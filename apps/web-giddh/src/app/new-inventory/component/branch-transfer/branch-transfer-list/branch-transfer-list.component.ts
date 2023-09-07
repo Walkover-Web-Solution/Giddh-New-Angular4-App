@@ -21,6 +21,7 @@ import { NewConfirmationModalComponent } from 'apps/web-giddh/src/app/theme/new-
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { SelectFieldComponent } from 'apps/web-giddh/src/app/theme/form-fields/select-field/select-field.component';
 import { Router } from '@angular/router';
+import { saveAs } from 'file-saver';
 
 @Component({
     selector: 'branch-transfer-list',

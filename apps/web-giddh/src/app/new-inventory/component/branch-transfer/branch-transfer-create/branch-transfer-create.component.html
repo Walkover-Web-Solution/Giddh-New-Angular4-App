@@ -159,7 +159,7 @@
                                                 <div class="mr-b15 position-relative info-field hello sender name">
                                                     <dropdown-field
                                                         #defaultSource
-                                                        [name]="'senderName'"
+                                                        [name]="'senderName0'"
                                                         [label]="'Sender\'s Name'"
                                                         [placeholder]="'Select Sender\'s Name'"
                                                         [options]="branches"
@@ -551,7 +551,7 @@
                                                 </input-field>
                                                 <dropdown-field
                                                     *ngIf="isUpdateMode"
-                                                    [name]="'senderName'"
+                                                    [name]="'senderName0'"
                                                     [label]="'Sender\'s Name'"
                                                     [placeholder]="'Select Sender\'s Name'"
                                                     [options]="branches"
@@ -966,7 +966,7 @@
                                                             >
                                                                 <select-field
                                                                     [cssClass]="'form-control mat-field-border pb-0'"
-                                                                    [name]="'senderName{{i}}'"
+                                                                    [name]="'senderName' + i"
                                                                     [placeholder]="'Sender\'s Name'"
                                                                     [options]="branches"
                                                                     (selectedOption)="selectSenderName($event, i)"
@@ -975,7 +975,7 @@
                                                                 </select-field>
                                                                 <select-field
                                                                     [cssClass]="'form-control mat-field-border pb-0'"
-                                                                    name="sourceWarehouse{{ i }}"
+                                                                    [name]="'sourceWarehouse' + i"
                                                                     [placeholder]="'Sender\'s Warehouse'"
                                                                     (selectedOption)="selectSenderWarehouse($event, i)"
                                                                     [options]="
@@ -1078,8 +1078,7 @@
                                                                     [allowDecimalDigitsOnly]="true"
                                                                     (change)="
                                                                         calculateRowTotal(
-                                                                            source.get('warehouse').value,
-                                                                            i
+                                                                            source.get('warehouse')
                                                                         )
                                                                     "
                                                                     formControlName="quantity"
@@ -1119,8 +1118,7 @@
                                                                         [customDecimalPlaces]="2"
                                                                         (change)="
                                                                             calculateRowTotal(
-                                                                                source.get('warehouse').value,
-                                                                                i
+                                                                                source.get('warehouse')
                                                                             )
                                                                         "
                                                                         [prefix]="activeCompany?.baseCurrencySymbol"
@@ -1358,18 +1356,18 @@
                                                                 >
                                                                     <div class="radio-btns mr-b1">
                                                                         <mat-radio-group
-                                                                              name="showCodeType{{ i }}"
+                                                                            name="showCodeType{{i}}"
                                                                             class="d-flex font-15"
                                                                             formControlName="showCodeType"
                                                                         >
                                                                             <mat-radio-button
                                                                                 color="primary"
-                                                                                 [value]="'hsn'"
+                                                                                value="hsn"
                                                                                 >HSN Code</mat-radio-button
                                                                             >
                                                                             <mat-radio-button
                                                                                 color="primary"
-                                                                                [value]="'sac'"
+                                                                                value="sac"
                                                                                 >SAC Code</mat-radio-button
                                                                             >
                                                                         </mat-radio-group>
@@ -1493,7 +1491,7 @@
                                                                     name="productQty{{ i }}"
                                                                     [placeholder]="'Enter Qty/Unit'"
                                                                     [allowDecimalDigitsOnly]="true"
-                                                                    (change)="calculateRowTotal(product, i)"
+                                                                    (change)="calculateRowTotal(product)"
                                                                     formControlName="quantity"
                                                                 >
                                                                 </text-field>
@@ -1532,7 +1530,7 @@
                                                                         formControlName="rate"
                                                                         [allowDecimalDigitsOnly]="true"
                                                                         [customDecimalPlaces]="2"
-                                                                        (change)="calculateRowTotal(product, i)"
+                                                                        (change)="calculateRowTotal(product)"
                                                                         [prefix]="activeCompany?.baseCurrencySymbol"
                                                                         [mask]="inputMaskFormat"
                                                                         [useMask]="true"
@@ -1762,8 +1760,7 @@
                                                                             [allowDecimalDigitsOnly]="true"
                                                                             (change)="
                                                                                 calculateRowTotal(
-                                                                                    destination.get('warehouse').value,
-                                                                                    i
+                                                                                    destination.get('warehouse')
                                                                                 )
                                                                             "
                                                                             formControlName="quantity"
@@ -1807,8 +1804,7 @@
                                                                         [customDecimalPlaces]="2"
                                                                         (change)="
                                                                             calculateRowTotal(
-                                                                                destination.get('warehouse').value,
-                                                                                i
+                                                                                destination.get('warehouse')
                                                                             )
                                                                         "
                                                                         [prefix]="activeCompany?.baseCurrencySymbol"
@@ -1955,29 +1951,30 @@
                                         <dropdown-field
                                             (createOption)="toggleTransporterModel()"
                                             [showCreateNew]="true"
-                                            [name]="''"
+                                            [name]="'transporterCompany'"
                                             [placeholder]="'Transport Company'"
                                             [options]="transporterDropdown"
                                             [appearance]="'outline'"
                                             (selectedOption)="onSelectTransportCompany($event)"
+                                            [defaultValue]="branchTransferCreateEditForm.get('transporterDetails.transporterName')?.value"
                                         >
                                         </dropdown-field>
                                     </div>
                                     <div class="col-sm-6 pl-0 mr-b15">
                                         <dropdown-field
-                                            [name]="''"
+                                            [name]="'transporterMode'"
                                             [placeholder]="'Transport Mode'"
                                             [options]="transporterMode"
                                             [appearance]="'outline'"
                                             (selectedOption)="onSelectTransportMode($event)"
-                                            [defaultValue]=""
+                                            [defaultValue]="branchTransferCreateEditForm.get('transporterDetails.transportMode')?.value"
                                         >
                                         </dropdown-field>
                                     </div>
                                     <div class="col-sm-6 pr-0 mr-b15">
                                         <input-field
                                             [type]="'text'"
-                                            [name]="''"
+                                            [name]="'vehicleNumber'"
                                             [placeholder]="'Vehicle Number'"
                                             [appearance]="'outline'"
                                             formControlName="vehicleNumber"

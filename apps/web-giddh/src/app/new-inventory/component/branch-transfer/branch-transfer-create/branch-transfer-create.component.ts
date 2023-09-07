@@ -95,7 +95,7 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
     public generateNewTransporter: IEwayBillTransporter = {
         transporterId: null,
         transporterName: null
-    }; '';
+    };
     /** Hold transported mode list */
     public transporterMode: IOption[] = [];
     /** Hold  active company details */
@@ -412,6 +412,10 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
      * @memberof BranchTransferCreateComponent
      */
     public submit(): void {
+        if (this.branchTransferCreateEditForm?.invalid) {
+            return;
+        }
+
         this.isLoading = true;
         let branchMode = '';
         if (this.branchTransferMode === 'receipt-note') {
@@ -426,7 +430,7 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
         for (let i = 0; i < sourcesArray.length; i++) {
             const sourcesFormGroup = sourcesArray.at(i) as UntypedFormGroup;
             const sourcesWarehouseFormGroup = sourcesFormGroup?.get('warehouse') as UntypedFormGroup;
-            if (sourcesWarehouseFormGroup) {
+            if (sourcesWarehouseFormGroup && sourcesWarehouseFormGroup?.get('address')?.value) {
                 const [address, pin] = sourcesWarehouseFormGroup?.get('address')?.value?.split('\nPIN: ');
                 sourcesWarehouseFormGroup.get('address')?.patchValue(address);
                 sourcesWarehouseFormGroup.get('pincode')?.patchValue(pin);
@@ -436,7 +440,7 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
         for (let i = 0; i < destinationsArray.length; i++) {
             const destinationsFormGroup = destinationsArray.at(i) as UntypedFormGroup;
             const destinationsStockDetails = destinationsFormGroup?.get('warehouse') as UntypedFormGroup;
-            if (destinationsStockDetails) {
+            if (destinationsStockDetails && destinationsStockDetails?.get('address').value) {
                 const [address, pin] = destinationsStockDetails?.get('address').value?.split('\nPIN: ');
                 destinationsStockDetails.get('address')?.patchValue(address);
                 destinationsStockDetails.get('pincode')?.patchValue(pin);
@@ -833,8 +837,8 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
                         uniqueName: source.warehouse.uniqueName,
                         taxNumber: source.warehouse.taxNumber,
                         address: source.warehouse.address
-                        }),
-                sourcesArray.push(sourcesFormGroup);
+                    }),
+                        sourcesArray.push(sourcesFormGroup);
                 });
 
                 response.body?.destinations.forEach(destination => {
@@ -982,13 +986,13 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
      * @memberof BranchTransferCreateComponent
      */
     public getWarehouseDetails(type: any, index: number): void {
-        const sourcesArray = this.branchTransferCreateEditForm.get('sources') as UntypedFormArray;
-        const sourceFormGroup = sourcesArray.at(index) as UntypedFormGroup;
-        const sourcesWarehouseFormGroup = sourceFormGroup.get('warehouse') as UntypedFormGroup;
+        const sourcesArray = this.branchTransferCreateEditForm?.get('sources') as UntypedFormArray;
+        const sourceFormGroup = sourcesArray?.at(index) as UntypedFormGroup;
+        const sourcesWarehouseFormGroup = sourceFormGroup?.get('warehouse') as UntypedFormGroup;
 
-        const destinationsArray = this.branchTransferCreateEditForm.get('destinations') as UntypedFormArray;
-        const destinationsFormGroup = destinationsArray.at(index) as UntypedFormGroup;
-        const destinationsWarehouseFormGroup = destinationsFormGroup.get('warehouse') as UntypedFormGroup;
+        const destinationsArray = this.branchTransferCreateEditForm?.get('destinations') as UntypedFormArray;
+        const destinationsFormGroup = destinationsArray?.at(index) as UntypedFormGroup;
+        const destinationsWarehouseFormGroup = destinationsFormGroup?.get('warehouse') as UntypedFormGroup;
         if (type === 'sources') {
             if (sourcesWarehouseFormGroup && sourcesWarehouseFormGroup.get('uniqueName').value !== null) {
 
@@ -1248,16 +1252,8 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
      * @memberof BranchTransferCreateComponent
      */
     public selectSenderName(event: any, index: number): void {
-        if (event?.value) {
-            const sourcesArray = this.branchTransferCreateEditForm.get('sources') as UntypedFormArray;
-            const sourceGroup = sourcesArray.at(index) as UntypedFormGroup;
-            sourceGroup.patchValue({
-                name: event?.label,
-                uniqueName: event?.value
-            });
-            if (this.branchTransferMode === 'receipt-note') {
-                this.selectCompany(event, 'sources', index);
-            }
+        if (event?.value && this.branchTransferMode === 'receipt-note') {
+            this.selectCompany(event, 'sources', index);
         }
     }
 
@@ -1269,16 +1265,8 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
      * @memberof BranchTransferCreateComponent
      */
     public selectRecieverName(event: any, index: number): void {
-        if (event?.value) {
-            const destinationsArray = this.branchTransferCreateEditForm.get('destinations') as UntypedFormArray;
-            const destinationGroup = destinationsArray.at(index) as UntypedFormGroup;
-            destinationGroup.patchValue({
-                name: event?.label,
-                uniqueName: event?.value
-            });
-            if (this.branchTransferMode === 'delivery-challan') {
-                this.selectCompany(event, 'destinations', index);
-            }
+        if (event?.value && this.branchTransferMode === 'delivery-challan') {
+            this.selectCompany(event, 'destinations', index);
         }
     }
 
@@ -1360,32 +1348,30 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
                 const stockDetailsFormGroup = sourcesWarehouseFormGroup?.get('stockDetails') as UntypedFormGroup;
                 if (sourcesArray) {
                     sourceGroup.patchValue({
-                        name: event?.label
+                        name: event?.label,
+                        uniqueName: event?.value
                     });
-                    if (sourcesArray) {
-                        sourcesWarehouseFormGroup.patchValue({
-                            name: null,
-                            uniqueName: null,
-                            taxNumber: null,
-                            address: null
-                        });
-                        if (!stockDetailsFormGroup) {
-                            stockDetailsFormGroup.patchValue({
-                                stockUnitUniqueName: null,
-                                stockUnit: null,
-                                amount: null,
-                                rate: null,
-                                quantity: null
-                            });
-                        }
+
+                    sourcesWarehouseFormGroup.patchValue({
+                        name: null,
+                        uniqueName: null,
+                        taxNumber: null,
+                        address: null
+                    });
+
+                    if (!stockDetailsFormGroup) {
                         stockDetailsFormGroup.patchValue({
+                            stockUnitUniqueName: null,
+                            stockUnit: null,
+                            amount: null,
+                            rate: null,
                             quantity: (event.value) ? 1 : null
                         });
                     }
+
                     this.resetSourceWarehouses(index, true);
                 }
             } else {
-
                 const destinationsArray = this.branchTransferCreateEditForm.get('destinations') as UntypedFormArray;
                 const destinationsFormGroup = destinationsArray?.at(index) as UntypedFormGroup;
                 const destinationsWarehouseFormGroup = destinationsFormGroup.get('warehouse') as UntypedFormGroup;
@@ -1393,28 +1379,27 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
 
                 if (destinationsArray) {
                     destinationsFormGroup.patchValue({
-                        name: event?.label
+                        name: event?.label,
+                        uniqueName: event?.value
                     });
-                    if (destinationsArray) {
-                        destinationsWarehouseFormGroup.patchValue({
-                            name: null,
-                            uniqueName: null,
-                            taxNumber: null,
-                            address: null
-                        });
-                        if (!stockDetailsFormGroup) {
-                            stockDetailsFormGroup.patchValue({
-                                stockUnitUniqueName: null,
-                                stockUnit: null,
-                                amount: null,
-                                rate: null,
-                                quantity: null
-                            });
-                        }
+
+                    destinationsWarehouseFormGroup.patchValue({
+                        name: null,
+                        uniqueName: null,
+                        taxNumber: null,
+                        address: null
+                    });
+
+                    if (!stockDetailsFormGroup) {
                         stockDetailsFormGroup.patchValue({
+                            stockUnitUniqueName: null,
+                            stockUnit: null,
+                            amount: null,
+                            rate: null,
                             quantity: (event.value) ? 1 : null
                         });
                     }
+
                     this.resetDestinationWarehouses(index, true);
                 }
             }
@@ -1428,9 +1413,9 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
         const sourcesStockDetailsFormGroup = sourcesArray.at(index).get('warehouse.stockDetails') as UntypedFormGroup;
 
         const destinationsArray = this.branchTransferCreateEditForm.get('destinations') as UntypedFormArray;
-        const destinationsFormGroup = destinationsArray.at(index) as UntypedFormGroup;
-        const destinationsWarehouseFormGroup = destinationsFormGroup.get('warehouse') as UntypedFormGroup;
-        const destinationsStockDetailsFormGroup = destinationsArray.at(index).get('warehouse.stockDetails') as UntypedFormGroup;
+        const destinationsFormGroup = destinationsArray?.at(index) as UntypedFormGroup;
+        const destinationsWarehouseFormGroup = destinationsFormGroup?.get('warehouse') as UntypedFormGroup;
+        const destinationsStockDetailsFormGroup = destinationsArray?.at(index)?.get('warehouse.stockDetails') as UntypedFormGroup;
 
         if (type === "sources") {
             if (sourcesArray && sourcesWarehouseFormGroup) {
@@ -1467,14 +1452,15 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
     }
 
     public resetSourceWarehouses(index: number, reInitializeWarehouses?: boolean) {
-        const sourcesArray = this.branchTransferCreateEditForm.get('sources') as UntypedFormArray;
+        let sourcesArray = this.branchTransferCreateEditForm.get('sources') as UntypedFormArray;
 
-        const sourceFormGroup = sourcesArray?.at(index) as UntypedFormGroup;
-        const sourcesWarehouseFormGroup = sourceFormGroup?.get('warehouse') as UntypedFormGroup;
+        let sourceFormGroup = sourcesArray?.at(index) as UntypedFormGroup;
+        let sourcesWarehouseFormGroup = sourceFormGroup?.get('warehouse') as UntypedFormGroup;
 
-        const destinationsArray = this.branchTransferCreateEditForm.get('destinations') as UntypedFormArray;
-        const destinationsFormGroup = destinationsArray?.at(index) as UntypedFormGroup;
-        const destinationsWarehouseFormGroup = destinationsFormGroup?.get('warehouse') as UntypedFormGroup;
+        let destinationsArray = this.branchTransferCreateEditForm.get('destinations') as UntypedFormArray;
+        let destinationsFormGroup = destinationsArray?.at(index) as UntypedFormGroup;
+        let destinationsWarehouseFormGroup = destinationsFormGroup?.get('warehouse') as UntypedFormGroup;
+
         if (destinationsArray && destinationsFormGroup && destinationsWarehouseFormGroup && destinationsWarehouseFormGroup.get('uniqueName')?.value !== null) {
             this.senderWarehouses[destinationsFormGroup.get('uniqueName').value] = [];
             let allowWarehouse = true;
@@ -1533,18 +1519,22 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
             }
 
             // If multiple senders case for receipt note
+            const sourceIndex = this.transferType !== 'products' ? index : 0;
+            const destinationIndex = this.transferType !== 'products' ? 0 : index;
+            sourceFormGroup = sourcesArray?.at(sourceIndex) as UntypedFormGroup;
+            destinationsFormGroup = destinationsArray?.at(destinationIndex) as UntypedFormGroup;
+            destinationsWarehouseFormGroup = destinationsFormGroup?.get('warehouse') as UntypedFormGroup;
+
             if (sourceFormGroup && sourceFormGroup.get('uniqueName').value) {
                 // Update source warehouses
                 this.senderWarehouses[sourceFormGroup.get('uniqueName').value] = [];
                 if (this.allWarehouses[sourceFormGroup.get('uniqueName').value] && this.allWarehouses[sourceFormGroup.get('uniqueName').value].length > 0) {
-                    this.allWarehouses[sourceFormGroup.get('uniqueName').value]?.forEach(key => {
-                        if (destinationsArray && destinationsWarehouseFormGroup && key?.uniqueName !== destinationsWarehouseFormGroup.get('uniqueName')?.value &&
+                    this.allWarehouses[sourceFormGroup.get('uniqueName').value].forEach(key => {
+                        if (destinationsFormGroup && destinationsWarehouseFormGroup && key?.uniqueName !== destinationsWarehouseFormGroup.get('uniqueName')?.value &&
                             (reInitializeWarehouses || key.taxNumber === (destinationsWarehouseFormGroup.get('taxNumber')?.value || ''))) {
-                            this.senderWarehouses[sourceFormGroup.get('uniqueName')?.value]?.push({ label: key?.name, value: key?.uniqueName });
-
+                            this.senderWarehouses[sourceFormGroup.get('uniqueName')?.value].push({ label: key.name, value: key?.uniqueName });
                         }
                     });
-
                 }
             }
         }
@@ -1742,7 +1732,7 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
                         productStockDetailsFormGroup.get('stockUnitUniqueName')?.setValue(response?.body?.purchaseAccountDetails?.unitRates[0]?.stockUnitUniqueName);
                         productStockDetailsFormGroup.get('stockUnit')?.setValue(response?.body?.purchaseAccountDetails?.unitRates[0]?.stockUnitCode);
                     }
-                    this.calculateRowTotal(product, index);
+                    this.calculateRowTotal(product);
                 }
             });
             productStockDetailsFormGroup.get('quantity')?.setValue(productStockDetailsFormGroup.get('quantity')?.value || 1);
@@ -1794,27 +1784,23 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
      * @param {number} [index]
      * @memberof BranchTransferCreateComponent
      */
-    public calculateRowTotal(product: any, index?: number): void {
-        const productArray = this.branchTransferCreateEditForm.get('products') as UntypedFormArray;
-        const productsFormGroup = productArray?.at(index) as UntypedFormGroup;
+    public calculateRowTotal(productsFormGroup: any): void {
         const productStockDetailsFormGroup = productsFormGroup.get('stockDetails') as UntypedFormGroup;
-        if (product) {
-            if (!isNaN(parseFloat(productStockDetailsFormGroup.get('rate')?.value)) && !isNaN(parseFloat(productStockDetailsFormGroup.get('quantity')?.value))) {
-                productStockDetailsFormGroup.get('amount')?.setValue(parseFloat(productStockDetailsFormGroup.get('rate')?.value) * parseFloat(productStockDetailsFormGroup.get('quantity')?.value));
-                if (isNaN(parseFloat(productStockDetailsFormGroup.get('amount')?.value))) {
-                    productStockDetailsFormGroup.get('amount')?.setValue(0);
-                } else {
-                    productStockDetailsFormGroup.get('amount')?.setValue(Number(this.generalService.convertExponentialToNumber(parseFloat(productStockDetailsFormGroup.get('amount')?.value).toFixed(this.giddhBalanceDecimalPlaces))));
-                }
-            } else {
-                if (isNaN(parseFloat(productStockDetailsFormGroup.get('rate')?.value))) {
-                    productStockDetailsFormGroup.get('rate')?.setValue(0);
-                }
-                if (isNaN(parseFloat(productStockDetailsFormGroup.get('quantity')?.value))) {
-                    productStockDetailsFormGroup.get('quantity')?.setValue(0);
-                }
+        if (!isNaN(parseFloat(productStockDetailsFormGroup.get('rate')?.value)) && !isNaN(parseFloat(productStockDetailsFormGroup.get('quantity')?.value))) {
+            productStockDetailsFormGroup.get('amount')?.setValue(parseFloat(productStockDetailsFormGroup.get('rate')?.value) * parseFloat(productStockDetailsFormGroup.get('quantity')?.value));
+            if (isNaN(parseFloat(productStockDetailsFormGroup.get('amount')?.value))) {
                 productStockDetailsFormGroup.get('amount')?.setValue(0);
+            } else {
+                productStockDetailsFormGroup.get('amount')?.setValue(Number(this.generalService.convertExponentialToNumber(parseFloat(productStockDetailsFormGroup.get('amount')?.value).toFixed(this.giddhBalanceDecimalPlaces))));
             }
+        } else {
+            if (isNaN(parseFloat(productStockDetailsFormGroup.get('rate')?.value))) {
+                productStockDetailsFormGroup.get('rate')?.setValue(0);
+            }
+            if (isNaN(parseFloat(productStockDetailsFormGroup.get('quantity')?.value))) {
+                productStockDetailsFormGroup.get('quantity')?.setValue(0);
+            }
+            productStockDetailsFormGroup.get('amount')?.setValue(0);
         }
         this.calculateOverallTotal();
         this.detectChanges();
@@ -1858,7 +1844,6 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
                     overallTotal = 0;
                 }
                 this.overallTotal += Number(this.generalService.convertExponentialToNumber((overallTotal)));
-                destinationsStockDetailsFormGroup.get('amount')?.setValue(this.overallTotal);
             }
         } else if (this.transferType !== 'products' && this.branchTransferMode === 'receipt-note') {
             const sourcesArray = this.branchTransferCreateEditForm.get('sources') as UntypedFormArray;
@@ -1875,7 +1860,6 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
                     overallTotal = 0;
                 }
                 this.overallTotal += Number(this.generalService.convertExponentialToNumber((overallTotal)));
-                sourcesStockDetailsFormGroup.get('amount')?.setValue(this.overallTotal);
             }
         }
         this.detectChanges();
