@@ -20,6 +20,7 @@ import { ConfirmationModalConfiguration } from 'apps/web-giddh/src/app/theme/con
 import { NewConfirmationModalComponent } from 'apps/web-giddh/src/app/theme/new-confirmation-modal/confirmation-modal.component';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { SelectFieldComponent } from 'apps/web-giddh/src/app/theme/form-fields/select-field/select-field.component';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'branch-transfer-list',
@@ -144,6 +145,7 @@ export class BranchTransferListComponent implements OnInit {
     }
     /** True if translations loaded */
     public translationLoaded: boolean = false;
+
     constructor(
         public dialog: MatDialog,
         private modalService: BsModalService,
@@ -153,7 +155,8 @@ export class BranchTransferListComponent implements OnInit {
         private inventoryService: InventoryService,
         private changeDetection: ChangeDetectorRef,
         private toaster: ToasterService,
-        private formBuilder: FormBuilder
+        private formBuilder: FormBuilder,
+        private router: Router
     ) {
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         if (this.currentOrganizationType === 'BRANCH') {
@@ -347,7 +350,7 @@ export class BranchTransferListComponent implements OnInit {
      * @param {*} item
      * @memberof BranchTransferListComponent
      */
-    public downloadBranchTransfer(item): void {
+    public downloadBranchTransfer(item: any): void {
         let downloadBranchTransferRequest = new NewBranchTransferDownloadRequest();
         downloadBranchTransferRequest.uniqueName = item?.uniqueName;
 
@@ -368,10 +371,17 @@ export class BranchTransferListComponent implements OnInit {
      * @param {*} item
      * @memberof BranchTransferListComponent
      */
-    public showEditBranchTransferPopup(item): void {
+    public showEditBranchTransferPopup(item: any): void {
         this.branchTransferMode = item.voucherType;
+        let branchMode = '';
+        if (this.branchTransferMode === 'receiptnote') {
+            branchMode = 'receipt-note';
+        }
+        if (this.branchTransferMode === 'deliverynote') {
+            branchMode = 'delivery-challan';
+        }
         this.editBranchTransferUniqueName = item?.uniqueName;
-        // this.openModal();
+        this.router.navigate(['/pages', 'inventory', 'v2', 'branch-transfer', branchMode, 'edit', this.editBranchTransferUniqueName]);
     }
 
     /**
@@ -380,7 +390,7 @@ export class BranchTransferListComponent implements OnInit {
      * @param {*} item
      * @memberof BranchTransferListComponent
      */
-    public showDeleteBranchTransferModal(item): void {
+    public showDeleteBranchTransferModal(item: any): void {
         this.selectedBranchTransferUniqueName = item?.uniqueName;
         this.selectedBranchTransferType = (item.voucherType === "receiptnote") ? "Receipt Note" : "Delivery Challan";
         this.branchTransferConfirmationConfiguration = this.generalService.getDeleteBranchTransferConfiguration(this.localeData, this.commonLocaleData, this.selectedBranchTransferType,);
@@ -447,7 +457,7 @@ export class BranchTransferListComponent implements OnInit {
     public openAdvanceFilterDialog(): void {
         this.voucherTypeDropdown?.closeDropdownPanel();
         this.dialog.open(this.advanceFilterComponent, {
-             width: '500px',
+            width: '500px',
             autoFocus: false
         })
     }
