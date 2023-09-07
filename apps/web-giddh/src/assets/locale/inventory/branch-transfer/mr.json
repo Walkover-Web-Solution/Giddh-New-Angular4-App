@@ -1,0 +1,8 @@
+{
+    "heading": "शाखा हस्तांतरण यादी",
+    "sender": "पाठवणारा",
+    "receiver": "स्वीकारणारा",
+    "from_warehouse": "गोदामातून",
+    "to_warehouse": "वेअरहाऊसला",
+    "select_condition": "अट निवडा"
+}

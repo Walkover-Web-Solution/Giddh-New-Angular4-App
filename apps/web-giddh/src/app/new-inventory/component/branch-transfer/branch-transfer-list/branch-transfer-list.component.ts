@@ -1,10 +1,10 @@
-import { ChangeDetectorRef, Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Store, select } from '@ngrx/store';
 import { SettingsBranchActions } from 'apps/web-giddh/src/app/actions/settings/branch/settings.branch.action';
 import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from 'apps/web-giddh/src/app/app.constant';
 import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
-import { NewBranchTransferDownloadRequest, NewBranchTransferListGetRequestParams, NewBranchTransferListPostRequestParams, NewBranchTransferListResponse } from 'apps/web-giddh/src/app/models/api-models/BranchTransfer';
+import { NewBranchTransferDownloadRequest, NewBranchTransferListGetRequestParams } from 'apps/web-giddh/src/app/models/api-models/BranchTransfer';
 import { OrganizationType } from 'apps/web-giddh/src/app/models/user-login-state';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { InventoryService } from 'apps/web-giddh/src/app/services/inventory.service';
@@ -28,8 +28,6 @@ import { Router } from '@angular/router';
     styleUrls: ['./branch-transfer-list.component.scss']
 })
 export class BranchTransferListComponent implements OnInit {
-    /** Material table elements */
-    public displayedColumns: string[] = [];
     /** Instance of Mat Dialog for Advance Filter */
     @ViewChild("advanceFilterDialog") public advanceFilterComponent: TemplateRef<any>;
     /** Directive to get reference of element */
@@ -44,6 +42,8 @@ export class BranchTransferListComponent implements OnInit {
     public selectedRangeLabel: any = "";
     /** This will store the x/y position of the field to show datepicker under it */
     public dateFieldPosition: any = { x: 0, y: 0 };
+    /** Material table elements */
+    public displayedColumns: string[] = [];
     /** This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
     /** Instance of bootstrap modal */
@@ -64,6 +64,7 @@ export class BranchTransferListComponent implements OnInit {
     public localeData: any = {};
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** This will hold common datepicker */
     public datePicker: any[] = [];
     /* Selected from date */
     public fromDate: string;
@@ -232,6 +233,7 @@ export class BranchTransferListComponent implements OnInit {
                 }
             }
         });
+
         this.branchTransferForm?.controls['sender'].valueChanges.pipe(
             debounceTime(700),
             distinctUntilChanged(),
@@ -630,40 +632,40 @@ export class BranchTransferListComponent implements OnInit {
     }
 
     /**
-       * This will use for translation complete
-       *
-       * @param {*} event
-       * @memberof BranchTransferListComponent
-       */
+    * This will use for translation complete
+    *
+    * @param {*} event
+    * @memberof BranchTransferListComponent
+    */
     public translationComplete(event: any): void {
         if (event) {
             this.translationLoaded = true;
             this.amountOperators = [
                 {
                     value: "Equals",
-                    label: "Equals"
+                    label: this.commonLocaleData.app_comparision_filters.equals
                 },
                 {
                     value: "Excluded",
-                    label: "Excluded"
+                    label: this.commonLocaleData.app_comparision_filters.excluded
                 },
                 {
                     value: "Less than",
-                    label: "Less than"
+                    label: this.commonLocaleData.app_comparision_filters.less_than
                 },
                 {
                     value: "Greater than",
-                    label: "Greater than"
+                    label: this.commonLocaleData.app_comparision_filters.greater_than
                 }
             ];
 
             this.voucherTypes = [
                 {
-                    label: 'Receipt Note',
+                    label: this.commonLocaleData.app_receipt_note,
                     value: 'Receipt Note'
                 },
                 {
-                    label: 'Delivery Challan',
+                    label: this.commonLocaleData.app_delivery_challan,
                     value: 'Delivery Challan'
                 }
             ];
