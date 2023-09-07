@@ -28,12 +28,11 @@ import { Observable, ReplaySubject, of as observableOf } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 
 @Component({
-    selector: 'branch-transfer-create',
-    templateUrl: './branch-transfer-create.component.html',
-    styleUrls: ['./branch-transfer-create.component.scss']
+    selector: 'create-branch-transfer',
+    templateUrl: './create-branch-transfer.component.html',
+    styleUrls: ['./create-branch-transfer.component.scss']
 })
-
-export class BranchTransferCreateComponent implements OnInit, OnDestroy {
+export class CreateBranchTransfer implements OnInit, OnDestroy {
     /** Close the  HSN/SAC Opened Menu*/
     @ViewChild('hsnSacMenuTrigger') hsnSacMenuTrigger: MatMenuTrigger;
     /** Close the  HSN/SAC Opened Menu*/
@@ -167,6 +166,8 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
         totalPages: 0,
         query: ''
     };
+    /** Holds if form is valid or not */
+    public isValidForm: boolean = true;
 
     constructor(
         private route: ActivatedRoute,
@@ -191,7 +192,7 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
     /**
      * This will use for component initialization
      *
-     * @memberof BranchTransferCreateComponent
+     * @memberof CreateBranchTransfer
      */
     public ngOnInit(): void {
         /* added image path */
@@ -239,7 +240,7 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
     /**
      * This will use for get inventory settings
      *
-     * @memberof BranchTransferCreateComponent
+     * @memberof CreateBranchTransfer
      */
     public getInventorySettings(): void {
         this.store.pipe(select((s: AppState) => s.invoice.settings), takeUntil(this.destroyed$)).subscribe((settings: InvoiceSetting) => {
@@ -253,7 +254,7 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
      * This will use for init main formgroup
      *
      * @private
-     * @memberof BranchTransferCreateComponent
+     * @memberof CreateBranchTransfer
      */
     private initBranchTransferForm(): void {
         this.branchTransferCreateEditForm = this.formBuilder.group({
@@ -287,7 +288,7 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
      * This will be use for init source form group
      *
      * @return {*}  {UntypedFormGroup}
-     * @memberof BranchTransferCreateComponent
+     * @memberof CreateBranchTransfer
      */
     public initSourceFormGroup(): UntypedFormGroup {
         return this.formBuilder.group({
@@ -313,7 +314,7 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
      *This will be use for destination form group
      *
      * @return {*}  {UntypedFormGroup}
-     * @memberof BranchTransferCreateComponent
+     * @memberof CreateBranchTransfer
      */
     public initDestinationFormGroup(): UntypedFormGroup {
         return this.formBuilder.group({
@@ -339,7 +340,7 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
      *This will be use for product form group
      *
      * @return {*}  {UntypedFormGroup}
-     * @memberof BranchTransferCreateComponent
+     * @memberof CreateBranchTransfer
      */
     public initProductFormGroup(): UntypedFormGroup {
         return this.formBuilder.group({
@@ -368,7 +369,7 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
      *This will be use for set active product row
      *
      * @param {number} index
-     * @memberof BranchTransferCreateComponent
+     * @memberof CreateBranchTransfer
      */
     public setActiveRow(index: number): void {
         this.activeIndx = index;
@@ -379,7 +380,7 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
      *
      * @param {*} date
      * @param {*} dateField
-     * @memberof BranchTransferCreateComponent
+     * @memberof CreateBranchTransfer
      */
     public selectDate(date: any, dateField: any): void {
         this.tempDateParams.dateOfSupply = date;
@@ -398,7 +399,7 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
      *This will be use for hide active row
      *
      * @param {*} event
-     * @memberof BranchTransferCreateComponent
+     * @memberof CreateBranchTransfer
      */
     public hideActiveRow(event: any): void {
         if (event?.target?.nodeName !== "MAT-OPTION" && event?.target?.nodeName !== "SPAN") {
@@ -409,98 +410,105 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
     /**
      * Thiw will be use for submit main form
      *
-     * @memberof BranchTransferCreateComponent
+     * @memberof CreateBranchTransfer
      */
     public submit(): void {
-        if (this.branchTransferCreateEditForm?.invalid) {
-            return;
-        }
 
-        this.isLoading = true;
-        let branchMode = '';
-        if (this.branchTransferMode === 'receipt-note') {
-            branchMode = 'receiptnote';
-        } else {
-            branchMode = 'deliverynote';
-        }
+        if (this.transferType === 'products') { }
+        if (this.transferType === 'senders') { }
+        if (this.transferType !== 'products' && this.branchTransferMode === 'delivery-challan') { }
+        if (this.transferType !== 'products' && this.branchTransferMode === 'receipt-note') { }
 
-        this.branchTransferCreateEditForm.get('entity').setValue(branchMode);
-        const sourcesArray = this.branchTransferCreateEditForm.get('sources') as UntypedFormArray;
+        this.isValidForm = !this.branchTransferCreateEditForm.invalid;
+        console.log(this.isValidForm);
 
-        for (let i = 0; i < sourcesArray.length; i++) {
-            const sourcesFormGroup = sourcesArray.at(i) as UntypedFormGroup;
-            const sourcesWarehouseFormGroup = sourcesFormGroup?.get('warehouse') as UntypedFormGroup;
-            if (sourcesWarehouseFormGroup && sourcesWarehouseFormGroup?.get('address')?.value) {
-                const [address, pin] = sourcesWarehouseFormGroup?.get('address')?.value?.split('\nPIN: ');
-                sourcesWarehouseFormGroup.get('address')?.patchValue(address);
-                sourcesWarehouseFormGroup.get('pincode')?.patchValue(pin);
-            }
-        }
-        const destinationsArray = this.branchTransferCreateEditForm.get('destinations') as UntypedFormArray;
-        for (let i = 0; i < destinationsArray.length; i++) {
-            const destinationsFormGroup = destinationsArray.at(i) as UntypedFormGroup;
-            const destinationsStockDetails = destinationsFormGroup?.get('warehouse') as UntypedFormGroup;
-            if (destinationsStockDetails && destinationsStockDetails?.get('address').value) {
-                const [address, pin] = destinationsStockDetails?.get('address').value?.split('\nPIN: ');
-                destinationsStockDetails.get('address')?.patchValue(address);
-                destinationsStockDetails.get('pincode')?.patchValue(pin);
-            }
-        }
-        const productsArray = this.branchTransferCreateEditForm.get('products') as UntypedFormArray;
-        for (let i = 0; i < productsArray.length; i++) {
-            const productFormGroup = productsArray.at(i) as UntypedFormGroup;
-            if (productFormGroup.get('showCodeType').value === "hsn") {
-                productFormGroup.get('sacNumber').patchValue("");
+        if (this.isValidForm) {
+            this.isLoading = true;
+            let branchMode = '';
+            if (this.branchTransferMode === 'receipt-note') {
+                branchMode = 'receiptnote';
             } else {
-                productFormGroup.get('hsnNumber').patchValue("");
+                branchMode = 'deliverynote';
             }
-        }
-        if (this.editBranchTransferUniqueName) {
-            this.inventoryService.updateNewBranchTransfer(this.branchTransferCreateEditForm.value).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-                this.isLoading = false;
 
-                if (res) {
-                    if (res.status === 'success') {
-                        if (this.branchTransferMode === 'receipt-note') {
-                            this.toasty.successToast("Receipt Note has been updated successfully.", "Success");
-                        } else {
-                            this.toasty.successToast("Delivery Challan has been updated successfully.", "Success");
-                        }
-                        this.router.navigate(['/pages', 'inventory', 'v2', 'branch-transfer', 'list']);
-                    } else {
-                        this.toasty.errorToast(res.message, res.code);
-                    }
-                } else {
-                    this.toasty.errorToast(res?.message, res?.code);
+            this.branchTransferCreateEditForm.get('entity').setValue(branchMode);
+            const sourcesArray = this.branchTransferCreateEditForm.get('sources') as UntypedFormArray;
+
+            for (let i = 0; i < sourcesArray.length; i++) {
+                const sourcesFormGroup = sourcesArray.at(i) as UntypedFormGroup;
+                const sourcesWarehouseFormGroup = sourcesFormGroup?.get('warehouse') as UntypedFormGroup;
+                if (sourcesWarehouseFormGroup && sourcesWarehouseFormGroup?.get('address')?.value) {
+                    const [address, pin] = sourcesWarehouseFormGroup?.get('address')?.value?.split('\nPIN: ');
+                    sourcesWarehouseFormGroup.get('address')?.patchValue(address);
+                    sourcesWarehouseFormGroup.get('pincode')?.patchValue(pin);
                 }
-            });
-        } else {
-
-            this.inventoryService.createNewBranchTransfer(this.branchTransferCreateEditForm.value).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-                this.isLoading = false;
-                if (res) {
-                    if (res.status === 'success') {
-                        let dataOfSupply = dayjs(this.tempDateParams.dateOfSupply).format(GIDDH_DATE_FORMAT)
-                        this.branchTransferCreateEditForm.get('dateOfSupply').setValue(dataOfSupply);
-
-                        if (this.branchTransferMode === 'receipt-note') {
-                            this.toasty.successToast("Receipt Note has been saved successfully.", "Success");
-                        } else {
-                            this.toasty.successToast("Delivery Challan has been saved successfully.", "Success");
-                        }
-                        this.router.navigate(['/pages', 'inventory', 'v2', 'branch-transfer', 'list']);
-                    } else {
-                        this.toasty.errorToast(res.message, res.code);
-                    }
-                } else {
-                    this.toasty.errorToast(res?.message, res?.code);
-                    if (this.branchTransferMode === 'receiptnote') {
-                        this.branchTransferMode = 'receipt-note';
-                    } else {
-                        this.branchTransferMode = 'delivery-challan';
-                    }
+            }
+            const destinationsArray = this.branchTransferCreateEditForm.get('destinations') as UntypedFormArray;
+            for (let i = 0; i < destinationsArray.length; i++) {
+                const destinationsFormGroup = destinationsArray.at(i) as UntypedFormGroup;
+                const destinationsStockDetails = destinationsFormGroup?.get('warehouse') as UntypedFormGroup;
+                if (destinationsStockDetails && destinationsStockDetails?.get('address').value) {
+                    const [address, pin] = destinationsStockDetails?.get('address').value?.split('\nPIN: ');
+                    destinationsStockDetails.get('address')?.patchValue(address);
+                    destinationsStockDetails.get('pincode')?.patchValue(pin);
                 }
-            });
+            }
+            const productsArray = this.branchTransferCreateEditForm.get('products') as UntypedFormArray;
+            for (let i = 0; i < productsArray.length; i++) {
+                const productFormGroup = productsArray.at(i) as UntypedFormGroup;
+                if (productFormGroup.get('showCodeType').value === "hsn") {
+                    productFormGroup.get('sacNumber').patchValue("");
+                } else {
+                    productFormGroup.get('hsnNumber').patchValue("");
+                }
+            }
+            if (this.editBranchTransferUniqueName) {
+                this.inventoryService.updateNewBranchTransfer(this.branchTransferCreateEditForm.value).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+                    this.isLoading = false;
+
+                    if (res) {
+                        if (res.status === 'success') {
+                            if (this.branchTransferMode === 'receipt-note') {
+                                this.toasty.successToast("Receipt Note has been updated successfully.", "Success");
+                            } else {
+                                this.toasty.successToast("Delivery Challan has been updated successfully.", "Success");
+                            }
+                            this.router.navigate(['/pages', 'inventory', 'v2', 'branch-transfer', 'list']);
+                        } else {
+                            this.toasty.errorToast(res.message, res.code);
+                        }
+                    } else {
+                        this.toasty.errorToast(res?.message, res?.code);
+                    }
+                });
+            } else {
+
+                this.inventoryService.createNewBranchTransfer(this.branchTransferCreateEditForm.value).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+                    this.isLoading = false;
+                    if (res) {
+                        if (res.status === 'success') {
+                            let dataOfSupply = dayjs(this.tempDateParams.dateOfSupply).format(GIDDH_DATE_FORMAT)
+                            this.branchTransferCreateEditForm.get('dateOfSupply').setValue(dataOfSupply);
+
+                            if (this.branchTransferMode === 'receipt-note') {
+                                this.toasty.successToast("Receipt Note has been saved successfully.", "Success");
+                            } else {
+                                this.toasty.successToast("Delivery Challan has been saved successfully.", "Success");
+                            }
+                            this.router.navigate(['/pages', 'inventory', 'v2', 'branch-transfer', 'list']);
+                        } else {
+                            this.toasty.errorToast(res.message, res.code);
+                        }
+                    } else {
+                        this.toasty.errorToast(res?.message, res?.code);
+                        if (this.branchTransferMode === 'receiptnote') {
+                            this.branchTransferMode = 'receipt-note';
+                        } else {
+                            this.branchTransferMode = 'delivery-challan';
+                        }
+                    }
+                });
+            }
         }
     }
 
@@ -508,7 +516,7 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
      *This will be use for get tax placeholder
      *
      * @return {*}  {string}
-     * @memberof BranchTransferCreateComponent
+     * @memberof CreateBranchTransfer
      */
     public getEnterTaxText(): string {
         let text = 'Enter Tax';
@@ -519,7 +527,7 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
     /**
      * This will be use for checkTaxNumberValidation
      *
-     * @memberof BranchTransferCreateComponent
+     * @memberof CreateBranchTransfer
      */
     public checkTaxNumberValidation(): void {
         let isValid: boolean = false;
@@ -553,7 +561,7 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
     /**
      *This will be use for add sender when multiple sender selected
      *
-     * @memberof BranchTransferCreateComponent
+     * @memberof CreateBranchTransfer
      */
     public addSender() {
         const sources = this.branchTransferCreateEditForm.get('sources') as UntypedFormArray;
@@ -563,7 +571,7 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
     /**
      *This will be use for remove sender when multiple sender selected
      *
-     * @memberof BranchTransferCreateComponent
+     * @memberof CreateBranchTransfer
      */
     public removeSenderDetailsForm(i: number) {
         const sources = this.branchTransferCreateEditForm.get('sources') as UntypedFormArray;
@@ -573,7 +581,7 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
     /**
      *This will be use for add receiver when multiple receiver selected
      *
-     * @memberof BranchTransferCreateComponent
+     * @memberof CreateBranchTransfer
      */
     public addReceiver() {
         const destinations = this.branchTransferCreateEditForm.get('destinations') as UntypedFormArray;
@@ -583,7 +591,7 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
     /**
      *This will be use for remove receiver when multiple receiver selected
      *
-     * @memberof BranchTransferCreateComponent
+     * @memberof CreateBranchTransfer
      */
     public removeReceiverDetailsForm(i: number) {
         const destinations = this.branchTransferCreateEditForm.get('destinations') as UntypedFormArray;
@@ -593,7 +601,7 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
     /**
      * This will be use for add product in active row
      *
-     * @memberof BranchTransferCreateComponent
+     * @memberof CreateBranchTransfer
      */
     public addBlankProductsForm() {
         const products = this.branchTransferCreateEditForm.get('products') as UntypedFormArray;
@@ -603,7 +611,7 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
     /**
      * This will be use for remove product in active row
      *
-     * @memberof BranchTransferCreateComponent
+     * @memberof CreateBranchTransfer
      */
     public removeProductDetailsForm(i: number) {
         const products = this.branchTransferCreateEditForm.get('products') as UntypedFormArray;
@@ -616,7 +624,7 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
      * @param {string} query
      * @param {number} [page=1]
      * @param {Function} [successCallback]
-     * @memberof BranchTransferCreateComponent
+     * @memberof CreateBranchTransfer
      */
     public onStockSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
         this.stocksSearchResultsPaginationData.query = query;
@@ -692,7 +700,7 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
      * This will be use for load default stock list
      *
      * @private
-     * @memberof BranchTransferCreateComponent
+     * @memberof CreateBranchTransfer
      */
     private loadDefaultStocksSuggestions(): void {
         this.onStockSearchQueryChanged('', 1, (response) => {
@@ -712,7 +720,7 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
     /**
      *This will be use for change transfer type
      *
-     * @memberof BranchTransferCreateComponent
+     * @memberof CreateBranchTransfer
      */
     public changeTransferType(): void {
         this.allowAutoFocusInField = false;
@@ -721,17 +729,24 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
         this.branchTransferCreateEditForm.get('dateOfSupply').setValue(dataOfSupply);
         this.assignCurrentCompany();
         this.calculateOverallTotal();
+        this.activeIndx = null
+    }
 
-        setTimeout(() => {
-            this.allowAutoFocusInField = true;
-            this.focusDefaultProduct();
-        }, 200);
+    public resetForm(): void {
+        this.branchTransferCreateEditForm.reset();
+        this.isValidForm = true;
+        let dataOfSupply = dayjs(this.tempDateParams.dateOfSupply).format(GIDDH_DATE_FORMAT)
+        this.branchTransferCreateEditForm.get('dateOfSupply').setValue(dataOfSupply);
+        this.assignCurrentCompany();
+        this.calculateOverallTotal();
+        this.activeIndx = null
+
     }
 
     /**
      * This will be use for get braches
      *
-     * @memberof BranchTransferCreateComponent
+     * @memberof CreateBranchTransfer
      */
     public getBranches(): void {
         this.store.dispatch(this.inventoryAction.GetAllLinkedStocks());
@@ -765,7 +780,7 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
     /**
      *This will be use for get branch transfer list
      *
-     * @memberof BranchTransferCreateComponent
+     * @memberof CreateBranchTransfer
      */
     public getBranchTransfer(): void {
         this.isUpdateMode = true;
@@ -775,7 +790,6 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
         const destinationsFormGroup = destinationsArray?.at(0) as UntypedFormGroup;
         const sourcesFormGroup = destinationsArray?.at(0) as UntypedFormGroup;
         this.inventoryService.getNewBranchTransfer(this.editBranchTransferUniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
-
             if (response?.status === "success") {
                 this.branchTransferCreateEditForm.patchValue({
                     dateOfSupply: response.body?.dateOfSupply,
@@ -788,7 +802,7 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
 
                 this.branchTransferCreateEditForm.get('transporterDetails').patchValue({
                     dispatchedDate: response.body?.transporterDetails.dispatchedDate,
-                    transporterName: response.body?.transporterDetails.name,
+                    transporterName: response.body?.transporterDetails.transporterId,
                     transporterId: response.body?.transporterDetails.transporterId,
                     transportMode: response.body?.transporterDetails.transportMode,
                     vehicleNumber: response.body?.transporterDetails.vehicleNumber
@@ -983,7 +997,7 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
      *
      * @param {*} type
      * @param {number} index
-     * @memberof BranchTransferCreateComponent
+     * @memberof CreateBranchTransfer
      */
     public getWarehouseDetails(type: any, index: number): void {
         const sourcesArray = this.branchTransferCreateEditForm?.get('sources') as UntypedFormArray;
@@ -1088,7 +1102,7 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
     /**
      * This will be use for assign current company
      *
-     * @memberof BranchTransferCreateComponent
+     * @memberof CreateBranchTransfer
      */
     public assignCurrentCompany(): void {
         let branches;
@@ -1132,7 +1146,7 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
      *
      * @param {ILinkedStocksResult[]} data
      * @return {*}  {LinkedStocksVM[]}
-     * @memberof BranchTransferCreateComponent
+     * @memberof CreateBranchTransfer
      */
     public linkedStocksVM(data: ILinkedStocksResult[]): LinkedStocksVM[] {
 
@@ -1176,7 +1190,7 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
      * This will be use for get onboarding form
      *
      * @param {*} countryCode
-     * @memberof BranchTransferCreateComponent
+     * @memberof CreateBranchTransfer
      */
     public getOnboardingForm(countryCode): void {
         this.store.dispatch(this.commonActions.resetOnboardingForm());
@@ -1203,7 +1217,7 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
     /**
      * This will be use for focus default product
      *
-     * @memberof BranchTransferCreateComponent
+     * @memberof CreateBranchTransfer
      */
     public focusDefaultProduct(): void {
         // if (this.allowAutoFocusInField) {
@@ -1219,7 +1233,7 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
      * This wil be use for on products no result found
      *
      * @param {number} [idx]
-     * @memberof BranchTransferCreateComponent
+     * @memberof CreateBranchTransfer
      */
     public onProductNoResultsClicked(idx?: number): void {
         this.innerEntryIndex = idx;
@@ -1249,7 +1263,7 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
      *
      * @param {*} event
      * @param {number} index
-     * @memberof BranchTransferCreateComponent
+     * @memberof CreateBranchTransfer
      */
     public selectSenderName(event: any, index: number): void {
         if (event?.value && this.branchTransferMode === 'receipt-note') {
@@ -1257,12 +1271,16 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
         }
     }
 
+    public resetSenderName(event: any): void {
+        console.log(event);
+    }
+
     /**
      * This will be use for select reciever name
      *
      * @param {*} event
      * @param {number} index
-     * @memberof BranchTransferCreateComponent
+     * @memberof CreateBranchTransfer
      */
     public selectRecieverName(event: any, index: number): void {
         if (event?.value && this.branchTransferMode === 'delivery-challan') {
@@ -1275,7 +1293,7 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
      *
      * @param {*} event
      * @param {number} index
-     * @memberof BranchTransferCreateComponent
+     * @memberof CreateBranchTransfer
      */
     public selectReceiverWarehouse(event: any, index: number): void {
         if (event?.value) {
@@ -1295,7 +1313,7 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
      *
      * @param {*} event
      * @param {number} index
-     * @memberof BranchTransferCreateComponent
+     * @memberof CreateBranchTransfer
      */
     public selectSenderWarehouse(event: any, index: number): void {
         if (event?.value) {
@@ -1314,7 +1332,7 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
      *This will be use for on select transport company
      *
      * @param {*} event
-     * @memberof BranchTransferCreateComponent
+     * @memberof CreateBranchTransfer
      */
     public onSelectTransportCompany(event: any): void {
         this.branchTransferCreateEditForm.get('transporterDetails.transporterName').setValue(event?.value);
@@ -1325,7 +1343,7 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
      *This will be use for on select transport mode
      *
      * @param {*} event
-     * @memberof BranchTransferCreateComponent
+     * @memberof CreateBranchTransfer
      */
     public onSelectTransportMode(event: any): void {
         this.branchTransferCreateEditForm.get('transporterDetails.transportMode').setValue(event?.value);
@@ -1337,7 +1355,7 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
      * @param {*} event
      * @param {*} type
      * @param {*} index
-     * @memberof BranchTransferCreateComponent
+     * @memberof CreateBranchTransfer
      */
     public selectCompany(event, type, index): void {
         if (!this.isDefaultLoad && type) {
@@ -1523,6 +1541,7 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
             const sourceIndex = this.transferType !== 'products' ? index : 0;
             const destinationIndex = this.transferType !== 'products' ? 0 : index;
             sourceFormGroup = sourcesArray?.at(sourceIndex) as UntypedFormGroup;
+            sourcesWarehouseFormGroup = sourceFormGroup?.get('warehouse') as UntypedFormGroup;
             destinationsFormGroup = destinationsArray?.at(destinationIndex) as UntypedFormGroup;
             destinationsWarehouseFormGroup = destinationsFormGroup?.get('warehouse') as UntypedFormGroup;
 
@@ -1536,6 +1555,11 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
                             this.senderWarehouses[sourceFormGroup.get('uniqueName')?.value].push({ label: key.name, value: key?.uniqueName });
                         }
                     });
+                    if (sourcesWarehouseFormGroup && sourcesWarehouseFormGroup.get('uniqueName')?.value) {
+                        setTimeout(() => {
+                            this.branchTransferCreateEditForm.get('sources.0.warehouse.uniqueName').setValue(sourcesWarehouseFormGroup.get('uniqueName')?.value)
+                        }, 100);
+                    }
                 }
             }
         }
@@ -1547,7 +1571,7 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
      *
      * @param {*} index
      * @param {boolean} [reInitializeWarehouses]
-     * @memberof BranchTransferCreateComponent
+     * @memberof CreateBranchTransfer
      */
     public resetDestinationWarehouses(index, reInitializeWarehouses?: boolean) {
         let sourcesArray = this.branchTransferCreateEditForm.get('sources') as UntypedFormArray;
@@ -1585,7 +1609,7 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
 
                     this.allWarehouses[destinationsFormGroup.get('uniqueName').value].forEach(key => {
 
-                        if (key?.uniqueName !== sourcesWarehouseFormGroup.get('uniqueName') &&
+                        if (key?.uniqueName !== sourcesWarehouseFormGroup.get('uniqueName')?.value &&
                             key.taxNumber === (sourcesWarehouseFormGroup.get('taxNumber')?.value || '')) {
                             this.destinationWarehouses[destinationsFormGroup.get('uniqueName').value].push({ label: key.name, value: key?.uniqueName });
                         }
@@ -1648,7 +1672,7 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
      * @param {string} branchUniqueName
      * @param {*} branches
      * @return {*}  {boolean}
-     * @memberof BranchTransferCreateComponent
+     * @memberof CreateBranchTransfer
      */
     private branchExists(branchUniqueName: string, branches: any): boolean {
         const branchExists = branches?.filter(branch => branch?.uniqueName === branchUniqueName);
@@ -1661,7 +1685,7 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
      * @param {*} event
      * @param {*} product
      * @param {number} index
-     * @memberof BranchTransferCreateComponent
+     * @memberof CreateBranchTransfer
      */
     public variantChanged(event: any, product: any, index: number): void {
         if (event) {
@@ -1676,7 +1700,7 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
     /**
      *This will be use for save sku number
      *
-     * @memberof BranchTransferCreateComponent
+     * @memberof CreateBranchTransfer
      */
     public saveSkuNumberPopup(): void {
         this.skuMenuTrigger?.closeMenu();
@@ -1685,7 +1709,7 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
     /**
      *This will be use for save hsn number
      *
-     * @memberof BranchTransferCreateComponent
+     * @memberof CreateBranchTransfer
      */
     public saveHsnNumberPopup(): void {
         this.hsnSacMenuTrigger?.closeMenu();
@@ -1694,7 +1718,7 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
     /**
      *This will be use for  close save sku number
      *
-     * @memberof BranchTransferCreateComponent
+     * @memberof CreateBranchTransfer
      */
     public closeShowCodeMenu(): void {
         this.hsnSacMenuTrigger?.closeMenu();
@@ -1707,12 +1731,10 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
      * @param {*} event
      * @param {*} product
      * @param {number} [index]
-     * @memberof BranchTransferCreateComponent
+     * @memberof CreateBranchTransfer
      */
-    public selectProduct(event: any, product: any, index?: number): void {
+    public selectProduct(event: any, productFormGroup: any, index?: number): void {
         if (event && event.additional) {
-            const productArray = this.branchTransferCreateEditForm.get('products') as UntypedFormArray;
-            const productFormGroup = productArray?.at(index) as UntypedFormGroup;
             const productStockDetailsFormGroup = productFormGroup.get('stockDetails') as UntypedFormGroup;
             productFormGroup.get('name')?.setValue(event.additional.name);
             productFormGroup.get('uniqueName')?.setValue(event.additional.uniqueName);
@@ -1739,7 +1761,7 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
                         productStockDetailsFormGroup.get('stockUnitUniqueName')?.setValue(response?.body?.purchaseAccountDetails?.unitRates[0]?.stockUnitUniqueName);
                         productStockDetailsFormGroup.get('stockUnit')?.setValue(response?.body?.purchaseAccountDetails?.unitRates[0]?.stockUnitCode);
                     }
-                    this.calculateRowTotal(product);
+                    this.calculateRowTotal(productFormGroup);
                 }
             });
             productStockDetailsFormGroup.get('quantity')?.setValue(productStockDetailsFormGroup.get('quantity')?.value || 1);
@@ -1747,25 +1769,25 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
 
             if (event.additional?.hsnNumber && event.additional?.sacNumber) {
                 if (this.inventorySettings?.manageInventory) {
-                    productStockDetailsFormGroup.get('hsnNumber')?.setValue(event.additional.hsnNumber);
-                    productStockDetailsFormGroup.get('showCodeType')?.setValue("hsn");
+                    productFormGroup.get('hsnNumber')?.setValue(event.additional.hsnNumber);
+                    productFormGroup.get('showCodeType')?.setValue("hsn");
                 } else {
-                    productStockDetailsFormGroup.get('sacNumber')?.setValue(event.additional.sacNumber);
-                    productStockDetailsFormGroup.get('showCodeType')?.setValue("sac");
+                    productFormGroup.get('sacNumber')?.setValue(event.additional.sacNumber);
+                    productFormGroup.get('showCodeType')?.setValue("sac");
                 }
             } else if (event.additional?.hsnNumber && !event.additional?.sacNumber) {
-                productStockDetailsFormGroup.get('hsnNumber')?.setValue(event.additional.hsnNumber);
-                productStockDetailsFormGroup.get('showCodeType')?.setValue("hsn");
+                productFormGroup.get('hsnNumber')?.setValue(event.additional.hsnNumber);
+                productFormGroup.get('showCodeType')?.setValue("hsn");
             } else if (!event.additional?.hsnNumber && event.additional?.sacNumber) {
-                productStockDetailsFormGroup.get('sacNumber')?.setValue(event.additional.sacNumber);
-                productStockDetailsFormGroup.get('showCodeType')?.setValue("sac");
+                productFormGroup.get('sacNumber')?.setValue(event.additional.sacNumber);
+                productFormGroup.get('showCodeType')?.setValue("sac");
             } else if (!event.additional?.hsnNumber && !event.additional?.sacNumber) {
                 if (this.inventorySettings?.manageInventory) {
-                    productStockDetailsFormGroup.get('hsnNumber')?.setValue("");
-                    productStockDetailsFormGroup.get('showCodeType')?.setValue("hsn");
+                    productFormGroup.get('hsnNumber')?.setValue("");
+                    productFormGroup.get('showCodeType')?.setValue("hsn");
                 } else {
-                    productStockDetailsFormGroup.get('sacNumber')?.setValue("");
-                    productStockDetailsFormGroup.get('showCodeType')?.setValue("sac");
+                    productFormGroup.get('sacNumber')?.setValue("");
+                    productFormGroup.get('showCodeType')?.setValue("sac");
                 }
             }
 
@@ -1789,7 +1811,7 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
      *
      * @param {*} product
      * @param {number} [index]
-     * @memberof BranchTransferCreateComponent
+     * @memberof CreateBranchTransfer
      */
     public calculateRowTotal(productsFormGroup: any): void {
         const productStockDetailsFormGroup = productsFormGroup.get('stockDetails') as UntypedFormGroup;
@@ -1816,7 +1838,7 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
     /**
      * This will be use for calculating the overall total
      *
-     * @memberof BranchTransferCreateComponent
+     * @memberof CreateBranchTransfer
      */
     public calculateOverallTotal(): void {
         this.overallTotal = 0;
@@ -1875,7 +1897,7 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
     /**
      *This will be use for toggle transport modal dialog
      *
-     * @memberof BranchTransferCreateComponent
+     * @memberof CreateBranchTransfer
      */
     public toggleTransporterModel(): void {
         this.dialog.open(this.asideManageTransport, {
@@ -1891,7 +1913,7 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
     /**
     * This Function is used to close Aside Menu Sidebar
     *
-    * @memberof BranchTransferCreateComponent
+    * @memberof CreateBranchTransfer
     */
     public closeAsideMenuProductServiceModal(): void {
         this.asideMenuStateForProductService?.close();
@@ -1901,7 +1923,7 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
     /**
      * This will be use for close aside modal dialog
      *
-     * @memberof BranchTransferCreateComponent
+     * @memberof CreateBranchTransfer
      */
     public closeAsideTransporterModal(): void {
         this.getTransportersList();
@@ -1910,7 +1932,7 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
     /**
      * This will be use for get transporters list
      *
-     * @memberof BranchTransferCreateComponent
+     * @memberof CreateBranchTransfer
      */
     public getTransportersList(): void {
         this.invoiceServices.getAllTransporterList(this.transporterObj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -1930,7 +1952,7 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
     /**
      * THis will be use for change detection callback
      *
-     * @memberof BranchTransferCreateComponent
+     * @memberof CreateBranchTransfer
      */
     public detectChanges(): void {
         if (!this.changeDetection['destroyed']) {
@@ -1942,7 +1964,7 @@ export class BranchTransferCreateComponent implements OnInit, OnDestroy {
     /**
      * Lifecycle hook for destroy
      *
-     * @memberof BranchTransferCreateComponent
+     * @memberof CreateBranchTransfer
      */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);

@@ -117,7 +117,6 @@ export class NewBranchTransferTransportationDetails {
     public transporterName: string;
     public transporterId: any;
     public transportMode: string;
-    public name?: string;
     public vehicleNumber: any;
 }
 

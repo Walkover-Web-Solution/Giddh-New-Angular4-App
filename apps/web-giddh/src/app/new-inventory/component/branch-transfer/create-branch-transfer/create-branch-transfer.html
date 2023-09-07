@@ -59,6 +59,10 @@
                                                         : 'Date of Supply'
                                                 "
                                                 [required]="true"
+                                                [showError]="
+                                                    !isValidForm &&
+                                                    !branchTransferCreateEditForm?.get('dateOfSupply')?.value
+                                                "
                                             >
                                             </giddh-datepicker>
                                         </div>
@@ -82,9 +86,13 @@
                                                 (selectedOption)="
                                                     selectProduct(
                                                         $event,
-                                                        branchTransferCreateEditForm.get('products.0')?.value,
+                                                        branchTransferCreateEditForm.get('products.0'),
                                                         0
                                                     )
+                                                "
+                                                [showError]="
+                                                    !isValidForm &&
+                                                    !branchTransferCreateEditForm?.get('products.0.uniqueName').value
                                                 "
                                                 [required]="true"
                                             >
@@ -173,6 +181,13 @@
                                                                       ?.value
                                                                 : ''
                                                         "
+                                                        [showError]="
+                                                            !isValidForm &&
+                                                            !branchTransferCreateEditForm?.get('sources.0.uniqueName')
+                                                                ?.value
+                                                        "
+                                                        [allowValueReset]="true"
+                                                        (onClear)="resetSenderName($event)"
                                                     >
                                                     </dropdown-field>
                                                     <i
@@ -191,7 +206,7 @@
                                                     >
                                                     </i>
                                                 </div>
-                                                <div *ngIf="editBranchTransferUniqueName" class="mr-b15 mr-t15">
+                                                <!-- <div *ngIf="editBranchTransferUniqueName" class="mr-b15 mr-t15">
                                                     <input-field
                                                         [name]="'name'"
                                                         [label]="'Sender\'s Warehouse'"
@@ -199,7 +214,7 @@
                                                         [type]="'text'"
                                                     >
                                                     </input-field>
-                                                </div>
+                                                </div> -->
                                             </div>
                                             <div formArrayName="sources">
                                                 <div [formGroupName]="0">
@@ -217,6 +232,12 @@
                                                                 ]
                                                             "
                                                             [required]="true"
+                                                            [showError]="
+                                                                !isValidForm &&
+                                                                !branchTransferCreateEditForm?.get(
+                                                                    'sources.0.warehouse.uniqueName'
+                                                                )?.value
+                                                            "
                                                             [defaultValue]="
                                                                 branchTransferCreateEditForm.get(
                                                                     'sources.0.warehouse.name'
@@ -299,6 +320,10 @@
                                                 [placeholder]="'Receiver\'s Name'"
                                                 [readonly]="isBranch || isCompanyWithSingleBranch"
                                                 [required]="true"
+                                                [showError]="
+                                                    !isValidForm &&
+                                                    !branchTransferCreateEditForm?.get('myCurrentCompany')?.value
+                                                "
                                             >
                                             </input-field>
                                             <i
@@ -329,6 +354,12 @@
                                                         (selectedOption)="selectRecieverName($event, 0)"
                                                         [readonly]="isUpdateMode"
                                                         [required]="true"
+                                                        [showError]="
+                                                            !isValidForm &&
+                                                            !branchTransferCreateEditForm?.get(
+                                                                'destinations.0.warehouse.uniqueName'
+                                                            )?.value
+                                                        "
                                                     >
                                                     </dropdown-field>
                                                 </div>
@@ -347,6 +378,12 @@
                                                         [allowValueReset]="true"
                                                         (onClear)="resetWarehouse('destinations', 0)"
                                                         [required]="true"
+                                                        [showError]="
+                                                            !isValidForm &&
+                                                            !branchTransferCreateEditForm?.get(
+                                                                'destinations.0.warehouse.uniqueName'
+                                                            )?.value
+                                                        "
                                                     >
                                                     </dropdown-field>
                                                 </div>
@@ -442,6 +479,11 @@
                                                         ? 'Date of Receipt'
                                                         : 'Date of Supply'
                                                 "
+                                                [reuqired]="true"
+                                                [showError]="
+                                                    !isValidForm &&
+                                                    !branchTransferCreateEditForm?.get('dateOfSupply')?.value
+                                                "
                                             >
                                             </giddh-datepicker>
                                         </div>
@@ -451,6 +493,10 @@
                                     <div class="col-lg-6">
                                         <div *ngIf="transferType === 'senders'">
                                             <dropdown-field
+                                                [showError]="
+                                                    !isValidForm &&
+                                                    !branchTransferCreateEditForm?.get('products.0.uniqueName')?.value
+                                                "
                                                 [required]="true"
                                                 (dynamicSearchedQuery)="onStockSearchQueryChanged($event)"
                                                 [enableDynamicSearch]="true"
@@ -466,7 +512,7 @@
                                                 (selectedOption)="
                                                     selectProduct(
                                                         $event,
-                                                        branchTransferCreateEditForm.get('products.0')?.value,
+                                                        branchTransferCreateEditForm.get('products.0'),
                                                         0
                                                     )
                                                 "
@@ -548,6 +594,10 @@
                                                     [type]="'text'"
                                                     [readonly]="isBranch || isCompanyWithSingleBranch"
                                                     class="mr-b15 d-block"
+                                                    [showError]="
+                                                        !isValidForm &&
+                                                        !branchTransferCreateEditForm?.get('myCurrentCompany')?.value
+                                                    "
                                                 >
                                                 </input-field>
                                                 <dropdown-field
@@ -561,6 +611,10 @@
                                                     [required]="true"
                                                     [defaultValue]="
                                                         branchTransferCreateEditForm.get('sources.0.name')?.value
+                                                    "
+                                                    [showError]="
+                                                        !isValidForm &&
+                                                        !branchTransferCreateEditForm?.get('sources.0.name')?.value
                                                     "
                                                 >
                                                 </dropdown-field>
@@ -580,7 +634,7 @@
                                                 >
                                                 </i>
                                             </div>
-                                            <div *ngIf="editBranchTransferUniqueName" class="mr-b15 mr-t15">
+                                            <!-- <div *ngIf="editBranchTransferUniqueName" class="mr-b15 mr-t15">
                                                 <input-field
                                                     [name]="'name'"
                                                     [label]="'Sender\'s Warehouse'"
@@ -588,7 +642,7 @@
                                                     [type]="'text'"
                                                 >
                                                 </input-field>
-                                            </div>
+                                            </div> -->
                                         </div>
 
                                         <div *ngIf="transferType === 'products'" formArrayName="sources">
@@ -611,6 +665,12 @@
                                                         "
                                                         [allowValueReset]="true"
                                                         (onClear)="resetWarehouse('sources', 0)"
+                                                        [showError]="
+                                                            !isValidForm &&
+                                                            !branchTransferCreateEditForm?.get(
+                                                                'sources.0.warehouse.uniqueName'
+                                                            )?.value
+                                                        "
                                                     >
                                                     </dropdown-field>
                                                 </div>
@@ -686,6 +746,12 @@
                                                             (selectedOption)="selectRecieverName($event, 0)"
                                                             [readonly]="isUpdateMode"
                                                             [required]="true"
+                                                            [showError]="
+                                                                !isValidForm &&
+                                                                !branchTransferCreateEditForm?.get(
+                                                                    'destinations.0.uniqueName'
+                                                                )?.value
+                                                            "
                                                         >
                                                         </dropdown-field>
                                                         <i
@@ -723,6 +789,12 @@
                                                         [allowValueReset]="true"
                                                         (onClear)="resetWarehouse('destinations', 0)"
                                                         [required]="true"
+                                                        [showError]="
+                                                            !isValidForm &&
+                                                            !branchTransferCreateEditForm?.get(
+                                                                'destinations.0.uniqueName'
+                                                            )?.value
+                                                        "
                                                     >
                                                     </dropdown-field>
                                                 </div>
@@ -793,6 +865,10 @@
                                                 [type]="'text'"
                                                 [placeholder]="'Senders\'s Name'"
                                                 [readonly]="isBranch || isCompanyWithSingleBranch"
+                                                [showError]="
+                                                    !isValidForm &&
+                                                    !branchTransferCreateEditForm?.get('myCurrentCompany')?.value
+                                                "
                                             >
                                             </input-field>
                                             <div formArrayName="sources">
@@ -807,6 +883,12 @@
                                                             (selectedOption)="selectSenderWarehouse($event, 0)"
                                                             [readonly]="isUpdateMode"
                                                             [required]="true"
+                                                            [showError]="
+                                                                !isValidForm &&
+                                                                !branchTransferCreateEditForm?.get(
+                                                                    'sources.0.uniqueName'
+                                                                )?.value
+                                                            "
                                                         >
                                                         </dropdown-field>
                                                         <i
@@ -829,7 +911,6 @@
                                                     </div>
                                                     <div class="mr-b15">
                                                         <dropdown-field
-                                                            #sourcesWarehouse
                                                             [name]="'senderWarehouse'"
                                                             [placeholder]="'Sender\'s Warehouse'"
                                                             [options]="
@@ -843,6 +924,12 @@
                                                             [allowValueReset]="true"
                                                             (onClear)="resetWarehouse('sources', 0)"
                                                             [required]="true"
+                                                            [showError]="
+                                                                !isValidForm &&
+                                                                !branchTransferCreateEditForm?.get(
+                                                                    'sources.0.uniqueName'
+                                                                )?.value
+                                                            "
                                                         >
                                                         </dropdown-field>
                                                     </div>
@@ -996,7 +1083,7 @@
                                                                             source.get('warehouse.uniqueName').value &&
                                                                             source.get('warehouse.taxNumber').value
                                                                         "
-                                                                        name="sourceWarehouseTaxnumber{{ i }}"
+                                                                        [name]="'sourceWarehouseTaxnumber' + i"
                                                                         [placeholder]="getEnterTaxText()"
                                                                         [type]="'text'"
                                                                         [label]="
@@ -1027,7 +1114,7 @@
                                                                             rows="3"
                                                                             class="form-control"
                                                                             rows="3"
-                                                                            name="sourceWarehouseAddress{{ i }}"
+                                                                            [name]="'sourceWarehouseAddress' + i"
                                                                             formControlName="address"
                                                                             [readonly]="
                                                                                 source.get('warehouse.uniqueName').value
@@ -1074,7 +1161,7 @@
                                                                 <text-field
                                                                     [cssClass]="'form-control mat-field-border'"
                                                                     [type]="'number'"
-                                                                    name="sourceQty{{ i }}"
+                                                                    [name]="'sourceQty' + i"
                                                                     [placeholder]="'Enter Qty/Unit'"
                                                                     [allowDecimalDigitsOnly]="true"
                                                                     (change)="
@@ -1086,10 +1173,8 @@
                                                             </div>
                                                             <div *ngIf="activeIndx !== i">
                                                                 <div class="text-right">
-                                                                    {{
-                                                                        source.get("warehouse.stockDetails.quantity")
-                                                                            .value
-                                                                    }}
+                                                                    {{ source.get("warehouse.stockDetails.quantity")
+                                                                    .value }}
                                                                 </div>
                                                             </div>
                                                         </td>
@@ -1097,11 +1182,9 @@
                                                             <div>
                                                                 <div *ngIf="activeIndx !== i">
                                                                     <div class="text-right">
-                                                                        {{ activeCompany?.baseCurrencySymbol }}
-                                                                        {{
-                                                                            source.get("warehouse.stockDetails.rate")
-                                                                                .value | giddhCurrency
-                                                                        }}
+                                                                        {{ activeCompany?.baseCurrencySymbol }} {{
+                                                                        source.get("warehouse.stockDetails.rate") .value
+                                                                        | giddhCurrency }}
                                                                     </div>
                                                                 </div>
                                                                 <div *ngIf="activeIndx === i" class="w-100">
@@ -1110,7 +1193,7 @@
                                                                             'form-control mat-field-border  text-right'
                                                                         "
                                                                         [type]="'text'"
-                                                                        name="sourceRate{{ i }}"
+                                                                        [name]="'sourceRate' + i"
                                                                         [placeholder]="'Enter Rate'"
                                                                         formControlName="rate"
                                                                         [allowDecimalDigitsOnly]="true"
@@ -1129,11 +1212,9 @@
                                                         <td class="amount">
                                                             <div *ngIf="activeIndx !== i">
                                                                 <div class="text-right">
-                                                                    {{ activeCompany?.baseCurrencySymbol }}
-                                                                    {{
-                                                                        source.get("warehouse.stockDetails.amount")
-                                                                            .value | giddhCurrency
-                                                                    }}
+                                                                    {{ activeCompany?.baseCurrencySymbol }} {{
+                                                                    source.get("warehouse.stockDetails.amount") .value |
+                                                                    giddhCurrency }}
                                                                 </div>
                                                             </div>
                                                             <div *ngIf="activeIndx === i" class="w-100">
@@ -1142,7 +1223,7 @@
                                                                         'form-control mat-field-border  text-right'
                                                                     "
                                                                     [type]="'text'"
-                                                                    name="sourceAmount{{ i }}"
+                                                                    [name]="'sourceAmount' + i"
                                                                     [placeholder]="'Enter Amount'"
                                                                     formControlName="amount"
                                                                     [allowDecimalDigitsOnly]="true"
@@ -1215,7 +1296,7 @@
                                                             <select-field
                                                                 (createOption)="onProductNoResultsClicked(0)"
                                                                 [showCreateNew]="true"
-                                                                name="productName{{ i }}"
+                                                                [name]="'productName' + i"
                                                                 [placeholder]="'Product\'s Name'"
                                                                 [options]="stockList"
                                                                 [appearance]="'outline'"
@@ -1242,7 +1323,7 @@
                                                                         variantChanged($event, product, i)
                                                                     "
                                                                     [options]="stockVariants"
-                                                                    name="variantName{{ i }}"
+                                                                    [name]="'variantName' + i"
                                                                     [defaultValue]="product.get('variant.name').value"
                                                                 >
                                                                 </select-field>
@@ -1276,7 +1357,7 @@
                                                                             type="text"
                                                                             [cssClass]="'form-control mat-field-border'"
                                                                             [type]="'text'"
-                                                                            name="productSkuCode{{ i }}"
+                                                                            [name]="'productSkuCode' + i"
                                                                             [placeholder]="'SKU Code'"
                                                                             [max]="50"
                                                                             formControlName="skuCode"
@@ -1310,7 +1391,7 @@
                                                                         maxlength="100"
                                                                         class="form-control"
                                                                         rows="3"
-                                                                        name="productDescription{{ i }}"
+                                                                        [name]="'productDescription' + i"
                                                                         formControlName="description"
                                                                         *ngIf="
                                                                             activeIndx == i &&
@@ -1328,19 +1409,13 @@
                                                                 #hsnSacMenuTrigger="matMenuTrigger"
                                                             >
                                                                 <label>
-                                                                    {{
-                                                                        product.get("showCodeType")?.value === "hsn"
-                                                                            ? "HSN"
-                                                                            : "SAC"
-                                                                    }}
-                                                                    Code:
+                                                                    {{ product.get("showCodeType")?.value === "hsn" ?
+                                                                    "HSN" : "SAC" }} Code:
                                                                 </label>
                                                                 <span
-                                                                    >{{
-                                                                        product.get("showCodeType")?.value === "hsn"
-                                                                            ? product.get("hsnNumber")?.value
-                                                                            : product.get("sacNumber")?.value
-                                                                    }}
+                                                                    >{{ product.get("showCodeType")?.value === "hsn" ?
+                                                                    product.get("hsnNumber")?.value :
+                                                                    product.get("sacNumber")?.value }}
                                                                     <span class="edit-icon cp">
                                                                         <img src="assets/images/edit-pencilicon.svg" />
                                                                     </span>
@@ -1353,9 +1428,9 @@
                                                                 >
                                                                     <div class="radio-btns mr-b1">
                                                                         <mat-radio-group
-                                                                            name="showCodeType{{ i }}"
+                                                                            [name]="'showCodeType' + i"
                                                                             class="d-flex font-15"
-                                                                            formControlName="showCodeType"
+                                                                            [formControl]="product.get('showCodeType')"
                                                                         >
                                                                             <mat-radio-button
                                                                                 color="primary"
@@ -1369,7 +1444,10 @@
                                                                             >
                                                                         </mat-radio-group>
                                                                     </div>
-                                                                    <div class="pt-1">
+                                                                    <div
+                                                                        class="pt-1"
+                                                                        *ngIf="product.get('showCodeType')?.value"
+                                                                    >
                                                                         <div
                                                                             class="mr-b15 mr-t15"
                                                                             *ngIf="
@@ -1485,7 +1563,7 @@
                                                                 <text-field
                                                                     [cssClass]="'form-control mat-field-border'"
                                                                     [type]="'number'"
-                                                                    name="productQty{{ i }}"
+                                                                    [name]="'productQty' + i"
                                                                     [placeholder]="'Enter Qty/Unit'"
                                                                     [allowDecimalDigitsOnly]="true"
                                                                     (change)="calculateRowTotal(product)"
@@ -1493,8 +1571,7 @@
                                                                 >
                                                                 </text-field>
                                                                 <span class="text-capitalize">
-                                                                    {{
-                                                                        product.get("stockDetails.stockUnit")?.value
+                                                                    {{ product.get("stockDetails.stockUnit")?.value
                                                                     }}</span
                                                                 >
                                                             </div>
@@ -1502,8 +1579,7 @@
                                                                 <div class="text-right">
                                                                     {{ product.get("stockDetails.quantity")?.value }}
                                                                     <span class="text-capitalize">
-                                                                        {{
-                                                                            product.get("stockDetails.stockUnit")?.value
+                                                                        {{ product.get("stockDetails.stockUnit")?.value
                                                                         }}</span
                                                                     >
                                                                 </div>
@@ -1522,7 +1598,7 @@
                                                                             'form-control mat-field-border  text-right'
                                                                         "
                                                                         [type]="'text'"
-                                                                        name="productRate{{ i }}"
+                                                                        [name]="'productRate' + i"
                                                                         [placeholder]="'Enter Rate'"
                                                                         formControlName="rate"
                                                                         [allowDecimalDigitsOnly]="true"
@@ -1536,11 +1612,9 @@
                                                                 </div>
                                                                 <div *ngIf="activeIndx !== i">
                                                                     <div class="text-right">
-                                                                        {{ activeCompany?.baseCurrencySymbol }}
-                                                                        {{
-                                                                            product.get("stockDetails.rate")?.value
-                                                                                | giddhCurrency
-                                                                        }}
+                                                                        {{ activeCompany?.baseCurrencySymbol }} {{
+                                                                        product.get("stockDetails.rate")?.value |
+                                                                        giddhCurrency }}
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -1557,7 +1631,7 @@
                                                                         'form-control mat-field-border  text-right'
                                                                     "
                                                                     [type]="'text'"
-                                                                    name="productAmount{{ i }}"
+                                                                    [name]="'productAmount' + i"
                                                                     [placeholder]="'Enter Amount'"
                                                                     formControlName="amount"
                                                                     [allowDecimalDigitsOnly]="true"
@@ -1571,11 +1645,9 @@
                                                             </div>
                                                             <div *ngIf="activeIndx !== i">
                                                                 <div class="text-right">
-                                                                    {{ activeCompany?.baseCurrencySymbol }}
-                                                                    {{
-                                                                        product.get("stockDetails.amount")?.value
-                                                                            | giddhCurrency
-                                                                    }}
+                                                                    {{ activeCompany?.baseCurrencySymbol }} {{
+                                                                    product.get("stockDetails.amount")?.value |
+                                                                    giddhCurrency }}
                                                                 </div>
                                                             </div>
                                                             <span class="position-relative">
@@ -1630,7 +1702,7 @@
                                                             >
                                                                 <select-field
                                                                     [cssClass]="'form-control mat-field-border pb-0'"
-                                                                    name="destinationName{{ i }}"
+                                                                    [name]="'destinationName' + i"
                                                                     [placeholder]="'Receiver\'s Name'"
                                                                     [options]="branches"
                                                                     (selectedOption)="selectRecieverName($event, i)"
@@ -1639,7 +1711,7 @@
                                                                 </select-field>
                                                                 <select-field
                                                                     [cssClass]="'form-control mat-field-border pb-0'"
-                                                                    name="destinationWarehouse{{ i }}"
+                                                                    [name]="'destinationWarehouse' + i"
                                                                     [placeholder]="'Receiver\'s Warehouse'"
                                                                     (selectedOption)="
                                                                         selectReceiverWarehouse($event, i)
@@ -1666,7 +1738,7 @@
                                                                                 .value &&
                                                                             destination.get('warehouse.taxNumber').value
                                                                         "
-                                                                        name="destinationWarehouseTaxnumber{{ i }}"
+                                                                        [name]="'destinationWarehouseTaxnumber' + i"
                                                                         [placeholder]="getEnterTaxText()"
                                                                         [type]="'text'"
                                                                         [label]="
@@ -1699,7 +1771,7 @@
                                                                             rows="3"
                                                                             class="form-control"
                                                                             rows="3"
-                                                                            name="destinationWarehouseAddress{{ i }}"
+                                                                            [name]="'destinationWarehouseAddress' + i"
                                                                             formControlName="address"
                                                                             [readonly]="
                                                                                 destination.get('warehouse.uniqueName')
@@ -1752,7 +1824,7 @@
                                                                         <text-field
                                                                             [cssClass]="'form-control mat-field-border'"
                                                                             [type]="'number'"
-                                                                            name="destinationQty{{ i }}"
+                                                                            [name]="'destinationQty' + i"
                                                                             [placeholder]="'Enter Qty/Unit'"
                                                                             [allowDecimalDigitsOnly]="true"
                                                                             (change)="
@@ -1766,11 +1838,8 @@
                                                                     </div>
                                                                     <div *ngIf="activeIndx !== i">
                                                                         <div class="text-right">
-                                                                            {{
-                                                                                destination.get(
-                                                                                    "warehouse.stockDetails.quantity"
-                                                                                ).value
-                                                                            }}
+                                                                            {{ destination.get(
+                                                                            "warehouse.stockDetails.quantity" ).value }}
                                                                         </div>
                                                                     </div>
                                                                 </span></span
@@ -1780,12 +1849,9 @@
                                                             <div>
                                                                 <div *ngIf="activeIndx !== i">
                                                                     <div class="text-right">
-                                                                        {{ activeCompany?.baseCurrencySymbol }}
-                                                                        {{
-                                                                            destination.get(
-                                                                                "warehouse.stockDetails.rate"
-                                                                            ).value | giddhCurrency
-                                                                        }}
+                                                                        {{ activeCompany?.baseCurrencySymbol }} {{
+                                                                        destination.get( "warehouse.stockDetails.rate"
+                                                                        ).value | giddhCurrency }}
                                                                     </div>
                                                                 </div>
                                                                 <div *ngIf="activeIndx === i" class="w-100">
@@ -1794,7 +1860,7 @@
                                                                             'form-control mat-field-border  text-right'
                                                                         "
                                                                         [type]="'text'"
-                                                                        name="destinationRate{{ i }}"
+                                                                        [name]="'destinationRate' + i"
                                                                         [placeholder]="'Enter Rate'"
                                                                         formControlName="rate"
                                                                         [allowDecimalDigitsOnly]="true"
@@ -1815,11 +1881,9 @@
                                                         <td class="amount">
                                                             <div *ngIf="activeIndx !== i">
                                                                 <div class="text-right">
-                                                                    {{ activeCompany?.baseCurrencySymbol }}
-                                                                    {{
-                                                                        destination.get("warehouse.stockDetails.rate")
-                                                                            .amount | giddhCurrency
-                                                                    }}
+                                                                    {{ activeCompany?.baseCurrencySymbol }} {{
+                                                                    destination.get("warehouse.stockDetails.rate")
+                                                                    .amount | giddhCurrency }}
                                                                 </div>
                                                             </div>
                                                             <div *ngIf="activeIndx === i" class="w-100">
@@ -1828,7 +1892,7 @@
                                                                         'form-control mat-field-border  text-right'
                                                                     "
                                                                     [type]="'text'"
-                                                                    name="destinationAmount{{ i }}"
+                                                                    [name]="'destinationAmount' + i"
                                                                     [placeholder]="'Enter Amount'"
                                                                     formControlName="amount"
                                                                     [allowDecimalDigitsOnly]="true"
@@ -1914,8 +1978,8 @@
                                             <div class="row text-right">
                                                 <div class="col px-0"><strong>Total</strong></div>
                                                 <div class="col px-0">
-                                                    {{ activeCompany?.baseCurrencySymbol }}
-                                                    {{ overallTotal | giddhCurrency }}
+                                                    {{ activeCompany?.baseCurrencySymbol }} {{ overallTotal |
+                                                    giddhCurrency }}
                                                 </div>
                                             </div>
                                         </td>
@@ -2001,7 +2065,7 @@
                     <div class="row position-bottom">
                         <div class="col-xl-8 col-lg-10 col-sm-12 mb-4">
                             <div class="action-btn-wrapper text-right w-100 d-flex column-gap1 justify-content-end">
-                                <button mat-stroked-button mat-dialog-close>Clear</button>
+                                <button mat-stroked-button (click)="resetForm()">Clear</button>
                                 <button
                                     mat-stroked-button
                                     color="primary"

@@ -24,11 +24,11 @@ import { Router } from '@angular/router';
 import { saveAs } from 'file-saver';
 
 @Component({
-    selector: 'branch-transfer-list',
-    templateUrl: './branch-transfer-list.component.html',
-    styleUrls: ['./branch-transfer-list.component.scss']
+    selector: 'list-branch-transfer',
+    templateUrl: './list-branch-transfer.component.html',
+    styleUrls: ['./list-branch-transfer.component.scss']
 })
-export class BranchTransferListComponent implements OnInit {
+export class ListBranchTransfer implements OnInit {
     /** Instance of Mat Dialog for Advance Filter */
     @ViewChild("advanceFilterDialog") public advanceFilterComponent: TemplateRef<any>;
     /** Directive to get reference of element */
@@ -177,7 +177,7 @@ export class BranchTransferListComponent implements OnInit {
     /**
      * Conponent init hook
      *
-     * @memberof BranchTransferListComponent
+     * @memberof ListBranchTransfer
      */
     public ngOnInit(): void {
         document.querySelector("body")?.classList?.add("new-branch-list-page");
@@ -290,7 +290,7 @@ export class BranchTransferListComponent implements OnInit {
     /**
      * This will use for init all forms value
      *
-     * @memberof BranchTransferListComponent
+     * @memberof ListBranchTransfer
      */
     public initAllForms(): void {
         this.branchTransferForm = this.formBuilder.group({
@@ -312,7 +312,7 @@ export class BranchTransferListComponent implements OnInit {
      *This will use for get branch transfer list data
      *
      * @param {boolean} resetPage
-     * @memberof BranchTransferListComponent
+     * @memberof ListBranchTransfer
      */
     public getBranchTransferList(resetPage: boolean): void {
         this.isLoading = true;
@@ -341,7 +341,7 @@ export class BranchTransferListComponent implements OnInit {
      * This will use for toggle table search field
      *
      * @param {string} fieldName
-     * @memberof BranchTransferListComponent
+     * @memberof ListBranchTransfer
      */
     public toggleSearch(fieldName: string): void {
         this.inlineSearch = fieldName;
@@ -351,7 +351,7 @@ export class BranchTransferListComponent implements OnInit {
      * This will use for download branch transfer row data
      *
      * @param {*} item
-     * @memberof BranchTransferListComponent
+     * @memberof ListBranchTransfer
      */
     public downloadBranchTransfer(item: any): void {
         let downloadBranchTransferRequest = new NewBranchTransferDownloadRequest();
@@ -372,7 +372,7 @@ export class BranchTransferListComponent implements OnInit {
      * This will be called when edit branch transfer row data
      *
      * @param {*} item
-     * @memberof BranchTransferListComponent
+     * @memberof ListBranchTransfer
      */
     public showEditBranchTransferPopup(item: any): void {
         this.branchTransferMode = item.voucherType;
@@ -391,7 +391,7 @@ export class BranchTransferListComponent implements OnInit {
      * This will be use for show delete branch transfer modal
      *
      * @param {*} item
-     * @memberof BranchTransferListComponent
+     * @memberof ListBranchTransfer
      */
     public showDeleteBranchTransferModal(item: any): void {
         this.selectedBranchTransferUniqueName = item?.uniqueName;
@@ -417,7 +417,7 @@ export class BranchTransferListComponent implements OnInit {
     /**
      *This will use for delete branch transfer confirmation
      *
-     * @memberof BranchTransferListComponent
+     * @memberof ListBranchTransfer
      */
     public deleteNewBranchTransfer(): void {
         this.dialog.closeAll();
@@ -435,7 +435,7 @@ export class BranchTransferListComponent implements OnInit {
      * This will be use for handle branch transfer change
      *
      * @param {*} selectedEntity
-     * @memberof BranchTransferListComponent
+     * @memberof ListBranchTransfer
      */
     public handleBranchChange(selectedEntity: any): void {
         this.currentBranch.name = selectedEntity.label;
@@ -445,7 +445,7 @@ export class BranchTransferListComponent implements OnInit {
      * This will use for page change
      *
      * @param {*} event
-     * @memberof BranchTransferListComponent
+     * @memberof ListBranchTransfer
      */
     public pageChanged(event: any): void {
         this.branchTransferPaginationObject.page = event?.page;
@@ -455,7 +455,7 @@ export class BranchTransferListComponent implements OnInit {
     /**
      * This will use for open advance filter dialog
      *
-     * @memberof BranchTransferListComponent
+     * @memberof ListBranchTransfer
      */
     public openAdvanceFilterDialog(): void {
         this.voucherTypeDropdown?.closeDropdownPanel();
@@ -469,7 +469,7 @@ export class BranchTransferListComponent implements OnInit {
      * This will be use for show datepicker
      *
      * @param {*} element
-     * @memberof BranchTransferListComponent
+     * @memberof ListBranchTransfer
      */
     public showGiddhDatepicker(element: any): void {
         if (element) {
@@ -484,7 +484,7 @@ export class BranchTransferListComponent implements OnInit {
     /**
      * This will be use for hide datepicker
      *
-     * @memberof BranchTransferListComponent
+     * @memberof ListBranchTransfer
      */
     public hideGiddhDatepicker(): void {
         this.modalRef.hide();
@@ -494,7 +494,7 @@ export class BranchTransferListComponent implements OnInit {
     * Call back function for date/range selection in datepicker
     *
     * @param {*} value
-    * @memberof BranchTransferListComponent
+    * @memberof ListBranchTransfer
     */
     public dateSelectedCallback(value?: any): void {
         if (value && value.event === "cancel") {
@@ -522,7 +522,7 @@ export class BranchTransferListComponent implements OnInit {
      *This will be use for table sorting
      *
      * @param {*} event
-     * @memberof BranchTransferListComponent
+     * @memberof ListBranchTransfer
      */
     public sortChange(event: any): void {
         this.branchTransferGetRequestParams.sort = event?.direction ? event?.direction : 'asc';
@@ -536,7 +536,7 @@ export class BranchTransferListComponent implements OnInit {
     /**
      * This will be use for clear filters
      *
-     * @memberof BranchTransferListComponent
+     * @memberof ListBranchTransfer
      */
     public clearFilters(): void {
         this.branchTransferAdvanceSearchFormObj.voucherType = null;
@@ -554,7 +554,7 @@ export class BranchTransferListComponent implements OnInit {
      *This will be use for select voucher type in advance filter
      *
      * @param {*} event
-     * @memberof BranchTransferListComponent
+     * @memberof ListBranchTransfer
      */
     public selectVoucherType(event: any): void {
         this.branchTransferAdvanceSearchFormObj.voucherType = event?.value;
@@ -565,7 +565,7 @@ export class BranchTransferListComponent implements OnInit {
      * This will be use for select operator type in advance filter
      *
      * @param {*} event
-     * @memberof BranchTransferListComponent
+     * @memberof ListBranchTransfer
      */
     public selectOperator(event: any): void {
         this.branchTransferAdvanceSearchFormObj.amountOperator = event?.value;
@@ -576,7 +576,7 @@ export class BranchTransferListComponent implements OnInit {
      * This will be use for submit advance search filter form
      *
      * @param {*} event
-     * @memberof BranchTransferListComponent
+     * @memberof ListBranchTransfer
      */
     public search(): void {
         this.showClearFilter = true;
@@ -603,7 +603,7 @@ export class BranchTransferListComponent implements OnInit {
      * This will be use for  reset select voucher type in advance filter
      *
      * @param {*} event
-     * @memberof BranchTransferListComponent
+     * @memberof ListBranchTransfer
      */
     public resetVoucherType(): void {
         this.branchTransferAdvanceSearchFormObj.voucherType = null
@@ -613,7 +613,7 @@ export class BranchTransferListComponent implements OnInit {
      * This will be use for reset operators type in advance filter
      *
      * @param {*} event
-     * @memberof BranchTransferListComponent
+     * @memberof ListBranchTransfer
      */
     public resetOperators(): void {
         this.branchTransferAdvanceSearchFormObj.amountOperator = null
@@ -623,7 +623,7 @@ export class BranchTransferListComponent implements OnInit {
      * This will be use for cancel in advance filter
      *
      * @param {*} event
-     * @memberof BranchTransferListComponent
+     * @memberof ListBranchTransfer
      */
     public cancel(): void {
         this.branchTransferForm.controls['voucherType'].setValue(null);
@@ -636,7 +636,7 @@ export class BranchTransferListComponent implements OnInit {
     * This will use for translation complete
     *
     * @param {*} event
-    * @memberof BranchTransferListComponent
+    * @memberof ListBranchTransfer
     */
     public translationComplete(event: any): void {
         if (event) {
@@ -679,7 +679,7 @@ export class BranchTransferListComponent implements OnInit {
      * Component destroy hook
      *
      * @param {*} event
-     * @memberof BranchTransferListComponent
+     * @memberof ListBranchTransfer
      */
     public ngOnDestroy(): void {
         document.querySelector("body")?.classList?.remove("new-branch-list-page");

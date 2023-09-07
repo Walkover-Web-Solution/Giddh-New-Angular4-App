@@ -11,9 +11,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatTableModule } from '@angular/material/table';
 import { MatMenuModule } from '@angular/material/menu';
-import { BranchTransferListComponent } from './branch-transfer-list/branch-transfer-list.component';
 import { DatepickerWrapperModule } from '../../../shared/datepicker-wrapper/datepicker.wrapper.module';
-import { BranchTransferCreateComponent } from './branch-transfer-create/branch-transfer-create.component';
 import { MatRadioModule } from '@angular/material/radio';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ClickOutsideModule } from 'ng-click-outside';
@@ -26,6 +24,8 @@ import { MatSortModule } from '@angular/material/sort';
 import { TranslateDirectiveModule } from '../../../theme/translate/translate.directive.module';
 import { AsideManageTransportComponent } from './aside-manage-transport/aside-manage-transport.component';
 import { AsideMenuProductServiceModule } from '../../../shared/aside-menu-product-service/aside-menu-product-service.module';
+import { CreateBranchTransfer } from './create-branch-transfer/create-branch-transfer';
+import { ListBranchTransfer } from './list-branch-transfer/list-branch-transfer';
 @NgModule({
     imports: [
         CommonModule,
@@ -54,10 +54,8 @@ import { AsideMenuProductServiceModule } from '../../../shared/aside-menu-produc
         AsideMenuProductServiceModule
     ],
     exports: [
-        BranchTransferListComponent,
-        BranchTransferCreateComponent,
-        AsideManageTransportComponent
+        AsideManageTransportComponent, ListBranchTransfer, CreateBranchTransfer
     ],
-    declarations: [MainComponent, BranchTransferListComponent, BranchTransferCreateComponent, AsideManageTransportComponent]
+    declarations: [MainComponent, ListBranchTransfer, CreateBranchTransfer, AsideManageTransportComponent]
 })
 export class BranchTransferModule { }
