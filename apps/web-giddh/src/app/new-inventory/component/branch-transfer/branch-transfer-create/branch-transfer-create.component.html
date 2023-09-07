@@ -58,6 +58,7 @@
                                                         ? 'Date of Receipt'
                                                         : 'Date of Supply'
                                                 "
+                                                [required]="true"
                                             >
                                             </giddh-datepicker>
                                         </div>
@@ -1077,9 +1078,7 @@
                                                                     [placeholder]="'Enter Qty/Unit'"
                                                                     [allowDecimalDigitsOnly]="true"
                                                                     (change)="
-                                                                        calculateRowTotal(
-                                                                            source.get('warehouse')
-                                                                        )
+                                                                        calculateRowTotal(source.get('warehouse'))
                                                                     "
                                                                     formControlName="quantity"
                                                                 >
@@ -1117,9 +1116,7 @@
                                                                         [allowDecimalDigitsOnly]="true"
                                                                         [customDecimalPlaces]="2"
                                                                         (change)="
-                                                                            calculateRowTotal(
-                                                                                source.get('warehouse')
-                                                                            )
+                                                                            calculateRowTotal(source.get('warehouse'))
                                                                         "
                                                                         [prefix]="activeCompany?.baseCurrencySymbol"
                                                                         [mask]="inputMaskFormat"
@@ -1356,7 +1353,7 @@
                                                                 >
                                                                     <div class="radio-btns mr-b1">
                                                                         <mat-radio-group
-                                                                            name="showCodeType{{i}}"
+                                                                            name="showCodeType{{ i }}"
                                                                             class="d-flex font-15"
                                                                             formControlName="showCodeType"
                                                                         >
@@ -1956,7 +1953,10 @@
                                             [options]="transporterDropdown"
                                             [appearance]="'outline'"
                                             (selectedOption)="onSelectTransportCompany($event)"
-                                            [defaultValue]="branchTransferCreateEditForm.get('transporterDetails.transporterName')?.value"
+                                            [defaultValue]="
+                                                branchTransferCreateEditForm.get('transporterDetails.transporterName')
+                                                    ?.value
+                                            "
                                         >
                                         </dropdown-field>
                                     </div>
@@ -1967,7 +1967,10 @@
                                             [options]="transporterMode"
                                             [appearance]="'outline'"
                                             (selectedOption)="onSelectTransportMode($event)"
-                                            [defaultValue]="branchTransferCreateEditForm.get('transporterDetails.transportMode')?.value"
+                                            [defaultValue]="
+                                                branchTransferCreateEditForm.get('transporterDetails.transportMode')
+                                                    ?.value
+                                            "
                                         >
                                         </dropdown-field>
                                     </div>
@@ -2009,12 +2012,6 @@
                                     (click)="submit()"
                                 >
                                     {{ editBranchTransferUniqueName ? "Update" : "Create" }}
-                                    <!-- [disabled]="
-                                        branchTransferCreateEditForm.invalid ||
-                                        !isValidSourceTaxNumber ||
-                                        !isValidDestinationTaxNumber ||
-                                        isLoading
-                                    " -->
                                 </button>
                             </div>
                         </div>

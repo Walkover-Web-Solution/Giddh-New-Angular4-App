@@ -37,6 +37,8 @@ export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, O
     @Input() public disabled: boolean = false;
     /** True if we need to show error */
     @Input() public showError: boolean = false;
+    /** True if field is required */
+    @Input() public required: boolean = false;
     /** True if we need to read only */
     @Input() public readonly: any ;
     /* Datepicker fill */

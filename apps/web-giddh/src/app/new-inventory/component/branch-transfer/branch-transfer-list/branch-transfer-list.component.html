@@ -96,7 +96,11 @@
 
                     <ng-container matColumnDef="voucher_no">
                         <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_voucher_no }}</th>
-                        <td mat-cell *matCellDef="let element">{{ element?.voucherNo }}</td>
+                        <td mat-cell *matCellDef="let element">
+                            <a href="javascript:;" (click)="showEditBranchTransferPopup(element)">{{
+                                element.voucherNo
+                            }}</a>
+                        </td>
                     </ng-container>
 
                     <ng-container matColumnDef="sender">
@@ -218,7 +222,7 @@
                             </button>
                             <mat-menu #beforeMenu="matMenu" xPosition="before">
                                 <button class="no-box-shadow" mat-menu-item (click)="downloadBranchTransfer(element)">
-                                    {{commonLocaleData?.app_download}
+                                    {{ commonLocaleData?.app_download }}
                                 </button>
                                 <button
                                     class="no-box-shadow"
@@ -241,7 +245,11 @@
                     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                 </table>
             </form>
-            <div class="pagination-wrapper" *ngIf="branchTransferResponse?.length && !isLoading">
+
+            <div
+                class="pagination-wrapper"
+                *ngIf="branchTransferPaginationObject?.totalItems > branchTransferPaginationObject?.count && !isLoading"
+            >
                 <pagination
                     [totalItems]="branchTransferPaginationObject?.totalItems"
                     [(ngModel)]="branchTransferPaginationObject.page"
