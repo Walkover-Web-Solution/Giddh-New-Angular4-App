@@ -122,7 +122,7 @@
                                                         >
                                                             <input-field
                                                                 [type]="'text'"
-                                                                [name]="'hsnNumber'"
+                                                                [name]="'hsnSacNumber'"
                                                                 [label]="'HSN Number'"
                                                                 [appearance]="'outline'"
                                                                 formControlName="hsnNumber"
@@ -141,7 +141,7 @@
                                                         >
                                                             <input-field
                                                                 [type]="'text'"
-                                                                [name]="'sacNumber'"
+                                                                [name]="'hsnSacNumber'"
                                                                 [label]="'SAC Number'"
                                                                 [appearance]="'outline'"
                                                                 formControlName="sacNumber"
@@ -156,7 +156,7 @@
                                         </div>
                                         <ng-container *ngIf="transferType === 'products'">
                                             <div>
-                                                <div class="mr-b15 position-relative info-field">
+                                                <div class="mr-b15 position-relative info-field hello sender name">
                                                     <dropdown-field
                                                         #defaultSource
                                                         [name]="'senderName'"
@@ -166,6 +166,12 @@
                                                         (selectedOption)="selectSenderName($event, 0)"
                                                         [readonly]="isUpdateMode"
                                                         [required]="true"
+                                                        [defaultValue]="
+                                                            isUpdateMode
+                                                                ? branchTransferCreateEditForm.get('sources.0.name')
+                                                                      ?.value
+                                                                : ''
+                                                        "
                                                     >
                                                     </dropdown-field>
                                                     <i
@@ -442,7 +448,6 @@
                                 </div>
                                 <div class="row row-gap">
                                     <div class="col-lg-6">
-                                        {{ transferType }}
                                         <div *ngIf="transferType === 'senders'">
                                             <dropdown-field
                                                 [required]="true"
@@ -553,6 +558,9 @@
                                                     (selectedOption)="selectSenderName($event, 0)"
                                                     [readonly]="isUpdateMode"
                                                     [required]="true"
+                                                    [defaultValue]="
+                                                        branchTransferCreateEditForm.get('sources.0.name')?.value
+                                                    "
                                                 >
                                                 </dropdown-field>
                                                 <i
@@ -1350,18 +1358,18 @@
                                                                 >
                                                                     <div class="radio-btns mr-b1">
                                                                         <mat-radio-group
-                                                                            name="code_type"
+                                                                              name="showCodeType{{ i }}"
                                                                             class="d-flex font-15"
                                                                             formControlName="showCodeType"
                                                                         >
                                                                             <mat-radio-button
                                                                                 color="primary"
-                                                                                value="hsn"
+                                                                                 [value]="'hsn'"
                                                                                 >HSN Code</mat-radio-button
                                                                             >
                                                                             <mat-radio-button
                                                                                 color="primary"
-                                                                                value="sac"
+                                                                                [value]="'sac'"
                                                                                 >SAC Code</mat-radio-button
                                                                             >
                                                                         </mat-radio-group>
@@ -1962,6 +1970,7 @@
                                             [options]="transporterMode"
                                             [appearance]="'outline'"
                                             (selectedOption)="onSelectTransportMode($event)"
+                                            [defaultValue]=""
                                         >
                                         </dropdown-field>
                                     </div>
