@@ -1267,8 +1267,7 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
                 top: '0'
             },
             width: '760px',
-            height: '100vh !important',
-            data: this.branchTransferMode
+            height: '100vh !important'
         });
 
         this.asideMenuStateForProductService.afterClosed().pipe(take(1)).subscribe(response => {
