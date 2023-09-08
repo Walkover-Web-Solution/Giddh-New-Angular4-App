@@ -439,7 +439,9 @@ export class ListBranchTransferComponent implements OnInit {
    * @memberof ListBranchTransfer
    */
   public handleBranchChange(selectedEntity: any): void {
-    this.currentBranch.name = selectedEntity.label;
+      this.currentBranch.name = selectedEntity.label;
+      this.branchTransferGetRequestParams.branchUniqueName = selectedEntity.value;
+      this.getBranchTransferList(true);
   }
 
   /**

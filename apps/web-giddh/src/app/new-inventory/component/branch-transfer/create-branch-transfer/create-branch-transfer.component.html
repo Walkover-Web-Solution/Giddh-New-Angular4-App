@@ -372,7 +372,9 @@
                                                                 )?.value
                                                             ]
                                                         "
-                                                        (selectedOption)="selectReceiverWarehouse($event, 0);openFirstEntry()"
+                                                        (selectedOption)="
+                                                            selectReceiverWarehouse($event, 0); openFirstEntry()
+                                                        "
                                                         [allowValueReset]="true"
                                                         (onClear)="resetWarehouse('destinations', 0)"
                                                         [required]="true"
@@ -787,7 +789,9 @@
                                                                 )?.value
                                                             ]
                                                         "
-                                                        (selectedOption)="selectReceiverWarehouse($event, 0);openFirstEntry()"
+                                                        (selectedOption)="
+                                                            selectReceiverWarehouse($event, 0); openFirstEntry()
+                                                        "
                                                         [allowValueReset]="true"
                                                         (onClear)="resetWarehouse('destinations', 0)"
                                                         [required]="true"
@@ -1748,7 +1752,7 @@
                                                                     [name]="'destinationWarehouse' + i"
                                                                     [placeholder]="'Receiver\'s Warehouse'"
                                                                     (selectedOption)="
-                                                                        selectReceiverWarehouse($event, i);
+                                                                        selectReceiverWarehouse($event, i)
                                                                     "
                                                                     [options]="
                                                                         destinationWarehouses[
@@ -2008,7 +2012,7 @@
 
                                                 <a
                                                     class="multiple-receivers btn-link cp"
-                                                    (click)="addBlankProductsForm();"
+                                                    (click)="addBlankProductsForm()"
                                                     *ngIf="transferType === 'products'"
                                                 >
                                                     <i class="icon-plus"></i> Add Multiple Products</a
@@ -2128,7 +2132,10 @@
 </ng-container>
 
 <ng-template #asideMenuProductService>
-    <aside-menu-product-service (closeAsideEvent)="closeAsideMenuProductServiceModal()"></aside-menu-product-service>
+    <aside-menu-product-service
+        [inputData]="branchTransferMode"
+        (closeAsideEvent)="closeAsideMenuProductServiceModal()"
+    ></aside-menu-product-service>
 </ng-template>
 <ng-template #asideManageTransport>
     <aside-manage-transport (closeAsideEvent)="closeAsideTransporterModal()"></aside-manage-transport>
