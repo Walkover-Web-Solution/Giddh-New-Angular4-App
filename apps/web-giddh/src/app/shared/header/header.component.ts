@@ -1106,10 +1106,20 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public navigateToSubItemLink(event: any): void {
         if (event) {
             this.trigger?.closeMenu();
-            if (event === 'deliverychallan' || event === 'receiptnote') {
-                this.router.navigate(['/pages/inventory/report/' + event]);
+            if (this.voucherApiVersion === 2) {
+                if (event === 'receiptnote') {
+                    this.router.navigate(['/pages/inventory/v2/branch-transfer/receipt-note/create']);
+                } else if (event === 'deliverychallan') {
+                    this.router.navigate(['/pages/inventory/v2/branch-transfer/delivery-challan/create']);
+                } else {
+                    this.router.navigate(['/pages' + event]);
+                }
             } else {
-                this.router.navigate(['/pages' + event]);
+                if (event === 'deliverychallan' || event === 'receiptnote') {
+                    this.router.navigate(['/pages/inventory/report/' + event]);
+                } else {
+                    this.router.navigate(['/pages' + event]);
+                }
             }
         }
     }

@@ -5,6 +5,7 @@
     (localeData)="localeData = $event"
 >
     <section id="branch-transfer-create">
+        <hamburger-menu></hamburger-menu>
         <div class="branch-transfer-header">
             <h2>{{ branchTransferMode === "receipt-note" ? "Receipt Note" : "Delivery Challan" }}</h2>
         </div>
@@ -87,7 +88,6 @@
                                                 [label]="'Product\'s Name'"
                                                 [placeholder]="'Select Product\'s Name'"
                                                 [options]="stockList"
-                                                [appearance]="'outline'"
                                                 (selectedOption)="
                                                     selectProduct(
                                                         $event,
@@ -109,7 +109,6 @@
                                                             [type]="'text'"
                                                             [name]="'skuCode'"
                                                             [label]="'SKU Code'"
-                                                            [appearance]="'outline'"
                                                             formControlName="skuCode"
                                                         >
                                                         </input-field>
@@ -138,7 +137,6 @@
                                                                 [type]="'text'"
                                                                 [name]="'hsnSacNumber'"
                                                                 [label]="'HSN Number'"
-                                                                [appearance]="'outline'"
                                                                 formControlName="hsnNumber"
                                                                 [allowDecimalDigitsOnly]="true"
                                                                 [max]="10"
@@ -157,7 +155,6 @@
                                                                 [type]="'text'"
                                                                 [name]="'hsnSacNumber'"
                                                                 [label]="'SAC Number'"
-                                                                [appearance]="'outline'"
                                                                 formControlName="sacNumber"
                                                                 [allowDecimalDigitsOnly]="true"
                                                                 [max]="10"
@@ -172,8 +169,7 @@
                                             <div>
                                                 <div class="mr-b15 position-relative info-field hello sender name">
                                                     <dropdown-field
-                                                        #defaultSource
-                                                        [name]="'senderName01'"
+                                                        [name]="'senderName'"
                                                         [label]="'Sender\'s Name'"
                                                         [placeholder]="'Select Sender\'s Name'"
                                                         [options]="branches"
@@ -214,7 +210,7 @@
                                             </div>
                                             <div formArrayName="sources">
                                                 <div [formGroupName]="0">
-                                                    <div class="mr-b15">
+                                                    <div class="mr-b15 four">
                                                         <dropdown-field
                                                             [name]="'senderWarehouse'"
                                                             [label]="'Sender\'s Warehouse'"
@@ -290,7 +286,6 @@
                                                                     matInput
                                                                     rows="3"
                                                                     class="form-control"
-                                                                    rows="3"
                                                                     name="sourceAddress"
                                                                     formControlName="address"
                                                                     [readonly]="
@@ -377,7 +372,7 @@
                                                                 )?.value
                                                             ]
                                                         "
-                                                        (selectedOption)="selectReceiverWarehouse($event, 0)"
+                                                        (selectedOption)="selectReceiverWarehouse($event, 0);openFirstEntry()"
                                                         [allowValueReset]="true"
                                                         (onClear)="resetWarehouse('destinations', 0)"
                                                         [required]="true"
@@ -439,7 +434,6 @@
                                                                 matInput
                                                                 rows="3"
                                                                 class="form-control"
-                                                                rows="3"
                                                                 name="sourceAddress"
                                                                 formControlName="address"
                                                                 [readonly]="
@@ -480,7 +474,6 @@
                                         >
                                             <giddh-datepicker
                                                 (dateSelected)="selectDate($event, 'dateOfSupply')"
-                                                [readonly]="!editBranchTransferUniqueName"
                                                 [disabled]="editBranchTransferUniqueName ? 'disabled' : null"
                                                 formControlName="dateOfSupply"
                                                 name="date"
@@ -543,7 +536,6 @@
                                                             [type]="'text'"
                                                             [name]="'skuCode'"
                                                             [label]="'SKU Code'"
-                                                            [appearance]="'outline'"
                                                             formControlName="skuCode"
                                                         >
                                                         </input-field>
@@ -572,7 +564,6 @@
                                                                 [type]="'text'"
                                                                 [name]="'hsnNumber'"
                                                                 [label]="'HSN Number'"
-                                                                [appearance]="'outline'"
                                                                 formControlName="hsnNumber"
                                                                 [allowDecimalDigitsOnly]="true"
                                                                 [max]="10"
@@ -591,7 +582,6 @@
                                                                 [type]="'text'"
                                                                 [name]="'sacNumber'"
                                                                 [label]="'SAC Number'"
-                                                                [appearance]="'outline'"
                                                                 formControlName="sacNumber"
                                                                 [allowDecimalDigitsOnly]="true"
                                                                 [max]="10"
@@ -656,7 +646,7 @@
 
                                         <div *ngIf="transferType === 'products'" formArrayName="sources">
                                             <div [formGroupName]="0">
-                                                <div class="mr-b15">
+                                                <div class="mr-b15 one">
                                                     <dropdown-field
                                                         [name]="'senderWarehouse'"
                                                         [label]="'Sender\'s Warehouse'"
@@ -725,7 +715,6 @@
                                                             <mat-label>Sender's Address</mat-label>
                                                             <textarea
                                                                 matInput
-                                                                rows="3"
                                                                 class="form-control"
                                                                 rows="3"
                                                                 name="sourceAddress"
@@ -798,7 +787,7 @@
                                                                 )?.value
                                                             ]
                                                         "
-                                                        (selectedOption)="selectReceiverWarehouse($event, 0)"
+                                                        (selectedOption)="selectReceiverWarehouse($event, 0);openFirstEntry()"
                                                         [allowValueReset]="true"
                                                         (onClear)="resetWarehouse('destinations', 0)"
                                                         [required]="true"
@@ -862,7 +851,6 @@
                                                                 matInput
                                                                 rows="3"
                                                                 class="form-control"
-                                                                rows="3"
                                                                 name="sourceAddress"
                                                                 formControlName="address"
                                                                 [readonly]="
@@ -893,7 +881,7 @@
                                             </input-field>
                                             <div formArrayName="sources">
                                                 <div [formGroupName]="0">
-                                                    <div class="mr-b15 position-relative info-field">
+                                                    <div class="mr-b15 position-relative info-field two">
                                                         <dropdown-field
                                                             *ngIf="isUpdateMode"
                                                             [name]="'senderWarehouse'"
@@ -908,6 +896,11 @@
                                                                 !branchTransferCreateEditForm?.get(
                                                                     'sources.0.uniqueName'
                                                                 )?.value
+                                                            "
+                                                            [defaultValue]="
+                                                                branchTransferCreateEditForm.get(
+                                                                    'sources.0.warehouse.name'
+                                                                ).value
                                                             "
                                                         >
                                                         </dropdown-field>
@@ -929,7 +922,7 @@
                                                         >
                                                         </i>
                                                     </div>
-                                                    <div class="mr-b15">
+                                                    <div class="mr-b15 thrree">
                                                         <dropdown-field
                                                             [name]="'senderWarehouse'"
                                                             [placeholder]="'Sender\'s Warehouse'"
@@ -939,6 +932,11 @@
                                                                         'sources.0.uniqueName'
                                                                     )?.value
                                                                 ]
+                                                            "
+                                                            [defaultValue]="
+                                                                branchTransferCreateEditForm.get(
+                                                                    'sources.0.warehouse.name'
+                                                                ).value
                                                             "
                                                             (selectedOption)="selectSenderWarehouse($event, 0)"
                                                             [allowValueReset]="true"
@@ -997,7 +995,6 @@
                                                                     matInput
                                                                     rows="3"
                                                                     class="form-control"
-                                                                    rows="3"
                                                                     name="sourceAddress"
                                                                     formControlName="address"
                                                                     [readonly]="
@@ -1133,7 +1130,6 @@
                                                                             matInput
                                                                             rows="3"
                                                                             class="form-control"
-                                                                            rows="3"
                                                                             [name]="'sourceWarehouseAddress' + i"
                                                                             formControlName="address"
                                                                             [readonly]="
@@ -1320,6 +1316,7 @@
                                                             class="position-relative w-100 fields-gap"
                                                         >
                                                             <select-field
+                                                                #selectAccount
                                                                 (createOption)="onProductNoResultsClicked(0)"
                                                                 [showCreateNew]="true"
                                                                 [name]="'productName' + i"
@@ -1416,7 +1413,6 @@
                                                                         rows="3"
                                                                         maxlength="100"
                                                                         class="form-control"
-                                                                        rows="3"
                                                                         [name]="'productDescription' + i"
                                                                         formControlName="description"
                                                                         *ngIf="
@@ -1752,7 +1748,7 @@
                                                                     [name]="'destinationWarehouse' + i"
                                                                     [placeholder]="'Receiver\'s Warehouse'"
                                                                     (selectedOption)="
-                                                                        selectReceiverWarehouse($event, i)
+                                                                        selectReceiverWarehouse($event, i);
                                                                     "
                                                                     [options]="
                                                                         destinationWarehouses[
@@ -1808,7 +1804,6 @@
                                                                             matInput
                                                                             rows="3"
                                                                             class="form-control"
-                                                                            rows="3"
                                                                             [name]="'destinationWarehouseAddress' + i"
                                                                             formControlName="address"
                                                                             [readonly]="
@@ -2013,7 +2008,7 @@
 
                                                 <a
                                                     class="multiple-receivers btn-link cp"
-                                                    (click)="addBlankProductsForm()"
+                                                    (click)="addBlankProductsForm();"
                                                     *ngIf="transferType === 'products'"
                                                 >
                                                     <i class="icon-plus"></i> Add Multiple Products</a
@@ -2061,7 +2056,6 @@
                                             [name]="'transporterCompany'"
                                             [placeholder]="'Transport Company'"
                                             [options]="transporterDropdown"
-                                            [appearance]="'outline'"
                                             (selectedOption)="onSelectTransportCompany($event)"
                                             [defaultValue]="
                                                 branchTransferCreateEditForm.get('transporterDetails.transporterName')
@@ -2075,7 +2069,6 @@
                                             [name]="'transporterMode'"
                                             [placeholder]="'Transport Mode'"
                                             [options]="transporterMode"
-                                            [appearance]="'outline'"
                                             (selectedOption)="onSelectTransportMode($event)"
                                             [defaultValue]="
                                                 branchTransferCreateEditForm.get('transporterDetails.transportMode')
@@ -2089,7 +2082,6 @@
                                             [type]="'text'"
                                             [name]="'vehicleNumber'"
                                             [placeholder]="'Vehicle Number'"
-                                            [appearance]="'outline'"
                                             formControlName="vehicleNumber"
                                         >
                                         </input-field>

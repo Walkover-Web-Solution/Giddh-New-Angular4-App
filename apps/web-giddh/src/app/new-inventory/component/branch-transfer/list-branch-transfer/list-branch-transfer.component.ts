@@ -334,7 +334,7 @@ export class ListBranchTransferComponent implements OnInit {
         this.branchTransferResponse = [];
         this.branchTransferPaginationObject.totalItems = 0;
       }
-      this.changeDetection.detectChanges();
+        this.changeDetection.detectChanges();
     });
   }
 
@@ -363,8 +363,8 @@ export class ListBranchTransferComponent implements OnInit {
         let blob = this.generalService.base64ToBlob(res?.body, 'application/pdf', 512);
         return saveAs(blob, item.voucherNo + `.pdf`);
       } else {
-        this.toaster.clearAllToaster();
-        this.toaster.errorToast(res?.message);
+          this.toaster.clearAllToaster();
+          this.toaster.showSnackBar("error", res.message);
       }
     });
   }
@@ -424,10 +424,10 @@ export class ListBranchTransferComponent implements OnInit {
     this.dialog.closeAll();
     this.inventoryService.deleteNewBranchTransfer(this.selectedBranchTransferUniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
       if (response?.status === "success") {
-        this.toaster.successToast(response?.body);
+          this.toaster.showSnackBar("success", response.body);
         this.getBranchTransferList(false);
       } else {
-        this.toaster.errorToast(response?.message);
+          this.toaster.showSnackBar("error", response.message);
       }
     });
   }

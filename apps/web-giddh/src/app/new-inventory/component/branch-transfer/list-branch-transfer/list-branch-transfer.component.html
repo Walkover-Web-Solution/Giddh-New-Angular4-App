@@ -7,7 +7,7 @@
 >
     <section id="branch-transfer-list" class="p-3 clearfix">
         <!-- page Title -->
-        <hamburger-menu pageHeading="{{ localeData?.heading }}"></hamburger-menu>
+      <hamburger-menu></hamburger-menu>
         <!-- form -->
         <div class="col-12 col-sm-12">
             <div class="clearfix">
@@ -19,7 +19,7 @@
                                 class="branch-width"
                             >
                                 <dropdown-field
-                                    label="{{ commonLocaleData?.app_select_entity }}"
+                                    [label]="commonLocaleData?.app_select_entity"
                                     [options]="currentCompanyBranches"
                                     width="100%"
                                     (selectedOption)="
@@ -111,7 +111,7 @@
                             </div>
                             <div class="input-container" [hidden]="inlineSearch !== 'sender'">
                                 <text-field
-                                    placeholder="{{ localeData?.sender }}"
+                                    [placeholder]="localeData?.sender"
                                     [type]="'text'"
                                     [cssClass]="'form-control  mat-field-border'"
                                     [formControl]="branchTransferForm.controls['sender']"
@@ -130,7 +130,7 @@
                             </div>
                             <div class="input-container" [hidden]="inlineSearch !== 'receiver'">
                                 <text-field
-                                    placeholder="{{ localeData?.receiver }}"
+                                    [placeholder]="localeData?.receiver"
                                     [type]="'text'"
                                     [cssClass]="'form-control  mat-field-border'"
                                     [formControl]="branchTransferForm.controls['receiver']"
@@ -150,7 +150,7 @@
                             </div>
                             <div class="input-container" [hidden]="inlineSearch !== 'senderReceiver'">
                                 <text-field
-                                    placeholder="{{ localeData?.sender }}/{{ localeData?.receiver }}"
+                                    [placeholder]="localeData?.sender +'/'+ localeData?.receiver"
                                     [type]="'text'"
                                     [cssClass]="'form-control  mat-field-border'"
                                     [formControl]="branchTransferForm.controls['senderReceiver']"

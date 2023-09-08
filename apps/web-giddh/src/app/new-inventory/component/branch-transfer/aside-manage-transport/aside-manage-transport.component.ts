@@ -9,7 +9,7 @@ import { ReplaySubject, takeUntil } from 'rxjs';
 
 export interface transporterDetails {
     name: string;
-    transportid: string;
+    transporterId: string;
     action: string;
 }
 const ELEMENT_DATA: transporterDetails[] = [];
@@ -20,14 +20,13 @@ const ELEMENT_DATA: transporterDetails[] = [];
 })
 export class AsideManageTransportComponent implements OnInit {
     /** Emits modal close event */
-
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
     /** This will use for displayed table columns*/
-    public displayedColumns: string[] = ['name', 'transportid', 'action'];
+    public displayedColumns: string[] = ['name', 'transporterId', 'action'];
     /** Hold  transporter id*/
-    public currenTransporterId: string;
+    public currentTransporterId: string;
     /** Hold table data*/
-    public dataSource = ELEMENT_DATA;
+    public dataSource: any[] = ELEMENT_DATA;
     /* Aside pane state*/
     public asideMenuState: string = 'out';
     /* This will hold common JSON data */
@@ -92,7 +91,7 @@ export class AsideManageTransportComponent implements OnInit {
      *
      * @memberof AsideManageTransportComponent
      */
-    public closeAsidePane() {
+    public closeAsidePane(): void {
         this.closeAsideEvent.emit();
     }
 
@@ -121,12 +120,12 @@ export class AsideManageTransportComponent implements OnInit {
         if (this.isValidForm) {
             this.invoiceServices.addEwayTransporter(generateTransporterForm).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response && response.status === "success" && response.body) {
-                    this.toasty.successToast('Transported created successfully');
+                    this.toasty.showSnackBar("success", 'Transported created successfully');
                     this.closeAsideEvent.emit();
                     this.clearTransportForm();
                     this.getTransportersList();
                 } else {
-                    this.toasty.errorToast(response.message);
+                    this.toasty.showSnackBar("error", response.message);
                 }
             });
         }
@@ -163,7 +162,8 @@ export class AsideManageTransportComponent implements OnInit {
      * @memberof AsideManageTransportComponent
      */
     public updateTransporter(generateTransporterForm: any): void {
-        this.invoiceServices.UpdateGeneratedTransporter(this.currenTransporterId, generateTransporterForm).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.isLoading = true;
+        this.invoiceServices.UpdateGeneratedTransporter(this.currentTransporterId, generateTransporterForm).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.isLoading = false;;
             if (response && response.status === "success" && response.body) {
                 this.toasty.successToast('Transporter updated successfully');
@@ -171,7 +171,7 @@ export class AsideManageTransportComponent implements OnInit {
                 this.clearTransportForm();
                 this.getTransportersList();
             } else {
-                this.toasty.errorToast(response.message);
+                this.toasty.showSnackBar("error", response.message);
             }
         });
         this.detectChanges();
@@ -199,7 +199,7 @@ export class AsideManageTransportComponent implements OnInit {
         if (transporter !== undefined && transporter) {
             this.transportedCreateEditForm.get('transporterId').setValue(transporter.transporterId);
             this.transportedCreateEditForm.get('transporterName').setValue(transporter.transporterName);
-            this.currenTransporterId = transporter.transporterId;
+            this.currentTransporterId = transporter.transporterId;
         }
         this.detectChanges();
     }
@@ -215,10 +215,10 @@ export class AsideManageTransportComponent implements OnInit {
         this.invoiceServices.deleteTransporterById(transporter.transporterId).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.isLoading = false;;
             if (response && response.status === "success" && response.body) {
-                this.toasty.successToast(response.body);
+                this.toasty.showSnackBar("success", response.body);
                 this.getTransportersList();
             } else {
-                this.toasty.errorToast(response.message);
+                this.toasty.showSnackBar("error", response.message);
             }
         });
         this.detectChanges();

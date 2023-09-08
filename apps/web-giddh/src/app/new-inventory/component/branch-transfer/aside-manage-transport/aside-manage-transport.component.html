@@ -1,6 +1,6 @@
 <ng-container
     appTranslate
-    [file]="'activity-logs'"
+    [file]="'inventory/branch-transfer'"
     (commonLocaleData)="commonLocaleData = $event"
     (localeData)="localeData = $event"
 >
@@ -9,7 +9,9 @@
         <div class="header-create-unit">
             <div class="form-header">
                 <h3 mat-dialog-title>Manage Transporter</h3>
-                <button id="close" mat-dialog-close     (closeAsideEvent)="closeAsidePane()"><i class="icon-cross"></i></button>
+                <button id="close" mat-dialog-close (closeAsideEvent)="closeAsidePane()">
+                    <i class="icon-cross"></i>
+                </button>
             </div>
         </div>
         <mat-dialog-content class="w-100">
@@ -46,7 +48,7 @@
                             <text-field
                                 [type]="'text'"
                                 [cssClass]="'form-control mat-field-border'"
-                               [placeholder]="'Transporter Id'"
+                                [placeholder]="'Transporter Id'"
                                 [name]="'transporterId'"
                                 formControlName="transporterId"
                                 [showError]="!isValidForm && !transportedCreateEditForm?.get('transporterId')?.value"
@@ -97,7 +99,7 @@
                                 <td mat-cell *matCellDef="let element">{{ element.transporterName }}</td>
                             </ng-container>
                             <!-- Weight Column -->
-                            <ng-container matColumnDef="transportid">
+                            <ng-container matColumnDef="transporterId">
                                 <th mat-header-cell *matHeaderCellDef class="mat-table-id">Transporter ID</th>
                                 <td mat-cell *matCellDef="let element">{{ element.transporterId }}</td>
                             </ng-container>

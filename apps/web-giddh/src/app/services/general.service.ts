@@ -663,7 +663,6 @@ export class GeneralService {
     }
 
     public getDeleteBranchTransferConfiguration(localeData: any, commonLocaleData: any, selectedBranchTransferType: string): ConfirmationModalConfiguration {
-        console.log(selectedBranchTransferType);
 
         const buttons: Array<ConfirmationModalButton> = [{
             text: 'Yes',

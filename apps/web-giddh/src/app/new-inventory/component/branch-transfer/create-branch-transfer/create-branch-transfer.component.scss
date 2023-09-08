@@ -12,12 +12,14 @@
             font-weight: 600;
         }
     }
+
     .branch-transfer-body {
         &-radio-btns {
             font-size: var(--font-size-15);
             padding: 15px;
             border-bottom: 1px solid var(--color-common-secondary-border);
         }
+
         &-multiple-wrapper {
             padding-top: 15px;
 
@@ -27,6 +29,7 @@
                         font-size: var(--font-size-24);
                         font-weight: 600;
                     }
+
                     p {
                         font-size: var(--font-size-15);
                     }
@@ -45,9 +48,11 @@
                     vertical-align: top !important;
                     color: var(--color-primary-button-text);
                     font-weight: 400;
+
                     &:first-child {
                         text-align: left;
                     }
+
                     &:nth-child(2) {
                         text-align: left;
                     }
@@ -56,6 +61,7 @@
                 thead {
                     border-bottom: 1px solid var(--color-iron);
                 }
+
                 tbody {
                     tr {
                         &:hover {
@@ -64,19 +70,23 @@
                                 transition: 200ms ease;
                             }
                         }
+
                         td {
                             .placeholder-color {
                                 color: var(--color-table-primary-content-bar-border);
                             }
+
                             .show-code-position {
                                 position: absolute;
                                 right: 0;
                                 bottom: 0px;
                             }
+
                             .delete-btn-position {
                                 position: absolute;
                                 top: -20px;
                                 left: 26px;
+
                                 .delete-icon {
                                     color: var(--color-gray);
                                     border: 1px solid var(--color-common-secondary-border);
@@ -87,15 +97,18 @@
                                     display: flex;
                                     justify-content: center;
                                     align-items: center;
+
                                     i {
                                         font-size: var(--font-size-12);
                                     }
                                 }
+
                                 .icon-info {
                                     margin-left: 10px;
                                     font-size: 18px;
                                 }
                             }
+
                             &.name {
                                 span {
                                     .placeholder-for-table {
@@ -104,6 +117,7 @@
                                     }
                                 }
                             }
+
                             .fields-gap {
                                 display: flex;
                                 flex-direction: column;
@@ -112,6 +126,7 @@
                         }
                     }
                 }
+
                 tfoot {
                     tr {
                         td {
@@ -121,6 +136,7 @@
                 }
             }
         }
+
         .info-field {
             .icon-info {
                 position: absolute;
@@ -129,13 +145,16 @@
             }
         }
     }
+
     h3 {
         font-size: var(var(--font-size-15));
     }
+
     .row {
         margin-left: unset !important;
         margin-right: unset !important;
     }
+
     .position-bottom {
         margin-bottom: -25px;
     }
