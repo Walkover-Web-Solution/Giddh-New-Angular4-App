@@ -13,26 +13,26 @@
             </div>
         </div>
         <div class="aside-body flexy-child vertical-align-middle aside-panel-ledger" vr-item>
-            <ng-container *ngIf="moduleType === 'branchtransfer'">
+            <ng-container *ngIf="moduleType === 'branch-transfer'">
                 <div class="pb-3">
-                    <button mat-stroked-button color="primary" (click)="openCreateBranchTransfer('receipt-note')">
+                    <button mat-stroked-button color="primary" (click)="openCreateBranchTransfer('receipt-note')" class="create-btn">
                         Receipt Note
                     </button>
                 </div>
                 <div>
-                    <button color="primary" mat-stroked-button (click)="openCreateBranchTransfer('delivery-challan')">
+                    <button color="primary" mat-stroked-button (click)="openCreateBranchTransfer('delivery-challan')" class="create-btn">
                         Delivery Challan
                     </button>
                 </div>
             </ng-container>
-            <ng-container *ngIf="moduleType !== 'branchtransfer'">
+            <ng-container *ngIf="moduleType !== 'branch-transfer'">
                 <div class="pb-3">
-                    <button mat-stroked-button color="primary" (click)="createNewByAsidePanel('stock')">
+                    <button mat-stroked-button color="primary" (click)="createNewByAsidePanel('stock')" class="create-btn">
                         {{ commonLocaleData?.app_create_stock }}
                     </button>
                 </div>
                 <div>
-                    <button mat-stroked-button color="primary" (click)="createNewByAsidePanel('group')">
+                    <button mat-stroked-button color="primary" (click)="createNewByAsidePanel('group')" class="create-btn">
                         {{ commonLocaleData?.app_create_group }}
                     </button>
                 </div>

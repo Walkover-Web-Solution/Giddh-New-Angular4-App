@@ -1,0 +1,8 @@
+{
+    "heading" : "Branch Transfer List",
+    "sender" : "Sender",
+    "receiver" : "Receiver",
+    "from_warehouse" : "From Warehouse",
+    "to_warehouse" : "To Warehouse",
+    "select_condition" : "Select Condition"
+}

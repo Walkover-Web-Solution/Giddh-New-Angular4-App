@@ -1,0 +1,8 @@
+{
+    "heading": "शाखा स्थानांतरण सूची",
+    "sender": "प्रेषक",
+    "receiver": "रिसीवर",
+    "from_warehouse": "गोदाम से",
+    "to_warehouse": "गोदाम के लिए",
+    "select_condition": "शर्त का चयन करें"
+}
