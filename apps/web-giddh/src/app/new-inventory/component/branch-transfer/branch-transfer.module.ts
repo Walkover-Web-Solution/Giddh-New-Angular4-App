@@ -24,8 +24,8 @@ import { MatSortModule } from '@angular/material/sort';
 import { TranslateDirectiveModule } from '../../../theme/translate/translate.directive.module';
 import { AsideManageTransportComponent } from './aside-manage-transport/aside-manage-transport.component';
 import { AsideMenuProductServiceModule } from '../../../shared/aside-menu-product-service/aside-menu-product-service.module';
-import { CreateBranchTransfer } from './create-branch-transfer/create-branch-transfer';
-import { ListBranchTransfer } from './list-branch-transfer/list-branch-transfer';
+import { CreateBranchTransferComponent } from './create-branch-transfer/create-branch-transfer.component';
+import { ListBranchTransferComponent } from './list-branch-transfer/list-branch-transfer.component';
 @NgModule({
     imports: [
         CommonModule,
@@ -54,8 +54,8 @@ import { ListBranchTransfer } from './list-branch-transfer/list-branch-transfer'
         AsideMenuProductServiceModule
     ],
     exports: [
-        AsideManageTransportComponent, ListBranchTransfer, CreateBranchTransfer
+        AsideManageTransportComponent, CreateBranchTransferComponent, ListBranchTransferComponent
     ],
-    declarations: [MainComponent, ListBranchTransfer, CreateBranchTransfer, AsideManageTransportComponent]
+    declarations: [MainComponent, AsideManageTransportComponent, CreateBranchTransferComponent, ListBranchTransferComponent]
 })
 export class BranchTransferModule { }

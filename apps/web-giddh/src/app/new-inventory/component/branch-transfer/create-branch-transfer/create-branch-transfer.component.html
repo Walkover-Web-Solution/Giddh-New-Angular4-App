@@ -44,7 +44,12 @@
                             <div class="col-lg-8 px-0">
                                 <div class="row">
                                     <div class="col-lg-6 mr-b15">
-                                        <div class="direct-mat-datepicker">
+                                        <div
+                                            class="direct-mat-datepicker"
+                                            [ngClass]="{
+                                                'readonly-field': editBranchTransferUniqueName
+                                            }"
+                                        >
                                             <giddh-datepicker
                                                 (dateSelected)="selectDate($event, 'dateOfSupply')"
                                                 [disabled]="editBranchTransferUniqueName ? 'disabled' : null"
@@ -168,7 +173,7 @@
                                                 <div class="mr-b15 position-relative info-field hello sender name">
                                                     <dropdown-field
                                                         #defaultSource
-                                                        [name]="'senderName0'"
+                                                        [name]="'senderName01'"
                                                         [label]="'Sender\'s Name'"
                                                         [placeholder]="'Select Sender\'s Name'"
                                                         [options]="branches"
@@ -206,15 +211,6 @@
                                                     >
                                                     </i>
                                                 </div>
-                                                <!-- <div *ngIf="editBranchTransferUniqueName" class="mr-b15 mr-t15">
-                                                    <input-field
-                                                        [name]="'name'"
-                                                        [label]="'Sender\'s Warehouse'"
-                                                        [placeholder]="'Select Sender\'s Warehouse'"
-                                                        [type]="'text'"
-                                                    >
-                                                    </input-field>
-                                                </div> -->
                                             </div>
                                             <div formArrayName="sources">
                                                 <div [formGroupName]="0">
@@ -348,7 +344,7 @@
                                                     <dropdown-field
                                                         *ngIf="isUpdateMode"
                                                         [name]="'receiverName'"
-                                                        [label]="'Receiver\'s Warehouse'"
+                                                        [label]="'Receiver\'s Name'"
                                                         [placeholder]="'Select Receiver\'s Warehouse'"
                                                         [options]="branches"
                                                         (selectedOption)="selectRecieverName($event, 0)"
@@ -359,6 +355,13 @@
                                                             !branchTransferCreateEditForm?.get(
                                                                 'destinations.0.warehouse.uniqueName'
                                                             )?.value
+                                                        "
+                                                        [defaultValue]="
+                                                            isUpdateMode
+                                                                ? branchTransferCreateEditForm.get(
+                                                                      'destinations.0.name'
+                                                                  )?.value
+                                                                : ''
                                                         "
                                                     >
                                                     </dropdown-field>
@@ -383,6 +386,11 @@
                                                             !branchTransferCreateEditForm?.get(
                                                                 'destinations.0.warehouse.uniqueName'
                                                             )?.value
+                                                        "
+                                                        [defaultValue]="
+                                                            branchTransferCreateEditForm.get(
+                                                                'destinations.0.warehouse.name'
+                                                            ).value
                                                         "
                                                     >
                                                     </dropdown-field>
@@ -464,7 +472,12 @@
                             <div class="col-lg-8 px-0">
                                 <div class="row">
                                     <div class="col-lg-6 mr-b15">
-                                        <div class="direct-mat-datepicker">
+                                        <div
+                                            class="direct-mat-datepicker"
+                                            [ngClass]="{
+                                                'readonly-field': editBranchTransferUniqueName
+                                            }"
+                                        >
                                             <giddh-datepicker
                                                 (dateSelected)="selectDate($event, 'dateOfSupply')"
                                                 [readonly]="!editBranchTransferUniqueName"
@@ -515,6 +528,11 @@
                                                         branchTransferCreateEditForm.get('products.0'),
                                                         0
                                                     )
+                                                "
+                                                [defaultValue]="
+                                                    isUpdateMode
+                                                        ? branchTransferCreateEditForm.get('products.0.name').value
+                                                        : ''
                                                 "
                                             >
                                             </dropdown-field>
@@ -585,7 +603,7 @@
                                             </div>
                                         </div>
                                         <div *ngIf="transferType === 'products'">
-                                            <div class="position-relative info-field">
+                                            <div class="position-relative info-field mr-b15">
                                                 <input-field
                                                     *ngIf="(isBranch || isCompanyWithSingleBranch) && !isUpdateMode"
                                                     [name]="'sourceName'"
@@ -634,15 +652,6 @@
                                                 >
                                                 </i>
                                             </div>
-                                            <!-- <div *ngIf="editBranchTransferUniqueName" class="mr-b15 mr-t15">
-                                                <input-field
-                                                    [name]="'name'"
-                                                    [label]="'Sender\'s Warehouse'"
-                                                    [placeholder]="'Select Sender\'s Warehouse'"
-                                                    [type]="'text'"
-                                                >
-                                                </input-field>
-                                            </div> -->
                                         </div>
 
                                         <div *ngIf="transferType === 'products'" formArrayName="sources">
@@ -752,6 +761,10 @@
                                                                     'destinations.0.uniqueName'
                                                                 )?.value
                                                             "
+                                                            [defaultValue]="
+                                                                branchTransferCreateEditForm?.get('destinations.0.name')
+                                                                    ?.value
+                                                            "
                                                         >
                                                         </dropdown-field>
                                                         <i
@@ -794,6 +807,13 @@
                                                             !branchTransferCreateEditForm?.get(
                                                                 'destinations.0.uniqueName'
                                                             )?.value
+                                                        "
+                                                        [defaultValue]="
+                                                            isUpdateMode
+                                                                ? branchTransferCreateEditForm?.get(
+                                                                      'destinations.0.warehouse.name'
+                                                                  )?.value
+                                                                : ''
                                                         "
                                                     >
                                                     </dropdown-field>
@@ -1173,8 +1193,10 @@
                                                             </div>
                                                             <div *ngIf="activeIndx !== i">
                                                                 <div class="text-right">
-                                                                    {{ source.get("warehouse.stockDetails.quantity")
-                                                                    .value }}
+                                                                    {{
+                                                                        source.get("warehouse.stockDetails.quantity")
+                                                                            .value
+                                                                    }}
                                                                 </div>
                                                             </div>
                                                         </td>
@@ -1182,9 +1204,11 @@
                                                             <div>
                                                                 <div *ngIf="activeIndx !== i">
                                                                     <div class="text-right">
-                                                                        {{ activeCompany?.baseCurrencySymbol }} {{
-                                                                        source.get("warehouse.stockDetails.rate") .value
-                                                                        | giddhCurrency }}
+                                                                        {{ activeCompany?.baseCurrencySymbol }}
+                                                                        {{
+                                                                            source.get("warehouse.stockDetails.rate")
+                                                                                .value | giddhCurrency
+                                                                        }}
                                                                     </div>
                                                                 </div>
                                                                 <div *ngIf="activeIndx === i" class="w-100">
@@ -1212,9 +1236,11 @@
                                                         <td class="amount">
                                                             <div *ngIf="activeIndx !== i">
                                                                 <div class="text-right">
-                                                                    {{ activeCompany?.baseCurrencySymbol }} {{
-                                                                    source.get("warehouse.stockDetails.amount") .value |
-                                                                    giddhCurrency }}
+                                                                    {{ activeCompany?.baseCurrencySymbol }}
+                                                                    {{
+                                                                        source.get("warehouse.stockDetails.amount")
+                                                                            .value | giddhCurrency
+                                                                    }}
                                                                 </div>
                                                             </div>
                                                             <div *ngIf="activeIndx === i" class="w-100">
@@ -1409,13 +1435,19 @@
                                                                 #hsnSacMenuTrigger="matMenuTrigger"
                                                             >
                                                                 <label>
-                                                                    {{ product.get("showCodeType")?.value === "hsn" ?
-                                                                    "HSN" : "SAC" }} Code:
+                                                                    {{
+                                                                        product.get("showCodeType")?.value === "hsn"
+                                                                            ? "HSN"
+                                                                            : "SAC"
+                                                                    }}
+                                                                    Code:
                                                                 </label>
                                                                 <span
-                                                                    >{{ product.get("showCodeType")?.value === "hsn" ?
-                                                                    product.get("hsnNumber")?.value :
-                                                                    product.get("sacNumber")?.value }}
+                                                                    >{{
+                                                                        product.get("showCodeType")?.value === "hsn"
+                                                                            ? product.get("hsnNumber")?.value
+                                                                            : product.get("sacNumber")?.value
+                                                                    }}
                                                                     <span class="edit-icon cp">
                                                                         <img src="assets/images/edit-pencilicon.svg" />
                                                                     </span>
@@ -1571,7 +1603,8 @@
                                                                 >
                                                                 </text-field>
                                                                 <span class="text-capitalize">
-                                                                    {{ product.get("stockDetails.stockUnit")?.value
+                                                                    {{
+                                                                        product.get("stockDetails.stockUnit")?.value
                                                                     }}</span
                                                                 >
                                                             </div>
@@ -1579,7 +1612,8 @@
                                                                 <div class="text-right">
                                                                     {{ product.get("stockDetails.quantity")?.value }}
                                                                     <span class="text-capitalize">
-                                                                        {{ product.get("stockDetails.stockUnit")?.value
+                                                                        {{
+                                                                            product.get("stockDetails.stockUnit")?.value
                                                                         }}</span
                                                                     >
                                                                 </div>
@@ -1612,9 +1646,11 @@
                                                                 </div>
                                                                 <div *ngIf="activeIndx !== i">
                                                                     <div class="text-right">
-                                                                        {{ activeCompany?.baseCurrencySymbol }} {{
-                                                                        product.get("stockDetails.rate")?.value |
-                                                                        giddhCurrency }}
+                                                                        {{ activeCompany?.baseCurrencySymbol }}
+                                                                        {{
+                                                                            product.get("stockDetails.rate")?.value
+                                                                                | giddhCurrency
+                                                                        }}
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -1645,9 +1681,11 @@
                                                             </div>
                                                             <div *ngIf="activeIndx !== i">
                                                                 <div class="text-right">
-                                                                    {{ activeCompany?.baseCurrencySymbol }} {{
-                                                                    product.get("stockDetails.amount")?.value |
-                                                                    giddhCurrency }}
+                                                                    {{ activeCompany?.baseCurrencySymbol }}
+                                                                    {{
+                                                                        product.get("stockDetails.amount")?.value
+                                                                            | giddhCurrency
+                                                                    }}
                                                                 </div>
                                                             </div>
                                                             <span class="position-relative">
@@ -1838,8 +1876,11 @@
                                                                     </div>
                                                                     <div *ngIf="activeIndx !== i">
                                                                         <div class="text-right">
-                                                                            {{ destination.get(
-                                                                            "warehouse.stockDetails.quantity" ).value }}
+                                                                            {{
+                                                                                destination.get(
+                                                                                    "warehouse.stockDetails.quantity"
+                                                                                ).value
+                                                                            }}
                                                                         </div>
                                                                     </div>
                                                                 </span></span
@@ -1849,9 +1890,12 @@
                                                             <div>
                                                                 <div *ngIf="activeIndx !== i">
                                                                     <div class="text-right">
-                                                                        {{ activeCompany?.baseCurrencySymbol }} {{
-                                                                        destination.get( "warehouse.stockDetails.rate"
-                                                                        ).value | giddhCurrency }}
+                                                                        {{ activeCompany?.baseCurrencySymbol }}
+                                                                        {{
+                                                                            destination.get(
+                                                                                "warehouse.stockDetails.rate"
+                                                                            ).value | giddhCurrency
+                                                                        }}
                                                                     </div>
                                                                 </div>
                                                                 <div *ngIf="activeIndx === i" class="w-100">
@@ -1881,9 +1925,11 @@
                                                         <td class="amount">
                                                             <div *ngIf="activeIndx !== i">
                                                                 <div class="text-right">
-                                                                    {{ activeCompany?.baseCurrencySymbol }} {{
-                                                                    destination.get("warehouse.stockDetails.rate")
-                                                                    .amount | giddhCurrency }}
+                                                                    {{ activeCompany?.baseCurrencySymbol }}
+                                                                    {{
+                                                                        destination.get("warehouse.stockDetails.rate")
+                                                                            .amount | giddhCurrency
+                                                                    }}
                                                                 </div>
                                                             </div>
                                                             <div *ngIf="activeIndx === i" class="w-100">
@@ -1978,8 +2024,8 @@
                                             <div class="row text-right">
                                                 <div class="col px-0"><strong>Total</strong></div>
                                                 <div class="col px-0">
-                                                    {{ activeCompany?.baseCurrencySymbol }} {{ overallTotal |
-                                                    giddhCurrency }}
+                                                    {{ activeCompany?.baseCurrencySymbol }}
+                                                    {{ overallTotal | giddhCurrency }}
                                                 </div>
                                             </div>
                                         </td>
@@ -2066,6 +2112,9 @@
                         <div class="col-xl-8 col-lg-10 col-sm-12 mb-4">
                             <div class="action-btn-wrapper text-right w-100 d-flex column-gap1 justify-content-end">
                                 <button mat-stroked-button (click)="resetForm()">Clear</button>
+                                <button *ngIf="isUpdateMode" mat-stroked-button (click)="navigateToList()">
+                                    Cancel
+                                </button>
                                 <button
                                     mat-stroked-button
                                     color="primary"
