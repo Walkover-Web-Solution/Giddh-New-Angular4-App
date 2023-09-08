@@ -43,6 +43,13 @@
         }
     }
 }
+
+.push-to-portal-modal {
+    max-width: 650px !important;
+    margin: 56px auto !important;
+    padding: 0 10px;
+}
+
 @media (max-width: 991px) {
     .list-filter {
         height: auto;
