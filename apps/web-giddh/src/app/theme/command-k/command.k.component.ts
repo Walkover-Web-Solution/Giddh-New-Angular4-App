@@ -45,8 +45,7 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
     @Input() public ItemHeight: number = 52;
     @Input() public ItemWidth: number = 300;
     @Input() public visibleItems: number = 10;
-
-    @Output() public closeEmitter: EventEmitter<boolean | any> = new EventEmitter<boolean | any>();
+    
     @Output() public selectedItemEmitter: EventEmitter<any | any[]> = new EventEmitter<any | any[]>();
     @Output() public groupEmitter: EventEmitter<any> = new EventEmitter<any>();
     @Output() public noResultFoundEmitter: EventEmitter<any> = new EventEmitter<null>();
@@ -459,15 +458,6 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     /**
-     * This will close the modal
-     *
-     * @memberof CommandKComponent
-     */
-    public close() {
-        this.closeEmitter.emit(true);
-    }
-
-    /**
      * This function is used to highlight the hovered item
      *
      * @param {number} index
@@ -498,7 +488,7 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
     @HostListener('scroll', ['$event'])
     onScroll(event: any) {
         // visible height + pixel scrolled >= total height - 200 (deducted 200 to load list little earlier before user reaches to end)
-        if (event.target.offsetHeight + event.target.scrollTop >= (event.target.scrollHeight - 200)) {
+        if (event.target.offsetHeight + event.target.scrollTop >= (event.target.scrollHeight - 800)) {
             if (this.allowLoadMore && !this.isLoading) {
                 if (this.commandKRequestParams.page + 1 <= this.commandKRequestParams.totalPages) {
                     this.commandKRequestParams.page++;

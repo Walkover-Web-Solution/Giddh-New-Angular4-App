@@ -26,56 +26,72 @@
                     vatReportTransactions.results[0].description
                 }}</span>
             </div>
+
             <div class="invoice-preview table-responsive">
-                <table class="table basic table-bordered mt-2 invoice-table desktop-table">
-                    <thead>
-                        <tr>
-                            <th width="10%">{{ localeData?.invoice_date }}</th>
-                            <th width="15%">{{ localeData?.invoice_number }}</th>
-                            <th width="15%">{{ localeData?.customer_name }}</th>
-                            <th width="12%" class="text-right">{{ localeData?.taxable_amount }}</th>
-                            <th width="12%" class="text-right">{{ localeData?.vat_amount }}</th>
-                            <th width="10%">{{ localeData?.reverse_charge }}</th>
-                            <th width="15%">{{ localeData?.trn_number }}</th>
-                            <th width="15%">{{ localeData?.place_supply }}</th>
-                        </tr>
-                    </thead>
-                    <tbody *ngIf="vatReportTransactions.results && vatReportTransactions.results.length > 0">
-                        <tr *ngFor="let item of vatReportTransactions.results; let i = index">
-                            <td>{{ item.voucherDate ? item.voucherDate : "-" }}</td>
-                            <td>
-                                <a
-                                    href="javascript:;"
-                                    [ngClass]="{ 'noclick': !item.voucherNumber && item.voucherType !== 'purchase' }"
-                                    (click)="onSelectInvoice(item)"
-                                    >{{ item.voucherNumber ? item.voucherNumber : "-" }}</a
-                                >
-                            </td>
-                            <td>{{ item.customerName ? item.customerName : "-" }}</td>
-                            <td class="text-right">
-                                {{ activeCompany.baseCurrencySymbol }} {{ item.taxableAmount | giddhCurrency }}
-                            </td>
-                            <td class="text-right">
-                                {{ activeCompany.baseCurrencySymbol }} {{ item.vatAmount | giddhCurrency }}
-                            </td>
-                            <td>{{ item.reverseCharge ? item.reverseCharge : "-" }}</td>
-                            <td>{{ item.trnNumber ? item.trnNumber : "-" }}</td>
-                            <td>{{ item.placeOfSupply ? item.placeOfSupply : "-" }}</td>
-                        </tr>
-                    </tbody>
-                    <tbody
-                        *ngIf="
-                            !vatReportTransactions ||
-                            !vatReportTransactions.results ||
-                            vatReportTransactions.results.length === 0
-                        "
-                    >
-                        <tr>
-                            <td *ngIf="!isLoading" colspan="8" align="center">{{ localeData?.no_records_found }}</td>
-                            <td *ngIf="isLoading" colspan="8">&nbsp;</td>
-                        </tr>
-                    </tbody>
+                <table
+                    mat-table
+                    [dataSource]="vatReportTransactions.results"
+                    class="table basic table-bordered mt-2 invoice-table desktop-table"
+                >
+                    <ng-container matColumnDef="date">
+                        <th mat-header-cell *matHeaderCellDef>{{ localeData?.invoice_date }}</th>
+                        <td mat-cell *matCellDef="let element">
+                            {{ element.voucherDate ? element.voucherDate : "-" }}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="number">
+                        <th mat-header-cell *matHeaderCellDef>{{ localeData?.invoice_number }}</th>
+                        <td mat-cell *matCellDef="let element">
+                            <a
+                                href="javascript:;"
+                                [ngClass]="{ 'noclick': !element.voucherNumber && element.voucherType !== 'purchase' }"
+                                (click)="onSelectInvoice(element)"
+                                >{{ element.voucherNumber ? element.voucherNumber : "-" }}
+                            </a>
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="name">
+                        <th mat-header-cell *matHeaderCellDef>{{ localeData?.customer_name }}</th>
+                        <td mat-cell *matCellDef="let element">
+                            {{ element.customerName ? element.customerName : "-" }}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="taxamt">
+                        <th mat-header-cell *matHeaderCellDef>{{ localeData?.taxable_amount }}</th>
+                        <td mat-cell *matCellDef="let element">
+                            {{ activeCompany.baseCurrencySymbol }} {{ element.taxableAmount | giddhCurrency }}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="vat_amt">
+                        <th mat-header-cell *matHeaderCellDef>{{ localeData?.vat_amount }}</th>
+                        <td mat-cell *matCellDef="let element">
+                            {{ activeCompany.baseCurrencySymbol }} {{ element.vatAmount | giddhCurrency }}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="reverse_charge">
+                        <th mat-header-cell *matHeaderCellDef>{{ localeData?.reverse_charge }}</th>
+                        <td mat-cell *matCellDef="let element">
+                            {{ element.reverseCharge ? element.reverseCharge : "-" }}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="trn_number">
+                        <th mat-header-cell *matHeaderCellDef>{{ localeData?.trn_number }}</th>
+                        <td mat-cell *matCellDef="let element">{{ element.trnNumber ? element.trnNumber : "-" }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="place_supply">
+                        <th mat-header-cell *matHeaderCellDef>{{ localeData?.place_supply }}</th>
+                        <td mat-cell *matCellDef="let element">
+                            {{ element.placeOfSupply ? element.placeOfSupply : "-" }}
+                        </td>
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                 </table>
+                <section class="no-logs" *ngIf="!vatReportTransactions.results?.length && !isLoading">
+                    <div class="no-data">
+                        <h1>{{ localeData?.no_records_found }}</h1>
+                    </div>
+                </section>
             </div>
             <div class="pagination-wrapper" *ngIf="vatReportTransactions.totalPages > 1">
                 <pagination
@@ -94,14 +110,17 @@
                 ></pagination>
             </div>
         </div>
-
-        <!-- Download or Send Invoice on mail -->
-        <div bsModal #downloadOrSendMailModel="bs-modal" class="modal fade" role="dialog" [config]="modalConfig">
-            <div class="modal-dialog modal-xl">
+        <ng-template #downloadOrSendMailModel>
+            <div class="modal-dialog">
                 <div class="modal-content">
-                    <div element-view-container-ref #downloadOrSendMailComponent="elementviewcontainerref"></div>
+                    <download-or-send-mail-invoice
+                        [selectedVoucher]="selectedInvoice"
+                        (downloadOrSendMailEvent)="onDownloadOrSendMailEvent($event)"
+                        (downloadInvoiceEvent)="ondownloadInvoiceEvent($event)"
+                        (closeModelEvent)="closeDownloadOrSendMailPopup($event)"
+                    ></download-or-send-mail-invoice>
                 </div>
             </div>
-        </div>
+        </ng-template>
     </div>
 </ng-container>

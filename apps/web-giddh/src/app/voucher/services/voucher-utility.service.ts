@@ -150,6 +150,8 @@ export class VoucherUtilityService {
         delete updatedData?.account?.billingDetails?.state?.name;
         delete updatedData?.account?.shippingDetails?.country;
         delete updatedData?.account?.shippingDetails?.state?.name;
+        delete updatedData?.account?.billingDetails?.county?.name;
+        delete updatedData?.account?.shippingDetails?.county?.name;
         delete updatedData?.account?.currency;
         delete updatedData?.account?.currencyCode;
         delete updatedData?.account?.currencySymbol;

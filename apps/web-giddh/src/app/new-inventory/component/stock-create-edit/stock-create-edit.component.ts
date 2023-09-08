@@ -1020,7 +1020,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
             }
         });
     }
-
+    
     /**
      * Formats request before sending
      *

@@ -18,7 +18,6 @@
     font-size: var(--font-size-15);
     box-shadow: 1px 1px 3px var(--color-primary-common-box-shadow);
 }
-
 .dashboard-container {
     max-width: 1200px;
     width: 100%;
@@ -38,11 +37,14 @@ span.icon-info-icon {
     margin-bottom: 20px;
 }
 .panel-heading {
-    padding: 15px 15px;
+    padding: 15px 12px;
     font-size: var(--font-size-15);
     display: flex;
     align-items: center;
     justify-content: space-between;
+    strong{
+        letter-spacing: -1px;
+    }
 }
 .basic > tbody > tr:hover td {
     background: transparent;

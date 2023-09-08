@@ -22,6 +22,7 @@ import { GeneralService } from '../../services/general.service';
 import { LocaleService } from '../../services/locale.service';
 import { AppState } from '../../store';
 import { AllItem, AllItems } from '../helpers/allItems';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
     selector: 'primary-sidebar',
@@ -97,10 +98,10 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     public commonLocaleData: any = {};
     /** This holds the active locale */
     public activeLocale: string = "";
-    /** This will holds true if we added ledger item in local db once */
-    public isItemAdded: boolean = false;
     /** This will open company branch switch dropdown */
     public showCompanyBranchSwitch: boolean = false;
+    /** This will holds true if we added ledger item in local db once */
+    public isItemAdded: boolean = false;
     /** This will show/hide account sidepan */
     public accountAsideMenuState: string = 'out';
     /** This will hold group unique name from CMD+k for creating account */
@@ -111,6 +112,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     public isActiveRoute: string;
     /** True if account has unsaved changes */
     public hasUnsavedChanges: boolean = false;
+    public commandkDialogRef: MatDialogRef<any>;
 
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
@@ -124,7 +126,8 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
         private dbService: DbService,
         private groupWithAction: GroupWithAccountsAction,
         private localeService: LocaleService,
-        private salesAction: SalesActions
+        private salesAction: SalesActions,
+        public dialog: MatDialog,
     ) {
         this.activeAccount$ = this.store.pipe(select(appStore => appStore.ledger.account), takeUntil(this.destroyed$));
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
@@ -179,7 +182,13 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             event.preventDefault();
             event.stopPropagation();
             if (this.companyList?.length > 0) {
-                this.showNavigationModal();
+                if(this.commandkDialogRef && this.dialog.getDialogById(this.commandkDialogRef.id)){
+                    this.commandkDialogRef.close()
+                }
+                this.commandkDialogRef = this.dialog.open(this.navigationModal, {
+                    width:'630px',
+                    height: '600'
+                });
             }
         }
     }
@@ -250,7 +259,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             if (response && response.length) {
                 this.currentCompanyBranches = response;
                 if (this.generalService.currentBranchUniqueName) {
-                    this.currentBranch = response.find(branch => (this.generalService.currentBranchUniqueName === branch.uniqueName)) || {};
+                    this.currentBranch = response.find(branch => (this.generalService.currentBranchUniqueName === branch?.uniqueName)) || {};
                     if (!this.activeCompanyForDb) {
                         this.activeCompanyForDb = new CompAidataModel();
                     }
@@ -385,7 +394,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof PrimarySidebarComponent
      */
     public handleNewTeamCreationEmitter(e: any): void {
-        this.modelRef.hide();
+        this.modelRef?.hide();
         if (e[0] === "group") {
             if (this.accountAsideMenuState === "in") {
                 this.toggleAccountAsidePane();
@@ -503,6 +512,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             item.time = +new Date();
             let entity = (item.type) === 'MENU' ? 'menus' : 'accounts';
             this.doEntryInDb(entity, item, fromInvalidState);
+            this.closeAccountModal(true);
         }, 200);
     }
 

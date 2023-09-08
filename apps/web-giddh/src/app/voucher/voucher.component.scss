@@ -427,6 +427,13 @@ textarea:focus {
     inset: 0;
     width: 100%;
 }
+.delete-image {
+    width: 3%;
+    position: absolute;
+    right: 25%;
+    top: 55px;
+    cursor: pointer;
+}
 
 .custom-file-label {
     height: 60px;
@@ -735,7 +742,9 @@ section.static-invoice-table {
             padding-left: 0 !important;
         }
     }
-
+    .billing-height{
+        height: 42px;
+    }
 }
 
 .customer-invoice-table.bg-white {
@@ -1008,11 +1017,6 @@ table.table.table-custom-invoice.basic,
     }
 }
 
-.balance-due-text {
-    min-width: 150px !important;
-    margin-left: 23px;
-}
-
 #deposit-dropdown > strong {
     text-align: left;
     font-weight: 600;
@@ -1239,7 +1243,7 @@ label.checkbox-custom-label {
 
 .bill-add {
     label {
-        min-width: 110px;
+        min-width: 190px;
     }
     .mat-mdc-checkbox {
         .mdc-form-field{
