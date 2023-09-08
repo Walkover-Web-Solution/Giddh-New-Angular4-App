@@ -108,6 +108,8 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     public imgPath: string = "";
     /** False for on init call */
     public defaultLoad: boolean = true;
+    /** True if api call in progress */
+    public isLoading: boolean = false;
 
     constructor(
         public dialog: MatDialog,
@@ -478,6 +480,9 @@ export class AgingReportComponent implements OnInit, OnDestroy {
      * @memberof AgingReportComponent
      */
     public exportReport(): void {
+        if (this.isLoading) {
+            return;
+        }
         let exportData = {
             exportType: "AGING_REPORT_EXPORT",
             fileType: "CSV",
@@ -491,7 +496,9 @@ export class AgingReportComponent implements OnInit, OnDestroy {
             rangeCol: this.dueAmountReportRequest.rangeCol,
             q: this.dueAmountReportRequest.q
         }
+        this.isLoading = true;
         this.agingReportService.exportAgingReport(exportData).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            this.isLoading = false;
             if (response?.status === 'success') {
                 this.toaster.showSnackBar("success", response?.body);
                 this.router.navigate(['pages', 'downloads', 'exports']);
