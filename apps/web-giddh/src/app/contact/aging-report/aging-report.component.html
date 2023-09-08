@@ -86,7 +86,7 @@
                     </span>
                 </div>
             </div>
-            <div class="cp advance-clear-filter-icons d-flex float-right">
+            <div class="cp advance-clear-filter-icons d-flex float-right column-gap1">
                 <button
                     mat-stroked-button
                     color="primary"
@@ -99,6 +99,9 @@
                         {{ commonLocaleData?.app_filter }}
                         <span class="icon-advance-filter ml-2"></span>
                     </div>
+                </button>
+                <button mat-stroked-button color="primary" (click)="exportReport()">
+                    {{ commonLocaleData?.app_export }}
                 </button>
                 <span class="refresh-btn" *ngIf="isAdvanceSearchApplied">
                     <button mat-icon-button (click)="resetAdvanceSearch()">
