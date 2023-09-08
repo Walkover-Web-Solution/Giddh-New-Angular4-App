@@ -284,6 +284,9 @@
         {
             "label": "Inventory",
             "icon": "icon-inventory",
+            "additional": {
+                "voucherVersion": 1
+            },
             "items": [
                 {
                     "label": "Branch Transfer",

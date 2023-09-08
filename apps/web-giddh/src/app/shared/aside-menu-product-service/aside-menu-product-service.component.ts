@@ -32,6 +32,8 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 export class AsideMenuProductServiceComponent implements OnInit, OnDestroy {
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
     @Input() public selectedVoucherType: string;
+    /* This will hold branch transfer mode input  */
+    @Input() public inputData: string = '';
     public autoFocusInChild: boolean = true;
     public isAddStockOpen: boolean = false;
     public isAddServiceOpen: boolean = false;
@@ -49,6 +51,7 @@ export class AsideMenuProductServiceComponent implements OnInit, OnDestroy {
     /** This will hold stock type */
     public stockType: string = '';
 
+
     constructor(
         private accountService: AccountService,
         private toasterService: ToasterService,
@@ -56,8 +59,7 @@ export class AsideMenuProductServiceComponent implements OnInit, OnDestroy {
         private pageLeaveUtilityService: PageLeaveUtilityService,
         private accountsAction: AccountsAction,
         private changeDetectionRef: ChangeDetectorRef,
-        private generalService: GeneralService,
-        @Inject(MAT_DIALOG_DATA) public inputData
+        private generalService: GeneralService
     ) {
     }
 
