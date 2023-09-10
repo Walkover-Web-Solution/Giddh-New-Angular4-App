@@ -8,7 +8,7 @@
     <div class="aside-pane">
         <div class="header-create-unit">
             <div class="form-header">
-                <h3 mat-dialog-title>Manage Transporter</h3>
+                <h3 mat-dialog-title>{{ commonLocaleData?.app_manage_transporter }}</h3>
                 <button id="close" mat-dialog-close (closeAsideEvent)="closeAsidePane()">
                     <i class="icon-cross"></i>
                 </button>
@@ -28,7 +28,7 @@
                             <text-field
                                 [type]="'text'"
                                 [cssClass]="'form-control mat-field-border'"
-                                [placeholder]="'Transporter Name'"
+                                [placeholder]="commonLocaleData?.app_transporter_name"
                                 [name]="'transporterName'"
                                 formControlName="transporterName"
                                 [showError]="!isValidForm && !transportedCreateEditForm?.get('transporterName')?.value"
@@ -40,15 +40,14 @@
                             <small
                                 *ngIf="transportedCreateEditForm.get('transporterName').hasError('minlength')"
                                 class="text-danger"
-                                >Transporter name should contain atleast 5 characters and should not contain any special
-                                character.</small
+                                >{{ commonLocaleData?.app_invalid_transporter_name_message }}</small
                             >
                         </div>
                         <div class="col-lg-12">
                             <text-field
                                 [type]="'text'"
                                 [cssClass]="'form-control mat-field-border'"
-                                [placeholder]="'Transporter Id'"
+                                [placeholder]="commonLocaleData?.app_transporter_id"
                                 [name]="'transporterId'"
                                 formControlName="transporterId"
                                 [showError]="!isValidForm && !transportedCreateEditForm?.get('transporterId')?.value"
@@ -61,7 +60,7 @@
                             <small
                                 *ngIf="transportedCreateEditForm.get('transporterId').hasError('minlength')"
                                 class="text-danger"
-                                >Transporter ID should contain atleast 15 characters.
+                                >{{ commonLocaleData?.app_invalid_transporter_id_message }}
                             </small>
                         </div>
                         <div class="col-lg-12">
@@ -72,7 +71,7 @@
                                     color="primary"
                                     (click)="generateTransporter(transportedCreateEditForm.value)"
                                 >
-                                    Save
+                                    {{ commonLocaleData?.app_save }}
                                 </button>
                                 <button
                                     mat-stroked-button
@@ -80,9 +79,11 @@
                                     *ngIf="transportEditMode"
                                     (click)="updateTransporter(transportedCreateEditForm.value)"
                                 >
-                                    Update
+                                    {{ commonLocaleData?.app_update }}
                                 </button>
-                                <button mat-stroked-button (click)="clearTransportForm()">Clear</button>
+                                <button mat-stroked-button (click)="clearTransportForm()">
+                                    {{ commonLocaleData?.app_clear }}
+                                </button>
                             </div>
                         </div>
                     </form>
@@ -91,8 +92,6 @@
                     </div>
                     <div class="table-responsive manage-table" *ngIf="!isLoading">
                         <table mat-table [dataSource]="transporterListDetails" class="mat-elevation-z8">
-                            <!--- Note that these columns can be defined in any order.
-                        The actual rendered columns are set as a property on the row definition" -->
                             <!-- Name Column -->
                             <ng-container matColumnDef="name">
                                 <th mat-header-cell *matHeaderCellDef class="mat-table-name">Name</th>
@@ -134,10 +133,10 @@
                             [itemsPerPage]="transporterObj.count"
                             [rotate]="false"
                             (pageChanged)="pageChanged($event)"
-                            [firstText]="'First'"
-                            [previousText]="'Previous'"
-                            [nextText]="'Next'"
-                            [lastText]="'Last'"
+                            [firstText]="commonLocaleData?.app_first"
+                            [previousText]="commonLocaleData?.app_previous"
+                            [nextText]="commonLocaleData?.app_next"
+                            [lastText]="commonLocaleData?.app_last"
                         ></pagination>
                     </div>
                 </div>

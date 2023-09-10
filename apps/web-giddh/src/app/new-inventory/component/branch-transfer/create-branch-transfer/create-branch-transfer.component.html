@@ -1,33 +1,39 @@
 <ng-container
     appTranslate
-    [file]="'inventory/stock'"
+    [file]="'inventory/branch-transfer'"
     (commonLocaleData)="commonLocaleData = $event"
     (localeData)="localeData = $event"
 >
-    <section id="branch-transfer-create">
+    <section id="branch-transfer-create" *ngIf="showContent">
         <hamburger-menu></hamburger-menu>
         <div class="branch-transfer-header">
-            <h2>{{ branchTransferMode === "receipt-note" ? "Receipt Note" : "Delivery Challan" }}</h2>
+            <h2>
+                {{
+                    branchTransferMode === "receipt-note"
+                        ? commonLocaleData?.app_receipt_note
+                        : commonLocaleData?.app_delivery_challan
+                }}
+            </h2>
         </div>
         <div class="branch-transfer-body">
             <div class="branch-transfer-body-radio-btns" *ngIf="!editBranchTransferUniqueName">
-                <mat-radio-group name="products_sender" [(ngModel)]="transferType">
+                <mat-radio-group name="transferType" [(ngModel)]="transferType">
                     <mat-radio-button color="primary" value="products" (click)="changeTransferType()"
-                        >Multiple Products
+                        >{{ localeData?.multiple_products }}
                     </mat-radio-button>
                     <mat-radio-button
                         color="primary"
                         value="senders"
                         (click)="changeTransferType()"
                         *ngIf="branchTransferMode === 'receipt-note'"
-                        >Multiple Senders</mat-radio-button
+                        >{{ localeData?.multiple_senders }}</mat-radio-button
                     >
                     <mat-radio-button
                         color="primary"
                         value="senders"
                         (click)="changeTransferType()"
                         *ngIf="branchTransferMode === 'delivery-challan'"
-                        >Multiple Receivers</mat-radio-button
+                        >{{ localeData?.mutiple_receivers }}</mat-radio-button
                     >
                 </mat-radio-group>
             </div>
@@ -61,8 +67,8 @@
                                                 [appearance]="'outline'"
                                                 [placeholder]="
                                                     branchTransferMode === 'receipt-note'
-                                                        ? 'Date of Receipt'
-                                                        : 'Date of Supply'
+                                                        ? localeData?.date_of_receipt
+                                                        : localeData?.date_of_supply
                                                 "
                                                 [required]="true"
                                                 [showError]="
@@ -85,8 +91,8 @@
                                                 (createOption)="onProductNoResultsClicked(0)"
                                                 [showCreateNew]="true"
                                                 [name]="'productName'"
-                                                [label]="'Product\'s Name'"
-                                                [placeholder]="'Select Product\'s Name'"
+                                                [label]="localeData?.product_name"
+                                                [placeholder]="localeData?.select_product_name"
                                                 [options]="stockList"
                                                 (selectedOption)="
                                                     selectProduct(
@@ -108,21 +114,21 @@
                                                         <input-field
                                                             [type]="'text'"
                                                             [name]="'skuCode'"
-                                                            [label]="'SKU Code'"
+                                                            [label]="commonLocaleData?.app_sku_code"
                                                             formControlName="skuCode"
                                                         >
                                                         </input-field>
                                                     </div>
                                                     <div>
                                                         <mat-radio-group
-                                                            name="products_sender"
+                                                            name="showCodeType0"
                                                             formControlName="showCodeType"
                                                         >
                                                             <mat-radio-button color="primary" value="hsn"
-                                                                >HSN Code
+                                                                >{{ commonLocaleData?.app_hsn_code }}
                                                             </mat-radio-button>
                                                             <mat-radio-button color="primary" value="sac"
-                                                                >SAC Code
+                                                                >{{ commonLocaleData?.app_sac_code }}
                                                             </mat-radio-button>
                                                         </mat-radio-group>
                                                         <div
@@ -136,7 +142,10 @@
                                                             <input-field
                                                                 [type]="'text'"
                                                                 [name]="'hsnSacNumber'"
-                                                                [label]="'HSN Number'"
+                                                                [label]="
+                                                                    commonLocaleData?.app_hsn +
+                                                                    commonLocaleData?.app_number
+                                                                "
                                                                 formControlName="hsnNumber"
                                                                 [allowDecimalDigitsOnly]="true"
                                                                 [max]="10"
@@ -154,7 +163,10 @@
                                                             <input-field
                                                                 [type]="'text'"
                                                                 [name]="'hsnSacNumber'"
-                                                                [label]="'SAC Number'"
+                                                                [label]="
+                                                                    commonLocaleData?.app_sac +
+                                                                    commonLocaleData?.app_number
+                                                                "
                                                                 formControlName="sacNumber"
                                                                 [allowDecimalDigitsOnly]="true"
                                                                 [max]="10"
@@ -170,8 +182,8 @@
                                                 <div class="mr-b15 position-relative info-field hello sender name">
                                                     <dropdown-field
                                                         [name]="'senderName'"
-                                                        [label]="'Sender\'s Name'"
-                                                        [placeholder]="'Select Sender\'s Name'"
+                                                        [label]="localeData?.sender_name"
+                                                        [placeholder]="localeData?.select_sender_name"
                                                         [options]="branches"
                                                         (selectedOption)="selectSenderName($event, 0)"
                                                         [readonly]="isUpdateMode"
@@ -212,9 +224,8 @@
                                                 <div [formGroupName]="0">
                                                     <div class="mr-b15 four">
                                                         <dropdown-field
-                                                            [name]="'senderWarehouse'"
-                                                            [label]="'Sender\'s Warehouse'"
-                                                            [placeholder]="'Select Sender\'s Warehouse'"
+                                                            [label]="localeData?.senders_warehouse"
+                                                            [placeholder]="localeData?.select_senders_warehouse"
                                                             (selectedOption)="selectSenderWarehouse($event, 0)"
                                                             [options]="
                                                                 senderWarehouses[
@@ -260,7 +271,9 @@
                                                                 [type]="'text'"
                                                                 formControlName="taxNumber"
                                                                 [label]="
-                                                                    'Sender\'s ' + formFields['taxName']?.label + '*'
+                                                                    localeData?.select_label +
+                                                                    formFields['taxName']?.label +
+                                                                    '*'
                                                                 "
                                                                 [max]="15"
                                                                 (change)="checkTaxNumberValidation()"
@@ -281,7 +294,7 @@
                                                             }"
                                                         >
                                                             <mat-form-field appearance="outline" class="w-100">
-                                                                <mat-label>Sender's Address</mat-label>
+                                                                <mat-label>{{ localeData?.sender_address }}</mat-label>
                                                                 <textarea
                                                                     matInput
                                                                     rows="3"
@@ -308,7 +321,7 @@
                                                 [name]="'myCurrentCompany'"
                                                 formControlName="myCurrentCompany"
                                                 [type]="'text'"
-                                                [placeholder]="'Receiver\'s Name'"
+                                                [placeholder]="localeData?.receiver_name"
                                                 [readonly]="isBranch || isCompanyWithSingleBranch"
                                                 [required]="true"
                                                 [showError]="
@@ -339,8 +352,8 @@
                                                     <dropdown-field
                                                         *ngIf="isUpdateMode"
                                                         [name]="'receiverName'"
-                                                        [label]="'Receiver\'s Name'"
-                                                        [placeholder]="'Select Receiver\'s Warehouse'"
+                                                        [label]="localeData?.receiver_name"
+                                                        [placeholder]="localeData?.select_receiver_name"
                                                         [options]="branches"
                                                         (selectedOption)="selectRecieverName($event, 0)"
                                                         [readonly]="isUpdateMode"
@@ -364,7 +377,8 @@
                                                 <div class="mr-b15">
                                                     <dropdown-field
                                                         [name]="'receiverWarehouse'"
-                                                        [placeholder]="'Receiver\'s Warehouse'"
+                                                        [label]="localeData?.receiver_warehouse"
+                                                        [placeholder]="localeData?.select_receiver_warehouse"
                                                         [options]="
                                                             destinationWarehouses[
                                                                 branchTransferCreateEditForm.get(
@@ -373,7 +387,8 @@
                                                             ]
                                                         "
                                                         (selectedOption)="
-                                                            selectReceiverWarehouse($event, 0); openFirstEntry()
+                                                            selectReceiverWarehouse($event, 0);
+                                                            openDropdown('first', 'destinations')
                                                         "
                                                         [allowValueReset]="true"
                                                         (onClear)="resetWarehouse('destinations', 0)"
@@ -410,7 +425,9 @@
                                                             [type]="'text'"
                                                             formControlName="taxNumber"
                                                             [label]="
-                                                                'Receiver\'s ' + formFields['taxName']?.label + '*'
+                                                                localeData?.select_label_receiver +
+                                                                formFields['taxName']?.label +
+                                                                '*'
                                                             "
                                                             [max]="15"
                                                             (change)="checkTaxNumberValidation()"
@@ -431,7 +448,7 @@
                                                         }"
                                                     >
                                                         <mat-form-field appearance="outline" class="w-100">
-                                                            <mat-label>Receiver's Address</mat-label>
+                                                            <mat-label>{{ localeData?.receiver_address }}</mat-label>
                                                             <textarea
                                                                 matInput
                                                                 rows="3"
@@ -513,8 +530,8 @@
                                                 (createOption)="onProductNoResultsClicked(0)"
                                                 [showCreateNew]="true"
                                                 [name]="'productName'"
-                                                [label]="'Product\'s Name'"
-                                                [placeholder]="'Select Product\'s Name'"
+                                                [label]="localeData?.product_name"
+                                                [placeholder]="localeData?.select_product_name"
                                                 [options]="stockList"
                                                 [appearance]="'outline'"
                                                 (selectedOption)="
@@ -537,14 +554,14 @@
                                                         <input-field
                                                             [type]="'text'"
                                                             [name]="'skuCode'"
-                                                            [label]="'SKU Code'"
+                                                            [label]="commonLocaleData?.app_sku_code"
                                                             formControlName="skuCode"
                                                         >
                                                         </input-field>
                                                     </div>
                                                     <div>
                                                         <mat-radio-group
-                                                            name="products_sender"
+                                                            name="showCodeType1"
                                                             formControlName="showCodeType"
                                                         >
                                                             <mat-radio-button color="primary" value="hsn"
@@ -565,7 +582,10 @@
                                                             <input-field
                                                                 [type]="'text'"
                                                                 [name]="'hsnNumber'"
-                                                                [label]="'HSN Number'"
+                                                                [label]="
+                                                                    commonLocaleData?.app_hsn +
+                                                                    commonLocaleData?.app_number
+                                                                "
                                                                 formControlName="hsnNumber"
                                                                 [allowDecimalDigitsOnly]="true"
                                                                 [max]="10"
@@ -583,7 +603,10 @@
                                                             <input-field
                                                                 [type]="'text'"
                                                                 [name]="'sacNumber'"
-                                                                [label]="'SAC Number'"
+                                                                [label]="
+                                                                    commonLocaleData?.app_sac +
+                                                                    commonLocaleData?.app_number
+                                                                "
                                                                 formControlName="sacNumber"
                                                                 [allowDecimalDigitsOnly]="true"
                                                                 [max]="10"
@@ -613,8 +636,8 @@
                                                 <dropdown-field
                                                     *ngIf="isUpdateMode"
                                                     [name]="'senderName0'"
-                                                    [label]="'Sender\'s Name'"
-                                                    [placeholder]="'Select Sender\'s Name'"
+                                                    [label]="localeData?.sender_name"
+                                                    [placeholder]="localeData?.select_sender_name"
                                                     [options]="branches"
                                                     (selectedOption)="selectSenderName($event, 0)"
                                                     [readonly]="isUpdateMode"
@@ -651,8 +674,8 @@
                                                 <div class="mr-b15 one">
                                                     <dropdown-field
                                                         [name]="'senderWarehouse'"
-                                                        [label]="'Sender\'s Warehouse'"
-                                                        [placeholder]="'Select Sender\'s Warehouse'"
+                                                        [label]="localeData?.senders_warehouse"
+                                                        [placeholder]="localeData?.select_senders_warehouse"
                                                         (selectedOption)="selectSenderWarehouse($event, 0)"
                                                         [options]="
                                                             senderWarehouses[
@@ -694,7 +717,11 @@
                                                             [placeholder]="getEnterTaxText()"
                                                             [type]="'text'"
                                                             formControlName="taxNumber"
-                                                            [label]="'Sender\'s ' + formFields['taxName']?.label + '*'"
+                                                            [label]="
+                                                                localeData?.select_label +
+                                                                formFields['taxName']?.label +
+                                                                '*'
+                                                            "
                                                             [max]="15"
                                                             (change)="checkTaxNumberValidation()"
                                                             [readonly]="
@@ -714,7 +741,7 @@
                                                         }"
                                                     >
                                                         <mat-form-field appearance="outline" class="w-100">
-                                                            <mat-label>Sender's Address</mat-label>
+                                                            <mat-label>{{ localeData?.sender_address }}</mat-label>
                                                             <textarea
                                                                 matInput
                                                                 class="form-control"
@@ -740,8 +767,8 @@
                                                     <div class="position-relative info-field">
                                                         <dropdown-field
                                                             [name]="'receiverName'"
-                                                            [label]="'Receiver\'s Name'"
-                                                            [placeholder]="'Select Receiver\'s Name'"
+                                                            [label]="localeData?.receiver_name"
+                                                            [placeholder]="localeData?.select_receiver_name"
                                                             [options]="branches"
                                                             (selectedOption)="selectRecieverName($event, 0)"
                                                             [readonly]="isUpdateMode"
@@ -781,7 +808,8 @@
                                                     <dropdown-field
                                                         #destinationWarehouse
                                                         [name]="'receiverWarehouse'"
-                                                        [placeholder]="'Receiver\'s Warehouse'"
+                                                        [label]="localeData?.receiver_warehouse"
+                                                        [placeholder]="localeData?.select_receiver_warehouse"
                                                         [options]="
                                                             destinationWarehouses[
                                                                 branchTransferCreateEditForm.get(
@@ -790,7 +818,8 @@
                                                             ]
                                                         "
                                                         (selectedOption)="
-                                                            selectReceiverWarehouse($event, 0); openFirstEntry()
+                                                            selectReceiverWarehouse($event, 0);
+                                                            openDropdown('first', 'destinations')
                                                         "
                                                         [allowValueReset]="true"
                                                         (onClear)="resetWarehouse('destinations', 0)"
@@ -829,7 +858,9 @@
                                                             [type]="'text'"
                                                             formControlName="taxNumber"
                                                             [label]="
-                                                                'Receiver\'s ' + formFields['taxName']?.label + '*'
+                                                                localeData?.select_label_receiver +
+                                                                formFields['taxName']?.label +
+                                                                '*'
                                                             "
                                                             [max]="15"
                                                             (change)="checkTaxNumberValidation()"
@@ -850,7 +881,7 @@
                                                         }"
                                                     >
                                                         <mat-form-field appearance="outline" class="w-100">
-                                                            <mat-label>Receiver's Address</mat-label>
+                                                            <mat-label>{{ localeData?.receiver_address }}</mat-label>
                                                             <textarea
                                                                 matInput
                                                                 rows="3"
@@ -875,7 +906,7 @@
                                                 [name]="'myCurrentCompany'"
                                                 formControlName="myCurrentCompany"
                                                 [type]="'text'"
-                                                [placeholder]="'Senders\'s Name'"
+                                                [placeholder]="localeData?.sender_name"
                                                 [readonly]="isBranch || isCompanyWithSingleBranch"
                                                 [showError]="
                                                     !isValidForm &&
@@ -889,8 +920,8 @@
                                                         <dropdown-field
                                                             *ngIf="isUpdateMode"
                                                             [name]="'senderWarehouse'"
-                                                            [label]="'Sender\'s Warehouse'"
-                                                            [placeholder]="'Select Sender\'s Warehouse'"
+                                                            [label]="localeData?.senders_warehouse"
+                                                            [placeholder]="localeData?.select_senders_warehouse"
                                                             [options]="branches"
                                                             (selectedOption)="selectSenderWarehouse($event, 0)"
                                                             [readonly]="isUpdateMode"
@@ -929,7 +960,7 @@
                                                     <div class="mr-b15 thrree">
                                                         <dropdown-field
                                                             [name]="'senderWarehouse'"
-                                                            [placeholder]="'Sender\'s Warehouse'"
+                                                            [placeholder]="localeData?.select_senders_warehouse"
                                                             [options]="
                                                                 senderWarehouses[
                                                                     branchTransferCreateEditForm.get(
@@ -942,7 +973,10 @@
                                                                     'sources.0.warehouse.name'
                                                                 ).value
                                                             "
-                                                            (selectedOption)="selectSenderWarehouse($event, 0)"
+                                                            (selectedOption)="
+                                                                selectSenderWarehouse($event, 0);
+                                                                openDropdown('first', 'destinations')
+                                                            "
                                                             [allowValueReset]="true"
                                                             (onClear)="resetWarehouse('sources', 0)"
                                                             [required]="true"
@@ -973,7 +1007,9 @@
                                                                 [type]="'text'"
                                                                 formControlName="taxNumber"
                                                                 [label]="
-                                                                    'Sender\'s ' + formFields['taxName']?.label + '*'
+                                                                    localeData?.select_label +
+                                                                    formFields['taxName']?.label +
+                                                                    '*'
                                                                 "
                                                                 [max]="15"
                                                                 (change)="checkTaxNumberValidation()"
@@ -994,7 +1030,7 @@
                                                             }"
                                                         >
                                                             <mat-form-field appearance="outline" class="w-100">
-                                                                <mat-label>Sender's Address</mat-label>
+                                                                <mat-label>{{ localeData?.sender_address }}</mat-label>
                                                                 <textarea
                                                                     matInput
                                                                     rows="3"
@@ -1076,16 +1112,17 @@
                                                                 <select-field
                                                                     [cssClass]="'form-control mat-field-border pb-0'"
                                                                     [name]="'senderName' + i"
-                                                                    [placeholder]="'Sender\'s Name'"
+                                                                    [placeholder]="localeData?.select_sender_name"
                                                                     [options]="branches"
                                                                     (selectedOption)="selectSenderName($event, i)"
                                                                     [defaultValue]="source.get('name').value"
+                                                                    #selectAccount
                                                                 >
                                                                 </select-field>
                                                                 <select-field
                                                                     [cssClass]="'form-control mat-field-border pb-0'"
                                                                     [name]="'sourceWarehouse' + i"
-                                                                    [placeholder]="'Sender\'s Warehouse'"
+                                                                    [placeholder]="localeData?.select_senders_warehouse"
                                                                     (selectedOption)="selectSenderWarehouse($event, i)"
                                                                     [options]="
                                                                         senderWarehouses[source.get('uniqueName').value]
@@ -1108,7 +1145,7 @@
                                                                         [placeholder]="getEnterTaxText()"
                                                                         [type]="'text'"
                                                                         [label]="
-                                                                            'Sender\'s ' +
+                                                                            localeData?.select_label +
                                                                             formFields['taxName']?.label +
                                                                             '*'
                                                                         "
@@ -1168,7 +1205,7 @@
                                                                     "
                                                                     class="placeholder-for-table"
                                                                 >
-                                                                    Enter sender's details
+                                                                    {{ localeData?.enter_sender }}
                                                                 </div>
                                                             </div>
                                                         </span>
@@ -1182,7 +1219,7 @@
                                                                     [cssClass]="'form-control mat-field-border'"
                                                                     [type]="'number'"
                                                                     [name]="'sourceQty' + i"
-                                                                    [placeholder]="'Enter Qty/Unit'"
+                                                                    [placeholder]="localeData?.enter_qty_unit"
                                                                     [allowDecimalDigitsOnly]="true"
                                                                     (change)="
                                                                         calculateRowTotal(source.get('warehouse'))
@@ -1218,7 +1255,7 @@
                                                                         "
                                                                         [type]="'text'"
                                                                         [name]="'sourceRate' + i"
-                                                                        [placeholder]="'Enter Rate'"
+                                                                        [placeholder]="localeData?.enter_rate"
                                                                         formControlName="rate"
                                                                         [allowDecimalDigitsOnly]="true"
                                                                         [customDecimalPlaces]="2"
@@ -1250,7 +1287,7 @@
                                                                     "
                                                                     [type]="'text'"
                                                                     [name]="'sourceAmount' + i"
-                                                                    [placeholder]="'Enter Amount'"
+                                                                    [placeholder]="localeData?.enter_amount"
                                                                     formControlName="amount"
                                                                     [allowDecimalDigitsOnly]="true"
                                                                     [customDecimalPlaces]="2"
@@ -1324,7 +1361,7 @@
                                                                 (createOption)="onProductNoResultsClicked(0)"
                                                                 [showCreateNew]="true"
                                                                 [name]="'productName' + i"
-                                                                [placeholder]="'Product\'s Name'"
+                                                                [placeholder]="localeData?.select_product_name"
                                                                 [options]="stockList"
                                                                 [appearance]="'outline'"
                                                                 (selectedOption)="selectProduct($event, product, i)"
@@ -1345,7 +1382,7 @@
                                                                         product.get('uniqueName').value
                                                                     "
                                                                     [cssClass]="'form-control mat-field-border'"
-                                                                    [placeholder]="'Variant\'s Name'"
+                                                                    [placeholder]="localeData?.variant_name"
                                                                     (selectedOption)="
                                                                         variantChanged($event, product, i)
                                                                     "
@@ -1364,7 +1401,7 @@
                                                                 [matMenuTriggerFor]="sku_Menu"
                                                                 #skuMenuTrigger="matMenuTrigger"
                                                             >
-                                                                <label>SKU Code: </label>
+                                                                <label>{{ commonLocaleData?.app_sku_code }}: </label>
                                                                 <span
                                                                     >{{ product.get("skuCode").value }}
                                                                     <span class="edit-icon cp">
@@ -1379,13 +1416,17 @@
                                                                     (click)="$event.stopPropagation()"
                                                                 >
                                                                     <div>
-                                                                        <label class="mr-b1">SKU Code: </label>
+                                                                        <label class="mr-b1"
+                                                                            >{{ commonLocaleData?.app_sku_code }}:
+                                                                        </label>
                                                                         <text-field
                                                                             type="text"
                                                                             [cssClass]="'form-control mat-field-border'"
                                                                             [type]="'text'"
                                                                             [name]="'productSkuCode' + i"
-                                                                            [placeholder]="'SKU Code'"
+                                                                            [placeholder]="
+                                                                                commonLocaleData?.app_sku_code
+                                                                            "
                                                                             [max]="50"
                                                                             formControlName="skuCode"
                                                                         >
@@ -1398,14 +1439,14 @@
                                                                             class="w-100"
                                                                             (click)="saveSkuNumberPopup()"
                                                                         >
-                                                                            Save
+                                                                            {{ commonLocaleData?.app_save }}
                                                                         </button>
                                                                         <button
                                                                             mat-stroked-button
                                                                             class="w-100"
                                                                             (click)="closeShowCodeMenu()"
                                                                         >
-                                                                            Cancel
+                                                                            {{ commonLocaleData?.app_cancel }}
                                                                         </button>
                                                                     </div>
                                                                 </div>
@@ -1437,8 +1478,8 @@
                                                                 <label>
                                                                     {{
                                                                         product.get("showCodeType")?.value === "hsn"
-                                                                            ? "HSN"
-                                                                            : "SAC"
+                                                                            ? commonLocaleData?.app_hsn
+                                                                            : commonLocaleData?.app_sac
                                                                     }}
                                                                     Code:
                                                                 </label>
@@ -1496,8 +1537,8 @@
                                                                                 placeholder="{{
                                                                                     product.get('showCodeType')
                                                                                         ?.value === 'hsn'
-                                                                                        ? 'HSN'
-                                                                                        : 'SAC'
+                                                                                        ? commonLocaleData?.app_hsn
+                                                                                        : commonLocaleData?.app_sac
                                                                                 }} Code"
                                                                                 formControlName="hsnNumber"
                                                                                 [allowDecimalDigitsOnly]="true"
@@ -1521,8 +1562,8 @@
                                                                                 placeholder="{{
                                                                                     product.get('showCodeType')
                                                                                         ?.value === 'hsn'
-                                                                                        ? 'HSN'
-                                                                                        : 'SAC'
+                                                                                        ? commonLocaleData?.app_hsn
+                                                                                        : commonLocaleData?.app_sac
                                                                                 }} Code"
                                                                                 formControlName="sacNumber"
                                                                                 [allowDecimalDigitsOnly]="true"
@@ -1582,7 +1623,7 @@
                                                                 "
                                                                 class="placeholder-for-table"
                                                             >
-                                                                Enter product details
+                                                                {{ localeData?.enter_product }}
                                                             </div>
                                                         </div>
                                                     </span>
@@ -1596,7 +1637,7 @@
                                                                     [cssClass]="'form-control mat-field-border'"
                                                                     [type]="'number'"
                                                                     [name]="'productQty' + i"
-                                                                    [placeholder]="'Enter Qty/Unit'"
+                                                                    [placeholder]="localeData?.enter_qty_unit"
                                                                     [allowDecimalDigitsOnly]="true"
                                                                     (change)="calculateRowTotal(product)"
                                                                     formControlName="quantity"
@@ -1633,7 +1674,7 @@
                                                                         "
                                                                         [type]="'text'"
                                                                         [name]="'productRate' + i"
-                                                                        [placeholder]="'Enter Rate'"
+                                                                        [placeholder]="localeData?.enter_rate"
                                                                         formControlName="rate"
                                                                         [allowDecimalDigitsOnly]="true"
                                                                         [customDecimalPlaces]="2"
@@ -1668,7 +1709,7 @@
                                                                     "
                                                                     [type]="'text'"
                                                                     [name]="'productAmount' + i"
-                                                                    [placeholder]="'Enter Amount'"
+                                                                    [placeholder]="localeData?.enter_amount"
                                                                     formControlName="amount"
                                                                     [allowDecimalDigitsOnly]="true"
                                                                     [customDecimalPlaces]="2"
@@ -1741,16 +1782,19 @@
                                                                 <select-field
                                                                     [cssClass]="'form-control mat-field-border pb-0'"
                                                                     [name]="'destinationName' + i"
-                                                                    [placeholder]="'Receiver\'s Name'"
+                                                                    [placeholder]="localeData?.receiver_name"
                                                                     [options]="branches"
                                                                     (selectedOption)="selectRecieverName($event, i)"
                                                                     [defaultValue]="destination.get('name').value"
+                                                                    #selectAccount
                                                                 >
                                                                 </select-field>
                                                                 <select-field
                                                                     [cssClass]="'form-control mat-field-border pb-0'"
                                                                     [name]="'destinationWarehouse' + i"
-                                                                    [placeholder]="'Receiver\'s Warehouse'"
+                                                                    [placeholder]="
+                                                                        localeData?.select_receiver_warehouse
+                                                                    "
                                                                     (selectedOption)="
                                                                         selectReceiverWarehouse($event, i)
                                                                     "
@@ -1780,7 +1824,7 @@
                                                                         [placeholder]="getEnterTaxText()"
                                                                         [type]="'text'"
                                                                         [label]="
-                                                                            'Reciever\'s ' +
+                                                                            localeData?.select_label_receiver +
                                                                             formFields['taxName']?.label +
                                                                             '*'
                                                                         "
@@ -1846,7 +1890,7 @@
                                                                     "
                                                                     class="placeholder-for-table"
                                                                 >
-                                                                    Enter reciever's details
+                                                                    {{ localeData?.enter_receiver }}
                                                                 </div>
                                                             </div>
                                                         </span>
@@ -1862,7 +1906,7 @@
                                                                             [cssClass]="'form-control mat-field-border'"
                                                                             [type]="'number'"
                                                                             [name]="'destinationQty' + i"
-                                                                            [placeholder]="'Enter Qty/Unit'"
+                                                                            [placeholder]="localeData?.enter_qty_unit"
                                                                             [allowDecimalDigitsOnly]="true"
                                                                             (change)="
                                                                                 calculateRowTotal(
@@ -1904,7 +1948,7 @@
                                                                         "
                                                                         [type]="'text'"
                                                                         [name]="'destinationRate' + i"
-                                                                        [placeholder]="'Enter Rate'"
+                                                                        [placeholder]="localeData?.enter_rate"
                                                                         formControlName="rate"
                                                                         [allowDecimalDigitsOnly]="true"
                                                                         [customDecimalPlaces]="2"
@@ -1938,7 +1982,7 @@
                                                                     "
                                                                     [type]="'text'"
                                                                     [name]="'destinationAmount' + i"
-                                                                    [placeholder]="'Enter Amount'"
+                                                                    [placeholder]="localeData?.enter_amount"
                                                                     formControlName="amount"
                                                                     [allowDecimalDigitsOnly]="true"
                                                                     [customDecimalPlaces]="2"
@@ -1997,7 +2041,7 @@
                                                         branchTransferMode === 'delivery-challan'
                                                     "
                                                 >
-                                                    + Add Multiple Receivers</a
+                                                    {{ localeData?.add_multiple_receiver }}</a
                                                 >
                                                 <a
                                                     *ngIf="
@@ -2007,7 +2051,7 @@
                                                     class="multiple-receivers btn-link cp"
                                                     (click)="addSender()"
                                                 >
-                                                    + Add Multiple Senders</a
+                                                    {{ localeData?.add_multiple_sender }}</a
                                                 >
 
                                                 <a
@@ -2015,7 +2059,7 @@
                                                     (click)="addBlankProductsForm()"
                                                     *ngIf="transferType === 'products'"
                                                 >
-                                                    <i class="icon-plus"></i> Add Multiple Products</a
+                                                    <i class="icon-plus"></i> {{ localeData?.add_multiple_products }}</a
                                                 >
                                             </div>
                                         </td>
@@ -2036,7 +2080,7 @@
                     <div class="row">
                         <div class="col-xl-8 col-lg-10 col-sm-12">
                             <div>
-                                <h3 class="mr-b15">Transportation Details</h3>
+                                <h3 class="mr-b15">{{ commonLocaleData?.app_transport_details }}</h3>
                                 <div class="row row-gap" formGroupName="transporterDetails">
                                     <div class="col-sm-6 pl-0">
                                         <div class="direct-mat-datepicker">
@@ -2048,7 +2092,7 @@
                                                 [cssClass]="'w-100'"
                                                 [showToggleIcon]="false"
                                                 [appearance]="'outline'"
-                                                [placeholder]="'Dispatched Date'"
+                                                [placeholder]="localeData?.dispatched_date"
                                             >
                                             </giddh-datepicker>
                                         </div>
@@ -2058,7 +2102,7 @@
                                             (createOption)="toggleTransporterModel()"
                                             [showCreateNew]="true"
                                             [name]="'transporterCompany'"
-                                            [placeholder]="'Transport Company'"
+                                            [placeholder]="localeData?.transport_company"
                                             [options]="transporterDropdown"
                                             (selectedOption)="onSelectTransportCompany($event)"
                                             [defaultValue]="
@@ -2071,7 +2115,7 @@
                                     <div class="col-sm-6 pl-0 mr-b15">
                                         <dropdown-field
                                             [name]="'transporterMode'"
-                                            [placeholder]="'Transport Mode'"
+                                            [placeholder]="commonLocaleData?.app_transport_mode"
                                             [options]="transporterMode"
                                             (selectedOption)="onSelectTransportMode($event)"
                                             [defaultValue]="
@@ -2085,7 +2129,7 @@
                                         <input-field
                                             [type]="'text'"
                                             [name]="'vehicleNumber'"
-                                            [placeholder]="'Vehicle Number'"
+                                            [placeholder]="commonLocaleData?.app_vehicle_number"
                                             formControlName="vehicleNumber"
                                         >
                                         </input-field>
@@ -2098,7 +2142,7 @@
                         <div class="col-xl-8 col-lg-10 col-sm-12 mb-4">
                             <div>
                                 <mat-form-field appearance="outline" class="w-100">
-                                    <mat-label>Note</mat-label>
+                                    <mat-label>{{ commonLocaleData?.app_note }}</mat-label>
                                     <textarea matInput rows="3" formControlName="note"></textarea>
                                 </mat-form-field>
                             </div>
@@ -2109,7 +2153,7 @@
                             <div class="action-btn-wrapper text-right w-100 d-flex column-gap1 justify-content-end">
                                 <button mat-stroked-button (click)="resetForm()">Clear</button>
                                 <button *ngIf="isUpdateMode" mat-stroked-button (click)="navigateToList()">
-                                    Cancel
+                                    {{ commonLocaleData?.app_cancel }}
                                 </button>
                                 <button
                                     mat-stroked-button
@@ -2120,7 +2164,11 @@
                                     }}-{{ isValidDestinationTaxNumber }}"
                                     (click)="submit()"
                                 >
-                                    {{ editBranchTransferUniqueName ? "Update" : "Create" }}
+                                    {{
+                                        editBranchTransferUniqueName
+                                            ? commonLocaleData?.app_update
+                                            : commonLocaleData?.app_create
+                                    }}
                                 </button>
                             </div>
                         </div>
