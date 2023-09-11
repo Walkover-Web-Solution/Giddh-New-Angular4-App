@@ -453,7 +453,7 @@ sh-select:focus {
 .advance-search-by-date {
     display: inline-flex;
     position: relative;
-    min-width: 250px;
+    min-width: 252px;
 }
 .advance-search-by-date:before {
     position: absolute;
@@ -470,7 +470,7 @@ sh-select:focus {
     height: 1px;
     width: 32%;
     background-color: var(--color-secondary-input-bar-border);
-    right: -28%;
+    right: -32%;
     top: 20px;
 }
 

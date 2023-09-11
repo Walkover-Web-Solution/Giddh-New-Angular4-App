@@ -742,7 +742,9 @@ section.static-invoice-table {
             padding-left: 0 !important;
         }
     }
-
+    .billing-height{
+        height: 42px;
+    }
 }
 
 .customer-invoice-table.bg-white {
@@ -1241,7 +1243,7 @@ label.checkbox-custom-label {
 
 .bill-add {
     label {
-        min-width: 110px;
+        min-width: 190px;
     }
     .mat-mdc-checkbox {
         .mdc-form-field{

@@ -1,0 +1,2190 @@
+<ng-container
+    appTranslate
+    [file]="'inventory/branch-transfer'"
+    (commonLocaleData)="commonLocaleData = $event"
+    (localeData)="localeData = $event"
+>
+    <section id="branch-transfer-create" *ngIf="showContent">
+        <hamburger-menu></hamburger-menu>
+        <div class="branch-transfer-header">
+            <h2>
+                {{
+                    branchTransferMode === "receipt-note"
+                        ? commonLocaleData?.app_receipt_note
+                        : commonLocaleData?.app_delivery_challan
+                }}
+            </h2>
+        </div>
+        <div class="branch-transfer-body">
+            <div class="branch-transfer-body-radio-btns" *ngIf="!editBranchTransferUniqueName">
+                <mat-radio-group name="transferType" [(ngModel)]="transferType">
+                    <mat-radio-button color="primary" value="products" (click)="changeTransferType()"
+                        >{{ localeData?.multiple_products }}
+                    </mat-radio-button>
+                    <mat-radio-button
+                        color="primary"
+                        value="senders"
+                        (click)="changeTransferType()"
+                        *ngIf="branchTransferMode === 'receipt-note'"
+                        >{{ localeData?.multiple_senders }}</mat-radio-button
+                    >
+                    <mat-radio-button
+                        color="primary"
+                        value="senders"
+                        (click)="changeTransferType()"
+                        *ngIf="branchTransferMode === 'delivery-challan'"
+                        >{{ localeData?.mutiple_receivers }}</mat-radio-button
+                    >
+                </mat-radio-group>
+            </div>
+
+            <div class="branch-transfer-body-multiple-wrapper">
+                <form
+                    autocomplete="off"
+                    novalidate
+                    name="branchTransferCreateEditForm"
+                    [formGroup]="branchTransferCreateEditForm"
+                >
+                    <!-- Receipt Note Content  Start-->
+                    <div *ngIf="branchTransferMode === 'receipt-note'">
+                        <div class="row clearfix primary-form-wrapper row-gap">
+                            <div class="col-lg-8 px-0">
+                                <div class="row">
+                                    <div class="col-lg-6 mr-b15">
+                                        <div
+                                            class="direct-mat-datepicker"
+                                            [ngClass]="{
+                                                'readonly-field': editBranchTransferUniqueName
+                                            }"
+                                        >
+                                            <giddh-datepicker
+                                                (dateSelected)="selectDate($event, 'dateOfSupply')"
+                                                [disabled]="editBranchTransferUniqueName ? 'disabled' : null"
+                                                formControlName="dateOfSupply"
+                                                name="date"
+                                                [cssClass]="'w-100'"
+                                                [showToggleIcon]="false"
+                                                [appearance]="'outline'"
+                                                [placeholder]="
+                                                    branchTransferMode === 'receipt-note'
+                                                        ? localeData?.date_of_receipt
+                                                        : localeData?.date_of_supply
+                                                "
+                                                [required]="true"
+                                                [showError]="
+                                                    !isValidForm &&
+                                                    !branchTransferCreateEditForm?.get('dateOfSupply')?.value
+                                                "
+                                            >
+                                            </giddh-datepicker>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row row-gap">
+                                    <div class="col-lg-6">
+                                        <div *ngIf="transferType === 'senders'">
+                                            <dropdown-field
+                                                (dynamicSearchedQuery)="onStockSearchQueryChanged($event)"
+                                                [enableDynamicSearch]="true"
+                                                [isPaginationEnabled]="true"
+                                                (scrollEnd)="handleScrollEnd()"
+                                                (createOption)="onProductNoResultsClicked(0)"
+                                                [showCreateNew]="true"
+                                                [name]="'productName'"
+                                                [label]="localeData?.product_name"
+                                                [placeholder]="localeData?.select_product_name"
+                                                [options]="stockList"
+                                                (selectedOption)="
+                                                    selectProduct(
+                                                        $event,
+                                                        branchTransferCreateEditForm.get('products.0'),
+                                                        0
+                                                    )
+                                                "
+                                                [showError]="
+                                                    !isValidForm &&
+                                                    !branchTransferCreateEditForm?.get('products.0.uniqueName').value
+                                                "
+                                                [required]="true"
+                                            >
+                                            </dropdown-field>
+                                            <div formArrayName="products">
+                                                <div [formGroupName]="0">
+                                                    <div class="mr-b15 mr-t15">
+                                                        <input-field
+                                                            [type]="'text'"
+                                                            [name]="'skuCode'"
+                                                            [label]="commonLocaleData?.app_sku_code"
+                                                            formControlName="skuCode"
+                                                        >
+                                                        </input-field>
+                                                    </div>
+                                                    <div>
+                                                        <mat-radio-group
+                                                            name="showCodeType0"
+                                                            formControlName="showCodeType"
+                                                        >
+                                                            <mat-radio-button color="primary" value="hsn"
+                                                                >{{ commonLocaleData?.app_hsn_code }}
+                                                            </mat-radio-button>
+                                                            <mat-radio-button color="primary" value="sac"
+                                                                >{{ commonLocaleData?.app_sac_code }}
+                                                            </mat-radio-button>
+                                                        </mat-radio-group>
+                                                        <div
+                                                            class="mr-b15 mr-t15"
+                                                            *ngIf="
+                                                                branchTransferCreateEditForm.get(
+                                                                    'products.0.showCodeType'
+                                                                )?.value === 'hsn'
+                                                            "
+                                                        >
+                                                            <input-field
+                                                                [type]="'text'"
+                                                                [name]="'hsnSacNumber'"
+                                                                [label]="
+                                                                    commonLocaleData?.app_hsn +
+                                                                    commonLocaleData?.app_number
+                                                                "
+                                                                formControlName="hsnNumber"
+                                                                [allowDecimalDigitsOnly]="true"
+                                                                [max]="10"
+                                                            >
+                                                            </input-field>
+                                                        </div>
+                                                        <div
+                                                            class="mr-b15 mr-t15"
+                                                            *ngIf="
+                                                                branchTransferCreateEditForm.get(
+                                                                    'products.0.showCodeType'
+                                                                )?.value === 'sac'
+                                                            "
+                                                        >
+                                                            <input-field
+                                                                [type]="'text'"
+                                                                [name]="'hsnSacNumber'"
+                                                                [label]="
+                                                                    commonLocaleData?.app_sac +
+                                                                    commonLocaleData?.app_number
+                                                                "
+                                                                formControlName="sacNumber"
+                                                                [allowDecimalDigitsOnly]="true"
+                                                                [max]="10"
+                                                            >
+                                                            </input-field>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <ng-container *ngIf="transferType === 'products'">
+                                            <div>
+                                                <div class="mr-b15 position-relative info-field hello sender name">
+                                                    <dropdown-field
+                                                        [name]="'senderName'"
+                                                        [label]="localeData?.sender_name"
+                                                        [placeholder]="localeData?.select_sender_name"
+                                                        [options]="branches"
+                                                        (selectedOption)="selectSenderName($event, 0)"
+                                                        [readonly]="isUpdateMode"
+                                                        [required]="true"
+                                                        [defaultValue]="
+                                                            isUpdateMode
+                                                                ? branchTransferCreateEditForm.get('sources.0.name')
+                                                                      ?.value
+                                                                : ''
+                                                        "
+                                                        [showError]="
+                                                            !isValidForm &&
+                                                            !branchTransferCreateEditForm?.get('sources.0.uniqueName')
+                                                                ?.value
+                                                        "
+                                                        [allowValueReset]="true"
+                                                        (onClear)="resetSenderName($event)"
+                                                    >
+                                                    </dropdown-field>
+                                                    <i
+                                                        *ngIf="
+                                                            destinationWarehouses[
+                                                                branchTransferCreateEditForm.get('sources.0.uniqueName')
+                                                                    ?.value
+                                                            ]?.length !==
+                                                            allWarehouses[
+                                                                branchTransferCreateEditForm.get('sources.0.uniqueName')
+                                                                    ?.value
+                                                            ]?.length
+                                                        "
+                                                        class="icon-info"
+                                                        matTooltip="{{ branchTransferInfoText }}"
+                                                    >
+                                                    </i>
+                                                </div>
+                                            </div>
+                                            <div formArrayName="sources">
+                                                <div [formGroupName]="0">
+                                                    <div class="mr-b15 four">
+                                                        <dropdown-field
+                                                            [label]="localeData?.senders_warehouse"
+                                                            [placeholder]="localeData?.select_senders_warehouse"
+                                                            (selectedOption)="selectSenderWarehouse($event, 0)"
+                                                            [options]="
+                                                                senderWarehouses[
+                                                                    branchTransferCreateEditForm.get(
+                                                                        'sources.0.uniqueName'
+                                                                    )?.value
+                                                                ]
+                                                            "
+                                                            [required]="true"
+                                                            [showError]="
+                                                                !isValidForm &&
+                                                                !branchTransferCreateEditForm?.get(
+                                                                    'sources.0.warehouse.uniqueName'
+                                                                )?.value
+                                                            "
+                                                            [defaultValue]="
+                                                                branchTransferCreateEditForm.get(
+                                                                    'sources.0.warehouse.name'
+                                                                ).value
+                                                            "
+                                                            [allowValueReset]="true"
+                                                            (onClear)="resetWarehouse('sources', 0)"
+                                                        >
+                                                        </dropdown-field>
+                                                    </div>
+                                                    <div formGroupName="warehouse">
+                                                        <div
+                                                            class="mr-b15"
+                                                            *ngIf="
+                                                                branchTransferCreateEditForm.get(
+                                                                    'sources.0.warehouse.taxNumber'
+                                                                )?.value &&
+                                                                branchTransferCreateEditForm.get(
+                                                                    'sources.0.warehouse.uniqueName'
+                                                                )?.value &&
+                                                                formFields &&
+                                                                formFields['taxName']
+                                                            "
+                                                        >
+                                                            <input-field
+                                                                [name]="'gstin'"
+                                                                [placeholder]="getEnterTaxText()"
+                                                                [type]="'text'"
+                                                                formControlName="taxNumber"
+                                                                [label]="
+                                                                    localeData?.select_label +
+                                                                    formFields['taxName']?.label +
+                                                                    '*'
+                                                                "
+                                                                [max]="15"
+                                                                (change)="checkTaxNumberValidation()"
+                                                                [readonly]="
+                                                                    branchTransferCreateEditForm.get(
+                                                                        'sources.0.warehouse.uniqueName'
+                                                                    )?.value
+                                                                "
+                                                            >
+                                                            </input-field>
+                                                        </div>
+                                                        <div
+                                                            class="mr-b15"
+                                                            [ngClass]="{
+                                                                'readonly-field': branchTransferCreateEditForm.get(
+                                                                    'sources.0.warehouse.uniqueName'
+                                                                )?.value
+                                                            }"
+                                                        >
+                                                            <mat-form-field appearance="outline" class="w-100">
+                                                                <mat-label>{{ localeData?.sender_address }}</mat-label>
+                                                                <textarea
+                                                                    matInput
+                                                                    rows="3"
+                                                                    class="form-control"
+                                                                    name="sourceAddress"
+                                                                    formControlName="address"
+                                                                    [readonly]="
+                                                                        branchTransferCreateEditForm.get(
+                                                                            'sources.0.warehouse.uniqueName'
+                                                                        )?.value
+                                                                    "
+                                                                ></textarea>
+                                                            </mat-form-field>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </ng-container>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="position-relative info-field">
+                                            <input-field
+                                                *ngIf="(isBranch || isCompanyWithSingleBranch) && !isUpdateMode"
+                                                [name]="'myCurrentCompany'"
+                                                formControlName="myCurrentCompany"
+                                                [type]="'text'"
+                                                [placeholder]="localeData?.receiver_name"
+                                                [readonly]="isBranch || isCompanyWithSingleBranch"
+                                                [required]="true"
+                                                [showError]="
+                                                    !isValidForm &&
+                                                    !branchTransferCreateEditForm?.get('myCurrentCompany')?.value
+                                                "
+                                            >
+                                            </input-field>
+                                            <i
+                                                *ngIf="
+                                                    destinationWarehouses[
+                                                        branchTransferCreateEditForm.get('destinations.0.uniqueName')
+                                                            ?.value
+                                                    ]?.length !==
+                                                    allWarehouses[
+                                                        branchTransferCreateEditForm.get('destinations.0.uniqueName')
+                                                            ?.value
+                                                    ]?.length
+                                                "
+                                                class="icon-info"
+                                                matTooltip="{{ branchTransferInfoText }}"
+                                            >
+                                            </i>
+                                        </div>
+                                        <div formArrayName="destinations">
+                                            <div [formGroupName]="0">
+                                                <div class="mr-b15 position-relative info-field">
+                                                    <dropdown-field
+                                                        *ngIf="isUpdateMode"
+                                                        [name]="'receiverName'"
+                                                        [label]="localeData?.receiver_name"
+                                                        [placeholder]="localeData?.select_receiver_name"
+                                                        [options]="branches"
+                                                        (selectedOption)="selectRecieverName($event, 0)"
+                                                        [readonly]="isUpdateMode"
+                                                        [required]="true"
+                                                        [showError]="
+                                                            !isValidForm &&
+                                                            !branchTransferCreateEditForm?.get(
+                                                                'destinations.0.warehouse.uniqueName'
+                                                            )?.value
+                                                        "
+                                                        [defaultValue]="
+                                                            isUpdateMode
+                                                                ? branchTransferCreateEditForm.get(
+                                                                      'destinations.0.name'
+                                                                  )?.value
+                                                                : ''
+                                                        "
+                                                    >
+                                                    </dropdown-field>
+                                                </div>
+                                                <div class="mr-b15">
+                                                    <dropdown-field
+                                                        [name]="'receiverWarehouse'"
+                                                        [label]="localeData?.receiver_warehouse"
+                                                        [placeholder]="localeData?.select_receiver_warehouse"
+                                                        [options]="
+                                                            destinationWarehouses[
+                                                                branchTransferCreateEditForm.get(
+                                                                    'destinations.0.uniqueName'
+                                                                )?.value
+                                                            ]
+                                                        "
+                                                        (selectedOption)="
+                                                            selectReceiverWarehouse($event, 0);
+                                                            openDropdown('first', 'destinations')
+                                                        "
+                                                        [allowValueReset]="true"
+                                                        (onClear)="resetWarehouse('destinations', 0)"
+                                                        [required]="true"
+                                                        [showError]="
+                                                            !isValidForm &&
+                                                            !branchTransferCreateEditForm?.get(
+                                                                'destinations.0.warehouse.uniqueName'
+                                                            )?.value
+                                                        "
+                                                        [defaultValue]="
+                                                            branchTransferCreateEditForm.get(
+                                                                'destinations.0.warehouse.name'
+                                                            ).value
+                                                        "
+                                                    >
+                                                    </dropdown-field>
+                                                </div>
+                                                <div formGroupName="warehouse">
+                                                    <div
+                                                        class="mr-b15"
+                                                        *ngIf="
+                                                            branchTransferCreateEditForm.get(
+                                                                'destinations.0.warehouse.taxNumber'
+                                                            )?.value &&
+                                                            branchTransferCreateEditForm.get(
+                                                                'destinations.0.warehouse.uniqueName'
+                                                            )?.value
+                                                        "
+                                                    >
+                                                        <input-field
+                                                            [name]="'gstin'"
+                                                            [placeholder]="getEnterTaxText()"
+                                                            [type]="'text'"
+                                                            formControlName="taxNumber"
+                                                            [label]="
+                                                                localeData?.select_label_receiver +
+                                                                formFields['taxName']?.label +
+                                                                '*'
+                                                            "
+                                                            [max]="15"
+                                                            (change)="checkTaxNumberValidation()"
+                                                            [readonly]="
+                                                                branchTransferCreateEditForm.get(
+                                                                    'destinations.0.warehouse.uniqueName'
+                                                                )?.value
+                                                            "
+                                                        >
+                                                        </input-field>
+                                                    </div>
+                                                    <div
+                                                        class="mr-b15"
+                                                        [ngClass]="{
+                                                            'readonly-field': branchTransferCreateEditForm.get(
+                                                                'destinations.0.warehouse.uniqueName'
+                                                            )?.value
+                                                        }"
+                                                    >
+                                                        <mat-form-field appearance="outline" class="w-100">
+                                                            <mat-label>{{ localeData?.receiver_address }}</mat-label>
+                                                            <textarea
+                                                                matInput
+                                                                rows="3"
+                                                                class="form-control"
+                                                                name="sourceAddress"
+                                                                formControlName="address"
+                                                                [readonly]="
+                                                                    branchTransferCreateEditForm.get(
+                                                                        'destinations.0.warehouse.uniqueName'
+                                                                    )?.value
+                                                                "
+                                                            ></textarea>
+                                                        </mat-form-field>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-4">
+                                <div class="total-amount text-right">
+                                    <p>Total Amount</p>
+                                    <h3>{{ activeCompany?.baseCurrencySymbol }} {{ overallTotal | giddhCurrency }}</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Receipt Note Content  End-->
+                    <!-- Delivery Challan Content  Start-->
+                    <div *ngIf="branchTransferMode === 'delivery-challan'">
+                        <div class="row clearfix primary-form-wrapper row-gap">
+                            <div class="col-lg-8 px-0">
+                                <div class="row">
+                                    <div class="col-lg-6 mr-b15">
+                                        <div
+                                            class="direct-mat-datepicker"
+                                            [ngClass]="{
+                                                'readonly-field': editBranchTransferUniqueName
+                                            }"
+                                        >
+                                            <giddh-datepicker
+                                                (dateSelected)="selectDate($event, 'dateOfSupply')"
+                                                [disabled]="editBranchTransferUniqueName ? 'disabled' : null"
+                                                formControlName="dateOfSupply"
+                                                name="date"
+                                                [cssClass]="'w-100'"
+                                                [showToggleIcon]="false"
+                                                [appearance]="'outline'"
+                                                [placeholder]="
+                                                    branchTransferMode === 'receipt-note'
+                                                        ? 'Date of Receipt'
+                                                        : 'Date of Supply'
+                                                "
+                                                [reuqired]="true"
+                                                [showError]="
+                                                    !isValidForm &&
+                                                    !branchTransferCreateEditForm?.get('dateOfSupply')?.value
+                                                "
+                                            >
+                                            </giddh-datepicker>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row row-gap">
+                                    <div class="col-lg-6">
+                                        <div *ngIf="transferType === 'senders'">
+                                            <dropdown-field
+                                                [showError]="
+                                                    !isValidForm &&
+                                                    !branchTransferCreateEditForm?.get('products.0.uniqueName')?.value
+                                                "
+                                                [required]="true"
+                                                (dynamicSearchedQuery)="onStockSearchQueryChanged($event)"
+                                                [enableDynamicSearch]="true"
+                                                [isPaginationEnabled]="true"
+                                                (scrollEnd)="handleScrollEnd()"
+                                                (createOption)="onProductNoResultsClicked(0)"
+                                                [showCreateNew]="true"
+                                                [name]="'productName'"
+                                                [label]="localeData?.product_name"
+                                                [placeholder]="localeData?.select_product_name"
+                                                [options]="stockList"
+                                                [appearance]="'outline'"
+                                                (selectedOption)="
+                                                    selectProduct(
+                                                        $event,
+                                                        branchTransferCreateEditForm.get('products.0'),
+                                                        0
+                                                    )
+                                                "
+                                                [defaultValue]="
+                                                    isUpdateMode
+                                                        ? branchTransferCreateEditForm.get('products.0.name').value
+                                                        : ''
+                                                "
+                                            >
+                                            </dropdown-field>
+                                            <div formArrayName="products">
+                                                <div [formGroupName]="0">
+                                                    <div class="mr-b15 mr-t15">
+                                                        <input-field
+                                                            [type]="'text'"
+                                                            [name]="'skuCode'"
+                                                            [label]="commonLocaleData?.app_sku_code"
+                                                            formControlName="skuCode"
+                                                        >
+                                                        </input-field>
+                                                    </div>
+                                                    <div>
+                                                        <mat-radio-group
+                                                            name="showCodeType1"
+                                                            formControlName="showCodeType"
+                                                        >
+                                                            <mat-radio-button color="primary" value="hsn"
+                                                                >HSN Code</mat-radio-button
+                                                            >
+                                                            <mat-radio-button color="primary" value="sac"
+                                                                >SAC Code</mat-radio-button
+                                                            >
+                                                        </mat-radio-group>
+                                                        <div
+                                                            class="mr-b15 mr-t15"
+                                                            *ngIf="
+                                                                branchTransferCreateEditForm.get(
+                                                                    'products.0.showCodeType'
+                                                                )?.value === 'hsn'
+                                                            "
+                                                        >
+                                                            <input-field
+                                                                [type]="'text'"
+                                                                [name]="'hsnNumber'"
+                                                                [label]="
+                                                                    commonLocaleData?.app_hsn +
+                                                                    commonLocaleData?.app_number
+                                                                "
+                                                                formControlName="hsnNumber"
+                                                                [allowDecimalDigitsOnly]="true"
+                                                                [max]="10"
+                                                            >
+                                                            </input-field>
+                                                        </div>
+                                                        <div
+                                                            class="mr-b15 mr-t15"
+                                                            *ngIf="
+                                                                branchTransferCreateEditForm.get(
+                                                                    'products.0.showCodeType'
+                                                                )?.value === 'sac'
+                                                            "
+                                                        >
+                                                            <input-field
+                                                                [type]="'text'"
+                                                                [name]="'sacNumber'"
+                                                                [label]="
+                                                                    commonLocaleData?.app_sac +
+                                                                    commonLocaleData?.app_number
+                                                                "
+                                                                formControlName="sacNumber"
+                                                                [allowDecimalDigitsOnly]="true"
+                                                                [max]="10"
+                                                            >
+                                                            </input-field>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div *ngIf="transferType === 'products'">
+                                            <div class="position-relative info-field mr-b15">
+                                                <input-field
+                                                    *ngIf="(isBranch || isCompanyWithSingleBranch) && !isUpdateMode"
+                                                    [name]="'sourceName'"
+                                                    formControlName="myCurrentCompany"
+                                                    [placeholder]=""
+                                                    [type]="'text'"
+                                                    [readonly]="isBranch || isCompanyWithSingleBranch"
+                                                    class="mr-b15 d-block"
+                                                    [showError]="
+                                                        !isValidForm &&
+                                                        !branchTransferCreateEditForm?.get('myCurrentCompany')?.value
+                                                    "
+                                                >
+                                                </input-field>
+                                                <dropdown-field
+                                                    *ngIf="isUpdateMode"
+                                                    [name]="'senderName0'"
+                                                    [label]="localeData?.sender_name"
+                                                    [placeholder]="localeData?.select_sender_name"
+                                                    [options]="branches"
+                                                    (selectedOption)="selectSenderName($event, 0)"
+                                                    [readonly]="isUpdateMode"
+                                                    [required]="true"
+                                                    [defaultValue]="
+                                                        branchTransferCreateEditForm.get('sources.0.name')?.value
+                                                    "
+                                                    [showError]="
+                                                        !isValidForm &&
+                                                        !branchTransferCreateEditForm?.get('sources.0.name')?.value
+                                                    "
+                                                >
+                                                </dropdown-field>
+                                                <i
+                                                    *ngIf="
+                                                        destinationWarehouses[
+                                                            branchTransferCreateEditForm.get('sources.0.uniqueName')
+                                                                ?.value
+                                                        ]?.length !==
+                                                        allWarehouses[
+                                                            branchTransferCreateEditForm.get('sources.0.uniqueName')
+                                                                ?.value
+                                                        ]?.length
+                                                    "
+                                                    class="icon-info"
+                                                    matTooltip="{{ branchTransferInfoText }}"
+                                                >
+                                                </i>
+                                            </div>
+                                        </div>
+
+                                        <div *ngIf="transferType === 'products'" formArrayName="sources">
+                                            <div [formGroupName]="0">
+                                                <div class="mr-b15 one">
+                                                    <dropdown-field
+                                                        [name]="'senderWarehouse'"
+                                                        [label]="localeData?.senders_warehouse"
+                                                        [placeholder]="localeData?.select_senders_warehouse"
+                                                        (selectedOption)="selectSenderWarehouse($event, 0)"
+                                                        [options]="
+                                                            senderWarehouses[
+                                                                branchTransferCreateEditForm.get('sources.0.uniqueName')
+                                                                    ?.value
+                                                            ]
+                                                        "
+                                                        [defaultValue]="
+                                                            branchTransferCreateEditForm.get('sources.0.warehouse.name')
+                                                                .value
+                                                        "
+                                                        [allowValueReset]="true"
+                                                        (onClear)="resetWarehouse('sources', 0)"
+                                                        [showError]="
+                                                            !isValidForm &&
+                                                            !branchTransferCreateEditForm?.get(
+                                                                'sources.0.warehouse.uniqueName'
+                                                            )?.value
+                                                        "
+                                                    >
+                                                    </dropdown-field>
+                                                </div>
+                                                <div formGroupName="warehouse">
+                                                    <div
+                                                        class="mr-b15"
+                                                        *ngIf="
+                                                            branchTransferCreateEditForm.get(
+                                                                'sources.0.warehouse.taxNumber'
+                                                            )?.value &&
+                                                            branchTransferCreateEditForm.get(
+                                                                'sources.0.warehouse.uniqueName'
+                                                            )?.value &&
+                                                            formFields &&
+                                                            formFields['taxName']
+                                                        "
+                                                    >
+                                                        <input-field
+                                                            [name]="'gstin'"
+                                                            [placeholder]="getEnterTaxText()"
+                                                            [type]="'text'"
+                                                            formControlName="taxNumber"
+                                                            [label]="
+                                                                localeData?.select_label +
+                                                                formFields['taxName']?.label +
+                                                                '*'
+                                                            "
+                                                            [max]="15"
+                                                            (change)="checkTaxNumberValidation()"
+                                                            [readonly]="
+                                                                branchTransferCreateEditForm.get(
+                                                                    'sources.0.warehouse.uniqueName'
+                                                                )?.value
+                                                            "
+                                                        >
+                                                        </input-field>
+                                                    </div>
+                                                    <div
+                                                        class="mr-b15"
+                                                        [ngClass]="{
+                                                            'readonly-field': branchTransferCreateEditForm.get(
+                                                                'sources.0.warehouse.uniqueName'
+                                                            )?.value
+                                                        }"
+                                                    >
+                                                        <mat-form-field appearance="outline" class="w-100">
+                                                            <mat-label>{{ localeData?.sender_address }}</mat-label>
+                                                            <textarea
+                                                                matInput
+                                                                class="form-control"
+                                                                rows="3"
+                                                                name="sourceAddress"
+                                                                formControlName="address"
+                                                                [readonly]="
+                                                                    branchTransferCreateEditForm.get(
+                                                                        'sources.0.warehouse.uniqueName'
+                                                                    )?.value
+                                                                "
+                                                            ></textarea>
+                                                        </mat-form-field>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div *ngIf="transferType === 'products'" formArrayName="destinations">
+                                            <div [formGroupName]="0">
+                                                <div class="mr-b15">
+                                                    <div class="position-relative info-field">
+                                                        <dropdown-field
+                                                            [name]="'receiverName'"
+                                                            [label]="localeData?.receiver_name"
+                                                            [placeholder]="localeData?.select_receiver_name"
+                                                            [options]="branches"
+                                                            (selectedOption)="selectRecieverName($event, 0)"
+                                                            [readonly]="isUpdateMode"
+                                                            [required]="true"
+                                                            [showError]="
+                                                                !isValidForm &&
+                                                                !branchTransferCreateEditForm?.get(
+                                                                    'destinations.0.uniqueName'
+                                                                )?.value
+                                                            "
+                                                            [defaultValue]="
+                                                                branchTransferCreateEditForm?.get('destinations.0.name')
+                                                                    ?.value
+                                                            "
+                                                        >
+                                                        </dropdown-field>
+                                                        <i
+                                                            *ngIf="
+                                                                destinationWarehouses[
+                                                                    branchTransferCreateEditForm.get(
+                                                                        'destinations.0.uniqueName'
+                                                                    )?.value
+                                                                ]?.length !==
+                                                                allWarehouses[
+                                                                    branchTransferCreateEditForm.get(
+                                                                        'destinations.0.uniqueName'
+                                                                    )?.value
+                                                                ]?.length
+                                                            "
+                                                            class="icon-info"
+                                                            matTooltip="{{ branchTransferInfoText }}"
+                                                        >
+                                                        </i>
+                                                    </div>
+                                                </div>
+                                                <div class="mr-b15">
+                                                    <dropdown-field
+                                                        #destinationWarehouse
+                                                        [name]="'receiverWarehouse'"
+                                                        [label]="localeData?.receiver_warehouse"
+                                                        [placeholder]="localeData?.select_receiver_warehouse"
+                                                        [options]="
+                                                            destinationWarehouses[
+                                                                branchTransferCreateEditForm.get(
+                                                                    'destinations.0.uniqueName'
+                                                                )?.value
+                                                            ]
+                                                        "
+                                                        (selectedOption)="
+                                                            selectReceiverWarehouse($event, 0);
+                                                            openDropdown('first', 'destinations')
+                                                        "
+                                                        [allowValueReset]="true"
+                                                        (onClear)="resetWarehouse('destinations', 0)"
+                                                        [required]="true"
+                                                        [showError]="
+                                                            !isValidForm &&
+                                                            !branchTransferCreateEditForm?.get(
+                                                                'destinations.0.uniqueName'
+                                                            )?.value
+                                                        "
+                                                        [defaultValue]="
+                                                            isUpdateMode
+                                                                ? branchTransferCreateEditForm?.get(
+                                                                      'destinations.0.warehouse.name'
+                                                                  )?.value
+                                                                : ''
+                                                        "
+                                                    >
+                                                    </dropdown-field>
+                                                </div>
+                                                <div formGroupName="warehouse">
+                                                    <div
+                                                        class="mr-b15"
+                                                        *ngIf="
+                                                            branchTransferCreateEditForm.get(
+                                                                'destinations.0.warehouse.taxNumber'
+                                                            )?.value &&
+                                                            branchTransferCreateEditForm.get(
+                                                                'destinations.0.warehouse.uniqueName'
+                                                            )?.value
+                                                        "
+                                                    >
+                                                        <input-field
+                                                            [name]="'gstin'"
+                                                            [placeholder]="getEnterTaxText()"
+                                                            [type]="'text'"
+                                                            formControlName="taxNumber"
+                                                            [label]="
+                                                                localeData?.select_label_receiver +
+                                                                formFields['taxName']?.label +
+                                                                '*'
+                                                            "
+                                                            [max]="15"
+                                                            (change)="checkTaxNumberValidation()"
+                                                            [readonly]="
+                                                                branchTransferCreateEditForm.get(
+                                                                    'destinations.0.warehouse.uniqueName'
+                                                                )?.value
+                                                            "
+                                                        >
+                                                        </input-field>
+                                                    </div>
+                                                    <div
+                                                        class="mr-b15"
+                                                        [ngClass]="{
+                                                            'readonly-field': branchTransferCreateEditForm.get(
+                                                                'destinations.0.warehouse.uniqueName'
+                                                            )?.value
+                                                        }"
+                                                    >
+                                                        <mat-form-field appearance="outline" class="w-100">
+                                                            <mat-label>{{ localeData?.receiver_address }}</mat-label>
+                                                            <textarea
+                                                                matInput
+                                                                rows="3"
+                                                                class="form-control"
+                                                                name="sourceAddress"
+                                                                formControlName="address"
+                                                                [readonly]="
+                                                                    branchTransferCreateEditForm.get(
+                                                                        'destinations.0.warehouse.uniqueName'
+                                                                    )?.value
+                                                                "
+                                                            ></textarea>
+                                                        </mat-form-field>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div *ngIf="transferType === 'senders'">
+                                            <input-field
+                                                *ngIf="(isBranch || isCompanyWithSingleBranch) && !isUpdateMode"
+                                                [name]="'myCurrentCompany'"
+                                                formControlName="myCurrentCompany"
+                                                [type]="'text'"
+                                                [placeholder]="localeData?.sender_name"
+                                                [readonly]="isBranch || isCompanyWithSingleBranch"
+                                                [showError]="
+                                                    !isValidForm &&
+                                                    !branchTransferCreateEditForm?.get('myCurrentCompany')?.value
+                                                "
+                                            >
+                                            </input-field>
+                                            <div formArrayName="sources">
+                                                <div [formGroupName]="0">
+                                                    <div class="mr-b15 position-relative info-field two">
+                                                        <dropdown-field
+                                                            *ngIf="isUpdateMode"
+                                                            [name]="'senderWarehouse'"
+                                                            [label]="localeData?.senders_warehouse"
+                                                            [placeholder]="localeData?.select_senders_warehouse"
+                                                            [options]="branches"
+                                                            (selectedOption)="selectSenderWarehouse($event, 0)"
+                                                            [readonly]="isUpdateMode"
+                                                            [required]="true"
+                                                            [showError]="
+                                                                !isValidForm &&
+                                                                !branchTransferCreateEditForm?.get(
+                                                                    'sources.0.uniqueName'
+                                                                )?.value
+                                                            "
+                                                            [defaultValue]="
+                                                                branchTransferCreateEditForm.get(
+                                                                    'sources.0.warehouse.name'
+                                                                ).value
+                                                            "
+                                                        >
+                                                        </dropdown-field>
+                                                        <i
+                                                            *ngIf="
+                                                                senderWarehouses[
+                                                                    branchTransferCreateEditForm.get(
+                                                                        'sources.0.uniqueName'
+                                                                    )?.value
+                                                                ]?.length !==
+                                                                allWarehouses[
+                                                                    branchTransferCreateEditForm.get(
+                                                                        'sources.0.uniqueName'
+                                                                    )?.value
+                                                                ]?.length
+                                                            "
+                                                            class="icon-info"
+                                                            matTooltip="{{ branchTransferInfoText }}"
+                                                        >
+                                                        </i>
+                                                    </div>
+                                                    <div class="mr-b15 thrree">
+                                                        <dropdown-field
+                                                            [name]="'senderWarehouse'"
+                                                            [placeholder]="localeData?.select_senders_warehouse"
+                                                            [options]="
+                                                                senderWarehouses[
+                                                                    branchTransferCreateEditForm.get(
+                                                                        'sources.0.uniqueName'
+                                                                    )?.value
+                                                                ]
+                                                            "
+                                                            [defaultValue]="
+                                                                branchTransferCreateEditForm.get(
+                                                                    'sources.0.warehouse.name'
+                                                                ).value
+                                                            "
+                                                            (selectedOption)="
+                                                                selectSenderWarehouse($event, 0);
+                                                                openDropdown('first', 'destinations')
+                                                            "
+                                                            [allowValueReset]="true"
+                                                            (onClear)="resetWarehouse('sources', 0)"
+                                                            [required]="true"
+                                                            [showError]="
+                                                                !isValidForm &&
+                                                                !branchTransferCreateEditForm?.get(
+                                                                    'sources.0.uniqueName'
+                                                                )?.value
+                                                            "
+                                                        >
+                                                        </dropdown-field>
+                                                    </div>
+                                                    <div formGroupName="warehouse">
+                                                        <div
+                                                            class="mr-b15"
+                                                            *ngIf="
+                                                                branchTransferCreateEditForm.get(
+                                                                    'sources.0.warehouse.taxNumber'
+                                                                )?.value &&
+                                                                branchTransferCreateEditForm.get(
+                                                                    'sources.0.warehouse.uniqueName'
+                                                                )?.value
+                                                            "
+                                                        >
+                                                            <input-field
+                                                                [name]="'gstin'"
+                                                                [placeholder]="getEnterTaxText()"
+                                                                [type]="'text'"
+                                                                formControlName="taxNumber"
+                                                                [label]="
+                                                                    localeData?.select_label +
+                                                                    formFields['taxName']?.label +
+                                                                    '*'
+                                                                "
+                                                                [max]="15"
+                                                                (change)="checkTaxNumberValidation()"
+                                                                [readonly]="
+                                                                    branchTransferCreateEditForm.get(
+                                                                        'sources.0.warehouse.uniqueName'
+                                                                    )?.value
+                                                                "
+                                                            >
+                                                            </input-field>
+                                                        </div>
+                                                        <div
+                                                            class="mr-b15"
+                                                            [ngClass]="{
+                                                                'readonly-field': branchTransferCreateEditForm.get(
+                                                                    'sources.0.warehouse.uniqueName'
+                                                                )?.value
+                                                            }"
+                                                        >
+                                                            <mat-form-field appearance="outline" class="w-100">
+                                                                <mat-label>{{ localeData?.sender_address }}</mat-label>
+                                                                <textarea
+                                                                    matInput
+                                                                    rows="3"
+                                                                    class="form-control"
+                                                                    name="sourceAddress"
+                                                                    formControlName="address"
+                                                                    [readonly]="
+                                                                        branchTransferCreateEditForm.get(
+                                                                            'sources.0.warehouse.uniqueName'
+                                                                        )?.value
+                                                                    "
+                                                                ></textarea>
+                                                            </mat-form-field>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-4">
+                                <div class="total-amount text-right">
+                                    <p>Total Amount</p>
+                                    <h3>{{ activeCompany?.baseCurrencySymbol }} {{ overallTotal | giddhCurrency }}</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Delivery Challan Content  End -->
+                    <div class="row mt-1">
+                        <div class="col-xl-8 col-lg-10 col-sm-12 mb-2">
+                            <table id="table-receipt">
+                                <thead *ngIf="transferType === 'products'">
+                                    <tr>
+                                        <th width="2%">#</th>
+                                        <th width="30%">Product Description</th>
+                                        <th width="20%">Qty/Unit</th>
+                                        <th width="20%">Rate</th>
+                                        <th width="20%">Amount</th>
+                                    </tr>
+                                </thead>
+                                <thead *ngIf="transferType !== 'products'">
+                                    <th width="2%">#</th>
+                                    <th width="30%" *ngIf="branchTransferMode === 'delivery-challan'">
+                                        Receiver’s Details
+                                    </th>
+                                    <th width="30%" *ngIf="branchTransferMode === 'receipt-note'">Sender’s Details</th>
+                                    <th width="20%">Qty/Unit</th>
+                                    <th width="20%">Rate</th>
+                                    <th width="20%">Amount</th>
+                                </thead>
+                                <tbody
+                                    *ngIf="transferType !== 'products' && branchTransferMode === 'receipt-note'"
+                                    (clickOutside)="hideActiveRow($event)"
+                                >
+                                    <ng-container formArrayName="sources">
+                                        <tr
+                                            *ngFor="
+                                                let source of branchTransferCreateEditForm.get('sources')['controls'];
+                                                let i = index
+                                            "
+                                            (click)="setActiveRow(i); $event.stopPropagation()"
+                                        >
+                                            <ng-container [formGroupName]="i">
+                                                <td class="id">
+                                                    <div>
+                                                        <div>{{ i + 1 }}</div>
+                                                    </div>
+                                                </td>
+                                                <td class="name">
+                                                    <span class="w-100">
+                                                        <span formGroupName="warehouse" class="w-100">
+                                                            <div
+                                                                *ngIf="activeIndx === i"
+                                                                class="position-relative w-100 fields-gap"
+                                                            >
+                                                                <select-field
+                                                                    [cssClass]="'form-control mat-field-border pb-0'"
+                                                                    [name]="'senderName' + i"
+                                                                    [placeholder]="localeData?.select_sender_name"
+                                                                    [options]="branches"
+                                                                    (selectedOption)="selectSenderName($event, i)"
+                                                                    [defaultValue]="source.get('name').value"
+                                                                    #selectAccount
+                                                                >
+                                                                </select-field>
+                                                                <select-field
+                                                                    [cssClass]="'form-control mat-field-border pb-0'"
+                                                                    [name]="'sourceWarehouse' + i"
+                                                                    [placeholder]="localeData?.select_senders_warehouse"
+                                                                    (selectedOption)="selectSenderWarehouse($event, i)"
+                                                                    [options]="
+                                                                        senderWarehouses[source.get('uniqueName').value]
+                                                                    "
+                                                                    [defaultValue]="source.get('warehouse.name').value"
+                                                                    *ngIf="source.get('uniqueName').value"
+                                                                    [allowValueReset]="true"
+                                                                    (onClear)="resetWarehouse('sources', i)"
+                                                                >
+                                                                </select-field>
+                                                                <div class="option-value-field">
+                                                                    <text-field
+                                                                        *ngIf="
+                                                                            formFields &&
+                                                                            formFields['taxName'] &&
+                                                                            source.get('warehouse.uniqueName').value &&
+                                                                            source.get('warehouse.taxNumber').value
+                                                                        "
+                                                                        [name]="'sourceWarehouseTaxnumber' + i"
+                                                                        [placeholder]="getEnterTaxText()"
+                                                                        [type]="'text'"
+                                                                        [label]="
+                                                                            localeData?.select_label +
+                                                                            formFields['taxName']?.label +
+                                                                            '*'
+                                                                        "
+                                                                        [max]="15"
+                                                                        (change)="checkTaxNumberValidation()"
+                                                                        [readonly]="
+                                                                            source.get('warehouse.uniqueName').value
+                                                                        "
+                                                                        formControlName="taxNumber"
+                                                                        [cssClass]="'form-control disabled w-100'"
+                                                                    >
+                                                                    </text-field>
+                                                                </div>
+                                                                <div class="position-relative pb-3">
+                                                                    <div
+                                                                        class="pb-3"
+                                                                        [ngClass]="{
+                                                                            'readonly-field':
+                                                                                source.get('warehouse.uniqueName').value
+                                                                        }"
+                                                                    >
+                                                                        <textarea
+                                                                            matInput
+                                                                            rows="3"
+                                                                            class="form-control"
+                                                                            [name]="'sourceWarehouseAddress' + i"
+                                                                            formControlName="address"
+                                                                            [readonly]="
+                                                                                source.get('warehouse.uniqueName').value
+                                                                            "
+                                                                            *ngIf="
+                                                                                source.get('warehouse.uniqueName').value
+                                                                            "
+                                                                        ></textarea>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div *ngIf="activeIndx !== i">
+                                                                <div *ngIf="source.get('name').value">
+                                                                    {{ source.get("name").value }}
+                                                                </div>
+                                                                <div *ngIf="source.get('warehouse.name').value">
+                                                                    {{ source.get("warehouse.name").value }}
+                                                                </div>
+                                                                <div *ngIf="source.get('warehouse.taxNumber').value">
+                                                                    {{ source.get("warehouse.taxNumber").value }}
+                                                                </div>
+                                                                <div *ngIf="source.get('warehouse.address').value">
+                                                                    {{ source.get("warehouse.address").value }}
+                                                                </div>
+                                                                <div
+                                                                    *ngIf="
+                                                                        !source.get('name').value &&
+                                                                        !source.get('warehouse.name').value &&
+                                                                        !source.get('warehouse.taxNumber').value &&
+                                                                        !source.get('warehouse.address').value
+                                                                    "
+                                                                    class="placeholder-for-table"
+                                                                >
+                                                                    {{ localeData?.enter_sender }}
+                                                                </div>
+                                                            </div>
+                                                        </span>
+                                                    </span>
+                                                </td>
+                                                <ng-container formGroupName="warehouse">
+                                                    <ng-container formGroupName="stockDetails">
+                                                        <td class="qtyUnit">
+                                                            <div *ngIf="activeIndx === i" class="w-100">
+                                                                <text-field
+                                                                    [cssClass]="'form-control mat-field-border'"
+                                                                    [type]="'number'"
+                                                                    [name]="'sourceQty' + i"
+                                                                    [placeholder]="localeData?.enter_qty_unit"
+                                                                    [allowDecimalDigitsOnly]="true"
+                                                                    (change)="
+                                                                        calculateRowTotal(source.get('warehouse'))
+                                                                    "
+                                                                    formControlName="quantity"
+                                                                >
+                                                                </text-field>
+                                                            </div>
+                                                            <div *ngIf="activeIndx !== i">
+                                                                <div class="text-right">
+                                                                    {{
+                                                                        source.get("warehouse.stockDetails.quantity")
+                                                                            .value
+                                                                    }}
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td class="rate">
+                                                            <div>
+                                                                <div *ngIf="activeIndx !== i">
+                                                                    <div class="text-right">
+                                                                        {{ activeCompany?.baseCurrencySymbol }}
+                                                                        {{
+                                                                            source.get("warehouse.stockDetails.rate")
+                                                                                .value | giddhCurrency
+                                                                        }}
+                                                                    </div>
+                                                                </div>
+                                                                <div *ngIf="activeIndx === i" class="w-100">
+                                                                    <text-field
+                                                                        [cssClass]="
+                                                                            'form-control mat-field-border  text-right'
+                                                                        "
+                                                                        [type]="'text'"
+                                                                        [name]="'sourceRate' + i"
+                                                                        [placeholder]="localeData?.enter_rate"
+                                                                        formControlName="rate"
+                                                                        [allowDecimalDigitsOnly]="true"
+                                                                        [customDecimalPlaces]="2"
+                                                                        (change)="
+                                                                            calculateRowTotal(source.get('warehouse'))
+                                                                        "
+                                                                        [prefix]="activeCompany?.baseCurrencySymbol"
+                                                                        [mask]="inputMaskFormat"
+                                                                        [useMask]="true"
+                                                                    >
+                                                                    </text-field>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td class="amount">
+                                                            <div *ngIf="activeIndx !== i">
+                                                                <div class="text-right">
+                                                                    {{ activeCompany?.baseCurrencySymbol }}
+                                                                    {{
+                                                                        source.get("warehouse.stockDetails.amount")
+                                                                            .value | giddhCurrency
+                                                                    }}
+                                                                </div>
+                                                            </div>
+                                                            <div *ngIf="activeIndx === i" class="w-100">
+                                                                <text-field
+                                                                    [cssClass]="
+                                                                        'form-control mat-field-border  text-right'
+                                                                    "
+                                                                    [type]="'text'"
+                                                                    [name]="'sourceAmount' + i"
+                                                                    [placeholder]="localeData?.enter_amount"
+                                                                    formControlName="amount"
+                                                                    [allowDecimalDigitsOnly]="true"
+                                                                    [customDecimalPlaces]="2"
+                                                                    [prefix]="activeCompany?.baseCurrencySymbol"
+                                                                    [mask]="inputMaskFormat"
+                                                                    [useMask]="true"
+                                                                    [readonly]="true"
+                                                                >
+                                                                </text-field>
+                                                            </div>
+                                                            <span class="position-relative">
+                                                                <span
+                                                                    class="delete-btn-position d-flex"
+                                                                    *ngIf="
+                                                                        branchTransferCreateEditForm.get('sources')
+                                                                            .value.length > 1
+                                                                    "
+                                                                >
+                                                                    <span class="delete-icon"
+                                                                        ><i
+                                                                            class="fa fa-trash"
+                                                                            (click)="removeSenderDetailsForm(i)"
+                                                                        ></i
+                                                                    ></span>
+                                                                    <i
+                                                                        *ngIf="
+                                                                            senderWarehouses[
+                                                                                source.get('uniqueName').value
+                                                                            ]?.length !==
+                                                                            allWarehouses[
+                                                                                source.get('uniqueName').value
+                                                                            ]?.length
+                                                                        "
+                                                                        matTooltip="{{ branchTransferInfoText }}"
+                                                                        matTooltipPosition="above"
+                                                                        class="icon-info"
+                                                                    ></i>
+                                                                </span>
+                                                            </span>
+                                                        </td>
+                                                    </ng-container>
+                                                </ng-container>
+                                            </ng-container>
+                                        </tr>
+                                    </ng-container>
+                                </tbody>
+                                <tbody *ngIf="transferType === 'products'" (clickOutside)="hideActiveRow($event)">
+                                    <ng-container formArrayName="products">
+                                        <tr
+                                            *ngFor="
+                                                let product of branchTransferCreateEditForm.get('products')['controls'];
+                                                let i = index
+                                            "
+                                            (click)="setActiveRow(i); $event.stopPropagation()"
+                                        >
+                                            <ng-container [formGroupName]="i">
+                                                <td class="id">
+                                                    <div>
+                                                        <div>{{ i + 1 }}</div>
+                                                    </div>
+                                                </td>
+
+                                                <td class="name">
+                                                    <span>
+                                                        <div
+                                                            *ngIf="activeIndx === i"
+                                                            class="position-relative w-100 fields-gap"
+                                                        >
+                                                            <select-field
+                                                                #selectAccount
+                                                                (createOption)="onProductNoResultsClicked(0)"
+                                                                [showCreateNew]="true"
+                                                                [name]="'productName' + i"
+                                                                [placeholder]="localeData?.select_product_name"
+                                                                [options]="stockList"
+                                                                [appearance]="'outline'"
+                                                                (selectedOption)="selectProduct($event, product, i)"
+                                                                [defaultValue]="product.get('name').value"
+                                                                [cssClass]="'form-control mat-field-border pb-0'"
+                                                                [enableDynamicSearch]="true"
+                                                                [isPaginationEnabled]="true"
+                                                                (scrollEnd)="handleScrollEnd()"
+                                                                (dynamicSearchedQuery)="
+                                                                    onStockSearchQueryChanged($event)
+                                                                "
+                                                            >
+                                                            </select-field>
+                                                            <span formGroupName="variant" class="w-100">
+                                                                <select-field
+                                                                    *ngIf="
+                                                                        stockVariants?.length > 1 &&
+                                                                        product.get('uniqueName').value
+                                                                    "
+                                                                    [cssClass]="'form-control mat-field-border'"
+                                                                    [placeholder]="localeData?.variant_name"
+                                                                    (selectedOption)="
+                                                                        variantChanged($event, product, i)
+                                                                    "
+                                                                    [options]="stockVariants"
+                                                                    [name]="'variantName' + i"
+                                                                    [defaultValue]="product.get('variant.name').value"
+                                                                >
+                                                                </select-field>
+                                                            </span>
+                                                            <div
+                                                                class="show-sku-code-position"
+                                                                *ngIf="
+                                                                    activeIndx == i && product.get('uniqueName').value
+                                                                "
+                                                                mat-button
+                                                                [matMenuTriggerFor]="sku_Menu"
+                                                                #skuMenuTrigger="matMenuTrigger"
+                                                            >
+                                                                <label>{{ commonLocaleData?.app_sku_code }}: </label>
+                                                                <span
+                                                                    >{{ product.get("skuCode").value }}
+                                                                    <span class="edit-icon cp">
+                                                                        <img src="assets/images/edit-pencilicon.svg" />
+                                                                    </span>
+                                                                </span>
+                                                            </div>
+
+                                                            <mat-menu #sku_Menu="matMenu" xPosition="before">
+                                                                <div
+                                                                    class="show-code-menu"
+                                                                    (click)="$event.stopPropagation()"
+                                                                >
+                                                                    <div>
+                                                                        <label class="mr-b1"
+                                                                            >{{ commonLocaleData?.app_sku_code }}:
+                                                                        </label>
+                                                                        <text-field
+                                                                            type="text"
+                                                                            [cssClass]="'form-control mat-field-border'"
+                                                                            [type]="'text'"
+                                                                            [name]="'productSkuCode' + i"
+                                                                            [placeholder]="
+                                                                                commonLocaleData?.app_sku_code
+                                                                            "
+                                                                            [max]="50"
+                                                                            formControlName="skuCode"
+                                                                        >
+                                                                        </text-field>
+                                                                    </div>
+                                                                    <div class="d-flex mt-3 column-gap1">
+                                                                        <button
+                                                                            mat-stroked-button
+                                                                            color="primary"
+                                                                            class="w-100"
+                                                                            (click)="saveSkuNumberPopup()"
+                                                                        >
+                                                                            {{ commonLocaleData?.app_save }}
+                                                                        </button>
+                                                                        <button
+                                                                            mat-stroked-button
+                                                                            class="w-100"
+                                                                            (click)="closeShowCodeMenu()"
+                                                                        >
+                                                                            {{ commonLocaleData?.app_cancel }}
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </mat-menu>
+                                                            <div class="position-relative pb-3">
+                                                                <div class="pb-3">
+                                                                    <textarea
+                                                                        matInput
+                                                                        rows="3"
+                                                                        maxlength="100"
+                                                                        class="form-control"
+                                                                        [name]="'productDescription' + i"
+                                                                        formControlName="description"
+                                                                        *ngIf="
+                                                                            activeIndx == i &&
+                                                                            product.get('uniqueName').value
+                                                                        "
+                                                                    ></textarea>
+                                                                    <!-- -->
+                                                                </div>
+                                                            </div>
+                                                            <div
+                                                                class="show-code-position"
+                                                                *ngIf="activeIndx == i"
+                                                                mat-button
+                                                                [matMenuTriggerFor]="hsn_sac_Menu"
+                                                                #hsnSacMenuTrigger="matMenuTrigger"
+                                                            >
+                                                                <label>
+                                                                    {{
+                                                                        product.get("showCodeType")?.value === "hsn"
+                                                                            ? commonLocaleData?.app_hsn
+                                                                            : commonLocaleData?.app_sac
+                                                                    }}
+                                                                    Code:
+                                                                </label>
+                                                                <span
+                                                                    >{{
+                                                                        product.get("showCodeType")?.value === "hsn"
+                                                                            ? product.get("hsnNumber")?.value
+                                                                            : product.get("sacNumber")?.value
+                                                                    }}
+                                                                    <span class="edit-icon cp">
+                                                                        <img src="assets/images/edit-pencilicon.svg" />
+                                                                    </span>
+                                                                </span>
+                                                            </div>
+                                                            <mat-menu #hsn_sac_Menu="matMenu" xPosition="after">
+                                                                <div
+                                                                    class="show-code-menu"
+                                                                    (click)="$event.stopPropagation()"
+                                                                >
+                                                                    <div class="radio-btns mr-b1">
+                                                                        <mat-radio-group
+                                                                            [name]="'showCodeType' + i"
+                                                                            class="d-flex font-15"
+                                                                            [formControl]="product.get('showCodeType')"
+                                                                        >
+                                                                            <mat-radio-button
+                                                                                color="primary"
+                                                                                value="hsn"
+                                                                                >HSN Code</mat-radio-button
+                                                                            >
+                                                                            <mat-radio-button
+                                                                                color="primary"
+                                                                                value="sac"
+                                                                                >SAC Code</mat-radio-button
+                                                                            >
+                                                                        </mat-radio-group>
+                                                                    </div>
+                                                                    <div
+                                                                        class="pt-1"
+                                                                        *ngIf="product.get('showCodeType')?.value"
+                                                                    >
+                                                                        <div
+                                                                            class="mr-b15 mr-t15"
+                                                                            *ngIf="
+                                                                                product.get('showCodeType')?.value ===
+                                                                                'hsn'
+                                                                            "
+                                                                        >
+                                                                            <text-field
+                                                                                [cssClass]="
+                                                                                    'form-control mat-field-border'
+                                                                                "
+                                                                                [type]="'text'"
+                                                                                [name]="'hsnNumber' + i"
+                                                                                placeholder="{{
+                                                                                    product.get('showCodeType')
+                                                                                        ?.value === 'hsn'
+                                                                                        ? commonLocaleData?.app_hsn
+                                                                                        : commonLocaleData?.app_sac
+                                                                                }} Code"
+                                                                                formControlName="hsnNumber"
+                                                                                [allowDecimalDigitsOnly]="true"
+                                                                                [max]="10"
+                                                                            >
+                                                                            </text-field>
+                                                                        </div>
+                                                                        <div
+                                                                            class="mr-b15 mr-t15"
+                                                                            *ngIf="
+                                                                                product.get('showCodeType')?.value ===
+                                                                                'sac'
+                                                                            "
+                                                                        >
+                                                                            <text-field
+                                                                                [cssClass]="
+                                                                                    'form-control mat-field-border'
+                                                                                "
+                                                                                [type]="'text'"
+                                                                                [name]="'sacNumber' + i"
+                                                                                placeholder="{{
+                                                                                    product.get('showCodeType')
+                                                                                        ?.value === 'hsn'
+                                                                                        ? commonLocaleData?.app_hsn
+                                                                                        : commonLocaleData?.app_sac
+                                                                                }} Code"
+                                                                                formControlName="sacNumber"
+                                                                                [allowDecimalDigitsOnly]="true"
+                                                                                [max]="10"
+                                                                            >
+                                                                            </text-field>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="d-flex mt-3 column-gap1">
+                                                                        <button
+                                                                            mat-stroked-button
+                                                                            color="primary"
+                                                                            class="w-100"
+                                                                            (click)="saveHsnNumberPopup()"
+                                                                        >
+                                                                            Save
+                                                                        </button>
+                                                                        <button
+                                                                            mat-stroked-button
+                                                                            class="w-100"
+                                                                            (click)="closeShowCodeMenu()"
+                                                                        >
+                                                                            Cancel
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </mat-menu>
+                                                        </div>
+                                                        <div *ngIf="activeIndx !== i">
+                                                            <div *ngIf="product.get('name').value">
+                                                                {{ product.get("name").value }}
+                                                            </div>
+                                                            <div *ngIf="product.get('variant.name').value">
+                                                                {{ product.get("variant.name").value }}
+                                                            </div>
+                                                            <div *ngIf="product.get('skuCode').value">
+                                                                SKU Code: {{ product.get("skuCode").value }}
+                                                            </div>
+                                                            <div *ngIf="product.get('showCodeType').value === 'hsn'">
+                                                                HSN Code: {{ product.get("hsnNumber").value }}
+                                                            </div>
+                                                            <div *ngIf="product.get('showCodeType').value === 'sac'">
+                                                                SAC Code: {{ product.get("sacNumber").value }}
+                                                            </div>
+                                                            <div *ngIf="product.get('description').value">
+                                                                {{ product.get("description").value }}
+                                                            </div>
+                                                            <div
+                                                                *ngIf="
+                                                                    !product.get('name').value &&
+                                                                    !product.get('description').value &&
+                                                                    !(
+                                                                        product.get('hsnNumber').value ||
+                                                                        product.get('sacNumber').value
+                                                                    ) &&
+                                                                    !product.get('skuCode').value
+                                                                "
+                                                                class="placeholder-for-table"
+                                                            >
+                                                                {{ localeData?.enter_product }}
+                                                            </div>
+                                                        </div>
+                                                    </span>
+                                                </td>
+
+                                                <td class="qtyUnit">
+                                                    <span>
+                                                        <span formGroupName="stockDetails" class="w-100">
+                                                            <div *ngIf="activeIndx === i" class="w-100">
+                                                                <text-field
+                                                                    [cssClass]="'form-control mat-field-border'"
+                                                                    [type]="'number'"
+                                                                    [name]="'productQty' + i"
+                                                                    [placeholder]="localeData?.enter_qty_unit"
+                                                                    [allowDecimalDigitsOnly]="true"
+                                                                    (change)="calculateRowTotal(product)"
+                                                                    formControlName="quantity"
+                                                                >
+                                                                </text-field>
+                                                                <span class="text-capitalize">
+                                                                    {{
+                                                                        product.get("stockDetails.stockUnit")?.value
+                                                                    }}</span
+                                                                >
+                                                            </div>
+                                                            <div *ngIf="activeIndx !== i">
+                                                                <div class="text-right">
+                                                                    {{ product.get("stockDetails.quantity")?.value }}
+                                                                    <span class="text-capitalize">
+                                                                        {{
+                                                                            product.get("stockDetails.stockUnit")?.value
+                                                                        }}</span
+                                                                    >
+                                                                </div>
+                                                            </div>
+                                                        </span>
+                                                    </span>
+                                                </td>
+
+                                                <td class="rate">
+                                                    <span>
+                                                        <span formGroupName="stockDetails" class="w-100">
+                                                            <div>
+                                                                <div *ngIf="activeIndx === i" class="w-100">
+                                                                    <text-field
+                                                                        [cssClass]="
+                                                                            'form-control mat-field-border  text-right'
+                                                                        "
+                                                                        [type]="'text'"
+                                                                        [name]="'productRate' + i"
+                                                                        [placeholder]="localeData?.enter_rate"
+                                                                        formControlName="rate"
+                                                                        [allowDecimalDigitsOnly]="true"
+                                                                        [customDecimalPlaces]="2"
+                                                                        (change)="calculateRowTotal(product)"
+                                                                        [prefix]="activeCompany?.baseCurrencySymbol"
+                                                                        [mask]="inputMaskFormat"
+                                                                        [useMask]="true"
+                                                                    >
+                                                                    </text-field>
+                                                                </div>
+                                                                <div *ngIf="activeIndx !== i">
+                                                                    <div class="text-right">
+                                                                        {{ activeCompany?.baseCurrencySymbol }}
+                                                                        {{
+                                                                            product.get("stockDetails.rate")?.value
+                                                                                | giddhCurrency
+                                                                        }}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </span>
+                                                    </span>
+                                                </td>
+
+                                                <td class="amount">
+                                                    <span>
+                                                        <span formGroupName="stockDetails" class="w-100">
+                                                            <div *ngIf="activeIndx === i" class="w-100">
+                                                                <text-field
+                                                                    [cssClass]="
+                                                                        'form-control mat-field-border  text-right'
+                                                                    "
+                                                                    [type]="'text'"
+                                                                    [name]="'productAmount' + i"
+                                                                    [placeholder]="localeData?.enter_amount"
+                                                                    formControlName="amount"
+                                                                    [allowDecimalDigitsOnly]="true"
+                                                                    [customDecimalPlaces]="2"
+                                                                    [prefix]="activeCompany?.baseCurrencySymbol"
+                                                                    [mask]="inputMaskFormat"
+                                                                    [useMask]="true"
+                                                                    [readonly]="true"
+                                                                >
+                                                                </text-field>
+                                                            </div>
+                                                            <div *ngIf="activeIndx !== i">
+                                                                <div class="text-right">
+                                                                    {{ activeCompany?.baseCurrencySymbol }}
+                                                                    {{
+                                                                        product.get("stockDetails.amount")?.value
+                                                                            | giddhCurrency
+                                                                    }}
+                                                                </div>
+                                                            </div>
+                                                            <span class="position-relative">
+                                                                <span
+                                                                    class="delete-btn-position d-flex"
+                                                                    *ngIf="
+                                                                        branchTransferCreateEditForm.get('products')
+                                                                            .value.length > 1
+                                                                    "
+                                                                >
+                                                                    <span class="delete-icon"
+                                                                        ><i
+                                                                            class="fa fa-trash"
+                                                                            (click)="removeProductDetailsForm(i)"
+                                                                        ></i
+                                                                    ></span>
+                                                                </span>
+                                                            </span>
+                                                        </span>
+                                                    </span>
+                                                </td>
+                                            </ng-container>
+                                        </tr>
+                                    </ng-container>
+                                </tbody>
+                                <tbody
+                                    *ngIf="transferType !== 'products' && branchTransferMode === 'delivery-challan'"
+                                    (clickOutside)="hideActiveRow($event)"
+                                >
+                                    <ng-container formArrayName="destinations">
+                                        <tr
+                                            *ngFor="
+                                                let destination of branchTransferCreateEditForm.get('destinations')[
+                                                    'controls'
+                                                ];
+                                                let i = index
+                                            "
+                                            (click)="setActiveRow(i); $event.stopPropagation()"
+                                        >
+                                            <ng-container [formGroupName]="i">
+                                                <td class="id">
+                                                    <div>
+                                                        <div>{{ i + 1 }}</div>
+                                                    </div>
+                                                </td>
+                                                <td class="name">
+                                                    <span class="w-100">
+                                                        <span formGroupName="warehouse" class="w-100">
+                                                            <div
+                                                                *ngIf="activeIndx === i"
+                                                                class="position-relative w-100 fields-gap"
+                                                            >
+                                                                <select-field
+                                                                    [cssClass]="'form-control mat-field-border pb-0'"
+                                                                    [name]="'destinationName' + i"
+                                                                    [placeholder]="localeData?.receiver_name"
+                                                                    [options]="branches"
+                                                                    (selectedOption)="selectRecieverName($event, i)"
+                                                                    [defaultValue]="destination.get('name').value"
+                                                                    #selectAccount
+                                                                >
+                                                                </select-field>
+                                                                <select-field
+                                                                    [cssClass]="'form-control mat-field-border pb-0'"
+                                                                    [name]="'destinationWarehouse' + i"
+                                                                    [placeholder]="
+                                                                        localeData?.select_receiver_warehouse
+                                                                    "
+                                                                    (selectedOption)="
+                                                                        selectReceiverWarehouse($event, i)
+                                                                    "
+                                                                    [options]="
+                                                                        destinationWarehouses[
+                                                                            destination.get('uniqueName').value
+                                                                        ]
+                                                                    "
+                                                                    [defaultValue]="
+                                                                        destination.get('warehouse.name').value
+                                                                    "
+                                                                    *ngIf="destination.get('uniqueName').value"
+                                                                    [allowValueReset]="true"
+                                                                    (onClear)="resetWarehouse('destinations', i)"
+                                                                >
+                                                                </select-field>
+                                                                <div class="option-value-field">
+                                                                    <text-field
+                                                                        *ngIf="
+                                                                            formFields &&
+                                                                            formFields['taxName'] &&
+                                                                            destination.get('warehouse.uniqueName')
+                                                                                .value &&
+                                                                            destination.get('warehouse.taxNumber').value
+                                                                        "
+                                                                        [name]="'destinationWarehouseTaxnumber' + i"
+                                                                        [placeholder]="getEnterTaxText()"
+                                                                        [type]="'text'"
+                                                                        [label]="
+                                                                            localeData?.select_label_receiver +
+                                                                            formFields['taxName']?.label +
+                                                                            '*'
+                                                                        "
+                                                                        [max]="15"
+                                                                        (change)="checkTaxNumberValidation()"
+                                                                        [readonly]="
+                                                                            destination.get('warehouse.uniqueName')
+                                                                                .value
+                                                                        "
+                                                                        formControlName="taxNumber"
+                                                                        [cssClass]="'w-100 form-control disabled'"
+                                                                    >
+                                                                    </text-field>
+                                                                </div>
+                                                                <div class="position-relative pb-3">
+                                                                    <div
+                                                                        class="pb-3"
+                                                                        [ngClass]="{
+                                                                            'readonly-field':
+                                                                                destination.get('warehouse.uniqueName')
+                                                                                    .value
+                                                                        }"
+                                                                    >
+                                                                        <textarea
+                                                                            matInput
+                                                                            rows="3"
+                                                                            class="form-control"
+                                                                            [name]="'destinationWarehouseAddress' + i"
+                                                                            formControlName="address"
+                                                                            [readonly]="
+                                                                                destination.get('warehouse.uniqueName')
+                                                                                    .value
+                                                                            "
+                                                                            *ngIf="
+                                                                                destination.get('warehouse.uniqueName')
+                                                                                    .value
+                                                                            "
+                                                                        ></textarea>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div *ngIf="activeIndx !== i">
+                                                                <div *ngIf="destination.get('name').value">
+                                                                    {{ destination.get("name").value }}
+                                                                </div>
+                                                                <div *ngIf="destination.get('warehouse.name').value">
+                                                                    {{ destination.get("warehouse.name").value }}
+                                                                </div>
+                                                                <div
+                                                                    *ngIf="destination.get('warehouse.taxNumber').value"
+                                                                >
+                                                                    {{ destination.get("warehouse.taxNumber").value }}
+                                                                </div>
+                                                                <div *ngIf="destination.get('warehouse.address').value">
+                                                                    {{ destination.get("warehouse.address").value }}
+                                                                </div>
+                                                                <div
+                                                                    *ngIf="
+                                                                        !destination.get('name').value &&
+                                                                        !destination.get('warehouse.name').value &&
+                                                                        !destination.get('warehouse.taxNumber').value &&
+                                                                        !destination.get('warehouse.address').value
+                                                                    "
+                                                                    class="placeholder-for-table"
+                                                                >
+                                                                    {{ localeData?.enter_receiver }}
+                                                                </div>
+                                                            </div>
+                                                        </span>
+                                                    </span>
+                                                </td>
+                                                <ng-container formGroupName="warehouse">
+                                                    <ng-container formGroupName="stockDetails">
+                                                        <td class="qtyUnit">
+                                                            <span class="w-100">
+                                                                <span class="w-100">
+                                                                    <div *ngIf="activeIndx === i" class="w-100">
+                                                                        <text-field
+                                                                            [cssClass]="'form-control mat-field-border'"
+                                                                            [type]="'number'"
+                                                                            [name]="'destinationQty' + i"
+                                                                            [placeholder]="localeData?.enter_qty_unit"
+                                                                            [allowDecimalDigitsOnly]="true"
+                                                                            (change)="
+                                                                                calculateRowTotal(
+                                                                                    destination.get('warehouse')
+                                                                                )
+                                                                            "
+                                                                            formControlName="quantity"
+                                                                        >
+                                                                        </text-field>
+                                                                    </div>
+                                                                    <div *ngIf="activeIndx !== i">
+                                                                        <div class="text-right">
+                                                                            {{
+                                                                                destination.get(
+                                                                                    "warehouse.stockDetails.quantity"
+                                                                                ).value
+                                                                            }}
+                                                                        </div>
+                                                                    </div>
+                                                                </span></span
+                                                            >
+                                                        </td>
+                                                        <td class="rate">
+                                                            <div>
+                                                                <div *ngIf="activeIndx !== i">
+                                                                    <div class="text-right">
+                                                                        {{ activeCompany?.baseCurrencySymbol }}
+                                                                        {{
+                                                                            destination.get(
+                                                                                "warehouse.stockDetails.rate"
+                                                                            ).value | giddhCurrency
+                                                                        }}
+                                                                    </div>
+                                                                </div>
+                                                                <div *ngIf="activeIndx === i" class="w-100">
+                                                                    <text-field
+                                                                        [cssClass]="
+                                                                            'form-control mat-field-border  text-right'
+                                                                        "
+                                                                        [type]="'text'"
+                                                                        [name]="'destinationRate' + i"
+                                                                        [placeholder]="localeData?.enter_rate"
+                                                                        formControlName="rate"
+                                                                        [allowDecimalDigitsOnly]="true"
+                                                                        [customDecimalPlaces]="2"
+                                                                        (change)="
+                                                                            calculateRowTotal(
+                                                                                destination.get('warehouse')
+                                                                            )
+                                                                        "
+                                                                        [prefix]="activeCompany?.baseCurrencySymbol"
+                                                                        [mask]="inputMaskFormat"
+                                                                        [useMask]="true"
+                                                                    >
+                                                                    </text-field>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td class="amount">
+                                                            <div *ngIf="activeIndx !== i">
+                                                                <div class="text-right">
+                                                                    {{ activeCompany?.baseCurrencySymbol }}
+                                                                    {{
+                                                                        destination.get("warehouse.stockDetails.rate")
+                                                                            .amount | giddhCurrency
+                                                                    }}
+                                                                </div>
+                                                            </div>
+                                                            <div *ngIf="activeIndx === i" class="w-100">
+                                                                <text-field
+                                                                    [cssClass]="
+                                                                        'form-control mat-field-border  text-right'
+                                                                    "
+                                                                    [type]="'text'"
+                                                                    [name]="'destinationAmount' + i"
+                                                                    [placeholder]="localeData?.enter_amount"
+                                                                    formControlName="amount"
+                                                                    [allowDecimalDigitsOnly]="true"
+                                                                    [customDecimalPlaces]="2"
+                                                                    [prefix]="activeCompany?.baseCurrencySymbol"
+                                                                    [mask]="inputMaskFormat"
+                                                                    [useMask]="true"
+                                                                    [readonly]="true"
+                                                                >
+                                                                </text-field>
+                                                            </div>
+                                                            <span class="position-relative">
+                                                                <span
+                                                                    class="delete-btn-position d-flex"
+                                                                    *ngIf="
+                                                                        branchTransferCreateEditForm.get('destinations')
+                                                                            .value.length > 1
+                                                                    "
+                                                                >
+                                                                    <span class="delete-icon"
+                                                                        ><i
+                                                                            class="fa fa-trash"
+                                                                            (click)="removeReceiverDetailsForm(i)"
+                                                                        ></i
+                                                                    ></span>
+                                                                    <i
+                                                                        *ngIf="
+                                                                            destinationWarehouses[
+                                                                                destination.get('uniqueName').value
+                                                                            ]?.length !==
+                                                                            allWarehouses[
+                                                                                destination.get('uniqueName').value
+                                                                            ]?.length
+                                                                        "
+                                                                        matTooltip="{{ branchTransferInfoText }}"
+                                                                        matTooltipPosition="above"
+                                                                        class="icon-info"
+                                                                    ></i>
+                                                                </span>
+                                                            </span>
+                                                        </td>
+                                                    </ng-container>
+                                                </ng-container>
+                                            </ng-container>
+                                        </tr>
+                                    </ng-container>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="4" class="pl-0">
+                                            <div class="add-new-line">
+                                                <a
+                                                    class="multiple-receivers btn-link cp"
+                                                    (click)="addReceiver()"
+                                                    *ngIf="
+                                                        transferType !== 'products' &&
+                                                        branchTransferMode === 'delivery-challan'
+                                                    "
+                                                >
+                                                    {{ localeData?.add_multiple_receiver }}</a
+                                                >
+                                                <a
+                                                    *ngIf="
+                                                        transferType !== 'products' &&
+                                                        branchTransferMode === 'receipt-note'
+                                                    "
+                                                    class="multiple-receivers btn-link cp"
+                                                    (click)="addSender()"
+                                                >
+                                                    {{ localeData?.add_multiple_sender }}</a
+                                                >
+
+                                                <a
+                                                    class="multiple-receivers btn-link cp"
+                                                    (click)="addBlankProductsForm()"
+                                                    *ngIf="transferType === 'products'"
+                                                >
+                                                    <i class="icon-plus"></i> {{ localeData?.add_multiple_products }}</a
+                                                >
+                                            </div>
+                                        </td>
+                                        <td class="pr-0">
+                                            <div class="row text-right">
+                                                <div class="col px-0"><strong>Total</strong></div>
+                                                <div class="col px-0">
+                                                    {{ activeCompany?.baseCurrencySymbol }}
+                                                    {{ overallTotal | giddhCurrency }}
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xl-8 col-lg-10 col-sm-12">
+                            <div>
+                                <h3 class="mr-b15">{{ commonLocaleData?.app_transport_details }}</h3>
+                                <div class="row row-gap" formGroupName="transporterDetails">
+                                    <div class="col-sm-6 pl-0">
+                                        <div class="direct-mat-datepicker">
+                                            <giddh-datepicker
+                                                (dateSelected)="selectDate($event, 'dispatchedDate')"
+                                                [minDate]="tempDateParams.dateOfSupply"
+                                                formControlName="dispatchedDate"
+                                                name="date"
+                                                [cssClass]="'w-100'"
+                                                [showToggleIcon]="false"
+                                                [appearance]="'outline'"
+                                                [placeholder]="localeData?.dispatched_date"
+                                            >
+                                            </giddh-datepicker>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 pr-0">
+                                        <dropdown-field
+                                            (createOption)="toggleTransporterModel()"
+                                            [showCreateNew]="true"
+                                            [name]="'transporterCompany'"
+                                            [placeholder]="localeData?.transport_company"
+                                            [options]="transporterDropdown"
+                                            (selectedOption)="onSelectTransportCompany($event)"
+                                            [defaultValue]="
+                                                branchTransferCreateEditForm.get('transporterDetails.transporterName')
+                                                    ?.value
+                                            "
+                                        >
+                                        </dropdown-field>
+                                    </div>
+                                    <div class="col-sm-6 pl-0 mr-b15">
+                                        <dropdown-field
+                                            [name]="'transporterMode'"
+                                            [placeholder]="commonLocaleData?.app_transport_mode"
+                                            [options]="transporterMode"
+                                            (selectedOption)="onSelectTransportMode($event)"
+                                            [defaultValue]="
+                                                branchTransferCreateEditForm.get('transporterDetails.transportMode')
+                                                    ?.value
+                                            "
+                                        >
+                                        </dropdown-field>
+                                    </div>
+                                    <div class="col-sm-6 pr-0 mr-b15">
+                                        <input-field
+                                            [type]="'text'"
+                                            [name]="'vehicleNumber'"
+                                            [placeholder]="commonLocaleData?.app_vehicle_number"
+                                            formControlName="vehicleNumber"
+                                        >
+                                        </input-field>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xl-8 col-lg-10 col-sm-12 mb-4">
+                            <div>
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>{{ commonLocaleData?.app_note }}</mat-label>
+                                    <textarea matInput rows="3" formControlName="note"></textarea>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row position-bottom">
+                        <div class="col-xl-8 col-lg-10 col-sm-12 mb-4">
+                            <div class="action-btn-wrapper text-right w-100 d-flex column-gap1 justify-content-end">
+                                <button mat-stroked-button (click)="resetForm()">Clear</button>
+                                <button *ngIf="isUpdateMode" mat-stroked-button (click)="navigateToList()">
+                                    {{ commonLocaleData?.app_cancel }}
+                                </button>
+                                <button
+                                    mat-stroked-button
+                                    color="primary"
+                                    *ngIf="isBranch || isCompanyWithSingleBranch"
+                                    class="d-inline-block v-align-middle {{ branchTransferCreateEditForm.invalid }}-{{
+                                        isValidSourceTaxNumber
+                                    }}-{{ isValidDestinationTaxNumber }}"
+                                    (click)="submit()"
+                                >
+                                    {{
+                                        editBranchTransferUniqueName
+                                            ? commonLocaleData?.app_update
+                                            : commonLocaleData?.app_create
+                                    }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+</ng-container>
+
+<ng-template #asideMenuProductService>
+    <aside-menu-product-service
+        [inputData]="branchTransferMode"
+        (closeAsideEvent)="closeAsideMenuProductServiceModal()"
+    ></aside-menu-product-service>
+</ng-template>
+<ng-template #asideManageTransport>
+    <aside-manage-transport (closeAsideEvent)="closeAsideTransporterModal()"></aside-manage-transport>
+</ng-template>

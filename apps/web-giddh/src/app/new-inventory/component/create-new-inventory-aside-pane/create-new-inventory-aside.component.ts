@@ -93,7 +93,18 @@ export class CreateNewInventoryAsideComponent implements OnInit {
         }
     }
 
+    /**
+     * This will use for open branch transfer mode
+     *
+     * @param {string} type
+     * @memberof CreateNewInventoryAsideComponent
+     */
     public openCreateBranchTransfer(type: string): void {
-        this.router.navigate(['/pages/inventory/v2/branch-transfer/create']);
+        if (type) {
+            this.router.navigate(['/pages', 'inventory', 'v2', this.moduleType, type, 'create']);
+        }
+        this.asideMenuState = this.asideMenuState === 'out' ? 'in' : 'out';
+        this.toggleBodyClass();
+        this.closeAsidePane();
     }
 }

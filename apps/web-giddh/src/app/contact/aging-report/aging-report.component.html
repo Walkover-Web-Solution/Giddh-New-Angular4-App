@@ -86,7 +86,7 @@
                     </span>
                 </div>
             </div>
-            <div class="cp advance-clear-filter-icons d-flex float-right">
+            <div class="cp advance-clear-filter-icons d-flex float-right column-gap1">
                 <button
                     mat-stroked-button
                     color="primary"
@@ -99,6 +99,9 @@
                         {{ commonLocaleData?.app_filter }}
                         <span class="icon-advance-filter ml-2"></span>
                     </div>
+                </button>
+                <button mat-stroked-button color="primary" (click)="exportReport()">
+                    {{ commonLocaleData?.app_export }}
                 </button>
                 <span class="refresh-btn" *ngIf="isAdvanceSearchApplied">
                     <button mat-icon-button (click)="resetAdvanceSearch()">
@@ -150,7 +153,7 @@
             </div>
         </div>
     </div>
-    <div class="contact-main aging-page">
+    <div class="contact-main aging-page"  *ngIf="!isLoading">
         <div class="pd-b2 mr-b1 on-mobile-view mobile-card-wrapper">
             <div *ngIf="!isMobileScreen" class="table-responsive">
                 <ng-container *ngTemplateOutlet="mainTable"></ng-container>
@@ -196,6 +199,9 @@
                 <no-data [secondaryMessageClass]="'p-0'"></no-data>
             </div>
         </div>
+    </div>
+        <div *ngIf="isLoading">
+        <giddh-page-loader></giddh-page-loader>
     </div>
 </div>
 <!--region advance_search Modal-->
