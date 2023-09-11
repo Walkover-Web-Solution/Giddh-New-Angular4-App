@@ -1830,7 +1830,6 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
  * This will use for get stock variants for stock
  *
  * @param {string} stockUniqueName
- * @param {number} [index]
  * @memberof CreateBranchTransferComponent
  */
 public loadStockVariants(stockUniqueName: string): void {
