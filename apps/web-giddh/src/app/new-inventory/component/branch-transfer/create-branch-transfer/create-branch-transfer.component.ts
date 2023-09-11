@@ -12,6 +12,7 @@ import { cloneDeep, isEmpty } from 'apps/web-giddh/src/app/lodash-optimized';
 import { ILinkedStocksResult, LinkedStocksResponse, LinkedStocksVM } from 'apps/web-giddh/src/app/models/api-models/BranchTransfer';
 import { OnboardingFormRequest } from 'apps/web-giddh/src/app/models/api-models/Common';
 import { IAllTransporterDetails, IEwayBillTransporter, IEwayBillfilter } from 'apps/web-giddh/src/app/models/api-models/Invoice';
+import { IVariant } from 'apps/web-giddh/src/app/models/api-models/Ledger';
 import { InvoiceSetting } from 'apps/web-giddh/src/app/models/interfaces/invoice.setting.interface';
 import { OrganizationType } from 'apps/web-giddh/src/app/models/user-login-state';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
@@ -26,7 +27,7 @@ import { AppState } from 'apps/web-giddh/src/app/store';
 import { IOption } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface';
 import * as dayjs from 'dayjs';
 import { Observable, ReplaySubject, of as observableOf } from 'rxjs';
-import {take, takeUntil } from 'rxjs/operators';
+import { map, take, takeUntil } from 'rxjs/operators';
 
 @Component({
     selector: 'app-create-branch-transfer',
@@ -71,7 +72,7 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
     /** Hold  stock list data */
     public stockList: IOption[] = [];
     /** Hold  stock list data */
-    public stockVariants: IOption[] = [];
+    public stockVariants: any[] = [];
     /** Hold  transporter data details */
     public transporterPopupStatus: boolean = false;
     /** Hold  transporter id*/
@@ -677,7 +678,8 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
                     const searchResults = data.body.results.map(result => {
                         return {
                             value: result?.uniqueName,
-                            label: result.name
+                            label: result.name,
+                            additional: result
                         }
                     }) || [];
                     if (page === 1) {
@@ -727,7 +729,8 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
                         const results = response.map(result => {
                             return {
                                 value: result?.uniqueName,
-                                label: result.name
+                                label: result.name,
+                                additional: result
                             }
                         }) || [];
                         this.defaultStockSuggestions = this.defaultStockSuggestions.concat(...results);
@@ -1779,7 +1782,7 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
                         const variantsFormGroup = productFormGroup?.get('variant') as UntypedFormGroup;
                         variantsFormGroup?.get('name')?.setValue("");
                         variantsFormGroup?.get('uniqueName')?.setValue("");
-                        this.loadStockVariants(productFormGroup.get('uniqueName')?.value);
+                        this.loadStockVariants(productFormGroup.get('uniqueName')?.value, index);
                     }
                     this.calculateRowTotal(productFormGroup);
                 }
@@ -1826,24 +1829,21 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
         }
     }
 
-/**
- * This will use for get stock variants for stock
- *
- * @param {string} stockUniqueName
- * @memberof CreateBranchTransferComponent
- */
-public loadStockVariants(stockUniqueName: string): void {
-        this.ledgerService.loadStockVariants(stockUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response.length) {
-                this.stockVariants = [];
-                let stockVariants = response;
-                if (stockVariants) {
-                    stockVariants.forEach(key => {
-                        this.stockVariants.push({ label: key.name, value: key?.uniqueName, additional: key });
-                    });
+    /**
+     * This will use for get stock variants for stock
+     *
+     * @param {string} stockUniqueName
+     * @param {number} [index]
+     * @memberof CreateBranchTransferComponent
+     */
+    public loadStockVariants(stockUniqueName: string, index?: number): void {
+        this.ledgerService.loadStockVariants(stockUniqueName).pipe(
+            map((variants) => variants.map((variant: IVariant) => ({ label: variant.name, value: variant.uniqueName ,additional:variant})))).subscribe(res => {
+                if (!this.stockVariants[index]) {
+                    this.stockVariants[index] = [];
                 }
-            }
-        });
+                this.stockVariants[index] = res;
+            });
     }
 
     /**
