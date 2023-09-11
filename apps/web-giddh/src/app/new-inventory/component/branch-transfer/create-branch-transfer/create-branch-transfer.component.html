@@ -1378,7 +1378,7 @@
                                                             <span formGroupName="variant" class="w-100">
                                                                 <select-field
                                                                     *ngIf="
-                                                                        stockVariants?.length > 1 &&
+                                                                        stockVariants?.length &&
                                                                         product.get('uniqueName').value
                                                                     "
                                                                     [cssClass]="'form-control mat-field-border'"
