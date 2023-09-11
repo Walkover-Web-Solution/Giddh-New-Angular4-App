@@ -6,7 +6,8 @@ add-company,
 stock-create-edit,
 dropdown-field,
 input-field,
-stock-balance {
+stock-balance,
+mat-form-field {
     .mat-mdc-form-field {
         width: 100%;
     }
@@ -85,6 +86,9 @@ stock-balance {
                         }
                     }
                 }
+            }
+            .mdc-notched-outline__notch {
+                border-color: var(--color-fields-border) !important;
             }
         }
         .mdc-notched-outline {

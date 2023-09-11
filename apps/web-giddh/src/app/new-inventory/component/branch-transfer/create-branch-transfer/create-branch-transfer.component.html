@@ -330,21 +330,6 @@
                                                 "
                                             >
                                             </input-field>
-                                            <i
-                                                *ngIf="
-                                                    destinationWarehouses[
-                                                        branchTransferCreateEditForm.get('destinations.0.uniqueName')
-                                                            ?.value
-                                                    ]?.length !==
-                                                    allWarehouses[
-                                                        branchTransferCreateEditForm.get('destinations.0.uniqueName')
-                                                            ?.value
-                                                    ]?.length
-                                                "
-                                                class="icon-info"
-                                                matTooltip="{{ branchTransferInfoText }}"
-                                            >
-                                            </i>
                                         </div>
                                         <div formArrayName="destinations">
                                             <div [formGroupName]="0">
@@ -373,6 +358,21 @@
                                                         "
                                                     >
                                                     </dropdown-field>
+                                                    <i
+                                                    *ngIf="
+                                                        destinationWarehouses[
+                                                            branchTransferCreateEditForm.get('destinations.0.uniqueName')
+                                                                ?.value
+                                                        ]?.length !==
+                                                        allWarehouses[
+                                                            branchTransferCreateEditForm.get('destinations.0.uniqueName')
+                                                                ?.value
+                                                        ]?.length
+                                                    "
+                                                    class="icon-info"
+                                                    matTooltip="{{ branchTransferInfoText }}"
+                                                >
+                                                </i>
                                                 </div>
                                                 <div class="mr-b15">
                                                     <dropdown-field
