@@ -110,6 +110,8 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     public defaultLoad: boolean = true;
     /** True if api call in progress */
     public isLoading: boolean = false;
+    /** Stores the voucher API version of company */
+    public voucherApiVersion: 1 | 2;
 
     constructor(
         public dialog: MatDialog,
@@ -163,6 +165,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.getDueReport();
         this.imgPath = isElectron ? "assets/images/" : AppUrl + APP_FOLDER + "assets/images/";
         this.getDueAmountreportData();
@@ -491,6 +494,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
             totalDueAmountLessThan: this.agingAdvanceSearchModal.totalDueAmountLessThan,
             totalDueAmountEqualTo: this.agingAdvanceSearchModal.totalDueAmountEqualTo,
             totalDueAmountNotEqualTo: this.agingAdvanceSearchModal.totalDueAmountNotEqualTo,
+            totalDueAmount: this.agingAdvanceSearchModal.totalDueAmount,
             sortBy: this.dueAmountReportRequest.sortBy,
             sort: this.dueAmountReportRequest.sort === 'asc' ? 'ASC' : 'DESC',
             rangeCol: this.dueAmountReportRequest.rangeCol,
