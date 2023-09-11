@@ -593,7 +593,7 @@
                 list-style: none;
                 margin: 0 auto;
                 padding: 0;
-                width: 201px;
+                width: 212px;
                 display: flex;
                 flex-direction: column;
                 li {
@@ -741,7 +741,6 @@
             display: flex;
             justify-content: space-evenly;
             padding: 0 3rem;
-            column-gap: 15px;
         }
     }
     .mat-button,
@@ -935,6 +934,9 @@ td.in-range.in-range-start.in-range-hovered.in-range-end::before {
     .wrap-selected-date {
         .date-container-one {
             width: 52% !important;
+        }
+        .date-container-two {
+            justify-content: flex-end;
         }
     }
 }
@@ -1345,7 +1347,7 @@ td span {
                         padding-bottom: 6px;
                         border-bottom: 3px solid var(--color-datepicker-selected-date-range-background);
                         input {
-                            width: 98px;
+                            width: 95px;
                             height: auto;
                             font-size: var(--font-size-15);
                             padding: 0;
