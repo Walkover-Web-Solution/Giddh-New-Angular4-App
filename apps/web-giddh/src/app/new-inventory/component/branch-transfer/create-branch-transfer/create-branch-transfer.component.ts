@@ -1779,7 +1779,7 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
                         const variantsFormGroup = productFormGroup?.get('variant') as UntypedFormGroup;
                         variantsFormGroup?.get('name')?.setValue("");
                         variantsFormGroup?.get('uniqueName')?.setValue("");
-                        this.loadStockVariants(productFormGroup.get('uniqueName')?.value, index);
+                        this.loadStockVariants(productFormGroup.get('uniqueName')?.value);
                     }
                     this.calculateRowTotal(productFormGroup);
                 }
@@ -1833,7 +1833,7 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
  * @param {number} [index]
  * @memberof CreateBranchTransferComponent
  */
-public loadStockVariants(stockUniqueName: string, index?: number): void {
+public loadStockVariants(stockUniqueName: string): void {
         this.ledgerService.loadStockVariants(stockUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response.length) {
                 this.stockVariants = [];
