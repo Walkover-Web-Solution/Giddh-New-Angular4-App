@@ -1378,7 +1378,7 @@
                                                             <span formGroupName="variant" class="w-100">
                                                                 <select-field
                                                                     *ngIf="
-                                                                        stockVariants?.length > 1 &&
+                                                                        stockVariants[i]?.length > 1 &&
                                                                         product.get('uniqueName').value
                                                                     "
                                                                     [cssClass]="'form-control mat-field-border'"
@@ -1386,7 +1386,7 @@
                                                                     (selectedOption)="
                                                                         variantChanged($event, product, i)
                                                                     "
-                                                                    [options]="stockVariants"
+                                                                    [options]="stockVariants[i]"
                                                                     [name]="'variantName' + i"
                                                                     [defaultValue]="product.get('variant.name').value"
                                                                 >
