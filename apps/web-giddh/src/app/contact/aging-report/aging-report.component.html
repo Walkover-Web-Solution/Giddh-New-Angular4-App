@@ -100,7 +100,7 @@
                         <span class="icon-advance-filter ml-2"></span>
                     </div>
                 </button>
-                <button mat-stroked-button color="primary" (click)="exportReport()">
+                <button *ngIf="voucherApiVersion ===2" mat-stroked-button color="primary" (click)="exportReport()">
                     {{ commonLocaleData?.app_export }}
                 </button>
                 <span class="refresh-btn" *ngIf="isAdvanceSearchApplied">
