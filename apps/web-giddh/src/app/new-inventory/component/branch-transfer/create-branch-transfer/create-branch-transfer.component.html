@@ -143,7 +143,7 @@
                                                                 [type]="'text'"
                                                                 [name]="'hsnSacNumber'"
                                                                 [label]="
-                                                                    commonLocaleData?.app_hsn +
+                                                                    commonLocaleData?.app_hsn +' ' +
                                                                     commonLocaleData?.app_number
                                                                 "
                                                                 formControlName="hsnNumber"
@@ -164,7 +164,7 @@
                                                                 [type]="'text'"
                                                                 [name]="'hsnSacNumber'"
                                                                 [label]="
-                                                                    commonLocaleData?.app_sac +
+                                                                    commonLocaleData?.app_sac + ' ' +
                                                                     commonLocaleData?.app_number
                                                                 "
                                                                 formControlName="sacNumber"
@@ -619,20 +619,22 @@
                                         </div>
                                         <div *ngIf="transferType === 'products'">
                                             <div class="position-relative info-field mr-b15">
-                                                <input-field
-                                                    *ngIf="(isBranch || isCompanyWithSingleBranch) && !isUpdateMode"
-                                                    [name]="'sourceName'"
-                                                    formControlName="myCurrentCompany"
-                                                    [placeholder]=""
-                                                    [type]="'text'"
-                                                    [readonly]="isBranch || isCompanyWithSingleBranch"
-                                                    class="mr-b15 d-block"
-                                                    [showError]="
-                                                        !isValidForm &&
-                                                        !branchTransferCreateEditForm?.get('myCurrentCompany')?.value
-                                                    "
-                                                >
-                                                </input-field>
+                                                <div class="option-value-field">
+                                                    <text-field
+                                                        *ngIf="(isBranch || isCompanyWithSingleBranch) && !isUpdateMode"
+                                                        [name]="'sourceName'"
+                                                        formControlName="myCurrentCompany"
+                                                        [placeholder]=""
+                                                        [type]="'text'"
+                                                        [readonly]="isBranch || isCompanyWithSingleBranch"
+                                                        [cssClass]="'form-control disabled w-100'"
+                                                        [showError]="
+                                                            !isValidForm &&
+                                                            !branchTransferCreateEditForm?.get('myCurrentCompany')?.value
+                                                        "
+                                                    >
+                                                    </text-field>
+                                                </div>
                                                 <dropdown-field
                                                     *ngIf="isUpdateMode"
                                                     [name]="'senderName0'"
