@@ -40,6 +40,7 @@ import { MatDialogModule } from "@angular/material/dialog";
 import { AccountUpdateNewDetailsModule } from '../shared/header/components/account-update-new-details/account-update-new-details.module';
 import { AsideMenuAccountModule } from '../shared/aside-menu-account/aside.menu.account.module';
 import { SelectTableColumnModule } from '../shared/select-table-column/select-table-column.module';
+import { GiddhPageLoaderModule } from '../shared/giddh-page-loader/giddh-page-loader.module';
 
 @NgModule({
     declarations: [
@@ -91,7 +92,8 @@ import { SelectTableColumnModule } from '../shared/select-table-column/select-ta
         MatDialogModule,
         AccountUpdateNewDetailsModule,
         AsideMenuAccountModule,
-        SelectTableColumnModule
+        SelectTableColumnModule,
+        GiddhPageLoaderModule
     ],
     providers: [
         GiddhCurrencyPipe

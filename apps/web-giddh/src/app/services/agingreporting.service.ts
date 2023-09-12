@@ -4,7 +4,7 @@ import { HttpWrapperService } from './http-wrapper.service';
 import { DueAmountReportQueryRequest, DueAmountReportRequest, DueAmountReportResponse, DueRangeRequest } from '../models/api-models/Contact';
 import { empty, Observable } from 'rxjs';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
-import { DUEAMOUNTREPORT_API_V2, DUEDAYSRANGE_API_V2 } from './apiurls/aging-reporting';
+import { AGINGREPORT_API, DUEAMOUNTREPORT_API_V2, DUEDAYSRANGE_API_V2 } from './apiurls/aging-reporting';
 import { GeneralService } from './general.service';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { GiddhErrorHandler } from './catchManager/catchmanger';
@@ -66,4 +66,25 @@ export class AgingreportingService {
         }
     }
 
+    /**
+     * This will be use for export aging report
+     *
+     * @param {*} model
+     * @return {*}  {Observable<BaseResponse<string, any>>}
+     * @memberof AgingreportingService
+     */
+    public exportAgingReport(model: any, branchUniqueName: string): Observable<BaseResponse<string, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        let url = this.config.apiUrl + AGINGREPORT_API.EXPORT?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
+        if (branchUniqueName) {
+            url = url.concat(`?branchUniqueName=${branchUniqueName}`);
+        }
+        return this.http.post(url, model).pipe(
+            map((res) => {
+                let data: BaseResponse<string, any> = res;
+                data.request = model;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<string, any>(e, model, {})));
+    }
 }
