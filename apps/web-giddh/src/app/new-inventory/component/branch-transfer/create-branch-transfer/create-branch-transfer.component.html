@@ -108,6 +108,18 @@
                                                 [required]="true"
                                             >
                                             </dropdown-field>
+                                                <select-field
+                                                    *ngIf="
+                                                        stockVariants[0]?.length > 1 && branchTransferCreateEditForm?.get('products.0.uniqueName').value
+                                                    "
+                                                    [cssClass]="'form-control mat-field-border'"
+                                                    [placeholder]="localeData?.variant_name"
+                                                    (selectedOption)="variantChanged($event, product, 0)"
+                                                    [options]="stockVariants[0]"
+                                                    [name]="'variantName' + 0"
+                                                    [defaultValue]="product.get('variant.name').value"
+                                                >
+                                                </select-field>
                                             <div formArrayName="products">
                                                 <div [formGroupName]="0">
                                                     <div class="mr-b15 mr-t15">
@@ -472,7 +484,7 @@
 
                             <div class="col-lg-4">
                                 <div class="total-amount text-right">
-                                    <p>Total Amount</p>
+                                    <p>{{commonLocaleData?.app_total_amount}}</p>
                                     <h3>{{ activeCompany?.baseCurrencySymbol }} {{ overallTotal | giddhCurrency }}</h3>
                                 </div>
                             </div>
@@ -548,6 +560,18 @@
                                                 "
                                             >
                                             </dropdown-field>
+                                                    <select-field
+                                                    *ngIf="
+                                                        stockVariants[0]?.length > 1 && branchTransferCreateEditForm?.get('products.0.uniqueName').value
+                                                    "
+                                                    [cssClass]="'form-control mat-field-border'"
+                                                    [placeholder]="localeData?.variant_name"
+                                                    (selectedOption)="variantChanged($event, product, 0)"
+                                                    [options]="stockVariants[0]"
+                                                    [name]="'variantName' + 0"
+                                                    [defaultValue]="product.get('variant.name').value"
+                                                >
+                                                </select-field>
                                             <div formArrayName="products">
                                                 <div [formGroupName]="0">
                                                     <div class="mr-b15 mr-t15">
@@ -1055,7 +1079,7 @@
 
                             <div class="col-lg-4">
                                 <div class="total-amount text-right">
-                                    <p>Total Amount</p>
+                                  <p>{{commonLocaleData?.app_total_amount}}</p>
                                     <h3>{{ activeCompany?.baseCurrencySymbol }} {{ overallTotal | giddhCurrency }}</h3>
                                 </div>
                             </div>
@@ -1643,11 +1667,17 @@
                                                                     formControlName="quantity"
                                                                 >
                                                                 </text-field>
-                                                                <span class="text-capitalize">
-                                                                    {{
-                                                                        product.get("stockDetails.stockUnit")?.value
-                                                                    }}</span
+                                                            </div>
+                                                            <div *ngIf="activeIndx === i" class="w-100 mr-b15 mr-t15">
+                                                                <select-field
+                                                                    [cssClass]="'form-control mat-field-border'"
+                                                                    [placeholder]="'Stock Units'"
+                                                                    (selectedOption)="unitChanged($event, product, i)"
+                                                                    [options]="stockUnits[i]"
+                                                                    [name]="'unitName' + i"
+                                                                    [defaultValue]="stockUnits[0]?.label"
                                                                 >
+                                                                </select-field>
                                                             </div>
                                                             <div *ngIf="activeIndx !== i">
                                                                 <div class="text-right">
@@ -2151,7 +2181,7 @@
                     <div class="row position-bottom">
                         <div class="col-xl-8 col-lg-10 col-sm-12 mb-4">
                             <div class="action-btn-wrapper text-right w-100 d-flex column-gap1 justify-content-end">
-                                <button mat-stroked-button (click)="resetForm()">Clear</button>
+                                <button mat-stroked-button (click)="resetForm()">  {{commonLocaleData?.app_clear}}</button>
                                 <button *ngIf="isUpdateMode" mat-stroked-button (click)="navigateToList()">
                                     {{ commonLocaleData?.app_cancel }}
                                 </button>
