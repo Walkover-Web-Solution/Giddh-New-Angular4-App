@@ -330,21 +330,6 @@
                                                 "
                                             >
                                             </input-field>
-                                            <i
-                                                *ngIf="
-                                                    destinationWarehouses[
-                                                        branchTransferCreateEditForm.get('destinations.0.uniqueName')
-                                                            ?.value
-                                                    ]?.length !==
-                                                    allWarehouses[
-                                                        branchTransferCreateEditForm.get('destinations.0.uniqueName')
-                                                            ?.value
-                                                    ]?.length
-                                                "
-                                                class="icon-info"
-                                                matTooltip="{{ branchTransferInfoText }}"
-                                            >
-                                            </i>
                                         </div>
                                         <div formArrayName="destinations">
                                             <div [formGroupName]="0">
@@ -373,6 +358,21 @@
                                                         "
                                                     >
                                                     </dropdown-field>
+                                                    <i
+                                                    *ngIf="
+                                                        destinationWarehouses[
+                                                            branchTransferCreateEditForm.get('destinations.0.uniqueName')
+                                                                ?.value
+                                                        ]?.length !==
+                                                        allWarehouses[
+                                                            branchTransferCreateEditForm.get('destinations.0.uniqueName')
+                                                                ?.value
+                                                        ]?.length
+                                                    "
+                                                    class="icon-info"
+                                                    matTooltip="{{ branchTransferInfoText }}"
+                                                >
+                                                </i>
                                                 </div>
                                                 <div class="mr-b15">
                                                     <dropdown-field
@@ -2058,7 +2058,7 @@
                                                     (click)="addBlankProductsForm()"
                                                     *ngIf="transferType === 'products'"
                                                 >
-                                                    <i class="icon-plus"></i> {{ localeData?.add_multiple_products }}</a
+                                                    {{ localeData?.add_multiple_products }}</a
                                                 >
                                             </div>
                                         </td>
@@ -2150,7 +2150,7 @@
                     <div class="row position-bottom">
                         <div class="col-xl-8 col-lg-10 col-sm-12 mb-4">
                             <div class="action-btn-wrapper text-right w-100 d-flex column-gap1 justify-content-end">
-                                <button mat-stroked-button (click)="resetForm()">  {{commonLocaleData?.app_clear}}</button>
+                                <button mat-stroked-button (click)="resetForm()" *ngIf="!isUpdateMode">  {{commonLocaleData?.app_clear}}</button>
                                 <button *ngIf="isUpdateMode" mat-stroked-button (click)="navigateToList()">
                                     {{ commonLocaleData?.app_cancel }}
                                 </button>

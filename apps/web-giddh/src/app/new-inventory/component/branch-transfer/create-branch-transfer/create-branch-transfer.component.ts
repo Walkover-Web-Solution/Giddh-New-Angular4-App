@@ -673,7 +673,7 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
                 q: encodeURIComponent(query),
                 page
             }
-            this.inventoryService.getStocksV2(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+            this.inventoryService.GetStocks(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
                         return {
@@ -1795,9 +1795,9 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
      */
     public selectProduct(event: any, productFormGroup: any, index?: number): void {
         if (event && event.additional) {
-            const productStockDetailsFormGroup = productFormGroup.get('stockDetails') as UntypedFormGroup;
-            productFormGroup.get('name')?.setValue(event.additional.name);
-            productFormGroup.get('uniqueName')?.setValue(event.additional.uniqueName);
+            const productStockDetailsFormGroup = productFormGroup?.get('stockDetails') as UntypedFormGroup;
+            productFormGroup?.get('name')?.setValue(event.additional.name);
+            productFormGroup?.get('uniqueName')?.setValue(event.additional.uniqueName);
             productStockDetailsFormGroup.get('stockUnit')?.setValue(event.additional.stockUnit);
             productStockDetailsFormGroup.get('stockUnitUniqueName')?.setValue(event.additional.stockUnit.uniqueName);
             productStockDetailsFormGroup.get('rate')?.setValue(0);
