@@ -1296,6 +1296,28 @@
                         </tr>
                         <tr
                             *ngIf="
+                                customTemplate.sections['table'].data['amountBeforeDiscount'] &&
+                                        voucherApiVersion === 2 &&
+                                customTemplate.templateType !== 'thermal_template'
+                            "
+                        >
+                            <td class="pb-3">
+                                <label>
+                                    <input
+                                        type="checkbox"
+                                        name="amountBeforeDiscount"
+                                        checked
+                                        [(ngModel)]="
+                                            customTemplate.sections['table'].data['amountBeforeDiscount'].display
+                                        "
+                                        (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                                    />
+                                    Total Before Dis.</label
+                                >
+                            </td>
+                        </tr>
+                        <tr
+                            *ngIf="
                                 fieldsAndVisibility.table.discount && customTemplate.templateType !== 'thermal_template'
                             "
                         >
