@@ -179,7 +179,7 @@
                                         </div>
                                         <ng-container *ngIf="transferType === 'products'">
                                             <div>
-                                                <div class="mr-b15 position-relative info-field hello sender name">
+                                                <div class="mr-b15 position-relative info-field">
                                                     <dropdown-field
                                                         [name]="'senderName'"
                                                         [label]="localeData?.sender_name"
@@ -214,7 +214,7 @@
                                                                     ?.value
                                                             ]?.length
                                                         "
-                                                        class="icon-info"
+                                                        class="icon-info three"
                                                         matTooltip="{{ branchTransferInfoText }}"
                                                     >
                                                     </i>
@@ -330,10 +330,25 @@
                                                 "
                                             >
                                             </input-field>
+                                            <i
+                                                *ngIf="
+                                                    destinationWarehouses[
+                                                        branchTransferCreateEditForm.get('destinations.0.uniqueName')
+                                                            ?.value
+                                                    ]?.length !==
+                                                    allWarehouses[
+                                                        branchTransferCreateEditForm.get('destinations.0.uniqueName')
+                                                            ?.value
+                                                    ]?.length
+                                                "
+                                                class="icon-info"
+                                                matTooltip="{{ branchTransferInfoText }}"
+                                            >
+                                            </i>
                                         </div>
                                         <div formArrayName="destinations">
                                             <div [formGroupName]="0">
-                                                <div class="mr-b15 position-relative info-field">
+                                                <div class="mr-b15">
                                                     <dropdown-field
                                                         *ngIf="isUpdateMode"
                                                         [name]="'receiverName'"
@@ -358,21 +373,6 @@
                                                         "
                                                     >
                                                     </dropdown-field>
-                                                    <i
-                                                    *ngIf="
-                                                        destinationWarehouses[
-                                                            branchTransferCreateEditForm.get('destinations.0.uniqueName')
-                                                                ?.value
-                                                        ]?.length !==
-                                                        allWarehouses[
-                                                            branchTransferCreateEditForm.get('destinations.0.uniqueName')
-                                                                ?.value
-                                                        ]?.length
-                                                    "
-                                                    class="icon-info"
-                                                    matTooltip="{{ branchTransferInfoText }}"
-                                                >
-                                                </i>
                                                 </div>
                                                 <div class="mr-b15">
                                                     <dropdown-field
@@ -472,7 +472,7 @@
 
                             <div class="col-lg-4">
                                 <div class="total-amount text-right">
-                                    <p>{{commonLocaleData?.app_total_amount}}</p>
+                                    <p>{{ commonLocaleData?.app_total_amount }}</p>
                                     <h3>{{ activeCompany?.baseCurrencySymbol }} {{ overallTotal | giddhCurrency }}</h3>
                                 </div>
                             </div>
@@ -798,7 +798,7 @@
                                                                     )?.value
                                                                 ]?.length
                                                             "
-                                                            class="icon-info"
+                                                            class="icon-info one"
                                                             matTooltip="{{ branchTransferInfoText }}"
                                                         >
                                                         </i>
@@ -916,7 +916,7 @@
                                             </input-field>
                                             <div formArrayName="sources">
                                                 <div [formGroupName]="0">
-                                                    <div class="mr-b15 position-relative info-field two">
+                                                    <div class="mr-b15 position-relative info-field">
                                                         <dropdown-field
                                                             *ngIf="isUpdateMode"
                                                             [name]="'senderWarehouse'"
@@ -952,7 +952,7 @@
                                                                     )?.value
                                                                 ]?.length
                                                             "
-                                                            class="icon-info"
+                                                            class="icon-info two"
                                                             matTooltip="{{ branchTransferInfoText }}"
                                                         >
                                                         </i>
@@ -1055,7 +1055,7 @@
 
                             <div class="col-lg-4">
                                 <div class="total-amount text-right">
-                                  <p>{{commonLocaleData?.app_total_amount}}</p>
+                                    <p>{{ commonLocaleData?.app_total_amount }}</p>
                                     <h3>{{ activeCompany?.baseCurrencySymbol }} {{ overallTotal | giddhCurrency }}</h3>
                                 </div>
                             </div>
@@ -1375,10 +1375,11 @@
                                                                 "
                                                             >
                                                             </select-field>
+                                                            {{stockVariants | json}}
                                                             <span formGroupName="variant" class="w-100">
                                                                 <select-field
                                                                     *ngIf="
-                                                                        stockVariants[i]?.length > 1 &&
+                                                                        stockVariants?.length > 1 &&
                                                                         product.get('uniqueName').value
                                                                     "
                                                                     [cssClass]="'form-control mat-field-border'"
@@ -1643,10 +1644,18 @@
                                                                     formControlName="quantity"
                                                                 >
                                                                 </text-field>
-                                                                <span class="text-capitalize">
-                                                                    {{
-                                                                    product.get("stockDetails.stockUnit")?.value
-                                                                    }}</span>
+                                                           <div *ngIf="activeIndx === i" class="w-100 mr-b15 mr-t15">
+                                                                <select-field
+                                                                    [cssClass]="'form-control mat-field-border'"
+                                                                    [placeholder]="'Stock Units'"
+                                                                    (selectedOption)="unitChanged($event, product)"
+                                                                    [options]="stockUnits[i]"
+                                                                    [name]="'unitName' + i"
+                                                                    [defaultValue]="product.get('stockDetails.stockUnit')?.value"
+                                                                    [disabled]="!product.get('stockDetails.stockUnit')?.value"
+                                                                >
+                                                                </select-field>
+                                                            </div>
                                                             </div>
                                                             <div *ngIf="activeIndx !== i">
                                                                 <div class="text-right">
@@ -2150,7 +2159,9 @@
                     <div class="row position-bottom">
                         <div class="col-xl-8 col-lg-10 col-sm-12 mb-4">
                             <div class="action-btn-wrapper text-right w-100 d-flex column-gap1 justify-content-end">
-                                <button mat-stroked-button (click)="resetForm()" *ngIf="!isUpdateMode">  {{commonLocaleData?.app_clear}}</button>
+                                <button mat-stroked-button (click)="resetForm()" *ngIf="!isUpdateMode">
+                                    {{ commonLocaleData?.app_clear }}
+                                </button>
                                 <button *ngIf="isUpdateMode" mat-stroked-button (click)="navigateToList()">
                                     {{ commonLocaleData?.app_cancel }}
                                 </button>

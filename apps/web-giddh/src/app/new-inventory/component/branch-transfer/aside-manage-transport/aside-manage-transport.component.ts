@@ -1,11 +1,12 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { PAGINATION_LIMIT } from 'apps/web-giddh/src/app/app.constant';
 import { IAllTransporterDetails } from 'apps/web-giddh/src/app/models/api-models/Invoice';
 import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
 import { IOption } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface';
-import { ReplaySubject, takeUntil } from 'rxjs';
+import { ReplaySubject, take, takeUntil } from 'rxjs';
 
 export interface transporterDetails {
     name: string;
@@ -19,6 +20,10 @@ const ELEMENT_DATA: transporterDetails[] = [];
     styleUrls: ['./aside-manage-transport.component.scss']
 })
 export class AsideManageTransportComponent implements OnInit {
+    /** Instance of entry confirmation modal */
+    @ViewChild('transporterConfirmModal', { static: false }) public transporterConfirmModal: any;
+    /** Dialog Ref for update ledger */
+    public confirmModalDialogRef: any;
     /** This will use for displayed table columns*/
     public displayedColumns: string[] = ['name', 'transporterId', 'action'];
     /** Hold  transporter id*/
@@ -57,6 +62,7 @@ export class AsideManageTransportComponent implements OnInit {
         private changeDetection: ChangeDetectorRef,
         private formBuilder: UntypedFormBuilder,
         private invoiceServices: InvoiceService,
+        public dialog: MatDialog,
         private toasty: ToasterService) {
     }
 
@@ -199,6 +205,28 @@ export class AsideManageTransportComponent implements OnInit {
      * @memberof AsideManageTransportComponent
      */
     public deleteTransporter(transporter: any): void {
+        this.confirmModalDialogRef = this.dialog.open(this.transporterConfirmModal, {
+            position: {
+                right: '0',
+                top: '0'
+            },
+            width: '760px',
+            height: '100vh !important'
+        });
+
+        this.confirmModalDialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            console.log(response);
+
+            this.confirmDelete(transporter);
+        });
+
+    }
+
+    public cancelDialog(): void {
+        this.confirmModalDialogRef?.close();
+    }
+
+    public confirmDelete(transporter:any): void {
         this.isLoading = true;
         this.invoiceServices.deleteTransporterById(transporter.transporterId).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.isLoading = false;;

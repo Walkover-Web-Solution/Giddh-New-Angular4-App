@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, QueryList, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
-import { UntypedFormGroup, UntypedFormArray, UntypedFormBuilder, Validators, FormArray } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormArray, UntypedFormBuilder, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -45,7 +45,7 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
     @ViewChild("asideManageTransport") public asideManageTransport: TemplateRef<any>;
     /** Service dropdown instance */
     @ViewChildren('selectAccount') public selectAccount: QueryList<ElementRef>;
-    /** Form Group for group form */
+    /** UntypedFormArray Group for group UntypedFormArray */
     public branchTransferCreateEditForm: UntypedFormGroup;
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
@@ -73,6 +73,8 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
     public stockList: IOption[] = [];
     /** Hold  stock list data */
     public stockVariants: any[] = [];
+    /** Hold  stock unitsdata */
+    public stockUnits: any[] = [];
     /** Hold  transporter data details */
     public transporterPopupStatus: boolean = false;
     /** Hold  transporter id*/
@@ -156,13 +158,13 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
         totalPages: 0,
         query: ''
     };
-    /** Holds if form is valid or not */
+    /** Holds if UntypedFormArray is valid or not */
     public isValidForm: boolean = true;
     /** This will hold dropdown is active */
     public openCustomerDropdown: boolean = false;
     /** This will hold dropdown is active */
     public showContent: boolean = false;
-
+    public stockUnitResults: any[] = [];
 
     constructor(
         private route: ActivatedRoute,
@@ -280,7 +282,7 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This will be use for init source form group
+     * This will be use for init source UntypedFormArray group
      *
      * @return {*}  {UntypedFormGroup}
      * @memberof CreateBranchTransferComponent
@@ -306,7 +308,7 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
     }
 
     /**
-     *This will be use for destination form group
+     *This will be use for destination UntypedFormArray group
      *
      * @return {*}  {UntypedFormGroup}
      * @memberof CreateBranchTransferComponent
@@ -332,7 +334,7 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
     }
 
     /**
-     *This will be use for product form group
+     *This will be use for product UntypedFormArray group
      *
      * @return {*}  {UntypedFormGroup}
      * @memberof CreateBranchTransferComponent
@@ -412,7 +414,7 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Thiw will be use for submit main form
+     * Thiw will be use for submit main UntypedFormArray
      *
      * @memberof CreateBranchTransferComponent
      */
@@ -624,15 +626,15 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
     public openDropdown(entry: string, type: string): void {
         let formArrayLength;
         if (type === 'products') {
-            const productsArray = this.branchTransferCreateEditForm.get('products') as FormArray;
+            const productsArray = this.branchTransferCreateEditForm.get('products') as UntypedFormArray;
             formArrayLength = productsArray?.controls?.length;
         }
         if (type === 'sources') {
-            const sourcesArray = this.branchTransferCreateEditForm.get('sources') as FormArray;
+            const sourcesArray = this.branchTransferCreateEditForm.get('sources') as UntypedFormArray;
             formArrayLength = sourcesArray?.controls?.length;
         }
         if (type == 'destinations') {
-            const destinationsArray = this.branchTransferCreateEditForm.get('destinations') as FormArray;
+            const destinationsArray = this.branchTransferCreateEditForm.get('destinations') as UntypedFormArray;
             formArrayLength = destinationsArray?.controls?.length;
         }
         if (entry === 'first') {
@@ -850,10 +852,12 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
                     vehicleNumber: response.body?.transporterDetails.vehicleNumber
                 });
 
-                (productsArray as FormArray).clear();
+                (productsArray as UntypedFormArray).clear();
 
                 response.body?.products?.forEach(product => {
-                    const productFormGroup = this.initProductFormGroup(); // Create a new product form group
+                    console.log(product);
+
+                    const productFormGroup = this.initProductFormGroup(); // Create a new product UntypedFormArray group
                     productFormGroup.patchValue({
                         name: product.name,
                         hsnNumber: product.hsnNumber,
@@ -875,36 +879,13 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
                         rate: product.stockDetails.rate,
                         quantity: product.stockDetails.quantity
                     });
+                    console.log(productFormGroup);
+                    console.log('before',this.stockUnits);
 
-                    productsArray.push(productFormGroup);
-                });
+                    this.stockUnits.push({ label: productFormGroup.value.stockDetails.stockUnit, value: productFormGroup.value.stockDetails.stockUnitUniqueName });
+                    console.log('after,', this.stockUnits);
 
-                (productsArray as FormArray).clear();
-
-                response.body?.products?.forEach(product => {
-                    const productFormGroup = this.initProductFormGroup(); // Create a new product form group
-                    productFormGroup.patchValue({
-                        name: product.name,
-                        hsnNumber: product.hsnNumber,
-                        sacNumber: product.sacNumber,
-                        skuCode: product.skuCode,
-                        uniqueName: product.uniqueName,
-                        description: product.description
-                    });
-
-                    productFormGroup.get('variant').patchValue({
-                        name: product.variant.name,
-                        uniqueName: product.variant.uniqueName,
-                    });
-
-                    productFormGroup.get('stockDetails').patchValue({
-                        stockUnitUniqueName: product.stockDetails.stockUnitUniqueName,
-                        stockUnit: product.stockDetails.stockUnit,
-                        amount: product.stockDetails.amount,
-                        rate: product.stockDetails.rate,
-                        quantity: product.stockDetails.quantity
-                    });
-
+                    this.stockVariants.push({ label: productFormGroup.value.variant.name, value: productFormGroup.value.variant.uniqueName });
                     productsArray.push(productFormGroup);
                 });
 
@@ -1250,7 +1231,7 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This will be use for get onboarding form
+     * This will be use for get onboarding UntypedFormArray
      *
      * @param {*} countryCode
      * @memberof CreateBranchTransferComponent
@@ -1749,11 +1730,12 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
      * @param {number} index
      * @memberof CreateBranchTransferComponent
      */
-    public variantChanged(event: any, productFormGroup: any): void {
+    public variantChanged(event: any, productFormGroup: any, index: number): void {
         if (event) {
             const variantsFormGroup = productFormGroup?.get('variant') as UntypedFormGroup;
             variantsFormGroup.get('name')?.setValue(event.additional.name);
             variantsFormGroup.get('uniqueName')?.setValue(event.additional.uniqueName);
+            this.loadStockUnits(event, index);
         }
     }
 
@@ -1795,34 +1777,41 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
      */
     public selectProduct(event: any, productFormGroup: any, index?: number): void {
         if (event && event.additional) {
-            const productStockDetailsFormGroup = productFormGroup?.get('stockDetails') as UntypedFormGroup;
+            productFormGroup.get('name').setValue('');
+            productFormGroup.get('hsnNumber').setValue('');
+            productFormGroup.get('sacNumber').setValue('');
+            productFormGroup.get('showCodeType').setValue('');
+            productFormGroup.get('skuCode').setValue('');
+            productFormGroup.get('uniqueName').setValue('');
+            productFormGroup.get('description').setValue('');
+            productFormGroup.get('variant.name').setValue('');
+            productFormGroup.get('variant.uniqueName').setValue('');
+            productFormGroup.get('stockDetails.stockUnitUniqueName').setValue('');
+            productFormGroup.get('stockDetails.stockUnit').setValue('');
+            productFormGroup.get('stockDetails.amount').setValue('');
+            productFormGroup.get('stockDetails.rate').setValue('');
+            productFormGroup.get('stockDetails.quantity').setValue('');
             productFormGroup?.get('name')?.setValue(event.additional.name);
             productFormGroup?.get('uniqueName')?.setValue(event.additional.uniqueName);
-            productStockDetailsFormGroup.get('stockUnit')?.setValue(event.additional.stockUnit);
-            productStockDetailsFormGroup.get('stockUnitUniqueName')?.setValue(event.additional.stockUnit.uniqueName);
-            productStockDetailsFormGroup.get('rate')?.setValue(0);
-            this.inventoryService.GetStockDetails(event.additional.stockGroup?.uniqueName, event.value).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            this.inventoryService.getStockV2(event.value).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
                 if (response?.status === 'success') {
-                    productStockDetailsFormGroup.get('rate')?.setValue(response?.body?.purchaseAccountDetails?.unitRates[0]?.rate);
-                    if (!response?.body?.purchaseAccountDetails) {
-                        productStockDetailsFormGroup.get('stockUnitUniqueName')?.setValue(response?.body?.stockUnit?.uniqueName);
-                        productStockDetailsFormGroup.get('stockUnit')?.setValue(response?.body?.stockUnit?.code);
-                    } else {
-                        productStockDetailsFormGroup.get('stockUnitUniqueName')?.setValue(response?.body?.purchaseAccountDetails?.unitRates[0]?.stockUnitUniqueName);
-                        productStockDetailsFormGroup.get('stockUnit')?.setValue(response?.body?.purchaseAccountDetails?.unitRates[0]?.stockUnitCode);
-                    }
+                    this.stockUnitResults[index] = response.body.stockUnit;
                     if (productFormGroup.get('uniqueName')?.value) {
                         const variantsFormGroup = productFormGroup?.get('variant') as UntypedFormGroup;
                         variantsFormGroup?.get('name')?.setValue("");
                         variantsFormGroup?.get('uniqueName')?.setValue("");
-                        this.loadStockVariants(productFormGroup.get('uniqueName')?.value, index);
+                        this.stockVariants[index] = [];
+                        this.stockVariants[index] = response?.body?.variants.map(item => ({
+                            label: item.name,
+                            value: item.uniqueName,
+                            additional: item
+                        }));
                     }
                     this.calculateRowTotal(productFormGroup);
                 }
             });
-            productStockDetailsFormGroup.get('quantity')?.setValue(productStockDetailsFormGroup.get('quantity')?.value || 1);
-            productStockDetailsFormGroup.get('skuCode')?.setValue(event.additional.skuCode);
-
+            productFormGroup.get('stockDetails.quantity')?.setValue(productFormGroup.get('stockDetails.quantity')?.value || 1);
+            productFormGroup.get('stockDetails.skuCode')?.setValue(event.additional.skuCode);
             if (event.additional?.hsnNumber && event.additional?.sacNumber) {
                 if (this.inventorySettings?.manageInventory) {
                     productFormGroup.get('hsnNumber')?.setValue(event.additional.hsnNumber);
@@ -1862,23 +1851,47 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
         }
     }
 
-    /**
-     * This will use for get stock variants for stock
-     *
-     * @param {string} stockUniqueName
-     * @param {number} [index]
-     * @memberof CreateBranchTransferComponent
-     */
-    public loadStockVariants(stockUniqueName: string, index?: number): void {
-        this.ledgerService.loadStockVariants(stockUniqueName).pipe(
-            map((variants) => variants.map((variant: IVariant) => ({ label: variant.name, value: variant.uniqueName, additional: variant })))).subscribe(res => {
-                if (!this.stockVariants[index]) {
-                    this.stockVariants[index] = [];
-                }
-                this.stockVariants[index] = res;
-            });
+    public loadStockUnits(event: any, index: number): void {
+            if (!this.stockUnits[index]) {
+                this.stockUnits[index] = [];
+            }
+            const unitRates = event.additional.purchaseAccountDetails.unitRates.map(rate => ({
+                label: rate.stockUnitName,
+                value: rate.stockUnitCode,
+                additional: rate.rate
+            }));
 
+        const baseUnitExists = unitRates?.filter(rate => rate.value === this.stockUnitResults[index].uniqueName);
+            if (!baseUnitExists?.length) {
+                unitRates.push({
+                    label: this.stockUnitResults[index].name,
+                    value: this.stockUnitResults[index].uniqueName,
+                    additional: 1
+                });
+            }
+        const productArray = this.branchTransferCreateEditForm.get('products') as UntypedFormArray;
+        const productFormGroup = productArray.at(index) as UntypedFormGroup;
+        this.unitChanged(unitRates[0], productFormGroup);
+        this.stockUnits[index] = unitRates;
     }
+
+    /**
+* This will be use for variant change selection
+*
+* @param {*} event
+* @param {*} product
+* @param {number} index
+* @memberof CreateBranchTransferComponent
+*/
+    public unitChanged(event: any, productFormGroup: any): void {
+        if (event) {
+            productFormGroup.get('stockDetails.stockUnit')?.setValue(event.label);
+            productFormGroup.get('stockDetails.stockUnitUniqueName')?.setValue(event.value);
+            productFormGroup.get("stockDetails.rate")?.setValue(event.additional);
+            this.calculateRowTotal(productFormGroup);
+        }
+    }
+
 
     /**
      * This will be use for calculating row total
@@ -1974,14 +1987,14 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
      * @memberof CreateBranchTransferComponent
      */
     public toggleTransporterModel(): void {
-      let dialgRef=   this.dialog.open(this.asideManageTransport, {
+        let dialgRef = this.dialog.open(this.asideManageTransport, {
             position: {
                 right: '0',
                 top: '0'
             },
             width: '760px',
             height: '100vh !important'
-      });
+        });
         dialgRef.afterClosed().pipe(take(1)).subscribe(response => {
             this.getTransportersList();
         });
