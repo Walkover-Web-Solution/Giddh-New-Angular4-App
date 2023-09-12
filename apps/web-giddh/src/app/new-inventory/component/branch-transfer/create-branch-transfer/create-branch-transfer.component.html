@@ -108,18 +108,6 @@
                                                 [required]="true"
                                             >
                                             </dropdown-field>
-                                                <select-field
-                                                    *ngIf="
-                                                        stockVariants[0]?.length > 1 && branchTransferCreateEditForm?.get('products.0.uniqueName').value
-                                                    "
-                                                    [cssClass]="'form-control mat-field-border'"
-                                                    [placeholder]="localeData?.variant_name"
-                                                    (selectedOption)="variantChanged($event, product, 0)"
-                                                    [options]="stockVariants[0]"
-                                                    [name]="'variantName' + 0"
-                                                    [defaultValue]="product.get('variant.name').value"
-                                                >
-                                                </select-field>
                                             <div formArrayName="products">
                                                 <div [formGroupName]="0">
                                                     <div class="mr-b15 mr-t15">
@@ -560,18 +548,6 @@
                                                 "
                                             >
                                             </dropdown-field>
-                                                    <select-field
-                                                    *ngIf="
-                                                        stockVariants[0]?.length > 1 && branchTransferCreateEditForm?.get('products.0.uniqueName').value
-                                                    "
-                                                    [cssClass]="'form-control mat-field-border'"
-                                                    [placeholder]="localeData?.variant_name"
-                                                    (selectedOption)="variantChanged($event, product, 0)"
-                                                    [options]="stockVariants[0]"
-                                                    [name]="'variantName' + 0"
-                                                    [defaultValue]="product.get('variant.name').value"
-                                                >
-                                                </select-field>
                                             <div formArrayName="products">
                                                 <div [formGroupName]="0">
                                                     <div class="mr-b15 mr-t15">
@@ -1667,17 +1643,10 @@
                                                                     formControlName="quantity"
                                                                 >
                                                                 </text-field>
-                                                            </div>
-                                                            <div *ngIf="activeIndx === i" class="w-100 mr-b15 mr-t15">
-                                                                <select-field
-                                                                    [cssClass]="'form-control mat-field-border'"
-                                                                    [placeholder]="'Stock Units'"
-                                                                    (selectedOption)="unitChanged($event, product, i)"
-                                                                    [options]="stockUnits[i]"
-                                                                    [name]="'unitName' + i"
-                                                                    [defaultValue]="stockUnits[0]?.label"
-                                                                >
-                                                                </select-field>
+                                                                <span class="text-capitalize">
+                                                                    {{
+                                                                    product.get("stockDetails.stockUnit")?.value
+                                                                    }}</span>
                                                             </div>
                                                             <div *ngIf="activeIndx !== i">
                                                                 <div class="text-right">

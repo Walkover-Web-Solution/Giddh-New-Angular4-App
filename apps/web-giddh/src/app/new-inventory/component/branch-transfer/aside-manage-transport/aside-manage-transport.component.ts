@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { PAGINATION_LIMIT } from 'apps/web-giddh/src/app/app.constant';
 import { IAllTransporterDetails } from 'apps/web-giddh/src/app/models/api-models/Invoice';
@@ -19,8 +19,6 @@ const ELEMENT_DATA: transporterDetails[] = [];
     styleUrls: ['./aside-manage-transport.component.scss']
 })
 export class AsideManageTransportComponent implements OnInit {
-    /** Emits modal close event */
-    @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
     /** This will use for displayed table columns*/
     public displayedColumns: string[] = ['name', 'transporterId', 'action'];
     /** Hold  transporter id*/
@@ -85,15 +83,6 @@ export class AsideManageTransportComponent implements OnInit {
         });
     }
 
-    /**
-     * Closes aside pane
-     *
-     *
-     * @memberof AsideManageTransportComponent
-     */
-    public closeAsidePane(): void {
-        this.closeAsideEvent.emit();
-    }
 
     /**
     * This will use for page change
@@ -121,7 +110,6 @@ export class AsideManageTransportComponent implements OnInit {
             this.invoiceServices.addEwayTransporter(generateTransporterForm).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response && response.status === "success" && response.body) {
                     this.toasty.showSnackBar("success", 'Transported created successfully');
-                    this.closeAsideEvent.emit();
                     this.clearTransportForm();
                     this.getTransportersList();
                 } else {

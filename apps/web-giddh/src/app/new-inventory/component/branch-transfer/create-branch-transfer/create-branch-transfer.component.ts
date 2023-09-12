@@ -19,11 +19,9 @@ import { GeneralService } from 'apps/web-giddh/src/app/services/general.service'
 import { InventoryService } from 'apps/web-giddh/src/app/services/inventory.service';
 import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service';
 import { LedgerService } from 'apps/web-giddh/src/app/services/ledger.service';
-import { ManufacturingService } from 'apps/web-giddh/src/app/services/manufacturing.service';
 import { SettingsWarehouseService } from 'apps/web-giddh/src/app/services/settings.warehouse.service';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
-import { giddhRoundOff } from 'apps/web-giddh/src/app/shared/helpers/helperFunctions';
 import { transporterModes } from 'apps/web-giddh/src/app/shared/helpers/transporterModes';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import { IOption } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface';
@@ -75,8 +73,6 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
     public stockList: IOption[] = [];
     /** Hold  stock list data */
     public stockVariants: any[] = [];
-    /** Hold  stock unitsdata */
-    public stockUnits: any[] = [];
     /** Hold  transporter data details */
     public transporterPopupStatus: boolean = false;
     /** Hold  transporter id*/
@@ -183,8 +179,7 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
         private warehouseService: SettingsWarehouseService,
         public dialog: MatDialog,
         private invoiceServices: InvoiceService,
-        private ledgerService: LedgerService,
-        private manufacturingService: ManufacturingService
+        private ledgerService: LedgerService
     ) {
     }
 
@@ -679,8 +674,6 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
                 page
             }
             this.inventoryService.getStocksV2(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
-                console.log(data);
-
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
                         return {
@@ -857,10 +850,8 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
                     vehicleNumber: response.body?.transporterDetails.vehicleNumber
                 });
 
-                // Clear existing form groups in productsArray
                 (productsArray as FormArray).clear();
 
-                // Iterate over the response products and add them to productsArray
                 response.body?.products?.forEach(product => {
                     const productFormGroup = this.initProductFormGroup(); // Create a new product form group
                     productFormGroup.patchValue({
@@ -885,14 +876,11 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
                         quantity: product.stockDetails.quantity
                     });
 
-                    // Push the product form group into the productsArray
                     productsArray.push(productFormGroup);
                 });
 
-                // Clear existing form groups in productsArray
                 (productsArray as FormArray).clear();
 
-                // Iterate over the response products and add them to productsArray
                 response.body?.products?.forEach(product => {
                     const productFormGroup = this.initProductFormGroup(); // Create a new product form group
                     productFormGroup.patchValue({
@@ -917,7 +905,6 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
                         quantity: product.stockDetails.quantity
                     });
 
-                    // Push the product form group into the productsArray
                     productsArray.push(productFormGroup);
                 });
 
@@ -1312,6 +1299,7 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
         this.asideMenuStateForProductService.afterClosed().pipe(take(1)).subscribe(response => {
             document.querySelector("body").classList.remove("new-branch-transfer-page");
         });
+
 
         if (!idx) {
             this.loadDefaultStocksSuggestions();
@@ -1761,52 +1749,11 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
      * @param {number} index
      * @memberof CreateBranchTransferComponent
      */
-    public variantChanged(event: any, productFormGroup: any, index: number): void {
+    public variantChanged(event: any, productFormGroup: any): void {
         if (event) {
             const variantsFormGroup = productFormGroup?.get('variant') as UntypedFormGroup;
             variantsFormGroup.get('name')?.setValue(event.additional.name);
             variantsFormGroup.get('uniqueName')?.setValue(event.additional.uniqueName);
-            this.getRateForStock(event , productFormGroup, index);
-        }
-    }
-
-    public getRateForStock(event:any, productFormGroup: any, index: number): void {
-        let productVariantDetailsFormGroup = productFormGroup.get('variant') as UntypedFormGroup;
-        let productStockDetailsFormGroup = productFormGroup.get('stockDetails') as UntypedFormGroup;
-        let stockUniqueName = productFormGroup.get('uniqueName')?.value;
-        let model = {
-            quantity: 1,
-            stockUnitUniqueName: productStockDetailsFormGroup.get('stockUnitUniqueName')?.value,
-            variant: {
-                uniqueName: productVariantDetailsFormGroup.get('uniqueName')?.value
-            }
-        }
-        this.manufacturingService.getRateForStockV2(stockUniqueName, model).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response?.status === "success" && response.body) {
-                productStockDetailsFormGroup.get('quantity')?.setValue(1);
-                productStockDetailsFormGroup.get('rate')?.setValue(response.body.rate);
-                let amount = productStockDetailsFormGroup.get('rate')?.value * productStockDetailsFormGroup.get('quantity')?.value;
-                let value = isNaN(amount) ? 0 : giddhRoundOff(amount, this.giddhBalanceDecimalPlaces);
-                productStockDetailsFormGroup.get('amount')?.setValue(value);
-                productStockDetailsFormGroup.get('amount')?.setValue(amount);
-            }
-
-            this.calculateOverallTotal();
-        });
-    }
-
-    /**
- * This will be use for variant change selection
- *
- * @param {*} event
- * @param {*} product
- * @param {number} index
- * @memberof CreateBranchTransferComponent
- */
-    public unitChanged(event: any, productFormGroup: any): void {
-        if (event) {
-            productFormGroup.get('stockUnit')?.setValue(event.additional.stockUnit);
-            productFormGroup.get('stockUnitUniqueName')?.setValue(event.additional.stockUnit.uniqueName);
         }
     }
 
@@ -1846,84 +1793,74 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
      * @param {number} [index]
      * @memberof CreateBranchTransferComponent
      */
-    // public selectProduct(event: any, productFormGroup: any, index?: number): void {
-    //     if (event && event.additional) {
-    //         const productStockDetailsFormGroup = productFormGroup.get('stockDetails') as UntypedFormGroup;
-    //         productFormGroup.get('name')?.setValue(event.additional.name);
-    //         productFormGroup.get('uniqueName')?.setValue(event.additional.uniqueName);
-    //         productStockDetailsFormGroup.get('stockUnit')?.setValue(event.additional.stockUnits[0].code);
-    //         productStockDetailsFormGroup.get('stockUnitUniqueName')?.setValue(event.additional.stockUnits[0].uniqueName);
-    //         // this.inventoryService.GetStockDetails(event.additional.stockGroup?.uniqueName, event.value).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
-    //             // console.log(response);
+    public selectProduct(event: any, productFormGroup: any, index?: number): void {
+        if (event && event.additional) {
+            const productStockDetailsFormGroup = productFormGroup.get('stockDetails') as UntypedFormGroup;
+            productFormGroup.get('name')?.setValue(event.additional.name);
+            productFormGroup.get('uniqueName')?.setValue(event.additional.uniqueName);
+            productStockDetailsFormGroup.get('stockUnit')?.setValue(event.additional.stockUnit);
+            productStockDetailsFormGroup.get('stockUnitUniqueName')?.setValue(event.additional.stockUnit.uniqueName);
+            productStockDetailsFormGroup.get('rate')?.setValue(0);
+            this.inventoryService.GetStockDetails(event.additional.stockGroup?.uniqueName, event.value).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+                if (response?.status === 'success') {
+                    productStockDetailsFormGroup.get('rate')?.setValue(response?.body?.purchaseAccountDetails?.unitRates[0]?.rate);
+                    if (!response?.body?.purchaseAccountDetails) {
+                        productStockDetailsFormGroup.get('stockUnitUniqueName')?.setValue(response?.body?.stockUnit?.uniqueName);
+                        productStockDetailsFormGroup.get('stockUnit')?.setValue(response?.body?.stockUnit?.code);
+                    } else {
+                        productStockDetailsFormGroup.get('stockUnitUniqueName')?.setValue(response?.body?.purchaseAccountDetails?.unitRates[0]?.stockUnitUniqueName);
+                        productStockDetailsFormGroup.get('stockUnit')?.setValue(response?.body?.purchaseAccountDetails?.unitRates[0]?.stockUnitCode);
+                    }
+                    if (productFormGroup.get('uniqueName')?.value) {
+                        const variantsFormGroup = productFormGroup?.get('variant') as UntypedFormGroup;
+                        variantsFormGroup?.get('name')?.setValue("");
+                        variantsFormGroup?.get('uniqueName')?.setValue("");
+                        this.loadStockVariants(productFormGroup.get('uniqueName')?.value, index);
+                    }
+                    this.calculateRowTotal(productFormGroup);
+                }
+            });
+            productStockDetailsFormGroup.get('quantity')?.setValue(productStockDetailsFormGroup.get('quantity')?.value || 1);
+            productStockDetailsFormGroup.get('skuCode')?.setValue(event.additional.skuCode);
 
-    //             // if (response?.status === 'success') {
-    //                 // productStockDetailsFormGroup.get('rate')?.setValue(response?.body?.purchaseAccountDetails?.unitRates[0]?.rate);
-    //                 // if (!response?.body?.purchaseAccountDetails) {
-    //                 //     productStockDetailsFormGroup.get('stockUnitUniqueName')?.setValue(response?.body?.stockUnit?.uniqueName);
-    //                 //     productStockDetailsFormGroup.get('stockUnit')?.setValue(response?.body?.stockUnit?.code);
-    //                 // } else {
-    //                 //     productStockDetailsFormGroup.get('stockUnitUniqueName')?.setValue(response?.body?.purchaseAccountDetails?.unitRates[0]?.stockUnitUniqueName);
-    //                 //     productStockDetailsFormGroup.get('stockUnit')?.setValue(response?.body?.purchaseAccountDetails?.unitRates[0]?.stockUnitCode);
-    //                 // }
-    //                 if (productFormGroup.get('uniqueName')?.value) {
-    //                    let  units = event?.additional?.stockUnits?.map(item => ({
-    //                         label: item.name,
-    //                         value: item.code,
-    //                         additional: item
-    //                     }));
-    //                     if (!this.stockUnits[index]) {
-    //                         this.stockVariants[index] = [];
-    //                     }
-    //                     this.stockUnits[index] = units;
-    //                     const variantsFormGroup = productFormGroup?.get('variant') as UntypedFormGroup;
-    //                     variantsFormGroup?.get('name')?.setValue("");
-    //                     variantsFormGroup?.get('uniqueName')?.setValue("");
-    //                     this.loadStockVariants(productFormGroup.get('uniqueName')?.value, index);
-    //                 }
-    //                 this.calculateRowTotal(productFormGroup);
-    //             // }
-    //         // });
-    //         productStockDetailsFormGroup.get('quantity')?.setValue(productStockDetailsFormGroup.get('quantity')?.value || 1);
-    //         productStockDetailsFormGroup.get('skuCode')?.setValue(event.additional.skuCode);
+            if (event.additional?.hsnNumber && event.additional?.sacNumber) {
+                if (this.inventorySettings?.manageInventory) {
+                    productFormGroup.get('hsnNumber')?.setValue(event.additional.hsnNumber);
+                    productFormGroup.get('showCodeType')?.setValue("hsn");
+                } else {
+                    productFormGroup.get('sacNumber')?.setValue(event.additional.sacNumber);
+                    productFormGroup.get('showCodeType')?.setValue("sac");
+                }
+            } else if (event.additional?.hsnNumber && !event.additional?.sacNumber) {
+                productFormGroup.get('hsnNumber')?.setValue(event.additional.hsnNumber);
+                productFormGroup.get('showCodeType')?.setValue("hsn");
+            } else if (!event.additional?.hsnNumber && event.additional?.sacNumber) {
+                productFormGroup.get('sacNumber')?.setValue(event.additional.sacNumber);
+                productFormGroup.get('showCodeType')?.setValue("sac");
+            } else if (!event.additional?.hsnNumber && !event.additional?.sacNumber) {
+                if (this.inventorySettings?.manageInventory) {
+                    productFormGroup.get('hsnNumber')?.setValue("");
+                    productFormGroup.get('showCodeType')?.setValue("hsn");
+                } else {
+                    productFormGroup.get('sacNumber')?.setValue("");
+                    productFormGroup.get('showCodeType')?.setValue("sac");
+                }
+            }
 
-    //         if (event.additional?.hsnNumber && event.additional?.sacNumber) {
-    //             if (this.inventorySettings?.manageInventory) {
-    //                 productFormGroup.get('hsnNumber')?.setValue(event.additional.hsnNumber);
-    //                 productFormGroup.get('showCodeType')?.setValue("hsn");
-    //             } else {
-    //                 productFormGroup.get('sacNumber')?.setValue(event.additional.sacNumber);
-    //                 productFormGroup.get('showCodeType')?.setValue("sac");
-    //             }
-    //         } else if (event.additional?.hsnNumber && !event.additional?.sacNumber) {
-    //             productFormGroup.get('hsnNumber')?.setValue(event.additional.hsnNumber);
-    //             productFormGroup.get('showCodeType')?.setValue("hsn");
-    //         } else if (!event.additional?.hsnNumber && event.additional?.sacNumber) {
-    //             productFormGroup.get('sacNumber')?.setValue(event.additional.sacNumber);
-    //             productFormGroup.get('showCodeType')?.setValue("sac");
-    //         } else if (!event.additional?.hsnNumber && !event.additional?.sacNumber) {
-    //             if (this.inventorySettings?.manageInventory) {
-    //                 productFormGroup.get('hsnNumber')?.setValue("");
-    //                 productFormGroup.get('showCodeType')?.setValue("hsn");
-    //             } else {
-    //                 productFormGroup.get('sacNumber')?.setValue("");
-    //                 productFormGroup.get('showCodeType')?.setValue("sac");
-    //             }
-    //         }
-
-    //         if (this.transferType === 'senders') {
-    //             const sourcesArray = this.branchTransferCreateEditForm.get('sources') as UntypedFormArray;
-    //             const sourceFormGroup = sourcesArray?.at(index) as UntypedFormGroup;
-    //             const sourcesWarehouseFormGroup = sourceFormGroup.get('warehouse') as UntypedFormGroup;
-    //             const destinationsArray = this.branchTransferCreateEditForm.get('destinations') as UntypedFormArray;
-    //             const destinationsFormGroup = destinationsArray?.at(index) as UntypedFormGroup;
-    //             const destinationsWarehouseFormGroup = destinationsFormGroup.get('warehouse') as UntypedFormGroup;
-    //             destinationsWarehouseFormGroup.get('stockDetails.stockUnit')?.setValue(event.additional.stockUnit.code);
-    //             destinationsWarehouseFormGroup.get('stockDetails.stockUnitUniqueName')?.setValue(event.additional.stockUnit.uniqueName);
-    //             sourcesWarehouseFormGroup.get('stockDetails.stockUnit')?.setValue(event.additional.stockUnit.code);
-    //             sourcesWarehouseFormGroup.get('stockDetails.stockUnitUniqueName')?.setValue(event.additional.stockUnit.uniqueName);
-    //         }
-    //     }
-    // }
+            if (this.transferType === 'senders') {
+                const sourcesArray = this.branchTransferCreateEditForm.get('sources') as UntypedFormArray;
+                const sourceFormGroup = sourcesArray?.at(index) as UntypedFormGroup;
+                const sourcesWarehouseFormGroup = sourceFormGroup.get('warehouse') as UntypedFormGroup;
+                const destinationsArray = this.branchTransferCreateEditForm.get('destinations') as UntypedFormArray;
+                const destinationsFormGroup = destinationsArray?.at(index) as UntypedFormGroup;
+                const destinationsWarehouseFormGroup = destinationsFormGroup.get('warehouse') as UntypedFormGroup;
+                destinationsWarehouseFormGroup.get('stockDetails.stockUnit')?.setValue(event.additional.stockUnit.code);
+                destinationsWarehouseFormGroup.get('stockDetails.stockUnitUniqueName')?.setValue(event.additional.stockUnit.uniqueName);
+                sourcesWarehouseFormGroup.get('stockDetails.stockUnit')?.setValue(event.additional.stockUnit.code);
+                sourcesWarehouseFormGroup.get('stockDetails.stockUnitUniqueName')?.setValue(event.additional.stockUnit.uniqueName);
+            }
+        }
+    }
 
     /**
      * This will use for get stock variants for stock
@@ -2037,13 +1974,16 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
      * @memberof CreateBranchTransferComponent
      */
     public toggleTransporterModel(): void {
-        this.dialog.open(this.asideManageTransport, {
+      let dialgRef=   this.dialog.open(this.asideManageTransport, {
             position: {
                 right: '0',
                 top: '0'
             },
             width: '760px',
             height: '100vh !important'
+      });
+        dialgRef.afterClosed().pipe(take(1)).subscribe(response => {
+            this.getTransportersList();
         });
     }
 
@@ -2055,15 +1995,6 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
     public closeAsideMenuProductServiceModal(): void {
         this.asideMenuStateForProductService?.close();
         this.loadDefaultStocksSuggestions();
-    }
-
-    /**
-     * This will be use for close aside modal dialog
-     *
-     * @memberof CreateBranchTransferComponent
-     */
-    public closeAsideTransporterModal(): void {
-        this.getTransportersList();
     }
 
     /**
