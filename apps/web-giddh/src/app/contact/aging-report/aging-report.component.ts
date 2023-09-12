@@ -401,12 +401,13 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Branch change handler
-     *
-     * @memberof AgingReportComponent
-     */
+    * Branch change handler
+    *
+    * @memberof AgingReportComponent
+    */
     public handleBranchChange(selectedEntity: any): void {
         this.currentBranch.name = selectedEntity?.label;
+        this.currentBranch.uniqueName = selectedEntity?.value;
         this.getDueReport();
     }
 
@@ -501,7 +502,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
             q: this.dueAmountReportRequest.q
         }
         this.isLoading = true;
-        this.agingReportService.exportAgingReport(exportData).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.agingReportService.exportAgingReport(exportData, this.currentBranch ? this.currentBranch.uniqueName : "").pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.isLoading = false;
             if (response?.status === 'success') {
                 this.toaster.showSnackBar("success", response?.body);
@@ -511,5 +512,4 @@ export class AgingReportComponent implements OnInit, OnDestroy {
             }
         });
     }
-
 }
