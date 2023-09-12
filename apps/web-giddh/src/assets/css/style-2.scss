@@ -14524,3 +14524,11 @@ activity-compare-json {
 .mat-snack-bar-wrapper {
     z-index: 99999 !important;
 }
+/*---- aside-button ----*/
+aside-menu-product-service {
+    .mat-mdc-outlined-button {
+        &.mat-unthemed {
+            color: var(--color-list) !important;
+        }
+    }
+}

@@ -2059,7 +2059,7 @@
                                                     (click)="addBlankProductsForm()"
                                                     *ngIf="transferType === 'products'"
                                                 >
-                                                    <i class="icon-plus"></i> {{ localeData?.add_multiple_products }}</a
+                                                    {{ localeData?.add_multiple_products }}</a
                                                 >
                                             </div>
                                         </td>
@@ -2151,7 +2151,7 @@
                     <div class="row position-bottom">
                         <div class="col-xl-8 col-lg-10 col-sm-12 mb-4">
                             <div class="action-btn-wrapper text-right w-100 d-flex column-gap1 justify-content-end">
-                                <button mat-stroked-button (click)="resetForm()">Clear</button>
+                                <button mat-stroked-button (click)="resetForm()" *ngIf="!isUpdateMode">  {{commonLocaleData?.app_clear}}</button>
                                 <button *ngIf="isUpdateMode" mat-stroked-button (click)="navigateToList()">
                                     {{ commonLocaleData?.app_cancel }}
                                 </button>
