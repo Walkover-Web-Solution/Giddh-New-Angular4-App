@@ -3,6 +3,7 @@
     [file]="'inventory/branch-transfer'"
     (commonLocaleData)="commonLocaleData = $event"
     (localeData)="localeData = $event"
+
 >
     <div class="aside-pane">
         <div class="header-create-unit">
@@ -136,13 +137,3 @@
         </mat-dialog-content>
     </div>
 </ng-container>
-    <ng-template #transporterConfirmModal>
-        <div class="modal-dialog modal-md">
-            <div class="modal-content">
-                <confirm-modal [title]="commonLocaleData?.app_confirm" [body]="'Are you sure want to delete?'"
-                    [permanentlyDeleteMessage]="' '" (cancelCallBack)="cancelDialog()"
-                    (successCallBack)="confirmDialog()">
-                </confirm-modal>
-            </div>
-        </div>
-    </ng-template>

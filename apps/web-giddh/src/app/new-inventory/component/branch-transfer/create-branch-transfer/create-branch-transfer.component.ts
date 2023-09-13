@@ -434,7 +434,6 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
     public submit(): void {
         this.branchTransferCreateEditForm.removeControl('myCurrentCompany');
         this.isValidForm = !this.branchTransferCreateEditForm.invalid;
-        console.log(this.isValidForm, this.branchTransferCreateEditForm)
         if (this.isValidForm) {
             this.isLoading = true;
 
@@ -461,11 +460,12 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
             const destinationsArray = this.branchTransferCreateEditForm.get('destinations') as UntypedFormArray;
             for (let i = 0; i < destinationsArray.length; i++) {
                 const destinationsFormGroup = destinationsArray.at(i) as UntypedFormGroup;
-                const destinationsStockDetails = destinationsFormGroup?.get('warehouse') as UntypedFormGroup;
-                if (destinationsStockDetails && destinationsStockDetails?.get('address').value) {
-                    const [address, pin] = destinationsStockDetails?.get('address').value?.split('\nPIN: ');
-                    destinationsStockDetails.get('address')?.patchValue(address);
-                    destinationsStockDetails.get('pincode')?.patchValue(pin);
+                const destianationsWarehouseFormGroup = destinationsFormGroup?.get('warehouse') as UntypedFormGroup;
+
+                if (destianationsWarehouseFormGroup && destianationsWarehouseFormGroup?.get('address').value) {
+                    const [address, pin] = destianationsWarehouseFormGroup?.get('address').value?.split('\nPIN: ');
+                    destianationsWarehouseFormGroup.get('address')?.patchValue(address);
+                    destianationsWarehouseFormGroup.get('pincode')?.patchValue(pin);
                 }
             }
             const productsArray = this.branchTransferCreateEditForm.get('products') as UntypedFormArray;
@@ -475,6 +475,25 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
                     productFormGroup.get('sacNumber').patchValue("");
                 } else {
                     productFormGroup.get('hsnNumber').patchValue("");
+                }
+            }
+            if (this.transferType === 'senders') {
+                const sourcesArray = this.branchTransferCreateEditForm.get('sources') as UntypedFormArray;
+                const sourcesFormGroup = sourcesArray?.at(0) as UntypedFormGroup;
+                const sourcesWarehouseFormGroup = sourcesFormGroup?.get('warehouse.stockDetails') as UntypedFormGroup;
+                const destinationsArray = this.branchTransferCreateEditForm.get('destinations') as UntypedFormArray;
+                const destinationsFormGroup = destinationsArray?.at(0) as UntypedFormGroup;
+                const destianationsWarehouseFormGroup = destinationsFormGroup?.get('warehouse.stockDetails') as UntypedFormGroup;
+
+                if (destianationsWarehouseFormGroup.get('amount').value === null) {
+                    destianationsWarehouseFormGroup.get('amount').patchValue(sourcesWarehouseFormGroup.get('amount').value);
+                    destianationsWarehouseFormGroup.get('quantity').patchValue(sourcesWarehouseFormGroup.get('quantity').value);
+                    destianationsWarehouseFormGroup.get('rate').patchValue(sourcesWarehouseFormGroup.get('rate').value);
+                }
+                if (sourcesWarehouseFormGroup.get('amount').value === null) {
+                    sourcesWarehouseFormGroup.get('amount').patchValue(destianationsWarehouseFormGroup.get('amount').value);
+                    sourcesWarehouseFormGroup.get('quantity').patchValue(destianationsWarehouseFormGroup.get('quantity').value);
+                    sourcesWarehouseFormGroup.get('rate').patchValue(destianationsWarehouseFormGroup.get('rate').value);
                 }
             }
             if (this.editBranchTransferUniqueName) {
@@ -1495,7 +1514,6 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
             this.resetSourceWarehouses(index, true);
             if (destinationsFormGroup && destinationsWarehouseFormGroup &&
                 destinationsWarehouseFormGroup.get('uniqueName')?.value === null) {
-                // Source and destination warehouses are cleared, reset both warehouses
                 this.resetDestinationWarehouses(index, true);
             }
         } else {
@@ -1809,6 +1827,7 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
                             const selectedVariant = this.stockVariants[index].find(variant => variant.value === variantsFormGroup.get('uniqueName')?.value);
                             this.variantChanged(selectedVariant, productFormGroup, index)
                         }
+
                     }
                     this.calculateRowTotal(productFormGroup);
                 }
@@ -1840,6 +1859,7 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
             }
 
             if (this.transferType === 'senders') {
+
                 const sourcesArray = this.branchTransferCreateEditForm.get('sources') as UntypedFormArray;
                 const sourceFormGroup = sourcesArray?.at(index) as UntypedFormGroup;
                 const sourcesWarehouseFormGroup = sourceFormGroup.get('warehouse') as UntypedFormGroup;
@@ -1858,11 +1878,20 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
         if (!this.stockUnits[index]) {
             this.stockUnits[index] = [];
         }
-        const unitRates = event.additional.purchaseAccountDetails.unitRates.map(rate => ({
-            label: rate.stockUnitName,
-            value: rate.stockUnitCode,
-            additional: rate.rate
-        }));
+        let unitRates = [];
+        if (event.additional.purchaseAccountDetails) {
+            unitRates = event.additional.purchaseAccountDetails.unitRates.map(rate => ({
+                label: rate.stockUnitName,
+                value: rate.stockUnitCode,
+                additional: rate.rate
+            }));
+        } else {
+            unitRates.push({
+                label: this.stockUnitResults[index].name,
+                value: this.stockUnitResults[index].uniqueName,
+                additional: 1
+            })
+        }
 
         const baseUnitExists = unitRates?.filter(rate => rate.value === this.stockUnitResults[index].uniqueName);
         if (!baseUnitExists?.length) {
