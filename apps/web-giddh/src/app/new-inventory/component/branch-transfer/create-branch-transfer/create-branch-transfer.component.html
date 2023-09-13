@@ -95,6 +95,7 @@
                                                 [placeholder]="localeData?.select_product_name"
                                                 [options]="stockList"
                                                 (selectedOption)="
+                                                    branchTransferCreateEditForm.get('products.0').reset();
                                                     selectProduct(
                                                         $event,
                                                         branchTransferCreateEditForm.get('products.0'),
@@ -110,6 +111,38 @@
                                             </dropdown-field>
                                             <div formArrayName="products">
                                                 <div [formGroupName]="0">
+                                                    <div class="mr-b15 mr-t15">
+                                                        <span formGroupName="variant" class="w-100">
+                                                            <dropdown-field
+                                                                *ngIf="
+                                                                    branchTransferCreateEditForm?.get(
+                                                                        'products.0.uniqueName'
+                                                                    ).value
+                                                                "
+                                                                [name]="'variantName'"
+                                                                [label]="
+                                                                    commonLocaleData?.app_variant +
+                                                                    ' ' +
+                                                                    commonLocaleData?.app_transporter_table_name
+                                                                "
+                                                                (selectedOption)="
+                                                                    variantChanged(
+                                                                        $event,
+                                                                        branchTransferCreateEditForm?.get('products.0'),
+                                                                        0
+                                                                    )
+                                                                "
+                                                                [options]="stockVariants[0]"
+                                                                [name]="'variantName'"
+                                                                [defaultValue]="
+                                                                    branchTransferCreateEditForm?.get(
+                                                                        'products.0.variant.name'
+                                                                    ).value
+                                                                "
+                                                            >
+                                                            </dropdown-field>
+                                                        </span>
+                                                    </div>
                                                     <div class="mr-b15 mr-t15">
                                                         <input-field
                                                             [type]="'text'"
@@ -144,6 +177,7 @@
                                                                 [name]="'hsnSacNumber'"
                                                                 [label]="
                                                                     commonLocaleData?.app_hsn +
+                                                                    ' ' +
                                                                     commonLocaleData?.app_number
                                                                 "
                                                                 formControlName="hsnNumber"
@@ -165,6 +199,7 @@
                                                                 [name]="'hsnSacNumber'"
                                                                 [label]="
                                                                     commonLocaleData?.app_sac +
+                                                                    ' ' +
                                                                     commonLocaleData?.app_number
                                                                 "
                                                                 formControlName="sacNumber"
@@ -179,7 +214,7 @@
                                         </div>
                                         <ng-container *ngIf="transferType === 'products'">
                                             <div>
-                                                <div class="mr-b15 position-relative info-field hello sender name">
+                                                <div class="mr-b15 position-relative info-field receipt-note">
                                                     <dropdown-field
                                                         [name]="'senderName'"
                                                         [label]="localeData?.sender_name"
@@ -200,12 +235,11 @@
                                                                 ?.value
                                                         "
                                                         [allowValueReset]="true"
-                                                        (onClear)="resetSenderName($event)"
                                                     >
                                                     </dropdown-field>
                                                     <i
                                                         *ngIf="
-                                                            destinationWarehouses[
+                                                            senderWarehouses[
                                                                 branchTransferCreateEditForm.get('sources.0.uniqueName')
                                                                     ?.value
                                                             ]?.length !==
@@ -214,7 +248,7 @@
                                                                     ?.value
                                                             ]?.length
                                                         "
-                                                        class="icon-info"
+                                                        class="icon-info three"
                                                         matTooltip="{{ branchTransferInfoText }}"
                                                     >
                                                     </i>
@@ -315,7 +349,7 @@
                                         </ng-container>
                                     </div>
                                     <div class="col-lg-6">
-                                        <div class="position-relative info-field">
+                                        <div class="mr-b15">
                                             <input-field
                                                 *ngIf="(isBranch || isCompanyWithSingleBranch) && !isUpdateMode"
                                                 [name]="'myCurrentCompany'"
@@ -333,9 +367,8 @@
                                         </div>
                                         <div formArrayName="destinations">
                                             <div [formGroupName]="0">
-                                                <div class="mr-b15 position-relative info-field">
+                                                <div *ngIf="isUpdateMode" class="mr-b15 position-relative info-field">
                                                     <dropdown-field
-                                                        *ngIf="isUpdateMode"
                                                         [name]="'receiverName'"
                                                         [label]="localeData?.receiver_name"
                                                         [placeholder]="localeData?.select_receiver_name"
@@ -359,20 +392,22 @@
                                                     >
                                                     </dropdown-field>
                                                     <i
-                                                    *ngIf="
-                                                        destinationWarehouses[
-                                                            branchTransferCreateEditForm.get('destinations.0.uniqueName')
-                                                                ?.value
-                                                        ]?.length !==
-                                                        allWarehouses[
-                                                            branchTransferCreateEditForm.get('destinations.0.uniqueName')
-                                                                ?.value
-                                                        ]?.length
-                                                    "
-                                                    class="icon-info"
-                                                    matTooltip="{{ branchTransferInfoText }}"
-                                                >
-                                                </i>
+                                                        *ngIf="
+                                                            destinationWarehouses[
+                                                                branchTransferCreateEditForm.get(
+                                                                    'destinations.0.uniqueName'
+                                                                )?.value
+                                                            ]?.length !==
+                                                            allWarehouses[
+                                                                branchTransferCreateEditForm.get(
+                                                                    'destinations.0.uniqueName'
+                                                                )?.value
+                                                            ]?.length
+                                                        "
+                                                        class="icon-info three"
+                                                        matTooltip="{{ branchTransferInfoText }}"
+                                                    >
+                                                    </i>
                                                 </div>
                                                 <div class="mr-b15">
                                                     <dropdown-field
@@ -472,7 +507,7 @@
 
                             <div class="col-lg-4">
                                 <div class="total-amount text-right">
-                                    <p>Total Amount</p>
+                                    <p>{{ commonLocaleData?.app_total_amount }}</p>
                                     <h3>{{ activeCompany?.baseCurrencySymbol }} {{ overallTotal | giddhCurrency }}</h3>
                                 </div>
                             </div>
@@ -535,6 +570,7 @@
                                                 [options]="stockList"
                                                 [appearance]="'outline'"
                                                 (selectedOption)="
+                                                    branchTransferCreateEditForm.get('products.0').reset();
                                                     selectProduct(
                                                         $event,
                                                         branchTransferCreateEditForm.get('products.0'),
@@ -550,6 +586,38 @@
                                             </dropdown-field>
                                             <div formArrayName="products">
                                                 <div [formGroupName]="0">
+                                                    <div class="mr-b15 mr-t15">
+                                                        <span formGroupName="variant" class="w-100">
+                                                            <dropdown-field
+                                                                *ngIf="
+                                                                    branchTransferCreateEditForm?.get(
+                                                                        'products.0.uniqueName'
+                                                                    ).value
+                                                                "
+                                                                [name]="'variantName'"
+                                                                [label]="
+                                                                    commonLocaleData?.app_variant +
+                                                                    ' ' +
+                                                                    commonLocaleData?.app_transporter_table_name
+                                                                "
+                                                                (selectedOption)="
+                                                                    variantChanged(
+                                                                        $event,
+                                                                        branchTransferCreateEditForm?.get('products.0'),
+                                                                        0
+                                                                    )
+                                                                "
+                                                                [options]="stockVariants[0]"
+                                                                [name]="'variantName'"
+                                                                [defaultValue]="
+                                                                    branchTransferCreateEditForm?.get(
+                                                                        'products.0.variant.name'
+                                                                    ).value
+                                                                "
+                                                            >
+                                                            </dropdown-field>
+                                                        </span>
+                                                    </div>
                                                     <div class="mr-b15 mr-t15">
                                                         <input-field
                                                             [type]="'text'"
@@ -618,54 +686,58 @@
                                             </div>
                                         </div>
                                         <div *ngIf="transferType === 'products'">
-                                            <div class="position-relative info-field mr-b15">
-                                                <input-field
-                                                    *ngIf="(isBranch || isCompanyWithSingleBranch) && !isUpdateMode"
-                                                    [name]="'sourceName'"
-                                                    formControlName="myCurrentCompany"
-                                                    [placeholder]=""
-                                                    [type]="'text'"
-                                                    [readonly]="isBranch || isCompanyWithSingleBranch"
-                                                    class="mr-b15 d-block"
-                                                    [showError]="
-                                                        !isValidForm &&
-                                                        !branchTransferCreateEditForm?.get('myCurrentCompany')?.value
-                                                    "
-                                                >
-                                                </input-field>
-                                                <dropdown-field
-                                                    *ngIf="isUpdateMode"
-                                                    [name]="'senderName0'"
-                                                    [label]="localeData?.sender_name"
-                                                    [placeholder]="localeData?.select_sender_name"
-                                                    [options]="branches"
-                                                    (selectedOption)="selectSenderName($event, 0)"
-                                                    [readonly]="isUpdateMode"
-                                                    [required]="true"
-                                                    [defaultValue]="
-                                                        branchTransferCreateEditForm.get('sources.0.name')?.value
-                                                    "
-                                                    [showError]="
-                                                        !isValidForm &&
-                                                        !branchTransferCreateEditForm?.get('sources.0.name')?.value
-                                                    "
-                                                >
-                                                </dropdown-field>
-                                                <i
-                                                    *ngIf="
-                                                        destinationWarehouses[
-                                                            branchTransferCreateEditForm.get('sources.0.uniqueName')
+                                            <div class="mr-b15">
+                                                <div class="option-value-field">
+                                                    <text-field
+                                                        *ngIf="(isBranch || isCompanyWithSingleBranch) && !isUpdateMode"
+                                                        [name]="'sourceName'"
+                                                        formControlName="myCurrentCompany"
+                                                        [placeholder]=""
+                                                        [type]="'text'"
+                                                        [readonly]="isBranch || isCompanyWithSingleBranch"
+                                                        [cssClass]="'form-control disabled w-100'"
+                                                        [showError]="
+                                                            !isValidForm &&
+                                                            !branchTransferCreateEditForm?.get('myCurrentCompany')
                                                                 ?.value
-                                                        ]?.length !==
-                                                        allWarehouses[
-                                                            branchTransferCreateEditForm.get('sources.0.uniqueName')
-                                                                ?.value
-                                                        ]?.length
-                                                    "
-                                                    class="icon-info"
-                                                    matTooltip="{{ branchTransferInfoText }}"
-                                                >
-                                                </i>
+                                                        "
+                                                    >
+                                                    </text-field>
+                                                </div>
+                                                <div class="position-relative info-field" *ngIf="isUpdateMode">
+                                                    <dropdown-field
+                                                        [name]="'senderName0'"
+                                                        [label]="localeData?.sender_name"
+                                                        [placeholder]="localeData?.select_sender_name"
+                                                        [options]="branches"
+                                                        (selectedOption)="selectSenderName($event, 0)"
+                                                        [readonly]="isUpdateMode"
+                                                        [required]="true"
+                                                        [defaultValue]="
+                                                            branchTransferCreateEditForm.get('sources.0.name')?.value
+                                                        "
+                                                        [showError]="
+                                                            !isValidForm &&
+                                                            !branchTransferCreateEditForm?.get('sources.0.name')?.value
+                                                        "
+                                                    >
+                                                    </dropdown-field>
+                                                    <i
+                                                        *ngIf="
+                                                            senderWarehouses[
+                                                                branchTransferCreateEditForm.get('sources.0.uniqueName')
+                                                                    ?.value
+                                                            ]?.length !==
+                                                            allWarehouses[
+                                                                branchTransferCreateEditForm.get('sources.0.uniqueName')
+                                                                    ?.value
+                                                            ]?.length
+                                                        "
+                                                        class="icon-info"
+                                                        matTooltip="{{ branchTransferInfoText }}"
+                                                    >
+                                                    </i>
+                                                </div>
                                             </div>
                                         </div>
 
@@ -798,7 +870,7 @@
                                                                     )?.value
                                                                 ]?.length
                                                             "
-                                                            class="icon-info"
+                                                            class="icon-info one"
                                                             matTooltip="{{ branchTransferInfoText }}"
                                                         >
                                                         </i>
@@ -901,22 +973,41 @@
                                         </div>
 
                                         <div *ngIf="transferType === 'senders'">
-                                            <input-field
+                                            <div
+                                                class="position-relative info-field"
                                                 *ngIf="(isBranch || isCompanyWithSingleBranch) && !isUpdateMode"
-                                                [name]="'myCurrentCompany'"
-                                                formControlName="myCurrentCompany"
-                                                [type]="'text'"
-                                                [placeholder]="localeData?.sender_name"
-                                                [readonly]="isBranch || isCompanyWithSingleBranch"
-                                                [showError]="
-                                                    !isValidForm &&
-                                                    !branchTransferCreateEditForm?.get('myCurrentCompany')?.value
-                                                "
                                             >
-                                            </input-field>
+                                                <input-field
+                                                    [name]="'myCurrentCompany'"
+                                                    formControlName="myCurrentCompany"
+                                                    [type]="'text'"
+                                                    [placeholder]="localeData?.sender_name"
+                                                    [readonly]="isBranch || isCompanyWithSingleBranch"
+                                                    [showError]="
+                                                        !isValidForm &&
+                                                        !branchTransferCreateEditForm?.get('myCurrentCompany')?.value
+                                                    "
+                                                >
+                                                </input-field>
+                                                <i
+                                                    *ngIf="
+                                                        senderWarehouses[
+                                                            branchTransferCreateEditForm.get('sources.0.uniqueName')
+                                                                ?.value
+                                                        ]?.length !==
+                                                        allWarehouses[
+                                                            branchTransferCreateEditForm.get('sources.0.uniqueName')
+                                                                ?.value
+                                                        ]?.length
+                                                    "
+                                                    class="icon-info three"
+                                                    matTooltip="{{ branchTransferInfoText }}"
+                                                >
+                                                </i>
+                                            </div>
                                             <div formArrayName="sources">
                                                 <div [formGroupName]="0">
-                                                    <div class="mr-b15 position-relative info-field two">
+                                                    <div class="mr-b15">
                                                         <dropdown-field
                                                             *ngIf="isUpdateMode"
                                                             [name]="'senderWarehouse'"
@@ -939,23 +1030,6 @@
                                                             "
                                                         >
                                                         </dropdown-field>
-                                                        <i
-                                                            *ngIf="
-                                                                senderWarehouses[
-                                                                    branchTransferCreateEditForm.get(
-                                                                        'sources.0.uniqueName'
-                                                                    )?.value
-                                                                ]?.length !==
-                                                                allWarehouses[
-                                                                    branchTransferCreateEditForm.get(
-                                                                        'sources.0.uniqueName'
-                                                                    )?.value
-                                                                ]?.length
-                                                            "
-                                                            class="icon-info"
-                                                            matTooltip="{{ branchTransferInfoText }}"
-                                                        >
-                                                        </i>
                                                     </div>
                                                     <div class="mr-b15 thrree">
                                                         <dropdown-field
@@ -1055,7 +1129,7 @@
 
                             <div class="col-lg-4">
                                 <div class="total-amount text-right">
-                                    <p>Total Amount</p>
+                                    <p>{{ commonLocaleData?.app_total_amount }}</p>
                                     <h3>{{ activeCompany?.baseCurrencySymbol }} {{ overallTotal | giddhCurrency }}</h3>
                                 </div>
                             </div>
@@ -1068,21 +1142,23 @@
                                 <thead *ngIf="transferType === 'products'">
                                     <tr>
                                         <th width="2%">#</th>
-                                        <th width="30%">Product Description</th>
-                                        <th width="20%">Qty/Unit</th>
-                                        <th width="20%">Rate</th>
-                                        <th width="20%">Amount</th>
+                                        <th width="30%">{{ commonLocaleData?.app_product_description }}</th>
+                                        <th width="20%">{{ commonLocaleData?.app_quantity_unit }}</th>
+                                        <th width="20%">{{ commonLocaleData?.app_rate }}</th>
+                                        <th width="20%">{{ commonLocaleData?.app_amount }}</th>
                                     </tr>
                                 </thead>
                                 <thead *ngIf="transferType !== 'products'">
                                     <th width="2%">#</th>
                                     <th width="30%" *ngIf="branchTransferMode === 'delivery-challan'">
-                                        Receiver’s Details
+                                        {{ localeData?.select_label_receiver }} {{ commonLocaleData?.app_details }}
                                     </th>
-                                    <th width="30%" *ngIf="branchTransferMode === 'receipt-note'">Sender’s Details</th>
-                                    <th width="20%">Qty/Unit</th>
-                                    <th width="20%">Rate</th>
-                                    <th width="20%">Amount</th>
+                                    <th width="30%" *ngIf="branchTransferMode === 'receipt-note'">
+                                        {{ localeData?.select_label }} {{ commonLocaleData?.app_details }}
+                                    </th>
+                                    <th width="20%">{{ commonLocaleData?.app_quantity_unit }}</th>
+                                    <th width="20%">{{ commonLocaleData?.app_rate }}</th>
+                                    <th width="20%">{{ commonLocaleData?.app_amount }}</th>
                                 </thead>
                                 <tbody
                                     *ngIf="transferType !== 'products' && branchTransferMode === 'receipt-note'"
@@ -1094,7 +1170,7 @@
                                                 let source of branchTransferCreateEditForm.get('sources')['controls'];
                                                 let i = index
                                             "
-                                            (click)="setActiveRow(i); $event.stopPropagation()"
+                                            (click)="activeIndx !== i && $event.stopPropagation(); setActiveRow(i)"
                                         >
                                             <ng-container [formGroupName]="i">
                                                 <td class="id">
@@ -1341,7 +1417,7 @@
                                                 let product of branchTransferCreateEditForm.get('products')['controls'];
                                                 let i = index
                                             "
-                                            (click)="setActiveRow(i); $event.stopPropagation()"
+                                            (click)="activeIndx !== i && $event.stopPropagation(); setActiveRow(i)"
                                         >
                                             <ng-container [formGroupName]="i">
                                                 <td class="id">
@@ -1364,7 +1440,9 @@
                                                                 [placeholder]="localeData?.select_product_name"
                                                                 [options]="stockList"
                                                                 [appearance]="'outline'"
-                                                                (selectedOption)="selectProduct($event, product, i)"
+                                                                (selectedOption)="
+                                                                    product.reset(); selectProduct($event, product, i)
+                                                                "
                                                                 [defaultValue]="product.get('name').value"
                                                                 [cssClass]="'form-control mat-field-border pb-0'"
                                                                 [enableDynamicSearch]="true"
@@ -1377,10 +1455,7 @@
                                                             </select-field>
                                                             <span formGroupName="variant" class="w-100">
                                                                 <select-field
-                                                                    *ngIf="
-                                                                        stockVariants[i]?.length > 1 &&
-                                                                        product.get('uniqueName').value
-                                                                    "
+                                                                    *ngIf="product.get('uniqueName').value"
                                                                     [cssClass]="'form-control mat-field-border'"
                                                                     [placeholder]="localeData?.variant_name"
                                                                     (selectedOption)="
@@ -1643,11 +1718,22 @@
                                                                     formControlName="quantity"
                                                                 >
                                                                 </text-field>
-                                                                <span class="text-capitalize">
-                                                                    {{
-                                                                        product.get("stockDetails.stockUnit")?.value
-                                                                    }}</span
+                                                                <div
+                                                                    *ngIf="activeIndx === i"
+                                                                    class="w-100 mr-b15 mr-t15"
                                                                 >
+                                                                    <select-field
+                                                                        [cssClass]="'form-control mat-field-border'"
+                                                                        [placeholder]="'Stock Units'"
+                                                                        (selectedOption)="unitChanged($event, product)"
+                                                                        [options]="stockUnits[i]"
+                                                                        [name]="'unitName' + i"
+                                                                        [defaultValue]="
+                                                                            product.get('stockDetails.stockUnit')?.value
+                                                                        "
+                                                                    >
+                                                                    </select-field>
+                                                                </div>
                                                             </div>
                                                             <div *ngIf="activeIndx !== i">
                                                                 <div class="text-right">
@@ -1764,7 +1850,7 @@
                                                 ];
                                                 let i = index
                                             "
-                                            (click)="setActiveRow(i); $event.stopPropagation()"
+                                            (click)="activeIndx !== i && $event.stopPropagation(); setActiveRow(i)"
                                         >
                                             <ng-container [formGroupName]="i">
                                                 <td class="id">
@@ -2151,7 +2237,9 @@
                     <div class="row position-bottom">
                         <div class="col-xl-8 col-lg-10 col-sm-12 mb-4">
                             <div class="action-btn-wrapper text-right w-100 d-flex column-gap1 justify-content-end">
-                                <button mat-stroked-button (click)="resetForm()" *ngIf="!isUpdateMode">  {{commonLocaleData?.app_clear}}</button>
+                                <button mat-stroked-button (click)="resetForm()" *ngIf="!isUpdateMode">
+                                    {{ commonLocaleData?.app_clear }}
+                                </button>
                                 <button *ngIf="isUpdateMode" mat-stroked-button (click)="navigateToList()">
                                     {{ commonLocaleData?.app_cancel }}
                                 </button>

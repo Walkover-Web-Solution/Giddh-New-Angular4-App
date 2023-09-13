@@ -3,12 +3,13 @@
     [file]="'inventory/branch-transfer'"
     (commonLocaleData)="commonLocaleData = $event"
     (localeData)="localeData = $event"
+
 >
     <div class="aside-pane">
         <div class="header-create-unit">
             <div class="form-header">
                 <h3 mat-dialog-title>{{ commonLocaleData?.app_manage_transporter }}</h3>
-                <button id="close" mat-dialog-close (closeAsideEvent)="closeAsidePane()">
+                <button id="close" mat-dialog-close>
                     <i class="icon-cross"></i>
                 </button>
             </div>
@@ -51,16 +52,9 @@
                                 formControlName="transporterId"
                                 [showError]="!isValidForm && !transportedCreateEditForm?.get('transporterId')?.value"
                                 [required]="true"
-                                [pattern]="'[0-9]{2}[0-9|A-Z]{13}'"
                                 [maxlength]="15"
-                                [minlength]="15"
                             >
                             </text-field>
-                            <small
-                                *ngIf="transportedCreateEditForm.get('transporterId').hasError('minlength')"
-                                class="text-danger"
-                                >{{ commonLocaleData?.app_invalid_transporter_id_message }}
-                            </small>
                         </div>
                         <div class="col-lg-12">
                             <div class="d-flex column-gap1">
