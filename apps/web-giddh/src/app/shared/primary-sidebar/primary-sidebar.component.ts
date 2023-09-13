@@ -58,8 +58,6 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     public currentOrganizationType: OrganizationType;
     /** Stores the details of the current branch */
     public currentBranch: any;
-    /** True if CMD+K modal is opened */
-    public navigationModalVisible: boolean = false;
     /** Subject to unsubscribe from listeners */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Active company details for indexedDB */
@@ -178,7 +176,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     // CMD + G functionality
     @HostListener('document:keydown', ['$event'])
     public handleKeyboardUpEvent(event: KeyboardEvent) {
-        if ((event.metaKey || event.ctrlKey) && (event.which === 75 || event.which === 71) && !this.navigationModalVisible) {
+        if ((event.metaKey || event.ctrlKey) && (event.which === 75 || event.which === 71)) {
             event.preventDefault();
             event.stopPropagation();
             if (this.companyList?.length > 0) {
@@ -367,24 +365,10 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof PrimarySidebarComponent
      */
     public showNavigationModal(): void {
-        this.navigationModalVisible = true;
-        const _combine = combineLatest([
-            this.modalService.onShow,
-            this.modalService.onShown,
-            this.modalService.onHide,
-            this.modalService.onHidden
-        ]).pipe(takeUntil(this.destroyed$)).subscribe(() => this.changeDetection.markForCheck());
-
-        this.subscriptions.push(
-            this.modalService.onHidden.pipe(takeUntil(this.destroyed$)).subscribe((reason: string) => {
-                this.navigationModalVisible = false;
-                this.unsubscribe();
-            })
-        );
-
-        this.subscriptions.push(_combine);
-        let config: ModalOptions = { class: 'universal_modal', show: true, keyboard: true, animated: false };
-        this.modelRef = this.modalService.show(this.navigationModal, config);
+        this.commandkDialogRef = this.dialog.open(this.navigationModal, {
+            width:'630px',
+            height: '600'
+        });
     }
 
     /**
