@@ -3,6 +3,8 @@ import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatButtonModule } from "@angular/material/button";
 import { MatMenuModule } from "@angular/material/menu";
+import { MatDialogModule } from "@angular/material/dialog";
+import { MatListModule } from "@angular/material/list";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatTreeModule } from "@angular/material/tree";
 import { RouterModule } from "@angular/router";
@@ -49,7 +51,9 @@ import { ScrollingModule } from "@angular/cdk/scrolling";
         RouterModule,
         MatMenuModule,
         MatButtonModule,
-        MatTreeModule
+        MatTreeModule,
+        MatDialogModule,
+        MatListModule
     ],
     exports: [
         HeaderComponent,

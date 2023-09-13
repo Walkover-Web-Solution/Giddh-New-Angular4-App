@@ -523,13 +523,11 @@
     </ng-template>
 
     <!--help & support sidebar  -->
-    <div
-        class="help-support-aside"
-        *ngIf="asideHelpSupportMenuState === 'in'"
-        (clickOutside)="closeHelpPaneOnOutsideClick()"
-    >
+
+    <ng-template #asideHelpSupportMenuStateRef>
         <aside-help-support (closeAsideEvent)="toggleHelpSupportPane(false)"></aside-help-support>
-    </div>
+    </ng-template>
+
     <!-- setting aside pane -->
     <div class="help-support-aside setting-sidebar-wrapper">
             <aside-setting
@@ -539,6 +537,13 @@
                 }"
                 (closeAsideEvent)="toggleSidebarPane(false, false)"
             ></aside-setting>
+    </div>
+    <div class="help-support-aside setting-sidebar-wrapper" *ngIf="asideInventorySidebarMenuState === 'in'">
+        <inventory-sidebar
+            class="inventory-sidebar"
+            [ngClass]="{ 'inventory-sidebar': isMobileSidebar }"
+            (closeAsideEvent)="toggleSidebarPane(false, false)"
+        ></inventory-sidebar>
     </div>
     <ng-template #datepickerTemplate>
         <div class="datepicker-modal">

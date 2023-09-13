@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, QueryList, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
-import { UntypedFormGroup, UntypedFormArray, UntypedFormBuilder, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormArray, UntypedFormBuilder, Validators, FormArray } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -12,6 +12,7 @@ import { cloneDeep, isEmpty } from 'apps/web-giddh/src/app/lodash-optimized';
 import { ILinkedStocksResult, LinkedStocksResponse, LinkedStocksVM } from 'apps/web-giddh/src/app/models/api-models/BranchTransfer';
 import { OnboardingFormRequest } from 'apps/web-giddh/src/app/models/api-models/Common';
 import { IAllTransporterDetails, IEwayBillTransporter, IEwayBillfilter } from 'apps/web-giddh/src/app/models/api-models/Invoice';
+import { IVariant } from 'apps/web-giddh/src/app/models/api-models/Ledger';
 import { InvoiceSetting } from 'apps/web-giddh/src/app/models/interfaces/invoice.setting.interface';
 import { OrganizationType } from 'apps/web-giddh/src/app/models/user-login-state';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
@@ -26,7 +27,7 @@ import { AppState } from 'apps/web-giddh/src/app/store';
 import { IOption } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface';
 import * as dayjs from 'dayjs';
 import { Observable, ReplaySubject, of as observableOf } from 'rxjs';
-import { take, takeUntil } from 'rxjs/operators';
+import { map, take, takeUntil } from 'rxjs/operators';
 
 @Component({
     selector: 'app-create-branch-transfer',
@@ -184,7 +185,8 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
         private toasty: ToasterService,
         private warehouseService: SettingsWarehouseService,
         public dialog: MatDialog,
-        private invoiceServices: InvoiceService
+        private invoiceServices: InvoiceService,
+        private ledgerService: LedgerService
     ) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
     }
@@ -432,7 +434,6 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
      * @memberof CreateBranchTransferComponent
      */
     public submit(): void {
-        this.branchTransferCreateEditForm.removeControl('myCurrentCompany');
         this.isValidForm = !this.branchTransferCreateEditForm.invalid;
         if (this.isValidForm) {
             this.isLoading = true;
@@ -1829,6 +1830,12 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
                         }
 
                     }
+                    if (productFormGroup.get('uniqueName')?.value) {
+                        const variantsFormGroup = productFormGroup?.get('variant') as UntypedFormGroup;
+                        variantsFormGroup?.get('name')?.setValue("");
+                        variantsFormGroup?.get('uniqueName')?.setValue("");
+                        this.loadStockVariants(productFormGroup.get('uniqueName')?.value, index);
+                    }
                     this.calculateRowTotal(productFormGroup);
                 }
             });
@@ -1922,6 +1929,23 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
         }
     }
 
+
+    /**
+     * This will use for get stock variants for stock
+     *
+     * @param {string} stockUniqueName
+     * @param {number} [index]
+     * @memberof CreateBranchTransferComponent
+     */
+    public loadStockVariants(stockUniqueName: string, index?: number): void {
+        this.ledgerService.loadStockVariants(stockUniqueName).pipe(
+            map((variants) => variants.map((variant: IVariant) => ({ label: variant.name, value: variant.uniqueName ,additional:variant})))).subscribe(res => {
+                if (!this.stockVariants[index]) {
+                    this.stockVariants[index] = [];
+                }
+                this.stockVariants[index] = res;
+            });
+    }
 
     /**
      * This will be use for calculating row total
