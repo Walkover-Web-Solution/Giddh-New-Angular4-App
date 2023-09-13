@@ -35,5 +35,6 @@
     "add_multiple_receiver":"+ Add Multiple Receiver",
     "dispatched_date":"Dispatched Date",
     "transport_company":"Transport Company",
-    "variant_name" : "Variant's Name"
+    "variant_name" : "Variant's Name",
+    "delete_transporter": "Are you sure you want to delete the transporter?"
 }
