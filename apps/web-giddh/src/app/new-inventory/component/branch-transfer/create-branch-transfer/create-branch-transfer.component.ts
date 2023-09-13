@@ -1843,12 +1843,6 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
                         }
 
                     }
-                    if (productFormGroup.get('uniqueName')?.value) {
-                        const variantsFormGroup = productFormGroup?.get('variant') as UntypedFormGroup;
-                        variantsFormGroup?.get('name')?.setValue("");
-                        variantsFormGroup?.get('uniqueName')?.setValue("");
-                        this.loadStockVariants(productFormGroup.get('uniqueName')?.value, index);
-                    }
                     this.calculateRowTotal(productFormGroup);
                 }
             });
