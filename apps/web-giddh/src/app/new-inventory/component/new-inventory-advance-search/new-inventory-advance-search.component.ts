@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, ViewChild, Inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ViewChild, Inject, ChangeDetectionStrategy, TemplateRef } from '@angular/core';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { GeneralService } from '../../../services/general.service';
 import { take, takeUntil } from 'rxjs/operators';
@@ -21,7 +21,7 @@ import { cloneDeep } from '../../../lodash-optimized';
 
 export class NewInventoryAdvanceSearch implements OnInit {
     /** Directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
     public isMobileScreen: boolean = false;
     /* This will store modal reference */
     public modalRef: BsModalRef;

@@ -15,9 +15,7 @@ import { ReportsDetailedRequestFilter } from '../models/api-models/Reports';
 import { cloneDeep } from '../lodash-optimized';
 import { PAGINATION_LIMIT } from '../app.constant';
 
-@Injectable({
-    providedIn: 'any'
-})
+@Injectable()
 export class LedgerService {
     private companyUniqueName: string;
 

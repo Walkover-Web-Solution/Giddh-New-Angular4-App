@@ -62,7 +62,7 @@ const PERMISSION_ROUTES: Routes = [
             style: 'slide-left',
             spinnerSize: 30
         }),
-        ModalModule,
+        ModalModule.forRoot(),
         BsDropdownModule.forRoot(),
         SharedModule,
         SortByModule,

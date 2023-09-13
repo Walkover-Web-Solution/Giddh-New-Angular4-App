@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 import { AppState } from 'apps/web-giddh/src/app/store';
@@ -26,6 +26,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { LedgerService } from '../services/ledger.service';
 import { Router } from '@angular/router';
+import { saveAs } from 'file-saver';
 
 @Component({
     selector: 'daybook',
@@ -63,12 +64,14 @@ export class DaybookComponent implements OnInit, OnDestroy {
     @ViewChild('updateLedgerModal', { static: false }) public updateLedgerModal: any;
     /** Update ledger component reference */
     @ViewChild(UpdateLedgerEntryPanelComponent, { static: false }) public updateLedgerComponent: UpdateLedgerEntryPanelComponent;
+    /** Instance of Aside Menu State For Other Taxes dialog */
+    @ViewChild("asideMenuStateForOtherTaxes") public asideMenuStateForOtherTaxes: TemplateRef<any>;
     /** True, if entry expanded (at least one entry) */
     public isEntryExpanded: boolean = false;
     /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
     /* This will store modal reference */
     public modalRef: BsModalRef;
     /* This will store selected date range to use in api */
@@ -108,8 +111,6 @@ export class DaybookComponent implements OnInit, OnDestroy {
     /** Stores the current organization type */
     public currentOrganizationType: OrganizationType;
     // aside menu properties
-    public asideMenuStateForOtherTaxes: string = 'out';
-    // aside menu properties
     public asideMenuState: string = 'out';
     /** Ledger object */
     public lc: LedgerVM;
@@ -133,6 +134,8 @@ export class DaybookComponent implements OnInit, OnDestroy {
     public isMobile: boolean;
     /** Holds side of entry (dr/cr) */
     public entrySide: string = "";
+    /** Holds Aside Menu State For Other Taxes DialogRef */
+    public asideMenuStateForOtherTaxesDialogRef:any;
 
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
@@ -582,21 +585,15 @@ export class DaybookComponent implements OnInit, OnDestroy {
      * @memberof DaybookComponent
      */
     public toggleOtherTaxesAsidePane(): void {
-        this.asideMenuStateForOtherTaxes = this.asideMenuStateForOtherTaxes === 'out' ? 'in' : 'out';
-        this.toggleBodyClass();
-    }
-
-    /**
-     * Toggle's fixed class in body
-     *
-     * @memberof DaybookComponent
-     */
-    public toggleBodyClass(): void {
-        if (this.asideMenuState === 'in' || this.asideMenuStateForOtherTaxes === 'in') {
-            document.querySelector('body').classList.add('fixed');
-        } else {
-            document.querySelector('body').classList.remove('fixed');
-        }
+            this.asideMenuStateForOtherTaxesDialogRef = this.dialog.open(this.asideMenuStateForOtherTaxes,{
+                position: {
+                    right: '0'
+                },
+                maxWidth: '760px',
+                width:'100%',
+                height:'100vh',
+                maxHeight:'100vh'
+            })
     }
 
     /**

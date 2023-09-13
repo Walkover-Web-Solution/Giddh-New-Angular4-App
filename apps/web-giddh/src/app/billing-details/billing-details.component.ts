@@ -9,7 +9,7 @@ import { AppState } from '../store';
 import { ToasterService } from '../services/toaster.service';
 import { take, takeUntil } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { FormControl, NgForm } from '@angular/forms';
+import { UntypedFormControl, NgForm } from '@angular/forms';
 import { CompanyService } from '../services/company.service';
 import { GeneralActions } from '../actions/general/general.actions';
 import { CompanyActions } from '../actions/company.actions';
@@ -47,7 +47,6 @@ export class BillingDetailComponent implements OnInit, OnDestroy {
     public subscriptionPrice: any = '';
     public razorpayAmount: any;
     public orderId: string;
-    public UserCurrency: string = '';
     public fromSubscription: boolean = false;
     public razorpay: any;
     public isUpdateCompanySuccess$: Observable<boolean>;
@@ -70,7 +69,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy {
     /** control for the MatSelect filter keyword */
     public searchBillingStates: string = "";
     /** control for the MatSelect filter keyword */
-    public searchCountry: FormControl = new FormControl();
+    public searchCountry: UntypedFormControl = new UntypedFormControl();
     /** True if api call in progress */
     public showLoader: boolean = true;
     /** True if we need to show GSTIN number */
@@ -88,6 +87,8 @@ export class BillingDetailComponent implements OnInit, OnDestroy {
     public taxPercentage: number = 0.18;
     /** Holds if state field is disabled for selection */
     public isStateDisabled: boolean = false;
+    /** Hold plan currency */
+    public planCurrency: string = '';
 
     constructor(private store: Store<AppState>, private generalService: GeneralService, private toasty: ToasterService, private route: Router, private companyService: CompanyService, private generalActions: GeneralActions, private companyActions: CompanyActions, private cdRef: ChangeDetectorRef,
         private settingsProfileActions: SettingsProfileActions, private commonActions: CommonActions, private settingsProfileService: SettingsProfileService, private salesService: SalesService,) {
@@ -126,12 +127,9 @@ export class BillingDetailComponent implements OnInit, OnDestroy {
         });
 
         if (this.fromSubscription && this.selectedPlans) {
-            this.store.pipe(select(s => s.session.currentCompanyCurrency), takeUntil(this.destroyed$)).subscribe(res => {
-                if (res) {
-                    this.UserCurrency = res.baseCurrency;
-                }
-            });
             this.prepareSelectedPlanFromSubscriptions(this.selectedPlans);
+        } else {
+            this.route.navigate(['pages', 'user-details', 'subscription'], { queryParams: { showPlans: true } });
         }
 
         this.cdRef.detectChanges();
@@ -223,15 +221,9 @@ export class BillingDetailComponent implements OnInit, OnDestroy {
         this.subscriptionPrice = plan.planDetails.amount;
         this.SubscriptionRequestObj.userUniqueName = this.userDetails?.uniqueName;
         this.SubscriptionRequestObj.planUniqueName = plan.planDetails?.uniqueName;
-        if (!this.UserCurrency) {
-            this.store.pipe(select(s => s.session.currentCompanyCurrency), takeUntil(this.destroyed$)).subscribe(res => {
-                if (res) {
-                    this.UserCurrency = res.baseCurrency;
-                }
-            });
-        }
-        if (this.subscriptionPrice && this.UserCurrency) {
-            this.companyService.getRazorPayOrderId(this.subscriptionPrice, this.UserCurrency).pipe(takeUntil(this.destroyed$)).subscribe((res: any) => {
+        this.planCurrency = plan.planDetails?.currency?.code;
+        if (this.subscriptionPrice && this.planCurrency) {
+            this.companyService.getRazorPayOrderId(this.subscriptionPrice, this.planCurrency).pipe(takeUntil(this.destroyed$)).subscribe((res: any) => {
                 if (res?.status === 'success') {
                     this.planAmount = res.body?.amount;
                     this.orderId = res.body?.id;
@@ -320,6 +312,8 @@ export class BillingDetailComponent implements OnInit, OnDestroy {
     public initializePayment(): void {
         let that = this;
 
+        console.log("Plan Amount : ", this.razorpayAmount);
+
         let activeCompany = null;
         this.store.pipe(select(state => state.session.activeCompany), take(1)).subscribe(activeCompany => activeCompany = activeCompany);
 
@@ -334,23 +328,16 @@ export class BillingDetailComponent implements OnInit, OnDestroy {
                 color: '#F37254'
             },
             amount: this.razorpayAmount,
-            currency: this.UserCurrency || activeCompany?.baseCurrency,
+            currency: this.planCurrency || activeCompany?.baseCurrency,
             name: 'GIDDH',
             description: 'Walkover Technologies Private Limited.'
         };
-
-        let interval = setInterval(() => {
-            try {
-                if (!this.razorpay) {
-                    this.razorpay = new window['Razorpay'](options);
-                    clearInterval(interval);
-
-                    setTimeout(() => {
-                        this.razorpay?.open();
-                    }, 100);
-                }
-            } catch (exception) {}
-        }, 50);
+        try {
+            this.razorpay = new window['Razorpay'](options);
+            setTimeout(() => {
+                this.razorpay?.open();
+            }, 100);
+        } catch (exception) { }
     }
 
     public reFillForm(): void {

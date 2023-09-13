@@ -52,9 +52,10 @@
                                             <div>
                                                 <mat-radio-group
                                                     color="primary"
-                                                    name="groupForm.showCodeType"
+                                                    name="showCodeType"
                                                     formControlName="showCodeType"
                                                     (change)="onChangeHsnSacType()"
+                                                    class="d-flex column-gap15"
                                                 >
                                                     <mat-radio-button id="hsn" [value]="'hsn'">{{
                                                         commonLocaleData?.app_hsn_code
@@ -174,7 +175,7 @@
                                                 }}
                                             </button>
                                         </div>
-                                        <div class="ml-auto right-aligned-buttons">
+                                        <div class="ml-auto right-aligned-buttons d-flex column-gap15">
                                             <button
                                                 *ngIf="!groupUniqueName"
                                                 mat-stroked-button

@@ -17,7 +17,7 @@ import { saveAs } from 'file-saver';
 import { PurchaseOrderActions } from '../../actions/purchase-order/purchase-order.action';
 import { DomSanitizer } from '@angular/platform-browser';
 import { GeneralService } from '../../services/general.service';
-import { PerfectScrollbarComponent } from 'ngx-perfect-scrollbar';
+import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 
 @Component({
     selector: 'purchase-order-preview',
@@ -46,8 +46,8 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
     @ViewChild('attachedDocumentPreview') attachedDocumentPreview: ElementRef;
     /** Instance of PDF container iframe */
     @ViewChild('pdfContainer', { static: false }) pdfContainer: ElementRef;
-    /** Instance of perfect scrollbar */
-    @ViewChild('perfectScrollbar', { static: false }) public perfectScrollbar: PerfectScrollbarComponent;
+    /** Instance of cdk scrollbar */
+    @ViewChild(CdkVirtualScrollViewport) cdkScrollbar: CdkVirtualScrollViewport;
     /* Modal instance */
     public modalRef: BsModalRef;
     /* This will hold state of activity history aside pan */
@@ -571,7 +571,7 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
      */
     private scrollToActiveItem(): void {
         setTimeout(() => {
-            this.perfectScrollbar?.directiveRef?.scrollToElement(".single-invoice-detail.activeItem");
+            this.cdkScrollbar?.scrollToIndex(0);
         }, 200);
     }
 

@@ -10,4 +10,6 @@ export const COMMON_API = {
     STOCK_UNITS: 'stock-units',
     GST_STOCK_UNITS: 'v2/company/:companyUniqueName/gst/unit-mapping',
     MODULE_WISE_COLUMNS: 'company/:companyUniqueName/report-filters?module=:module',
+    UPLOAD_FILE: 'company/:companyUniqueName/ledger/upload',
+    UPLOAD_IMAGE: 'company/:companyUniqueName/images'
 };

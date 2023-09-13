@@ -7,8 +7,10 @@
 
 .select-multiple-field-input {
     width: 100%;
-    padding-bottom: 7px;
-    height: 30px !important;
     font-weight: normal !important;
     font-size: var(--font-size-15) !important;
+}
+
+.communication-input {
+    border-bottom: 1px solid var(--color-common-primary-border);
 }

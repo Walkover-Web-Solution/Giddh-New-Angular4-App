@@ -7,7 +7,6 @@
 >
     <giddh-page-loader *ngIf="(showLoader && isUpdateMode) || isShowLoader"></giddh-page-loader>
     <div [ngStyle]="{ 'display': (!isUpdateMode || !showLoader) && !isShowLoader ? 'block' : 'none' }">
-        <!-- region page change menu -->
         <div class="d-flex border-bottom mobile-view-padding">
             <hamburger-menu
                 [pageHeading]="(isCashInvoice ? localeData?.invoice_types?.cash : getInvoiceType()) | titlecase"
@@ -15,56 +14,22 @@
             </hamburger-menu>
             <div class="form-group mr-b05 clearfix pro-invoice-heading">
                 <div class="clearfix">
-                    <div class="btn-group proforma-sales-time" dropdown>
-                        <button
-                            id="giddh-page-heading-link"
-                            dropdownToggle
-                            type="button"
-                            class="btn more-btn-dropdown dropdown-toggle"
-                            aria-controls="dropdown-basic"
-                            *ngIf="!isUpdateMode"
-                        >
-                            <span *ngIf="isCashInvoice; else invoiceTypeDisplayRef">
-                                {{ localeData?.invoice_types?.cash }}
-                            </span>
-                            <small *ngIf="invoiceType === 'estimates'"> ({{ commonLocaleData?.app_beta }}) </small>
-                            <span class="caret"></span>
-                        </button>
+                    <div class="btn-group proforma-sales-time">
                         <button
                             id="giddh-page-heading-link"
                             type="button"
                             class="btn more-btn-dropdown dropdown-toggle"
                             aria-controls="dropdown-basic"
-                            *ngIf="isUpdateMode"
                         >
-                            <span *ngIf="isCashInvoice; else invoiceTypeDisplayRef">
-                                {{ localeData?.invoice_types?.cash }}
+                            <span>
+                                {{ invoiceTypeLabel }}
                             </span>
                             <small *ngIf="invoiceType === 'estimates'"> ({{ commonLocaleData?.app_beta }}) </small>
-                            <span class="caret" *ngIf="!isUpdateMode"></span>
                         </button>
-                        <ng-container *ngIf="!isUpdateMode">
-                            <ul
-                                id="dropdown1-basic"
-                                *dropdownMenu
-                                class="dropdown-menu"
-                                role="menu"
-                                aria-labelledby="button-basic"
-                            >
-                                <li
-                                    role="menuitem"
-                                    (click)="pageChanged(item?.value, item.additional.label)"
-                                    *ngFor="let item of pageList"
-                                >
-                                    <a class="dropdown-item cp">{{ item.additional?.label }}</a>
-                                </li>
-                            </ul>
-                        </ng-container>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- endregion -->
         <!-- region update mode loader-->
         <ng-container *ngIf="isUpdateDataInProcess">
             <div class="loader-class">
@@ -230,8 +195,12 @@
                                                             isEinvoiceGenerated ||
                                                             (isUpdateMode &&
                                                                 invoiceType !== 'sales' &&
-                                                                invoiceType !== 'cash')
+                                                                invoiceType !== 'cash' &&
+                                                                invoiceType !== 'credit note' &&
+                                                                invoiceType !== 'debit note' &&
+                                                                invoiceType !== 'purchase')
                                                         "
+                                                        [label]="localeData?.customer_name"
                                                     ></input-field>
                                                 </ng-container>
                                                 <!-- endregion -->
@@ -348,7 +317,7 @@
                                                         <!-- region billing address -->
                                                         <div class="col-sm-12 col-xl-6 col-md-10 bill-add pd-r1">
                                                             <div class="form-group mb-0">
-                                                                <div class="d-flex align-items-center pb-2">
+                                                                <div class="d-flex align-items-center pd-b2">
                                                                     <span class="pb-0 pd-r15">{{
                                                                         localeData?.billing_address
                                                                     }}</span>
@@ -988,6 +957,7 @@
                                             [name]="'accountDetails.mobileNumber'"
                                             [type]="'tel'"
                                             #initContactProforma
+                                            class="flag-input"
                                             [id]="'init-contact-proforma'"
                                             (keydown.enter)="$event.preventDefault()"
                                             [label]="commonLocaleData?.app_mobile_number"
@@ -1030,7 +1000,7 @@
                                                     <!-- region billing address -->
                                                     <div class="col-sm-12 col-xl-6 col-md-10 bill-add pd-r1">
                                                         <div class="form-group">
-                                                            <div class="d-flex align-items-center pb-2">
+                                                            <div class="d-flex align-items-center pd-b1">
                                                                 <span class="pd-r15">{{
                                                                     localeData?.billing_address
                                                                 }}</span>
@@ -1230,8 +1200,8 @@
                                                     <!-- region shipping address -->
                                                     <div class="col-sm-12 col-xl-6 col-md-10 bill-add pd-l1">
                                                         <div class="form-group p-0 width-100">
-                                                            <div class="d-flex align-items-center pb-1">
-                                                                <span class="pd-r15">
+                                                            <div class="d-flex align-items-center pb-2">
+                                                                <span class="pd-r15 ">
                                                                     <mat-checkbox
                                                                         (keydown.enter)="$event.preventDefault()"
                                                                         autocomplete="None"
@@ -1640,7 +1610,7 @@
                                                 ></span>
                                             </div>
                                             <div
-                                                class="form-group invoice-date-label"
+                                                class="form-group invoice-date-label new-datepicker"
                                                 [ngClass]="{
                                                     'date-invoice-parent-form':
                                                         isPurchaseInvoice || isEstimateInvoice || isProformaInvoice,
@@ -1705,17 +1675,18 @@
                                             <div
                                                 class="form-group invoice-due-label"
                                                 *ngIf="
-                                                    currentVoucherFormDetails?.dueDate ||
-                                                    isSalesInvoice ||
-                                                    isPurchaseInvoice ||
-                                                    isProformaInvoice ||
-                                                    isEstimateInvoice
+                                                    (currentVoucherFormDetails?.dueDate ||
+                                                        isSalesInvoice ||
+                                                        isPurchaseInvoice ||
+                                                        isProformaInvoice ||
+                                                        isEstimateInvoice) &&
+                                                    !isCashInvoice
                                                 "
                                                 [ngClass]="{ 'due-invoice-parent-form': isPurchaseInvoice }"
                                             >
                                                 <div
                                                     [ngClass]="{ 'due-invoice-formgroup': isPurchaseInvoice }"
-                                                    class="w-100"
+                                                    class="w-100 new-datepicker"
                                                 >
                                                     <giddh-datepicker
                                                         [placeholder]="giddhDateFormat"
@@ -1776,7 +1747,7 @@
                                         (currentVoucherFormDetails?.rcmAllowed && companyCountryName === 'India')
                                     "
                                 >
-                                    <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
+                                    <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12 ">
                                         <mat-checkbox
                                             (keydown.enter)="$event.preventDefault()"
                                             #rcmCheckbox
@@ -1806,11 +1777,8 @@
                                 <!-- for sales invoice start (ngModelChange)="touristSchemeApplicableToggle($event)"-->
                                 <ng-container *ngIf="companyCountryCode === 'AE'">
                                     <div class="row mt-1" *ngIf="isSalesInvoice || isCashInvoice">
-                                        <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3" *ngIf="!isMobileView">
-                                            <label></label>
-                                        </div>
                                         <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
-                                            <div class="col-sm-12 col-xl-6 col-lg-10 col-md-10 pl-0">
+                                            <div class="col-sm-12 col-xl-10 col-lg-10 col-md-10 pl-0 ">
                                                 <mat-checkbox
                                                     color="primary"
                                                     (keydown.enter)="$event.preventDefault()"
@@ -2486,8 +2454,9 @@
                                                     <div class="col-6 col-sm-6 pl-0">
                                                         <div class="entry-date">
                                                             <label>{{ localeData?.entry_date }}: </label>
-                                                            <span *ngIf="!isUpdateMode" class="custom-date-entries">
+                                                            <span *ngIf="!isUpdateMode" class="custom-date-entries custom-input-field">
                                                                 <giddh-datepicker
+                                                                    class="date-border"
                                                                     [showToggleIcon]="true"
                                                                     #dp="ngModel"
                                                                     (keydown.enter)="$event.preventDefault()"
@@ -2499,11 +2468,13 @@
                                                                     [(ngModel)]="entry.entryDate"
                                                                     [appearance]="'fill'"
                                                                     (datepickerState)="onFocusEntryDate($event)"
+                                                                    [isOpened]="isEntryDatepickerOpen"
                                                                 >
                                                                 </giddh-datepicker>
                                                                 <span
                                                                     class="edit-icon-custom-entry-date cp"
                                                                     [attr.aria-expanded]="dp.isOpen"
+                                                                    (click)="isEntryDatepickerOpen = true"
                                                                 >
                                                                     <img src="{{ imgPath }}edit-pencilicon.svg" />
                                                                 </span>
@@ -2574,6 +2545,7 @@
                                                                 </mat-radio-group>
                                                                 <text-field
                                                                     [type]="'text'"
+                                                                    [cssClass]="'form-control'"
                                                                     maxLength="10"
                                                                     [allowDecimalDigitsOnly]="true"
                                                                     [placeholder]="localeData?.hsn_number"
@@ -2584,6 +2556,7 @@
                                                                 ></text-field>
                                                                 <text-field
                                                                     [type]="'text'"
+                                                                    [cssClass]="'form-control'"
                                                                     maxLength="10"
                                                                     [allowDecimalDigitsOnly]="true"
                                                                     [placeholder]="localeData?.sac_number"
@@ -2592,7 +2565,7 @@
                                                                     [(ngModel)]="transaction.sacNumber"
                                                                     [readonly]="isEinvoiceGenerated"
                                                                 ></text-field>
-                                                                <div class="d-inline-flex mt-2 pt-1">
+                                                                <div class="d-inline-flex mt-2 pt-1 column-gap5">
                                                                     <button
                                                                         mat-stroked-button
                                                                         color="primary"
@@ -2974,7 +2947,7 @@
                                             class="clearfix max-width-600 pd-l3 m-0 other-details-section-list"
                                         >
                                             <div class="row">
-                                                <div class="form-group col-xs-4 col-sm-4 pd-r1 mb-0">
+                                                <div class="form-group col-xs-4 col-sm-4 pd-r1 mb-0 new-datepicker">
                                                     <giddh-datepicker
                                                         [cssClass]="'shipping-date'"
                                                         (keydown.enter)="$event.preventDefault()"
@@ -3123,11 +3096,7 @@
                                             type="file"
                                             name="invoiceFile"
                                             id="invoiceFile"
-                                            [options]="fileUploadOptions"
-                                            ngFileSelect
-                                            [uploadInput]="uploadInput"
-                                            (uploadOutput)="onUploadOutput($event)"
-                                            (change)="onFileChange($event.target)"
+                                            (change)="uploadFile()"
                                             droppable="true"
                                         />
                                     </label>
@@ -3636,7 +3605,7 @@
                     >
                         <div class="col-12 pr-0">
                             <!-- region generate mode -->
-                            <div class="pull-right pr update-mode" *ngIf="!isUpdateMode">
+                            <div class="pull-right pr update-mode d-flex d-flex column-gap15" *ngIf="!isUpdateMode">
                                 <button
                                     mat-stroked-button
                                     color="warn"
@@ -3646,7 +3615,7 @@
                                     {{ commonLocaleData?.app_clear }}
                                 </button>
                                 <!-- region purchase invoice -->
-                                <span class="d-inline-block" *ngIf="isPurchaseInvoice">
+                                <span *ngIf="isPurchaseInvoice">
                                     <button
                                         mat-stroked-button
                                         color="primary"
@@ -3665,7 +3634,7 @@
                                 <!-- endregion -->
                                 <!-- region non purchase -->
                                 <span
-                                    class="d-inline-block"
+                                    class="d-flex column-gap15"
                                     *ngIf="!isPurchaseInvoice && !isProformaInvoice && !isEstimateInvoice"
                                 >
                                     <button
@@ -3703,7 +3672,7 @@
                                             {{ generateInvoiceText }}
                                         </button>
                                     </div>
-                                    <div *ngIf="!isCompany" class="d-inline-flex">
+                                    <ng-container *ngIf="!isCompany">
                                         <mat-menu
                                             #dropdownMenu="matMenu"
                                             class="bottom-dropdown-menu"
@@ -3746,16 +3715,16 @@
                                         >
                                             <span class="caret"></span>
                                         </button>
-                                    </div>
+                                    </ng-container>
                                 </span>
                                 <!-- endregion -->
                                 <!-- region proforma/estimates -->
                                 <span
-                                    class="d-inline-block"
+                                    class="d-flex column-gap15"
                                     *ngIf="!isCompany && (isProformaInvoice || isEstimateInvoice)"
                                 >
                                     <div
-                                        class="d-inline-flex"
+                                        class="d-inline-flex column-gap15"
                                         [isDisabled]="
                                             !hasVoucherEntry || (invoiceForm?.controls)['message2']?.errors?.maxlength
                                         "
@@ -3812,7 +3781,7 @@
                             </div>
                             <!-- endregion -->
                             <!-- region update mode -->
-                            <div class="pull-right pr" *ngIf="isUpdateMode">
+                            <div class="pull-right pr d-flex column-gap15" *ngIf="isUpdateMode">
                                 <button mat-stroked-button class="d-inline-block" (click)="cancelUpdate()">
                                     {{ commonLocaleData?.app_cancel }}
                                 </button>
@@ -3937,14 +3906,10 @@
     </ng-template>
     <!-- region purchase  order  popup -->
     <ng-template #purchaseRecordConfirmationPopup>
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <confirmation-modal
-                    [configuration]="purchaseRecordConfirmationConfiguration"
-                    (buttonClicked)="handlePurchaseRecordConfirmation($event)"
-                ></confirmation-modal>
-            </div>
-        </div>
+        <confirmation-modal
+            [configuration]="purchaseRecordConfirmationConfiguration"
+            (buttonClicked)="handlePurchaseRecordConfirmation($event)"
+        ></confirmation-modal>
     </ng-template>
     <!-- region bulk items -->
     <ng-template #bulkItemsModal>
@@ -3956,47 +3921,35 @@
     </ng-template>
     <!-- region  adjust payment  popup -->
     <ng-template #adjustPaymentModal>
-        <div class="modal-dialog modal-xl">
-            <div class="modal-content">
-                <advance-receipt-adjustment-component
-                    *ngIf="showAdvanceReceiptAdjust"
-                    #advanceReceiptComponent
-                    [adjustedVoucherType]="
-                        voucherApiVersion === 2 && isPendingVoucherType ? invoiceType : selectedVoucherType
-                    "
-                    [isUpdateMode]="isUpdateMode"
-                    [depositAmount]="depositAmount"
-                    [invoiceFormDetails]="invFormData"
-                    [isVoucherModule]="true && voucherApiVersion !== 2"
-                    [advanceReceiptAdjustmentUpdatedData]="advanceReceiptAdjustmentData"
-                    (closeModelEvent)="closeAdvanceReceiptModal()"
-                    (submitClicked)="getAdvanceReceiptAdjustData($event)"
-                    [voucherForAdjustment]="voucherForAdjustment"
-                >
-                </advance-receipt-adjustment-component>
-            </div>
-        </div>
+        <advance-receipt-adjustment-component
+            *ngIf="showAdvanceReceiptAdjust"
+            #advanceReceiptComponent
+            [adjustedVoucherType]="
+                voucherApiVersion === 2 && isPendingVoucherType ? invoiceType : selectedVoucherType
+            "
+            [isUpdateMode]="isUpdateMode"
+            [depositAmount]="depositAmount"
+            [invoiceFormDetails]="invFormData"
+            [isVoucherModule]="true && voucherApiVersion !== 2"
+            [advanceReceiptAdjustmentUpdatedData]="advanceReceiptAdjustmentData"
+            (closeModelEvent)="closeAdvanceReceiptModal()"
+            (submitClicked)="getAdvanceReceiptAdjustData($event)"
+            [voucherForAdjustment]="voucherForAdjustment"
+        >
+        </advance-receipt-adjustment-component>
     </ng-template>
     <!-- region  date change confirmation popup -->
     <ng-template #dateChangeConfirmationModel>
-        <div class="modal-dialog modal-md">
-            <div class="modal-content">
-                <confirmation-modal
-                    [configuration]="dateChangeConfiguration"
-                    (buttonClicked)="handleDateChangeConfirmation($event)"
-                ></confirmation-modal>
-            </div>
-        </div>
+        <confirmation-modal
+            [configuration]="dateChangeConfiguration"
+            (buttonClicked)="handleDateChangeConfirmation($event)"
+        ></confirmation-modal>
     </ng-template>
     <!-- region  delete attachment confirmation popup -->
     <ng-template #attachmentDeleteConfirmationModel>
-        <div class="modal-dialog modal-md">
-            <div class="modal-content">
-                <confirmation-modal
-                    (buttonClicked)="handleAttachmentDelete($event)"
-                    [configuration]="attachmentDeleteConfiguration"
-                ></confirmation-modal>
-            </div>
-        </div>
+        <confirmation-modal
+            (buttonClicked)="handleAttachmentDelete($event)"
+            [configuration]="attachmentDeleteConfiguration"
+        ></confirmation-modal>
     </ng-template>
 </ng-container>

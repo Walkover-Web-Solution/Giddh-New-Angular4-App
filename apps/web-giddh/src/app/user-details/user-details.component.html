@@ -17,7 +17,7 @@
                 [id]="activeTab == 'auth-key' ? 'giddh-page-heading' : ''"
             >
                 <div class="wrap-tab-content-pd-15" *ngIf="activeTab == 'auth-key'">
-                    <div class="box clearfix mt-1">
+                    <div class="box clearfix mt-1 p-0">
                         <h1 class="section-head pt-0">{{ localeData?.auth_key?.main_auth_key }}</h1>
                         <form name="authKeyForm" #authKeyForm="ngForm" novalidate role="form">
                             <div class="form-group row">
@@ -51,7 +51,7 @@
                 [id]="activeTab == 'mobile-number' ? 'giddh-page-heading' : ''"
             >
                 <div class="wrap-tab-content-pd-15" *ngIf="activeTab == 'mobile-number'">
-                    <div class="box clearfix mt-1">
+                    <div class="box clearfix mt-1 p-0">
                         <form name="mobileForm" novalidate>
                             <h1 class="section-head">{{ localeData?.mobile_number?.add_edit_mobile_number }}</h1>
                             <div class="mr-t05">
@@ -199,7 +199,7 @@
                 [id]="activeTab == 'session' ? 'giddh-page-heading' : ''"
             >
                 <div class="wrap-tab-content-pd-15" *ngIf="activeTab == 'session'">
-                    <div class="box clearfix mt-1">
+                    <div class="box clearfix mt-1 p-0">
                         <div class="max900 d-flex pd-b1 activity-title">
                             <h1 class="section-head pt-0">{{ localeData?.session?.section_heading }}</h1>
                             <button class="btn btn-primary mr-0" (click)="clearAllSession()">

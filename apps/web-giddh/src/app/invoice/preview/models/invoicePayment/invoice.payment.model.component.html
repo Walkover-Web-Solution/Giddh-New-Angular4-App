@@ -97,11 +97,12 @@
                     <label>{{ commonLocaleData?.app_cheque_clearance_date }}</label>
                     <input
                         type="text"
-                        [textMask]="{ mask: dateMask, guide: true }"
+                        bsDatepicker
                         class="form-control"
                         [(ngModel)]="paymentActionFormObj.chequeClearanceDate"
                         name="chequeClearance"
                         [placeholder]="giddhDateFormat"
+                        [bsConfig]="{ dateInputFormat: giddhDateFormat }"
                     />
                 </div>
             </div>

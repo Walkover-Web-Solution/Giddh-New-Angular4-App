@@ -1,5 +1,5 @@
 import { takeUntil } from 'rxjs/operators';
-import { Component, Input, OnDestroy, OnInit, ChangeDetectorRef, ElementRef, ViewChild } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ChangeDetectorRef, ViewChild, TemplateRef } from '@angular/core';
 import { combineLatest, Observable, ReplaySubject } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
@@ -23,7 +23,7 @@ Chart.register(...registerables);
     styleUrls: ['../../home.component.scss', './total-overdues-chart.component.scss'],
 })
 export class TotalOverduesChartComponent implements OnInit, OnDestroy {
-    @ViewChild('datepickerTemplate', { static: true }) public datepickerTemplate: ElementRef;
+    @ViewChild('datepickerTemplate', { static: true }) public datepickerTemplate: TemplateRef<any>;
     /** This will store if device is mobile or not */
     public isMobileScreen: boolean = false;
     /** This will store modal reference */

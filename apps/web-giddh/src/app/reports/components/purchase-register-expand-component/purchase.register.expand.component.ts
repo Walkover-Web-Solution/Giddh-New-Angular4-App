@@ -1,19 +1,19 @@
-import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, OnDestroy } from "@angular/core";
-import { Store, select } from "@ngrx/store";
-import { AppState } from "../../../store";
-import { InvoiceReceiptActions } from "../../../actions/invoice/receipt/receipt.actions";
-import { ReportsDetailedRequestFilter, PurchaseRegisteDetailedResponse } from "../../../models/api-models/Reports";
-import { ActivatedRoute, Router } from "@angular/router";
-import { take, takeUntil, debounceTime, distinctUntilChanged } from "rxjs/operators";
-import { ReplaySubject, Observable } from "rxjs";
-import { BsDropdownDirective } from "ngx-bootstrap/dropdown";
-import { FormControl } from "@angular/forms";
-import { PAGINATION_LIMIT } from "../../../app.constant";
-import { CurrentCompanyState } from "../../../store/company/company.reducer";
-import { BreakpointObserver } from "@angular/cdk/layout";
-import { GeneralService } from "../../../services/general.service";
-import { MatDialog } from "@angular/material/dialog";
-import { SalesPurchaseRegisterExportComponent } from "../../sales-purchase-register-export/sales-purchase-register-export.component";
+import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, OnDestroy } from '@angular/core';
+import { Store, select } from '@ngrx/store';
+import { AppState } from '../../../store';
+import { InvoiceReceiptActions } from '../../../actions/invoice/receipt/receipt.actions';
+import { ReportsDetailedRequestFilter, PurchaseRegisteDetailedResponse } from '../../../models/api-models/Reports';
+import { ActivatedRoute, Router } from '@angular/router';
+import { take, takeUntil, debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { ReplaySubject, Observable } from 'rxjs';
+import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
+import { UntypedFormControl } from '@angular/forms';
+import { PAGINATION_LIMIT } from '../../../app.constant';
+import { CurrentCompanyState } from '../../../store/company/company.reducer';
+import { BreakpointObserver } from '@angular/cdk/layout';
+import { GeneralService } from '../../../services/general.service';
+import { MatDialog } from '@angular/material/dialog';
+import { SalesPurchaseRegisterExportComponent } from '../../sales-purchase-register-export/sales-purchase-register-export.component';
 
 @Component({
     selector: "purchase-register-expand",
@@ -37,9 +37,9 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
 
     public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     // searching
-    @ViewChild("invoiceSearch", { static: true }) public invoiceSearch: ElementRef;
-    @ViewChild("filterDropDownList", { static: true }) public filterDropDownList: BsDropdownDirective;
-    public voucherNumberInput: FormControl = new FormControl();
+    @ViewChild('invoiceSearch', { static: true }) public invoiceSearch: ElementRef;
+    @ViewChild('filterDropDownList', { static: true }) public filterDropDownList: BsDropdownDirective;
+    public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
     public monthNames = [];
     public monthYear: string[] = [];
     public modalUniqueName: string;

@@ -126,6 +126,12 @@
     height: 100%;
     min-height: 600px;
 }
+
+.branch-modal-wrap, 
+.modal-height{
+    height: 100%;
+}
+
 @media (max-width: 768px) {
     :host,
     :host.in {

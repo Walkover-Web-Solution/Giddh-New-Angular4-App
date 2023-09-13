@@ -28,16 +28,18 @@ import { ElementViewContainerRef } from "../../shared/helpers/directives/element
 import { debounceTime, distinctUntilChanged, takeUntil } from "rxjs/operators";
 import { BreakpointObserver, BreakpointState } from "@angular/cdk/layout";
 import * as dayjs from "dayjs";
-import { PerfectScrollbarConfigInterface } from "ngx-perfect-scrollbar";
 import { ContactAdvanceSearchComponent } from "../advanceSearch/contactAdvanceSearch.component";
 import { GeneralService } from "../../services/general.service";
 import { SettingsBranchActions } from "../../actions/settings/branch/settings.branch.action";
 import { OrganizationType } from "../../models/user-login-state";
-import { FormControl } from "@angular/forms";
+import { UntypedFormControl } from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
 import { MatTableDataSource } from "@angular/material/table";
 import { MatMenuTrigger } from "@angular/material/menu";
 import { PAGINATION_LIMIT } from "../../app.constant";
+import { AgingreportingService } from "../../services/agingreporting.service";
+import { ToasterService } from "../../services/toaster.service";
+import { Router } from "@angular/router";
 @Component({
     selector: "aging-report",
     templateUrl: "aging-report.component.html",
@@ -63,7 +65,6 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     public key: string = "name";
     public order: string = "asc";
     public filter: string = "";
-    public config: PerfectScrollbarConfigInterface = { suppressScrollX: false, suppressScrollY: false };
     public searchStr$ = new Subject<string>();
     public searchStr: string = "";
     public isMobileScreen: boolean = false;
@@ -87,7 +88,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     /** Stores the current organization type */
     public currentOrganizationType: OrganizationType;
     /** Stores the searched name value for the Name filter */
-    public searchedName: FormControl = new FormControl();
+    public searchedName: UntypedFormControl = new UntypedFormControl();
     /** True, if name search field is to be shown in the filters */
     public showNameSearch: boolean;
     /** Observable if loading in process */
@@ -107,16 +108,23 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     public imgPath: string = "";
     /** False for on init call */
     public defaultLoad: boolean = true;
+    /** True if api call in progress */
+    public isLoading: boolean = false;
+    /** Stores the voucher API version of company */
+    public voucherApiVersion: 1 | 2;
 
     constructor(
         public dialog: MatDialog,
+        private toaster: ToasterService,
         private store: Store<AppState>,
         private agingReportActions: AgingReportActions,
         private cdr: ChangeDetectorRef,
         private breakpointObserver: BreakpointObserver,
         private componentFactoryResolver: ComponentFactoryResolver,
         private settingsBranchAction: SettingsBranchActions,
-        private generalService: GeneralService) {
+        private generalService: GeneralService,
+        private router: Router,
+        private agingReportService: AgingreportingService) {
         this.agingDropDownoptions$ = this.store.pipe(select(s => s.agingreport.agingDropDownoptions), takeUntil(this.destroyed$));
         this.dueAmountReportRequest = new DueAmountReportQueryRequest();
         this.dueAmountReportRequest.count = PAGINATION_LIMIT;
@@ -157,6 +165,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.getDueReport();
         this.imgPath = isElectron ? "assets/images/" : AppUrl + APP_FOLDER + "assets/images/";
         this.getDueAmountreportData();
@@ -392,12 +401,13 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Branch change handler
-     *
-     * @memberof AgingReportComponent
-     */
+    * Branch change handler
+    *
+    * @memberof AgingReportComponent
+    */
     public handleBranchChange(selectedEntity: any): void {
         this.currentBranch.name = selectedEntity?.label;
+        this.currentBranch.uniqueName = selectedEntity?.value;
         this.getDueReport();
     }
 
@@ -468,4 +478,38 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         this.menu?.closeMenu();
     }
 
+    /**
+     * This will use for export aging report
+     *
+     * @memberof AgingReportComponent
+     */
+    public exportReport(): void {
+        if (this.isLoading) {
+            return;
+        }
+        let exportData = {
+            exportType: "AGING_REPORT_EXPORT",
+            fileType: "CSV",
+            includeTotalDueAmount: this.agingAdvanceSearchModal.includeTotalDueAmount,
+            totalDueAmountGreaterThan: this.agingAdvanceSearchModal.totalDueAmountGreaterThan,
+            totalDueAmountLessThan: this.agingAdvanceSearchModal.totalDueAmountLessThan,
+            totalDueAmountEqualTo: this.agingAdvanceSearchModal.totalDueAmountEqualTo,
+            totalDueAmountNotEqualTo: this.agingAdvanceSearchModal.totalDueAmountNotEqualTo,
+            totalDueAmount: this.agingAdvanceSearchModal.totalDueAmount,
+            sortBy: this.dueAmountReportRequest.sortBy,
+            sort: this.dueAmountReportRequest.sort === 'asc' ? 'ASC' : 'DESC',
+            rangeCol: this.dueAmountReportRequest.rangeCol,
+            q: this.dueAmountReportRequest.q
+        }
+        this.isLoading = true;
+        this.agingReportService.exportAgingReport(exportData, this.currentBranch ? this.currentBranch.uniqueName : "").pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            this.isLoading = false;
+            if (response?.status === 'success') {
+                this.toaster.showSnackBar("success", response?.body);
+                this.router.navigate(['pages', 'downloads', 'exports']);
+            } else {
+                this.toaster.showSnackBar("error", response?.message);
+            }
+        });
+    }
 }

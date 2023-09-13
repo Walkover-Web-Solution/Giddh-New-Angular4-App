@@ -4,7 +4,6 @@ import {
     OnDestroy,
     OnInit,
     ViewChild,
-    ElementRef,
     HostListener
 } from "@angular/core";
 import { BsModalService, BsModalRef, ModalDirective } from "ngx-bootstrap/modal";
@@ -28,6 +27,7 @@ import { BsDaterangepickerConfig } from 'ngx-bootstrap/datepicker';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 import { OrganizationType } from '../../../models/user-login-state';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
+import { Router } from "@angular/router";
 
 @Component({
     selector: "new-branch-transfer-list",
@@ -49,7 +49,7 @@ import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 
 export class NewBranchTransferListComponent implements OnInit, OnDestroy {
 
-    @ViewChild('branchtransfertemplate', { static: true }) public branchtransfertemplate: ElementRef;
+    @ViewChild('branchtransfertemplate', { static: true }) public branchtransfertemplate: TemplateRef<any>;
     @ViewChild('deleteBranchTransferModal', { static: true }) public deleteBranchTransferModal: ModalDirective;
     @ViewChild('senderReceiverField', { static: true }) public senderReceiverField;
     @ViewChild('warehouseNameField', { static: true }) public warehouseNameField;
@@ -78,7 +78,7 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
     /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
     /* This will store selected date range to use in api */
     public selectedDateRange: any;
     /* This will store selected date range to show on UI */
@@ -136,7 +136,8 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
         private store: Store<AppState>,
         private inventoryService: InventoryService,
         private _toasty: ToasterService,
-        private settingsBranchAction: SettingsBranchActions
+        private settingsBranchAction: SettingsBranchActions,
+        private router: Router
     ) {
         this.store.pipe(select(p => p.settings.profile), takeUntil(this.destroyed$)).subscribe((o) => {
             if (o && !_.isEmpty(o)) {
@@ -151,7 +152,6 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         document.querySelector("body")?.classList?.add("new-branch-list-page");
         this.initBranchTransferListResponse();
-
         branchTransferVoucherTypes.map(voucherType => {
             this.voucherTypes.push({ label: voucherType.label, value: voucherType.value });
         });
@@ -314,6 +314,7 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
     }
 
     public hideModal(refreshList: boolean): void {
+        this.router.navigate(['/pages/inventory/report']);
         if (refreshList) {
             this.getBranchTransferList(true);
         }
