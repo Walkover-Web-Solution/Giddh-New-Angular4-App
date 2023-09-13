@@ -48,15 +48,16 @@
                             *ngIf="!isCompany && voucherType !== 'sales'"
                             (click)="goToInvoice()"
                         >
-                            {{ localeData?.new }} {{ voucherType | voucherTypeToNamePipe }}
+                            {{ localeData?.new }}
+                            {{ voucherType === "purchase" ? localeData?.bill : (voucherType | voucherTypeToNamePipe) }}
                         </button>
                     </div>
 
                     <ul class="invoice-sidebar">
-                        <perfect-scrollbar #perfectScrollbar>
+                        <cdk-virtual-scroll-viewport [itemSize]="62">
                             <li
                                 class="single-invoice-detail cp"
-                                *ngFor="let item of filteredData"
+                                *cdkVirtualFor="let item of filteredData"
                                 [ngClass]="{ 'activeItem': item?.uniqueName === selectedItem?.uniqueName }"
                                 (click)="selectVoucher(item)"
                             >
@@ -90,7 +91,7 @@
                                     </div>
                                 </div>
                             </li>
-                        </perfect-scrollbar>
+                        </cdk-virtual-scroll-viewport>
                     </ul>
                 </div>
             </div>
@@ -627,10 +628,7 @@
                                     [placeholder]="localeData?.upload_excel_csv"
                                     droppable="true"
                                     class="form-control"
-                                    [options]="fileUploadOptions"
-                                    ngFileSelect
-                                    [uploadInput]="uploadInput"
-                                    (uploadOutput)="onUploadOutput($event)"
+                                    (change)="uploadFile()"
                                 />
                                 <div class="clearfix position-relative width-100">
                                     <div class="file-input-wrapper text-center">
@@ -709,7 +707,6 @@
         </div>
     </div>
     <!-- endregion -->
-
     <!-- region edit invoice -->
     <div *ngIf="showEditMode">
         <div class="invoice-edit-wrapper">

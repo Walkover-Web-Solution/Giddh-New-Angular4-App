@@ -1,10 +1,9 @@
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { LedgerService } from '../../../services/ledger.service';
 import { ExportLedgerRequest } from '../../../models/api-models/Ledger';
 import { ToasterService } from '../../../services/toaster.service';
 import { PermissionDataService } from 'apps/web-giddh/src/app/permissions/permission-data.service';
-import { some } from '../../../lodash-optimized';
 import * as dayjs from 'dayjs';
 import { Observable, ReplaySubject } from 'rxjs';
 import { AppState } from 'apps/web-giddh/src/app/store';
@@ -45,7 +44,7 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
     /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
     /* This will store modal reference */
     public modalRef: BsModalRef;
     /* This will store selected date range to use in api */
@@ -189,7 +188,7 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
                 this.changeDetectorRef.detectChanges();
                 if (response?.status === 'success') {
                     if (response.body) {
-                        if (this.emailTypeSelected === 'admin-detailed') {
+                        if (this.emailTypeSelected === 'admin-detailed' || this.emailTypeSelected === 'view-detailed') {
                             if (response.body.encodedData) {
                                 let blob = this.generalService.base64ToBlob(response.body.encodedData, (response.body.type === "xlsx" ? 'application/vnd.ms-excel' : 'text/csv'), 512);
                                 return download(response.body.name, blob, (response.body.type === "xlsx" ? 'application/vnd.ms-excel' : 'text/csv'));

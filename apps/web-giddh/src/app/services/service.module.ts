@@ -60,13 +60,14 @@ import { PurchaseOrderService } from './purchase-order.service';
 import { BulkVoucherExportService } from './bulkvoucherexport.service';
 import { LocaleService } from './locale.service';
 import { PrinterFormatService } from "./printer.format.service";
-import { ThermalService } from "./thermal.service";
+//import { ThermalService } from "./thermal.service";
 import { ActivityLogsService } from "./activity-logs.service";
 import { DownloadsService } from "./downloads.service";
 import { CustomFieldsService } from "./custom-fields.service";
 import { ImportsService } from "./imports.service";
 import { CampaignIntegrationService } from "./campaign.integration.service";
 import { PageLeaveUtilityService } from "./page-leave-utility.service";
+import { LedgerService } from "./ledger.service";
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -142,10 +143,11 @@ export class ServiceModule {
                 LocaleService,
                 DownloadsService,
                 PrinterFormatService,
-                ThermalService,
+                //ThermalService,
                 CustomFieldsService,
                 ImportsService,
-                PageLeaveUtilityService
+                PageLeaveUtilityService,
+                LedgerService
             ]
         };
     }

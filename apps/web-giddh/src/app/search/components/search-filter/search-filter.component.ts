@@ -1,6 +1,6 @@
 import { Component, EventEmitter, OnInit, Output, ViewChild, Input } from '@angular/core';
 import { SearchDataSet } from '../../../models/api-models/Search';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { digitsOnly } from '../../../shared/helpers/customValidationHelper';
 import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
 
@@ -30,8 +30,8 @@ export class SearchFilterComponent implements OnInit {
     public queryTypes = [];
     public queryDiffers = [];
     public balType = [];
-    public searchQueryForm: FormGroup;
-    public searchDataSet: FormArray;
+    public searchQueryForm: UntypedFormGroup;
+    public searchDataSet: UntypedFormArray;
     public toggleFilters: boolean = false;
     /* It reset the status for Filter by Account  */
     public resetValues: boolean = false;
@@ -39,7 +39,7 @@ export class SearchFilterComponent implements OnInit {
     /**
      * TypeScript public modifiers
      */
-    constructor(private fb: FormBuilder) {
+    constructor(private fb: UntypedFormBuilder) {
         this.searchQueryForm = this.fb.group({
             searchQuery: this.fb.array([this.fb.group({
                 queryType: ['', Validators.required],
@@ -49,7 +49,7 @@ export class SearchFilterComponent implements OnInit {
                 amount: ['', [Validators.required, digitsOnly]],
             })])
         });
-        this.searchDataSet = this.searchQueryForm.controls['searchQuery'] as FormArray;
+        this.searchDataSet = this.searchQueryForm.controls['searchQuery'] as UntypedFormArray;
     }
 
     public ngOnInit() {
@@ -105,7 +105,7 @@ export class SearchFilterComponent implements OnInit {
     }
 
     public removeSearchRow() {
-        let arr = this.searchQueryForm.controls['searchQuery'] as FormArray;
+        let arr = this.searchQueryForm.controls['searchQuery'] as UntypedFormArray;
         arr.removeAt(-1);
     }
 

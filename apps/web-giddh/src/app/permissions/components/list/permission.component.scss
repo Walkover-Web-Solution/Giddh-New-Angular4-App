@@ -159,6 +159,11 @@
     align-items: center;
     flex-direction: column;
 }
+.permission-btn{
+    color: var(--color-white) !important;
+}
+
+
 @media (max-width: 767px) {
     .role {
         ul {

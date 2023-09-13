@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
@@ -31,9 +31,9 @@ import { takeUntil } from 'rxjs/operators';
 })
 export class ListManufacturingComponent implements OnInit {
     /** Instance of Mat Dialog for Advance Filter */
-    @ViewChild("advance_filter_dialog") public advanceFilterComponent: TemplateRef<any>;
+    @ViewChild("advanceFilterDialog") public advanceFilterComponent: TemplateRef<any>;
     /** directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
     /* This will hold local JSON data */
     public localeData: any = {};
     /** This will hold common JSON data */
@@ -392,7 +392,7 @@ export class ListManufacturingComponent implements OnInit {
         this.dialog.open(this.advanceFilterComponent, {
             width: '500px',
             autoFocus: false
-        })
+        });
     }
 
     /**

@@ -1,6 +1,6 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
@@ -63,7 +63,7 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
         linkedEntities: []
     };
     /** Warehouse form */
-    public warehouseForm: FormGroup;
+    public warehouseForm: UntypedFormGroup;
     /** Stores the addresses */
     public addresses: Array<any>;
     /** True, if address change is in progress */
@@ -92,7 +92,7 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
     constructor(
         private commonService: CommonService,
         private companyService: CompanyService,
-        private formBuilder: FormBuilder,
+        private formBuilder: UntypedFormBuilder,
         private generalService: GeneralService,
         private router: Router,
         private store: Store<AppState>,

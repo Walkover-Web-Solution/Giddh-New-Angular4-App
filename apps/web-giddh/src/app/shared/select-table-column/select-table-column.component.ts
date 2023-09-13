@@ -78,19 +78,21 @@ export class SelectTableColumnComponent implements OnInit, OnChanges {
      */
     public saveSelectedColumns(): void {
         setTimeout(() => {
-            this.filteredDisplayColumns();
-            let saveColumnReq = {
-                module: this.moduleType,
-                columns: this.displayedColumns
-            }
-            this.commonService.saveSelectedTableColumns(saveColumnReq).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                if (response && response.body && response.status === 'success') {
-                    this.isLoading.emit(false);
-                } else {
-                    this.toaster.errorToast(response?.message);
-                    this.isLoading.emit(false);
+            setTimeout(() => {
+                this.filteredDisplayColumns();
+                let saveColumnReq = {
+                    module: this.moduleType,
+                    columns: this.displayedColumns
                 }
-            });
+                this.commonService.saveSelectedTableColumns(saveColumnReq).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                    if (response && response.body && response.status === 'success') {
+                        this.isLoading.emit(false);
+                    } else {
+                        this.toaster.errorToast(response?.message);
+                        this.isLoading.emit(false);
+                    }
+                });
+            }, 200);
         });
     }
 

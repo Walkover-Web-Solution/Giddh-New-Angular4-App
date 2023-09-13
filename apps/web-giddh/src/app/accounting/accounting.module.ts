@@ -3,13 +3,11 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { LaddaModule } from 'angular2-ladda';
-import { TextMaskModule } from 'angular2-text-mask';
 import {
     AccountingSidebarComponent,
 } from 'apps/web-giddh/src/app/accounting/accouting-sidebar/accounting-sidebar.component';
 import { KeyboardService } from 'apps/web-giddh/src/app/accounting/keyboard.service';
 import { ClickOutsideModule } from 'ng-click-outside';
-import { DatepickerModule } from 'ngx-bootstrap/datepicker';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
@@ -55,8 +53,7 @@ import { VoucherGridComponent } from './voucher-grid/voucher-grid.component';
         CurrencyModule,
         FormsModule,
         ReactiveFormsModule,
-        DatepickerModule,
-        ModalModule,
+        ModalModule.forRoot(),
         LaddaModule.forRoot({
             style: 'slide-left',
             spinnerSize: 30
@@ -67,7 +64,6 @@ import { VoucherGridComponent } from './voucher-grid/voucher-grid.component';
         ClickOutsideModule,
         TooltipModule.forRoot(),
         TypeaheadModule.forRoot(),
-        TextMaskModule,
         VirtualScrollModule,
         ElementViewChildModule,
         QuickAccountModule,

@@ -65,12 +65,9 @@
                     </div>
                 </div>
                 <div>
-                    <perfect-scrollbar
-                        #perfectdirective
+                    <div
+                        id="horizontal-master-scroll"
                         class="scroll-container"
-                        fxFlex="auto"
-                        [config]="config"
-                        [scrollIndicators]="true"
                     >
                         <div
                             *ngIf="!(searchLoad | async)"
@@ -97,7 +94,7 @@
                             >
                             </master>
                         </div>
-                    </perfect-scrollbar>
+                    </div>
                 </div>
             </div>
             <!-- middle body -->

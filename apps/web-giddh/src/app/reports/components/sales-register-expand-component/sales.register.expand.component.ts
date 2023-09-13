@@ -7,14 +7,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { take, takeUntil, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { ReplaySubject, Observable } from 'rxjs';
 import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { PAGINATION_LIMIT } from '../../../app.constant';
 import { CurrentCompanyState } from '../../../store/company/company.reducer';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { GeneralService } from '../../../services/general.service';
-import { ExportBodyRequest } from '../../../models/api-models/DaybookRequest';
-import { LedgerService } from '../../../services/ledger.service';
-import { ToasterService } from '../../../services/toaster.service';
+import { MatDialog } from '@angular/material/dialog';
+import { SalesPurchaseRegisterExportComponent } from '../../sales-purchase-register-export/sales-purchase-register-export.component';
 
 @Component({
     selector: 'sales-register-expand',
@@ -43,7 +42,7 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
     @ViewChild('invoiceSearch', { static: true }) public invoiceSearch: ElementRef;
     @ViewChild('filterDropDownList', { static: true }) public filterDropDownList: BsDropdownDirective;
 
-    public voucherNumberInput: FormControl = new FormControl();
+    public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
     public monthNames = [];
     public monthYear: string[] = [];
     public modalUniqueName: string;
@@ -79,11 +78,18 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
         value: false,
         discount: false,
         tax: false,
-        net_sales: false
+        net_sales: false,
+        parent_group: false,
+        sales_account: false,
+        tax_no: false,
+        address: false,
+        pincode: false,
+        email: false,
+        mobile_no: false
     };
     /** True if api call in progress */
     public isLoading: boolean = false;
-    constructor(private store: Store<AppState>, private invoiceReceiptActions: InvoiceReceiptActions, private activeRoute: ActivatedRoute, private router: Router, private _cd: ChangeDetectorRef, private breakPointObservar: BreakpointObserver, private generalService: GeneralService, private ledgerService: LedgerService, private toaster: ToasterService) {
+    constructor(private store: Store<AppState>, private invoiceReceiptActions: InvoiceReceiptActions, private activeRoute: ActivatedRoute, private router: Router, private _cd: ChangeDetectorRef, private breakPointObservar: BreakpointObserver, private generalService: GeneralService, private dialog: MatDialog) {
         this.salesRegisteDetailedResponse$ = this.store.pipe(select(appState => appState.receipt.SalesRegisteDetailedResponse), takeUntil(this.destroyed$));
         this.isGetSalesDetailsInProcess$ = this.store.pipe(select(p => p.receipt.isGetSalesDetailsInProcess), takeUntil(this.destroyed$));
         this.isGetSalesDetailsSuccess$ = this.store.pipe(select(p => p.receipt.isGetSalesDetailsSuccess), takeUntil(this.destroyed$));
@@ -159,6 +165,41 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
                 "value": "account",
                 "label": "Account",
                 "checked": true
+            },
+            {
+                "value": "parent_group",
+                "label": "Parent Group",
+                "checked": false
+            },
+            {
+                "value": "tax_no",
+                "label": "Tax no.",
+                "checked": false
+            },
+            {
+                "value": "address",
+                "label": "Address",
+                "checked": false
+            },
+            {
+                "value": "pincode",
+                "label": "Pincode",
+                "checked": false
+            },
+            {
+                "value": "email",
+                "label": "Email",
+                "checked": false
+            },
+            {
+                "value": "mobile_no",
+                "label": "Mobile No.",
+                "checked": false
+            },
+            {
+                "value": "sales_account",
+                "label": "Sales Account",
+                "checked": false
             },
             {
                 "value": "voucher_type",
@@ -392,38 +433,21 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
      * @memberof SalesRegisterExpandComponent
      */
     public export(): void {
-        let exportBodyRequest: ExportBodyRequest = new ExportBodyRequest();
-        exportBodyRequest.from = this.from;
-        exportBodyRequest.to = this.to;
-        exportBodyRequest.exportType = "SALES_REGISTER_DETAILED_EXPORT";
-        exportBodyRequest.fileType = "CSV";
-        exportBodyRequest.isExpanded = this.expand;
-        exportBodyRequest.q = this.voucherNumberInput?.value;
-        exportBodyRequest.branchUniqueName = this.getDetailedsalesRequestFilter?.branchUniqueName;
-        exportBodyRequest.columnsToExport = [];
-        if (this.showFieldFilter.voucher_type) {
-            exportBodyRequest.columnsToExport.push("Voucher Type");
+        let exportData = {
+            from: this.from,
+            to: this.to,
+            exportType: "SALES_REGISTER_DETAILED_EXPORT",
+            fileType: "CSV",
+            isExpanded: this.expand,
+            q: this.voucherNumberInput?.value,
+            branchUniqueName: this.getDetailedsalesRequestFilter?.branchUniqueName,
+            commonLocaleData: this.commonLocaleData,
+            localeData: this.localeData
         }
-        if (this.showFieldFilter.voucher_no) {
-            exportBodyRequest.columnsToExport.push("Voucher No");
-        }
-        if (this.showFieldFilter.qty_rate) {
-            exportBodyRequest.columnsToExport.push("Qty/Unit");
-        }
-        if (this.showFieldFilter.discount) {
-            exportBodyRequest.columnsToExport.push("Discount");
-        }
-        if (this.showFieldFilter.tax) {
-            exportBodyRequest.columnsToExport.push("Tax");
-        }
-
-        this.ledgerService.exportData(exportBodyRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response?.status === 'success') {
-                this.toaster.successToast(response?.body);
-                this.router.navigate(["/pages/downloads"]);
-            } else {
-                this.toaster.errorToast(response?.message);
-            }
+        this.dialog.open(SalesPurchaseRegisterExportComponent, {
+            width: '630px',
+            panelClass: 'export-container',
+            data: exportData
         });
     }
 

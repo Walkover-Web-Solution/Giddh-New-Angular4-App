@@ -86,7 +86,7 @@
                     </span>
                 </div>
             </div>
-            <div class="cp advance-clear-filter-icons d-flex float-right">
+            <div class="cp advance-clear-filter-icons d-flex float-right column-gap1">
                 <button
                     mat-stroked-button
                     color="primary"
@@ -99,6 +99,9 @@
                         {{ commonLocaleData?.app_filter }}
                         <span class="icon-advance-filter ml-2"></span>
                     </div>
+                </button>
+                <button *ngIf="voucherApiVersion ===2" mat-stroked-button color="primary" (click)="exportReport()">
+                    {{ commonLocaleData?.app_export }}
                 </button>
                 <span class="refresh-btn" *ngIf="isAdvanceSearchApplied">
                     <button mat-icon-button (click)="resetAdvanceSearch()">
@@ -150,7 +153,7 @@
             </div>
         </div>
     </div>
-    <div class="contact-main aging-page">
+    <div class="contact-main aging-page"  *ngIf="!isLoading">
         <div class="pd-b2 mr-b1 on-mobile-view mobile-card-wrapper">
             <div *ngIf="!isMobileScreen" class="table-responsive">
                 <ng-container *ngTemplateOutlet="mainTable"></ng-container>
@@ -196,6 +199,9 @@
                 <no-data [secondaryMessageClass]="'p-0'"></no-data>
             </div>
         </div>
+    </div>
+        <div *ngIf="isLoading">
+        <giddh-page-loader></giddh-page-loader>
     </div>
 </div>
 <!--region advance_search Modal-->
@@ -262,7 +268,7 @@
         >
             <ng-container matColumnDef="customerName">
                 <th
-                    class="mat-customer-name"
+                    class="mat-customer-name mat-column-name"
                     mat-header-cell
                     *matHeaderCellDef
                     #searchCustomerContainer
@@ -291,7 +297,7 @@
             </ng-container>
 
             <ng-container matColumnDef="parentGroup">
-                <th class="mat-parent-group" mat-header-cell *matHeaderCellDef>
+                <th class="mat-parent-group mat-column-group" mat-header-cell *matHeaderCellDef>
                     <div class="d-flex align-items-center">
                         {{ commonLocaleData?.app_parent_group }}
                         <ng-container
@@ -305,7 +311,7 @@
             </ng-container>
 
             <ng-container matColumnDef="app_upcoming_due">
-                <th mat-header-cell *matHeaderCellDef>
+                <th mat-header-cell *matHeaderCellDef class="mat-column-upcoming">
                     <div class="d-flex align-items-center justify-content-end">
                         {{ commonLocaleData?.app_upcoming_due }}
                         <ng-container *ngTemplateOutlet="sortingTemplate; context: { $implicit: 'futureDueAmount' }">
@@ -325,7 +331,7 @@
             </ng-container>
 
             <ng-container matColumnDef="app_days_1">
-                <th class="mat-app-days-1" mat-header-cell *matHeaderCellDef>
+                <th class="mat-app-days-1 mat-column-group" mat-header-cell *matHeaderCellDef>
                     <div class="d-flex align-items-center justify-content-end">
                         <button
                             mat-button
@@ -360,7 +366,7 @@
             </ng-container>
 
             <ng-container matColumnDef="app_days_2">
-                <th class="mat-app-days-2" mat-header-cell *matHeaderCellDef>
+                <th class="mat-app-days-2 mat-column-group" mat-header-cell *matHeaderCellDef>
                     <div class="d-flex align-items-center justify-content-end">
                         <button
                             [matMenuTriggerFor]="agingDropdown"
@@ -403,7 +409,7 @@
             </ng-container>
 
             <ng-container matColumnDef="app_days_3">
-                <th class="mat-app-days-3" mat-header-cell *matHeaderCellDef>
+                <th class="mat-app-days-3 mat-column-group" mat-header-cell *matHeaderCellDef>
                     <div class="d-flex align-items-center justify-content-end">
                         <button
                             mat-button
@@ -444,7 +450,7 @@
             </ng-container>
 
             <ng-container matColumnDef="app_days_4">
-                <th class="mat-app-days-4" mat-header-cell *matHeaderCellDef>
+                <th class="mat-app-days-4 mat-column-group" mat-header-cell *matHeaderCellDef>
                     <div class="d-flex align-items-center justify-content-end">
                         <button
                             mat-button
@@ -475,7 +481,7 @@
             </ng-container>
 
             <ng-container matColumnDef="app_total_due">
-                <th mat-header-cell *matHeaderCellDef>
+                <th mat-header-cell *matHeaderCellDef class="mat-column-group">
                     <div class="d-flex align-items-center justify-content-end">
                         {{ commonLocaleData?.app_total_due }}
                         <ng-container *ngTemplateOutlet="sortingTemplate; context: { $implicit: 'totalDueAmount' }">

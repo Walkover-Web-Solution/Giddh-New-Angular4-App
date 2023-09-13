@@ -21,9 +21,6 @@ import { SettingTaxesComponent } from './taxes/setting.taxes.component';
 import { SettingTriggerComponent } from './trigger/setting.trigger.component';
 import { CreateWarehouseComponent } from './warehouse/create-warehouse/create-warehouse.component';
 import { WarehouseComponent } from './warehouse/warehouse.component';
-import { PERFECT_SCROLLBAR_CONFIG, PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
-import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar/lib/perfect-scrollbar.interfaces';
-import { TextMaskModule } from 'angular2-text-mask';
 import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
 import { DigitsOnlyModule } from '../shared/helpers/directives/digitsOnly/digitsOnly.module';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
@@ -62,9 +59,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 
 import { NgxPlaidLinkModule } from "ngx-plaid-link";
-const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
-    suppressScrollX: true
-};
+import { AsideMenuAccountModule } from '../shared/aside-menu-account/aside.menu.account.module';
 
 @NgModule({
     declarations: [
@@ -99,8 +94,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         ContactModule,
         ReactiveFormsModule,
         CurrencyModule,
-        PerfectScrollbarModule,
-        TextMaskModule,
         NgxMaskModule.forRoot(),
         DigitsOnlyModule,
         ShSelectModule,
@@ -132,15 +125,10 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         MatTooltipModule,
         MatMenuModule,
         MatDatepickerModule,
-        NgxPlaidLinkModule
+        NgxPlaidLinkModule,
+        AsideMenuAccountModule
 
     ],
-    providers: [
-        {
-            provide: PERFECT_SCROLLBAR_CONFIG,
-            useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
-        }
-    ]
 })
 
 export class SettingsModule {

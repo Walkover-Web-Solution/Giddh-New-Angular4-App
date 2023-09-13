@@ -67,7 +67,6 @@ span.dr-label {
         }
         input {
             border-left: 1px solid var(--color-iron) !important;
-            border-right: none;
             &:focus {
                 border-left: 1px solid var(--color-blue) !important;
             }
@@ -88,7 +87,7 @@ form.gstin-form {
     margin: 20px 0;
 }
 .add-address-btn {
-    width: 130px;
+    width: 140px;
     display: flex;
     justify-content: center;
     align-items: center;

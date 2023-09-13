@@ -1,6 +1,6 @@
 import { CdkVirtualScrollViewport } from "@angular/cdk/scrolling";
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, TemplateRef, ViewChild, ViewChildren } from "@angular/core";
-import { FormControl } from "@angular/forms";
+import { UntypedFormControl } from "@angular/forms";
 import { MatAutocompleteTrigger } from "@angular/material/autocomplete";
 import { ReplaySubject } from "rxjs";
 import { debounceTime, distinctUntilChanged, takeUntil } from "rxjs/operators";
@@ -70,7 +70,7 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
     /** Callback for clear selected value */
     @Output() public onClear: EventEmitter<any> = new EventEmitter<any>();
     /** Search field form control */
-    public searchFormControl = new FormControl();
+    public searchFormControl = new UntypedFormControl();
     /** Filtered options to show in autocomplete list */
     public fieldFilteredOptions: IOption[] = [];
     /** Selected value from option list */
