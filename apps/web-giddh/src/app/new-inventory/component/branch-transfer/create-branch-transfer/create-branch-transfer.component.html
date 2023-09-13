@@ -99,6 +99,7 @@
                                                     selectProduct(
                                                         $event,
                                                         branchTransferCreateEditForm.get('products.0'),
+                                                        false,
                                                         0
                                                     )
                                                 "
@@ -180,6 +181,11 @@
                                                                     ' ' +
                                                                     commonLocaleData?.app_number
                                                                 "
+                                                                [placeholder]="
+                                                                    commonLocaleData?.app_hsn +
+                                                                    ' ' +
+                                                                    commonLocaleData?.app_number
+                                                                "
                                                                 formControlName="hsnNumber"
                                                                 [allowDecimalDigitsOnly]="true"
                                                                 [max]="10"
@@ -198,6 +204,11 @@
                                                                 [type]="'text'"
                                                                 [name]="'hsnSacNumber'"
                                                                 [label]="
+                                                                    commonLocaleData?.app_sac +
+                                                                    ' ' +
+                                                                    commonLocaleData?.app_number
+                                                                "
+                                                                [placeholder]="
                                                                     commonLocaleData?.app_sac +
                                                                     ' ' +
                                                                     commonLocaleData?.app_number
@@ -349,7 +360,7 @@
                                         </ng-container>
                                     </div>
                                     <div class="col-lg-6">
-                                        <div class="mr-b15">
+                                        <div class="position-relative info-field mr-b15">
                                             <input-field
                                                 *ngIf="(isBranch || isCompanyWithSingleBranch) && !isUpdateMode"
                                                 [name]="'myCurrentCompany'"
@@ -364,10 +375,25 @@
                                                 "
                                             >
                                             </input-field>
+                                            <i
+                                                *ngIf="
+                                                    destinationWarehouses[
+                                                        branchTransferCreateEditForm.get('destinations.0.uniqueName')
+                                                            ?.value
+                                                    ]?.length !==
+                                                    allWarehouses[
+                                                        branchTransferCreateEditForm.get('destinations.0.uniqueName')
+                                                            ?.value
+                                                    ]?.length
+                                                "
+                                                class="icon-info three"
+                                                matTooltip="{{ branchTransferInfoText }}"
+                                            >
+                                            </i>
                                         </div>
                                         <div formArrayName="destinations">
                                             <div [formGroupName]="0">
-                                                <div *ngIf="isUpdateMode" class="mr-b15 position-relative info-field">
+                                                <div *ngIf="isUpdateMode" class="mr-b15">
                                                     <dropdown-field
                                                         [name]="'receiverName'"
                                                         [label]="localeData?.receiver_name"
@@ -391,23 +417,6 @@
                                                         "
                                                     >
                                                     </dropdown-field>
-                                                    <i
-                                                        *ngIf="
-                                                            destinationWarehouses[
-                                                                branchTransferCreateEditForm.get(
-                                                                    'destinations.0.uniqueName'
-                                                                )?.value
-                                                            ]?.length !==
-                                                            allWarehouses[
-                                                                branchTransferCreateEditForm.get(
-                                                                    'destinations.0.uniqueName'
-                                                                )?.value
-                                                            ]?.length
-                                                        "
-                                                        class="icon-info three"
-                                                        matTooltip="{{ branchTransferInfoText }}"
-                                                    >
-                                                    </i>
                                                 </div>
                                                 <div class="mr-b15">
                                                     <dropdown-field
@@ -574,6 +583,7 @@
                                                     selectProduct(
                                                         $event,
                                                         branchTransferCreateEditForm.get('products.0'),
+                                                        false,
                                                         0
                                                     )
                                                 "
@@ -652,6 +662,12 @@
                                                                 [name]="'hsnNumber'"
                                                                 [label]="
                                                                     commonLocaleData?.app_hsn +
+                                                                    ' ' +
+                                                                    commonLocaleData?.app_number
+                                                                "
+                                                                [placeholder]="
+                                                                    commonLocaleData?.app_hsn +
+                                                                    ' ' +
                                                                     commonLocaleData?.app_number
                                                                 "
                                                                 formControlName="hsnNumber"
@@ -673,6 +689,12 @@
                                                                 [name]="'sacNumber'"
                                                                 [label]="
                                                                     commonLocaleData?.app_sac +
+                                                                    ' ' +
+                                                                    commonLocaleData?.app_number
+                                                                "
+                                                                [placeholder]="
+                                                                    commonLocaleData?.app_sac +
+                                                                    ' ' +
                                                                     commonLocaleData?.app_number
                                                                 "
                                                                 formControlName="sacNumber"
@@ -687,11 +709,12 @@
                                         </div>
                                         <div *ngIf="transferType === 'products'">
                                             <div class="mr-b15">
-                                                <div class="option-value-field">
-                                                    <text-field
+                                                <div class="position-relative info-field">
+                                                    <input-field
                                                         *ngIf="(isBranch || isCompanyWithSingleBranch) && !isUpdateMode"
                                                         [name]="'sourceName'"
                                                         formControlName="myCurrentCompany"
+                                                        [label]="localeData?.sender_name"
                                                         [placeholder]=""
                                                         [type]="'text'"
                                                         [readonly]="isBranch || isCompanyWithSingleBranch"
@@ -702,7 +725,22 @@
                                                                 ?.value
                                                         "
                                                     >
-                                                    </text-field>
+                                                    </input-field>
+                                                    <i
+                                                        *ngIf="
+                                                            senderWarehouses[
+                                                                branchTransferCreateEditForm.get('sources.0.uniqueName')
+                                                                    ?.value
+                                                            ]?.length !==
+                                                            allWarehouses[
+                                                                branchTransferCreateEditForm.get('sources.0.uniqueName')
+                                                                    ?.value
+                                                            ]?.length
+                                                        "
+                                                        class="icon-info"
+                                                        matTooltip="{{ branchTransferInfoText }}"
+                                                    >
+                                                    </i>
                                                 </div>
                                                 <div class="position-relative info-field" *ngIf="isUpdateMode">
                                                     <dropdown-field
@@ -1441,7 +1479,8 @@
                                                                 [options]="stockList"
                                                                 [appearance]="'outline'"
                                                                 (selectedOption)="
-                                                                    product.reset(); selectProduct($event, product, i)
+                                                                    product.reset();
+                                                                    selectProduct($event, product, false, i)
                                                                 "
                                                                 [defaultValue]="product.get('name').value"
                                                                 [cssClass]="'form-control mat-field-border pb-0'"
@@ -2056,8 +2095,8 @@
                                                                 <div class="text-right">
                                                                     {{ activeCompany?.baseCurrencySymbol }}
                                                                     {{
-                                                                        destination.get("warehouse.stockDetails.rate")
-                                                                            .amount | giddhCurrency
+                                                                        destination.get("warehouse.stockDetails.amount")
+                                                                            .value | giddhCurrency
                                                                     }}
                                                                 </div>
                                                             </div>

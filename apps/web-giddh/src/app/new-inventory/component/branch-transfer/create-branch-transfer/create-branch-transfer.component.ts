@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, QueryList, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
-import { UntypedFormGroup, UntypedFormArray, UntypedFormBuilder, Validators, FormArray } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormArray, UntypedFormBuilder, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -12,13 +12,11 @@ import { cloneDeep, isEmpty } from 'apps/web-giddh/src/app/lodash-optimized';
 import { ILinkedStocksResult, LinkedStocksResponse, LinkedStocksVM } from 'apps/web-giddh/src/app/models/api-models/BranchTransfer';
 import { OnboardingFormRequest } from 'apps/web-giddh/src/app/models/api-models/Common';
 import { IAllTransporterDetails, IEwayBillTransporter, IEwayBillfilter } from 'apps/web-giddh/src/app/models/api-models/Invoice';
-import { IVariant } from 'apps/web-giddh/src/app/models/api-models/Ledger';
 import { InvoiceSetting } from 'apps/web-giddh/src/app/models/interfaces/invoice.setting.interface';
 import { OrganizationType } from 'apps/web-giddh/src/app/models/user-login-state';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { InventoryService } from 'apps/web-giddh/src/app/services/inventory.service';
 import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service';
-import { LedgerService } from 'apps/web-giddh/src/app/services/ledger.service';
 import { SettingsWarehouseService } from 'apps/web-giddh/src/app/services/settings.warehouse.service';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
@@ -27,7 +25,7 @@ import { AppState } from 'apps/web-giddh/src/app/store';
 import { IOption } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface';
 import * as dayjs from 'dayjs';
 import { Observable, ReplaySubject, of as observableOf } from 'rxjs';
-import { map, take, takeUntil } from 'rxjs/operators';
+import { take, takeUntil } from 'rxjs/operators';
 
 @Component({
     selector: 'app-create-branch-transfer',
@@ -185,8 +183,7 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
         private toasty: ToasterService,
         private warehouseService: SettingsWarehouseService,
         public dialog: MatDialog,
-        private invoiceServices: InvoiceService,
-        private ledgerService: LedgerService
+        private invoiceServices: InvoiceService
     ) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
     }
@@ -446,6 +443,7 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
      * @memberof CreateBranchTransferComponent
      */
     public submit(): void {
+
         this.isValidForm = !this.branchTransferCreateEditForm.invalid;
         this.isLoading = true;
 
@@ -511,7 +509,7 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
         let branchTransferObj = cloneDeep(this.branchTransferCreateEditForm.value);
         delete branchTransferObj.myCurrentCompany
         if (this.isValidForm) {
-        if (this.editBranchTransferUniqueName) {
+            if (this.editBranchTransferUniqueName) {
                 this.inventoryService.updateNewBranchTransfer(branchTransferObj).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                     this.isLoading = false;
                     if (res) {
@@ -1444,20 +1442,19 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
                         taxNumber: null,
                         address: null
                     });
-
                     if (!stockDetailsFormGroup) {
                         stockDetailsFormGroup.patchValue({
                             stockUnitUniqueName: null,
                             stockUnit: null,
                             amount: null,
                             rate: null,
-                            quantity: (event.value) ? 1 : null
+                            quantity: null
                         });
                     }
+                    sourceGroup.get('warehouse.stockDetails.quantity')?.patchValue(event?.value ? 1 : null);
                     this.resetSourceWarehouses(index, true);
                 }
             } else {
-
                 const destinationsArray = this.branchTransferCreateEditForm.get('destinations') as UntypedFormArray;
                 const destinationsFormGroup = destinationsArray?.at(index) as UntypedFormGroup;
                 const destinationsWarehouseFormGroup = destinationsFormGroup.get('warehouse') as UntypedFormGroup;
@@ -1475,16 +1472,16 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
                         taxNumber: null,
                         address: null
                     });
-
                     if (!stockDetailsFormGroup) {
                         stockDetailsFormGroup.patchValue({
                             stockUnitUniqueName: null,
                             stockUnit: null,
                             amount: null,
                             rate: null,
-                            quantity: (event.value) ? 1 : null
+                            quantity: null
                         });
                     }
+                    destinationsFormGroup.get('warehouse.stockDetails.quantity')?.patchValue(event?.value ? 1 : null);
                     this.resetDestinationWarehouses(index, true);
                 }
             }
@@ -1580,7 +1577,7 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
                 });
             }
 
-            if (sourcesArray && sourceFormGroup.get('uniqueName')?.value) {
+            if (sourcesArray && sourceFormGroup && sourceFormGroup.get('uniqueName')?.value) {
                 // Update source warehouses
                 this.senderWarehouses[sourceFormGroup.get('uniqueName').value] = [];
                 if (this.allWarehouses[sourceFormGroup.get('uniqueName').value] && this.allWarehouses[sourceFormGroup.get('uniqueName').value].length > 0) {
@@ -1768,7 +1765,7 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
      * @param {number} index
      * @memberof CreateBranchTransferComponent
      */
-    public variantChanged(event: any, productFormGroup: any, index: number, defaultLoad:boolean = false): void {
+    public variantChanged(event: any, productFormGroup: any, index: number, defaultLoad: boolean = false): void {
         if (event) {
             const variantsFormGroup = productFormGroup?.get('variant') as UntypedFormGroup;
             variantsFormGroup.get('name')?.setValue(event.additional.name);
@@ -1838,11 +1835,11 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
                                 this.variantChanged(selectedVariant, productFormGroup, index)
                             }
                         } else {
-                          const selectedVariant = this.stockVariants[index].find(variant => variant.value === variantsFormGroup.get('uniqueName')?.value);
+                            const selectedVariant = this.stockVariants[index].find(variant => variant.value === variantsFormGroup.get('uniqueName')?.value);
                             this.variantChanged(selectedVariant, productFormGroup, index, defaultLoad)
                         }
-
                     }
+
                     this.calculateRowTotal(productFormGroup);
                 }
             });
@@ -1873,39 +1870,48 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
             }
 
             if (this.transferType === 'senders') {
-
                 const sourcesArray = this.branchTransferCreateEditForm.get('sources') as UntypedFormArray;
                 const sourceFormGroup = sourcesArray?.at(index) as UntypedFormGroup;
-                const sourcesWarehouseFormGroup = sourceFormGroup.get('warehouse') as UntypedFormGroup;
+                const sourcesWarehouseFormGroup = sourceFormGroup?.get('warehouse') as UntypedFormGroup;
                 const destinationsArray = this.branchTransferCreateEditForm.get('destinations') as UntypedFormArray;
                 const destinationsFormGroup = destinationsArray?.at(index) as UntypedFormGroup;
-                const destinationsWarehouseFormGroup = destinationsFormGroup.get('warehouse') as UntypedFormGroup;
-                destinationsWarehouseFormGroup.get('stockDetails.stockUnit')?.setValue(event.additional.stockUnit.code);
-                destinationsWarehouseFormGroup.get('stockDetails.stockUnitUniqueName')?.setValue(event.additional.stockUnit.uniqueName);
-                sourcesWarehouseFormGroup.get('stockDetails.stockUnit')?.setValue(event.additional.stockUnit.code);
-                sourcesWarehouseFormGroup.get('stockDetails.stockUnitUniqueName')?.setValue(event.additional.stockUnit.uniqueName);
+                const destinationsWarehouseFormGroup = destinationsFormGroup?.get('warehouse') as UntypedFormGroup;
+                destinationsWarehouseFormGroup?.get('stockDetails.stockUnit')?.setValue(event.additional.stockUnit.code);
+                destinationsWarehouseFormGroup?.get('stockDetails.stockUnitUniqueName')?.setValue(event.additional.stockUnit.uniqueName);
+                destinationsWarehouseFormGroup?.get('stockDetails.stockUnitUniqueName')?.setValue(event.additional.stockUnit.uniqueName);
+                sourcesWarehouseFormGroup?.get('stockDetails.stockUnit')?.setValue(event.additional.stockUnit.code);
+                sourcesWarehouseFormGroup?.get('stockDetails.stockUnitUniqueName')?.setValue(event.additional.stockUnit.uniqueName);
             }
         }
     }
 
-    public loadStockUnits(event: any, index: number, productFormGroup: UntypedFormGroup, defaultLoad:boolean= false): void {
+    /**
+     * This will use for load stock units
+     *
+     * @param {*} event
+     * @param {number} index
+     * @param {UntypedFormGroup} productFormGroup
+     * @param {boolean} [defaultLoad=false]
+     * @memberof CreateBranchTransferComponent
+     */
+    public loadStockUnits(event: any, index: number, productFormGroup: UntypedFormGroup, defaultLoad: boolean = false): void {
         if (!this.stockUnits[index]) {
             this.stockUnits[index] = [];
         }
         let unitRates = [];
-            if (event.additional.purchaseAccountDetails) {
-                unitRates = event.additional.purchaseAccountDetails.unitRates.map(rate => ({
-                    label: rate.stockUnitName,
-                    value: rate.stockUnitCode,
-                    additional: rate.rate
-                }));
-            } else {
-                unitRates.push({
-                    label: this.stockUnitResults[index].name,
-                    value: this.stockUnitResults[index].uniqueName,
-                    additional: 1
-                })
-            }
+        if (event.additional.purchaseAccountDetails) {
+            unitRates = event.additional.purchaseAccountDetails.unitRates.map(rate => ({
+                label: rate.stockUnitName,
+                value: rate.stockUnitCode,
+                additional: rate.rate
+            }));
+        } else {
+            unitRates.push({
+                label: this.stockUnitResults[index].name,
+                value: this.stockUnitResults[index].uniqueName,
+                additional: 1
+            })
+        }
         const baseUnitExists = unitRates?.filter(rate => rate.value === this.stockUnitResults[index].uniqueName);
         if (!baseUnitExists?.length) {
             unitRates.push({
@@ -1923,13 +1929,13 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
     }
 
     /**
-* This will be use for variant change selection
-*
-* @param {*} event
-* @param {*} product
-* @param {number} index
-* @memberof CreateBranchTransferComponent
-*/
+    * This will be use for variant change selection
+    *
+    * @param {*} event
+    * @param {*} product
+    * @param {number} index
+    * @memberof CreateBranchTransferComponent
+    */
     public unitChanged(event: any, productFormGroup: any): void {
         if (event) {
             productFormGroup.get('stockDetails.stockUnit')?.setValue(event.label);
@@ -1939,23 +1945,6 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
         }
     }
 
-
-    /**
-     * This will use for get stock variants for stock
-     *
-     * @param {string} stockUniqueName
-     * @param {number} [index]
-     * @memberof CreateBranchTransferComponent
-     */
-    public loadStockVariants(stockUniqueName: string, index?: number): void {
-        this.ledgerService.loadStockVariants(stockUniqueName).pipe(
-            map((variants) => variants.map((variant: IVariant) => ({ label: variant.name, value: variant.uniqueName ,additional:variant})))).subscribe(res => {
-                if (!this.stockVariants[index]) {
-                    this.stockVariants[index] = [];
-                }
-                this.stockVariants[index] = res;
-            });
-    }
 
     /**
      * This will be use for calculating row total
