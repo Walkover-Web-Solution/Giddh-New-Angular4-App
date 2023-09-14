@@ -37,5 +37,9 @@
     "select_stock_unit": "स्टॉक यूनिट का चयन करें",
     "add_expense":"+ व्यय जोड़ें",
     "app_expense":"व्यय",
-    "manufacturing_expenses": "कुल विनिर्माण व्यय"
+    "manufacturing_expenses": "कुल विनिर्माण व्यय",
+    "increase_value": "संपत्ति मूल्य बढ़ाएं",
+    "book_expense": "खर्च पुस्तक",
+    "liability_assets": "देयता/संपत्ति खाता",
+    "expense_acc": "खर्च खाता"
 }

@@ -35,7 +35,11 @@
     "select_output_stock_unit": "Select Output Stock Unit",
     "enter_quantity": "Enter Quantity",
     "select_stock_unit": "Select Stock Unit",
-    "add_expense":"+ Add Expense",
-    "app_expense":"Expense",
-    "manufacturing_expenses": "Total Manufacturing Expense"
+    "add_expense": "+ Add Expense",
+    "app_expense": "Expense",
+    "manufacturing_expenses": "Total Manufacturing Expense",
+    "increase_value": "Increase Assets Value",
+    "book_expense": "Book Expense",
+    "liability_assets": "Liability/Asset A/c",
+    "expense_acc": "Expense A/c"
 }

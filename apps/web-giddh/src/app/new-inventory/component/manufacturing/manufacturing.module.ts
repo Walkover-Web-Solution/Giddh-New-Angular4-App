@@ -19,6 +19,7 @@ import { TranslateDirectiveModule } from '../../../theme/translate/translate.dir
 import { NoDataModule } from '../../../shared/no-data/no-data.module';
 import { GiddhPageLoaderModule } from '../../../shared/giddh-page-loader/giddh-page-loader.module';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 @NgModule({
     imports: [
@@ -38,7 +39,8 @@ import { MatExpansionModule } from '@angular/material/expansion';
         TranslateDirectiveModule,
         NoDataModule,
         GiddhPageLoaderModule,
-        MatExpansionModule
+        MatExpansionModule,
+        MatSlideToggleModule
     ],
     exports: [
         CreateManufacturingComponent,

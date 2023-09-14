@@ -49,14 +49,14 @@
                                 </div>
                             </div>
                             <div class="col">
-                                <div class="custom-card bg-vivid-gamboge">
-                                    <p class="card-head-text">{{ localeData?.item_cost }}</p>
-                                    <p class="card-text">{{ totals.costPerItem }}</p>
+                                <div class="custom-card bg-expense">
+                                    <p class="card-head-text">{{ localeData?.manufacturing_expenses }}</p>
+                                    <p class="card-text">{{ totals.expensePerItem }}</p>
                                 </div>
                             </div>
                             <div class="col">
-                                <div class="custom-card bg-expense">
-                                    <p class="card-head-text">{{ localeData?.manufacturing_expenses }}</p>
+                                <div class="custom-card bg-vivid-gamboge">
+                                    <p class="card-head-text">{{ localeData?.item_cost }}</p>
                                     <p class="card-text">{{ totals.costPerItem }}</p>
                                 </div>
                             </div>
@@ -445,6 +445,20 @@
                                         </div>
                                     </mat-expansion-panel>
                                     <mat-expansion-panel>
+                                        <div class="col-8">
+                                            <mat-slide-toggle
+                                                color="primary"
+                                                [(ngModel)]="increaseExpenseAmount"
+                                                (change)="toggleExpenseSetting($event)"
+                                                name="increaseExpenseAmount"
+                                            >
+                                                {{
+                                                    increaseExpenseAmount
+                                                        ? localeData?.increase_value
+                                                        : localeData?.book_expense
+                                                }}
+                                            </mat-slide-toggle>
+                                        </div>
                                         <mat-expansion-panel-header>
                                             <mat-panel-title class="p-0">
                                                 {{ localeData?.app_expense }}
@@ -464,74 +478,82 @@
                                                         <th class="table-delete">&nbsp;</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody (mouseleave)="activeLinkedStockIndex = null">
+                                                <tbody>
                                                     <ng-container
                                                         *ngFor="
-                                                            let linkedStock of manufacturingObject
-                                                                .manufacturingDetails[0].linkedStocks;
+                                                            let expense of manufacturingObject.manufacturingDetails[0]
+                                                                .otherExpenses;
                                                             let i = index
                                                         "
                                                     >
-                                                        <tr
-                                                            (mouseenter)="
-                                                                activeLinkedStockIndex = i; showBorder(linkedStock)
-                                                            "
-                                                            (mouseleave)="
-                                                                activeLinkedStockIndex = null; hideBorder(linkedStock)
-                                                            "
-                                                        >
+                                                        <tr>
                                                             <td class="table-name">
                                                                 <div
                                                                     class="field-m-width table-column-width d-flex align-items-center"
                                                                 >
                                                                     <select-field
                                                                         [cssClass]="'form-control mat-field-border'"
-                                                                        [name]="'accounts'"
-                                                                        [placeholder]="
-                                                                            commonLocaleData?.app_import_type
-                                                                                ?.base_accounts
+                                                                        [name]="'baseAccountUniqueName_' + i"
+                                                                        [placeholder]="localeData?.liability_assets"
+                                                                        [options]="liabilitiesAssetAccounts"
+                                                                        [scrollableElementId]="
+                                                                            'baseAccountUniqueName_' + i
                                                                         "
-                                                                        [options]="accounts"
-                                                                        (selectedOption)="selecteAccountType($event)"
-                                                                        (onClear)="resetAccounts($event)"
-                                                                        [allowValueReset]="true"
+                                                                        (selectedOption)="
+                                                                            expense.baseAccount.defaultName =
+                                                                                $event?.label;
+                                                                            expense.baseAccount.uniqueName =
+                                                                                $event?.value
+                                                                        "
+                                                                        [defaultValue]="expense.baseAccount.defaultName"
                                                                         (dynamicSearchedQuery)="
-                                                                            onExpenseAccountSearchQueryChanged($event)
+                                                                            onLiabilitiesAssetAccountSearchQueryChanged(
+                                                                                $event
+                                                                            )
                                                                         "
                                                                         [enableDynamicSearch]="true"
                                                                         [isPaginationEnabled]="true"
-                                                                        (scrollEnd)="handleScrollEnd()"
+                                                                        (scrollEnd)="
+                                                                            handleLiabilitiesAssetAccountScrollEnd()
+                                                                        "
+                                                                        [readonly]="
+                                                                            currentOrganizationType === 'COMPANY' &&
+                                                                            (currentCompanyBranches$ | async)?.length >
+                                                                                1
+                                                                        "
                                                                     >
                                                                     </select-field>
-                                                                    <!-- [defaultValue]="activityObjLabels?.accounts" -->
-                                                                    <span>to</span>
+                                                                    <span>{{ commonLocaleData?.app_to }}</span>
                                                                 </div>
                                                             </td>
                                                             <td class="table-variant">
                                                                 <div class="">
                                                                     <select-field
-                                                                        [cssClass]="
-                                                                            'disable-bg ' +
-                                                                            linkedStock.cssClass +
-                                                                            (linkedStock.variantNameError
-                                                                                ? ' required-field-error'
-                                                                                : '')
-                                                                        "
-                                                                        [name]="'variantUniqueName' + i"
-                                                                        [scrollableElementId]="'variant' + i"
-                                                                        [placeholder]="
-                                                                            commonLocaleData?.app_select_account
-                                                                        "
-                                                                        [options]="linkedStock.variants"
+                                                                        [cssClass]="'form-control mat-field-border'"
+                                                                        [name]="'expenseAccount_' + i"
+                                                                        [placeholder]="localeData?.expense_acc"
+                                                                        [options]="expenseAccounts"
+                                                                        [scrollableElementId]="'expenseAccount_' + i"
                                                                         (selectedOption)="
-                                                                            linkedStock.variant.name = $event.label;
-                                                                            linkedStock.variant.uniqueName =
-                                                                                $event.value;
-                                                                            validateSelectedVariant(i);
-                                                                            getRateForStock(linkedStock, i)
+                                                                            expense.transactions[0].account.defaultName =
+                                                                                $event?.label;
+                                                                            expense.transactions[0].account.uniqueName =
+                                                                                $event?.value
                                                                         "
-                                                                        [defaultValue]="linkedStock.variant.name"
-                                                                        [readonly]="isCompany"
+                                                                        [defaultValue]="
+                                                                            expense.transactions[0].account.defaultName
+                                                                        "
+                                                                        (dynamicSearchedQuery)="
+                                                                            onExpenseAccountSearchQueryChanged($event)
+                                                                        "
+                                                                        [enableDynamicSearch]="true"
+                                                                        [isPaginationEnabled]="true"
+                                                                        (scrollEnd)="handleExpenseAccountScrollEnd()"
+                                                                        [readonly]="
+                                                                            currentOrganizationType === 'COMPANY' &&
+                                                                            (currentCompanyBranches$ | async)?.length >
+                                                                                1
+                                                                        "
                                                                     >
                                                                     </select-field>
                                                                 </div>
@@ -539,15 +561,17 @@
                                                             <td class="table-rate">
                                                                 <div class="">
                                                                     <text-field
-                                                                        [cssClass]="
-                                                                            'disable-bg ' + linkedStock.cssClass
+                                                                        [cssClass]="'form-control mat-field-border text-right'"
+                                                                        [type]="'text'"
+                                                                        [name]="'amount' + i"
+                                                                        [(ngModel)]="expense.transactions[0].amount"
+                                                                        [placeholder]="commonLocaleData?.app_amount"
+                                                                        [readonly]="
+                                                                            currentOrganizationType === 'COMPANY' &&
+                                                                            (currentCompanyBranches$ | async)?.length >
+                                                                                1
                                                                         "
-                                                                        [type]="'number'"
-                                                                        [name]="'rate' + i"
-                                                                        [(ngModel)]="linkedStock.rate"
-                                                                        [placeholder]="commonLocaleData?.app_rate"
-                                                                        (change)="calculateRowTotal(linkedStock)"
-                                                                        [readonly]="isCompany"
+                                                                        (change)="calculateExpenseRowTotal(expense)"
                                                                     >
                                                                     </text-field>
                                                                 </div>
@@ -556,13 +580,12 @@
                                                                 <i
                                                                     [ngClass]="{
                                                                         'unvisible':
-                                                                            activeLinkedStockIndex !== i ||
                                                                             manufacturingObject.manufacturingDetails[0]
-                                                                                .linkedStocks?.length <= 1
+                                                                                .otherExpenses?.length <= 1
                                                                     }"
                                                                     class="icon-trash cursor-pointer"
                                                                     aria-hidden="true"
-                                                                    (click)="removeLinkedStock(i)"
+                                                                    (click)="removeExpenseItem(i)"
                                                                     *ngIf="!isCompany"
                                                                 ></i>
                                                             </td>
@@ -570,11 +593,7 @@
                                                     </ng-container>
                                                     <tr *ngIf="!isCompany">
                                                         <td colspan="7">
-                                                            <a
-                                                                class="mb-2"
-                                                                (click)="addNewLinkedStock()"
-                                                                href="javascript:;"
-                                                            >
+                                                            <a class="mb-2" (click)="addExpense()" href="javascript:;">
                                                                 {{ localeData?.add_expense }}
                                                             </a>
                                                         </td>
