@@ -488,22 +488,39 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
             }
         }
         if (this.transferType === 'senders') {
-            const sourcesArray = this.branchTransferCreateEditForm.get('sources') as UntypedFormArray;
-            const sourcesFormGroup = sourcesArray?.at(0) as UntypedFormGroup;
-            const sourcesWarehouseFormGroup = sourcesFormGroup?.get('warehouse.stockDetails') as UntypedFormGroup;
             const destinationsArray = this.branchTransferCreateEditForm.get('destinations') as UntypedFormArray;
-            const destinationsFormGroup = destinationsArray?.at(0) as UntypedFormGroup;
-            const destianationsWarehouseFormGroup = destinationsFormGroup?.get('warehouse.stockDetails') as UntypedFormGroup;
-
-            if (destianationsWarehouseFormGroup.get('amount').value === null) {
-                destianationsWarehouseFormGroup.get('amount').patchValue(sourcesWarehouseFormGroup.get('amount').value);
-                destianationsWarehouseFormGroup.get('quantity').patchValue(sourcesWarehouseFormGroup.get('quantity').value);
-                destianationsWarehouseFormGroup.get('rate').patchValue(sourcesWarehouseFormGroup.get('rate').value);
+            const sourcesArray = this.branchTransferCreateEditForm.get('sources') as UntypedFormArray;
+            for (let i = 0; i < destinationsArray.length; i++) {
+                const destinationsFormGroup = destinationsArray?.at(i) as UntypedFormGroup;
+                const destianationsWarehouseFormGroup = destinationsFormGroup?.get('warehouse.stockDetails') as UntypedFormGroup;
+                const sourcesFormGroup = sourcesArray?.at(0) as UntypedFormGroup;
+                const sourcesWarehouseFormGroup = sourcesFormGroup?.get('warehouse.stockDetails') as UntypedFormGroup;
+                if (destianationsWarehouseFormGroup.get('amount').value === null) {
+                    destianationsWarehouseFormGroup.get('amount').patchValue(sourcesWarehouseFormGroup.get('amount').value);
+                    destianationsWarehouseFormGroup.get('quantity').patchValue(sourcesWarehouseFormGroup.get('quantity').value);
+                    destianationsWarehouseFormGroup.get('rate').patchValue(sourcesWarehouseFormGroup.get('rate').value);
+                }
+                if (destianationsWarehouseFormGroup.get('stockUnitUniqueName').value === null) {
+                    destianationsWarehouseFormGroup.get('stockUnit').patchValue(sourcesWarehouseFormGroup.get('stockUnit').value);
+                    destianationsWarehouseFormGroup.get('stockUnitUniqueName').patchValue(sourcesWarehouseFormGroup.get('stockUnitUniqueName').value);
+                }
             }
-            if (sourcesWarehouseFormGroup.get('amount').value === null) {
-                sourcesWarehouseFormGroup.get('amount').patchValue(destianationsWarehouseFormGroup.get('amount').value);
-                sourcesWarehouseFormGroup.get('quantity').patchValue(destianationsWarehouseFormGroup.get('quantity').value);
-                sourcesWarehouseFormGroup.get('rate').patchValue(destianationsWarehouseFormGroup.get('rate').value);
+            for (let i = 0; i < sourcesArray.length; i++) {
+                const sourcesFormGroup = sourcesArray?.at(i) as UntypedFormGroup;
+                const sourcesWarehouseFormGroup = sourcesFormGroup?.get('warehouse.stockDetails') as UntypedFormGroup;
+                const destinationsArray = this.branchTransferCreateEditForm.get('destinations') as UntypedFormArray;
+                const destinationsFormGroup = destinationsArray?.at(0) as UntypedFormGroup;
+                const destianationsWarehouseFormGroup = destinationsFormGroup?.get('warehouse.stockDetails') as UntypedFormGroup;
+                if (sourcesWarehouseFormGroup.get('amount').value === null) {
+                    sourcesWarehouseFormGroup.get('amount').patchValue(destianationsWarehouseFormGroup.get('amount').value);
+                    sourcesWarehouseFormGroup.get('quantity').patchValue(destianationsWarehouseFormGroup.get('quantity').value);
+                    sourcesWarehouseFormGroup.get('stockUnit').patchValue(destianationsWarehouseFormGroup.get('stockUnit').value);
+                    sourcesWarehouseFormGroup.get('stockUnitUniqueName').patchValue(destianationsWarehouseFormGroup.get('stockUnitUniqueName').value);
+                }
+                if (sourcesWarehouseFormGroup.get('stockUnitUniqueName').value === null) {
+                    sourcesWarehouseFormGroup.get('stockUnit').patchValue(destianationsWarehouseFormGroup.get('stockUnit').value);
+                    sourcesWarehouseFormGroup.get('stockUnitUniqueName').patchValue(destianationsWarehouseFormGroup.get('stockUnitUniqueName').value);
+                }
             }
         }
         let branchTransferObj = cloneDeep(this.branchTransferCreateEditForm.value);
