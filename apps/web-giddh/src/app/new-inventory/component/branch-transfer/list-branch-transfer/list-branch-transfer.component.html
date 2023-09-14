@@ -7,7 +7,7 @@
 >
     <section id="branch-transfer-list" class="p-3 clearfix">
         <!-- page Title -->
-      <hamburger-menu></hamburger-menu>
+        <hamburger-menu></hamburger-menu>
         <!-- form -->
         <div class="col-12 col-sm-12">
             <div class="clearfix">
@@ -26,6 +26,7 @@
                                         currentBranch.uniqueName = $event?.value; handleBranchChange($event)
                                     "
                                     [placeholder]="commonLocaleData?.app_select_entity"
+                                    [defaultValue]="currentBranch?.alias"
                                 ></dropdown-field>
                             </div>
                             <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
@@ -62,7 +63,13 @@
             </div>
         </div>
         <section *ngIf="shouldShowElement">
-            <form class="table-responsive" name="branchTransferForm" [formGroup]="branchTransferForm" novalidate="" autocomplete="off">
+            <form
+                class="table-responsive"
+                name="branchTransferForm"
+                [formGroup]="branchTransferForm"
+                novalidate=""
+                autocomplete="off"
+            >
                 <table
                     matSort
                     (matSortChange)="sortChange($event)"
@@ -150,7 +157,7 @@
                             </div>
                             <div class="input-container" [hidden]="inlineSearch !== 'senderReceiver'">
                                 <text-field
-                                    [placeholder]="localeData?.sender +'/'+ localeData?.receiver"
+                                    [placeholder]="localeData?.sender + '/' + localeData?.receiver"
                                     [type]="'text'"
                                     [cssClass]="'form-control  mat-field-border'"
                                     [formControl]="branchTransferForm.controls['senderReceiver']"
@@ -202,7 +209,7 @@
                         <td mat-cell *matCellDef="let element">{{ element?.toWarehouse }}</td>
                     </ng-container>
 
-                    <ng-container matColumnDef="total_amount">
+                    <ng-container matColumnDef="totalAmount">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header>
                             {{ commonLocaleData?.app_total_amount }}
                         </th>

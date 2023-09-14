@@ -163,9 +163,9 @@ export class ListBranchTransferComponent implements OnInit {
   ) {
     this.currentOrganizationType = this.generalService.currentOrganizationType;
     if (this.currentOrganizationType === 'BRANCH') {
-      this.displayedColumns = ['s_no', 'date', 'voucher_type', 'voucher_no', 'sender_receiver', 'from_warehouse', 'to_warehouse', 'total_amount', 'action'];
+      this.displayedColumns = ['s_no', 'date', 'voucher_type', 'voucher_no', 'sender_receiver', 'from_warehouse', 'to_warehouse', 'totalAmount', 'action'];
     } else {
-      this.displayedColumns = ['s_no', 'date', 'voucher_type', 'voucher_no', 'sender', 'receiver', 'from_warehouse', 'to_warehouse', 'total_amount', 'action'];
+      this.displayedColumns = ['s_no', 'date', 'voucher_type', 'voucher_no', 'sender', 'receiver', 'from_warehouse', 'to_warehouse', 'totalAmount', 'action'];
     }
     this.store.pipe(
       select(appState => appState.session.activeCompany), takeUntil(this.destroyed$)
@@ -334,7 +334,7 @@ export class ListBranchTransferComponent implements OnInit {
         this.branchTransferResponse = [];
         this.branchTransferPaginationObject.totalItems = 0;
       }
-        this.changeDetection.detectChanges();
+      this.changeDetection.detectChanges();
     });
   }
 
@@ -363,8 +363,8 @@ export class ListBranchTransferComponent implements OnInit {
         let blob = this.generalService.base64ToBlob(res?.body, 'application/pdf', 512);
         return saveAs(blob, item.voucherNo + `.pdf`);
       } else {
-          this.toaster.clearAllToaster();
-          this.toaster.showSnackBar("error", res.message);
+        this.toaster.clearAllToaster();
+        this.toaster.showSnackBar("error", res.message);
       }
     });
   }
@@ -424,10 +424,10 @@ export class ListBranchTransferComponent implements OnInit {
     this.dialog.closeAll();
     this.inventoryService.deleteNewBranchTransfer(this.selectedBranchTransferUniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
       if (response?.status === "success") {
-          this.toaster.showSnackBar("success", response.body);
+        this.toaster.showSnackBar("success", response.body);
         this.getBranchTransferList(false);
       } else {
-          this.toaster.showSnackBar("error", response.message);
+        this.toaster.showSnackBar("error", response.message);
       }
     });
   }
@@ -439,9 +439,11 @@ export class ListBranchTransferComponent implements OnInit {
    * @memberof ListBranchTransfer
    */
   public handleBranchChange(selectedEntity: any): void {
+    if (selectedEntity.value) {
       this.currentBranch.name = selectedEntity.label;
       this.branchTransferGetRequestParams.branchUniqueName = selectedEntity.value;
       this.getBranchTransferList(true);
+    }
   }
 
   /**

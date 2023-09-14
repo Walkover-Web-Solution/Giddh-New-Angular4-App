@@ -470,7 +470,6 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
         delete branchTransferObj.myCurrentCompany
         this.isValidForm = !this.branchTransferCreateEditForm.invalid;
         this.isLoading = true;
-        console.log(this.isValidForm, this.branchTransferCreateEditForm);
 
         let branchMode = '';
         if (this.branchTransferMode === 'receipt-note') {
@@ -1837,9 +1836,19 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
      *
      * @memberof CreateBranchTransferComponent
      */
-    public closeShowCodeMenu(): void {
-        this.hsnSacMenuTrigger?.closeMenu();
+    public closeShowCodeMenu(productFormGroup: any): void {
+        productFormGroup.get('skuCode').setValue('');
         this.skuMenuTrigger?.closeMenu();
+    }
+
+    /**
+     *This will be use for  clear sac number
+     *
+     * @memberof CreateBranchTransferComponent
+     */
+    public closeSacNumber(productFormGroup: any): void {
+        productFormGroup.get('sacNumber').setValue('');
+        this.hsnSacMenuTrigger?.closeMenu();
     }
 
     /**
@@ -1860,11 +1869,15 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
                     if (productFormGroup.get('uniqueName')?.value) {
                         const variantsFormGroup = productFormGroup?.get('variant') as UntypedFormGroup;
                         this.stockVariants[index] = [];
-                        this.stockVariants[index] = response?.body?.variants.map(item => ({
-                            label: item.name,
-                            value: item.uniqueName,
-                            additional: item
-                        }));
+                        response?.body?.variants.forEach(item => {
+                            if (!item.archive) {
+                                this.stockVariants[index].push({
+                                    label: item.name,
+                                    value: item.uniqueName,
+                                    additional: item
+                                });
+                            }
+                        });
                         if (!defaultLoad) {
                             if (!variantsFormGroup.get('uniqueName')?.value) {
                                 variantsFormGroup.get('name').setValue(this.stockVariants[index][0]?.label);

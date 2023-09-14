@@ -113,7 +113,11 @@
                                             <div formArrayName="products">
                                                 <div [formGroupName]="0">
                                                     <div class="mr-b15 mr-t15">
-                                                        <span formGroupName="variant" class="w-100"  *ngIf="stockVariants[0]?.length > 1">
+                                                        <span
+                                                            formGroupName="variant"
+                                                            class="w-100"
+                                                            *ngIf="stockVariants[0]?.length > 1"
+                                                        >
                                                             <dropdown-field
                                                                 *ngIf="
                                                                     branchTransferCreateEditForm?.get(
@@ -375,21 +379,21 @@
                                                 "
                                             >
                                             </input-field>
-                                               <i
-                                                        *ngIf="
-                                                            destinationWarehouses[
-                                                                branchTransferCreateEditForm.get('destinations.0.uniqueName')
-                                                                    ?.value
-                                                            ]?.length !==
-                                                            allWarehouses[
-                                                                branchTransferCreateEditForm.get('destinations.0.uniqueName')
-                                                                    ?.value
-                                                            ]?.length
-                                                        "
-                                                        class="icon-info three"
-                                                        matTooltip="{{ branchTransferInfoText }}"
-                                                    >
-                                                    </i>
+                                            <i
+                                                *ngIf="
+                                                    destinationWarehouses[
+                                                        branchTransferCreateEditForm.get('destinations.0.uniqueName')
+                                                            ?.value
+                                                    ]?.length !==
+                                                    allWarehouses[
+                                                        branchTransferCreateEditForm.get('destinations.0.uniqueName')
+                                                            ?.value
+                                                    ]?.length
+                                                "
+                                                class="icon-info three"
+                                                matTooltip="{{ branchTransferInfoText }}"
+                                            >
+                                            </i>
                                         </div>
                                         <div formArrayName="destinations">
                                             <div [formGroupName]="0">
@@ -597,7 +601,11 @@
                                             <div formArrayName="products">
                                                 <div [formGroupName]="0">
                                                     <div class="mr-b15 mr-t15">
-                                                        <span formGroupName="variant" class="w-100"  *ngIf="stockVariants[0]?.length > 1">
+                                                        <span
+                                                            formGroupName="variant"
+                                                            class="w-100"
+                                                            *ngIf="stockVariants[0]?.length > 1"
+                                                        >
                                                             <dropdown-field
                                                                 *ngIf="
                                                                     branchTransferCreateEditForm?.get(
@@ -1478,7 +1486,11 @@
                                                                 "
                                                             >
                                                             </select-field>
-                                                            <span formGroupName="variant" class="w-100"  *ngIf="stockVariants[i]?.length > 1">
+                                                            <span
+                                                                formGroupName="variant"
+                                                                class="w-100"
+                                                                *ngIf="stockVariants[i]?.length > 1"
+                                                            >
                                                                 <select-field
                                                                     *ngIf="product.get('uniqueName').value"
                                                                     [cssClass]="'form-control mat-field-border'"
@@ -1544,7 +1556,7 @@
                                                                         <button
                                                                             mat-stroked-button
                                                                             class="w-100"
-                                                                            (click)="closeShowCodeMenu()"
+                                                                            (click)="closeShowCodeMenu(product)"
                                                                         >
                                                                             {{ commonLocaleData?.app_cancel }}
                                                                         </button>
@@ -1684,7 +1696,7 @@
                                                                         <button
                                                                             mat-stroked-button
                                                                             class="w-100"
-                                                                            (click)="closeShowCodeMenu()"
+                                                                            (click)="closeSacNumber(product)"
                                                                         >
                                                                             Cancel
                                                                         </button>
