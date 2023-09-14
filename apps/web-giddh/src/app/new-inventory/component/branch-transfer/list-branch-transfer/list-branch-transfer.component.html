@@ -62,7 +62,7 @@
             </div>
         </div>
         <section *ngIf="shouldShowElement">
-            <form name="branchTransferForm" [formGroup]="branchTransferForm" novalidate="" autocomplete="off">
+            <form class="table-responsive" name="branchTransferForm" [formGroup]="branchTransferForm" novalidate="" autocomplete="off">
                 <table
                     matSort
                     (matSortChange)="sortChange($event)"
