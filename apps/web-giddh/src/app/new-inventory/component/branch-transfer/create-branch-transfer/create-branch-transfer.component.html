@@ -545,8 +545,8 @@
                                                 [appearance]="'outline'"
                                                 [placeholder]="
                                                     branchTransferMode === 'receipt-note'
-                                                        ? 'Date of Receipt'
-                                                        : 'Date of Supply'
+                                                        ? localeData?.date_of_receipt
+                                                        : localeData?.date_of_supply
                                                 "
                                                 [reuqired]="true"
                                                 [showError]="

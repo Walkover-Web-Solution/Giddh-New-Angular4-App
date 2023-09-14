@@ -16,12 +16,12 @@
             <ng-container *ngIf="moduleType === 'branch-transfer'">
                 <div class="pb-3">
                     <button mat-stroked-button color="primary" (click)="openCreateBranchTransfer('receipt-note')" class="create-btn">
-                        Receipt Note
+                        {{commonLocaleData?.app_receipt_note}}
                     </button>
                 </div>
                 <div>
                     <button color="primary" mat-stroked-button (click)="openCreateBranchTransfer('delivery-challan')" class="create-btn">
-                        Delivery Challan
+                        {{commonLocaleData?.app_delivery_challan}}
                     </button>
                 </div>
             </ng-container>
