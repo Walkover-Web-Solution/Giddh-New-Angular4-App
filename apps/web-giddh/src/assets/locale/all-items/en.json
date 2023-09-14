@@ -392,7 +392,7 @@
         },
         {
           "label": "Branch Transfer",
-          "link": "/pages/inventory/report",
+          "link": "/pages/inventory/v2/branch-transfer/list",
           "icon": "icon-branch-transfer",
           "description": "Manage & Transfer inventory"
         },

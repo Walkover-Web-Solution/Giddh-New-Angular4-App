@@ -387,10 +387,10 @@
           }
         },
         {
-          "label": "शाखा स्थानांतरण",
-          "link": "/pages/inventory/report",
-          "icon": "icon-branch-transfer",
-          "description": "इन्वेंट्री प्रबंधित करें और ट्रांसफर करें"
+            "label": "शाखा स्थानांतरण",
+            "link": "/pages/inventory/v2/branch-transfer/list",
+            "icon": "icon-branch-transfer",
+            "description": "इन्वेंट्री प्रबंधित करें और ट्रांसफर करें"
         },
         {
           "label": "गोदाम",

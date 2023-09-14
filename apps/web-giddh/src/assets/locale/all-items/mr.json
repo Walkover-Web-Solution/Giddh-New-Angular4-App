@@ -387,10 +387,10 @@
           }
         },
         {
-          "label": "शाखा हस्तांतरण",
-          "link": "/pages/inventory/report",
-          "icon": "icon-branch-transfer",
-          "description": "यादी व्यवस्थापित करा आणि हस्तांतरण यादी"
+            "label": "शाखा हस्तांतरण",
+            "link": "/pages/inventory/v2/branch-transfer/list",
+            "icon": "icon-branch-transfer",
+            "description": "यादी व्यवस्थापित करा आणि हस्तांतरण यादी"
         },
         {
           "label": "कोठार",
