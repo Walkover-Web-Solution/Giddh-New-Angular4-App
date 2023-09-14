@@ -37,5 +37,9 @@
     "select_stock_unit": "स्टॉक युनिट निवडा",
     "add_expense":"+ खर्च जोडा",
     "app_expense":"खर्च",
-    "manufacturing_expenses": "एकूण उत्पादन खर्च"
+    "manufacturing_expenses": "एकूण उत्पादन खर्च",
+    "increase_value": "संपत्तील मौजूदी वाढवा",
+    "book_expense": "खर्च पुस्तक",
+    "liability_assets": "उधारी/संपत्ती खाते",
+    "expense_acc": "खर्च खाते"
 }
