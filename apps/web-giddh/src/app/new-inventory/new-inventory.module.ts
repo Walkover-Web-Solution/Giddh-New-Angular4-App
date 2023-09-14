@@ -80,7 +80,7 @@ import { FormsModule } from "@angular/forms";
 import { NoDataModule } from "../shared/no-data/no-data.module";
 import { DragDropModule } from "@angular/cdk/drag-drop";
 import { CdkScrollModule } from "../theme/form-fields/cdk-scroll/cdk-scroll.module";
-import { CustomPriceComponent } from "./component/custom-price/custom-price.component";
+import { CustomPriceModule } from "./component/custom-price/custom-price.module";
 
 @NgModule({
     declarations: [
@@ -125,8 +125,7 @@ import { CustomPriceComponent } from "./component/custom-price/custom-price.comp
         CreateUnitGroupComponent,
         AsideCreateUnitGroupComponent,
         CustomUnitsComponent,
-        InventoryMasterComponent,
-        CustomPriceComponent
+        InventoryMasterComponent
     ],
     imports: [
         NewInventoryRoutingModule,
@@ -166,7 +165,8 @@ import { CustomPriceComponent } from "./component/custom-price/custom-price.comp
         CdkScrollModule,
         FormsModule,
         NoDataModule,
-        DragDropModule
+        DragDropModule,
+        CustomPriceModule
     ],
     exports: [
         NewInventoryComponent,

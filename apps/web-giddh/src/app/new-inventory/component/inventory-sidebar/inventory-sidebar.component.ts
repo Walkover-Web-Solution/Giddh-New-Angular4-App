@@ -263,8 +263,8 @@ export class InventorySidebarComponent implements OnDestroy {
                     name: this.localeData?.sidebar?.custom_price,
                     icons: 'stock.svg',
                     children: [
-                        { name: this.localeData?.sidebar?.custom_vendor, icons: 'create-new.svg',  hiddenLink: ['/pages/inventory/v2/stock/custom/vendor']},
-                        { name: this.localeData?.sidebar?.custom_price, icons: 'item-wise.svg', link: '/pages/inventory/v2/stock/custom/price' }
+                        { name: this.localeData?.sidebar?.customer_wise, icons: 'create-new.svg',  link: '/pages/inventory/v2/custom/customer-wise'},
+                        { name: this.localeData?.sidebar?.vendor_wise, icons: 'item-wise.svg', link: '/pages/inventory/v2/custom/customer-vendor' }
                     ],
                 },
                 {

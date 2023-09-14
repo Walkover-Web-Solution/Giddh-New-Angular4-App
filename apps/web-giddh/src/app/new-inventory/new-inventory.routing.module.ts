@@ -20,7 +20,6 @@ import { VariantWiseComponent } from "./component/variant-wise/variant-wise.comp
 import { ReportsComponent } from "./component/reports/reports.component";
 import { CustomUnitsComponent } from "./component/custom-units/custom-units.component"
 import { InventoryMasterComponent } from "./component/inventory-master/inventory-master.component";
-import { CustomPriceComponent } from "./component/custom-price/custom-price.component";
 
 const routes: Routes = [
     {
@@ -67,10 +66,6 @@ const routes: Routes = [
             {
                 path: "custom-units",
                 component: CustomUnitsComponent,
-            },
-            {
-                path: ":type/master",
-                component: CustomPriceComponent,
             }
         ],
     },
@@ -127,6 +122,10 @@ const routes: Routes = [
     {
         path: "recipe",
         loadChildren: () => import('./component/recipe/recipe.module').then(module => module.RecipeModule)
+    },
+    {
+        path: "price",
+        loadChildren: () => import('./component/custom-price/custom-price.module').then(module => module.CustomPriceModule)
     },
     {
         path: "manufacturing",

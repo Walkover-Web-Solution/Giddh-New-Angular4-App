@@ -1,0 +1,22 @@
+.custom-grid-wrapper {
+    .mat-list-wrap {
+        .item-list {
+            .mat-mdc-list-item {
+                .mdc-list-item__content {
+                    a {
+                        display: block;
+                        color: var(--color-black);
+                    }
+                }
+                &:hover{
+                    background-color: var(--color-giddh-blue);
+                    .mdc-list-item__content {
+                        a {
+                            color: var(--color-white);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

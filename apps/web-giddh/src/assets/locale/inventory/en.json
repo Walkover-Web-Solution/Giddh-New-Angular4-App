@@ -18,7 +18,8 @@
         "report":"Report",
         "master":"Master",
         "custom_price":"Custom Price",
-        "custom_vendor":"Custom Vendor"
+        "customer_wise":"Customer Wise",
+        "vendor_wise":"Vendor Wise"
     },
     "reports":{
         "transaction_count":"Transaction Count",
