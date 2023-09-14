@@ -18,6 +18,8 @@ import { FormsModule } from '@angular/forms';
 import { TranslateDirectiveModule } from '../../../theme/translate/translate.directive.module';
 import { NoDataModule } from '../../../shared/no-data/no-data.module';
 import { GiddhPageLoaderModule } from '../../../shared/giddh-page-loader/giddh-page-loader.module';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 @NgModule({
     imports: [
@@ -36,7 +38,9 @@ import { GiddhPageLoaderModule } from '../../../shared/giddh-page-loader/giddh-p
         FormsModule,
         TranslateDirectiveModule,
         NoDataModule,
-        GiddhPageLoaderModule
+        GiddhPageLoaderModule,
+        MatExpansionModule,
+        MatSlideToggleModule
     ],
     exports: [
         CreateManufacturingComponent,
