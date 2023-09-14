@@ -31,11 +31,29 @@ export class ManufacturingLinkedStock {
         this.stocksQ = "";
     }
 }
+export class ManufacturingBaseAccount {
+    uniqueName: string;
+    defaultName: string;
+}
+export class ManufacturingTransactionAccount {
+    uniqueName: string;
+    defaultName: string;
+}
+
+export class ManufacturingTransaction {
+    account: ManufacturingTransactionAccount;
+    amount: number;
+}
+export class ManufacturingExpense {
+    baseAccount: ManufacturingBaseAccount;
+    transactions: ManufacturingTransaction[];
+}
 
 export class CreateManufacturingClass {
     manufacturingQuantity: number;
     date: string;
     linkedStocks: ManufacturingLinkedStock[];
+    otherExpenses: ManufacturingExpense[];
     warehouseUniqueName: string;
     manufacturingMultipleOf: number;
     stockUniqueName: string;

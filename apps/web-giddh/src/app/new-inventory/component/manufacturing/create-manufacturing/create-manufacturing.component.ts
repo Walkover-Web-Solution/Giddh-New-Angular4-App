@@ -11,12 +11,14 @@ import { GeneralService } from 'apps/web-giddh/src/app/services/general.service'
 import { InventoryService } from 'apps/web-giddh/src/app/services/inventory.service';
 import { LedgerService } from 'apps/web-giddh/src/app/services/ledger.service';
 import { ManufacturingService } from 'apps/web-giddh/src/app/services/manufacturing.service';
+import { SearchService } from 'apps/web-giddh/src/app/services/search.service';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
 import { WarehouseActions } from 'apps/web-giddh/src/app/settings/warehouse/action/warehouse.action';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { giddhRoundOff } from 'apps/web-giddh/src/app/shared/helpers/helperFunctions';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import { ConfirmModalComponent } from 'apps/web-giddh/src/app/theme/new-confirm-modal/confirm-modal.component';
+import { IOption } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface';
 import * as dayjs from 'dayjs';
 import { ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
@@ -70,6 +72,24 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
     public isCompany: boolean;
     /** True if get manufacturing in progress */
     public isLoadingManufacturing: boolean = false;
+    /** Stores the default search results pagination details */
+    public defaultAccountPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
+    /** True, if API call should be prevented on default scroll caused by scroll in list */
+    public preventDefaultScrollApiCall: boolean = false;
+    /** Default search suggestion list to be shown for search */
+    public defaultAccountSuggestions: Array<IOption> = [];
+    /** Stores the search results pagination details */
+    public accountsSearchResultsPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
+    /** Activity log form's company operations list */
+    public accounts: IOption[] = [];
 
     constructor(
         private store: Store<AppState>,
@@ -83,11 +103,146 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
         private route: ActivatedRoute,
         private router: Router,
         private generalService: GeneralService,
-        private settingsBranchAction: SettingsBranchActions
+        private settingsBranchAction: SettingsBranchActions,
+        private searchService: SearchService
     ) {
 
     }
-
+    public loadExpenseAccounts(): void {
+        this.onExpenseAccountSearchQueryChanged('');
+    }
+    // public onExpenseAccountSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
+    //     this.expenseAccountsSearchResultsPaginationData.query = query;
+    //     if (!this.preventExpenseDefaultScrollApiCall &&
+    //         (query || (this.defaultExpenseAccountSuggestions && this.defaultExpenseAccountSuggestions.length === 0) || successCallback)) {
+    //         // Call the API when either query is provided, default suggestions are not present or success callback is provided
+    //         const requestObject: any = {
+    //             q: encodeURIComponent(query),
+    //             page,
+    //             group: encodeURIComponent('operatingcost, indirectexpenses')
+    //         };
+    //         this.searchService.searchAccountV2(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+    //             if (data && data.body && data.body.results) {
+    //                 const searchResults = data.body.results.map(result => {
+    //                     return {
+    //                         value: result?.uniqueName,
+    //                         label: `${result.name} (${result?.uniqueName})`
+    //                     }
+    //                 }) || [];
+    //                 if (page === 1) {
+    //                     this.expenseAccounts = searchResults;
+    //                 } else {
+    //                     this.expenseAccounts = [
+    //                         ...this.expenseAccounts,
+    //                         ...searchResults
+    //                     ];
+    //                 }
+    //                 this.expenseGroupAccounts$ = observableOf(this.expenseAccounts);
+    //                 this.expenseAccountsSearchResultsPaginationData.page = data.body.page;
+    //                 this.expenseAccountsSearchResultsPaginationData.totalPages = data.body.totalPages;
+    //                 if (successCallback) {
+    //                     successCallback(data.body.results);
+    //                 } else {
+    //                     this.defaultExpenseAccountPaginationData.page = this.expenseAccountsSearchResultsPaginationData.page;
+    //                     this.defaultExpenseAccountPaginationData.totalPages = this.expenseAccountsSearchResultsPaginationData.totalPages;
+    //                 }
+    //             }
+    //         });
+    //     } else {
+    //         this.expenseAccounts = [...this.defaultExpenseAccountSuggestions];
+    //         this.expenseAccountsSearchResultsPaginationData.page = this.defaultExpenseAccountPaginationData.page;
+    //         this.expenseAccountsSearchResultsPaginationData.totalPages = this.defaultExpenseAccountPaginationData.totalPages;
+    //         this.preventExpenseDefaultScrollApiCall = true;
+    //         setTimeout(() => {
+    //             this.preventExpenseDefaultScrollApiCall = false;
+    //         }, 500);
+    //     }
+    // }
+    public onExpenseAccountSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
+        this.accountsSearchResultsPaginationData.query = query;
+        if (!this.preventDefaultScrollApiCall &&
+            (query || (this.defaultAccountSuggestions && this.defaultAccountSuggestions.length === 0) || successCallback)) {
+            // Call the API when either query is provided, default suggestions are not present or success callback is provided
+            const requestObject: any = {
+                q: encodeURIComponent(query),
+                page,
+                group: encodeURIComponent('operatingcost, indirectexpenses')
+            }
+            this.searchService.searchAccountV2(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+                if (data && data.body && data.body.results) {
+                    const searchResults = data.body.results.map(result => {
+                        return {
+                            value: result?.uniqueName,
+                            label: result.name
+                        }
+                    }) || [];
+                    if (page === 1) {
+                        this.accounts = searchResults;
+                    } else {
+                        this.accounts = [
+                            ...this.accounts,
+                            ...searchResults
+                        ];
+                    }
+                    this.accounts = this.accounts;
+                    this.accountsSearchResultsPaginationData.page = data.body.page;
+                    this.accountsSearchResultsPaginationData.totalPages = data.body.totalPages;
+                    if (successCallback) {
+                        successCallback(data.body.results);
+                    } else {
+                        this.defaultAccountPaginationData.page = this.accountsSearchResultsPaginationData.page;
+                        this.defaultAccountPaginationData.totalPages = this.accountsSearchResultsPaginationData.totalPages;
+                    }
+                    // this.changeDetection.detectChanges();
+                }
+            });
+        } else {
+            this.accounts = [...this.defaultAccountSuggestions];
+            this.accountsSearchResultsPaginationData.page = this.defaultAccountPaginationData.page;
+            this.accountsSearchResultsPaginationData.totalPages = this.defaultAccountPaginationData.totalPages;
+            this.preventDefaultScrollApiCall = true;
+            setTimeout(() => {
+                this.preventDefaultScrollApiCall = false;
+                // this.changeDetection.detectChanges();
+            }, 500);
+        }
+    }
+    public resetAccounts(event: any): void {
+        // if (!event?.value) {
+        //     this.activityObjLabels.account = '';
+        //     this.activityObj.accountUniqueNames = [];
+        this.loadExpenseAccounts();
+        // }
+    }
+    public selecteAccountType(event: IOption): void {
+        // if (event && event.value) {
+        //     this.activityObj.accountUniqueNames = [];
+        //     this.activityObj.accountUniqueNames.push(event.value);
+        // } else {
+        //     this.activityObj.accountUniqueNames = [];
+        // }
+    }
+    public handleScrollEnd(): void {
+        if (this.accountsSearchResultsPaginationData.page < this.accountsSearchResultsPaginationData.totalPages) {
+            this.onExpenseAccountSearchQueryChanged(
+                this.accountsSearchResultsPaginationData.query,
+                this.accountsSearchResultsPaginationData.page + 1,
+                (response) => {
+                    if (!this.accountsSearchResultsPaginationData.query) {
+                        const results = response.map(result => {
+                            return {
+                                value: result?.uniqueName,
+                                label: result.name
+                            }
+                        }) || [];
+                        this.defaultAccountSuggestions = this.defaultAccountSuggestions.concat(...results);
+                        this.defaultAccountPaginationData.page = this.accountsSearchResultsPaginationData.page;
+                        this.defaultAccountPaginationData.totalPages = this.accountsSearchResultsPaginationData.totalPages;
+                        // this.changeDetection.detectChanges();
+                    }
+                });
+        }
+    }
     /**
      * Initializes the component
      *
@@ -100,6 +255,8 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
                 this.getManufacturingDetails(params?.uniqueName);
             }
         });
+        this.loadExpenseAccounts();
+        // this.loadAssetsLiabilitiesAccounts();
 
         this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj: Date[]) => {
             if (dateObj) {
