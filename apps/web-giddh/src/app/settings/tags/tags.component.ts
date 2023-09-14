@@ -160,12 +160,10 @@ export class SettingsTagsComponent implements OnInit, OnDestroy {
 
     
     public deleteTag(tag: TagRequest) {
-        console.log(tag);
-        
-        // this.newTag = tag;
-        // let message = this.localeData?.remove_tag;
-        // message = message?.replace("[TAG_NAME]", tag.name);
-        // this.confirmationMessage = message;
+        this.newTag = tag;
+        let message = this.localeData?.remove_tag;
+        message = message?.replace("[TAG_NAME]", tag.name);
+        this.confirmationMessage = message;
         this.dialog.open(this.confirmationModal, {
             panelClass: 'modal-dialog',
             width: '1000px',

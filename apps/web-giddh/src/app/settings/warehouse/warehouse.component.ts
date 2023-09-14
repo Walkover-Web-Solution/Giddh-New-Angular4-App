@@ -116,6 +116,8 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
     public warehouseStatusToUpdate: any;
     /** Holds current page number */
     private currentPage: number = 1;
+    /** Holds modal reference */
+    public statusModalRef:any;
 
     /** Stores the address configuration */
     public addressConfiguration: SettingsAsideConfiguration = {
@@ -597,9 +599,7 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
     // }
 
     public confirmStatusUpdate() {
-        console.log("called");
-
-        this.dialog.open(this.statusModal, {
+       this.statusModalRef = this.dialog.open(this.statusModal, {
             panelClass: 'modal-dialog',
             width: '1000px',
         });

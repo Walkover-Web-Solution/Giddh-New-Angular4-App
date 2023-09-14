@@ -14413,6 +14413,11 @@ activity-compare-json {
 .mat-mdc-dialog-content {
     max-height: 70vh !important;
 }
+.aside-pane{
+    .mat-mdc-dialog-content {
+        max-height: 100vh !important;
+    }
+}
 
 .flag-input {
     position: relative;
@@ -14441,5 +14446,11 @@ activity-compare-json {
     .mdc-data-table__header-cell {
         word-break: break-word;
         white-space: nowrap;
+    }
+}
+
+.mat-select-btn{
+    .mdc-button__label{
+        width: 100%;
     }
 }

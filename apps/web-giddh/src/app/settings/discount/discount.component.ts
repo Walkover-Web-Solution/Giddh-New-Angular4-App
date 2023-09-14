@@ -64,6 +64,7 @@ export class DiscountComponent implements OnInit, OnDestroy {
     /*-- mat-table --*/
     displayedColumns: string[] = ['number', 'name', 'action'];
     dataSource = ELEMENT_DATA;
+    public discountConfirmationModelRef:any;
 
     constructor(
         private salesService: SalesService,
@@ -145,15 +146,15 @@ export class DiscountComponent implements OnInit, OnDestroy {
     // }
 
     public showDeleteDiscountModal(): void {
-        this.dialog.open(this.discountConfirmationModel, {
+        this.discountConfirmationModelRef =  this.dialog.open(this.discountConfirmationModel, {
             panelClass: 'modal-dialog',
         });
     }
 
-    // public hideDeleteDiscountModal() {
-    //     this.deleteRequest = null;
-    //     this.discountConfirmationModel.hide();
-    // }
+    public hideDeleteDiscountModal() {
+        this.deleteRequest = null;
+        this.discountConfirmationModelRef.close();
+    }
 
     public delete() {
         this.isLoading$ = of(true);

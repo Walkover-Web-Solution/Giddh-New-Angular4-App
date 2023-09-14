@@ -139,11 +139,13 @@
                                 type="button"
                                 class="mat-select-btn text-left w-100"
                             >
-                                {{ selectedTimeSpan }}
-                                <span class="pull-right"><span class="fa fa-caret-down"></span></span>
+                                <span class="d-flex w-100" >
+                                    {{ selectedTimeSpan }}
+                                    <span class="ml-auto"><span class="fa fa-caret-down"></span></span>
+                                </span>
                             </button>
-                            <mat-menu #menu="matMenu" (click)="$event.stopPropagation()">
-                                <section class="mr-b1 time-span-dropdown" [ngClass]="{ 'open': showTimeSpan }">
+                            <mat-menu #menu="matMenu">
+                                <section class="mr-b1 time-span-dropdown" [ngClass]="{ 'open': showTimeSpan }" (click)="$event.stopPropagation()" style="background-color: red;">
                                     <div class="clearfix pd-1">
                                         <!-- <span
                                             class="p-0 mr-r3"
@@ -219,7 +221,7 @@
                                                     container="body"
                                                     autocomplete="off"
                                                 /> -->
-                                                <mat-form-field
+                                                <!-- <mat-form-field
                                                     class="example-form-field"
                                                     appearance="outline"
                                                     (click)="campaignOnePicker.open()"
@@ -243,7 +245,7 @@
                                                         />
                                                     </mat-date-range-input>
                                                     <mat-date-range-picker #campaignOnePicker></mat-date-range-picker>
-                                                </mat-form-field>
+                                                </mat-form-field> -->
                                             </div>
                                         </div>
                                     </section>

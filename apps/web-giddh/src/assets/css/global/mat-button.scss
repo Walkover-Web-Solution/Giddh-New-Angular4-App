@@ -1,12 +1,10 @@
 .mat-mdc-button,
-.mat-icon-button,
-.mat-stroked-button,
-.mat-raised-button {
+.mat-mdc-outlined-button {
     &.mat-primary {
         color: var(--color-giddh-blue) !important;
     }
     /*Material Button Disabled Cursor*/
-    &.mat-button-disabled {
+    &:disabled {
         &:hover {
             cursor: not-allowed !important;
         }

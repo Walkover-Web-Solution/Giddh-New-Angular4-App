@@ -197,7 +197,7 @@
     </ng-template>
 
     <ng-template #statusModal>
-        <div class="modal-dialog modal-md">
+        <div class="modal-md">
             <div class="modal-content">
                 <confirm-modal
                     [title]="commonLocaleData?.app_confirmation"
@@ -207,7 +207,7 @@
                             : localeData?.confirm_archive_title
                     "
                     [permanentlyDeleteMessage]="' '"
-                    (cancelCallBack)="warehouseStatusToUpdate = ''; statusModal?.hide()"
+                    (cancelCallBack)="warehouseStatusToUpdate = ''; statusModalRef.close()"
                     (successCallBack)="updateWarehouseStatus()"
                 >
                 </confirm-modal>

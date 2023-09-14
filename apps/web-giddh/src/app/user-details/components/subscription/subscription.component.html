@@ -1,21 +1,28 @@
 <div *ngIf="!isPlanShow">
-    <div class="main-content-subscription pd-t15">
+    <button mat-stroked-button color="primary" (click)="isPlanShow = true" class="pull-right my-2" *ngIf="!showLoader">
+        {{ commonLocaleData?.app_buy_new_plan }}
+    </button>
+    <div class="main-content-subscription">
         <mat-grid-list cols="16" rowHeight="60px" gutterSize="0px">
             <mat-grid-tile [colspan]="menuOneWidth" rowspan="1" class="ipad-responsive">
                 <div class="menu-two" [ngClass]="{ 'skeleton-common-class': showLoader }">
                     <label for="Search-box">
                         <img src="{{ imgPath }}search.png" alt="SearchBar" *ngIf="!showLoader" />
                     </label>
-                    <div class="custom-input-field">
+                    <div class="custom-input-field mt-3">
                         <mat-form-field class="form-field" *ngIf="!showLoader">
-                            <input matInput class="search-bar" [placeholder]="localeData?.subscription?.search_plans"
-                                [formControl]="searchSubscription" />
+                            <input
+                                matInput
+                                class="search-bar"
+                                [placeholder]="localeData?.subscription?.search_plans"
+                                [formControl]="searchSubscription"
+                            />
                         </mat-form-field>
                     </div>
                 </div>
             </mat-grid-tile>
             <mat-grid-tile [colspan]="menuTwoWidth" class="ipad-responsive">
-                <div class="head-dropdown">
+                <div class="head-dropdown">                    
                     <div class="menu-two-list" [ngClass]="{ 'skeleton-common-class': showLoader }">
                         <div class="menu-two-list-items" *ngIf="!showLoader">
                             <!-- <span class="mat-body-1 plan">{{ localeData?.subscription?.plan }}</span>
@@ -37,14 +44,28 @@
                             </mat-form-field> -->
                         </div>
                         <div class="menu-two-list-items" *ngIf="!showLoader">
-                            <dropdown-field [placeholder]="commonLocaleData?.app_select" [cssClass]="'input-background'"
+                            <dropdown-field
+                                [placeholder]="commonLocaleData?.app_select"
+                                [label]="localeData?.subscription?.plan"
+                                (selectedOption)="filterSubscriptions()"
+                                [options]="plansList"
+                            ></dropdown-field>
+                        </div>
+                        <div class="menu-two-list-items" *ngIf="!showLoader">
+                            <dropdown-field
+                                [placeholder]="commonLocaleData?.app_select"
                                 [label]="localeData?.subscription?.expiring_within"
-                                (selectedOption)="(filters.expiration)" [options]="expiringList"></dropdown-field>
+                                (selectedOption)="(filters.expiration)"
+                                [options]="expiringList"
+                            ></dropdown-field>
                         </div>
                         <div class="menu-two-list-items transaction-box" *ngIf="!showLoader">
-                            <dropdown-field [placeholder]="commonLocaleData?.app_select" [cssClass]="'input-background'"
+                            <dropdown-field
+                                [placeholder]="commonLocaleData?.app_select"
                                 [label]="localeData?.subscription?.transaction_balance"
-                                (selectedOption)="(filters.transactionBalance)" [options]="transactionBalanceList">
+                                (selectedOption)="(filters.transactionBalance)"
+                                [options]="transactionBalanceList"
+                            >
                             </dropdown-field>
                         </div>
                     </div>
@@ -56,19 +77,25 @@
 
             <div class="full-subscription-wrapper">
                 <mat-grid-tile [colspan]="sideBarBoxWidth" [rowspan]="sideBarBoxLength" class="ipad-responsive-sidebar">
-                    <div class="subscription-sidebar" *ngIf="!showLoader"
-                        [ngClass]="{ 'border-none': !selectedSubscription }">
+                    <div
+                        class="subscription-sidebar"
+                        *ngIf="!showLoader"
+                        [ngClass]="{ 'border-none': !selectedSubscription }"
+                    >
                         <ng-container *ngFor="let subscription of subscriptions; let i = index">
                             <mat-grid-list cols="2" [rowHeight]="rowLength" gutterSize="0px" class="sidebar-box">
-                                <mat-grid-tile colspan="2" [ngClass]="{
+                                <mat-grid-tile
+                                    colspan="2"
+                                    [ngClass]="{
                                         'active': selectedSubscription?.subscriptionId === subscription?.subscriptionId
-                                    }">
+                                    }"
+                                >
                                     <div class="side-bar-items" (click)="selectSubscription(subscription)">
                                         <p class="mat-body-2 side-bar-head">
                                             {{ subscription?.planDetails?.name
                                             }}<img src="{{ imgPath }}dot.png" alt="dot" /><span>{{
                                                 subscription?.subscriptionId
-                                                }}</span>
+                                            }}</span>
                                         </p>
                                         <div class="side-bar-list">
                                             <img src="{{ imgPath }}transaction.png" alt="transaction" />
@@ -78,7 +105,7 @@
                                                 {{ subscription?.remainingTransactions }}
                                                 <span class="warning mat-body-2">{{
                                                     localeData?.subscription?.left
-                                                    }}</span>
+                                                }}</span>
                                             </p>
                                         </div>
                                         <div class="side-bar-list">
@@ -109,13 +136,17 @@
                             <mat-grid-list cols="2" [rowHeight]="rowLength" gutterSize="0px" class="sidebar-box-clone">
                                 <mat-grid-tile colspan="2">
                                     <div class="side-bar-items-clone">
-                                        <p class="mat-body-2 side-bar-head-clone"
-                                            [ngClass]="{ 'skeleton-common-class': showLoader }">
+                                        <p
+                                            class="mat-body-2 side-bar-head-clone"
+                                            [ngClass]="{ 'skeleton-common-class': showLoader }"
+                                        >
                                             -
                                             <span></span>
                                         </p>
-                                        <div class="side-bar-list-clone-1"
-                                            [ngClass]="{ 'skeleton-common-class': showLoader }">
+                                        <div
+                                            class="side-bar-list-clone-1"
+                                            [ngClass]="{ 'skeleton-common-class': showLoader }"
+                                        >
                                             <p class="side-bar-list-title">-</p>
                                             <span>:</span>
                                             <p class="mat-body-2">
@@ -123,14 +154,18 @@
                                                 <span class="warning mat-body-2"></span>
                                             </p>
                                         </div>
-                                        <div class="side-bar-list-clone-2"
-                                            [ngClass]="{ 'skeleton-common-class': showLoader }">
+                                        <div
+                                            class="side-bar-list-clone-2"
+                                            [ngClass]="{ 'skeleton-common-class': showLoader }"
+                                        >
                                             <p class="mat-subheading-4 side-bar-list-title"></p>
                                             <span></span>
                                             <p>-</p>
                                         </div>
-                                        <div class="side-bar-list-clone-3 plan-timeline"
-                                            [ngClass]="{ 'skeleton-common-class': showLoader }">
+                                        <div
+                                            class="side-bar-list-clone-3 plan-timeline"
+                                            [ngClass]="{ 'skeleton-common-class': showLoader }"
+                                        >
                                             <p class="mat-subheading-4 side-bar-list-title">-</p>
                                             <span>:</span>
                                             <p class="date"></p>
@@ -142,34 +177,43 @@
                     </div>
                 </mat-grid-tile>
 
-                <mat-grid-tile [colspan]="mainContentWidth" [rowspan]="sideBarBoxLength"
-                    class="ipad-responsive-sidebar">
+                <mat-grid-tile
+                    [colspan]="mainContentWidth"
+                    [rowspan]="sideBarBoxLength"
+                    class="ipad-responsive-sidebar"
+                >
                     <div class="main-content" *ngIf="selectedSubscription">
                         <mat-toolbar class="main-content-head">
                             <div class="left-side">
                                 <p>
                                     {{ selectedSubscription?.planDetails?.name }} <br /><span>
-                                        {{ selectedSubscription?.subscriptionId }}</span>
+                                        {{ selectedSubscription?.subscriptionId }}</span
+                                    >
                                 </p>
                             </div>
                             <div class="right-side">
                                 <div>
                                     <p>
                                         {{
-                                        selectedSubscription?.remainingDays > 0
-                                        ? localeData?.subscription?.expires
-                                        : localeData?.subscription?.expired
+                                            selectedSubscription?.remainingDays > 0
+                                                ? localeData?.subscription?.expires
+                                                : localeData?.subscription?.expired
                                         }}
                                         {{ commonLocaleData?.app_date_options?.on }}: {{ selectedSubscription?.expiry }}
                                         <br />
                                         <span *ngIf="selectedSubscription?.remainingDays > 0">{{
                                             selectedSubscription?.remainingDays +
-                                            localeData?.subscription?.days_remaining
-                                            }}</span>
+                                                localeData?.subscription?.days_remaining
+                                        }}</span>
                                     </p>
                                 </div>
-                                <button mat-stroked-button color="primary" class="right-side-btn"
-                                    *ngIf="selectedSubscription?.status !== 'trial'" (click)="renewPlan()">
+                                <button
+                                    mat-stroked-button
+                                    color="primary"
+                                    class="right-side-btn"
+                                    *ngIf="selectedSubscription?.status !== 'trial'"
+                                    (click)="renewPlan()"
+                                >
                                     {{ commonLocaleData?.app_renew }}
                                 </button>
                                 <!-- <button mat-raised-button color="primary">Buy Add-ons</button> -->
@@ -191,10 +235,11 @@
                                                 {{ commonLocaleData?.app_balance
                                                 }}<span>
                                                     {{
-                                                    selectedSubscription?.remainingTransactions
-                                                    ? (selectedSubscription?.remainingTransactions | number)
-                                                    : "0"
-                                                    }}</span>
+                                                        selectedSubscription?.remainingTransactions
+                                                            ? (selectedSubscription?.remainingTransactions | number)
+                                                            : "0"
+                                                    }}</span
+                                                >
                                             </p>
                                         </div>
                                         <!-- <div class="box item-2">
@@ -244,13 +289,21 @@
                         </mat-form-field>
                     </div> -->
                         <div class="main-tabs-content position-relative">
-                            <div class="expand-button">
-                                <button (click)="accordion.openAll(); isExpand = true" mat-button disableRipple="true"
-                                    *ngIf="!isExpand">
+                            <div class="expand-button pr-2">
+                                <button
+                                    (click)="accordion.openAll(); isExpand = true"
+                                    mat-button
+                                    disableRipple="true"
+                                    *ngIf="!isExpand"
+                                >
                                     {{ commonLocaleData?.app_expand_all }}
                                 </button>
-                                <button (click)="accordion.closeAll(); isExpand = false" mat-button disableRipple="true"
-                                    *ngIf="isExpand">
+                                <button
+                                    (click)="accordion.closeAll(); isExpand = false"
+                                    mat-button
+                                    disableRipple="true"
+                                    *ngIf="isExpand"
+                                >
                                     {{ commonLocaleData?.app_collapse_all }}
                                 </button>
                             </div>
@@ -800,26 +853,36 @@
                     </mat-tab>  -->
                                 <mat-tab [label]="localeData?.subscription?.companies">
                                     <mat-accordion class="companies" multi>
-                                        <ng-container *ngFor="
+                                        <ng-container
+                                            *ngFor="
                                                 let company of selectedSubscription?.companiesWithTransactions;
                                                 let i = index
-                                            ">
-                                            <mat-expansion-panel hideToggle class="companies-expansion-panel"
+                                            "
+                                        >
+                                            <mat-expansion-panel
+                                                hideToggle
+                                                class="companies-expansion-panel"
                                                 (opened)="panelOpenState = true; isExpand = true"
-                                                (closed)="panelOpenState = false; isExpand = false">
+                                                (closed)="panelOpenState = false; isExpand = false"
+                                            >
                                                 <mat-expansion-panel-header class="companies-expansion-header-mat">
                                                     <mat-panel-title>
                                                         {{ company?.name }}
-                                                        <a (click)="openModalMove(company, $event)"
-                                                            href="javascript:void(0);" class="link-color">{{
-                                                            localeData?.subscription?.move }}</a>
+                                                        <a
+                                                            (click)="openModalMove(company, $event)"
+                                                            href="javascript:void(0);"
+                                                            class="link-color"
+                                                            >{{ localeData?.subscription?.move }}</a
+                                                        >
                                                     </mat-panel-title>
                                                 </mat-expansion-panel-header>
                                                 <div class="companies-container">
                                                     <div class="companies-container-items">
                                                         <p>
-                                                            <img src="{{ imgPath }}transaction.png"
-                                                                [alt]="commonLocaleData?.subscription?.app_transactions" />
+                                                            <img
+                                                                src="{{ imgPath }}transaction.png"
+                                                                [alt]="commonLocaleData?.subscription?.app_transactions"
+                                                            />
                                                             {{ company?.transactions }}
                                                             {{ localeData?.subscription?.transaction_used }}
                                                         </p>
@@ -833,7 +896,8 @@
                                                 </div>
                                             </mat-expansion-panel>
                                             <mat-divider
-                                                *ngIf="i < selectedSubscription?.companiesWithTransactions?.length">
+                                                *ngIf="i < selectedSubscription?.companiesWithTransactions?.length"
+                                            >
                                             </mat-divider>
                                         </ng-container>
                                     </mat-accordion>
@@ -850,12 +914,21 @@
     </div>
 </div>
 <!-- </ng-container> -->
-<subscriptions-plans *ngIf="isPlanShow && localeData?.subscription" [subscriptions]="subscriptions"
-    (isSubscriptionPlanShow)="isSubscriptionPlanShow($event)" [localeData]="localeData"
-    [commonLocaleData]="commonLocaleData"></subscriptions-plans>
+<subscriptions-plans
+    *ngIf="isPlanShow && localeData?.subscription"
+    [subscriptions]="subscriptions"
+    (isSubscriptionPlanShow)="isSubscriptionPlanShow($event)"
+    [localeData]="localeData"
+    [commonLocaleData]="commonLocaleData"
+></subscriptions-plans>
 <!-- MoveCompany Modal -->
 <ng-template #moveCompany>
-    <move-company (moveCompany)="addOrMoveCompanyCallback($event)" [subscriptions]="subscriptions"
-        [moveSelectedCompany]="selectedCompany" [localeData]="localeData" [commonLocaleData]="commonLocaleData">
+    <move-company
+        (moveCompany)="addOrMoveCompanyCallback($event)"
+        [subscriptions]="subscriptions"
+        [moveSelectedCompany]="selectedCompany"
+        [localeData]="localeData"
+        [commonLocaleData]="commonLocaleData"
+    >
     </move-company>
 </ng-template>

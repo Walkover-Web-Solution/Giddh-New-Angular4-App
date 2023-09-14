@@ -306,7 +306,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
                     }
                 });
 
-                this.plansList = uniqBy(response.map(subscription => { return { name: subscription.planDetails?.name, uniqueName: subscription.planDetails?.uniqueName } }), "uniqueName");
+                this.plansList = uniqBy(response.map(subscription => { return { label: subscription.planDetails?.name, value: subscription.planDetails?.uniqueName } }), "uniqueName");
                 if (subscriptions?.length > 0) {
                     this.subscriptions = subscriptions;
                     let loop = 0;
@@ -419,17 +419,17 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
      */
     public translationComplete(): void {
         this.expiringList = [
-            { name: this.localeData?.expiring_list?.seven_days, value: 7 },
-            { name: this.localeData?.expiring_list?.fifteen_days, value: 15 },
-            { name: this.localeData?.expiring_list?.one_month, value: 31 },
-            { name: this.localeData?.expiring_list?.six_months, value: 180 },
-            { name: this.localeData?.expiring_list?.one_year, value: 365 }
+            { label: this.localeData?.expiring_list?.seven_days, value: 7 },
+            { label: this.localeData?.expiring_list?.fifteen_days, value: 15 },
+            { label: this.localeData?.expiring_list?.one_month, value: 31 },
+            { label: this.localeData?.expiring_list?.six_months, value: 180 },
+            { label: this.localeData?.expiring_list?.one_year, value: 365 }
         ];
         this.transactionBalanceList = [
-            { name: this.localeData?.transaction_balance_list?.less_than_1k, value: 1000 },
-            { name: this.localeData?.transaction_balance_list?.less_than_5k, value: 5000 },
-            { name: this.localeData?.transaction_balance_list?.less_than_10k, value: 10000 },
-            { name: this.localeData?.transaction_balance_list?.less_than_50k, value: 50000 }
+            { label: this.localeData?.transaction_balance_list?.less_than_1k, value: 1000 },
+            { label: this.localeData?.transaction_balance_list?.less_than_5k, value: 5000 },
+            { label: this.localeData?.transaction_balance_list?.less_than_10k, value: 10000 },
+            { label: this.localeData?.transaction_balance_list?.less_than_50k, value: 50000 }
         ];
     }
 }
