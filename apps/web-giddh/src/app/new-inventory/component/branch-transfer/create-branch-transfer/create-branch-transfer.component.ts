@@ -1489,6 +1489,7 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
                         });
                     }
                     sourceGroup.get('warehouse.stockDetails.quantity')?.patchValue(event?.value ? 1 : null);
+                    this.assignRateInSourceDestinations();
                     this.resetSourceWarehouses(index, true);
                 }
             } else {
@@ -1519,6 +1520,7 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
                         });
                     }
                     destinationsFormGroup.get('warehouse.stockDetails.quantity')?.patchValue(event?.value ? 1 : null);
+                    this.assignRateInSourceDestinations();
                     this.resetDestinationWarehouses(index, true);
                 }
             }
@@ -1981,6 +1983,42 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
             this.unitChanged(unitRates[0], productFormGroup);
         }
         this.stockUnits[index] = unitRates;
+
+        this.assignRateInSourceDestinations();
+    }
+
+    /**
+     * Assigns rate in sources/destination if multiple senders/receivers
+     *
+     * @private
+     * @memberof CreateBranchTransferComponent
+     */
+    private assignRateInSourceDestinations(): void {
+        if (this.transferType === 'senders' && this.stockUnits?.length && this.stockUnits[0]?.length) {
+            const destinationsArray = this.branchTransferCreateEditForm.get('destinations') as UntypedFormArray;
+            this.branchTransferCreateEditForm.get('destinations')['controls']?.forEach((destination, index) => {
+                let destinationsFormGroup = destinationsArray?.at(index) as UntypedFormGroup;
+                let destinationsWarehouseFormGroup = destinationsFormGroup.get('warehouse') as UntypedFormGroup;
+                destinationsFormGroup.get('warehouse.stockDetails.rate')?.patchValue(this.stockUnits[0][0].additional);
+
+                if (!destinationsFormGroup.get('warehouse.stockDetails.quantity')?.value) {
+                    destinationsFormGroup.get('warehouse.stockDetails.quantity')?.patchValue(1);
+                }
+                this.calculateRowTotal(destinationsWarehouseFormGroup);
+            });
+
+            const sourcesArray = this.branchTransferCreateEditForm.get('sources') as UntypedFormArray;
+            this.branchTransferCreateEditForm.get('sources')['controls']?.forEach((sources, index) => {
+                let sourcesFormGroup = sourcesArray?.at(index) as UntypedFormGroup;
+                let sourcesWarehouseFormGroup = sourcesFormGroup.get('warehouse') as UntypedFormGroup;
+                sourcesFormGroup.get('warehouse.stockDetails.rate')?.patchValue(this.stockUnits[0][0].additional);
+
+                if (!sourcesFormGroup.get('warehouse.stockDetails.quantity')?.value) {
+                    sourcesFormGroup.get('warehouse.stockDetails.quantity')?.patchValue(1);
+                }
+                this.calculateRowTotal(sourcesWarehouseFormGroup);
+            });
+        }
     }
 
     /**
