@@ -41,7 +41,7 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
     /** Create Manufacturing form object */
     public manufacturingObject: CreateManufacturing = new CreateManufacturing();
     /** New Linked stocks object */
-    public totals: any = { totalRate: 0, totalAmount: 0, costPerItem: 0, expensePerItem:0 };
+    public totals: any = { totalRate: 0, totalAmount: 0, costPerItem: 0, expensePerItem: 0, totalStockAmount: 0 };
     /** Index of active linked item */
     public activeLinkedStockIndex: number = null;
     /** List of required fields */
@@ -111,7 +111,7 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
     /** Index of active linked item */
     public activeExpenseIndex: number = null;
     /** True if increase assets value*/
-    private increaseExpenseAmount: boolean ;
+    private increaseExpenseAmount: boolean;
 
     constructor(
         private store: Store<AppState>,
@@ -141,13 +141,14 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
                 this.manufactureUniqueName = params?.uniqueName;
                 this.getManufacturingDetails(params?.uniqueName);
             }
+            if (!this.manufactureUniqueName) {
+                this.increaseExpenseAmount = this.manufacturingObject.manufacturingDetails[0].increaseAssetValue;
+            }
         });
 
         this.loadExpenseAccounts();
         this.loadAssetsLiabilitiesAccounts();
         this.initializeOtherExpenseObj();
-
-      this.increaseExpenseAmount =   this.manufacturingObject.manufacturingDetails[0].increaseAssetValue;
 
         this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj: Date[]) => {
             if (dateObj) {
@@ -278,7 +279,10 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
         }
 
         object.variants = [];
-
+        if (!this.manufacturingObject.manufacturingDetails[0].otherExpenses.length) {
+            this.manufacturingObject.manufacturingDetails[0].otherExpenses = [];
+            this.initializeOtherExpenseObj();
+        }
         this.ledgerService.loadStockVariants(object.stockUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(variants => {
             if (variants?.length) {
                 variants?.forEach(variant => {
@@ -672,6 +676,8 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
      */
     public addExpense(): void {
         this.initializeOtherExpenseObj();
+        this.loadAssetsLiabilitiesAccounts();
+        this.loadExpenseAccounts();
     }
     /**
      * This will be use for remove expense item
@@ -726,9 +732,11 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
         let totalRate = 0;
         let totalAmount = 0;
         let expenseAmount = 0;
+        let totalStockAmount = 0;
         this.manufacturingObject.manufacturingDetails[0].linkedStocks?.forEach(linkedStock => {
             totalRate += Number(linkedStock.rate) || 0;
             totalAmount += Number(linkedStock.amount) || 0;
+            totalStockAmount += Number(linkedStock.amount) || 0;
         });
 
         this.manufacturingObject.manufacturingDetails[0].otherExpenses?.forEach(expense => {
@@ -738,19 +746,16 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
         });
 
         if (this.increaseExpenseAmount) {
-            let  updatedAmount = giddhRoundOff(((totalAmount+ expenseAmount ) / this.manufacturingObject.manufacturingDetails[0].manufacturingQuantity), this.giddhBalanceDecimalPlaces);
-            console.log('update true', updatedAmount);
+            let updatedAmount = giddhRoundOff(((totalAmount + expenseAmount) / this.manufacturingObject.manufacturingDetails[0].manufacturingQuantity), this.giddhBalanceDecimalPlaces);
             this.totals.costPerItem = updatedAmount;
-
         } else {
             let updatedAmount = giddhRoundOff((totalAmount / this.manufacturingObject.manufacturingDetails[0].manufacturingQuantity), this.giddhBalanceDecimalPlaces);
-            console.log('update false', updatedAmount);
             this.totals.costPerItem = updatedAmount;
 
         }
-
+        this.totals.totalStockAmount = totalStockAmount
         this.totals.totalRate = totalRate;
-        this.totals.totalAmount = totalAmount + expenseAmount ;
+        this.totals.totalAmount = totalAmount + expenseAmount;
         this.totals.expensePerItem = expenseAmount;
         this.changeDetectionRef.detectChanges();
     }
@@ -768,7 +773,7 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
         this.manufacturingObject = new CreateManufacturing();
         this.initializeOtherExpenseObj();
         this.manufacturingObject.manufacturingDetails[0].date = cloneDeep(this.universalDate);
-
+        this.increaseExpenseAmount = true;
         this.initialLinkedStocks = [];
         this.selectedWarehouseName = (this.warehouses?.length) ? this.warehouses[0].label : "";
         this.selectedInventoryType = "";
@@ -962,7 +967,7 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
                 this.manufacturingObject.manufacturingDetails[0].variant.uniqueName = response.body.variant.uniqueName;
                 this.manufacturingObject.manufacturingDetails[0].manufacturingQuantity = Number(response.body.manufacturingQuantity);
                 this.manufacturingObject.manufacturingDetails[0].manufacturingMultipleOf = Number(response.body.manufacturingQuantity);
-                this.manufacturingObject.manufacturingDetails[0].increaseAssetValue = response.body.increaseAssetValue;
+                this.increaseExpenseAmount = response.body.increaseAssetValue;
 
                 this.selectedInventoryType = response.body.inventoryType;
 
@@ -1011,9 +1016,10 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
                         transactions: transactions
                     });
                 });
-                this.manufacturingObject.manufacturingDetails[0].otherExpenses = otherExpenses;
-                console.log(this.activeExpenseIndex);
 
+                if (response.body.otherExpenses.length) {
+                    this.manufacturingObject.manufacturingDetails[0].otherExpenses = otherExpenses;
+                }
                 this.getStockVariants(this.manufacturingObject.manufacturingDetails[0], { label: response.body.stockName, value: response.body.stockUniqueName, additional: { stockUnitCode: response.body.manufacturingUnitCode, stockUnitUniqueName: response.body.manufacturingUnitUniqueName } }, true, 0, true);
 
                 this.preventStocksApiCall = false;
@@ -1036,7 +1042,6 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
                             });
                         });
                     }
-
                     this.manufacturingObject.manufacturingDetails[0].linkedStocks?.forEach(linkedStock => {
                         this.getStockVariants(linkedStock, { label: linkedStock.selectedStock.label, value: linkedStock.selectedStock.value, additional: { stockUnitCode: linkedStock.stockUnitCode, stockUnitUniqueName: linkedStock.stockUnitUniqueName } }, false, 0, true);
                     });
