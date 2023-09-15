@@ -28,7 +28,7 @@
                                 >
                                 </giddh-datepicker>
                             </div>
-                            <div class="col" *ngIf="warehouses?.length > 1">
+                            <div class="col responsive-width" *ngIf="warehouses?.length > 1">
                                 <dropdown-field
                                     [name]="'warehouseUniqueName'"
                                     [placeholder]="commonLocaleData?.app_select_warehouse"
@@ -42,19 +42,19 @@
                                 >
                                 </dropdown-field>
                             </div>
-                            <div class="col">
+                            <div class="col responsive-width">
                                 <div class="custom-card bg-green">
                                     <p class="card-head-text">{{ localeData?.total_cost }}</p>
                                     <p class="card-text">{{ totals.totalAmount }}</p>
                                 </div>
                             </div>
-                            <div class="col">
+                            <div class="col responsive-width">
                                 <div class="custom-card bg-expense">
                                     <p class="card-head-text">{{ localeData?.manufacturing_expenses }}</p>
                                     <p class="card-text">{{ totals.expensePerItem }}</p>
                                 </div>
                             </div>
-                            <div class="col">
+                            <div class="col responsive-width">
                                 <div class="custom-card bg-vivid-gamboge">
                                     <p class="card-head-text">{{ localeData?.item_cost }}</p>
                                     <p class="card-text">{{ totals.costPerItem }}</p>
