@@ -83,21 +83,19 @@
                             <div class="table-responsive">
                                 <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
                                     <ng-container matColumnDef="name">
-                                        <th mat-header-cell *matHeaderCellDef> Vendor Name </th>
                                         <td mat-cell *matCellDef="let element">
-                                            Vendor
+                                            Variant
                                         </td>
                                     </ng-container>
                                   
                                     <!-- Name Column -->
                                     <ng-container matColumnDef="price">
-                                        <th mat-header-cell *matHeaderCellDef> Price </th>
                                         <td mat-cell *matCellDef="let element"> 
-                                            <text-field
+                                            <input-field
+                                                [placeholder]="'00'"
+                                                [label]="'Price'"
                                                 [type]="'text'"
-                                                [placeholder]="Amount"
-                                                [cssClass]="'form-control mat-field-border'"
-                                            ></text-field>    
+                                            ></input-field>
                                         </td>
                                     </ng-container>
                                   
@@ -118,33 +116,37 @@
                                   
                                     <!-- Symbol Column -->
                                     <ng-container matColumnDef="discount">
-                                        <th mat-header-cell *matHeaderCellDef> Discount </th>
-                                        <td mat-cell *matCellDef="let element"> {{element.discount}} </td>
+                                        <td mat-cell *matCellDef="let element"> 
+                                            <input-field
+                                                [placeholder]="'00'"
+                                                [label]="'Discount'"
+                                                [type]="'text'"
+                                            ></input-field>
+                                        </td>
                                     </ng-container>
                                 
                                     <!-- Symbol Column -->
                                     <ng-container matColumnDef="quantity">
-                                        <th mat-header-cell *matHeaderCellDef> Quantity </th>
-                                        <td mat-cell *matCellDef="let element"> {{element.quantity}} </td>
+                                        <td mat-cell *matCellDef="let element">
+                                            <input-field
+                                                [placeholder]="'00'"
+                                                [label]="'Quantity'"
+                                                [type]="'text'"
+                                            ></input-field>
+                                        </td>
                                     </ng-container>
                                     <ng-container matColumnDef="delete">
-                                        <th mat-header-cell *matHeaderCellDef></th>
                                         <td mat-cell *matCellDef="let element">
                                             <button mat-stroked-button class="delete-icon">
                                                 <i class="icon-trash"></i>
                                             </button>
                                         </td>
                                     </ng-container>
-                                  
-                                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+
                                     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                                 </table>
                             </div>
                         </div>
-                    </div>
-                    <div class="footer-btn d-flex column-gap1 pd-t15 pd-l15">
-                        <!-- <button mat-stroked-button color="primary">Paginated</button> -->
-                        <button mat-stroked-button>Delete</button>
                     </div>
                 </div>
             </div>
