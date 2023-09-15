@@ -198,7 +198,7 @@
                     "description": "File & review VAT",
                     "hide": "sidebar",
                     "additional": {
-                        "countrySpecific": ["AE"]
+                        "countrySpecific": ["AE", "GB"]
                     }
                 },
                 {

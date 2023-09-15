@@ -195,7 +195,7 @@
                     "description": "फ़ाइल और समीक्षा वैट",
                     "hide": "sidebar",
                     "additional": {
-                        "countrySpecific": ["AE"]
+                        "countrySpecific": ["AE", "GB"]
                     }
                 },
                 {
