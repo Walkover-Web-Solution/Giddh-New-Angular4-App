@@ -465,20 +465,23 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
      * @memberof CreateBranchTransferComponent
      */
     public submit(): void {
-        this.branchTransferCreateEditForm.removeControl('myControlKey');
-        let branchTransferObj = this.branchTransferCreateEditForm.value;
-        delete branchTransferObj.myCurrentCompany
-        this.isValidForm = !this.branchTransferCreateEditForm.invalid;
-        this.isLoading = true;
-
         let branchMode = '';
         if (this.branchTransferMode === 'receipt-note') {
             branchMode = 'receiptnote';
         } else {
             branchMode = 'deliverynote';
         }
-
         this.branchTransferCreateEditForm.get('entity').setValue(branchMode);
+        this.branchTransferCreateEditForm.removeControl('myControlKey');
+        let branchTransferObj = this.branchTransferCreateEditForm.value;
+        delete branchTransferObj.myCurrentCompany
+        this.isValidForm = !this.branchTransferCreateEditForm.invalid;
+        this.isLoading = true;
+
+
+        console.log(this.branchTransferMode);
+
+
         this.branchTransferCreateEditForm.get('transferType').setValue(this.transferType);
         const sourcesArray = this.branchTransferCreateEditForm.get('sources') as UntypedFormArray;
 
