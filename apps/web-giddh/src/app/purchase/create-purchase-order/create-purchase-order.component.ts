@@ -1356,20 +1356,26 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                 this.showVATNo = false;
                 this.getOnboardingForm('IN')
             } else if (this.vatSupportedCountries.includes(code)) {
-                this.showGSTINNo = false;
-                this.showVATNo = false;
-                this.showTRNNo = true;
-                this.getOnboardingForm(code);
-            } else if (name === 'United Kingdom') {
-                this.showGSTINNo = false;
-                this.showTRNNo = false;
-                this.showVATNo = true;
-                this.getOnboardingForm('GB')
+                if (code === 'GB') {
+                    this.showGSTINNo = false;
+                    this.showTRNNo = false;
+                    this.showVATNo = true;
+                    this.getOnboardingForm('GB')
+                } else {
+                    this.showGSTINNo = false;
+                    this.showVATNo = false;
+                    this.showTRNNo = true;
+                    this.getOnboardingForm(code);
+                }
             } else {
                 this.showGSTINNo = false;
                 this.showTRNNo = false;
                 this.showVATNo = false;
             }
+        } else {
+            this.showGSTINNo = false;
+            this.showTRNNo = false;
+            this.showVATNo = false;
         }
     }
 
@@ -2407,19 +2413,16 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             obj.account.shippingDetails.county.code = obj.account.shippingDetails?.county?.code;
             obj.account.shippingDetails.county.name = obj.account.shippingDetails?.county?.name;
         }
+        
         if (this.statesSource.length) {
             obj.account.billingDetails.stateCode = obj.account.billingDetails.state.code;
             obj.account.billingDetails.stateName = obj.account.billingDetails.state.name;
             obj.account.shippingDetails.stateCode = obj.account.shippingDetails.state.code;
             obj.account.shippingDetails.stateName = obj.account.shippingDetails.state.name;
-            delete obj.account.billingDetails.county.code;
-            delete obj.account.billingDetails.county.name;
-            delete obj.account.shippingDetails.county.code;
-            delete obj.account.shippingDetails.county.name;
-            delete obj.company.billingDetails.county.code;
-            delete obj.company.billingDetails.county.name;
-            delete obj.company.shippingDetails.county.code;
-            delete obj.company.shippingDetails.county.name;
+            obj.account.billingDetails.county = null;
+            obj.account.shippingDetails.county = null;
+            obj.company.billingDetails.county = null;
+            obj.company.shippingDetails.county = null;
         }
 
         obj.account.billingDetails.countryName = this.vendorCountry;
