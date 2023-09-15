@@ -465,24 +465,7 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
      * @memberof CreateBranchTransferComponent
      */
     public submit(): void {
-        this.branchTransferCreateEditForm.removeControl('myControlKey');
-        let branchTransferObj = this.branchTransferCreateEditForm.value;
-        delete branchTransferObj.myCurrentCompany
-        this.isValidForm = !this.branchTransferCreateEditForm.invalid;
-        this.isLoading = true;
-        console.log(this.isValidForm, this.branchTransferCreateEditForm);
-
-        let branchMode = '';
-        if (this.branchTransferMode === 'receipt-note') {
-            branchMode = 'receiptnote';
-        } else {
-            branchMode = 'deliverynote';
-        }
-
-        this.branchTransferCreateEditForm.get('entity').setValue(branchMode);
-        this.branchTransferCreateEditForm.get('transferType').setValue(this.transferType);
         const sourcesArray = this.branchTransferCreateEditForm.get('sources') as UntypedFormArray;
-
         for (let i = 0; i < sourcesArray.length; i++) {
             const sourcesFormGroup = sourcesArray.at(i) as UntypedFormGroup;
             const sourcesWarehouseFormGroup = sourcesFormGroup?.get('warehouse') as UntypedFormGroup;
@@ -548,6 +531,19 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
                 }
             }
         }
+        let branchMode = '';
+        if (this.branchTransferMode === 'receipt-note') {
+            branchMode = 'receiptnote';
+        } else {
+            branchMode = 'deliverynote';
+        }
+        this.branchTransferCreateEditForm.get('transferType').setValue(this.transferType);
+        this.branchTransferCreateEditForm.get('entity').setValue(branchMode);
+        this.branchTransferCreateEditForm.removeControl('myControlKey');
+        let branchTransferObj = this.branchTransferCreateEditForm.value;
+        delete branchTransferObj.myCurrentCompany
+        this.isValidForm = !this.branchTransferCreateEditForm.invalid;
+        this.isLoading = true;
         if (this.isValidForm) {
             if (this.editBranchTransferUniqueName) {
                 this.inventoryService.updateNewBranchTransfer(branchTransferObj).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
