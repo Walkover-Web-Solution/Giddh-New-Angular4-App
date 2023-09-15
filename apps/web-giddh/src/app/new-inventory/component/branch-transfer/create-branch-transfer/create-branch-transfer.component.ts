@@ -1966,7 +1966,7 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
             }));
         } else {
             unitRates.push({
-                label: this.stockUnitResults[index].name,
+                label: this.stockUnitResults[index].code,
                 value: this.stockUnitResults[index].uniqueName,
                 additional: 1
             })
@@ -1974,7 +1974,7 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
         const baseUnitExists = unitRates?.filter(rate => rate.value === this.stockUnitResults[index].uniqueName);
         if (!baseUnitExists?.length) {
             unitRates.push({
-                label: this.stockUnitResults[index].name,
+                label: this.stockUnitResults[index].code,
                 value: this.stockUnitResults[index].uniqueName,
                 additional: 1
             });

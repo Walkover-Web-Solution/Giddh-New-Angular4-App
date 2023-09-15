@@ -678,7 +678,7 @@ export class GeneralService {
         return {
             headerText,
             headerCssClass,
-            messageText: 'Are you sure you want to delete this' + selectedBranchTransferType +'?' ,
+            messageText: 'Are you sure you want to delete this' + selectedBranchTransferType + '?',
             messageCssClass,
             footerText: 'It will be deleted permanently and will no longer be accessible from any other module.',
             footerCssClass,
@@ -825,8 +825,17 @@ export class GeneralService {
      */
     public getVisibleMenuItems(module: string, apiItems: Array<any>, itemList: Array<AllItems>, countryCode: string = ""): Array<AllItems> {
         const visibleMenuItems = cloneDeep(itemList);
+        let index = 0;
         itemList?.forEach((menuItem, menuIndex) => {
             visibleMenuItems[menuIndex].items = [];
+
+            if (visibleMenuItems[menuIndex]?.additional?.voucherVersion && visibleMenuItems[menuIndex]?.additional?.voucherVersion !== this.voucherApiVersion) {
+                visibleMenuItems[menuIndex].hide = true;
+            } else {
+                visibleMenuItems[menuIndex].itemIndex = index;
+                index++;
+            }
+
             menuItem.items?.forEach(item => {
                 const isValidItem = apiItems.find(apiItem => apiItem?.uniqueName === item.link);
                 if (((isValidItem && item.hide !== module) || (item.alwaysPresent && item.hide !== module)) && (!item.additional?.countrySpecific?.length || item.additional?.countrySpecific?.indexOf(countryCode) > -1) && (!item.additional?.voucherVersion || item.additional?.voucherVersion === this.voucherApiVersion)) {
