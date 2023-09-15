@@ -350,54 +350,66 @@
       "label": "यादी",
       "icon": "icon-inventory",
       "items": [
-        {
-          "label": "यादी",
-          "link": "/pages/inventory",
-          "icon": "icon-inventory",
-          "description": "स्टॉक / गट आणि युनिट आयात / तयार करा",
-          "additional": {
-            "voucherVersion": 1
+          {
+              "label": "यादी",
+              "link": "/pages/inventory",
+              "icon": "icon-inventory",
+              "description": "स्टॉक / गट आणि युनिट आयात / तयार करा",
+              "additional": {
+                  "voucherVersion": 1
+              }
+          },
+          {
+              "label": "यादी",
+              "link": "/pages/inventory/v2/reports/product/stock",
+              "icon": "icon-inventory",
+              "description": "स्टॉक / गट आणि युनिट आयात / तयार करा",
+              "additional": {
+                  "voucherVersion": 2
+              }
+          },
+          {
+              "label": "उत्पादन",
+              "link": "/pages/inventory/manufacturing",
+              "icon": "icon-manufacturing1",
+              "description": "उत्पादन यादीची स्थिती शोधा",
+              "additional": {
+                  "voucherVersion": 1
+              }
+          },
+          {
+              "label": "उत्पादन",
+              "link": "/pages/inventory/v2/manufacturing/list",
+              "icon": "icon-manufacturing1",
+              "description": "उत्पादन यादीची स्थिती शोधा",
+              "additional": {
+                  "voucherVersion": 2
+              }
+          },
+          {
+              "label": "शाखा हस्तांतरण",
+              "link": "/pages/inventory/v2/branch-transfer/list",
+              "icon": "icon-branch-transfer",
+              "description": "यादी व्यवस्थापित करा आणि हस्तांतरण यादी",
+              "additional": {
+                  "voucherVersion": 2
+              }
+          },
+          {
+              "label": "शाखा हस्तांतरण",
+              "link": "/pages/inventory/report",
+              "icon": "icon-branch-transfer",
+              "description": "यादी व्यवस्थापित करा आणि हस्तांतरण यादी",
+              "additional": {
+                  "voucherVersion": 1
+              }
+          },
+          {
+              "label": "कोठार",
+              "link": "/pages/settings/warehouse",
+              "icon": "icon-warehouse1",
+              "description": "सर्व गोदामे पहा"
           }
-        },
-        {
-          "label": "यादी",
-          "link": "/pages/inventory/v2/reports/product/stock",
-          "icon": "icon-inventory",
-          "description": "स्टॉक / गट आणि युनिट आयात / तयार करा",
-          "additional": {
-            "voucherVersion": 2
-          }
-        },
-        {
-          "label": "उत्पादन",
-          "link": "/pages/inventory/manufacturing",
-          "icon": "icon-manufacturing1",
-          "description": "उत्पादन यादीची स्थिती शोधा",
-          "additional": {
-            "voucherVersion": 1
-          }
-        },
-        {
-          "label": "उत्पादन",
-          "link": "/pages/inventory/v2/manufacturing/list",
-          "icon": "icon-manufacturing1",
-          "description": "उत्पादन यादीची स्थिती शोधा",
-          "additional": {
-            "voucherVersion": 2
-          }
-        },
-        {
-          "label": "शाखा हस्तांतरण",
-          "link": "/pages/inventory/report",
-          "icon": "icon-branch-transfer",
-          "description": "यादी व्यवस्थापित करा आणि हस्तांतरण यादी"
-        },
-        {
-          "label": "कोठार",
-          "link": "/pages/settings/warehouse",
-          "icon": "icon-warehouse1",
-          "description": "सर्व गोदामे पहा"
-        }
       ]
     },
     {

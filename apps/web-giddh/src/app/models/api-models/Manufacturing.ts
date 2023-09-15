@@ -31,11 +31,39 @@ export class ManufacturingLinkedStock {
         this.stocksQ = "";
     }
 }
+export class ManufacturingBaseAccount {
+    uniqueName: string;
+    defaultName: string;
+}
+export class ManufacturingTransactionAccount {
+    uniqueName: string;
+    defaultName: string;
+}
+
+export class ManufacturingTransaction {
+    account: ManufacturingTransactionAccount;
+    amount: number;
+    cssClass?: string;
+    constructor() {
+        this.account = new ManufacturingTransactionAccount();
+        this.cssClass = "form-control mat-field-border";
+    }
+}
+export class ManufacturingExpense {
+    baseAccount: ManufacturingBaseAccount;
+    transactions: ManufacturingTransaction[];
+    constructor() {
+        this.baseAccount = new ManufacturingBaseAccount();
+        this.transactions = [new ManufacturingTransaction()];
+    }
+}
 
 export class CreateManufacturingClass {
     manufacturingQuantity: number;
     date: string;
     linkedStocks: ManufacturingLinkedStock[];
+    otherExpenses: ManufacturingExpense[];
+    increaseAssetValue: boolean;
     warehouseUniqueName: string;
     manufacturingMultipleOf: number;
     stockUniqueName: string;
@@ -54,6 +82,8 @@ export class CreateManufacturingClass {
         this.manufacturingMultipleOf = 1;
         this.date = '';
         this.linkedStocks = [];
+        this.otherExpenses = [];
+        this.increaseAssetValue = true;
         this.variant = new ManufacturingVariant();
         this.variants = [new ManufacturingVariant()];
         this.stocksPageNumber = 1;

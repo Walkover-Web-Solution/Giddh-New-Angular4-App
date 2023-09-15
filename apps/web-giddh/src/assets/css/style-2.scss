@@ -14436,3 +14436,12 @@ activity-compare-json {
         white-space: nowrap;
     }
 }
+
+/*---- aside-button ----*/
+aside-menu-product-service {
+    .mat-mdc-outlined-button {
+        &.mat-unthemed {
+            color: var(--color-list) !important;
+        }
+    }
+}
