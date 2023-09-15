@@ -364,9 +364,8 @@
                                         </ng-container>
                                     </div>
                                     <div class="col-lg-6">
-                                        <div class="position-relative info-field mr-b15">
+                                        <div class="position-relative info-field mr-b15" *ngIf="(isBranch || isCompanyWithSingleBranch) && !isUpdateMode">
                                             <input-field
-                                                *ngIf="(isBranch || isCompanyWithSingleBranch) && !isUpdateMode"
                                                 [name]="'myCurrentCompany'"
                                                 formControlName="myCurrentCompany"
                                                 [type]="'text'"
@@ -397,7 +396,7 @@
                                         </div>
                                         <div formArrayName="destinations">
                                             <div [formGroupName]="0">
-                                                <div *ngIf="isUpdateMode" class="mr-b15">
+                                                <div *ngIf="isUpdateMode" class="mr-b15 position-relative info-field">
                                                     <dropdown-field
                                                         [name]="'receiverName'"
                                                         [label]="localeData?.receiver_name"
@@ -421,6 +420,21 @@
                                                         "
                                                     >
                                                     </dropdown-field>
+                                                    <i
+                                                        *ngIf="
+                                                            destinationWarehouses[
+                                                                branchTransferCreateEditForm.get('destinations.0.uniqueName')
+                                                                    ?.value
+                                                            ]?.length !==
+                                                            allWarehouses[
+                                                                branchTransferCreateEditForm.get('destinations.0.uniqueName')
+                                                                    ?.value
+                                                            ]?.length
+                                                        "
+                                                        class="icon-info three"
+                                                        matTooltip="{{ branchTransferInfoText }}"
+                                                    >
+                                                    </i>
                                                 </div>
                                                 <div class="mr-b15">
                                                     <dropdown-field
