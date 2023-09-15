@@ -718,7 +718,7 @@
                                                         [placeholder]=""
                                                         [type]="'text'"
                                                         [readonly]="isBranch || isCompanyWithSingleBranch"
-                                                        [cssClass]="'form-control disabled w-100'"
+                                                        [cssClass]="'w-100'"
                                                         [showError]="
                                                             !isValidForm &&
                                                             !branchTransferCreateEditForm?.get('myCurrentCompany')
@@ -2191,7 +2191,7 @@
                                         <td class="pr-0">
                                             <div class="row text-right">
                                                 <div class="col px-0"><strong>Total</strong></div>
-                                                <div class="col px-0">
+                                                <div class="col px-0 total-rs">
                                                     {{ activeCompany?.baseCurrencySymbol }}
                                                     {{ overallTotal | giddhCurrency }}
                                                 </div>
