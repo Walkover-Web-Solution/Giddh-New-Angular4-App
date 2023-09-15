@@ -465,26 +465,7 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
      * @memberof CreateBranchTransferComponent
      */
     public submit(): void {
-        let branchMode = '';
-        if (this.branchTransferMode === 'receipt-note') {
-            branchMode = 'receiptnote';
-        } else {
-            branchMode = 'deliverynote';
-        }
-        this.branchTransferCreateEditForm.get('entity').setValue(branchMode);
-        this.branchTransferCreateEditForm.removeControl('myControlKey');
-        let branchTransferObj = this.branchTransferCreateEditForm.value;
-        delete branchTransferObj.myCurrentCompany
-        this.isValidForm = !this.branchTransferCreateEditForm.invalid;
-        this.isLoading = true;
-
-
-        console.log(this.branchTransferMode);
-
-
-        this.branchTransferCreateEditForm.get('transferType').setValue(this.transferType);
         const sourcesArray = this.branchTransferCreateEditForm.get('sources') as UntypedFormArray;
-
         for (let i = 0; i < sourcesArray.length; i++) {
             const sourcesFormGroup = sourcesArray.at(i) as UntypedFormGroup;
             const sourcesWarehouseFormGroup = sourcesFormGroup?.get('warehouse') as UntypedFormGroup;
@@ -550,6 +531,19 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
                 }
             }
         }
+        let branchMode = '';
+        if (this.branchTransferMode === 'receipt-note') {
+            branchMode = 'receiptnote';
+        } else {
+            branchMode = 'deliverynote';
+        }
+        this.branchTransferCreateEditForm.get('transferType').setValue(this.transferType);
+        this.branchTransferCreateEditForm.get('entity').setValue(branchMode);
+        this.branchTransferCreateEditForm.removeControl('myControlKey');
+        let branchTransferObj = this.branchTransferCreateEditForm.value;
+        delete branchTransferObj.myCurrentCompany
+        this.isValidForm = !this.branchTransferCreateEditForm.invalid;
+        this.isLoading = true;
         if (this.isValidForm) {
             if (this.editBranchTransferUniqueName) {
                 this.inventoryService.updateNewBranchTransfer(branchTransferObj).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
@@ -1958,18 +1952,18 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
         if (event.additional.purchaseAccountDetails) {
             unitRates = event.additional.purchaseAccountDetails.unitRates.map(rate => ({
                 label: rate.stockUnitCode,
-                value: rate.stockUnitCode,
+                value: rate.stockUnitUniqueName,
                 additional: rate.rate
             }));
         } if (event.additional.fixedAssetAccountDetails) {
             unitRates = event.additional.fixedAssetAccountDetails.unitRates.map(rate => ({
                 label: rate.stockUnitCode,
-                value: rate.stockUnitCode,
+                value: rate.stockUnitUniqueName,
                 additional: rate.rate
             }));
         } else {
             unitRates.push({
-                label: this.stockUnitResults[index].uniqueName,
+                label: this.stockUnitResults[index].name,
                 value: this.stockUnitResults[index].uniqueName,
                 additional: 1
             })
@@ -1981,9 +1975,7 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
                 value: this.stockUnitResults[index].uniqueName,
                 additional: 1
             });
-
         }
-
         if (!defaultLoad) {
             this.unitChanged(unitRates[0], productFormGroup);
         }
