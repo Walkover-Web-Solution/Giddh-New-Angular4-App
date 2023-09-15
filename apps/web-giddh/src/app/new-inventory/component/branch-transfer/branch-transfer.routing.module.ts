@@ -1,8 +1,8 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
+import { CreateBranchTransferComponent } from "./create-branch-transfer/create-branch-transfer.component";
+import { ListBranchTransferComponent } from "./list-branch-transfer/list-branch-transfer.component";
 import { MainComponent } from "./main.component";
-import { BranchTransferListComponent } from "./branch-transfer-list/branch-transfer-list.component";
-import { BranchTransferCreateComponent } from "./branch-transfer-create/branch-transfer-create.component";
 
 const routes: Routes = [
     {
@@ -10,17 +10,19 @@ const routes: Routes = [
         component: MainComponent,
         children: [
             {
-                path: "",
-                redirectTo: 'list'
+                path: ":type/create",
+                component: CreateBranchTransferComponent,
+                pathMatch: 'full'
+            },
+            {
+                path: ":type/edit/:uniqueName",
+                component: CreateBranchTransferComponent,
+                pathMatch: 'full'
             },
             {
                 path: "list",
-                component: BranchTransferListComponent
+                component: ListBranchTransferComponent
             },
-            {
-                path: "create",
-                component: BranchTransferCreateComponent
-            }
         ]
     }
 ];

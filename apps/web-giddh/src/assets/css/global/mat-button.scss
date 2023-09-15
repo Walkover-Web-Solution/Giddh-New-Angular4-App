@@ -16,6 +16,7 @@
     }
 }
 .mat-mdc-outlined-button {
+    color: var(--color-default-button) !important;
     &.mat-primary {
         color: var(--color-giddh-blue) !important;
     }

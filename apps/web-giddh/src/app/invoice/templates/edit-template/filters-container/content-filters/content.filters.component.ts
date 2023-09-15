@@ -50,6 +50,8 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
     public activeCompanyName: string;
     /** Ng form instance of content filter component */
     @ViewChild(NgForm) contentForm: NgForm;
+    /** Stores the voucher API version of company */
+    public voucherApiVersion: 1 | 2;
 
     constructor(
         private store: Store<AppState>,
@@ -80,6 +82,7 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
      * @memberof ContentFilterComponent
      */
     public ngOnInit(): void {
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany?.countryV2?.countryName) {
                 this.showGstComposition = activeCompany.countryV2.countryName === 'India';

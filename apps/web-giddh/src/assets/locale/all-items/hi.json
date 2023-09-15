@@ -286,7 +286,7 @@
           "hide": "sidebar",
           "additional": {
             "countrySpecific": [
-              "AE"
+              "AE", "GB"
             ]
           }
         }
@@ -350,54 +350,66 @@
       "label": "इन्वेंटरी",
       "icon": "icon-inventory",
       "items": [
-        {
-          "label": "इन्वेंटरी",
-          "link": "/pages/inventory",
-          "icon": "icon-inventory",
-          "description": "स्टॉक, समूह और इकाई आयात/बनाएं",
-          "additional": {
-            "voucherVersion": 1
+          {
+              "label": "इन्वेंटरी",
+              "link": "/pages/inventory",
+              "icon": "icon-inventory",
+              "description": "स्टॉक, समूह और इकाई आयात/बनाएं",
+              "additional": {
+                  "voucherVersion": 1
+              }
+          },
+          {
+              "label": "इन्वेंटरी",
+              "link": "/pages/inventory/v2/reports/product/stock",
+              "icon": "icon-inventory",
+              "description": "स्टॉक, समूह और इकाई आयात/बनाएं",
+              "additional": {
+                  "voucherVersion": 2
+              }
+          },
+          {
+              "label": "विनिर्माण",
+              "link": "/pages/inventory/manufacturing",
+              "icon": "icon-manufacturing1",
+              "description": "एमएफजी खोजें। माल सूची स्थिति",
+              "additional": {
+                  "voucherVersion": 1
+              }
+          },
+          {
+              "label": "विनिर्माण",
+              "link": "/pages/inventory/v2/manufacturing/list",
+              "icon": "icon-manufacturing1",
+              "description": "एमएफजी खोजें। माल सूची स्थिति",
+              "additional": {
+                  "voucherVersion": 2
+              }
+          },
+          {
+              "label": "शाखा स्थानांतरण",
+              "link": "/pages/inventory/v2/branch-transfer/list",
+              "icon": "icon-branch-transfer",
+              "description": "इन्वेंट्री प्रबंधित करें और ट्रांसफर करें",
+              "additional": {
+                  "voucherVersion": 2
+              }
+          },
+          {
+              "label": "शाखा स्थानांतरण",
+              "link": "/pages/inventory/report",
+              "icon": "icon-branch-transfer",
+              "description": "इन्वेंट्री प्रबंधित करें और ट्रांसफर करें",
+              "additional": {
+                  "voucherVersion": 1
+              }
+          },
+          {
+              "label": "गोदाम",
+              "link": "/pages/settings/warehouse",
+              "icon": "icon-warehouse1",
+              "description": "सभी गोदाम देखें"
           }
-        },
-        {
-          "label": "इन्वेंटरी",
-          "link": "/pages/inventory/v2/reports/product/stock",
-          "icon": "icon-inventory",
-          "description": "स्टॉक, समूह और इकाई आयात/बनाएं",
-          "additional": {
-            "voucherVersion": 2
-          }
-        },
-        {
-          "label": "विनिर्माण",
-          "link": "/pages/inventory/manufacturing",
-          "icon": "icon-manufacturing1",
-          "description": "एमएफजी खोजें। माल सूची स्थिति",
-          "additional": {
-            "voucherVersion": 1
-          }
-        },
-        {
-          "label": "विनिर्माण",
-          "link": "/pages/inventory/v2/manufacturing/list",
-          "icon": "icon-manufacturing1",
-          "description": "एमएफजी खोजें। माल सूची स्थिति",
-          "additional": {
-            "voucherVersion": 2
-          }
-        },
-        {
-          "label": "शाखा स्थानांतरण",
-          "link": "/pages/inventory/report",
-          "icon": "icon-branch-transfer",
-          "description": "इन्वेंट्री प्रबंधित करें और ट्रांसफर करें"
-        },
-        {
-          "label": "गोदाम",
-          "link": "/pages/settings/warehouse",
-          "icon": "icon-warehouse1",
-          "description": "सभी गोदाम देखें"
-        }
       ]
     },
     {

@@ -18,6 +18,7 @@ $custom-typography: mat-typography-config(
 @import "../css/global/mat-button.scss";
 @import "../css/global/search.scss";
 @import "../css/global/all-items.scss";
+@import "../css/global/vat-report.scss";
 @import "../css/global/header.scss";
 @import "../css/global/setting-integration.scss";
 @import "../css/global/sales-register-expand.scss";
@@ -10755,8 +10756,6 @@ body.update-scroll-hidden {
 
 .contact-body {
     .contact-modal {
-        height: 375px !important;
-
         .mat-dialog-container {
             float: left !important;
             width: 100% !important;
@@ -14435,5 +14434,14 @@ activity-compare-json {
     .mdc-data-table__header-cell {
         word-break: break-word;
         white-space: nowrap;
+    }
+}
+
+/*---- aside-button ----*/
+aside-menu-product-service {
+    .mat-mdc-outlined-button {
+        &.mat-unthemed {
+            color: var(--color-list) !important;
+        }
     }
 }

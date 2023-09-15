@@ -66,9 +66,7 @@
                     "link": "/pages/reports/sales-register",
                     "icon": "icon-register-new",
                     "description": "निव्वळ व संचयी विक्री",
-                    "additionalRoutes":[
-                        "/pages/reports/sales-detailed-expand"
-                    ]
+                    "additionalRoutes": ["/pages/reports/sales-detailed-expand"]
                 },
                 {
                     "label": "टेम्पलेट",
@@ -112,9 +110,7 @@
                     "link": "/pages/reports/purchase-register",
                     "icon": "icon-register-new",
                     "description": "निव्वळ आणि संचयी खरेदी",
-                    "additionalRoutes":[
-                        "/pages/reports/purchase-detailed-expand"
-                    ]
+                    "additionalRoutes": ["/pages/reports/purchase-detailed-expand"]
                 },
                 {
                     "label": "विक्रेता",
@@ -195,7 +191,7 @@
                     "description": "व्हॅट फाइल आणि पुनरावलोकन करा",
                     "hide": "sidebar",
                     "additional": {
-                        "countrySpecific": ["AE"]
+                        "countrySpecific": ["AE", "GB"]
                     }
                 },
                 {
@@ -274,7 +270,19 @@
         },
         {
             "label": "यादी",
+            "link": "/pages/inventory/v2/reports/product/stock",
             "icon": "icon-inventory",
+            "description": "स्टॉक / गट आणि युनिट आयात / तयार करा",
+            "additional": {
+                "voucherVersion": 2
+            }
+        },
+        {
+            "label": "यादी",
+            "icon": "icon-inventory",
+            "additional": {
+                "voucherVersion": 1
+            },
             "items": [
                 {
                     "label": "शाखा हस्तांतरण",
@@ -298,24 +306,6 @@
                     "description": "उत्पादन यादीची स्थिती शोधा",
                     "additional": {
                         "voucherVersion": 1
-                    }
-                },
-                {
-                    "label": "यादी",
-                    "link": "/pages/inventory/v2/reports/product/stock",
-                    "icon": "icon-inventory",
-                    "description": "स्टॉक / गट आणि युनिट आयात / तयार करा",
-                    "additional": {
-                        "voucherVersion": 2
-                    }
-                },
-                {
-                    "label": "उत्पादन",
-                    "link": "/pages/inventory/v2/manufacturing/list",
-                    "icon": "icon-manufacturing1",
-                    "description": "उत्पादन यादीची स्थिती शोधा",
-                    "additional": {
-                        "voucherVersion": 2
                     }
                 },
                 {
