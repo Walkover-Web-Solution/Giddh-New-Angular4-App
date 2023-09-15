@@ -286,7 +286,7 @@
           "hide": "sidebar",
           "additional": {
             "countrySpecific": [
-              "AE"
+              "AE", "GB"
             ]
           }
         }
