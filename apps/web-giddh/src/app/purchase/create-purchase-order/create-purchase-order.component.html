@@ -192,7 +192,11 @@
                                                                                     "
                                                                                 >
                                                                                     {{ address.address }}
-                                                                                    {{ address.state?.name }}
+                                                                                    {{
+                                                                                        address.state?.name
+                                                                                            ? address.state?.name
+                                                                                            : address.county?.name
+                                                                                    }}
                                                                                     <span class="d-block"
                                                                                         >{{
                                                                                             address.gstNumber
@@ -231,8 +235,11 @@
                                                                             {{ vendorCountry }}
                                                                         </label>
                                                                     </div>
-
-                                                                    <div class="col-sm-12 col-md-6" #vendorBillingState>
+                                                                    <div
+                                                                        class="col-sm-12 col-md-6"
+                                                                        #vendorBillingState
+                                                                        *ngIf="statesSource?.length"
+                                                                    >
                                                                         <sales-sh-select
                                                                             [placeholder]="commonLocaleData?.app_state"
                                                                             class="select-border-bottom"
@@ -255,12 +262,38 @@
                                                                         >
                                                                         </sales-sh-select>
                                                                     </div>
-
+                                                                    <div
+                                                                        class="col-sm-12 col-md-6"
+                                                                        #vendorBillingState
+                                                                        *ngIf="regionsSource?.length"
+                                                                    >
+                                                                        <sales-sh-select
+                                                                            [placeholder]="commonLocaleData?.app_region"
+                                                                            class="select-border-bottom"
+                                                                            (selected)="
+                                                                                fillShippingBillingDetails(
+                                                                                    $event,
+                                                                                    true,
+                                                                                    'vendor'
+                                                                                );
+                                                                                autoFillShippingDetails('vendor')
+                                                                            "
+                                                                            #vendorStatesBilling
+                                                                            [showBottomBorderOnly]="true"
+                                                                            [options]="regionsSource"
+                                                                            name="vendorBillingDetailsRegionCode"
+                                                                            [(ngModel)]="
+                                                                                purchaseOrder.account.billingDetails
+                                                                                    .county.code
+                                                                            "
+                                                                        >
+                                                                        </sales-sh-select>
+                                                                    </div>
                                                                     <div
                                                                         class="col-sm-12 col-md-6"
                                                                         *ngIf="
-                                                                            shouldShowTrnGstField &&
-                                                                            (showGSTINNo || showTRNNo)
+                                                                            shouldShowTrnGstVatField &&
+                                                                            (showGSTINNo || showTRNNo || showVATNo)
                                                                         "
                                                                     >
                                                                         <input
@@ -275,12 +308,21 @@
                                                                             class="form-control input-custom"
                                                                             (blur)="autoFillShippingDetails('vendor')"
                                                                             (change)="
-                                                                                getStateCode('billingDetails', 'vendor')
+                                                                                !showVATNo
+                                                                                    ? getStateCode(
+                                                                                          'billingDetails',
+                                                                                          'vendor'
+                                                                                      )
+                                                                                    : null
                                                                             "
                                                                             [placeholder]="
                                                                                 showGSTINNo
                                                                                     ? commonLocaleData?.app_gstin
-                                                                                    : commonLocaleData?.app_trn
+                                                                                    : showTRNNo
+                                                                                    ? commonLocaleData?.app_trn
+                                                                                    : showVATNo
+                                                                                    ? commonLocaleData?.app_enter_vat
+                                                                                    : ''
                                                                             "
                                                                         />
                                                                     </div>
@@ -288,9 +330,11 @@
                                                                     <div
                                                                         [ngClass]="{
                                                                             'col-sm-12 col-md-6':
-                                                                                showGSTINNo || showTRNNo,
+                                                                                showGSTINNo || showTRNNo || showVATNo,
                                                                             'col-sm-12 col-md-12': !(
-                                                                                showGSTINNo || showTRNNo
+                                                                                showGSTINNo ||
+                                                                                showTRNNo ||
+                                                                                showVATNo
                                                                             )
                                                                         }"
                                                                     >
@@ -382,7 +426,11 @@
                                                                                     "
                                                                                 >
                                                                                     {{ address.address }}
-                                                                                    {{ address.state?.name }}
+                                                                                    {{
+                                                                                        address.state?.name
+                                                                                            ? address.state?.name
+                                                                                            : address.county?.name
+                                                                                    }}
                                                                                     {{
                                                                                         address.gstNumber
                                                                                             ? (showGSTINNo
@@ -431,6 +479,7 @@
                                                                                 select-border-bottom
                                                                             "
                                                                             #vendorShippingState
+                                                                            *ngIf="statesSource?.length"
                                                                         >
                                                                             <sales-sh-select
                                                                                 [placeholder]="
@@ -457,10 +506,42 @@
                                                                             </sales-sh-select>
                                                                         </div>
                                                                         <div
+                                                                            class="
+                                                                                col-sm-12 col-md-6
+                                                                                select-border-bottom
+                                                                            "
+                                                                            #vendorShippingState
+                                                                            *ngIf="regionsSource?.length"
+                                                                        >
+                                                                            <sales-sh-select
+                                                                                [placeholder]="
+                                                                                    commonLocaleData?.app_region
+                                                                                "
+                                                                                [disabled]="autoFillVendorShipping"
+                                                                                class="select-border-bottom"
+                                                                                (selected)="
+                                                                                    fillShippingBillingDetails(
+                                                                                        $event,
+                                                                                        false,
+                                                                                        'vendor'
+                                                                                    )
+                                                                                "
+                                                                                #vendorStatesShipping
+                                                                                [showBottomBorderOnly]="true"
+                                                                                [options]="regionsSource"
+                                                                                name="vendorShippingDetailsRegionCode"
+                                                                                [(ngModel)]="
+                                                                                    purchaseOrder.account
+                                                                                        .shippingDetails.county.code
+                                                                                "
+                                                                            >
+                                                                            </sales-sh-select>
+                                                                        </div>
+                                                                        <div
                                                                             class="col-sm-12 col-md-6"
                                                                             *ngIf="
-                                                                                shouldShowTrnGstField &&
-                                                                                (showGSTINNo || showTRNNo)
+                                                                                shouldShowTrnGstVatField &&
+                                                                                (showGSTINNo || showTRNNo || showVATNo)
                                                                             "
                                                                         >
                                                                             <input
@@ -474,15 +555,21 @@
                                                                                 "
                                                                                 class="form-control input-custom"
                                                                                 (change)="
-                                                                                    getStateCode(
-                                                                                        'shippingDetails',
-                                                                                        'vendor'
-                                                                                    )
+                                                                                    !showVATNo
+                                                                                        ? getStateCode(
+                                                                                              'shippingDetails',
+                                                                                              'vendor'
+                                                                                          )
+                                                                                        : null
                                                                                 "
                                                                                 [placeholder]="
                                                                                     showGSTINNo
                                                                                         ? commonLocaleData?.app_gstin
-                                                                                        : commonLocaleData?.app_trn
+                                                                                        : showTRNNo
+                                                                                        ? commonLocaleData?.app_trn
+                                                                                        : showVATNo
+                                                                                        ? commonLocaleData?.app_enter_vat
+                                                                                        : ''
                                                                                 "
                                                                             />
                                                                         </div>
@@ -490,9 +577,13 @@
                                                                         <div
                                                                             [ngClass]="{
                                                                                 'col-sm-12 col-md-6':
-                                                                                    showGSTINNo || showTRNNo,
+                                                                                    showGSTINNo ||
+                                                                                    showTRNNo ||
+                                                                                    showVATNo,
                                                                                 'col-sm-12 col-md-12': !(
-                                                                                    showGSTINNo || showTRNNo
+                                                                                    showGSTINNo ||
+                                                                                    showTRNNo ||
+                                                                                    showVATNo
                                                                                 )
                                                                             }"
                                                                         >
@@ -611,14 +702,23 @@
                                                                             "
                                                                         >
                                                                             {{ address.address }}
-                                                                            {{ address.state?.name }}
+                                                                            {{
+                                                                                address.state?.name
+                                                                                    ? address.state?.name
+                                                                                    : address.county?.name
+                                                                            }}
                                                                             {{
                                                                                 address.taxNumber
                                                                                     ? (showGSTINNo
                                                                                           ? commonLocaleData?.app_gstin +
-                                                                                            ": "
-                                                                                          : commonLocaleData?.app_trn +
-                                                                                            ": ") + address.taxNumber
+                                                                                            ":"
+                                                                                          : showTRNNo
+                                                                                          ? commonLocaleData?.app_trn +
+                                                                                            ":"
+                                                                                          : showVATNo
+                                                                                          ? commonLocaleData?.enter_vat_no +
+                                                                                            ":"
+                                                                                          : "") + address.gstNumber
                                                                                     : ""
                                                                             }}
                                                                         </a>
@@ -646,7 +746,11 @@
                                                                     {{ companyCountryName }}
                                                                 </label>
                                                             </div>
-                                                            <div class="col-sm-12 col-md-6" #companyBillingState>
+                                                            <div
+                                                                class="col-sm-12 col-md-6"
+                                                                #companyBillingState
+                                                                *ngIf="companyStatesSource?.length"
+                                                            >
                                                                 <sales-sh-select
                                                                     [placeholder]="commonLocaleData?.app_state"
                                                                     class="select-border-bottom"
@@ -682,8 +786,47 @@
                                                             </div>
                                                             <div
                                                                 class="col-sm-12 col-md-6"
+                                                                #companyBillingState
+                                                                *ngIf="companyRegionsSource?.length"
+                                                            >
+                                                                <sales-sh-select
+                                                                    [placeholder]="commonLocaleData?.app_region"
+                                                                    class="select-border-bottom"
+                                                                    (selected)="
+                                                                        fillShippingBillingDetails(
+                                                                            $event,
+                                                                            true,
+                                                                            'company'
+                                                                        );
+                                                                        autoFillShippingDetails('company')
+                                                                    "
+                                                                    [showBottomBorderOnly]="true"
+                                                                    [options]="companyRegionsSource"
+                                                                    name="companyBillingDetailsRegionCode"
+                                                                    [disabled]="
+                                                                        purchaseOrder.company.billingDetails.county
+                                                                            .code &&
+                                                                        purchaseOrder.company.billingDetails
+                                                                            .gstNumber &&
+                                                                        purchaseOrder.company.billingDetails.gstNumber
+                                                                            .length >= 2
+                                                                            ? true
+                                                                            : null
+                                                                    "
+                                                                    [fixedValue]="
+                                                                        purchaseOrder.company.billingDetails.county.name
+                                                                    "
+                                                                    [(ngModel)]="
+                                                                        purchaseOrder.company.billingDetails.county.code
+                                                                    "
+                                                                >
+                                                                </sales-sh-select>
+                                                            </div>
+                                                            <div
+                                                                class="col-sm-12 col-md-6"
                                                                 *ngIf="
-                                                                    shouldShowTrnGstField && (showGSTINNo || showTRNNo)
+                                                                    shouldShowTrnGstVatField &&
+                                                                    (showGSTINNo || showTRNNo || showVATNo)
                                                                 "
                                                             >
                                                                 <input
@@ -696,19 +839,32 @@
                                                                     "
                                                                     class="form-control input-custom"
                                                                     (blur)="autoFillShippingDetails('company')"
-                                                                    (change)="getStateCode('billingDetails', 'company')"
+                                                                    (change)="
+                                                                        !showVATNo
+                                                                            ? getStateCode('billingDetails', 'company')
+                                                                            : null
+                                                                    "
                                                                     [placeholder]="
                                                                         showGSTINNo
                                                                             ? commonLocaleData?.app_gstin
-                                                                            : commonLocaleData?.app_trn
+                                                                            : showTRNNo
+                                                                            ? commonLocaleData?.app_trn
+                                                                            : showVATNo
+                                                                            ? commonLocaleData?.app_enter_vat
+                                                                            : ''
                                                                     "
                                                                 />
                                                             </div>
                                                             <!-- static pin code  -->
                                                             <div
                                                                 [ngClass]="{
-                                                                    'col-sm-12 col-md-6': showGSTINNo || showTRNNo,
-                                                                    'col-sm-12 col-md-12': !(showGSTINNo || showTRNNo)
+                                                                    'col-sm-12 col-md-6':
+                                                                        showGSTINNo || showTRNNo || showVATNo,
+                                                                    'col-sm-12 col-md-12': !(
+                                                                        showGSTINNo ||
+                                                                        showTRNNo ||
+                                                                        showVATNo
+                                                                    )
                                                                 }"
                                                             >
                                                                 <div class="form-group mr-b05">
@@ -793,14 +949,23 @@
                                                                             "
                                                                         >
                                                                             {{ address.address }}
-                                                                            {{ address.state?.name }}
+                                                                            {{
+                                                                                address.state?.name
+                                                                                    ? address.state?.name
+                                                                                    : address.county?.name
+                                                                            }}
                                                                             {{
                                                                                 address.taxNumber
                                                                                     ? (showGSTINNo
                                                                                           ? commonLocaleData?.app_gstin +
-                                                                                            ": "
-                                                                                          : commonLocaleData?.app_trn +
-                                                                                            ": ") + address.taxNumber
+                                                                                            ":"
+                                                                                          : showTRNNo
+                                                                                          ? commonLocaleData?.app_trn +
+                                                                                            ":"
+                                                                                          : showVATNo
+                                                                                          ? commonLocaleData?.enter_vat_no +
+                                                                                            ":"
+                                                                                          : "") + address.gstNumber
                                                                                     : ""
                                                                             }}
                                                                         </a>
@@ -835,7 +1000,11 @@
                                                                         </label>
                                                                     </div>
                                                                 </div>
-                                                                <div class="col-sm-12 col-md-6" #companyShippingState>
+                                                                <div
+                                                                    class="col-sm-12 col-md-6"
+                                                                    #companyShippingState
+                                                                    *ngIf="companyStatesSource?.length"
+                                                                >
                                                                     <sales-sh-select
                                                                         [placeholder]="commonLocaleData?.app_state"
                                                                         [disabled]="autoFillCompanyShipping"
@@ -873,9 +1042,43 @@
                                                                 </div>
                                                                 <div
                                                                     class="col-sm-12 col-md-6"
+                                                                    #companyShippingState
+                                                                    *ngIf="companyRegionsSource?.length"
+                                                                >
+                                                                    <sales-sh-select
+                                                                        [placeholder]="commonLocaleData?.app_region"
+                                                                        [disabled]="autoFillCompanyShipping"
+                                                                        class="select-border-bottom disabled"
+                                                                        (selected)="
+                                                                            fillShippingBillingDetails(
+                                                                                $event,
+                                                                                false,
+                                                                                'company'
+                                                                            )
+                                                                        "
+                                                                        [showBottomBorderOnly]="true"
+                                                                        [options]="companyRegionsSource"
+                                                                        name="companyShippingDetailsRegionCode"
+                                                                        [disabled]="
+                                                                            purchaseOrder.company.shippingDetails.county
+                                                                                .code
+                                                                        "
+                                                                        [fixedValue]="
+                                                                            purchaseOrder.company.shippingDetails.county
+                                                                                .name
+                                                                        "
+                                                                        [(ngModel)]="
+                                                                            purchaseOrder.company.shippingDetails.county
+                                                                                .code
+                                                                        "
+                                                                    >
+                                                                    </sales-sh-select>
+                                                                </div>
+                                                                <div
+                                                                    class="col-sm-12 col-md-6"
                                                                     *ngIf="
-                                                                        shouldShowTrnGstField &&
-                                                                        (showGSTINNo || showTRNNo)
+                                                                        shouldShowTrnGstVatField &&
+                                                                        (showGSTINNo || showTRNNo || showVATNo)
                                                                     "
                                                                 >
                                                                     <input
@@ -889,21 +1092,33 @@
                                                                         "
                                                                         class="form-control input-custom"
                                                                         (change)="
-                                                                            getStateCode('shippingDetails', 'company')
+                                                                            !showVATNo
+                                                                                ? getStateCode(
+                                                                                      'shippingDetails',
+                                                                                      'company'
+                                                                                  )
+                                                                                : null
                                                                         "
                                                                         [placeholder]="
                                                                             showGSTINNo
                                                                                 ? commonLocaleData?.app_gstin
-                                                                                : commonLocaleData?.app_trn
+                                                                                : showTRNNo
+                                                                                ? commonLocaleData?.app_trn
+                                                                                : showVATNo
+                                                                                ? commonLocaleData?.app_enter_vat
+                                                                                : ''
                                                                         "
                                                                     />
                                                                 </div>
                                                                 <!-- static pin code  -->
                                                                 <div
                                                                     [ngClass]="{
-                                                                        'col-sm-12 col-md-6': showGSTINNo || showTRNNo,
+                                                                        'col-sm-12 col-md-6':
+                                                                            showGSTINNo || showTRNNo || showVATNo,
                                                                         'col-sm-12 col-md-12': !(
-                                                                            showGSTINNo || showTRNNo
+                                                                            showGSTINNo ||
+                                                                            showTRNNo ||
+                                                                            showVATNo
                                                                         )
                                                                     }"
                                                                 >
