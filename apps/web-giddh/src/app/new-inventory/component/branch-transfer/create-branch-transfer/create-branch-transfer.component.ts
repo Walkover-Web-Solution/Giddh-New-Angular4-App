@@ -404,18 +404,6 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
             this.loadDefaultStocksSuggestions();
         }
         this.activeIndx = index;
-        if (this.editBranchTransferUniqueName) {
-            const productArray = this.branchTransferCreateEditForm.get('products') as UntypedFormArray;
-            const productFormGroup = productArray.at(index) as UntypedFormGroup;
-            if (productFormGroup.get('uniqueName').value) {
-                let stockObj = {
-                    label: productFormGroup.get('name').value,
-                    value: productFormGroup.get('uniqueName').value,
-                    additional: productFormGroup.value
-                }
-                this.selectProduct(stockObj, productFormGroup, true, index);
-            }
-        }
     }
 
     /**
@@ -964,6 +952,13 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
                     productsArray.push(productFormGroup);
                     this.stockVariants[index] = [];
                     this.stockVariants[index].push(productFormGroup.get('variant'));
+
+                    let stockObj = {
+                        label: productFormGroup.get('name').value,
+                        value: productFormGroup.get('uniqueName').value,
+                        additional: productFormGroup.value
+                    }
+                    this.selectProduct(stockObj, productFormGroup, true, index);
                 });
 
                 response.body?.sources?.forEach(source => {
