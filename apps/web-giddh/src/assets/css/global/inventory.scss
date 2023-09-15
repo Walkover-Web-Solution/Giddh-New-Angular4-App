@@ -32,9 +32,9 @@
 }
 
 /*---- report-filter-chip ----*/
-report-filters{
-    .inventory-filter-bar{
-        .select-multiple-chiplist-inventory{
+report-filters {
+    .inventory-filter-bar {
+        .select-multiple-chiplist-inventory {
             .mat-mdc-standard-chip {
                 color: var(--color-chips-primary) !important;
                 background-color: var(--color-body-background) !important;
@@ -47,9 +47,9 @@ report-filters{
 }
 
 /*---- inventory-stock ----*/
-.back-btn-align{
+.back-btn-align {
     .mdc-button {
-        .mdc-button__label{
+        .mdc-button__label {
             display: flex;
             align-items: center;
             column-gap: 2px;
@@ -58,31 +58,35 @@ report-filters{
 }
 
 /*---- inventory-sidebar ----*/
-inventory-sidebar{
-    .mat-mdc-icon-button{
-        &.mat-mdc-button-base{
+inventory-sidebar {
+    .mat-mdc-icon-button {
+        &.mat-mdc-button-base {
             width: 40px;
         }
     }
 }
 
 /*---- variant ----*/
-.option-value-field{
+.option-value-field {
     text-field,
-    select-field{
-        input{
-            padding: 12px;
+    select-field {
+        input {
+            padding: 12px !important;
             border: 1px solid var(--color-fields-border) !important;
             border-radius: 4px;
+            height: auto;
+            &.disabled{
+                background-color: var(--color-primary-input-bar-background) !important;
+            }
         }
     }
-    select-field{
+    select-field {
         position: relative;
-        input{
+        input {
             height: 48px !important;
         }
-        &::before{
-            content: '';
+        &::before {
+            content: "";
             position: absolute;
             width: 0px;
             height: 0;
@@ -96,17 +100,17 @@ inventory-sidebar{
         }
     }
 }
-body{
-    &.fixed{
-        .mat-grid-wrapper{
+body {
+    &.fixed {
+        .mat-grid-wrapper {
             .inventory-search {
                 z-index: 99 !important;
             }
-        } 
+        }
     }
 }
-.text-field-right{
-    .select-field-input{
+.text-field-right {
+    .select-field-input {
         text-align: right !important;
         border: 0;
         padding: 6px;
@@ -126,14 +130,14 @@ body{
     }
 }
 
-.field-m-width{
+.field-m-width {
     max-width: 170px;
     .select-field-input {
         width: 100% !important;
     }
 }
 
-inventory-master{
+inventory-master {
     .mat-grid-wrapper {
         .mat-list-wrap {
             .inventory-sub-sideabar {
@@ -144,7 +148,7 @@ inventory-master{
                                 color: var(--color-field-hover) !important;
                             }
                         }
-                        &.isActive{
+                        &.isActive {
                             mat-list-item {
                                 .mdc-list-item__primary-text {
                                     color: var(--color-list) !important;
@@ -152,6 +156,37 @@ inventory-master{
                             }
                         }
                     }
+                }
+            }
+        }
+    }
+}
+
+/*--- branch-transfer ---*/
+#branch-transfer-list {
+    table {
+        .bg-transparent {
+            &.mat-mdc-button {
+                .mdc-button__label {
+                    padding: 0 5px;
+                }
+            }
+        }
+    }
+}
+
+.manage-table {
+    table {
+        thead {
+            th {
+                &.mat-table-name {
+                    width: 30%;
+                }
+                &.mat-table-id {
+                    width: 40%;
+                }
+                &.mat-table-action {
+                    width: 30%;
                 }
             }
         }

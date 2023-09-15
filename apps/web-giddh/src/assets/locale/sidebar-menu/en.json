@@ -66,9 +66,7 @@
                     "link": "/pages/reports/sales-register",
                     "icon": "icon-register-new",
                     "description": "Net & cumulative sales",
-                    "additionalRoutes":[
-                        "/pages/reports/sales-detailed-expand"
-                    ]
+                    "additionalRoutes": ["/pages/reports/sales-detailed-expand"]
                 },
                 {
                     "label": "Template",
@@ -112,9 +110,7 @@
                     "link": "/pages/reports/purchase-register",
                     "icon": "icon-register-new",
                     "description": "Net & cumulative purchases",
-                    "additionalRoutes":[
-                        "/pages/reports/purchase-detailed-expand"
-                    ]
+                    "additionalRoutes": ["/pages/reports/purchase-detailed-expand"]
                 },
                 {
                     "label": "Vendor",
@@ -278,13 +274,28 @@
         },
         {
             "label": "Inventory",
+            "link": "/pages/inventory/v2/reports/product/stock",
             "icon": "icon-inventory",
+            "description": "Import/create stock, group & unit",
+            "additional": {
+                "voucherVersion": 2
+            }
+        },
+        {
+            "label": "Inventory",
+            "icon": "icon-inventory",
+            "additional": {
+                "voucherVersion": 1
+            },
             "items": [
                 {
                     "label": "Branch Transfer",
                     "link": "/pages/inventory/report",
                     "icon": "icon-branch-transfer",
-                    "description": "Manage & Transfer inventory"
+                    "description": "Manage & Transfer inventory",
+                    "additional": {
+                        "voucherVersion": 1
+                    }
                 },
                 {
                     "label": "Inventory",
@@ -305,28 +316,13 @@
                     }
                 },
                 {
-                    "label": "Inventory",
-                    "link": "/pages/inventory/v2/reports/product/stock",
-                    "icon": "icon-inventory",
-                    "description": "Import/create stock, group & unit",
-                    "additional": {
-                        "voucherVersion": 2
-                    }
-                },
-                {
-                    "label": "Manufacturing",
-                    "link": "/pages/inventory/v2/manufacturing/list",
-                    "icon": "icon-manufacturing1",
-                    "description": "Find mfg. inventory status",
-                    "additional": {
-                        "voucherVersion": 2
-                    }
-                },
-                {
                     "label": "Warehouse",
                     "link": "/pages/settings/warehouse",
                     "icon": "icon-warehouse1",
-                    "description": "See all the warehouses"
+                    "description": "See all the warehouses",
+                    "additional": {
+                        "voucherVersion": 1
+                    }
                 }
             ]
         },
@@ -343,7 +339,7 @@
                         "voucherVersion": 1
                     }
                 },
-                  {
+                {
                     "label": "Audit Trail",
                     "link": "/pages/activity-logs",
                     "icon": "icon-audit-log",

@@ -17,9 +17,11 @@
         <div class="aside-body flexy-child" *ngIf="!hideFirstStep">
             <div class="pb-3 text-center">
                 <div class="buttons-wrapper">
-                    <button mat-stroked-button color="primary" class="mb-2" (click)="toggleAccountPane()">
-                        {{ commonLocaleData?.app_add_account }}
-                    </button>
+                    <ng-container *ngIf="inputData !== 'receipt-note' && inputData !== 'delivery-challan'">
+                        <button mat-stroked-button color="primary" class="mb-2" (click)="toggleAccountPane()">
+                            {{ commonLocaleData?.app_add_account }}
+                        </button>
+                    </ng-container>
                     <button
                         mat-stroked-button
                         color="primary"
