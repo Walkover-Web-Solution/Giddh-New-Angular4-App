@@ -13,7 +13,8 @@ import { CustomerWiseComponent } from './customer-wise/customer-wise.component';
 import { CustomPriceRoutingModule } from './custom-price.routing.module';
 import { MatListModule } from '@angular/material/list';
 import { MatTableModule } from '@angular/material/table';
-import { MatRadioModule } from '@angular/material/radio';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import { PaginationModule } from 'ngx-bootstrap/pagination';
 
 @NgModule({
     imports: [
@@ -29,7 +30,8 @@ import { MatRadioModule } from '@angular/material/radio';
         CustomPriceRoutingModule,
         MatListModule,
         MatTableModule,
-        MatRadioModule
+        MatSlideToggleModule,
+        PaginationModule
     ],
     exports: [
         CustomerWiseComponent

@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
+import { PAGINATION_LIMIT } from "apps/web-giddh/src/app/app.constant";
 
 export interface PeriodicElement {
     name: string;
@@ -9,8 +10,11 @@ export interface PeriodicElement {
     delete: string;
 }
 
-const ELEMENT_DATA: PeriodicElement[] = [
-    { name: 'Hydrogen', price: '1.0079', radio: 'H', discount: '', quantity: '', delete: '' }
+const ELEMENT_DATA: any[] = [
+    { name: 'Variant', price: '1.0079', radio: 'H', discount: '', quantity: '', delete: '' },
+    { name: 'Variant', price: '1.0079', radio: 'H', discount: '', quantity: '', delete: '' },
+    { name: 'Variant', price: '1.0079', radio: 'H', discount: '', quantity: '', delete: ''},
+    { name: 'Variant', price: '1.0079', radio: 'H', discount: '', quantity: '', delete: '' }
 ];
 
 @Component({
@@ -22,10 +26,13 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
     /*--- table ---*/
     displayedColumns: string[] = ['name', 'price', 'radio', 'discount', 'quantity', 'delete'];
     dataSource = ELEMENT_DATA;
+    dataSourceChild = ELEMENT_DATA;
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** Pagination limit */
+    public paginationLimit: number = PAGINATION_LIMIT;
 
     constructor(
     ) {

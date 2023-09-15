@@ -25,6 +25,9 @@
                         &:first-child > .mdc-data-table__cell {
                             border-top: 1px solid var(--color-drag-right-shadow) !important;
                         }
+                        .toggle-wrap {
+                            width: 105px;
+                        }
                     }
                 }
             }

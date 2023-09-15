@@ -22,7 +22,7 @@
                                     </span>
                                 </div>
                                 <div class="mr-b1">
-                                    <button mat-stroked-button color="primary">+ Add Customer</button>
+                                    <button mat-stroked-button color="primary">+ Add</button>
                                 </div>
                             </div>
                             <mat-list-item>
@@ -68,7 +68,7 @@
                         </mat-list>
                         <div class="customer-right-side">
                             <div class="right-heading">
-                                <h2>Inventory</h2>
+                                <button mat-stroked-button color="primary">+ Inventory</button>
                                 <div class="search-list position-relative">
                                     <text-field
                                         type="text"
@@ -80,71 +80,215 @@
                                     </span>
                                 </div>
                             </div>
-                            <div class="table-responsive">
-                                <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-                                    <ng-container matColumnDef="name">
-                                        <td mat-cell *matCellDef="let element">
-                                            Variant
-                                        </td>
-                                    </ng-container>
-                                  
-                                    <!-- Name Column -->
-                                    <ng-container matColumnDef="price">
-                                        <td mat-cell *matCellDef="let element"> 
-                                            <input-field
-                                                [placeholder]="'00'"
-                                                [label]="'Price'"
-                                                [type]="'text'"
-                                            ></input-field>
-                                        </td>
-                                    </ng-container>
-                                  
-                                    <!-- Weight Column -->
-                                    <ng-container matColumnDef="radio">
-                                        <th mat-header-cell *matHeaderCellDef></th>
-                                        <td mat-cell *matCellDef="let element">
-                                            <mat-radio-group color="primary" name="emailTypeSelected">
-                                                <mat-radio-button id="mini" [value]="emailTypeMini"
-                                                    >Inclusive
-                                                </mat-radio-button>
-                                                <mat-radio-button id="entryDate" [value]="emailTypeDetail"
-                                                    >Exclusive
-                                                </mat-radio-button>
-                                            </mat-radio-group>
-                                        </td>
-                                    </ng-container>
-                                  
-                                    <!-- Symbol Column -->
-                                    <ng-container matColumnDef="discount">
-                                        <td mat-cell *matCellDef="let element"> 
-                                            <input-field
-                                                [placeholder]="'00'"
-                                                [label]="'Discount'"
-                                                [type]="'text'"
-                                            ></input-field>
-                                        </td>
-                                    </ng-container>
-                                
-                                    <!-- Symbol Column -->
-                                    <ng-container matColumnDef="quantity">
-                                        <td mat-cell *matCellDef="let element">
-                                            <input-field
-                                                [placeholder]="'00'"
-                                                [label]="'Quantity'"
-                                                [type]="'text'"
-                                            ></input-field>
-                                        </td>
-                                    </ng-container>
-                                    <ng-container matColumnDef="delete">
-                                        <td mat-cell *matCellDef="let element">
-                                            <button mat-stroked-button class="delete-icon">
-                                                <i class="icon-trash"></i>
-                                            </button>
-                                        </td>
-                                    </ng-container>
-
-                                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-                                </table>
+                            <div class="mr-t2">
+                                <div class="table-inventory">
+                                    <p class="inventory-head">
+                                        <strong>Inventory</strong>
+                                    </p>
+                                    <div class="table-responsive mr-t05 mr-b15">
+                                        <table mat-table [dataSource]="dataSource" multiTemplateDataRows>
+                                            <ng-container matColumnDef="name">
+                                                <td mat-cell *matCellDef="let element">
+                                                    {{element.name}}
+                                                </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="price">
+                                                <td mat-cell *matCellDef="let element"> 
+                                                    <input-field
+                                                        [placeholder]="'00'"
+                                                        [label]="'Price'"
+                                                        [type]="'text'"
+                                                    ></input-field>
+                                                </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="radio">
+                                                <td mat-cell *matCellDef="let element" class="child-td-nam">
+                                                    <div class="toggle-wrap">
+                                                        <mat-slide-toggle
+                                                            class="example-margin"
+                                                            color="primary"
+                                                            name="inclusiveExclusive" [(ngModel)]="inclusiveExclusive"
+                                                        >
+                                                        <span>
+                                                            {{
+                                                                inclusiveExclusive ? 'Inclusive' : 'Exclusive'
+                                                            }}
+                                                        </span>
+                                                        </mat-slide-toggle>
+                                                    </div>
+                                                </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="discount">
+                                                <td mat-cell *matCellDef="let element"> 
+                                                    <input-field
+                                                        [placeholder]="'00'"
+                                                        [label]="'Discount'"
+                                                        [type]="'text'"
+                                                    ></input-field>
+                                                </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="quantity">
+                                                <td mat-cell *matCellDef="let element">
+                                                    <input-field
+                                                        [placeholder]="'00'"
+                                                        [label]="'Quantity'"
+                                                        [type]="'text'"
+                                                    ></input-field>
+                                                </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="delete">
+                                                <td mat-cell *matCellDef="let element">
+                                                    <button mat-stroked-button class="delete-icon">
+                                                        <i class="icon-trash"></i>
+                                                    </button>
+                                                </td>
+                                            </ng-container>
+                                            <tr class="child-row" mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="table-inventory">
+                                    <p class="inventory-head">
+                                        <strong>Inventory</strong>
+                                    </p>
+                                    <div class="table-responsive mr-t05 mr-b15">
+                                        <table mat-table [dataSource]="dataSource" multiTemplateDataRows>
+                                            <ng-container matColumnDef="name">
+                                                <td mat-cell *matCellDef="let element">
+                                                    {{element.name}}
+                                                </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="price">
+                                                <td mat-cell *matCellDef="let element"> 
+                                                    <input-field
+                                                        [placeholder]="'00'"
+                                                        [label]="'Price'"
+                                                        [type]="'text'"
+                                                    ></input-field>
+                                                </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="radio">
+                                                <td mat-cell *matCellDef="let element" class="child-td-nam">
+                                                    <div class="toggle-wrap">
+                                                        <mat-slide-toggle
+                                                            class="example-margin"
+                                                            color="primary"
+                                                            name="inclusiveExclusive" [(ngModel)]="inclusiveExclusive"
+                                                        >
+                                                        <span>
+                                                            {{
+                                                                inclusiveExclusive ? 'Inclusive' : 'Exclusive'
+                                                            }}
+                                                        </span>
+                                                        </mat-slide-toggle>
+                                                    </div>
+                                                </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="discount">
+                                                <td mat-cell *matCellDef="let element"> 
+                                                    <input-field
+                                                        [placeholder]="'00'"
+                                                        [label]="'Discount'"
+                                                        [type]="'text'"
+                                                    ></input-field>
+                                                </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="quantity">
+                                                <td mat-cell *matCellDef="let element">
+                                                    <input-field
+                                                        [placeholder]="'00'"
+                                                        [label]="'Quantity'"
+                                                        [type]="'text'"
+                                                    ></input-field>
+                                                </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="delete">
+                                                <td mat-cell *matCellDef="let element">
+                                                    <button mat-stroked-button class="delete-icon">
+                                                        <i class="icon-trash"></i>
+                                                    </button>
+                                                </td>
+                                            </ng-container>
+                                            <tr class="child-row" mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="table-inventory">
+                                    <div class="table-responsive mr-t05 mr-b15">
+                                        <table mat-table [dataSource]="dataSource" multiTemplateDataRows>
+                                            <ng-container matColumnDef="name">
+                                                <td mat-cell *matCellDef="let element">
+                                                </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="price">
+                                                <td mat-cell *matCellDef="let element"> 
+                                                    <input-field
+                                                        [placeholder]="'00'"
+                                                        [label]="'Price'"
+                                                        [type]="'text'"
+                                                    ></input-field>
+                                                </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="radio">
+                                                <td mat-cell *matCellDef="let element" class="child-td-nam">
+                                                    <div class="toggle-wrap">
+                                                        <mat-slide-toggle
+                                                            class="example-margin"
+                                                            color="primary"
+                                                            name="inclusiveExclusive" [(ngModel)]="inclusiveExclusive"
+                                                        >
+                                                        <span>
+                                                            {{
+                                                                inclusiveExclusive ? 'Inclusive' : 'Exclusive'
+                                                            }}
+                                                        </span>
+                                                        </mat-slide-toggle>
+                                                    </div>
+                                                </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="discount">
+                                                <td mat-cell *matCellDef="let element"> 
+                                                    <input-field
+                                                        [placeholder]="'00'"
+                                                        [label]="'Discount'"
+                                                        [type]="'text'"
+                                                    ></input-field>
+                                                </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="quantity">
+                                                <td mat-cell *matCellDef="let element">
+                                                    <input-field
+                                                        [placeholder]="'00'"
+                                                        [label]="'Quantity'"
+                                                        [type]="'text'"
+                                                    ></input-field>
+                                                </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="delete">
+                                                <td mat-cell *matCellDef="let element">
+                                                    <button mat-stroked-button class="delete-icon">
+                                                        <i class="icon-trash"></i>
+                                                    </button>
+                                                </td>
+                                            </ng-container>
+                                            <tr class="child-row" mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="pagination-wrapper">
+                                <pagination
+                                    [totalItems]="500"
+                                    [maxSize]="3"
+                                    class="pagination-sm"
+                                    [boundaryLinks]="true"
+                                    [itemsPerPage]="paginationLimit"
+                                    [rotate]="false"
+                                    [firstText]="'First'"
+                                    [previousText]="'Previous'"
+                                    [nextText]="'Next'"
+                                    [lastText]="'Last'"
+                                ></pagination>
                             </div>
                         </div>
                     </div>

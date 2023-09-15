@@ -23,13 +23,33 @@
                 .right-heading {
                     display: flex;
                     justify-content: space-between;
+                    align-items: center;
                     h2 {
                         color: var(--color-giddh-blue);
                         font-weight: 600;
                     }
                 }
-                .table-responsive {
+                .table-inventory {
+                    background: var(--color-white);
+                    padding: 20px;
+                    margin-bottom: 15px;
+                    box-shadow: 0 3px 6px var(--color-primary-common-box-shadow);
+                    .inventory-head {
+                        strong {
+                            color: var(--color-giddh-blue);
+                            font-size: var(--font-size-16);
+                        }
+                    }
                     table {
+                        tbody {
+                            tr {
+                                td {
+                                    .toggle-wrap {
+                                        min-width: 105px;
+                                    }
+                                }
+                            }
+                        }
                         .delete-icon {
                             display: flex;
                             align-items: center;
