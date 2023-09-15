@@ -404,7 +404,7 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
             this.loadDefaultStocksSuggestions();
         }
         this.activeIndx = index;
-        if (!this.stockVariants[index] && this.editBranchTransferUniqueName) {
+        if (this.editBranchTransferUniqueName) {
             const productArray = this.branchTransferCreateEditForm.get('products') as UntypedFormArray;
             const productFormGroup = productArray.at(index) as UntypedFormGroup;
             if (productFormGroup.get('uniqueName').value) {
@@ -962,8 +962,9 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
                     });
 
                     productsArray.push(productFormGroup);
+                    this.stockVariants[index] = [];
+                    this.stockVariants[index].push(productFormGroup.get('variant'));
                 });
-
 
                 response.body?.sources?.forEach(source => {
                     for (let i = 0; i < sourcesArray.length; i++) {
@@ -1955,7 +1956,7 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
                 value: rate.stockUnitUniqueName,
                 additional: rate.rate
             }));
-        } if (event.additional.fixedAssetAccountDetails) {
+        } else if (event.additional.fixedAssetAccountDetails) {
             unitRates = event.additional.fixedAssetAccountDetails.unitRates.map(rate => ({
                 label: rate.stockUnitCode,
                 value: rate.stockUnitUniqueName,
@@ -1971,7 +1972,7 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
         const baseUnitExists = unitRates?.filter(rate => rate.value === this.stockUnitResults[index].uniqueName);
         if (!baseUnitExists?.length) {
             unitRates.push({
-                label: this.stockUnitResults[index].uniqueName,
+                label: this.stockUnitResults[index].name,
                 value: this.stockUnitResults[index].uniqueName,
                 additional: 1
             });
