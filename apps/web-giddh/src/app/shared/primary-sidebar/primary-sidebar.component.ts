@@ -305,7 +305,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
 
         this.store.pipe(select(state => state.session.currentLocale), takeUntil(this.destroyed$)).subscribe(response => {
             if (this.activeLocale && this.activeLocale !== response?.value) {
-                this.localeService.getLocale('all-items', response?.value).subscribe(response => {
+                this.localeService.getLocale('sidebar-menu', response?.value).subscribe(response => {
                     this.localeData = response;
                     this.translationComplete(true);
                 });

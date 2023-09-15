@@ -1,0 +1,394 @@
+<ng-container
+    appTranslate
+    [file]="'inventory/branch-transfer'"
+    (commonLocaleData)="commonLocaleData = $event"
+    (localeData)="localeData = $event"
+    (translationComplete)="translationComplete($event)"
+>
+    <section id="branch-transfer-list" class="p-3 clearfix">
+        <!-- page Title -->
+        <hamburger-menu></hamburger-menu>
+        <!-- form -->
+        <div class="col-12 col-sm-12">
+            <div class="clearfix">
+                <form name="branchTransferHeaderForm" class="col-12 pl-0 pr-0 mr-b05">
+                    <div class="row">
+                        <div class="d-flex flex-wrap align-items-center w-100 mb-3 column-gap15">
+                            <div
+                                *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'"
+                                class="branch-width"
+                            >
+                                <dropdown-field
+                                    [label]="commonLocaleData?.app_select_entity"
+                                    [options]="currentCompanyBranches"
+                                    width="100%"
+                                    (selectedOption)="
+                                        currentBranch.uniqueName = $event?.value; handleBranchChange($event)
+                                    "
+                                    [placeholder]="commonLocaleData?.app_select_entity"
+                                    [defaultValue]="currentBranch?.alias"
+                                ></dropdown-field>
+                            </div>
+                            <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
+                                <input
+                                    type="text"
+                                    name="selectedDateRange"
+                                    [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                                    class="giddh-datepicker date-range-picker"
+                                />
+                            </div>
+                            <div class="text-center d-lg-flex d-none" *ngIf="showClearFilter">
+                                <div class="clear-filter">
+                                    <button class="btn btn-filter mr-0" (click)="clearFilters()">
+                                        <span class="icon-cross"></span>{{ commonLocaleData?.app_clear_filter }}
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="ml-auto mt-auto">
+                                <button
+                                    matTooltip="{{ commonLocaleData?.app_advanced_filter }}"
+                                    matTooltipPosition="left"
+                                    type="button"
+                                    (click)="openAdvanceFilterDialog()"
+                                    mat-stroked-button
+                                    color="primary"
+                                >
+                                    {{ commonLocaleData?.app_filter }}
+                                    <span class="icon-advance-filter"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <section *ngIf="shouldShowElement">
+            <form
+                class="table-responsive"
+                name="branchTransferForm"
+                [formGroup]="branchTransferForm"
+                novalidate=""
+                autocomplete="off"
+            >
+                <table
+                    matSort
+                    (matSortChange)="sortChange($event)"
+                    [matSortActive]="branchTransferGetRequestParams?.sortBy"
+                    [matSortDirection]="branchTransferGetRequestParams?.sort"
+                    mat-table
+                    [dataSource]="branchTransferResponse"
+                    class="w-100"
+                >
+                    <ng-container matColumnDef="s_no">
+                        <th mat-header-cell *matHeaderCellDef>#</th>
+                        <td mat-cell *matCellDef="let element; let i = index">{{ i + 1 }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="date">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ commonLocaleData?.app_date }}</th>
+                        <td mat-cell *matCellDef="let element">{{ element?.dateOfSupply }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="voucher_type">
+                        <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_voucher_type }}</th>
+                        <td mat-cell *matCellDef="let element">
+                            <span *ngIf="element.voucherType === 'deliverynote'">{{
+                                commonLocaleData?.app_delivery_challan
+                            }}</span
+                            ><span *ngIf="element.voucherType === 'receiptnote'">{{
+                                commonLocaleData?.app_receipt_note
+                            }}</span>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="voucher_no">
+                        <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_voucher_no }}</th>
+                        <td mat-cell *matCellDef="let element">
+                            <a href="javascript:;" (click)="showEditBranchTransferPopup(element)">{{
+                                element.voucherNo
+                            }}</a>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="sender">
+                        <th mat-header-cell *matHeaderCellDef class="td-search-box" #searchSenderContainer>
+                            <div [hidden]="inlineSearch === 'sender'" class="d-flex align-items-center">
+                                <i class="icon-search mr-r05 cp" (click)="toggleSearch('sender')"></i>
+                                <span class="pl-0">{{ localeData?.sender }}</span>
+                            </div>
+                            <div class="input-container" [hidden]="inlineSearch !== 'sender'">
+                                <text-field
+                                    [placeholder]="localeData?.sender"
+                                    [type]="'text'"
+                                    [cssClass]="'form-control  mat-field-border'"
+                                    [formControl]="branchTransferForm.controls['sender']"
+                                    [autoFocus]="inlineSearch === 'sender'"
+                                >
+                                </text-field>
+                            </div>
+                        </th>
+                        <td mat-cell *matCellDef="let element">{{ element?.sender }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="receiver">
+                        <th mat-header-cell *matHeaderCellDef class="td-search-box" #searchRecieverContainer>
+                            <div [hidden]="inlineSearch === 'receiver'" class="d-flex align-items-center">
+                                <i class="icon-search mr-r05 cp" (click)="toggleSearch('receiver')"></i>
+                                <span class="pl-0">{{ localeData?.receiver }}</span>
+                            </div>
+                            <div class="input-container" [hidden]="inlineSearch !== 'receiver'">
+                                <text-field
+                                    [placeholder]="localeData?.receiver"
+                                    [type]="'text'"
+                                    [cssClass]="'form-control  mat-field-border'"
+                                    [formControl]="branchTransferForm.controls['receiver']"
+                                    [autoFocus]="inlineSearch === 'receiver'"
+                                >
+                                </text-field>
+                            </div>
+                        </th>
+                        <td mat-cell *matCellDef="let element">{{ element?.receiver }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="sender_receiver">
+                        <th mat-header-cell *matHeaderCellDef class="td-search-box" #searchSenderRecieverContainer>
+                            <div [hidden]="inlineSearch === 'senderReceiver'" class="d-flex align-items-center">
+                                <i class="icon-search mr-r05 cp" (click)="toggleSearch('senderReceiver')"></i>
+                                <span class="pl-0">{{ localeData?.sender }}/{{ localeData?.receiver }}</span>
+                            </div>
+                            <div class="input-container" [hidden]="inlineSearch !== 'senderReceiver'">
+                                <text-field
+                                    [placeholder]="localeData?.sender + '/' + localeData?.receiver"
+                                    [type]="'text'"
+                                    [cssClass]="'form-control  mat-field-border'"
+                                    [formControl]="branchTransferForm.controls['senderReceiver']"
+                                    [autoFocus]="inlineSearch === 'senderReceiver'"
+                                >
+                                </text-field>
+                            </div>
+                        </th>
+                        <td mat-cell *matCellDef="let element">{{ element?.senderReceiver }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="from_warehouse">
+                        <th mat-header-cell *matHeaderCellDef class="td-search-box" #searchFromWarehouseContainer>
+                            <div [hidden]="inlineSearch === 'fromWarehouse'" class="d-flex align-items-center">
+                                <i class="icon-search mr-r05 cp" (click)="toggleSearch('fromWarehouse')"></i>
+                                <span class="pl-0">{{ localeData?.from_warehouse }}</span>
+                            </div>
+                            <div class="input-container" [hidden]="inlineSearch !== 'fromWarehouse'">
+                                <text-field
+                                    [placeholder]="localeData?.from_warehouse"
+                                    [type]="'text'"
+                                    [cssClass]="'form-control  mat-field-border'"
+                                    [formControl]="branchTransferForm.controls['fromWarehouse']"
+                                    [autoFocus]="inlineSearch === 'fromWarehouse'"
+                                >
+                                </text-field>
+                            </div>
+                        </th>
+                        <td mat-cell *matCellDef="let element">{{ element?.fromWarehouse }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="to_warehouse">
+                        <th mat-header-cell *matHeaderCellDef class="td-search-box" #searchToWarehouseContainer>
+                            <div [hidden]="inlineSearch === 'toWarehouse'" class="d-flex align-items-center">
+                                <i class="icon-search mr-r05 cp" (click)="toggleSearch('toWarehouse')"></i>
+                                <span class="pl-0">{{ localeData?.to_warehouse }}</span>
+                            </div>
+                            <div class="input-container" [hidden]="inlineSearch !== 'toWarehouse'">
+                                <text-field
+                                    [placeholder]="localeData?.to_warehouse"
+                                    [type]="'text'"
+                                    [cssClass]="'form-control  mat-field-border'"
+                                    [formControl]="branchTransferForm.controls['toWarehouse']"
+                                    [autoFocus]="inlineSearch === 'toWarehouse'"
+                                >
+                                </text-field>
+                            </div>
+                        </th>
+                        <td mat-cell *matCellDef="let element">{{ element?.toWarehouse }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="totalAmount">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                            {{ commonLocaleData?.app_total_amount }}
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                            {{ activeCompany?.baseCurrencySymbol }} {{ element?.totalAmount | giddhCurrency }}
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="action">
+                        <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_action }}</th>
+                        <td mat-cell *matCellDef="let element">
+                            <button mat-button [matMenuTriggerFor]="beforeMenu" class="bg-transparent mr-0 px-0">
+                                <span class="d-flex align-items-center justify-content-space-between">
+                                    <span class="text-light-2 pr-2">{{ commonLocaleData?.app_select_action }}</span>
+                                    <span> <i class="icon-dots-three-vertical"></i></span>
+                                </span>
+                            </button>
+                            <mat-menu #beforeMenu="matMenu" xPosition="before">
+                                <button class="no-box-shadow" mat-menu-item (click)="downloadBranchTransfer(element)">
+                                    {{ commonLocaleData?.app_download }}
+                                </button>
+                                <button
+                                    class="no-box-shadow"
+                                    mat-menu-item
+                                    (click)="showEditBranchTransferPopup(element)"
+                                >
+                                    {{ commonLocaleData?.app_edit }}
+                                </button>
+                                <button
+                                    class="no-box-shadow"
+                                    mat-menu-item
+                                    (click)="showDeleteBranchTransferModal(element)"
+                                >
+                                    {{ commonLocaleData?.app_delete }}
+                                </button>
+                            </mat-menu>
+                        </td>
+                    </ng-container>
+                    <tr (clickOutside)="inlineSearch = null" mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                </table>
+            </form>
+
+            <div
+                class="pagination-wrapper"
+                *ngIf="branchTransferPaginationObject?.totalItems > branchTransferPaginationObject?.count && !isLoading"
+            >
+                <pagination
+                    [totalItems]="branchTransferPaginationObject?.totalItems"
+                    [(ngModel)]="branchTransferPaginationObject.page"
+                    [maxSize]="5"
+                    class="pagination-sm"
+                    [boundaryLinks]="true"
+                    [itemsPerPage]="branchTransferPaginationObject.count"
+                    [rotate]="false"
+                    (pageChanged)="pageChanged($event)"
+                    [firstText]="commonLocaleData?.app_first"
+                    [previousText]="commonLocaleData?.app_previous"
+                    [nextText]="commonLocaleData?.app_next"
+                    [lastText]="commonLocaleData?.app_last"
+                ></pagination>
+            </div>
+        </section>
+
+        <div class="no-data" *ngIf="isLoading">
+            <giddh-page-loader></giddh-page-loader>
+        </div>
+        <section class="no-logs" *ngIf="!branchTransferResponse?.length && !isLoading">
+            <div class="no-data">
+                <h1>{{ commonLocaleData?.app_no_entries_found }}</h1>
+                <h1>{{ commonLocaleData?.app_search_suggestion }}</h1>
+            </div>
+        </section>
+    </section>
+    <!--Mat Dialog for Advance Filter-->
+    <ng-template #advanceFilterDialog>
+        <div class="advance-search-dialog">
+            <div class="modal-header theme-bg pd-l2 pd-r2">
+                <h3 class="modal-title bg" id="modal-title">{{ commonLocaleData?.app_advanced_filter }}</h3>
+                <i mat-dialog-close class="icon-cross color-white"></i>
+            </div>
+
+            <div class="modal-body clearfix">
+                <form class="col-md-12 pl-0 pr-0 mr-b05">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="row">
+                                <div class="col-lg-12 col-sm-6 mr-b15">
+                                    <dropdown-field
+                                        [placeholder]="commonLocaleData?.app_select_voucher + commonLocaleData.app_type"
+                                        [options]="voucherTypes"
+                                        (selectedOption)="selectVoucherType($event)"
+                                        [defaultValue]="branchTransferAdvanceSearchFormObj?.voucherType"
+                                        [allowValueReset]="true"
+                                        (onClear)="branchTransferAdvanceSearchFormObj.voucherType = ''"
+                                        [label]="commonLocaleData?.app_voucher_type"
+                                    >
+                                    </dropdown-field>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="row">
+                                <div class="col-lg-12 col-sm-6 mr-b15">
+                                    <dropdown-field
+                                        [placeholder]="localeData?.select_condition"
+                                        [options]="amountOperators"
+                                        (selectedOption)="selectOperator($event)"
+                                        [defaultValue]="branchTransferAdvanceSearchFormObj?.amountOperator"
+                                        [allowValueReset]="true"
+                                        (onClear)="branchTransferAdvanceSearchFormObj.amountOperator = ''"
+                                        [label]="commonLocaleData?.app_select_category"
+                                    >
+                                    </dropdown-field>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="row">
+                                <div class="col-lg-12 col-sm-6 mr-b15">
+                                    <input-field
+                                        [type]="'number'"
+                                        [placeholder]="'0'"
+                                        [name]="'amount'"
+                                        [(ngModel)]="branchTransferAdvanceSearchFormObj.amount"
+                                        [allowDigitsOnly]="true"
+                                        (onClear)="branchTransferAdvanceSearchFormObj.amount = ''"
+                                        [autocomplete]="'off'"
+                                        [label]="commonLocaleData?.app_total_amount"
+                                    >
+                                    </input-field>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-end mt-4">
+                        <div class="mr-2">
+                            <button type="button" class="mr-0" mat-stroked-button color="primary" (click)="search()">
+                                {{ commonLocaleData?.app_search }}
+                            </button>
+                        </div>
+                        <div class="ml-2">
+                            <button type="button" mat-dialog-close class="mr-0" mat-stroked-button (click)="cancel()">
+                                {{ commonLocaleData?.app_cancel }}
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </ng-template>
+    <!-- Date Picker  -->
+    <ng-template #datepickerTemplate>
+        <div class="datepicker-modal">
+            <div class="modal-body">
+                <app-datepicker-wrapper
+                    [inputStartDate]="selectedDateRange?.startDate"
+                    [inputEndDate]="selectedDateRange?.endDate"
+                    [alwaysShowCalendars]="true"
+                    [ranges]="datePickerOption"
+                    [selectedRangeLabel]="selectedRangeLabel"
+                    [showCustomRangeLabel]="true"
+                    [showClearButton]="false"
+                    [showCancel]="true"
+                    [linkedCalendars]="true"
+                    [showDropdowns]="true"
+                    (rangeClicked)="dateSelectedCallback($event)"
+                    (datesUpdated)="dateSelectedCallback($event)"
+                    [keepCalendarOpeningWithRange]="false"
+                    [showRangeLabelOnInput]="false"
+                    [dateFieldPosition]="dateFieldPosition"
+                >
+                </app-datepicker-wrapper>
+            </div>
+        </div>
+    </ng-template>
+</ng-container>
