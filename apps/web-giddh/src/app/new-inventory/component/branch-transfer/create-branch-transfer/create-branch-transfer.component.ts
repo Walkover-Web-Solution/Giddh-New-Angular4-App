@@ -465,24 +465,7 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
      * @memberof CreateBranchTransferComponent
      */
     public submit(): void {
-        this.branchTransferCreateEditForm.removeControl('myControlKey');
-        let branchTransferObj = this.branchTransferCreateEditForm.value;
-        delete branchTransferObj.myCurrentCompany
-        this.isValidForm = !this.branchTransferCreateEditForm.invalid;
-        this.isLoading = true;
-        console.log(this.isValidForm, this.branchTransferCreateEditForm);
-
-        let branchMode = '';
-        if (this.branchTransferMode === 'receipt-note') {
-            branchMode = 'receiptnote';
-        } else {
-            branchMode = 'deliverynote';
-        }
-
-        this.branchTransferCreateEditForm.get('entity').setValue(branchMode);
-        this.branchTransferCreateEditForm.get('transferType').setValue(this.transferType);
         const sourcesArray = this.branchTransferCreateEditForm.get('sources') as UntypedFormArray;
-
         for (let i = 0; i < sourcesArray.length; i++) {
             const sourcesFormGroup = sourcesArray.at(i) as UntypedFormGroup;
             const sourcesWarehouseFormGroup = sourcesFormGroup?.get('warehouse') as UntypedFormGroup;
@@ -548,6 +531,19 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
                 }
             }
         }
+        let branchMode = '';
+        if (this.branchTransferMode === 'receipt-note') {
+            branchMode = 'receiptnote';
+        } else {
+            branchMode = 'deliverynote';
+        }
+        this.branchTransferCreateEditForm.get('transferType').setValue(this.transferType);
+        this.branchTransferCreateEditForm.get('entity').setValue(branchMode);
+        this.branchTransferCreateEditForm.removeControl('myControlKey');
+        let branchTransferObj = this.branchTransferCreateEditForm.value;
+        delete branchTransferObj.myCurrentCompany
+        this.isValidForm = !this.branchTransferCreateEditForm.invalid;
+        this.isLoading = true;
         if (this.isValidForm) {
             if (this.editBranchTransferUniqueName) {
                 this.inventoryService.updateNewBranchTransfer(branchTransferObj).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
@@ -1837,9 +1833,19 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
      *
      * @memberof CreateBranchTransferComponent
      */
-    public closeShowCodeMenu(): void {
-        this.hsnSacMenuTrigger?.closeMenu();
+    public closeShowCodeMenu(productFormGroup: any): void {
+        productFormGroup.get('skuCode').setValue('');
         this.skuMenuTrigger?.closeMenu();
+    }
+
+    /**
+     *This will be use for  clear sac number
+     *
+     * @memberof CreateBranchTransferComponent
+     */
+    public closeSacNumber(productFormGroup: any): void {
+        productFormGroup.get('sacNumber').setValue('');
+        this.hsnSacMenuTrigger?.closeMenu();
     }
 
     /**
@@ -1860,11 +1866,15 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
                     if (productFormGroup.get('uniqueName')?.value) {
                         const variantsFormGroup = productFormGroup?.get('variant') as UntypedFormGroup;
                         this.stockVariants[index] = [];
-                        this.stockVariants[index] = response?.body?.variants.map(item => ({
-                            label: item.name,
-                            value: item.uniqueName,
-                            additional: item
-                        }));
+                        response?.body?.variants.forEach(item => {
+                            if (!item.archive) {
+                                this.stockVariants[index].push({
+                                    label: item.name,
+                                    value: item.uniqueName,
+                                    additional: item
+                                });
+                            }
+                        });
                         if (!defaultLoad) {
                             if (!variantsFormGroup.get('uniqueName')?.value) {
                                 variantsFormGroup.get('name').setValue(this.stockVariants[index][0]?.label);
