@@ -149,13 +149,18 @@
                             <div class="form-group">
                                 <div class="mat-field-select width-100 only-bottom-border mat-input">
                                     <label [ngClass]="{ 'form-label': showLoader, 'skeleton-common-class': showLoader }"
-                                        >{{ commonLocaleData?.app_state }}
+                                        >{{
+                                            (statesSource$ | async)?.length
+                                                ? commonLocaleData?.app_state
+                                                : commonLocaleData?.app_region
+                                        }}
                                         <span [ngClass]="{ 'red-text-content': showLoader }" class="red-text"
-                                            >*</span
-                                        ></label
+                                            >*
+                                        </span></label
                                     >
                                     <ng-container *ngTemplateOutlet="skeletonLoader"></ng-container>
                                     <select-field
+                                        *ngIf="(statesSource$ | async)?.length"
                                         [cssClass]="'form-control mat-field-border'"
                                         [name]="'stateCode'"
                                         [ngClass]="{ 'form-field': showLoader }"
@@ -165,6 +170,20 @@
                                         [defaultValue]="searchBillingStates"
                                         [required]="true"
                                         [readonly]="isStateDisabled"
+                                    >
+                                    </select-field>
+                                    <select-field
+                                        *ngIf="countyList?.length"
+                                        [cssClass]="'form-control mat-field-border'"
+                                        [name]="'regionCode'"
+                                        [ngClass]="{ 'form-field': showLoader }"
+                                        [placeholder]="commonLocaleData?.app_region"
+                                        [options]="countyList"
+                                        (selectedOption)="onRegionChange($event)"
+                                        [required]="true"
+                                        [defaultValue]="searchRegionStates"
+                                        (onClear)="resetRegion($event)"
+                                        [allowValueReset]="true"
                                     >
                                     </select-field>
                                 </div>
@@ -326,7 +345,9 @@
                                     [ngClass]="{ 'pay-now-content': showLoader }"
                                     (click)="payWithRazor(billingForm)"
                                     [disabled]="
-                                        billingForm.invalid || !isMobileNumberValid || !billingDetailsObj.stateCode
+                                        billingForm.invalid ||
+                                        !isMobileNumberValid ||
+                                        (!billingDetailsObj.stateCode && !billingDetailsObj.county.code)
                                     "
                                 >
                                     {{ commonLocaleData?.app_pay_now }}

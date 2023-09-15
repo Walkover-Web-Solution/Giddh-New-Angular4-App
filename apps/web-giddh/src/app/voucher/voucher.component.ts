@@ -207,6 +207,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public showGSTINNo: boolean;
     /** Show TRN number */
     public showTRNNo: boolean;
+    /** Show vat number */
+    public showVATNo: boolean;
     /** Show other details collapsed */
     public isOthrDtlCollapsed: boolean = false;
     /** Show type head number of results */
@@ -351,7 +353,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     /** Prevents double click on generate button */
     public generateUpdateButtonClicked = new Subject<NgForm>();
     /** True, if the Giddh supports the taxation of the country (not supported now: UK, US, Nepal, Australia) */
-    public shouldShowTrnGstField: boolean = false;
+    public shouldShowTrnGstVatField: boolean = false;
     /** True, if company country supports other tax (TCS/TDS) */
     public isTcsTdsApplicable: boolean;
     /** Placeholder text for template */
@@ -530,6 +532,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         billingDetails: {
             address: [],
             state: { code: '', name: '' },
+            county: { code: '', name: '' },
             gstNumber: '',
             stateName: '',
             stateCode: '',
@@ -538,6 +541,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         shippingDetails: {
             address: [],
             state: { code: '', name: '' },
+            county: { code: '', name: '' },
             gstNumber: '',
             stateName: '',
             stateCode: '',
@@ -714,6 +718,10 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public voucherTypes: any[] = [VoucherTypeEnum.cashCreditNote, VoucherTypeEnum.cash, VoucherTypeEnum.cashDebitNote, VoucherTypeEnum.cashBill];
     /** This will hold invoice text */
     public invoiceTypeLabel: string = "";
+    /** Hold regions source array  */
+    public regionsSource: IOption[] = [];
+    /* This will hold company's country regions */
+    public companyRegionsSource: IOption[] = [];
 
 
     /**
@@ -1175,7 +1183,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 /** results[1] :- get voucher details response */
                 if (results[0]) {
                     let obj;
-
+                    this.invFormData.accountDetails.billingDetails = results[0].account?.billingDetails;
+                    this.invFormData.accountDetails.shippingDetails = results[0].account?.shippingDetails;
                     if (this.voucherApiVersion === 2) {
                         results[0] = this.adjustmentUtilityService.getVoucherAdjustmentObject(results[0], this.selectedVoucherType);
 
@@ -1275,6 +1284,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                                     }
                                     obj.companyDetails.billingDetails.state = { code: obj.companyDetails.billingDetails?.stateCode, name: obj.companyDetails.billingDetails?.state?.name };
                                     obj.companyDetails.shippingDetails.state = { code: obj.companyDetails.shippingDetails?.stateCode, name: obj.companyDetails.shippingDetails?.state?.name };
+                                    obj.companyDetails.billingDetails.county = { code: obj.companyDetails.billingDetails?.county?.code, name: obj.companyDetails.billingDetails?.county?.name };
+                                    obj.companyDetails.shippingDetails.county = { code: obj.companyDetails.shippingDetails?.county?.code, name: obj.companyDetails.shippingDetails?.county?.name };
+
                                 }
                                 this.assignCompanyBillingShipping(obj.companyDetails);
 
@@ -1391,24 +1403,31 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                             }
                         }
 
-                        if (!this.isLastInvoiceCopied && !obj.accountDetails.billingDetails.state) {
+                        if (!this.isLastInvoiceCopied && (!obj.accountDetails.billingDetails.state || !obj.accountDetails.billingDetails.county)) {
                             obj.accountDetails.billingDetails.state = {};
+                            obj.accountDetails.billingDetails.county = {};
                             if (this.isEstimateInvoice || this.isProformaInvoice) {
                                 obj.accountDetails.billingDetails.state.code = this.getNewStateCode(obj.accountDetails.billingDetails.stateCode);
                             } else {
                                 obj.accountDetails.billingDetails.state.code = obj.accountDetails.billingDetails.stateCode;
+                                obj.accountDetails.billingDetails.county.code = obj.accountDetails.billingDetails?.county?.code;
                             }
                             obj.accountDetails.billingDetails.state.name = obj.accountDetails.billingDetails.stateName;
+                            obj.accountDetails.billingDetails.county.name = obj.accountDetails.billingDetails?.county?.name;
+
                         }
 
-                        if (!this.isLastInvoiceCopied && !obj.accountDetails.shippingDetails.state) {
+                        if (!this.isLastInvoiceCopied && (!obj.accountDetails.shippingDetails.state || !obj.accountDetails.shippingDetails.county)) {
                             obj.accountDetails.shippingDetails.state = {};
+                            obj.accountDetails.shippingDetails.county = {};
                             if (this.isEstimateInvoice || this.isProformaInvoice) {
                                 obj.accountDetails.shippingDetails.state.code = this.getNewStateCode(obj.accountDetails.shippingDetails.stateCode);
                             } else {
                                 obj.accountDetails.shippingDetails.state.code = obj.accountDetails.shippingDetails.stateCode;
+                                obj.accountDetails.shippingDetails.county.code = obj.accountDetails.shippingDetails?.county?.code;
                             }
                             obj.accountDetails.shippingDetails.state.name = obj.accountDetails.shippingDetails.stateName;
+                            obj.accountDetails.shippingDetails.county.name = obj.accountDetails.shippingDetails?.county?.name;
                         }
 
                         if (!this.isLastInvoiceCopied && !obj.voucherDetails.customerUniquename) {
@@ -1455,9 +1474,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 }
                 if (this.isEinvoiceGenerated || (this.invFormData.accountDetails.billingDetails?.gstNumber && this.purchaseBillCompany.billingDetails
                     .gstNumber)) {
-                    this.statesBilling.readonly = true;
+                    this.makeFieldReadonly("billingState", true);
                 } else {
-                    this.statesBilling.readonly = false;
+                    this.makeFieldReadonly("billingState", false);
                 }
                 // create account success then close sidebar, and add customer details
                 if (results[1] && this.isCreatingNewAccount) {
@@ -1484,7 +1503,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         this.getUpdatedStateCodes(tempSelectedAcc.country?.countryCode).then(() => {
                             this.invFormData.accountDetails = new AccountDetailsClass(tempSelectedAcc);
                         });
-
                         this.showGstAndTrnUsingCountryName(this.customerCountryName);
                         if (this.isMulticurrencyAccount) {
                             this.getCurrencyRate(this.companyCurrency, tempSelectedAcc.currency, this.invFormData.voucherDetails.voucherDate);
@@ -1493,9 +1511,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                             this.invFormData.accountDetails = new AccountDetailsClass(tempSelectedAcc);
                         }
                         if (this.isEinvoiceGenerated || (this.invFormData.accountDetails.billingDetails?.gstNumber && this.purchaseBillCompany.billingDetails.gstNumber)) {
-                            this.statesBilling.readonly = true;
+                            this.makeFieldReadonly("billingState", true);
                         } else {
-                            this.statesBilling.readonly = false;
+                            this.makeFieldReadonly("billingState", false);
                         }
                     } else {
                         this.isCustomerSelected = false;
@@ -1661,9 +1679,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     });
                 }
                 if (this.formFields && this.formFields['taxName']) {
-                    this.shouldShowTrnGstField = true;
+                    this.shouldShowTrnGstVatField = true;
                 } else {
-                    this.shouldShowTrnGstField = false;
+                    this.shouldShowTrnGstVatField = false;
                 }
             }
         });
@@ -1787,6 +1805,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     private async prepareCompanyCountryAndCurrencyFromProfile(profile) {
         if (profile && Object.keys(profile).length) {
             this.customerCountryName = profile.country;
+
             this.showGstAndTrnUsingCountryName(profile.country);
 
             this.companyCurrency = profile.baseCurrency || 'INR';
@@ -2234,7 +2253,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @param {SalesShSelectComponent} statesEle state input box
      * @memberof VoucherComponent
      */
-    public getStateCode(type: string, statesEle: SelectFieldComponent) {
+    public getStateCode(type: string) {
         let gstVal = cloneDeep(this.invFormData.accountDetails[type].gstNumber)?.toString();
         if (gstVal && gstVal.length >= 2) {
             const selectedState = this.statesSource.find(item => item.stateGstCode === gstVal.substring(0, 2));
@@ -2242,7 +2261,13 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 this.invFormData.accountDetails[type].stateCode = selectedState.value;
                 this.invFormData.accountDetails[type].state.code = selectedState.value;
                 this.invFormData.accountDetails[type].state.name = selectedState.label;
-                statesEle.readonly = true;
+                if (type === 'billingDetails') {
+                    this.makeFieldReadonly("billingState", true);
+                }
+                if (type === 'shippingDetails') {
+                    this.makeFieldReadonly("shippingState", true);
+                }
+
             } else {
                 this.checkGstNumValidation(gstVal);
                 if (!this.isValidGstinNumber) {
@@ -2252,10 +2277,18 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     this.invFormData.accountDetails[type].state.code = null;
                     this.invFormData.accountDetails[type].state.name = null;
                 }
-                statesEle.readonly = this.isEinvoiceGenerated ? true : false;
+                if (this.isEinvoiceGenerated) {
+                    this.makeFieldReadonly("stateEle", true);
+                } else {
+                    this.makeFieldReadonly("stateEle", false);
+                }
             }
         } else {
-            statesEle.readonly = this.isEinvoiceGenerated ? true : false;
+            if (this.isEinvoiceGenerated) {
+                this.makeFieldReadonly("stateEle", true);
+            } else {
+                this.makeFieldReadonly("stateEle", false);
+            }
 
         }
         this.checkGstNumValidation(gstVal);
@@ -2263,7 +2296,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
     /**
      * To check Tax number validation using regex get by API
-     *
      * @param {*} value Value to be validated
      * @param {string} fieldName Field name for which the value is validated
      * @memberof VoucherComponent
@@ -2348,6 +2380,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             billingDetails: {
                 address: [],
                 state: { code: '', name: '' },
+                county: { code: '', name: '' },
                 gstNumber: '',
                 stateName: '',
                 stateCode: ''
@@ -2355,6 +2388,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             shippingDetails: {
                 address: [],
                 state: { code: '', name: '' },
+                county: { code: '', name: '' },
                 gstNumber: '',
                 stateName: '',
                 stateCode: ''
@@ -2436,7 +2470,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             this.userDeposit = 0;
         }
         let data: VoucherClass = cloneDeep(this.invFormData);
-
         // special check if gst no filed is visible then and only then check for gst validation
         if (data.accountDetails && data.accountDetails.billingDetails && data.accountDetails.billingDetails.gstNumber && this.showGSTINNo) {
             this.checkGstNumValidation(data.accountDetails.billingDetails.gstNumber, this.localeData?.billing_address);
@@ -2649,14 +2682,13 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             // set state details as new request
             requestObject.account.billingDetails.countryName = this.customerCountryName;
             requestObject.account.billingDetails.countryCode = this.customerCountryCode;
-            requestObject.account.billingDetails.stateCode = requestObject.account.billingDetails.state.code;
+            requestObject.account.billingDetails.stateCode = requestObject.account.billingDetails.state?.code;
             requestObject.account.billingDetails.stateName = requestObject.account.billingDetails.state?.name;
             // set state details as new request
             requestObject.account.shippingDetails.countryName = this.customerCountryName;
             requestObject.account.shippingDetails.countryCode = this.customerCountryCode;
-            requestObject.account.shippingDetails.stateCode = requestObject.account.shippingDetails.state.code;
+            requestObject.account.shippingDetails.stateCode = requestObject.account.shippingDetails.state?.code;
             requestObject.account.shippingDetails.stateName = requestObject.account.shippingDetails.state?.name;
-
             /** Tourist scheme is applicable only for voucher type 'sales invoice' and 'Cash Invoice' and company country code 'AE'   */
             if (this.isSalesInvoice || this.isCashInvoice) {
                 if (this.invFormData.touristSchemeApplicable) {
@@ -2713,7 +2745,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 purchaseOrders: purchaseOrders,
                 company: this.purchaseBillCompany
             } as PurchaseRecordRequest;
-
             /** Advance receipts adjustment */
             if (this.advanceReceiptAdjustmentData && this.advanceReceiptAdjustmentData.adjustments) {
                 if (this.advanceReceiptAdjustmentData.adjustments.length) {
@@ -2760,7 +2791,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
             requestObject.date = dayjs(voucherDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
             requestObject.type = VoucherTypeEnum.sales;
-
             let updatedData = requestObject;
             updatedData = this.updateData(requestObject, data);
             if (!updatedData.voucherDetails) {
@@ -2776,6 +2806,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             if (this.voucherApiVersion === 2) {
                 updatedData = this.voucherUtilityService.cleanObject(updatedData);
             }
+            updatedData = this.deleteUnusedVoucherUpdateObjectKey(updatedData);
 
             this.store.dispatch(this.proformaActions.generateProforma(updatedData));
         } else {
@@ -2804,7 +2835,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 }
             }
             if (this.isPurchaseInvoice) {
-                if (this.voucherApiVersion === 2 || (this.invFormData.accountDetails.shippingDetails.state.code && this.invFormData.accountDetails.billingDetails.state.code)) {
+                if (this.voucherApiVersion === 2 || ((this.invFormData.accountDetails.shippingDetails.state.code && this.invFormData.accountDetails.billingDetails.state.code) || (this.invFormData.accountDetails.shippingDetails?.county?.code && this.invFormData.accountDetails.billingDetails?.county?.code))) {
                     if (this.voucherApiVersion === 2) {
                         updatedData = this.voucherUtilityService.getVoucherRequestObjectForInvoice(updatedData);
                     }
@@ -2812,13 +2843,12 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     if (this.voucherApiVersion === 2) {
                         updatedData = this.voucherUtilityService.cleanObject(updatedData);
                     }
-
                     this.generatePurchaseRecord(updatedData);
                 } else {
-                    if (this.shippingState && this.shippingState.nativeElement && !this.invFormData.accountDetails.shippingDetails.state.code) {
+                    if (this.shippingState && this.shippingState.nativeElement && (!this.invFormData.accountDetails.shippingDetails.state.code || !this.invFormData.accountDetails.shippingDetails?.county?.code)) {
                         this.shippingState.nativeElement.classList.add('error-box');
                     }
-                    if (this.billingState && this.billingState.nativeElement && !this.invFormData.accountDetails.billingDetails.state.code) {
+                    if (this.billingState && this.billingState.nativeElement && (!this.invFormData.accountDetails.billingDetails.state.code || !this.invFormData.accountDetails.shippingDetails?.county?.code)) {
                         this.billingState.nativeElement.classList.add('error-box');
                     }
                     this.isShowLoader = false;
@@ -2829,6 +2859,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             } else {
                 if (this.isPendingVoucherType) {
                     let apiCallObservable;
+                    updatedData = this.deleteUnusedVoucherUpdateObjectKey(updatedData);
 
                     if (this.voucherApiVersion === 2) {
                         updatedData = this.voucherUtilityService.cleanObject(updatedData);
@@ -2856,6 +2887,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     if (this.voucherApiVersion === 2) {
                         updatedData = this.voucherUtilityService.cleanObject(updatedData);
                     }
+                    updatedData = this.deleteUnusedVoucherUpdateObjectKey(updatedData);
 
                     this.salesService.generateGenericItem(updatedData, isVoucherV4).pipe(takeUntil(this.destroyed$)).subscribe((response: BaseResponse<any, GenericRequestForGenerateSCD>) => {
                         this.handleGenerateResponse(response, form);
@@ -4268,15 +4300,12 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             this.startLoader(false);
             return;
         }
-
         if (this.isProformaInvoice || this.isEstimateInvoice) {
             let data = requestObject.voucher;
             let exRate = this.originalExchangeRate;
             let unqName = this.invoiceUniqueName || this.accountUniqueName;
-
             let salesEntryClassArray: SalesEntryClassMulticurrency[] = [];
             let entries = data.entries;
-
             entries.forEach(entry => {
                 let salesEntryClass = new SalesEntryClassMulticurrency();
                 salesEntryClass.voucherType = entry?.voucherType;
@@ -4322,7 +4351,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
                 salesEntryClassArray.push(salesEntryClass);
             });
-
             requestObject = {
                 account: data.accountDetails,
                 updateAccountDetails: this.updateAccount,
@@ -4356,7 +4384,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             let data = requestObject.voucher;
             let exRate = this.originalExchangeRate;
             let unqName = this.invoiceUniqueName || this.accountUniqueName;
-
             // sales and cash invoice uses v4 api so need to parse main object to regarding that
             if (this.isSalesInvoice || this.isCashInvoice || this.isCreditNote || this.isDebitNote) {
                 if (this.isRcmEntry && !this.validateTaxes(cloneDeep(data))) {
@@ -4439,7 +4466,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     updatedData = this.voucherUtilityService.getVoucherRequestObjectForInvoice(updatedData);
                     updatedData = this.voucherUtilityService.cleanObject(updatedData);
                 }
-                this.salesService.updateVoucherV4(updatedData).pipe(takeUntil(this.destroyed$))
+                let updatedNewData = this.deleteUnusedVoucherUpdateObjectKey(updatedData);
+
+                this.salesService.updateVoucherV4(updatedNewData).pipe(takeUntil(this.destroyed$))
                     .subscribe((response: BaseResponse<VoucherClass, GenericRequestForGenerateSCD>) => {
                         this.actionsAfterVoucherUpdate(response, form);
                     }, (err) => {
@@ -4477,7 +4506,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     purchaseOrders: purchaseOrders,
                     company: this.purchaseBillCompany
                 } as PurchaseRecordRequest;
-
                 if (this.voucherApiVersion === 2) {
                     requestObject = <GenericRequestForGenerateSCD>this.updateData(requestObject, data);
                     requestObject = this.voucherUtilityService.getVoucherRequestObjectForInvoice(requestObject);
@@ -4496,7 +4524,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 if (this.voucherApiVersion === 2) {
                     requestObject = this.voucherUtilityService.cleanObject(requestObject);
                 }
-
+                requestObject = this.deleteUnusedVoucherUpdateObjectKey(requestObject);
                 this.salesService.updateVoucher(requestObject).pipe(takeUntil(this.destroyed$))
                     .subscribe((response: BaseResponse<VoucherClass, GenericRequestForGenerateSCD>) => {
                         this.actionsAfterVoucherUpdate(response, form);
@@ -4506,6 +4534,83 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     });
             }
         }
+    }
+
+    /**
+     * This will delete key of unused in voucher object
+     *
+     * @param {*} data
+     * @return {*}  {void}
+     * @memberof VoucherComponent
+     */
+    public deleteUnusedVoucherUpdateObjectKey(data: any): void {
+        if (this.showGSTINNo) {
+            if (data?.account) {
+                delete data.account?.billingDetails?.county;
+                delete data.account?.shippingDetails?.county;
+            }
+            if (data?.accountDetails) {
+                delete data.accountDetails?.billingDetails?.county;
+                delete data.accountDetails?.shippingDetails?.county;
+            }
+
+            if (data?.company) {
+                delete data.company?.billingDetails?.county;
+                delete data.company?.shippingDetails?.county;
+            }
+            if (data?.companyDetails) {
+                delete data.companyDetails?.billingDetails?.county;
+                delete data.companyDetails?.shippingDetails?.county;
+            }
+        }
+        if (this.showVATNo) {
+            if (data?.account) {
+                delete data.account?.billingDetails?.state;
+                delete data.account?.billingDetails?.stateCode;
+                delete data.account?.billingDetails?.stateName;
+                delete data.account?.billingDetails?.gstNumber;
+
+                delete data.account?.shippingDetails?.state;
+                delete data.account?.shippingDetails?.stateCode;
+                delete data.account?.shippingDetails?.stateName;
+                delete data.account?.shippingDetails?.gstNumber;
+            }
+            if (data?.accountDetails) {
+                delete data.accountDetails?.billingDetails?.state;
+                delete data.accountDetails?.billingDetails?.stateCode;
+                delete data.accountDetails?.billingDetails?.stateName;
+                delete data.accountDetails?.billingDetails?.gstNumber;
+
+                delete data.accountDetails?.shippingDetails?.state;
+                delete data.accountDetails?.shippingDetails?.stateCode;
+                delete data.accountDetails?.shippingDetails?.stateName;
+                delete data.accountDetails?.shippingDetails?.gstNumber;
+            }
+
+            if (data?.company) {
+                delete data.company?.billingDetails?.state;
+                delete data.company?.billingDetails?.stateCode;
+                delete data.company?.billingDetails?.stateName;
+                delete data.company?.billingDetails?.gstNumber;
+
+                delete data.company?.shippingDetails?.state;
+                delete data.company?.shippingDetails?.stateCode;
+                delete data.company?.shippingDetails?.stateName;
+                delete data.company?.shippingDetails?.gstNumber;
+            }
+            if (data?.companyDetails) {
+                delete data.companyDetails?.billingDetails?.state;
+                delete data.companyDetails?.billingDetails?.stateCode;
+                delete data.companyDetails?.billingDetails?.stateName;
+                delete data.companyDetails?.billingDetails?.gstNumber;
+
+                delete data.companyDetails?.shippingDetails?.state;
+                delete data.companyDetails?.shippingDetails?.stateCode;
+                delete data.companyDetails?.shippingDetails?.stateName;
+                delete data.companyDetails?.shippingDetails?.gstNumber;
+            }
+        }
+        return data;
     }
 
     /**
@@ -5222,15 +5327,14 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
         obj.templateDetails = data.templateDetails;
         obj.entries = salesEntryClassArray;
-
         obj.account.billingDetails.countryName = this.customerCountryName;
         obj.account.billingDetails.countryCode = this.customerCountryCode;
-        obj.account.billingDetails.stateCode = obj.account.billingDetails.state.code;
+        obj.account.billingDetails.stateCode = obj.account.billingDetails.state?.code;
         obj.account.billingDetails.stateName = obj.account.billingDetails.state?.name;
 
         obj.account.shippingDetails.countryName = this.customerCountryName;
         obj.account.shippingDetails.countryCode = this.customerCountryCode;
-        obj.account.shippingDetails.stateCode = obj.account.shippingDetails.state.code;
+        obj.account.shippingDetails.stateCode = obj.account.shippingDetails.state?.code;
         obj.account.shippingDetails.stateName = obj.account.shippingDetails.state?.name;
 
         if (this.isCashInvoice && obj.account) {
@@ -5436,6 +5540,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         voucherClassConversion.accountDetails.billingDetails.gstNumber = result.account.billingDetails?.gstNumber ?? result?.account?.billingDetails?.taxNumber;
         voucherClassConversion.accountDetails.billingDetails.state.code = this.getNewStateCode(result.account.billingDetails?.stateCode ?? result?.account?.billingDetails?.state?.code);
         voucherClassConversion.accountDetails.billingDetails.state.name = result.account.billingDetails?.stateName ?? result?.account?.billingDetails?.state?.name;
+        voucherClassConversion.accountDetails.billingDetails.county.name = result?.account?.billingDetails?.county?.name;
+        voucherClassConversion.accountDetails.billingDetails.county.code = result?.account?.billingDetails?.county?.code;
         let selectedCustomerNumber = result?.account?.mobileNumber ? "+" + result?.account?.mobileNumber : '';
         this.intl?.setNumber(selectedCustomerNumber);
         voucherClassConversion.accountDetails.mobileNumber = result.account.mobileNumber;
@@ -5449,6 +5555,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             voucherClassConversion.accountDetails.shippingDetails.gstNumber = result.account.shippingDetails.gstNumber ?? result?.account?.shippingDetails?.taxNumber;
             voucherClassConversion.accountDetails.shippingDetails.state.code = this.getNewStateCode(result.account.shippingDetails.stateCode ?? result?.account?.shippingDetails?.state?.code);
             voucherClassConversion.accountDetails.shippingDetails.state.name = result.account.shippingDetails.stateName ?? result?.account?.shippingDetails?.state?.name;
+            voucherClassConversion.accountDetails.shippingDetails.county.name = result?.account?.shippingDetails?.county?.name;
+            voucherClassConversion.accountDetails.shippingDetails.county.code = result?.account?.shippingDetails?.county?.code;
 
             voucherClassConversion.accountDetails.shippingDetails = this.updateAddressShippingBilling(voucherClassConversion.accountDetails.shippingDetails);
         }
@@ -5500,7 +5608,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             this.customerCountryName = result.account.billingDetails?.countryName ?? result?.account?.billingDetails?.country?.name;
             this.customerCountryCode = result?.account?.billingDetails?.countryCode ?? result?.account?.billingDetails?.country?.code ?? 'IN';
         }
-
         this.showGstAndTrnUsingCountryName(this.customerCountryName);
 
         this.exchangeRate = result.exchangeRate;
@@ -5689,14 +5796,24 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         if (!countryCode) {
             return;
         }
+        this.statesSource = [];
+        this.regionsSource = [];
         this.startLoader(true);
         return new Promise((resolve: Function) => {
             if (countryCode) {
                 if (this.countryStates[countryCode]) {
                     if (!isCompanyStates) {
-                        this.statesSource = this.countryStates[countryCode];
+                        if (countryCode !== 'GB') {
+                            this.statesSource = this.countryStates[countryCode];
+                        } else {
+                            this.regionsSource = this.countryStates[countryCode];
+                        }
                     } else {
-                        this.companyStatesSource = this.countryStates[countryCode];
+                        if (countryCode !== 'GB') {
+                            this.companyStatesSource = this.countryStates[countryCode];
+                        } else {
+                            this.companyRegionsSource = this.countryStates[countryCode];
+                        }
                     }
                     this.startLoader(false);
                     resolve();
@@ -5704,9 +5821,17 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     this.salesService.getStateCode(countryCode).pipe(takeUntil(this.destroyed$)).subscribe(resp => {
                         this.startLoader(false);
                         if (!isCompanyStates) {
-                            this.statesSource = this.modifyStateResp((resp.body) ? resp.body?.stateList : [], countryCode);
+                            if (countryCode !== 'GB') {
+                                this.statesSource = this.modifyStateResp((resp.body) ? resp.body?.stateList : [], countryCode);
+                            } else {
+                                this.regionsSource = this.modifyStateResp((resp.body) ? resp.body?.countyList : [], countryCode);
+                            }
                         } else {
-                            this.companyStatesSource = this.modifyStateResp((resp.body) ? resp.body?.stateList : [], countryCode);
+                            if (countryCode !== 'GB') {
+                                this.companyStatesSource = this.modifyStateResp((resp.body) ? resp.body?.stateList : [], countryCode);
+                            } else {
+                                this.companyRegionsSource = this.modifyStateResp((resp.body) ? resp.body?.countyList : [], countryCode);
+                            }
                         }
                         resolve();
                     }, () => {
@@ -5737,7 +5862,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public fillShippingBillingDetails(event: any, isBilling?: boolean): void {
         let stateName = event.label;
         let stateCode = event?.value;
-
         if (isBilling) {
             // update account details address if it's billing details
             if (this.billingState && this.billingState.nativeElement) {
@@ -5747,6 +5871,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             this.invFormData.accountDetails.billingDetails.stateName = stateName;
             this.invFormData.accountDetails.billingDetails.stateCode = stateCode;
             this.invFormData.accountDetails.billingDetails.state.code = stateCode;
+            this.invFormData.accountDetails.billingDetails.county.name = stateName;
+            this.invFormData.accountDetails.billingDetails.county.code = stateCode;
         } else {
             if (this.shippingState && this.shippingState.nativeElement) {
                 this.shippingState.nativeElement.classList.remove('error-box');
@@ -5758,6 +5884,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 this.invFormData.accountDetails.shippingDetails.stateCode = stateCode;
                 this.invFormData.accountDetails.shippingDetails.state.name = stateName;
                 this.invFormData.accountDetails.shippingDetails.state.code = stateCode;
+                this.invFormData.accountDetails.shippingDetails.county.name = stateName;
+                this.invFormData.accountDetails.shippingDetails.county.code = stateCode
             }
         }
     }
@@ -5782,15 +5910,23 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             if (name === 'India') {
                 this.showGSTINNo = true;
                 this.showTRNNo = false;
+                this.showVATNo = false;
                 this.getOnboardingForm('IN')
             } else if (name === 'United Arab Emirates') {
                 this.showGSTINNo = false;
                 this.showTRNNo = true;
+                this.showVATNo = false;
                 this.getOnboardingForm('AE')
+            } else if (name === 'United Kingdom') {
+                this.showGSTINNo = false;
+                this.showTRNNo = false;
+                this.showVATNo = true;
+                this.getOnboardingForm('GB')
             }
         } else {
             this.showGSTINNo = false;
             this.showTRNNo = false;
+            this.showVATNo = false;
         }
     }
 
@@ -6146,6 +6282,10 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      */
     private createPurchaseRecord(request: PurchaseRecordRequest): void {
         // Create a new puchase record with voucher API for voucher version 2 else create a new purchase record with its own API
+        if (this.showVATNo) {
+            delete request['company'].billingDetails.gstNumber;
+            delete request['company'].shippingDetails.gstNumber;
+        }
         const apiCallObservable = this.voucherApiVersion === 2 ?
             this.salesService.generateGenericItem(request, true) : this.purchaseRecordService.generatePurchaseRecord(request);
         apiCallObservable.pipe(takeUntil(this.destroyed$)).subscribe((response: BaseResponse<any, GenericRequestForGenerateSCD>) => {
@@ -7251,6 +7391,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             this.purchaseBillCompany.billingDetails.stateName = stateName;
             this.purchaseBillCompany.billingDetails.stateCode = stateCode;
             this.purchaseBillCompany.billingDetails.state.code = stateCode;
+            this.purchaseBillCompany.billingDetails.county.name = stateName;
+            this.purchaseBillCompany.billingDetails.county.code = stateCode;
         } else {
             if (this.shippingStateCompany && this.shippingStateCompany.nativeElement) {
                 this.shippingStateCompany.nativeElement.classList.remove('error-box');
@@ -7262,6 +7404,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 this.purchaseBillCompany.shippingDetails.stateCode = stateCode;
                 this.purchaseBillCompany.shippingDetails.state.name = stateName;
                 this.purchaseBillCompany.shippingDetails.state.code = stateCode;
+                this.purchaseBillCompany.shippingDetails.county.name = stateName;
+                this.purchaseBillCompany.shippingDetails.county.code = stateCode;
             }
         }
         this.changeDetectorRef.detectChanges();
@@ -7304,6 +7448,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 billingDetails: {
                     address: company?.billingDetails?.address,
                     state: { code: company?.billingDetails?.state?.code, name: company?.billingDetails?.state?.name },
+                    county: { code: company?.billingDetails?.county?.code, name: company?.billingDetails?.county?.name },
                     gstNumber: company?.billingDetails?.gstNumber ?? company?.billingDetails?.taxNumber,
                     stateName: company?.billingDetails?.state?.name,
                     stateCode: company?.billingDetails?.state?.code,
@@ -7312,6 +7457,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 shippingDetails: {
                     address: company?.shippingDetails?.address,
                     state: { code: company?.shippingDetails?.state?.code, name: company?.shippingDetails?.state?.name },
+                    county: { code: company?.shippingDetails?.county?.code, name: company?.shippingDetails?.county?.name },
                     gstNumber: company?.shippingDetails?.gstNumber ?? company?.shippingDetails?.taxNumber,
                     stateName: company?.shippingDetails?.state?.name,
                     stateCode: company?.shippingDetails?.state?.code,
@@ -7353,6 +7499,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         this.purchaseBillCompany.billingDetails.stateName = defaultAddress.stateName;
                         this.purchaseBillCompany.billingDetails.gstNumber = defaultAddress.gstNumber ?? defaultAddress.taxNumber;
                         this.purchaseBillCompany.billingDetails.pincode = defaultAddress.pincode;
+                        this.purchaseBillCompany.billingDetails.county.code = defaultAddress?.county?.code;
+                        this.purchaseBillCompany.billingDetails.county.name = defaultAddress?.county?.name;
                         this.isDeliverAddressFilled = true;
                     }
                 }
@@ -7381,6 +7529,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     this.purchaseBillCompany.shippingDetails.stateName = defaultAddress.stateName;
                     this.purchaseBillCompany.shippingDetails.gstNumber = defaultAddress.gstNumber ?? defaultAddress.taxNumber;
                     this.purchaseBillCompany.shippingDetails.pincode = defaultAddress.pincode;
+                    this.purchaseBillCompany.shippingDetails.county.code = defaultAddress?.county?.code;
+                    this.purchaseBillCompany.shippingDetails.county.name = defaultAddress?.county?.name;
                 } else {
                     this.resetShippingAddress();
                 }
@@ -7405,6 +7555,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.purchaseBillCompany.shippingDetails.state.name = "";
         this.purchaseBillCompany.shippingDetails.stateName = "";
         this.purchaseBillCompany.shippingDetails.gstNumber = "";
+        this.purchaseBillCompany.shippingDetails.county.code = "";
+        this.purchaseBillCompany.shippingDetails.county.code = "";
     }
 
     /**
@@ -7666,6 +7818,10 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 data.state = {};
             }
             data.state.code = (isCompanyAddress) ? address.stateCode : (address.state) ? address.state.code : "";
+            if (data.county) {
+                data.county.code = address.county ? address.county?.code : "";
+                data.county.name = address.county ? address.county?.name : "";
+            }
             data.stateCode = data.state.code;
             data.state.name = (isCompanyAddress) ? address.stateName : (address.state) ? address.state.name : "";
             data.stateName = data.state.name;
@@ -8220,31 +8376,40 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     }
 
     /**
-     * Updates account details
-     *
-     * @private
-     * @param {*} data
-     * @memberof VoucherComponent
-     */
+    * Updates account details
+    *
+    * @private
+    * @param {*} data
+    * @memberof VoucherComponent
+    */
     private updateAccountDetails(data: any): void {
         this.getUpdatedStateCodes(data.country.countryCode).then(() => {
             if (data.addresses && data.addresses.length) {
                 data.addresses = [find(data.addresses, (tax) => tax.isDefault)];
             }
             // auto fill all the details
-            this.invFormData.accountDetails = new AccountDetailsClass(data);
-
+            if (!this.isUpdateMode) {
+                this.invFormData.accountDetails = new AccountDetailsClass(data);
+            }
             if (this.invFormData.accountDetails) {
-                this.getStateCode('billingDetails', this.statesBilling);
+                this.getStateCode('billingDetails');
                 this.autoFillShippingDetails();
             } else {
-                this.statesBilling.readonly = (this.isEinvoiceGenerated) ? true : false;
+                if (this.isEinvoiceGenerated) {
+                    this.makeFieldReadonly("billingState", true);
+                } else {
+                    this.makeFieldReadonly("billingState", false);
+                }
                 this.changeDetectorRef.detectChanges();
             }
             if (this.invFormData.accountDetails.shippingDetails?.gstNumber) {
-                this.getStateCode('shippingDetails', this.statesShipping);
+                this.getStateCode('shippingDetails');
             } else {
-                this.statesShipping.readonly = (this.isEinvoiceGenerated) ? true : false;
+                if (this.isEinvoiceGenerated) {
+                    this.makeFieldReadonly("shippingState", true);
+                } else {
+                    this.makeFieldReadonly("shippingState", false);
+                }
                 this.changeDetectorRef.detectChanges();
             }
 
@@ -8277,7 +8442,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      */
     private getProfile(): void {
         this.store.pipe(select(state => state.settings.profile), takeUntil(this.destroyed$)).subscribe(async (profile) => {
-            if (profile) {
+            if (profile && Object.keys(profile).length) {
                 this.companyCountryName = profile.country;
                 this.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
                 await this.prepareCompanyCountryAndCurrencyFromProfile(profile);
@@ -8797,5 +8962,30 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      */
     public onFocusEntryDate(event: any): void {
         this.isEntryDatepickerOpen = event;
+    }
+
+    /**
+     * This will be use for field read only
+     *
+     * @param {string} fieldType
+     * @param {boolean} isReadonly
+     * @memberof VoucherComponent
+     */
+    public makeFieldReadonly(fieldType: string, isReadonly: boolean): void {
+        let interval = setInterval(() => {
+            if (fieldType === "billingState" && this.statesBilling) {
+                clearInterval(interval);
+                this.statesBilling.readonly = isReadonly;
+            }
+            if (fieldType === "shippingState" && this.statesShipping) {
+                clearInterval(interval);
+                this.statesShipping.readonly = isReadonly;
+            }
+            if (fieldType === "stateEle" && (this.statesShipping || this.statesBilling)) {
+                clearInterval(interval);
+                this.statesShipping.readonly = isReadonly;
+                this.statesBilling.readonly = isReadonly;
+            }
+        }, 300);
     }
 }
