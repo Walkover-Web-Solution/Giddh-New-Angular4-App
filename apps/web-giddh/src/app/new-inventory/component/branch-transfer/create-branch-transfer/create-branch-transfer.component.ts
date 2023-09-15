@@ -166,8 +166,16 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
     public stockUnitResults: any[] = [];
     /** This will store universalDate */
     public universalDate: any;
+    /** This will hold today selected */
+    public todaySelected: boolean = false;
     /** Universal date observer */
     public universalDate$: Observable<any>;
+    /** Today date observer */
+    public todaySelected$: Observable<boolean> = observableOf(false);
+    /** This will hold universal  from */
+    public universalFrom: any;
+    /** This will hold universal date  */
+    public universalTo: any;
 
     constructor(
         private route: ActivatedRoute,
@@ -186,6 +194,7 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
         private invoiceServices: InvoiceService
     ) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
+        this.todaySelected$ = this.store.pipe(select(p => p.session.todaySelected), takeUntil(this.destroyed$));
     }
 
     /**
@@ -209,11 +218,24 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
                 this.branchTransferMode = params.type;
                 this.transferType = 'products';
                 /** Universal date observer */
-                this.universalDate$.subscribe(dateObj => {
+                this.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(dateObj => {
                     if (dateObj) {
-                        this.universalDate = _.cloneDeep(dateObj);
-                        this.selectDate(this.universalDate[0], 'dateOfSupply')
-                        this.detectChanges();
+                        let universalDate = _.cloneDeep(dateObj);
+                        setTimeout(() => {
+                            this.store.pipe(select(state => state.session.todaySelected), take(1)).subscribe(response => {
+                                this.todaySelected = response;
+                                this.universalFrom = dayjs(universalDate[0]);
+                                this.universalTo = dayjs(universalDate[1]);
+                                if (universalDate && !this.todaySelected) {
+                                    this.selectDate(this.universalFrom, 'dateOfSupply')
+                                    this.detectChanges();
+                                } else {
+                                    this.selectDate(this.universalTo, 'dateOfSupply')
+                                    this.detectChanges();
+                                }
+                                this.detectChanges();
+                            });
+                        }, 100);
                     }
                 });
                 this.getBranches();
@@ -443,9 +465,12 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
      * @memberof CreateBranchTransferComponent
      */
     public submit(): void {
-
+        this.branchTransferCreateEditForm.removeControl('myControlKey');
+        let branchTransferObj = this.branchTransferCreateEditForm.value;
+        delete branchTransferObj.myCurrentCompany
         this.isValidForm = !this.branchTransferCreateEditForm.invalid;
         this.isLoading = true;
+        console.log(this.isValidForm, this.branchTransferCreateEditForm);
 
         let branchMode = '';
         if (this.branchTransferMode === 'receipt-note') {
@@ -523,8 +548,6 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
                 }
             }
         }
-        let branchTransferObj = cloneDeep(this.branchTransferCreateEditForm.value);
-        delete branchTransferObj.myCurrentCompany
         if (this.isValidForm) {
             if (this.editBranchTransferUniqueName) {
                 this.inventoryService.updateNewBranchTransfer(branchTransferObj).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
@@ -1918,13 +1941,19 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
         let unitRates = [];
         if (event.additional.purchaseAccountDetails) {
             unitRates = event.additional.purchaseAccountDetails.unitRates.map(rate => ({
-                label: rate.stockUnitName,
+                label: rate.stockUnitCode,
+                value: rate.stockUnitCode,
+                additional: rate.rate
+            }));
+        } if (event.additional.fixedAssetAccountDetails) {
+            unitRates = event.additional.fixedAssetAccountDetails.unitRates.map(rate => ({
+                label: rate.stockUnitCode,
                 value: rate.stockUnitCode,
                 additional: rate.rate
             }));
         } else {
             unitRates.push({
-                label: this.stockUnitResults[index].name,
+                label: this.stockUnitResults[index].uniqueName,
                 value: this.stockUnitResults[index].uniqueName,
                 additional: 1
             })
@@ -1932,7 +1961,7 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
         const baseUnitExists = unitRates?.filter(rate => rate.value === this.stockUnitResults[index].uniqueName);
         if (!baseUnitExists?.length) {
             unitRates.push({
-                label: this.stockUnitResults[index].name,
+                label: this.stockUnitResults[index].uniqueName,
                 value: this.stockUnitResults[index].uniqueName,
                 additional: 1
             });

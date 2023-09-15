@@ -113,7 +113,7 @@
                                             <div formArrayName="products">
                                                 <div [formGroupName]="0">
                                                     <div class="mr-b15 mr-t15">
-                                                        <span formGroupName="variant" class="w-100">
+                                                        <span formGroupName="variant" class="w-100"  *ngIf="stockVariants[0]?.length > 1">
                                                             <dropdown-field
                                                                 *ngIf="
                                                                     branchTransferCreateEditForm?.get(
@@ -597,7 +597,7 @@
                                             <div formArrayName="products">
                                                 <div [formGroupName]="0">
                                                     <div class="mr-b15 mr-t15">
-                                                        <span formGroupName="variant" class="w-100">
+                                                        <span formGroupName="variant" class="w-100"  *ngIf="stockVariants[0]?.length > 1">
                                                             <dropdown-field
                                                                 *ngIf="
                                                                     branchTransferCreateEditForm?.get(
@@ -1492,7 +1492,7 @@
                                                                 "
                                                             >
                                                             </select-field>
-                                                            <span formGroupName="variant" class="w-100">
+                                                            <span formGroupName="variant" class="w-100"  *ngIf="stockVariants[i]?.length > 1">
                                                                 <select-field
                                                                     *ngIf="product.get('uniqueName').value"
                                                                     [cssClass]="'form-control mat-field-border'"
