@@ -66,6 +66,14 @@
     .trn-width {
         min-width: 280px;
     }
+    .custom-datepicker{
+        &.custom-new-datepicker {
+            input{
+                width: 240px !important;
+                max-width: 240px;
+            }
+        }
+    }
 }
 .export-btn {
     display: flex;
