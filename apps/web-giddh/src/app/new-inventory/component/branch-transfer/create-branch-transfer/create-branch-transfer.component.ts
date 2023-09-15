@@ -1845,6 +1845,7 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
      */
     public closeSacNumber(productFormGroup: any): void {
         productFormGroup.get('sacNumber').setValue('');
+        productFormGroup.get('hsnNumber').setValue('');
         this.hsnSacMenuTrigger?.closeMenu();
     }
 
