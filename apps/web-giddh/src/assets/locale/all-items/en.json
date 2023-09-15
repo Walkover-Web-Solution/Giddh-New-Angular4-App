@@ -350,21 +350,9 @@
         }
       ]
     },
-              {
-              "label": "Inventory",
-              "link": "/pages/inventory/v2/reports/product/stock",
-              "icon": "icon-inventory",
-              "description": "Import/create stock, group & unit",
-              "additional": {
-                  "voucherVersion": 2
-              }
-          },
     {
       "label": "Inventory",
       "icon": "icon-inventory",
-           "additional": {
-                  "voucherVersion": 1
-              },
       "items": [
           {
               "label": "Inventory",
