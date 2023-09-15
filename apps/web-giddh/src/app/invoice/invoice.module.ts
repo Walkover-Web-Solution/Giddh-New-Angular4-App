@@ -74,6 +74,7 @@ import { DeleteTemplateConfirmationModalModule } from './templates/edit-template
 import { InvoiceTemplatesModule } from './templates/invoice.templates.module';
 import { VoucherModule } from '../voucher/voucher.module';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatDialogModule } from '@angular/material/dialog';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 
 @NgModule({
@@ -160,7 +161,8 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
         BsDatepickerModule.forRoot(),
         GiddhPageLoaderModule,
         DatepickerWrapperModule,
-        DeleteTemplateConfirmationModalModule
+        DeleteTemplateConfirmationModalModule,
+        MatDialogModule
     ],
     exports: [
         InvoiceRoutingModule,
