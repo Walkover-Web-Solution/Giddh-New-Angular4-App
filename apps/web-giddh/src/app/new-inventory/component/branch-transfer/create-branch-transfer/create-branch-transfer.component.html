@@ -1722,7 +1722,7 @@
                                                             <div *ngIf="product.get('name').value">
                                                                 {{ product.get("name").value }}
                                                             </div>
-                                                            <div *ngIf="product.get('variant.name').value">
+                                                            <div *ngIf="stockVariants[i]?.length > 1">
                                                                 {{ product.get("variant.name").value }}
                                                             </div>
                                                             <div *ngIf="product.get('skuCode').value">
