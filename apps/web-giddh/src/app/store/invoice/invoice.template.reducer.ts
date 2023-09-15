@@ -348,6 +348,11 @@ export const initialState: CustomTemplateState = {
                         display: false,
                         width: null
                     },
+                    amountBeforeDiscount: {
+                        label:"Total Before Dis.",
+                        display: true,
+                        width: null
+                    },
                     hsnSac: {
                         label: 'HSN/SAC',
                         display: true,

@@ -73,9 +73,13 @@ export class AgingreportingService {
      * @return {*}  {Observable<BaseResponse<string, any>>}
      * @memberof AgingreportingService
      */
-    public exportAgingReport(model: any): Observable<BaseResponse<string, any>> {
+    public exportAgingReport(model: any, branchUniqueName: string): Observable<BaseResponse<string, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.post(this.config.apiUrl + AGINGREPORT_API.EXPORT?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(
+        let url = this.config.apiUrl + AGINGREPORT_API.EXPORT?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
+        if (branchUniqueName) {
+            url = url.concat(`?branchUniqueName=${branchUniqueName}`);
+        }
+        return this.http.post(url, model).pipe(
             map((res) => {
                 let data: BaseResponse<string, any> = res;
                 data.request = model;

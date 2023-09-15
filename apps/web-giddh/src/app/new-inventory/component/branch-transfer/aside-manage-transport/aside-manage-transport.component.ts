@@ -1,11 +1,13 @@
-import { ChangeDetectorRef, Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { PAGINATION_LIMIT } from 'apps/web-giddh/src/app/app.constant';
 import { IAllTransporterDetails } from 'apps/web-giddh/src/app/models/api-models/Invoice';
 import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
+import { ConfirmModalComponent } from 'apps/web-giddh/src/app/theme/new-confirm-modal/confirm-modal.component';
 import { IOption } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface';
-import { ReplaySubject, takeUntil } from 'rxjs';
+import { ReplaySubject, take, takeUntil } from 'rxjs';
 
 export interface transporterDetails {
     name: string;
@@ -19,8 +21,8 @@ const ELEMENT_DATA: transporterDetails[] = [];
     styleUrls: ['./aside-manage-transport.component.scss']
 })
 export class AsideManageTransportComponent implements OnInit {
-    /** Emits modal close event */
-    @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
+    /** Dialog Ref for update ledger */
+    public confirmModalDialogRef: any;
     /** This will use for displayed table columns*/
     public displayedColumns: string[] = ['name', 'transporterId', 'action'];
     /** Hold  transporter id*/
@@ -59,6 +61,7 @@ export class AsideManageTransportComponent implements OnInit {
         private changeDetection: ChangeDetectorRef,
         private formBuilder: UntypedFormBuilder,
         private invoiceServices: InvoiceService,
+        public dialog: MatDialog,
         private toasty: ToasterService) {
     }
 
@@ -85,15 +88,6 @@ export class AsideManageTransportComponent implements OnInit {
         });
     }
 
-    /**
-     * Closes aside pane
-     *
-     *
-     * @memberof AsideManageTransportComponent
-     */
-    public closeAsidePane(): void {
-        this.closeAsideEvent.emit();
-    }
 
     /**
     * This will use for page change
@@ -121,7 +115,6 @@ export class AsideManageTransportComponent implements OnInit {
             this.invoiceServices.addEwayTransporter(generateTransporterForm).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response && response.status === "success" && response.body) {
                     this.toasty.showSnackBar("success", 'Transported created successfully');
-                    this.closeAsideEvent.emit();
                     this.clearTransportForm();
                     this.getTransportersList();
                 } else {
@@ -204,6 +197,7 @@ export class AsideManageTransportComponent implements OnInit {
         this.detectChanges();
     }
 
+
     /**
      * This will be use for delete transporter
      *
@@ -211,17 +205,30 @@ export class AsideManageTransportComponent implements OnInit {
      * @memberof AsideManageTransportComponent
      */
     public deleteTransporter(transporter: any): void {
-        this.isLoading = true;
-        this.invoiceServices.deleteTransporterById(transporter.transporterId).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            this.isLoading = false;;
-            if (response && response.status === "success" && response.body) {
-                this.toasty.showSnackBar("success", response.body);
-                this.getTransportersList();
-            } else {
-                this.toasty.showSnackBar("error", response.message);
+        this.confirmModalDialogRef = this.dialog.open(ConfirmModalComponent, {
+            width: '585px',
+            data: {
+                title: this.commonLocaleData?.app_confirmation,
+                body: 'Are you sure you want to delete the transporter?',
+                ok: this.commonLocaleData?.app_yes,
+                cancel: this.commonLocaleData?.app_no
             }
         });
-        this.detectChanges();
+
+        this.confirmModalDialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            if (response) {
+                this.isLoading = true
+                this.invoiceServices.deleteTransporterById(transporter.transporterId).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                    this.isLoading = false;;
+                    if (response && response.status === "success" && response.body) {
+                        this.toasty.showSnackBar("success", response.body);
+                        this.getTransportersList();
+                    } else {
+                        this.toasty.showSnackBar("error", response.message);
+                    }
+                });
+            }
+        });
     }
 
     /**

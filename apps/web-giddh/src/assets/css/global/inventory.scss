@@ -71,9 +71,10 @@ inventory-sidebar {
     text-field,
     select-field {
         input {
-            padding: 12px;
+            padding: 12px !important;
             border: 1px solid var(--color-fields-border) !important;
             border-radius: 4px;
+            height: auto;
             &.disabled{
                 background-color: var(--color-primary-input-bar-background) !important;
             }
@@ -129,6 +130,15 @@ body{
     }
 }
 
+.consumption-details-wrapper {
+    .mat-expansion-panel {
+        .mat-expansion-panel-header {
+            .mat-expansion-panel-header-title{
+                color: var(--color-primary-header-background) !important;
+            }
+        }
+    }
+}
 .field-m-width{
     max-width: 170px;
     .select-field-input {

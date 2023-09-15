@@ -11,12 +11,14 @@ import { GeneralService } from 'apps/web-giddh/src/app/services/general.service'
 import { InventoryService } from 'apps/web-giddh/src/app/services/inventory.service';
 import { LedgerService } from 'apps/web-giddh/src/app/services/ledger.service';
 import { ManufacturingService } from 'apps/web-giddh/src/app/services/manufacturing.service';
+import { SearchService } from 'apps/web-giddh/src/app/services/search.service';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
 import { WarehouseActions } from 'apps/web-giddh/src/app/settings/warehouse/action/warehouse.action';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { giddhRoundOff } from 'apps/web-giddh/src/app/shared/helpers/helperFunctions';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import { ConfirmModalComponent } from 'apps/web-giddh/src/app/theme/new-confirm-modal/confirm-modal.component';
+import { IOption } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface';
 import * as dayjs from 'dayjs';
 import { ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
@@ -39,7 +41,7 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
     /** Create Manufacturing form object */
     public manufacturingObject: CreateManufacturing = new CreateManufacturing();
     /** New Linked stocks object */
-    public totals: any = { totalRate: 0, totalAmount: 0, costPerItem: 0 };
+    public totals: any = { totalRate: 0, totalAmount: 0, costPerItem: 0, expensePerItem:0 };
     /** Index of active linked item */
     public activeLinkedStockIndex: number = null;
     /** List of required fields */
@@ -70,6 +72,46 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
     public isCompany: boolean;
     /** True if get manufacturing in progress */
     public isLoadingManufacturing: boolean = false;
+    // /** Stores the default search results pagination details */
+    public defaultExpenseAccountPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
+    /** True, if API call should be prevented on default scroll caused by scroll in list */
+    public preventExpenseDefaultScrollApiCall: boolean = false;
+    /** Default search suggestion list to be shown for search */
+    public defaultExpenseAccountSuggestions: Array<IOption> = [];
+    /** Stores the search results pagination details */
+    public expenseAccountsSearchResultsPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
+    /** Activity log form's company operations list */
+    public expenseAccounts: IOption[] = [];
+    /** Stores the search results pagination details */
+    public liabilitiesAssetAccountsSearchResultsPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
+    /** Default search suggestion list to be shown for search */
+    public defaultLiabilitiesAssetAccountSuggestions: Array<IOption> = [];
+    /** True, if API call should be prevented on default scroll caused by scroll in list */
+    public preventLiabilitiesAssetDefaultScrollApiCall: boolean = false;
+    /** Stores the default search results pagination details */
+    public defaultLiabilitiesAssetAccountPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
+    /** Stores the list of accounts */
+    public liabilitiesAssetAccounts: IOption[];
+    /** Index of active linked item */
+    public activeExpenseIndex: number = null;
+    /** True if increase assets value*/
+    private increaseExpenseAmount: boolean ;
 
     constructor(
         private store: Store<AppState>,
@@ -83,9 +125,9 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
         private route: ActivatedRoute,
         private router: Router,
         private generalService: GeneralService,
-        private settingsBranchAction: SettingsBranchActions
+        private settingsBranchAction: SettingsBranchActions,
+        private searchService: SearchService
     ) {
-
     }
 
     /**
@@ -100,6 +142,12 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
                 this.getManufacturingDetails(params?.uniqueName);
             }
         });
+
+        this.loadExpenseAccounts();
+        this.loadAssetsLiabilitiesAccounts();
+        this.initializeOtherExpenseObj();
+
+      this.increaseExpenseAmount =   this.manufacturingObject.manufacturingDetails[0].increaseAssetValue;
 
         this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj: Date[]) => {
             if (dateObj) {
@@ -271,7 +319,6 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
      */
     public getVariantRecipe(): void {
         this.manufacturingObject.manufacturingDetails[0].linkedStocks = [];
-
         this.manufacturingService.getVariantRecipe(this.manufacturingObject.manufacturingDetails[0].stockUniqueName, [this.manufacturingObject.manufacturingDetails[0].variant.uniqueName], true).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success" && response?.body?.manufacturingDetails?.length) {
                 this.recipeExists = true;
@@ -317,8 +364,8 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
                         variant: { name: '', uniqueName: '' }
                     }
                 );
-
                 this.showBorder(this.manufacturingObject.manufacturingDetails[0].linkedStocks[0]);
+
             }
 
             if (!this.manufactureUniqueName) {
@@ -488,6 +535,7 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
             });
         }
 
+        manufacturingObject.increaseAssetValue = this.increaseExpenseAmount;
         this.manufacturingService.saveManufacturing(manufacturingObject.manufacturingDetails[0].stockUniqueName, manufacturingObject).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
                 this.toasterService.showSnackBar("success", this.localeData?.manufacturing_saved);
@@ -560,6 +608,76 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * This will use for initialization manufacturing other expense object
+     *
+     * @memberof CreateManufacturingComponent
+     */
+    public initializeOtherExpenseObj() {
+        this.manufacturingObject.manufacturingDetails[0].otherExpenses.push(
+            {
+                baseAccount: {
+                    uniqueName: '',
+                    defaultName: ''
+                },
+                transactions: [
+                    {
+                        account: {
+                            uniqueName: '',
+                            defaultName: ''
+                        },
+                        amount: 0
+                    }
+                ],
+            }
+        );
+    }
+
+    /**
+     * This will be use for load expense accounts list
+     *
+     * @memberof CreateManufacturingComponent
+     */
+    public loadExpenseAccounts(): void {
+        this.onExpenseAccountSearchQueryChanged('');
+    }
+
+    /**
+     * This will be use for load assets libialities accounts list
+     *
+     * @memberof CreateManufacturingComponent
+     */
+    public loadAssetsLiabilitiesAccounts(): void {
+        this.onLiabilitiesAssetAccountSearchQueryChanged('', 1, (response) => {
+            this.defaultLiabilitiesAssetAccountSuggestions = response.map(result => {
+                return {
+                    value: result?.uniqueName,
+                    label: result.name + ' (' + result?.uniqueName + ')'
+                }
+            }) || [];
+            this.defaultLiabilitiesAssetAccountPaginationData.page = this.liabilitiesAssetAccountsSearchResultsPaginationData.page;
+            this.defaultLiabilitiesAssetAccountPaginationData.totalPages = this.liabilitiesAssetAccountsSearchResultsPaginationData.totalPages;
+        });
+    }
+    /**
+     * This will be use for add expense item
+     *
+     * @memberof CreateManufacturingComponent
+     */
+    public addExpense(): void {
+        this.initializeOtherExpenseObj();
+    }
+    /**
+     * This will be use for remove expense item
+     *
+     * @param {number} index
+     * @memberof CreateManufacturingComponent
+     */
+    public removeExpenseItem(index: number) {
+        this.manufacturingObject.manufacturingDetails[0].otherExpenses = this.manufacturingObject.manufacturingDetails[0].otherExpenses?.filter((expense, i) => i !== index);
+        this.calculateTotals();
+    }
+
+    /**
      * Remove linked stock row
      *
      * @param {number} index
@@ -583,6 +701,16 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * This will be use for calculating the expense row totals
+     *
+     * @memberof CreateManufacturingComponent
+     */
+    public calculateExpenseRowTotal(expense: any): void {
+        this.calculateTotals();
+    }
+
+
+    /**
      * Calculates grand total
      *
      * @memberof CreateManufacturingComponent
@@ -590,17 +718,38 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
     public calculateTotals(): void {
         let totalRate = 0;
         let totalAmount = 0;
-
+        let expenseAmount = 0;
         this.manufacturingObject.manufacturingDetails[0].linkedStocks?.forEach(linkedStock => {
             totalRate += Number(linkedStock.rate) || 0;
             totalAmount += Number(linkedStock.amount) || 0;
         });
 
-        this.totals.totalRate = totalRate;
-        this.totals.totalAmount = totalAmount;
-        this.totals.costPerItem = giddhRoundOff((totalAmount / this.manufacturingObject.manufacturingDetails[0].manufacturingQuantity), this.giddhBalanceDecimalPlaces);
+        this.manufacturingObject.manufacturingDetails[0].otherExpenses?.forEach(expense => {
+            expense.transactions.forEach(res => {
+                expenseAmount += Number(res.amount) || 0;
+            });
+        });
 
+        if (this.increaseExpenseAmount) {
+            let  updatedAmount = giddhRoundOff(((totalAmount+ expenseAmount ) / this.manufacturingObject.manufacturingDetails[0].manufacturingQuantity), this.giddhBalanceDecimalPlaces);
+            console.log('update true', updatedAmount);
+            this.totals.costPerItem = updatedAmount;
+
+        } else {
+            let updatedAmount = giddhRoundOff((totalAmount / this.manufacturingObject.manufacturingDetails[0].manufacturingQuantity), this.giddhBalanceDecimalPlaces);
+            console.log('update false', updatedAmount);
+            this.totals.costPerItem = updatedAmount;
+
+        }
+
+        this.totals.totalRate = totalRate;
+        this.totals.totalAmount = totalAmount + expenseAmount ;
+        this.totals.expensePerItem = expenseAmount;
         this.changeDetectionRef.detectChanges();
+    }
+
+    public toggleExpenseSetting(event: Event) {
+        this.calculateTotals();
     }
 
     /**
@@ -610,6 +759,7 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
      */
     public resetForm(): void {
         this.manufacturingObject = new CreateManufacturing();
+        this.initializeOtherExpenseObj();
         this.manufacturingObject.manufacturingDetails[0].date = cloneDeep(this.universalDate);
 
         this.initialLinkedStocks = [];
@@ -645,6 +795,21 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
             linkedStock.cssClass = 'form-control mat-field-border';
         } else {
             linkedStock.cssClass = 'form-control';
+        }
+    }
+
+
+    public hideExpenseBorder(expense: any): void {
+        if (!expense.baseAccount.uniqueName && !this.isCompany) {
+            expense.cssClass = 'form-control mat-field-border';
+        } else {
+            expense.cssClass = 'form-control';
+        }
+    }
+
+    public showExpenseBorder(expense: any): void {
+        if (!this.isCompany) {
+            expense.cssClass = 'form-control mat-field-border';
         }
     }
 
@@ -796,6 +961,7 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
                 this.manufacturingObject.manufacturingDetails[0].variant.uniqueName = response.body.variant.uniqueName;
                 this.manufacturingObject.manufacturingDetails[0].manufacturingQuantity = Number(response.body.manufacturingQuantity);
                 this.manufacturingObject.manufacturingDetails[0].manufacturingMultipleOf = Number(response.body.manufacturingQuantity);
+                this.manufacturingObject.manufacturingDetails[0].increaseAssetValue = response.body.increaseAssetValue;
 
                 this.selectedInventoryType = response.body.inventoryType;
 
@@ -822,6 +988,30 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
                 });
                 this.manufacturingObject.manufacturingDetails[0].linkedStocks = linkedStocks;
                 this.initialLinkedStocks = cloneDeep(linkedStocks);
+
+                let otherExpenses = [];
+                response.body.otherExpenses?.forEach(responseItem => {
+                    let transactions = [];
+                    responseItem.transactions?.forEach(value => {
+                        transactions.push({
+                            account: {
+                                defaultName: value.account.name,
+                                uniqueName: value.account.uniqueName
+                            },
+                            amount: value.amount
+                        });
+                    });
+
+                    otherExpenses.push({
+                        baseAccount: {
+                            uniqueName: responseItem.baseAccount?.uniqueName,
+                            defaultName: responseItem.baseAccount?.name
+                        },
+                        transactions: transactions
+                    });
+                });
+                this.manufacturingObject.manufacturingDetails[0].otherExpenses = otherExpenses;
+                console.log(this.activeExpenseIndex);
 
                 this.getStockVariants(this.manufacturingObject.manufacturingDetails[0], { label: response.body.stockName, value: response.body.stockUniqueName, additional: { stockUnitCode: response.body.manufacturingUnitCode, stockUnitUniqueName: response.body.manufacturingUnitUniqueName } }, true, 0, true);
 
@@ -1003,5 +1193,151 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
                 linkedStock.amount = giddhRoundOff(linkedStock.quantity * linkedStock.rate, this.giddhBalanceDecimalPlaces);
             }
         });
+    }
+
+    /**
+     * This will be use for handle expense accounts scroll end
+     *
+     * @memberof CreateManufacturingComponent
+     */
+    public handleExpenseAccountScrollEnd(): void {
+        if (this.expenseAccountsSearchResultsPaginationData.page < this.expenseAccountsSearchResultsPaginationData.totalPages) {
+            this.onExpenseAccountSearchQueryChanged(
+                this.expenseAccountsSearchResultsPaginationData.query,
+                this.expenseAccountsSearchResultsPaginationData.page + 1,
+                (response) => {
+                    if (!this.expenseAccountsSearchResultsPaginationData.query) {
+                        const results = response.map(result => {
+                            return {
+                                value: result?.uniqueName,
+                                label: result.name + ' (' + result?.uniqueName + ')'
+                            }
+                        }) || [];
+                        this.defaultExpenseAccountSuggestions = this.defaultExpenseAccountSuggestions.concat(...results);
+                        this.defaultExpenseAccountPaginationData.page = this.expenseAccountsSearchResultsPaginationData.page;
+                        this.defaultExpenseAccountPaginationData.totalPages = this.expenseAccountsSearchResultsPaginationData.totalPages;
+                        this.changeDetectionRef.detectChanges();
+                    }
+                });
+        }
+    }
+    public handleLiabilitiesAssetAccountScrollEnd(): void {
+        if (this.defaultLiabilitiesAssetAccountPaginationData.page < this.defaultLiabilitiesAssetAccountPaginationData.totalPages) {
+            this.onLiabilitiesAssetAccountSearchQueryChanged(
+                this.defaultLiabilitiesAssetAccountPaginationData.query,
+                this.defaultLiabilitiesAssetAccountPaginationData.page + 1,
+                (response) => {
+                    if (!this.defaultLiabilitiesAssetAccountPaginationData.query) {
+                        const results = response.map(result => {
+                            return {
+                                value: result?.uniqueName,
+                                label: `${result.name} (${result?.uniqueName})`
+                            }
+                        }) || [];
+                        this.defaultLiabilitiesAssetAccountSuggestions = this.defaultLiabilitiesAssetAccountSuggestions.concat(...results);
+                        this.defaultLiabilitiesAssetAccountPaginationData.page = this.liabilitiesAssetAccountsSearchResultsPaginationData.page;
+                        this.defaultLiabilitiesAssetAccountPaginationData.totalPages = this.liabilitiesAssetAccountsSearchResultsPaginationData.totalPages;
+                    }
+                });
+        }
+    }
+    public onLiabilitiesAssetAccountSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
+        this.liabilitiesAssetAccountsSearchResultsPaginationData.query = query;
+        if (!this.preventLiabilitiesAssetDefaultScrollApiCall &&
+            (query || (this.defaultLiabilitiesAssetAccountSuggestions && this.defaultLiabilitiesAssetAccountSuggestions.length === 0) || successCallback)) {
+            // Call the API when either query is provided, default suggestions are not present or success callback is provided
+            const requestObject: any = {
+                q: encodeURIComponent(query),
+                page,
+                group: encodeURIComponent('noncurrentassets, currentassets, fixedassets, currentliabilities, noncurrentliabilities, shareholdersfunds')
+            }
+            this.searchService.searchAccountV2(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+                if (data && data.body && data.body.results) {
+                    const searchResults = data.body.results.map(result => {
+                        return {
+                            value: result?.uniqueName,
+                            label: result.name + ' (' + result?.uniqueName + ')'
+                        }
+                    }) || [];
+                    if (page === 1) {
+                        this.liabilitiesAssetAccounts = searchResults;
+                    } else {
+                        this.liabilitiesAssetAccounts = [
+                            ...this.liabilitiesAssetAccounts,
+                            ...searchResults
+                        ];
+                    }
+                    this.liabilitiesAssetAccounts = this.liabilitiesAssetAccounts;
+                    this.liabilitiesAssetAccountsSearchResultsPaginationData.page = data.body.page;
+                    this.liabilitiesAssetAccountsSearchResultsPaginationData.totalPages = data.body.totalPages;
+                    if (successCallback) {
+                        successCallback(data.body.results);
+                    } else {
+                        this.defaultLiabilitiesAssetAccountPaginationData.page = this.liabilitiesAssetAccountsSearchResultsPaginationData.page;
+                        this.defaultLiabilitiesAssetAccountPaginationData.totalPages = this.liabilitiesAssetAccountsSearchResultsPaginationData.totalPages;
+                    }
+                    this.changeDetectionRef.detectChanges();
+                }
+            });
+        } else {
+            this.liabilitiesAssetAccounts = [...this.defaultLiabilitiesAssetAccountSuggestions];
+            this.liabilitiesAssetAccountsSearchResultsPaginationData.page = this.defaultLiabilitiesAssetAccountPaginationData.page;
+            this.liabilitiesAssetAccountsSearchResultsPaginationData.totalPages = this.defaultLiabilitiesAssetAccountPaginationData.totalPages;
+            this.preventLiabilitiesAssetDefaultScrollApiCall = true;
+            setTimeout(() => {
+                this.preventLiabilitiesAssetDefaultScrollApiCall = false;
+                this.changeDetectionRef.detectChanges();
+            }, 500);
+        }
+    }
+
+    public onExpenseAccountSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
+        this.expenseAccountsSearchResultsPaginationData.query = query;
+        if (!this.preventExpenseDefaultScrollApiCall &&
+            (query || (this.defaultExpenseAccountSuggestions && this.defaultExpenseAccountSuggestions.length === 0) || successCallback)) {
+            // Call the API when either query is provided, default suggestions are not present or success callback is provided
+            const requestObject: any = {
+                q: encodeURIComponent(query),
+                page,
+                group: encodeURIComponent('operatingcost, indirectexpenses')
+            }
+            this.searchService.searchAccountV2(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+                if (data && data.body && data.body.results) {
+                    const searchResults = data.body.results.map(result => {
+                        return {
+                            value: result?.uniqueName,
+                            label: result.name + ' (' + result?.uniqueName + ')'
+                        }
+                    }) || [];
+                    if (page === 1) {
+                        this.expenseAccounts = searchResults;
+                    } else {
+                        this.expenseAccounts = [
+                            ...this.expenseAccounts,
+                            ...searchResults
+                        ];
+                    }
+                    this.expenseAccounts = this.expenseAccounts;
+                    this.expenseAccountsSearchResultsPaginationData.page = data.body.page;
+                    this.expenseAccountsSearchResultsPaginationData.totalPages = data.body.totalPages;
+                    if (successCallback) {
+                        successCallback(data.body.results);
+                    } else {
+                        this.defaultExpenseAccountPaginationData.page = this.expenseAccountsSearchResultsPaginationData.page;
+                        this.defaultExpenseAccountPaginationData.totalPages = this.expenseAccountsSearchResultsPaginationData.totalPages;
+                    }
+                    this.changeDetectionRef.detectChanges();
+                }
+            });
+        } else {
+            this.expenseAccounts = [...this.defaultExpenseAccountSuggestions];
+            this.expenseAccountsSearchResultsPaginationData.page = this.defaultExpenseAccountPaginationData.page;
+            this.expenseAccountsSearchResultsPaginationData.totalPages = this.defaultExpenseAccountPaginationData.totalPages;
+            this.preventExpenseDefaultScrollApiCall = true;
+            setTimeout(() => {
+                this.preventExpenseDefaultScrollApiCall = false;
+                this.changeDetectionRef.detectChanges();
+            }, 500);
+        }
     }
 }

@@ -20,8 +20,8 @@
     "receiver_name" : "Receiver's Name",
     "senders_warehouse" : "Sender's Warehouse",
     "receiver_warehouse" : "Receiver's Warehouse",
-    "select_label":"Sender's",
-    "select_label_receiver":"Receiver's",
+    "select_label":"Sender's ",
+    "select_label_receiver":"Receiver's ",
     "sender_address":"Sender's Address",
     "receiver_address":"Receiver's Address",
     "enter_receiver":"Enter reciever's details",
@@ -30,10 +30,9 @@
     "enter_qty_unit":"Enter Qty/Unit",
     "enter_rate":"Enter Rate",
     "enter_amount":"Enter Amount",
-    "add_multiple_products":" + Add Multiple Products",
-    "add_multiple_sender":" + Add Multiple Sender",
-    "add_multiple_receiver ":"+ Add Multiple Receiver",
+    "add_new_line":" + Add New Line",
     "dispatched_date":"Dispatched Date",
     "transport_company":"Transport Company",
-    "variant_name" : "Variant's Name"
+    "variant_name" : "Variant's Name",
+    "delete_transporter": "Are you sure you want to delete the transporter?"
 }
