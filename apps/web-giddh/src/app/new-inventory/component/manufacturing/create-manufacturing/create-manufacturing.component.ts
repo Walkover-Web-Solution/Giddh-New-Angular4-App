@@ -44,7 +44,7 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
     public totals: any = { totalRate: 0, totalAmount: 0, costPerItem: 0, expensePerItem: 0, totalStockAmount: 0 };
     /** Index of active linked item */
     public activeLinkedStockIndex: number = null;
-    /** Index of active linked item */
+    /** Index of active other expense item */
     public activeOtherExpenseIndex: number = null;
     /** List of required fields */
     public errorFields: any = { date: false, finishedStockName: false, finishedStockVariant: false, finishedQuantity: false };
