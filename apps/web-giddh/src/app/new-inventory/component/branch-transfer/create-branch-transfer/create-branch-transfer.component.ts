@@ -1952,18 +1952,18 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
         if (event.additional.purchaseAccountDetails) {
             unitRates = event.additional.purchaseAccountDetails.unitRates.map(rate => ({
                 label: rate.stockUnitCode,
-                value: rate.stockUnitCode,
+                value: rate.stockUnitUniqueName,
                 additional: rate.rate
             }));
         } if (event.additional.fixedAssetAccountDetails) {
             unitRates = event.additional.fixedAssetAccountDetails.unitRates.map(rate => ({
                 label: rate.stockUnitCode,
-                value: rate.stockUnitCode,
+                value: rate.stockUnitUniqueName,
                 additional: rate.rate
             }));
         } else {
             unitRates.push({
-                label: this.stockUnitResults[index].uniqueName,
+                label: this.stockUnitResults[index].name,
                 value: this.stockUnitResults[index].uniqueName,
                 additional: 1
             })
@@ -1975,9 +1975,7 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
                 value: this.stockUnitResults[index].uniqueName,
                 additional: 1
             });
-
         }
-
         if (!defaultLoad) {
             this.unitChanged(unitRates[0], productFormGroup);
         }
