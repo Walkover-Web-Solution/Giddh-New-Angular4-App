@@ -250,10 +250,10 @@
                                                     >
                                                         <tr
                                                             (mouseenter)="
-                                                                activeLinkedStockIndex = i; showBorder(linkedStock)
+                                                                activeLinkedStockIndex = i; showBorder('linkedStock',linkedStock)
                                                             "
                                                             (mouseleave)="
-                                                                activeLinkedStockIndex = null; hideBorder(linkedStock)
+                                                                activeLinkedStockIndex = null; hideBorder('linkedStock',linkedStock)
                                                             "
                                                         >
                                                             <td class="table-name">
@@ -444,7 +444,7 @@
                                             </table>
                                         </div>
                                     </mat-expansion-panel>
-                                    <mat-expansion-panel>
+                                   <mat-expansion-panel [expanded]="this.manufacturingObject.manufacturingDetails[0].otherExpenses[0].baseAccount.uniqueName ? true : false">
                                         <div class="col-8">
                                             <mat-slide-toggle
                                                 color="primary"
@@ -478,7 +478,7 @@
                                                         <th class="table-delete">&nbsp;</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody>
+                                                <tbody  (mouseleave)="activeOtherExpenseIndex = null">
                                                     <ng-container
                                                         *ngFor="
                                                             let expense of manufacturingObject.manufacturingDetails[0]
@@ -486,13 +486,21 @@
                                                             let i = index
                                                         "
                                                     >
-                                                        <tr>
+                                                        <tr
+                                                             (mouseenter)="
+                                                                activeOtherExpenseIndex = i; showBorder('expense',expense)
+                                                            "
+                                                            (mouseleave)="
+                                                                activeOtherExpenseIndex = null; hideBorder('expense',expense)
+                                                            ">
                                                             <td class="table-name">
                                                                 <div
                                                                     class="field-m-width table-column-width d-flex align-items-center"
                                                                 >
                                                                     <select-field
-                                                                        [cssClass]="'form-control mat-field-border'"
+                                                                        [cssClass]="
+                                                                                'disable-bg ' + expense.cssClass
+                                                                            "
                                                                         [name]="'baseAccountUniqueName_' + i"
                                                                         [placeholder]="localeData?.liability_assets"
                                                                         [options]="liabilitiesAssetAccounts"
@@ -529,7 +537,9 @@
                                                             <td class="table-variant">
                                                                 <div class="">
                                                                     <select-field
-                                                                        [cssClass]="'form-control mat-field-border'"
+                                                                              [cssClass]="
+                                                                                'disable-bg ' + expense.cssClass
+                                                                            "
                                                                         [name]="'expenseAccount_' + i"
                                                                         [placeholder]="localeData?.expense_acc"
                                                                         [options]="expenseAccounts"
@@ -561,7 +571,9 @@
                                                             <td class="table-rate">
                                                                 <div class="">
                                                                     <text-field
-                                                                        [cssClass]="'form-control mat-field-border text-right'"
+                                                                                [cssClass]="
+                                                                                'disable-bg  text-right ' + expense.cssClass
+                                                                            "
                                                                         [type]="'text'"
                                                                         [name]="'amount' + i"
                                                                         [(ngModel)]="expense.transactions[0].amount"
@@ -580,6 +592,7 @@
                                                                 <i
                                                                     [ngClass]="{
                                                                         'unvisible':
+                                                                            activeOtherExpenseIndex !== i  ||
                                                                             manufacturingObject.manufacturingDetails[0]
                                                                                 .otherExpenses?.length <= 1
                                                                     }"
