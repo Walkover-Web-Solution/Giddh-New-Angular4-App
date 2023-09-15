@@ -435,15 +435,12 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
         }
 
         manufacturingObject.manufacturingDetails[0].increaseAssetValue = this.increaseExpenseAmount;
-
-        if (manufacturingObject.manufacturingDetails[0].otherExpenses) {
-            manufacturingObject.manufacturingDetails[0].otherExpenses?.forEach(result => {
-                if (!result.baseAccount.uniqueName) {
-                    manufacturingObject.manufacturingDetails[0].otherExpenses = [];
-                }
-            })
+        let filteredData = manufacturingObject.manufacturingDetails[0].otherExpenses.filter(expense => expense.baseAccount.defaultName !== '');
+        if (filteredData.length) {
+            manufacturingObject.manufacturingDetails[0].otherExpenses = filteredData;
+        } else {
+            manufacturingObject.manufacturingDetails[0].otherExpenses = []
         }
-
         manufacturingObject.manufacturingDetails[0].linkedStocks = manufacturingObject.manufacturingDetails[0].linkedStocks?.filter(linkedStock => linkedStock?.variant?.uniqueName);
 
         manufacturingObject.manufacturingDetails[0].linkedStocks?.map(linkedStock => {
