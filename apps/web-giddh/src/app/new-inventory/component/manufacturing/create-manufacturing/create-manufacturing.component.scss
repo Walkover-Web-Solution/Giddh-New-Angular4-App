@@ -47,6 +47,11 @@
         }
 
         .consumption-details-wrapper {
+            .mat-accordion {
+                .mat-expansion-panel {
+                    margin-bottom: 15px;
+                }
+            }
             #table-raw-stock {
                 width: 100%;
                 th,
@@ -227,7 +232,7 @@
                         tr {
                             td {
                                 .table-column-width {
-                                    column-gap: 5px;
+                                    column-gap: 8px;
                                 }
                             } 
                         }
@@ -235,6 +240,19 @@
                 }
             }
         }
+    }
+}
+
+@media screen and (max-width: 1366px) {
+    #create-manufacturing {
+        .manufacturing-wrapper {
+            .custom-card {
+                min-width: 200px;
+            }
+        }
+    }
+    .responsive-width {
+        padding-left: 0;
     }
 }
 
