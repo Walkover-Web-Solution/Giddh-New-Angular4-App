@@ -156,8 +156,26 @@ export class VoucherUtilityService {
         delete updatedData?.account?.currencyCode;
         delete updatedData?.account?.currencySymbol;
 
-        return cleaner?.clean(updatedData, {
+        updatedData = cleaner?.clean(updatedData, {
             nullCleaner: true
         });
+
+        if (!updatedData.account?.shippingDetails) {
+            updatedData.account.shippingDetails = {
+                address: [],
+                state: {
+                    code: '',
+                    stateGstCode: ''
+                },
+                county: {
+                    name: '',
+                    code: '',
+                    stateGstCode: ''
+                },
+                pincode: ''
+            }
+        }
+
+        return updatedData;
     }
 }

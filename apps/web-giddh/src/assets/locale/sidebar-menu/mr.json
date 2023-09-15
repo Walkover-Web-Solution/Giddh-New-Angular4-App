@@ -195,7 +195,7 @@
                     "description": "व्हॅट फाइल आणि पुनरावलोकन करा",
                     "hide": "sidebar",
                     "additional": {
-                        "countrySpecific": ["AE"]
+                        "countrySpecific": ["AE", "GB"]
                     }
                 },
                 {
