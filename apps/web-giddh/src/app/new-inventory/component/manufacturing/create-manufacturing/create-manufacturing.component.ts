@@ -5,7 +5,7 @@ import { Store, select } from '@ngrx/store';
 import { SettingsBranchActions } from 'apps/web-giddh/src/app/actions/settings/branch/settings.branch.action';
 import { isEqual } from 'apps/web-giddh/src/app/lodash-optimized';
 import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
-import { CreateManufacturing, ManufacturingLinkedStock } from 'apps/web-giddh/src/app/models/api-models/Manufacturing';
+import { CreateManufacturing } from 'apps/web-giddh/src/app/models/api-models/Manufacturing';
 import { OrganizationType } from 'apps/web-giddh/src/app/models/user-login-state';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { InventoryService } from 'apps/web-giddh/src/app/services/inventory.service';
@@ -44,6 +44,8 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
     public totals: any = { totalRate: 0, totalAmount: 0, costPerItem: 0, expensePerItem: 0, totalStockAmount: 0 };
     /** Index of active linked item */
     public activeLinkedStockIndex: number = null;
+    /** Index of active other expense item */
+    public activeOtherExpenseIndex: number = null;
     /** List of required fields */
     public errorFields: any = { date: false, finishedStockName: false, finishedStockVariant: false, finishedQuantity: false };
     /** True if is loading */
@@ -150,6 +152,7 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
         this.loadAssetsLiabilitiesAccounts();
         this.initializeOtherExpenseObj();
 
+        this.showBorder(this.manufacturingObject.manufacturingDetails[0].otherExpenses[0]);
         this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj: Date[]) => {
             if (dateObj) {
                 try {
@@ -369,7 +372,6 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
                     }
                 );
                 this.showBorder(this.manufacturingObject.manufacturingDetails[0].linkedStocks[0]);
-
             }
 
             if (!this.manufactureUniqueName) {
@@ -407,7 +409,7 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
             this.checkLinkedStockValidation(index);
 
             if (this.activeLinkedStockIndex === null) {
-                this.hideBorder(linkedStock);
+                this.hideBorder('linkedStock',linkedStock);
             }
 
             this.calculateTotals();
@@ -787,9 +789,9 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
      * @param {*} linkedStock
      * @memberof CreateManufacturingComponent
      */
-    public showBorder(linkedStock: any): void {
+    public showBorder(dataType: any): void {
         if (!this.isCompany) {
-            linkedStock.cssClass = 'form-control mat-field-border';
+            dataType.cssClass = 'form-control mat-field-border';
         }
     }
 
@@ -799,11 +801,20 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
      * @param {*} linkedStock
      * @memberof CreateManufacturingComponent
      */
-    public hideBorder(linkedStock: any): void {
-        if (!linkedStock?.variant?.uniqueName && !this.isCompany) {
-            linkedStock.cssClass = 'form-control mat-field-border';
-        } else {
-            linkedStock.cssClass = 'form-control';
+    public hideBorder(type: any, dataType: any): void {
+        if (type === 'linkedStock') {
+            if (!dataType?.variant?.uniqueName && !this.isCompany) {
+                dataType.cssClass = 'form-control mat-field-border';
+            } else {
+                dataType.cssClass = 'form-control';
+            }
+        }
+        if (type === 'expense') {
+            if (!dataType?.baseAccount?.uniqueName && !this.isCompany) {
+                dataType.cssClass = 'form-control mat-field-border';
+            } else {
+                dataType.cssClass = 'form-control';
+            }
         }
     }
 
@@ -1018,6 +1029,9 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
                         },
                         transactions: transactions
                     });
+                    if (this.activeOtherExpenseIndex === null) {
+                        this.hideBorder('expense', responseItem);
+                    }
                 });
 
                 if (response.body.otherExpenses.length) {
@@ -1308,7 +1322,7 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
             const requestObject: any = {
                 q: encodeURIComponent(query),
                 page,
-                group: encodeURIComponent('operatingcost, indirectexpenses')
+                group: encodeURIComponent('operatingcost, indirectexpenses,revenuefromoperations,otherincome')
             }
             this.searchService.searchAccountV2(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
                 if (data && data.body && data.body.results) {
