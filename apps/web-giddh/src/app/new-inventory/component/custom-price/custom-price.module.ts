@@ -15,6 +15,8 @@ import { MatListModule } from '@angular/material/list';
 import { MatTableModule } from '@angular/material/table';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
+import { MatDialogModule } from '@angular/material/dialog';
+import { CommandKModule } from '../../../theme/command-k/command.k.module';
 
 @NgModule({
     imports: [
@@ -31,7 +33,9 @@ import { PaginationModule } from 'ngx-bootstrap/pagination';
         MatListModule,
         MatTableModule,
         MatSlideToggleModule,
-        PaginationModule
+        PaginationModule,
+        MatDialogModule,
+        CommandKModule
     ],
     exports: [
         CustomerWiseComponent

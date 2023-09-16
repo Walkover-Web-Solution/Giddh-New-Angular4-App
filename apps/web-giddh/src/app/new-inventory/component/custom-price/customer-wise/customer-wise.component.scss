@@ -7,7 +7,6 @@
                 width: 14%;
                 height: 100%;
                 position: relative;
-                border-right: 1px solid var(--color-iron);
                 min-height: calc(100vh - 120px);
                 .mat-mdc-list-item {
                     cursor: pointer;
@@ -20,6 +19,7 @@
             .customer-right-side {
                 width: 86%;
                 padding: 12px 16px;
+                border-left: 1px solid var(--color-iron);
                 .right-heading {
                     display: flex;
                     justify-content: space-between;
@@ -31,7 +31,7 @@
                 }
                 .table-inventory {
                     background: var(--color-white);
-                    padding: 20px;
+                    padding: 20px 20px 0px;
                     margin-bottom: 15px;
                     box-shadow: 0 3px 6px var(--color-primary-common-box-shadow);
                     .inventory-head {

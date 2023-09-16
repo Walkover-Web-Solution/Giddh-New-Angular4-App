@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 
 @Component({
-    selector: "customer-wise",
+    selector: "customprice",
     templateUrl: './main.component.html'
 })
 export class MainComponent {
