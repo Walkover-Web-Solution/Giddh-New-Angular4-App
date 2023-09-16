@@ -298,7 +298,7 @@
                     <div class="box clearfix mt-3">
                         <!-- <h1 class="section-head pt-0">{{ localeData?.auth_key?.main_auth_key }}</h1> -->
                         <form name="authKeyForm" #authKeyForm="ngForm" novalidate role="form">
-                            <div class="form-group row align-items-center">
+                            <div class="form-group row align-items-center" [ngClass]="{'mb-1' : isCopied}">
                                 <div class="col-12 col-sm-12 col-md-12 col-lg-6">
                                     <!-- <input
                                         #authKeyUrl
@@ -316,8 +316,7 @@
                                         [name]="'userAuthKey'"
                                         [(ngModel)]="userAuthKey"
                                         [readonly]="true"
-                                    ></input-field>
-                                    <span class="success" *ngIf="isCopied">{{ localeData?.auth_key?.copied }}</span>
+                                    ></input-field>                                    
                                 </div>
                                 <button
                                     mat-stroked-button
@@ -327,6 +326,11 @@
                                 >
                                     Copy
                                 </button>
+                            </div>
+                            <div class="row mb-3" *ngIf="isCopied">
+                                <div class="col-12 col-sm-12 col-md-12 col-lg-6">
+                                <span class="success">{{ localeData?.auth_key?.copied }}</span>
+                            </div>
                             </div>
                             <div class="form-group clearfix mb-0">
                                 <button mat-stroked-button color="primary" (click)="regenerateKey()" class="mr-4">
@@ -572,7 +576,7 @@
                 [id]="activeTab == 'session' ? 'giddh-page-heading' : ''"
             >
                 <div class="wrap-tab-content-pd-15">
-                    <div class="box clearfix mt-1 max900">
+                    <div class="box clearfix mt-1">
                         <div class="d-flex pd-b1 activity-title">
                             <h1 class="section-head pt-0">{{ localeData?.session?.section_heading }}</h1>
                             <button mat-stroked-button class="mr-0" (click)="clearAllSession()">

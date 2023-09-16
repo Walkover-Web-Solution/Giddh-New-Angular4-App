@@ -14,22 +14,6 @@ import { AppState } from '../../store';
 import { OrganizationProfile, SettingsAsideFormType } from '../constants/settings.constant';
 import { WarehouseActions } from '../warehouse/action/warehouse.action';
 
-
-export interface PeriodicElement {
-    no: number;
-    name: string;
-    address: string;
-    gstin: string;
-    state: string;
-    linked: string;
-}
-
-const ELEMENT_DATA: PeriodicElement[] = [
-    {no: 1, name: '12/07/2023', address: 'Testing PIN: 452001', gstin: '544545', state: 'MP - Madhya Pradesh', linked: 'AAAA Dv ShriDefault Ke Alawa Ek Or Warehouse Sfrtt'},
-    {no: 1, name: '12/07/2023', address: 'LTS', gstin: '544545', state: 'MP - Madhya Pradesh', linked: 'AAAA Dv ShriDefault Ke Alawa Ek Or Warehouse Sfrtt'},
-    {no: 1, name: '12/07/2023', address: 'LTS', gstin: '544545', state: 'MP - Madhya Pradesh', linked: 'AAAA Dv ShriDefault Ke Alawa Ek Or Warehouse Sfrtt'},
-]
-
 @Component({
     selector: 'address-settings',
     templateUrl: './address-settings.component.html',
@@ -153,7 +137,6 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /*-- mat-table --*/
     displayedColumns: string[] = ['no', 'name', 'address', 'gstin', 'state', 'linked'];
-    dataSource = ELEMENT_DATA;
 
     /** @ignore */
     constructor(
@@ -215,7 +198,7 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
                 this.searchAddress.emit(this.addressSearchRequest);
             }
         });
-    }
+}
 
     /**
      * Checks the input data if changed

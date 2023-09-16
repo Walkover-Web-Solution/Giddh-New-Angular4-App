@@ -51,6 +51,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     @ViewChild('confirmationModal', { static: false }) public confirmationModal: ModalDirective;
     @ViewChild('statusModal', { static: true }) public statusModal: any;
     @ViewChild('addCompanyModal', { static: true }) public addCompanyModal: any;
+    @ViewChild('closeAddressSidePane', { static: true }) public closeAddressSidePane: any;
     public bsConfig: Partial<BsDatepickerConfig> = {
         showWeekNumbers: false,
         dateInputFormat: GIDDH_DATE_FORMAT,
@@ -74,8 +75,6 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     public formFields: any[] = [];
     public universalDate$: Observable<any>;
     public dateRangePickerValue: Date[] = [];
-    /** Holds the state of aside menu */
-    public closeAddressSidePane: string = 'out';
     /** True if branch update is in progress, used to show ladda loader in aside menu */
     public isBranchChangeInProgress: boolean = false;
     /** Stores all the branches */
@@ -104,6 +103,9 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     public commonLocaleData: any = {};
     /** Holds branch to archive/unarchive */
     public branchStatusToUpdate: any;
+    /** Holds MatDailog Reference */
+    public statusModalRef: any;
+    public closeAddressSidePaneRef: any;
 
     constructor(
         private router: Router,
@@ -391,22 +393,18 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         if (event) {
             event.preventDefault();
         }
-        this.closeAddressSidePane = this.closeAddressSidePane === 'out' ? 'in' : 'out';
         this.isBranchChangeInProgress = false;
-        this.toggleBodyClass();
-    }
 
-    /**
-     * Toggles fixed body class when aside menu is udpated
-     *
-     * @memberof BranchComponent
-     */
-    public toggleBodyClass(): void {
-        if (this.closeAddressSidePane === 'in') {
-            document.querySelector('body').classList.add('fixed');
-        } else {
-            document.querySelector('body').classList.remove('fixed');
-        }
+        this.closeAddressSidePaneRef = this.dialog.open(this.closeAddressSidePane,
+            {
+                position: {
+                    right: '0'
+                },
+                width: '760px',
+                height: '100vh',
+                maxHeight: '100vh'
+            });
+
     }
 
     /**
@@ -430,7 +428,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         };
         this.settingsProfileService.updateBranchInfo(requestObj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === 'success') {
-                this.closeAddressSidePane = 'out';
+                this.closeAddressSidePaneRef.close();
                 this.store.dispatch(this.settingsBranchActions.GetALLBranches({ from: '', to: '' }));
                 this.toasterService.successToast(this.localeData?.branch_updated);
             } else {
@@ -563,9 +561,8 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     // }
 
     public confirmStatusUpdate() {
-        console.log("called");
 
-        this.dialog.open(this.statusModal, {
+        this.statusModalRef = this.dialog.open(this.statusModal, {
             panelClass: 'modal-dialog',
             width: '1000px',
         });
@@ -588,7 +585,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
             } else {
                 this.toasterService.errorToast(response?.message);
             }
-            this.statusModal?.hide();
+            this.statusModalRef.close();
         });
     }
 }

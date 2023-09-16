@@ -177,7 +177,7 @@
         <br />
         <br />
         <div class="branch-vector">
-            <img src="{{ imgPath }}" [alt]="localeData?.branch_image" />
+            <img src="/assets/images/warehouse-vector.svg" [alt]="localeData?.branch_image" />
         </div>
         <!-- add branch modal -->
         <div
@@ -324,32 +324,6 @@
                 </div>
             </div>
         </ng-template>
-
-        <!-- Edit branch -->
-        <div
-            *ngIf="closeAddressSidePane === 'in'"
-            appTranslate
-            [file]="'settings/profile'"
-            (localeData)="profileLocaleData = $event"
-            [requireCommonData]="false"
-        >
-            <div class="aside-overlay"></div>
-            <create-address
-                [class]="closeAddressSidePane"
-                [@slideInOut]="closeAddressSidePane"
-                [keyboardShortcut]="'esc'"
-                (onShortcutPress)="toggleAsidePane()"
-                [companyName]="currentBranch"
-                [branchToUpdate]="branchToUpdate"
-                [showLoader]="isBranchChangeInProgress"
-                (updateAddress)="updateBranchInfo($event)"
-                [addressConfiguration]="addressConfiguration"
-                [localeData]="profileLocaleData"
-                [commonLocaleData]="commonLocaleData"
-                (closeAsideEvent)="toggleAsidePane($event)"
-            >
-            </create-address>
-        </div>
     </div>
     <ng-template #statusModal>
         <div class="modal-md">
@@ -362,11 +336,35 @@
                             : localeData?.confirm_archive_title
                     "
                     [permanentlyDeleteMessage]="' '"
-                    (cancelCallBack)="branchStatusToUpdate = ''; statusModal?.hide()"
+                    (cancelCallBack)="branchStatusToUpdate = ''; statusModalRef.close()"
                     (successCallBack)="updateBranchStatus()"
                 >
                 </confirm-modal>
             </div>
+        </div>
+    </ng-template>
+    <!-- Edit branch -->
+    <ng-template #closeAddressSidePane>
+        <div
+            appTranslate
+            [file]="'settings/profile'"
+            (localeData)="profileLocaleData = $event"
+            [requireCommonData]="false"
+        >
+            <create-address
+                [class]="closeAddressSidePane"
+                [keyboardShortcut]="'esc'"
+                (onShortcutPress)="closeAddressSidePaneRef.close()"
+                [companyName]="currentBranch"
+                [branchToUpdate]="branchToUpdate"
+                [showLoader]="isBranchChangeInProgress"
+                (updateAddress)="updateBranchInfo($event)"
+                [addressConfiguration]="addressConfiguration"
+                [localeData]="profileLocaleData"
+                [commonLocaleData]="commonLocaleData"
+                (closeAsideEvent)="closeAddressSidePaneRef.close()"
+            >
+            </create-address>
         </div>
     </ng-template>
 </ng-container>

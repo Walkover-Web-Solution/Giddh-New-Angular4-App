@@ -145,8 +145,8 @@
                                 </span>
                             </button>
                             <mat-menu #menu="matMenu">
-                                <section class="mr-b1 time-span-dropdown" [ngClass]="{ 'open': showTimeSpan }" (click)="$event.stopPropagation()" style="background-color: red;">
-                                    <div class="clearfix pd-1">
+                                <section class="mr-b1 time-span-dropdown custom-date-range-menu" (click)="$event.stopPropagation()">
+                                    <div class="pd-1">
                                         <!-- <span
                                             class="p-0 mr-r3"
                                             (click)="isOpenedInModal ? handleTimeSpanChange('daterange') : ''"
@@ -181,13 +181,13 @@
                                             }}</label>
                                         </span> -->
 
-                                        <mat-radio-group name="periodOptions">
+                                        <mat-radio-group formControlName="periodOptions" class="d-flex flex-column">
                                             <mat-radio-button
                                                 value="daterange"
                                                 id="dateRange"
                                                 color="primary"
                                                 (click)="isOpenedInModal ? handleTimeSpanChange('daterange') : ''"
-                                                class="w-100 mr-0"
+                                                class="w-100 mr-0 mb-1"
                                             >
                                                 {{ commonLocaleData?.app_date_range }}
                                             </mat-radio-button>
@@ -204,7 +204,7 @@
                                     </div>
 
                                     <section
-                                        class="periods container-fluid mr-b1"
+                                        class="periods container-fluid mr-b1 mt-3"
                                         *ngIf="permissionForm.get('periodOptions')?.value === 'daterange'"
                                     >
                                         <div class="row">
@@ -221,37 +221,23 @@
                                                     container="body"
                                                     autocomplete="off"
                                                 /> -->
-                                                <!-- <mat-form-field
-                                                    class="example-form-field"
+                                                <mat-form-field
                                                     appearance="outline"
-                                                    (click)="campaignOnePicker.open()"
+                                                    (click)="picker.open()"
                                                 >
                                                     <mat-label>{{ localeData?.from_to_label }}</mat-label>
-                                                    <mat-date-range-input
-                                                        [formGroup]="campaignOne"
-                                                        [rangePicker]="campaignOnePicker"
-                                                        [comparisonStart]="campaignTwo.value.start"
-                                                        [comparisonEnd]="campaignTwo.value.end"
-                                                    >
-                                                        <input
-                                                            matStartDate
-                                                            placeholder="Start date"
-                                                            formControlName="start"
-                                                        />
-                                                        <input
-                                                            matEndDate
-                                                            placeholder="End date"
-                                                            formControlName="end"
-                                                        />
+                                                    <mat-date-range-input [rangePicker]="picker">
+                                                      <input matStartDate placeholder="Start date">
+                                                      <input matEndDate placeholder="End date">
                                                     </mat-date-range-input>
-                                                    <mat-date-range-picker #campaignOnePicker></mat-date-range-picker>
-                                                </mat-form-field> -->
+                                                    <mat-date-range-picker #picker></mat-date-range-picker>
+                                                  </mat-form-field>
                                             </div>
                                         </div>
                                     </section>
 
                                     <section
-                                        class="periods container-fluid mr-b1"
+                                        class="periods container-fluid mr-b1 mt-2"
                                         *ngIf="permissionForm.get('periodOptions')?.value === 'pastperiod'"
                                     >
                                         <div class="row">
@@ -259,7 +245,7 @@
                                                 <input-field
                                                     [label]="localeData?.select_past_period_label"
                                                     [name]="'duration'"
-                                                    digitsOnlyDirective
+                                                    [allowDigitsOnly]="true"
                                                     formControlName="duration"
                                                     [type]="'number'"
                                                     [placeholder]="localeData?.select_past_period_placeholder"
@@ -414,9 +400,9 @@
                                 {{ selectedIPRange }}
                                 <span class="pull-right"><span class="fa fa-caret-down"></span></span>
                             </button>
-                            <mat-menu #menurange="matMenu" (click)="$event.stopPropagation()">
-                                <section class="ip-addresses-dropdown" role="menu" [ngClass]="{ 'open': showIPWrap }">
-                                    <div class="clearfix pd-1">
+                            <mat-menu #menurange="matMenu">
+                                <section class="ip-addresses-dropdown" role="menu" (click)="$event.stopPropagation()">
+                                    <div class="pd-1">
                                         <!-- <span
                                             (click)="isOpenedInModal ? handleIpAddressChange('cidr_range') : ''"
                                             class="p-0 mr-r3"
@@ -451,7 +437,7 @@
                                             }}</label>
                                         </span> -->
 
-                                        <mat-radio-group name="ipOptions">
+                                        <mat-radio-group formControlName="ipOptions" class="d-flex flex-column">
                                             <mat-radio-button
                                                 value="cidr_range"
                                                 id="cidrRange"
@@ -475,7 +461,7 @@
 
                                     <section
                                         formArrayName="allowedCidrs"
-                                        class="ip-range container-fluid"
+                                        class="ip-range container-fluid mt-2"
                                         *ngIf="permissionForm.get('ipOptions')?.value === 'cidr_range'"
                                     >
                                         <div
@@ -513,7 +499,7 @@
 
                                     <section
                                         formArrayName="allowedIps"
-                                        class="ip-range container-fluid"
+                                        class="ip-range container-fluid mt-2"
                                         *ngIf="permissionForm.get('ipOptions')?.value === 'ip_address'"
                                     >
                                         <div
@@ -571,7 +557,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-xl-2 col-md-12">
+        <div class="col-xl-2 col-md-12" *ngIf="isSuperAdminCompany">
             <button
                 mat-stroked-button
                 color="primary"

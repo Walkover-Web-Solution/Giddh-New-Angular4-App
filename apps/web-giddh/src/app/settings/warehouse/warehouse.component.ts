@@ -619,7 +619,7 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
             } else {
                 this.toasterService.errorToast(response?.message);
             }
-            this.statusModal?.hide();
+            this.statusModalRef?.close();
         });
     }
 }

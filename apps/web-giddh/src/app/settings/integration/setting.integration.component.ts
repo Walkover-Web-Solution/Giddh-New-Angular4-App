@@ -162,6 +162,10 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public isIciciBankSupportedCountry: boolean = false;
 /** True, if is add or manage group form outside */
     public isAddAndManageOpenedFromOutside:boolean = false;
+    /** Hold editAccountUserModal mat dailog reference */
+    public editAccountUserModalRef: any;
+    /** Hold confirmationModalRef mat dailog reference */
+    public confirmationModalRef: any;
 
     constructor(
         private router: Router,
@@ -1070,7 +1074,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     
     public showDeleteBankAccountLoginConfirmationModal(bankAccount: any, payor: any): void {
         this.activeBankAccount = { uniqueName: bankAccount?.iciciDetailsResource?.uniqueName, urn: payor?.urn, loginId: payor?.loginId };
-        this.dialog.open(this.confirmationModal, {
+        this.confirmationModalRef = this.dialog.open(this.confirmationModal, {
             panelClass: 'modal-dialog',
             width: '1000px',
         });
@@ -1098,7 +1102,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public openEditAccountUserModal(bankAccount: any, payor: any): void {
         this.activeBankAccount = bankAccount;
         this.activePayorAccount = payor;
-        this.dialog.open(this.editAccountUserModal, {
+       this.editAccountUserModalRef =  this.dialog.open(this.editAccountUserModal, {
             panelClass: 'modal-dialog',
             width: '1000px',
         });
