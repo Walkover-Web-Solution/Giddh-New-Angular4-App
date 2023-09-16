@@ -250,7 +250,7 @@
                                                     >
                                                         <tr
                                                             (mouseenter)="
-                                                                activeLinkedStockIndex = i; showBorder('linkedStock',linkedStock)
+                                                                activeLinkedStockIndex = i; showBorder(linkedStock)
                                                             "
                                                             (mouseleave)="
                                                                 activeLinkedStockIndex = null; hideBorder('linkedStock',linkedStock)
@@ -488,7 +488,7 @@
                                                     >
                                                         <tr
                                                              (mouseenter)="
-                                                                activeOtherExpenseIndex = i; showBorder('expense',expense)
+                                                                activeOtherExpenseIndex = i; showBorder(expense)
                                                             "
                                                             (mouseleave)="
                                                                 activeOtherExpenseIndex = null; hideBorder('expense',expense)
