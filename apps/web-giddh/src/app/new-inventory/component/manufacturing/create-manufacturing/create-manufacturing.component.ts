@@ -152,7 +152,7 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
         this.loadAssetsLiabilitiesAccounts();
         this.initializeOtherExpenseObj();
 
-        this.showBorder('expense', this.manufacturingObject.manufacturingDetails[0].otherExpenses[0]);
+        this.showBorder(this.manufacturingObject.manufacturingDetails[0].otherExpenses[0]);
         this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj: Date[]) => {
             if (dateObj) {
                 try {
@@ -371,7 +371,7 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
                         variant: { name: '', uniqueName: '' }
                     }
                 );
-                this.showBorder('linkedStock',this.manufacturingObject.manufacturingDetails[0].linkedStocks[0]);
+                this.showBorder(this.manufacturingObject.manufacturingDetails[0].linkedStocks[0]);
             }
 
             if (!this.manufactureUniqueName) {
@@ -789,16 +789,9 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
      * @param {*} linkedStock
      * @memberof CreateManufacturingComponent
      */
-    public showBorder(type: any, dataType: any): void {
-        if (type === 'linkedStock') {
-            if (!this.isCompany) {
-                dataType.cssClass = 'form-control mat-field-border';
-            }
-        }
-        if (type === 'expense') {
-            if (!this.isCompany) {
-                dataType.cssClass = 'form-control mat-field-border';
-            }
+    public showBorder(dataType: any): void {
+        if (!this.isCompany) {
+            dataType.cssClass = 'form-control mat-field-border';
         }
     }
 
