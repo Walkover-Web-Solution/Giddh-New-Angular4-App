@@ -2403,10 +2403,10 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             delete obj.account.billingDetails.stateName;
             delete obj.account.billingDetails.stateCode;
 
-            if (!obj.account.billingDetails.county.code) {
+            if (!obj.account.billingDetails.county?.code) {
                 obj.account.billingDetails.county = null;
             }
-            if (!obj.account.shippingDetails.county.code) {
+            if (!obj.account.shippingDetails.county?.code) {
                 obj.account.shippingDetails.county = null;
             }
         }
@@ -2430,20 +2430,20 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             delete obj.company.billingDetails.stateName;
             delete obj.company.billingDetails.stateCode;
 
-            if (!obj.company.billingDetails.county.code) {
+            if (!obj.company.billingDetails.county?.code) {
                 obj.company.billingDetails.county = null;
             }
-            if (!obj.company.shippingDetails.county.code) {
+            if (!obj.company.shippingDetails.county?.code) {
                 obj.company.shippingDetails.county = null;
             }
         } else {
             delete obj.company.billingDetails.county;
             delete obj.company.shippingDetails.county;
 
-            if (!obj.company.billingDetails.state.code) {
+            if (!obj.company.billingDetails.state?.code) {
                 obj.company.billingDetails.state = null;
             }
-            if (!obj.company.shippingDetails.state.code) {
+            if (!obj.company.shippingDetails.state?.code) {
                 obj.company.shippingDetails.state = null;
             }
         }
