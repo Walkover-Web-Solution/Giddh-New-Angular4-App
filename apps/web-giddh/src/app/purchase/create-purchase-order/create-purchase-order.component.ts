@@ -2297,7 +2297,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             subVoucher: (this.isRcmEntry) ? SubVoucher.ReverseCharge : ''
         };
 
-        let updatedData = this.updateData(postRequestObject, data);
+        let updatedData = this.updateData(cloneDeep(postRequestObject), data);
 
         let getRequestObject = {
             companyUniqueName: this.selectedCompany?.uniqueName,
@@ -2402,18 +2402,15 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             delete obj.account.billingDetails.state;
             delete obj.account.billingDetails.stateName;
             delete obj.account.billingDetails.stateCode;
-            delete obj.company.shippingDetails.state;
-            delete obj.company.shippingDetails.stateName;
-            delete obj.company.shippingDetails.stateCode;
-            delete obj.company.billingDetails.state;
-            delete obj.company.billingDetails.stateName;
-            delete obj.company.billingDetails.stateCode;
-            obj.account.billingDetails.county.code = obj.account.billingDetails?.county?.code;
-            obj.account.billingDetails.county.name = obj.account.billingDetails?.county?.name;
-            obj.account.shippingDetails.county.code = obj.account.shippingDetails?.county?.code;
-            obj.account.shippingDetails.county.name = obj.account.shippingDetails?.county?.name;
+
+            if (!obj.account.billingDetails.county.code) {
+                obj.account.billingDetails.county = null;
+            }
+            if (!obj.account.shippingDetails.county.code) {
+                obj.account.shippingDetails.county = null;
+            }
         }
-        
+
         if (this.statesSource.length) {
             obj.account.billingDetails.stateCode = obj.account.billingDetails.state.code;
             obj.account.billingDetails.stateName = obj.account.billingDetails.state.name;
@@ -2423,6 +2420,32 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             obj.account.shippingDetails.county = null;
             obj.company.billingDetails.county = null;
             obj.company.shippingDetails.county = null;
+        }
+
+        if (this.companyRegionsSource?.length) {
+            delete obj.company.shippingDetails.state;
+            delete obj.company.shippingDetails.stateName;
+            delete obj.company.shippingDetails.stateCode;
+            delete obj.company.billingDetails.state;
+            delete obj.company.billingDetails.stateName;
+            delete obj.company.billingDetails.stateCode;
+
+            if (!obj.company.billingDetails.county.code) {
+                obj.company.billingDetails.county = null;
+            }
+            if (!obj.company.shippingDetails.county.code) {
+                obj.company.shippingDetails.county = null;
+            }
+        } else {
+            delete obj.company.billingDetails.county;
+            delete obj.company.shippingDetails.county;
+
+            if (!obj.company.billingDetails.state.code) {
+                obj.company.billingDetails.state = null;
+            }
+            if (!obj.company.shippingDetails.state.code) {
+                obj.company.shippingDetails.state = null;
+            }
         }
 
         obj.account.billingDetails.countryName = this.vendorCountry;
