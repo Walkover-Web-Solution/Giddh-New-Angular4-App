@@ -22,6 +22,7 @@ import { GeneralService } from '../../services/general.service';
 import { LocaleService } from '../../services/locale.service';
 import { AppState } from '../../store';
 import { AllItem, AllItems } from '../helpers/allItems';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
     selector: 'primary-sidebar',
@@ -57,8 +58,6 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     public currentOrganizationType: OrganizationType;
     /** Stores the details of the current branch */
     public currentBranch: any;
-    /** True if CMD+K modal is opened */
-    public navigationModalVisible: boolean = false;
     /** Subject to unsubscribe from listeners */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Active company details for indexedDB */
@@ -111,6 +110,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     public isActiveRoute: string;
     /** True if account has unsaved changes */
     public hasUnsavedChanges: boolean = false;
+    public commandkDialogRef: MatDialogRef<any>;
 
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
@@ -124,7 +124,8 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
         private dbService: DbService,
         private groupWithAction: GroupWithAccountsAction,
         private localeService: LocaleService,
-        private salesAction: SalesActions
+        private salesAction: SalesActions,
+        public dialog: MatDialog,
     ) {
         this.activeAccount$ = this.store.pipe(select(appStore => appStore.ledger.account), takeUntil(this.destroyed$));
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
@@ -175,11 +176,17 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     // CMD + G functionality
     @HostListener('document:keydown', ['$event'])
     public handleKeyboardUpEvent(event: KeyboardEvent) {
-        if ((event.metaKey || event.ctrlKey) && (event.which === 75 || event.which === 71) && !this.navigationModalVisible) {
+        if ((event.metaKey || event.ctrlKey) && (event.which === 75 || event.which === 71)) {
             event.preventDefault();
             event.stopPropagation();
             if (this.companyList?.length > 0) {
-                this.showNavigationModal();
+                if(this.commandkDialogRef && this.dialog.getDialogById(this.commandkDialogRef.id)){
+                    this.commandkDialogRef.close()
+                }
+                this.commandkDialogRef = this.dialog.open(this.navigationModal, {
+                    width:'630px',
+                    height: '600'
+                });
             }
         }
     }
@@ -358,24 +365,10 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof PrimarySidebarComponent
      */
     public showNavigationModal(): void {
-        this.navigationModalVisible = true;
-        const _combine = combineLatest([
-            this.modalService.onShow,
-            this.modalService.onShown,
-            this.modalService.onHide,
-            this.modalService.onHidden
-        ]).pipe(takeUntil(this.destroyed$)).subscribe(() => this.changeDetection.markForCheck());
-
-        this.subscriptions.push(
-            this.modalService.onHidden.pipe(takeUntil(this.destroyed$)).subscribe((reason: string) => {
-                this.navigationModalVisible = false;
-                this.unsubscribe();
-            })
-        );
-
-        this.subscriptions.push(_combine);
-        let config: ModalOptions = { class: 'universal_modal', show: true, keyboard: true, animated: false };
-        this.modelRef = this.modalService.show(this.navigationModal, config);
+        this.commandkDialogRef = this.dialog.open(this.navigationModal, {
+            width:'630px',
+            height: '600'
+        });
     }
 
     /**
@@ -385,7 +378,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof PrimarySidebarComponent
      */
     public handleNewTeamCreationEmitter(e: any): void {
-        this.modelRef.hide();
+        this.modelRef?.hide();
         if (e[0] === "group") {
             if (this.accountAsideMenuState === "in") {
                 this.toggleAccountAsidePane();

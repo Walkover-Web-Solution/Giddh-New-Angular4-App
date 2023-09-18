@@ -21,6 +21,7 @@ $custom-typography: mat-typography-config(
 @import "../css/global/vat-report.scss";
 @import "../css/global/header.scss";
 @import "../css/global/setting-integration.scss";
+@import "../css/global/help-support.scss";
 @import "../css/global/sales-register-expand.scss";
 @import "../css/global/input-dropdown-field.scss";
 @import "../css/global/voucher.scss";
@@ -914,7 +915,7 @@ aside-create-group {
     bottom: 0;
     width: 100%;
     max-width: 760px;
-    z-index: 99999;
+    z-index: 9999;
 
     .container-fluid {
         padding-left: 0;
@@ -8372,12 +8373,6 @@ button.btn.btn-filter {
 .new-branch-list-page {
     .modal-backdrop + .modal {
         z-index: 992 !important;
-    }
-}
-
-.modal-open.cmd-k {
-    .modal-backdrop + .modal {
-        z-index: 999999 !important;
     }
 }
 
