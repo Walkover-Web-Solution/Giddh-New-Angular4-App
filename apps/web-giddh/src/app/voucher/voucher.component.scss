@@ -341,7 +341,7 @@ textarea:focus {
                 padding: 10px 8px 20px;
                 white-space: nowrap;
                 position: relative;
-                background: rgba(0,0,0,0);
+                background: var(--color-transparent-background);
 
                 &:nth-child(2) {
                     white-space: normal;
