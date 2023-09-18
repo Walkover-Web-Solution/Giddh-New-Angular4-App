@@ -657,6 +657,7 @@ body {
 
 .head-block .vertical-center {
     font-size: var(--font-size-24);
+    display: block;
 }
 
 .ledger-account-name {
@@ -1014,6 +1015,8 @@ body {
     float: left;
     width: 100%;
     margin-bottom: 0;
+    border-radius: .25rem 0 0 .25rem !important;
+    border: 1px solid #ced4da !important;
 }
 
 .input-group-addon:last-child {
@@ -1039,6 +1042,10 @@ body {
     width: 1%;
     white-space: nowrap;
     vertical-align: middle;
+}
+.tooltip-inner{
+    background-color: #000 !important;
+    color: #fff !important;
 }
 
 @-webkit-keyframes sk-cubemove {
@@ -1187,6 +1194,10 @@ footer .menu-item a {
 }
 .tab-content > .tab-pane {
     display: block;
+}
+.tab-content{
+    width: unset !important;
+    float: unset !important;
 }
 /* small device */
 

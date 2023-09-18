@@ -105,21 +105,23 @@ button.btn.btn-filter {
 
 .daybook-w-100 {
     width: 100px;
+    min-width: 100px;
 }
 
 .daybook-w-150 {
     width: 150px;
+    min-width: 150px;
 }
 
 .daybook-w-200 {
     width: 200px;
-    white-space: normal !important;
+    min-width: 200px;
     text-transform: capitalize;
 }
 
 .daybook-w-300 {
     width: 300px;
-    white-space: normal !important;
+    min-width: 300px;
 }
 
 /*responsive */
