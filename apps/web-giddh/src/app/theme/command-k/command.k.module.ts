@@ -5,12 +5,19 @@ import { ClickOutsideModule } from 'ng-click-outside';
 import { CommandKComponent, ScrollComponent } from '.';
 import { CommandKService } from '../../services/commandk.service';
 import { TranslateDirectiveModule } from '../translate/translate.directive.module';
+import { MatListModule } from '@angular/material/list';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
     imports: [
         CommonModule,
         FormsModule,
         ClickOutsideModule,
+        TranslateDirectiveModule,
+        MatListModule,
+        MatDialogModule,
+        MatButtonModule,
         TranslateDirectiveModule
     ],
     declarations: [

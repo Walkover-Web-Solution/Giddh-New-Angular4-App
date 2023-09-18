@@ -2,6 +2,8 @@ import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatButtonModule } from "@angular/material/button";
+import { MatDialogModule } from "@angular/material/dialog";
+import { MatListModule } from "@angular/material/list";
 import { MatMenuModule } from "@angular/material/menu";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatTreeModule } from "@angular/material/tree";
@@ -47,8 +49,10 @@ import { ScrollingModule } from "@angular/cdk/scrolling";
         }),
         ConfirmModalModule,
         RouterModule,
-        MatMenuModule,
+        MatDialogModule,
+        MatListModule,
         MatButtonModule,
+        MatMenuModule,
         MatTreeModule
     ],
     exports: [
