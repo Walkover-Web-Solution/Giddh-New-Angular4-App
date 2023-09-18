@@ -5572,6 +5572,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         voucherClassConversion.accountDetails.email = result.account.email;
         voucherClassConversion.accountDetails.uniqueName = result.account?.uniqueName;
 
+        voucherClassConversion.accountDetails.currencySymbol = result.account?.currency?.symbol;
+        voucherClassConversion.accountDetails.currencyCode = result.account?.currency?.code;
+
         //code for voucher details
         voucherDetails.voucherDate = result?.date ? result?.date : '';
         if (this.voucherApiVersion === 2) {
