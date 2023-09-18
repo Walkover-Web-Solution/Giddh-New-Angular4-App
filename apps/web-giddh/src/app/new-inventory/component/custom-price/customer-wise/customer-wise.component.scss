@@ -79,3 +79,34 @@
         }
     }
 }
+
+/*---- responsive ----*/
+@media screen and (max-width: 1440px) {
+    .custom-grid-wrapper {
+        .mat-list-wrap {
+            .inventory-sub-sideabar {
+                .item-list {
+                    width: 20%;
+                }
+                .customer-right-side {
+                    width: 80%;
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 1280px) {
+    .custom-grid-wrapper {
+        .mat-list-wrap {
+            .inventory-sub-sideabar {
+                .item-list {
+                    width: 25%;
+                }
+                .customer-right-side {
+                    width: 75%;
+                }
+            }
+        }
+    }
+}

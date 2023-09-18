@@ -22,7 +22,7 @@
                                     </span>
                                 </div>
                                 <div class="mr-b1">
-                                    <button mat-stroked-button color="primary" (click)="openAddCustomer()">{{ localeData?.add }}</button>
+                                    <button mat-stroked-button color="primary" (click)="openAddCustomer()">{{ localeData?.add_customer_group }}</button>
                                 </div>
                             </div>
                             <mat-list-item>
@@ -68,7 +68,7 @@
                         </mat-list>
                         <div class="customer-right-side">
                             <div class="right-heading">
-                                <button mat-stroked-button color="primary" (click)="openAddInventory()"> {{ localeData?.add_inventory }} </button>
+                                <button mat-stroked-button color="primary" (click)="openSearchModal()"> {{ localeData?.add_inventory }} </button>
                                 <div class="search-list position-relative">
                                     <text-field
                                         type="text"
@@ -265,7 +265,7 @@
 
 
     <!--CMD + G modal  -->
-    <ng-template #addInventory>
+    <ng-template #addSearchModal>
         <command-k
             (newTeamCreationEmitter)="handleNewTeamCreationEmitter($event)"
             (groupEmitter)="makeGroupEntryInDB($event)"

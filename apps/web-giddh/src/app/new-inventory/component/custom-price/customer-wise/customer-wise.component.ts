@@ -27,7 +27,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
     /** Instance of Mat Dialog for Add Customer */
     @ViewChild("addCustomer") public addCustomer: TemplateRef<any>;
     /** Instance of Mat Dialog for Add Inventory */
-    @ViewChild("addInventory") public addInventory: TemplateRef<any>;
+    @ViewChild("addSearchModal") public addSearchModal: TemplateRef<any>;
     /** Instance of Mat Dialog for Add Variant */
     @ViewChild("addVariant") public addVariant: TemplateRef<any>;
     /*--- table ---*/
@@ -75,21 +75,9 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
      *
      * @memberof CustomerWiseComponent
      */
-    public openAddInventory(): void {
-        this.dialog.open(this.addInventory, {
-            width: '500px',
-            height: '200px'
-        });
-    }
-    
-    /**
-     * Open Add customer modal
-     *
-     * @memberof CustomerWiseComponent
-     */
-    public openAddVariant(): void {
-        this.commandkDialogRef = this.dialog.open(this.addInventory, {
-            width:'630px'
+    public openSearchModal(): void {
+        this.dialog.open(this.addSearchModal, {
+            width: '650px'
         });
     }
     
