@@ -227,7 +227,7 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
                                 this.universalFrom = dayjs(universalDate[0]);
                                 this.universalTo = dayjs(universalDate[1]);
                                 if (universalDate && !this.todaySelected) {
-                                    this.selectDate(this.universalFrom, 'dateOfSupply')
+                                    this.selectDate(this.universalTo, 'dateOfSupply')
                                     this.detectChanges();
                                 } else {
                                     this.selectDate(this.universalTo, 'dateOfSupply')
@@ -858,6 +858,7 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
         this.assignCurrentCompany();
         this.calculateOverallTotal();
         this.activeIndx = null
+        this.stockUnits[0] = [];
     }
 
     /**
@@ -1456,6 +1457,8 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
      * @memberof CreateBranchTransferComponent
      */
     public selectCompany(event: any, type: any, index: number): void {
+        const productArray = this.branchTransferCreateEditForm.get('products') as UntypedFormArray;
+        const productGroup = productArray?.at(0) as UntypedFormGroup;
         if (!this.isDefaultLoad && type) {
             if (type === "sources") {
                 const sourcesArray = this.branchTransferCreateEditForm.get('sources') as UntypedFormArray;
@@ -1484,7 +1487,10 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
                         });
                     }
                     sourceGroup.get('warehouse.stockDetails.quantity')?.patchValue(event?.value ? 1 : null);
-                    this.assignRateInSourceDestinations();
+                    if (this.transferType === 'senders') {
+                        sourceGroup.get('warehouse.stockDetails.rate')?.patchValue(productGroup?.get('stockDetails.rate').value);
+                        this.calculateRowTotal(sourcesWarehouseFormGroup);
+                    }
                     this.resetSourceWarehouses(index, true);
                 }
             } else {
@@ -1515,7 +1521,10 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
                         });
                     }
                     destinationsFormGroup.get('warehouse.stockDetails.quantity')?.patchValue(event?.value ? 1 : null);
-                    this.assignRateInSourceDestinations();
+                    if (this.transferType === 'senders') {
+                        destinationsFormGroup.get('warehouse.stockDetails.rate')?.patchValue(productGroup?.get('stockDetails.rate').value);
+                        this.calculateRowTotal(destinationsWarehouseFormGroup);
+                    }
                     this.resetDestinationWarehouses(index, true);
                 }
             }
@@ -1832,7 +1841,7 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
      * @memberof CreateBranchTransferComponent
      */
     public closeShowCodeMenu(productFormGroup: any): void {
-        productFormGroup.get('skuCode').setValue('');
+        productFormGroup.get('skuCode').patchValue('');
         this.skuMenuTrigger?.closeMenu();
     }
 
@@ -1842,8 +1851,8 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
      * @memberof CreateBranchTransferComponent
      */
     public closeSacNumber(productFormGroup: any): void {
-        productFormGroup.get('sacNumber').setValue('');
-        productFormGroup.get('hsnNumber').setValue('');
+        productFormGroup.get('sacNumber').patchValue('');
+        productFormGroup.get('hsnNumber').patchValue('');
         this.hsnSacMenuTrigger?.closeMenu();
     }
 

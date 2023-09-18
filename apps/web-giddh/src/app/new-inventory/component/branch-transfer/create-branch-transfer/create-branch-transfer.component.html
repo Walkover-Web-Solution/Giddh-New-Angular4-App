@@ -1250,7 +1250,7 @@
                                                                     [name]="'senderName' + i"
                                                                     [placeholder]="localeData?.select_sender_name"
                                                                     [options]="branches"
-                                                                    (selectedOption)="selectSenderName($event, i)"
+                                                                    (selectedOption)="selectSenderName( $event, i)"
                                                                     [defaultValue]="source.get('name').value"
                                                                     #selectAccount
                                                                 >
@@ -1719,14 +1719,14 @@
                                                                             class="w-100"
                                                                             (click)="saveHsnNumberPopup()"
                                                                         >
-                                                                            Save
+                                                                          {{ commonLocaleData?.app_save }}
                                                                         </button>
                                                                         <button
                                                                             mat-stroked-button
                                                                             class="w-100"
                                                                             (click)="closeSacNumber(product)"
                                                                         >
-                                                                            Cancel
+                                                                         {{ commonLocaleData?.app_cancel }}
                                                                         </button>
                                                                     </div>
                                                                 </div>
