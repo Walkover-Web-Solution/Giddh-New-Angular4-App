@@ -2,5 +2,7 @@
     "add_variant": "+ Add Variant",
     "add_inventory": "+ Add Inventory",
     "price": "Price",
-    "add_customer_group": "+ Add Customer/Group"
+    "add_customer_group": "+ Add Customer/Group",
+    "exclusive": "Exclusive",
+    "inclusive": "Inclusive"
 }

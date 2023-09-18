@@ -2,5 +2,7 @@
     "add_variant": "+ प्रकार जोडा",
     "add_inventory": "+ इन्व्हेंटरी जोडा",
     "price": "किंमत",
-    "add_customer_group": "+ ग्राहक/गट जोडा"
+    "add_customer_group": "+ ग्राहक/गट जोडा",
+    "exclusive": "अनन्य",
+    "inclusive": "समावेशक"
 }
