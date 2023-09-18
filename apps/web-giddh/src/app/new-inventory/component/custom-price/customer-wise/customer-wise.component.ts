@@ -24,12 +24,8 @@ const ELEMENT_DATA: any[] = [
     styleUrls: ["./customer-wise.component.scss"]
 })
 export class CustomerWiseComponent implements OnInit, OnDestroy {
-    /** Instance of Mat Dialog for Add Customer */
-    @ViewChild("addCustomer") public addCustomer: TemplateRef<any>;
     /** Instance of Mat Dialog for Add Inventory */
     @ViewChild("addSearchModal") public addSearchModal: TemplateRef<any>;
-    /** Instance of Mat Dialog for Add Variant */
-    @ViewChild("addVariant") public addVariant: TemplateRef<any>;
     /*--- table ---*/
     displayedColumns: string[] = ['name', 'price', 'radio', 'discount', 'quantity', 'delete'];
     dataSource = ELEMENT_DATA;
@@ -59,19 +55,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Open Add customer modal
-     *
-     * @memberof CustomerWiseComponent
-     */
-    public openAddCustomer(): void {
-        this.dialog.open(this.addCustomer, {
-            width: '500px',
-            height: '200px'
-        });
-    }
-
-    /**
-     * Open Add customer modal
+     * Open Add search modal
      *
      * @memberof CustomerWiseComponent
      */

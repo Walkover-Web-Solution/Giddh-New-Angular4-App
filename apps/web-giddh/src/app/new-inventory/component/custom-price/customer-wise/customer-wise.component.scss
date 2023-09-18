@@ -11,6 +11,18 @@
                 .mat-mdc-list-item {
                     cursor: pointer;
                     height: 32px;
+                    a {
+                        .customer-delete {
+                            display: none;
+                        }
+                    }
+                    &:hover {
+                        a {
+                            .customer-delete {
+                                display: block;
+                            }
+                        }
+                    }
                 }
                 .list-head-gap {
                     padding: 0 16px;

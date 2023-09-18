@@ -41,17 +41,17 @@
                         }
                     }
                     tbody {
-                        tr{
+                        tr {
                             td {
-                                &.delete-width{
+                                &.delete-width {
                                     width: 5%;
                                 }
                                 .delete-show {
                                     display: none;
                                 }
                             }
-                            &:hover{
-                                td{
+                            &:hover {
+                                td {
                                     .delete-show {
                                         display: block;
                                     }

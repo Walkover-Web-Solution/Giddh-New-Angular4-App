@@ -28,49 +28,49 @@
                             <mat-list-item>
                                 <a href="javascript:;">
                                     <span>Customer 1</span>
-                                    <span><i class="icon-trash"></i></span>
+                                    <span class="customer-delete"><i class="icon-trash"></i></span>
                                 </a>
                             </mat-list-item>
                             <mat-list-item>
                                 <a href="javascript:;">
                                    <span>Customer 2</span>
-                                   <span><i class="icon-trash"></i></span>
+                                   <span class="customer-delete"><i class="icon-trash"></i></span>
                                 </a>
                             </mat-list-item>
                             <mat-list-item>
                                 <a href="javascript:;">
                                     <span>Customer 3</span>
-                                    <span><i class="icon-trash"></i></span>
+                                    <span class="customer-delete"><i class="icon-trash"></i></span>
                                 </a>
                             </mat-list-item>
                             <mat-list-item>
                                 <a href="javascript:;">
                                    <span>Customer 4</span>
-                                    <span><i class="icon-trash"></i></span>
+                                    <span class="customer-delete"><i class="icon-trash"></i></span>
                                 </a>
                             </mat-list-item>
                             <mat-list-item>
                                 <a href="javascript:;">
                                     <span>Group 1</span>
-                                    <span><i class="icon-trash"></i></span>
+                                    <span class="customer-delete"><i class="icon-trash"></i></span>
                                 </a>
                             </mat-list-item>
                             <mat-list-item>
                                 <a href="javascript:;">
                                     <span>Group 2</span>
-                                    <span><i class="icon-trash"></i></span>
+                                    <span class="customer-delete"><i class="icon-trash"></i></span>
                                 </a>
                             </mat-list-item>
                             <mat-list-item>
                                 <a href="javascript:;">
                                     <span>Group 3</span>
-                                    <span><i class="icon-trash"></i></span>
+                                    <span class="customer-delete"><i class="icon-trash"></i></span>
                                 </a>
                             </mat-list-item>
                             <mat-list-item>
                                 <a href="javascript:;">
                                     <span>Group 4</span>
-                                    <span><i class="icon-trash"></i></span>
+                                    <span class="customer-delete"><i class="icon-trash"></i></span>
                                 </a>
                             </mat-list-item>
                         </mat-list>
@@ -96,7 +96,7 @@
                                     <div class="table-responsive mr-t05 mr-b15">
                                         <table mat-table [dataSource]="dataSource" multiTemplateDataRows>
                                             <ng-container matColumnDef="name">
-                                                <td mat-cell *matCellDef="let element" class="name-width">
+                                                <td mat-cell *matCellDef="let element">
                                                     {{element.name}}
                                                 </td>
                                                 <td mat-footer-cell *matFooterCellDef>
@@ -114,7 +114,7 @@
                                                 </td>
                                                 <td mat-footer-cell *matFooterCellDef> </td>
                                             </ng-container>
-                                            <ng-container matColumnDef="radio" class="radio-width">
+                                            <ng-container matColumnDef="radio">
                                                 <td mat-cell *matCellDef="let element" class="child-td-nam">
                                                     <div class="toggle-wrap">
                                                         <mat-slide-toggle
@@ -133,7 +133,7 @@
                                                 <td mat-footer-cell *matFooterCellDef> </td>
                                             </ng-container>
                                             <ng-container matColumnDef="discount">
-                                                <td mat-cell *matCellDef="let element" class="discount-width"> 
+                                                <td mat-cell *matCellDef="let element"> 
                                                     <input-field
                                                         [placeholder]="'00'"
                                                         [label]="commonLocaleData?.app_discount"
@@ -144,7 +144,7 @@
                                                 <td mat-footer-cell *matFooterCellDef> </td>
                                             </ng-container>
                                             <ng-container matColumnDef="quantity">
-                                                <td mat-cell *matCellDef="let element" class="quantity-width">
+                                                <td mat-cell *matCellDef="let element">
                                                     <input-field
                                                         [placeholder]="'00'"
                                                         [label]="commonLocaleData?.app_defaultquantity"
@@ -236,10 +236,12 @@
                                                 <td mat-footer-cell *matFooterCellDef> </td>
                                             </ng-container>
                                             <ng-container matColumnDef="delete">
-                                                <td mat-cell *matCellDef="let element">
-                                                    <button mat-stroked-button class="delete-icon">
-                                                        <i class="icon-trash"></i>
-                                                    </button>
+                                                <td mat-cell *matCellDef="let element" class="delete-width">
+                                                    <div class="delete-show">
+                                                        <button mat-stroked-button class="delete-icon">
+                                                            <i class="icon-trash"></i>
+                                                        </button>
+                                                    </div>
                                                 </td>
                                                 <td mat-footer-cell *matFooterCellDef> </td>
                                             </ng-container>
