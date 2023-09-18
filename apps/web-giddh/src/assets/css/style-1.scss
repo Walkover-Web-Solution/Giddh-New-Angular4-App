@@ -2869,10 +2869,13 @@ td.mat-footer-cell:first-of-type {
     white-space: normal !important;
     word-break: inherit;
 }
-td.mat-mdc-cell:first-of-type {
-    word-wrap: anywhere;
+td{
+    &.mat-mdc-cell{
+        &:first-of-type {
+            word-wrap: anywhere;
+        }
+    }
 }
-td
 .manufacturing-table {
     th.mat-mdc-header-cell:first-of-type,
     td.mat-mdc-cell:first-of-type,
