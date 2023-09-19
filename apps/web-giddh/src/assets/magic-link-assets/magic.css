@@ -16,6 +16,9 @@ body{
     --font-size-24 : 24px;
     --font-size-32 : 32px;
     --font-size-48 : 48px;
+
+    --input-field-border-color: #d9d9d9;
+    --white-color: #fff;
 }
 
 html,
@@ -389,7 +392,7 @@ body {
 }
 
 .bdr {
-    border: 1px solid #d9d9d9;
+    border: 1px solid var(--input-field-border-color);
 }
 
 .border-none {
@@ -397,19 +400,19 @@ body {
 }
 
 .bd-rt {
-    border-top: 1px solid #d9d9d9;
+    border-top: 1px solid var(--input-field-border-color);
 }
 
 .bd-rb {
-    border-bottom: 1px solid #d9d9d9;
+    border-bottom: 1px solid var(--input-field-border-color);
 }
 
 .bd-rl {
-    border-left: 1px solid #d9d9d9 !important;
+    border-left: 1px solid var(--input-field-border-color) !important;
 }
 
 .bd-rr {
-    border-right: 1px solid #d9d9d9 !important;
+    border-right: 1px solid var(--input-field-border-color) !important;
 }
 
 .bdrR0 {
@@ -429,7 +432,7 @@ body {
 }
 
 .white-color {
-    color: #fff;
+    color:var(--white-color);
 }
 
 .gryClr {
@@ -442,7 +445,7 @@ body {
 }
 
 .white-bg {
-    background: #fff;
+    background:var(--white-color);
 }
 
 .transparent-bg {
@@ -576,7 +579,7 @@ body {
 }
 
 body {
-    background: #fff !important;
+    background:var(--white-color) !important;
 }
 #magicLink {
     font-size: var(--font-size-15);
@@ -589,7 +592,7 @@ body {
 #demo {
     padding-top: 25.833px;
     font-size: var(--font-size-24);
-    color: #fff;
+    color:var(--white-color);
     font-weight: regular;
 }
 
@@ -604,7 +607,7 @@ body {
 }
 
 .text-white {
-    color: #fff;
+    color:var(--white-color);
 }
 
 .nav-tabs > li > a {
@@ -616,11 +619,11 @@ body {
 }
 
 .gray-bg {
-    background: #d9d9d9;
+    background: var(--input-field-border-color);
 }
 
 .white-bg {
-    background: #fff;
+    background:var(--white-color);
 }
 
 .wid-50 {
@@ -693,7 +696,7 @@ body {
 }
 
 /*#transaction_table table th[class*="col-"]:last-child {
-    border-right: 1px solid #d9d9d9 !important;
+    border-right: 1px solid var(--input-field-border-color) !important;
 }*/
 
 #transaction_table table td[class*="col-"],
@@ -704,7 +707,7 @@ table th[class*="col-"] {
 .compound-entry td,
 .compound-entry td .form-control {
     background: #fddfa4 !important;
-    border-left: 1px solid #d9d9d9;
+    border-left: 1px solid var(--input-field-border-color);
 }
 
 .nav.nav-tabs {
@@ -720,7 +723,7 @@ table th[class*="col-"] {
 .nav-tabs > li > a.active:focus,
 .nav-tabs > li > a.active:hover {
     background-color: #f26122;
-    color: #fff !important;
+    color:var(--white-color) !important;
 }
 
 .table-bordered {
@@ -759,7 +762,7 @@ table th[class*="col-"] {
 }
 
 .ledger-footer-1.float-right tbody td {
-    border-right: 1px solid #d9d9d9;
+    border-right: 1px solid var(--input-field-border-color);
 }
 
 .ylwBg {
@@ -768,7 +771,7 @@ table th[class*="col-"] {
 
 .ledger-stat {
     margin-bottom: 0;
-    background-color: #fff;
+    background-color:var(--white-color);
     margin-top: 30px;
     padding: 20px 0;
 }
@@ -787,7 +790,7 @@ table th[class*="col-"] {
 
 .sub_footer {
     background: #f26122;
-    color: #fff;
+    color:var(--white-color);
 }
 
 /*footer style start*/
@@ -801,7 +804,7 @@ table th[class*="col-"] {
     background-color: #f26122;
     padding: 60px 0;
     font-weight: 400;
-    color: #fff;
+    color:var(--white-color);
     /* letter-spacing: 1px; */
     /* font-family: 'Arvo', serif; */
 }
@@ -809,7 +812,7 @@ table th[class*="col-"] {
 .header-line {
     font-size: var(--font-size-32);
     /* font-family: 'Arvo', serif; */
-    color: white;
+    color: var(--white-color);
 }
 
 #contact p {
@@ -819,7 +822,7 @@ table th[class*="col-"] {
 }
 
 #contact label {
-    color: white;
+    color: var(--white-color);
     font-size: var(--font-size-16);
     font-weight: 400;
 }
@@ -925,7 +928,7 @@ h4 {
 
 #contact a:hover,
 #contact a:focus {
-    color: #fff;
+    color:var(--white-color);
 }
 
 /* Chrome/Opera/Safari */
@@ -961,7 +964,7 @@ h4 {
 /* sadik */
 body {
     height: 100vh;
-    background: #fff;
+    background:var(--white-color);
 }
 
 .bounce2 {
@@ -1019,7 +1022,7 @@ body {
     width: 100%;
     margin-bottom: 0;
     border-radius: .25rem 0 0 .25rem !important;
-    border: 1px solid #ced4da !important;
+    border: 1px solid var(--input-field-border-color) !important;
 }
 
 .input-group-addon:last-child {
@@ -1036,7 +1039,7 @@ body {
     color: #555;
     text-align: center;
     background-color: #eee;
-    border: 1px solid #d9d9d9;
+    border: 1px solid var(--input-field-border-color);
     border-radius: 4px;
 }
 
@@ -1048,7 +1051,7 @@ body {
 }
 .tooltip-inner{
     background-color: #000 !important;
-    color: #fff !important;
+    color:var(--white-color) !important;
 }
 
 @-webkit-keyframes sk-cubemove {
@@ -1152,7 +1155,7 @@ footer .menu-item a {
     width: 100%;
     padding: 10px 22px;
     margin-bottom: 5px;
-    border: 1px solid #d9d9d9;
+    border: 1px solid var(--input-field-border-color);
     border-radius: 5px;
     font-size: var(--font-size-15);
     box-shadow: none;
@@ -1215,7 +1218,7 @@ footer .menu-item a {
         display: none;
     }
     #web-bg {
-        background-color: #fff;
+        background-color:var(--white-color);
     }
     :host ::ng-deep footer > div > a {
         display: block;
@@ -1284,7 +1287,7 @@ footer .menu-item a {
         height: calc(100% - 140px);
         position: absolute;
         width: 0;
-        border-left: 1px solid #d9d9d9;
+        border-left: 1px solid var(--input-field-border-color);
         top: 42px;
         bottom: 0;
         z-index: 9;
@@ -1342,21 +1345,21 @@ footer .menu-item a {
 }
 
 .app_download h3 {
-    color: #fff;
+    color:var(--white-color);
 }
 
 .app_download li {
     display: inline-block;
     list-style: none;
     float: left;
-    color: #fff;
+    color:var(--white-color);
     margin: 0 4px;
 }
 
 .app_download li a {
     border: 1px solid #cc3f1c;
     font-size: var(--font-size-16);
-    color: #fff;
+    color:var(--white-color);
     padding: 5px 9px;
     border-radius: 2px;
     background: #cc3f1c;
@@ -1369,7 +1372,7 @@ footer .menu-item a {
 }
 
 tbody td {
-    border-left: 1px solid #d9d9d9;
+    border-left: 1px solid var(--input-field-border-color);
 }
 thead tr:first-child th {
     border-left: 0 !important;
@@ -1379,7 +1382,7 @@ thead tr:first-child th {
     border-left: 0;
 }
 div#transaction_table {
-    background-color: #fff;
+    background-color:var(--white-color);
     position: relative;
 }
 .ledger-footer-1.leftfooter .total-col td {
