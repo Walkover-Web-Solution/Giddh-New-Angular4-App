@@ -2185,8 +2185,16 @@ perfect-scrollbar.ps-show-active > .ps.ps--active-y > .ps-overlay:not(.ps-at-bot
 
     text-transform: capitalize;
 }
-.basic tbody tr:hover td {
-    background: var(--color-table-row-hover-primary-background);
+.basic {
+    tbody {
+        tr {
+            &:hover {
+                td {
+                    background: var(--color-table-row-hover-primary-background) !important;
+                }
+            }
+        }
+    }
 }
 
 body.fixed {
@@ -2840,6 +2848,13 @@ td.mat-footer-cell:first-of-type {
     border-left: none;
     white-space: normal !important;
     word-break: inherit;
+}
+td{
+    &.mat-mdc-cell{
+        &:first-of-type {
+            word-wrap: anywhere;
+        }
+    }
 }
 .manufacturing-table {
     th.mat-mdc-header-cell:first-of-type,
