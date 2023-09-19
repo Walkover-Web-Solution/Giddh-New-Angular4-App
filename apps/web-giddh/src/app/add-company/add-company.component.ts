@@ -469,7 +469,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
             name: ['', Validators.required],
             country: ['', Validators.required],
             currency: ['', Validators.required],
-            mobile: ['', Validators.required],
+            mobile: [''],
             mobileOtp: ['']
         });
 
@@ -846,7 +846,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      */
     public nextStepForm(): void {
         this.isFormSubmitted = false;
-        if (this.firstStepForm.invalid || this.isMobileNumberInvalid || (this.showMobileField && !this.isMobileNumberVerified)) {
+        if (this.firstStepForm.invalid || (this.showMobileField && !this.isMobileNumberVerified)) {
             this.isFormSubmitted = true;
             this.selectedStep = 0;
             return;
