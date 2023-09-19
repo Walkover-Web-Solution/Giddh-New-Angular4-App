@@ -78,7 +78,7 @@
                                         (isFormSubmitted && !firstStepForm.get('mobile')?.value) ||
                                         isMobileNumberInvalid
                                     "
-                                    [readonly]="isMobileNumberVerified"
+                                    [readonly]="isMobileNumberVerified || showOtpField"
                                 >
                                 </input-field>
                                 <span id="init-contact-proforma-valid-msg" class="d-none"></span>
@@ -86,7 +86,7 @@
                             </div>
                             <div class="col-lg-6 mobile-no-action-buttons"> 
                                
-                                    <button mat-stroked-button (click)="reVerifyNumber()" *ngIf="isMobileNumberVerified">Change</button>
+                                    <button mat-stroked-button (click)="reVerifyNumber()" *ngIf="isMobileNumberVerified || showOtpField">Change</button>
     
                                     <button mat-stroked-button (click)="sendOtp()" [disabled]="sendOtpInProgress" *ngIf="!showOtpField && !isMobileNumberVerified">
                                         <mat-progress-spinner
