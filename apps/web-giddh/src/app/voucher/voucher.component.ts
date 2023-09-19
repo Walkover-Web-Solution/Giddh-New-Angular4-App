@@ -722,6 +722,11 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public regionsSource: IOption[] = [];
     /* This will hold company's country regions */
     public companyRegionsSource: IOption[] = [];
+    /** This will hold barcode uniquename*/
+    public getBarcodeUniqueName: string = "";
+    public startTime: number = 0;
+    public endTime: number = 0;
+    public totalTime: number = 0;
 
 
     /**
@@ -8778,9 +8783,42 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
     // CMD + G functionality
     @HostListener('document:keydown', ['$event'])
-    public handleKeyboardUpEvent(event: KeyboardEvent) {
+    public handleKeyboardDownEvent(event: KeyboardEvent) {
         if ((event.metaKey || event.ctrlKey) && (event.which === 75 || event.which === 71)) {
             this.isCreatingNewAccount = false;
+        }
+        this.startTime = event.timeStamp;
+    }
+
+    // CMD + G functionality
+    @HostListener('document:keyup', ['$event'])
+    public handleKeyboardUpEvent(event: KeyboardEvent) {
+        let uniqueName = this.detectBarcode(event);
+        if (uniqueName && this.startTime) {
+            this.endTime = event.timeStamp;
+            const scanTime = this.endTime - this.startTime;
+            console.log(scanTime, uniqueName);
+            this.totalTime += scanTime;
+            if (scanTime < 5.20000000298023) {
+                console.log('Barcode scanned')
+            } else {
+                console.log('Typing Scanned');
+            }
+            this.startTime = null;
+            this.getBarcodeUniqueName = '';
+        }
+    }
+    public detectBarcode(event: KeyboardEvent): string | null {
+        const key = event.key;
+        if (key === 'Enter') {
+            if (this.getBarcodeUniqueName.length) {
+                return this.getBarcodeUniqueName;
+            } else {
+                return null;
+            }
+        } else {
+            this.getBarcodeUniqueName += key;
+            return null;
         }
     }
 
