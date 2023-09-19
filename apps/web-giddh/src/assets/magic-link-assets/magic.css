@@ -19,6 +19,7 @@ body{
 
     --input-field-border-color: #d9d9d9;
     --white-color: #fff;
+    --black-color: #000;
 }
 
 html,
@@ -603,7 +604,7 @@ body {
 }
 
 .nav-tabs > li > a {
-    color: #000;
+    color: var(--black-color);
 }
 
 .light-gray-bg {
@@ -1047,7 +1048,7 @@ body {
     vertical-align: middle;
 }
 .tooltip-inner{
-    background-color: #000 !important;
+    background-color: var(--black-color) !important;
     color:var(--white-color) !important;
 }
 
