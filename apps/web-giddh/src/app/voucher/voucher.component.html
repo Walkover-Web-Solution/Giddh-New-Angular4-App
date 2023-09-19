@@ -4206,7 +4206,7 @@
             [isUpdateMode]="isUpdateMode"
             [depositAmount]="depositAmount"
             [invoiceFormDetails]="invFormData"
-            [isVoucherModule]="true && voucherApiVersion !== 2"
+            [isVoucherModule]="voucherApiVersion !== 2"
             [advanceReceiptAdjustmentUpdatedData]="advanceReceiptAdjustmentData"
             (closeModelEvent)="closeAdvanceReceiptModal()"
             (submitClicked)="getAdvanceReceiptAdjustData($event)"
