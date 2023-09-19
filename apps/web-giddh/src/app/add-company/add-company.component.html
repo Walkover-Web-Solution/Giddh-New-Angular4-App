@@ -94,7 +94,7 @@
                                         mode="indeterminate"
                                         value="50">
                                     </mat-progress-spinner>
-                                    <span *ngIf="!sendOtpInProgress">Verify</span>
+                                    <span *ngIf="!sendOtpInProgress">Send OTP</span>
                                 </button>
 
                                 <ng-container *ngIf="showOtpField">
@@ -107,6 +107,16 @@
                                         formControlName="mobileOtp"
                                     >
                                     </input-field>
+                                    <button mat-stroked-button (click)="verifyOtp()" [disabled]="verifyOtpInProgress">
+                                        <mat-progress-spinner
+                                            *ngIf="verifyOtpInProgress"
+                                            diameter="20"
+                                            color="primary"
+                                            mode="indeterminate"
+                                            value="50">
+                                        </mat-progress-spinner>
+                                        <span *ngIf="!verifyOtpInProgress">Verify</span>
+                                    </button>
                                     <button mat-stroked-button (click)="resendOtp()" [disabled]="resendOtpInProgress">
                                         <mat-progress-spinner
                                             *ngIf="resendOtpInProgress"
@@ -116,16 +126,6 @@
                                             value="50">
                                         </mat-progress-spinner>
                                         <span *ngIf="!resendOtpInProgress">Resend Otp</span>
-                                    </button>
-                                    <button mat-stroked-button (click)="verifyOtp()" [disabled]="verifyOtpInProgress">
-                                        <mat-progress-spinner
-                                            *ngIf="verifyOtpInProgress"
-                                            diameter="20"
-                                            color="primary"
-                                            mode="indeterminate"
-                                            value="50">
-                                        </mat-progress-spinner>
-                                        <span *ngIf="!verifyOtpInProgress">Submit</span>
                                     </button>
                                 </ng-container>
                             </div>
