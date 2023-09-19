@@ -2111,18 +2111,6 @@ bs-datepicker-container {
 .modal-dialog.universal_modal .modal-body {
     padding: 0;
 }
-.modal-dialog.universal_modal .shortcuts {
-    background: var(--color-popup-footer-background);
-    border-top: none;
-    margin: 0;
-    padding: 12px 16px 12px 20px;
-    color: var(--color-abbey);
-    font-size: var(--font-size-12);
-    border-bottom-left-radius: 8px;
-    border-bottom-right-radius: 8px;
-    text-align: right;
-}
-
 perfect-scrollbar.ps-show-active > .ps.ps--active-y > .ps-overlay:not(.ps-at-top) .ps-indicator-top,
 perfect-scrollbar.ps-show-active > .ps.ps--active-y > .ps-overlay:not(.ps-at-bottom) .ps-indicator-bottom {
     opacity: 0;
