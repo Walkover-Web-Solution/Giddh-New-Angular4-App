@@ -21,6 +21,7 @@ import { AsideHelpSupportComponent } from "./components/aside-help-support/aside
 import { AsideSettingComponent } from "./components/aside-setting/aside-setting.component";
 import { HeaderComponent } from "./header.component";
 import { ScrollingModule } from "@angular/cdk/scrolling";
+import { MatMenuModule } from "@angular/material/menu";
 
 @NgModule({
     declarations: [
@@ -52,6 +53,7 @@ import { ScrollingModule } from "@angular/cdk/scrolling";
         MatListModule,
         MatButtonModule,
         MatTreeModule,
+        MatMenuModule,
         MatDialogModule,
         MatListModule
     ],
