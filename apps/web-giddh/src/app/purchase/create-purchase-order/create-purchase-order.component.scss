@@ -142,6 +142,7 @@ form {
                     }
                     .form-control {
                         font-size: var(--font-size-14) !important;
+                        min-width: 100px;
                     }
                 }
             }
