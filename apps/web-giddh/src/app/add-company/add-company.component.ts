@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 import { select, Store } from "@ngrx/store";
@@ -8,7 +8,7 @@ import { CommonActions } from "../actions/common.actions";
 import { CompanyActions } from "../actions/company.actions";
 import { GeneralActions } from "../actions/general/general.actions";
 import { LoginActions } from "../actions/login.action";
-import { BusinessTypes } from '../app.constant';
+import { BusinessTypes, MOBILE_NUMBER_SELF_URL, MOBILE_NUMBER_UTIL_URL, OTP_PROVIDER_URL, OTP_WIDGET_ID_NEW, OTP_WIDGET_TOKEN_NEW } from '../app.constant';
 import { CountryRequest, OnboardingFormRequest } from "../models/api-models/Common";
 import { Addresses, CompanyCreateRequest, CompanyResponse, SocketNewCompanyRequest, StatesRequest } from "../models/api-models/Company";
 import { UserDetails } from "../models/api-models/loginModels";
@@ -23,6 +23,10 @@ import { MatDialog } from "@angular/material/dialog";
 import { VerifyMobileActions } from "../actions/verify-mobile.actions";
 import { AuthService } from "../theme/ng-social-login-module/index";
 import { ConfirmModalComponent } from 'apps/web-giddh/src/app/theme/new-confirm-modal/confirm-modal.component';
+import { HttpClient } from "@angular/common/http";
+
+declare var initSendOTP: any;
+declare var window: any;
 
 @Component({
     selector: 'add-company',
@@ -33,10 +37,18 @@ import { ConfirmModalComponent } from 'apps/web-giddh/src/app/theme/new-confirm-
 
 export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
     @ViewChild('stepper') stepperIcon: any;
+    /** Mobile number field instance */
+    @ViewChild('mobileNoField', { static: false }) mobileNoField: ElementRef;
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** True if user doesn't have mobile number and we have to provide field to input mobile number */
+    public showMobileField: boolean = false;
+    /** This will hold mobile number field input  */
+    public intl: any;
+    /** This will hold if mobile number is invalid */
+    public isMobileNumberInvalid: boolean = false;
     /** Form Group for company form */
     public companyForm: UntypedFormGroup;
     /** Form Group for company form */
@@ -137,6 +149,8 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
     public isOtherCountry: boolean = false;
     /** Constant for business type */
     public businessTypes = BusinessTypes;
+    /** Hold current flag*/
+    public currentFlag: any;
     /** Hold selected tab*/
     public selectedStep: number = 0;
     /** List of counties of country */
@@ -153,6 +167,20 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
     public companiesList: any[] = [];
     /** Holds mobile number of user */
     public mobileNo: string = "";
+    /** True if need to show otp field */
+    public showOtpField: boolean = false;
+    /** Holds otp request id */
+    public otpRequestId: string = "";
+    /** This will hold if mobile number is verified */
+    public isMobileNumberVerified: boolean = false;
+    /** True if send otp in progress */
+    public sendOtpInProgress: boolean = false;
+    /** True if resend otp in progress */
+    public resendOtpInProgress: boolean = false;
+    /** True if verify otp in progress */
+    public verifyOtpInProgress: boolean = false;
+    /** True if need to focus in otp field */
+    public showFocusInOtpField: boolean = false;
 
     /** Returns true if form is dirty else false */
     public get showPageLeaveConfirmation(): boolean {
@@ -162,6 +190,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
     constructor(
         private formBuilder: UntypedFormBuilder,
         private toaster: ToasterService,
+        private http: HttpClient,
         private store: Store<AppState>,
         private generalService: GeneralService,
         private commonActions: CommonActions,
@@ -238,12 +267,211 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         });
 
         this.store.pipe(select(state => state.session.user), takeUntil(this.destroyed$)).subscribe(response => {
-            if (response?.user) {
+            if (response?.user?.contactNo) {
+                this.showMobileField = false;
                 this.mobileNo = response.user.contactNo;
+                this.firstStepForm.get('mobileNo')?.removeValidators(Validators.required);
+            } else {
+                this.showMobileField = true;
+                this.firstStepForm.get('mobileNo')?.addValidators(Validators.required);
+                this.initMobileNumberField();
             }
         });
 
         this.changeDetection.detectChanges();
+    }
+
+    /**
+     * Resets the verified mobile number
+     *
+     * @memberof AddCompanyComponent
+     */
+    public reVerifyNumber(): void {
+        this.isMobileNumberVerified = false;
+        this.showOtpField = false;
+        this.firstStepForm.get('mobileOtp')?.patchValue("");
+        this.changeDetection.detectChanges();
+    }
+
+    /**
+     * Inits mobile number field
+     *
+     * @memberof AddCompanyComponent
+     */
+    public initMobileNumberField(): void {
+        let interval = setInterval(() => {
+            if (this.mobileNoField) {
+                setTimeout(() => {
+                    this.showPhoneNumberField();
+                }, 100);
+                clearInterval(interval);
+            }
+        }, 500);
+
+        let configuration = {
+            widgetId: OTP_WIDGET_ID_NEW,
+            tokenAuth: OTP_WIDGET_TOKEN_NEW,
+            exposeMethods: true,
+            success: (data: any) => { },
+            failure: (error: any) => {
+                this.toaster.showSnackBar("error", error?.message);
+            }
+        };
+
+        /* OTP LOGIN */
+        if (window['initSendOTP'] === undefined) {
+            let scriptTag = document.createElement('script');
+            scriptTag.src = OTP_PROVIDER_URL;
+            scriptTag.type = 'text/javascript';
+            scriptTag.defer = true;
+            scriptTag.onload = () => {
+                initSendOTP(configuration);
+            };
+            document.body.appendChild(scriptTag);
+        } else {
+            initSendOTP(configuration);
+        }
+    }
+
+    /**
+     * Sends otp
+     *
+     * @returns {void}
+     * @memberof AddCompanyComponent
+     */
+    public sendOtp(): void {
+        this.isMobileNumberVerified = false;
+        let mobileNo = this.intl.getNumber();
+        mobileNo = mobileNo?.replace("+", "");
+        if (!mobileNo || this.isMobileNumberInvalid) {
+            this.toaster.showSnackBar("error", this.localeData?.enter_valid_mobile_number);
+            return;
+        }
+        this.sendOtpInProgress = true;
+        window.sendOtp(mobileNo, (data) => { this.mobileOtpSentCallback(data); }, (error) => { this.mobileOtpFailedCallback(error) });
+        this.changeDetection.detectChanges();
+    }
+
+    /**
+     * OTP sent callback
+     *
+     * @private
+     * @param {*} data
+     * @memberof AddCompanyComponent
+     */
+    private mobileOtpSentCallback(data: any): void {
+        this.sendOtpInProgress = false;
+        this.otpRequestId = data?.message;
+        this.showOtpField = true;
+        this.showHideFocusFromOtpField(true);
+        this.toaster.showSnackBar("success", this.localeData?.otp_sent);
+        this.changeDetection.detectChanges();
+    }
+
+    /**
+     * Focus in otp field
+     *
+     * @param {boolean} value
+     * @memberof AddCompanyComponent
+     */
+    public showHideFocusFromOtpField(value: boolean): void {
+        this.showFocusInOtpField = value;
+        this.changeDetection.detectChanges();
+    }
+
+    /**
+     * OTP sent fail callback
+     *
+     * @private
+     * @param {string} error
+     * @memberof AddCompanyComponent
+     */
+    private mobileOtpFailedCallback(error: string): void {
+        this.sendOtpInProgress = false;
+        this.changeDetection.detectChanges();
+        this.toaster.showSnackBar("error", error);
+    }
+
+    /**
+     * Resends otp
+     *
+     * @memberof AddCompanyComponent
+     */
+    public resendOtp(): void {
+        this.resendOtpInProgress = true;
+        this.isMobileNumberVerified = false;
+        this.showHideFocusFromOtpField(true);
+        this.firstStepForm.get('mobileOtp')?.patchValue("");
+        window.retryOtp(11, (data) => { this.retrySendOtpSuccessCallback(); }, (error) => { this.retrySendOtpErrorCallback(error); }, this.otpRequestId);
+        this.changeDetection.detectChanges();
+    }
+
+    /**
+     * Resend otp callback
+     *
+     * @private
+     * @memberof AddCompanyComponent
+     */
+    private retrySendOtpSuccessCallback(): void {
+        this.toaster.showSnackBar("success", this.localeData?.otp_resent);
+        this.resendOtpInProgress = false;
+        this.changeDetection.detectChanges();
+    }
+
+    /**
+     * Resend otp error callback
+     *
+     * @private
+     * @param {string} error
+     * @memberof AddCompanyComponent
+     */
+    private retrySendOtpErrorCallback(error: string): void {
+        this.resendOtpInProgress = false;
+        this.changeDetection.detectChanges();
+        this.toaster.showSnackBar("error", error);
+    }
+
+    /**
+     * Verify otp
+     *
+     * @memberof AddCompanyComponent
+     */
+    public verifyOtp(): void {
+        if (!this.firstStepForm.get('mobileOtp')?.value?.trim()) {
+            this.toaster.showSnackBar("error", this.localeData?.enter_valid_otp);
+            return;
+        }
+        this.verifyOtpInProgress = true;
+        window.verifyOtp(this.firstStepForm.get('mobileOtp')?.value, (data) => { this.verifyOtpSuccessCallback(); }, (error) => { this.verifyOtpErrorCallback(error); }, this.otpRequestId);
+        this.changeDetection.detectChanges();
+    }
+
+    /**
+     * Verify otp callback
+     *
+     * @private
+     * @memberof AddCompanyComponent
+     */
+    private verifyOtpSuccessCallback(): void {
+        this.verifyOtpInProgress = false;
+        this.isMobileNumberVerified = true;
+        this.showOtpField = false;
+        this.toaster.showSnackBar("success",this.localeData?.mobile_verified);
+        this.changeDetection.detectChanges();
+    }
+
+    /**
+     * Verify otp error callback
+     *
+     * @private
+     * @param {string} error
+     * @memberof AddCompanyComponent
+     */
+    private verifyOtpErrorCallback(error: string): void {
+        this.verifyOtpInProgress = false;
+        this.isMobileNumberVerified = false;
+        this.changeDetection.detectChanges();
+        this.toaster.showSnackBar("error", error);
     }
 
     /**
@@ -257,7 +485,8 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
             name: ['', Validators.required],
             country: ['', Validators.required],
             currency: ['', Validators.required],
-            mobile: ['']
+            mobile: [''],
+            mobileOtp: ['']
         });
 
         this.secondStepForm = this.formBuilder.group({
@@ -454,6 +683,13 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      */
     public onSelectedTab(event: any): void {
         this.selectedStep = event?.selectedIndex;
+        if (this.showMobileField) {
+            setTimeout(() => {
+                let currencyFlag = this.intl?.getSelectedCountryData();
+                this.currentFlag = currencyFlag?.iso2;
+                this.changeDetection.detectChanges();
+            }, 500);
+        }
     }
 
     /**
@@ -485,6 +721,45 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
             this.company.baseCurrency = event?.additional?.currency?.code;
             this.firstStepForm.controls['currency'].setValue({ label: event?.additional?.currency?.code, value: event?.additional?.currency?.code });
 
+            if (this.showMobileField) {
+                this.intl?.setCountry(event.value?.toLowerCase());
+
+                let phoneNumber = this.intl?.getNumber();
+
+                if (phoneNumber?.length) {
+                    let input = document.getElementById('init-contact-proforma');
+                    const errorMsg = document.querySelector("#init-contact-proforma-error-msg");
+                    const validMsg = document.querySelector("#init-contact-proforma-valid-msg");
+                    let reset = () => {
+                        input?.classList?.remove("error");
+                        if (errorMsg && validMsg) {
+                            errorMsg.innerHTML = "";
+                            errorMsg.classList.add("d-none");
+                            validMsg.classList.add("d-none");
+                        }
+                    };
+                    let errorMap = [this.localeData?.invalid_contact_number, this.commonLocaleData?.app_invalid_country_code, this.commonLocaleData?.app_invalid_contact_too_short, this.commonLocaleData?.app_invalid_contact_too_long, this.localeData?.invalid_contact_number];
+                    if (input) {
+                        reset();
+                        if (this.intl?.isValidNumber()) {
+                            validMsg?.classList?.remove("d-none");
+                            this.setMobileNumberValid(true);
+                        } else {
+                            input?.classList?.add("error");
+                            this.setMobileNumberValid(false);
+                            let errorCode = this.intl?.getValidationError();
+                            if (errorMsg && errorMap[errorCode]) {
+                                this.toaster.showSnackBar("error", this.localeData?.invalid_contact_number);
+                                errorMsg.innerHTML = errorMap[errorCode];
+                                errorMsg.classList.remove("d-none");
+                            }
+                        }
+                    } else {
+                        this.setMobileNumberValid(true);
+                    }
+                }
+            }
+
             let onboardingFormRequest = new OnboardingFormRequest();
             onboardingFormRequest.formName = 'onboarding';
             onboardingFormRequest.country = event.value;
@@ -498,6 +773,88 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     /**
+     * This will use for mobile number
+     *
+     * @memberof AddCompanyComponent
+     */
+    public showPhoneNumberField(): void {
+        let input = document.getElementById('init-contact-proforma');
+        const errorMsg = document.querySelector("#init-contact-proforma-error-msg");
+        const validMsg = document.querySelector("#init-contact-proforma-valid-msg");
+        let errorMap = [this.localeData?.invalid_contact_number, this.commonLocaleData?.app_invalid_country_code, this.commonLocaleData?.app_invalid_contact_too_short, this.commonLocaleData?.app_invalid_contact_too_long, this.localeData?.invalid_contact_number];
+        const intlTelInput = !isElectron ? window['intlTelInput'] : window['intlTelInputGlobals']['electron'];
+        if (intlTelInput && input) {
+            this.intl = intlTelInput(input, {
+                nationalMode: true,
+                utilsScript: MOBILE_NUMBER_UTIL_URL,
+                autoHideDialCode: false,
+                separateDialCode: false,
+                initialCountry: 'auto',
+                geoIpLookup: (success, failure) => {
+                    let countryCode = 'in';
+                    const fetchIPApi = this.http.get<any>(MOBILE_NUMBER_SELF_URL);
+                    fetchIPApi.subscribe(
+                        (response) => {
+                            if (response?.ipAddress) {
+                                return success(response.countryCode);
+                            } else {
+                                return success(countryCode);
+                            }
+                        },
+                        (err) => {
+                            return success(countryCode);
+                        }
+                    );
+                },
+            });
+            let reset = () => {
+                input?.classList?.remove("error");
+                if (errorMsg && validMsg) {
+                    errorMsg.innerHTML = "";
+                    errorMsg.classList.add("d-none");
+                    validMsg.classList.add("d-none");
+                }
+            };
+            input.addEventListener('blur', () => {
+                let phoneNumber = this.intl?.getNumber();
+                reset();
+                if (input) {
+                    if (phoneNumber?.length) {
+                        if (this.intl?.isValidNumber()) {
+                            validMsg?.classList?.remove("d-none");
+                            this.setMobileNumberValid(true);
+                        } else {
+                            input?.classList?.add("error");
+                            this.setMobileNumberValid(false);
+                            let errorCode = this.intl?.getValidationError();
+                            if (errorMsg && errorMap[errorCode]) {
+                                this.toaster.showSnackBar("error", this.localeData?.invalid_contact_number);
+                                errorMsg.innerHTML = errorMap[errorCode];
+                                errorMsg.classList.remove("d-none");
+                            }
+                        }
+                    } else {
+                        this.setMobileNumberValid(true);
+                    }
+                }
+            });
+        }
+        this.changeDetection.detectChanges();
+    }
+
+    /**
+     * This will use for set mobile number validation.
+     *
+     * @param {boolean} value
+     * @memberof AddCompanyComponent
+     */
+    public setMobileNumberValid(value: boolean): void {
+        this.firstStepForm.controls['mobile'].setErrors(value ? null : { invalidMobileNumber: true });
+        this.isMobileNumberInvalid = !value;
+        this.changeDetection.detectChanges();
+    }
+
+    /**
      * This will use for next step form
      *
      * @return {*}  {void}
@@ -505,12 +862,12 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      */
     public nextStepForm(): void {
         this.isFormSubmitted = false;
-        if (this.firstStepForm.invalid) {
+        if (this.firstStepForm.invalid || (this.showMobileField && !this.isMobileNumberVerified)) {
             this.isFormSubmitted = true;
             this.selectedStep = 0;
             return;
         }
-        this.firstStepForm.controls['mobile'].setValue(this.mobileNo);
+        this.firstStepForm.controls['mobile'].setValue(this.showMobileField ? this.intl?.getNumber() : this.mobileNo);
         this.selectedStep = 1;
         this.company.name = this.firstStepForm.controls['name'].value;
         this.company.country = this.firstStepForm.controls['country'].value.value;
@@ -638,10 +995,17 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         let number = "";
         let countryCode = "";
 
-        if (this.mobileNo) {
-            let parsedMobileNo = window['libphonenumber']?.parsePhoneNumber("+" + this.mobileNo);
-            number = parsedMobileNo?.nationalNumber ?? this.mobileNo;
-            countryCode = parsedMobileNo?.countryCallingCode;
+        if (!this.showMobileField) {
+            if (this.mobileNo) {
+                let parsedMobileNo = window['libphonenumber']?.parsePhoneNumber("+" + this.mobileNo);
+                number = parsedMobileNo?.nationalNumber ?? this.mobileNo;
+                countryCode = parsedMobileNo?.countryCallingCode;
+            }
+        } else {
+            const phoneNumber = this.intl.getNumber();
+            countryCode = this.intl.getSelectedCountryData().dialCode;
+            number = phoneNumber.replace(countryCode, '').trim();
+            number = number.substring(1);
         }
         let taxDetails = this.prepareTaxDetail(this.companyForm);
         this.company.name = this.firstStepForm.value.name;
@@ -673,6 +1037,18 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
             } else {
                 this.isLoading = false;
                 this.toaster.showSnackBar("error", response?.message);
+
+                if (this.showMobileField) {
+                    let mobileNo = this.intl?.getNumber();
+
+                    setTimeout(() => {
+                        this.showPhoneNumberField();
+                        setTimeout(() => {
+                            this.intl?.setNumber(mobileNo);
+                        }, 500);
+                    }, 500);
+                }
+
                 this.changeDetection.detectChanges();
             }
         });

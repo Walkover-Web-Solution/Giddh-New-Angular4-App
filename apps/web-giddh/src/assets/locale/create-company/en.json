@@ -64,5 +64,16 @@
     "select_state" : "Select State",
     "business_type": "Business Type",
     "business_nature": "Business Nature",
-    "invalid_contact_number": "Invalid Contact number"
+    "invalid_contact_number": "Invalid mobile number",
+    "enter_otp": "Enter OTP",
+    "enter_valid_mobile_number": "Please enter valid mobile number!",
+    "otp_sent": "OTP sent successfully.",
+    "otp_resent": "OTP resent successfully.",
+    "enter_valid_otp": "Please enter otp!",
+    "mobile_verified": "Mobile number verified successfully.",
+    "change": "Change",
+    "send_otp": "Send OTP",
+    "otp": "OTP",
+    "verify": "Verify",
+    "resend_otp": "Resend OTP"
 }

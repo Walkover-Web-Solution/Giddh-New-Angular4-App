@@ -23,6 +23,7 @@ $custom-typography: mat-typography-config(
 @import "../css/global/help-support.scss";
 @import "../css/global/sales-register-expand.scss";
 @import "../css/global/setting-integration.scss";
+@import "../css/global/help-support.scss";
 @import "../css/global/sales-register-expand.scss";
 @import "../css/global/input-dropdown-field.scss";
 @import "../css/global/voucher.scss";
@@ -14505,6 +14506,13 @@ activity-compare-json {
         padding: 0;
     }
 }
+<<<<<<< HEAD
+=======
+.mat-snack-bar-wrapper {
+    z-index: 99999 !important;
+    justify-content: center;
+}
+>>>>>>> ba87231c201570b3668055194c8dd052077560ab
 
 // Material 16 Table
 .mdc-data-table__row {
