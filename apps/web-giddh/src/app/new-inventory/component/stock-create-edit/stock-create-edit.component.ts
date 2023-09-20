@@ -663,7 +663,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 salesTaxInclusive: this.stockForm.variants?.length && this.stockForm.variants[0]?.salesTaxInclusive || false,
                 purchaseTaxInclusive: this.stockForm.variants?.length && this.stockForm.variants[0]?.purchaseTaxInclusive || false,
                 fixedAssetTaxInclusive: this.stockForm.variants?.length && this.stockForm.variants[0]?.fixedAssetTaxInclusive || false,
-                customFields: this.companyCustomFields,
+                customFields: cloneDeep(this.companyCustomFields),
                 salesInformation: [
                     {
                         rate: undefined,
@@ -720,7 +720,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 salesTaxInclusive: this.stockForm.variants?.length && this.stockForm.variants[0]?.salesTaxInclusive || false,
                 purchaseTaxInclusive: this.stockForm.variants?.length && this.stockForm.variants[0]?.purchaseTaxInclusive || false,
                 fixedAssetTaxInclusive: this.stockForm.variants?.length && this.stockForm.variants[0]?.fixedAssetTaxInclusive || false,
-                customFields: this.companyCustomFields,
+                customFields: cloneDeep(this.companyCustomFields),
                 salesInformation: [
                     {
                         rate: undefined,
@@ -1241,6 +1241,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                     return variant;
                 });
 
+                this.updateCustomFieldObjectInVariant();
+
                 this.hsnSac = this.stockForm.hsnNumber ? 'HSN' : 'SAC';
                 this.stockUnitName = response.body?.stockUnit?.name;
                 this.stockGroupName = response.body?.stockGroup?.name;
@@ -1474,11 +1476,14 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         this.customFieldsService.list(this.customFieldsVariantRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.status === 'success') {
                 this.companyCustomFields = response.body?.results;
-                this.stockForm.variants.forEach(variant => {
-                    if (this.companyCustomFields?.length > 0) {
-                        variant.customFields = this.companyCustomFields;
-                    }
-                });
+                if (!this.queryParams?.stockUniqueName) {
+                    this.stockForm.variants.forEach(variant => {
+                        if (this.companyCustomFields?.length > 0) {
+                            variant.customFields = cloneDeep(this.companyCustomFields);
+                        }
+                    });
+                }
+                this.updateCustomFieldObjectInVariant();
             } else {
                 this.toaster.showSnackBar("error", response.message);
             }
@@ -1487,10 +1492,43 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     }
 
     /**
- * Get custom fields
- *
- * @memberof StockCreateEditComponent
- */
+     * Maps custom fields with data
+     *
+     * @memberof StockCreateEditComponent
+     */
+    public updateCustomFieldObjectInVariant(): void {
+        if (this.stockForm?.variants?.length && this.companyCustomFields?.length) {
+            this.companyCustomFields?.forEach(customField => {
+                this.stockForm.variants = this.stockForm.variants?.map(variant => {
+                    if (variant?.customFields?.length) {
+                        let customFieldFound = false;
+                        variant.customFields = variant?.customFields?.map(variantCustomField => {
+                            if (variantCustomField.uniqueName === customField.uniqueName) {
+                                customFieldFound = true;
+                                const customFieldValue = variantCustomField.value;
+                                variantCustomField = cloneDeep(customField);
+                                variantCustomField.value = customFieldValue;
+                            }
+                            return variantCustomField;
+                        });
+
+                        if (!customFieldFound) {
+                            variant.customFields.push(customField);
+                        }
+                    } else {
+                        variant.customFields = [customField];
+                    }
+                    return variant;
+                });
+            })
+        }
+    }
+
+    /**
+     * Get custom fields
+     *
+     * @memberof StockCreateEditComponent
+     */
     public getCustomFields(): void {
         this.customFieldsService.list(this.customFieldsRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.status === 'success') {
