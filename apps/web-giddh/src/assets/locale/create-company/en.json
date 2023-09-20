@@ -75,5 +75,6 @@
     "send_otp": "Send OTP",
     "otp": "OTP",
     "verify": "Verify",
-    "resend_otp": "Resend OTP"
+    "resend_otp": "Resend OTP",
+    "verify_number": "Please verify mobile number"
 }
