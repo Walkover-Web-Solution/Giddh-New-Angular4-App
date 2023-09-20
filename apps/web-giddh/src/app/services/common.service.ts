@@ -25,6 +25,17 @@ export class CommonService {
             }));
     }
 
+    public getBarcodeScanData(uniqueName: string): Observable<BaseResponse<any, any>> {
+        let url = this.config.apiUrl + COMMON_API.BARCODE_SCAN;
+        url=   url?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName));
+        url = url?.replace(':barcodeUniqueName', uniqueName);
+        return this.http.get(url).pipe(
+            map((res) => {
+                let data: BaseResponse<CountryResponse, any> = res;
+                return data;
+            }));
+    }
+
     public GetCallingCodes(): Observable<BaseResponse<any, any>> {
         let url = this.config.apiUrl + COMMON_API.CALLING_CODES;
         return this.http.get(url).pipe(

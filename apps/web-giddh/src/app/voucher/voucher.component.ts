@@ -71,6 +71,7 @@ import { SelectFieldComponent } from '../theme/form-fields/select-field/select-f
 import { DropdownFieldComponent } from '../theme/form-fields/dropdown-field/dropdown-field.component';
 import { PageLeaveUtilityService } from '../services/page-leave-utility.service';
 import { CommonService } from '../services/common.service';
+import { CustomFieldsService } from '../services/custom-fields.service';
 
 /** Type of search: customer and item (product/service) search */
 const SEARCH_TYPE = {
@@ -724,9 +725,19 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public companyRegionsSource: IOption[] = [];
     /** This will hold barcode uniquename*/
     public getBarcodeUniqueName: string = "";
+    /** Custom fields request */
+    public customFieldsRequest: any = {
+        page: 0,
+        count: 0,
+        moduleUniqueName: 'variant'
+    };
+    /**Hold barcode scan start time */
     public startTime: number = 0;
+    /**Hold barcode scan end time */
     public endTime: number = 0;
+    /**Hold barcode scan total time */
     public totalTime: number = 0;
+    /**Hold barcode last scanned key */
     public lastScannedKey: string = '';
 
     /**
@@ -796,7 +807,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         private http: HttpClient,
         public dialog: MatDialog,
         private pageLeaveUtilityService: PageLeaveUtilityService,
-        private commonService: CommonService
+        private commonService: CommonService,
+        private customFieldsService: CustomFieldsService
     ) {
         this.advanceReceiptAdjustmentData = new VoucherAdjustments();
         this.advanceReceiptAdjustmentData.adjustments = [];
@@ -3448,7 +3460,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         return res;
     }
 
-    public onSelectSalesAccount(selectedAcc: any, txn: SalesTransactionItemClass, entry: SalesEntryClass, isBulkItem: boolean = false, isLinkedPoItem: boolean = false, entryIndex: number): any {
+    public onSelectSalesAccount(selectedAcc: any, txn: any, entry: any, isBulkItem: boolean = false, isLinkedPoItem: boolean = false, entryIndex: number): any {
         this.invFormData.entries[entryIndex] = entry;
         this.invFormData.entries[entryIndex].transactions[0] = txn;
         if ((selectedAcc?.value || isBulkItem) && selectedAcc.additional && selectedAcc.additional?.uniqueName) {
@@ -8797,10 +8809,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         if (uniqueName && this.startTime) {
             this.endTime = event.timeStamp;
             const scanTime = this.endTime - this.startTime;
-            console.log(scanTime, uniqueName);
             this.totalTime += scanTime;
             if (scanTime < 5.20000000298023) {
-                console.log('Barcode scanned')
+                this.getStockByBarcode();
             } else {
                 console.log('Typing Scanned');
             }
@@ -8808,11 +8819,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             this.getBarcodeUniqueName = '';
         }
     }
+
     public detectBarcode(event: KeyboardEvent): string | null {
-        console.log(event.key);
-
         let ignoreKeyList = ['Shift'];
-
         const key = event.key;
         if (key === 'Enter') {
             if (this.getBarcodeUniqueName.length) {
@@ -8827,6 +8836,254 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             this.lastScannedKey = key;
             return null;
         }
+    }
+
+    public getStockByBarcode(): void {
+        this.commonService.getBarcodeScanData('dilpreetsig').pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response && response.status === 'success') {
+                let selecetedAcc =  {
+                    value: "sales#bar",
+                    label: "Sales (Stock -Barcode)",
+                    additional: {
+                        type: "ACCOUNT",
+                        name: "Sales",
+                        uniqueName: "sales",
+                        stock: {
+                            name: "Stock -Barcode",
+                            uniqueName: "bar",
+                            stockUnitCode: "kg",
+                            rate: 1,
+                            stockUnitName: "Kilogram",
+                            stockUnitUniqueName: "kg",
+                            taxes: [
+                                "gst12"
+                            ],
+                            groupTaxes: [],
+                            skuCodeHeading: "SKU Code",
+                            customField1Heading: "Custom Field 1",
+                            customField1Value: "",
+                            customField2Heading: "Custom Field 2",
+                            customField2Value: "",
+                            variant: {
+                                uniqueName: "yellow1695126325287b33rdcz55q",
+                                salesTaxInclusive: false,
+                                purchaseTaxInclusive: false,
+                                unitRates: [
+                                    {
+                                        rate: 1,
+                                        stockUnitCode: "kg",
+                                        stockUnitUniqueName: "kg",
+                                        stockUnitName: "Kilogram"
+                                    }
+                                ]
+                            }
+                        },
+                        parentGroups: [],
+                        route: "/pages/ledger/sales",
+                        label: "Sales (Stock -Barcode)",
+                        value: "sales#bar",
+                        applicableTaxes: [
+                            "gst12"
+                        ],
+                        currency: {
+                            code: "INR",
+                            symbol: "₹"
+                        },
+                        nameStr: "",
+                        hsnNumber: null,
+                        sacNumber: null,
+                        uNameStr: "",
+                        category: "income"
+                    }
+                };
+                let txn = {
+                        stockList: [
+                            {
+                                id: "kg",
+                                text: "kg",
+                                rate: 1
+                            }
+                        ],
+                        applicableTaxes: [
+                            "gst12"
+                        ],
+                        taxRenderData: [],
+                        highPrecisionRate: 16,
+                        amount: 1,
+                        total: 1.12,
+                        isStockTxn: true,
+                        hsnOrSac: "sac",
+                        taxableValue: 1,
+                        showCodeType: "sac",
+                        variant: {
+                            name: "yellow",
+                            uniqueName: "yellow1695126325287b33rdcz55q"
+                        },
+                        convertedTotal: 1.12,
+                        quantity: 1,
+                        rate: 1,
+                        fakeAccForSelect2: "sales#bar",
+                        sku_and_customfields: "",
+                        accountName: "Sales",
+                        accountUniqueName: "sales",
+                        stockUnit: "kg",
+                        stockUnitCode: "kg",
+                        stockDetails: {
+                            name: "Stock -Barcode",
+                            uniqueName: "bar",
+                            stockUnitCode: "kg",
+                            rate: 1,
+                            stockUnitName: "Kilogram",
+                            stockUnitUniqueName: "kg",
+                            taxes: [
+                                "gst12"
+                            ],
+                            groupTaxes: [],
+                            skuCodeHeading: "SKU Code",
+                            customField1Heading: "Custom Field 1",
+                            customField1Value: "",
+                            customField2Heading: "Custom Field 2",
+                            customField2Value: "",
+                            variant: {
+                                uniqueName: "yellow1695126325287b33rdcz55q",
+                                salesTaxInclusive: false,
+                                purchaseTaxInclusive: false,
+                                unitRates: [
+                                    {
+                                        rate: 1,
+                                        stockUnitCode: "kg",
+                                        stockUnitUniqueName: "kg",
+                                        stockUnitName: "Kilogram"
+                                    }
+                                ]
+                            }
+                        },
+                        sacNumber: "",
+                        sacNumberExists: true,
+                        hsnNumber: null,
+                        highPrecisionAmount: 1
+                    }
+                let entries = {
+                        taxes: [
+                            {
+                                name: "GST12",
+                                uniqueName: "gst12",
+                                type: "gst",
+                                amount: 12,
+                                isChecked: true,
+                                isDisabled: false
+                            },
+                            {
+                                name: "GST18",
+                                uniqueName: "gst18",
+                                type: "gst",
+                                amount: 18,
+                                isChecked: false,
+                                isDisabled: true
+                            }
+                        ],
+                        isOtherTaxApplicable: false,
+                        transactions: [
+                            {
+                                stockList: [
+                                    {
+                                        id: "kg",
+                                        text: "kg",
+                                        rate: 1
+                                    }
+                                ],
+                                applicableTaxes: [
+                                    "gst12"
+                                ],
+                                taxRenderData: [],
+                                highPrecisionRate: 16,
+                                amount: 1,
+                                total: 1.12,
+                                isStockTxn: true,
+                                hsnOrSac: "sac",
+                                taxableValue: 1,
+                                showCodeType: "sac",
+                                variant: {
+                                    name: "yellow",
+                                    uniqueName: "yellow1695126325287b33rdcz55q"
+                                },
+                                convertedTotal: 1.12,
+                                quantity: 1,
+                                rate: 1,
+                                fakeAccForSelect2: "sales#bar",
+                                sku_and_customfields: "",
+                                accountName: "Sales",
+                                accountUniqueName: "sales",
+                                stockUnit: "kg",
+                                stockUnitCode: "kg",
+                                stockDetails: {
+                                    name: "Stock -Barcode",
+                                    uniqueName: "bar",
+                                    stockUnitCode: "kg",
+                                    rate: 1,
+                                    stockUnitName: "Kilogram",
+                                    stockUnitUniqueName: "kg",
+                                    taxes: [
+                                        "gst12"
+                                    ],
+                                    groupTaxes: [],
+                                    skuCodeHeading: "SKU Code",
+                                    customField1Heading: "Custom Field 1",
+                                    customField1Value: "",
+                                    customField2Heading: "Custom Field 2",
+                                    customField2Value: "",
+                                    variant: {
+                                        uniqueName: "yellow1695126325287b33rdcz55q",
+                                        salesTaxInclusive: false,
+                                        purchaseTaxInclusive: false,
+                                        unitRates: [
+                                            {
+                                                rate: 1,
+                                                stockUnitCode: "kg",
+                                                stockUnitUniqueName: "kg",
+                                                stockUnitName: "Kilogram"
+                                            }
+                                        ]
+                                    }
+                                },
+                                sacNumber: "",
+                                sacNumberExists: true,
+                                hsnNumber: null,
+                                highPrecisionAmount: 1
+                            }
+                        ],
+                        entryDate: "20-09-2023",
+                        taxList: [],
+                        discounts: [
+                            {
+                                discountType: "FIX_AMOUNT",
+                                amount: 0,
+                                name: "",
+                                particular: "",
+                                isActive: true
+                            }
+                        ],
+                        tradeDiscounts: [],
+                        taxSum: 0.12,
+                        discountSum: 0,
+                        otherTaxSum: 0,
+                        otherTaxModal: {
+                            tcsCalculationMethod: "OnTaxableAmount"
+                        },
+                        cessSum: 0,
+                        purchaseOrderItemMapping: {
+                            uniqueName: "",
+                            entryUniqueName: ""
+                        },
+                        tcsTaxList: [],
+                        tdsTaxList: []
+                }
+                this.onSelectSalesAccount(selecetedAcc, txn ,entries, false, false, 0);
+            } else {
+                this.toaster.showSnackBar("error", response.message);
+            }
+            this.changeDetectorRef.detectChanges();
+        });
     }
 
     /**
