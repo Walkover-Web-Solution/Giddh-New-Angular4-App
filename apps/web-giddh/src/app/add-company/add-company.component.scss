@@ -8,6 +8,7 @@
         }
         .mobile-number {
             position: relative;
+            padding-right: 6px;
             .country-flag {
                 position: absolute;
                 top: 50%;
@@ -30,6 +31,19 @@
         }
         .currency-space {
             padding-left: 6px;
+        }
+        .mobile-no-action-buttons{
+            padding-left: 6px;
+            padding-top: 6.5px;
+        }
+        .otp-input{
+            padding-right: 6px;
+        }
+        .btn-min-width{
+            min-width: 84px;
+        }
+        .send-otp-btn{
+            min-width: 112px;
         }
     }
 }
