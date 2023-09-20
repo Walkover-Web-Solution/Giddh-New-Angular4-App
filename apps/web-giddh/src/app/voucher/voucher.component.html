@@ -1709,48 +1709,48 @@
                                     class="row mt-3"
                                     *ngIf="isPurchaseInvoice && (!isUpdateMode || (isUpdateMode && poLinkUpdated))"
                                 >
-                                    <div class="col-sm-12 col-xl-6 col-lg-6 col-md-6 col-xs-12 purchase-link">
-                                        <mat-select
-                                            name="linkedPO"
-                                            [(ngModel)]="linkedPo"
-                                            [multiple]="true"
-                                            (selectionChange)="getPurchaseOrder($event?.value, true)"
-                                            class="po-mat-salect"
-                                            [placeholder]="localeData?.select_order_placeholder"
-                                            [disabled]="linkedPo?.length === 0 && fieldFilteredOptions?.length === 0"
-                                        >
-                                            <mat-select-trigger *ngIf="linkedPo?.length">
-                                                <ng-container *ngFor="let poNumber of linkedPo; let i = index"
-                                                    >{{ purchaseOrderNumberValueMapping[poNumber]
-                                                    }}<ng-container *ngIf="linkedPo[i + 1]">, </ng-container>
-                                                </ng-container>
-                                            </mat-select-trigger>
-                                            <mat-option class="po-options-line">
-                                                <ngx-mat-select-search
-                                                    [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
-                                                    [formControl]="linkPoDropdown"
-                                                    [placeholderLabel]="localeData?.select_order_placeholder"
-                                                >
-                                                    <i class="icon-cross" ngxMatSelectSearchClear></i>
-                                                </ngx-mat-select-search>
-                                            </mat-option>
-
-                                            <mat-option
-                                                *ngFor="let option of fieldFilteredOptions"
-                                                [value]="option?.value"
-                                                class="po-options-line"
-                                                [disabled]="showLoader"
+                                    <div class="col-sm-12 col-xl-6 col-lg-6 col-md-6 col-xs-12 pd-r1 purchase-link">                                                                                 
+                                            <mat-select
+                                                name="linkedPO"
+                                                [(ngModel)]="linkedPo"
+                                                [multiple]="true"
+                                                (selectionChange)="getPurchaseOrder($event?.value, true)"
+                                                class="po-mat-select"
+                                                [placeholder]="localeData?.select_order_placeholder"
+                                                [disabled]="linkedPo?.length === 0 && fieldFilteredOptions?.length === 0"
                                             >
-                                                <span class="po-option-label"> {{ option?.label }}</span>
-                                                <span class="po-option-value" *ngIf="option?.additional?.pending">
-                                                    {{ localeData?.pending }}: {{ option?.additional?.pending }}</span
+                                                <mat-select-trigger *ngIf="linkedPo?.length">
+                                                    <ng-container *ngFor="let poNumber of linkedPo; let i = index"
+                                                        >{{ purchaseOrderNumberValueMapping[poNumber]
+                                                        }}<ng-container *ngIf="linkedPo[i + 1]">, </ng-container>
+                                                    </ng-container>
+                                                </mat-select-trigger>
+                                                <mat-option class="po-options-line">
+                                                    <ngx-mat-select-search
+                                                        [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
+                                                        [formControl]="linkPoDropdown"
+                                                        [placeholderLabel]="localeData?.select_order_placeholder"
+                                                    >
+                                                        <i class="icon-cross" ngxMatSelectSearchClear></i>
+                                                    </ngx-mat-select-search>
+                                                </mat-option>
+    
+                                                <mat-option
+                                                    *ngFor="let option of fieldFilteredOptions"
+                                                    [value]="option?.value"
+                                                    class="po-options-line"
+                                                    [disabled]="showLoader"
                                                 >
-                                                <span class="po-option-value" *ngIf="option.additional?.grandTotal">
-                                                    {{ commonLocaleData?.app_amount }}:
-                                                    {{ option?.additional?.grandTotal }}</span
-                                                >
-                                            </mat-option>
-                                        </mat-select>
+                                                    <span class="po-option-label"> {{ option?.label }}</span>
+                                                    <span class="po-option-value" *ngIf="option?.additional?.pending">
+                                                        {{ localeData?.pending }}: {{ option?.additional?.pending }}</span
+                                                    >
+                                                    <span class="po-option-value" *ngIf="option.additional?.grandTotal">
+                                                        {{ commonLocaleData?.app_amount }}:
+                                                        {{ option?.additional?.grandTotal }}</span
+                                                    >
+                                                </mat-option>
+                                            </mat-select>                                       
                                     </div>
                                 </div>
                                 <!-- end Link purchase order -->
