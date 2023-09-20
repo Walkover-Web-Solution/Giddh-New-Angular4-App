@@ -8,7 +8,7 @@ import { CommonActions } from "../actions/common.actions";
 import { CompanyActions } from "../actions/company.actions";
 import { GeneralActions } from "../actions/general/general.actions";
 import { LoginActions } from "../actions/login.action";
-import { BusinessTypes, MOBILE_NUMBER_SELF_URL, MOBILE_NUMBER_UTIL_URL, OTP_PROVIDER_URL } from '../app.constant';
+import { BusinessTypes, MOBILE_NUMBER_SELF_URL, MOBILE_NUMBER_UTIL_URL, OTP_PROVIDER_URL, OTP_WIDGET_ID_NEW, OTP_WIDGET_TOKEN_NEW } from '../app.constant';
 import { CountryRequest, OnboardingFormRequest } from "../models/api-models/Common";
 import { Addresses, CompanyCreateRequest, CompanyResponse, SocketNewCompanyRequest, StatesRequest } from "../models/api-models/Company";
 import { UserDetails } from "../models/api-models/loginModels";
@@ -37,7 +37,7 @@ declare var window: any;
 
 export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
     @ViewChild('stepper') stepperIcon: any;
-    /** Mobile Number state instance */
+    /** Mobile number field instance */
     @ViewChild('mobileNoField', { static: false }) mobileNoField: ElementRef;
     /* This will hold local JSON data */
     public localeData: any = {};
@@ -179,6 +179,8 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
     public resendOtpInProgress: boolean = false;
     /** True if verify otp in progress */
     public verifyOtpInProgress: boolean = false;
+    /** True if need to focus in otp field */
+    public showFocusInOtpField: boolean = false;
 
     /** Returns true if form is dirty else false */
     public get showPageLeaveConfirmation(): boolean {
@@ -307,8 +309,8 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         }, 500);
 
         let configuration = {
-            widgetId: "33686b716134333831313239",
-            tokenAuth: "205968TmXguUAwoD633af103P1",
+            widgetId: OTP_WIDGET_ID_NEW,
+            tokenAuth: OTP_WIDGET_TOKEN_NEW,
             exposeMethods: true,
             success: (data: any) => { },
             failure: (error: any) => {
@@ -342,7 +344,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         let mobileNo = this.intl.getNumber();
         mobileNo = mobileNo?.replace("+", "");
         if (!mobileNo || this.isMobileNumberInvalid) {
-            this.toaster.showSnackBar("error", "Please enter valid mobile number!");
+            this.toaster.showSnackBar("error", this.localeData?.enter_valid_mobile_number);
             return;
         }
         this.sendOtpInProgress = true;
@@ -361,7 +363,19 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         this.sendOtpInProgress = false;
         this.otpRequestId = data?.message;
         this.showOtpField = true;
-        this.toaster.showSnackBar("success", "OTP sent successfully.");
+        this.showHideFocusFromOtpField(true);
+        this.toaster.showSnackBar("success", this.localeData?.otp_sent);
+        this.changeDetection.detectChanges();
+    }
+
+    /**
+     * Focus in otp field
+     *
+     * @param {boolean} value
+     * @memberof AddCompanyComponent
+     */
+    public showHideFocusFromOtpField(value: boolean): void {
+        this.showFocusInOtpField = value;
         this.changeDetection.detectChanges();
     }
 
@@ -386,6 +400,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
     public resendOtp(): void {
         this.resendOtpInProgress = true;
         this.isMobileNumberVerified = false;
+        this.showHideFocusFromOtpField(true);
         window.retryOtp(11, (data) => { this.retrySendOtpSuccessCallback(); }, (error) => { this.retrySendOtpErrorCallback(error); }, this.otpRequestId);
         this.changeDetection.detectChanges();
     }
@@ -397,7 +412,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      * @memberof AddCompanyComponent
      */
     private retrySendOtpSuccessCallback(): void {
-        this.toaster.showSnackBar("success", "OTP resent successfully.");
+        this.toaster.showSnackBar("success", this.localeData?.otp_resent);
         this.resendOtpInProgress = false;
         this.changeDetection.detectChanges();
     }
@@ -422,7 +437,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      */
     public verifyOtp(): void {
         if (!this.firstStepForm.get('mobileOtp')?.value?.trim()) {
-            this.toaster.showSnackBar("error", "Please enter valid otp!");
+            this.toaster.showSnackBar("error", this.localeData?.enter_valid_otp);
             return;
         }
         this.verifyOtpInProgress = true;
@@ -440,7 +455,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         this.verifyOtpInProgress = false;
         this.isMobileNumberVerified = true;
         this.showOtpField = false;
-        this.toaster.showSnackBar("success", "Mobile number verified successfully.");
+        this.toaster.showSnackBar("success",this.localeData?.mobile_verified);
         this.changeDetection.detectChanges();
     }
 

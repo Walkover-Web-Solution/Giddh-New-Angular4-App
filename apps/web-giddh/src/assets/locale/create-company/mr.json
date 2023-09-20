@@ -51,7 +51,6 @@
 	"unlimited_users": "अमर्यादित वापरकर्ते",
 	"unlimited_contacts": "अमर्यादित ग्राहक / विक्रेते",
 	"desktop_mobile_app": "डेस्कटॉप / मोबाइल अ‍ॅप",
-    "invalid_contact_number": "अवैध संपर्क क्रमांक",
     "registered": "नोंदणीकृत",
     "unregistered": "नोंदणी नसलेली",
     "food": "अन्न",
@@ -64,5 +63,12 @@
     "enter_mobile_number" : "मोबाईल नंबर टाका",
     "select_state" : "राज्य निवडा",
     "business_type": "व्यवसाय प्रकार",
-    "business_nature": "व्यवसाय निसर्ग"
+    "business_nature": "व्यवसाय निसर्ग",
+    "invalid_contact_number": "अवैध संपर्क क्रमांक",
+    "enter_otp": "ओटीपी एंटर करा",
+    "enter_valid_mobile_number": "कृपया वैध मोबाइल नंबर प्रविष्ट करा!",
+    "otp_sent": "ओटीपी यशस्वीरित्या पाठवला.",
+    "otp_resent": "ओटीपी यशस्वीरित्या पुन्हा पाठवला.",
+    "enter_valid_otp": "कृपया ओटीपी प्रविष्ट करा!",
+    "mobile_verified": "मोबाईल नंबरची यशस्वीपणे पडताळणी झाली."
 }

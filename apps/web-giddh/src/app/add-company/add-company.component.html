@@ -110,12 +110,14 @@
                             <ng-container *ngIf="showMobileField && showOtpField">
                                 <div class="col-lg-6 otp-input">
                                     <input-field
+                                        (clickOutside)="showHideFocusFromOtpField(false)"
                                         [name]="'mobileOtp'"
                                         [type]="'tel'"
                                         [label]="'OTP'"
-                                        [placeholder]="'Enter OTP'"
-                                        [floatLabel]="'auto'"
+                                        [placeholder]="localeData?.enter_otp"
+                                        [floatLabel]="showFocusInOtpField ? 'always' : 'auto'"
                                         formControlName="mobileOtp"
+                                        [autoFocus]="true"
                                     >
                                     </input-field>
                                 </div>
