@@ -84,7 +84,7 @@
                                 <span id="init-contact-proforma-valid-msg" class="d-none"></span>
                                 <span id="init-contact-proforma-error-msg" class="d-none"></span>
                             </div>
-                            <div class="col-lg-6 mobile-no-action-buttons">
+                            <div class="col-lg-6 mobile-no-action-buttons" *ngIf="showMobileField">
                                 <button mat-stroked-button (click)="reVerifyNumber()" *ngIf="isMobileNumberVerified || showOtpField">
                                     Change
                                 </button>
@@ -106,7 +106,7 @@
                                     <span *ngIf="!sendOtpInProgress">Send OTP</span>
                                 </button>
                             </div>
-                            <ng-container *ngIf="showOtpField">
+                            <ng-container *ngIf="showMobileField && showOtpField">
                                 <div class="col-lg-6 otp-input">
                                     <input-field
                                         [name]="'mobileOtp'"
@@ -123,7 +123,7 @@
                                         <button
                                             mat-stroked-button
                                             (click)="verifyOtp()"
-                                            [disabled]="verifyOtpInProgress"
+                                            [disabled]="verifyOtpInProgress || resendOtpInProgress"
                                         >
                                             <mat-progress-spinner
                                                 *ngIf="verifyOtpInProgress"
@@ -138,7 +138,7 @@
                                         <button
                                             mat-stroked-button
                                             (click)="resendOtp()"
-                                            [disabled]="resendOtpInProgress"
+                                            [disabled]="resendOtpInProgress || verifyOtpInProgress"
                                             class="ml-auto"
                                         >
                                             <mat-progress-spinner
