@@ -85,7 +85,7 @@
                                 <span id="init-contact-proforma-error-msg" class="d-none"></span>
                             </div>
                             <div class="col-lg-6 mobile-no-action-buttons" *ngIf="showMobileField">
-                                <button mat-stroked-button (click)="reVerifyNumber()" *ngIf="isMobileNumberVerified || showOtpField">
+                                <button mat-stroked-button (click)="reVerifyNumber()" *ngIf="isMobileNumberVerified || showOtpField" class="btn-min-width">
                                     Change
                                 </button>
 
@@ -94,6 +94,7 @@
                                     (click)="sendOtp()"
                                     [disabled]="sendOtpInProgress"
                                     *ngIf="!showOtpField && !isMobileNumberVerified"
+                                    class="send-otp-btn"
                                 >
                                     <mat-progress-spinner
                                         *ngIf="sendOtpInProgress"
@@ -124,6 +125,7 @@
                                             mat-stroked-button
                                             (click)="verifyOtp()"
                                             [disabled]="verifyOtpInProgress || resendOtpInProgress"
+                                            class="btn-min-width"
                                         >
                                             <mat-progress-spinner
                                                 *ngIf="verifyOtpInProgress"
@@ -139,7 +141,7 @@
                                             mat-stroked-button
                                             (click)="resendOtp()"
                                             [disabled]="resendOtpInProgress || verifyOtpInProgress"
-                                            class="ml-auto"
+                                            class="ml-auto send-otp-btn"
                                         >
                                             <mat-progress-spinner
                                                 *ngIf="resendOtpInProgress"
