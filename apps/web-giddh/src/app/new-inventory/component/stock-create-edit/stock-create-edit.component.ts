@@ -182,6 +182,12 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     public customFieldsRequest: any = {
         page: 0,
         count: 0,
+        moduleUniqueName: 'stock'
+    };
+    /** Custom fields request */
+    public customFieldsVariantRequest: any = {
+        page: 0,
+        count: 0,
         moduleUniqueName: 'variant'
     };
     /** Available field types list */
@@ -262,7 +268,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
 
         this.getTaxes();
         this.getWarehouses();
-        this.getCustomFields();
+        this.getVariantCustomFields();
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             if (params?.type || this.addStock) {
                 this.stockForm.type = this.addStock ? this.stockType.toUpperCase() : params?.type?.toUpperCase();
@@ -588,8 +594,6 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
      * @memberof StockCreateEditComponent
      */
     public generateVariants(): void {
-        console.log("called generateVariants", this.stockForm.variants);
-
         const checkUnitRateObject = {
             purchase: false,
             sales: false,
@@ -649,6 +653,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 if (!variantExists?.length && !variant?.combinations?.length) {
                     variantExists = existingVariants?.filter(existingVariant => existingVariant?.name === variant.current);
                 }
+
             });
             let variantObj = (variantExists?.length > 0) ? variantExists[0] : {
                 name: variant.current,
@@ -701,12 +706,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                     }
                 ]
             };
-
             variantObj.name = variant.current;
-
-            console.log('stockVariants', variantObj);
             stockVariants.push(variantObj);
-
             this.checkUnitRateValidation.push(Object.assign({}, checkUnitRateObject));
         });
 
@@ -764,7 +765,6 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
             });
             this.checkUnitRateValidation.push(Object.assign({}, checkUnitRateObject));
         }
-        console.log('stockVariants', stockVariants);
 
         this.stockForm.variants = stockVariants;
     }
@@ -928,7 +928,17 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
      * @memberof StockCreateEditComponent
      */
     public createStock(openEditAfterSave: boolean = false): void {
-        console.log(this.stockForm.variants);
+        let updatedCustomFieldArray = [];
+        this.stockForm.variants?.forEach((variant) => {
+            updatedCustomFieldArray = variant.customFields.map((obj) => {
+                return {
+                    uniqueName: obj.uniqueName,
+                    value: obj.value
+                };
+            });
+            variant.customFields = updatedCustomFieldArray;
+        });
+
 
         this.isFormSubmitted = false;
         if (!this.stockForm.name || !this.stockForm.stockUnitUniqueName) {
@@ -1048,11 +1058,15 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 value: customField?.value
             }
         });
-        stockForm.variants.customFields = stockForm.variants.customFields?.map(customField => {
-            return {
-                uniqueName: customField?.uniqueName,
-                value: customField?.value
-            }
+        let updatedCustomFieldArray = [];
+        this.stockForm.variants?.forEach((variant) => {
+            updatedCustomFieldArray = variant.customFields.map((obj) => {
+                return {
+                    uniqueName: obj.uniqueName,
+                    value: obj.value
+                };
+            });
+            variant.customFields = updatedCustomFieldArray;
         });
         let defaultWarehouse = null;
         if (this.warehouses?.length > 0) {
@@ -1455,12 +1469,32 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
      *
      * @memberof StockCreateEditComponent
      */
-    public getCustomFields(): void {
+    public getVariantCustomFields(): void {
         this.companyCustomFields = [];
+        this.customFieldsService.list(this.customFieldsVariantRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response && response.status === 'success') {
+                this.companyCustomFields = response.body?.results;
+                this.stockForm.variants.forEach(variant => {
+                    if (this.companyCustomFields?.length > 0) {
+                        variant.customFields = this.companyCustomFields;
+                    }
+                });
+            } else {
+                this.toaster.showSnackBar("error", response.message);
+            }
+            this.changeDetection.detectChanges();
+        });
+    }
+
+    /**
+ * Get custom fields
+ *
+ * @memberof StockCreateEditComponent
+ */
+    public getCustomFields(): void {
         this.customFieldsService.list(this.customFieldsRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.status === 'success') {
                 this.stockForm.customFields = response.body?.results;
-                this.companyCustomFields = response.body?.results;
                 this.mapCustomFieldsData();
             } else {
                 this.toaster.showSnackBar("error", response.message);
@@ -1484,12 +1518,6 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 }
             });
         }
-        this.stockForm.variants.forEach(variant => {
-            if (this.companyCustomFields?.length > 0) {
-                variant.customFields = this.companyCustomFields;
-            }
-        });
-
     }
 
     /**
