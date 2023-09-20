@@ -401,6 +401,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         this.resendOtpInProgress = true;
         this.isMobileNumberVerified = false;
         this.showHideFocusFromOtpField(true);
+        this.firstStepForm.get('mobileOtp')?.patchValue("");
         window.retryOtp(11, (data) => { this.retrySendOtpSuccessCallback(); }, (error) => { this.retrySendOtpErrorCallback(error); }, this.otpRequestId);
         this.changeDetection.detectChanges();
     }

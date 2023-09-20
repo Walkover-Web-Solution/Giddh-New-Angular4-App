@@ -86,7 +86,7 @@
                             </div>
                             <div class="col-lg-6 mobile-no-action-buttons" *ngIf="showMobileField">
                                 <button mat-stroked-button (click)="reVerifyNumber()" *ngIf="isMobileNumberVerified || showOtpField" class="btn-min-width">
-                                    Change
+                                    {{ localeData?.change }}
                                 </button>
 
                                 <button
@@ -104,7 +104,7 @@
                                         value="50"
                                     >
                                     </mat-progress-spinner>
-                                    <span *ngIf="!sendOtpInProgress">Send OTP</span>
+                                    <span *ngIf="!sendOtpInProgress">{{ localeData?.send_otp }}</span>
                                 </button>
                             </div>
                             <ng-container *ngIf="showMobileField && showOtpField">
@@ -113,7 +113,7 @@
                                         (clickOutside)="showHideFocusFromOtpField(false)"
                                         [name]="'mobileOtp'"
                                         [type]="'tel'"
-                                        [label]="'OTP'"
+                                        [label]="localeData?.otp"
                                         [placeholder]="localeData?.enter_otp"
                                         [floatLabel]="showFocusInOtpField ? 'always' : 'auto'"
                                         formControlName="mobileOtp"
@@ -137,7 +137,7 @@
                                                 value="50"
                                             >
                                             </mat-progress-spinner>
-                                            <span *ngIf="!verifyOtpInProgress">Verify</span>
+                                            <span *ngIf="!verifyOtpInProgress">{{ localeData?.verify }}</span>
                                         </button>
                                         <button
                                             mat-stroked-button
@@ -153,7 +153,7 @@
                                                 value="50"
                                             >
                                             </mat-progress-spinner>
-                                            <span *ngIf="!resendOtpInProgress">Resend OTP</span>
+                                            <span *ngIf="!resendOtpInProgress">{{ localeData?.resend_otp }}</span>
                                         </button>
                                     </div>
                                 </div>

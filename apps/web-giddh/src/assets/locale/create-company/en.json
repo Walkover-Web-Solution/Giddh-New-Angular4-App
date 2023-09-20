@@ -70,5 +70,10 @@
     "otp_sent": "OTP sent successfully.",
     "otp_resent": "OTP resent successfully.",
     "enter_valid_otp": "Please enter otp!",
-    "mobile_verified": "Mobile number verified successfully."
+    "mobile_verified": "Mobile number verified successfully.",
+    "change": "Change",
+    "send_otp": "Send OTP",
+    "otp": "OTP",
+    "verify": "Verify",
+    "resend_otp": "Resend OTP"
 }
