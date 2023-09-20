@@ -588,7 +588,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
      * @memberof StockCreateEditComponent
      */
     public generateVariants(): void {
-        console.log("called generateVariants");
+        console.log("called generateVariants", this.stockForm.variants);
 
         const checkUnitRateObject = {
             purchase: false,
@@ -609,7 +609,6 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 });
             }
         });
-
         if (attributes?.length > 0) {
             attributes = attributes.reduce((previous, current) => previous.flatMap(currentValue => current.map(finalValue => ({ ...currentValue, ...finalValue }))));
         }
@@ -651,8 +650,6 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                     variantExists = existingVariants?.filter(existingVariant => existingVariant?.name === variant.current);
                 }
             });
-            console.log(this.stockForm.variants.customFields);
-
             let variantObj = (variantExists?.length > 0) ? variantExists[0] : {
                 name: variant.current,
                 archive: false,
@@ -707,8 +704,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
 
             variantObj.name = variant.current;
 
+            console.log('stockVariants', variantObj);
             stockVariants.push(variantObj);
-            console.log('stockVariants', stockVariants);
 
             this.checkUnitRateValidation.push(Object.assign({}, checkUnitRateObject));
         });
@@ -931,6 +928,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
      * @memberof StockCreateEditComponent
      */
     public createStock(openEditAfterSave: boolean = false): void {
+        console.log(this.stockForm.variants);
+
         this.isFormSubmitted = false;
         if (!this.stockForm.name || !this.stockForm.stockUnitUniqueName) {
             this.isFormSubmitted = true;
@@ -1156,8 +1155,6 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     public getStockDetails(callback?: Function): void {
         this.toggleLoader(true);
         this.inventoryService.getStockV2(this.queryParams?.stockUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            // console.log('Stock Details', response);
-
             if (response?.status === "success" && response.body) {
                 this.stockForm.name = response.body.name;
                 this.stockForm.uniqueName = response.body.uniqueName;
@@ -1463,7 +1460,6 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         this.customFieldsService.list(this.customFieldsRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.status === 'success') {
                 this.stockForm.customFields = response.body?.results;
-                this.stockForm.variants.customFields = response.body?.results;
                 this.companyCustomFields = response.body?.results;
                 this.mapCustomFieldsData();
             } else {
@@ -1488,15 +1484,12 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 }
             });
         }
-        // console.log('before', this.stockForm.variants.customFields, this.customFieldsData);
-        // if (this.stockForm.variants.customFields?.length > 0 && this.customFieldsData?.length > 0) {
-        //     this.stockForm.variants.customFields?.forEach(customField => {
-        //         const customFieldData = this.customFieldsData?.filter(cfData => cfData?.uniqueName === customField?.uniqueName);
-        //         if (customFieldData?.length > 0) {
-        //             customField.value = customFieldData[0]?.value;
-        //         }
-        //     });
-        // }
+        this.stockForm.variants.forEach(variant => {
+            if (this.companyCustomFields?.length > 0) {
+                variant.customFields = this.companyCustomFields;
+            }
+        });
+
     }
 
     /**

@@ -8809,6 +8809,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         }
     }
     public detectBarcode(event: KeyboardEvent): string | null {
+        console.log(event.key);
+
         const key = event.key;
         if (key === 'Enter') {
             if (this.getBarcodeUniqueName.length) {
