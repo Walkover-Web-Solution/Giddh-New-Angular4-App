@@ -727,7 +727,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public startTime: number = 0;
     public endTime: number = 0;
     public totalTime: number = 0;
-
+    public lastScannedKey: string = '';
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -8811,6 +8811,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public detectBarcode(event: KeyboardEvent): string | null {
         console.log(event.key);
 
+        let ignoreKeyList = ['Shift'];
+
         const key = event.key;
         if (key === 'Enter') {
             if (this.getBarcodeUniqueName.length) {
@@ -8819,7 +8821,10 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 return null;
             }
         } else {
-            this.getBarcodeUniqueName += key;
+            if (!ignoreKeyList.includes(key)) {
+                this.getBarcodeUniqueName += (this.lastScannedKey === 'Shift') ? key.toUpperCase() : key;
+            }
+            this.lastScannedKey = key;
             return null;
         }
     }
