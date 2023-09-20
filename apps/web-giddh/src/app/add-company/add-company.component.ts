@@ -456,7 +456,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         this.verifyOtpInProgress = false;
         this.isMobileNumberVerified = true;
         this.showOtpField = false;
-        this.toaster.showSnackBar("success",this.localeData?.mobile_verified);
+        this.toaster.showSnackBar("success", this.localeData?.mobile_verified);
         this.changeDetection.detectChanges();
     }
 
@@ -865,6 +865,9 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         if (this.firstStepForm.invalid || (this.showMobileField && !this.isMobileNumberVerified)) {
             this.isFormSubmitted = true;
             this.selectedStep = 0;
+            if (!this.firstStepForm.invalid && this.showMobileField && !this.isMobileNumberVerified) {
+                this.toaster.showSnackBar("error", this.localeData?.verify_number);
+            }
             return;
         }
         this.firstStepForm.controls['mobile'].setValue(this.showMobileField ? this.intl?.getNumber() : this.mobileNo);
