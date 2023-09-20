@@ -63,6 +63,8 @@ export class CustomFieldsListComponent implements OnInit, OnDestroy {
      * @memberof CustomFieldsListComponent
      */
     public ngOnInit(): void {
+        this.customFieldsRequest.moduleUniqueName = 'account';
+        this.getCustomFields();
     }
 
     /**
@@ -132,7 +134,7 @@ export class CustomFieldsListComponent implements OnInit, OnDestroy {
      * Page change event handler
      *
      * @param {PageChangedEvent} event Page changed event
-     * @memberof CustomFieldsListComponent 
+     * @memberof CustomFieldsListComponent
      */
     public pageChanged(event: PageChangedEvent): void {
         this.customFieldsRequest.page = event.page;
