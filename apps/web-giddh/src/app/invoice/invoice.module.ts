@@ -74,8 +74,8 @@ import { DeleteTemplateConfirmationModalModule } from './templates/edit-template
 import { InvoiceTemplatesModule } from './templates/invoice.templates.module';
 import { VoucherModule } from '../voucher/voucher.module';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { ScrollingModule } from '@angular/cdk/scrolling';
 import { MatDialogModule } from '@angular/material/dialog';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 @NgModule({
     declarations: [
