@@ -8,5 +8,6 @@ export enum FieldTypes {
 export enum FieldModules {
     Account = 'account',
     Stock = 'stock',
-    Group = 'group'
+    Group = 'group',
+    Variant = 'variant'
 }
