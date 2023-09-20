@@ -1,6 +1,7 @@
 import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { MatDialogModule } from "@angular/material/dialog";
 import { RouterModule } from "@angular/router";
 import { ClickOutsideModule } from "ng-click-outside";
 import { BsDropdownModule } from "ngx-bootstrap/dropdown";
@@ -44,7 +45,8 @@ export function provideConfig() {
         CommandKModule,
         TabsModule.forRoot(),
         SocialLoginModule,
-        GenericAsideMenuAccountModule
+        GenericAsideMenuAccountModule,
+        MatDialogModule
     ],
     exports: [
         PrimarySidebarComponent

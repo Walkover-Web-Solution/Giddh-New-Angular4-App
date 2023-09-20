@@ -1,7 +1,6 @@
-import { Component, EventEmitter, OnInit, Output, HostListener, OnDestroy } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { GeneralActions } from 'apps/web-giddh/src/app/actions/general/general.actions';
-import { CALENDLY_URL } from 'apps/web-giddh/src/app/app.constant';
 import { AuthenticationService } from 'apps/web-giddh/src/app/services/authentication.service';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import { ReplaySubject } from 'rxjs';
@@ -32,7 +31,7 @@ export class AsideHelpSupportComponent implements OnInit, OnDestroy {
         private authService: AuthenticationService,
         private generalActions: GeneralActions,
         private store: Store<AppState>
-        ) {
+    ) {
 
     }
 
@@ -82,16 +81,6 @@ export class AsideHelpSupportComponent implements OnInit, OnDestroy {
                 this.apkVersion = versNum;
             }
         });
-    }
-
-    /**
-     * This will detect the ESCAPE keypress and will close the popup
-     *
-     * @param {KeyboardEvent} event
-     * @memberof AsideHelpSupportComponent
-     */
-    @HostListener('document:keydown.escape', ['$event']) onKeydownHandler(event: KeyboardEvent) {
-        this.closeAsidePane();
     }
 
     /**

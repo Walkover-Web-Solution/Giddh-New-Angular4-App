@@ -18,8 +18,10 @@ $custom-typography: mat-typography-config(
 @import "../css/global/mat-button.scss";
 @import "../css/global/search.scss";
 @import "../css/global/all-items.scss";
+@import "../css/global/vat-report.scss";
 @import "../css/global/header.scss";
 @import "../css/global/setting-integration.scss";
+@import "../css/global/help-support.scss";
 @import "../css/global/sales-register-expand.scss";
 @import "../css/global/input-dropdown-field.scss";
 @import "../css/global/voucher.scss";
@@ -913,7 +915,7 @@ aside-create-group {
     bottom: 0;
     width: 100%;
     max-width: 760px;
-    z-index: 99999;
+    z-index: 9999;
 
     .container-fluid {
         padding-left: 0;
@@ -8374,12 +8376,6 @@ button.btn.btn-filter {
     }
 }
 
-.modal-open.cmd-k {
-    .modal-backdrop + .modal {
-        z-index: 999999 !important;
-    }
-}
-
 .modal-backdrop + .modal.fade .modal-dialog {
     transform: translate(0);
 }
@@ -10755,8 +10751,6 @@ body.update-scroll-hidden {
 
 .contact-body {
     .contact-modal {
-        height: 375px !important;
-
         .mat-dialog-container {
             float: left !important;
             width: 100% !important;
@@ -14435,5 +14429,14 @@ activity-compare-json {
     .mdc-data-table__header-cell {
         word-break: break-word;
         white-space: nowrap;
+    }
+}
+
+/*---- aside-button ----*/
+aside-menu-product-service {
+    .mat-mdc-outlined-button {
+        &.mat-unthemed {
+            color: var(--color-list) !important;
+        }
     }
 }

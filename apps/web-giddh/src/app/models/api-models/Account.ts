@@ -6,7 +6,7 @@ import { IFlattenAccountsResultItem } from '../interfaces/flatten-accounts-resul
 import { IInheritedTaxes } from '../interfaces/inherited-taxes.interface';
 import { IPaginatedResponse } from '../interfaces/paginated-response.interface';
 import { IDiscountList } from './SettingsDiscount';
-import { StateList } from './Company';
+import { CountyList, StateList } from './Company';
 
 /**
  * Model for create account api response
@@ -179,7 +179,7 @@ export class IAccountAddress {
     public stateCodeName: string;
     public pincode?: string;
     public countyCode?: string;
-    public county?: any;
+    public county?: CountyList;
 }
 export class AccountRequestV2 {
     public addresses: IAccountAddress[];

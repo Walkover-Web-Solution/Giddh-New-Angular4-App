@@ -6,7 +6,8 @@ add-company,
 stock-create-edit,
 dropdown-field,
 input-field,
-stock-balance {
+stock-balance,
+mat-form-field {
     .mat-mdc-form-field {
         width: 100%;
     }
@@ -42,6 +43,7 @@ stock-balance {
             &.mdc-floating-label{
                 line-height: 38px;
                 margin-top: -5px;
+                color: var(--color-popup-list-input-text)!important;
             }
         }
         .mdc-notched-outline__notch{
@@ -85,6 +87,9 @@ stock-balance {
                         }
                     }
                 }
+            }
+            .mdc-notched-outline__notch {
+                border-color: var(--color-fields-border) !important;
             }
         }
         .mdc-notched-outline {
@@ -312,9 +317,11 @@ add-company{
             background-color: transparent !important;
         }
     }
-    &.mat-mdc-option-active{
-        &.mdc-list-item {
-            background-color: transparent !important;
+}
+ngx-mat-select-search {
+    .mat-select-search-inner {
+        .mat-select-search-clear {
+            font-size: 12px;
         }
     }
 }
