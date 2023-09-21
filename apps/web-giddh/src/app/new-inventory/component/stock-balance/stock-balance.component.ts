@@ -81,7 +81,7 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
     /** True if translations loaded */
     public translationLoaded: boolean = false;
     /** Stores the voucher API version of company */
-    private voucherApiVersion: 1 | 2;
+    public voucherApiVersion: 1 | 2;
 
     constructor(
 
