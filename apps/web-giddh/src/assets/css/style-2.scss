@@ -14528,8 +14528,10 @@ activity-compare-json {
 /*---- aside-button ----*/
 aside-menu-product-service {
     .mat-mdc-outlined-button {
-        &.mat-unthemed {
-            color: var(--color-list) !important;
+        &.mat-unthemed{
+            &#back {
+                color: var(--color-list) !important;
+            }
         }
     }
 }
