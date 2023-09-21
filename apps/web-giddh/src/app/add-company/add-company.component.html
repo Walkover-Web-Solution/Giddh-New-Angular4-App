@@ -38,7 +38,7 @@
                                 >
                                 </input-field>
                             </div>
-                            <div class="col-lg-6 country-space">
+                            <div class="col-6 country-space">
                                 <dropdown-field
                                     [name]="'country'"
                                     [label]="commonLocaleData?.app_country + '*'"
@@ -50,7 +50,7 @@
                                 >
                                 </dropdown-field>
                             </div>
-                            <div class="col-lg-6 currency-space">
+                            <div class="col-6 currency-space">
                                 <dropdown-field
                                     [name]="'currency'"
                                     [label]="commonLocaleData?.app_currency + '*'"
@@ -62,7 +62,7 @@
                                 >
                                 </dropdown-field>
                             </div>
-                            <div class="col-lg-6 mobile-number mobile-number-wrapper" *ngIf="showMobileField">
+                            <div class="col-6 mobile-number mobile-number-wrapper" *ngIf="showMobileField">
                                 <input-field
                                     [name]="'mobile'"
                                     [type]="'tel'"
@@ -84,7 +84,7 @@
                                 <span id="init-contact-proforma-valid-msg" class="d-none"></span>
                                 <span id="init-contact-proforma-error-msg" class="d-none"></span>
                             </div>
-                            <div class="col-lg-6 mobile-no-action-buttons" *ngIf="showMobileField">
+                            <div class="col-6 mobile-no-action-buttons" *ngIf="showMobileField">
                                 <button mat-stroked-button (click)="reVerifyNumber()" *ngIf="isMobileNumberVerified || showOtpField" class="btn-min-width">
                                     {{ localeData?.change }}
                                 </button>
@@ -108,7 +108,7 @@
                                 </button>
                             </div>
                             <ng-container *ngIf="showMobileField && showOtpField">
-                                <div class="col-lg-6 otp-input">
+                                <div class="col-6 otp-input">
                                     <input-field
                                         (clickOutside)="showHideFocusFromOtpField(false)"
                                         [name]="'mobileOtp'"
@@ -121,7 +121,7 @@
                                     >
                                     </input-field>
                                 </div>
-                                <div class="col-lg-6 mobile-no-action-buttons">
+                                <div class="col-6 mobile-no-action-buttons">
                                     <div class="d-flex align-items-center">
                                         <button
                                             mat-stroked-button
