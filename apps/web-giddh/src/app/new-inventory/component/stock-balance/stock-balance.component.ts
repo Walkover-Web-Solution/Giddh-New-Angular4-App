@@ -80,6 +80,8 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /** True if translations loaded */
     public translationLoaded: boolean = false;
+    /** Stores the voucher API version of company */
+    private voucherApiVersion: 1 | 2;
 
     constructor(
 
@@ -162,6 +164,7 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
                 "checked": true
             }
         ];
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
     }
 
     /**
