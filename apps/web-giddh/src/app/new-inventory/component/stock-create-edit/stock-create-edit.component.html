@@ -1055,9 +1055,7 @@
                                                                     {{ localeData?.is_rate_inclusive }}
                                                                 </th> -->
                                                                 <ng-container
-                                                                    *ngFor="
-                                                                        let customField of companyCustomFields
-                                                                    "
+                                                                    *ngFor="let customField of companyCustomFields"
                                                                 >
                                                                     <th class="sales-purchase-info table-heading-color">
                                                                         {{ customField?.fieldName }}
@@ -1566,14 +1564,16 @@
                                                                                     [placeholder]="
                                                                                         customField?.fieldInfo
                                                                                     "
-                                                                                    [(ngModel)]="
-                                                                                        customField.value
-                                                                                    "
+                                                                                    [(ngModel)]="customField.value"
                                                                                     [maxlength]="
                                                                                         customField.dataRange?.max
                                                                                     "
                                                                                     [pattern]="customField.regex"
                                                                                     [required]="customField.isMandatory"
+                                                                                    [showError]="
+                                                                                        isFormSubmitted &&
+                                                                                        !customField.value
+                                                                                    "
                                                                                 >
                                                                                 </input-field>
                                                                                 <input-field
@@ -1589,23 +1589,23 @@
                                                                                     [placeholder]="
                                                                                         customField?.fieldInfo
                                                                                     "
-                                                                                    [(ngModel)]="
-                                                                                        customField.value
-                                                                                    "
+                                                                                    [(ngModel)]="customField.value"
                                                                                     [min]="customField.dataRange?.min"
                                                                                     [max]="customField.dataRange?.max"
                                                                                     [pattern]="customField.regex"
                                                                                     [required]="customField.isMandatory"
                                                                                     [allowDecimalDigitsOnly]="true"
+                                                                                    [showError]="
+                                                                                        isFormSubmitted &&
+                                                                                        !customField.value
+                                                                                    "
                                                                                 ></input-field>
                                                                                 <mat-radio-group
                                                                                     color="primary"
                                                                                     [name]="
                                                                                         'customField-' + i + '-' + k
                                                                                     "
-                                                                                    [(ngModel)]="
-                                                                                        customField.value
-                                                                                    "
+                                                                                    [(ngModel)]="customField.value"
                                                                                     [required]="customField.isMandatory"
                                                                                     *ngIf="
                                                                                         customField.fieldType?.type ===

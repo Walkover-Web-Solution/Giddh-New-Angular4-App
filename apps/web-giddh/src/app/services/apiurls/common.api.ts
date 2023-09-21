@@ -11,6 +11,5 @@ export const COMMON_API = {
     GST_STOCK_UNITS: 'v2/company/:companyUniqueName/gst/unit-mapping',
     MODULE_WISE_COLUMNS: 'company/:companyUniqueName/report-filters?module=:module',
     UPLOAD_FILE: 'company/:companyUniqueName/ledger/upload',
-    UPLOAD_IMAGE: 'company/:companyUniqueName/images',
-    BARCODE_SCAN: 'company/:companyUniqueName/customfield/barcode/:barcodeUniqueName'
+    UPLOAD_IMAGE: 'company/:companyUniqueName/images'
 };
