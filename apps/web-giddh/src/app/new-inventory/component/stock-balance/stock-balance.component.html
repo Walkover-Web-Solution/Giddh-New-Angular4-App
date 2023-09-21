@@ -9,18 +9,20 @@
     <div class="stock-balance-wrapper" *ngIf="!isLoading">
         <div class="stock-balance-top-bar">
             <div class="stock-balance-top-bar-left-side column-gap15">
-                <button mat-stroked-button color="primary" [matMenuTriggerFor]="newStock">
-                    {{ localeData?.warehouse_opening_balance?.new_stock }}
-                    <span class="caret"></span>
-                </button>
-                <mat-menu #newStock="matMenu">
-                    <button mat-menu-item [routerLink]="'/pages/inventory/v2/stock/product/create'">
-                        {{ commonLocaleData?.app_product }}
+                <ng-container *ngIf="voucherApiVersion == 2">
+                    <button mat-stroked-button color="primary" [matMenuTriggerFor]="newStock">
+                        {{ localeData?.warehouse_opening_balance?.new_stock }}
+                        <span class="caret"></span>
                     </button>
-                    <button mat-menu-item [routerLink]="'/pages/inventory/v2/stock/service/create'">
-                        {{ commonLocaleData?.app_service }}
-                    </button>
-                </mat-menu>
+                    <mat-menu #newStock="matMenu">
+                        <button mat-menu-item [routerLink]="'/pages/inventory/v2/stock/product/create'">
+                            {{ commonLocaleData?.app_product }}
+                        </button>
+                        <button mat-menu-item [routerLink]="'/pages/inventory/v2/stock/service/create'">
+                            {{ commonLocaleData?.app_service }}
+                        </button>
+                    </mat-menu>
+                </ng-container>
                 <div class="col-xl-6 col-lg-10 col-md-10 pl-0">
                     <mat-select
                         name="selectedWarehouse"
