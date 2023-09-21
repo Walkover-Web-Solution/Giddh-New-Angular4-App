@@ -320,7 +320,6 @@ export enum EInvoiceStatus {
 
 /** Length of entry description on vouchers */
 export const ENTRY_DESCRIPTION_LENGTH = 300;
-
 export const EMAIL_REGEX_PATTERN = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 /** This will hold error status code for permission error from API */
 export const UNAUTHORISED = 401;
@@ -538,3 +537,6 @@ export const OTP_PROVIDER_URL = 'https://control.msg91.com/app/assets/otp-provid
 
 export const RESTRICTED_VOUCHERS_FOR_DOWNLOAD = ['journal'];
 export const SAMPLE_FILES_URL = 'https://giddh-import-sample-files.s3.ap-south-1.amazonaws.com/sample-file-';
+
+export const OTP_WIDGET_ID_NEW = '33686b716134333831313239';
+export const OTP_WIDGET_TOKEN_NEW = '205968TmXguUAwoD633af103P1';

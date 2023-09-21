@@ -101,14 +101,14 @@
                         <table class="width-100 card-table">
                             <thead class="hidden-xs">
                                 <tr class="thead-background1 row">
-                                    <th class="col-3 border-top-none">
+                                    <th class="col-4 border-top-none">
                                         <span class="cursor-pointer">
                                             {{ commonLocaleData?.app_date }}
                                         </span>
                                     </th>
                                     <th class="col-5 border-top-none">{{ commonLocaleData?.app_particular }}</th>
 
-                                    <th class="col-4 text-right border-top-none">
+                                    <th class="col-3 text-right border-top-none">
                                         {{ commonLocaleData?.app_amount }}
                                     </th>
                                 </tr>
@@ -125,7 +125,7 @@
                                 >
                                     <ng-container *ngIf="txn.type === 'DEBIT'">
                                         <td
-                                            class="col-3 d-flex align-items-center custom-input-field"
+                                            class="col-4 d-flex align-items-center custom-input-field"
                                             [attr.data-title]="commonLocaleData?.app_date"
                                         >
                                             <giddh-datepicker
@@ -339,7 +339,7 @@
                                         </td>
 
                                         <td
-                                            class="col-4 text-right d-flex align-items-center flex-column"
+                                            class="col-3 text-right d-flex align-items-center flex-column"
                                             [attr.data-title]="commonLocaleData?.app_amount"
                                         >
                                             <input
@@ -448,13 +448,13 @@
                         <table class="width-100 card-table">
                             <thead class="xs-hidden">
                                 <tr class="thead-background1 row">
-                                    <th class="col-3 border-top-none">
+                                    <th class="col-4 border-top-none">
                                         <span class="cursor-pointer">
                                             {{ commonLocaleData?.app_date }}
                                         </span>
                                     </th>
                                     <th class="col-5 border-top-none">{{ commonLocaleData?.app_particular }}</th>
-                                    <th class="col-4 text-right border-top-none">{{ commonLocaleData?.app_amount }}</th>
+                                    <th class="col-3 text-right border-top-none">{{ commonLocaleData?.app_amount }}</th>
                                 </tr>
                             </thead>
                             <tbody class="ledger-main">
@@ -465,7 +465,7 @@
                                     <ng-container *ngIf="txn.type == 'CREDIT'">
                                         <td
                                             [attr.data-title]="commonLocaleData?.app_date"
-                                            class="col-3 d-flex align-items-center custom-input-field"
+                                            class="col-4 d-flex align-items-center custom-input-field"
                                         >
                                             <giddh-datepicker
                                                 [showToggleIcon]="false"
@@ -680,7 +680,7 @@
 
                                         <td
                                             [attr.data-title]="commonLocaleData?.app_amount"
-                                            class="col-4 text-right d-flex align-items-center flex-column"
+                                            class="col-3 text-right d-flex align-items-center flex-column"
                                         >
                                             <input
                                                 matInput
@@ -1797,8 +1797,8 @@
                                             <td
                                                 *ngIf="
                                                     voucherApiVersion === 2 &&
-                                                    (vm.selectedLedger.voucher?.shortCode === 'credit note' ||
-                                                        vm.selectedLedger.voucher?.shortCode === 'debit note')
+                                                    (vm.selectedLedger?.voucher?.shortCode === 'credit note' ||
+                                                        vm.selectedLedger?.voucher?.shortCode === 'debit note')
                                                 "
                                                 class="pd-r1 pb-1"
                                             >

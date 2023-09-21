@@ -8,9 +8,9 @@
     <div class="aside-pane" (clickOutside)="closeAsidePaneIfMobile($event)" asideInventorySidebarMenuState>
         <div class="help-aside-body">
             <div class="back-to-main-slider">
-                <a href="javascript:;">
-                    <span (click)="goToPreviousPage()">
-                        <i class="icon-back-arrow"></i>
+                <a [routerLink]="['/pages/giddh-all-items']">
+                    <span>
+                        <img src="{{ imgPath }}home-icon-black.svg" alt="home-icon" class="icon-pull-top">
                     </span>
                 </a>
                 <h1 class="heading">{{ localeData?.sidebar?.inventory }}</h1>
@@ -25,15 +25,18 @@
                         routerLinkActive="active"
                         [ngClass]="{
                             'hide-node': node.onlyBranchMode && isCompany,
-                            'active': !node?.link && node.hiddenLink.includes(currentUrl)
+                            'active': !node?.link && node.hiddenLink.includes(currentUrl),
+                            'mr-t1': (node.name == localeData?.sidebar?.warehouse_balance)
                         }"
                     >
                         <span
-                            class="w-100 d-inline-flex align-items-center"
+                            class="w-100 d-inline-flex"
+                            [ngClass]="{ 'align-items-start': (node.name == localeData?.sidebar?.warehouse_balance),
+                                         'align-items-center': !(node.name == localeData?.sidebar?.warehouse_balance)}"
                             *ngIf="!(node.onlyBranchMode && isCompany)"
                             (click)="toggleAsidePane($event, node)"
                         >
-                            <img src="{{ imgPath }}{{ node.icons }}" class="sidebar-menu-icons" alt="" />
+                            <img src="{{ imgPath }}{{ node.icons }}" [ngClass]="{ 'mt-1': (node.name == localeData?.sidebar?.warehouse_balance)}" class="sidebar-menu-icons" alt="" />
                             <h5>{{ node.name }}</h5>
                         </span>
                     </mat-tree-node>

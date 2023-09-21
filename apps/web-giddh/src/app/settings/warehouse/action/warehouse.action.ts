@@ -53,7 +53,7 @@ export class WarehouseActions {
         map((response: BaseResponse<any, any>) => {
             if (response?.status === 'error') {
                 this.toast.errorToast(response.message, response.code);
-                return this.createWarehouseResponse(response);
+                return { type: 'EmptyAction' };
             }
             this.toast.successToast(this.localeService.translate("app_messages.warehouse_created"), this.localeService.translate("app_success"));
             return this.createWarehouseResponse(response);

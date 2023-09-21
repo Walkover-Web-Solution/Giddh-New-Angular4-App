@@ -142,6 +142,7 @@ form {
                     }
                     .form-control {
                         font-size: var(--font-size-14) !important;
+                        min-width: 100px;
                     }
                 }
             }
@@ -585,7 +586,7 @@ table.table.customer-purchase-table {
 }
 
 .invoice-due-date input {
-    width: 93px !important;
+    width: 100px !important;
 }
 
 section.static-purchase-table {
@@ -598,10 +599,6 @@ section.static-purchase-table {
     width: 100%;
     left: 0;
     margin-left: 48%;
-}
-
-.m-l-10 {
-    margin-left: 10px;
 }
 
 .mt-1 {
