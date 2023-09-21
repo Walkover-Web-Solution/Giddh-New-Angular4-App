@@ -37,7 +37,7 @@ export class CustomFieldsListComponent implements OnInit, OnDestroy {
     public customFieldsRequest: any = {
         page: 1,
         count: PAGINATION_LIMIT,
-        moduleUniqueName: 'account'
+        moduleUniqueName: ''
     };
     /** Holds get all custom fields api response */
     public customFieldsList: any = {};
@@ -63,6 +63,7 @@ export class CustomFieldsListComponent implements OnInit, OnDestroy {
      * @memberof CustomFieldsListComponent
      */
     public ngOnInit(): void {
+        this.customFieldsRequest.moduleUniqueName = 'account';
         this.getCustomFields();
     }
 
@@ -133,7 +134,7 @@ export class CustomFieldsListComponent implements OnInit, OnDestroy {
      * Page change event handler
      *
      * @param {PageChangedEvent} event Page changed event
-     * @memberof CustomFieldsListComponent 
+     * @memberof CustomFieldsListComponent
      */
     public pageChanged(event: PageChangedEvent): void {
         this.customFieldsRequest.page = event.page;
@@ -149,7 +150,8 @@ export class CustomFieldsListComponent implements OnInit, OnDestroy {
     public translationComplete(event: boolean): void {
         if (event) {
             this.fieldModules = [
-                { name: this.localeData?.modules?.account, uniqueName: FieldModules.Account }
+                { name: this.localeData?.modules?.account, uniqueName: FieldModules.Account },
+                { name: this.commonLocaleData.app_variant, uniqueName: FieldModules.Variant }
             ];
             this.translationsLoaded = true;
             this.changeDetectorRef.detectChanges();

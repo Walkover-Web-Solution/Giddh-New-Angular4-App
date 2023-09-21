@@ -425,9 +425,7 @@
                                                                                 </mat-radio-group>
                                                                             </div>
                                                                         </div>
-                                                                        <div
-                                                                            class="col-sm-6 col-lg-12 pt-3 which-tab"
-                                                                        >
+                                                                        <div class="col-sm-6 col-lg-12 pt-3 which-tab">
                                                                             <dropdown-field
                                                                                 [name]="'purchaseAccount'"
                                                                                 [placeholder]="
@@ -1056,6 +1054,13 @@
                                                                 >
                                                                     {{ localeData?.is_rate_inclusive }}
                                                                 </th> -->
+                                                                <ng-container
+                                                                    *ngFor="let customField of companyCustomFields"
+                                                                >
+                                                                    <th class="sales-purchase-info table-heading-color">
+                                                                        {{ customField?.fieldName }}
+                                                                    </th>
+                                                                </ng-container>
                                                                 <th class="archive table-heading-color">
                                                                     {{ commonLocaleData?.app_archive }}
                                                                 </th>
@@ -1063,7 +1068,7 @@
                                                             <ng-container
                                                                 *ngFor="
                                                                     let variant of stockForm.variants
-                                                                        | sortBy: ['archive'];
+                                                                        | sortBy : ['archive'];
                                                                     let i = index
                                                                 "
                                                             >
@@ -1533,6 +1538,92 @@
                                                                             ></mat-checkbox>
                                                                         </ng-container>
                                                                     </td> -->
+
+                                                                    <ng-container
+                                                                        *ngFor="
+                                                                            let customField of variant?.customFields;
+                                                                            let k = index
+                                                                        "
+                                                                    >
+                                                                        <td
+                                                                            class="sales-purchase-info inventory-tab purchase-information-enable"
+                                                                        >
+                                                                            <div class="sales-purchase-wrapper">
+                                                                                <input-field
+                                                                                    *ngIf="
+                                                                                        customField.fieldType?.type ===
+                                                                                            availableFieldTypes.String ||
+                                                                                        customField.fieldType?.type ===
+                                                                                            availableFieldTypes.Barcode
+                                                                                    "
+                                                                                    [cssClass]="'custom-field'"
+                                                                                    [name]="
+                                                                                        'customField-' + i + '-' + k
+                                                                                    "
+                                                                                    [type]="'text'"
+                                                                                    [placeholder]="
+                                                                                        customField?.fieldInfo
+                                                                                    "
+                                                                                    [(ngModel)]="customField.value"
+                                                                                    [maxlength]="
+                                                                                        customField.dataRange?.max
+                                                                                    "
+                                                                                    [pattern]="customField.regex"
+                                                                                    [required]="customField.isMandatory"
+                                                                                    [showError]="
+                                                                                        isFormSubmitted &&
+                                                                                        !customField.value
+                                                                                    "
+                                                                                >
+                                                                                </input-field>
+                                                                                <input-field
+                                                                                    *ngIf="
+                                                                                        customField.fieldType?.type ===
+                                                                                        availableFieldTypes.Number
+                                                                                    "
+                                                                                    [cssClass]="'custom-field'"
+                                                                                    [name]="
+                                                                                        'customField-' + i + '-' + k
+                                                                                    "
+                                                                                    [type]="'number'"
+                                                                                    [placeholder]="
+                                                                                        customField?.fieldInfo
+                                                                                    "
+                                                                                    [(ngModel)]="customField.value"
+                                                                                    [min]="customField.dataRange?.min"
+                                                                                    [max]="customField.dataRange?.max"
+                                                                                    [pattern]="customField.regex"
+                                                                                    [required]="customField.isMandatory"
+                                                                                    [allowDecimalDigitsOnly]="true"
+                                                                                    [showError]="
+                                                                                        isFormSubmitted &&
+                                                                                        !customField.value
+                                                                                    "
+                                                                                ></input-field>
+                                                                                <mat-radio-group
+                                                                                    color="primary"
+                                                                                    [name]="
+                                                                                        'customField-' + i + '-' + k
+                                                                                    "
+                                                                                    [(ngModel)]="customField.value"
+                                                                                    [required]="customField.isMandatory"
+                                                                                    *ngIf="
+                                                                                        customField.fieldType?.type ===
+                                                                                        availableFieldTypes.Boolean
+                                                                                    "
+                                                                                >
+                                                                                    <mat-radio-button value="true">
+                                                                                        {{ commonLocaleData?.app_true }}
+                                                                                    </mat-radio-button>
+                                                                                    <mat-radio-button value="false">
+                                                                                        {{
+                                                                                            commonLocaleData?.app_false
+                                                                                        }}
+                                                                                    </mat-radio-button>
+                                                                                </mat-radio-group>
+                                                                            </div>
+                                                                        </td>
+                                                                    </ng-container>
                                                                     <td class="text-center archive">
                                                                         <!-- <mat-checkbox
                                                                             color="primary"
@@ -1737,75 +1828,6 @@
                                                     </input-field>
                                                 </div>
                                             </div>
-                                            <!-- <ng-container *ngIf="stockForm?.customFields?.length > 0">
-                                                <div
-                                                    class="col-xl-6 col-md-12 col-lg-8 col-sm-12"
-                                                    *ngFor="let customField of stockForm?.customFields; let i = index"
-                                                >
-                                                    <div class="row mr-b1">
-                                                        <div class="col-sm-6 col-lg-4">
-                                                            <label
-                                                                >{{ customField?.fieldName }}
-                                                                <span class="red-text" *ngIf="customField.isMandatory"
-                                                                    >*</span
-                                                                ></label
-                                                            >
-                                                        </div>
-                                                        <div class="col-sm-6 col-lg-6">
-                                                            <input-field
-                                                                *ngIf="
-                                                                    customField.fieldType?.type ===
-                                                                        availableFieldTypes.String ||
-                                                                    customField.fieldType?.type ===
-                                                                        availableFieldTypes.Barcode
-                                                                "
-                                                                [cssClass]="'custom-field'"
-                                                                [name]="customField?.uniqueName"
-                                                                [type]="'text'"
-                                                                [placeholder]="customField?.fieldInfo"
-                                                                [(ngModel)]="customField.value"
-                                                                [maxlength]="customField.dataRange?.max"
-                                                                [pattern]="customField.regex"
-                                                                [required]="customField.isMandatory"
-                                                            >
-                                                            </input-field>
-                                                            <input-field
-                                                                *ngIf="
-                                                                    customField.fieldType?.type ===
-                                                                    availableFieldTypes.Number
-                                                                "
-                                                                [cssClass]="'custom-field'"
-                                                                [name]="customField?.uniqueName"
-                                                                [type]="'number'"
-                                                                [placeholder]="customField?.fieldInfo"
-                                                                [(ngModel)]="customField.value"
-                                                                [min]="customField.dataRange?.min"
-                                                                [max]="customField.dataRange?.max"
-                                                                [pattern]="customField.regex"
-                                                                [required]="customField.isMandatory"
-                                                                [allowDecimalDigitsOnly]="true"
-                                                            ></input-field>
-                                                            <mat-radio-group
-                                                                color="primary"
-                                                                [name]="customField?.uniqueName"
-                                                                [(ngModel)]="customField.value"
-                                                                [required]="customField.isMandatory"
-                                                                *ngIf="
-                                                                    customField.fieldType?.type ===
-                                                                    availableFieldTypes.Boolean
-                                                                "
-                                                            >
-                                                                <mat-radio-button value="true">
-                                                                    {{ commonLocaleData?.app_true }}
-                                                                </mat-radio-button>
-                                                                <mat-radio-button value="false">
-                                                                    {{ commonLocaleData?.app_false }}
-                                                                </mat-radio-button>
-                                                            </mat-radio-group>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </ng-container> -->
                                         </div>
                                     </div>
                                 </mat-tab>
