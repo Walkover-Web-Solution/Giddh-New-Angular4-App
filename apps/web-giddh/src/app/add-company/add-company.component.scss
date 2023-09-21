@@ -9,6 +9,9 @@
         .mobile-number {
             position: relative;
             padding-right: 6px;
+            .flag-input{
+                z-index: 2 !important;
+            }
             .country-flag {
                 position: absolute;
                 top: 50%;
