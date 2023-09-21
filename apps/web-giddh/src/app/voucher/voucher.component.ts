@@ -71,7 +71,6 @@ import { SelectFieldComponent } from '../theme/form-fields/select-field/select-f
 import { DropdownFieldComponent } from '../theme/form-fields/dropdown-field/dropdown-field.component';
 import { PageLeaveUtilityService } from '../services/page-leave-utility.service';
 import { CommonService } from '../services/common.service';
-import { CustomFieldsService } from '../services/custom-fields.service';
 
 /** Type of search: customer and item (product/service) search */
 const SEARCH_TYPE = {
@@ -723,22 +722,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public regionsSource: IOption[] = [];
     /* This will hold company's country regions */
     public companyRegionsSource: IOption[] = [];
-    /** This will hold barcode uniquename*/
-    public getBarcodeUniqueName: string = "";
-    /** Custom fields request */
-    public customFieldsRequest: any = {
-        page: 0,
-        count: 0,
-        moduleUniqueName: 'variant'
-    };
-    /**Hold barcode scan start time */
-    public startTime: number = 0;
-    /**Hold barcode scan end time */
-    public endTime: number = 0;
-    /**Hold barcode scan total time */
-    public totalTime: number = 0;
-    /**Hold barcode last scanned key */
-    public lastScannedKey: string = '';
+
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -807,8 +791,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         private http: HttpClient,
         public dialog: MatDialog,
         private pageLeaveUtilityService: PageLeaveUtilityService,
-        private commonService: CommonService,
-        private customFieldsService: CustomFieldsService
+        private commonService: CommonService
     ) {
         this.advanceReceiptAdjustmentData = new VoucherAdjustments();
         this.advanceReceiptAdjustmentData.adjustments = [];
@@ -3461,12 +3444,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     }
 
     public onSelectSalesAccount(selectedAcc: any, txn: SalesTransactionItemClass, entry: SalesEntryClass, isBulkItem: boolean = false, isLinkedPoItem: boolean = false, entryIndex: number): any {
-        console.log(selectedAcc, txn, entry);
-
         this.invFormData.entries[entryIndex] = entry;
         this.invFormData.entries[entryIndex].transactions[0] = txn;
-        console.log(this.invFormData.entries[entryIndex].transactions[0]);
-
         if ((selectedAcc?.value || isBulkItem) && selectedAcc.additional && selectedAcc.additional?.uniqueName) {
             let params;
             if (selectedAcc.additional.stock) {
@@ -8799,170 +8778,10 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
     // CMD + G functionality
     @HostListener('document:keydown', ['$event'])
-    public handleKeyboardDownEvent(event: KeyboardEvent) {
+    public handleKeyboardUpEvent(event: KeyboardEvent) {
         if ((event.metaKey || event.ctrlKey) && (event.which === 75 || event.which === 71)) {
             this.isCreatingNewAccount = false;
         }
-        this.startTime = event.timeStamp;
-    }
-
-    // CMD + G functionality
-    @HostListener('document:keyup', ['$event'])
-    public handleKeyboardUpEvent(event: KeyboardEvent) {
-        let uniqueName = this.detectBarcode(event);
-        if (uniqueName && this.startTime) {
-            this.endTime = event.timeStamp;
-            const scanTime = this.endTime - this.startTime;
-            this.totalTime += scanTime;
-            if (scanTime < 5.20000000298023) {
-                this.getStockByBarcode();
-            } else {
-                console.log('Typing Scanned');
-            }
-            this.startTime = null;
-            this.getBarcodeUniqueName = '';
-        }
-    }
-
-    public detectBarcode(event: KeyboardEvent): string | null {
-        let ignoreKeyList = ['Shift','Meta','Backspace'];
-        const key = event.key;
-        if (key === 'Enter') {
-            if (this.getBarcodeUniqueName.length) {
-                return this.getBarcodeUniqueName;
-            } else {
-                return null;
-            }
-        } else {
-            if (!ignoreKeyList.includes(key)) {
-                this.getBarcodeUniqueName += (this.lastScannedKey === 'Shift') ? key.toUpperCase() : key;
-            }
-            this.lastScannedKey = key;
-            return null;
-        }
-    }
-
-    public getStockByBarcode(): void {
-        console.log(this.getBarcodeUniqueName);
-
-        this.commonService.getBarcodeScanData(this.getBarcodeUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response && response.body && response.status === 'success') {
-
-                let stockObj = response.body?.stocks[0];
-                let variantObj = response.body?.stocks[0].variants[0];
-                let selectedAcc = {
-                    value: "sales#"+stockObj.uniqueName,
-                    label: stockObj.name,
-                    additional: {
-                        type: "ACCOUNT",
-                        name: "Sales",
-                        uniqueName: "sales",
-                        stock: {
-                            name: stockObj.name,
-                            uniqueName: stockObj.uniqueName,
-                            stockUnitCode: stockObj.stockUnit.code,
-                            rate: 1,
-                            stockUnitName: stockObj.stockUnit.name,
-                            stockUnitUniqueName: stockObj.stockUnit.uniqueName,
-                            taxes:stockObj.taxes,
-                            groupTaxes: [],
-                            skuCodeHeading: stockObj.skuCodeHeading,
-                            customField1Heading: stockObj.customField1Heading,
-                            customField1Value: stockObj.customField1Value,
-                            customField2Heading: stockObj.customField2Heading,
-                            customField2Value: stockObj.customField2Value,
-                            variant: {
-                                uniqueName:variantObj.name,
-                                salesTaxInclusive: variantObj.salesTaxInclusive,
-                                purchaseTaxInclusive: variantObj.purchaseTaxInclusive,
-                                unitRates: [
-                                ]
-                            }
-                        },
-                        parentGroups: [],
-                        route: "/pages/ledger/sales",
-                        label: stockObj.name,
-                        value: "sales#" + stockObj.uniqueName,
-                        applicableTaxes: [
-                            "gst12"
-                        ],
-                        currency: {
-                            code: "INR",
-                            symbol: "₹"
-                        },
-                        nameStr: "",
-                        hsnNumber: null,
-                        sacNumber: null,
-                        uNameStr: "",
-                        category: "income"
-                    }
-                };
-                this.salesAccounts$.pipe(takeUntil(this.destroyed$)).subscribe(data => {
-                    data.unshift(selectedAcc);
-                });
-                let newTrxObj: SalesTransactionItemClass = new SalesTransactionItemClass();
-                newTrxObj.fakeAccForSelect2 = selectedAcc.value;
-                newTrxObj.stockDetails =
-                {
-                    name: stockObj.name,
-                    uniqueName: stockObj.uniqueName,
-                    stockUnitCode: stockObj.stockUnit.code,
-                    rate: 444,
-                    stockUnitName: stockObj.stockUnit.name,
-                    stockUnitUniqueName: stockObj.stockUnit.uniqueName,
-                    taxes: [
-                        "gst12"
-                    ],
-                    groupTaxes: [],
-                    skuCodeHeading: stockObj.skuCodeHeading,
-                    customField1Heading: stockObj.customField1Heading,
-                    customField1Value: stockObj.customField1Value,
-                    customField2Heading: stockObj.customField2Heading,
-                    customField2Value: stockObj.customField2Value,
-                    variant: {
-                        uniqueName: variantObj.name,
-                        salesTaxInclusive: variantObj.salesTaxInclusive,
-                        purchaseTaxInclusive: variantObj.purchaseTaxInclusive,
-                        unitRates: [
-                            {
-                                rate: 444,
-                                stockUnitCode: "kg",
-                                stockUnitUniqueName: "kg",
-                                stockUnitName: "Kilogram"
-                            }
-                        ]
-                    }
-                }
-                let entry: SalesEntryClass = new SalesEntryClass();
-                // let lastIndex = -1;
-                // const startIndex = this.invFormData.entries?.length;
-                // let isBlankItemPresent;
-                // let blankItemIndex = this.invFormData.entries?.findIndex(f => !f.transactions[0].accountUniqueName);
-                // let isBlankItemInBetween;
-                // if (blankItemIndex > -1) {
-                //     lastIndex = blankItemIndex;
-                //     this.invFormData.entries[lastIndex] = new SalesEntryClass();
-                //     isBlankItemInBetween = true;
-                //     isBlankItemPresent = true;
-                // } else {
-                //     this.invFormData.entries.push(new SalesEntryClass());
-                //     lastIndex = this.invFormData.entries?.length - 1;
-                //     isBlankItemInBetween = false;
-                // }
-
-                // this.activeIndx = lastIndex;
-                // this.setActiveIndx(0);
-                this.openFirstEntry();
-                // this.onSearchQueryChanged(newTrxObj.stockDetails.name, 1, 'item');
-                setTimeout(() => {
-
-                    this.onSelectSalesAccount(selectedAcc, newTrxObj, entry, false, false, 0);
-                }, 100);
-            } else {
-                this.toaster.showSnackBar("error", response.message);
-            }
-            this.changeDetectorRef.detectChanges();
-        });
     }
 
     /**
