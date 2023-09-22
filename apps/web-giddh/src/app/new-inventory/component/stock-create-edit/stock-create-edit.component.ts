@@ -1058,8 +1058,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
             }
         });
         let updatedCustomFieldArray = [];
-        let stockObjClone = stockForm.variants;
-        stockObjClone.forEach((variant) => {
+        stockForm.variants.forEach((variant) => {
                     updatedCustomFieldArray = variant.customFields.map((obj) => {
                         return {
                             uniqueName: obj.uniqueName,
