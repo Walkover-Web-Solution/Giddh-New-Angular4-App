@@ -928,23 +928,28 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
      * @memberof StockCreateEditComponent
      */
     public createStock(openEditAfterSave: boolean = false): void {
-        let updatedCustomFieldArray = [];
-        this.stockForm.variants?.forEach((variant) => {
-            updatedCustomFieldArray = variant.customFields.map((obj) => {
-                return {
-                    uniqueName: obj.uniqueName,
-                    value: obj.value
-                };
-            });
-            variant.customFields = updatedCustomFieldArray;
-        });
-
-
         this.isFormSubmitted = false;
         if (!this.stockForm.name || !this.stockForm.stockUnitUniqueName) {
             this.isFormSubmitted = true;
             return;
         }
+        let updatedCustomFieldArray = [];
+        let stockObjClone = cloneDeep(this.stockForm.variants);
+        stockObjClone.forEach((variant) => {
+            variant.customFields.forEach((field) => {
+                if (field.isMandatory) {
+                    return;
+                } else {
+                    updatedCustomFieldArray = variant.customFields.map((obj) => {
+                        return {
+                            uniqueName: obj.uniqueName,
+                            value: obj.value
+                        };
+                    });
+                    variant.customFields = updatedCustomFieldArray;
+                }
+            });
+        });
         if (this.validateStock(this.stockForm.purchaseAccountDetails?.unitRates)) {
             this.stockForm.purchaseAccountDetails.unitRates = this.stockForm.purchaseAccountDetails.unitRates.filter((unitRate) => {
                 return unitRate.stockUnitUniqueName || unitRate.rate;
@@ -1058,15 +1063,23 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 value: customField?.value
             }
         });
+
         let updatedCustomFieldArray = [];
-        this.stockForm.variants?.forEach((variant) => {
-            updatedCustomFieldArray = variant.customFields.map((obj) => {
-                return {
-                    uniqueName: obj.uniqueName,
-                    value: obj.value
-                };
+        let stockObjClone = stockForm.variants;
+        stockObjClone.forEach((variant) => {
+            variant.customFields.forEach((field) => {
+                if (field.isMandatory) {
+                    return;
+                } else {
+                    updatedCustomFieldArray = variant.customFields.map((obj) => {
+                        return {
+                            uniqueName: obj.uniqueName,
+                            value: obj.value
+                        };
+                    });
+                    variant.customFields = updatedCustomFieldArray;
+                }
             });
-            variant.customFields = updatedCustomFieldArray;
         });
         let defaultWarehouse = null;
         if (this.warehouses?.length > 0) {
