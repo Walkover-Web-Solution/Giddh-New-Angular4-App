@@ -937,9 +937,6 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         let stockObjClone = cloneDeep(this.stockForm.variants);
         stockObjClone.forEach((variant) => {
             variant.customFields.forEach((field) => {
-                if (field.isMandatory) {
-                    return;
-                } else {
                     updatedCustomFieldArray = variant.customFields.map((obj) => {
                         return {
                             uniqueName: obj.uniqueName,
@@ -947,7 +944,6 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                         };
                     });
                     variant.customFields = updatedCustomFieldArray;
-                }
             });
         });
         if (this.validateStock(this.stockForm.purchaseAccountDetails?.unitRates)) {
@@ -1068,9 +1064,6 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         let stockObjClone = stockForm.variants;
         stockObjClone.forEach((variant) => {
             variant.customFields.forEach((field) => {
-                if (field.isMandatory) {
-                    return;
-                } else {
                     updatedCustomFieldArray = variant.customFields.map((obj) => {
                         return {
                             uniqueName: obj.uniqueName,
@@ -1078,7 +1071,6 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                         };
                     });
                     variant.customFields = updatedCustomFieldArray;
-                }
             });
         });
         let defaultWarehouse = null;
