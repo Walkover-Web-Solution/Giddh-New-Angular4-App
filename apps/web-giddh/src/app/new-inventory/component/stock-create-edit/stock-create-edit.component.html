@@ -1059,6 +1059,7 @@
                                                                 >
                                                                     <th class="sales-purchase-info table-heading-color">
                                                                         {{ customField?.fieldName }}
+                                                                        <span *ngIf="customField?.isMandatory" class="red-text">*</span>
                                                                     </th>
                                                                 </ng-container>
                                                                 <th class="archive table-heading-color">
