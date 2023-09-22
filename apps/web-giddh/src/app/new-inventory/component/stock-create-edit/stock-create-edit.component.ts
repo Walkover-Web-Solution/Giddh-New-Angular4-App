@@ -935,14 +935,14 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         }
         let updatedCustomFieldArray = [];
         let stockObjClone = cloneDeep(this.stockForm.variants);
-        stockObjClone.forEach((variant) => {
-                    updatedCustomFieldArray = variant.customFields.map((obj) => {
-                        return {
-                            uniqueName: obj.uniqueName,
-                            value: obj.value
-                        };
-                    });
-                    variant.customFields = updatedCustomFieldArray;
+        stockObjClone?.forEach((variant) => {
+            updatedCustomFieldArray = variant?.customFields?.map((obj) => {
+                return {
+                    uniqueName: obj?.uniqueName,
+                    value: obj?.value
+                };
+            });
+            variant.customFields = updatedCustomFieldArray;
         });
         if (this.validateStock(this.stockForm.purchaseAccountDetails?.unitRates)) {
             this.stockForm.purchaseAccountDetails.unitRates = this.stockForm.purchaseAccountDetails.unitRates.filter((unitRate) => {
@@ -1058,14 +1058,14 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
             }
         });
         let updatedCustomFieldArray = [];
-        stockForm.variants.forEach((variant) => {
-                    updatedCustomFieldArray = variant.customFields.map((obj) => {
-                        return {
-                            uniqueName: obj.uniqueName,
-                            value: obj.value
-                        };
-                    });
-                    variant.customFields = updatedCustomFieldArray;
+        stockForm.variants?.forEach((variant) => {
+            updatedCustomFieldArray = variant?.customFields?.map((obj) => {
+                return {
+                    uniqueName: obj?.uniqueName,
+                    value: obj?.value
+                };
+            });
+            variant.customFields = updatedCustomFieldArray;
         });
         let defaultWarehouse = null;
         if (this.warehouses?.length > 0) {
