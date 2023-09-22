@@ -932,6 +932,7 @@ button.btn.btn-filter {
     right: 8px;
     border-color: var(--color-sidebar-primary-search-bar-background);
     background-color: var(--color-sidebar-primary-search-bar-background) !important;
+    min-width: 110px;
 }
 
 :hover.menu-table-item {
