@@ -73,7 +73,6 @@
         }
     }
 }
-
 @media (max-width: 1680px) {
     .inventory-filter-bar {
         .search-control {
@@ -83,6 +82,20 @@
             }
             .menu-btn-control {
                 width: 35%;
+            }
+        }
+    }
+}
+
+@media (max-width: 1199px) {
+    .inventory-filter-bar {
+        .search-control {
+            .icon-input {
+                float: left;
+                width: 60%;
+            }
+            .menu-btn-control {
+                width: 40%;
             }
         }
     }
