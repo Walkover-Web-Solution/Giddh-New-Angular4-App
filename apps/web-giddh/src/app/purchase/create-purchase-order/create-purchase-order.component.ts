@@ -2570,7 +2570,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         this.assignDates();
         setTimeout(() => {
             this.createEmbeddedViewAtIndex(0);
-        },);
+        });
     }
 
     /**
