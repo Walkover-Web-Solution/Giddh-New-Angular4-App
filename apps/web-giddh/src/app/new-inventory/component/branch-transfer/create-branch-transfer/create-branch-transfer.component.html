@@ -1308,11 +1308,7 @@
                                                                     [options]="
                                                                         senderWarehouses[source.get('uniqueName').value]
                                                                     "
-                                                                    [defaultValue]="
-                                                                        senderWarehouses[source.get('uniqueName').value]
-                                                                            ?.length === 1
-                                                                            ? source.get('warehouse.name').value
-                                                                            : ''
+                                                                    [defaultValue]="source.get('warehouse.name').value
                                                                     "
                                                                     *ngIf="source.get('uniqueName').value"
                                                                     [allowValueReset]="true"
@@ -1692,10 +1688,16 @@
                                                                             <mat-radio-button
                                                                                 color="primary"
                                                                                 value="hsn"
+                                                                                (change)="
+                                                                                    handleTableCodeTypeChange($event,i)
+                                                                                "
                                                                                 >HSN Code</mat-radio-button
                                                                             >
                                                                             <mat-radio-button
                                                                                 color="primary"
+                                                                                     (change)="
+                                                                                    handleTableCodeTypeChange($event, i)
+                                                                                "
                                                                                 value="sac"
                                                                                 >SAC Code</mat-radio-button
                                                                             >
@@ -1992,13 +1994,7 @@
                                                                             destination.get('uniqueName').value
                                                                         ]
                                                                     "
-                                                                    [defaultValue]="
-                                                                        destinationWarehouses[
-                                                                            destination.get('uniqueName').value
-                                                                        ]?.length === 1
-                                                                            ? destination.get('warehouse.name').value
-                                                                            : ''
-                                                                    "
+                                                                    [defaultValue]="destination.get('warehouse.name').value"
                                                                     *ngIf="destination.get('uniqueName').value"
                                                                     [allowValueReset]="true"
                                                                     (onClear)="resetWarehouse('destinations', i)"
