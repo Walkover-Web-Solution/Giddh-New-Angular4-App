@@ -650,7 +650,7 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
      */
     public removeSenderDetailsForm(index: number) {
         const sources = this.branchTransferCreateEditForm.get('sources') as UntypedFormArray;
-        if (index < 1) {
+        if (sources.value.length === 1) {
             sources.reset();
         } else {
             sources.removeAt(index);
@@ -677,7 +677,7 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
      */
     public removeReceiverDetailsForm(index: number) {
         const destinations = this.branchTransferCreateEditForm.get('destinations') as UntypedFormArray;
-        if (index < 1) {
+        if (destinations.value.length === 1) {
             destinations.reset();
         } else {
             destinations.removeAt(index);
@@ -734,7 +734,7 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
      */
     public removeProductDetailsForm(index: number) {
         const products = this.branchTransferCreateEditForm.get('products') as UntypedFormArray;
-        if (index < 1) {
+        if (products.value.length === 1) {
             products.reset();
         } else {
             products.removeAt(index);
