@@ -862,6 +862,28 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
         this.activeIndx = null
     }
 
+    /**
+     *This will be use for change table product transfer type
+     *
+     * @memberof CreateBranchTransferComponent
+     */
+    public handleTableCodeTypeChange(event: any, index: number): void {
+        const productsArray = this.branchTransferCreateEditForm.get('products') as UntypedFormArray;
+        const productFormGroup = productsArray?.at(index) as UntypedFormGroup;
+        if (event.value === "hsn") {
+            productFormGroup.get('hsnNumber').setValue(productFormGroup.get('sacNumber').value);
+            productFormGroup.get('sacNumber').setValue('');
+        } else if (event.value === "sac") {
+            productFormGroup.get('sacNumber').setValue(productFormGroup.get('hsnNumber').value);
+            productFormGroup.get('hsnNumber').setValue('');
+        }
+    }
+
+    /**
+     * This will be use for reset form
+     *
+     * @memberof CreateBranchTransferComponent
+     */
     public resetForm(): void {
         this.branchTransferCreateEditForm.reset();
         this.isValidForm = true;
@@ -1636,24 +1658,20 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
                 this.senderWarehouses[sourceFormGroup.get('uniqueName').value] = [];
                 if (this.allWarehouses[sourceFormGroup.get('uniqueName').value] && this.allWarehouses[sourceFormGroup.get('uniqueName').value].length > 0) {
                     this.allWarehouses[sourceFormGroup.get('uniqueName').value]?.forEach(key => {
-
                         if (destinationsArray && destinationsWarehouseFormGroup && key?.uniqueName !== destinationsWarehouseFormGroup.get('uniqueName')?.value &&
                             key.taxNumber === (destinationsWarehouseFormGroup.get('taxNumber')?.value || '')) {
                             this.senderWarehouses[sourceFormGroup.get('uniqueName')?.value]?.push({ label: key.name, value: key?.uniqueName });
-                            if (this.senderWarehouses[sourceFormGroup.get('uniqueName')?.value].length === 1) {
-                                let sourceFormGroup = sourcesArray?.at(0) as UntypedFormGroup;
-                                let sourcesWarehouseFormGroup = sourceFormGroup?.get('warehouse') as UntypedFormGroup;
-                                sourcesWarehouseFormGroup.get('name').setValue(this.senderWarehouses[sourceFormGroup.get('uniqueName')?.value][0]?.label);
-                            }
                         }
                     });
-                    if (destinationsWarehouseFormGroup && sourcesWarehouseFormGroup.get('uniqueName')?.value) {
-                        setTimeout(() => {
-                            let sourceFormGroup = sourcesArray?.at(0) as UntypedFormGroup;
-                            let sourcesWarehouseFormGroup = sourceFormGroup?.get('warehouse') as UntypedFormGroup;
-                            sourcesWarehouseFormGroup.get('uniqueName').setValue(sourcesWarehouseFormGroup.get('uniqueName')?.value);
-                        }, 100);
-                    }
+                    setTimeout(() => {
+                        if (this.senderWarehouses[sourceFormGroup.get('uniqueName')?.value].length === 1) {
+                            let event = {
+                                label: this.senderWarehouses[sourceFormGroup.get('uniqueName')?.value][0]?.label,
+                                value: this.senderWarehouses[sourceFormGroup.get('uniqueName')?.value][0]?.value
+                            }
+                            this.selectSenderWarehouse(event, index);
+                        }
+                    }, 100);
                 }
             }
         }
@@ -1692,20 +1710,18 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
                         if (destinationsFormGroup && destinationsWarehouseFormGroup && key?.uniqueName !== destinationsWarehouseFormGroup.get('uniqueName')?.value &&
                             (reInitializeWarehouses || key.taxNumber === (destinationsWarehouseFormGroup.get('taxNumber')?.value || ''))) {
                             this.senderWarehouses[sourceFormGroup.get('uniqueName')?.value].push({ label: key.name, value: key?.uniqueName });
-                            if (this.senderWarehouses[sourceFormGroup.get('uniqueName')?.value].length === 1) {
-                                let sourceFormGroup = sourcesArray?.at(0) as UntypedFormGroup;
-                                let sourcesWarehouseFormGroup = sourceFormGroup?.get('warehouse') as UntypedFormGroup;
-                                sourcesWarehouseFormGroup.get('name').setValue(this.senderWarehouses[sourceFormGroup.get('uniqueName')?.value][0]?.label);
-                            }
                         }
                     });
-                    if (sourcesWarehouseFormGroup && sourcesWarehouseFormGroup.get('uniqueName')?.value) {
-                        setTimeout(() => {
-                            let sourceFormGroup = sourcesArray?.at(0) as UntypedFormGroup;
-                            let sourcesWarehouseFormGroup = sourceFormGroup?.get('warehouse') as UntypedFormGroup;
+                    setTimeout(() => {
+                        if (this.senderWarehouses[sourceFormGroup.get('uniqueName')?.value].length === 1) {
                             sourcesWarehouseFormGroup.get('uniqueName').setValue(sourcesWarehouseFormGroup.get('uniqueName')?.value);
-                        }, 100);
-                    }
+                            let event = {
+                                label: this.senderWarehouses[sourceFormGroup.get('uniqueName')?.value][0]?.label,
+                                value: this.senderWarehouses[sourceFormGroup.get('uniqueName')?.value][0]?.value
+                            }
+                            this.selectSenderWarehouse(event, index);
+                        }
+                    }, 100);
                 }
             }
         }
@@ -1758,21 +1774,18 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
                         if (key?.uniqueName !== sourcesWarehouseFormGroup.get('uniqueName')?.value &&
                             key.taxNumber === (sourcesWarehouseFormGroup.get('taxNumber')?.value || '')) {
                             this.destinationWarehouses[destinationsFormGroup.get('uniqueName').value].push({ label: key.name, value: key?.uniqueName });
-                            if (this.destinationWarehouses[destinationsFormGroup.get('uniqueName')?.value].length === 1) {
-                                let destinationsFormGroup = destinationsArray?.at(0) as UntypedFormGroup;
-                                let destinationsWarehouseFormGroup = destinationsFormGroup?.get('warehouse') as UntypedFormGroup;
-                                destinationsWarehouseFormGroup.get('name').setValue(this.destinationWarehouses[destinationsFormGroup.get('uniqueName')?.value][0]?.label);
-                            }
                         }
                     });
                 }
-                if (destinationsWarehouseFormGroup && destinationsWarehouseFormGroup.get('uniqueName')?.value) {
-                    setTimeout(() => {
-                        let destinationsFormGroup = destinationsArray?.at(0) as UntypedFormGroup;
-                        let destinationsWarehouseFormGroup = destinationsFormGroup?.get('warehouse') as UntypedFormGroup;
-                        destinationsWarehouseFormGroup.get('uniqueName').setValue(destinationsWarehouseFormGroup.get('uniqueName')?.value);
-                    }, 100);
-                }
+                setTimeout(() => {
+                    if (this.destinationWarehouses[sourceFormGroup.get('uniqueName')?.value].length === 1) {
+                        let event = {
+                            label: this.destinationWarehouses[destinationsFormGroup.get('uniqueName')?.value][0]?.label,
+                            value: this.destinationWarehouses[destinationsFormGroup.get('uniqueName')?.value][0]?.value
+                        }
+                        this.selectReceiverWarehouse(event, index);
+                    }
+                }, 100);
             }
         } else {
             if (this.allWarehouses && sourcesArray && this.allWarehouses[sourceFormGroup?.get('uniqueName')?.value]) {
@@ -1810,14 +1823,19 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
                         if (sourceFormGroup && sourcesWarehouseFormGroup && key?.uniqueName !== sourceFormGroup.get('uniqueName')?.value &&
                             (reInitializeWarehouses || key.taxNumber === (sourcesWarehouseFormGroup.get('taxNumber')?.value || ''))) {
                             this.destinationWarehouses[destinationsFormGroup.get('uniqueName')?.value]?.push({ label: key.name, value: key?.uniqueName });
-                            if (this.destinationWarehouses[destinationsFormGroup.get('uniqueName')?.value].length === 1) {
-                                let destinationsFormGroup = destinationsArray?.at(0) as UntypedFormGroup;
-                                let destinationsWarehouseFormGroup = destinationsFormGroup?.get('warehouse') as UntypedFormGroup;
-                                destinationsWarehouseFormGroup.get('name').setValue(this.destinationWarehouses[destinationsFormGroup.get('uniqueName')?.value][0]?.label);
-                            }
                         }
                     });
                 }
+                setTimeout(() => {
+                    if (this.destinationWarehouses[destinationsFormGroup.get('uniqueName')?.value].length === 1) {
+                        destinationsWarehouseFormGroup.get('uniqueName').setValue(destinationsWarehouseFormGroup.get('uniqueName')?.value);
+                        let event = {
+                            label: this.destinationWarehouses[destinationsFormGroup.get('uniqueName')?.value][0]?.label,
+                            value: this.destinationWarehouses[destinationsFormGroup.get('uniqueName')?.value][0]?.value
+                        }
+                        this.selectReceiverWarehouse(event, index);
+                    }
+                }, 100);
             }
         }
         this.detectChanges();
