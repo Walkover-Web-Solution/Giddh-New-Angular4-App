@@ -467,21 +467,15 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             if (params) {
                 this.urlParams = params;
-
-                if (params['action'] === "new") {
+                if (params.action === "new") {
                     this.resetForm();
                     this.isUpdateMode = false;
                     this.autoFillVendorShipping = true;
                 }
 
-                if (params['action'] === "edit") {
+                if (params.action === "edit") {
                     this.isUpdateMode = true;
                     this.autoFillVendorShipping = false;
-                }
-                if (!this.isUpdateMode) {
-                    setTimeout(() => {
-                        this.createEmbeddedViewAtIndex(0);
-                    });
                 }
             }
         });
@@ -2574,7 +2568,9 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         this.initializeWarehouse();
         this.fillCompanyAddress("reset");
         this.assignDates();
-        this.createEmbeddedViewAtIndex(0);
+        setTimeout(() => {
+            this.createEmbeddedViewAtIndex(0);
+        },);
     }
 
     /**
@@ -3731,13 +3727,16 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
      * @memberof CreatePurchaseOrderComponent
      */
     private loadTaxesAndDiscounts(startIndex: number): void {
-        this.showBulkLoader = true;
+        if (startIndex < this.purchaseOrder.entries?.length) {
+            this.showBulkLoader = true;
+        }
         for (let index = startIndex; index < this.purchaseOrder.entries?.length; index++) {
             setTimeout(() => {
                 this.activeIndex = index;
                 if (index === (this.purchaseOrder.entries?.length - 1)) {
                     this.showBulkLoader = false;
                 }
+                this.changeDetection.detectChanges();
             }, 30 * index);
         }
     }
