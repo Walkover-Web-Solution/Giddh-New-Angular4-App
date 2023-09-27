@@ -1050,10 +1050,10 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             uniqueName: [''],
             value: ['', (value?.isMandatory) ? Validators.required : undefined],
         });
+        
         if (value) {
             customFields?.patchValue(value);
         }
-        console.log(customFields);
 
         return customFields;
     }
