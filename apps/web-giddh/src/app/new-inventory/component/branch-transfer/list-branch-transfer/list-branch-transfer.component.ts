@@ -141,9 +141,11 @@ export class ListBranchTransferComponent implements OnInit {
     public get shouldShowElement(): boolean {
         const hasResponse = this.branchTransferResponse.length > 0;
         const hasAdvancedSearchResponse = (
-            this.branchTransferAdvanceSearchFormObj.amountOperator ||
-            this.branchTransferAdvanceSearchFormObj.amount ||
-            this.branchTransferAdvanceSearchFormObj.voucherType
+            (this.branchTransferAdvanceSearchFormObj.amountOperator ||
+                this.branchTransferAdvanceSearchFormObj.amount ||
+                this.branchTransferAdvanceSearchFormObj.voucherType) || (!this.branchTransferAdvanceSearchFormObj.amountOperator ||
+                    !this.branchTransferAdvanceSearchFormObj.amount ||
+                    !this.branchTransferAdvanceSearchFormObj.voucherType)
         );
 
         // Check if hasResponse has no data and hasAdvancedSearchResponse has a length greater than 0
@@ -373,13 +375,13 @@ export class ListBranchTransferComponent implements OnInit {
         return searchField;
     }
 
-/**
- * This will be use for toggle search field
- *
- * @param {string} fieldName
- * @param {*} el
- * @memberof ListBranchTransferComponent
- */
+    /**
+     * This will be use for toggle search field
+     *
+     * @param {string} fieldName
+     * @param {*} el
+     * @memberof ListBranchTransferComponent
+     */
     public toggleSearch(fieldName: string) {
         if (fieldName === 'Sender') {
             this.showSender = true;
@@ -396,17 +398,17 @@ export class ListBranchTransferComponent implements OnInit {
         if (fieldName === 'To Warehouse') {
             this.showToWarehouse = true;
         }
-}
+    }
 
-/**
- *This will be use for click outsie for search field hidden
- *
- * @param {*} event
- * @param {*} element
- * @param {string} searchedFieldName
- * @return {*}  {void}
- * @memberof ListBranchTransferComponent
- */
+    /**
+     *This will be use for click outsie for search field hidden
+     *
+     * @param {*} event
+     * @param {*} element
+     * @param {string} searchedFieldName
+     * @return {*}  {void}
+     * @memberof ListBranchTransferComponent
+     */
     public handleClickOutside(event: any, element: any, searchedFieldName: string): void {
         if (searchedFieldName === 'Sender') {
             if (this.branchTransferForm?.controls['sender'].value !== null && this.branchTransferForm?.controls['sender'].value !== '') {
