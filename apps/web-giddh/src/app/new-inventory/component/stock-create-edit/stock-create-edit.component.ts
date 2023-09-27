@@ -1515,7 +1515,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                             variant.customFields.push(customField);
                         }
                     } else {
-                        variant.customFields = [customField];
+                        variant.customFields = cloneDeep([customField]);
                     }
                     return variant;
                 });
