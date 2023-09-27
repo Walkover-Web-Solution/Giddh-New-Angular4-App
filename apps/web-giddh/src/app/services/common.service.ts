@@ -224,4 +224,23 @@ export class CommonService {
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
     }
+    
+    /**
+     * This will be use for get Barcode Scan Data
+     *
+     * @param {string} uniqueName
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof CommonService
+     */
+    public getBarcodeScanData(uniqueName: string): Observable<BaseResponse<any, any>> {
+        let url = this.config.apiUrl + COMMON_API.BARCODE_SCAN;
+        url = url?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName));
+        url = url?.replace(':barcodeUniqueName', uniqueName);
+        return this.http.get(url).pipe(
+            map((res) => {
+                let data: BaseResponse<CountryResponse, any> = res;
+                return data;
+            }));
+    }
+
 }
