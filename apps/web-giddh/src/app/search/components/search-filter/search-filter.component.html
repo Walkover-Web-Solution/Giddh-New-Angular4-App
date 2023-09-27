@@ -69,7 +69,7 @@
                                 [label]="localeData?.than"
                             >
                             </input-field>
-    
+
                             <input-field
                                 class="width-query-differs mr-3"
                                 *ngIf="item?.value.queryDiffer === 'Equals'"
@@ -82,7 +82,7 @@
                                 [label]="localeData?.to"
                             >
                             </input-field>
-    
+
                             <!--By and To: Not required in paginated API -->
                             <span class="position-relative form-group option-value-field" *ngIf="item?.value.queryType === 'openingBalance'">
                                 <select-field
@@ -151,16 +151,16 @@
         </button>
     </div>
     <div class="pull-right d-flex column-gap15">
-        <div class="btn-group" *ngIf="showSendButton">
+        <!-- <div class="btn-group" *ngIf="showSendButton">
             <button type="button" mat-stroked-button [matMenuTriggerFor]="sendAsMenu">
                 {{ localeData?.send_as }}
                 <span class="caret"></span>
             </button>
             <mat-menu #sendAsMenu="matMenu">
                 <button mat-menu-item (click)="openEmailDialog.emit()">{{ commonLocaleData?.app_email }}</button>
-                <!-- <button mat-menu-item (click)="openSmsDialog.emit()">{{ commonLocaleData?.app_sms }}</button> -->
+                 <button mat-menu-item (click)="openSmsDialog.emit()">{{ commonLocaleData?.app_sms }}</button>
             </mat-menu>
-        </div>
+        </div> -->
         <button type="button" mat-stroked-button color="primary" *ngIf="showDownloadCsv" (click)="createCSV()">
             {{ commonLocaleData?.app_download_csv }}
         </button>
