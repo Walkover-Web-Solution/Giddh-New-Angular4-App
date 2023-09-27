@@ -162,10 +162,16 @@
                                                             name="showCodeType0"
                                                             formControlName="showCodeType"
                                                         >
-                                                            <mat-radio-button color="primary" value="hsn"
+                                                            <mat-radio-button
+                                                                color="primary"
+                                                                value="hsn"
+                                                                (change)="handleCodeTypeChange($event)"
                                                                 >{{ commonLocaleData?.app_hsn_code }}
                                                             </mat-radio-button>
-                                                            <mat-radio-button color="primary" value="sac"
+                                                            <mat-radio-button
+                                                                color="primary"
+                                                                value="sac"
+                                                                (change)="handleCodeTypeChange($event)"
                                                                 >{{ commonLocaleData?.app_sac_code }}
                                                             </mat-radio-button>
                                                         </mat-radio-group>
@@ -291,9 +297,15 @@
                                                                 )?.value
                                                             "
                                                             [defaultValue]="
-                                                                branchTransferCreateEditForm.get(
-                                                                    'sources.0.warehouse.name'
-                                                                ).value
+                                                                senderWarehouses[
+                                                                    branchTransferCreateEditForm.get(
+                                                                        'sources.0.uniqueName'
+                                                                    )?.value
+                                                                ]?.length === 1
+                                                                    ? branchTransferCreateEditForm.get(
+                                                                          'sources.0.warehouse.name'
+                                                                      ).value
+                                                                    : ''
                                                             "
                                                             [allowValueReset]="true"
                                                             (onClear)="resetWarehouse('sources', 0)"
@@ -364,7 +376,10 @@
                                         </ng-container>
                                     </div>
                                     <div class="col-lg-6">
-                                        <div class="position-relative info-field mr-b15" *ngIf="(isBranch || isCompanyWithSingleBranch) && !isUpdateMode">
+                                        <div
+                                            class="position-relative info-field mr-b15"
+                                            *ngIf="(isBranch || isCompanyWithSingleBranch) && !isUpdateMode"
+                                        >
                                             <input-field
                                                 [name]="'myCurrentCompany'"
                                                 formControlName="myCurrentCompany"
@@ -423,12 +438,14 @@
                                                     <i
                                                         *ngIf="
                                                             destinationWarehouses[
-                                                                branchTransferCreateEditForm.get('destinations.0.uniqueName')
-                                                                    ?.value
+                                                                branchTransferCreateEditForm.get(
+                                                                    'destinations.0.uniqueName'
+                                                                )?.value
                                                             ]?.length !==
                                                             allWarehouses[
-                                                                branchTransferCreateEditForm.get('destinations.0.uniqueName')
-                                                                    ?.value
+                                                                branchTransferCreateEditForm.get(
+                                                                    'destinations.0.uniqueName'
+                                                                )?.value
                                                             ]?.length
                                                         "
                                                         class="icon-info three"
@@ -462,9 +479,15 @@
                                                             )?.value
                                                         "
                                                         [defaultValue]="
-                                                            branchTransferCreateEditForm.get(
-                                                                'destinations.0.warehouse.name'
-                                                            ).value
+                                                            destinationWarehouses[
+                                                                branchTransferCreateEditForm.get(
+                                                                    'destinations.0.uniqueName'
+                                                                )?.value
+                                                            ]?.length === 1
+                                                                ? branchTransferCreateEditForm.get(
+                                                                      'destinations.0.warehouse.name'
+                                                                  ).value
+                                                                : ''
                                                         "
                                                     >
                                                     </dropdown-field>
@@ -664,10 +687,16 @@
                                                             name="showCodeType1"
                                                             formControlName="showCodeType"
                                                         >
-                                                            <mat-radio-button color="primary" value="hsn"
+                                                            <mat-radio-button
+                                                                color="primary"
+                                                                value="hsn"
+                                                                (change)="handleCodeTypeChange($event)"
                                                                 >HSN Code</mat-radio-button
                                                             >
-                                                            <mat-radio-button color="primary" value="sac"
+                                                            <mat-radio-button
+                                                                color="primary"
+                                                                value="sac"
+                                                                (change)="handleCodeTypeChange($event)"
                                                                 >SAC Code</mat-radio-button
                                                             >
                                                         </mat-radio-group>
@@ -816,8 +845,14 @@
                                                             ]
                                                         "
                                                         [defaultValue]="
-                                                            branchTransferCreateEditForm.get('sources.0.warehouse.name')
-                                                                .value
+                                                            senderWarehouses[
+                                                                branchTransferCreateEditForm.get('sources.0.uniqueName')
+                                                                    ?.value
+                                                            ]?.length === 1
+                                                                ? branchTransferCreateEditForm.get(
+                                                                      'sources.0.warehouse.name'
+                                                                  ).value
+                                                                : ''
                                                         "
                                                         [allowValueReset]="true"
                                                         (onClear)="resetWarehouse('sources', 0)"
@@ -963,10 +998,14 @@
                                                             )?.value
                                                         "
                                                         [defaultValue]="
-                                                            isUpdateMode
-                                                                ? branchTransferCreateEditForm?.get(
+                                                            destinationWarehouses[
+                                                                branchTransferCreateEditForm.get(
+                                                                    'destinations.0.uniqueName'
+                                                                )?.value
+                                                            ]?.length === 1
+                                                                ? branchTransferCreateEditForm.get(
                                                                       'destinations.0.warehouse.name'
-                                                                  )?.value
+                                                                  ).value
                                                                 : ''
                                                         "
                                                     >
@@ -1103,9 +1142,15 @@
                                                                 ]
                                                             "
                                                             [defaultValue]="
-                                                                branchTransferCreateEditForm.get(
-                                                                    'sources.0.warehouse.name'
-                                                                ).value
+                                                                senderWarehouses[
+                                                                    branchTransferCreateEditForm.get(
+                                                                        'sources.0.uniqueName'
+                                                                    )?.value
+                                                                ]?.length === 1
+                                                                    ? branchTransferCreateEditForm.get(
+                                                                          'sources.0.warehouse.name'
+                                                                      ).value
+                                                                    : ''
                                                             "
                                                             (selectedOption)="
                                                                 selectSenderWarehouse($event, 0);
@@ -1250,7 +1295,7 @@
                                                                     [name]="'senderName' + i"
                                                                     [placeholder]="localeData?.select_sender_name"
                                                                     [options]="branches"
-                                                                    (selectedOption)="selectSenderName( $event, i)"
+                                                                    (selectedOption)="selectSenderName($event, i)"
                                                                     [defaultValue]="source.get('name').value"
                                                                     #selectAccount
                                                                 >
@@ -1263,7 +1308,8 @@
                                                                     [options]="
                                                                         senderWarehouses[source.get('uniqueName').value]
                                                                     "
-                                                                    [defaultValue]="source.get('warehouse.name').value"
+                                                                    [defaultValue]="source.get('warehouse.name').value
+                                                                    "
                                                                     *ngIf="source.get('uniqueName').value"
                                                                     [allowValueReset]="true"
                                                                     (onClear)="resetWarehouse('sources', i)"
@@ -1437,16 +1483,10 @@
                                                             <span class="position-relative">
                                                                 <span
                                                                     class="delete-btn-position d-flex"
-                                                                    *ngIf="
-                                                                        branchTransferCreateEditForm.get('sources')
-                                                                            .value.length > 1
-                                                                    "
                                                                     (click)="removeSenderDetailsForm(i)"
                                                                 >
                                                                     <span class="delete-icon"
-                                                                        ><i
-                                                                            class="fa fa-trash"
-                                                                        ></i
+                                                                        ><i class="fa fa-trash"></i
                                                                     ></span>
                                                                     <i
                                                                         *ngIf="
@@ -1648,10 +1688,16 @@
                                                                             <mat-radio-button
                                                                                 color="primary"
                                                                                 value="hsn"
+                                                                                (change)="
+                                                                                    handleTableCodeTypeChange($event,i)
+                                                                                "
                                                                                 >HSN Code</mat-radio-button
                                                                             >
                                                                             <mat-radio-button
                                                                                 color="primary"
+                                                                                     (change)="
+                                                                                    handleTableCodeTypeChange($event, i)
+                                                                                "
                                                                                 value="sac"
                                                                                 >SAC Code</mat-radio-button
                                                                             >
@@ -1719,14 +1765,14 @@
                                                                             class="w-100"
                                                                             (click)="saveHsnNumberPopup()"
                                                                         >
-                                                                          {{ commonLocaleData?.app_save }}
+                                                                            {{ commonLocaleData?.app_save }}
                                                                         </button>
                                                                         <button
                                                                             mat-stroked-button
                                                                             class="w-100"
                                                                             (click)="closeSacNumber(product)"
                                                                         >
-                                                                         {{ commonLocaleData?.app_cancel }}
+                                                                            {{ commonLocaleData?.app_cancel }}
                                                                         </button>
                                                                     </div>
                                                                 </div>
@@ -1883,16 +1929,10 @@
                                                             <span class="position-relative">
                                                                 <span
                                                                     class="delete-btn-position d-flex"
-                                                                    *ngIf="
-                                                                        branchTransferCreateEditForm.get('products')
-                                                                            .value.length > 1
-                                                                    "
                                                                     (click)="removeProductDetailsForm(i)"
                                                                 >
                                                                     <span class="delete-icon"
-                                                                        ><i
-                                                                            class="fa fa-trash"
-                                                                        ></i
+                                                                        ><i class="fa fa-trash"></i
                                                                     ></span>
                                                                 </span>
                                                             </span>
@@ -1954,9 +1994,7 @@
                                                                             destination.get('uniqueName').value
                                                                         ]
                                                                     "
-                                                                    [defaultValue]="
-                                                                        destination.get('warehouse.name').value
-                                                                    "
+                                                                    [defaultValue]="destination.get('warehouse.name').value"
                                                                     *ngIf="destination.get('uniqueName').value"
                                                                     [allowValueReset]="true"
                                                                     (onClear)="resetWarehouse('destinations', i)"
@@ -2147,16 +2185,10 @@
                                                             <span class="position-relative">
                                                                 <span
                                                                     class="delete-btn-position d-flex"
-                                                                    *ngIf="
-                                                                        branchTransferCreateEditForm.get('destinations')
-                                                                            .value.length > 1
-                                                                    "
                                                                     (click)="removeReceiverDetailsForm(i)"
                                                                 >
                                                                     <span class="delete-icon"
-                                                                        ><i
-                                                                            class="fa fa-trash"
-                                                                        ></i
+                                                                        ><i class="fa fa-trash"></i
                                                                     ></span>
                                                                     <i
                                                                         *ngIf="

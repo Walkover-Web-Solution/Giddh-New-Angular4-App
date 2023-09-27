@@ -365,6 +365,15 @@
               }
           },
           {
+              "label": "Inventory",
+              "link": "/pages/inventory/v2/reports/product/stock",
+              "icon": "icon-inventory",
+              "description": "Import/create stock, group & unit",
+              "additional": {
+                  "voucherVersion": 2
+              }
+          },
+          {
               "label": "Manufacturing",
               "link": "/pages/inventory/manufacturing",
               "icon": "icon-manufacturing1",
@@ -387,7 +396,7 @@
               "link": "/pages/inventory/v2/branch-transfer/list",
               "icon": "icon-branch-transfer",
               "description": "Manage & Transfer inventory",
-                "additional": {
+              "additional": {
                   "voucherVersion": 2
               }
           },

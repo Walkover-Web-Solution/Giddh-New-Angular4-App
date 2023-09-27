@@ -27,11 +27,11 @@
                 font-size: var(--font-size-16);
                 font-family: var(--font-regular);
             }
-            .icon-back-arrow {
+            .icon-pull-top {
                 position: relative;
                 z-index: 2;
-                top: -2px;
-                color: var(--color-giddh-blue);
+                top: -6px;
+                height: 14px;
             }
         }
 
@@ -98,7 +98,7 @@
                         }
                         &.sub-option[aria-level="1"] {
                             position: relative;
-                            padding-left: 15px !important;
+                            padding-left: 20px !important;
                             height: 27px;
                             width: 100%;
                             line-height: 15px;
