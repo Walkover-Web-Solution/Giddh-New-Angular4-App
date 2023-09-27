@@ -242,13 +242,13 @@
                                         <span class="icon-arrow-down"></span>
                                     </button>
                                     <mat-menu #downloadCsvEmail="matMenu">
-                                        <button
+                                        <!-- <button
                                             mat-menu-item
                                             *ngIf="selectedCheckedContacts?.length"
                                             (click)="openEmailDialog()"
                                         >
                                             {{ commonLocaleData?.app_email }}
-                                        </button>
+                                        </button> -->
                                         <button mat-menu-item (click)="downloadCSV()">
                                             {{ commonLocaleData?.app_download_csv }}
                                         </button>
