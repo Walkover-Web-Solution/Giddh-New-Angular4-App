@@ -23,12 +23,12 @@ import { SelectFieldComponent } from 'apps/web-giddh/src/app/theme/form-fields/s
 import { Router } from '@angular/router';
 import { saveAs } from 'file-saver';
 
-
 @Component({
     selector: 'app-list-branch-transfer',
     templateUrl: './list-branch-transfer.component.html',
     styleUrls: ['./list-branch-transfer.component.scss']
 })
+
 export class ListBranchTransferComponent implements OnInit {
     /** Instance of Mat Dialog for Advance Filter */
     @ViewChild("advanceFilterDialog") public advanceFilterComponent: TemplateRef<any>;
@@ -125,6 +125,18 @@ export class ListBranchTransferComponent implements OnInit {
     public branchTransferAdvanceSearchForm: FormGroup;
     /** True, if custom date filter is selected or custom searching or sorting is performed */
     public showClearFilter: boolean = false;
+    /* True if show sender receiver show */
+    public showSenderReciever = false;
+    /* True if show from warehouse show */
+    public showFromWarehouse = false;
+    /* True if show to warehouse show */
+    public showToWarehouse = false;
+    /* True if show sender show */
+    public showSender = false;
+    /* True if show receiver show */
+    public showReceiver = false;
+    /** True if translations loaded */
+    public translationLoaded: boolean = false;
     /** Getter for show search element by type */
     public get shouldShowElement(): boolean {
         const hasResponse = this.branchTransferResponse.length > 0;
@@ -135,7 +147,7 @@ export class ListBranchTransferComponent implements OnInit {
         );
 
         // Check if hasResponse has no data and hasAdvancedSearchResponse has a length greater than 0
-        if (!hasResponse && hasAdvancedSearchResponse && hasAdvancedSearchResponse.length > 0) {
+        if (!hasResponse && hasAdvancedSearchResponse) {
             return false;
         }
 
@@ -157,10 +169,6 @@ export class ListBranchTransferComponent implements OnInit {
             (hasResponse && this.inlineSearch === 'toWarehouse' || this.showClearFilter)
         );
     }
-
-
-    /** True if translations loaded */
-    public translationLoaded: boolean = false;
 
     constructor(
         public dialog: MatDialog,
@@ -351,14 +359,94 @@ export class ListBranchTransferComponent implements OnInit {
         });
     }
 
+
     /**
-     * This will use for toggle table search field
+     * Returns the search field text
      *
-     * @param {string} fieldName
+     * @param {*} title
+     * @returns {string}
      * @memberof ListBranchTransfer
      */
-    public toggleSearch(fieldName: string): void {
-        this.inlineSearch = fieldName;
+    public getSearchFieldText(title: any): string {
+        let searchField = this.localeData?.search_field;
+        searchField = searchField?.replace("[FIELD]", title);
+        return searchField;
+    }
+
+/**
+ * This will be use for toggle search field
+ *
+ * @param {string} fieldName
+ * @param {*} el
+ * @memberof ListBranchTransferComponent
+ */
+    public toggleSearch(fieldName: string) {
+        if (fieldName === 'Sender') {
+            this.showSender = true;
+        }
+        if (fieldName === 'Receiver') {
+            this.showReceiver = true;
+        }
+        if (fieldName === 'Sender/Reciever') {
+            this.showSenderReciever = true;
+        }
+        if (fieldName === 'From Warehouse') {
+            this.showFromWarehouse = true;
+        }
+        if (fieldName === 'To Warehouse') {
+            this.showToWarehouse = true;
+        }
+}
+
+/**
+ *This will be use for click outsie for search field hidden
+ *
+ * @param {*} event
+ * @param {*} element
+ * @param {string} searchedFieldName
+ * @return {*}  {void}
+ * @memberof ListBranchTransferComponent
+ */
+    public handleClickOutside(event: any, element: any, searchedFieldName: string): void {
+        if (searchedFieldName === 'Sender') {
+            if (this.branchTransferForm?.controls['sender'].value !== null && this.branchTransferForm?.controls['sender'].value !== '') {
+                return;
+            }
+        } else if (searchedFieldName === 'Receiver') {
+            if (this.branchTransferForm?.controls['receiver'].value !== null && this.branchTransferForm?.controls['receiver'].value !== '') {
+                return;
+            }
+        } else if (searchedFieldName === 'Sender/Reciever') {
+            if (this.branchTransferForm?.controls['senderReceiver'].value !== null && this.branchTransferForm?.controls['senderReceiver'].value !== '') {
+                return;
+            }
+        } else if (searchedFieldName === 'From Warehouse') {
+            if (this.branchTransferForm?.controls['fromWarehouse'].value !== null && this.branchTransferForm?.controls['fromWarehouse'].value !== '') {
+                return;
+            }
+        } else if (searchedFieldName === 'To Warehouse') {
+            if (this.branchTransferForm?.controls['toWarehouse'].value !== null && this.branchTransferForm?.controls['toWarehouse'].value !== '') {
+                return;
+            }
+        }
+
+        if (this.generalService.childOf(event?.target, element)) {
+            return;
+        } else {
+            if (searchedFieldName === 'Sender') {
+                this.showSender = false;
+            } else if (searchedFieldName === 'Receiver') {
+                this.showReceiver = false;
+            } else if (searchedFieldName === 'Sender/Reciever') {
+                this.showSenderReciever = false;
+            }
+            else if (searchedFieldName === 'From Warehouse') {
+                this.showFromWarehouse = false;
+            }
+            else if (searchedFieldName === 'To Warehouse') {
+                this.showToWarehouse = false;
+            }
+        }
     }
 
     /**

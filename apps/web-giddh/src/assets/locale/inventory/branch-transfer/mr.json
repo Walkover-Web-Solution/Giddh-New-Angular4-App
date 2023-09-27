@@ -34,5 +34,6 @@
         "dispatched_date": "पुरवठा तारीख",
         "transport_company": "परिवहन कंपनी",
         "variant_name": "प्रकाराचे नाव",
-        "delete_transporter": "आपण परिवहक काढून टाकायचं आहे का?"
+        "delete_transporter": "आपण परिवहक काढून टाकायचं आहे का?",
+        "search_field": "शोधा [FIELD]"
     }
