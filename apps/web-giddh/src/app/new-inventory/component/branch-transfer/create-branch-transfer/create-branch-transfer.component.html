@@ -245,7 +245,7 @@
                                                         [readonly]="isUpdateMode"
                                                         [required]="true"
                                                         [defaultValue]="
-                                                            isUpdateMode
+                                                            branchTransferCreateEditForm.get('sources.0.name')?.value
                                                                 ? branchTransferCreateEditForm.get('sources.0.name')
                                                                       ?.value
                                                                 : ''
@@ -255,7 +255,6 @@
                                                             !branchTransferCreateEditForm?.get('sources.0.uniqueName')
                                                                 ?.value
                                                         "
-                                                        [allowValueReset]="true"
                                                     >
                                                     </dropdown-field>
                                                     <i
@@ -297,11 +296,9 @@
                                                                 )?.value
                                                             "
                                                             [defaultValue]="
-                                                                senderWarehouses[
-                                                                    branchTransferCreateEditForm.get(
-                                                                        'sources.0.uniqueName'
-                                                                    )?.value
-                                                                ]?.length === 1
+                                                                branchTransferCreateEditForm.get(
+                                                                    'sources.0.warehouse.name'
+                                                                ).value
                                                                     ? branchTransferCreateEditForm.get(
                                                                           'sources.0.warehouse.name'
                                                                       ).value
@@ -427,7 +424,8 @@
                                                             )?.value
                                                         "
                                                         [defaultValue]="
-                                                            isUpdateMode
+                                                            branchTransferCreateEditForm.get('destinations.0.name')
+                                                                ?.value
                                                                 ? branchTransferCreateEditForm.get(
                                                                       'destinations.0.name'
                                                                   )?.value
@@ -479,11 +477,9 @@
                                                             )?.value
                                                         "
                                                         [defaultValue]="
-                                                            destinationWarehouses[
-                                                                branchTransferCreateEditForm.get(
-                                                                    'destinations.0.uniqueName'
-                                                                )?.value
-                                                            ]?.length === 1
+                                                            branchTransferCreateEditForm.get(
+                                                                'destinations.0.warehouse.name'
+                                                            ).value
                                                                 ? branchTransferCreateEditForm.get(
                                                                       'destinations.0.warehouse.name'
                                                                   ).value
@@ -629,7 +625,7 @@
                                                     )
                                                 "
                                                 [defaultValue]="
-                                                    isUpdateMode
+                                                    branchTransferCreateEditForm.get('products.0.name').value
                                                         ? branchTransferCreateEditForm.get('products.0.name').value
                                                         : ''
                                                 "
@@ -804,6 +800,9 @@
                                                         [required]="true"
                                                         [defaultValue]="
                                                             branchTransferCreateEditForm.get('sources.0.name')?.value
+                                                                ? branchTransferCreateEditForm.get('sources.0.name')
+                                                                      ?.value
+                                                                : ''
                                                         "
                                                         [showError]="
                                                             !isValidForm &&
@@ -845,10 +844,8 @@
                                                             ]
                                                         "
                                                         [defaultValue]="
-                                                            senderWarehouses[
-                                                                branchTransferCreateEditForm.get('sources.0.uniqueName')
-                                                                    ?.value
-                                                            ]?.length === 1
+                                                            branchTransferCreateEditForm.get('sources.0.warehouse.name')
+                                                                .value
                                                                 ? branchTransferCreateEditForm.get(
                                                                       'sources.0.warehouse.name'
                                                                   ).value
@@ -949,6 +946,10 @@
                                                             [defaultValue]="
                                                                 branchTransferCreateEditForm?.get('destinations.0.name')
                                                                     ?.value
+                                                                    ? branchTransferCreateEditForm?.get(
+                                                                          'destinations.0.name'
+                                                                      )?.value
+                                                                    : ''
                                                             "
                                                         >
                                                         </dropdown-field>
@@ -998,11 +999,9 @@
                                                             )?.value
                                                         "
                                                         [defaultValue]="
-                                                            destinationWarehouses[
-                                                                branchTransferCreateEditForm.get(
-                                                                    'destinations.0.uniqueName'
-                                                                )?.value
-                                                            ]?.length === 1
+                                                            branchTransferCreateEditForm.get(
+                                                                'destinations.0.warehouse.name'
+                                                            ).value
                                                                 ? branchTransferCreateEditForm.get(
                                                                       'destinations.0.warehouse.name'
                                                                   ).value
@@ -1126,6 +1125,10 @@
                                                                 branchTransferCreateEditForm.get(
                                                                     'sources.0.warehouse.name'
                                                                 ).value
+                                                                    ? branchTransferCreateEditForm.get(
+                                                                          'sources.0.warehouse.name'
+                                                                      ).value
+                                                                    : ''
                                                             "
                                                         >
                                                         </dropdown-field>
@@ -1142,11 +1145,9 @@
                                                                 ]
                                                             "
                                                             [defaultValue]="
-                                                                senderWarehouses[
-                                                                    branchTransferCreateEditForm.get(
-                                                                        'sources.0.uniqueName'
-                                                                    )?.value
-                                                                ]?.length === 1
+                                                                branchTransferCreateEditForm.get(
+                                                                    'sources.0.warehouse.name'
+                                                                ).value
                                                                     ? branchTransferCreateEditForm.get(
                                                                           'sources.0.warehouse.name'
                                                                       ).value
@@ -1308,8 +1309,7 @@
                                                                     [options]="
                                                                         senderWarehouses[source.get('uniqueName').value]
                                                                     "
-                                                                    [defaultValue]="source.get('warehouse.name').value
-                                                                    "
+                                                                    [defaultValue]="source.get('warehouse.name').value"
                                                                     *ngIf="source.get('uniqueName').value"
                                                                     [allowValueReset]="true"
                                                                     (onClear)="resetWarehouse('sources', i)"
@@ -1689,13 +1689,13 @@
                                                                                 color="primary"
                                                                                 value="hsn"
                                                                                 (change)="
-                                                                                    handleTableCodeTypeChange($event,i)
+                                                                                    handleTableCodeTypeChange($event, i)
                                                                                 "
                                                                                 >HSN Code</mat-radio-button
                                                                             >
                                                                             <mat-radio-button
                                                                                 color="primary"
-                                                                                     (change)="
+                                                                                (change)="
                                                                                     handleTableCodeTypeChange($event, i)
                                                                                 "
                                                                                 value="sac"
@@ -1994,7 +1994,9 @@
                                                                             destination.get('uniqueName').value
                                                                         ]
                                                                     "
-                                                                    [defaultValue]="destination.get('warehouse.name').value"
+                                                                    [defaultValue]="
+                                                                        destination.get('warehouse.name').value
+                                                                    "
                                                                     *ngIf="destination.get('uniqueName').value"
                                                                     [allowValueReset]="true"
                                                                     (onClear)="resetWarehouse('destinations', i)"
@@ -2290,7 +2292,8 @@
                                             (selectedOption)="onSelectTransportCompany($event)"
                                             [defaultValue]="
                                                 branchTransferCreateEditForm.get('transporterDetails.transporterName')
-                                                    ?.value
+                                                    ?.value ?  branchTransferCreateEditForm.get('transporterDetails.transporterName')
+                                                    ?.value : ''
                                             "
                                         >
                                         </dropdown-field>
@@ -2303,7 +2306,8 @@
                                             (selectedOption)="onSelectTransportMode($event)"
                                             [defaultValue]="
                                                 branchTransferCreateEditForm.get('transporterDetails.transportMode')
-                                                    ?.value
+                                                    ?.value ?  branchTransferCreateEditForm.get('transporterDetails.transportMode')
+                                                    ?.value:''
                                             "
                                         >
                                         </dropdown-field>
