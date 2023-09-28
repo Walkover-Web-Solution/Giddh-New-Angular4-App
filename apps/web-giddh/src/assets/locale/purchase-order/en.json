@@ -1,4 +1,5 @@
 {
+    "account_missing_in_stock": "account is not linked with stock",
     "bulk_update": "Bulk Update",
     "convert_tobill": "Convert to bill",
     "expired": "Expired",
