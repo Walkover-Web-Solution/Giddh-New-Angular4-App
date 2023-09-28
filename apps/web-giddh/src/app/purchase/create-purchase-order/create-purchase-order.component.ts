@@ -498,11 +498,6 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                     this.isUpdateMode = true;
                     this.autoFillVendorShipping = false;
                 }
-                // if (!this.isUpdateMode) {
-                //     setTimeout(() => {
-                //         this.createEmbeddedViewAtIndex(0);
-                //     });
-                // }
             }
         });
 
