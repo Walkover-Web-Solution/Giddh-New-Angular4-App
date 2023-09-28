@@ -4092,10 +4092,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
 
     // CMD + G functionality
     @HostListener('document:keydown', ['$event'])
-    public handleKeyboardDownEvent(event: KeyboardEvent) {
-        console.log('keydown', event);
-
-
+    public handleKeyboardDownEvent(event: KeyboardEvent): void {
         if ((event.metaKey || event.ctrlKey) && (event.which === 75 || event.which === 71)) {
             this.isCreatingNewAccount = false;
         }
@@ -4105,8 +4102,6 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     // detecting keyup event for barcode scan
     @HostListener('document:keyup', ['$event'])
     public handleKeyboardUpEvent(event: KeyboardEvent): void {
-        console.log('keyup',event);
-
         let uniqueName = this.detectBarcode(event);
 
         if (event.timeStamp - this.startTime < 2) {
@@ -4171,19 +4166,18 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                 let stockObj = response.body?.stocks[0];
                 let variantObj = stockObj?.variants[0];
 
-                let group = (this.invoiceType === VoucherTypeEnum.debitNote || this.invoiceType === VoucherTypeEnum.purchase || this.invoiceType === VoucherTypeEnum.cashBill || this.invoiceType === VoucherTypeEnum.cashDebitNote) ?
-                    'purchase' : 'sales';
-                let unitRates = group === 'purchase' ? variantObj?.purchaseAccountDetails?.unitRates : variantObj?.salesAccountDetails?.unitRates;
-                let accountUniqueName = group === 'purchase' ? variantObj?.purchaseAccountDetails?.accountUniqueName : variantObj?.salesAccountDetails?.accountUniqueName;
-                let accountName = group === 'purchase' ? variantObj?.purchaseAccountDetails?.accountName : variantObj?.salesAccountDetails?.accountName;
+
+                let unitRates = variantObj?.purchaseAccountDetails?.unitRates;
+                let accountUniqueName =  variantObj?.purchaseAccountDetails?.accountUniqueName;
+                let accountName = variantObj?.purchaseAccountDetails?.accountName;
 
                 if (!accountUniqueName) {
-                    this.toaster.showSnackBar("warning", group + " " + this.localeData?.account_missing_in_stock);
+                    this.toaster.showSnackBar("warning", 'purchase' + " " + this.localeData?.account_missing_in_stock);
                     return;
                 }
 
                 let selectedAcc = {
-                    value: group + stockObj.uniqueName,
+                    value: 'purchase' + stockObj.uniqueName,
                     label: stockObj.name,
                     additional: {
                         type: "ACCOUNT",
@@ -4213,7 +4207,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                         parentGroups: [],
                         route: '',
                         label: stockObj.name,
-                        value: group + stockObj.uniqueName,
+                        value: 'purchase' + stockObj.uniqueName,
                         applicableTaxes: [],
                         currency: {
                             code: "",
