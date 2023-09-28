@@ -117,7 +117,7 @@ export const initialState: CustomTemplateState = {
                     },
                     taxBifurcation: { // this is for template a
                         label: 'Tax Bifurcation',
-                        display: true,
+                        display: false,
                         width: null
                     },
                 }
