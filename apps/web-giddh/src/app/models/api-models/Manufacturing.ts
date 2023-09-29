@@ -43,18 +43,18 @@ export class ManufacturingTransactionAccount {
 export class ManufacturingTransaction {
     account: ManufacturingTransactionAccount;
     amount: number;
-    cssClass?: string;
     constructor() {
         this.account = new ManufacturingTransactionAccount();
-        this.cssClass = "form-control mat-field-border";
     }
 }
 export class ManufacturingExpense {
     baseAccount: ManufacturingBaseAccount;
     transactions: ManufacturingTransaction[];
+    cssClass?: string;
     constructor() {
         this.baseAccount = new ManufacturingBaseAccount();
         this.transactions = [new ManufacturingTransaction()];
+        this.cssClass = "form-control mat-field-border";
     }
 }
 

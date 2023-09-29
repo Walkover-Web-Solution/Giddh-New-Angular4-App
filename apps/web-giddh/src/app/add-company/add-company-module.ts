@@ -12,6 +12,8 @@ import { FormFieldsModule } from "../theme/form-fields/form-fields.module";
 import { TranslateDirectiveModule } from "../theme/translate/translate.directive.module";
 import { AddCompanyComponent } from "./add-company.component";
 import { AddCompanyRoutingModule } from "./add-company.routing.module";
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
+import { ClickOutsideModule } from "ng-click-outside";
 
 @NgModule({
     declarations: [
@@ -30,7 +32,9 @@ import { AddCompanyRoutingModule } from "./add-company.routing.module";
         FormFieldsModule,
         HamburgerMenuModule,
         TranslateDirectiveModule,
-        GiddhPageLoaderModule
+        GiddhPageLoaderModule,
+        MatProgressSpinnerModule,
+        ClickOutsideModule
     ],
     providers: [
 
