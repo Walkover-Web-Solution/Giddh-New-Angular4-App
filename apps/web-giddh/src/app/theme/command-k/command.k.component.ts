@@ -179,10 +179,11 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof CommandKComponent
      */
     public itemSelected(item: any, event?:any): void {              
-        if (event.ctrlKey || event.metaKey){
+        if (event && (event.ctrlKey || event.metaKey)){
             this.closeDailogEmitter.emit();
             return ;
-        }else{
+        }else if(event && event.type ==="click"){
+            console.log("event: ",event);
             event.preventDefault();
         }
        // emit data in case of direct A/c or Menus
