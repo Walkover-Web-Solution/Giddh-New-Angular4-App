@@ -7,6 +7,7 @@ import { cloneDeep } from "../../lodash-optimized";
 import { CustomFieldsService } from "../../services/custom-fields.service";
 import { ToasterService } from "../../services/toaster.service";
 import { FieldModules, FieldTypes } from "../custom-fields.constant";
+import { GeneralService } from "../../services/general.service";
 
 @Component({
     selector: "create-edit",
@@ -56,13 +57,16 @@ export class CustomFieldsCreateEditComponent implements OnInit, OnDestroy {
     public showLoader: boolean = false;
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Stores the voucher API version of company */
+    public voucherApiVersion: 1 | 2;
 
     constructor(
         private toasterService: ToasterService,
         private changeDetector: ChangeDetectorRef,
         private customFieldsService: CustomFieldsService,
         private route: ActivatedRoute,
-        private router: Router
+        private router: Router,
+        private generalService: GeneralService
     ) {
 
     }
@@ -73,6 +77,7 @@ export class CustomFieldsCreateEditComponent implements OnInit, OnDestroy {
      * @memberof CustomFieldsCreateEditComponent
      */
     public ngOnInit(): void {
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             if (params?.customFieldUniqueName) {
                 this.customFieldUniqueName = params?.customFieldUniqueName;
@@ -133,11 +138,16 @@ export class CustomFieldsCreateEditComponent implements OnInit, OnDestroy {
                 { label: this.commonLocaleData?.app_datatype_list?.boolean, value: FieldTypes.Boolean },
                 { label: this.commonLocaleData?.app_datatype_list?.barcode, value: FieldTypes.Barcode }
             ];
-
-            this.fieldModules = [
-                { name: this.localeData?.modules?.account, uniqueName: FieldModules.Account },
-                { name: this.commonLocaleData?.app_variant, uniqueName: FieldModules.Variant }
-            ];
+            if (this.voucherApiVersion === 2) {
+                this.fieldModules = [
+                    { name: this.localeData?.modules?.account, uniqueName: FieldModules.Account },
+                    { name: this.commonLocaleData?.app_variant, uniqueName: FieldModules.Variant }
+                ];
+            } else {
+                this.fieldModules = [
+                    { name: this.localeData?.modules?.account, uniqueName: FieldModules.Account }
+                ];
+            }
         }
     }
 

@@ -942,6 +942,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                     value: obj?.value
                 };
             });
+           updatedCustomFieldArray = updatedCustomFieldArray.filter(field => field.value);
             variant.customFields = updatedCustomFieldArray;
         });
         if (this.validateStock(this.stockForm.purchaseAccountDetails?.unitRates)) {
@@ -1065,6 +1066,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                     value: obj?.value
                 };
             });
+            updatedCustomFieldArray = updatedCustomFieldArray.filter(field => field.value);
             variant.customFields = updatedCustomFieldArray;
         });
         let defaultWarehouse = null;
@@ -1519,9 +1521,11 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                     }
                     return variant;
                 });
-            })
+            });
         }
     }
+
+
 
     /**
      * Get custom fields
@@ -1645,7 +1649,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                     salesTaxInclusive: false,
                     purchaseTaxInclusive: false,
                     fixedAssetTaxInclusive: false,
-                    customFields: [],
+                    customFields: [] ,
                     salesInformation: [
                         {
                             rate: undefined,
@@ -1701,6 +1705,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         this.fixedAssetsAccountName = "";
         this.salesAccountName = "";
         this.customFieldsData = [];
+        this.companyCustomFields = [];
         this.inlineEditCustomField = 0;
         this.selectedTaxes = [];
         this.taxTempArray = [];
@@ -1708,7 +1713,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         this.processedTaxes = [];
         this.activeTabIndex = 0;
         this.resetTaxes();
-
+        this.getVariantCustomFields();
         setTimeout(() => {
             this.stockForm.name = "";
             this.stockForm.customField1Value = "";
