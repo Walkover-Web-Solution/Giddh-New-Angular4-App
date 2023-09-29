@@ -183,7 +183,6 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
             this.closeDailogEmitter.emit();
             return ;
         }else if(event && event.type ==="click"){
-            console.log("event: ",event);
             event.preventDefault();
         }
        // emit data in case of direct A/c or Menus
