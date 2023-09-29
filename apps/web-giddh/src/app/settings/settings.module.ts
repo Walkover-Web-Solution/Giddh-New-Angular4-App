@@ -56,6 +56,7 @@ import { SettingCampaignComponent } from './integration/campaign/setting-campaig
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { NgxPlaidLinkModule } from "ngx-plaid-link";
 import { AsideMenuAccountModule } from '../shared/aside-menu-account/aside.menu.account.module';
+import { AccountNumberMaskModule } from '../shared/helpers/pipes/accountNumberMaskPipe/accountNumberMask.module';
 
 @NgModule({
     declarations: [
@@ -118,7 +119,8 @@ import { AsideMenuAccountModule } from '../shared/aside-menu-account/aside.menu.
         MatAutocompleteModule,
         MatSlideToggleModule,
         NgxPlaidLinkModule,
-        AsideMenuAccountModule
+        AsideMenuAccountModule,
+        AccountNumberMaskModule
     ]
 })
 
