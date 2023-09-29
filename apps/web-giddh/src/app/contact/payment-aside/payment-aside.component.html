@@ -11,7 +11,7 @@
         <span aria-hidden="true">&times;</span>
     </button>
 </div>
-<mat-dialog-content class="all-payment-side  w-100">
+<mat-dialog-content class="all-payment-side w-100">
     <div class="clearfix">
         <form #adjustAdvancePaymentForm="ngForm" autocomplete="off">
             <div class="row d-flex align-items-center payment-top-form">
@@ -66,12 +66,24 @@
                                     </ng-template>
                                 </sh-select>
                             </div>
-                            <p *ngIf="totalAvailableBalance">
-                                <small class="text-gray"
-                                    >{{ localeData?.bal }} {{ totalAvailableBalance | giddhCurrency }}
-                                    {{ commonLocaleData?.app_dr }}</small
-                                >
-                            </p>
+                            <div>
+                                <p *ngIf="totalAvailableBalance" class="total-balance">
+                                    <mat-slide-toggle
+                                        color="primary"
+                                        id="total-balance-id"
+                                        [(ngModel)]="showBankBalance"
+                                    >
+                                        <span *ngIf="showBankBalance" class="pull-left">{{localeData?.show_bank_balance}}</span>
+                                        <span *ngIf="!showBankBalance" class="pull-right">{{localeData?.hide_bank_balance}}</span>
+                                    </mat-slide-toggle>
+                                </p>
+                                <p *ngIf="totalAvailableBalance && showBankBalance" class="mr-t05">
+                                    <small class="text-gray"
+                                        >{{ localeData?.bal }} {{ totalAvailableBalance | giddhCurrency }}
+                                        {{ commonLocaleData?.app_dr }}</small
+                                    >
+                                </p>
+                            </div>
                         </div>
                         <div class="form-group mr-r15">
                             <label>{{ localeData?.select_payor }}<span class="red-text">*</span></label>
@@ -100,7 +112,7 @@
                                 >
                             </p>
                         </div>
-                        <div class="form-group mr-r15 ">
+                        <div class="form-group mr-r15">
                             <label>{{ commonLocaleData?.app_total_amount }}<span class="red-text">*</span></label>
                             <text-field
                                 type="text"
@@ -112,7 +124,7 @@
                                 name="amount"
                             ></text-field>
                         </div>
-                        <div class="form-group mr-r15 " *ngIf="isPayClicked">
+                        <div class="form-group mr-r15" *ngIf="isPayClicked">
                             <label class="relative d-flex"
                                 >{{ commonLocaleData?.app_enter_otp }}<span class="red-text">*</span>
                                 <p class="resend-btn" *ngIf="!timerOn">
@@ -134,7 +146,7 @@
                                 [(ngModel)]="receivedOtp"
                             ></text-field>
                         </div>
-                        <div class="form-group mr-r15  d-flex column-gap15 align-items-center confirm-btn">
+                        <div class="form-group mr-r15 d-flex column-gap15 confirm-btn">
                             <button
                                 mat-stroked-button
                                 color="primary"
@@ -164,7 +176,10 @@
                                             !receivedOtp
                                     }"
                                     [disabled]="
-                                        !isBankSelectedForBulkPayment || !selectedBankUrn || !isValidData || !receivedOtp
+                                        !isBankSelectedForBulkPayment ||
+                                        !selectedBankUrn ||
+                                        !isValidData ||
+                                        !receivedOtp
                                     "
                                     [ladda]="isRequestInProcess"
                                     (click)="confirmOTP()"
