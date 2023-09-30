@@ -1561,7 +1561,9 @@
                                                                                         customField.fieldType?.type ===
                                                                                             availableFieldTypes.Barcode
                                                                                     "
-                                                                                    [cssClass]="'custom-field form-control'"
+                                                                                    [cssClass]="
+                                                                                        'custom-field form-control'
+                                                                                    "
                                                                                     [name]="
                                                                                         'customField-' + i + '-' + k
                                                                                     "
@@ -1577,6 +1579,7 @@
                                                                                     [required]="customField.isMandatory"
                                                                                     [showError]="
                                                                                         isFormSubmitted &&
+                                                                                        customField.isMandatory &&
                                                                                         !customField.value
                                                                                     "
                                                                                 >
@@ -1586,7 +1589,9 @@
                                                                                         customField.fieldType?.type ===
                                                                                         availableFieldTypes.Number
                                                                                     "
-                                                                                    [cssClass]="'custom-field form-control'"
+                                                                                    [cssClass]="
+                                                                                        'custom-field form-control'
+                                                                                    "
                                                                                     [name]="
                                                                                         'customField-' + i + '-' + k
                                                                                     "
@@ -1602,6 +1607,7 @@
                                                                                     [allowDecimalDigitsOnly]="true"
                                                                                     [showError]="
                                                                                         isFormSubmitted &&
+                                                                                        customField.isMandatory &&
                                                                                         !customField.value
                                                                                     "
                                                                                 ></text-field>
@@ -1832,45 +1838,6 @@
                                                     </input-field>
                                                 </div>
                                             </div>
-                                            <div class="row mr-t15 align-items-center">
-                                                <ng-container *ngIf="!isVariantAvailable">
-                                                    <div class="col-sm-6 col-lg-3">
-                                                        <input-field
-                                                            [name]="'openingQuantity'"
-                                                            [type]="'number'"
-                                                            [placeholder]="localeData?.opening_quantity"
-                                                            [(ngModel)]="
-                                                                stockForm.variants[0].warehouseBalance[0]
-                                                                    .openingQuantity
-                                                            "
-                                                        >
-                                                        </input-field>
-                                                    </div>
-                                                    <div class="col-sm-6 col-lg-3">
-                                                        <input-field
-                                                            [name]="'openingAmount'"
-                                                            [type]="'text'"
-                                                            [placeholder]="localeData?.opening_amount"
-                                                            [(ngModel)]="
-                                                                stockForm.variants[0].warehouseBalance[0].openingAmount
-                                                            "
-                                                            [prefix]="companyCurrencySymbol"
-                                                            [mask]="inputMaskFormat"
-                                                            [useMask]="true"
-                                                        >
-                                                        </input-field>
-                                                    </div>
-                                                </ng-container>
-                                                <div class="col-sm-6 col-lg-3" *ngIf="isVariantAvailable">
-                                                    <input-field
-                                                        [name]="'skuCode'"
-                                                        [type]="'text'"
-                                                        [placeholder]="commonLocaleData?.app_sku_code"
-                                                        [(ngModel)]="stockForm.variants[0].skuCode"
-                                                    >
-                                                    </input-field>
-                                                </div>
-                                            </div>
                                             <div class="row mr-t15 align-items-center" *ngIf="!isVariantAvailable">
                                                 <ng-container
                                                     *ngFor="
@@ -1884,8 +1851,12 @@
                                                             matTooltipPosition="above"
                                                             class="d-flex"
                                                         >
-                                                            <span class="word-wrap-dots"> {{ customField?.fieldName }}</span>
-                                                            <span *ngIf="customField?.isMandatory" class="red-text pd-r05"
+                                                            <span class="word-wrap-dots">
+                                                                {{ customField?.fieldName }}</span
+                                                            >
+                                                            <span
+                                                                *ngIf="customField?.isMandatory"
+                                                                class="red-text pd-r05"
                                                                 >*</span
                                                             >
                                                             :
@@ -1907,7 +1878,11 @@
                                                             [maxlength]="customField.dataRange?.max"
                                                             [pattern]="customField.regex"
                                                             [required]="customField.isMandatory"
-                                                            [showError]="isFormSubmitted && !customField.value"
+                                                            [showError]="
+                                                                isFormSubmitted &&
+                                                                customField.isMandatory &&
+                                                                !customField.value
+                                                            "
                                                         >
                                                         </text-field>
                                                         <text-field
@@ -1925,7 +1900,11 @@
                                                             [pattern]="customField.regex"
                                                             [required]="customField.isMandatory"
                                                             [allowDecimalDigitsOnly]="true"
-                                                            [showError]="isFormSubmitted && !customField.value"
+                                                            [showError]="
+                                                                isFormSubmitted &&
+                                                                customField.isMandatory &&
+                                                                !customField.value
+                                                            "
                                                         ></text-field>
                                                         <mat-radio-group
                                                             color="primary"
