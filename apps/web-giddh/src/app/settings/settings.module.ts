@@ -32,8 +32,8 @@ import { CreateAddressComponent } from './create-address/create-address.componen
 import { CreateBranchComponent } from './branch/create-branch/create-branch.component';
 import { SalesShSelectModule } from '../theme/sales-ng-virtual-select/sh-select.module';
 import { TaxSidebarModule } from '../shared/tax-sidebar/tax-sidebar.module';
-import { NoDataModule } from '../shared/no-data/no-data.module';
 import { ReplacePipeModule } from '../shared/helpers/pipes/replace/replace.module';
+import { NoDataModule } from '../shared/no-data/no-data.module';
 import { SettingIntegrationPaymentModule } from './integration/payment/setting.integration.payment.module';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -56,6 +56,7 @@ import { SettingCampaignComponent } from './integration/campaign/setting-campaig
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { NgxPlaidLinkModule } from "ngx-plaid-link";
 import { AsideMenuAccountModule } from '../shared/aside-menu-account/aside.menu.account.module';
+import { AccountNumberMaskModule } from '../shared/helpers/pipes/accountNumberMaskPipe/accountNumberMask.module';
 
 @NgModule({
     declarations: [
@@ -118,7 +119,8 @@ import { AsideMenuAccountModule } from '../shared/aside-menu-account/aside.menu.
         MatAutocompleteModule,
         MatSlideToggleModule,
         NgxPlaidLinkModule,
-        AsideMenuAccountModule
+        AsideMenuAccountModule,
+        AccountNumberMaskModule
     ]
 })
 
