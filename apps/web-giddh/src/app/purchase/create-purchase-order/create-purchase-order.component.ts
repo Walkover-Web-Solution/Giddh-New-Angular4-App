@@ -2599,9 +2599,9 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         this.initializeWarehouse();
         this.fillCompanyAddress("reset");
         this.assignDates();
-        setTimeout(() => {
-            this.createEmbeddedViewAtIndex(0);
-        });
+            setTimeout(() => {
+                this.createEmbeddedViewAtIndex(0);
+            });
     }
 
     /**
