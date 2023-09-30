@@ -57,7 +57,7 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
         private store: Store<AppState>,
         private accountsAction: AccountsAction,
         private pageLeaveUtilityService: PageLeaveUtilityService,
-        public dialog: MatDialog,
+        public dialog: MatDialog
     ) {
         // account-add component's property
         this.createAccountInProcess$ = this.store.pipe(select(state => state.groupwithaccounts.createAccountInProcess), takeUntil(this.destroyed$));
@@ -154,8 +154,7 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
     }
 
     public showDeleteAccountModal() {
-        this.deleteAccountmodalRef = this.dialog.open(this.deleteAccountModal, {
-        });
+        this.deleteAccountmodalRef = this.dialog.open(this.deleteAccountModal);
     }
 
     public hideDeleteAccountModal() {
