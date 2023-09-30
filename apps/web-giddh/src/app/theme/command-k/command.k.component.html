@@ -37,11 +37,11 @@
                                         class="item"
                                         *ngFor="let r of searchedItems; let i = index; trackBy: trackByFn"
                                         (mouseover)="highlightItem(i)"
-                                        (mouseout)="unhighlightItem()"
-                                        (click)="itemSelected(r)"
+                                        (mouseout)="unhighlightItem()"                     
+                                        (click)="itemSelected(r,$event)"                     
                                         [ngClass]="{ 'selected': r.loop === highlightedItem, 'active': r.isSelected }"
                                     >
-                                        <a  [attr.href]="r.type === 'MENU' || r.type === 'ACCOUNT' ? r.route : null"  class="d-flex flex-row align-items-center">
+                                        <a [attr.href]="r.type === 'MENU' || r.type === 'ACCOUNT' ? r.route : null" class="d-flex flex-row align-items-center">
                                             <div class="item-icon">
                                                 <ng-container [ngSwitch]="r.type">
                                                     <ng-container *ngSwitchCase="'MENU'">

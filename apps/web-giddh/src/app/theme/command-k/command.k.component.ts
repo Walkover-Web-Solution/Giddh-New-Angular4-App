@@ -47,6 +47,7 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
     @Input() public visibleItems: number = 10;
     
     @Output() public selectedItemEmitter: EventEmitter<any | any[]> = new EventEmitter<any | any[]>();
+    @Output() public closeDailogEmitter: EventEmitter<any | any[]> = new EventEmitter<any | any[]>();
     @Output() public groupEmitter: EventEmitter<any> = new EventEmitter<any>();
     @Output() public noResultFoundEmitter: EventEmitter<any> = new EventEmitter<null>();
     @Output() public newTeamCreationEmitter: EventEmitter<any> = new EventEmitter<null>();
@@ -177,12 +178,18 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
      * @param {*} item
      * @memberof CommandKComponent
      */
-    public itemSelected(item: any): void {
-        // emit data in case of direct A/c or Menus
+    public itemSelected(item: any, event?:any): void {              
+        if (event && (event.ctrlKey || event.metaKey)){
+            this.closeDailogEmitter.emit();
+            return ;
+        }else if(event && event.type ==="click"){
+            event.preventDefault();
+        }
+       // emit data in case of direct A/c or Menus
         if (!item.type || (item.type && (item.type === 'MENU' || item.type === 'ACCOUNT'))) {
             if (item.type === 'MENU') {
                 item.uniqueName = item.route;
-            }
+            }           
             this.selectedItemEmitter.emit(item);
         } else {
             // emit value for save data in db
