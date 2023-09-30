@@ -939,12 +939,23 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         let stockObjClone = cloneDeep(this.stockForm.variants);
         stockObjClone?.forEach((variant) => {
             updatedCustomFieldArray = variant?.customFields?.map((obj) => {
-                return {
+               return {
                     uniqueName: obj?.uniqueName,
-                    value: obj?.value
-                };
+                   value: obj?.value,
+                    isMandatory:obj.isMandatory
+                }
             });
-           updatedCustomFieldArray = updatedCustomFieldArray.filter(field => field.value);
+            updatedCustomFieldArray.forEach(field => {
+                if (field.isMandatory && !field.value) {
+                    this.isFormSubmitted = true;
+                    return;
+                }
+
+            })
+            updatedCustomFieldArray = updatedCustomFieldArray.filter(field => {
+                delete field.isMandatory
+                return field.value;
+            });
             variant.customFields = updatedCustomFieldArray;
         });
         if (this.validateStock(this.stockForm.purchaseAccountDetails?.unitRates)) {
