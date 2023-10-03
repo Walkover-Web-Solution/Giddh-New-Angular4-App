@@ -946,9 +946,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 }
             });
             updatedCustomFieldArray.forEach(field => {
-                if (field.isMandatory && !field.value) {
+                if (field.isMandatory && (field.value === undefined|| field.value ===null)) {
                     this.isFormSubmitted = true;
-                    return;
                 }
 
             })
@@ -958,6 +957,11 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
             });
             variant.customFields = updatedCustomFieldArray;
         });
+
+        if (this.isFormSubmitted) {
+            return;
+        }
+        
         if (this.validateStock(this.stockForm.purchaseAccountDetails?.unitRates)) {
             this.stockForm.purchaseAccountDetails.unitRates = this.stockForm.purchaseAccountDetails.unitRates.filter((unitRate) => {
                 return unitRate.stockUnitUniqueName || unitRate.rate;
