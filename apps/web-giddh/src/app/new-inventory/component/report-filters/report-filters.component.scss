@@ -59,34 +59,7 @@
     column-gap: 5px;
 }
 
-@media (max-width: 1440px) {
-    .inventory-filter-bar {
-        .search-control {
-            .icon-input {
-                float: left;
-                width: 70%;
-            }
-
-            .menu-btn-control {
-                width: 30%;
-            }
-        }
-    }
-}
-
-@media (max-width: 1024px) {
-    .inventory-filter-bar {
-        .search-control {
-            .icon-input {
-                float: left;
-                width: 60%;
-            }
-            .menu-btn-control {
-                width: 40%;
-            }
-        }
-    }
-
+@media (max-width: 1199px) {
     .stock-mat-salect {
         min-width: 187px;
     }
