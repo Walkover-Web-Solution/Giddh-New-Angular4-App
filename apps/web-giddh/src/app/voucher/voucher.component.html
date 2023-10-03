@@ -376,12 +376,17 @@
                                                                                         *ngIf="address.gstNumber"
                                                                                     >
                                                                                         {{
-                                                                                            address.gstNumber
+                                                                                            address.taxNumber
                                                                                                 ? (showGSTINNo
                                                                                                       ? commonLocaleData?.app_gstin +
-                                                                                                        ": "
-                                                                                                      : commonLocaleData?.app_trn +
-                                                                                                        ": ") +
+                                                                                                        ":"
+                                                                                                      : showTRNNo
+                                                                                                      ? commonLocaleData?.app_trn +
+                                                                                                        ":"
+                                                                                                      : showVATNo
+                                                                                                      ? commonLocaleData?.enter_vat_no +
+                                                                                                        ":"
+                                                                                                      : "") +
                                                                                                   address.gstNumber
                                                                                                 : ""
                                                                                         }}
@@ -419,6 +424,7 @@
                                                                                 col-sm-12 col-md-6
                                                                                 billing-shipping-value
                                                                             "
+                                                                            *ngIf="statesSource?.length"
                                                                         >
                                                                             <select-field
                                                                                 [placeholder]="
@@ -454,8 +460,48 @@
                                                                             </select-field>
                                                                         </div>
                                                                         <div
+                                                                            *ngIf="regionsSource?.length"
+                                                                            class="
+                                                                                col-sm-12 col-md-6
+                                                                                billing-shipping-value
+                                                                            "
+                                                                        >
+                                                                            <select-field
+                                                                                [placeholder]="
+                                                                                    commonLocaleData?.app_region
+                                                                                "
+                                                                                [cssClass]="
+                                                                                    'select-bdr-bottom form-control  input-bill'
+                                                                                "
+                                                                                (selectedOption)="
+                                                                                    fillShippingBillingDetails(
+                                                                                        $event,
+                                                                                        true
+                                                                                    );
+                                                                                    autoFillShippingDetails()
+                                                                                "
+                                                                                #statesBilling
+                                                                                [options]="regionsSource"
+                                                                                [name]="'billingDetails.county.code'"
+                                                                                [allowValueReset]="true"
+                                                                                [defaultValue]="
+                                                                                    invFormData?.accountDetails
+                                                                                        ?.billingDetails?.county?.name
+                                                                                "
+                                                                                (onClear)="
+                                                                                    fillShippingBillingDetails(
+                                                                                        $event,
+                                                                                        true
+                                                                                    );
+                                                                                    autoFillShippingDetails()
+                                                                                "
+                                                                                [readonly]="isEinvoiceGenerated"
+                                                                            >
+                                                                            </select-field>
+                                                                        </div>
+                                                                        <div
                                                                             class="col-sm-6 col-md-6"
-                                                                            *ngIf="shouldShowTrnGstField"
+                                                                            *ngIf="shouldShowTrnGstVatField"
                                                                         >
                                                                             <text-field
                                                                                 [maxlength]="15"
@@ -484,7 +530,7 @@
                                                                             >
                                                                             </text-field>
                                                                             <text-field
-                                                                                [maxlength]="15"
+                                                                                [maxlength]="12"
                                                                                 autocomplete="none"
                                                                                 [type]="'text'"
                                                                                 [name]="'billingDetails.gstNumber'"
@@ -509,14 +555,37 @@
                                                                                 [readonly]="isEinvoiceGenerated"
                                                                             >
                                                                             </text-field>
+                                                                            <text-field
+                                                                                [maxlength]="12"
+                                                                                autocomplete="None"
+                                                                                [type]="'text'"
+                                                                                [name]="'billingDetails.gstNumber'"
+                                                                                [cssClass]="
+                                                                                    'form-control input-custom billing input-bill'
+                                                                                "
+                                                                                *ngIf="showVATNo"
+                                                                                [(ngModel)]="
+                                                                                    invFormData.accountDetails
+                                                                                        .billingDetails.gstNumber
+                                                                                "
+                                                                                (change)="autoFillShippingDetails()"
+                                                                                [placeholder]="
+                                                                                    commonLocaleData?.app_enter_vat
+                                                                                "
+                                                                            >
+                                                                            </text-field>
                                                                         </div>
                                                                         <!-- static pin code  -->
                                                                         <div
                                                                             [ngClass]="{
                                                                                 'col-sm-6 col-md-6':
-                                                                                    showGSTINNo || showTRNNo,
+                                                                                    showGSTINNo ||
+                                                                                    showTRNNo ||
+                                                                                    showVATNo,
                                                                                 'col-sm-12 col-md-12': !(
-                                                                                    showGSTINNo || showTRNNo
+                                                                                    showGSTINNo ||
+                                                                                    showTRNNo ||
+                                                                                    showVATNo
                                                                                 )
                                                                             }"
                                                                         >
@@ -623,12 +692,17 @@
                                                                                         *ngIf="address.gstNumber"
                                                                                     >
                                                                                         {{
-                                                                                            address.gstNumber
+                                                                                            address.taxNumber
                                                                                                 ? (showGSTINNo
                                                                                                       ? commonLocaleData?.app_gstin +
-                                                                                                        ": "
-                                                                                                      : commonLocaleData?.app_trn +
-                                                                                                        ": ") +
+                                                                                                        ":"
+                                                                                                      : showTRNNo
+                                                                                                      ? commonLocaleData?.app_trn +
+                                                                                                        ":"
+                                                                                                      : showVATNo
+                                                                                                      ? commonLocaleData?.enter_vat_no +
+                                                                                                        ":"
+                                                                                                      : "") +
                                                                                                   address.gstNumber
                                                                                                 : ""
                                                                                         }}
@@ -670,6 +744,7 @@
                                                                                     billing-shipping-value
                                                                                 "
                                                                                 #shippingState
+                                                                                *ngIf="statesSource?.length"
                                                                             >
                                                                                 <select-field
                                                                                     #customerShippingState
@@ -705,8 +780,51 @@
                                                                                 </select-field>
                                                                             </div>
                                                                             <div
+                                                                                class="
+                                                                                    col-sm-12 col-md-6
+                                                                                    billing-shipping-value
+                                                                                "
+                                                                                #shippingState
+                                                                                *ngIf="regionsSource?.length"
+                                                                            >
+                                                                                <select-field
+                                                                                    #customerShippingState
+                                                                                    [placeholder]="
+                                                                                        commonLocaleData?.app_region
+                                                                                    "
+                                                                                    [cssClass]="
+                                                                                        'select-bdr-bottom form-control input-bill'
+                                                                                    "
+                                                                                    #statesShipping
+                                                                                    (selectedOption)="
+                                                                                        fillShippingBillingDetails(
+                                                                                            $event,
+                                                                                            false
+                                                                                        )
+                                                                                    "
+                                                                                    [options]="regionsSource"
+                                                                                    [name]="
+                                                                                        'shippingDetails.county.code'
+                                                                                    "
+                                                                                    [allowValueReset]="true"
+                                                                                    [defaultValue]="
+                                                                                        invFormData?.accountDetails
+                                                                                            ?.shippingDetails?.county
+                                                                                            ?.name
+                                                                                    "
+                                                                                    (onClear)="
+                                                                                        fillShippingBillingDetails(
+                                                                                            $event,
+                                                                                            false
+                                                                                        )
+                                                                                    "
+                                                                                    [readonly]="isEinvoiceGenerated"
+                                                                                >
+                                                                                </select-field>
+                                                                            </div>
+                                                                            <div
                                                                                 class="col-sm-6"
-                                                                                *ngIf="shouldShowTrnGstField"
+                                                                                *ngIf="shouldShowTrnGstVatField"
                                                                             >
                                                                                 <text-field
                                                                                     [readonly]="
@@ -762,14 +880,39 @@
                                                                                         commonLocaleData?.app_trn
                                                                                     "
                                                                                 ></text-field>
+                                                                                <text-field
+                                                                                    [readonly]="
+                                                                                        autoFillShipping ||
+                                                                                        isEinvoiceGenerated
+                                                                                    "
+                                                                                    [maxlength]="12"
+                                                                                    autocomplete="None"
+                                                                                    [type]="'text'"
+                                                                                    [name]="'shippingDetails.gstNumber'"
+                                                                                    [cssClass]="
+                                                                                        'form-control input-custom input-bill'
+                                                                                    "
+                                                                                    *ngIf="showVATNo"
+                                                                                    [(ngModel)]="
+                                                                                        invFormData.accountDetails
+                                                                                            .shippingDetails.gstNumber
+                                                                                    "
+                                                                                    [placeholder]="
+                                                                                        commonLocaleData?.app_enter_vat
+                                                                                    "
+                                                                                ></text-field>
                                                                             </div>
                                                                             <!-- static pin code  -->
                                                                             <div
                                                                                 [ngClass]="{
                                                                                     'col-sm-6':
-                                                                                        showGSTINNo || showTRNNo,
+                                                                                        showGSTINNo ||
+                                                                                        showTRNNo ||
+                                                                                        showVATNo,
                                                                                     'col-sm-12': !(
-                                                                                        showGSTINNo || showTRNNo
+                                                                                        showGSTINNo ||
+                                                                                        showTRNNo ||
+                                                                                        showVATNo
                                                                                     )
                                                                                 }"
                                                                             >
@@ -1053,10 +1196,14 @@
                                                                                     address.taxNumber
                                                                                         ? (showGSTINNo
                                                                                               ? commonLocaleData?.app_gstin +
-                                                                                                ": "
-                                                                                              : commonLocaleData?.app_trn +
-                                                                                                ": ") +
-                                                                                          address.taxNumber
+                                                                                                ":"
+                                                                                              : showTRNNo
+                                                                                              ? commonLocaleData?.app_trn +
+                                                                                                ":"
+                                                                                              : showVATNo
+                                                                                              ? commonLocaleData?.enter_vat_no +
+                                                                                                ":"
+                                                                                              : "") + address.gstNumber
                                                                                         : ""
                                                                                 }}
                                                                             </p>
@@ -1089,12 +1236,13 @@
                                                                             billing-shipping-value
                                                                         "
                                                                         #billingStateCompany
+                                                                        *ngIf="companyStatesSource?.length"
                                                                     >
                                                                         <select-field
                                                                             #companyBillingState
                                                                             [placeholder]="commonLocaleData?.app_state"
                                                                             [cssClass]="
-                                                                                ' select-bdr-bottom form-control input-bill'
+                                                                                ' select-bdr-bottom form-control input-bill w-100'
                                                                             "
                                                                             (selectedOption)="
                                                                                 fillShippingBillingCompanyDetails(
@@ -1129,10 +1277,56 @@
                                                                         </select-field>
                                                                     </div>
                                                                     <div
+                                                                        class="
+                                                                            col-sm-12 col-md-6
+                                                                            billing-shipping-value
+                                                                        "
+                                                                        #companyBillingState
+                                                                        *ngIf="companyRegionsSource?.length"
+                                                                    >
+                                                                        <select-field
+                                                                            #companyBillingState
+                                                                            [placeholder]="commonLocaleData?.app_region"
+                                                                            [cssClass]="
+                                                                                ' select-bdr-bottom form-control input-bill w-100'
+                                                                            "
+                                                                            (selectedOption)="
+                                                                                fillShippingBillingCompanyDetails(
+                                                                                    $event,
+                                                                                    true
+                                                                                );
+                                                                                autoFillCompanyShippingDetails()
+                                                                            "
+                                                                            [allowValueReset]="true"
+                                                                            (onClear)="
+                                                                                fillShippingBillingCompanyDetails(
+                                                                                    $event,
+                                                                                    true
+                                                                                );
+                                                                                autoFillCompanyShippingDetails()
+                                                                            "
+                                                                            [options]="companyRegionsSource"
+                                                                            [name]="'companyBillingDetailsStateCode'"
+                                                                            [readonly]="
+                                                                                purchaseBillCompany.billingDetails
+                                                                                    .gstNumber &&
+                                                                                purchaseBillCompany.billingDetails
+                                                                                    .gstNumber.length >= 2
+                                                                                    ? true
+                                                                                    : null
+                                                                            "
+                                                                            [defaultValue]="
+                                                                                purchaseBillCompany?.billingDetails
+                                                                                    ?.county?.name
+                                                                            "
+                                                                        >
+                                                                        </select-field>
+                                                                    </div>
+                                                                    <div
                                                                         class="col-sm-6 col-md-6"
                                                                         *ngIf="
-                                                                            shouldShowTrnGstField &&
-                                                                            (showGSTINNo || showTRNNo)
+                                                                            shouldShowTrnGstVatField &&
+                                                                            (showGSTINNo || showTRNNo || showVATNo)
                                                                         "
                                                                     >
                                                                         <text-field
@@ -1145,16 +1339,24 @@
                                                                                     .gstNumber
                                                                             "
                                                                             [cssClass]="
-                                                                                'form-control input-custom billing input-bill'
+                                                                                'form-control input-custom billing input-bill w-100'
                                                                             "
                                                                             (change)="
-                                                                                getStateCodeCompany('billingDetails');
+                                                                                !showVATNo
+                                                                                    ? getStateCodeCompany(
+                                                                                          'billingDetails'
+                                                                                      )
+                                                                                    : null;
                                                                                 autoFillCompanyShippingDetails()
                                                                             "
                                                                             [placeholder]="
                                                                                 showGSTINNo
                                                                                     ? commonLocaleData?.app_gstin
-                                                                                    : commonLocaleData?.app_trn
+                                                                                    : showTRNNo
+                                                                                    ? commonLocaleData?.app_trn
+                                                                                    : showVATNo
+                                                                                    ? commonLocaleData?.app_enter_vat
+                                                                                    : ''
                                                                             "
                                                                         ></text-field>
                                                                     </div>
@@ -1162,9 +1364,11 @@
                                                                     <div
                                                                         [ngClass]="{
                                                                             'col-sm-6 col-md-6':
-                                                                                showGSTINNo || showTRNNo,
+                                                                                showGSTINNo || showTRNNo || showVATNo,
                                                                             'col-sm-12 col-md-12': !(
-                                                                                showGSTINNo || showTRNNo
+                                                                                showGSTINNo ||
+                                                                                showTRNNo ||
+                                                                                showVATNo
                                                                             )
                                                                         }"
                                                                     >
@@ -1172,7 +1376,7 @@
                                                                             <text-field
                                                                                 [type]="'number'"
                                                                                 [cssClass]="
-                                                                                    'form-control input-custom input-bill'
+                                                                                    'form-control input-custom input-bill w-100'
                                                                                 "
                                                                                 autocomplete="false"
                                                                                 [name]="'purchaseBillBillingPinCode'"
@@ -1264,12 +1468,19 @@
                                                                             >
                                                                                 {{
                                                                                     address.taxNumber
-                                                                                        ? (showGSTINNo
+                                                                                        ? ((showGSTINNo
                                                                                               ? commonLocaleData?.app_gstin +
-                                                                                                ": "
-                                                                                              : commonLocaleData?.app_trn +
-                                                                                                ": ") +
-                                                                                          address.taxNumber
+                                                                                                ":"
+                                                                                              : "") ||
+                                                                                              (showTRNNo
+                                                                                                  ? commonLocaleData?.app_trn +
+                                                                                                    ":"
+                                                                                                  : "") ||
+                                                                                              (showVATNo
+                                                                                                  ? commonLocaleData?.enter_vat_no +
+                                                                                                    ":"
+                                                                                                  : "")) +
+                                                                                          address.gstNumber
                                                                                         : ""
                                                                                 }}
                                                                             </p>
@@ -1309,6 +1520,7 @@
                                                                                 billing-shipping-value
                                                                             "
                                                                             #shippingStateCompany
+                                                                            *ngIf="companyStatesSource?.length"
                                                                         >
                                                                             <select-field
                                                                                 #companyShippingState
@@ -1316,7 +1528,7 @@
                                                                                     commonLocaleData?.app_state
                                                                                 "
                                                                                 [cssClass]="
-                                                                                    'select-bdr-bottom form-control input-bill'
+                                                                                    'select-bdr-bottom form-control input-bill w-100'
                                                                                 "
                                                                                 [ngClass]="{
                                                                                     'disabled': autoFillCompanyShipping
@@ -1356,10 +1568,63 @@
                                                                             </select-field>
                                                                         </div>
                                                                         <div
+                                                                            class="
+                                                                                col-sm-12 col-md-6
+                                                                                billing-shipping-value
+                                                                            "
+                                                                            #shippingStateCompany
+                                                                            *ngIf="companyRegionsSource?.length"
+                                                                        >
+                                                                            <select-field
+                                                                                #companyShippingState
+                                                                                [placeholder]="
+                                                                                    commonLocaleData?.app_region
+                                                                                "
+                                                                                [cssClass]="
+                                                                                    'select-bdr-bottom form-control input-bill w-100'
+                                                                                "
+                                                                                [ngClass]="{
+                                                                                    'disabled': autoFillCompanyShipping
+                                                                                }"
+                                                                                (selectedOption)="
+                                                                                    fillShippingBillingCompanyDetails(
+                                                                                        $event,
+                                                                                        false
+                                                                                    )
+                                                                                "
+                                                                                [allowValueReset]="true"
+                                                                                (onClear)="
+                                                                                    fillShippingBillingCompanyDetails(
+                                                                                        $event,
+                                                                                        false
+                                                                                    )
+                                                                                "
+                                                                                [options]="companyRegionsSource"
+                                                                                [name]="
+                                                                                    'companyShippingDetailsCountyCode'
+                                                                                "
+                                                                                [readonly]="
+                                                                                    autoFillCompanyShipping ||
+                                                                                    (purchaseBillCompany.shippingDetails
+                                                                                        .gstNumber &&
+                                                                                        purchaseBillCompany
+                                                                                            .shippingDetails.gstNumber
+                                                                                            .length >= 2)
+                                                                                        ? true
+                                                                                        : null
+                                                                                "
+                                                                                [defaultValue]="
+                                                                                    purchaseBillCompany.shippingDetails
+                                                                                        .county?.name
+                                                                                "
+                                                                            >
+                                                                            </select-field>
+                                                                        </div>
+                                                                        <div
                                                                             class="col-sm-6 col-md-6"
                                                                             *ngIf="
-                                                                                shouldShowTrnGstField &&
-                                                                                (showGSTINNo || showTRNNo)
+                                                                                shouldShowTrnGstVatField &&
+                                                                                (showGSTINNo || showTRNNo || showVATNo)
                                                                             "
                                                                         >
                                                                             <text-field
@@ -1372,17 +1637,23 @@
                                                                                         .gstNumber
                                                                                 "
                                                                                 [cssClass]="
-                                                                                    'form-control input-custom input-bill'
+                                                                                    'form-control input-custom input-bill w-100'
                                                                                 "
                                                                                 (change)="
-                                                                                    getStateCodeCompany(
-                                                                                        'shippingDetails'
-                                                                                    )
+                                                                                    !showVATNo
+                                                                                        ? getStateCodeCompany(
+                                                                                              'shippingDetails'
+                                                                                          )
+                                                                                        : null
                                                                                 "
                                                                                 [placeholder]="
                                                                                     showGSTINNo
                                                                                         ? commonLocaleData?.app_gstin
-                                                                                        : commonLocaleData?.app_trn
+                                                                                        : showTRNNo
+                                                                                        ? commonLocaleData?.app_trn
+                                                                                        : showVATNo
+                                                                                        ? commonLocaleData?.app_enter_vat
+                                                                                        : ''
                                                                                 "
                                                                             ></text-field>
                                                                         </div>
@@ -1390,9 +1661,13 @@
                                                                         <div
                                                                             [ngClass]="{
                                                                                 'col-sm-6 col-md-6':
-                                                                                    showGSTINNo || showTRNNo,
+                                                                                    showGSTINNo ||
+                                                                                    showTRNNo ||
+                                                                                    showVATNo,
                                                                                 'col-sm-12 col-md-12': !(
-                                                                                    showGSTINNo || showTRNNo
+                                                                                    showGSTINNo ||
+                                                                                    showTRNNo ||
+                                                                                    showVATNo
                                                                                 )
                                                                             }"
                                                                         >
@@ -1400,7 +1675,7 @@
                                                                                 <text-field
                                                                                     [type]="'number'"
                                                                                     [cssClass]="
-                                                                                        'form-control input-custom input-bill'
+                                                                                        'form-control input-custom input-bill w-100'
                                                                                     "
                                                                                     autocomplete="false"
                                                                                     [name]="
@@ -1434,48 +1709,48 @@
                                     class="row mt-3"
                                     *ngIf="isPurchaseInvoice && (!isUpdateMode || (isUpdateMode && poLinkUpdated))"
                                 >
-                                    <div class="col-sm-12 col-xl-6 col-lg-6 col-md-6 col-xs-12 purchase-link">
-                                        <mat-select
-                                            name="linkedPO"
-                                            [(ngModel)]="linkedPo"
-                                            [multiple]="true"
-                                            (selectionChange)="getPurchaseOrder($event?.value, true)"
-                                            class="po-mat-salect"
-                                            [placeholder]="localeData?.select_order_placeholder"
-                                            [disabled]="linkedPo?.length === 0 && fieldFilteredOptions?.length === 0"
-                                        >
-                                            <mat-select-trigger *ngIf="linkedPo?.length">
-                                                <ng-container *ngFor="let poNumber of linkedPo; let i = index"
-                                                    >{{ purchaseOrderNumberValueMapping[poNumber]
-                                                    }}<ng-container *ngIf="linkedPo[i + 1]">, </ng-container>
-                                                </ng-container>
-                                            </mat-select-trigger>
-                                            <mat-option class="po-options-line">
-                                                <ngx-mat-select-search
-                                                    [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
-                                                    [formControl]="linkPoDropdown"
-                                                    [placeholderLabel]="localeData?.select_order_placeholder"
-                                                >
-                                                    <i class="icon-cross" ngxMatSelectSearchClear></i>
-                                                </ngx-mat-select-search>
-                                            </mat-option>
-
-                                            <mat-option
-                                                *ngFor="let option of fieldFilteredOptions"
-                                                [value]="option?.value"
-                                                class="po-options-line"
-                                                [disabled]="showLoader"
+                                    <div class="col-sm-12 col-xl-6 col-lg-6 col-md-6 col-xs-12 pd-r1 purchase-link">                                                                                 
+                                            <mat-select
+                                                name="linkedPO"
+                                                [(ngModel)]="linkedPo"
+                                                [multiple]="true"
+                                                (selectionChange)="getPurchaseOrder($event?.value, true)"
+                                                class="po-mat-select"
+                                                [placeholder]="localeData?.select_order_placeholder"
+                                                [disabled]="linkedPo?.length === 0 && fieldFilteredOptions?.length === 0"
                                             >
-                                                <span class="po-option-label"> {{ option?.label }}</span>
-                                                <span class="po-option-value" *ngIf="option?.additional?.pending">
-                                                    {{ localeData?.pending }}: {{ option?.additional?.pending }}</span
+                                                <mat-select-trigger *ngIf="linkedPo?.length">
+                                                    <ng-container *ngFor="let poNumber of linkedPo; let i = index"
+                                                        >{{ purchaseOrderNumberValueMapping[poNumber]
+                                                        }}<ng-container *ngIf="linkedPo[i + 1]">, </ng-container>
+                                                    </ng-container>
+                                                </mat-select-trigger>
+                                                <mat-option class="po-options-line">
+                                                    <ngx-mat-select-search
+                                                        [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
+                                                        [formControl]="linkPoDropdown"
+                                                        [placeholderLabel]="localeData?.select_order_placeholder"
+                                                    >
+                                                        <i class="icon-cross" ngxMatSelectSearchClear></i>
+                                                    </ngx-mat-select-search>
+                                                </mat-option>
+    
+                                                <mat-option
+                                                    *ngFor="let option of fieldFilteredOptions"
+                                                    [value]="option?.value"
+                                                    class="po-options-line"
+                                                    [disabled]="showLoader"
                                                 >
-                                                <span class="po-option-value" *ngIf="option.additional?.grandTotal">
-                                                    {{ commonLocaleData?.app_amount }}:
-                                                    {{ option?.additional?.grandTotal }}</span
-                                                >
-                                            </mat-option>
-                                        </mat-select>
+                                                    <span class="po-option-label"> {{ option?.label }}</span>
+                                                    <span class="po-option-value" *ngIf="option?.additional?.pending">
+                                                        {{ localeData?.pending }}: {{ option?.additional?.pending }}</span
+                                                    >
+                                                    <span class="po-option-value" *ngIf="option.additional?.grandTotal">
+                                                        {{ commonLocaleData?.app_amount }}:
+                                                        {{ option?.additional?.grandTotal }}</span
+                                                    >
+                                                </mat-option>
+                                            </mat-select>                                       
                                     </div>
                                 </div>
                                 <!-- end Link purchase order -->
@@ -1744,7 +2019,8 @@
                                     class="row mt-3"
                                     *ngIf="
                                         isPurchaseInvoice ||
-                                        (currentVoucherFormDetails?.rcmAllowed && companyCountryName === 'India')
+                                        (currentVoucherFormDetails?.rcmAllowed &&
+                                            (companyCountryName === 'India' || companyCountryName === 'United Kingdom'))
                                     "
                                 >
                                     <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12 ">
@@ -3930,7 +4206,7 @@
             [isUpdateMode]="isUpdateMode"
             [depositAmount]="depositAmount"
             [invoiceFormDetails]="invFormData"
-            [isVoucherModule]="true && voucherApiVersion !== 2"
+            [isVoucherModule]="voucherApiVersion !== 2"
             [advanceReceiptAdjustmentUpdatedData]="advanceReceiptAdjustmentData"
             (closeModelEvent)="closeAdvanceReceiptModal()"
             (submitClicked)="getAdvanceReceiptAdjustData($event)"

@@ -313,14 +313,16 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
             if (response && response.body && response.status === 'success') {
                 const result = response.body;
                 this.addressConfiguration.stateList = [];
-                Object.keys(result.stateList).forEach(key => {
-                    this.addressConfiguration.stateList.push({
-                        label: result.stateList[key].code + ' - ' + result.stateList[key].name,
-                        value: result.stateList[key].code,
-                        code: result.stateList[key].stateGstCode,
-                        stateName: result.stateList[key].name
+                if (result.stateList?.length) {
+                    Object.keys(result.stateList).forEach(key => {
+                        this.addressConfiguration.stateList.push({
+                            label: result.stateList[key].code + ' - ' + result.stateList[key].name,
+                            value: result.stateList[key].code,
+                            code: result.stateList[key].stateGstCode,
+                            stateName: result.stateList[key].name
+                        });
                     });
-                });
+                }
             }
         });
     }

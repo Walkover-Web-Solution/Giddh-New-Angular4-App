@@ -25,9 +25,10 @@ export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
     public updatedData: any = {};
     /** Company number system */
     public numberSystem: string;
-
     /** Decides when to emit the value for UPDATE operation */
     public saveProfileSubject: Subject<any> = new Subject();
+    /** Stores the voucher API version of current company */
+    public voucherApiVersion: 1 | 2;
 
     /** Emits the saved value */
     @Output() public saveProfile: EventEmitter<any> = new EventEmitter();
@@ -97,6 +98,7 @@ export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
 
         this.translationLocales = this.generalService.getSupportedLocales();
         this.availableThemes = this.generalService.getAvailableThemes();
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
 
         this.store.pipe(select(state => state.session.currentLocale), takeUntil(this.destroyed$)).subscribe(response => {
             this.activeLocale = response?.value;
@@ -154,6 +156,16 @@ export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
         this.saveProfileSubject.next(true);
     }
 
+        /**
+     * Inventory type update handler
+     *
+     * @param {boolean} value True, if Product is selected
+     * @memberof OtherSettingsComponent
+     */
+    public inventoryTypeUpdated(value: boolean): void {
+        this.profileData.manageInventory = value;
+        this.profileUpdated('manageInventory');
+    }
     /**
      * This will set active locale
      *

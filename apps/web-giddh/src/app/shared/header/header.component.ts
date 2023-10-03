@@ -44,6 +44,7 @@ import { LedgerActions } from '../../actions/ledger/ledger.actions';
 import { LocaleService } from '../../services/locale.service';
 import { SettingsFinancialYearActions } from '../../actions/settings/financial-year/financial-year.action';
 import { DomSanitizer } from '@angular/platform-browser';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatMenuTrigger } from '@angular/material/menu';
 
 @Component({
@@ -61,8 +62,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public imgPath: string = '';
     public subscribedPlan: SubscriptionsUser;
     public isLedgerAccSelected: boolean = false;
-    /* This will hold the value out/in to open/close help popup */
-    public asideHelpSupportMenuState: string = 'out';
+    /* This will hold the help popup dialog ref */
+    public asideHelpSupportDialogRef: MatDialogRef<any>;
     /* This will hold the value out/in to open/close setting sidebar popup */
     public asideSettingMenuState: string = 'out';
     /*This will check if page has not tabs*/
@@ -88,6 +89,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     @ViewChild('companyDetailsDropDownWeb', { static: true }) public companyDetailsDropDownWeb: BsDropdownDirective;
     /** All modules popover instance */
     @ViewChild('allModulesPopover', { static: true }) public allModulesPopover: PopoverDirective;
+    /** Instance of mat dialog */
+    @ViewChild('asideHelpSupportMenuStateRef', { static: true }) public asideHelpSupportMenuStateRef: TemplateRef<any>;
     /** Instance of menu trigger */
     @ViewChild(MatMenuTrigger) public trigger: MatMenuTrigger;
 
@@ -270,7 +273,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         public location: Location,
         private localeService: LocaleService,
         private settingsFinancialYearActions: SettingsFinancialYearActions,
-        private sanitizer: DomSanitizer
+        private sanitizer: DomSanitizer,
+        public dialog: MatDialog
     ) {
         this.calendlyUrl = this.sanitizer.bypassSecurityTrustResourceUrl(CALENDLY_URL);
         // Reset old stored application date
@@ -827,35 +831,30 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     /**
-     * This will toggle the fixed class on body
-     *
-     * @memberof HeaderComponent
-     */
-    public toggleBodyClass(): void {
-        if (this.asideHelpSupportMenuState === 'in') {
-            document.querySelector('body')?.classList?.add('fixed');
-        } else {
-            document.querySelector('body')?.classList?.remove('fixed');
-        }
-    }
-
-    /**
      * This will toggle the help popup
      *
      * @param {boolean} show
      * @memberof HeaderComponent
      */
-    public toggleHelpSupportPane(show: boolean): void {
-        setTimeout(() => {
-            if (show) {
-                this.asideSettingMenuState = 'out';
-                document.querySelector('body')?.classList?.remove('aside-setting');
+    public toggleHelpSupportPane(event: boolean): void {
+        if (event) {
+            if (this.asideHelpSupportDialogRef?.id && this.dialog.getDialogById(this.asideHelpSupportDialogRef?.id)) {
+                this.asideHelpSupportDialogRef?.close();
+            } else {
+                this.asideHelpSupportDialogRef = this.dialog.open(this.asideHelpSupportMenuStateRef, {
+                    width: '1000px',
+                    hasBackdrop: false,
+                    position: {
+                        right: '0',
+                        top: '0'
+                    }
+                });
             }
-            document.querySelector('body').classList.remove('mobile-setting-sidebar');
-            this.asideHelpSupportMenuState = (show && this.asideHelpSupportMenuState === 'out') ? 'in' : 'out';
-            this.toggleBodyClass();
-        }, (this.asideHelpSupportMenuState === 'out') ? 100 : 0);
+        } else {
+            this.asideHelpSupportDialogRef?.close();
+        }
     }
+
 
     /**
      * This will toggle the settings popup
@@ -868,10 +867,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         setTimeout(() => {
             this.isMobileSidebar = isMobileSidebar;
             if (show) {
-                this.asideHelpSupportMenuState = 'out';
+                this.asideHelpSupportDialogRef?.close();
             }
             this.asideSettingMenuState = (show) ? 'in' : 'out';
-            this.toggleBodyClass();
 
             if (this.asideSettingMenuState === "in") {
                 document.querySelector('body')?.classList?.add('aside-setting');
@@ -885,20 +883,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 document.querySelector('body').classList.remove('mobile-setting-sidebar');
             }
         }, ((this.asideSettingMenuState === 'out') ? 100 : 0));
-    }
-
-    /**
-     * This will close the help popup if click outside of popup
-     *
-     * @memberof HeaderComponent
-     */
-    public closeHelpPaneOnOutsideClick(): void {
-        setTimeout(() => {
-            if (this.asideHelpSupportMenuState === "in") {
-                this.asideHelpSupportMenuState = 'out';
-                document.querySelector('body')?.classList?.remove('fixed');
-            }
-        }, 50);
     }
 
     /**
@@ -997,7 +981,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     public showManageGroupsModal() {
-        this.closeHelpPaneOnOutsideClick();
+        this.toggleHelpSupportPane(false);
         this.store.dispatch(this.groupWithAccountsAction.OpenAddAndManageFromOutside(''));
     }
 
@@ -1106,10 +1090,20 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public navigateToSubItemLink(event: any): void {
         if (event) {
             this.trigger?.closeMenu();
-            if (event === 'deliverychallan' || event === 'receiptnote') {
-                this.router.navigate(['/pages/inventory/report/' + event]);
+            if (this.voucherApiVersion === 2) {
+                if (event === 'receiptnote') {
+                    this.router.navigate(['/pages/inventory/v2/branch-transfer/receipt-note/create']);
+                } else if (event === 'deliverychallan') {
+                    this.router.navigate(['/pages/inventory/v2/branch-transfer/delivery-challan/create']);
+                } else {
+                    this.router.navigate(['/pages' + event]);
+                }
             } else {
-                this.router.navigate(['/pages' + event]);
+                if (event === 'deliverychallan' || event === 'receiptnote') {
+                    this.router.navigate(['/pages/inventory/report/' + event]);
+                } else {
+                    this.router.navigate(['/pages' + event]);
+                }
             }
         }
     }

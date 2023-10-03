@@ -102,10 +102,10 @@
                         <ul class="left-fixed-header list-style-none font-15 lh33 mr-t05">
                             <li *ngFor="let acc of accountItemsFromIndexDB">
                                 <a
-                                    href="javascript:void(0);"
+                                    [href]="'/pages/ledger/'+ acc?.uniqueName"
                                     [routerLinkActive]="['active']"
                                     [class.active]="isLedgerAccSelected && selectedLedgerName === acc?.uniqueName"
-                                    (click)="analyzeAccounts($event, acc); companyDetailsDropDownWeb.hide()"
+                                    (click)="analyzeAccounts($event, acc); companyDetailsDropDownWeb.hide(); $event.stopPropagation()"
                                     >{{ acc.name }} {{ commonLocaleData?.app_ac }}</a
                                 >
                             </li>
@@ -175,72 +175,75 @@
                             </p>
                         </div>
                         <ul class="list-style-none giddh-primary-items">
-                            <li
-                                class="main-item btn-group"
-                                *ngFor="let menu of allItems; trackBy: trackItems; index as itemIndex"
-                                dropdown
-                                #dropdown="bs-dropdown"
-                                [autoClose]="isOpen ? false : true"
-                                [attr.container]="!isOpen ? 'body' : ''"
-                                (click)="openActiveItem(itemIndex)"
-                            >
-                                <a
-                                    href="javascript:void(0);"
-                                    tooltip="{{ menu?.label }}"
-                                    *ngIf="menu?.items?.length"
-                                    dropdownToggle
-                                    class="dropdown-toggle"
-                                    [class.active]="menu?.isActive"
-                                >
-                                    <span
-                                        ><i [ngClass]="menu?.icon"></i>
-                                        <span class="item-name">{{ menu?.label }}</span>
-                                    </span>
-                                    <i class="icon-right mr-l1 font-15"></i>
-                                </a>
-                                <a
-                                    href="javascript:void(0);"
-                                    *ngIf="menu?.items?.length === 0 && menu?.link"
-                                    [routerLink]="[menu?.link]"
-                                    [queryParams]="menu?.additional"
-                                    dropdownToggle
-                                    class="dropdown-toggle"
-                                >
-                                    <span
-                                        ><i [ngClass]="menu?.icon"></i>
-                                        <span class="item-name">{{ menu?.label }}</span>
-                                    </span>
-                                </a>
-                                <ng-container *ngIf="menu?.items?.length">
-                                    <ul *dropdownMenu class="dropdown-menu list-style-none pd-l2 sub-menu" role="menu">
-                                        <li *ngFor="let item of menu?.items; trackBy: trackItems">
-                                            <a
-                                                *ngIf="item?.link"
-                                                href="javascript:void(0);"
-                                                [class.active]="
-                                                    rla?.isActive ||
-                                                    isRouteWithParamsActive(item?.link) ||
-                                                    item?.additionalRoutes?.includes(isActiveRoute)
-                                                "
-                                                [routerLink]="[item?.link]"
-                                                routerLinkActive
-                                                #rla="routerLinkActive"
-                                                [routerLinkActiveOptions]="{ exact: true }"
-                                                [queryParams]="item?.additional"
-                                                ><i [ngClass]="item.icon"></i>
-                                                {{ item?.label }}
-                                            </a>
-                                            <a
-                                                *ngIf="!item?.link"
-                                                href="javascript:void(0);"
-                                                (click)="handleItemClick(item)"
-                                                ><i [ngClass]="item.icon"></i>
-                                                {{ item?.label }}
-                                            </a>
-                                        </li>
-                                    </ul>
+                            <ng-container *ngFor="let menu of allItems; trackBy: trackItems;">
+                                <ng-container *ngIf="!menu.hide">
+                                    <li
+                                        class="main-item btn-group"
+                                        dropdown
+                                        #dropdown="bs-dropdown"
+                                        [autoClose]="isOpen ? false : true"
+                                        [attr.container]="!isOpen ? 'body' : ''"
+                                        (click)="openActiveItem(menu.itemIndex)"
+                                    >
+                                        <a
+                                            href="javascript:void(0);"
+                                            tooltip="{{ menu?.label }}"
+                                            *ngIf="menu?.items?.length"
+                                            dropdownToggle
+                                            class="dropdown-toggle"
+                                            [class.active]="menu?.isActive"
+                                        >
+                                            <span
+                                                ><i [ngClass]="menu?.icon"></i>
+                                                <span class="item-name">{{ menu?.label }}</span>
+                                            </span>
+                                            <i class="icon-right mr-l1 font-15"></i>
+                                        </a>
+                                        <a
+                                            href="javascript:void(0);"
+                                            *ngIf="menu?.items?.length === 0 && menu?.link"
+                                            [routerLink]="[menu?.link]"
+                                            [queryParams]="menu?.additional"
+                                            dropdownToggle
+                                            class="dropdown-toggle"
+                                        >
+                                            <span
+                                                ><i [ngClass]="menu?.icon"></i>
+                                                <span class="item-name">{{ menu?.label }}</span>
+                                            </span>
+                                        </a>
+                                        <ng-container *ngIf="menu?.items?.length">
+                                            <ul *dropdownMenu class="dropdown-menu list-style-none pd-l2 sub-menu" role="menu">
+                                                <li *ngFor="let item of menu?.items; trackBy: trackItems">
+                                                    <a
+                                                        *ngIf="item?.link"
+                                                        href="javascript:void(0);"
+                                                        [class.active]="
+                                                            rla?.isActive ||
+                                                            isRouteWithParamsActive(item?.link) ||
+                                                            item?.additionalRoutes?.includes(isActiveRoute)
+                                                        "
+                                                        [routerLink]="[item?.link]"
+                                                        routerLinkActive
+                                                        #rla="routerLinkActive"
+                                                        [routerLinkActiveOptions]="{ exact: true }"
+                                                        [queryParams]="item?.additional"
+                                                        ><i [ngClass]="item.icon"></i>
+                                                        {{ item?.label }}
+                                                    </a>
+                                                    <a
+                                                        *ngIf="!item?.link"
+                                                        href="javascript:void(0);"
+                                                        (click)="handleItemClick(item)"
+                                                        ><i [ngClass]="item.icon"></i>
+                                                        {{ item?.label }}
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </ng-container>
+                                    </li>
                                 </ng-container>
-                            </li>
+                            </ng-container>
                         </ul>
                     </div>
                 </div>
@@ -249,27 +252,23 @@
     </div>
     <!--CMD + G modal  -->
     <ng-template #navigationModal>
-        <div class="modal-body" #mdl>
-            <command-k
-                (newTeamCreationEmitter)="handleNewTeamCreationEmitter($event)"
-                (groupEmitter)="makeGroupEntryInDB($event)"
-                (selectedItemEmitter)="onItemSelected($event)"
-                [parentEle]="mdl"
-                [isOpen]="true"
-                [setParentWidth]="true"
-                (closeEmitter)="modelRef.hide()"
-            ></command-k>
-
-            <div class="shortcuts">
-                <strong>↑</strong> <strong>↓</strong>&nbsp; {{ localeData?.to_navigate }}
-                <strong class="mr-l1" [attr.aria-label]="commonLocaleData?.app_return">↵</strong>&nbsp;
-                {{ localeData?.to_select }}
-                <strong class="mr-l1" [attr.aria-label]="commonLocaleData?.app_escape">{{
-                    commonLocaleData?.app_esc
-                }}</strong
-                >&nbsp;
-                {{ localeData?.to_dismiss }}
-            </div>
+        <command-k
+            (newTeamCreationEmitter)="handleNewTeamCreationEmitter($event)"
+            (groupEmitter)="makeGroupEntryInDB($event)"
+            (selectedItemEmitter)="onItemSelected($event)"
+            [parentEle]="mdl"
+            [isOpen]="true"
+            [setParentWidth]="true"
+        ></command-k>
+        <div class="shortcuts">
+            <strong>↑</strong> <strong>↓</strong>&nbsp; {{ localeData?.to_navigate }}
+            <strong class="mr-l1" [attr.aria-label]="commonLocaleData?.app_return">↵</strong>&nbsp;
+            {{ localeData?.to_select }}
+            <strong class="mr-l1" [attr.aria-label]="commonLocaleData?.app_escape">{{
+                commonLocaleData?.app_esc
+            }}</strong
+            >&nbsp;
+            {{ localeData?.to_dismiss }}
         </div>
     </ng-template>
 </ng-container>

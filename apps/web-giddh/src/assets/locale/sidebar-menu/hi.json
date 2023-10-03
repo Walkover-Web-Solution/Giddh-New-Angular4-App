@@ -66,9 +66,7 @@
                     "link": "/pages/reports/sales-register",
                     "icon": "icon-register-new",
                     "description": "शुद्ध और संचयी बिक्री",
-                    "additionalRoutes":[
-                        "/pages/reports/sales-detailed-expand"
-                    ]
+                    "additionalRoutes": ["/pages/reports/sales-detailed-expand"]
                 },
                 {
                     "label": "टेम्पलेट",
@@ -112,9 +110,7 @@
                     "link": "/pages/reports/purchase-register",
                     "icon": "icon-register-new",
                     "description": "शुद्ध और संचयी खरीदारी",
-                    "additionalRoutes":[
-                        "/pages/reports/purchase-detailed-expand"
-                    ]
+                    "additionalRoutes": ["/pages/reports/purchase-detailed-expand"]
                 },
                 {
                     "label": "विक्रेता",
@@ -195,7 +191,7 @@
                     "description": "फ़ाइल और समीक्षा वैट",
                     "hide": "sidebar",
                     "additional": {
-                        "countrySpecific": ["AE"]
+                        "countrySpecific": ["AE", "GB"]
                     }
                 },
                 {
@@ -274,7 +270,19 @@
         },
         {
             "label": "इन्वेंटरी",
+            "link": "/pages/inventory/v2/reports/product/stock",
             "icon": "icon-inventory",
+            "description": "स्टॉक, समूह और इकाई आयात/बनाएं",
+            "additional": {
+                "voucherVersion": 2
+            }
+        },
+        {
+            "label": "इन्वेंटरी",
+            "icon": "icon-inventory",
+              "additional": {
+                "voucherVersion": 1
+            },
             "items": [
                 {
                     "label": "शाखा स्थानांतरण",
@@ -298,24 +306,6 @@
                     "description": "एमएफजी खोजें। माल सूची स्थिति",
                     "additional": {
                         "voucherVersion": 1
-                    }
-                },
-                {
-                    "label": "इन्वेंटरी",
-                    "link": "/pages/inventory/v2/reports/product/stock",
-                    "icon": "icon-inventory",
-                    "description": "स्टॉक, समूह और इकाई आयात/बनाएं",
-                    "additional": {
-                        "voucherVersion": 2
-                    }
-                },
-                {
-                    "label": "विनिर्माण",
-                    "link": "/pages/inventory/v2/manufacturing/list",
-                    "icon": "icon-manufacturing1",
-                    "description": "एमएफजी खोजें। माल सूची स्थिति",
-                    "additional": {
-                        "voucherVersion": 2
                     }
                 },
                 {

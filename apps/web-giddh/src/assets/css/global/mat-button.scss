@@ -1,19 +1,16 @@
 .mat-mdc-button,
-.mat-mdc-outlined-button {
+.mat-icon-button,
+.mat-mdc-outlined-button,
+.mat-raised-button {
     &.mat-primary {
         color: var(--color-giddh-blue) !important;
-    }
-    /*Material Button Disabled Cursor*/
-    &:disabled {
-        &:hover {
-            cursor: not-allowed !important;
-        }
     }
     .mat-button-focus-overlay {
         background-color: var(--color-primary-header-background) !important;
     }
 }
 .mat-mdc-outlined-button {
+    color: var(--color-default-button) !important;
     &.mat-primary {
         color: var(--color-giddh-blue) !important;
     }
@@ -38,7 +35,7 @@
 
 /* ======Ladda  Button Color in Material Stroked Button====Start Here=========== */
 button {
-    &.mat-stroked-button {
+    &.mat-mdc-outlined-button {
         &.mat-primary {
             &:disabled {
                 .ladda-label {
@@ -70,7 +67,7 @@ button {
 
 /* This class is used to ladda button text color which is conditionally disabled*/
 .disabled-ladda-btn {
-    &.mat-stroked-button {
+    &.mat-mdc-outlined-button {
         &.mat-primary {
             &:disabled {
                 .ladda-label {
@@ -124,4 +121,10 @@ button {
             }
         }
     }
+}
+ /*Material Button Disabled Cursor*/
+.mat-mdc-button[disabled],
+.mat-mdc-outlined-button[disabled]{        
+            cursor: not-allowed !important;
+            pointer-events: all !important;
 }

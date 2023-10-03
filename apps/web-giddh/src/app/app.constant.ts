@@ -230,7 +230,7 @@ export const INVALID_STOCK_ERROR_MESSAGE = 'Both Unit and Rate fields are mandat
 
 /** Vat supported country codes */
 export const VAT_SUPPORTED_COUNTRIES = [
-    'QA', 'BH', 'AE', 'SA', 'OM', 'KW'
+    'QA', 'BH', 'AE', 'SA', 'OM', 'KW', 'GB'
 ];
 
 export const API_POSTMAN_DOC_URL = 'https://apidoc.giddh.com/';
@@ -538,3 +538,6 @@ export const OTP_PROVIDER_URL = 'https://control.msg91.com/app/assets/otp-provid
 
 export const RESTRICTED_VOUCHERS_FOR_DOWNLOAD = ['journal'];
 export const SAMPLE_FILES_URL = 'https://giddh-import-sample-files.s3.ap-south-1.amazonaws.com/sample-file-';
+
+export const OTP_WIDGET_ID_NEW = '33686b716134333831313239';
+export const OTP_WIDGET_TOKEN_NEW = '205968TmXguUAwoD633af103P1';

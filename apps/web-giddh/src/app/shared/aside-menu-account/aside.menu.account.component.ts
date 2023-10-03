@@ -1,13 +1,12 @@
 import { Observable, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import { AccountRequestV2, AccountResponseV2 } from '../../models/api-models/Account';
 import { AccountsAction } from '../../actions/accounts.actions';
 import { IOption } from '../../theme/ng-select/option.interface';
 import { GroupResponse } from '../../models/api-models/Group';
-import { ModalDirective } from 'ngx-bootstrap/modal';
 import { AccountAddNewDetailsComponent } from '../header/components';
 import { AccountService } from '../../services/account.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -26,7 +25,7 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
     @Input() public activeAccountDetails: any;
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
     @Output() public getUpdateList: EventEmitter<string> = new EventEmitter();
-    @ViewChild('deleteAccountModal', { static: true }) public deleteAccountModal: any;
+    @ViewChild("deleteAccountModal") public deleteAccountModal: TemplateRef<any>;
     @ViewChild('addAccountNewComponent', { static: true }) public addAccountNewComponent: AccountAddNewDetailsComponent;
     public flatGroupsOptions: IOption[];
     public isGstEnabledAcc: boolean = true; // true only for groups will not under other
@@ -50,13 +49,14 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** True if account has unsaved changes */
     private hasUnsavedChanges: boolean = false;
+    public deleteAccountmodalRef: any;
 
     constructor(
         private accountService: AccountService,
         private store: Store<AppState>,
         private accountsAction: AccountsAction,
-        public dialog: MatDialog,
-        private pageLeaveUtilityService: PageLeaveUtilityService
+        private pageLeaveUtilityService: PageLeaveUtilityService,
+        public dialog: MatDialog
     ) {
         // account-add component's property
         this.createAccountInProcess$ = this.store.pipe(select(state => state.groupwithaccounts.createAccountInProcess), takeUntil(this.destroyed$));
@@ -153,13 +153,11 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
     }
 
     public showDeleteAccountModal(): void {
-        this.dialog.open(this.deleteAccountModal, {
-            panelClass: 'modal-dialog',
-        });
+        this.deleteAccountmodalRef = this.dialog.open(this.deleteAccountModal);
     }
 
-    public hideDeleteAccountModal() {
-        this.deleteAccountModal.hide();
+    public hideDeleteAccountModal(): void {
+        this.deleteAccountmodalRef.close()
     }
 
     public deleteAccount() {

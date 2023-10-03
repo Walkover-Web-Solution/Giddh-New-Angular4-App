@@ -289,7 +289,8 @@
           "hide": "sidebar",
           "additional": {
             "countrySpecific": [
-              "AE"
+              "AE",
+              "GB"
             ]
           }
         }
@@ -354,54 +355,66 @@
       "label": "Inventory",
       "icon": "icon-inventory",
       "items": [
-        {
-          "label": "Inventory",
-          "link": "/pages/inventory",
-          "icon": "icon-inventory",
-          "description": "Import/create stock, group & unit",
-          "additional": {
-            "voucherVersion": 1
+          {
+              "label": "Inventory",
+              "link": "/pages/inventory",
+              "icon": "icon-inventory",
+              "description": "Import/create stock, group & unit",
+              "additional": {
+                  "voucherVersion": 1
+              }
+          },
+          {
+              "label": "Inventory",
+              "link": "/pages/inventory/v2/reports/product/stock",
+              "icon": "icon-inventory",
+              "description": "Import/create stock, group & unit",
+              "additional": {
+                  "voucherVersion": 2
+              }
+          },
+          {
+              "label": "Manufacturing",
+              "link": "/pages/inventory/manufacturing",
+              "icon": "icon-manufacturing1",
+              "description": "Find mfg. inventory status",
+              "additional": {
+                  "voucherVersion": 1
+              }
+          },
+          {
+              "label": "Manufacturing",
+              "link": "/pages/inventory/v2/manufacturing/list",
+              "icon": "icon-manufacturing1",
+              "description": "Find mfg. inventory status",
+              "additional": {
+                  "voucherVersion": 2
+              }
+          },
+          {
+              "label": "Branch Transfer",
+              "link": "/pages/inventory/v2/branch-transfer/list",
+              "icon": "icon-branch-transfer",
+              "description": "Manage & Transfer inventory",
+              "additional": {
+                  "voucherVersion": 2
+              }
+          },
+          {
+              "label": "Branch Transfer",
+              "link": "/pages/inventory/report",
+              "icon": "icon-branch-transfer",
+              "description": "Manage & Transfer inventory",
+              "additional": {
+                  "voucherVersion": 1
+              }
+          },
+          {
+              "label": "Warehouse",
+              "link": "/pages/settings/warehouse",
+              "icon": "icon-warehouse1",
+              "description": "See all the warehouses"
           }
-        },
-        {
-          "label": "Inventory",
-          "link": "/pages/inventory/v2/reports/product/stock",
-          "icon": "icon-inventory",
-          "description": "Import/create stock, group & unit",
-          "additional": {
-            "voucherVersion": 2
-          }
-        },
-        {
-          "label": "Manufacturing",
-          "link": "/pages/inventory/manufacturing",
-          "icon": "icon-manufacturing1",
-          "description": "Find mfg. inventory status",
-          "additional": {
-            "voucherVersion": 1
-          }
-        },
-        {
-          "label": "Manufacturing",
-          "link": "/pages/inventory/v2/manufacturing/list",
-          "icon": "icon-manufacturing1",
-          "description": "Find mfg. inventory status",
-          "additional": {
-            "voucherVersion": 2
-          }
-        },
-        {
-          "label": "Branch Transfer",
-          "link": "/pages/inventory/report",
-          "icon": "icon-branch-transfer",
-          "description": "Manage & Transfer inventory"
-        },
-        {
-          "label": "Warehouse",
-          "link": "/pages/settings/warehouse",
-          "icon": "icon-warehouse1",
-          "description": "See all the warehouses"
-        }
       ]
     },
     {

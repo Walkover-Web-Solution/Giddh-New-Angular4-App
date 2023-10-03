@@ -254,9 +254,9 @@ export class GeneralService {
         if (currentLedgerAccountDetails && selectedAccountDetails) {
             if (![currentLedgerAccountDetails?.uniqueName, selectedAccountDetails?.uniqueName].includes('roundoff')) {
                 // List of allowed first level parent groups
-                const allowedFirstLevelUniqueNames = (this.voucherApiVersion === 2 && activeCompany?.country === "India") ? ['operatingcost', 'indirectexpenses', 'fixedassets', 'revenuefromoperations', 'otherincome'] : ['operatingcost', 'indirectexpenses', 'fixedassets'];
+                const allowedFirstLevelUniqueNames = (this.voucherApiVersion === 2 && (activeCompany?.country === "India" || activeCompany?.country === 'United Kingdom')) ? ['operatingcost', 'indirectexpenses', 'fixedassets', 'revenuefromoperations', 'otherincome'] : ['operatingcost', 'indirectexpenses', 'fixedassets'];
                 // List of not allowed second level parent groups
-                const disallowedSecondLevelUniqueNames = (this.voucherApiVersion === 2 && activeCompany?.country === "India") ? ['discount', 'exchangeloss', 'roundoff', 'exchangegain', 'dividendincome', 'interestincome', 'dividendexpense', 'interestexpense'] : ['discount', 'exchangeloss'];
+                const disallowedSecondLevelUniqueNames = (this.voucherApiVersion === 2 && (activeCompany?.country === "India" || activeCompany?.country === 'United Kingdom')) ? ['discount', 'exchangeloss', 'roundoff', 'exchangegain', 'dividendincome', 'interestincome', 'dividendexpense', 'interestexpense'] : ['discount', 'exchangeloss'];
                 const currentLedgerFirstParent = (currentLedgerAccountDetails.parentGroups && currentLedgerAccountDetails.parentGroups[0]) ? currentLedgerAccountDetails.parentGroups[0]?.uniqueName : '';
                 const currentLedgerSecondParent = (currentLedgerAccountDetails.parentGroups && currentLedgerAccountDetails.parentGroups[1]) ? currentLedgerAccountDetails.parentGroups[1]?.uniqueName : '';
                 const selectedAccountFirstParent = (selectedAccountDetails.parentGroups && selectedAccountDetails.parentGroups[0]) ? selectedAccountDetails.parentGroups[0]?.uniqueName : '';
@@ -662,6 +662,30 @@ export class GeneralService {
         };
     }
 
+    public getDeleteBranchTransferConfiguration(localeData: any, commonLocaleData: any, selectedBranchTransferType: string): ConfirmationModalConfiguration {
+
+        const buttons: Array<ConfirmationModalButton> = [{
+            text: 'Yes',
+            color: 'primary'
+        },
+        {
+            text: 'No'
+        }];
+        const headerText: string = 'Delete' + selectedBranchTransferType;
+        const headerCssClass: string = 'd-inline-block mr-1';
+        const messageCssClass: string = 'mr-b1 text-light';
+        const footerCssClass: string = 'mr-b1';
+        return {
+            headerText,
+            headerCssClass,
+            messageText: 'Are you sure you want to delete this' + selectedBranchTransferType + '?',
+            messageCssClass,
+            footerText: 'It will be deleted permanently and will no longer be accessible from any other module.',
+            footerCssClass,
+            buttons
+        };
+    }
+
     /**
      * This will use for confirmation delete attachment in vocher
      *
@@ -801,8 +825,17 @@ export class GeneralService {
      */
     public getVisibleMenuItems(module: string, apiItems: Array<any>, itemList: Array<AllItems>, countryCode: string = ""): Array<AllItems> {
         const visibleMenuItems = cloneDeep(itemList);
+        let index = 0;
         itemList?.forEach((menuItem, menuIndex) => {
             visibleMenuItems[menuIndex].items = [];
+
+            if (visibleMenuItems[menuIndex]?.additional?.voucherVersion && visibleMenuItems[menuIndex]?.additional?.voucherVersion !== this.voucherApiVersion) {
+                visibleMenuItems[menuIndex].hide = true;
+            } else {
+                visibleMenuItems[menuIndex].itemIndex = index;
+                index++;
+            }
+
             menuItem.items?.forEach(item => {
                 const isValidItem = apiItems.find(apiItem => apiItem?.uniqueName === item.link);
                 if (((isValidItem && item.hide !== module) || (item.alwaysPresent && item.hide !== module)) && (!item.additional?.countrySpecific?.length || item.additional?.countrySpecific?.indexOf(countryCode) > -1) && (!item.additional?.voucherVersion || item.additional?.voucherVersion === this.voucherApiVersion)) {
