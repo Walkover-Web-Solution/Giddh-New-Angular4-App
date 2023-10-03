@@ -195,9 +195,8 @@ export class DropdownFieldComponent implements OnInit, OnChanges, OnDestroy, Aft
                 filteredOptions.push({ label: option.label, value: option.value, additional: option.additional ?? option });
             }
         });
-
         this.fieldFilteredOptions = filteredOptions;
-
+        this.cdr.detectChanges();
     }
 
     /**
