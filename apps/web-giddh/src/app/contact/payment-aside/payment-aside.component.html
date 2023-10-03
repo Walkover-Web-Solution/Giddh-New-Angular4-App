@@ -80,13 +80,10 @@
                                         <span *ngIf="!showBankBalance" class="pull-right">{{
                                             localeData?.hide_bank_balance
                                         }}</span>
-                                    </mat-slide-toggle>
-                                </p>
-                                <p *ngIf="totalAvailableBalance && showBankBalance" class="mr-t05">
-                                    <small class="text-gray"
-                                        >{{ localeData?.bal }} {{ totalAvailableBalance | giddhCurrency }}
-                                        {{ commonLocaleData?.app_dr }}</small
                                     >
+                                        <span *ngIf="showBankBalance" class="pull-left">{{localeData?.show_bank_balance}}</span>
+                                        <span *ngIf="!showBankBalance" class="pull-right">{{localeData?.hide_bank_balance}}</span>
+                                    </mat-slide-toggle>
                                 </p>
                             </div>
                         </div>
