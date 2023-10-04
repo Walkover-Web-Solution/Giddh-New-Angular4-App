@@ -13738,7 +13738,7 @@ hamburger-menu {
 
         .icon-input {
             float: left;
-            width: 80%;
+            width: 100%;
         }
 
         .search-icon {
@@ -13758,7 +13758,10 @@ hamburger-menu {
             border-top-right-radius: 20px;
             border-bottom-right-radius: 20px;
             height: 100%;
-            width: 20%;
+            width: 100%;
+            float: right;
+            max-width: 280px;
+            margin-left: auto;
 
             .advance-filter-button {
                 border-left: 1px solid var(--color-gray);
