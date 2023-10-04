@@ -702,4 +702,15 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             this.showCompanyBranchSwitch = false;
         }
     }
+
+     /**
+     * Close the Cmd + K Dialog on close Event
+     *
+     * @memberof PrimarySidebarComponent
+     */
+    public closeEvent(): void {
+        setTimeout(()=>{
+            this.commandkDialogRef.close();
+        },600);
+    }
 }
