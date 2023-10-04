@@ -7,6 +7,7 @@
         padding-top: 10px !important;
     }
 }
+
 .stock-create-edit,
 .custom-units {
     .options-line-value {
@@ -68,6 +69,7 @@ inventory-sidebar {
 
 /*---- variant ----*/
 .option-value-field {
+
     text-field,
     select-field {
         input {
@@ -75,16 +77,20 @@ inventory-sidebar {
             border: 1px solid var(--color-fields-border) !important;
             border-radius: 4px;
             height: auto;
-            &.disabled{
+
+            &.disabled {
                 background-color: var(--color-primary-input-bar-background) !important;
             }
         }
     }
+
     select-field {
         position: relative;
+
         input {
             height: 48px !important;
         }
+
         &::before {
             content: "";
             position: absolute;
@@ -100,23 +106,26 @@ inventory-sidebar {
         }
     }
 }
-body{
-    &.fixed{
-        .mat-grid-wrapper{
+
+body {
+    &.fixed {
+        .mat-grid-wrapper {
             .inventory-search {
                 z-index: 99 !important;
             }
         }
     }
 }
-.text-field-right{
-    .select-field-input{
+
+.text-field-right {
+    .select-field-input {
         text-align: right !important;
         border: 0;
         padding: 6px;
         background-color: transparent;
     }
 }
+
 .inventory-report-table {
     .mat-mdc-table {
         .mat-mdc-header-row {
@@ -133,14 +142,16 @@ body{
 .consumption-details-wrapper {
     .mat-expansion-panel {
         .mat-expansion-panel-header {
-            .mat-expansion-panel-header-title{
+            .mat-expansion-panel-header-title {
                 color: var(--color-primary-header-background) !important;
             }
         }
     }
 }
-.field-m-width{
+
+.field-m-width {
     max-width: 170px;
+
     .select-field-input {
         width: 100% !important;
     }
@@ -157,7 +168,8 @@ inventory-master{
                                 color: var(--color-field-hover) !important;
                             }
                         }
-                        &.isActive{
+
+                        &.isActive {
                             mat-list-item {
                                 .mdc-list-item__primary-text {
                                     color: var(--color-list) !important;
@@ -191,12 +203,27 @@ inventory-master{
                 &.mat-table-name {
                     width: 30%;
                 }
+
                 &.mat-table-id {
                     width: 40%;
                 }
+
                 &.mat-table-action {
                     width: 30%;
                 }
+            }
+        }
+    }
+}
+
+/*---- create-menufacturing ----*/
+.consumption-details-wrapper {
+    .mat-expansion-panel {
+        .mat-expansion-panel-header {
+            height: 45px;
+
+            &.mat-expanded {
+                height: 45px;
             }
         }
     }
