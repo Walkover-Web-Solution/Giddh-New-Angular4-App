@@ -113,7 +113,7 @@
         "@ngrx/store-devtools": "16.1.0",
         "@types/file-saver": "^2.0.1",
         "@types/jquery": "3.5.1",
-        "@types/node": "16.11.7",
+        "@types/node": "16.18.54",
         "compression-webpack-plugin": "^10.0.0",
         "cross-env": "^7.0.2",
         "dotenv": "^10.0.0",
