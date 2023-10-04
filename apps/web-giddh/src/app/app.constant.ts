@@ -539,5 +539,5 @@ export const OTP_PROVIDER_URL = `https://test.msg91.com/hello-new/assets/otp-pro
 export const RESTRICTED_VOUCHERS_FOR_DOWNLOAD = ['journal'];
 export const SAMPLE_FILES_URL = 'https://giddh-import-sample-files.s3.ap-south-1.amazonaws.com/sample-file-';
 
-export const OTP_WIDGET_ID_NEW = '33686b716134333831313239';
-export const OTP_WIDGET_TOKEN_NEW = '205968TmXguUAwoD633af103P1';
+export const OTP_WIDGET_ID_NEW = '33697a6e6148323934353438';
+export const OTP_WIDGET_TOKEN_NEW = '278060TX9AIhxEpR7H6427de5cP1';
