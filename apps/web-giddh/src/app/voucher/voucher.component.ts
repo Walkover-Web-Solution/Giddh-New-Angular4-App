@@ -2808,8 +2808,13 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             } else {
                 requestObject.depositAccountUniqueName = '';
             }
-
             requestObject.date = dayjs(voucherDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+            if (dayjs(requestObject.dueDate, GIDDH_DATE_FORMAT).isBefore(dayjs(requestObject.date, GIDDH_DATE_FORMAT), 'd')) {
+              setTimeout(() => {                
+                  this.isShowLoader = false;
+                  this.startLoader(false);
+              }, 100);
+            }
             requestObject.type = VoucherTypeEnum.sales;
             let updatedData = requestObject;
             updatedData = this.updateData(requestObject, data);
