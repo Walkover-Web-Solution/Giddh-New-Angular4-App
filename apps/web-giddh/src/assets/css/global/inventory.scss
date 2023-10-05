@@ -100,17 +100,17 @@ inventory-sidebar {
         }
     }
 }
-body {
-    &.fixed {
-        .mat-grid-wrapper {
+body{
+    &.fixed{
+        .mat-grid-wrapper{
             .inventory-search {
                 z-index: 99 !important;
             }
         }
     }
 }
-.text-field-right {
-    .select-field-input {
+.text-field-right{
+    .select-field-input{
         text-align: right !important;
         border: 0;
         padding: 6px;
@@ -146,7 +146,7 @@ body {
     }
 }
 
-inventory-master {
+inventory-master{
     .mat-grid-wrapper {
         .mat-list-wrap {
             .inventory-sub-sideabar {
@@ -157,7 +157,7 @@ inventory-master {
                                 color: var(--color-field-hover) !important;
                             }
                         }
-                        &.isActive {
+                        &.isActive{
                             mat-list-item {
                                 .mdc-list-item__primary-text {
                                     color: var(--color-list) !important;

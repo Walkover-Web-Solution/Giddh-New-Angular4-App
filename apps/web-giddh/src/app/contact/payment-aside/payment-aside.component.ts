@@ -132,6 +132,8 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     public isPayorRequired: boolean = true;
     /** Holds message of payment successful */
     public paymentSuccessfulMessage: string = "";
+    /** True if show bank balance  */
+    public showBankBalance: boolean = false;
 
     constructor(
         private formBuilder: UntypedFormBuilder,
