@@ -27,6 +27,8 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 import { LedgerService } from '../services/ledger.service';
 import { Router } from '@angular/router';
 import { saveAs } from 'file-saver';
+import { ShSelectComponent } from '../theme/ng-virtual-select/sh-select.component';
+import { PageLeaveUtilityService } from '../services/page-leave-utility.service';
 
 @Component({
     selector: 'daybook',
@@ -135,7 +137,16 @@ export class DaybookComponent implements OnInit, OnDestroy {
     /** Holds side of entry (dr/cr) */
     public entrySide: string = "";
     /** Holds Aside Menu State For Other Taxes DialogRef */
-    public asideMenuStateForOtherTaxesDialogRef:any;
+    public asideMenuStateForOtherTaxesDialogRef: any;
+    /** Ledger aside pan modal */
+    private ledgerAsidePaneModal: any;
+    /** Instance of ledger aside pane modal */
+    @ViewChild("ledgerAsidePane") public ledgerAsidePane: TemplateRef<any>;
+    /** Returns true if account is selected else false */
+    public get showPageLeaveConfirmation(): boolean {
+        let hasParticularSelected = this.lc.blankLedger.transactions?.filter(txn => txn?.particular);
+        return (hasParticularSelected?.length) ? true : false;
+    }
 
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
@@ -150,7 +161,8 @@ export class DaybookComponent implements OnInit, OnDestroy {
         private dialog: MatDialog,
         private breakpointObserver: BreakpointObserver,
         private ledgerService: LedgerService,
-        private router: Router
+        private router: Router,
+        private pageLeaveUtilityService: PageLeaveUtilityService
     ) {
 
         this.daybookQueryRequest = new DaybookQueryRequest();
@@ -585,15 +597,15 @@ export class DaybookComponent implements OnInit, OnDestroy {
      * @memberof DaybookComponent
      */
     public toggleOtherTaxesAsidePane(): void {
-            this.asideMenuStateForOtherTaxesDialogRef = this.dialog.open(this.asideMenuStateForOtherTaxes,{
-                position: {
-                    right: '0'
-                },
-                maxWidth: '760px',
-                width:'100%',
-                height:'100vh',
-                maxHeight:'100vh'
-            })
+        this.asideMenuStateForOtherTaxesDialogRef = this.dialog.open(this.asideMenuStateForOtherTaxes, {
+            position: {
+                right: '0'
+            },
+            maxWidth: '760px',
+            width: '100%',
+            height: '100vh',
+            maxHeight: '100vh'
+        })
     }
 
     /**
@@ -646,5 +658,87 @@ export class DaybookComponent implements OnInit, OnDestroy {
                 this.touchedTransaction = {};
             }, 200);
         }
+    }
+
+    /**
+     * This will be use for toggle aside pan from daybook
+     *
+     * @param {*} [event]
+     * @param {ShSelectComponent} [shSelectElement]
+     * @memberof DaybookComponent
+     */
+    public toggleAsidePane(event?, shSelectElement?: ShSelectComponent): void {
+        if (event) {
+            event.preventDefault();
+        }
+        if (shSelectElement) {
+            this.closeActiveEntry(shSelectElement);
+        }
+        this.ledgerAsidePaneModal = this.dialog.open(this.ledgerAsidePane, {
+            position: {
+                right: '0',
+                top: '0',
+            },
+            width: '760px',
+            disableClose: true
+        });
+        this.ledgerAsidePaneModal.afterClosed().pipe(take(1)).subscribe(response => {
+            setTimeout(() => {
+                if (this.showPageLeaveConfirmation) {
+                    this.pageLeaveUtilityService.addBrowserConfirmationDialog();
+                }
+            }, 100);
+        });
+
+        this.changeDetectorRef.detectChanges();
+    }
+
+    /**
+     * Closes the active incomplete entry in ledger if user
+     * presses the shortcut key 'Alt + C'
+     *
+     * @private
+     * @param {ShSelectComponent} shSelectElement Current Sh select element instance
+     * @memberof DaybookComponent
+     */
+    private closeActiveEntry(shSelectElement: ShSelectComponent): void {
+        if (shSelectElement) {
+            shSelectElement.hide();
+        }
+        this.hideBankLedgerPopup(true);
+    }
+
+    /**
+     * This will be use for hide bank ledger popup
+     *
+     * @param {*} [event]
+     * @return {*} 
+     * @memberof DaybookComponent
+     */
+    public hideBankLedgerPopup(event?: any) {
+        if (event && event.path) {
+            let classList = event.path.map(element => {
+                return element?.classList;
+            });
+
+            if (classList && classList instanceof Array) {
+                const shouldNotClose = classList?.some((className: DOMTokenList) => {
+                    if (!className) {
+                        return;
+                    }
+                    return className.contains('entry-picker') || className.contains('currency-toggler') || className.contains('mat-calendar');
+                });
+
+                if (shouldNotClose) {
+                    return;
+                }
+            }
+        }
+        if (this.lc.currentBlankTxn) {
+            this.lc.currentBlankTxn.showDropdown = false;
+        }
+        this.lc.showBankLedgerPanel = false;
+        this.lc.currentBlankTxn = null;
+        this.lc.selectedBankTxnUniqueName = null;
     }
 }
