@@ -296,16 +296,10 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         });
         
         // get openingblance value changes
-        this.addAccountForm.get('openingBalance').valueChanges.pipe(
-            debounceTime(300),
-            takeUntil(this.destroyed$)
-        ).subscribe(value => {
-            let amountValue = value.replace(/,/g, '');
-            this.addAccountForm.get('openingBalance').patchValue(amountValue, { emitEvent: false });
-            // as disccused with back end team bydefault openingBalanceType will be CREDIT
-            if (amountValue && (amountValue === 0 || amountValue <= 0) && this.addAccountForm.get('openingBalanceType')?.value) {
+        this.addAccountForm.get('openingBalance').valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(a => { // as disccused with back end team bydefault openingBalanceType will be CREDIT
+            if (a && (a === 0 || a <= 0) && this.addAccountForm.get('openingBalanceType')?.value) {
                 this.addAccountForm.get('openingBalanceType')?.patchValue('CREDIT');
-            } else if (amountValue && (amountValue === 0 || amountValue > 0) && this.addAccountForm.get('openingBalanceType')?.value === '') {
+            } else if (a && (a === 0 || a > 0) && this.addAccountForm.get('openingBalanceType')?.value === '') {
                 this.addAccountForm.get('openingBalanceType')?.patchValue('CREDIT');
             }
         });

@@ -27,7 +27,7 @@
     display: flex;
     .btn-group{
         button{
-            min-width: 135px;
+            min-width: 150px;
         }
     }
 }
@@ -932,6 +932,7 @@ button.btn.btn-filter {
     right: 8px;
     border-color: var(--color-sidebar-primary-search-bar-background);
     background-color: var(--color-sidebar-primary-search-bar-background) !important;
+    min-width: 110px;
 }
 
 :hover.menu-table-item {
