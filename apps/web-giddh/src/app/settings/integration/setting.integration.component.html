@@ -258,7 +258,7 @@
             </mat-tab>
 
             <mat-tab [label]="localeData?.payment?.tab_heading">
-                <div class="clearfix box">
+                <div class="box">
                     <ng-container *ngIf="isIciciBankSupportedCountry">
                         <ng-template>
                             <span class="icon-payment"></span> {{ localeData?.payment?.tab_heading }}
@@ -326,7 +326,7 @@
                                                 ><span *ngIf="!isIciciBankSupportedCountry"
                                                     >{{ commonLocaleData?.app_ac }} #</span
                                                 >
-                                                {{ bankAccount?.iciciDetailsResource?.accountNumber }}</b
+                                                {{ bankAccount?.iciciDetailsResource?.accountNumber  | accountNumberMask }}</b
                                             ></span
                                         >
                                     </div>

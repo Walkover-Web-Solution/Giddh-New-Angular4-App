@@ -91,10 +91,10 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     /** To clear sales stock  */
     public forceClearSalesStock$: Observable<IForceClear> = of({ status: false });
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    /** This will handle if we can reset sales/purchase account information */
-    public allowReset: boolean = false;
     /** This will hold inventory settings */
     public inventorySettings: any;
+    /** This will handle if we can reset sales/purchase account information */
+    public allowReset: boolean = false;
     /** This will hold modal reference */
     public modalRef: BsModalRef;
     /** This will hold variants data from edit stock */
@@ -756,7 +756,13 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
 
         this.addStockForm.reset();
         this.companyTaxesList$.pipe(map((item) => {
-            return item?.map(tax => tax.isChecked = false);
+            return item?.map(tax => {
+                if (tax) {
+                    tax.isChecked = false;
+                    tax.isDisabled = false;
+                }
+                return tax;
+            });
         }), takeUntil(this.destroyed$)).subscribe(res => {
             return res;
         });

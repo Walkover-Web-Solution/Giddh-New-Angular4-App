@@ -63,12 +63,35 @@
     }
 }
 
+.input-share-width {
+    width: 45%;
+}
+
+.input-group-btn {
+    width: 53%;
+}
+
 .selected-permission {
-    width: calc(100% - 123px) !important;
-    min-width: 200px;
-    margin-right: 10px;
+    width: 60% !important;
 }
 
 .btn-share {
-    float: right;
+    width: 36% !important;
+}
+
+.share-grp.account-share-modal {
+    .add-mailer {
+        .input-group {
+            input {
+                min-width: 100% !important;
+                max-width: 100% !important;
+            }
+        }
+    }
+}
+
+@media (min-width: 576px) {
+    #share-modal select {
+        max-width: 100%;
+    }
 }
