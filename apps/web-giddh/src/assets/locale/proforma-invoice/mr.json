@@ -114,5 +114,6 @@
     "invalid_contact_number": "अवैध संपर्क क्रमांक",
     "account": "खाते",
     "select_variant": "प्रकार निवडा",
-    "variant": "प्रकार"
+    "variant": "प्रकार",
+    "account_missing_in_stock": "खाते स्टॉकशी जोडलेले नाही"
 }
