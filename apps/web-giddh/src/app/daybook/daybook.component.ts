@@ -667,12 +667,9 @@ export class DaybookComponent implements OnInit, OnDestroy {
      * @param {ShSelectComponent} [shSelectElement]
      * @memberof DaybookComponent
      */
-    public toggleAsidePane(event?, shSelectElement?: ShSelectComponent): void {
+    public toggleAsidePane(event?:any): void {
         if (event) {
             event.preventDefault();
-        }
-        if (shSelectElement) {
-            this.closeActiveEntry(shSelectElement);
         }
         this.ledgerAsidePaneModal = this.dialog.open(this.ledgerAsidePane, {
             position: {
@@ -691,54 +688,5 @@ export class DaybookComponent implements OnInit, OnDestroy {
         });
 
         this.changeDetectorRef.detectChanges();
-    }
-
-    /**
-     * Closes the active incomplete entry in ledger if user
-     * presses the shortcut key 'Alt + C'
-     *
-     * @private
-     * @param {ShSelectComponent} shSelectElement Current Sh select element instance
-     * @memberof DaybookComponent
-     */
-    private closeActiveEntry(shSelectElement: ShSelectComponent): void {
-        if (shSelectElement) {
-            shSelectElement.hide();
-        }
-        this.hideBankLedgerPopup(true);
-    }
-
-    /**
-     * This will be use for hide bank ledger popup
-     *
-     * @param {*} [event]
-     * @return {*} 
-     * @memberof DaybookComponent
-     */
-    public hideBankLedgerPopup(event?: any) {
-        if (event && event.path) {
-            let classList = event.path.map(element => {
-                return element?.classList;
-            });
-
-            if (classList && classList instanceof Array) {
-                const shouldNotClose = classList?.some((className: DOMTokenList) => {
-                    if (!className) {
-                        return;
-                    }
-                    return className.contains('entry-picker') || className.contains('currency-toggler') || className.contains('mat-calendar');
-                });
-
-                if (shouldNotClose) {
-                    return;
-                }
-            }
-        }
-        if (this.lc.currentBlankTxn) {
-            this.lc.currentBlankTxn.showDropdown = false;
-        }
-        this.lc.showBankLedgerPanel = false;
-        this.lc.currentBlankTxn = null;
-        this.lc.selectedBankTxnUniqueName = null;
     }
 }
