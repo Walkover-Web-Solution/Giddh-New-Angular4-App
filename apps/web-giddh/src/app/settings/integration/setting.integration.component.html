@@ -329,7 +329,7 @@
                                 class="account-wrapper"
                                 *ngFor="let bankAccount of connectedBankAccounts; trackBy: trackByAccountUniqueName"
                             >
-                                <div class="account-info-background width-100 font-15 row align-items-center">
+                                <div class="account-info-background width-100 font-15 row align-items-end">
                                     <div class="col-md-4">
                                         <span class="field-label">{{ bankAccount?.bankName }}</span
                                         ><br />
@@ -368,12 +368,13 @@
                                             (click)="openEditAccountModal(bankAccount)"
                                         ></a>
                                     </span>
-                                    <div class="col-md-4" *ngIf="isIciciBankSupportedCountry">
+                                    <div class="col-md-4 d-flex flex-column" *ngIf="isIciciBankSupportedCountry">
                                         <span class="field-label"
                                             >{{ localeData?.payment?.payment_updates }}<br
                                         /></span>
-                                        <span
-                                            class="payment-updates view-only-field inline"
+                                        <span class="d-flex">
+                                            <span
+                                            class="payment-updates view-only-field"
                                             *ngIf="bankAccount?.iciciDetailsResource?.paymentAlerts?.length > 0"
                                         >
                                             <ng-container
@@ -396,6 +397,7 @@
                                                 class="icon-edit-pencil"
                                                 (click)="openEditAccountModal(bankAccount)"
                                             ></a>
+                                        </span>
                                         </span>
                                     </div>
                                 </div>
