@@ -407,8 +407,8 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.loaderService.show();
 
         let configuration = {
-            widgetId: '33697a6e6148323934353438',
-            tokenAuth: '278060TX9AIhxEpR7H6427de5cP1',
+            widgetId: OTP_WIDGET_ID,
+            tokenAuth: OTP_TOKEN_AUTH,
             success: (data: any) => {
                 this.ngZone.run(() => {
                     this.initiateLogin(data);

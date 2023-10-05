@@ -534,10 +534,10 @@ export const MOBILE_NUMBER_UTIL_URL = 'https://cdnjs.cloudflare.com/ajax/libs/in
 export const MOBILE_NUMBER_SELF_URL = 'https://api.db-ip.com/v2/free/self';
 export const MOBILE_NUMBER_IP_ADDRESS_URL = 'http://ip-api.com/json/';
 export const MOBILE_NUMBER_ADDRESS_JSON_URL = 'https://ipinfo.io/';
-export const OTP_PROVIDER_URL = `https://test.msg91.com/hello-new/assets/otp-provider/otp-provider.js?time=${new Date().getTime()}`;
+export const OTP_PROVIDER_URL = `https://control.msg91.com/app/assets/otp-provider/otp-provider.js?time=${new Date().getTime()}`;
 
 export const RESTRICTED_VOUCHERS_FOR_DOWNLOAD = ['journal'];
 export const SAMPLE_FILES_URL = 'https://giddh-import-sample-files.s3.ap-south-1.amazonaws.com/sample-file-';
 
-export const OTP_WIDGET_ID_NEW = '33697a6e6148323934353438';
-export const OTP_WIDGET_TOKEN_NEW = '278060TX9AIhxEpR7H6427de5cP1';
+export const OTP_WIDGET_ID_NEW = '33686b716134333831313239';
+export const OTP_WIDGET_TOKEN_NEW = '205968TmXguUAwoD633af103P1';

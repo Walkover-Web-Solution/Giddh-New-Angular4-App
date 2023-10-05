@@ -46,13 +46,13 @@ jobs:
                   CYPRESS_INSTALL_BINARY: 0
               with:
                   useLockFile: false
-                  useRollingCache: false
+                  useRollingCache: true
                   working-directory: .
                   install-command: npm i --force
             - uses: bahmutov/npm-install@v1
               with:
                   useLockFile: false
-                  useRollingCache: false
+                  useRollingCache: true
                   working-directory: ./apps/electron-giddh/src/
             - name: Update app version in root package
               uses: MerthinTechnologies/edit-json-action@v1
