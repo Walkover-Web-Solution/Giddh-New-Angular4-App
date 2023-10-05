@@ -242,13 +242,13 @@
                                         <span class="icon-arrow-down"></span>
                                     </button>
                                     <mat-menu #downloadCsvEmail="matMenu">
-                                        <button
+                                        <!-- <button
                                             mat-menu-item
                                             *ngIf="selectedCheckedContacts?.length"
                                             (click)="openEmailDialog()"
                                         >
                                             {{ commonLocaleData?.app_email }}
-                                        </button>
+                                        </button> -->
                                         <button mat-menu-item (click)="downloadCSV()">
                                             {{ commonLocaleData?.app_download_csv }}
                                         </button>
@@ -650,13 +650,13 @@
                                     <button mat-menu-item class="menu-table-item" (click)="performActions(2, account)">
                                         {{ commonLocaleData?.app_generate_invoice }}
                                     </button>
-                                    <button
+                                    <!-- <button
                                         mat-menu-item
                                         class="menu-table-item"
                                         (click)="performActions(4, account, $event)"
                                     >
                                         {{ commonLocaleData?.app_send_email }}
-                                    </button>
+                                    </button> -->
                                 </mat-menu>
                             </div>
                         </td>
@@ -989,13 +989,13 @@
                                     <button mat-menu-item class="menu-table-item" (click)="performActions(2, account)">
                                         {{ commonLocaleData?.app_record_bill }}
                                     </button>
-                                    <button
+                                    <!-- <button
                                         mat-menu-item
                                         class="menu-table-item"
                                         (click)="performActions(4, account, $event)"
                                     >
                                         {{ commonLocaleData?.app_send_email }}
-                                    </button>
+                                    </button> -->
                                 </mat-menu>
 
                                 <!--Modal for Mail/SMS-->

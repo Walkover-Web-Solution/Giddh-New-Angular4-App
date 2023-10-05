@@ -34,5 +34,6 @@
     "dispatched_date": "प्रेषित तारीख",
     "transport_company": "परिवहन कंपनी",
     "variant_name": "प्रकार का नाम",
-    "delete_transporter": "क्या आप निश्चित हैं कि आप परिवहक को हटाना चाहते हैं?"
+    "delete_transporter": "क्या आप निश्चित हैं कि आप परिवहक को हटाना चाहते हैं?",
+    "search_field": "[FIELD] ढूंढे"
 }

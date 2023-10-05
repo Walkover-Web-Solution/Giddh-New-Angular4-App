@@ -236,6 +236,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     public groupList: any[] = [];
     /** Holds custom fields data */
     private companyCustomFields: any[] = [];
+    /** Holds variant custom fields data */
+    private variantCustomFields: any[] = [];
 
     constructor(
         private inventoryService: InventoryService,
@@ -937,13 +939,29 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         let stockObjClone = cloneDeep(this.stockForm.variants);
         stockObjClone?.forEach((variant) => {
             updatedCustomFieldArray = variant?.customFields?.map((obj) => {
-                return {
+               return {
                     uniqueName: obj?.uniqueName,
-                    value: obj?.value
-                };
+                   value: obj?.value,
+                    isMandatory:obj.isMandatory
+                }
+            });
+            updatedCustomFieldArray.forEach(field => {
+                if (field.isMandatory && (field.value === undefined|| field.value ===null)) {
+                    this.isFormSubmitted = true;
+                }
+
+            })
+            updatedCustomFieldArray = updatedCustomFieldArray.filter(field => {
+                delete field.isMandatory
+                return field.value;
             });
             variant.customFields = updatedCustomFieldArray;
         });
+
+        if (this.isFormSubmitted) {
+            return;
+        }
+        
         if (this.validateStock(this.stockForm.purchaseAccountDetails?.unitRates)) {
             this.stockForm.purchaseAccountDetails.unitRates = this.stockForm.purchaseAccountDetails.unitRates.filter((unitRate) => {
                 return unitRate.stockUnitUniqueName || unitRate.rate;
@@ -1065,6 +1083,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                     value: obj?.value
                 };
             });
+            updatedCustomFieldArray = updatedCustomFieldArray.filter(field => field.value);
             variant.customFields = updatedCustomFieldArray;
         });
         let defaultWarehouse = null;
@@ -1501,27 +1520,31 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 this.stockForm.variants = this.stockForm.variants?.map(variant => {
                     if (variant?.customFields?.length) {
                         let customFieldFound = false;
-                        variant.customFields = variant?.customFields?.map(variantCustomField => {
+                       let variantMapped = variant?.customFields?.map(variantCustomField => {
+                            const customFieldValue = variantCustomField.value;
+                            let mergedObject = { ...variantCustomField, ...customField };
+                            mergedObject.value = customFieldValue;
                             if (variantCustomField.uniqueName === customField.uniqueName) {
                                 customFieldFound = true;
-                                const customFieldValue = variantCustomField.value;
-                                variantCustomField = cloneDeep(customField);
-                                variantCustomField.value = customFieldValue;
+                                variantCustomField = mergedObject;
                             }
                             return variantCustomField;
-                        });
-
+                       });
+                        variant.customFields = variantMapped;
                         if (!customFieldFound) {
-                            variant.customFields.push(customField);
+                            variant.customFields.push(cloneDeep(customField));
                         }
                     } else {
                         variant.customFields = cloneDeep([customField]);
                     }
+                    this.variantCustomFields = variant.customFields;
                     return variant;
                 });
-            })
+            });
         }
     }
+
+
 
     /**
      * Get custom fields
@@ -1645,7 +1668,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                     salesTaxInclusive: false,
                     purchaseTaxInclusive: false,
                     fixedAssetTaxInclusive: false,
-                    customFields: [],
+                    customFields: [] ,
                     salesInformation: [
                         {
                             rate: undefined,
@@ -1701,6 +1724,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         this.fixedAssetsAccountName = "";
         this.salesAccountName = "";
         this.customFieldsData = [];
+        this.companyCustomFields = [];
         this.inlineEditCustomField = 0;
         this.selectedTaxes = [];
         this.taxTempArray = [];
@@ -1708,7 +1732,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         this.processedTaxes = [];
         this.activeTabIndex = 0;
         this.resetTaxes();
-
+        this.getVariantCustomFields();
+        this.updateCustomFieldObjectInVariant();
         setTimeout(() => {
             this.stockForm.name = "";
             this.stockForm.customField1Value = "";

@@ -8,6 +8,7 @@ import { CustomFieldsService } from "../../services/custom-fields.service";
 import { ToasterService } from "../../services/toaster.service";
 import { ConfirmModalComponent } from "../../theme/new-confirm-modal/confirm-modal.component";
 import { FieldModules } from "../custom-fields.constant";
+import { GeneralService } from "../../services/general.service";
 
 export interface CustomFieldsInterface {
     fieldName: string;
@@ -47,11 +48,14 @@ export class CustomFieldsListComponent implements OnInit, OnDestroy {
     public translationsLoaded: boolean = false;
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Stores the voucher API version of company */
+    public voucherApiVersion: 1 | 2;
 
     constructor(
         private toasterService: ToasterService,
         private changeDetectorRef: ChangeDetectorRef,
         private customFieldsService: CustomFieldsService,
+        private generalService: GeneralService,
         private dialog: MatDialog
     ) {
 
@@ -63,6 +67,7 @@ export class CustomFieldsListComponent implements OnInit, OnDestroy {
      * @memberof CustomFieldsListComponent
      */
     public ngOnInit(): void {
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.customFieldsRequest.moduleUniqueName = 'account';
         this.getCustomFields();
     }
@@ -149,10 +154,16 @@ export class CustomFieldsListComponent implements OnInit, OnDestroy {
      */
     public translationComplete(event: boolean): void {
         if (event) {
-            this.fieldModules = [
-                { name: this.localeData?.modules?.account, uniqueName: FieldModules.Account },
-                { name: this.commonLocaleData.app_variant, uniqueName: FieldModules.Variant }
-            ];
+            if (this.voucherApiVersion === 2) {
+                this.fieldModules = [
+                    { name: this.localeData?.modules?.account, uniqueName: FieldModules.Account },
+                    { name: this.commonLocaleData.app_variant, uniqueName: FieldModules.Variant }
+                ];
+            } else {
+                this.fieldModules = [
+                    { name: this.localeData?.modules?.account, uniqueName: FieldModules.Account }
+                ];
+            }
             this.translationsLoaded = true;
             this.changeDetectorRef.detectChanges();
         }
