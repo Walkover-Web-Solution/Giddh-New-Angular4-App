@@ -8886,7 +8886,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 let variantObj = stockObj?.variants[0];
 
                 let group = (this.invoiceType === VoucherTypeEnum.debitNote || this.invoiceType === VoucherTypeEnum.purchase || this.invoiceType === VoucherTypeEnum.cashBill || this.invoiceType === VoucherTypeEnum.cashDebitNote) ?
-                    ('purchase') : ('sales');
+                    'purchase' : 'sales';
                 let unitRates = group === 'purchase' ? variantObj?.purchaseAccountDetails?.unitRates ?? variantObj?.fixedAssetAccountDetails?.unitRates : variantObj?.salesAccountDetails?.unitRates ?? variantObj?.fixedAssetAccountDetails?.unitRates;
 
                 let accountUniqueName = group === 'purchase' ? variantObj?.purchaseAccountDetails?.accountUniqueName ?? variantObj?.fixedAssetAccountDetails?.accountUniqueName : variantObj?.salesAccountDetails?.accountUniqueName ?? variantObj?.fixedAssetAccountDetails?.accountUniqueName
