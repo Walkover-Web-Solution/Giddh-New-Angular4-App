@@ -146,20 +146,20 @@ export class DropdownFieldComponent implements OnInit, OnChanges, OnDestroy, Aft
      */
     public ngOnChanges(changes: SimpleChanges): void {
         setTimeout(() => {
-            if (changes?.options) {
-                this.fieldFilteredOptions = changes.options.currentValue;
-            }
+        if (changes?.options) {
+            this.fieldFilteredOptions = changes.options.currentValue;
+        }
         }, 250);
 
-        if (changes?.defaultValue) {
-            this.searchFormControl.setValue({ label: changes?.defaultValue.currentValue });
-            if (!this.options || this.options?.length === 0) {
-                if (this.enableDynamicSearch) {
-                    this.dynamicSearchedQuery.emit(changes?.defaultValue.currentValue);
-                } else {
-                    this.filterOptions(changes?.defaultValue.currentValue);
+        if (changes?.defaultValue) {            
+                this.searchFormControl.setValue({ label: changes?.defaultValue.currentValue });
+                if (!this.options || this.options?.length === 0) {
+                    if (this.enableDynamicSearch) {
+                        this.dynamicSearchedQuery.emit(changes?.defaultValue.currentValue);
+                    } else {
+                        this.filterOptions(changes?.defaultValue.currentValue);
+                    }
                 }
-            }
         }
     }
 
@@ -217,7 +217,7 @@ export class DropdownFieldComponent implements OnInit, OnChanges, OnDestroy, Aft
      * @param {*} event
      * @memberof DropdownFieldComponent
      */
-    public optionSelected(event: any): void {
+    public optionSelected(event: any): void {        
         if (event?.option?.value?.label) {
             this.selectedValue = event?.option?.value?.label;
             this.selectedOption.emit(event?.option?.value);

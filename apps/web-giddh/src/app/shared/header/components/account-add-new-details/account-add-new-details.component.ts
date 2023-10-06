@@ -1,5 +1,5 @@
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
-import { take, takeUntil } from 'rxjs/operators';
+import { debounceTime, take, takeUntil } from 'rxjs/operators';
 import {
     AfterViewInit,
     ChangeDetectorRef,

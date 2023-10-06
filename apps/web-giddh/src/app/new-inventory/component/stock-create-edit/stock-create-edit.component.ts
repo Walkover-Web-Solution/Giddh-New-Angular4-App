@@ -951,7 +951,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 }
 
             })
-            updatedCustomFieldArray = updatedCustomFieldArray.filter(field => {
+            updatedCustomFieldArray = updatedCustomFieldArray?.filter(field => {
                 delete field.isMandatory
                 return field.value;
             });
@@ -1083,7 +1083,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                     value: obj?.value
                 };
             });
-            updatedCustomFieldArray = updatedCustomFieldArray.filter(field => field.value);
+            updatedCustomFieldArray = updatedCustomFieldArray?.filter(field => field.value);
             variant.customFields = updatedCustomFieldArray;
         });
         let defaultWarehouse = null;
