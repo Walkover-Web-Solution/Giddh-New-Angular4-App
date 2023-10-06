@@ -1272,6 +1272,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                                 this.localeData.create_address = this.localeData.create_gst;
                                 this.localeData.update_address = this.localeData.update_gst;
                             } else {
+                                this.taxType = '';
                                 this.localeData.company_address_list = this.localeData.company_address_list;
                                 this.localeData.add_address = this.localeData.create_address;
                                 this.localeData.create_address = this.localeData.create_address;
