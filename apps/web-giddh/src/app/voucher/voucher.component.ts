@@ -9029,7 +9029,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                             unitRates: unitRates
                         }
                     };
-                    // this.onChangeUnit(this.invFormData.entries[activeEntryIndex].transactions[0],unitRate)
                     this.invFormData.entries[activeEntryIndex].transactions[0].variant = {
                         name: variantObj.name,
                         uniqueName: variantObj.uniqueName
@@ -9050,14 +9049,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             }
             this.changeDetectorRef.detectChanges();
         });
-    }
-
-    public prepareBarcodeStockUnitArr(unitArr) {
-        let unitArray = [];
-        forEach(unitArr, (item) => {
-            unitArray.push({ id: item.uniqueName, text: item.code });
-        });
-        return unitArray;
     }
 
     /**
