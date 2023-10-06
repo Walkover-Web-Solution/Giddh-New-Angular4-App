@@ -18,7 +18,6 @@ import { GeneralService } from '../../services/general.service';
 import { VoucherTypeEnum } from '../../models/api-models/Sales';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { ReceiptService } from '../../services/receipt.service';
-import { CommonService } from '../../services/common.service';
 import { MatDialog } from '@angular/material/dialog';
 
 @Component({
@@ -65,21 +64,20 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
     displayedColumns: string[] = ['date', 'number', 'name', 'taxamt', 'vat_amt', 'reverse_charge', 'trn_number', 'place_supply'];
 
     constructor(
-        private store: Store<AppState>, 
-        private vatService: VatService, 
-        private toasty: ToasterService, 
-        private cdRef: ChangeDetectorRef, 
-        public route: ActivatedRoute, 
-        private router: Router, 
-        private invoiceReceiptActions: InvoiceReceiptActions, 
-        private invoiceActions: InvoiceActions, 
-        private componentFactoryResolver: ComponentFactoryResolver, 
-        private invoiceService: InvoiceService, 
-        private generalService: GeneralService, 
-        private breakpointObserver: BreakpointObserver, 
-        private receiptService: ReceiptService, 
-        private commonService: CommonService,
-        public dialog: MatDialog,
+        private store: Store<AppState>,
+        private vatService: VatService,
+        private toasty: ToasterService,
+        private cdRef: ChangeDetectorRef,
+        public route: ActivatedRoute,
+        private router: Router,
+        private invoiceReceiptActions: InvoiceReceiptActions,
+        private invoiceActions: InvoiceActions,
+        private componentFactoryResolver: ComponentFactoryResolver,
+        private invoiceService: InvoiceService,
+        private generalService: GeneralService,
+        private breakpointObserver: BreakpointObserver,
+        private receiptService: ReceiptService,
+        public dialog: MatDialog
     ) {
     }
 
@@ -208,7 +206,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
                 this.dialog.open(this.downloadOrSendMailModel, {
                     panelClass: 'modal-dialog',
                     width: '600px !important',
-                });   
+                });
             }
         }
     }
@@ -241,6 +239,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
      */
     public closeDownloadOrSendMailPopup(userResponse: any): void {
         if (userResponse.action === 'closed') {
+            this.dialog.closeAll();
             this.store.dispatch(this.invoiceActions.ResetInvoiceData());
         }
     }
