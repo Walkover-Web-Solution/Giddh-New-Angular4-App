@@ -1544,14 +1544,14 @@
                                                                         </ng-container>
                                                                     </td> -->
 
-                                                                    <ng-container
-                                                                        *ngFor="
-                                                                            let customField of variant?.customFields;
-                                                                            let k = index
-                                                                        "
+                                                                    <td
+                                                                        class="sales-purchase-info inventory-tab purchase-information-enable"
                                                                     >
-                                                                        <td
-                                                                            class="sales-purchase-info inventory-tab purchase-information-enable"
+                                                                        <ng-container
+                                                                            *ngFor="
+                                                                                let customField of variant?.customFields;
+                                                                                let k = index
+                                                                            "
                                                                         >
                                                                             <div class="sales-purchase-wrapper">
                                                                                 <text-field
@@ -1633,8 +1633,8 @@
                                                                                     </mat-radio-button>
                                                                                 </mat-radio-group>
                                                                             </div>
-                                                                        </td>
-                                                                    </ng-container>
+                                                                        </ng-container>
+                                                                    </td>
                                                                     <td class="text-center archive">
                                                                         <mat-slide-toggle
                                                                             class="mt-1"
