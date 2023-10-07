@@ -9049,10 +9049,10 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         });
                     } else {
                         this.invFormData.entries[activeEntryIndex].transactions[0].setAmount(this.invFormData.entries[activeEntryIndex]);
+                        this.calculateWhenTrxAltered(this.invFormData.entries[activeEntryIndex], this.invFormData.entries[activeEntryIndex].transactions[0]);
+                        this.calculateStockEntryAmount(this.invFormData.entries[activeEntryIndex].transactions[0]);
                     }
                     this.onSelectSalesAccount(selectedAcc, this.invFormData.entries[activeEntryIndex].transactions[0], this.invFormData.entries[activeEntryIndex], false, false, 0, true);
-                    this.calculateWhenTrxAltered(this.invFormData.entries[activeEntryIndex], this.invFormData.entries[activeEntryIndex].transactions[0]);
-                    this.calculateStockEntryAmount(this.invFormData.entries[activeEntryIndex].transactions[0]);
                 } else {
                     this.activeIndx = isExistingEntry;
                     this.handleQuantityBlur(this.invFormData.entries[isExistingEntry], this.invFormData.entries[isExistingEntry].transactions[0]);
