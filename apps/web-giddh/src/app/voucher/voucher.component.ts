@@ -8897,6 +8897,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 let accountUniqueName = group === 'purchase' ? variantObj?.purchaseAccountDetails?.accountUniqueName ?? variantObj?.fixedAssetAccountDetails?.accountUniqueName : variantObj?.salesAccountDetails?.accountUniqueName ?? variantObj?.fixedAssetAccountDetails?.accountUniqueName
                 let accountName = group === 'purchase' ? variantObj?.purchaseAccountDetails?.accountName ?? variantObj?.fixedAssetAccountDetails?.accountName : variantObj?.salesAccountDetails?.accountName ?? variantObj?.fixedAssetAccountDetails?.accountName;
 
+                let isInclusiveTax = group === 'purchase' ? variantObj?.purchaseTaxInclusive ?? variantObj?.fixedAssetTaxInclusive : variantObj?.salesTaxInclusive ?? variantObj?.fixedAssetTaxInclusive;
+
                 if (!accountUniqueName) {
                     this.toaster.showSnackBar("warning", group + " " + this.localeData?.account_missing_in_stock);
                     return;
@@ -9040,11 +9042,17 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     };
 
                     this.activeIndx = activeEntryIndex;
-
+                    if (isInclusiveTax) {
+                        setTimeout(() => {
+                            this.invFormData.entries[activeEntryIndex].transactions[0].total = this.invFormData.entries[activeEntryIndex].transactions[0].quantity * this.invFormData.entries[activeEntryIndex].transactions[0].rate;
+                            this.calculateTransactionValueInclusively(this.invFormData.entries[activeEntryIndex], this.invFormData.entries[activeEntryIndex].transactions[0]);
+                        });
+                    } else {
+                        this.invFormData.entries[activeEntryIndex].transactions[0].setAmount(this.invFormData.entries[activeEntryIndex]);
+                    }
                     this.onSelectSalesAccount(selectedAcc, this.invFormData.entries[activeEntryIndex].transactions[0], this.invFormData.entries[activeEntryIndex], false, false, 0, true);
-
-                    this.calculateStockEntryAmount(this.invFormData.entries[activeEntryIndex].transactions[0]);
                     this.calculateWhenTrxAltered(this.invFormData.entries[activeEntryIndex], this.invFormData.entries[activeEntryIndex].transactions[0]);
+                    this.calculateStockEntryAmount(this.invFormData.entries[activeEntryIndex].transactions[0]);
                 } else {
                     this.activeIndx = isExistingEntry;
                     this.handleQuantityBlur(this.invFormData.entries[isExistingEntry], this.invFormData.entries[isExistingEntry].transactions[0]);
