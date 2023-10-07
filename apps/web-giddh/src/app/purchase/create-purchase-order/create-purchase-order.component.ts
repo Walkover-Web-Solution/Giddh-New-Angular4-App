@@ -4172,6 +4172,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                 let unitRates = variantObj?.purchaseAccountDetails?.unitRates ?? variantObj?.fixedAssetAccountDetails?.unitRates;
                 let accountUniqueName = variantObj?.purchaseAccountDetails?.accountUniqueName ?? variantObj?.fixedAssetAccountDetails?.accountUniqueName;
                 let accountName = variantObj?.purchaseAccountDetails?.accountName ?? variantObj?.fixedAssetAccountDetails?.accountName;
+
+                let isInclusiveTax =variantObj?.purchaseTaxInclusive ?? variantObj?.fixedAssetTaxInclusive;
               if (!accountUniqueName) {
                     this.toaster.showSnackBar("warning", 'purchase' + " " + this.localeData?.account_missing_in_stock);
                     return;
@@ -4268,6 +4270,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                         this.purchaseOrder.entries[activeEntryIndex].transactions[0].stockList = [];
                         if (unitRates.length) {
                             this.purchaseOrder.entries[activeEntryIndex].transactions[0].stockList = this.prepareUnitArr(unitRates);
+                            this.purchaseOrder.entries[activeEntryIndex].transactions[0].taxInclusive = isInclusiveTax;
                             this.purchaseOrder.entries[activeEntryIndex].transactions[0].stockUnit = this.purchaseOrder.entries[activeEntryIndex].transactions[0].stockList[0].id;
                             this.purchaseOrder.entries[activeEntryIndex].transactions[0].stockUnitCode = this.purchaseOrder.entries[activeEntryIndex].transactions[0].stockList[0].text;
                         } else {
@@ -4281,6 +4284,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                     this.purchaseOrder.entries[activeEntryIndex].transactions[0].accountName = accountName;
                     this.purchaseOrder.entries[activeEntryIndex].transactions[0].accountUniqueName = accountUniqueName;
                     this.purchaseOrder.entries[activeEntryIndex].transactions[0].quantity = 1;
+                    this.purchaseOrder.entries[activeEntryIndex].transactions[0].rate = unitRates?.length ? unitRates[0]?.rate : 1;
                     this.purchaseOrder.entries[activeEntryIndex].transactions[0].applicableTaxes = stockObj.taxes;
                     this.purchaseOrder.entries[activeEntryIndex].transactions[0].showCodeType = stockObj.hsnNumber ? 'hsn' : 'sac';
                     this.purchaseOrder.entries[activeEntryIndex].transactions[0].hsnNumber = stockObj.hsnNumber;
@@ -4314,12 +4318,18 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                         name: variantObj.name,
                         uniqueName: variantObj.uniqueName
                     };
-
                     this.activeIndex = activeEntryIndex;
+                    if (isInclusiveTax) {
+                        setTimeout(() => {
+                            this.purchaseOrder.entries[activeEntryIndex].transactions[0].total = this.purchaseOrder.entries[activeEntryIndex].transactions[0].quantity * this.purchaseOrder.entries[activeEntryIndex].transactions[0].rate;
+                            this.calculateTransactionValueInclusively(this.purchaseOrder.entries[activeEntryIndex], this.purchaseOrder.entries[activeEntryIndex].transactions[0]);
+                        });
+                    } else {
+                        this.purchaseOrder.entries[activeEntryIndex].transactions[0].setAmount(this.purchaseOrder.entries[activeEntryIndex]);
+                        this.calculateWhenTrxAltered(this.purchaseOrder.entries[activeEntryIndex], this.purchaseOrder.entries[activeEntryIndex].transactions[0]);
+                        this.calculateStockEntryAmount(this.purchaseOrder.entries[activeEntryIndex].transactions[0]);
+                    }
                     this.onSelectSalesAccount(selectedAcc, this.purchaseOrder.entries[activeEntryIndex].transactions[0], this.purchaseOrder.entries[activeEntryIndex], false, 0, true);
-
-                    this.calculateStockEntryAmount(this.purchaseOrder.entries[activeEntryIndex].transactions[0]);
-                    this.calculateWhenTrxAltered(this.purchaseOrder.entries[activeEntryIndex], this.purchaseOrder.entries[activeEntryIndex].transactions[0]);
                 } else {
                     this.activeIndex = isExistingEntry;
                     this.handleQuantityBlur(this.purchaseOrder.entries[isExistingEntry], this.purchaseOrder.entries[isExistingEntry].transactions[0]);
