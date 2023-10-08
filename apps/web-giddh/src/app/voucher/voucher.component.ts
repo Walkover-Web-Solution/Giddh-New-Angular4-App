@@ -8887,9 +8887,12 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
                 let group = (this.invoiceType === VoucherTypeEnum.debitNote || this.invoiceType === VoucherTypeEnum.purchase || this.invoiceType === VoucherTypeEnum.cashBill || this.invoiceType === VoucherTypeEnum.cashDebitNote) ?
                     'purchase' : 'sales';
-                let unitRates = group === 'purchase' ? variantObj?.purchaseAccountDetails?.unitRates : variantObj?.salesAccountDetails?.unitRates;
-                let accountUniqueName = group === 'purchase' ? variantObj?.purchaseAccountDetails?.accountUniqueName : variantObj?.salesAccountDetails?.accountUniqueName;
-                let accountName = group === 'purchase' ? variantObj?.purchaseAccountDetails?.accountName : variantObj?.salesAccountDetails?.accountName;
+                let unitRates = group === 'purchase' ? variantObj?.purchaseAccountDetails?.unitRates ?? variantObj?.fixedAssetAccountDetails?.unitRates : variantObj?.salesAccountDetails?.unitRates ?? variantObj?.fixedAssetAccountDetails?.unitRates;
+
+                let accountUniqueName = group === 'purchase' ? variantObj?.purchaseAccountDetails?.accountUniqueName ?? variantObj?.fixedAssetAccountDetails?.accountUniqueName : variantObj?.salesAccountDetails?.accountUniqueName ?? variantObj?.fixedAssetAccountDetails?.accountUniqueName
+                let accountName = group === 'purchase' ? variantObj?.purchaseAccountDetails?.accountName ?? variantObj?.fixedAssetAccountDetails?.accountName : variantObj?.salesAccountDetails?.accountName ?? variantObj?.fixedAssetAccountDetails?.accountName;
+
+                let isInclusiveTax = group === 'purchase' ? variantObj?.purchaseTaxInclusive ?? variantObj?.fixedAssetTaxInclusive : variantObj?.salesTaxInclusive ?? variantObj?.fixedAssetTaxInclusive;
 
                 if (!accountUniqueName) {
                     this.toaster.showSnackBar("warning", group + " " + this.localeData?.account_missing_in_stock);
@@ -8934,8 +8937,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                             symbol: ""
                         },
                         nameStr: "",
-                        hsnNumber: null,
-                        sacNumber: null,
+                        hsnNumber: stockObj.hsnNumber,
+                        sacNumber: stockObj.sacNumber,
                         uNameStr: "",
                         category: ""
                     }
@@ -8960,17 +8963,51 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     if (this.invFormData.entries[this.invFormData.entries.length - 1].transactions[0].fakeAccForSelect2) {
                         this.addBlankRow(null);
                     }
-
                     let activeEntryIndex = this.invFormData.entries.length - 1;
+                    this.invFormData.entries[activeEntryIndex].transactions[0].sku_and_customfields = null;
+                    let description = [];
+                    let skuCodeHeading = stockObj.skuCodeHeading ? stockObj.skuCodeHeading : this.commonLocaleData?.app_sku_code;
+                    if (stockObj.skuCode) {
+                        description.push(skuCodeHeading + ':' + stockObj.skuCode);
+                    }
 
+                    let customField1Heading = stockObj.customField1Heading ? stockObj.customField1Heading : this.localeData?.custom_field1;
+                    if (stockObj.customField1Value) {
+                        description.push(customField1Heading + ':' + stockObj.customField1Value);
+                    }
+
+                    let customField2Heading = stockObj.customField2Heading ? stockObj.customField2Heading : this.localeData?.custom_field2;
+                    if (stockObj.customField2Value) {
+                        description.push(customField2Heading + ':' + stockObj.customField2Value);
+                    }
+
+                    if (stockObj) {
+                        let obj: IStockUnit = {
+                            id: stockObj.stockUnit.uniqueName,
+                            text: stockObj.stockUnit.code
+                        };
+                        this.invFormData.entries[activeEntryIndex].transactions[0].stockList = [];
+                        if (unitRates.length) {
+                            this.invFormData.entries[activeEntryIndex].transactions[0].stockList = this.prepareUnitArr(unitRates);
+                            this.invFormData.entries[activeEntryIndex].transactions[0].stockUnit = this.invFormData.entries[activeEntryIndex].transactions[0].stockList[0].id;
+                            this.invFormData.entries[activeEntryIndex].transactions[0].stockUnitCode = this.invFormData.entries[activeEntryIndex].transactions[0].stockList[0].text;
+                        } else {
+                            this.invFormData.entries[activeEntryIndex].transactions[0].stockList.push(obj);
+                            this.invFormData.entries[activeEntryIndex].transactions[0].stockUnit = stockObj.stockUnit.uniqueName;
+                            this.invFormData.entries[activeEntryIndex].transactions[0].stockUnitCode = stockObj.stockUnit.code;
+                        }
+                    }
+                    this.invFormData.entries[activeEntryIndex].transactions[0].sku_and_customfields = description.join(', ');
                     this.invFormData.entries[activeEntryIndex].transactions[0].fakeAccForSelect2 = selectedAcc.value;
                     this.invFormData.entries[activeEntryIndex].transactions[0].accountName = accountName;
                     this.invFormData.entries[activeEntryIndex].transactions[0].accountUniqueName = accountUniqueName;
                     this.invFormData.entries[activeEntryIndex].transactions[0].quantity = 1;
-                    this.invFormData.entries[activeEntryIndex].transactions[0].stockList = this.prepareUnitArr(unitRates);
-                    this.invFormData.entries[activeEntryIndex].transactions[0].stockUnit = unitRates?.length ? unitRates[0]?.stockUnitUniqueName : "";
                     this.invFormData.entries[activeEntryIndex].transactions[0].rate = unitRates?.length ? unitRates[0]?.rate : 1;
                     this.invFormData.entries[activeEntryIndex].transactions[0].isStockTxn = true;
+                    this.invFormData.entries[activeEntryIndex].transactions[0].applicableTaxes = stockObj.taxes;
+                    this.invFormData.entries[activeEntryIndex].transactions[0].showCodeType = stockObj.hsnNumber ? 'hsn' : 'sac';
+                    this.invFormData.entries[activeEntryIndex].transactions[0].hsnNumber = stockObj.hsnNumber;
+                    this.invFormData.entries[activeEntryIndex].transactions[0].sacNumber = stockObj.sacNumber;
                     this.invFormData.entries[activeEntryIndex].transactions[0].stockDetails =
                     {
                         name: stockObj.name,
@@ -8994,18 +9031,23 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                             unitRates: unitRates
                         }
                     };
-
                     this.invFormData.entries[activeEntryIndex].transactions[0].variant = {
                         name: variantObj.name,
                         uniqueName: variantObj.uniqueName
                     };
 
                     this.activeIndx = activeEntryIndex;
-
+                    if (isInclusiveTax) {
+                        setTimeout(() => {
+                            this.invFormData.entries[activeEntryIndex].transactions[0].total = this.invFormData.entries[activeEntryIndex].transactions[0].quantity * this.invFormData.entries[activeEntryIndex].transactions[0].rate;
+                            this.calculateTransactionValueInclusively(this.invFormData.entries[activeEntryIndex], this.invFormData.entries[activeEntryIndex].transactions[0]);
+                        });
+                    } else {
+                        this.invFormData.entries[activeEntryIndex].transactions[0].setAmount(this.invFormData.entries[activeEntryIndex]);
+                        this.calculateWhenTrxAltered(this.invFormData.entries[activeEntryIndex], this.invFormData.entries[activeEntryIndex].transactions[0]);
+                        this.calculateStockEntryAmount(this.invFormData.entries[activeEntryIndex].transactions[0]);
+                    }
                     this.onSelectSalesAccount(selectedAcc, this.invFormData.entries[activeEntryIndex].transactions[0], this.invFormData.entries[activeEntryIndex], false, false, 0, true);
-
-                    this.calculateStockEntryAmount(this.invFormData.entries[activeEntryIndex].transactions[0]);
-                    this.calculateWhenTrxAltered(this.invFormData.entries[activeEntryIndex], this.invFormData.entries[activeEntryIndex].transactions[0]);
                 } else {
                     this.activeIndx = isExistingEntry;
                     this.handleQuantityBlur(this.invFormData.entries[isExistingEntry], this.invFormData.entries[isExistingEntry].transactions[0]);
