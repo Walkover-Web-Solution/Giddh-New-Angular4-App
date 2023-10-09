@@ -129,6 +129,10 @@ textarea {
         z-index: 9 !important;
         position: relative !important;
     }
+    tbody{
+        z-index: 1;
+        position: relative;
+    }
 }
 
 .mobile-number-wrapper {
@@ -191,7 +195,7 @@ textarea {
             right: 44% !important;
             margin-top: -35px !important;
             z-index: 0 !important;
-            top: 14px;
+            top: 17px;
         }
 
         giddh-datepicker {
@@ -2638,7 +2642,7 @@ modal-container.modal {
 .form-control {
     background: var(--color-secondary-input-bar-background) !important;
     border: 1px solid var(--color-secondary-input-bar-border);
-    border-radius: 5px !important;
+    border-radius: 5px;
     padding: 6px !important;
     outline: 0;
     color: var(--color-nero) !important;
@@ -3906,7 +3910,7 @@ a.btn.btn-xs.btn-link.pull-right {
 .multi-select input.form-control {
     background-image: var(--color-caret-image) !important;
     background-size: 10px !important;
-    background-position: 96% !important;
+    background-position: 95% !important;
     background-repeat: no-repeat !important;
     background-color: var(--color-white) !important;
     padding-right: 24px !important;
@@ -3928,7 +3932,7 @@ a.btn.btn-xs.btn-link.pull-right {
 #tax-control-multi-select.multi-select input.form-control[readonly] {
     background-image: var(--color-caret-image) !important;
     background-color: var(--color-white) !important;
-    background-position: 98.5% !important;
+    background-position: 95% !important;
 
     &.field-disabled {
         background-color: var(--color-primary-input-bar-background) !important;
@@ -6658,7 +6662,7 @@ GST filing
 .tax-engine .list-filter {
     padding: 15px !important;
     border-bottom: 1px solid var(--color-common-secondary-border) !important;
-    height: 80px;
+    min-height: 80px;
 }
 
 .tax-engine .transactions-list .list-filter .btn-toolbar {
@@ -12804,7 +12808,7 @@ inventory-master {
 
     .top-content {
         .count-box {
-            min-width: auto !important;
+            min-width: fit-content !important;
         }
     }
 
