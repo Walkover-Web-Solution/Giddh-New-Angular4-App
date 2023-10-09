@@ -30,6 +30,11 @@
 
 .template-meta {
     padding: 15px 0 0;
+
+    .text-ellipsis{
+        width: 200px;
+        display: inline-block;
+    }
 }
 
 .btn-warning {

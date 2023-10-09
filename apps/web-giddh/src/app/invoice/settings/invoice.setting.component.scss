@@ -209,7 +209,9 @@ span.viasocket a {
         border-radius: 5px !important;
     }
 }
-
+.input-group-addon{
+    border-radius: 0 5px 5px 0 !important;
+}
 @media (max-width: 991px) {
     /*--- custom ---*/
     .left-gap {
