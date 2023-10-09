@@ -574,6 +574,7 @@ aside-menu-account .container-fluid {
     border-radius: 5px;
     padding: 15px;
     width: 100%;
+    min-width: 200px;
     h5 {
         font-size: var(--font-size-12);
         color: var(--color-total-details-heading);
@@ -2998,6 +2999,12 @@ td.mat-footer-cell {
             border-bottom: 1px solid var(--color-iron);
         }
     }
+    giddh-datepicker{
+        .mdc-text-field{
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+        }
+    }
 }
 
 .right-currency {
@@ -3123,10 +3130,7 @@ td.mat-footer-cell {
         margin-top: -3px !important;
     }
 }
-.border-left-right-none {
-    border-left: none !important;
-    border-right: none !important;
-}
+
 .text-field {
     .text-field-container {
         .input-custom {
