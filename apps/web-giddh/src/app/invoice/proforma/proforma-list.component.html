@@ -305,7 +305,7 @@
 
                             <th width="10%">
                                 <div class="d-flex">
-                                    <div class="">
+                                    <div >
                                         {{
                                             voucherType === "proformas"
                                                 ? localeData?.proforma_date
@@ -335,7 +335,7 @@
 
                             <th width="12%">
                                 <div class="d-flex">
-                                    <div class="">{{ localeData?.expiry_date }}</div>
+                                    <div >{{ localeData?.expiry_date }}</div>
                                     <div class="icon-pointer">
                                         <ng-container *ngTemplateOutlet="sortTemplate; context: { column: 'dueDate' }">
                                         </ng-container>

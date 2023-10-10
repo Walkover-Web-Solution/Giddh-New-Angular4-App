@@ -809,7 +809,7 @@
                                 </th>
                                 <th [attr.data-title]="localeData?.due_date" width="10%">
                                     <div class="d-flex">
-                                        <div class="">{{ localeData?.due_date }}</div>
+                                        <div >{{ localeData?.due_date }}</div>
                                         <div class="icon-pointer">
                                             <ng-container
                                                 *ngTemplateOutlet="sortTemplate; context: { column: 'dueDate' }"
@@ -907,7 +907,7 @@
 
                                 <th width="10%">
                                     <div class="d-flex">
-                                        <div class="">{{ commonLocaleData?.app_date }}</div>
+                                        <div >{{ commonLocaleData?.app_date }}</div>
                                         <div class="icon-pointer">
                                             <ng-container
                                                 *ngTemplateOutlet="sortTemplate; context: { column: 'voucherDate' }"
