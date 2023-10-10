@@ -961,6 +961,10 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         if (this.isFormSubmitted) {
             return;
         }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 33d21027c2 (Dilpreet |Stage | Prod - Design of variant table is distorting when no custom field is present in the company)
         if (this.validateStock(this.stockForm.purchaseAccountDetails?.unitRates)) {
             this.stockForm.purchaseAccountDetails.unitRates = this.stockForm.purchaseAccountDetails.unitRates.filter((unitRate) => {
                 return unitRate.stockUnitUniqueName || unitRate.rate;
