@@ -1,0 +1,269 @@
+<ng-container appTranslate [file]="'inventory'" (commonLocaleData)="commonLocaleData = $event"
+    (localeData)="localeData = $event">
+    <div class="bulk-stock pd-15">
+        <div class="bulk-stock-warpper">
+            <div class="bulk-stock-header mb-3">
+                <div class="pull-right">
+                    <select-table-column [localeData]="localeData" [commonLocaleData]="commonLocaleData"
+                        [iconClass]="'icon-options select-multiple-icon-options'"
+                        [cssClass]="'customise-filter-button'">
+                    </select-table-column>
+                </div>
+            </div>
+            <div class="bulk-stock-body d-flex flex-column">
+                <div class="bulk-stock-table">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Stock Name<span class="red-text">*</span></th>
+                                <th>Unique Name<span class="red-text">*</span></th>
+                                <th>Inventory Type<span class="red-text">*</span></th>
+                                <th>Inventory Unit<span class="red-text">*</span></th>
+                                <th>Parent Group<span class="red-text">*</span></th>
+                                <th>Inventory Account<span class="red-text">*</span></th>
+                                <th>HSN/SAC Code</th>
+                                <th>SKU Code</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="border-line">
+                                        <text-field [type]="'text'" #stockName [autoFocus]="true">
+                                        </text-field>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="border-line">
+                                        <text-field [type]="'text'" #stockName [autoFocus]="true">
+                                        </text-field>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="border-line">
+                                        <select-field [name]="'fields'" [options]="dropdownData"
+                                            (selectedOption)="selectField($event)">
+                                        </select-field>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="border-line">
+                                        <select-field [name]="'fields'" [options]="dropdownData"
+                                            (selectedOption)="selectField($event)">
+                                        </select-field>
+                                    </div>  
+                                </td>
+                                <td>
+                                    <div class="border-line">
+                                        <select-field [name]="'fields'" [options]="dropdownData"
+                                            (selectedOption)="selectField($event)">
+                                        </select-field>
+                                    </div>  
+                                </td>
+                                <td>
+                                    <div class="border-line">
+                                        <select-field [name]="'fields'" [options]="dropdownData"
+                                            (selectedOption)="selectField($event)">
+                                        </select-field>
+                                    </div>  
+                                </td>
+                                <td>
+                                    <div class="border-line">
+                                        <text-field [type]="'text'" #stockName [autoFocus]="true">
+                                        </text-field>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="border-line">
+                                        <text-field [type]="'text'" #stockName [autoFocus]="true">
+                                        </text-field>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="border-line">
+                                        <text-field [type]="'text'" #stockName [autoFocus]="true">
+                                        </text-field>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="border-line">
+                                        <text-field [type]="'text'" #stockName [autoFocus]="true">
+                                        </text-field>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="border-line">
+                                        <select-field [name]="'fields'" [options]="dropdownData"
+                                            (selectedOption)="selectField($event)">
+                                        </select-field>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="border-line">
+                                        <select-field [name]="'fields'" [options]="dropdownData"
+                                            (selectedOption)="selectField($event)">
+                                        </select-field>
+                                    </div>  
+                                </td>
+                                <td>
+                                    <div class="border-line">
+                                        <select-field [name]="'fields'" [options]="dropdownData"
+                                            (selectedOption)="selectField($event)">
+                                        </select-field>
+                                    </div>  
+                                </td>
+                                <td>
+                                    <div class="border-line">
+                                        <select-field [name]="'fields'" [options]="dropdownData"
+                                            (selectedOption)="selectField($event)">
+                                        </select-field>
+                                    </div>  
+                                </td>
+                                <td>
+                                    <div class="border-line">
+                                        <text-field [type]="'text'" #stockName [autoFocus]="true">
+                                        </text-field>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="border-line">
+                                        <text-field [type]="'text'" #stockName [autoFocus]="true">
+                                        </text-field>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="border-line">
+                                        <text-field [type]="'text'" #stockName [autoFocus]="true">
+                                        </text-field>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="border-line">
+                                        <text-field [type]="'text'" #stockName [autoFocus]="true">
+                                        </text-field>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="border-line">
+                                        <select-field [name]="'fields'" [options]="dropdownData"
+                                            (selectedOption)="selectField($event)">
+                                        </select-field>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="border-line">
+                                        <select-field [name]="'fields'" [options]="dropdownData"
+                                            (selectedOption)="selectField($event)">
+                                        </select-field>
+                                    </div>  
+                                </td>
+                                <td>
+                                    <div class="border-line">
+                                        <select-field [name]="'fields'" [options]="dropdownData"
+                                            (selectedOption)="selectField($event)">
+                                        </select-field>
+                                    </div>  
+                                </td>
+                                <td>
+                                    <div class="border-line">
+                                        <select-field [name]="'fields'" [options]="dropdownData"
+                                            (selectedOption)="selectField($event)">
+                                        </select-field>
+                                    </div>  
+                                </td>
+                                <td>
+                                    <div class="border-line">
+                                        <text-field [type]="'text'" #stockName [autoFocus]="true">
+                                        </text-field>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="border-line">
+                                        <text-field [type]="'text'" #stockName [autoFocus]="true">
+                                        </text-field>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="border-line">
+                                        <text-field [type]="'text'" #stockName [autoFocus]="true">
+                                        </text-field>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="border-line">
+                                        <text-field [type]="'text'" #stockName [autoFocus]="true">
+                                        </text-field>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="border-line">
+                                        <select-field [name]="'fields'" [options]="dropdownData"
+                                            (selectedOption)="selectField($event)">
+                                        </select-field>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="border-line">
+                                        <select-field [name]="'fields'" [options]="dropdownData"
+                                            (selectedOption)="selectField($event)">
+                                        </select-field>
+                                    </div>  
+                                </td>
+                                <td>
+                                    <div class="border-line">
+                                        <select-field [name]="'fields'" [options]="dropdownData"
+                                            (selectedOption)="selectField($event)">
+                                        </select-field>
+                                    </div>  
+                                </td>
+                                <td>
+                                    <div class="border-line">
+                                        <select-field [name]="'fields'" [options]="dropdownData"
+                                            (selectedOption)="selectField($event)">
+                                        </select-field>
+                                    </div>  
+                                </td>
+                                <td>
+                                    <div class="border-line">
+                                        <text-field [type]="'text'" #stockName [autoFocus]="true">
+                                        </text-field>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="border-line">
+                                        <text-field [type]="'text'" #stockName [autoFocus]="true">
+                                        </text-field>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="pagination-wrapper mt-auto">
+                        <pagination
+                            *ngIf="1"
+                            [totalItems]="50"
+                            [maxSize]="5"
+                            class="pagination-sm"
+                            [boundaryLinks]="true"
+                            [itemsPerPage]="4"
+                            [rotate]="false"
+                            (pageChanged)="pageChanged($event)"
+                            [firstText]="commonLocaleData?.app_first"
+                            [previousText]="commonLocaleData?.app_previous"
+                            [nextText]="commonLocaleData?.app_next"
+                            [lastText]="commonLocaleData?.app_last"
+                        ></pagination>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</ng-container>

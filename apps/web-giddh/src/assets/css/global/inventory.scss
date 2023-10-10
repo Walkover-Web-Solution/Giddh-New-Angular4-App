@@ -208,3 +208,23 @@ inventory-master{
         background-color: var(--color-white);
     }
 }
+
+// For Bulk Stock Edit
+.bulk-stock{
+    &-body{
+        .bulk-stock-table{
+            table{
+                tbody{
+                    td{
+                        input{
+                            width: 100%;
+                            height: inherit;
+                            border: none;
+                            padding: 6px 10px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
