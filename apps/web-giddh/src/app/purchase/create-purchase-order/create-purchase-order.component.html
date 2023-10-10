@@ -369,17 +369,21 @@
                                                     <!-- region shipping address -->
                                                     <div class="col-sm-12 col-xl-6 col-md-10 bill-add">
                                                         <div class="form-group p-0 width-100">
-                                                            <div class="d-flex align-items-center pb-1">
-                                                                <span class="pd-r15">
-                                                                    <input
-                                                                        type="checkbox"
-                                                                        autocomplete="None"
-                                                                        name="autoFillVendorShipping"
-                                                                        [(ngModel)]="autoFillVendorShipping"
-                                                                        (change)="autoFillShippingDetails('vendor')"
-                                                                    />
-                                                                    {{ localeData?.shipping_billing_same }}
-                                                                </span>
+                                                            <div class="d-flex align-items-start pb-1">
+                                                                <div class="d-flex align-items-start pd-r15">
+                                                                    <div class="pt-1">
+                                                                        <input
+                                                                            type="checkbox"
+                                                                            autocomplete="None"
+                                                                            name="autoFillVendorShipping"
+                                                                            [(ngModel)]="autoFillVendorShipping"
+                                                                            (change)="autoFillShippingDetails('vendor')"
+                                                                        />
+                                                                    </div>
+                                                                    <div>
+                                                                        {{ localeData?.shipping_billing_same }}
+                                                                    </div>
+                                                                </div>
                                                                 <span>
                                                                     <div
                                                                         class="btn-group btn-block"
@@ -893,17 +897,21 @@
                                             <!-- region shipping address -->
                                             <div class="col-sm-12 col-xl-6 col-md-10 bill-add">
                                                 <div class="form-group p-0 width-100">
-                                                    <div class="d-flex align-items-center pb-1">
-                                                        <span class="pd-r15">
-                                                            <input
-                                                                type="checkbox"
-                                                                autocomplete="None"
-                                                                name="autoFillCompanyShipping"
-                                                                [(ngModel)]="autoFillCompanyShipping"
-                                                                (change)="autoFillShippingDetails('company')"
-                                                            />
-                                                            {{ localeData?.shipping_billing_same }}
-                                                        </span>
+                                                    <div class="d-flex align-items-start pb-1">
+                                                        <div class="d-flex align-items-start pd-r15">
+                                                            <div class="pt-1">
+                                                                <input
+                                                                    type="checkbox"
+                                                                    autocomplete="None"
+                                                                    name="autoFillCompanyShipping"
+                                                                    [(ngModel)]="autoFillCompanyShipping"
+                                                                    (change)="autoFillShippingDetails('company')"
+                                                                />
+                                                            </div>
+                                                            <div>
+                                                                {{ localeData?.shipping_billing_same }}
+                                                            </div>
+                                                        </div>
                                                         <span>
                                                             <div
                                                                 class="btn-group btn-block"
@@ -1187,8 +1195,8 @@
                                     </div>
                                 </div>
                                 <!-- endregion -->
-                                <div class="col-sm-6" *ngIf="!isMobileScreen">
-                                    <div class="invoice-due-date">
+                                <div class="col-sm-6 pr-0" *ngIf="!isMobileScreen">
+                                    <div class="invoice-due-date column-gap2">
                                         <div class="d-flex">
                                             <label>{{ localeData?.order_date }}<span class="red-text">*</span></label>
                                             <input
