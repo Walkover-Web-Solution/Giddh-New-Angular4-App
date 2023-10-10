@@ -1,0 +1,45 @@
+.bulk-stock{
+    min-height: calc(100dvh - 60px);
+    height: 100%;
+    &-warpper{
+        height: inherit;
+        min-height: inherit;
+    }
+    &-header{
+        height: 60px;
+    }
+    &-body{
+        display: flex;
+        .bulk-stock-table{
+            height: inherit;
+            table{
+                background: var(--color-white);
+                thead{
+                    th{
+                        color: var(--color-giddh-blue);
+                        border-bottom-width: 0 !important;
+                    }
+                }
+                tbody{
+                    td{
+                        padding: 0;
+                        .border-line{
+                            border: 2px solid transparent;
+                        }
+                        input{
+                            width: 100%;
+                            height: inherit;
+                            border: none;
+                            padding: 6px 10px;
+                        }
+                        &:hover{
+                            .border-line{
+                                border-color: var(--color-giddh-blue);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
