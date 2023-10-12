@@ -17,6 +17,8 @@ import { SalesActions } from '../sales/sales.action';
 @Injectable()
 export class InventoryAction {
 
+    public static GET_BULK_STOCK_LIST = 'GetBulkStockList';
+
     public addNewGroup$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(InventoryActionsConst.AddNewGroup),
@@ -307,6 +309,12 @@ export class InventoryAction {
                 return { type: 'EmptyAction' };
             })));
 
+        public GetListBulkStock$: Observable<Action> = createEffect(() => this.action$
+        .pipe(
+            ofType(InventoryAction.GET_BULK_STOCK_LIST),
+            switchMap((action: CustomActions) => this._inventoryService.GetListBulkStock(action.payload)),
+            map(response => this.GetListBulkStockResponse(response))));
+
     constructor(private store: Store<AppState>, private _inventoryService: InventoryService, private action$: Actions,
         private _toasty: ToasterService, private router: Router, private _salesActions: SalesActions) {
 
@@ -553,6 +561,19 @@ export class InventoryAction {
         return {
             type: InventoryActionsConst.MoveStockResponse,
             payload: response
+        };
+    }
+
+    public GetListBulkStock(response): CustomActions {
+        return {
+            type: InventoryAction.GET_BULK_STOCK_LIST,
+            payload: response
+        };
+    }
+    public GetListBulkStockResponse(value: BaseResponse<any, any>): CustomActions {
+        return {
+            type: InventoryActionsConst.BulkStockResponse,
+            payload: value?.body
         };
     }
 }

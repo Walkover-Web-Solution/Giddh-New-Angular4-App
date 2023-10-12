@@ -67,6 +67,10 @@ const routes: Routes = [
             {
                 path: "custom-units",
                 component: CustomUnitsComponent,
+            },
+            {
+                path: ":type/bulk-stock-edit",
+                component: BulkStockEditComponent
             }
         ],
     },
@@ -143,10 +147,6 @@ const routes: Routes = [
     {
         path: "stock-balance",
         component: StockBalanceComponent,
-    },
-    {
-        path: 'bulk-stock-edit',
-        component: BulkStockEditComponent
     }
 ];
 

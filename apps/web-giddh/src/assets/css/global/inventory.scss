@@ -213,17 +213,15 @@ inventory-master{
 .bulk-stock{
     &-body{
         .bulk-stock-table{
-            table{
-                tbody{
-                    td{
+            table{                
+                    td,th{
                         input{
                             width: 100%;
                             height: inherit;
                             border: none;
                             padding: 6px 10px;
                         }
-                    }
-                }
+                  }                
             }
         }
     }
