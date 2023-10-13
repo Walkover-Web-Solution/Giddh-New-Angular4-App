@@ -571,9 +571,47 @@ export class InventoryAction {
         };
     }
     public GetListBulkStockResponse(value: BaseResponse<any, any>): CustomActions {
+        
+        const data = value.body;
+
+        const keys = data.results;
+
+         keys.forEach((x) => {           
+                x.variantName = x?.variantName ? x.variantName : null,
+                x.variantUniqueName = x?.variantUniqueName ? x.variantUniqueName : null,
+                x.stockName = x?.stockName ? x.stockName : null,
+                x.stockUniqueName = x?.stockUniqueName ? x.stockUniqueName : null,
+                x.stockGroupName = x?.stockGroupName ? x.stockGroupName : null,
+                x.stockUnitGroup = x?.stockUnitGroup ? x.stockUnitGroup : null,
+                x.stockGroupUniqueName = x?.stockGroupUniqueName ? x.stockGroupUniqueName : null,
+                x.purchaseUnits = x?.purchaseUnits ? x.purchaseUnits : null,
+                x.purchaseAccountName = x?.purchaseAccountName ? x.purchaseAccountName : null,
+                x.purchaseAccountUniqueName = x?.purchaseAccountUniqueName ? x.purchaseAccountUniqueName : null,
+                x.purchaseRate = x?.purchaseRate ? x.purchaseRate : null,
+                x.purchaseTaxInclusive = x?.purchaseTaxInclusive ? x.purchaseTaxInclusive : null,
+                x.salesUnits = x?.salesUnits ? x.salesUnits : null,
+                x.salesAccountName = x?.salesAccountName ? x.salesAccountName : null,
+                x.salesAccountUniqueName = x?.salesAccountUniqueName ? x.salesAccountUniqueName : null,
+                x.salesRate = x?.salesRate ? x.salesRate : null,
+                x.salesTaxInclusive = x?.salesTaxInclusive ? x.salesTaxInclusive : null,
+                x.fixedAssetTaxInclusive = x?.fixedAssetTaxInclusive ? x.fixedAssetTaxInclusive : null,
+                x.fixedAssetRate = x?.fixedAssetRate ? x.fixedAssetRate : null,
+                x.fixedAssetUnits = x?.fixedAssetUnits ? x.fixedAssetUnits : null,
+                x.fixedAssetAccountName = x?.fixedAssetAccountName ? x.fixedAssetAccountName : null,
+                x.fixedAssetAccountUniqueName = x?.fixedAssetAccountUniqueName ? x.fixedAssetAccountUniqueName : null,
+                x.hsnNo = x?.hsnNo ? x.hsnNo : null,
+                x.sacNo = x?.sacNo ? x.sacNo : null,
+                x.skuCode = x?.skuCode ? x.skuCode : null,
+                x.archive = x?.archive ? x.archive : null,
+                x.taxes = x?.taxes ? x.taxes : null
+         })
+        // data.body.results = keys;
+
+        console.log("Data after Modification ", data)
+
         return {
             type: InventoryActionsConst.BulkStockResponse,
-            payload: value?.body
+            payload: data
         };
     }
 }
