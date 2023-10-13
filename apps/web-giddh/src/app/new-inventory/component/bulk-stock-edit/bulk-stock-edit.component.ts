@@ -22,12 +22,13 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
     /** This will use for customise column check values */
     public customiseColumns = [];
     /** Holds Inventory Type */
-    private inventoryType:string;
+    public inventoryType: string;
     /** Holds Bulk Stock List come from API*/
-    public bulkStockList:any;
+    public bulkStockList: any;
     /** Holds Pagination Info*/
-    public pagination:any;
-    public isLoading: boolean= true;
+    public pagination: any;
+    /** Holds Loader status */
+    public isLoading: boolean = true;
 
     public dropdownData = [{
         label: 'Inventory 1',
@@ -59,6 +60,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
     };
     /** UntypedFormArray Group for group UntypedFormArray */
     public bulkStockEditForm: UntypedFormGroup;
+    public hideShowForm: UntypedFormGroup;
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -70,31 +72,59 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
         private store: Store<AppState>,
         private inventoryAction: InventoryAction,
         private titlecasePipe: TitleCasePipe
-    ) { }
+    ) {
+        this.hideShowForm = this.formBuilder.group({
+
+                variantUniqueName: ['', Validators.required],                       
+                stockUniqueName: ['', Validators.required],
+                stockGroupUniqueName: ['', Validators.required],
+                purchaseUnits: ['', Validators.required],
+                purchaseAccountName: ['', Validators.required],
+                purchaseAccountUniqueName: ['', Validators.required],                        
+                purchaseTaxInclusive: ['', Validators.required],
+                salesUnits: ['', Validators.required],
+                salesAccountName: ['', Validators.required],
+                salesAccountUniqueName: ['', Validators.required],                        
+                salesTaxInclusive: ['', Validators.required],
+                fixedAssetTaxInclusive: ['', Validators.required],
+                fixedAssetRate: ['', Validators.required],
+                fixedAssetUnits: ['', Validators.required],
+                fixedAssetAccountName: ['', Validators.required],
+                fixedAssetAccountUniqueName: ['', Validators.required],                        
+                skuCode: ['', Validators.required],                        
+                taxes: ['', Validators.required]
+
+        });
+    }
 
     public ngOnInit(): void {
         this.changeDetection.detectChanges();
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             if (params?.type) {
-                this.inventoryType = params.type == 'fixedassets' ? 'FIXED_ASSETS' :  params?.type.toUpperCase();
+                this.inventoryType = params.type == 'fixedassets' ? 'FIXED_ASSETS' : params?.type.toUpperCase();
                 this.initBuldStockForm();
             }
         });
-        this.store.dispatch(this.inventoryAction.GetListBulkStock({ inventoryType: this.inventoryType, page: 1 , count: 100}));
+        this.store.dispatch(this.inventoryAction.GetListBulkStock({
+            inventoryType: this.inventoryType, page: 1, count: 50, body: {
+                "search": "",
+                "searchBy": "",
+                "sortBy": "",
+                "sort": "",
+                "expression": "GREATER_THAN",
+                "rate": 0
+            }
+        }));
         this.store.pipe(select(select => select.inventory.bulkStock), takeUntil(this.destroyed$)).subscribe((res: any) => {
-            if(res){
+            if (res) {
                 this.isLoading = false
+                this.initBuldStockForm();
                 console.log("Res: ", res);
                 this.bulkStockList = res.results;
                 this.convertArrayToDropDownObject();
                 this.setPaginationData(res)
             }
         });
-
-    //    setTimeout(()=>{
-
-    //    },1000)
-
         this.customiseColumns = [
             {
                 "value": "closing",
@@ -122,6 +152,10 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
                 "checked": false
             }
         ];
+
+        setTimeout(() => {
+            console.log("Main Form", this.bulkStockEditForm);
+        }, 1000)
     }
 
     /**
@@ -129,12 +163,39 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
      * @private
      */
     private initBuldStockForm(): void {
-        this.bulkStockEditForm = this.formBuilder.group({
-            dateOfSupply: ['', Validators.required],
-            challanNo: [null],
-            uniqueName: [null],
-            note: [''],
-        });
+        this.bulkStockEditForm = this.formBuilder.group(
+            this.formBuilder.array([
+                this.formBuilder.group({
+                    variantName: ['', Validators.required],
+                    variantUniqueName: ['', Validators.required],
+                    stockName: ['', Validators.required],
+                    stockUniqueName: ['', Validators.required],
+                    stockGroupName: ['', Validators.required],
+                    stockUnitGroup: ['', Validators.required],
+                    stockGroupUniqueName: ['', Validators.required],
+                    purchaseUnits: ['', Validators.required],
+                    purchaseAccountName: ['', Validators.required],
+                    purchaseAccountUniqueName: ['', Validators.required],
+                    purchaseRate: ['', Validators.required],
+                    purchaseTaxInclusive: ['', Validators.required],
+                    salesUnits: ['', Validators.required],
+                    salesAccountName: ['', Validators.required],
+                    salesAccountUniqueName: ['', Validators.required],
+                    salesRate: ['', Validators.required],
+                    salesTaxInclusive: ['', Validators.required],
+                    fixedAssetTaxInclusive: ['', Validators.required],
+                    fixedAssetRate: ['', Validators.required],
+                    fixedAssetUnits: ['', Validators.required],
+                    fixedAssetAccountName: ['', Validators.required],
+                    fixedAssetAccountUniqueName: ['', Validators.required],
+                    hsnNo: ['', Validators.required],
+                    sacNo: ['', Validators.required],
+                    skuCode: ['', Validators.required],
+                    archive: ['', Validators.required],
+                    taxes: ['', Validators.required]
+                })
+            ])
+        );
     }
 
     /**
@@ -147,7 +208,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
     /**
     * Get select value from select field
     */
-    public setPaginationData(data:any): void {
+    public setPaginationData(data: any): void {
         this.pagination = {
             currentPage: data?.page,
             itemsPerPage: data?.count,
@@ -159,9 +220,9 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
     /**
     * Change text into Title case
     */
-    public titleCase(text:string){
+    public titleCase(text: string) {
         return this.titlecasePipe.transform(text);
-    }   
+    }
 
     /**
      * Get select value from filter checkbox
@@ -179,6 +240,17 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
   */
     public pageChanged(e): void {
         console.log("Page Changed Event: ", e);
+        this.store.dispatch(this.inventoryAction.GetListBulkStock({
+            inventoryType: this.inventoryType, page: e.page, count: 50, body: {
+                "search": "",
+                "searchBy": "",
+                "sortBy": "",
+                "sort": "",
+                "expression": "GREATER_THAN",
+                "rate": 0
+            }
+        }));
+        this.changeDetection.detectChanges();
     }
 
     public toggleInput(key): void {
@@ -193,18 +265,18 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
         });
     }
 
-    public convertArrayToDropDownObject(): void{
-        this.bulkStockList.forEach( (x,i) => {
-            if(x?.taxes.length > 0){                       
+    public convertArrayToDropDownObject(): void {
+        this.bulkStockList.forEach((x, i) => {
+            if (x?.taxes?.length > 0) {
 
-                if(x?.taxes.length === 1){
+                if (x?.taxes?.length === 1) {
                     this.bulkStockList[i].taxes = [{
                         label: this.titleCase(x?.taxes[0]),
                         value: x?.taxes[0]
                     }];
-                }else{
+                } else {
                     let newObject = [];
-                    x.taxes.forEach( (y) => {
+                    x.taxes.forEach((y) => {
                         newObject.push({
                             label: this.titleCase(y),
                             value: y
@@ -215,7 +287,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
             }
         });
 
-        console.log("bulkStockList: ",this.bulkStockList)
+        console.log("bulkStockList: ", this.bulkStockList)
     }
 
     /**

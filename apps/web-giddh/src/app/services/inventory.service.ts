@@ -1487,6 +1487,6 @@ export class InventoryService {
     public GetListBulkStock(request: any): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let apiUrl = this.config.apiUrl + INVENTORY_API.GET_BULK_STOCK_WITH_INVENTROY_TYPE?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':page', encodeURIComponent(request.page))?.replace(':count', encodeURIComponent(request.count))?.replace(':inventoryType', encodeURIComponent(request.inventoryType));
-        return this.http.get(apiUrl);
+        return this.http.post(apiUrl,request.body);
     }
 }
