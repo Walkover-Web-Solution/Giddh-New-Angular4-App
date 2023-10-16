@@ -8,482 +8,498 @@
                         matTooltipPosition="left">
                         <i class="icon-options select-multiple-icon-options"> </i>
                     </button>
-                    <mat-menu #filterMenu="matMenu" class="columns-wrapper">
-                        <ng-container *ngFor="let item of customiseColumns">
-                            <button class="menu-buttons" mat-menu-item (click)="$event?.stopPropagation()"
-                                (keydown.enter)="$event?.stopPropagation(); onKeydownEnter(item)">
-                                <mat-checkbox class="inventory-checkbox" color="primary" [name]="item.value"
-                                    (ngModelChange)="saveSelectedColumns()" [(ngModel)]="item.checked"
-                                    (click)="$event?.stopPropagation()">
-                                    {{ item.label }}</mat-checkbox>
-                            </button>
-                        </ng-container>
-                    </mat-menu>
+                    <form>
+                        <mat-menu #filterMenu="matMenu" class="columns-wrapper">
+                            <ng-container *ngFor="let item of customiseColumns">
+                                <button class="menu-buttons" mat-menu-item (click)="$event?.stopPropagation()"
+                                    (keydown.enter)="$event?.stopPropagation(); onKeydownEnter(item)">
+                                    <mat-checkbox class="inventory-checkbox" color="primary" [name]="item.value"
+                                        (ngModelChange)="saveSelectedColumns()" [(ngModel)]="item.checked"
+                                        (click)="$event?.stopPropagation()">
+                                        {{ item.label }}</mat-checkbox>
+                                </button>
+                            </ng-container>
+                        </mat-menu>
+                    </form>
 
                 </div>
             </div>
             <div class="bulk-stock-body">
                 <div class="bulk-stock-table d-flex flex-column">
-                    <ng-container *ngIf="isLoading">                      
-                            <div>
-                                <giddh-page-loader></giddh-page-loader>
-                            </div>                        
+                    <ng-container *ngIf="isLoading">
+                        <div>
+                            <giddh-page-loader></giddh-page-loader>
+                        </div>
                     </ng-container>
                     <ng-container *ngIf="!isLoading">
                         <div class="table-responsive">
-                            <table class="table table-bordered">
-                                <thead>
-                                    <tr (clickOutside)="hideTableHeadInput()">
-                                          <!-- Variant Name -->
-                                        <th class="cursor-pointer"
-                                            (click)="toggleInput('variantName'); $event.stopPropagation();">
-                                            <h3 *ngIf="!tableHeadInput.variantName">Variant Name</h3>
-                                            <div *ngIf="tableHeadInput.variantName" class="border-line"
-                                                [ngClass]="{'active': tableHeadInput.variantName }">
-                                                <text-field [type]="'text'" [autoFocus]="true" [id]="'variantName'">
-                                                </text-field>
-                                            </div>
-                                        </th>
-                                        <!-- Variant UN -->
-                                        <th class="cursor-pointer"
-                                            (click)="toggleInput('variantUniqueName'); $event.stopPropagation();">
-                                            <h3 *ngIf="!tableHeadInput.variantUniqueName">Variant UN</h3>
-                                            <div *ngIf="tableHeadInput.variantUniqueName" class="border-line"
-                                                [ngClass]="{'active': tableHeadInput.variantUniqueName }">
-                                                <text-field [type]="'text'" [autoFocus]="true"
-                                                    [id]="'variantUniqueName'">
-                                                </text-field>
-                                            </div>
-                                        </th>
-                                        <!--  Stock Name -->
-                                        <th class="cursor-pointer"
-                                            (click)="toggleInput('stockName'); $event.stopPropagation();">
-                                            <h3 *ngIf="!tableHeadInput.stockName">Stock Name</h3>
-                                            <div *ngIf="tableHeadInput.stockName" class="border-line"
-                                                [ngClass]="{'active': tableHeadInput.stockName }">
-                                                <text-field [type]="'text'" [autoFocus]="true" [id]="'stockName'">
-                                                </text-field>
-                                            </div>
-                                        </th>
-                                        <!--  Stock UN -->
-                                        <th class="cursor-pointer"
-                                            (click)="toggleInput('stockUniqueName'); $event.stopPropagation();">
-                                            <h3 *ngIf="!tableHeadInput.stockUniqueName">Stock UN</h3>
-                                            <div *ngIf="tableHeadInput.stockUniqueName" class="border-line"
-                                                [ngClass]="{'active': tableHeadInput.stockUniqueName }">
-                                                <text-field [type]="'text'" [autoFocus]="true" [id]="'Uniquename'">
-                                                </text-field>
-                                            </div>
-                                        </th>
-                                        <!--  Stock Group Name -->
-                                        <th class="cursor-pointer"
-                                            (click)="toggleInput('stockGroupName'); $event.stopPropagation();">
-                                            <h3 *ngIf="!tableHeadInput.stockGroupName">Stock Group Name</h3>
-                                            <div *ngIf="tableHeadInput.stockGroupName" class="border-line"
-                                                [ngClass]="{'active': tableHeadInput.stockGroupName }">
-                                                <text-field [type]="'text'" [autoFocus]="true" [id]="'stockGroupName'">
-                                                </text-field>
-                                            </div>
-                                        </th>
-                                        <!--  Stock Unit Group -->
-                                        <th>
-                                            <h3>Stock Unit Group</h3>
-                                        </th>
-                                        <!--  Stock Base Unit -->
-                                        <th>
-                                            <h3>Stock Base Unit</h3>
-                                        </th>
-                                         <!-- Taxes -->
-                                        <th class="cursor-pointer"
-                                            (click)="toggleInput('tax'); $event.stopPropagation();">
-                                            <h3 *ngIf="!tableHeadInput.tax">Tax</h3>
-                                            <div *ngIf="tableHeadInput.tax" class="border-line"
-                                                [ngClass]="{'active': tableHeadInput.tax }">
-                                                <select-field [name]="'fields'" [options]="dropdownData"
-                                                    (selectedOption)="selectField($event)"
-                                                    [placeholder]="commonLocaleData?.app_select">
-                                                </select-field>
-                                            </div>
-                                        </th>
-                                         <!-- HSN -->
-                                        <th class="cursor-pointer"
-                                            (click)="toggleInput('hsn'); $event.stopPropagation();">
-                                            <h3 *ngIf="!tableHeadInput.hsn">HSN</h3>
-                                            <div *ngIf="tableHeadInput.hsn" class="border-line"
-                                                [ngClass]="{'active': tableHeadInput.hsn }">
-                                                <text-field [type]="'text'" [autoFocus]="true" [id]="'hsn'">
-                                                </text-field>
-                                            </div>
-                                        </th>
-                                        <!-- SAC -->
-                                        <th class="cursor-pointer"
-                                            (click)="toggleInput('sac'); $event.stopPropagation();">
-                                            <h3 *ngIf="!tableHeadInput.sac">SAC</h3>
-                                            <div *ngIf="tableHeadInput.sac" class="border-line"
-                                                [ngClass]="{'active': tableHeadInput.sac }">
-                                                <text-field [type]="'text'" [autoFocus]="true" [id]="'sac'">
-                                                </text-field>
-                                            </div>
-                                        </th>
-                                        <!-- SKU Code -->
-                                        <th class="cursor-pointer"
-                                            (click)="toggleInput('skuCode'); $event.stopPropagation();">
-                                            <h3 *ngIf="!tableHeadInput.skuCode">SKU Code
-                                            </h3>
-                                            <div *ngIf="tableHeadInput.skuCode" class="border-line"
-                                                [ngClass]="{'active': tableHeadInput.skuCode }">
-                                                <text-field [type]="'text'" [autoFocus]="true" [id]="'skuCode'">
-                                                </text-field>
-                                            </div>
-                                        </th>
-                                        <!--  Purchases Account Name -->
-                                        <th *ngIf="inventoryType === 'SERVICE' || inventoryType === 'PRODUCT'">
-                                            <h3>Purchases Account Name</h3>
-                                        </th>
-                                        <!--  Purchases Account UN -->
-                                        <th *ngIf="inventoryType === 'SERVICE' || inventoryType === 'PRODUCT'">
-                                            <h3>Purchase Account UN</h3>
-                                        </th>
-                                        <!--  Purchases Rate -->
-                                        <th *ngIf="inventoryType === 'SERVICE' || inventoryType === 'PRODUCT'">
-                                            <h3>Purchase Rate</h3>
-                                        </th>
-                                         <!--  Purchases Unit  (Array)-->
-                                        <th *ngIf="inventoryType === 'SERVICE' || inventoryType === 'PRODUCT'" class="cursor-pointer"
-                                            (click)="toggleInput('purchaseUnit'); $event.stopPropagation();">
-                                            <h3 *ngIf="!tableHeadInput.purchaseUnit">Purchase Unit</h3>
-                                            <div *ngIf="tableHeadInput.purchaseUnit" class="border-line"
-                                                [ngClass]="{'active': tableHeadInput.purchaseUnit }">
-                                                <select-field [name]="'fields'" [options]="dropdownData"
-                                                    (selectedOption)="selectField($event)"
-                                                    [placeholder]="commonLocaleData?.app_select">
-                                                </select-field>
-                                            </div>
-                                        </th>                                        
-                                        <!-- Purchase Inclusive -->
-                                        <th *ngIf="inventoryType === 'SERVICE' || inventoryType === 'PRODUCT'">
-                                            <h3>Purchase Inclusive</h3>
-                                        </th>
-                                        <!--  Sales Account Name -->
-                                        <th *ngIf="inventoryType === 'SERVICE' || inventoryType === 'PRODUCT'">
-                                            <h3>Sales Account Name</h3>
-                                        </th>
-                                         <!--  Sales Account UN -->
-                                        <th *ngIf="inventoryType === 'SERVICE' || inventoryType === 'PRODUCT'">
-                                            <h3>Sales Account UN</h3>
-                                        </th>                                      
-                                        <!--  Sales Rate -->
-                                        <th *ngIf="inventoryType === 'SERVICE' || inventoryType === 'PRODUCT'" (click)="toggleInput('salesUnit'); $event.stopPropagation();">
-                                            <h3 *ngIf="!tableHeadInput.salesUnit">Sales Rate</h3>
-                                            <div *ngIf="tableHeadInput.salesUnit" class="border-line"
-                                                [ngClass]="{'active': tableHeadInput.salesUnit }">
-                                                <text-field [type]="'text'" [autoFocus]="true" [id]="'salesRate'">
-                                                </text-field>
-                                            </div>
-                                        </th>
-                                         <!--  Sales Unit (Array)-->
-                                         <th *ngIf="inventoryType === 'SERVICE' || inventoryType === 'PRODUCT'" (click)="toggleInput('salesUnit'); $event.stopPropagation();">
-                                            <h3 *ngIf="!tableHeadInput.salesUnit">Sales Unit</h3>
-                                            <div *ngIf="tableHeadInput.salesUnit" class="border-line"
-                                                [ngClass]="{'active': tableHeadInput.salesUnit }">
-                                                <select-field [name]="'fields'" [options]="dropdownData"
-                                                    (selectedOption)="selectField($event)"
-                                                    [placeholder]="commonLocaleData?.app_select">
-                                                </select-field>
-                                            </div>
-                                        </th>
-                                        <!-- Sales Inclusive -->
-                                        <th *ngIf="inventoryType === 'SERVICE' || inventoryType === 'PRODUCT'">
-                                            <h3>Sales Inclusive</h3>
-                                        </th>
-                                        <!-- Fixed Asset Units -->
-                                        <th *ngIf="inventoryType === 'FIXED_ASSETS'">
-                                            <h3>Fixed Asset Units</h3>
-                                        </th>
-                                        <!-- Fixed Asset AN -->
-                                        <th *ngIf="inventoryType === 'FIXED_ASSETS'">
-                                            <h3>Fixed Asset AN</h3>
-                                        </th>
-                                        <!-- Fixed Asset Account UN -->
-                                        <th *ngIf="inventoryType === 'FIXED_ASSETS'">
-                                            <h3>Fixed Asset Account UN</h3>
-                                        </th>
-                                        <!-- Fixed Asset Unit -->
-                                        <th *ngIf="inventoryType === 'FIXED_ASSETS'">
-                                            <h3>Fixed Asset Unit</h3>
-                                        </th>
-                                        <!-- Fixed Asset AN -->
-                                        <th *ngIf="inventoryType === 'FIXED_ASSETS'">
-                                            <h3>Fixed Asset AN</h3>
-                                        </th>
-                                        <!-- Fixed Asset Account UN -->
-                                        <th *ngIf="inventoryType === 'FIXED_ASSETS'">
-                                            <h3>Fixed Asset Account UN</h3>
-                                        </th>
-                                        <!-- Archive -->
-                                        <th>
-                                            <h3>Archive</h3>
-                                        </th>
-                                        <!-- Tax UN -->
-                                        <th>
-                                            <h3>Tax UN</h3>
-                                        </th>
-                                        <!-- Sales Tax Inclusive -->
-                                        <th *ngIf="inventoryType === 'SERVICE' || inventoryType === 'PRODUCT'">
-                                            <h3>Sales Tax Inclusive</h3>
-                                        </th>
-                                        <!-- Purchase Tax Inclusive -->
-                                        <th *ngIf="inventoryType === 'SERVICE' || inventoryType === 'PRODUCT'">
-                                            <h3>Purchase Tax Inclusive</h3>
-                                        </th>
-                                        <!-- FixedAsset Tax Inclusive -->
-                                        <th *ngIf="inventoryType === 'FIXED_ASSETS'">
-                                            <h3>FixedAsset Tax Inclusive</h3>
-                                        </th>                                        
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr *ngFor="let x of bulkStockList; let i = index; let l = last">
-                                        <!-- Variant Name -->
-                                        <td>
-                                            <div class="border-line">
-                                                <text-field [type]="'text'" [ngModel]="x.variantName">
-                                                </text-field>
-                                            </div>
-                                        </td>
-                                        <!-- Variant UN -->
-                                        <td>
-                                            <div class="border-line">
-                                                <text-field [type]="'text'" [(ngModel)]="x.variantUniqueName">
-                                                </text-field>
-                                            </div>
-                                        </td>
-                                        <!--  Stock Name -->
-                                        <td>
-                                            <div class="border-line">
-                                                <text-field [type]="'text'" [(ngModel)]="x.stockName">
-                                                </text-field>
-                                            </div>
-                                        </td>
-                                         <!--  Stock UN -->
-                                        <td>
-                                            <div class="border-line">
-                                                <text-field [type]="'text'" [(ngModel)]="x.stockUniqueName">
-                                                </text-field>
-                                            </div>
-                                        </td>
-                                         <!--  Stock Group Name -->
-                                        <td>
-                                            <div class="border-line">
-                                                <text-field [type]="'text'" [(ngModel)]="x.stockGroupName">
-                                                </text-field>
-                                            </div>
-                                        </td>
-                                        <!--  Stock Unit Group -->
-                                        <td>
-                                            <div class="border-line">
-                                                <text-field [type]="'text'" [value]="">
-                                                </text-field>
-                                            </div>
-                                        </td>
-                                         <!--  Stock Base Unit -->
-                                        <td>
-                                            <div class="border-line">
-                                                <select-field 
-                                                    [cssClass]="x?.taxes?.length ? null : 'text-center'"
-                                                    [name]="'fields'"
-                                                    [options]="x?.taxes"
-                                                    [placeholder]="x?.taxes?.length ? '' : 'N/A'"  
-                                                    (selectedOption)="selectField($event)"
-                                                    >
-                                                </select-field>
-                                            </div>
-                                        </td>
-                                        <!-- Taxes -->
-                                        <td>
-                                            <div class="border-line">
-                                                <select-field [name]="'fields'" [options]="dropdownData"
-                                                    (selectedOption)="selectField($event)">
-                                                </select-field>
-                                            </div>
-                                        </td>
-                                         <!-- HSN -->
-                                        <td>
-                                            <div class="border-line">
-                                                <text-field [type]="'text'" [value]="" [(ngModel)]="x.hsnNo">
-                                                </text-field>
-                                            </div>
-                                        </td>
-                                         <!-- SAC -->
-                                        <td>
-                                            <div class="border-line">
-                                                <text-field [type]="'text'" [value]="" [(ngModel)]="x.sacNo">
-                                                </text-field>
-                                            </div>
-                                        </td>
-                                         <!-- SKU Code -->
-                                        <td>
-                                            <div class="border-line">
-                                                <text-field [type]="'text'" [value]="" [(ngModel)]="x.skuCode">
-                                                </text-field>
-                                            </div>
-                                        </td>
-                                        <!--  Purchases Account Name -->
-                                        <td *ngIf="inventoryType === 'SERVICE' || inventoryType === 'PRODUCT'">
-                                            <div class="border-line">
-                                                <text-field [type]="'text'" [value]="" [(ngModel)]="x.purchaseAccountName">
-                                                </text-field>
-                                            </div>
-                                        </td>
-                                         <!--  Purchases Account UN -->
-                                        <td *ngIf="inventoryType === 'SERVICE' || inventoryType === 'PRODUCT'">
-                                            <div class="border-line">
-                                                <text-field [type]="'text'" [value]="" [(ngModel)]="x.purchaseAccountUniqueName">
-                                                </text-field>
-                                            </div>
-                                        </td>
-                                        <!--  Purchases Rate -->
-                                        <td *ngIf="inventoryType === 'SERVICE' || inventoryType === 'PRODUCT'">
-                                            <div class="border-line">
-                                                <text-field [type]="'text'" [value]="" [(ngModel)]="x.variantName">
-                                                </text-field>
-                                            </div>
-                                        </td>
-                                        <!--  Purchases Rate Unit  -->
-                                        <td *ngIf="inventoryType === 'SERVICE' || inventoryType === 'PRODUCT'">
-                                            <div class="border-line">
-                                                <text-field [type]="'text'" [value]="" [(ngModel)]="x.variantName">
-                                                </text-field>
-                                            </div>
-                                        </td>
-                                        <!-- Purchase Inclusive -->
-                                        <td *ngIf="inventoryType === 'SERVICE' || inventoryType === 'PRODUCT'">
-                                            <div class="border-line">
-                                                <text-field [type]="'text'" [value]="" [(ngModel)]="x.variantName">
-                                                </text-field>
-                                            </div>
-                                        </td>
-                                        <!--  Sales Account Name -->
-                                        <td *ngIf="inventoryType === 'SERVICE' || inventoryType === 'PRODUCT'">
-                                            <div class="border-line">
-                                                <text-field [type]="'text'" [value]="" [(ngModel)]="x.salesAccountName">
-                                                </text-field>
-                                            </div>
-                                        </td>
-                                         <!--  Sales Account UN -->
-                                        <td *ngIf="inventoryType === 'SERVICE' || inventoryType === 'PRODUCT'">
-                                            <div class="border-line">
-                                                <text-field [type]="'text'" [value]="" [(ngModel)]="x.salesAccountUniqueName">
-                                                </text-field>
-                                            </div>
-                                        </td>
-                                         <!--  Sales Rate -->
-                                        <td *ngIf="inventoryType === 'SERVICE' || inventoryType === 'PRODUCT'">
-                                            <div class="border-line">
-                                                <text-field [type]="'text'" [value]="" [(ngModel)]="x.variantName">
-                                                </text-field>
-                                            </div>
-                                        </td>
-                                         <!--  Sales Unit (Array) -->
-                                         <td *ngIf="inventoryType === 'SERVICE' || inventoryType === 'PRODUCT'">
-                                            <div class="border-line">
-                                                <select-field 
-                                                    [cssClass]="x?.salesUnits?.length ? null : 'text-center'"
-                                                    [name]="'fields'"
-                                                    [options]="x?.salesUnits"
-                                                    [placeholder]="x?.salesUnits?.length ? '' : 'N/A'"  
-                                                    (selectedOption)="selectField($event)"
-                                                >
-                                                </select-field>
-                                            </div>
-                                        </td>
-                                        <!-- Sales Inclusive -->
-                                        <td *ngIf="inventoryType === 'SERVICE' || inventoryType === 'PRODUCT'">
-                                            <div class="border-line">
-                                                <text-field [type]="'text'" [value]="" [(ngModel)]="x.variantName">
-                                                </text-field>
-                                            </div>
-                                        </td>
-                                        <!-- Fixed Asset Units (Array)-->
-                                        <td *ngIf="inventoryType === 'FIXED_ASSETS'">
-                                            <div class="border-line">
-                                                <text-field [type]="'text'" [value]="" [(ngModel)]="x.variantName">
-                                                </text-field>
-                                            </div>
-                                        </td>
-                                        <!-- Fixed Asset AN -->
-                                        <td *ngIf="inventoryType === 'FIXED_ASSETS'">
-                                            <div class="border-line">
-                                                <text-field [type]="'text'" [value]="" [(ngModel)]="x.variantName">
-                                                </text-field>
-                                            </div>
-                                        </td>
-                                        <!-- Fixed Asset Account UN -->
-                                        <td *ngIf="inventoryType === 'FIXED_ASSETS'">
-                                            <div class="border-line">
-                                                <text-field [type]="'text'" [value]="" [(ngModel)]="x.variantName">
-                                                </text-field>
-                                            </div>
-                                        </td>
-                                        <!-- Fixed Asset Unit -->
-                                        <td *ngIf="inventoryType === 'FIXED_ASSETS'">
-                                            <div class="border-line">
-                                                <text-field [type]="'text'" [value]="" [(ngModel)]="x.variantName">
-                                                </text-field>
-                                            </div>
-                                        </td>
-                                        <!-- Fixed Asset AN -->
-                                        <td *ngIf="inventoryType === 'FIXED_ASSETS'">
-                                            <div class="border-line">
-                                                <text-field [type]="'text'" [value]="" [(ngModel)]="x.variantName">
-                                                </text-field>
-                                            </div>
-                                        </td>
-                                        <!-- Fixed Asset Account UN -->
-                                        <td *ngIf="inventoryType === 'FIXED_ASSETS'">
-                                            <div class="border-line">
-                                                <text-field [type]="'text'" [value]="" [(ngModel)]="x.variantName">
-                                                </text-field>
-                                            </div>
-                                        </td>
-                                        <!-- Archive -->
-                                        <td>
-                                            <div class="border-line">
-                                                <text-field [type]="'text'" [value]="" [(ngModel)]="x.archive">
-                                                </text-field>
-                                            </div>
-                                        </td>
-                                        <!-- Tax UN  -->
-                                        <td>
-                                            <div class="border-line">
-                                                <text-field [type]="'text'" [value]="" [(ngModel)]="x.variantName">
-                                                </text-field>
-                                            </div>
-                                        </td>
-                                         <!-- Sales Tax Inclusive -->
-                                         <td *ngIf="inventoryType === 'SERVICE' || inventoryType === 'PRODUCT'">
-                                            <div class="border-line">
-                                                <text-field [type]="'text'" [value]="" [(ngModel)]="x.salesTaxInclusive">
-                                                </text-field>
-                                            </div>
-                                        </td>
-                                        <!-- Purchase Tax Inclusive -->
-                                        <td *ngIf="inventoryType === 'SERVICE' || inventoryType === 'PRODUCT'">
-                                            <div class="border-line">
-                                                <text-field [type]="'text'" [value]="" [(ngModel)]="x.purchaseTaxInclusive">
-                                                </text-field>
-                                            </div>
-                                        </td>
-                                        <!-- FixedAsset Tax Inclusive -->
-                                        <td *ngIf="inventoryType === 'FIXED_ASSETS'">
-                                            <div class="border-line">
-                                                <text-field [type]="'text'" [value]="" [(ngModel)]="x.fixedAssetTaxInclusive">
-                                                </text-field>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                            <form [formGroup]="bulkStockEditForm" (ngSubmit)="onFormSubmit()">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr (clickOutside)="hideTableHeadInput()">
+                                            <!-- Variant Name -->
+                                            <th class="cursor-pointer"
+                                                (click)="toggleInput('variantName'); $event.stopPropagation();">
+                                                <h3 *ngIf="!tableHeadInput.variantName">Variant Name</h3>
+                                                <div *ngIf="tableHeadInput.variantName" class="border-line"
+                                                    [ngClass]="{'active': tableHeadInput.variantName }">
+                                                    <text-field [type]="'text'" [autoFocus]="true">
+                                                    </text-field>
+                                                </div>
+                                            </th>
+                                            <!-- Variant UN -->
+                                            <th class="cursor-pointer"
+                                                (click)="toggleInput('variantUniqueName'); $event.stopPropagation();">
+                                                <h3 *ngIf="!tableHeadInput.variantUniqueName">Variant UN</h3>
+                                                <div *ngIf="tableHeadInput.variantUniqueName" class="border-line"
+                                                    [ngClass]="{'active': tableHeadInput.variantUniqueName }">
+                                                    <text-field [type]="'text'" [autoFocus]="true"
+                                                        [id]="'variantUniqueName'">
+                                                    </text-field>
+                                                </div>
+                                            </th>
+                                            <!--  Stock Name -->
+                                            <th class="cursor-pointer"
+                                                (click)="toggleInput('stockName'); $event.stopPropagation();">
+                                                <h3 *ngIf="!tableHeadInput.stockName">Stock Name</h3>
+                                                <div *ngIf="tableHeadInput.stockName" class="border-line"
+                                                    [ngClass]="{'active': tableHeadInput.stockName }">
+                                                    <text-field [type]="'text'" [autoFocus]="true" [id]="'stockName'">
+                                                    </text-field>
+                                                </div>
+                                            </th>
+                                            <!--  Stock UN -->
+                                            <th class="cursor-pointer"
+                                                (click)="toggleInput('stockUniqueName'); $event.stopPropagation();">
+                                                <h3 *ngIf="!tableHeadInput.stockUniqueName">Stock UN</h3>
+                                                <div *ngIf="tableHeadInput.stockUniqueName" class="border-line"
+                                                    [ngClass]="{'active': tableHeadInput.stockUniqueName }">
+                                                    <text-field [type]="'text'" [autoFocus]="true" [id]="'Uniquename'">
+                                                    </text-field>
+                                                </div>
+                                            </th>
+                                            <!--  Stock Group Name -->
+                                            <th class="cursor-pointer"
+                                                (click)="toggleInput('stockGroupName'); $event.stopPropagation();">
+                                                <h3 *ngIf="!tableHeadInput.stockGroupName">Stock Group Name</h3>
+                                                <div *ngIf="tableHeadInput.stockGroupName" class="border-line"
+                                                    [ngClass]="{'active': tableHeadInput.stockGroupName }">
+                                                    <text-field [type]="'text'" [autoFocus]="true"
+                                                        [id]="'stockGroupName'">
+                                                    </text-field>
+                                                </div>
+                                            </th>
+                                            <!-- HSN -->
+                                            <th class="cursor-pointer"
+                                                (click)="toggleInput('hsn'); $event.stopPropagation();">
+                                                <h3 *ngIf="!tableHeadInput.hsn">HSN</h3>
+                                                <div *ngIf="tableHeadInput.hsn" class="border-line"
+                                                    [ngClass]="{'active': tableHeadInput.hsn }">
+                                                    <text-field [type]="'text'" [autoFocus]="true" [id]="'hsn'">
+                                                    </text-field>
+                                                </div>
+                                            </th>
+                                            <!-- SAC -->
+                                            <th class="cursor-pointer"
+                                                (click)="toggleInput('sac'); $event.stopPropagation();">
+                                                <h3 *ngIf="!tableHeadInput.sac">SAC</h3>
+                                                <div *ngIf="tableHeadInput.sac" class="border-line"
+                                                    [ngClass]="{'active': tableHeadInput.sac }">
+                                                    <text-field [type]="'text'" [autoFocus]="true" [id]="'sac'">
+                                                    </text-field>
+                                                </div>
+                                            </th>
+                                            <!-- SKU Code -->
+                                            <th class="cursor-pointer"
+                                                (click)="toggleInput('skuCode'); $event.stopPropagation();">
+                                                <h3 *ngIf="!tableHeadInput.skuCode">SKU Code
+                                                </h3>
+                                                <div *ngIf="tableHeadInput.skuCode" class="border-line"
+                                                    [ngClass]="{'active': tableHeadInput.skuCode }">
+                                                    <text-field [type]="'text'" [autoFocus]="true" [id]="'skuCode'">
+                                                    </text-field>
+                                                </div>
+                                            </th>
+                                            <!--  Purchases Account Name -->
+                                            <th *ngIf="inventoryType === 'SERVICE' || inventoryType === 'PRODUCT'">
+                                                <h3>Purchases Account Name</h3>
+                                            </th>
+                                            <!--  Purchases Account UN -->
+                                            <th *ngIf="inventoryType === 'SERVICE' || inventoryType === 'PRODUCT'">
+                                                <h3>Purchase Account UN</h3>
+                                            </th>
+                                            <!--  Purchases Rate -->
+                                            <th *ngIf="inventoryType === 'SERVICE' || inventoryType === 'PRODUCT'">
+                                                <h3>Purchase Rate</h3>
+                                            </th>
+                                            <!--  Purchases Unit  (Menu)-->
+                                            <th *ngIf="inventoryType === 'SERVICE' || inventoryType === 'PRODUCT'"
+                                                class="cursor-pointer"
+                                                (click)="toggleInput('purchaseUnit'); $event.stopPropagation();">
+                                                <h3 *ngIf="!tableHeadInput.purchaseUnit">Purchase Unit</h3>
+                                                <div *ngIf="tableHeadInput.purchaseUnit" class="border-line"
+                                                    [ngClass]="{'active': tableHeadInput.purchaseUnit }">
+                                                    <mat-select multiple class="vertical-margin">
+                                                        <mat-option *ngFor="let dummy of dropdownData"
+                                                            [value]="dummy.value">{{dummy.label}}</mat-option>
+                                                            <mat-option
+                                                            class="create-update-no-data"
+                                                            [disabled]="true"
+                                                            *ngIf="!dummy?.length"
+                                                            >
+                                                            {{ commonLocaleData?.app_no_result_found }}
+                                                        </mat-option>
+                                                    </mat-select>
+                                                </div>
+                                            </th>
+                                            <!--  Sales Account Name -->
+                                            <th *ngIf="inventoryType === 'SERVICE' || inventoryType === 'PRODUCT'">
+                                                <h3>Sales Account Name</h3>
+                                            </th>
+                                            <!--  Sales Account UN -->
+                                            <th *ngIf="inventoryType === 'SERVICE' || inventoryType === 'PRODUCT'">
+                                                <h3>Sales Account UN</h3>
+                                            </th>
+                                            <!--  Sales Rate -->
+                                            <th *ngIf="inventoryType === 'SERVICE' || inventoryType === 'PRODUCT'"
+                                                (click)="toggleInput('salesUnit'); $event.stopPropagation();">
+                                                <h3 *ngIf="!tableHeadInput.salesUnit">Sales Rate</h3>
+                                                <div *ngIf="tableHeadInput.salesUnit" class="border-line"
+                                                    [ngClass]="{'active': tableHeadInput.salesUnit }">
+                                                    <text-field [type]="'text'" [autoFocus]="true" [id]="'salesRate'">
+                                                    </text-field>
+                                                </div>
+                                            </th>
+                                            <!--  Sales Unit (Menu)-->
+                                            <th *ngIf="inventoryType === 'SERVICE' || inventoryType === 'PRODUCT'"
+                                                (click)="toggleInput('salesUnit'); $event.stopPropagation();">
+                                                <h3 *ngIf="!tableHeadInput.salesUnit">Sales Unit</h3>
+                                                <div *ngIf="tableHeadInput.salesUnit" class="border-line"
+                                                    [ngClass]="{'active': tableHeadInput.salesUnit }">
+                                                    <mat-select multiple class="vertical-margin">
+                                                        <mat-option *ngFor="let dummy of dropdownData"
+                                                            [value]="dummy.value">{{dummy.label}}</mat-option>
+                                                        <!-- <mat-option
+                                                            class="create-update-no-data"
+                                                            [disabled]="true"
+                                                            *ngIf="!dummy.length"
+                                                            >
+                                                            {{ commonLocaleData?.app_no_result_found }}
+                                                        </mat-option> -->
+                                                    </mat-select>
+                                                </div>
+                                            </th>
+                                            <!-- Fixed Asset Units (Menu) -->
+                                            <th *ngIf="inventoryType === 'FIXED_ASSETS'">
+                                                <h3 *ngIf="!tableHeadInput.fixedAssetUnits">Fixed Asset Units</h3>
+                                                <div *ngIf="tableHeadInput.fixedAssetUnits" class="border-line"
+                                                    [ngClass]="{'active': tableHeadInput.fixedAssetUnits }">
+                                                    <mat-select multiple class="vertical-margin">
+                                                        <mat-option *ngFor="let dummy of dropdownData"
+                                                            [value]="dummy.value">{{dummy.label}}</mat-option>
+                                                        <!-- <mat-option
+                                                            class="create-update-no-data"
+                                                            [disabled]="true"
+                                                            *ngIf="!dummy.length"
+                                                            >
+                                                            {{ commonLocaleData?.app_no_result_found }}
+                                                        </mat-option> -->
+                                                    </mat-select>
+                                                </div>
+                                            </th>
+                                            <!-- Fixed Asset AN -->
+                                            <th *ngIf="inventoryType === 'FIXED_ASSETS'">
+                                                <h3>Fixed Asset AN</h3>
+                                            </th>
+                                            <!-- Fixed Asset Account UN -->
+                                            <th *ngIf="inventoryType === 'FIXED_ASSETS'">
+                                                <h3>Fixed Asset Account UN</h3>
+                                            </th>
+                                            <!-- Fixed Asset Unit -->
+                                            <th *ngIf="inventoryType === 'FIXED_ASSETS'">
+                                                <h3>Fixed Asset Unit</h3>
+                                            </th>
+                                            <!-- Fixed Asset AN -->
+                                            <th *ngIf="inventoryType === 'FIXED_ASSETS'">
+                                                <h3>Fixed Asset AN</h3>
+                                            </th>
+                                            <!-- Fixed Asset Account UN -->
+                                            <th *ngIf="inventoryType === 'FIXED_ASSETS'">
+                                                <h3>Fixed Asset Account UN</h3>
+                                            </th>
+                                            <!-- Archive -->
+                                            <th>
+                                                <h3>Archive</h3>
+                                            </th>
+                                            <!-- Taxes -->
+                                            <th class="cursor-pointer"
+                                                (click)="toggleInput('tax'); $event.stopPropagation();">
+                                                <h3 *ngIf="!tableHeadInput.tax">Tax</h3>
+                                                <div *ngIf="tableHeadInput.tax" class="border-line"
+                                                    [ngClass]="{'active': tableHeadInput.tax }">
+                                                    <mat-select multiple class="vertical-margin">
+                                                        <mat-option *ngFor="let dummy of dropdownData"
+                                                            [value]="dummy.value">{{dummy.label}}</mat-option>
+                                                        <!-- <mat-option
+                                                            class="create-update-no-data"
+                                                            [disabled]="true"
+                                                            *ngIf="!dummy.length"
+                                                            >
+                                                            {{ commonLocaleData?.app_no_result_found }}
+                                                        </mat-option> -->
+                                                    </mat-select>
+                                                </div>
+                                            </th>
+                                            <!-- Sales Tax Inclusive -->
+                                            <th *ngIf="inventoryType === 'SERVICE' || inventoryType === 'PRODUCT'">
+                                                <h3>Sales Tax Inclusive</h3>
+                                            </th>
+                                            <!-- Purchase Tax Inclusive -->
+                                            <th *ngIf="inventoryType === 'SERVICE' || inventoryType === 'PRODUCT'">
+                                                <h3>Purchase Tax Inclusive</h3>
+                                            </th>
+                                            <!-- FixedAsset Tax Inclusive -->
+                                            <th *ngIf="inventoryType === 'FIXED_ASSETS'">
+                                                <h3>FixedAsset Tax Inclusive</h3>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody formArrayName="fields">
+                                        <ng-container
+                                            *ngFor="let row of bulkStockEditForm.get('fields')['controls']; let i=index">
+                                            <tr [formGroupName]="i">
+                                                <!-- Variant Name -->
+                                                <td (click)="getInputIndex(i,'variantName')">
+                                                    <div class="border-line">
+                                                        <text-field [type]="'text'" formControlName="variantName">
+                                                        </text-field>
+                                                    </div>
+                                                </td>
+                                                <!-- Variant UN -->
+                                                <td (click)="getInputIndex(i,'variantUniqueName')">
+                                                    <div class="border-line">
+                                                        <text-field [type]="'text'" formControlName="variantUniqueName">
+                                                        </text-field>
+                                                    </div>
+                                                </td>
+                                                <!--  Stock Name -->
+                                                <td (click)="getInputIndex(i,'stockName')">
+                                                    <div class="border-line">
+                                                        <text-field [type]="'text'" formControlName="stockName">
+                                                        </text-field>
+                                                    </div>
+                                                </td>
+                                                <!--  Stock UN -->
+                                                <td (click)="getInputIndex(i,'stockUniqueName')">
+                                                    <div class="border-line">
+                                                        <text-field [type]="'text'" formControlName="stockUniqueName">
+                                                        </text-field>
+                                                    </div>
+                                                </td>
+                                                <!--  Stock Group Name -->
+                                                <td (click)="getInputIndex(i,'stockGroupName')">
+                                                    <div class="border-line">
+                                                        <text-field [type]="'text'" formControlName="stockGroupName">
+                                                        </text-field>
+                                                    </div>
+                                                </td>
+                                                <!-- HSN -->
+                                                <td (click)="getInputIndex(i,'hsnNo')">
+                                                    <div class="border-line">
+                                                        <text-field [type]="'text'" formControlName="hsnNo">
+                                                        </text-field>
+                                                    </div>
+                                                </td>
+                                                <!-- SAC -->
+                                                <td (click)="getInputIndex(i,'sacNo')">
+                                                    <div class="border-line">
+                                                        <text-field [type]="'text'" formControlName="sacNo">
+                                                        </text-field>
+                                                    </div>
+                                                </td>
+                                                <!-- SKU Code -->
+                                                <td (click)="getInputIndex(i,'skuCode')">
+                                                    <div class="border-line">
+                                                        <text-field [type]="'text'" formControlName="skuCode">
+                                                        </text-field>
+                                                    </div>
+                                                </td>
+                                                <!--  Purchases Account Name -->
+                                                <td (click)="getInputIndex(i,'purchaseAccountName')" *ngIf="inventoryType === 'SERVICE' || inventoryType === 'PRODUCT'">
+                                                    <div class="border-line">
+                                                        <text-field [type]="'text'"
+                                                            formControlName="purchaseAccountName">
+                                                        </text-field>
+                                                    </div>
+                                                </td>
+                                                <!--  Purchases Account UN -->
+                                                <td (click)="getInputIndex(i,'purchaseAccountUniqueName')" *ngIf="inventoryType === 'SERVICE' || inventoryType === 'PRODUCT'">
+                                                    <div class="border-line">
+                                                        <text-field [type]="'text'"
+                                                            formControlName="purchaseAccountUniqueName">
+                                                        </text-field>
+                                                    </div>
+                                                </td>
+                                                <!--  Purchases Rate -->
+                                                <td (click)="getInputIndex(i,'purchaseRate')" *ngIf="inventoryType === 'SERVICE' || inventoryType === 'PRODUCT'">
+                                                    <div class="border-line">
+                                                        <text-field [type]="'text'" formControlName="purchaseRate">
+                                                        </text-field>
+                                                    </div>
+                                                </td>
+                                                <!--  Purchases Unit  (Menu)-->
+                                                <td (click)="getInputIndex(i,'purchaseUnits')" *ngIf="inventoryType === 'SERVICE' || inventoryType === 'PRODUCT'">
+                                                    <div class="border-line">
+                                                    <mat-select  formControlName="purchaseUnits" multiple class="vertical-margin">
+                                                        <mat-option
+                                                            *ngFor="let purchaseUnit of dropdownValues[i]?.purchaseUnits"
+                                                            [value]="purchaseUnit?.uniqueName">{{purchaseUnit?.name}}</mat-option>
+                                                    </mat-select>
+                                                    </div>
+                                                </td>
+                                                <!--  Sales Account Name -->
+                                                <td (click)="getInputIndex(i,'salesAccountName')" *ngIf="inventoryType === 'SERVICE' || inventoryType === 'PRODUCT'">
+                                                    <div class="border-line">
+                                                        <text-field [type]="'text'" formControlName="salesAccountName">
+                                                        </text-field>
+                                                    </div>
+                                                </td>
+                                                <!--  Sales Account UN -->
+                                                <td (click)="getInputIndex(i,'salesAccountUniqueName')" *ngIf="inventoryType === 'SERVICE' || inventoryType === 'PRODUCT'">
+                                                    <div class="border-line">
+                                                        <text-field [type]="'text'"
+                                                            formControlName="salesAccountUniqueName">
+                                                        </text-field>
+                                                    </div>
+                                                </td>
+                                                <!--  Sales Rate -->
+                                                <td (click)="getInputIndex(i,'salesRate')" *ngIf="inventoryType === 'SERVICE' || inventoryType === 'PRODUCT'">
+                                                    <div class="border-line">
+                                                        <text-field [type]="'text'" formControlName="salesRate">
+                                                        </text-field>
+                                                    </div>
+                                                </td>
+                                                <!--  Sales Unit (Menu) -->
+                                                <td (click)="getInputIndex(i,'salesUnits')" *ngIf="inventoryType === 'SERVICE' || inventoryType === 'PRODUCT'">
+                                                    <div class="border-line">
+                                                        <mat-select formControlName="salesUnits" multiple class="vertical-margin">
+                                                            <mat-option
+                                                                *ngFor="let salesUnit of dropdownValues[i]?.salesUnits"
+                                                                [value]="salesUnit?.uniqueName">{{salesUnit?.name}}</mat-option>
+                                                        </mat-select>
+                                                    </div>
+                                                </td>
+                                                <!-- Fixed Asset Units (Menu)-->
+                                                <td (click)="getInputIndex(i,'fixedAssetUnits')" *ngIf="inventoryType === 'FIXED_ASSETS'">
+                                                    <div class="border-line">
+                                                        <mat-select formControlName="fixedAssetUnits" multiple class="vertical-margin">
+                                                            <mat-option
+                                                                *ngFor="let fixedAssetUnit of dropdownValues[i]?.fixedAssetUnits"
+                                                                [value]="fixedAssetUnit?.uniqueName">{{fixedAssetUnit?.name}}</mat-option>
+                                                        </mat-select>
+                                                    </div>
+                                                </td>
+                                                <!-- Fixed Asset AN -->
+                                                <td (click)="getInputIndex(i,'fixedAssetAccountName')" *ngIf="inventoryType === 'FIXED_ASSETS'">
+                                                    <div class="border-line">
+                                                        <text-field [type]="'text'"
+                                                            formControlName="fixedAssetAccountName">
+                                                        </text-field>
+                                                    </div>
+                                                </td>
+                                                <!-- Fixed Asset Account UN -->
+                                                <td (click)="getInputIndex(i,'fixedAssetAccountUniqueName')" *ngIf="inventoryType === 'FIXED_ASSETS'">
+                                                    <div class="border-line">
+                                                        <text-field [type]="'text'"
+                                                            formControlName="fixedAssetAccountUniqueName">
+                                                        </text-field>
+                                                    </div>
+                                                </td>
+                                                <!-- Fixed Asset Unit (Menu)-->
+                                                <td (click)="getInputIndex(i,'fixedAssetUnits')" *ngIf="inventoryType === 'FIXED_ASSETS'">
+                                                    <div class="border-line">
+                                                        <text-field [type]="'text'" formControlName="fixedAssetUnits">
+                                                        </text-field>
+                                                    </div>
+                                                </td>
+                                                <!-- Fixed Asset AN -->
+                                                <td (click)="getInputIndex(i,'fixedAssetAccountName')" *ngIf="inventoryType === 'FIXED_ASSETS'">
+                                                    <div class="border-line">
+                                                        <text-field [type]="'text'"
+                                                            formControlName="fixedAssetAccountName">
+                                                        </text-field>
+                                                    </div>
+                                                </td>
+                                                <!-- Fixed Asset Account UN -->
+                                                <td (click)="getInputIndex(i,'fixedAssetAccountUniqueName')" *ngIf="inventoryType === 'FIXED_ASSETS'">
+                                                    <div class="border-line">
+                                                        <text-field [type]="'text'"
+                                                            formControlName="fixedAssetAccountUniqueName">
+                                                        </text-field>
+                                                    </div>
+                                                </td>
+                                                <!-- Archive -->
+                                                <td (click)="getInputIndex(i,'archive')">
+                                                    <div class="border-line">
+                                                        <text-field [type]="'text'" formControlName="archive">
+                                                        </text-field>
+                                                    </div>
+                                                </td>
+                                                <!-- Tax (Menu)-->
+                                                <td (click)="getInputIndex(i,'taxes')">
+                                                    <div class="border-line">
+                                                        <mat-select
+                                                            name="taxes"
+                                                            formControlName="taxes"
+                                                            multiple
+                                                            (openedChange)="openedSelectTax($event)"
+                                                        >
+                                                        <mat-option
+                                                            *ngFor="let tax of taxes"
+                                                            [value]="tax?.uniqueName"
+                                                            [disabled]="tax.isDisabled"
+                                                            [selected]="tax.isChecked"
+                                                            (onSelectionChange)="!tax.isDisabled ? selectTax(tax) : ''"
+                                                            >{{ tax.name }}</mat-option
+                                                        >
+                                                        <mat-option
+                                                            class="create-update-no-data"
+                                                            [disabled]="true"
+                                                            *ngIf="!taxes?.length"
+                                                            >
+                                                            {{ commonLocaleData?.app_no_result_found }}
+                                                        </mat-option>
+                                                        </mat-select>
+                                                    </div>
+                                                </td>
+                                                <!-- Sales Tax Inclusive -->
+                                                <td (click)="getInputIndex(i,'salesTaxInclusive')" *ngIf="inventoryType === 'SERVICE' || inventoryType === 'PRODUCT'">
+                                                    <div class="border-line">
+                                                        <text-field [type]="'text'" formControlName="salesTaxInclusive">
+                                                        </text-field>
+                                                    </div>
+                                                </td>
+                                                <!-- Purchase Tax Inclusive -->
+                                                <td (click)="getInputIndex(i,'purchaseTaxInclusive')" *ngIf="inventoryType === 'SERVICE' || inventoryType === 'PRODUCT'">
+                                                    <div class="border-line">
+                                                        <text-field [type]="'text'"
+                                                            formControlName="purchaseTaxInclusive">
+                                                        </text-field>
+                                                    </div>
+                                                </td>
+                                                <!-- FixedAsset Tax Inclusive -->
+                                                <td (click)="getInputIndex(i,'fixedAssetTaxInclusive')" *ngIf="inventoryType === 'FIXED_ASSETS'">
+                                                    <div class="border-line">
+                                                        <text-field [type]="'text'"
+                                                            formControlName="fixedAssetTaxInclusive">
+                                                        </text-field>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </ng-container>
+                                    </tbody>
+                                </table>
+                            </form>
                         </div>
 
                         <div class="pagination-wrapper mt-auto">

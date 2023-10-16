@@ -582,7 +582,6 @@ export class InventoryAction {
                 x.stockName = x?.stockName ? x.stockName : null,
                 x.stockUniqueName = x?.stockUniqueName ? x.stockUniqueName : null,
                 x.stockGroupName = x?.stockGroupName ? x.stockGroupName : null,
-                x.stockUnitGroup = x?.stockUnitGroup ? x.stockUnitGroup : null,
                 x.stockGroupUniqueName = x?.stockGroupUniqueName ? x.stockGroupUniqueName : null,
                 x.purchaseUnits = x?.purchaseUnits ? x.purchaseUnits : null,
                 x.purchaseAccountName = x?.purchaseAccountName ? x.purchaseAccountName : null,
