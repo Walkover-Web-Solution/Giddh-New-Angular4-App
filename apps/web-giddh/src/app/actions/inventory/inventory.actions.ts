@@ -587,13 +587,13 @@ export class InventoryAction {
                 x.purchaseAccountName = x?.purchaseAccountName ? x.purchaseAccountName : null,
                 x.purchaseAccountUniqueName = x?.purchaseAccountUniqueName ? x.purchaseAccountUniqueName : null,
                 x.purchaseRate = x?.purchaseRate ? x.purchaseRate : null,
-                x.purchaseTaxInclusive = x?.purchaseTaxInclusive ? x.purchaseTaxInclusive : null,
+                x.purchaseTaxInclusive = x.purchaseTaxInclusive === true ||  x?.purchaseTaxInclusive === false ? x.purchaseTaxInclusive : null,
                 x.salesUnits = x?.salesUnits ? x.salesUnits : null,
                 x.salesAccountName = x?.salesAccountName ? x.salesAccountName : null,
                 x.salesAccountUniqueName = x?.salesAccountUniqueName ? x.salesAccountUniqueName : null,
                 x.salesRate = x?.salesRate ? x.salesRate : null,
-                x.salesTaxInclusive = x?.salesTaxInclusive ? x.salesTaxInclusive : null,
-                x.fixedAssetTaxInclusive = x?.fixedAssetTaxInclusive ? x.fixedAssetTaxInclusive : null,
+                x.salesTaxInclusive = x.salesTaxInclusive === true ||  x?.salesTaxInclusive === false ? x.salesTaxInclusive : null,
+                x.fixedAssetTaxInclusive = x.fixedAssetTaxInclusive === true ||  x?.fixedAssetTaxInclusive === false ? x.fixedAssetTaxInclusive : null,
                 x.fixedAssetRate = x?.fixedAssetRate ? x.fixedAssetRate : null,
                 x.fixedAssetUnits = x?.fixedAssetUnits ? x.fixedAssetUnits : null,
                 x.fixedAssetAccountName = x?.fixedAssetAccountName ? x.fixedAssetAccountName : null,
@@ -601,7 +601,7 @@ export class InventoryAction {
                 x.hsnNo = x?.hsnNo ? x.hsnNo : null,
                 x.sacNo = x?.sacNo ? x.sacNo : null,
                 x.skuCode = x?.skuCode ? x.skuCode : null,
-                x.archive = x?.archive ? x.archive : null,
+                x.archive = x?.archive === true ||  x?.archive === false ? x.archive : null,
                 x.taxes = x?.taxes ? x.taxes : null
          })
         // data.body.results = keys;

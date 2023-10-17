@@ -1,0 +1,101 @@
+<ng-container appTranslate [file]="'inventory'" (commonLocaleData)="commonLocaleData = $event"
+    (localeData)="localeData = $event">
+    <div class="inventory-advance-search">
+        <div class="modal-header">
+            <h4 class="modal-title pull-left">{{ localeData?.advance_search_filter?.advance_search }}</h4>
+            <button type="button" class="close pull-right" (click)="advanceSearchAction('cancel')" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="row">
+                            <div class="col-lg-6 col-sm-6 col-12 mr-b15 pr-2">                               
+                                    <dropdown-field
+                                        [placeholder]="localeData?.advance_search_filter?.select_category"
+                                        [options]="advanceSearchCategory"
+                                        (selectedOption)="selectCategory($event?.value)"
+                                        [defaultValue]="advanceSearchFormObj.param1"
+                                        [allowValueReset]="true"
+                                        (onClear)="advanceSearchFormObj.param1 = ''"
+                                        [label]="localeData?.advance_search_filter?.category"
+                                    ></dropdown-field>                              
+                            </div>
+                            <div class="col-lg-6 col-sm-6 col-12 mr-b15 pl-2">
+                                <dropdown-field
+                                    [placeholder]="localeData?.advance_search_filter?.select_type"
+                                    [options]="advanceSearchCategoryOptions"
+                                    (selectedOption)="selectCategoryOptions($event?.value)"
+                                    [defaultValue]="advanceSearchFormObj.param2"
+                                    [allowValueReset]="true"
+                                    (onClear)="advanceSearchFormObj.param2 = ''"
+                                    [label]="localeData?.advance_search_filter?.type"
+                                ></dropdown-field>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="row">
+                            <div class="col-lg-6 col-sm-6 mr-b15 pr-2">
+                                <dropdown-field
+                                    [placeholder]="localeData?.advance_search_filter?.select_value"
+                                    [options]="advanceSearchValue"
+                                    (selectedOption)="selectValueType($event?.value)"
+                                    [defaultValue]="advanceSearchFormObj.expression"
+                                    [allowValueReset]="true"
+                                    (onClear)="advanceSearchFormObj.expression = ''"
+                                    [label]="localeData?.advance_search_filter?.value"
+                                ></dropdown-field>
+                            </div>
+                            <div class="col-lg-6 col-sm-6 mr-b15 pl-2">
+                                <input-field
+                                    [type]="'number'"
+                                    [placeholder]="localeData?.advance_search_filter?.enter_amount"
+                                    [name]="'amount'"
+                                    [(ngModel)]="advanceSearchFormObj.val"
+                                    [allowDigitsOnly]="true"
+                                    (onClear)="advanceSearchFormObj.val = ''"
+                                    [autocomplete]="'off'"
+                                    [label]="localeData?.advance_search_filter?.amount"
+                                >
+                                </input-field>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-sm-12">
+                        <div class="button-group d-flex justify-content-end column-gap15">
+                            <button
+                                id="search-btn"
+                                mat-stroked-button
+                                color="primary"
+                                (click)="advanceSearchAction('search')"
+                                [disabled]="
+                                    !advanceSearchFormObj.param1 ||
+                                    !advanceSearchFormObj.param2 ||
+                                    !advanceSearchFormObj.expression ||
+                                    !advanceSearchFormObj.val
+                                "
+                            >
+                                {{ commonLocaleData?.app_search }}
+                            </button>
+                            <button
+                                id="clear-btn"
+                                mat-stroked-button
+                                class="mr-0"
+                                (click)="advanceFilterClear()"
+                            >
+                                {{ commonLocaleData?.app_reset }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</ng-container>
