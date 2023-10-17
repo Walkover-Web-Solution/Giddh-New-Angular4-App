@@ -203,7 +203,7 @@ inventory-master {
 }
 
 // For Bulk Stock Edit
-.bulk-stock{
+.bulk-stock{ 
     &-body{
         .bulk-stock-table{
             table{                
@@ -221,5 +221,10 @@ inventory-master {
                   } 
             }
         }
+    }
+}
+.max-height-50{
+    &.mat-mdc-menu-panel{
+        max-height: 50vh;
     }
 }

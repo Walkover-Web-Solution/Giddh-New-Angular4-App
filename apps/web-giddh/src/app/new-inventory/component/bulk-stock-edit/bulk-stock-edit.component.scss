@@ -33,7 +33,10 @@
                         .border-line{
                             border: 2px solid transparent;
                             &.active{
-                                border-color: var(--color-giddh-blue);
+                                // border-color: var(--color-giddh-blue);
+                            }
+                            .custom-padding{
+                                padding: 6px 10px;
                             }
                         }
                         input{
@@ -42,11 +45,12 @@
                             border: none;
                             padding: 6px 10px;
                         }
-                        &:hover{
-                            .border-line{
-                                border-color: var(--color-giddh-blue);
-                            }
-                        }
+                        //========= PLEASE UN COMMENT BELOW CODE TO SHOW LINE ON HOVER ON THE TABLE CELL =============
+                        // &:hover{
+                        //     .border-line{
+                        //         border-color: var(--color-giddh-blue);
+                        //     }
+                        // }
                     }
                 
             }
