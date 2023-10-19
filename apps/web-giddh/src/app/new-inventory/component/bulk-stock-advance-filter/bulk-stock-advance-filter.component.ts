@@ -116,7 +116,7 @@ export class BulkStockAdvanceFilterComponent implements OnInit {
         this.advanceSearchFormObj.sortBy =  this.advanceSearchFormObj.sortBy.value
         this.advanceSearchFormObj.type =   this.advanceSearchFormObj.type.value
         this.advanceSearchFormObj.expression =  this.advanceSearchFormObj.expression.value
-        this.advanceSearchFormObj.amount =  this.advanceSearchFormObj.amount.value
+        this.advanceSearchFormObj.amount =  this.advanceSearchFormObj.amount
 
         this.applyAdvanceSearchEvent.emit(this.advanceSearchFormObj);
     }
