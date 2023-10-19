@@ -203,7 +203,17 @@ inventory-master {
 }
 
 // For Bulk Stock Edit
-.bulk-stock{ 
+.bulk-stock{
+    .bulk-stock-hide-show-button{
+        padding-left: 28px;
+        border: 1px solid var(--color-fields-border);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 6px;
+        height: 40px;
+        width: 40px;
+    }
     &-body{
         .bulk-stock-table{
             table{                

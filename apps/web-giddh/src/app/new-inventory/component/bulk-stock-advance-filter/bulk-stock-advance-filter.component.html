@@ -3,7 +3,7 @@
     <div class="inventory-advance-search">
         <div class="modal-header">
             <h4 class="modal-title pull-left">{{ localeData?.advance_search_filter?.advance_search }}</h4>
-            <button type="button" class="close pull-right" (click)="advanceSearchAction('cancel')" aria-label="Close">
+            <button type="button" class="close pull-right" (click)="advanceFilterClose()" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>
@@ -14,25 +14,25 @@
                         <div class="row">
                             <div class="col-lg-6 col-sm-6 col-12 mr-b15 pr-2">                               
                                     <dropdown-field
-                                        [placeholder]="localeData?.advance_search_filter?.select_category"
+                                        [placeholder]="'Select '"
                                         [options]="advanceSearchCategory"
-                                        (selectedOption)="selectCategory($event?.value)"
-                                        [defaultValue]="advanceSearchFormObj.param1"
+                                        (selectedOption)="selectCategory($event)"
+                                        [defaultValue]="advanceSearchFormObj.sortBy.label"
                                         [allowValueReset]="true"
-                                        (onClear)="advanceSearchFormObj.param1 = ''"
-                                        [label]="localeData?.advance_search_filter?.category"
-                                    ></dropdown-field>                              
+                                        (onClear)="advanceSearchFormObj.sortBy = ''"
+                                        [label]="'Sort By'"
+                                    ></dropdown-field>
                             </div>
                             <div class="col-lg-6 col-sm-6 col-12 mr-b15 pl-2">
-                                <dropdown-field
-                                    [placeholder]="localeData?.advance_search_filter?.select_type"
-                                    [options]="advanceSearchCategoryOptions"
-                                    (selectedOption)="selectCategoryOptions($event?.value)"
-                                    [defaultValue]="advanceSearchFormObj.param2"
-                                    [allowValueReset]="true"
-                                    (onClear)="advanceSearchFormObj.param2 = ''"
-                                    [label]="localeData?.advance_search_filter?.type"
-                                ></dropdown-field>
+                                    <dropdown-field
+                                        [placeholder]="localeData?.advance_search_filter?.select_type"
+                                        [options]="advanceSearchCategoryOptions"
+                                        (selectedOption)="selectCategoryType($event)"
+                                        [defaultValue]="advanceSearchFormObj.type.label"
+                                        [allowValueReset]="true"
+                                        (onClear)="advanceSearchFormObj.type.value = { label: 'Rate', value: 'rate'}"
+                                        [label]="localeData?.advance_search_filter?.type"
+                                    ></dropdown-field>
                             </div>
                         </div>
                     </div>
@@ -42,13 +42,13 @@
                         <div class="row">
                             <div class="col-lg-6 col-sm-6 mr-b15 pr-2">
                                 <dropdown-field
-                                    [placeholder]="localeData?.advance_search_filter?.select_value"
+                                    [placeholder]="'Select Expression'"
                                     [options]="advanceSearchValue"
-                                    (selectedOption)="selectValueType($event?.value)"
-                                    [defaultValue]="advanceSearchFormObj.expression"
+                                    (selectedOption)="selectValueType($event)"
+                                    [defaultValue]="advanceSearchFormObj.expression.label"
                                     [allowValueReset]="true"
                                     (onClear)="advanceSearchFormObj.expression = ''"
-                                    [label]="localeData?.advance_search_filter?.value"
+                                    [label]="'Expression'"
                                 ></dropdown-field>
                             </div>
                             <div class="col-lg-6 col-sm-6 mr-b15 pl-2">
@@ -56,9 +56,9 @@
                                     [type]="'number'"
                                     [placeholder]="localeData?.advance_search_filter?.enter_amount"
                                     [name]="'amount'"
-                                    [(ngModel)]="advanceSearchFormObj.val"
+                                    [(ngModel)]="advanceSearchFormObj.amount"
                                     [allowDigitsOnly]="true"
-                                    (onClear)="advanceSearchFormObj.val = ''"
+                                    (onClear)="advanceSearchFormObj.amount = ''"
                                     [autocomplete]="'off'"
                                     [label]="localeData?.advance_search_filter?.amount"
                                 >
@@ -74,12 +74,12 @@
                                 id="search-btn"
                                 mat-stroked-button
                                 color="primary"
-                                (click)="advanceSearchAction('search')"
+                                (click)="advanceSearchAction()"
                                 [disabled]="
-                                    !advanceSearchFormObj.param1 ||
-                                    !advanceSearchFormObj.param2 ||
+                                    !advanceSearchFormObj.sortBy ||
+                                    !advanceSearchFormObj.type ||
                                     !advanceSearchFormObj.expression ||
-                                    !advanceSearchFormObj.val
+                                    !advanceSearchFormObj.amount
                                 "
                             >
                                 {{ commonLocaleData?.app_search }}
@@ -88,7 +88,7 @@
                                 id="clear-btn"
                                 mat-stroked-button
                                 class="mr-0"
-                                (click)="advanceFilterClear()"
+                                (click)="formObjectIntialvalue()"
                             >
                                 {{ commonLocaleData?.app_reset }}
                             </button>

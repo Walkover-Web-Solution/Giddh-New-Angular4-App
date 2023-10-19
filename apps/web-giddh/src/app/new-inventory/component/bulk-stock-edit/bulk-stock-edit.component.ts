@@ -1,185 +1,191 @@
-import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { ToasterService } from '../../../services/toaster.service';
-import { FormArray, FormGroup, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormArray, FormGroup, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { ReplaySubject, takeUntil } from 'rxjs';
+import { ReplaySubject, debounceTime, distinctUntilChanged, takeUntil } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import { InventoryAction } from '../../../actions/inventory/inventory.actions';
-import { TitleCasePipe } from '@angular/common';
-import { CompanyActions } from '../../../actions/company.actions';
-import { distinctUntilChanged } from "rxjs/operators";
-import { InventoryService } from '../../../services/inventory.service';
 import { IGroupsWithStocksHierarchyMinItem } from '../../../models/interfaces/groups-with-stocks.interface';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { InventoryModuleName } from '../../inventory.enum';
 @Component({
     selector: 'bulk-stock',
     templateUrl: './bulk-stock-edit.component.html',
-    styleUrls: ['./bulk-stock-edit.component.scss'],
-    providers: [TitleCasePipe]
+    styleUrls: ['./bulk-stock-edit.component.scss']
 })
 export class BulkStockEditComponent implements OnInit, OnDestroy {
-
+    @ViewChild('bulkStockAdvanceFilter') public bulkStockAdvanceFilter: TemplateRef<any>
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
-    /** This will use for customise column check values */
-    public customiseColumns = [];
     /** Holds Inventory Type */
     public inventoryType: string;
-    /** Holds Bulk Stock List come from API*/
-    public bulkStockList: any;
     /** Holds Pagination Info*/
     public pagination: any;
+    /**Holds Page count in single page for Pagination */
+    private pageCount = 100;
+    public totalInventoryCount: number;
+    public sortOrderStatus: null | 'asc' | 'desc' = null;
     /** Holds Loader status */
     public isLoading: boolean = true;
     /** Taxes list */
-    public taxes: any[] = [];
+    // public taxes: any[] = [];
     /** Holds list of selected taxes */
-    private selectedTaxes: any[] = [];
+    // private selectedTaxes: any[] = [];
     /** True if tax selection box is open */
-    public isTaxSelectionOpen: boolean = false;
+    // public isTaxSelectionOpen: boolean = false;
     /** Holds list of taxes processed while tax selection box was closed */
-    public processedTaxes: any[] = [];
+    // public processedTaxes: any[] = [];
     /** True if we need to show tax field. We are maintaining this because taxes are not getting reset on form reset */
-    public showTaxField: boolean = true;
+    // public showTaxField: boolean = true;
     /** Stock groups list */
-    public stockGroups: IOption[] = [];
-     /** Holds stock group unique name */
-     public stockGroupUniqueName: string = "";
+    // public stockGroups: IOption[] = [];
+    /** Holds stock group unique name */
+    // public stockGroupUniqueName: string = "";
+    public advanceFilterDialogRef: MatDialogRef<any>;
+    public advanaceSearchData: any = null;
+    public hideShowColumnList: any = [];
+    private commonHideShowColumnList = [
+        {
+            label: "Variant Unique Name",
+            value: "variantUniqueName",
+            checked: false
+        },
+        {
+            label: "Variant Name",
+            value: "variantName",
+            checked: false
+        },
+        {
+            label: "Stock Name",
+            value: "stockName",
+            checked: false
+        },
+        {
+            label: "Stock Unique Name",
+            value: "stockUniqueName",
+            checked: false
+        },
+        {
+            label: "Stock Group Name",
+            value: "stockGroupName",
+            checked: false
+        },
+        {
+            label: "Stock Group Unique Name",
+            value: "stockGroupUniqueName",
+            checked: false
+        },
+        {
+            label: "SKU Code",
+            value: "skuCode",
+            checked: false
+        },
+        {
+            label: "Taxes",
+            value: "taxes",
+            checked: false
+        },
+        {
+            label: "HSN No",
+            value: "hsnNo",
+            checked: false
+        },
+        {
+            label: "SAC No",
+            value: "sacNo",
+            checked: false
+        },
+        {
+            label: "Archive",
+            value: "archive",
+            checked: false
+        }
+    ];
 
-    
-    public dropdownData = [{
-        label: 'Inventory 1',
-        value: '1'
-    },
-    {
-        label: 'Inventory 2',
-        value: '2'
-    },
-    {
-        label: 'Inventory 3',
-        value: '3'
-    }];
-    public hideShowColumnList = [
+    private fixedAssetHideShowColumn = [
         {
-            name: "Purchase Account Name",
-            uniqueName: "purchaseAccountName"
+            label: "Fixed Asset Account Name",
+            value: "fixedAssetAccountName",
+            checked: false
         },
         {
-            name: "Purchase Account Unique Name",
-            uniqueName: "purchaseAccountUniqueName"
-        },
-      
-        {
-            name: "Purchase Tax Inclusive",
-            uniqueName: "purchaseTaxInclusive"
+            label: "Fixed Asset Account UniqueName",
+            value: "fixedAssetAccountUniqueName",
+            checked: false
         },
         {
-            name: "Variant Unique Name",
-            uniqueName: "variantUniqueName"
+            label: "Fixed Asset Rate",
+            value: "fixedAssetRate",
+            checked: false
         },
         {
-            name: "Sales Account Name",
-            uniqueName: "salesAccountName"
+            label: "Fixed Asset Units",
+            value: "fixedAssetUnits",
+            checked: false
         },
         {
-            name: "Sales Account Unique Name",
-            uniqueName: "salesAccountUniqueName"
+            label: "Fixed Asset Tax Inclusive",
+            value: "fixedAssetTaxInclusive",
+            checked: false
+        }
+    ];
+
+    private salesPurchaseHideShowColumn = [
+        {
+            label: "Purchase Account Name",
+            value: "purchaseAccountName",
+            checked: false
         },
         {
-            name: "Sales Tax Inclusive",
-            uniqueName: "salesTaxInclusive"
+            label: "Purchase Account Unique Name",
+            value: "purchaseAccountUniqueName",
+            checked: false
         },
         {
-            name: "Fixed Asset Tax Inclusive",
-            uniqueName: "fixedAssetTaxInclusive"
+            label: "Purchase Rate",
+            value: "purchaseRate",
+            checked: false
         },
         {
-            name: "Fixed Asset Account Name",
-            uniqueName: "fixedAssetAccountName"
+            label: "Purchase Units",
+            value: "purchaseUnits",
+            checked: false
         },
         {
-            name: "Fixed Asset Account UniqueName",
-            uniqueName: "fixedAssetAccountUniqueName"
+            label: "Purchase Tax Inclusive",
+            value: "purchaseTaxInclusive",
+            checked: false
         },
         {
-            name: "SKU Code",
-            uniqueName: "skuCode"
+            label: "Sales Account Name",
+            value: "salesAccountName",
+            checked: false
         },
         {
-            name: "Taxes",
-            uniqueName: "taxes"
+            label: "Sales Account Unique Name",
+            value: "salesAccountUniqueName",
+            checked: false
         },
         {
-            name: "Variant Name",
-            uniqueName: "variantName",
-            disabled: true
+            label: "Sales Rate",
+            value: "salesRate",
+            checked: false
         },
         {
-            name: "Stock Name",
-            uniqueName: "stockName",
-            disabled: true
+            label: "Sales Units",
+            value: "salesUnits",
+            checked: false
         },
         {
-            name: "Stock Unique Name",
-            uniqueName: "stockUniqueName"
+            label: "Sales Tax Inclusive",
+            value: "salesTaxInclusive",
+            checked: false
         },
-        {
-            name: "Stock Group Name",
-            uniqueName: "stockGroupName",
-            disabled: true
-        },
-        {
-            name: "Stock Group Unique Name",
-            uniqueName: "stockGroupUniqueName"
-        },
-        {
-            name: "Purchase Units",
-            uniqueName: "purchaseUnits",
-            disabled: true
-        },
-        {
-            name: "Sales Rate",
-            uniqueName: "salesRate",
-            disabled: true
-        },
-        {
-            name: "Sales Units",
-            uniqueName: "salesUnits",
-            disabled: true
-        },
-        {
-            name: "Purchase Rate",
-            uniqueName: "purchaseRate",
-            disabled: true
-        },
-        {
-            name: "Archive",
-            uniqueName: "archive",
-            disabled: true
-        },
-        {
-            name: "HSN No",
-            uniqueName: "hsnNo",
-            disabled: true
-        },
-        {
-            name: "SAC No",
-            uniqueName: "sacNo",
-            disabled: true
-        },
-        {
-            name: "Fixed Asset Rate",
-            uniqueName: "fixedAssetRate",
-            disabled: true
-        },
-        {
-            name: "Fixed Asset Units",
-            uniqueName: "fixedAssetUnits",
-            disabled: true
-        }];
+    ];
 
     public tableHeadInput = {
         variantName: false,
@@ -189,12 +195,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
         stockGroupName: false,
         hsn: false,
         sac: false,
-        skuCode: false,
-        purchaseUnit: false,
-        salesRate: false,
-        salesUnit: false,
-        fixedAssetUnits: false,
-        tax: false
+        skuCode: false
     };
     /** UntypedFormArray Group for group UntypedFormArray */
     public bulkStockEditForm: UntypedFormGroup;
@@ -202,7 +203,17 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
     public dropdownValues: any[] = [];
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-
+    /** Holds module name */
+    public moduleName = InventoryModuleName.bulk;
+    /** Stores the Table head inpu value for the Name filter */
+    public thVariantName: UntypedFormControl = new UntypedFormControl();
+    public thVariantUniqueName: UntypedFormControl = new UntypedFormControl();
+    public thStockName: UntypedFormControl = new UntypedFormControl();
+    public thStockUniqueName: UntypedFormControl = new UntypedFormControl();
+    public thStockGroupName: UntypedFormControl = new UntypedFormControl();
+    public thHSN: UntypedFormControl = new UntypedFormControl();
+    public thSAC: UntypedFormControl = new UntypedFormControl();
+    public thSkuCode: UntypedFormControl = new UntypedFormControl();
 
     constructor(
         private changeDetection: ChangeDetectorRef,
@@ -211,135 +222,91 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
         private formBuilder: UntypedFormBuilder,
         private store: Store<AppState>,
         private inventoryAction: InventoryAction,
-        private titlecasePipe: TitleCasePipe,
-        private companyAction: CompanyActions,
-        private inventoryService: InventoryService
+        private dailog: MatDialog
     ) {
-        this.hideShowForm = this.formBuilder.group({
+        this.initBulkStockForm();
+        this.hideShowForm = this.initalHideShowFrom();
+    }
 
-            variantName: [true],
+    public ngOnInit(): void {
+        this.searchInputObservableInitialize();
+
+        this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
+            if (params?.type) {
+                this.inventoryType = params.type == 'fixedassets' ? 'FIXED_ASSETS' : params?.type.toUpperCase();
+                this.createHideshowColumn();
+                const bulkStockForm = this.bulkStockData;
+                bulkStockForm.clear();
+                this.isLoading = true;
+                this.store.dispatch(this.inventoryAction.GetListBulkStock({
+                    inventoryType: this.inventoryType, page: 1, count: this.pageCount, body: {
+                        "search": "",
+                        "searchBy": "",
+                        "sortBy": "",
+                        "sort": "",
+                        "expression": "GREATER_THAN",
+                        "rate": 0
+                    }
+                }));
+                this.store.pipe(select(select => select.inventory.bulkStock), takeUntil(this.destroyed$)).subscribe((res: any) => {
+                    if (res) {
+                        this.isLoading = false;
+                        const bulkStockForm = this.bulkStockData;
+                        bulkStockForm.clear();
+                        this.setPaginationData(res);
+                        this.totalInventoryCount = res?.totalItems;
+                        res.results.forEach((row, index) => {
+                            this.dropdownValues[index] = [];
+                            this.dropdownValues[index].salesUnits = row.salesUnits;
+                            this.dropdownValues[index].purchaseUnits = row.purchaseUnits;
+                            this.dropdownValues[index].fixedAssetUnits = row.fixedAssetUnits;
+                            this.addRow(row);
+                        });
+                    }
+                });
+            }
+        });
+      
+        // this.getStockGroups();
+        // this.getTaxes();
+     
+    }
+
+    public initalHideShowFrom() {
+        return this.formBuilder.group({
+
+            variantName: [false],
             variantUniqueName: [false],
 
-            stockName: [true],
+            stockName: [false],
             stockUniqueName: [false],
-            stockGroupName: [true],
+            stockGroupName: [false],
             stockGroupUniqueName: [false],
 
             purchaseUnits: [false],
             purchaseAccountName: [false],
             purchaseAccountUniqueName: [false],
-            purchaseRate: [true],
+            purchaseRate: [false],
             purchaseTaxInclusive: [false],
 
             salesUnits: [false],
             salesAccountName: [false],
             salesAccountUniqueName: [false],
-            salesRate: [true],
+            salesRate: [false],
             salesTaxInclusive: [false],
 
             fixedAssetUnits: [false],
-            fixedAssetRate: [true],
+            fixedAssetRate: [false],
             fixedAssetAccountName: [false],
             fixedAssetAccountUniqueName: [false],
             fixedAssetTaxInclusive: [false],
 
-            hsnNo: [true],
-            sacNo: [true],
+            hsnNo: [false],
+            sacNo: [false],
             skuCode: [false],
-            archive: [true],
+            archive: [false],
             taxes: [false]
         });
-        this.initBulkStockForm();
-    }
-
-    public ngOnInit(): void {
-        this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
-            if (params?.type) {
-                if (params.type == 'fixedassets') {
-                    this.inventoryType = 'FIXED_ASSETS';
-                    this.hideShowForm.controls['fixedAssetUnits'].setValue(true);
-                } else {
-                    this.inventoryType = params?.type.toUpperCase();
-                    this.hideShowForm.controls['purchaseUnits'].setValue(true);
-                    this.hideShowForm.controls['salesUnits'].setValue(true);
-                }
-            }
-        });
-        this.store.dispatch(this.inventoryAction.GetListBulkStock({
-            inventoryType: this.inventoryType, page: 1, count: 100, body: {
-                "search": "",
-                "searchBy": "",
-                "sortBy": "",
-                "sort": "",
-                "expression": "GREATER_THAN",
-                "rate": 0
-            }
-        }));
-        this.getStockGroups();
-        this.getTaxes();
-        this.store.pipe(select(select => select.inventory.bulkStock), takeUntil(this.destroyed$)).subscribe((res: any) => {
-            if (res) {
-                this.isLoading = false;
-                // this.bulkStockEditForm.reset();
-                this.initBulkStockForm();
-
-                console.log("Store select call");
-                this.bulkStockList = res.results;
-                // this.convertArrayToDropDownObject();
-                this.setPaginationData(res);
-
-
-                res.results.forEach((row, index) => {
-                    this.dropdownValues[index] = [];
-                    this.dropdownValues[index].salesUnits = row.salesUnits;
-                    this.dropdownValues[index].purchaseUnits = row.purchaseUnits;
-                    this.dropdownValues[index].fixedAssetUnits = row.fixedAssetUnits;
-
-                    this.addRow(row);
-                });
-                console.log("bulkStockEditForm", this.bulkStockEditForm);
-                console.log("dropdownValues", this.dropdownValues);
-                console.log("stockGroups", this.stockGroups);
-            }
-        });
-        // this.inventoryService.getStockV2(this.queryParams?.stockUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-        //     if (response?.status === "success" && response.body) {
-
-        //     }
-        // });
-
-        this.customiseColumns = [
-            {
-                "value": "closing",
-                "label": "Closing",
-                "checked": true
-            },
-            {
-                "value": "contacts",
-                "label": "Contacts",
-                "checked": true
-            },
-            {
-                "value": "state",
-                "label": "State",
-                "checked": true
-            },
-            {
-                "value": "gstin",
-                "label": "Tax Number",
-                "checked": true
-            },
-            {
-                "value": "comment",
-                "label": "Comment",
-                "checked": false
-            }
-        ];
-
-        setTimeout(() => {
-
-            console.log("hideShowForm", this.hideShowForm);
-        }, 1000)
     }
 
     /**
@@ -348,26 +315,11 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
      */
     private initBulkStockForm(): void {
         this.bulkStockEditForm = this.formBuilder.group({
-            thVariantName: [''],
-            thVariantUniqueName: [''],
-            thStockName: [''],
-            thstockGroupUniqueName: [''],
-            thStockUniqueName: [''],
-            thStockGroupName: [''],
-            thHSN: [''],
-            thSAC: [''],
-            thSkuCode: [''],
-            thPurchaseUnit: [''],
-            thSalesRate: [''],
-            thSalesUnit: [''],
-            thFixedAssetUnits: [''],
-            thTax: [''],
             fields: this.formBuilder.array([])
         });
     }
 
     private addNewRow(controlValue: any): FormGroup {
-        console.log("stockGroupName : ",controlValue.stockGroupName);
         return this.formBuilder.group({
             variantName: [controlValue.variantName, Validators.required],
             variantUniqueName: [controlValue.variantUniqueName, Validators.required],
@@ -411,19 +363,8 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
         return this.bulkStockEditForm.get("fields") as FormArray
     }
 
-    removeSkill(i: number) {
-        this.bulkStockData.removeAt(i);
-    }
-
     onFormSubmit() {
-        console.log(this.bulkStockEditForm.value);
-    }
-
-    /**
-    * Get select value from select field
-    */
-    public selectField(e): void {
-        console.log("Event: ", e);
+        // console.log(this.bulkStockEditForm.value);
     }
 
     /**
@@ -439,30 +380,19 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
     }
 
     /**
-    * Change text into Title case
-    */
-    public titleCase(text: string) {
-        return this.titlecasePipe.transform(text);
-    }
-
-    /**
      * Get select value from filter checkbox
     
      */
     public showSelectedHeaderColumns(e): void {
-        console.log("Event: ", e);
-    }
-
-    public saveSelectedColumns(): void {
-        this.changeDetection.detectChanges();
+        // console.log("Event: ", e);
     }
     /**
   * Get Pagination page change event
   */
     public pageChanged(e): void {
-        console.log("Page Changed Event: ", e);
+        this.isLoading = true;
         this.store.dispatch(this.inventoryAction.GetListBulkStock({
-            inventoryType: this.inventoryType, page: e.page, count: 100, body: {
+            inventoryType: this.inventoryType, page: e.page, count: this.pageCount, body: {
                 "search": "",
                 "searchBy": "",
                 "sortBy": "",
@@ -471,7 +401,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
                 "rate": 0
             }
         }));
-        this.changeDetection.detectChanges();
+       
     }
 
     public toggleInput(key): void {
@@ -484,13 +414,299 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
             this.tableHeadInput[key] = false;
         });
     }
-
-    public getInputIndex(index: number, key: string): void {
-        console.log(`At index - ${index} and key is '${key}'`);
+    /**
+     * Create list of items in respect to Inventory Type
+     * which will by hide and show by user
+     * @memberof StockCreateEditComponent
+     */
+    private createHideshowColumn(): void {
+        this.hideShowColumnList = [];
+        if (this.inventoryType === 'FIXED_ASSETS') {
+            this.hideShowColumnList = [...this.commonHideShowColumnList, ...this.fixedAssetHideShowColumn];
+        } else {
+            this.hideShowColumnList = [...this.commonHideShowColumnList, ...this.salesPurchaseHideShowColumn];
+        }
     }
 
-    public consoleIt(e): void {
-        console.log("Change: ",e)
+    public getInputIndex(index: number, key: string): void {
+        // console.log(`At index - ${index} and key is '${key}'`);
+    }
+    private searchInputObservableInitialize(): void {
+        this.thVariantName.valueChanges.pipe(
+            debounceTime(700),
+            distinctUntilChanged(),
+            takeUntil(this.destroyed$),
+        ).subscribe(searchedText => {
+            if (searchedText !== null && searchedText !== undefined) {
+                let bodyObj;
+                if (this.advanaceSearchData !== null) {
+                    bodyObj = {
+                        "search": searchedText,
+                        "searchBy": "variant_name",
+                        "sortBy": this.advanaceSearchData.sortBy,
+                        "sort": this.advanaceSearchData.sortOrder,
+                        "expression": this.advanaceSearchData.expression,
+                        "rate": this.advanaceSearchData.amount
+                    }
+                } else {
+                    bodyObj = {
+                        "search": searchedText,
+                        "searchBy": "variant_name",
+                        "sortBy": "",
+                        "sort": "",
+                        "expression": "GREATER_THAN",
+                        "rate": 0
+                    }
+                }
+                this.isLoading = true;
+                this.store.dispatch(this.inventoryAction.GetListBulkStock({
+                    inventoryType: this.inventoryType, page: this.pagination.currentPage, count: this.pageCount, body: bodyObj
+                }));
+            }
+        });
+        this.thVariantUniqueName.valueChanges.pipe(
+            debounceTime(700),
+            distinctUntilChanged(),
+            takeUntil(this.destroyed$),
+        ).subscribe(searchedText => {
+            if (searchedText !== null && searchedText !== undefined) {
+                let bodyObj;
+                if (this.advanaceSearchData !== null) {
+                    bodyObj = {
+                        "search": searchedText,
+                        "searchBy": "variant_unique_name",
+                        "sortBy": this.advanaceSearchData.sortBy,
+                        "sort": this.advanaceSearchData.sortOrder,
+                        "expression": this.advanaceSearchData.expression,
+                        "rate": this.advanaceSearchData.amount
+                    }
+                } else {
+                    bodyObj = {
+                        "search": searchedText,
+                        "searchBy": "variant_unique_name",
+                        "sortBy": "",
+                        "sort": "",
+                        "expression": "GREATER_THAN",
+                        "rate": 0
+                    }
+                }
+                this.isLoading = true;
+                this.store.dispatch(this.inventoryAction.GetListBulkStock({
+                    inventoryType: this.inventoryType, page: this.pagination.currentPage, count: this.pageCount, body: bodyObj
+                }));
+            }
+        });
+        this.thStockName.valueChanges.pipe(
+            debounceTime(700),
+            distinctUntilChanged(),
+            takeUntil(this.destroyed$),
+        ).subscribe(searchedText => {
+            if (searchedText !== null && searchedText !== undefined) {
+                let bodyObj;
+                if (this.advanaceSearchData !== null) {
+                    bodyObj = {
+                        "search": searchedText,
+                        "searchBy": "stock_name",
+                        "sortBy": this.advanaceSearchData.sortBy,
+                        "sort": this.advanaceSearchData.sortOrder,
+                        "expression": this.advanaceSearchData.expression,
+                        "rate": this.advanaceSearchData.amount
+                    }
+                } else {
+                    bodyObj = {
+                        "search": searchedText,
+                        "searchBy": "stock_name",
+                        "sortBy": "",
+                        "sort": "",
+                        "expression": "GREATER_THAN",
+                        "rate": 0
+                    }
+                }
+                this.isLoading = true;
+                this.store.dispatch(this.inventoryAction.GetListBulkStock({
+                    inventoryType: this.inventoryType, page: this.pagination.currentPage, count: this.pageCount, body: bodyObj
+                }));
+            }
+        });
+        this.thStockUniqueName.valueChanges.pipe(
+            debounceTime(700),
+            distinctUntilChanged(),
+            takeUntil(this.destroyed$),
+        ).subscribe(searchedText => {
+            if (searchedText !== null && searchedText !== undefined) {
+                let bodyObj;
+                if (this.advanaceSearchData !== null) {
+                    bodyObj = {
+                        "search": searchedText,
+                        "searchBy": "stock_unique_name",
+                        "sortBy": this.advanaceSearchData.sortBy,
+                        "sort": this.advanaceSearchData.sortOrder,
+                        "expression": this.advanaceSearchData.expression,
+                        "rate": this.advanaceSearchData.amount
+                    }
+                } else {
+                    bodyObj = {
+                        "search": searchedText,
+                        "searchBy": "stock_unique_name",
+                        "sortBy": "",
+                        "sort": "",
+                        "expression": "GREATER_THAN",
+                        "rate": 0
+                    }
+                }
+                this.isLoading = true;
+                this.store.dispatch(this.inventoryAction.GetListBulkStock({
+                    inventoryType: this.inventoryType, page: this.pagination.currentPage, count: this.pageCount, body: bodyObj
+                }));
+            }
+        });
+        this.thStockGroupName.valueChanges.pipe(
+            debounceTime(700),
+            distinctUntilChanged(),
+            takeUntil(this.destroyed$),
+        ).subscribe(searchedText => {
+            if (searchedText !== null && searchedText !== undefined) {
+                let bodyObj;
+                if (this.advanaceSearchData !== null) {
+                    bodyObj = {
+                        "search": searchedText,
+                        "searchBy": "stock_group_name",
+                        "sortBy": this.advanaceSearchData.sortBy,
+                        "sort": this.advanaceSearchData.sortOrder,
+                        "expression": this.advanaceSearchData.expression,
+                        "rate": this.advanaceSearchData.amount
+                    }
+                } else {
+                    bodyObj = {
+                        "search": searchedText,
+                        "searchBy": "stock_group_name",
+                        "sortBy": "",
+                        "sort": "",
+                        "expression": "GREATER_THAN",
+                        "rate": 0
+                    }
+                }
+                this.isLoading = true;
+                this.store.dispatch(this.inventoryAction.GetListBulkStock({
+                    inventoryType: this.inventoryType, page: this.pagination.currentPage, count: this.pageCount, body: bodyObj
+                }));
+            }
+        });
+        this.thHSN.valueChanges.pipe(
+            debounceTime(700),
+            distinctUntilChanged(),
+            takeUntil(this.destroyed$),
+        ).subscribe(searchedText => {
+            if (searchedText !== null && searchedText !== undefined) {
+                let bodyObj;
+                if (this.advanaceSearchData !== null) {
+                    bodyObj = {
+                        "search": searchedText,
+                        "searchBy": "hsn",
+                        "sortBy": this.advanaceSearchData.sortBy,
+                        "sort": this.advanaceSearchData.sortOrder,
+                        "expression": this.advanaceSearchData.expression,
+                        "rate": this.advanaceSearchData.amount
+                    }
+                } else {
+                    bodyObj = {
+                        "search": searchedText,
+                        "searchBy": "hsn",
+                        "sortBy": "",
+                        "sort": "",
+                        "expression": "GREATER_THAN",
+                        "rate": 0
+                    }
+                }
+                this.isLoading = true;
+                this.store.dispatch(this.inventoryAction.GetListBulkStock({
+                    inventoryType: this.inventoryType, page: this.pagination.currentPage, count: this.pageCount, body: bodyObj
+                }));
+            }
+        });
+        this.thSAC.valueChanges.pipe(
+            debounceTime(700),
+            distinctUntilChanged(),
+            takeUntil(this.destroyed$),
+        ).subscribe(searchedText => {
+            if (searchedText !== null && searchedText !== undefined) {
+                let bodyObj;
+                if (this.advanaceSearchData !== null) {
+                    bodyObj = {
+                        "search": searchedText,
+                        "searchBy": "sac",
+                        "sortBy": this.advanaceSearchData.sortBy,
+                        "sort": this.advanaceSearchData.sortOrder,
+                        "expression": this.advanaceSearchData.expression,
+                        "rate": this.advanaceSearchData.amount
+                    }
+                } else {
+                    bodyObj = {
+                        "search": searchedText,
+                        "searchBy": "sac",
+                        "sortBy": "",
+                        "sort": "",
+                        "expression": "GREATER_THAN",
+                        "rate": 0
+                    }
+                }
+                this.isLoading = true;
+                this.store.dispatch(this.inventoryAction.GetListBulkStock({
+                    inventoryType: this.inventoryType, page: this.pagination.currentPage, count: this.pageCount, body: bodyObj
+                }));
+            }
+        });
+        this.thSkuCode.valueChanges.pipe(
+            debounceTime(700),
+            distinctUntilChanged(),
+            takeUntil(this.destroyed$),
+        ).subscribe(searchedText => {
+            if (searchedText !== null && searchedText !== undefined) {
+                let bodyObj;
+                if (this.advanaceSearchData !== null) {
+                    bodyObj = {
+                        "search": searchedText,
+                        "searchBy": "sku",
+                        "sortBy": this.advanaceSearchData.sortBy,
+                        "sort": this.advanaceSearchData.sortOrder,
+                        "expression": this.advanaceSearchData.expression,
+                        "rate": this.advanaceSearchData.amount
+                    }
+                } else {
+                    bodyObj = {
+                        "search": searchedText,
+                        "searchBy": "sku",
+                        "sortBy": "",
+                        "sort": "",
+                        "expression": "GREATER_THAN",
+                        "rate": 0
+                    }
+                }
+                this.isLoading = true;
+                this.store.dispatch(this.inventoryAction.GetListBulkStock({
+                    inventoryType: this.inventoryType, page: this.pagination.currentPage, count: this.pageCount, body: bodyObj
+                }));
+            }
+        });
+    }
+
+    public sort(key: string): void {
+        if (this.sortOrderStatus === null || this.sortOrderStatus === 'desc') {
+            this.sortOrderStatus = 'asc';
+        } else {
+            this.sortOrderStatus = 'desc';
+        }
+        this.isLoading = true;
+        this.store.dispatch(this.inventoryAction.GetListBulkStock({
+            inventoryType: this.inventoryType, page: this.pagination.currentPage, count: this.pageCount, body: {
+                "search": "",
+                "searchBy": "",
+                "sortBy": key,
+                "sort": this.sortOrderStatus,
+                "expression": "GREATER_THAN",
+                "rate": 0
+            }
+        }));
     }
 
     /**
@@ -498,18 +714,18 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
      *
      * @memberof StockCreateEditComponent
      */
-    public getStockGroups(): void {
-       
-        this.inventoryService.GetGroupsWithStocksFlatten(this.inventoryType).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response?.status === "success") {
-                let stockGroups: IOption[] = [];
-                this.arrangeStockGroups(response.body?.results, stockGroups);
-                this.stockGroups = stockGroups;
-                // this.stockGroupUniqueName = this.activeGroup?.uniqueName ? this.activeGroup?.uniqueName : this.stockGroups?.length ? this.stockGroups[0]?.value : '';
-            }
-        });
-        this.changeDetection.detectChanges();
-    }
+    // public getStockGroups(): void {
+
+    //     this.inventoryService.GetGroupsWithStocksFlatten(this.inventoryType).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+    //         if (response?.status === "success") {
+    //             let stockGroups: IOption[] = [];
+    //             this.arrangeStockGroups(response.body?.results, stockGroups);
+    //             this.stockGroups = stockGroups;
+    //             // this.stockGroupUniqueName = this.activeGroup?.uniqueName ? this.activeGroup?.uniqueName : this.stockGroups?.length ? this.stockGroups[0]?.value : '';
+    //         }
+    //     });
+    //     this.changeDetection.detectChanges();
+    // }
 
     /**
      * Arrange stock groups
@@ -540,50 +756,82 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
     *
     * @memberof BulkStockEditComponent
     */
-    public getTaxes(): void {
-        this.store.dispatch(this.companyAction.getTax());
-        this.store.pipe(select(state => state?.company?.taxes), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(response => {
-            if (response?.length > 0 && !this.processedTaxes?.length) {
-                this.taxes = response || [];
-                console.log("Taxes: ", this.taxes);
+    // public getTaxes(): void {
+    //     this.store.dispatch(this.companyAction.getTax());
+    //     this.store.pipe(select(state => state?.company?.taxes), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(response => {
+    //         if (response?.length > 0 && !this.processedTaxes?.length) {
+    //             this.taxes = response || [];
+    //             console.log("Taxes: ", this.taxes);
+    //         }
+    //         this.changeDetection.detectChanges();
+    //     });
+    // }
+    // public openedSelectTax(e): void {
+    //     console.log("Selected Tax : ", e)
+    // }
+
+    // public selectTax(tax): void {
+    //     console.log("OnTaxSelection Change : ", tax)
+    // }
+
+    public openAdvanceFilter(): void {
+        this.advanceFilterDialogRef = this.dailog.open(this.bulkStockAdvanceFilter, {
+            width: '600px'
+        })
+    }
+
+    public resetAdvanceSearch(): void {
+        this.advanaceSearchData = null;
+        this.sortOrderStatus = null;
+        this.isLoading = true;
+        this.store.dispatch(this.inventoryAction.GetListBulkStock({
+            inventoryType: this.inventoryType, page: this.pagination.currentPage, count: this.pageCount, body: {
+                "search": "",
+                "searchBy": "",
+                "sortBy": "",
+                "sort": "",
+                "expression": "GREATER_THAN",
+                "rate": 0
             }
-            this.changeDetection.detectChanges();
+        }));
+
+    }
+
+    public applyAdvanceFilter(e): void {
+        this.advanceFilterDialogRef.close();
+
+        let checkColumnStatus: boolean;
+
+        // if (e.sortBy === 'fixed_asset_rate') {
+        //     checkColumnStatus = this.hideShowForm.controls['fixedAssetRate'].value
+        // } else if (e.sortBy === 'sales_rate') {
+        //     checkColumnStatus = this.hideShowForm.controls['salesRate'].value
+        // } else if (e.sortBy === 'purchase_rate') {
+        //     checkColumnStatus = this.hideShowForm.controls['purchaseRate'].value
+        // }
+        // if (checkColumnStatus) {
+            this.isLoading = true;
+            this.advanaceSearchData = e;
+            const pageNo = this.pagination.currentPage;
+            this.isLoading = true;
+            this.store.dispatch(this.inventoryAction.GetListBulkStock({
+                inventoryType: this.inventoryType, page: pageNo, count: this.pageCount, body: {
+                    "sortBy": e.sortBy,
+                    "expression": e.expression,
+                    "rate": e.amount
+                }
+            }));
+        // } else {
+        //     this.toaster.errorToast("This column is Hidden, you cannot sort Hidden Column");
+        // }
+    }
+
+    public setDisplayColumns(e): void {
+        this.hideShowForm.reset();
+        e.forEach(keys => {
+            this.hideShowForm.controls[keys].setValue(true);
         });
     }
-    public openedSelectTax(e): void {
-        console.log("Selected Tax : ", e)
-    }
-
-    public selectTax(tax): void {
-        console.log("OnTaxSelection Change : ", tax)
-    }
-
-
-
-    // public convertArrayToDropDownObject(): void {
-    //     this.bulkStockList.forEach((x, i) => {
-    //         if (x?.taxes?.length > 0) {
-
-    //             if (x?.taxes?.length === 1) {
-    //                 this.bulkStockList[i].taxes = [{
-    //                     label: this.titleCase(x?.taxes[0]),
-    //                     value: x?.taxes[0]
-    //                 }];
-    //             } else {
-    //                 let newObject = [];
-    //                 x.taxes.forEach((y) => {
-    //                     newObject.push({
-    //                         label: this.titleCase(y),
-    //                         value: y
-    //                     })
-    //                 })
-    //                 this.bulkStockList[i].taxes = newObject;
-    //             }
-    //         }
-    //     });
-
-    //     console.log("bulkStockList: ", this.bulkStockList)
-    // }
 
     /**
     * Lifcycle hook for destroy event
