@@ -121,8 +121,7 @@
                                                 </div>
                                             </th>
                                             <!--  Stock Name -->
-                                            <th *ngIf="hideShowForm.controls['stockGroupUniqueName'].value" class="cursor-pointer"
-                                                (click)="toggleInput('stockGroupUniqueName'); $event.stopPropagation();">
+                                            <th *ngIf="hideShowForm.controls['stockGroupUniqueName'].value" class="cursor-pointer">
                                                 <h3>Stock Name</h3>                                                
                                             </th>
                                             <!-- HSN -->
@@ -166,8 +165,7 @@
                                                 <h3>Purchase Rate</h3>
                                             </th>
                                             <!--  Purchases Unit  (Menu)-->
-                                            <th *ngIf="(inventoryType === 'SERVICE' || inventoryType === 'PRODUCT') && hideShowForm.controls['purchaseUnits'].value"
-                                                (click)="toggleInput('purchaseUnit'); $event.stopPropagation();">
+                                            <th *ngIf="(inventoryType === 'SERVICE' || inventoryType === 'PRODUCT') && hideShowForm.controls['purchaseUnits'].value">
                                                 <h3>Purchase Unit</h3>
                                             </th>
                                             <!--  Sales Account Name -->
@@ -179,13 +177,11 @@
                                                 <h3>Sales Account UN</h3>
                                             </th>
                                             <!--  Sales Rate -->
-                                            <th *ngIf="(inventoryType === 'SERVICE' || inventoryType === 'PRODUCT' && hideShowForm.controls['salesRate'].value)"
-                                                (click)="toggleInput('salesRate'); $event.stopPropagation();"  class="cursor-pointer">
+                                            <th *ngIf="(inventoryType === 'SERVICE' || inventoryType === 'PRODUCT' && hideShowForm.controls['salesRate'].value)">
                                                 <h3>Sales Rate</h3>
                                             </th>
                                             <!--  Sales Unit (Menu)-->
-                                            <th *ngIf="(inventoryType === 'SERVICE' || inventoryType === 'PRODUCT') && hideShowForm.controls['salesUnits'].value"
-                                                (click)="toggleInput('salesUnit'); $event.stopPropagation();">
+                                            <th *ngIf="(inventoryType === 'SERVICE' || inventoryType === 'PRODUCT') && hideShowForm.controls['salesUnits'].value">
                                                 <h3>Sales Unit</h3>
                                             </th>
                                             <!-- Fixed Asset Units (Menu) -->
@@ -205,8 +201,7 @@
                                                 <h3>Archive</h3>
                                             </th>
                                             <!-- Taxes -->
-                                            <th *ngIf="hideShowForm.controls['taxes'].value" class="cursor-pointer"
-                                                (click)="toggleInput('tax');$event.stopPropagation();">
+                                            <th *ngIf="hideShowForm.controls['taxes'].value" class="cursor-pointer">
                                                 <h3>Tax</h3>
                                             </th>
                                             <!-- Sales Tax Inclusive -->

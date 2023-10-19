@@ -1,5 +1,4 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { ToasterService } from '../../../services/toaster.service';
 import { FormArray, FormGroup, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { ReplaySubject, debounceTime, distinctUntilChanged, takeUntil } from 'rxjs';
@@ -29,6 +28,9 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
     private pageCount = 100;
     public totalInventoryCount: number;
     public sortOrderStatus: null | 'asc' | 'desc' = null;
+    public sortOrderKey:string = null;
+    public searchString:string = null;
+    public searchStringKey:string = null;
     /** Holds Loader status */
     public isLoading: boolean = true;
     /** Taxes list */
@@ -217,7 +219,6 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
 
     constructor(
         private changeDetection: ChangeDetectorRef,
-        private toaster: ToasterService,
         private route: ActivatedRoute,
         private formBuilder: UntypedFormBuilder,
         private store: Store<AppState>,
@@ -250,10 +251,13 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
                 }));
                 this.store.pipe(select(select => select.inventory.bulkStock), takeUntil(this.destroyed$)).subscribe((res: any) => {
                     if (res) {
+                        console.log("Res: ",res);                        
                         this.isLoading = false;
                         const bulkStockForm = this.bulkStockData;
                         bulkStockForm.clear();
                         this.setPaginationData(res);
+                        console.log(this.pagination);
+                        
                         this.totalInventoryCount = res?.totalItems;
                         res.results.forEach((row, index) => {
                             this.dropdownValues[index] = [];
@@ -393,15 +397,15 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
         this.isLoading = true;
         this.store.dispatch(this.inventoryAction.GetListBulkStock({
             inventoryType: this.inventoryType, page: e.page, count: this.pageCount, body: {
-                "search": "",
-                "searchBy": "",
-                "sortBy": "",
-                "sort": "",
-                "expression": "GREATER_THAN",
-                "rate": 0
+                "search": this.searchString !== null ? this.searchString : "",
+                "searchBy": this.searchStringKey !== null ? this.searchStringKey : "",
+                "sortBy": this.advanaceSearchData !== null ? this.advanaceSearchData?.sortBy : (this.sortOrderKey !== null ? this.sortOrderKey : ""),
+                "sort":  this.sortOrderStatus !== null ? this.sortOrderStatus : "asc",
+                "expression": this.advanaceSearchData !== null ? this.advanaceSearchData?.expression : "",
+                "rate": this.advanaceSearchData !== null ? this.advanaceSearchData?.amount : ""
             }
-        }));
-       
+        })); 
+       this.changeDetection.detectChanges();
     }
 
     public toggleInput(key): void {
@@ -438,6 +442,8 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
             if (searchedText !== null && searchedText !== undefined) {
+                this.searchString = searchedText;
+                this.searchStringKey = "variant_name";
                 let bodyObj;
                 if (this.advanaceSearchData !== null) {
                     bodyObj = {
@@ -470,6 +476,8 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
             if (searchedText !== null && searchedText !== undefined) {
+                this.searchString = searchedText;
+                this.searchStringKey = "variant_unique_name";
                 let bodyObj;
                 if (this.advanaceSearchData !== null) {
                     bodyObj = {
@@ -502,6 +510,8 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
             if (searchedText !== null && searchedText !== undefined) {
+                this.searchString = searchedText;
+                this.searchStringKey = "stock_name";
                 let bodyObj;
                 if (this.advanaceSearchData !== null) {
                     bodyObj = {
@@ -534,6 +544,8 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
             if (searchedText !== null && searchedText !== undefined) {
+                this.searchString = searchedText;
+                this.searchStringKey = "stock_unique_name";
                 let bodyObj;
                 if (this.advanaceSearchData !== null) {
                     bodyObj = {
@@ -566,6 +578,8 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
             if (searchedText !== null && searchedText !== undefined) {
+                this.searchString = searchedText;
+                this.searchStringKey = "stock_group_name";
                 let bodyObj;
                 if (this.advanaceSearchData !== null) {
                     bodyObj = {
@@ -598,6 +612,8 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
             if (searchedText !== null && searchedText !== undefined) {
+                this.searchString = searchedText;
+                this.searchStringKey = "hsn";
                 let bodyObj;
                 if (this.advanaceSearchData !== null) {
                     bodyObj = {
@@ -630,6 +646,8 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
             if (searchedText !== null && searchedText !== undefined) {
+                this.searchString = searchedText;
+                this.searchStringKey = "sac";
                 let bodyObj;
                 if (this.advanaceSearchData !== null) {
                     bodyObj = {
@@ -662,6 +680,8 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
             if (searchedText !== null && searchedText !== undefined) {
+                this.searchString = searchedText;
+                this.searchStringKey = "sku";
                 let bodyObj;
                 if (this.advanaceSearchData !== null) {
                     bodyObj = {
@@ -696,6 +716,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
         } else {
             this.sortOrderStatus = 'desc';
         }
+        this.sortOrderKey = key;
         this.isLoading = true;
         this.store.dispatch(this.inventoryAction.GetListBulkStock({
             inventoryType: this.inventoryType, page: this.pagination.currentPage, count: this.pageCount, body: {
@@ -800,7 +821,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
     public applyAdvanceFilter(e): void {
         this.advanceFilterDialogRef.close();
 
-        let checkColumnStatus: boolean;
+        // let checkColumnStatus: boolean;
 
         // if (e.sortBy === 'fixed_asset_rate') {
         //     checkColumnStatus = this.hideShowForm.controls['fixedAssetRate'].value
