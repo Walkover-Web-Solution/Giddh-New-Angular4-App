@@ -604,10 +604,6 @@ export class InventoryAction {
                 x.archive = x?.archive === true ||  x?.archive === false ? x.archive : null,
                 x.taxes = x?.taxes ? x.taxes : null
          })
-        // data.body.results = keys;
-
-        console.log("Data after Modification ", data)
-
         return {
             type: InventoryActionsConst.BulkStockResponse,
             payload: data

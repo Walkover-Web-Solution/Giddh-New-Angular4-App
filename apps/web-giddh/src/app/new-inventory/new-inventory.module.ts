@@ -81,7 +81,7 @@ import { NoDataModule } from "../shared/no-data/no-data.module";
 import { DragDropModule } from "@angular/cdk/drag-drop";
 import { CdkScrollModule } from "../theme/form-fields/cdk-scroll/cdk-scroll.module";
 import { BulkStockEditComponent } from "./component/bulk-stock-edit/bulk-stock-edit.component";
-import { BulkStockAdvanceFilterComponent } from "./component/bulk-stock-advance-filter/bulk-stock-edit.component";
+import { BulkStockAdvanceFilterComponent } from "./component/bulk-stock-advance-filter/bulk-stock-advance-filter.component";
 
 @NgModule({
     declarations: [
@@ -203,7 +203,8 @@ import { BulkStockAdvanceFilterComponent } from "./component/bulk-stock-advance-
         DashboardSalesReport,
         DashboardSellingReport,
         ReportFiltersComponent,
-        MatDivider
+        MatDivider,
+        BulkStockAdvanceFilterComponent
     ]
 })
 export class NewInventoryModule { }

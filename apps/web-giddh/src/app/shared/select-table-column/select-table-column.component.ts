@@ -31,6 +31,8 @@ export class SelectTableColumnComponent implements OnInit, OnChanges {
     @Input() public buttonText: string = "";
     /** Observable to subscribe refresh columns */
     @Input() public refreshColumnsSubject: Subject<void>;
+    /** CSS Class for Mat Menu */
+    @Input() public additionalMenuCssClass: string = "";
     /** Emits the selected filters */
     @Output() public selectedColumns: EventEmitter<any> = new EventEmitter();
     /** Emits the refresh column change filters */

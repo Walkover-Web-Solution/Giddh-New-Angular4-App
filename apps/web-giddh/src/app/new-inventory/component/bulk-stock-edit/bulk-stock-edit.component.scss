@@ -5,7 +5,17 @@
         height: inherit;
     }
     &-header{
-        height: 80px
+        height: 80px;
+        p{
+            span{
+                font-weight: 600;
+            }
+        }
+        button{
+            .icon-cross{
+                top: 1px;
+            }
+        }
     }
     &-body{
         min-height: calc(100dvh - 185px);
@@ -23,6 +33,7 @@
                         h3{
                             padding: 0 10px;
                             line-height: 38.5px;
+                            position: relative;
                         }
                     }
                 }
@@ -38,6 +49,11 @@
                             .custom-padding{
                                 padding: 6px 10px;
                             }
+                            // .icon-search{
+                            //     position: absolute;
+                            //     top: 50%;
+                            //     transform: translate(5px,-50%);                            
+                            // }
                         }
                         input{
                             width: 100%;
