@@ -89,7 +89,9 @@
         "category":"श्रेणी",
         "type":"प्रकार",
         "select_value":"कीमत चुनें",
-        "enter_amount":"राशि डालें"
+        "enter_amount":"राशि डालें",
+        "sort_by": "इसके अनुसार क्रमबद्ध करें",
+        "expression": "अभिव्यक्ति"
     },
      "warehouse_opening_balance":{
         "unique_name":"अनूठा नाम",

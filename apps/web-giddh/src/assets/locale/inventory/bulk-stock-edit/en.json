@@ -1,3 +1,27 @@
 {
-    
+    "purchase_rate": "Purchase Rate",
+    "sales_rate": "Sales Rate",
+    "fixed_asset_rate": "Fixed Asset Rate",
+    "total_inventory_count": "Total Inventory Count",
+    "variant_name": "Variant Name",
+    "variant_unique_name": "Variant UN",
+    "stock_name": "Stock Name",
+    "stock_unique_name": "Stock UN",
+    "stock_group_name": "Stock Group Name",
+    "stock_group_unique_name": "Stock Group UN",
+    "purchases_account_name": "Purchases Account Name",
+    "purchase_account_unique_name": "Purchase Account UN",
+    "purchase_unit": "Purchase Unit",
+    "sales_account_name": "Sales Account Name",
+    "sales_account_unique_name": "Sales Account UN",
+    "sales_unit": "Sales Unit",
+    "fixed_assets_units": "Fixed Assets Units",
+    "fixed_assets_rate": "Fixed Assets Rate",
+    "fixed_assets_account_name": "Fixed Assets AN",
+    "fixed_assets_account_unique_name": "Fixed Assets Account UN",
+    "sales_tax_inclusive": "Sales Tax Inclusive",
+    "purchase_tax_inclusive": "Purchase Tax Inclusive",
+    "fixed_asset_tax_inclusive": "Fixed Asset Tax Inclusive",
+    "customize_column": "Customize Column",
+    "enter_rate": "Enter Rate"
 }

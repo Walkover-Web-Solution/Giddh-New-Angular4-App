@@ -7,8 +7,9 @@ import { EventEmitter } from '@angular/core';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BulkStockAdvanceFilterComponent implements OnInit {
-    /** Holds Translate Data */
+    /** Holds Common Locale Translate Data */
     @Input() public commonLocaleData: any = {};
+    /** Holds Locale Translate Data */
     @Input() public localeData: any = {};
     /** Output Emitter to emit advance search Info */
     @Output() public applyAdvanceSearchEvent: EventEmitter<string> = new EventEmitter();
@@ -36,15 +37,15 @@ export class BulkStockAdvanceFilterComponent implements OnInit {
         this.advanceSearchSortBy = [
             {
                 value: "purchase_rate",
-                label: "Purchase Rate",
+                label: this.localeData?.purchase_rate,
             },
             {
                 value: "sales_rate",
-                label: "Sales Rate",
+                label: this.localeData?.sales_rate,
             },
             {
                 value: "fixed_asset_rate",
-                label: "Fixed Asset Rate",
+                label: this.localeData?.fixed_asset_rate,
             }
         ];
         this.advanceSearchSortByOptions = [
@@ -88,7 +89,7 @@ export class BulkStockAdvanceFilterComponent implements OnInit {
     public initializeForm(): void {
         this.advanceSearchFormObj = {
             sortBy: '',
-            type: { label: 'Rate', value: 'rate' },
+            type: { label: this.commonLocaleData?.app_rate, value: 'rate' },
             expression: '',
             amount: ''
         };
