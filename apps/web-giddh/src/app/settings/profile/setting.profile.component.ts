@@ -1281,13 +1281,19 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                                 this.localeData.address_list = this.localeData.trn_list;
                                 this.localeData.create_address = this.localeData.create_trn;
                                 this.localeData.update_address = this.localeData.update_trn;
-                            } else {
+                            } else if (activeCompany.countryV2?.alpha2CountryCode === 'IN') {
                                 this.taxType = this.commonLocaleData?.app_gstin;
                                 this.localeData.company_address_list = this.localeData.company_gst_list;
                                 this.localeData.add_address = this.localeData.add_gst;
                                 this.localeData.address_list = this.localeData.gst_list;
                                 this.localeData.create_address = this.localeData.create_gst;
                                 this.localeData.update_address = this.localeData.update_gst;
+                            } else {
+                                this.taxType = '';
+                                this.localeData.company_address_list = this.localeData.company_address_list;
+                                this.localeData.add_address = this.localeData.create_address;
+                                this.localeData.create_address = this.localeData.create_address;
+                                this.localeData.update_address = this.localeData.update_address;
                             }
                         }
                     });
