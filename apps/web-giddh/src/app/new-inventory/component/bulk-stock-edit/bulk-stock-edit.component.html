@@ -8,8 +8,7 @@
         ></text-field>
     </div>
 </ng-template>
-<ng-container appTranslate [file]="'inventory/bulk-stock-edit'" (commonLocaleData)="commonLocaleData = $event"
-    (localeData)="localeData = $event">
+<ng-container appTranslate [file]="'inventory/bulk-stock-edit'" (commonLocaleData)="commonLocaleData = $event" (localeData)="localeData = $event; updateColumnsList()">
     <div class="bulk-stock pd-15 pb-0">
         <div class="bulk-stock-warpper">
             <div class="bulk-stock-header">
