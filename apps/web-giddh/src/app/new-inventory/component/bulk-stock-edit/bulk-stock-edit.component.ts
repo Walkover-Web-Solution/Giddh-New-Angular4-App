@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormArray, FormGroup, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { ReplaySubject, debounceTime, distinctUntilChanged, takeUntil } from 'rxjs';
@@ -62,145 +62,6 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
     public advanceSearchData: any = null;
     /** Holds hide show column list*/
     public hideShowColumnList: any = [];
-    /** Holds list of all hide show column common in inventory type*/
-    private commonHideShowColumnList = [
-        {
-            label: this.localeData?.variant_unique_name,
-            value: "variantUniqueName",
-            checked: false
-        },
-        {
-            label: this.localeData?.variant_name,
-            value: "variantName",
-            checked: false
-        },
-        {
-            label: this.localeData?.stock_name,
-            value: "stockName",
-            checked: false
-        },
-        {
-            label: this.localeData?.stock_unique_name,
-            value: "stockUniqueName",
-            checked: false
-        },
-        {
-            label: this.localeData?.stock_group_name,
-            value: "stockGroupName",
-            checked: false
-        },
-        {
-            label: this.localeData?.stock_group_unique_name,
-            value: "stockGroupUniqueName",
-            checked: false
-        },
-        {
-            label: this.commonLocaleData?.app_sku,
-            value: "skuCode",
-            checked: false
-        },
-        {
-            label: this.commonLocaleData?.app_tax,
-            value: "taxes",
-            checked: false
-        },
-        {
-            label: this.commonLocaleData?.app_hsn,
-            value: "hsnNo",
-            checked: false
-        },
-        {
-            label: this.commonLocaleData?.app_sac,
-            value: "sacNo",
-            checked: false
-        },
-        {
-            label: this.commonLocaleData?.app_archive,
-            value: "archive",
-            checked: false
-        }
-    ];
-    /** Holds list of all hide show column only in FIXED ASSETS*/
-    private fixedAssetHideShowColumn = [
-        {
-            label: this.localeData?.fixed_assets_account_name,
-            value: "fixedAssetAccountName",
-            checked: false
-        },
-        {
-            label: this.localeData?.fixed_assets_account_unique_name,
-            value: "fixedAssetAccountUniqueName",
-            checked: false
-        },
-        {
-            label: this.localeData?.fixed_assets_rate,
-            value: "fixedAssetRate",
-            checked: false
-        },
-        {
-            label: this.localeData?.fixed_assets_units,
-            value: "fixedAssetUnits",
-            checked: false
-        },
-        {
-            label: this.localeData?.fixed_asset_tax_inclusive,
-            value: "fixedAssetTaxInclusive",
-            checked: false
-        }
-    ];
-    /** Holds list of all hide show column of both PRODUCT AND SERVICE*/
-    private salesPurchaseHideShowColumn = [
-        {
-            label: this.localeData?.purchases_account_name,
-            value: "purchaseAccountName",
-            checked: false
-        },
-        {
-            label: this.localeData?.purchase_account_unique_name,
-            value: "purchaseAccountUniqueName",
-            checked: false
-        },
-        {
-            label: this.localeData?.purchase_rate,
-            value: "purchaseRate",
-            checked: false
-        },
-        {
-            label: this.localeData?.purchase_unit,
-            value: "purchaseUnits",
-            checked: false
-        },
-        {
-            label: this.localeData?.purchase_tax_inclusive,
-            value: "purchaseTaxInclusive",
-            checked: false
-        },
-        {
-            label: this.localeData?.sales_account_name,
-            value: "salesAccountName",
-            checked: false
-        },
-        {
-            label: this.localeData?.sales_account_unique_name,
-            value: "salesAccountUniqueName",
-            checked: false
-        },
-        {
-            label: this.localeData?.sales_rate,
-            value: "salesRate",
-            checked: false
-        },
-        {
-            label: this.localeData?.sales_unit,
-            value: "salesUnits",
-            checked: false
-        },
-        {
-            label: this.localeData?.sales_tax_inclusive,
-            value: "salesTaxInclusive",
-            checked: false
-        },
-    ];
     /** Holds Table Head Input Fileds open/close status*/
     public tableHeadInput = {
         variantName: false,
@@ -255,7 +116,6 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             if (params?.type) {
                 this.inventoryType = params.type == 'fixedassets' ? 'FIXED_ASSETS' : params?.type.toUpperCase();
-                this.updateColumnsList();
                 this.isLoading = true;
                 this.store.dispatch(this.inventoryAction.getBulkStockList({
                     inventoryType: this.inventoryType, page: 1, count: this.pageCount, body: {
@@ -487,12 +347,151 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
      * @private
      * @memberof BulkStockEditComponent
      */
-    private updateColumnsList(): void {
+    public updateColumnsList(): void {
         this.hideShowColumnList = [];
+        /** Holds list of all hide show column common in inventory type*/
+        let commonHideShowColumnList = [
+            {
+                label: this.localeData?.variant_unique_name,
+                value: "variantUniqueName",
+                checked: false
+            },
+            {
+                label: this.localeData?.variant_name,
+                value: "variantName",
+                checked: false
+            },
+            {
+                label: this.localeData?.stock_name,
+                value: "stockName",
+                checked: false
+            },
+            {
+                label: this.localeData?.stock_unique_name,
+                value: "stockUniqueName",
+                checked: false
+            },
+            {
+                label: this.localeData?.stock_group_name,
+                value: "stockGroupName",
+                checked: false
+            },
+            {
+                label: this.localeData?.stock_group_unique_name,
+                value: "stockGroupUniqueName",
+                checked: false
+            },
+            {
+                label: this.commonLocaleData?.app_sku,
+                value: "skuCode",
+                checked: false
+            },
+            {
+                label: this.commonLocaleData?.app_tax,
+                value: "taxes",
+                checked: false
+            },
+            {
+                label: this.commonLocaleData?.app_hsn,
+                value: "hsnNo",
+                checked: false
+            },
+            {
+                label: this.commonLocaleData?.app_sac,
+                value: "sacNo",
+                checked: false
+            },
+            {
+                label: this.commonLocaleData?.app_archive,
+                value: "archive",
+                checked: false
+            }
+        ];
+        /** Holds list of all hide show column only in FIXED ASSETS*/
+        let fixedAssetHideShowColumn = [
+            {
+                label: this.localeData?.fixed_assets_account_name,
+                value: "fixedAssetAccountName",
+                checked: false
+            },
+            {
+                label: this.localeData?.fixed_assets_account_unique_name,
+                value: "fixedAssetAccountUniqueName",
+                checked: false
+            },
+            {
+                label: this.localeData?.fixed_assets_rate,
+                value: "fixedAssetRate",
+                checked: false
+            },
+            {
+                label: this.localeData?.fixed_assets_units,
+                value: "fixedAssetUnits",
+                checked: false
+            },
+            {
+                label: this.localeData?.fixed_asset_tax_inclusive,
+                value: "fixedAssetTaxInclusive",
+                checked: false
+            }
+        ];
+        /** Holds list of all hide show column of both PRODUCT AND SERVICE*/
+        let salesPurchaseHideShowColumn = [
+            {
+                label: this.localeData?.purchases_account_name,
+                value: "purchaseAccountName",
+                checked: false
+            },
+            {
+                label: this.localeData?.purchase_account_unique_name,
+                value: "purchaseAccountUniqueName",
+                checked: false
+            },
+            {
+                label: this.localeData?.purchase_rate,
+                value: "purchaseRate",
+                checked: false
+            },
+            {
+                label: this.localeData?.purchase_unit,
+                value: "purchaseUnits",
+                checked: false
+            },
+            {
+                label: this.localeData?.purchase_tax_inclusive,
+                value: "purchaseTaxInclusive",
+                checked: false
+            },
+            {
+                label: this.localeData?.sales_account_name,
+                value: "salesAccountName",
+                checked: false
+            },
+            {
+                label: this.localeData?.sales_account_unique_name,
+                value: "salesAccountUniqueName",
+                checked: false
+            },
+            {
+                label: this.localeData?.sales_rate,
+                value: "salesRate",
+                checked: false
+            },
+            {
+                label: this.localeData?.sales_unit,
+                value: "salesUnits",
+                checked: false
+            },
+            {
+                label: this.localeData?.sales_tax_inclusive,
+                value: "salesTaxInclusive",
+                checked: false
+            },
+        ];
         if (this.inventoryType === 'FIXED_ASSETS') {
-            this.hideShowColumnList = [...this.commonHideShowColumnList, ...this.fixedAssetHideShowColumn];
+            this.hideShowColumnList = [...commonHideShowColumnList, ...fixedAssetHideShowColumn];
         } else {
-            this.hideShowColumnList = [...this.commonHideShowColumnList, ...this.salesPurchaseHideShowColumn];
+            this.hideShowColumnList = [...commonHideShowColumnList, ...salesPurchaseHideShowColumn];
         }
     }
 
