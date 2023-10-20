@@ -486,7 +486,7 @@
                             </form>
                         </div>
 
-                        <div class="pagination-wrapper mt-auto" *ngIf="pagination.totalPages > 1">
+                        <div class="pagination-wrapper mt-auto" *ngIf="pagination.totalPages > 1 && !isLoading">
                             <pagination 
                                 *ngIf="pagination" 
                                 class="pagination-sm" 

@@ -15,7 +15,7 @@
                             <div class="col-lg-6 col-sm-6 col-12 mr-b15 pr-2">                               
                                     <dropdown-field
                                         [placeholder]="'Select '"
-                                        [options]="advanceSearchCategory"
+                                        [options]="advanceSearchSortBy"
                                         (selectedOption)="selectCategory($event)"
                                         [defaultValue]="advanceSearchFormObj.sortBy.label"
                                         [allowValueReset]="true"
@@ -26,7 +26,7 @@
                             <div class="col-lg-6 col-sm-6 col-12 mr-b15 pl-2">
                                     <dropdown-field
                                         [placeholder]="localeData?.advance_search_filter?.select_type"
-                                        [options]="advanceSearchCategoryOptions"
+                                        [options]="advanceSearchSortByOptions"
                                         (selectedOption)="selectCategoryType($event)"
                                         [defaultValue]="advanceSearchFormObj.type.label"
                                         [allowValueReset]="true"
@@ -43,8 +43,8 @@
                             <div class="col-lg-6 col-sm-6 mr-b15 pr-2">
                                 <dropdown-field
                                     [placeholder]="'Select Expression'"
-                                    [options]="advanceSearchValue"
-                                    (selectedOption)="selectValueType($event)"
+                                    [options]="advanceSearchExpression"
+                                    (selectedOption)="selectValueExpression($event)"
                                     [defaultValue]="advanceSearchFormObj.expression.label"
                                     [allowValueReset]="true"
                                     (onClear)="advanceSearchFormObj.expression = ''"

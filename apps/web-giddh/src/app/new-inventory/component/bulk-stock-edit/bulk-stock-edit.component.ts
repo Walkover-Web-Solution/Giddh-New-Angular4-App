@@ -243,7 +243,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
                 const bulkStockForm = this.bulkStockData;
                 bulkStockForm.clear();
                 this.isLoading = true;
-                this.store.dispatch(this.inventoryAction.GetListBulkStock({
+                this.store.dispatch(this.inventoryAction.GetBulkStockList({
                     inventoryType: this.inventoryType, page: 1, count: this.pageCount, body: {
                         "search": "",
                         "searchBy": "",
@@ -416,7 +416,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
     public pageChanged(e): void {
         if (this.pagination.currentPage !== e?.page) {
             this.isLoading = true;
-            this.store.dispatch(this.inventoryAction.GetListBulkStock({
+            this.store.dispatch(this.inventoryAction.GetBulkStockList({
                 inventoryType: this.inventoryType, page: e.page, count: this.pageCount, body: {
                     "search": this.searchString !== null ? this.searchString : "",
                     "searchBy": this.searchStringKey !== null ? this.searchStringKey : "",
@@ -505,7 +505,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
                     }
                 }
                 this.isLoading = true;
-                this.store.dispatch(this.inventoryAction.GetListBulkStock({
+                this.store.dispatch(this.inventoryAction.GetBulkStockList({
                     inventoryType: this.inventoryType, page: this.pagination.currentPage, count: this.pageCount, body: bodyObj
                 }));
             }
@@ -539,7 +539,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
                     }
                 }
                 this.isLoading = true;
-                this.store.dispatch(this.inventoryAction.GetListBulkStock({
+                this.store.dispatch(this.inventoryAction.GetBulkStockList({
                     inventoryType: this.inventoryType, page: this.pagination.currentPage, count: this.pageCount, body: bodyObj
                 }));
             }
@@ -573,7 +573,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
                     }
                 }
                 this.isLoading = true;
-                this.store.dispatch(this.inventoryAction.GetListBulkStock({
+                this.store.dispatch(this.inventoryAction.GetBulkStockList({
                     inventoryType: this.inventoryType, page: this.pagination.currentPage, count: this.pageCount, body: bodyObj
                 }));
             }
@@ -607,7 +607,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
                     }
                 }
                 this.isLoading = true;
-                this.store.dispatch(this.inventoryAction.GetListBulkStock({
+                this.store.dispatch(this.inventoryAction.GetBulkStockList({
                     inventoryType: this.inventoryType, page: this.pagination.currentPage, count: this.pageCount, body: bodyObj
                 }));
             }
@@ -641,7 +641,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
                     }
                 }
                 this.isLoading = true;
-                this.store.dispatch(this.inventoryAction.GetListBulkStock({
+                this.store.dispatch(this.inventoryAction.GetBulkStockList({
                     inventoryType: this.inventoryType, page: this.pagination.currentPage, count: this.pageCount, body: bodyObj
                 }));
             }
@@ -675,7 +675,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
                     }
                 }
                 this.isLoading = true;
-                this.store.dispatch(this.inventoryAction.GetListBulkStock({
+                this.store.dispatch(this.inventoryAction.GetBulkStockList({
                     inventoryType: this.inventoryType, page: this.pagination.currentPage, count: this.pageCount, body: bodyObj
                 }));
             }
@@ -709,7 +709,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
                     }
                 }
                 this.isLoading = true;
-                this.store.dispatch(this.inventoryAction.GetListBulkStock({
+                this.store.dispatch(this.inventoryAction.GetBulkStockList({
                     inventoryType: this.inventoryType, page: this.pagination.currentPage, count: this.pageCount, body: bodyObj
                 }));
             }
@@ -743,7 +743,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
                     }
                 }
                 this.isLoading = true;
-                this.store.dispatch(this.inventoryAction.GetListBulkStock({
+                this.store.dispatch(this.inventoryAction.GetBulkStockList({
                     inventoryType: this.inventoryType, page: this.pagination.currentPage, count: this.pageCount, body: bodyObj
                 }));
             }
@@ -758,7 +758,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
         }
         this.sortOrderKey = key;
         this.isLoading = true;
-        this.store.dispatch(this.inventoryAction.GetListBulkStock({
+        this.store.dispatch(this.inventoryAction.GetBulkStockList({
             inventoryType: this.inventoryType, page: this.pagination.currentPage, count: this.pageCount, body: {
                 "search": "",
                 "searchBy": "",
@@ -796,21 +796,21 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
      * @param {IOption[]} [parents=[]]
      * @memberof StockCreateEditComponent
      */
-    private arrangeStockGroups(groups: IGroupsWithStocksHierarchyMinItem[], parents: IOption[] = []): void {
-        groups.map(group => {
-            if (group) {
-                let newOption: IOption = { label: '', value: '', additional: {} };
-                newOption.label = group?.name;
-                newOption.value = group?.uniqueName;
-                newOption.additional = group;
-                parents.push(newOption);
-                if (group?.childStockGroups?.length > 0) {
-                    this.arrangeStockGroups(group?.childStockGroups, parents);
-                }
-            }
-        });
-        this.changeDetection.detectChanges();
-    }
+    // private arrangeStockGroups(groups: IGroupsWithStocksHierarchyMinItem[], parents: IOption[] = []): void {
+    //     groups.map(group => {
+    //         if (group) {
+    //             let newOption: IOption = { label: '', value: '', additional: {} };
+    //             newOption.label = group?.name;
+    //             newOption.value = group?.uniqueName;
+    //             newOption.additional = group;
+    //             parents.push(newOption);
+    //             if (group?.childStockGroups?.length > 0) {
+    //                 this.arrangeStockGroups(group?.childStockGroups, parents);
+    //             }
+    //         }
+    //     });
+    //     this.changeDetection.detectChanges();
+    // }
 
     /**
     * Get taxes
@@ -852,7 +852,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
         this.advanceSearchData = null;
         this.sortOrderStatus = null;
         this.isLoading = true;
-        this.store.dispatch(this.inventoryAction.GetListBulkStock({
+        this.store.dispatch(this.inventoryAction.GetBulkStockList({
             inventoryType: this.inventoryType, page: this.pagination.currentPage, count: this.pageCount, body: {
                 "search": "",
                 "searchBy": "",
@@ -885,7 +885,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
         this.advanceSearchData = e;
         const pageNo = this.pagination.currentPage;
         this.isLoading = true;
-        this.store.dispatch(this.inventoryAction.GetListBulkStock({
+        this.store.dispatch(this.inventoryAction.GetBulkStockList({
             inventoryType: this.inventoryType, page: pageNo, count: this.pageCount, body: {
                 "sortBy": e.sortBy,
                 "expression": e.expression,

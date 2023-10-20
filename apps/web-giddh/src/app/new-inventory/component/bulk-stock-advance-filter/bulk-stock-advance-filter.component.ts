@@ -13,18 +13,14 @@ export class BulkStockAdvanceFilterComponent implements OnInit {
     @Output() public applyAdvanceSearchEvent: EventEmitter<string> = new EventEmitter();
     @Output() public closeDailog: EventEmitter<string> = new EventEmitter();
 
-    /* Hold advance search category   */
-    public advanceSearchCategory: any[] = [];
-    /* Hold advance search category options*/
-    public advanceSearchCategoryOptions: any[] = [];
-    /* Hold advance search value*/
-    public advanceSearchValue: any[] = [];
-    /** Instance of advance search form*/
+    /* Hold advance search SortBy   */
+    public advanceSearchSortBy: any[] = [];
+    /* Hold advance search SortBy options*/
+    public advanceSearchSortByOptions: any[] = [];
+    /* Hold Advance Search Expression*/
+    public advanceSearchExpression: any[] = [];
+    /** Instance of Advance Search Form*/
     public advanceSearchFormObj: any;
-    /** True if translations loaded */
-    public translationLoaded: boolean = false;
-    /** Holds report type for modules */
-    public reportType: string = '';
     constructor() { }
 
     public ngOnInit(): void {
@@ -35,7 +31,7 @@ export class BulkStockAdvanceFilterComponent implements OnInit {
      * The formInit() is used to initialize advance search form data     * 
      */
     public formInit(): void {
-        this.advanceSearchCategory = [
+        this.advanceSearchSortBy = [
             {
                 value: "purchase_rate",
                 label: "Purchase Rate",
@@ -49,13 +45,13 @@ export class BulkStockAdvanceFilterComponent implements OnInit {
                 label: "Fixed Asset Rate",
             }
         ];
-        this.advanceSearchCategoryOptions = [
+        this.advanceSearchSortByOptions = [
             {
                 value: "rate",
                 label: this.commonLocaleData?.app_rate,
             }
         ];
-        this.advanceSearchValue = [
+        this.advanceSearchExpression = [
             {
                 value: "EQUAL",
                 label: this.commonLocaleData?.app_comparision_filters?.equals,
@@ -116,7 +112,7 @@ export class BulkStockAdvanceFilterComponent implements OnInit {
     /**
      *  Set selected expression to Advance search form object 
      */
-    public selectValueType(e):void{
+    public selectValueExpression(e):void{
         this.advanceSearchFormObj.expression = e;
     }
 
