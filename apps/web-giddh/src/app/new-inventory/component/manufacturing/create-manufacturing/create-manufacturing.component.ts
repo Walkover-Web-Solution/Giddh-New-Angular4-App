@@ -219,7 +219,7 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
      *
      * @memberof CreateManufacturingComponent
      */
-    public getStocks(stockObject: any, page: number = 1, q?: string, inventoryType?: string, callback?: Function): void {
+    public getStocks(stockObject: any, page: number = 1, q?: string, inventoryType?: string, callback?: Function, assignDataAndCallback: boolean = false): void {
         console.log('stockObject', stockObject, this.preventStocksApiCall,q);
 
         if (page > stockObject.stocksTotalPages || this.preventStocksApiCall || q === undefined) {
@@ -237,7 +237,7 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
         stockObject.stocksPageNumber = page;
         this.inventoryService.getStocksV2({ inventoryType: inventoryType, page: page, q: q }).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
             if (response?.status === "success" && response?.body?.results?.length) {
-                if (!callback) {
+                if (!callback || assignDataAndCallback) {
                     stockObject.stocksTotalPages = response.body.totalPages;
                     if (page === 1) {
                         stockObject.stocks = [];
@@ -251,6 +251,10 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
 
                         stockObject.stocks.push({ label: stock?.name, value: stock?.uniqueName, additional: { stockUnitCode: stock?.stockUnits[0]?.code, stockUnitUniqueName: stock?.stockUnits[0]?.uniqueName, inventoryType: stock.inventoryType, unitsList: unitsList } });
                     });
+
+                    if (assignDataAndCallback) {
+                        callback(response);    
+                    }
                 } else {
                     callback(response);
                 }
@@ -419,8 +423,12 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
             }
 
             this.preventStocksApiCall = false;
-            this.getStocks(this.manufacturingObject.manufacturingDetails[0].linkedStocks[0], 1, '', this.selectedInventoryType);
-            this.getStocks(this.manufacturingObject.manufacturingDetails[0].byProducts[0], 1, '', this.selectedInventoryType);
+            this.getStocks(this.manufacturingObject.manufacturingDetails[0].linkedStocks[0], 1, '', this.selectedInventoryType, () => {
+                this.manufacturingObject.manufacturingDetails[0].byProducts[0].stocks = cloneDeep(this.manufacturingObject.manufacturingDetails[0].linkedStocks[0].stocks);
+                this.manufacturingObject.manufacturingDetails[0].byProducts[0].stocksQ = cloneDeep(this.manufacturingObject.manufacturingDetails[0].linkedStocks[0].stocksQ);
+                this.manufacturingObject.manufacturingDetails[0].byProducts[0].stocksPageNumber = cloneDeep(this.manufacturingObject.manufacturingDetails[0].linkedStocks[0].stocksPageNumber);
+                this.manufacturingObject.manufacturingDetails[0].byProducts[0].stocksTotalPages = cloneDeep(this.manufacturingObject.manufacturingDetails[0].linkedStocks[0].stocksTotalPages);
+            }, true);
 
             this.calculateTotals();
         });
