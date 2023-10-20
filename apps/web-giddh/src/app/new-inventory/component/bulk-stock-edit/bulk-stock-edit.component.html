@@ -15,7 +15,7 @@
             <div class="bulk-stock-header">
                 <div class="d-flex justify-content-end align-items-center">
                     <div class="mr-5">
-                        <button *ngIf="(advanaceSearchData !== null || sortOrderStatus !== null) && !isLoading" mat-stroked-button (click)="resetAdvanceSearch()">
+                        <button *ngIf="(advanceSearchData !== null || sortOrderStatus !== null) && !isLoading" mat-stroked-button (click)="resetSearch()">
                            <span class="icon-cross position-relative"></span> Clear Filter
                         </button>
                     </div>
@@ -58,7 +58,7 @@
                                     <thead>
                                         <tr (clickOutside)="hideTableHeadInput()">
                                             <!-- Variant Name -->
-                                            <th class="cursor-pointer" *ngIf="hideShowForm.controls['variantName'].value">
+                                            <th class="cursor-pointer" *ngIf="hideShowForm.controls['variantName'].value" >
                                                 <div class="d-flex align-items-center">
                                                     <div (click)="toggleInput('variantName'); $event.stopPropagation();" class="w-100">
                                                         <h3 *ngIf="!tableHeadInput.variantName"><span class="icon-search"></span> Variant Name </h3>
@@ -225,35 +225,35 @@
                                                 <!-- Variant Name -->
                                                 <td *ngIf="hideShowForm.controls['variantName'].value" (click)="getInputIndex(i,'variantName')">
                                                     <div class="border-line">
-                                                        <text-field [type]="'text'" formControlName="variantName" [readonly]="true" >
+                                                        <text-field [type]="'text'" formControlName="variantName" [readonly]="true" [matTooltip]="row.get('variantName').value" matTooltipPosition="above">
                                                         </text-field>
                                                     </div>
                                                 </td>
                                                 <!-- Variant UN -->
                                                 <td *ngIf="hideShowForm.controls['variantUniqueName'].value" (click)="getInputIndex(i,'variantUniqueName')">
                                                     <div class="border-line">
-                                                        <text-field [type]="'text'" formControlName="variantUniqueName" [readonly]="true">
+                                                        <text-field [type]="'text'" formControlName="variantUniqueName" [readonly]="true" [matTooltip]="row.get('variantUniqueName').value" matTooltipPosition="above">
                                                         </text-field>
                                                     </div>
                                                 </td>
                                                 <!--  Stock Name -->
                                                 <td *ngIf="hideShowForm.controls['stockName'].value" (click)="getInputIndex(i,'stockName')">
                                                     <div class="border-line">
-                                                        <text-field [type]="'text'" formControlName="stockName" [readonly]="true">
+                                                        <text-field [type]="'text'" formControlName="stockName" [readonly]="true" [matTooltip]="row.get('stockName').value" matTooltipPosition="above">
                                                         </text-field>
                                                     </div>
                                                 </td>
                                                 <!--  Stock UN -->
                                                 <td *ngIf="hideShowForm.controls['stockUniqueName'].value" (click)="getInputIndex(i,'stockUniqueName')">
                                                     <div class="border-line">
-                                                        <text-field [type]="'text'" formControlName="stockUniqueName"  [readonly]="true">
+                                                        <text-field [type]="'text'" formControlName="stockUniqueName"  [readonly]="true" [matTooltip]="row.get('stockUniqueName').value" matTooltipPosition="above">
                                                         </text-field>
                                                     </div>
                                                 </td>
                                                 <!--  Stock Group Name -->
                                                 <td *ngIf="hideShowForm.controls['stockGroupName'].value" (click)="getInputIndex(i,'stockGroupName')">
                                                     <div class="border-line">
-                                                        <text-field [type]="'text'" formControlName="stockGroupName"  [readonly]="true">
+                                                        <text-field [type]="'text'" formControlName="stockGroupName"  [readonly]="true" [matTooltip]="row.get('stockGroupName').value" matTooltipPosition="above">
                                                         </text-field>
                                                         <!-- <mat-select formControlName="stockGroupName" class="vertical-margin" [disabled]="true">
                                                             <mat-option
@@ -269,7 +269,7 @@
                                                 <!--  Stock Group Unique Name -->
                                                 <td *ngIf="hideShowForm.controls['stockGroupUniqueName'].value" (click)="getInputIndex(i,'stockGroupUniqueName')">
                                                     <div class="border-line">
-                                                        <text-field [type]="'text'" formControlName="stockGroupUniqueName"  [readonly]="true">
+                                                        <text-field [type]="'text'" formControlName="stockGroupUniqueName"  [readonly]="true" [matTooltip]="row.get('stockGroupUniqueName').value" matTooltipPosition="above">
                                                         </text-field>
                                                         <!-- <mat-select formControlName="stockGroupName" class="vertical-margin" [disabled]="true">
                                                             <mat-option
@@ -285,21 +285,21 @@
                                                 <!-- HSN -->
                                                 <td *ngIf="hideShowForm.controls['hsnNo'].value" (click)="getInputIndex(i,'hsnNo')">
                                                     <div class="border-line">
-                                                        <text-field [type]="'text'" formControlName="hsnNo"  [readonly]="true">
+                                                        <text-field [type]="'text'" formControlName="hsnNo"  [readonly]="true" [matTooltip]="row.get('hsnNo').value" matTooltipPosition="above">
                                                         </text-field>
                                                     </div>
                                                 </td>
                                                 <!-- SAC -->
                                                 <td *ngIf="hideShowForm.controls['sacNo'].value" (click)="getInputIndex(i,'sacNo')">
                                                     <div class="border-line">
-                                                        <text-field [type]="'text'" formControlName="sacNo" [readonly]="true">
+                                                        <text-field [type]="'text'" formControlName="sacNo" [readonly]="true" [matTooltip]="row.get('sacNo').value" matTooltipPosition="above">
                                                         </text-field>
                                                     </div>
                                                 </td>
                                                 <!-- SKU Code -->
                                                 <td *ngIf="hideShowForm.controls['skuCode'].value" (click)="getInputIndex(i,'skuCode')">
                                                     <div class="border-line">
-                                                        <text-field [type]="'text'" formControlName="skuCode" [readonly]="true">
+                                                        <text-field [type]="'text'" formControlName="skuCode" [readonly]="true" [matTooltip]="row.get('skuCode').value" matTooltipPosition="above">
                                                         </text-field>
                                                     </div>
                                                 </td>
@@ -307,7 +307,7 @@
                                                 <td (click)="getInputIndex(i,'purchaseAccountName')" *ngIf="(inventoryType === 'SERVICE' || inventoryType === 'PRODUCT') && hideShowForm.controls['purchaseAccountName'].value">
                                                     <div class="border-line">
                                                         <text-field [type]="'text'"
-                                                            formControlName="purchaseAccountName" [readonly]="true">
+                                                            formControlName="purchaseAccountName" [readonly]="true" [matTooltip]="row.get('purchaseAccountName').value" matTooltipPosition="above">
                                                         </text-field>
                                                     </div>
                                                 </td>
@@ -315,21 +315,21 @@
                                                 <td (click)="getInputIndex(i,'purchaseAccountUniqueName')" *ngIf="(inventoryType === 'SERVICE' || inventoryType === 'PRODUCT') && hideShowForm.controls['purchaseAccountUniqueName'].value">
                                                     <div class="border-line">
                                                         <text-field [type]="'text'"
-                                                            formControlName="purchaseAccountUniqueName" [readonly]="true">
+                                                            formControlName="purchaseAccountUniqueName" [readonly]="true" [matTooltip]="row.get('purchaseAccountUniqueName').value" matTooltipPosition="above">
                                                         </text-field>
                                                     </div>
                                                 </td>
                                                 <!--  Purchases Rate -->
                                                 <td (click)="getInputIndex(i,'purchaseRate')" *ngIf="(inventoryType === 'SERVICE' || inventoryType === 'PRODUCT' && hideShowForm.controls['purchaseRate'].value)">
                                                     <div class="border-line">
-                                                        <text-field [type]="'text'" formControlName="purchaseRate" [readonly]="true">
+                                                        <text-field [type]="'text'" formControlName="purchaseRate" [readonly]="true" [matTooltip]="row.get('purchaseRate').value" matTooltipPosition="above">
                                                         </text-field>
                                                     </div>
                                                 </td>
                                                 <!--  Purchases Unit  (Menu)-->
                                                 <td (click)="getInputIndex(i,'purchaseUnits')" *ngIf="(inventoryType === 'SERVICE' || inventoryType === 'PRODUCT') && hideShowForm.controls['purchaseUnits'].value">
                                                     <div class="border-line">
-                                                        <text-field [type]="'text'" formControlName="purchaseUnits" [readonly]="true">
+                                                        <text-field [type]="'text'" formControlName="purchaseUnits" [readonly]="true" [matTooltip]="row.get('purchaseUnits').value" matTooltipPosition="above">
                                                         </text-field>
                                                     <!-- <mat-select  disabled="true" formControlName="purchaseUnits" class="vertical-margin">
                                                         <mat-option
@@ -341,7 +341,7 @@
                                                 <!--  Sales Account Name -->
                                                 <td (click)="getInputIndex(i,'salesAccountName')" *ngIf="(inventoryType === 'SERVICE' || inventoryType === 'PRODUCT') && hideShowForm.controls['salesAccountName'].value">
                                                     <div class="border-line">
-                                                        <text-field [type]="'text'" formControlName="salesAccountName" [readonly]="true">
+                                                        <text-field [type]="'text'" formControlName="salesAccountName" [readonly]="true" [matTooltip]="row.get('salesAccountName').value" matTooltipPosition="above">
                                                         </text-field>
                                                     </div>
                                                 </td>
@@ -349,21 +349,21 @@
                                                 <td (click)="getInputIndex(i,'salesAccountUniqueName')" *ngIf="(inventoryType === 'SERVICE' || inventoryType === 'PRODUCT') && hideShowForm.controls['salesAccountUniqueName'].value">
                                                     <div class="border-line">
                                                         <text-field [type]="'text'"
-                                                            formControlName="salesAccountUniqueName" [readonly]="true">
+                                                            formControlName="salesAccountUniqueName" [readonly]="true" [matTooltip]="row.get('salesAccountUniqueName').value" matTooltipPosition="above">
                                                         </text-field>
                                                     </div>
                                                 </td>
                                                 <!--  Sales Rate -->
                                                 <td (click)="getInputIndex(i,'salesRate')" *ngIf="(inventoryType === 'SERVICE' || inventoryType === 'PRODUCT' && hideShowForm.controls['salesRate'].value)">
                                                     <div class="border-line">
-                                                        <text-field [type]="'text'" formControlName="salesRate" [readonly]="true">
+                                                        <text-field [type]="'text'" formControlName="salesRate" [readonly]="true" [matTooltip]="row.get('salesRate').value" matTooltipPosition="above">
                                                         </text-field>
                                                     </div>
                                                 </td>
                                                 <!--  Sales Unit (Menu) -->
                                                 <td (click)="getInputIndex(i,'salesUnits')" *ngIf="(inventoryType === 'SERVICE' || inventoryType === 'PRODUCT') && hideShowForm.controls['salesUnits'].value">
                                                     <div class="border-line">
-                                                        <text-field [type]="'text'" formControlName="salesUnits"  [readonly]="true">
+                                                        <text-field [type]="'text'" formControlName="salesUnits"  [readonly]="true" [matTooltip]="row.get('salesUnits').value" matTooltipPosition="above">
                                                         </text-field>
                                                         <!-- <mat-select formControlName="salesUnits" class="vertical-margin" [disabled]="true">
                                                             <mat-option
@@ -375,7 +375,7 @@
                                                 <!-- Fixed Asset Units (Menu)-->
                                                 <td (click)="getInputIndex(i,'fixedAssetUnits')" *ngIf="inventoryType === 'FIXED_ASSETS' && hideShowForm.controls['fixedAssetUnits'].value">
                                                     <div class="border-line">
-                                                        <text-field [type]="'text'" formControlName="fixedAssetUnits"  [readonly]="true">
+                                                        <text-field [type]="'text'" formControlName="fixedAssetUnits"  [readonly]="true" [matTooltip]="row.get('fixedAssetUnits').value" matTooltipPosition="above">
                                                         </text-field>
                                                         <!-- <mat-select formControlName="fixedAssetUnits" class="vertical-margin" [disabled]="true">
                                                             <mat-option
@@ -388,7 +388,7 @@
                                                 <td (click)="getInputIndex(i,'fixedAssetRate')" *ngIf="inventoryType === 'FIXED_ASSETS' && hideShowForm.controls['fixedAssetRate'].value">
                                                     <div class="border-line">
                                                         <text-field [type]="'text'"
-                                                            formControlName="fixedAssetRate" [readonly]="true">
+                                                            formControlName="fixedAssetRate" [readonly]="true" [matTooltip]="row.get('fixedAssetRate').value" matTooltipPosition="above">
                                                         </text-field>
                                                     </div>
                                                 </td>
@@ -396,7 +396,7 @@
                                                 <td (click)="getInputIndex(i,'fixedAssetAccountName')" *ngIf="inventoryType === 'FIXED_ASSETS' && hideShowForm.controls['fixedAssetAccountName'].value">
                                                     <div class="border-line">
                                                         <text-field [type]="'text'"
-                                                            formControlName="fixedAssetAccountName" [readonly]="true">
+                                                            formControlName="fixedAssetAccountName" [readonly]="true" [matTooltip]="row.get('fixedAssetAccountName').value" matTooltipPosition="above">
                                                         </text-field>
                                                     </div>
                                                 </td>
@@ -404,14 +404,14 @@
                                                 <td (click)="getInputIndex(i,'fixedAssetAccountUniqueName')" *ngIf="inventoryType === 'FIXED_ASSETS' && hideShowForm.controls['fixedAssetAccountUniqueName'].value">
                                                     <div class="border-line">
                                                         <text-field [type]="'text'"
-                                                            formControlName="fixedAssetAccountUniqueName" [readonly]="true">
+                                                            formControlName="fixedAssetAccountUniqueName" [readonly]="true" [matTooltip]="row.get('fixedAssetAccountUniqueName').value" matTooltipPosition="above">
                                                         </text-field>
                                                     </div>
                                                 </td>
                                                 <!-- Archive -->
                                                 <td *ngIf="hideShowForm.controls['archive'].value" (click)="getInputIndex(i,'archive')">
                                                     <div class="border-line">
-                                                        <div class="custom-padding">
+                                                        <div class="custom-padding" [matTooltip]="row.get('archive').value ? 'Yes' : 'No'" matTooltipPosition="above">
                                                             {{ row.get('archive').value ? "Yes" : "No" }}
                                                         </div>
                                                         <!-- <text-field [type]="'text'" formControlName="archive" [readonly]="true">
@@ -421,7 +421,7 @@
                                                 <!-- Tax (Menu)-->
                                                 <td *ngIf="hideShowForm.controls['taxes'].value" (click)="getInputIndex(i,'taxes')">
                                                     <div class="border-line">
-                                                        <text-field [type]="'text'" formControlName="taxes"  [readonly]="true">
+                                                        <text-field [type]="'text'" formControlName="taxes"  [readonly]="true" [matTooltip]="row.get('taxes').value" matTooltipPosition="above">
                                                         </text-field>
                                                         <!-- <mat-select
                                                             class="vertical-margin"
@@ -450,7 +450,7 @@
                                                 <!-- Sales Tax Inclusive -->
                                                 <td (click)="getInputIndex(i,'salesTaxInclusive')" *ngIf="(inventoryType === 'SERVICE' || inventoryType === 'PRODUCT') && hideShowForm.controls['salesTaxInclusive'].value">
                                                     <div class="border-line">
-                                                        <div class="custom-padding">
+                                                        <div class="custom-padding" [matTooltip]="row.get('salesTaxInclusive').value ? 'MRP (Inclusive)' : 'Exclusive'" matTooltipPosition="above">
                                                             {{ row.get('salesTaxInclusive').value ? "MRP (Inclusive)" : "Exclusive" }}
                                                         </div>
                                                         <!-- <text-field [type]="'text'" formControlName="salesTaxInclusive" [readonly]="true">
@@ -460,7 +460,7 @@
                                                 <!-- Purchase Tax Inclusive -->
                                                 <td (click)="getInputIndex(i,'purchaseTaxInclusive')" *ngIf="(inventoryType === 'SERVICE' || inventoryType === 'PRODUCT') && hideShowForm.controls['purchaseTaxInclusive'].value">
                                                     <div class="border-line">
-                                                        <div class="custom-padding">
+                                                        <div class="custom-padding" [matTooltip]="row.get('purchaseTaxInclusive').value ? 'MRP (Inclusive)' : 'Exclusive'" matTooltipPosition="above">
                                                             {{ row.get('purchaseTaxInclusive').value ? "MRP (Inclusive)" : "Exclusive" }}
                                                         </div>
                                                         <!-- <text-field [type]="'text'"
@@ -471,7 +471,7 @@
                                                 <!-- FixedAsset Tax Inclusive -->
                                                 <td (click)="getInputIndex(i,'fixedAssetTaxInclusive')" *ngIf="inventoryType === 'FIXED_ASSETS' && hideShowForm.controls['fixedAssetTaxInclusive'].value">
                                                     <div class="border-line">
-                                                        <div class="custom-padding">
+                                                        <div class="custom-padding" [matTooltip]="row.get('fixedAssetTaxInclusive').value ? 'MRP (Inclusive)' : 'Exclusive'" matTooltipPosition="above">
                                                             {{ row.get('fixedAssetTaxInclusive').value ? "MRP (Inclusive)" : "Exclusive" }}
                                                         </div>
                                                         <!-- <text-field [type]="'text'"
@@ -487,11 +487,19 @@
                         </div>
 
                         <div class="pagination-wrapper mt-auto" *ngIf="pagination.totalPages > 1">
-                            <pagination *ngIf="pagination" class="pagination-sm" [totalItems]="pagination.totalItems"
-                                [maxSize]="5" [boundaryLinks]="true" [itemsPerPage]="pagination.itemsPerPage"
-                                [rotate]="false" (pageChanged)="pageChanged($event)"
+                            <pagination 
+                                *ngIf="pagination" 
+                                class="pagination-sm" 
+                                [(ngModel)]="pagination.currentPage"
+                                [totalItems]="pagination.totalItems"
+                                [maxSize]="5" 
+                                [boundaryLinks]="true" 
+                                [itemsPerPage]="pagination.itemsPerPage"
+                                [rotate]="false" 
+                                (pageChanged)="pageChanged($event)"
                                 [firstText]="commonLocaleData?.app_first"
-                                [previousText]="commonLocaleData?.app_previous" [nextText]="commonLocaleData?.app_next"
+                                [previousText]="commonLocaleData?.app_previous" 
+                                [nextText]="commonLocaleData?.app_next"
                                 [lastText]="commonLocaleData?.app_last"></pagination>
                         </div>
                     </ng-container>
