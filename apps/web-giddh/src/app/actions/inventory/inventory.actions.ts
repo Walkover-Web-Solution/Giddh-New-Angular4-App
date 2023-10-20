@@ -309,11 +309,11 @@ export class InventoryAction {
                 return { type: 'EmptyAction' };
             })));
 
-        public GetListBulkStock$: Observable<Action> = createEffect(() => this.action$
+        public GetBulkStockList$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(InventoryAction.GET_BULK_STOCK_LIST),
-            switchMap((action: CustomActions) => this._inventoryService.GetListBulkStock(action.payload)),
-            map(response => this.GetListBulkStockResponse(response))));
+            switchMap((action: CustomActions) => this._inventoryService.GetBulkStockList(action.payload)),
+            map(response => this.GetBulkStockListResponse(response))));
 
     constructor(private store: Store<AppState>, private _inventoryService: InventoryService, private action$: Actions,
         private _toasty: ToasterService, private router: Router, private _salesActions: SalesActions) {
@@ -564,18 +564,15 @@ export class InventoryAction {
         };
     }
 
-    public GetListBulkStock(response): CustomActions {
+    public GetBulkStockList(response): CustomActions {
         return {
             type: InventoryAction.GET_BULK_STOCK_LIST,
             payload: response
         };
     }
-    public GetListBulkStockResponse(value: BaseResponse<any, any>): CustomActions {
-        
+    public GetBulkStockListResponse(value: BaseResponse<any, any>): CustomActions {        
         const data = value.body;
-
         const keys = data.results;
-
          keys.forEach((x) => {           
                 x.variantName = x?.variantName ? x.variantName : null,
                 x.variantUniqueName = x?.variantUniqueName ? x.variantUniqueName : null,
