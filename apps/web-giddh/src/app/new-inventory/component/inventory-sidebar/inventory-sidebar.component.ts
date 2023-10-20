@@ -224,7 +224,7 @@ export class InventorySidebarComponent implements OnDestroy {
                         { name: this.localeData?.sidebar?.variant_wise, icons: 'varient-wise.svg', link: '/pages/inventory/v2/reports/product/variant' },
                         { name: this.localeData?.sidebar?.transactions, icons: 'transactions.svg', link: '/pages/inventory/v2/reports/product/transaction' },
                         { name: this.localeData?.sidebar?.master, icons: 'transactions.svg', link: '/pages/inventory/v2/product/master' },
-                        { name: 'Bulk Stock', icons: 'transactions.svg', link: '/pages/inventory/v2/product/bulk-stock-edit' }
+                        { name: this.localeData?.sidebar?.inventory, icons: 'home-icon-black.svg', link: '/pages/inventory/v2/product/bulk-stock-edit' }
                     ],
                 },
                 {
@@ -237,7 +237,7 @@ export class InventorySidebarComponent implements OnDestroy {
                         { name: this.localeData?.sidebar?.variant_wise, icons: 'varient-wise.svg', link: '/pages/inventory/v2/reports/service/variant' },
                         { name: this.localeData?.sidebar?.transactions, icons: 'transactions.svg', link: '/pages/inventory/v2/reports/service/transaction' },
                         { name: this.localeData?.sidebar?.master, icons: 'transactions.svg', link: '/pages/inventory/v2/service/master' },
-                        { name: 'Bulk Stock', icons: 'transactions.svg', link: '/pages/inventory/v2/service/bulk-stock-edit' }
+                        { name: this.localeData?.sidebar?.inventory, icons: 'home-icon-black.svg', link: '/pages/inventory/v2/service/bulk-stock-edit' }
                     ],
                 },
                 {
@@ -250,7 +250,7 @@ export class InventorySidebarComponent implements OnDestroy {
                         { name: this.localeData?.sidebar?.variant_wise, icons: 'varient-wise.svg', link: '/pages/inventory/v2/reports/fixedassets/variant' },
                         { name: this.localeData?.sidebar?.transactions, icons: 'transactions.svg', link: '/pages/inventory/v2/reports/fixedassets/transaction' },
                         { name: this.localeData?.sidebar?.master, icons: 'transactions.svg', link: '/pages/inventory/v2/fixedassets/master' },
-                        { name: 'Bulk Stock', icons: 'transactions.svg', link: '/pages/inventory/v2/fixedassets/bulk-stock-edit' }
+                        { name: this.localeData?.sidebar?.inventory, icons: 'home-icon-black.svg', link: '/pages/inventory/v2/fixedassets/bulk-stock-edit' }
                     ],
                 },
                 {

@@ -5,10 +5,9 @@ import { ReplaySubject, debounceTime, distinctUntilChanged, takeUntil } from 'rx
 import { Store, select } from '@ngrx/store';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import { InventoryAction } from '../../../actions/inventory/inventory.actions';
-import { IGroupsWithStocksHierarchyMinItem } from '../../../models/interfaces/groups-with-stocks.interface';
-import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { InventoryModuleName } from '../../inventory.enum';
+import { PAGINATION_LIMIT } from '../../../app.constant';
 @Component({
     selector: 'bulk-stock',
     templateUrl: './bulk-stock-edit.component.html',
@@ -25,7 +24,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
     /** Holds Pagination Info*/
     public pagination: any;
     /**Holds Page count in single page for Pagination */
-    private pageCount = 100;
+    private pageCount = PAGINATION_LIMIT;
     /** Holds Total Item(stock) get from API */
     public totalInventoryCount: number;
     /** Holds recent Searching and sort info*/
@@ -222,7 +221,6 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
     public thSkuCode: UntypedFormControl = new UntypedFormControl();
 
     constructor(
-        private changeDetection: ChangeDetectorRef,
         private route: ActivatedRoute,
         private formBuilder: UntypedFormBuilder,
         private store: Store<AppState>,
@@ -235,15 +233,12 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
         this.searchInputObservableInitialize();
-
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             if (params?.type) {
                 this.inventoryType = params.type == 'fixedassets' ? 'FIXED_ASSETS' : params?.type.toUpperCase();
-                this.createHideshowColumn();
-                const bulkStockForm = this.bulkStockData;
-                bulkStockForm.clear();
+                this.updateColumnsList();
                 this.isLoading = true;
-                this.store.dispatch(this.inventoryAction.GetBulkStockList({
+                this.store.dispatch(this.inventoryAction.getBulkStockList({
                     inventoryType: this.inventoryType, page: 1, count: this.pageCount, body: {
                         "search": "",
                         "searchBy": "",
@@ -272,15 +267,16 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
                 });
             }
         });
-
         // this.getStockGroups();
         // this.getTaxes();
-
     }
 
+
     /**
-     * This will use for init Hide Show formgroup 
+     * This will use for init Hide Show formgroup      *
      * @private
+     * @return {*} 
+     * @memberof BulkStockEditComponent
      */
     private initalHideShowFrom() {
         return this.formBuilder.group({
@@ -319,9 +315,11 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
         });
     }
 
+  
     /**
      * This will use for init Bulk stock formgroup 
      * @private
+     * @memberof BulkStockEditComponent
      */
     private initBulkStockForm(): void {
         this.bulkStockEditForm = this.formBuilder.group({
@@ -331,8 +329,11 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
 
     /**
      * The addNewRow(controlValue) is used to store FormArray at run time in  "bulkStockEditForm" form group
+     *
      * @private
-     * @param controlValue
+     * @param {*} controlValue
+     * @return {*}  {FormGroup}
+     * @memberof BulkStockEditComponent
      */
     private addNewRow(controlValue: any): FormGroup {
         return this.formBuilder.group({
@@ -370,30 +371,39 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
         })
     }
 
-    /**
+     /**
      * The addRow(data) is used to push addNewRow() in "bulkStockEditForm" Formgroup
      * @private
-     * @param data
+     * @param {*} data
+     * @memberof BulkStockEditComponent
      */
-    private addRow(data) {
+    private addRow(data):void {
         this.bulkStockData.push(this.addNewRow(data));
     }
+   
     /**
-      * Getter method for "fields" of "bulkStockEditForm" Formgroup
-      */
+     * Getter method for "fields" of "bulkStockEditForm" Formgroup
+     * @readonly
+     * @type {FormArray}
+     * @memberof BulkStockEditComponent
+     */
     get bulkStockData(): FormArray {
         return this.bulkStockEditForm.get("fields") as FormArray
     }
+
     /**
      * NgFormSubmit for "bulkStockEditForm" Formgroup
+     * @memberof BulkStockEditComponent
      */
-    onFormSubmit() {
+    onFormSubmit():void {
         // console.log(this.bulkStockEditForm.value);
     }
 
     /**
-    * Get select value from select field
-    */
+     * Get select value from select field
+     * @param {*} data
+     * @memberof BulkStockEditComponent
+     */
     public setPaginationData(data: any): void {
         this.pagination = {
             currentPage: data?.page,
@@ -405,19 +415,23 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
 
     /**
      * Get select value from filter checkbox
-     * @param Event
+     * @param {*} event
+     * @memberof BulkStockEditComponent
      */
-    public showSelectedHeaderColumns(e): void {
-        // console.log("Event: ", e);
+    public showSelectedHeaderColumns(event: any): void {
+        // console.log("Event: ", event:any);
     }
-    /**
-  * Get Pagination page change event
-  */
-    public pageChanged(e): void {
-        if (this.pagination.currentPage !== e?.page) {
+ 
+   /**
+   * Get Pagination page change event
+   * @param {*} event
+   * @memberof BulkStockEditComponent
+   */
+    public pageChanged(event: any): void {
+        if (this.pagination.currentPage !== event?.page) {
             this.isLoading = true;
-            this.store.dispatch(this.inventoryAction.GetBulkStockList({
-                inventoryType: this.inventoryType, page: e.page, count: this.pageCount, body: {
+            this.store.dispatch(this.inventoryAction.getBulkStockList({
+                inventoryType: this.inventoryType, page: event.page, count: this.pageCount, body: {
                     "search": this.searchString !== null ? this.searchString : "",
                     "searchBy": this.searchStringKey !== null ? this.searchStringKey : "",
                     "sortBy": this.advanceSearchData !== null ? this.advanceSearchData?.sortBy : (this.sortOrderKey !== null ? this.sortOrderKey : ""),
@@ -430,31 +444,40 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * toggleInput(key) is used to change boolean value of tableHeadInput 
+     *toggleInput(key) is used to change boolean value of tableHeadInput 
      * object key value to show hide table head input fields
-     * @param key
+     * @param {*} key
+     * @memberof BulkStockEditComponent
      */
     public toggleInput(key): void {
         this.hideTableHeadInput();
-        this.tableHeadInput[key] = !this.tableHeadInput[key];
+        if (!(this.tableHeadInput[key] && this.searchString && this.searchStringKey)) {
+            this.tableHeadInput[key] = !this.tableHeadInput[key];
+        }
     }
 
     /**
      * This will false all the keys of tableHeadInput Object 
      * which will hide all the input fields from table head on, this method trigger on click outside the table head
+     * @memberof BulkStockEditComponent
      */
     public hideTableHeadInput(): void {
         Object.entries(this.tableHeadInput).forEach(([key]) => {
-            this.tableHeadInput[key] = false;
+            if (this.tableHeadInput[key] && this.searchString && this.searchStringKey) {
+                this.tableHeadInput[key] = true;
+            } else {
+                this.tableHeadInput[key] = false;
+            }
         });
     }
+
     /**
      * Create list of items in respect to Inventory Type
      * which will by hide and show by user
      * @private
-     * @memberof StockCreateEditComponent
+     * @memberof BulkStockEditComponent
      */
-    private createHideshowColumn(): void {
+    private updateColumnsList(): void {
         this.hideShowColumnList = [];
         if (this.inventoryType === 'FIXED_ASSETS') {
             this.hideShowColumnList = [...this.commonHideShowColumnList, ...this.fixedAssetHideShowColumn];
@@ -462,10 +485,13 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
             this.hideShowColumnList = [...this.commonHideShowColumnList, ...this.salesPurchaseHideShowColumn];
         }
     }
+
     /**
-    * Used to get "key name and Index value" of form array
-    * @memberof StockCreateEditComponent
-    */
+     * Used to get "key name and Index value" of form array
+     * @param {number} index
+     * @param {string} key
+     * @memberof BulkStockEditComponent
+     */
     public getInputIndex(index: number, key: string): void {
         // console.log(`At index - ${index} and key is '${key}'`);
     }
@@ -473,7 +499,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
     /**
      * Used to create Observable for all table head input on value changes 
      * @private
-     * @memberof StockCreateEditComponent
+     * @memberof BulkStockEditComponent
      */
     private searchInputObservableInitialize(): void {
         this.thVariantName.valueChanges.pipe(
@@ -482,32 +508,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
             if (searchedText !== null && searchedText !== undefined) {
-                this.searchString = searchedText;
-                this.searchStringKey = "variant_name";
-                let bodyObj;
-                if (this.advanceSearchData !== null) {
-                    bodyObj = {
-                        "search": searchedText,
-                        "searchBy": "variant_name",
-                        "sortBy": this.advanceSearchData.sortBy,
-                        "sort": this.advanceSearchData.sortOrder,
-                        "expression": this.advanceSearchData.expression,
-                        "rate": this.advanceSearchData.amount
-                    }
-                } else {
-                    bodyObj = {
-                        "search": searchedText,
-                        "searchBy": "variant_name",
-                        "sortBy": "",
-                        "sort": "",
-                        "expression": "GREATER_THAN",
-                        "rate": 0
-                    }
-                }
-                this.isLoading = true;
-                this.store.dispatch(this.inventoryAction.GetBulkStockList({
-                    inventoryType: this.inventoryType, page: this.pagination.currentPage, count: this.pageCount, body: bodyObj
-                }));
+                this.searchBy(searchedText, "variant_name");
             }
         });
         this.thVariantUniqueName.valueChanges.pipe(
@@ -516,32 +517,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
             if (searchedText !== null && searchedText !== undefined) {
-                this.searchString = searchedText;
-                this.searchStringKey = "variant_unique_name";
-                let bodyObj;
-                if (this.advanceSearchData !== null) {
-                    bodyObj = {
-                        "search": searchedText,
-                        "searchBy": "variant_unique_name",
-                        "sortBy": this.advanceSearchData.sortBy,
-                        "sort": this.advanceSearchData.sortOrder,
-                        "expression": this.advanceSearchData.expression,
-                        "rate": this.advanceSearchData.amount
-                    }
-                } else {
-                    bodyObj = {
-                        "search": searchedText,
-                        "searchBy": "variant_unique_name",
-                        "sortBy": "",
-                        "sort": "",
-                        "expression": "GREATER_THAN",
-                        "rate": 0
-                    }
-                }
-                this.isLoading = true;
-                this.store.dispatch(this.inventoryAction.GetBulkStockList({
-                    inventoryType: this.inventoryType, page: this.pagination.currentPage, count: this.pageCount, body: bodyObj
-                }));
+                this.searchBy(searchedText, "variant_unique_name");
             }
         });
         this.thStockName.valueChanges.pipe(
@@ -550,32 +526,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
             if (searchedText !== null && searchedText !== undefined) {
-                this.searchString = searchedText;
-                this.searchStringKey = "stock_name";
-                let bodyObj;
-                if (this.advanceSearchData !== null) {
-                    bodyObj = {
-                        "search": searchedText,
-                        "searchBy": "stock_name",
-                        "sortBy": this.advanceSearchData.sortBy,
-                        "sort": this.advanceSearchData.sortOrder,
-                        "expression": this.advanceSearchData.expression,
-                        "rate": this.advanceSearchData.amount
-                    }
-                } else {
-                    bodyObj = {
-                        "search": searchedText,
-                        "searchBy": "stock_name",
-                        "sortBy": "",
-                        "sort": "",
-                        "expression": "GREATER_THAN",
-                        "rate": 0
-                    }
-                }
-                this.isLoading = true;
-                this.store.dispatch(this.inventoryAction.GetBulkStockList({
-                    inventoryType: this.inventoryType, page: this.pagination.currentPage, count: this.pageCount, body: bodyObj
-                }));
+                this.searchBy(searchedText, "stock_name");
             }
         });
         this.thStockUniqueName.valueChanges.pipe(
@@ -584,32 +535,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
             if (searchedText !== null && searchedText !== undefined) {
-                this.searchString = searchedText;
-                this.searchStringKey = "stock_unique_name";
-                let bodyObj;
-                if (this.advanceSearchData !== null) {
-                    bodyObj = {
-                        "search": searchedText,
-                        "searchBy": "stock_unique_name",
-                        "sortBy": this.advanceSearchData.sortBy,
-                        "sort": this.advanceSearchData.sortOrder,
-                        "expression": this.advanceSearchData.expression,
-                        "rate": this.advanceSearchData.amount
-                    }
-                } else {
-                    bodyObj = {
-                        "search": searchedText,
-                        "searchBy": "stock_unique_name",
-                        "sortBy": "",
-                        "sort": "",
-                        "expression": "GREATER_THAN",
-                        "rate": 0
-                    }
-                }
-                this.isLoading = true;
-                this.store.dispatch(this.inventoryAction.GetBulkStockList({
-                    inventoryType: this.inventoryType, page: this.pagination.currentPage, count: this.pageCount, body: bodyObj
-                }));
+                this.searchBy(searchedText, "stock_unique_name");
             }
         });
         this.thStockGroupName.valueChanges.pipe(
@@ -618,32 +544,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
             if (searchedText !== null && searchedText !== undefined) {
-                this.searchString = searchedText;
-                this.searchStringKey = "stock_group_name";
-                let bodyObj;
-                if (this.advanceSearchData !== null) {
-                    bodyObj = {
-                        "search": searchedText,
-                        "searchBy": "stock_group_name",
-                        "sortBy": this.advanceSearchData.sortBy,
-                        "sort": this.advanceSearchData.sortOrder,
-                        "expression": this.advanceSearchData.expression,
-                        "rate": this.advanceSearchData.amount
-                    }
-                } else {
-                    bodyObj = {
-                        "search": searchedText,
-                        "searchBy": "stock_group_name",
-                        "sortBy": "",
-                        "sort": "",
-                        "expression": "GREATER_THAN",
-                        "rate": 0
-                    }
-                }
-                this.isLoading = true;
-                this.store.dispatch(this.inventoryAction.GetBulkStockList({
-                    inventoryType: this.inventoryType, page: this.pagination.currentPage, count: this.pageCount, body: bodyObj
-                }));
+                this.searchBy(searchedText, "stock_group_name");
             }
         });
         this.thHSN.valueChanges.pipe(
@@ -652,32 +553,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
             if (searchedText !== null && searchedText !== undefined) {
-                this.searchString = searchedText;
-                this.searchStringKey = "hsn";
-                let bodyObj;
-                if (this.advanceSearchData !== null) {
-                    bodyObj = {
-                        "search": searchedText,
-                        "searchBy": "hsn",
-                        "sortBy": this.advanceSearchData.sortBy,
-                        "sort": this.advanceSearchData.sortOrder,
-                        "expression": this.advanceSearchData.expression,
-                        "rate": this.advanceSearchData.amount
-                    }
-                } else {
-                    bodyObj = {
-                        "search": searchedText,
-                        "searchBy": "hsn",
-                        "sortBy": "",
-                        "sort": "",
-                        "expression": "GREATER_THAN",
-                        "rate": 0
-                    }
-                }
-                this.isLoading = true;
-                this.store.dispatch(this.inventoryAction.GetBulkStockList({
-                    inventoryType: this.inventoryType, page: this.pagination.currentPage, count: this.pageCount, body: bodyObj
-                }));
+                this.searchBy(searchedText, "hsn");
             }
         });
         this.thSAC.valueChanges.pipe(
@@ -686,32 +562,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
             if (searchedText !== null && searchedText !== undefined) {
-                this.searchString = searchedText;
-                this.searchStringKey = "sac";
-                let bodyObj;
-                if (this.advanceSearchData !== null) {
-                    bodyObj = {
-                        "search": searchedText,
-                        "searchBy": "sac",
-                        "sortBy": this.advanceSearchData.sortBy,
-                        "sort": this.advanceSearchData.sortOrder,
-                        "expression": this.advanceSearchData.expression,
-                        "rate": this.advanceSearchData.amount
-                    }
-                } else {
-                    bodyObj = {
-                        "search": searchedText,
-                        "searchBy": "sac",
-                        "sortBy": "",
-                        "sort": "",
-                        "expression": "GREATER_THAN",
-                        "rate": 0
-                    }
-                }
-                this.isLoading = true;
-                this.store.dispatch(this.inventoryAction.GetBulkStockList({
-                    inventoryType: this.inventoryType, page: this.pagination.currentPage, count: this.pageCount, body: bodyObj
-                }));
+                this.searchBy(searchedText, "sac");
             }
         });
         this.thSkuCode.valueChanges.pipe(
@@ -720,37 +571,16 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
             if (searchedText !== null && searchedText !== undefined) {
-                this.searchString = searchedText;
-                this.searchStringKey = "sku";
-                let bodyObj;
-                if (this.advanceSearchData !== null) {
-                    bodyObj = {
-                        "search": searchedText,
-                        "searchBy": "sku",
-                        "sortBy": this.advanceSearchData.sortBy,
-                        "sort": this.advanceSearchData.sortOrder,
-                        "expression": this.advanceSearchData.expression,
-                        "rate": this.advanceSearchData.amount
-                    }
-                } else {
-                    bodyObj = {
-                        "search": searchedText,
-                        "searchBy": "sku",
-                        "sortBy": "",
-                        "sort": "",
-                        "expression": "GREATER_THAN",
-                        "rate": 0
-                    }
-                }
-                this.isLoading = true;
-                this.store.dispatch(this.inventoryAction.GetBulkStockList({
-                    inventoryType: this.inventoryType, page: this.pagination.currentPage, count: this.pageCount, body: bodyObj
-                }));
+                this.searchBy(searchedText, "sku");
             }
         });
     }
-
-    public sort(key: string): void {
+/**
+ * Sort Table column ASC | DESC*
+ * @param {string} key
+ * @memberof BulkStockEditComponent
+ */
+public sort(key: string): void {
         if (this.sortOrderStatus === null || this.sortOrderStatus === 'desc') {
             this.sortOrderStatus = 'asc';
         } else {
@@ -758,7 +588,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
         }
         this.sortOrderKey = key;
         this.isLoading = true;
-        this.store.dispatch(this.inventoryAction.GetBulkStockList({
+        this.store.dispatch(this.inventoryAction.getBulkStockList({
             inventoryType: this.inventoryType, page: this.pagination.currentPage, count: this.pageCount, body: {
                 "search": "",
                 "searchBy": "",
@@ -767,6 +597,41 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
                 "expression": "GREATER_THAN",
                 "rate": 0
             }
+        }));
+    }
+/**
+ * It call API and send custom body in payload with KEY and SEARCH TEXT
+ * @private
+ * @param {string} searchedText
+ * @param {string} key
+ * @memberof BulkStockEditComponent
+ */
+private searchBy(searchedText: string, key: string): void {
+        this.searchString = searchedText;
+        this.searchStringKey = key;
+        let bodyObj;
+        if (this.advanceSearchData !== null) {
+            bodyObj = {
+                "search": searchedText,
+                "searchBy": key,
+                "sortBy": this.advanceSearchData.sortBy,
+                "sort": this.advanceSearchData.sortOrder,
+                "expression": this.advanceSearchData.expression,
+                "rate": this.advanceSearchData.amount
+            }
+        } else {
+            bodyObj = {
+                "search": searchedText,
+                "searchBy": key,
+                "sortBy": "",
+                "sort": "",
+                "expression": "GREATER_THAN",
+                "rate": 0
+            }
+        }
+        this.isLoading = true;
+        this.store.dispatch(this.inventoryAction.getBulkStockList({
+            inventoryType: this.inventoryType, page: this.pagination.currentPage, count: this.pageCount, body: bodyObj
         }));
     }
 
@@ -827,8 +692,8 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
     //         this.changeDetection.detectChanges();
     //     });
     // }
-    // public openedSelectTax(e): void {
-    //     console.log("Selected Tax : ", e)
+    // public openedSelectTax(event:any): void {
+    //     console.log("Selected Tax : ", event)
     // }
 
     // public selectTax(tax): void {
@@ -836,23 +701,35 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
     // }
 
     /**
-     * Open advance search Dialog 
-     * @memberof StockCreateEditComponent
+     * Open advance search Dialog
+     * @memberof BulkStockEditComponent
      */
     public openAdvanceFilter(): void {
         this.advanceFilterDialogRef = this.dailog.open(this.bulkStockAdvanceFilter, {
             width: '600px'
         })
     }
+
     /**
      * Reset all the search/ sort value to intial value 
-     * @memberof StockCreateEditComponent
+     * @memberof BulkStockEditComponent
      */
     public resetSearch(): void {
+        this.thVariantName.reset();
+        this.thVariantUniqueName.reset();
+        this.thStockName.reset();
+        this.thStockUniqueName.reset();
+        this.thStockGroupName.reset();
+        this.thHSN.reset();
+        this.thSAC.reset();
+        this.thSkuCode.reset();
+        this.searchString = null;
+        this.searchStringKey = null;
         this.advanceSearchData = null;
         this.sortOrderStatus = null;
+        this.hideTableHeadInput();
         this.isLoading = true;
-        this.store.dispatch(this.inventoryAction.GetBulkStockList({
+        this.store.dispatch(this.inventoryAction.getBulkStockList({
             inventoryType: this.inventoryType, page: this.pagination.currentPage, count: this.pageCount, body: {
                 "search": "",
                 "searchBy": "",
@@ -864,11 +741,13 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
         }));
 
     }
+
     /**
-     * Apply Advance search  
-     * @memberof StockCreateEditComponent
+     * Apply Advance search
+     * @param {*} event
+     * @memberof BulkStockEditComponent
      */
-    public applyAdvanceFilter(e): void {
+    public applyAdvanceFilter(event: any): void {
         this.advanceFilterDialogRef.close();
 
         // let checkColumnStatus: boolean;
@@ -882,14 +761,14 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
         // }
         // if (checkColumnStatus) {
         this.isLoading = true;
-        this.advanceSearchData = e;
+        this.advanceSearchData = event;
         const pageNo = this.pagination.currentPage;
         this.isLoading = true;
-        this.store.dispatch(this.inventoryAction.GetBulkStockList({
+        this.store.dispatch(this.inventoryAction.getBulkStockList({
             inventoryType: this.inventoryType, page: pageNo, count: this.pageCount, body: {
-                "sortBy": e.sortBy,
-                "expression": e.expression,
-                "rate": e.amount
+                "sortBy": event.sortBy,
+                "expression": event.expression,
+                "rate": event.amount
             }
         }));
         // } else {
@@ -899,18 +778,20 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
 
     /**
      * This function reset hideshowForm  and set true to user selected value which get from API 
-     * @memberof StockCreateEditComponent
+     * @param {*} event
+     * @memberof BulkStockEditComponent
      */
-    public setDisplayColumns(e): void {
+    public setDisplayColumns(event: any): void {
         this.hideShowForm.reset();
-        e.forEach(keys => {
+        event.forEach(keys => {
             this.hideShowForm.controls[keys].setValue(true);
         });
     }
-
+    
     /**
-    * Lifcycle hook for destroy event
-    */
+     * Lifcycle hook for destroy event
+     * @memberof BulkStockEditComponent
+     */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();

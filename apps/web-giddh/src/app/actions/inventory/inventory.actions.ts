@@ -309,11 +309,11 @@ export class InventoryAction {
                 return { type: 'EmptyAction' };
             })));
 
-        public GetBulkStockList$: Observable<Action> = createEffect(() => this.action$
+        public getBulkStockList$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(InventoryAction.GET_BULK_STOCK_LIST),
-            switchMap((action: CustomActions) => this._inventoryService.GetBulkStockList(action.payload)),
-            map(response => this.GetBulkStockListResponse(response))));
+            switchMap((action: CustomActions) => this._inventoryService.getBulkStockList(action.payload)),
+            map(response => this.getBulkStockListResponse(response))));
 
     constructor(private store: Store<AppState>, private _inventoryService: InventoryService, private action$: Actions,
         private _toasty: ToasterService, private router: Router, private _salesActions: SalesActions) {
@@ -564,42 +564,42 @@ export class InventoryAction {
         };
     }
 
-    public GetBulkStockList(response): CustomActions {
+    public getBulkStockList(response): CustomActions {
         return {
             type: InventoryAction.GET_BULK_STOCK_LIST,
             payload: response
         };
     }
-    public GetBulkStockListResponse(value: BaseResponse<any, any>): CustomActions {        
+    public getBulkStockListResponse(value: BaseResponse<any, any>): CustomActions {        
         const data = value.body;
-        const keys = data.results;
-         keys.forEach((x) => {           
-                x.variantName = x?.variantName ? x.variantName : null,
-                x.variantUniqueName = x?.variantUniqueName ? x.variantUniqueName : null,
-                x.stockName = x?.stockName ? x.stockName : null,
-                x.stockUniqueName = x?.stockUniqueName ? x.stockUniqueName : null,
-                x.stockGroupName = x?.stockGroupName ? x.stockGroupName : null,
-                x.stockGroupUniqueName = x?.stockGroupUniqueName ? x.stockGroupUniqueName : null,
-                x.purchaseUnits = x?.purchaseUnits ? x.purchaseUnits : null,
-                x.purchaseAccountName = x?.purchaseAccountName ? x.purchaseAccountName : null,
-                x.purchaseAccountUniqueName = x?.purchaseAccountUniqueName ? x.purchaseAccountUniqueName : null,
-                x.purchaseRate = x?.purchaseRate ? x.purchaseRate : null,
-                x.purchaseTaxInclusive = x.purchaseTaxInclusive === true ||  x?.purchaseTaxInclusive === false ? x.purchaseTaxInclusive : null,
-                x.salesUnits = x?.salesUnits ? x.salesUnits : null,
-                x.salesAccountName = x?.salesAccountName ? x.salesAccountName : null,
-                x.salesAccountUniqueName = x?.salesAccountUniqueName ? x.salesAccountUniqueName : null,
-                x.salesRate = x?.salesRate ? x.salesRate : null,
-                x.salesTaxInclusive = x.salesTaxInclusive === true ||  x?.salesTaxInclusive === false ? x.salesTaxInclusive : null,
-                x.fixedAssetTaxInclusive = x.fixedAssetTaxInclusive === true ||  x?.fixedAssetTaxInclusive === false ? x.fixedAssetTaxInclusive : null,
-                x.fixedAssetRate = x?.fixedAssetRate ? x.fixedAssetRate : null,
-                x.fixedAssetUnits = x?.fixedAssetUnits ? x.fixedAssetUnits : null,
-                x.fixedAssetAccountName = x?.fixedAssetAccountName ? x.fixedAssetAccountName : null,
-                x.fixedAssetAccountUniqueName = x?.fixedAssetAccountUniqueName ? x.fixedAssetAccountUniqueName : null,
-                x.hsnNo = x?.hsnNo ? x.hsnNo : null,
-                x.sacNo = x?.sacNo ? x.sacNo : null,
-                x.skuCode = x?.skuCode ? x.skuCode : null,
-                x.archive = x?.archive === true ||  x?.archive === false ? x.archive : null,
-                x.taxes = x?.taxes ? x.taxes : null
+        const results = data.results;
+         results.forEach((result) => {           
+              result.variantName = result?.variantName ? result.variantName : null,
+              result.variantUniqueName = result?.variantUniqueName ? result.variantUniqueName : null,
+              result.stockName = result?.stockName ? result.stockName : null,
+              result.stockUniqueName = result?.stockUniqueName ? result.stockUniqueName : null,
+              result.stockGroupName = result?.stockGroupName ? result.stockGroupName : null,
+              result.stockGroupUniqueName = result?.stockGroupUniqueName ? result.stockGroupUniqueName : null,
+              result.purchaseUnits = result?.purchaseUnits ? result.purchaseUnits : null,
+              result.purchaseAccountName = result?.purchaseAccountName ? result.purchaseAccountName : null,
+              result.purchaseAccountUniqueName = result?.purchaseAccountUniqueName ? result.purchaseAccountUniqueName : null,
+              result.purchaseRate = result?.purchaseRate ? result.purchaseRate : null,
+              result.purchaseTaxInclusive = result.purchaseTaxInclusive === true ||  result?.purchaseTaxInclusive === false ? result.purchaseTaxInclusive : null,
+              result.salesUnits = result?.salesUnits ? result.salesUnits : null,
+              result.salesAccountName = result?.salesAccountName ? result.salesAccountName : null,
+              result.salesAccountUniqueName = result?.salesAccountUniqueName ? result.salesAccountUniqueName : null,
+              result.salesRate = result?.salesRate ? result.salesRate : null,
+              result.salesTaxInclusive = result.salesTaxInclusive === true ||  result?.salesTaxInclusive === false ? result.salesTaxInclusive : null,
+              result.fixedAssetTaxInclusive = result.fixedAssetTaxInclusive === true ||  result?.fixedAssetTaxInclusive === false ? result.fixedAssetTaxInclusive : null,
+              result.fixedAssetRate = result?.fixedAssetRate ? result.fixedAssetRate : null,
+              result.fixedAssetUnits = result?.fixedAssetUnits ? result.fixedAssetUnits : null,
+              result.fixedAssetAccountName = result?.fixedAssetAccountName ? result.fixedAssetAccountName : null,
+              result.fixedAssetAccountUniqueName = result?.fixedAssetAccountUniqueName ? result.fixedAssetAccountUniqueName : null,
+              result.hsnNo = result?.hsnNo ? result.hsnNo : null,
+              result.sacNo = result?.sacNo ? result.sacNo : null,
+              result.skuCode = result?.skuCode ? result.skuCode : null,
+              result.archive = result?.archive === true ||  result?.archive === false ? result.archive : null,
+              result.taxes = result?.taxes ? result.taxes : null
          })
         return {
             type: InventoryActionsConst.BulkStockResponse,
