@@ -1,8 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input, OnInit, Output } from '@angular/core';
-import { ReplaySubject } from 'rxjs';
 import { EventEmitter } from '@angular/core';
-import { InventoryModuleName } from '../../inventory.enum';
-
 @Component({
     selector: 'bulk-stock-advance-filter',
     templateUrl: './bulk-stock-advance-filter.component.html',
@@ -15,9 +12,6 @@ export class BulkStockAdvanceFilterComponent implements OnInit {
     @Input() public localeData: any = {};
     @Output() public applyAdvanceSearchEvent: EventEmitter<string> = new EventEmitter();
     @Output() public closeDailog: EventEmitter<string> = new EventEmitter();
-
-    /** Observable to unsubscribe all the store listeners to avoid memory leaks */
-    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     /* Hold advance search category   */
     public advanceSearchCategory: any[] = [];
@@ -37,7 +31,9 @@ export class BulkStockAdvanceFilterComponent implements OnInit {
         this.formInit();
         this.formObjectIntialvalue();
     }
-
+    /**
+     * The formInit() is used to initialize advance search form data     * 
+     */
     public formInit(): void {
         this.advanceSearchCategory = [
             {
@@ -87,6 +83,9 @@ export class BulkStockAdvanceFilterComponent implements OnInit {
         ];
     }
 
+    /**
+     * Set Advance search form object to initial value  
+     */
     public formObjectIntialvalue():void{
         this.advanceSearchFormObj = {
             sortBy: '',
@@ -95,24 +94,36 @@ export class BulkStockAdvanceFilterComponent implements OnInit {
             amount: ''
          };
     }
-
+    /**
+     *  Emit close event on dailog close 
+     */
     public advanceFilterClose():void{       
         this.closeDailog.emit();
     }
+    /**
+     *  Set selected catergory to Advance search form object 
+     */
     public selectCategory(e):void{
         this.advanceSearchFormObj.sortBy = e;
     }
+    /**
+     *  Set selected Type to Advance search form object 
+     */
     public selectCategoryType(e):void{
         this.advanceSearchFormObj.type = e;
     }
-    public selectSortOrder(e):void{
-        this.advanceSearchFormObj.sortOrder = e;
-    }
+
+    /**
+     *  Set selected expression to Advance search form object 
+     */
     public selectValueType(e):void{
         this.advanceSearchFormObj.expression = e;
     }
-    public advanceSearchAction():void{
-        
+
+     /**
+     *  Set all the form fields value  to "advanceSearchFormObj" object and Emit the updated object
+     */
+    public advanceSearchAction():void{        
         this.advanceSearchFormObj.sortBy =  this.advanceSearchFormObj.sortBy.value
         this.advanceSearchFormObj.type =   this.advanceSearchFormObj.type.value
         this.advanceSearchFormObj.expression =  this.advanceSearchFormObj.expression.value
