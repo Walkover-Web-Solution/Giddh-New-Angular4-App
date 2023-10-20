@@ -15,7 +15,7 @@
             <div class="bulk-stock-header">
                 <div class="d-flex justify-content-end align-items-center">
                     <div class="mr-5">
-                        <button *ngIf="(advanceSearchData !== null || sortOrderStatus !== null) && !isLoading" mat-stroked-button (click)="resetSearch()">
+                        <button *ngIf="(advanceSearchData !== null || sortOrderStatus !== null || searchStringKey !== null || searchString !== null ) && !isLoading" mat-stroked-button (click)="resetSearch()">
                            <span class="icon-cross position-relative"></span> Clear Filter
                         </button>
                     </div>
@@ -186,6 +186,10 @@
                                             </th>
                                             <!-- Fixed Asset Units (Menu) -->
                                             <th *ngIf="inventoryType === 'FIXED_ASSETS' && hideShowForm.controls['fixedAssetUnits'].value">
+                                                <h3>Fixed Asset Units</h3>
+                                            </th>
+                                            <!-- Fixed Asset Rate -->
+                                            <th *ngIf="inventoryType === 'FIXED_ASSETS' && hideShowForm.controls['fixedAssetRate'].value">
                                                 <h3>Fixed Asset Units</h3>
                                             </th>
                                             <!-- Fixed Asset AN -->

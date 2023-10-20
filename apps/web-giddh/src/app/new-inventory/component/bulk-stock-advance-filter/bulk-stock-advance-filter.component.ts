@@ -7,10 +7,12 @@ import { EventEmitter } from '@angular/core';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BulkStockAdvanceFilterComponent implements OnInit {
-
+    /** Holds Translate Data */
     @Input() public commonLocaleData: any = {};
     @Input() public localeData: any = {};
+    /** Output Emitter to emit advance search Info */
     @Output() public applyAdvanceSearchEvent: EventEmitter<string> = new EventEmitter();
+    /** Output Emitter to emit dailog close status */
     @Output() public closeDailog: EventEmitter<string> = new EventEmitter();
 
     /* Hold advance search SortBy   */
@@ -21,16 +23,16 @@ export class BulkStockAdvanceFilterComponent implements OnInit {
     public advanceSearchExpression: any[] = [];
     /** Instance of Advance Search Form*/
     public advanceSearchFormObj: any;
-    constructor() { }
 
     public ngOnInit(): void {
         this.formInit();
-        this.formObjectIntialvalue();
+        this.initializeForm();
     }
-    /**
-     * The formInit() is used to initialize advance search form data     * 
-     */
-    public formInit(): void {
+  /**
+   * Initialize Form fields Data to display
+   * @memberof BulkStockAdvanceFilterComponent
+   */
+  public formInit(): void {
         this.advanceSearchSortBy = [
             {
                 value: "purchase_rate",
@@ -78,53 +80,64 @@ export class BulkStockAdvanceFilterComponent implements OnInit {
             }
         ];
     }
-
+ 
     /**
-     * Set Advance search form object to initial value  
+     * Set Advance search form object to initial value 
+     * @memberof BulkStockAdvanceFilterComponent
      */
-    public formObjectIntialvalue():void{
+    public initializeForm(): void {
         this.advanceSearchFormObj = {
             sortBy: '',
-            type:  { label: 'Rate', value: 'rate'},
+            type: { label: 'Rate', value: 'rate' },
             expression: '',
             amount: ''
-         };
+        };
     }
+
     /**
-     *  Emit close event on dailog close 
+     * Emit close event on dailog close *
+     * @memberof BulkStockAdvanceFilterComponent
      */
-    public advanceFilterClose():void{       
+    public advanceFilterClose(): void {
         this.closeDailog.emit();
     }
+  
     /**
-     *  Set selected catergory to Advance search form object 
+     * Set selected catergory to Advance search form object 
+     * @param {*} event
+     * @memberof BulkStockAdvanceFilterComponent
      */
-    public selectCategory(e):void{
-        this.advanceSearchFormObj.sortBy = e;
+    public selectCategory(event:any): void {
+        this.advanceSearchFormObj.sortBy = event;
     }
+     
     /**
-     *  Set selected Type to Advance search form object 
+     * Set selected Type to Advance search form object 
+     * @param {*} event
+     * @memberof BulkStockAdvanceFilterComponent
      */
-    public selectCategoryType(e):void{
-        this.advanceSearchFormObj.type = e;
+    public selectCategoryType(event:any): void {
+        this.advanceSearchFormObj.type = event;
+    }
+ 
+    /**
+     * Set selected expression to Advance search form object 
+     * @param {*} event
+     * @memberof BulkStockAdvanceFilterComponent
+     */
+    public selectValueExpression(event:any): void {
+        this.advanceSearchFormObj.expression = event;
     }
 
     /**
-     *  Set selected expression to Advance search form object 
+     * Set all the form fields value  to "advanceSearchFormObj" object and Emit the updated object*
+     * @memberof BulkStockAdvanceFilterComponent
      */
-    public selectValueExpression(e):void{
-        this.advanceSearchFormObj.expression = e;
-    }
-
-     /**
-     *  Set all the form fields value  to "advanceSearchFormObj" object and Emit the updated object
-     */
-    public advanceSearchAction():void{        
-        this.advanceSearchFormObj.sortBy =  this.advanceSearchFormObj.sortBy.value
-        this.advanceSearchFormObj.type =   this.advanceSearchFormObj.type.value
-        this.advanceSearchFormObj.expression =  this.advanceSearchFormObj.expression.value
-        this.advanceSearchFormObj.amount =  this.advanceSearchFormObj.amount
-
+    public advanceSearchAction(): void {
+        this.advanceSearchFormObj.sortBy = this.advanceSearchFormObj.sortBy.value
+        this.advanceSearchFormObj.type = this.advanceSearchFormObj.type.value
+        this.advanceSearchFormObj.expression = this.advanceSearchFormObj.expression.value
+        this.advanceSearchFormObj.amount = this.advanceSearchFormObj.amount
         this.applyAdvanceSearchEvent.emit(this.advanceSearchFormObj);
     }
 }
