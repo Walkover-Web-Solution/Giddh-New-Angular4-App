@@ -72,6 +72,8 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
     private readyToRedirect: boolean = false;
     /** Holds list of linked stocks fetched initially in edit */
     public initialLinkedStocks: any[] = [];
+    /** Holds list of linked stocks fetched initially in edit */
+    public initialByProductLinkedStocks: any[] = [];
     /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
     public isCompany: boolean;
     /** True if get manufacturing in progress */
@@ -218,6 +220,8 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
      * @memberof CreateManufacturingComponent
      */
     public getStocks(stockObject: any, page: number = 1, q?: string, inventoryType?: string, callback?: Function): void {
+        console.log('stockObject', stockObject, this.preventStocksApiCall,q);
+
         if (page > stockObject.stocksTotalPages || this.preventStocksApiCall || q === undefined) {
             return;
         }
@@ -411,7 +415,7 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
 
             if (!this.manufactureUniqueName) {
                 this.initialLinkedStocks = cloneDeep(this.manufacturingObject.manufacturingDetails[0].linkedStocks);
-                this.initialLinkedStocks = cloneDeep(this.manufacturingObject.manufacturingDetails[0].byProducts);
+                this.initialByProductLinkedStocks = cloneDeep(this.manufacturingObject.manufacturingDetails[0].byProducts);
             }
 
             this.preventStocksApiCall = false;
@@ -876,6 +880,7 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
         this.manufacturingObject.manufacturingDetails[0].date = cloneDeep(this.universalDate);
         this.increaseExpenseAmount = true;
         this.initialLinkedStocks = [];
+        this.initialByProductLinkedStocks = [];
         this.selectedWarehouseName = (this.warehouses?.length) ? this.warehouses[0].label : "";
         this.selectedInventoryType = "";
         this.preventStocksApiCall = false;
@@ -1146,6 +1151,8 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
         this.changeDetectionRef.detectChanges();
 
         this.manufacturingService.getManufacturingDetails(uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            console.log('getManufacturingDetails',response);
+
             if (response?.status === "success" && response.body) {
                 this.manufacturingObject.manufacturingDetails[0].date = dayjs(response.body.date, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
                 this.manufacturingObject.manufacturingDetails[0].warehouseUniqueName = response.body.warehouse.uniqueName;
@@ -1183,9 +1190,32 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
                     });
                 });
 
+                let byProductLinkedStocks = [];
+                response.body.byProducts?.forEach(linkedStock => {
+                    let amount = linkedStock.rate * linkedStock.manufacturingQuantity;
+
+                    let unitsList = [];
+
+                    linkedStock?.stockUnits?.forEach(unit => {
+                        unitsList.push({ label: unit.code, value: unit.uniqueName });
+                    });
+
+                    byProductLinkedStocks.push({
+                        selectedStock: { label: linkedStock.stockName, value: linkedStock.stockUniqueName, additional: { stockUnitCode: linkedStock.manufacturingUnitCode, stockUnitUniqueName: linkedStock.manufacturingUnitUniqueName, unitsList: unitsList } },
+                        stockUniqueName: linkedStock.stockUniqueName,
+                        quantity: linkedStock.manufacturingQuantity,
+                        stockUnitUniqueName: linkedStock.manufacturingUnitUniqueName,
+                        stockUnitCode: linkedStock.manufacturingUnitCode,
+                        rate: linkedStock.rate,
+                        amount: isNaN(amount) ? 0 : giddhRoundOff(amount, this.giddhBalanceDecimalPlaces),
+                        variant: linkedStock.variant
+                    });
+                });
+
                 this.initialLinkedStocks = cloneDeep(linkedStocks);
+                this.initialByProductLinkedStocks = cloneDeep(byProductLinkedStocks);
                 this.manufacturingObject.manufacturingDetails[0].linkedStocks = linkedStocks;
-                this.manufacturingObject.manufacturingDetails[0].byProducts = linkedStocks;
+                this.manufacturingObject.manufacturingDetails[0].byProducts = byProductLinkedStocks;
 
                 let otherExpenses = [];
                 response.body.otherExpenses?.forEach(responseItem => {
@@ -1219,6 +1249,7 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
 
                 this.preventStocksApiCall = false;
                 this.getStocks(this.manufacturingObject.manufacturingDetails[0].linkedStocks[0], 1, '', this.selectedInventoryType, (response: any) => {
+
                     if (response?.status === "success" && response.body?.results?.length) {
                         this.manufacturingObject.manufacturingDetails[0].linkedStocks?.forEach(linkedStock => {
                             linkedStock.stocksPageNumber = 1;
@@ -1415,7 +1446,7 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
         });
 
         this.manufacturingObject.manufacturingDetails[0].byProducts?.forEach(linkedStock => {
-            let selectedStock = this.initialLinkedStocks?.find(stock => stock.variant?.uniqueName === linkedStock.variant?.uniqueName);
+            let selectedStock = this.initialByProductLinkedStocks?.find(stock => stock.variant?.uniqueName === linkedStock.variant?.uniqueName);
 
             if (selectedStock) {
                 linkedStock.quantity = giddhRoundOff(selectedStock.quantity * finishedStockQuantity, this.giddhBalanceDecimalPlaces);

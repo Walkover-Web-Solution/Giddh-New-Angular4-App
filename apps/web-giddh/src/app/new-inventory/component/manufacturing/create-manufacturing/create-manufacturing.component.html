@@ -224,8 +224,6 @@
                                             </mat-panel-title>
                                         </mat-expansion-panel-header>
                                         <div class="pd-r1 pd-l1">
-                                            <!-- {{manufacturingObject
-                                                                .manufacturingDetails[0].linkedStocks | json}} -->
                                             <table id="table-raw-stock">
                                                 <thead>
                                                     <tr>
@@ -644,9 +642,6 @@
                                                         <th>&nbsp;</th>
                                                     </tr>
                                                 </thead>
-                                                {{
-                                                    manufacturingObject.manufacturingDetails[0].byProducts | json
-                                                }}
                                                 <tbody (mouseleave)="activeByProductLinkedStockIndex = null">
                                                     <ng-container
                                                         *ngFor="
