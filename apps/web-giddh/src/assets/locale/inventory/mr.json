@@ -88,7 +88,9 @@
         "category":"श्रेणी",
         "type":"प्रकार",
         "select_value":"मूल्य निवडा",
-        "enter_amount":"रक्कम प्रविष्ट करा"
+        "enter_amount":"रक्कम प्रविष्ट करा",
+        "sort_by": "यानुसार क्रमवारी लावा",
+        "expression": "अभिव्यक्ती"
     },
      "warehouse_opening_balance":{
         "unique_name":"अद्वितीय नाव",

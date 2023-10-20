@@ -14,23 +14,23 @@
                         <div class="row">
                             <div class="col-lg-6 col-sm-6 col-12 mr-b15 pr-2">                               
                                     <dropdown-field
-                                        [placeholder]="'Select '"
+                                        [placeholder]="commonLocaleData?.app_select"
                                         [options]="advanceSearchSortBy"
                                         (selectedOption)="selectCategory($event)"
                                         [defaultValue]="advanceSearchFormObj.sortBy.label"
                                         [allowValueReset]="true"
                                         (onClear)="advanceSearchFormObj.sortBy = ''"
-                                        [label]="'Sort By'"
+                                        [label]="localeData?.advance_search_filter?.sort_by"
                                     ></dropdown-field>
                             </div>
                             <div class="col-lg-6 col-sm-6 col-12 mr-b15 pl-2">
                                     <dropdown-field
-                                        [placeholder]="localeData?.advance_search_filter?.select_type"
+                                        [placeholder]="commonLocaleData?.app_select"
                                         [options]="advanceSearchSortByOptions"
                                         (selectedOption)="selectCategoryType($event)"
                                         [defaultValue]="advanceSearchFormObj.type.label"
                                         [allowValueReset]="true"
-                                        (onClear)="advanceSearchFormObj.type.value = { label: 'Rate', value: 'rate'}"
+                                        (onClear)="advanceSearchFormObj.type.value = { label: commonLocaleData?.app_rate, value: 'rate'}"
                                         [label]="localeData?.advance_search_filter?.type"
                                     ></dropdown-field>
                             </div>
@@ -42,13 +42,13 @@
                         <div class="row">
                             <div class="col-lg-6 col-sm-6 mr-b15 pr-2">
                                 <dropdown-field
-                                    [placeholder]="'Select Expression'"
+                                    [placeholder]="commonLocaleData?.app_select"
                                     [options]="advanceSearchExpression"
                                     (selectedOption)="selectValueExpression($event)"
                                     [defaultValue]="advanceSearchFormObj.expression.label"
                                     [allowValueReset]="true"
                                     (onClear)="advanceSearchFormObj.expression = ''"
-                                    [label]="'Expression'"
+                                    [label]="localeData?.advance_search_filter?.expression"
                                 ></dropdown-field>
                             </div>
                             <div class="col-lg-6 col-sm-6 mr-b15 pl-2">

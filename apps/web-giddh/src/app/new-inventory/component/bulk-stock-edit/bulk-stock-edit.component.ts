@@ -14,6 +14,11 @@ import { PAGINATION_LIMIT } from '../../../app.constant';
     styleUrls: ['./bulk-stock-edit.component.scss']
 })
 export class BulkStockEditComponent implements OnInit, OnDestroy {
+    /**
+     * Store Advance search dialog template reference
+     * @type {TemplateRef<any>}
+     * @memberof BulkStockEditComponent
+     */
     @ViewChild('bulkStockAdvanceFilter') public bulkStockAdvanceFilter: TemplateRef<any>
     /* This will hold local JSON data */
     public localeData: any = {};
@@ -27,10 +32,13 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
     private pageCount = PAGINATION_LIMIT;
     /** Holds Total Item(stock) get from API */
     public totalInventoryCount: number;
-    /** Holds recent Searching and sort info*/
+    /** Holds recent sort order*/
     public sortOrderStatus: null | 'asc' | 'desc' = null;
+    /** Holds recent sorted key*/
     public sortOrderKey: string = null;
+    /** Holds recent search text*/
     public searchString: string = null;
+    /** Holds recent search on which key*/
     public searchStringKey: string = null;
     /** Holds Loader status */
     public isLoading: boolean = true;
@@ -52,140 +60,143 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
     public advanceFilterDialogRef: MatDialogRef<any>;
     /** Holds Recent Advance search data*/
     public advanceSearchData: any = null;
-    /** Holds Hde show column list*/
+    /** Holds hide show column list*/
     public hideShowColumnList: any = [];
+    /** Holds list of all hide show column common in inventory type*/
     private commonHideShowColumnList = [
         {
-            label: "Variant Unique Name",
+            label: this.localeData?.variant_unique_name,
             value: "variantUniqueName",
             checked: false
         },
         {
-            label: "Variant Name",
+            label: this.localeData?.variant_name,
             value: "variantName",
             checked: false
         },
         {
-            label: "Stock Name",
+            label: this.localeData?.stock_name,
             value: "stockName",
             checked: false
         },
         {
-            label: "Stock Unique Name",
+            label: this.localeData?.stock_unique_name,
             value: "stockUniqueName",
             checked: false
         },
         {
-            label: "Stock Group Name",
+            label: this.localeData?.stock_group_name,
             value: "stockGroupName",
             checked: false
         },
         {
-            label: "Stock Group Unique Name",
+            label: this.localeData?.stock_group_unique_name,
             value: "stockGroupUniqueName",
             checked: false
         },
         {
-            label: "SKU Code",
+            label: this.commonLocaleData?.app_sku,
             value: "skuCode",
             checked: false
         },
         {
-            label: "Taxes",
+            label: this.commonLocaleData?.app_tax,
             value: "taxes",
             checked: false
         },
         {
-            label: "HSN No",
+            label: this.commonLocaleData?.app_hsn,
             value: "hsnNo",
             checked: false
         },
         {
-            label: "SAC No",
+            label: this.commonLocaleData?.app_sac,
             value: "sacNo",
             checked: false
         },
         {
-            label: "Archive",
+            label: this.commonLocaleData?.app_archive,
             value: "archive",
             checked: false
         }
     ];
+    /** Holds list of all hide show column only in FIXED ASSETS*/
     private fixedAssetHideShowColumn = [
         {
-            label: "Fixed Asset Account Name",
+            label: this.localeData?.fixed_assets_account_name,
             value: "fixedAssetAccountName",
             checked: false
         },
         {
-            label: "Fixed Asset Account UniqueName",
+            label: this.localeData?.fixed_assets_account_unique_name,
             value: "fixedAssetAccountUniqueName",
             checked: false
         },
         {
-            label: "Fixed Asset Rate",
+            label: this.localeData?.fixed_assets_rate,
             value: "fixedAssetRate",
             checked: false
         },
         {
-            label: "Fixed Asset Units",
+            label: this.localeData?.fixed_assets_units,
             value: "fixedAssetUnits",
             checked: false
         },
         {
-            label: "Fixed Asset Tax Inclusive",
+            label: this.localeData?.fixed_asset_tax_inclusive,
             value: "fixedAssetTaxInclusive",
             checked: false
         }
     ];
+    /** Holds list of all hide show column of both PRODUCT AND SERVICE*/
     private salesPurchaseHideShowColumn = [
         {
-            label: "Purchase Account Name",
+            label: this.localeData?.purchases_account_name,
             value: "purchaseAccountName",
             checked: false
         },
         {
-            label: "Purchase Account Unique Name",
+            label: this.localeData?.purchase_account_unique_name,
             value: "purchaseAccountUniqueName",
             checked: false
         },
         {
-            label: "Purchase Rate",
+            label: this.localeData?.purchase_rate,
             value: "purchaseRate",
             checked: false
         },
         {
-            label: "Purchase Units",
+            label: this.localeData?.purchase_unit,
             value: "purchaseUnits",
             checked: false
         },
         {
-            label: "Purchase Tax Inclusive",
+            label: this.localeData?.purchase_tax_inclusive,
             value: "purchaseTaxInclusive",
             checked: false
         },
         {
-            label: "Sales Account Name",
+            label: this.localeData?.sales_account_name,
             value: "salesAccountName",
             checked: false
         },
         {
-            label: "Sales Account Unique Name",
+            label: this.localeData?.sales_account_unique_name,
             value: "salesAccountUniqueName",
             checked: false
         },
         {
-            label: "Sales Rate",
+            label: this.localeData?.sales_rate,
             value: "salesRate",
             checked: false
         },
         {
-            label: "Sales Units",
+            label: this.localeData?.sales_unit,
             value: "salesUnits",
             checked: false
         },
         {
-            label: "Sales Tax Inclusive",
+            label: this.localeData?.sales_tax_inclusive,
             value: "salesTaxInclusive",
             checked: false
         },
@@ -201,8 +212,9 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
         sac: false,
         skuCode: false
     };
-    /** Holds Form Group  */
+    /** Holds bulkStockEditForm Form Group  */
     public bulkStockEditForm: UntypedFormGroup;
+    /** Holds hideShowForm Form Group  */
     public hideShowForm: UntypedFormGroup;
     /** Store Dropdown fields value get from API */
     public dropdownValues: any[] = [];
@@ -210,14 +222,21 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Holds module name */
     public moduleName = InventoryModuleName.bulk;
-    /** Stores the Table head input value for the Name filter */
+    /** Stores the Table head VariantName input value for the search filter */
     public thVariantName: UntypedFormControl = new UntypedFormControl();
+    /** Stores the Table head VariantUniqueName input value for the search filter */
     public thVariantUniqueName: UntypedFormControl = new UntypedFormControl();
+    /** Stores the Table head StockName input value for the search filter */
     public thStockName: UntypedFormControl = new UntypedFormControl();
+    /** Stores the Table head StockUniqueName input value for the search filter */
     public thStockUniqueName: UntypedFormControl = new UntypedFormControl();
+    /** Stores the Table head StockGroupName input value for the search filter */
     public thStockGroupName: UntypedFormControl = new UntypedFormControl();
-    public thHSN: UntypedFormControl = new UntypedFormControl();
-    public thSAC: UntypedFormControl = new UntypedFormControl();
+    /** Stores the Table head HSN input value for the search filter */
+    public thHsn: UntypedFormControl = new UntypedFormControl();
+    /** Stores the Table head SAC input value for the search filter */
+    public thSac: UntypedFormControl = new UntypedFormControl();
+    /** Stores the Table head SkuCode input value for the search filter */
     public thSkuCode: UntypedFormControl = new UntypedFormControl();
 
     constructor(
@@ -228,7 +247,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
         private dailog: MatDialog
     ) {
         this.initBulkStockForm();
-        this.hideShowForm = this.initalHideShowFrom();
+        this.hideShowForm = this.initialHideShowForm();
     }
 
     public ngOnInit(): void {
@@ -278,7 +297,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
      * @return {*} 
      * @memberof BulkStockEditComponent
      */
-    private initalHideShowFrom() {
+    private initialHideShowForm() {
         return this.formBuilder.group({
 
             variantName: [false],
@@ -315,7 +334,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
         });
     }
 
-  
+
     /**
      * This will use for init Bulk stock formgroup 
      * @private
@@ -371,16 +390,16 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
         })
     }
 
-     /**
-     * The addRow(data) is used to push addNewRow() in "bulkStockEditForm" Formgroup
-     * @private
-     * @param {*} data
-     * @memberof BulkStockEditComponent
-     */
-    private addRow(data):void {
+    /**
+    * The addRow(data) is used to push addNewRow() in "bulkStockEditForm" Formgroup
+    * @private
+    * @param {*} data
+    * @memberof BulkStockEditComponent
+    */
+    private addRow(data: any): void {
         this.bulkStockData.push(this.addNewRow(data));
     }
-   
+
     /**
      * Getter method for "fields" of "bulkStockEditForm" Formgroup
      * @readonly
@@ -395,7 +414,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
      * NgFormSubmit for "bulkStockEditForm" Formgroup
      * @memberof BulkStockEditComponent
      */
-    onFormSubmit():void {
+    onFormSubmit(): void {
         // console.log(this.bulkStockEditForm.value);
     }
 
@@ -414,19 +433,10 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Get select value from filter checkbox
-     * @param {*} event
-     * @memberof BulkStockEditComponent
-     */
-    public showSelectedHeaderColumns(event: any): void {
-        // console.log("Event: ", event:any);
-    }
- 
-   /**
-   * Get Pagination page change event
-   * @param {*} event
-   * @memberof BulkStockEditComponent
-   */
+    * Get Pagination page change event
+    * @param {*} event
+    * @memberof BulkStockEditComponent
+    */
     public pageChanged(event: any): void {
         if (this.pagination.currentPage !== event?.page) {
             this.isLoading = true;
@@ -449,7 +459,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
      * @param {*} key
      * @memberof BulkStockEditComponent
      */
-    public toggleInput(key): void {
+    public toggleInput(key: string): void {
         this.hideTableHeadInput();
         if (!(this.tableHeadInput[key] && this.searchString && this.searchStringKey)) {
             this.tableHeadInput[key] = !this.tableHeadInput[key];
@@ -547,7 +557,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
                 this.searchBy(searchedText, "stock_group_name");
             }
         });
-        this.thHSN.valueChanges.pipe(
+        this.thHsn.valueChanges.pipe(
             debounceTime(700),
             distinctUntilChanged(),
             takeUntil(this.destroyed$),
@@ -556,7 +566,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
                 this.searchBy(searchedText, "hsn");
             }
         });
-        this.thSAC.valueChanges.pipe(
+        this.thSac.valueChanges.pipe(
             debounceTime(700),
             distinctUntilChanged(),
             takeUntil(this.destroyed$),
@@ -575,12 +585,12 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
             }
         });
     }
-/**
- * Sort Table column ASC | DESC*
- * @param {string} key
- * @memberof BulkStockEditComponent
- */
-public sort(key: string): void {
+    /**
+     * Sort Table column ASC | DESC*
+     * @param {string} key
+     * @memberof BulkStockEditComponent
+     */
+    public sort(key: string): void {
         if (this.sortOrderStatus === null || this.sortOrderStatus === 'desc') {
             this.sortOrderStatus = 'asc';
         } else {
@@ -599,14 +609,14 @@ public sort(key: string): void {
             }
         }));
     }
-/**
- * It call API and send custom body in payload with KEY and SEARCH TEXT
- * @private
- * @param {string} searchedText
- * @param {string} key
- * @memberof BulkStockEditComponent
- */
-private searchBy(searchedText: string, key: string): void {
+    /**
+     * It call API and send custom body in payload with KEY and SEARCH TEXT
+     * @private
+     * @param {string} searchedText
+     * @param {string} key
+     * @memberof BulkStockEditComponent
+     */
+    private searchBy(searchedText: string, key: string): void {
         this.searchString = searchedText;
         this.searchStringKey = key;
         let bodyObj;
@@ -720,8 +730,8 @@ private searchBy(searchedText: string, key: string): void {
         this.thStockName.reset();
         this.thStockUniqueName.reset();
         this.thStockGroupName.reset();
-        this.thHSN.reset();
-        this.thSAC.reset();
+        this.thHsn.reset();
+        this.thSac.reset();
         this.thSkuCode.reset();
         this.searchString = null;
         this.searchStringKey = null;
@@ -787,7 +797,7 @@ private searchBy(searchedText: string, key: string): void {
             this.hideShowForm.controls[keys].setValue(true);
         });
     }
-    
+
     /**
      * Lifcycle hook for destroy event
      * @memberof BulkStockEditComponent
