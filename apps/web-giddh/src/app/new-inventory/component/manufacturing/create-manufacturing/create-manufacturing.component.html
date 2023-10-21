@@ -671,8 +671,8 @@
                                                                                 ? ' required-field-error'
                                                                                 : '')
                                                                         "
-                                                                        [name]="'stock' + i"
-                                                                        [scrollableElementId]="'stock' + i"
+                                                                        [name]="'byproduct-stock' + i"
+                                                                        [scrollableElementId]="'byproduct-stock' + i"
                                                                         [placeholder]="
                                                                             commonLocaleData?.app_select_stock
                                                                         "
@@ -684,7 +684,9 @@
                                                                                 byProductLinkedStock,
                                                                                 $event,
                                                                                 false,
-                                                                                i
+                                                                                i,
+                                                                                false,
+                                                                                false
                                                                             )
                                                                         "
                                                                         [defaultValue]="
