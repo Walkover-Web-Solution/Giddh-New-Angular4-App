@@ -803,10 +803,9 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
         // if (checkColumnStatus) {
         this.isLoading = true;
         this.advanceSearchData = event;
-        const pageNo = this.pagination.currentPage;
         this.isLoading = true;
         this.store.dispatch(this.inventoryAction.getBulkStockList({
-            inventoryType: this.inventoryType, page: pageNo, count: this.pageCount, body: {
+            inventoryType: this.inventoryType, page: this.pagination.currentPage, count: this.pageCount, body: {
                 "sortBy": event.sortBy,
                 "expression": event.expression,
                 "rate": event.amount
