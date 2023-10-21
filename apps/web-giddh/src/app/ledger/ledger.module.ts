@@ -73,7 +73,8 @@ import { StockCreateEditModule } from '../new-inventory/component/stock-create-e
         GenerateVoucherConfirmationModalComponent
     ],
     exports: [
-        LedgerComponent
+        LedgerComponent,
+        LedgerAsidePaneComponent
     ],
     providers: [],
     imports: [

@@ -951,7 +951,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 }
 
             })
-            updatedCustomFieldArray = updatedCustomFieldArray.filter(field => {
+            updatedCustomFieldArray = updatedCustomFieldArray?.filter(field => {
                 delete field.isMandatory
                 return field.value;
             });
@@ -961,7 +961,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         if (this.isFormSubmitted) {
             return;
         }
-        
+
         if (this.validateStock(this.stockForm.purchaseAccountDetails?.unitRates)) {
             this.stockForm.purchaseAccountDetails.unitRates = this.stockForm.purchaseAccountDetails.unitRates.filter((unitRate) => {
                 return unitRate.stockUnitUniqueName || unitRate.rate;
@@ -1083,7 +1083,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                     value: obj?.value
                 };
             });
-            updatedCustomFieldArray = updatedCustomFieldArray.filter(field => field.value);
+            updatedCustomFieldArray = updatedCustomFieldArray?.filter(field => field.value);
             variant.customFields = updatedCustomFieldArray;
         });
         let defaultWarehouse = null;
@@ -1349,6 +1349,9 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 if (this.createRecipe.hasRecipeForStock()) {
                     this.createRecipe.saveRecipeFromStock();
                 }
+
+                this.getVariantCustomFields();
+                this.updateCustomFieldObjectInVariant();
 
                 if (this.createRecipe.newVariants?.length) {
                     this.createRecipe.stock.variants = response.body.variants;
