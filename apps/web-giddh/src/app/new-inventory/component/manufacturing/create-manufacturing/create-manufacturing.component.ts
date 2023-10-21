@@ -5,6 +5,7 @@ import { Store, select } from '@ngrx/store';
 import { SettingsBranchActions } from 'apps/web-giddh/src/app/actions/settings/branch/settings.branch.action';
 import { isEqual } from 'apps/web-giddh/src/app/lodash-optimized';
 import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
+import { LinkedStocks } from 'apps/web-giddh/src/app/manufacturing/manufacturing.utility';
 import { CreateManufacturing } from 'apps/web-giddh/src/app/models/api-models/Manufacturing';
 import { OrganizationType } from 'apps/web-giddh/src/app/models/user-login-state';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
@@ -334,14 +335,13 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
         this.manufacturingObject.manufacturingDetails[0].linkedStocks = [];
         this.manufacturingObject.manufacturingDetails[0].byProducts = [];
         this.manufacturingService.getVariantRecipe(this.manufacturingObject.manufacturingDetails[0].stockUniqueName, [this.manufacturingObject.manufacturingDetails[0].variant.uniqueName], true).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            console.log(response);
-
             if (response?.status === "success" && response?.body?.manufacturingDetails?.length) {
                 this.recipeExists = true;
                 this.manufacturingObject.manufacturingDetails[0].manufacturingUnitCode = response.body.manufacturingDetails[0].manufacturingUnitCode;
                 this.manufacturingObject.manufacturingDetails[0].manufacturingUnitUniqueName = response.body.manufacturingDetails[0].manufacturingUnitUniqueName;
                 this.manufacturingObject.manufacturingDetails[0].manufacturingMultipleOf = response.body.manufacturingDetails[0].manufacturingQuantity;
                 this.manufacturingObject.manufacturingDetails[0].manufacturingQuantity = response.body.manufacturingDetails[0].manufacturingQuantity;
+
                 response.body.manufacturingDetails[0].linkedStocks?.forEach(linkedStock => {
                     let amount = linkedStock.rate * linkedStock.quantity;
                     let unitsList = [];
@@ -361,6 +361,12 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
                             variant: linkedStock.variant
                         }
                     );
+                });
+
+                this.manufacturingObject.manufacturingDetails[0].linkedStocks?.forEach(linkedStock => {
+                    if (linkedStock.selectedStock.value) {
+                        this.getStockVariants(linkedStock, { label: linkedStock.selectedStock.label, value: linkedStock.selectedStock.value, additional: { stockUnitCode: linkedStock.stockUnitCode, stockUnitUniqueName: linkedStock.stockUnitUniqueName } }, false, 0, true);
+                    }
                 });
 
                 this.manufacturingObject.manufacturingDetails[0].byProducts = [];
@@ -398,6 +404,12 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
                                 variant: linkedStock.variant
                             }
                         );
+                    });
+
+                    this.manufacturingObject.manufacturingDetails[0].byProducts?.forEach(linkedStock => {
+                        if (linkedStock.selectedStock.value) {
+                            this.getStockVariants(linkedStock, { label: linkedStock.selectedStock.label, value: linkedStock.selectedStock.value, additional: { stockUnitCode: linkedStock.stockUnitCode, stockUnitUniqueName: linkedStock.stockUnitUniqueName } }, false, 0, true);
+                        }
                     });
                 }
                 this.existingRecipe = this.formatRecipeRequest();
