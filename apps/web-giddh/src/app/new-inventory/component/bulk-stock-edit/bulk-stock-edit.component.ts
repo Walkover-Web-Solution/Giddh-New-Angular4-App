@@ -433,22 +433,22 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
         /** Holds list of all hide show column only in FIXED ASSETS*/
         let fixedAssetHideShowColumn = [
             {
-                label: this.localeData?.fixed_assets_account_name,
+                label: this.localeData?.fixed_asset_account_name,
                 value: "fixedAssetAccountName",
                 checked: false
             },
             {
-                label: this.localeData?.fixed_assets_account_unique_name,
+                label: this.localeData?.fixed_asset_account_unique_name,
                 value: "fixedAssetAccountUniqueName",
                 checked: false
             },
             {
-                label: this.localeData?.fixed_assets_rate,
+                label: this.localeData?.fixed_asset_rate,
                 value: "fixedAssetRate",
                 checked: true
             },
             {
-                label: this.localeData?.fixed_assets_units,
+                label: this.localeData?.fixed_asset_units,
                 value: "fixedAssetUnits",
                 checked: false
             },
