@@ -509,14 +509,10 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
                 checked: false
             },
         ];
-        console.log("commonHideShowColumnList[1].checked",commonHideShowColumnList[1].checked)
         if (this.inventoryType === 'FIXED_ASSETS') {
             this.hideShowColumnList = [...commonHideShowColumnList, ...fixedAssetHideShowColumn];            
-            console.log("hideShowColumnList",this.hideShowColumnList);            
         } else {
             this.hideShowColumnList = [...commonHideShowColumnList, ...salesPurchaseHideShowColumn];
-            console.log("hideShowColumnList",this.hideShowColumnList);
-            
         }
     }
 
