@@ -4092,6 +4092,15 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         this.dialog.closeAll();
     }
 
+    /**
+     * Set barcode machine typing to false if user clicked on dropdown
+     *
+     * @memberof CreatePurchaseOrderComponent
+     */
+    public setUserManuallyClicked(): void {
+        this.isBarcodeMachineTyping = false;
+    }
+
     // CMD + G functionality
     @HostListener('document:keydown', ['$event'])
     public handleKeyboardDownEvent(event: KeyboardEvent): void {
@@ -4108,6 +4117,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
 
         if (event.timeStamp - this.startTime < 2) {
             this.isBarcodeMachineTyping = true;
+        } else {
+            this.isBarcodeMachineTyping = false;
         }
 
         if (uniqueName && this.startTime) {
