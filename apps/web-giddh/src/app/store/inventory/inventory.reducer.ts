@@ -62,6 +62,7 @@ export interface InventoryState {
     isGetManufactureStockInProgress: boolean;
     getStocksInProgress: boolean;
     stocksTotalPages: number;
+    bulkStock:any;
 }
 
 const prepare = (mockData: IGroupsWithStocksHierarchyMinItem[]): IGroupsWithStocksHierarchyMinItem[] => {
@@ -131,7 +132,8 @@ const initialState: InventoryState = {
     moveStockSuccess: false,
     isGetManufactureStockInProgress: false,
     getStocksInProgress: false,
-    stocksTotalPages: 0
+    stocksTotalPages: 0,
+    bulkStock: null
 };
 
 export function InventoryReducer(state: InventoryState = initialState, action: CustomActions): InventoryState {
@@ -666,6 +668,8 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
             return Object.assign({}, state, { showBranchScreen: action.payload });
         case InventoryActionsConst.ShowBranchScreenSideBar:
             return Object.assign({}, state, { showBranchScreenSidebar: action.payload });
+        case InventoryActionsConst.BulkStockResponse:
+            return Object.assign({}, state, { bulkStock: action.payload });
         //  endregion
         default:
             return state;

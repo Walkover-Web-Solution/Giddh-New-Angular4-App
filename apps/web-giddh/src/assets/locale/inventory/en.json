@@ -1,6 +1,6 @@
 {
     "sidebar":{
-        "inventory":"INVENTORY",
+        "inventory":"Inventory",
         "stock":"Product",
         "create_new":"Create New",
         "item_wise":"Item-wise",
@@ -90,7 +90,9 @@
         "category":"Category",
         "type":"Type",
         "select_value":"Select Value",
-        "enter_amount":"Enter Amount"
+        "enter_amount":"Enter Amount",
+        "sort_by": "Sort By",
+        "expression": "Expression"
     },
     "warehouse_opening_balance":{
         "unique_name":"Unique Name",
