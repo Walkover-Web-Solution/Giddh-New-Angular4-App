@@ -658,10 +658,7 @@
                                                             "
                                                             (mouseleave)="
                                                                 activeByProductLinkedStockIndex = null;
-                                                                hideBorder(
-                                                                    'byProductLinkedStock',
-                                                                    byProductLinkedStock
-                                                                )
+                                                                hideBorder('byProductLinkedStock', byProductLinkedStock)
                                                             "
                                                         >
                                                             <td class="table-name">
@@ -679,10 +676,9 @@
                                                                         [placeholder]="
                                                                             commonLocaleData?.app_select_stock
                                                                         "
-                                                                        [options]="byProductLinkedStock.stocks"
+                                                                        [options]="byProductLinkedStocksList"
                                                                         (selectedOption)="
-                                                                            byProductLinkedStock.selectedStock =
-                                                                                $event;
+                                                                            byProductLinkedStock.selectedStock = $event;
                                                                             validateSelectedByProductStock(i);
                                                                             getStockVariants(
                                                                                 byProductLinkedStock,
@@ -794,10 +790,7 @@
                                                                                     $event.value;
                                                                                 byProductLinkedStock.stockUnitCode =
                                                                                     $event.label;
-                                                                                getRateForStock(
-                                                                                    byProductLinkedStock,
-                                                                                    i
-                                                                                )
+                                                                                getRateForStock(byProductLinkedStock, i)
                                                                             "
                                                                             [defaultValue]="
                                                                                 byProductLinkedStock.stockUnitCode
