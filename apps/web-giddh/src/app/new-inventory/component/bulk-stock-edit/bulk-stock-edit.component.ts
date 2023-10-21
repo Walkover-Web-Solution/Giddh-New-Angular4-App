@@ -98,6 +98,8 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
     public thSac: UntypedFormControl = new UntypedFormControl();
     /** Stores the Table head SkuCode input value for the search filter */
     public thSkuCode: UntypedFormControl = new UntypedFormControl();
+    /** Hold no data found status */
+    public noDataFound:boolean = false;
 
     constructor(
         private route: ActivatedRoute,
@@ -140,6 +142,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
                         const bulkStockForm = this.bulkStockData;
                         bulkStockForm.clear();
                         this.setPaginationData(res);
+                        this.noDataFound = res.totalItems === 0;
 
                         this.totalInventoryCount = res?.totalItems;
                         res.results.forEach((row, index) => {
