@@ -307,8 +307,12 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
                         };
 
                         if (loadRecipe) {
+                            console.log("yes");
+
                             this.getVariantRecipe();
                         } else if (isRawStock) {
+                            console.log("no");
+
                             this.getRateForStock(object, index);
                         }
                     }
@@ -335,6 +339,8 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
         this.manufacturingObject.manufacturingDetails[0].linkedStocks = [];
         this.manufacturingObject.manufacturingDetails[0].byProducts = [];
         this.manufacturingService.getVariantRecipe(this.manufacturingObject.manufacturingDetails[0].stockUniqueName, [this.manufacturingObject.manufacturingDetails[0].variant.uniqueName], true).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            console.log(response);
+
             if (response?.status === "success" && response?.body?.manufacturingDetails?.length) {
                 this.recipeExists = true;
                 this.manufacturingObject.manufacturingDetails[0].manufacturingUnitCode = response.body.manufacturingDetails[0].manufacturingUnitCode;
@@ -1183,6 +1189,8 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
         this.changeDetectionRef.detectChanges();
 
         this.manufacturingService.getManufacturingDetails(uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            console.log("response", response);
+
             if (response?.status === "success" && response.body) {
                 this.manufacturingObject.manufacturingDetails[0].date = dayjs(response.body.date, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
                 this.manufacturingObject.manufacturingDetails[0].warehouseUniqueName = response.body.warehouse.uniqueName;
@@ -1219,33 +1227,62 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
                         variant: linkedStock.variant
                     });
                 });
-
-                let byProductLinkedStocks = [];
-                response.body.byProducts?.forEach(linkedStock => {
-                    let amount = linkedStock.rate * linkedStock.manufacturingQuantity;
-
-                    let unitsList = [];
-
-                    linkedStock?.stockUnits?.forEach(unit => {
-                        unitsList.push({ label: unit.code, value: unit.uniqueName });
-                    });
-
-                    byProductLinkedStocks.push({
-                        selectedStock: { label: linkedStock.stockName, value: linkedStock.stockUniqueName, additional: { stockUnitCode: linkedStock.manufacturingUnitCode, stockUnitUniqueName: linkedStock.manufacturingUnitUniqueName, unitsList: unitsList } },
-                        stockUniqueName: linkedStock.stockUniqueName,
-                        quantity: linkedStock.manufacturingQuantity,
-                        stockUnitUniqueName: linkedStock.manufacturingUnitUniqueName,
-                        stockUnitCode: linkedStock.manufacturingUnitCode,
-                        rate: linkedStock.rate,
-                        amount: isNaN(amount) ? 0 : giddhRoundOff(amount, this.giddhBalanceDecimalPlaces),
-                        variant: linkedStock.variant
-                    });
+                this.manufacturingObject.manufacturingDetails[0].linkedStocks?.forEach(linkedStock => {
+                    if (linkedStock.selectedStock.value) {
+                        this.getStockVariants(linkedStock, { label: linkedStock.selectedStock.label, value: linkedStock.selectedStock.value, additional: { stockUnitCode: linkedStock.stockUnitCode, stockUnitUniqueName: linkedStock.stockUnitUniqueName } }, false, 0, true);
+                    }
                 });
+                if (!response.body.byProducts.length) {
+                    this.manufacturingObject.manufacturingDetails[0].byProducts = [];
+                    this.manufacturingObject.manufacturingDetails[0].byProducts.push(
+                        {
+                            selectedStock: { label: "", value: "", additional: { stockUnitCode: "", stockUnitUniqueName: "", unitsList: [] } },
+                            stockUniqueName: "",
+                            quantity: 1,
+                            stockUnitUniqueName: "",
+                            stockUnitCode: "",
+                            rate: 0,
+                            amount: 0,
+                            variant: { name: '', uniqueName: '' }
+                        }
+                    );
 
+                } else {
+                    console.log("0", this.manufacturingObject.manufacturingDetails[0]);
+
+                    let byProductLinkedStocks = [];
+                    response.body.byProducts?.forEach(linkedStock => {
+                        let amount = linkedStock.rate * linkedStock.manufacturingQuantity;
+
+                        let unitsList = [];
+
+                        linkedStock?.stockUnits?.forEach(unit => {
+                            unitsList.push({ label: unit.code, value: unit.uniqueName });
+                        });
+
+                        byProductLinkedStocks.push({
+                            selectedStock: { label: linkedStock.stockName, value: linkedStock.stockUniqueName, additional: { stockUnitCode: linkedStock.manufacturingUnitCode, stockUnitUniqueName: linkedStock.manufacturingUnitUniqueName, unitsList: unitsList } },
+                            stockUniqueName: linkedStock.stockUniqueName,
+                            quantity: linkedStock.manufacturingQuantity,
+                            stockUnitUniqueName: linkedStock.manufacturingUnitUniqueName,
+                            stockUnitCode: linkedStock.manufacturingUnitCode,
+                            rate: linkedStock.rate,
+                            amount: isNaN(amount) ? 0 : giddhRoundOff(amount, this.giddhBalanceDecimalPlaces),
+                            variant: linkedStock.variant
+                        });
+                    });
+                    this.manufacturingObject.manufacturingDetails[0].byProducts = byProductLinkedStocks;
+                    this.manufacturingObject.manufacturingDetails[0].byProducts?.forEach(linkedStock => {
+                        if (linkedStock.selectedStock.value) {
+                            this.getStockVariants(linkedStock, { label: linkedStock.selectedStock.label, value: linkedStock.selectedStock.value, additional: { stockUnitCode: linkedStock.stockUnitCode, stockUnitUniqueName: linkedStock.stockUnitUniqueName } }, false, 0, true);
+                        }
+                    });
+                    this.initialByProductLinkedStocks = cloneDeep(byProductLinkedStocks);
+
+                }
                 this.manufacturingObject.manufacturingDetails[0].linkedStocks = linkedStocks;
-                this.manufacturingObject.manufacturingDetails[0].byProducts = byProductLinkedStocks;
+
                 this.initialLinkedStocks = cloneDeep(linkedStocks);
-                this.initialByProductLinkedStocks = cloneDeep(byProductLinkedStocks);
 
                 let otherExpenses = [];
                 response.body.otherExpenses?.forEach(responseItem => {
@@ -1275,7 +1312,6 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
                 if (response.body.otherExpenses.length) {
                     this.manufacturingObject.manufacturingDetails[0].otherExpenses = otherExpenses;
                 }
-                this.getStockVariants(this.manufacturingObject.manufacturingDetails[0], { label: response.body.stockName, value: response.body.stockUniqueName, additional: { stockUnitCode: response.body.manufacturingUnitCode, stockUnitUniqueName: response.body.manufacturingUnitUniqueName } }, true, 0, true);
 
                 this.preventStocksApiCall = false;
                 this.getStocks(this.manufacturingObject.manufacturingDetails[0].linkedStocks[0], 1, '', this.selectedInventoryType, (response: any) => {
