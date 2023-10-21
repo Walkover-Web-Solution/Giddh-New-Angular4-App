@@ -23,5 +23,7 @@
     "purchase_tax_inclusive": "खरीद कर सहित",
     "fixed_asset_tax_inclusive": "अचल संपत्ति कर सहित",
     "customize_column": "कॉलम अनुकूलित करें",
-    "enter_rate": "दर दर्ज करें"
+    "enter_rate": "दर दर्ज करें",
+    "app_include": "शामिल",
+    "app_exclude": "निकालना"
 }

@@ -13,12 +13,10 @@ import { PAGINATION_LIMIT } from '../../../app.constant';
     templateUrl: './bulk-stock-edit.component.html',
     styleUrls: ['./bulk-stock-edit.component.scss']
 })
+
 export class BulkStockEditComponent implements OnInit, OnDestroy {
-    /**
-     * Store Advance search dialog template reference
-     * @type {TemplateRef<any>}
-     * @memberof BulkStockEditComponent
-     */
+
+    /** Store Advance search dialog template reference*/
     @ViewChild('bulkStockAdvanceFilter') public bulkStockAdvanceFilter: TemplateRef<any>
     /* This will hold local JSON data */
     public localeData: any = {};
@@ -111,6 +109,11 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
         this.hideShowForm = this.initialHideShowForm();
     }
 
+    /**
+     * Initializes the component,
+     * get Inventory type  and call getBulkStockList api and then get list from Store
+     * @memberof BulkStockEditComponent
+     */
     public ngOnInit(): void {
         this.searchInputObservableInitialize();
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
@@ -279,6 +282,18 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Callback for translation response complete
+     *
+     * @param {*} event
+     * @memberof BulkStockEditComponent
+     */
+    public translationComplete(event: any): void {
+        if (event) {
+            this.updateColumnsList();
+        }
+    }
+
+    /**
      * Get select value from select field
      * @param {*} data
      * @memberof BulkStockEditComponent
@@ -347,7 +362,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
      * @private
      * @memberof BulkStockEditComponent
      */
-    public updateColumnsList(): void {
+    private updateColumnsList(): void {
         this.hideShowColumnList = [];
         /** Holds list of all hide show column common in inventory type*/
         let commonHideShowColumnList = [
@@ -407,6 +422,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
                 checked: false
             }
         ];
+
         /** Holds list of all hide show column only in FIXED ASSETS*/
         let fixedAssetHideShowColumn = [
             {
@@ -435,6 +451,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
                 checked: false
             }
         ];
+
         /** Holds list of all hide show column of both PRODUCT AND SERVICE*/
         let salesPurchaseHideShowColumn = [
             {
@@ -488,6 +505,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
                 checked: false
             },
         ];
+
         if (this.inventoryType === 'FIXED_ASSETS') {
             this.hideShowColumnList = [...commonHideShowColumnList, ...fixedAssetHideShowColumn];
         } else {
@@ -520,6 +538,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
                 this.searchBy(searchedText, "variant_name");
             }
         });
+
         this.thVariantUniqueName.valueChanges.pipe(
             debounceTime(700),
             distinctUntilChanged(),
@@ -529,6 +548,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
                 this.searchBy(searchedText, "variant_unique_name");
             }
         });
+
         this.thStockName.valueChanges.pipe(
             debounceTime(700),
             distinctUntilChanged(),
@@ -538,6 +558,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
                 this.searchBy(searchedText, "stock_name");
             }
         });
+
         this.thStockUniqueName.valueChanges.pipe(
             debounceTime(700),
             distinctUntilChanged(),
@@ -547,6 +568,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
                 this.searchBy(searchedText, "stock_unique_name");
             }
         });
+
         this.thStockGroupName.valueChanges.pipe(
             debounceTime(700),
             distinctUntilChanged(),
@@ -556,6 +578,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
                 this.searchBy(searchedText, "stock_group_name");
             }
         });
+
         this.thHsn.valueChanges.pipe(
             debounceTime(700),
             distinctUntilChanged(),
@@ -565,6 +588,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
                 this.searchBy(searchedText, "hsn");
             }
         });
+
         this.thSac.valueChanges.pipe(
             debounceTime(700),
             distinctUntilChanged(),
@@ -574,6 +598,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
                 this.searchBy(searchedText, "sac");
             }
         });
+
         this.thSkuCode.valueChanges.pipe(
             debounceTime(700),
             distinctUntilChanged(),
@@ -599,8 +624,8 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
         this.isLoading = true;
         this.store.dispatch(this.inventoryAction.getBulkStockList({
             inventoryType: this.inventoryType, page: this.pagination.currentPage, count: this.pageCount, body: {
-                "search": "",
-                "searchBy": "",
+                "search": this.searchString !== null ? this.searchString : "",
+                "searchBy": this.searchStringKey !== null ? this.searchStringKey : "",
                 "sortBy": key,
                 "sort": this.sortOrderStatus,
                 "expression": "GREATER_THAN",
@@ -608,6 +633,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
             }
         }));
     }
+
     /**
      * It call API and send custom body in payload with KEY and SEARCH TEXT
      * @private

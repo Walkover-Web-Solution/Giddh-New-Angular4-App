@@ -25,15 +25,20 @@ export class BulkStockAdvanceFilterComponent implements OnInit {
     /** Instance of Advance Search Form*/
     public advanceSearchFormObj: any;
 
+    /**
+     * Initializes the Advance Serach Form*
+     * @memberof BulkStockAdvanceFilterComponent
+     */
     public ngOnInit(): void {
-        this.formInit();
+        this.initDropdownValues();
         this.initializeForm();
     }
-  /**
-   * Initialize Form fields Data to display
-   * @memberof BulkStockAdvanceFilterComponent
-   */
-  public formInit(): void {
+
+    /**
+     * Initialize Form fields Data to display
+     * @memberof BulkStockAdvanceFilterComponent
+     */
+    public initDropdownValues(): void {
         this.advanceSearchSortBy = [
             {
                 value: "purchase_rate",
@@ -81,7 +86,7 @@ export class BulkStockAdvanceFilterComponent implements OnInit {
             }
         ];
     }
- 
+
     /**
      * Set Advance search form object to initial value 
      * @memberof BulkStockAdvanceFilterComponent
@@ -102,31 +107,31 @@ export class BulkStockAdvanceFilterComponent implements OnInit {
     public advanceFilterClose(): void {
         this.closeDailog.emit();
     }
-  
+
     /**
      * Set selected catergory to Advance search form object 
      * @param {*} event
      * @memberof BulkStockAdvanceFilterComponent
      */
-    public selectCategory(event:any): void {
+    public selectCategory(event: any): void {
         this.advanceSearchFormObj.sortBy = event;
     }
-     
+
     /**
      * Set selected Type to Advance search form object 
      * @param {*} event
      * @memberof BulkStockAdvanceFilterComponent
      */
-    public selectCategoryType(event:any): void {
+    public selectCategoryType(event: any): void {
         this.advanceSearchFormObj.type = event;
     }
- 
+
     /**
      * Set selected expression to Advance search form object 
      * @param {*} event
      * @memberof BulkStockAdvanceFilterComponent
      */
-    public selectValueExpression(event:any): void {
+    public selectValueExpression(event: any): void {
         this.advanceSearchFormObj.expression = event;
     }
 

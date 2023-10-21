@@ -23,5 +23,7 @@
        "purchase_tax_inclusive": "खरेदी कर समावेशक",
        "fixed_asset_tax_inclusive": "निश्चित मालमत्ता कर समावेशक",
        "customize_column": "स्तंभ सानुकूलित करा",
-       "enter_rate": "दर प्रविष्ट करा"
+       "enter_rate": "दर प्रविष्ट करा",
+       "inclusive": "एमआरपी (समावेशक)",
+       "exclusive": "अनन्य"
     }
