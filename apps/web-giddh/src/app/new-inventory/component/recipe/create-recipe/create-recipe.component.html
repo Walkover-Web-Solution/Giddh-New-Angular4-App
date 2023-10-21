@@ -79,7 +79,7 @@
                     <div class="col-8 pr-0">
                         <div class="row">
                             <mat-accordion>
-                                <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+                                <mat-expansion-panel [expanded]="true">
                                     <mat-expansion-panel-header>
                                         <mat-panel-title class="p-0">
                                             {{ localeData?.raw_stock }}
@@ -192,7 +192,7 @@
                                                     </tr>
                                                 </tbody>
                                             </table>
-                                            <div>
+                                            <div class="mt-2 mb-3 pd-r1 pd-l1">
                                                 <a
                                                     href="javascript:void(0);"
                                                     (click)="addNewLinkedStockInRecipe(recipe)"
@@ -205,7 +205,7 @@
                                 </mat-expansion-panel>
                                 <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
                                     <mat-expansion-panel-header>
-                                        <mat-panel-title class="p-0"> By Product </mat-panel-title>
+                                        <mat-panel-title class="p-0"> By Product (Output) </mat-panel-title>
                                     </mat-expansion-panel-header>
                                     <div class="consumption-details-wrapper w-100">
                                         <div class="mt-2">
@@ -324,7 +324,7 @@
                                                     </tr>
                                                 </tbody>
                                             </table>
-                                            <div>
+                                            <div class="mt-2 mb-2 pd-r1 pd-l1">
                                                 <a
                                                     href="javascript:void(0);"
                                                     (click)="addNewByProductLinkedStockInRecipe(recipe)"
@@ -405,49 +405,53 @@
                         <div class="col-4 pr-0">
                             <div class="row">
                                 <div class="consumption-details-wrapper w-100">
-                                    <h1 class="section-head" *ngIf="recipe.byProducts.length">By Product</h1>
-                                    <table class="table-filled view-mode-table table-raw-stock">
-                                        <tbody>
-                                            <tr *ngFor="let linkedStock of recipe.byProducts; let j = index">
-                                                <td>
-                                                    <div>
-                                                        <p>{{ linkedStock.stockName }}</p>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div>
-                                                        <p>{{ linkedStock.variant?.name }}</p>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div>
-                                                        <p>
-                                                            {{ linkedStock.quantity }} ({{ linkedStock.stockUnitCode }})
-                                                        </p>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                    <div class="d-flex">
-                                        <a
-                                            href="javascript:void(0);"
-                                            class="icon-remove"
-                                            (click)="recipe.isEdit = true"
-                                            [matTooltip]="commonLocaleData?.app_edit"
-                                            matTooltipPosition="above"
-                                        >
-                                            <i class="icon-edit-pencil"></i>
-                                        </a>
-                                        <a
-                                            href="javascript:void(0);"
-                                            class="icon-remove"
-                                            [matTooltip]="commonLocaleData?.app_delete"
-                                            matTooltipPosition="above"
-                                            (click)="removeRecipe(i)"
-                                        >
-                                            <i class="icon-trash"></i>
-                                        </a>
+                                    <h1 class="section-head" *ngIf="i == 0">By Product</h1>
+                                    <div class="d-flex align-items-baseline">
+                                        <table class="table-filled view-mode-table table-raw-stock">
+                                            <tbody>
+                                                <tr *ngFor="let linkedStock of recipe.byProducts; let j = index">
+                                                    <td>
+                                                        <div>
+                                                            <p>{{ linkedStock.stockName }}</p>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div>
+                                                            <p>{{ linkedStock.variant?.name }}</p>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div>
+                                                            <p>
+                                                                {{ linkedStock.quantity }} ({{
+                                                                    linkedStock.stockUnitCode
+                                                                }})
+                                                            </p>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <div class="d-flex">
+                                            <a
+                                                href="javascript:void(0);"
+                                                class="icon-remove"
+                                                (click)="recipe.isEdit = true"
+                                                [matTooltip]="commonLocaleData?.app_edit"
+                                                matTooltipPosition="above"
+                                            >
+                                                <i class="icon-edit-pencil"></i>
+                                            </a>
+                                            <a
+                                                href="javascript:void(0);"
+                                                class="icon-remove"
+                                                [matTooltip]="commonLocaleData?.app_delete"
+                                                matTooltipPosition="above"
+                                                (click)="removeRecipe(i)"
+                                            >
+                                                <i class="icon-trash"></i>
+                                            </a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

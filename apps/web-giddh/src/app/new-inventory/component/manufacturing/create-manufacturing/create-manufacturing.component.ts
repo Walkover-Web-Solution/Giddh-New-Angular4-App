@@ -334,6 +334,8 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
         this.manufacturingObject.manufacturingDetails[0].linkedStocks = [];
         this.manufacturingObject.manufacturingDetails[0].byProducts = [];
         this.manufacturingService.getVariantRecipe(this.manufacturingObject.manufacturingDetails[0].stockUniqueName, [this.manufacturingObject.manufacturingDetails[0].variant.uniqueName], true).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            console.log(response);
+
             if (response?.status === "success" && response?.body?.manufacturingDetails?.length) {
                 this.recipeExists = true;
                 this.manufacturingObject.manufacturingDetails[0].manufacturingUnitCode = response.body.manufacturingDetails[0].manufacturingUnitCode;
@@ -436,6 +438,7 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
             }
 
             this.preventStocksApiCall = false;
+
             this.getStocks(this.manufacturingObject.manufacturingDetails[0].linkedStocks[0], 1, '', this.selectedInventoryType);
             this.calculateTotals();
         });
