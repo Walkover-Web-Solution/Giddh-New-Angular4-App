@@ -1,7 +1,5 @@
-<ng-template #searchTemplate let-show let-title="title" let-fieldName="fieldName" let-formControl="formControl">
-    <div class="input-container">
+<ng-template #searchTemplate let-show let-title="title" let-fieldName="fieldName" let-formControl="formControl">   
         <text-field [type]="'text'" [formControl]="formControl" [autoFocus]="true"></text-field>
-    </div>
 </ng-template>
 <ng-container appTranslate [file]="'inventory/bulk-stock-edit'" (commonLocaleData)="commonLocaleData = $event"
     (localeData)="localeData = $event" (translationComplete)="translationComplete($event)">
@@ -20,7 +18,7 @@
                         <div class="d-flex align-items-center">
                             <p *ngIf="!isLoading" class="mr-r3 ">{{ localeData?.total_inventory_count }} : <span>{{
                                     totalInventoryCount}}</span></p>
-                            <div class="menu-btn-control" [matTooltip]="localeData?.customize_column">
+                            <div class="menu-btn-control" [matTooltip]="localeData?.customize_column">                               
                                 <select-table-column [moduleType]="moduleName" [customiseColumns]="hideShowColumnList"
                                     (isLoading)="isLoading = $event" (selectedColumns)="setDisplayColumns($event)"
                                     [localeData]="localeData" [commonLocaleData]="commonLocaleData"
@@ -65,7 +63,7 @@
                                                                 *ngTemplateOutlet="searchTemplate;context: {formControl: thVariantName}"></ng-container>
                                                         </div>
                                                     </div>
-                                                    <button *ngIf="tableHeadInput.variantName" mat-icon-button
+                                                    <button mat-icon-button
                                                         class="sort-btn icon-font-22 p-0"
                                                         (click)="sort('variant_name')">
                                                         <span class="icon-sort-asc text-light-2 d-block"></span>
@@ -88,7 +86,7 @@
                                                                 *ngTemplateOutlet="searchTemplate;context: {formControl: thVariantUniqueName}"></ng-container>
                                                         </div>
                                                     </div>
-                                                    <button *ngIf="!tableHeadInput.variantUniqueName" mat-icon-button
+                                                    <button mat-icon-button
                                                         class="sort-btn icon-font-22 p-0"
                                                         (click)="sort('variant_unique_name')">
                                                         <span class="icon-sort-asc text-light-2 d-block"></span>
@@ -109,7 +107,7 @@
                                                                 *ngTemplateOutlet="searchTemplate;context: {formControl: thStockName}"></ng-container>
                                                         </div>
                                                     </div>
-                                                    <button *ngIf="!tableHeadInput.stockName" mat-icon-button
+                                                    <button mat-icon-button
                                                         class="sort-btn icon-font-22 p-0" (click)="sort('stock_name')">
                                                         <span class="icon-sort-asc text-light-2 d-block"></span>
                                                     </button>
@@ -130,7 +128,7 @@
                                                                 *ngTemplateOutlet="searchTemplate;context: {formControl: thStockUniqueName}"></ng-container>
                                                         </div>
                                                     </div>
-                                                    <button *ngIf="!tableHeadInput.stockUniqueName" mat-icon-button
+                                                    <button mat-icon-button
                                                         class="sort-btn icon-font-22 p-0"
                                                         (click)="sort('stock_unique_name')">
                                                         <span class="icon-sort-asc text-light-2 d-block"></span>
@@ -152,7 +150,7 @@
                                                                 *ngTemplateOutlet="searchTemplate;context: {formControl: thStockGroupName}"></ng-container>
                                                         </div>
                                                     </div>
-                                                    <button *ngIf="!tableHeadInput.stockGroupName" mat-icon-button
+                                                    <button mat-icon-button
                                                         class="sort-btn icon-font-22 p-0"
                                                         (click)="sort('stock_group_name')">
                                                         <span class="icon-sort-asc text-light-2 d-block"></span>
@@ -179,7 +177,7 @@
                                                                 *ngTemplateOutlet="searchTemplate;context: {formControl: thStockGroupName}"></ng-container>
                                                         </div>
                                                     </div>
-                                                    <button *ngIf="!tableHeadInput.hsn" mat-icon-button
+                                                    <button mat-icon-button
                                                         class="sort-btn icon-font-22 p-0" (click)="sort('hsn')">
                                                         <span class="icon-sort-asc text-light-2 d-block"></span>
                                                     </button>
@@ -200,7 +198,7 @@
                                                                 *ngTemplateOutlet="searchTemplate;context: {formControl: thSac}"></ng-container>
                                                         </div>
                                                     </div>
-                                                    <button *ngIf="!tableHeadInput.sac" mat-icon-button
+                                                    <button mat-icon-button
                                                         class="sort-btn icon-font-22 p-0" (click)="sort('sac')">
                                                         <span class="icon-sort-asc text-light-2 d-block"></span>
                                                     </button>
@@ -220,7 +218,7 @@
                                                                 *ngTemplateOutlet="searchTemplate;context: {formControl: thSkuCode}"></ng-container>
                                                         </div>
                                                     </div>
-                                                    <button *ngIf="!tableHeadInput.skuCode" mat-icon-button
+                                                    <button mat-icon-button
                                                         class="sort-btn icon-font-22 p-0" (click)="sort('sku')">
                                                         <span class="icon-sort-asc text-light-2 d-block"></span>
                                                     </button>
