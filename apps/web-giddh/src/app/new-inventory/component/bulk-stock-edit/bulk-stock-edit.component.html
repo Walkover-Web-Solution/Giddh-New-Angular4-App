@@ -232,7 +232,7 @@
                                             </th>
                                             <!--  Purchases Rate -->
                                             <th
-                                                *ngIf="(inventoryType === 'SERVICE' || inventoryType === 'PRODUCT' && hideShowForm.controls['purchaseRate'].value)">
+                                                *ngIf="(inventoryType === 'SERVICE' || inventoryType === 'PRODUCT') && hideShowForm.controls['purchaseRate'].value">
                                                 <h3>{{ localeData?.purchase_rate }}</h3>
                                             </th>
                                             <!--  Purchases Unit  (Menu)-->
@@ -252,7 +252,7 @@
                                             </th>
                                             <!--  Sales Rate -->
                                             <th
-                                                *ngIf="(inventoryType === 'SERVICE' || inventoryType === 'PRODUCT' && hideShowForm.controls['salesRate'].value)">
+                                                *ngIf="(inventoryType === 'SERVICE' || inventoryType === 'PRODUCT') && hideShowForm.controls['salesRate'].value">
                                                 <h3>{{ localeData?.sales_rate }}</h3>
                                             </th>
                                             <!--  Sales Unit (Menu)-->
