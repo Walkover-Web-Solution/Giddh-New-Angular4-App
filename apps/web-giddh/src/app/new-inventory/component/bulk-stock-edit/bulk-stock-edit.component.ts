@@ -167,7 +167,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
      * @return {*} 
      * @memberof BulkStockEditComponent
      */
-    private initialHideShowForm() {
+    private initialHideShowForm(): FormGroup {
         return this.formBuilder.group({
 
             variantName: [true],
