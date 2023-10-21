@@ -80,22 +80,20 @@ export class SelectTableColumnComponent implements OnInit, OnChanges {
      */
     public saveSelectedColumns(): void {
         setTimeout(() => {
-            setTimeout(() => {
-                this.filteredDisplayColumns();
-                let saveColumnReq = {
-                    module: this.moduleType,
-                    columns: this.displayedColumns
+            this.filteredDisplayColumns();
+            let saveColumnReq = {
+                module: this.moduleType,
+                columns: this.displayedColumns
+            }
+            this.commonService.saveSelectedTableColumns(saveColumnReq).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                if (response && response.body && response.status === 'success') {
+                    this.isLoading.emit(false);
+                } else {
+                    this.toaster.errorToast(response?.message);
+                    this.isLoading.emit(false);
                 }
-                this.commonService.saveSelectedTableColumns(saveColumnReq).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                    if (response && response.body && response.status === 'success') {
-                        this.isLoading.emit(false);
-                    } else {
-                        this.toaster.errorToast(response?.message);
-                        this.isLoading.emit(false);
-                    }
-                });
-            }, 200);
-        });
+            });
+        }, 200);
     }
 
     /**
@@ -133,12 +131,10 @@ export class SelectTableColumnComponent implements OnInit, OnChanges {
             if (response && response.body && response.status === 'success') {
                 if (response.body.columns) {
                     const displayColumnsSet = new Set(response.body.columns);
-                    this.customiseColumns.forEach(column => column.checked = displayColumnsSet.has(column.value));
+                    this.customiseColumns.forEach(column => column.checked = displayColumnsSet.has(column.label));
                 }
             }
             this.filteredDisplayColumns();
         });
     }
-
-
 }
