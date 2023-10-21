@@ -8,6 +8,7 @@ import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { InventoryModuleName } from '../../inventory.enum';
 import { PAGINATION_LIMIT } from '../../../app.constant';
+
 @Component({
     selector: 'bulk-stock',
     templateUrl: './bulk-stock-edit.component.html',
@@ -119,6 +120,9 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             if (params?.type) {
                 this.inventoryType = params.type == 'fixedassets' ? 'FIXED_ASSETS' : params?.type.toUpperCase();
+                if(this.hideShowColumnList.length){
+                    this.updateColumnsList();
+                }
                 this.isLoading = true;
                 this.store.dispatch(this.inventoryAction.getBulkStockList({
                     inventoryType: this.inventoryType, page: 1, count: this.pageCount, body: {
@@ -163,36 +167,36 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
     private initialHideShowForm() {
         return this.formBuilder.group({
 
-            variantName: [false],
+            variantName: [true],
             variantUniqueName: [false],
 
-            stockName: [false],
+            stockName: [true],
             stockUniqueName: [false],
-            stockGroupName: [false],
+            stockGroupName: [true],
             stockGroupUniqueName: [false],
 
             purchaseUnits: [false],
             purchaseAccountName: [false],
             purchaseAccountUniqueName: [false],
-            purchaseRate: [false],
+            purchaseRate: [true],
             purchaseTaxInclusive: [false],
 
             salesUnits: [false],
             salesAccountName: [false],
             salesAccountUniqueName: [false],
-            salesRate: [false],
+            salesRate: [true],
             salesTaxInclusive: [false],
 
             fixedAssetUnits: [false],
-            fixedAssetRate: [false],
+            fixedAssetRate: [true],
             fixedAssetAccountName: [false],
             fixedAssetAccountUniqueName: [false],
             fixedAssetTaxInclusive: [false],
 
-            hsnNo: [false],
-            sacNo: [false],
+            hsnNo: [true],
+            sacNo: [true],
             skuCode: [false],
-            archive: [false],
+            archive: [true],
             taxes: [false]
         });
     }
@@ -374,12 +378,12 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
             {
                 label: this.localeData?.variant_name,
                 value: "variantName",
-                checked: false
+                checked: true
             },
             {
                 label: this.localeData?.stock_name,
                 value: "stockName",
-                checked: false
+                checked: true
             },
             {
                 label: this.localeData?.stock_unique_name,
@@ -389,7 +393,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
             {
                 label: this.localeData?.stock_group_name,
                 value: "stockGroupName",
-                checked: false
+                checked: true
             },
             {
                 label: this.localeData?.stock_group_unique_name,
@@ -409,17 +413,17 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
             {
                 label: this.commonLocaleData?.app_hsn,
                 value: "hsnNo",
-                checked: false
+                checked: true
             },
             {
                 label: this.commonLocaleData?.app_sac,
                 value: "sacNo",
-                checked: false
+                checked: true
             },
             {
                 label: this.commonLocaleData?.app_archive,
                 value: "archive",
-                checked: false
+                checked: true
             }
         ];
 
@@ -438,7 +442,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
             {
                 label: this.localeData?.fixed_assets_rate,
                 value: "fixedAssetRate",
-                checked: false
+                checked: true
             },
             {
                 label: this.localeData?.fixed_assets_units,
@@ -467,7 +471,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
             {
                 label: this.localeData?.purchase_rate,
                 value: "purchaseRate",
-                checked: false
+                checked: true
             },
             {
                 label: this.localeData?.purchase_unit,
@@ -492,7 +496,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
             {
                 label: this.localeData?.sales_rate,
                 value: "salesRate",
-                checked: false
+                checked: true
             },
             {
                 label: this.localeData?.sales_unit,
@@ -505,11 +509,14 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
                 checked: false
             },
         ];
-
+        console.log("commonHideShowColumnList[1].checked",commonHideShowColumnList[1].checked)
         if (this.inventoryType === 'FIXED_ASSETS') {
-            this.hideShowColumnList = [...commonHideShowColumnList, ...fixedAssetHideShowColumn];
+            this.hideShowColumnList = [...commonHideShowColumnList, ...fixedAssetHideShowColumn];            
+            console.log("hideShowColumnList",this.hideShowColumnList);            
         } else {
             this.hideShowColumnList = [...commonHideShowColumnList, ...salesPurchaseHideShowColumn];
+            console.log("hideShowColumnList",this.hideShowColumnList);
+            
         }
     }
 
@@ -817,10 +824,12 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
      * @memberof BulkStockEditComponent
      */
     public setDisplayColumns(event: any): void {
-        this.hideShowForm.reset();
-        event.forEach(keys => {
-            this.hideShowForm.controls[keys].setValue(true);
-        });
+        if (event.length) {
+            this.hideShowForm.reset();
+            event.forEach(keys => {
+                this.hideShowForm.controls[keys].setValue(true);
+            });
+        }
     }
 
     /**
