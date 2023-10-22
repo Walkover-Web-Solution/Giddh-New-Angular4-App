@@ -278,7 +278,7 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
      * @returns {void}
      * @memberof CreateManufacturingComponent
      */
-    public getStockVariants(object: any, event: any, loadRecipe: boolean = false, index: number, isEdit: boolean = false, isRawStock: boolean = true, isByProductLinkedStock: boolean = true): void {
+    public getStockVariants(object: any, event: any, loadRecipe: boolean = false, index: number, isEdit: boolean = false, isRawStock: boolean = true, isByProductLinkedStock: boolean = false): void {
         object.stockUniqueName = event?.value;
         object.stockName = event?.label;
         object.stockUnitCode = event?.additional?.stockUnitCode;
@@ -308,7 +308,7 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
 
                         if (loadRecipe) {
                             this.getVariantRecipe();
-                        } else if (isRawStock && !isByProductLinkedStock) {
+                        } else if (isRawStock) {
                             this.getRateForStock(object, index);
                         }
                     }
@@ -365,7 +365,7 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
 
                 this.manufacturingObject.manufacturingDetails[0].linkedStocks?.forEach(linkedStock => {
                     if (linkedStock.selectedStock.value) {
-                        this.getStockVariants(linkedStock, { label: linkedStock.selectedStock.label, value: linkedStock.selectedStock.value, additional: { stockUnitCode: linkedStock.stockUnitCode, stockUnitUniqueName: linkedStock.stockUnitUniqueName } }, false, 0, true, true);
+                        this.getStockVariants(linkedStock, { label: linkedStock.selectedStock.label, value: linkedStock.selectedStock.value, additional: { stockUnitCode: linkedStock.stockUnitCode, stockUnitUniqueName: linkedStock.stockUnitUniqueName } }, false, 0, true);
                     }
                 });
 
@@ -408,7 +408,7 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
 
                     this.manufacturingObject.manufacturingDetails[0].byProducts?.forEach(linkedStock => {
                         if (linkedStock.selectedStock.value) {
-                            this.getStockVariants(linkedStock, { label: linkedStock.selectedStock.label, value: linkedStock.selectedStock.value, additional: { stockUnitCode: linkedStock.stockUnitCode, stockUnitUniqueName: linkedStock.stockUnitUniqueName } }, false, 0, true, false);
+                            this.getStockVariants(linkedStock, { label: linkedStock.selectedStock.label, value: linkedStock.selectedStock.value, additional: { stockUnitCode: linkedStock.stockUnitCode, stockUnitUniqueName: linkedStock.stockUnitUniqueName } }, false, 0, true);
                         }
                     });
                 }
@@ -476,9 +476,7 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
                 let amount = linkedStock.rate * linkedStock.quantity;
                 linkedStock.amount = isNaN(amount) ? 0 : giddhRoundOff(amount, this.giddhBalanceDecimalPlaces);
             }
-
             this.checkLinkedStockValidation(index);
-
             if (this.activeLinkedStockIndex === null) {
                 this.hideBorder('linkedStock', linkedStock);
             }
@@ -520,7 +518,6 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
         }
         manufacturingObject.manufacturingDetails[0].linkedStocks = manufacturingObject.manufacturingDetails[0].linkedStocks?.filter(linkedStock => linkedStock?.variant?.uniqueName);
         manufacturingObject.manufacturingDetails[0].byProducts = manufacturingObject.manufacturingDetails[0].byProducts?.filter(linkedStock => linkedStock?.variant?.uniqueName);
-
         manufacturingObject.manufacturingDetails[0].linkedStocks?.map(linkedStock => {
             delete linkedStock.stocks;
             delete linkedStock.stocksPageNumber;
@@ -1221,7 +1218,7 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
                 });
                 this.manufacturingObject.manufacturingDetails[0].linkedStocks?.forEach(linkedStock => {
                     if (linkedStock.selectedStock.value) {
-                        this.getStockVariants(linkedStock, { label: linkedStock.selectedStock.label, value: linkedStock.selectedStock.value, additional: { stockUnitCode: linkedStock.stockUnitCode, stockUnitUniqueName: linkedStock.stockUnitUniqueName } }, false, 0, true, true);
+                        this.getStockVariants(linkedStock, { label: linkedStock.selectedStock.label, value: linkedStock.selectedStock.value, additional: { stockUnitCode: linkedStock.stockUnitCode, stockUnitUniqueName: linkedStock.stockUnitUniqueName } }, false, 0, true);
                     }
                 });
                 if (!response.body.byProducts.length) {
@@ -1264,7 +1261,7 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
                     this.manufacturingObject.manufacturingDetails[0].byProducts = byProductLinkedStocks;
                     this.manufacturingObject.manufacturingDetails[0].byProducts?.forEach(linkedStock => {
                         if (linkedStock.selectedStock.value) {
-                            this.getStockVariants(linkedStock, { label: linkedStock.selectedStock.label, value: linkedStock.selectedStock.value, additional: { stockUnitCode: linkedStock.stockUnitCode, stockUnitUniqueName: linkedStock.stockUnitUniqueName } }, false, 0, true, false);
+                            this.getStockVariants(linkedStock, { label: linkedStock.selectedStock.label, value: linkedStock.selectedStock.value, additional: { stockUnitCode: linkedStock.stockUnitCode, stockUnitUniqueName: linkedStock.stockUnitUniqueName } }, false, 0, true);
                         }
                     });
                     this.initialByProductLinkedStocks = cloneDeep(byProductLinkedStocks);
@@ -1328,10 +1325,10 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
                         });
                     }
                     this.manufacturingObject.manufacturingDetails[0].byProducts?.forEach(linkedStock => {
-                        this.getStockVariants(linkedStock, { label: linkedStock.selectedStock.label, value: linkedStock.selectedStock.value, additional: { stockUnitCode: linkedStock.stockUnitCode, stockUnitUniqueName: linkedStock.stockUnitUniqueName } }, false, 0, true, false);
+                        this.getStockVariants(linkedStock, { label: linkedStock.selectedStock.label, value: linkedStock.selectedStock.value, additional: { stockUnitCode: linkedStock.stockUnitCode, stockUnitUniqueName: linkedStock.stockUnitUniqueName } }, false, 0, true);
                     });
                     this.manufacturingObject.manufacturingDetails[0].linkedStocks?.forEach(linkedStock => {
-                        this.getStockVariants(linkedStock, { label: linkedStock.selectedStock.label, value: linkedStock.selectedStock.value, additional: { stockUnitCode: linkedStock.stockUnitCode, stockUnitUniqueName: linkedStock.stockUnitUniqueName } }, false, 0, true, true);
+                        this.getStockVariants(linkedStock, { label: linkedStock.selectedStock.label, value: linkedStock.selectedStock.value, additional: { stockUnitCode: linkedStock.stockUnitCode, stockUnitUniqueName: linkedStock.stockUnitUniqueName } }, false, 0, true);
                     });
                 });
                 this.calculateTotals();
