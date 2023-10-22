@@ -401,55 +401,77 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
      */
     public getVariantRecipe(): void {
         this.manufacturingService.getVariantRecipe(this.stock.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            console.log(response);
-
             if (response?.status === "success" && response?.body?.manufacturingDetails?.length) {
                 this.recipeExists = true;
-                let index = 0;
-                response?.body?.manufacturingDetails?.forEach(manufacturingDetail => {
-                    this.recipeObject.manufacturingDetails[index] = [];
-
-                    this.recipeObject.manufacturingDetails[index].manufacturingUnitCode = manufacturingDetail.manufacturingUnitCode;
-                    this.recipeObject.manufacturingDetails[index].manufacturingUnitUniqueName = manufacturingDetail.manufacturingUnitUniqueName;
-                    this.recipeObject.manufacturingDetails[index].manufacturingQuantity = manufacturingDetail.manufacturingQuantity;
-                    this.recipeObject.manufacturingDetails[index].variant = manufacturingDetail.variant;
-                    this.recipeObject.manufacturingDetails[index].linkedStocks = [];
-                    this.recipeObject.manufacturingDetails[index].byProducts = [];
-
-                    this.getStockUnits(this.recipeObject.manufacturingDetails[index], this.stock.stockUnitUniqueName, true, true);
-
-                    let linkedStockIndex = 0;
-                    manufacturingDetail.linkedStocks?.forEach(linkedStock => {
-                        let unitsList = [];
-                        linkedStock?.stockUnits?.forEach(unit => {
-                            unitsList.push({ label: unit.code, value: unit.uniqueName });
+                this.getStocks({}, 1, "", (data: any) => {
+                    let stocks = [];
+                    data?.body?.results?.forEach(stock => {
+                        let stockUnitsList = [];
+                        stock?.stockUnits?.forEach(unit => {
+                            stockUnitsList.push({ label: unit.code, value: unit.uniqueName });
                         });
 
-                        this.recipeObject.manufacturingDetails[index].linkedStocks[linkedStockIndex] = {
-                            stockName: linkedStock.stockName,
-                            stockUniqueName: linkedStock.stockUniqueName,
-                            stockUnitCode: linkedStock.stockUnitCode,
-                            stockUnitUniqueName: linkedStock.stockUnitUniqueName,
-                            quantity: linkedStock.quantity,
-                            variant: linkedStock.variant,
-                            units: unitsList
-                        };
-
-
-                        this.getStocks(this.recipeObject.manufacturingDetails[index].linkedStocks[linkedStockIndex], 1, "");
-                        this.getStockVariants(this.recipeObject.manufacturingDetails[index].linkedStocks[linkedStockIndex], { label: linkedStock.stockName, value: linkedStock.stockUniqueName }, true);
-
-                        linkedStockIndex++;
+                        stocks.push({ label: stock?.name, value: stock?.uniqueName, additional: { stockUnitCode: stock?.stockUnits[0]?.code, stockUnitUniqueName: stock?.stockUnits[0]?.uniqueName, inventoryType: stock.inventoryType, unitsList: stockUnitsList } });
                     });
-                    console.log(manufacturingDetail);
+                    let index = 0;
+                    response?.body?.manufacturingDetails?.forEach(manufacturingDetail => {
+                        this.recipeObject.manufacturingDetails[index] = [];
 
+                        this.recipeObject.manufacturingDetails[index].manufacturingUnitCode = manufacturingDetail.manufacturingUnitCode;
+                        this.recipeObject.manufacturingDetails[index].manufacturingUnitUniqueName = manufacturingDetail.manufacturingUnitUniqueName;
+                        this.recipeObject.manufacturingDetails[index].manufacturingQuantity = manufacturingDetail.manufacturingQuantity;
+                        this.recipeObject.manufacturingDetails[index].variant = manufacturingDetail.variant;
+                        this.recipeObject.manufacturingDetails[index].linkedStocks = [];
+                        this.recipeObject.manufacturingDetails[index].byProducts = [];
+
+                        this.getStockUnits(this.recipeObject.manufacturingDetails[index], this.stock.stockUnitUniqueName, true, true);
+
+                        let linkedStockIndex = 0;
+                        manufacturingDetail.linkedStocks?.forEach(linkedStock => {
+                            let unitsList = [];
+                            linkedStock?.stockUnits?.forEach(unit => {
+                                unitsList.push({ label: unit.code, value: unit.uniqueName });
+                            });
+                            this.recipeObject.manufacturingDetails[index].linkedStocks[linkedStockIndex] = {
+                                stockName: linkedStock.stockName,
+                                stockUniqueName: linkedStock.stockUniqueName,
+                                stockUnitCode: linkedStock.stockUnitCode,
+                                stockUnitUniqueName: linkedStock.stockUnitUniqueName,
+                                quantity: linkedStock.quantity,
+                                variant: linkedStock.variant,
+                                units: unitsList,
+                                stocks: stocks,
+                                stocksPageNumber: data.body.page,
+                                stocksTotalPages: data.body.totalPages
+                            };
+                            this.getStockVariants(this.recipeObject.manufacturingDetails[index].linkedStocks[linkedStockIndex], { label: linkedStock.stockName, value: linkedStock.stockUniqueName }, true);
+
+                            linkedStockIndex++;
+                        });
+
+                        if (!manufacturingDetail.byProducts.length) {
+                            manufacturingDetail.byProducts.push(
+                                {
+                                    stockName: '',
+                                    stockUniqueName: '',
+                                    stockUnitCode: '',
+                                    stockUnitUniqueName: '',
+                                    quantity: 1,
+                                    variant: {
+                                        name: '',
+                                        uniqueName: ''
+                                    },
+                                    stocks: stocks,
+                                    stocksPageNumber: data.body.page,
+                                    stocksTotalPages: data.body.totalPages
+                                });
+                        }
                         let byProductlinkedStockIndex = 0;
                         manufacturingDetail.byProducts?.forEach(linkedStock => {
                             let unitsList = [];
                             linkedStock?.stockUnits?.forEach(unit => {
                                 unitsList.push({ label: unit.code, value: unit.uniqueName });
                             });
-                            console.log(this.recipeObject.manufacturingDetails);
 
                             this.recipeObject.manufacturingDetails[index].byProducts[byProductlinkedStockIndex] = {
                                 stockName: linkedStock.stockName,
@@ -458,15 +480,18 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
                                 stockUnitUniqueName: linkedStock.stockUnitUniqueName,
                                 quantity: linkedStock.quantity,
                                 variant: linkedStock.variant,
-                                units: unitsList
+                                units: unitsList,
+                                stocks: stocks,
+                                stocksPageNumber: data.body.page,
+                                stocksTotalPages: data.body.totalPages
                             };
-
-                                this.getStocks(this.recipeObject.manufacturingDetails[index].byProducts[byProductlinkedStockIndex], 1, "");
-                                this.getStockVariants(this.recipeObject.manufacturingDetails[index].byProducts[byProductlinkedStockIndex], { label: linkedStock.stockName, value: linkedStock.stockUniqueName }, true);
+                            this.getStockVariants(this.recipeObject.manufacturingDetails[index].byProducts[byProductlinkedStockIndex], { label: linkedStock.stockName, value: linkedStock.stockUniqueName }, true);
 
                             byProductlinkedStockIndex++;
+
                         });
                         index++;
+                    });
                 });
                 this.existingRecipe = this.formatRecipeRequest();
                 this.changeDetectionRef.detectChanges();

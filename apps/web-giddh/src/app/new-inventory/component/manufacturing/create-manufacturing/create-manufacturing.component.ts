@@ -278,7 +278,7 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
      * @returns {void}
      * @memberof CreateManufacturingComponent
      */
-    public getStockVariants(object: any, event: any, loadRecipe: boolean = false, index: number, isEdit: boolean = false, isRawStock: boolean = true): void {
+    public getStockVariants(object: any, event: any, loadRecipe: boolean = false, index: number, isEdit: boolean = false, isRawStock: boolean = true, isByProductLinkedStock: boolean = true): void {
         object.stockUniqueName = event?.value;
         object.stockName = event?.label;
         object.stockUnitCode = event?.additional?.stockUnitCode;
@@ -307,12 +307,8 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
                         };
 
                         if (loadRecipe) {
-                            console.log("yes");
-
                             this.getVariantRecipe();
-                        } else if (isRawStock) {
-                            console.log("no");
-
+                        } else if (isRawStock && !isByProductLinkedStock) {
                             this.getRateForStock(object, index);
                         }
                     }
@@ -339,8 +335,6 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
         this.manufacturingObject.manufacturingDetails[0].linkedStocks = [];
         this.manufacturingObject.manufacturingDetails[0].byProducts = [];
         this.manufacturingService.getVariantRecipe(this.manufacturingObject.manufacturingDetails[0].stockUniqueName, [this.manufacturingObject.manufacturingDetails[0].variant.uniqueName], true).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            console.log(response);
-
             if (response?.status === "success" && response?.body?.manufacturingDetails?.length) {
                 this.recipeExists = true;
                 this.manufacturingObject.manufacturingDetails[0].manufacturingUnitCode = response.body.manufacturingDetails[0].manufacturingUnitCode;
@@ -371,7 +365,7 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
 
                 this.manufacturingObject.manufacturingDetails[0].linkedStocks?.forEach(linkedStock => {
                     if (linkedStock.selectedStock.value) {
-                        this.getStockVariants(linkedStock, { label: linkedStock.selectedStock.label, value: linkedStock.selectedStock.value, additional: { stockUnitCode: linkedStock.stockUnitCode, stockUnitUniqueName: linkedStock.stockUnitUniqueName } }, false, 0, true);
+                        this.getStockVariants(linkedStock, { label: linkedStock.selectedStock.label, value: linkedStock.selectedStock.value, additional: { stockUnitCode: linkedStock.stockUnitCode, stockUnitUniqueName: linkedStock.stockUnitUniqueName } }, false, 0, true, true);
                     }
                 });
 
@@ -414,7 +408,7 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
 
                     this.manufacturingObject.manufacturingDetails[0].byProducts?.forEach(linkedStock => {
                         if (linkedStock.selectedStock.value) {
-                            this.getStockVariants(linkedStock, { label: linkedStock.selectedStock.label, value: linkedStock.selectedStock.value, additional: { stockUnitCode: linkedStock.stockUnitCode, stockUnitUniqueName: linkedStock.stockUnitUniqueName } }, false, 0, true);
+                            this.getStockVariants(linkedStock, { label: linkedStock.selectedStock.label, value: linkedStock.selectedStock.value, additional: { stockUnitCode: linkedStock.stockUnitCode, stockUnitUniqueName: linkedStock.stockUnitUniqueName } }, false, 0, true, false);
                         }
                     });
                 }
@@ -1082,7 +1076,7 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
      * @memberof CreateManufacturingComponent
      */
     public validateSelectedStock(linkedStockIndex: number): void {
-        if (!this.manufacturingObject.manufacturingDetails[0].linkedStocks[linkedStockIndex].selectedStock?.value) {
+        if (!this.manufacturingObject.manufacturingDetails[0].linkedStocks[linkedStockIndex]?.selectedStock?.value) {
             this.manufacturingObject.manufacturingDetails[0].linkedStocks[linkedStockIndex].stockNameError = true;
         } else {
             this.manufacturingObject.manufacturingDetails[0].linkedStocks[linkedStockIndex].stockNameError = false;
@@ -1189,8 +1183,6 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
         this.changeDetectionRef.detectChanges();
 
         this.manufacturingService.getManufacturingDetails(uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            console.log("response", response);
-
             if (response?.status === "success" && response.body) {
                 this.manufacturingObject.manufacturingDetails[0].date = dayjs(response.body.date, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
                 this.manufacturingObject.manufacturingDetails[0].warehouseUniqueName = response.body.warehouse.uniqueName;
@@ -1229,7 +1221,7 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
                 });
                 this.manufacturingObject.manufacturingDetails[0].linkedStocks?.forEach(linkedStock => {
                     if (linkedStock.selectedStock.value) {
-                        this.getStockVariants(linkedStock, { label: linkedStock.selectedStock.label, value: linkedStock.selectedStock.value, additional: { stockUnitCode: linkedStock.stockUnitCode, stockUnitUniqueName: linkedStock.stockUnitUniqueName } }, false, 0, true);
+                        this.getStockVariants(linkedStock, { label: linkedStock.selectedStock.label, value: linkedStock.selectedStock.value, additional: { stockUnitCode: linkedStock.stockUnitCode, stockUnitUniqueName: linkedStock.stockUnitUniqueName } }, false, 0, true, true);
                     }
                 });
                 if (!response.body.byProducts.length) {
@@ -1248,8 +1240,6 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
                     );
 
                 } else {
-                    console.log("0", this.manufacturingObject.manufacturingDetails[0]);
-
                     let byProductLinkedStocks = [];
                     response.body.byProducts?.forEach(linkedStock => {
                         let amount = linkedStock.rate * linkedStock.manufacturingQuantity;
@@ -1274,7 +1264,7 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
                     this.manufacturingObject.manufacturingDetails[0].byProducts = byProductLinkedStocks;
                     this.manufacturingObject.manufacturingDetails[0].byProducts?.forEach(linkedStock => {
                         if (linkedStock.selectedStock.value) {
-                            this.getStockVariants(linkedStock, { label: linkedStock.selectedStock.label, value: linkedStock.selectedStock.value, additional: { stockUnitCode: linkedStock.stockUnitCode, stockUnitUniqueName: linkedStock.stockUnitUniqueName } }, false, 0, true);
+                            this.getStockVariants(linkedStock, { label: linkedStock.selectedStock.label, value: linkedStock.selectedStock.value, additional: { stockUnitCode: linkedStock.stockUnitCode, stockUnitUniqueName: linkedStock.stockUnitUniqueName } }, false, 0, true, false);
                         }
                     });
                     this.initialByProductLinkedStocks = cloneDeep(byProductLinkedStocks);
@@ -1331,17 +1321,17 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
                             });
                         });
                         this.manufacturingObject.manufacturingDetails[0].byProducts.forEach((product, i) => {
-                            product.stocks = cloneDeep(this.manufacturingObject.manufacturingDetails[0].linkedStocks[i].stocks);
-                            product.stocksQ = cloneDeep(this.manufacturingObject.manufacturingDetails[0].linkedStocks[i].stocksQ);
-                            product.stocksPageNumber = cloneDeep(this.manufacturingObject.manufacturingDetails[0].linkedStocks[i].stocksPageNumber);
-                            product.stocksTotalPages = cloneDeep(this.manufacturingObject.manufacturingDetails[0].linkedStocks[i].stocksTotalPages);
+                            product.stocks = cloneDeep(this.manufacturingObject.manufacturingDetails[0].linkedStocks[i]?.stocks);
+                            product.stocksQ = cloneDeep(this.manufacturingObject.manufacturingDetails[0].linkedStocks[i]?.stocksQ);
+                            product.stocksPageNumber = cloneDeep(this.manufacturingObject.manufacturingDetails[0].linkedStocks[i]?.stocksPageNumber);
+                            product.stocksTotalPages = cloneDeep(this.manufacturingObject.manufacturingDetails[0].linkedStocks[i]?.stocksTotalPages);
                         });
                     }
                     this.manufacturingObject.manufacturingDetails[0].byProducts?.forEach(linkedStock => {
-                        this.getStockVariants(linkedStock, { label: linkedStock.selectedStock.label, value: linkedStock.selectedStock.value, additional: { stockUnitCode: linkedStock.stockUnitCode, stockUnitUniqueName: linkedStock.stockUnitUniqueName } }, false, 0, true);
+                        this.getStockVariants(linkedStock, { label: linkedStock.selectedStock.label, value: linkedStock.selectedStock.value, additional: { stockUnitCode: linkedStock.stockUnitCode, stockUnitUniqueName: linkedStock.stockUnitUniqueName } }, false, 0, true, false);
                     });
                     this.manufacturingObject.manufacturingDetails[0].linkedStocks?.forEach(linkedStock => {
-                        this.getStockVariants(linkedStock, { label: linkedStock.selectedStock.label, value: linkedStock.selectedStock.value, additional: { stockUnitCode: linkedStock.stockUnitCode, stockUnitUniqueName: linkedStock.stockUnitUniqueName } }, false, 0, true);
+                        this.getStockVariants(linkedStock, { label: linkedStock.selectedStock.label, value: linkedStock.selectedStock.value, additional: { stockUnitCode: linkedStock.stockUnitCode, stockUnitUniqueName: linkedStock.stockUnitUniqueName } }, false, 0, true, true);
                     });
                 });
                 this.calculateTotals();

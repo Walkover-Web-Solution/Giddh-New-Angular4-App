@@ -624,15 +624,15 @@
                                     <mat-expansion-panel>
                                         <mat-expansion-panel-header>
                                             <mat-panel-title class="p-0">
-                                                {{ localeData?.by_product }} (Output)
+                                                {{ commonLocaleData?.app_by_product_output }}
                                             </mat-panel-title>
                                         </mat-expansion-panel-header>
                                         <div class="pd-r1 pd-l1">
                                             <table id="table-raw-stock">
                                                 <thead>
                                                     <tr>
-                                                        <th class="table-name">{{ commonLocaleData?.app_name }}</th>
-                                                        <th class="table-variant">
+                                                        <th class="table-name2">{{ commonLocaleData?.app_name }}</th>
+                                                        <th class="table-name2">
                                                             {{ commonLocaleData?.app_variant }}
                                                         </th>
                                                         <th class="table-quantity">
@@ -662,7 +662,7 @@
                                                             "
                                                         >
                                                             <td class="table-name">
-                                                                <div class="field-m-width">
+                                                                <div class="field-max-width">
                                                                     <select-field
                                                                         [cssClass]="
                                                                             'disable-bg ' +
@@ -718,7 +718,7 @@
                                                                 </div>
                                                             </td>
                                                             <td class="table-variant">
-                                                                <div class="field-m-width">
+                                                                <div class="field-max-width">
                                                                     <select-field
                                                                         [cssClass]="
                                                                             'disable-bg ' +
@@ -750,7 +750,7 @@
                                                                 </div>
                                                             </td>
                                                             <td class="table-quantity">
-                                                                <div class="field-m-width">
+                                                                <div class="field-max-width">
                                                                     <text-field
                                                                         [cssClass]="
                                                                             'disable-bg ' +
@@ -774,7 +774,7 @@
                                                             </td>
                                                             <td class="table-unit">
                                                                 <div class="text-field-right">
-                                                                    <div class="field-m-width">
+                                                                    <div class="field-max-width">
                                                                         <select-field
                                                                             [cssClass]="
                                                                                 'disable-bg' +
