@@ -1,0 +1,696 @@
+<ng-template #searchTemplate let-show let-title="title" let-fieldName="fieldName" let-formControl="formControl">
+    <text-field [type]="'text'" [formControl]="formControl" [autoFocus]="true"></text-field>
+</ng-template>
+<ng-container appTranslate [file]="'inventory/bulk-stock-edit'" (commonLocaleData)="commonLocaleData = $event"
+    (localeData)="localeData = $event" (translationComplete)="translationComplete($event)">
+    <div class="bulk-stock pd-15 pb-0">
+        <div class="bulk-stock-warpper">
+            <div class="bulk-stock-header">
+                <div class="d-flex justify-content-end align-items-center">
+                    <div class="mr-5">
+                        <button
+                            *ngIf="(advanceSearchData !== null || sortOrderStatus !== null || searchStringKey !== null || searchString !== null ) && !isLoading"
+                            mat-stroked-button (click)="resetSearch()">
+                            <span class="icon-cross position-relative"></span> {{ commonLocaleData?.app_clear_filter}}
+                        </button>
+                    </div>
+                    <div>
+                        <div class="d-flex align-items-center">
+                            <p *ngIf="!isLoading" class="mr-r3 ">{{ localeData?.total_inventory_count }} : <span>{{
+                                    totalInventoryCount}}</span></p>
+                            <div class="menu-btn-control" [matTooltip]="localeData?.customize_column">
+                                <select-table-column [moduleType]="moduleName" [customiseColumns]="hideShowColumnList"
+                                    (isLoading)="isLoading = $event" (selectedColumns)="setDisplayColumns($event)"
+                                    [localeData]="localeData" [commonLocaleData]="commonLocaleData"
+                                    [iconClass]="'icon-options font-16'" [cssClass]="'bulk-stock-hide-show-button'"
+                                    [additionalMenuCssClass]="'max-height-50'">
+                                </select-table-column>
+                            </div>
+                            <button mat-icon-button color="primary" class="bulk-stock-hide-show-button p-0 ml-2"
+                                (click)="openAdvanceFilter()" [matTooltip]="commonLocaleData?.app_advanced_filter">
+                                <i class="icon-advance-filter font-16"></i>
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="bulk-stock-body">
+                <div class="bulk-stock-table d-flex flex-column">
+                    <ng-container *ngIf="isLoading">
+                        <div>
+                            <giddh-page-loader></giddh-page-loader>
+                        </div>
+                    </ng-container>
+                    <ng-container *ngIf="!isLoading">
+                        <div class="table-responsive">
+                            <form [formGroup]="bulkStockEditForm" (ngSubmit)="onFormSubmit()">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr (clickOutside)="hideTableHeadInput()">
+                                            <!-- Variant Name -->
+                                            <th class="cursor-pointer"
+                                                *ngIf="hideShowForm.controls['variantName'].value">
+                                                <div class="d-flex align-items-center">
+                                                    <div (click)="toggleInput('variantName'); $event.stopPropagation();"
+                                                        class="w-100">
+                                                        <h3 *ngIf="!tableHeadInput.variantName"><span
+                                                                class="icon-search mr-r05"></span>{{localeData?.variant_name}}
+                                                        </h3>
+                                                        <div *ngIf="tableHeadInput.variantName" class="border-line"
+                                                            [ngClass]="{'active': tableHeadInput.variantName }">
+                                                            <ng-container
+                                                                *ngTemplateOutlet="searchTemplate;context: {formControl: thVariantName}"></ng-container>
+                                                        </div>
+                                                    </div>
+                                                    <button mat-icon-button class="sort-btn icon-font-22 p-0"
+                                                        (click)="sort('variant_name')">
+                                                        <span class="icon-sort-asc text-light-2 d-block"></span>
+                                                    </button>
+                                                </div>
+                                            </th>
+                                            <!-- Variant UN -->
+                                            <th class="cursor-pointer"
+                                                *ngIf="hideShowForm.controls['variantUniqueName'].value">
+                                                <div class="d-flex align-items-center">
+                                                    <div (click)="toggleInput('variantUniqueName'); $event.stopPropagation();"
+                                                        class="w-100">
+                                                        <h3 *ngIf="!tableHeadInput.variantUniqueName"><span
+                                                                class="icon-search mr-r05"></span>
+                                                            {{localeData?.variant_unique_name}} </h3>
+                                                        <div *ngIf="tableHeadInput.variantUniqueName"
+                                                            class="border-line"
+                                                            [ngClass]="{'active': tableHeadInput.variantUniqueName }">
+                                                            <ng-container
+                                                                *ngTemplateOutlet="searchTemplate;context: {formControl: thVariantUniqueName}"></ng-container>
+                                                        </div>
+                                                    </div>
+                                                    <button mat-icon-button class="sort-btn icon-font-22 p-0"
+                                                        (click)="sort('variant_unique_name')">
+                                                        <span class="icon-sort-asc text-light-2 d-block"></span>
+                                                    </button>
+                                                </div>
+                                            </th>
+                                            <!--  Stock Name -->
+                                            <th *ngIf="hideShowForm.controls['stockName'].value" class="cursor-pointer">
+                                                <div class="d-flex align-items-center">
+                                                    <div (click)="toggleInput('stockName'); $event.stopPropagation();"
+                                                        class="w-100">
+                                                        <h3 *ngIf="!tableHeadInput.stockName"><span
+                                                                class="icon-search mr-r05"></span> {{
+                                                            localeData?.stock_name }} </h3>
+                                                        <div *ngIf="tableHeadInput.stockName" class="border-line"
+                                                            [ngClass]="{'active': tableHeadInput.stockName }">
+                                                            <ng-container
+                                                                *ngTemplateOutlet="searchTemplate;context: {formControl: thStockName}"></ng-container>
+                                                        </div>
+                                                    </div>
+                                                    <button mat-icon-button class="sort-btn icon-font-22 p-0"
+                                                        (click)="sort('stock_name')">
+                                                        <span class="icon-sort-asc text-light-2 d-block"></span>
+                                                    </button>
+                                                </div>
+                                            </th>
+                                            <!--  Stock UN -->
+                                            <th *ngIf="hideShowForm.controls['stockUniqueName'].value"
+                                                class="cursor-pointer">
+                                                <div class="d-flex align-items-center">
+                                                    <div (click)="toggleInput('stockUniqueName'); $event.stopPropagation();"
+                                                        class="w-100">
+                                                        <h3 *ngIf="!tableHeadInput.stockUniqueName"><span
+                                                                class="icon-search mr-r05"></span> {{
+                                                            localeData?.stock_unique_name }} </h3>
+                                                        <div *ngIf="tableHeadInput.stockUniqueName" class="border-line"
+                                                            [ngClass]="{'active': tableHeadInput.stockUniqueName }">
+                                                            <ng-container
+                                                                *ngTemplateOutlet="searchTemplate;context: {formControl: thStockUniqueName}"></ng-container>
+                                                        </div>
+                                                    </div>
+                                                    <button mat-icon-button class="sort-btn icon-font-22 p-0"
+                                                        (click)="sort('stock_unique_name')">
+                                                        <span class="icon-sort-asc text-light-2 d-block"></span>
+                                                    </button>
+                                                </div>
+                                            </th>
+                                            <!--  Stock Group Name -->
+                                            <th *ngIf="hideShowForm.controls['stockGroupName'].value"
+                                                class="cursor-pointer min-width-240">
+                                                <div class="d-flex align-items-center">
+                                                    <div (click)="toggleInput('stockGroupName'); $event.stopPropagation();"
+                                                        class="w-100">
+                                                        <h3 *ngIf="!tableHeadInput.stockGroupName"><span
+                                                                class="icon-search mr-r05"></span> {{
+                                                            localeData?.stock_group_name }} </h3>
+                                                        <div *ngIf="tableHeadInput.stockGroupName" class="border-line"
+                                                            [ngClass]="{'active': tableHeadInput.stockGroupName }">
+                                                            <ng-container
+                                                                *ngTemplateOutlet="searchTemplate;context: {formControl: thStockGroupName}"></ng-container>
+                                                        </div>
+                                                    </div>
+                                                    <button mat-icon-button class="sort-btn icon-font-22 p-0"
+                                                        (click)="sort('stock_group_name')">
+                                                        <span class="icon-sort-asc text-light-2 d-block"></span>
+                                                    </button>
+                                                </div>
+                                            </th>
+                                            <!--  Stock Group Unique Name -->
+                                            <th *ngIf="hideShowForm.controls['stockGroupUniqueName'].value"
+                                                class="cursor-pointer">
+                                                <h3>{{ localeData?.stock_group_unique_name }}</h3>
+                                            </th>
+                                            <!-- HSN -->
+                                            <th *ngIf="hideShowForm.controls['hsnNo'].value"
+                                                class="cursor-pointer min-width-140">
+                                                <div class="d-flex align-items-center">
+                                                    <div (click)="toggleInput('hsn'); $event.stopPropagation();"
+                                                        class="w-100">
+                                                        <h3 *ngIf="!tableHeadInput.hsn"><span
+                                                                class="icon-search mr-r05"></span> {{
+                                                            commonLocaleData?.app_hsn }} </h3>
+                                                        <div *ngIf="tableHeadInput.hsn" class="border-line"
+                                                            [ngClass]="{'active': tableHeadInput.hsn }">
+                                                            <ng-container
+                                                                *ngTemplateOutlet="searchTemplate;context: {formControl: thStockGroupName}"></ng-container>
+                                                        </div>
+                                                    </div>
+                                                    <button mat-icon-button class="sort-btn icon-font-22 p-0"
+                                                        (click)="sort('hsn')">
+                                                        <span class="icon-sort-asc text-light-2 d-block"></span>
+                                                    </button>
+                                                </div>
+                                            </th>
+                                            <!-- SAC -->
+                                            <th *ngIf="hideShowForm.controls['sacNo'].value"
+                                                class="cursor-pointer min-width-140">
+                                                <div class="d-flex align-items-center">
+                                                    <div (click)="toggleInput('sac'); $event.stopPropagation();"
+                                                        class="w-100">
+                                                        <h3 *ngIf="!tableHeadInput.sac"><span
+                                                                class="icon-search mr-r05"></span> {{
+                                                            commonLocaleData?.app_sac }} </h3>
+                                                        <div *ngIf="tableHeadInput.sac" class="border-line"
+                                                            [ngClass]="{'active': tableHeadInput.sac }">
+                                                            <ng-container
+                                                                *ngTemplateOutlet="searchTemplate;context: {formControl: thSac}"></ng-container>
+                                                        </div>
+                                                    </div>
+                                                    <button mat-icon-button class="sort-btn icon-font-22 p-0"
+                                                        (click)="sort('sac')">
+                                                        <span class="icon-sort-asc text-light-2 d-block"></span>
+                                                    </button>
+                                                </div>
+                                            </th>
+                                            <!-- SKU Code -->
+                                            <th *ngIf="hideShowForm.controls['skuCode'].value" class="cursor-pointer">
+                                                <div class="d-flex align-items-center">
+                                                    <div (click)="toggleInput('skuCode'); $event.stopPropagation();"
+                                                        class="w-100">
+                                                        <h3 *ngIf="!tableHeadInput.skuCode"><span
+                                                                class="icon-search mr-r05"></span> {{
+                                                            commonLocaleData?.app_sku_code }} </h3>
+                                                        <div *ngIf="tableHeadInput.skuCode" class="border-line"
+                                                            [ngClass]="{'active': tableHeadInput.skuCode }">
+                                                            <ng-container
+                                                                *ngTemplateOutlet="searchTemplate;context: {formControl: thSkuCode}"></ng-container>
+                                                        </div>
+                                                    </div>
+                                                    <button mat-icon-button class="sort-btn icon-font-22 p-0"
+                                                        (click)="sort('sku')">
+                                                        <span class="icon-sort-asc text-light-2 d-block"></span>
+                                                    </button>
+                                                </div>
+                                            </th>
+                                            <!--  Purchases Account Name -->
+                                            <th
+                                                *ngIf="(inventoryType === 'SERVICE' || inventoryType === 'PRODUCT') && hideShowForm.controls['purchaseAccountName'].value">
+                                                <h3>{{ localeData?.purchases_account_name }}</h3>
+                                            </th>
+                                            <!--  Purchases Account UN -->
+                                            <th
+                                                *ngIf="(inventoryType === 'SERVICE' || inventoryType === 'PRODUCT') && hideShowForm.controls['purchaseAccountUniqueName'].value">
+                                                <h3>{{ localeData?.purchase_account_unique_name }}</h3>
+                                            </th>
+                                            <!--  Purchases Rate -->
+                                            <th
+                                                *ngIf="(inventoryType === 'SERVICE' || inventoryType === 'PRODUCT') && hideShowForm.controls['purchaseRate'].value">
+                                                <h3>{{ localeData?.purchase_rate }}</h3>
+                                            </th>
+                                            <!--  Purchases Unit  (Menu)-->
+                                            <th
+                                                *ngIf="(inventoryType === 'SERVICE' || inventoryType === 'PRODUCT') && hideShowForm.controls['purchaseUnits'].value">
+                                                <h3>{{ localeData?.purchase_unit }}</h3>
+                                            </th>
+                                            <!--  Sales Account Name -->
+                                            <th
+                                                *ngIf="(inventoryType === 'SERVICE' || inventoryType === 'PRODUCT') && hideShowForm.controls['salesAccountName'].value">
+                                                <h3>{{ localeData?.sales_account_name }}</h3>
+                                            </th>
+                                            <!--  Sales Account UN -->
+                                            <th
+                                                *ngIf="(inventoryType === 'SERVICE' || inventoryType === 'PRODUCT') && hideShowForm.controls['salesAccountUniqueName'].value">
+                                                <h3>{{ localeData?.sales_account_unique_name }}</h3>
+                                            </th>
+                                            <!--  Sales Rate -->
+                                            <th
+                                                *ngIf="(inventoryType === 'SERVICE' || inventoryType === 'PRODUCT') && hideShowForm.controls['salesRate'].value">
+                                                <h3>{{ localeData?.sales_rate }}</h3>
+                                            </th>
+                                            <!--  Sales Unit (Menu)-->
+                                            <th
+                                                *ngIf="(inventoryType === 'SERVICE' || inventoryType === 'PRODUCT') && hideShowForm.controls['salesUnits'].value">
+                                                <h3>{{ localeData?.sales_unit }}</h3>
+                                            </th>
+                                            <!-- Fixed Assets Units (Menu) -->
+                                            <th
+                                                *ngIf="inventoryType === 'FIXED_ASSETS' && hideShowForm.controls['fixedAssetUnits'].value">
+                                                <h3>{{ localeData?.fixed_asset_units }}</h3>
+                                            </th>
+                                            <!-- Fixed Assets Rate -->
+                                            <th
+                                                *ngIf="inventoryType === 'FIXED_ASSETS' && hideShowForm.controls['fixedAssetRate'].value">
+                                                <h3>{{ localeData?.fixed_asset_rate }}</h3>
+                                            </th>
+                                            <!-- Fixed Assets AN -->
+                                            <th
+                                                *ngIf="inventoryType === 'FIXED_ASSETS' && hideShowForm.controls['fixedAssetAccountName'].value">
+                                                <h3>{{ localeData?.fixed_asset_account_name }}</h3>
+                                            </th>
+                                            <!-- Fixed Assets Account UN -->
+                                            <th
+                                                *ngIf="inventoryType === 'FIXED_ASSETS' && hideShowForm.controls['fixedAssetAccountUniqueName'].value">
+                                                <h3>{{ localeData?.fixed_asset_account_unique_name }}</h3>
+                                            </th>
+                                            <!-- Archive -->
+                                            <th *ngIf="hideShowForm.controls['archive'].value" class="min-width-140">
+                                                <h3>{{ commonLocaleData?.app_archive }}</h3>
+                                            </th>
+                                            <!-- Taxes -->
+                                            <th *ngIf="hideShowForm.controls['taxes'].value" class="min-width-140">
+                                                <h3>{{ commonLocaleData?.app_tax }}</h3>
+                                            </th>
+                                            <!-- Sales Tax Inclusive -->
+                                            <th
+                                                *ngIf="(inventoryType === 'SERVICE' || inventoryType === 'PRODUCT') && hideShowForm.controls['salesTaxInclusive'].value">
+                                                <h3>{{ localeData?.sales_tax_inclusive }}</h3>
+                                            </th>
+                                            <!-- Purchase Tax Inclusive -->
+                                            <th
+                                                *ngIf="(inventoryType === 'SERVICE' || inventoryType === 'PRODUCT') && hideShowForm.controls['purchaseTaxInclusive'].value">
+                                                <h3>{{ localeData?.purchase_tax_inclusive }}</h3>
+                                            </th>
+                                            <!-- FixedAsset Tax Inclusive -->
+                                            <th
+                                                *ngIf="inventoryType === 'FIXED_ASSETS' && hideShowForm.controls['fixedAssetTaxInclusive'].value">
+                                                <h3>{{ localeData?.fixed_asset_tax_inclusive }}</h3>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody formArrayName="fields">
+                                        <ng-container
+                                            *ngFor="let row of bulkStockEditForm.get('fields')['controls']; let i=index">
+                                            <tr [formGroupName]="i">
+                                                <!-- Variant Name -->
+                                                <td *ngIf="hideShowForm.controls['variantName'].value"
+                                                    (click)="getInputIndex(i,'variantName')">
+                                                    <div class="border-line">
+                                                        <text-field [type]="'text'" formControlName="variantName"
+                                                            [readonly]="true"
+                                                            [matTooltip]="row.get('variantName').value"
+                                                            matTooltipPosition="above">
+                                                        </text-field>
+                                                    </div>
+                                                </td>
+                                                <!-- Variant UN -->
+                                                <td *ngIf="hideShowForm.controls['variantUniqueName'].value"
+                                                    (click)="getInputIndex(i,'variantUniqueName')">
+                                                    <div class="border-line">
+                                                        <text-field [type]="'text'" formControlName="variantUniqueName"
+                                                            [readonly]="true"
+                                                            [matTooltip]="row.get('variantUniqueName').value"
+                                                            matTooltipPosition="above">
+                                                        </text-field>
+                                                    </div>
+                                                </td>
+                                                <!--  Stock Name -->
+                                                <td *ngIf="hideShowForm.controls['stockName'].value"
+                                                    (click)="getInputIndex(i,'stockName')">
+                                                    <div class="border-line">
+                                                        <text-field [type]="'text'" formControlName="stockName"
+                                                            [readonly]="true" [matTooltip]="row.get('stockName').value"
+                                                            matTooltipPosition="above">
+                                                        </text-field>
+                                                    </div>
+                                                </td>
+                                                <!--  Stock UN -->
+                                                <td *ngIf="hideShowForm.controls['stockUniqueName'].value"
+                                                    (click)="getInputIndex(i,'stockUniqueName')">
+                                                    <div class="border-line">
+                                                        <text-field [type]="'text'" formControlName="stockUniqueName"
+                                                            [readonly]="true"
+                                                            [matTooltip]="row.get('stockUniqueName').value"
+                                                            matTooltipPosition="above">
+                                                        </text-field>
+                                                    </div>
+                                                </td>
+                                                <!--  Stock Group Name -->
+                                                <td *ngIf="hideShowForm.controls['stockGroupName'].value"
+                                                    (click)="getInputIndex(i,'stockGroupName')" class="min-width-240">
+                                                    <div class="border-line">
+                                                        <text-field [type]="'text'" formControlName="stockGroupName"
+                                                            [readonly]="true"
+                                                            [matTooltip]="row.get('stockGroupName').value"
+                                                            matTooltipPosition="above">
+                                                        </text-field>
+                                                        <!-- <mat-select formControlName="stockGroupName" class="vertical-margin" [disabled]="true">
+                                                            <mat-option
+                                                                *ngFor="let x of stockGroups"
+                                                                [value]="x?.value"
+                                                                (onSelectionChange)="consoleIt(x)"
+                                                                >
+                                                                {{x?.label}}
+                                                            </mat-option>
+                                                        </mat-select> -->
+                                                    </div>
+                                                </td>
+                                                <!--  Stock Group Unique Name -->
+                                                <td *ngIf="hideShowForm.controls['stockGroupUniqueName'].value"
+                                                    (click)="getInputIndex(i,'stockGroupUniqueName')">
+                                                    <div class="border-line">
+                                                        <text-field [type]="'text'"
+                                                            formControlName="stockGroupUniqueName" [readonly]="true"
+                                                            [matTooltip]="row.get('stockGroupUniqueName').value"
+                                                            matTooltipPosition="above">
+                                                        </text-field>
+                                                        <!-- <mat-select formControlName="stockGroupName" class="vertical-margin" [disabled]="true">
+                                                            <mat-option
+                                                                *ngFor="let x of stockGroups"
+                                                                [value]="x?.value"
+                                                                (onSelectionChange)="consoleIt(x)"
+                                                                >
+                                                                {{x?.label}}
+                                                            </mat-option>
+                                                        </mat-select> -->
+                                                    </div>
+                                                </td>
+                                                <!-- HSN -->
+                                                <td class="min-width-140" *ngIf="hideShowForm.controls['hsnNo'].value"
+                                                    (click)="getInputIndex(i,'hsnNo')">
+                                                    <div class="border-line">
+                                                        <text-field [type]="'text'" formControlName="hsnNo"
+                                                            [readonly]="true" [matTooltip]="row.get('hsnNo').value"
+                                                            matTooltipPosition="above">
+                                                        </text-field>
+                                                    </div>
+                                                </td>
+                                                <!-- SAC -->
+                                                <td class="min-width-140" *ngIf="hideShowForm.controls['sacNo'].value"
+                                                    (click)="getInputIndex(i,'sacNo')">
+                                                    <div class="border-line">
+                                                        <text-field [type]="'text'" formControlName="sacNo"
+                                                            [readonly]="true" [matTooltip]="row.get('sacNo').value"
+                                                            matTooltipPosition="above">
+                                                        </text-field>
+                                                    </div>
+                                                </td>
+                                                <!-- SKU Code -->
+                                                <td *ngIf="hideShowForm.controls['skuCode'].value"
+                                                    (click)="getInputIndex(i,'skuCode')">
+                                                    <div class="border-line">
+                                                        <text-field [type]="'text'" formControlName="skuCode"
+                                                            [readonly]="true" [matTooltip]="row.get('skuCode').value"
+                                                            matTooltipPosition="above">
+                                                        </text-field>
+                                                    </div>
+                                                </td>
+                                                <!--  Purchases Account Name -->
+                                                <td (click)="getInputIndex(i,'purchaseAccountName')"
+                                                    *ngIf="(inventoryType === 'SERVICE' || inventoryType === 'PRODUCT') && hideShowForm.controls['purchaseAccountName'].value">
+                                                    <div class="border-line">
+                                                        <text-field [type]="'text'"
+                                                            formControlName="purchaseAccountName" [readonly]="true"
+                                                            [matTooltip]="row.get('purchaseAccountName').value"
+                                                            matTooltipPosition="above">
+                                                        </text-field>
+                                                    </div>
+                                                </td>
+                                                <!--  Purchases Account UN -->
+                                                <td (click)="getInputIndex(i,'purchaseAccountUniqueName')"
+                                                    *ngIf="(inventoryType === 'SERVICE' || inventoryType === 'PRODUCT') && hideShowForm.controls['purchaseAccountUniqueName'].value">
+                                                    <div class="border-line">
+                                                        <text-field [type]="'text'"
+                                                            formControlName="purchaseAccountUniqueName"
+                                                            [readonly]="true"
+                                                            [matTooltip]="row.get('purchaseAccountUniqueName').value"
+                                                            matTooltipPosition="above">
+                                                        </text-field>
+                                                    </div>
+                                                </td>
+                                                <!--  Purchases Rate -->
+                                                <td (click)="getInputIndex(i,'purchaseRate')"
+                                                    *ngIf="(inventoryType === 'SERVICE' || inventoryType === 'PRODUCT') && hideShowForm.controls['purchaseRate'].value">
+                                                    <div class="border-line">
+                                                        <text-field [type]="'text'" formControlName="purchaseRate"
+                                                            [readonly]="true"
+                                                            [matTooltip]="row.get('purchaseRate').value"
+                                                            matTooltipPosition="above">
+                                                        </text-field>
+                                                    </div>
+                                                </td>
+                                                <!--  Purchases Unit  (Menu)-->
+                                                <td (click)="getInputIndex(i,'purchaseUnits')"
+                                                    *ngIf="(inventoryType === 'SERVICE' || inventoryType === 'PRODUCT') && hideShowForm.controls['purchaseUnits'].value">
+                                                    <div class="border-line">
+                                                        <text-field [type]="'text'" formControlName="purchaseUnits"
+                                                            [readonly]="true"
+                                                            [matTooltip]="row.get('purchaseUnits').value"
+                                                            matTooltipPosition="above">
+                                                        </text-field>
+                                                        <!-- <mat-select  disabled="true" formControlName="purchaseUnits" class="vertical-margin">
+                                                        <mat-option
+                                                            *ngFor="let purchaseUnit of dropdownValues[i]?.purchaseUnits"
+                                                            [value]="purchaseUnit?.uniqueName">{{purchaseUnit?.name}}</mat-option>
+                                                    </mat-select> -->
+                                                    </div>
+                                                </td>
+                                                <!--  Sales Account Name -->
+                                                <td (click)="getInputIndex(i,'salesAccountName')"
+                                                    *ngIf="(inventoryType === 'SERVICE' || inventoryType === 'PRODUCT') && hideShowForm.controls['salesAccountName'].value">
+                                                    <div class="border-line">
+                                                        <text-field [type]="'text'" formControlName="salesAccountName"
+                                                            [readonly]="true"
+                                                            [matTooltip]="row.get('salesAccountName').value"
+                                                            matTooltipPosition="above">
+                                                        </text-field>
+                                                    </div>
+                                                </td>
+                                                <!--  Sales Account UN -->
+                                                <td (click)="getInputIndex(i,'salesAccountUniqueName')"
+                                                    *ngIf="(inventoryType === 'SERVICE' || inventoryType === 'PRODUCT') && hideShowForm.controls['salesAccountUniqueName'].value">
+                                                    <div class="border-line">
+                                                        <text-field [type]="'text'"
+                                                            formControlName="salesAccountUniqueName" [readonly]="true"
+                                                            [matTooltip]="row.get('salesAccountUniqueName').value"
+                                                            matTooltipPosition="above">
+                                                        </text-field>
+                                                    </div>
+                                                </td>
+                                                <!--  Sales Rate -->
+                                                <td (click)="getInputIndex(i,'salesRate')"
+                                                    *ngIf="(inventoryType === 'SERVICE' || inventoryType === 'PRODUCT') && hideShowForm.controls['salesRate'].value">
+                                                    <div class="border-line">
+                                                        <text-field [type]="'text'" formControlName="salesRate"
+                                                            [readonly]="true" [matTooltip]="row.get('salesRate').value"
+                                                            matTooltipPosition="above">
+                                                        </text-field>
+                                                    </div>
+                                                </td>
+                                                <!--  Sales Unit (Menu) -->
+                                                <td (click)="getInputIndex(i,'salesUnits')"
+                                                    *ngIf="(inventoryType === 'SERVICE' || inventoryType === 'PRODUCT') && hideShowForm.controls['salesUnits'].value">
+                                                    <div class="border-line">
+                                                        <text-field [type]="'text'" formControlName="salesUnits"
+                                                            [readonly]="true" [matTooltip]="row.get('salesUnits').value"
+                                                            matTooltipPosition="above">
+                                                        </text-field>
+                                                        <!-- <mat-select formControlName="salesUnits" class="vertical-margin" [disabled]="true">
+                                                            <mat-option
+                                                                *ngFor="let salesUnit of dropdownValues[i]?.salesUnits"
+                                                                [value]="salesUnit?.uniqueName">{{salesUnit?.name}}</mat-option>
+                                                        </mat-select> -->
+                                                    </div>
+                                                </td>
+                                                <!-- Fixed Assets Units (Menu)-->
+                                                <td (click)="getInputIndex(i,'fixedAssetUnits')"
+                                                    *ngIf="inventoryType === 'FIXED_ASSETS' && hideShowForm.controls['fixedAssetUnits'].value">
+                                                    <div class="border-line">
+                                                        <text-field [type]="'text'" formControlName="fixedAssetUnits"
+                                                            [readonly]="true"
+                                                            [matTooltip]="row.get('fixedAssetUnits').value"
+                                                            matTooltipPosition="above">
+                                                        </text-field>
+                                                        <!-- <mat-select formControlName="fixedAssetUnits" class="vertical-margin" [disabled]="true">
+                                                            <mat-option
+                                                                *ngFor="let fixedAssetUnit of dropdownValues[i]?.fixedAssetUnits"
+                                                                [value]="fixedAssetUnit?.uniqueName">{{fixedAssetUnit?.name}}</mat-option>
+                                                        </mat-select> -->
+                                                    </div>
+                                                </td>
+                                                <!-- Fixed Assets Rate -->
+                                                <td (click)="getInputIndex(i,'fixedAssetRate')"
+                                                    *ngIf="inventoryType === 'FIXED_ASSETS' && hideShowForm.controls['fixedAssetRate'].value">
+                                                    <div class="border-line">
+                                                        <text-field [type]="'text'" formControlName="fixedAssetRate"
+                                                            [readonly]="true"
+                                                            [matTooltip]="row.get('fixedAssetRate').value"
+                                                            matTooltipPosition="above">
+                                                        </text-field>
+                                                    </div>
+                                                </td>
+                                                <!-- Fixed Assets AN -->
+                                                <td (click)="getInputIndex(i,'fixedAssetAccountName')"
+                                                    *ngIf="inventoryType === 'FIXED_ASSETS' && hideShowForm.controls['fixedAssetAccountName'].value">
+                                                    <div class="border-line">
+                                                        <text-field [type]="'text'"
+                                                            formControlName="fixedAssetAccountName" [readonly]="true"
+                                                            [matTooltip]="row.get('fixedAssetAccountName').value"
+                                                            matTooltipPosition="above">
+                                                        </text-field>
+                                                    </div>
+                                                </td>
+                                                <!-- Fixed Assets Account UN -->
+                                                <td (click)="getInputIndex(i,'fixedAssetAccountUniqueName')"
+                                                    *ngIf="inventoryType === 'FIXED_ASSETS' && hideShowForm.controls['fixedAssetAccountUniqueName'].value">
+                                                    <div class="border-line">
+                                                        <text-field [type]="'text'"
+                                                            formControlName="fixedAssetAccountUniqueName"
+                                                            [readonly]="true"
+                                                            [matTooltip]="row.get('fixedAssetAccountUniqueName').value"
+                                                            matTooltipPosition="above">
+                                                        </text-field>
+                                                    </div>
+                                                </td>
+                                                <!-- Archive -->
+                                                <td *ngIf="hideShowForm.controls['archive'].value"
+                                                    (click)="getInputIndex(i,'archive')" class="min-width-140">
+                                                    <div class="border-line">
+                                                        <div class="custom-padding"
+                                                            [matTooltip]="row.get('archive').value ? commonLocaleData?.app_yes : commonLocaleData?.app_no"
+                                                            matTooltipPosition="above">
+                                                            {{ row.get('archive').value ? commonLocaleData?.app_yes :
+                                                            commonLocaleData?.app_no }}
+                                                        </div>
+                                                        <!-- <text-field [type]="'text'" formControlName="archive" [readonly]="true">
+                                                        </text-field> -->
+                                                    </div>
+                                                </td>
+                                                <!-- Tax (Menu)-->
+                                                <td *ngIf="hideShowForm.controls['taxes'].value"
+                                                    (click)="getInputIndex(i,'taxes')" class="min-width-140">
+                                                    <div class="border-line">
+                                                        <text-field [type]="'text'" formControlName="taxes"
+                                                            [readonly]="true" [matTooltip]="row.get('taxes').value"
+                                                            matTooltipPosition="above">
+                                                        </text-field>
+                                                        <!-- <mat-select
+                                                            class="vertical-margin"
+                                                            name="taxes"
+                                                            formControlName="taxes"
+                                                            multiple
+                                                            (openedChange)="openedSelectTax($event)"
+                                                            [disabled]="true"
+                                                        >
+                                                        <mat-option
+                                                            *ngFor="let tax of taxes"
+                                                            [value]="tax?.uniqueName"
+                                                            (onSelectionChange)="selectTax(tax)"
+                                                            >{{ tax.name }}</mat-option
+                                                        >
+                                                        <mat-option
+                                                            class="create-update-no-data"
+                                                            [disabled]="true"
+                                                            *ngIf="!taxes?.length"
+                                                            >
+                                                            {{ commonLocaleData?.app_no_result_found }}
+                                                        </mat-option>
+                                                        </mat-select> -->
+                                                    </div>
+                                                </td>
+                                                <!-- Sales Tax Inclusive -->
+                                                <td (click)="getInputIndex(i,'salesTaxInclusive')"
+                                                    *ngIf="(inventoryType === 'SERVICE' || inventoryType === 'PRODUCT') && hideShowForm.controls['salesTaxInclusive'].value">
+                                                    <div class="border-line">
+                                                        <div class="custom-padding"
+                                                            [matTooltip]="row.get('salesTaxInclusive').value ? localeData?.inclusive : localeData?.exclusive"
+                                                            matTooltipPosition="above">
+                                                            {{ row.get('salesTaxInclusive').value ?
+                                                            localeData?.inclusive : localeData?.exclusive }}
+                                                        </div>
+                                                        <!-- <text-field [type]="'text'" formControlName="salesTaxInclusive" [readonly]="true">
+                                                        </text-field> -->
+                                                    </div>
+                                                </td>
+                                                <!-- Purchase Tax Inclusive -->
+                                                <td (click)="getInputIndex(i,'purchaseTaxInclusive')"
+                                                    *ngIf="(inventoryType === 'SERVICE' || inventoryType === 'PRODUCT') && hideShowForm.controls['purchaseTaxInclusive'].value">
+                                                    <div class="border-line">
+                                                        <div class="custom-padding"
+                                                            [matTooltip]="row.get('purchaseTaxInclusive').value ? localeData?.inclusive : localeData?.exclusive"
+                                                            matTooltipPosition="above">
+                                                            {{ row.get('purchaseTaxInclusive').value ?
+                                                            localeData?.inclusive : localeData?.exclusive }}
+                                                        </div>
+                                                        <!-- <text-field [type]="'text'"
+                                                            formControlName="purchaseTaxInclusive" [readonly]="true">
+                                                        </text-field> -->
+                                                    </div>
+                                                </td>
+                                                <!-- FixedAsset Tax Inclusive -->
+                                                <td (click)="getInputIndex(i,'fixedAssetTaxInclusive')"
+                                                    *ngIf="inventoryType === 'FIXED_ASSETS' && hideShowForm.controls['fixedAssetTaxInclusive'].value">
+                                                    <div class="border-line">
+                                                        <div class="custom-padding"
+                                                            [matTooltip]="row.get('fixedAssetTaxInclusive').value ? localeData?.inclusive : localeData?.exclusive"
+                                                            matTooltipPosition="above">
+                                                            {{ row.get('fixedAssetTaxInclusive').value ?
+                                                            localeData?.inclusive : localeData?.exclusive }}
+                                                        </div>
+                                                        <!-- <text-field [type]="'text'"
+                                                            formControlName="fixedAssetTaxInclusive" [readonly]="true">
+                                                        </text-field> -->
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </ng-container>
+                                        <tr *ngIf="noDataFound && !isLoading">
+                                            <td colspan="100%">
+                                                <div class="no-data mb-5">
+                                                    <h1 class="mb-5">{{ commonLocaleData?.app_no_entries_found }}</h1>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </form>
+                        </div>
+
+                        <div class="pagination-wrapper mt-auto" *ngIf="pagination.totalPages > 1 && !isLoading">
+                            <pagination *ngIf="pagination" class="pagination-sm" [(ngModel)]="pagination.currentPage"
+                                [totalItems]="pagination.totalItems" [maxSize]="5" [boundaryLinks]="true"
+                                [itemsPerPage]="pagination.itemsPerPage" [rotate]="false"
+                                (pageChanged)="pageChanged($event)" [firstText]="commonLocaleData?.app_first"
+                                [previousText]="commonLocaleData?.app_previous" [nextText]="commonLocaleData?.app_next"
+                                [lastText]="commonLocaleData?.app_last"></pagination>
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</ng-container>
+
+<ng-template #bulkStockAdvanceFilter>
+    <bulk-stock-advance-filter [localeData]="localeData" [commonLocaleData]="commonLocaleData"
+        (applyAdvanceSearchEvent)="applyAdvanceFilter($event)"
+        (closeDailog)="advanceFilterDialogRef.close()"></bulk-stock-advance-filter>
+</ng-template>

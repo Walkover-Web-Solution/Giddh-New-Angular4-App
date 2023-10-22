@@ -30,7 +30,7 @@
                                 <div class="form-wrapper" *ngIf="loginUsing">
                                     <!-- login with email form -->
                                     <form
-                                        class=""
+                                        
                                         name="verifyEmailForm"
                                         novalidate
                                         [formGroup]="emailVerifyForm"
@@ -126,7 +126,7 @@
                                     </form>
                                     <!-- form end/ -->
                                     <form
-                                        class=""
+                                        
                                         *ngIf="isSignupWithPasswordSuccess$ | async"
                                         id="signupVerifyForm"
                                         [formGroup]="signupVerifyForm"

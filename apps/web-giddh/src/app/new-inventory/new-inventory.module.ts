@@ -65,6 +65,7 @@ import { MatTooltipModule } from "@angular/material/tooltip";
 import { ReportFiltersComponent } from "./component/report-filters/report-filters.component";
 import { ReportsComponent } from "./component/reports/reports.component";
 import { GroupCreateEditModule } from "./component/create-update-group/create-update-group.module";
+import { SelectTableColumnModule } from "../shared/select-table-column/select-table-column.module";
 import { CustomUnitsComponent } from "./component/custom-units/custom-units.component";
 import { MatGridListModule } from "@angular/material/grid-list";
 import { MatListModule } from "@angular/material/list";
@@ -75,11 +76,12 @@ import { AsideCreateUnitGroupComponent } from "./component/aside-create-unit-gro
 import { RecipeModule } from "./component/recipe/recipe.module";
 import { ManufacturingModule } from "../manufacturing/manufacturing.module";
 import { InventoryMasterComponent } from "./component/inventory-master/inventory-master.component";
-import { SelectTableColumnModule } from "../shared/select-table-column/select-table-column.module";
 import { FormsModule } from "@angular/forms";
 import { NoDataModule } from "../shared/no-data/no-data.module";
 import { DragDropModule } from "@angular/cdk/drag-drop";
 import { CdkScrollModule } from "../theme/form-fields/cdk-scroll/cdk-scroll.module";
+import { BulkStockEditComponent } from "./component/bulk-stock-edit/bulk-stock-edit.component";
+import { BulkStockAdvanceFilterComponent } from "./component/bulk-stock-advance-filter/bulk-stock-advance-filter.component";
 
 @NgModule({
     declarations: [
@@ -124,7 +126,9 @@ import { CdkScrollModule } from "../theme/form-fields/cdk-scroll/cdk-scroll.modu
         CreateUnitGroupComponent,
         AsideCreateUnitGroupComponent,
         CustomUnitsComponent,
-        InventoryMasterComponent
+        InventoryMasterComponent,
+        BulkStockEditComponent,
+        BulkStockAdvanceFilterComponent
     ],
     imports: [
         NewInventoryRoutingModule,
@@ -156,11 +160,11 @@ import { CdkScrollModule } from "../theme/form-fields/cdk-scroll/cdk-scroll.modu
         MatDialogModule,
         MatAutocompleteModule,
         MatTooltipModule,
+        SelectTableColumnModule,
         MatGridListModule,
         MatListModule,
         RecipeModule,
         ManufacturingModule,
-        SelectTableColumnModule,
         CdkScrollModule,
         FormsModule,
         NoDataModule,
@@ -199,7 +203,8 @@ import { CdkScrollModule } from "../theme/form-fields/cdk-scroll/cdk-scroll.modu
         DashboardSalesReport,
         DashboardSellingReport,
         ReportFiltersComponent,
-        MatDivider
+        MatDivider,
+        BulkStockAdvanceFilterComponent
     ]
 })
 export class NewInventoryModule { }

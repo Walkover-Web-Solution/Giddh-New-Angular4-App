@@ -1,6 +1,6 @@
 {
     "sidebar":{
-        "inventory":"INVENTORY",
+        "inventory":"Inventory",
         "stock":"Product",
         "create_new":"Create New",
         "item_wise":"Item-wise",
@@ -13,10 +13,11 @@
         "manufacturing":"Manufacturing",
         "warehouse_balance":"Warehouse Opening Balance",
         "custom_units":"Custom Units",
+        "master":"Master",
         "recipe":"Recipe",
         "create_manufacturing":"Create Manufacturing",
         "report":"Report",
-        "master":"Master"
+        "create_branch_transfer": "Create Branch Transfer"
     },
     "reports":{
         "transaction_count":"Transaction Count",
@@ -89,7 +90,9 @@
         "category":"Category",
         "type":"Type",
         "select_value":"Select Value",
-        "enter_amount":"Enter Amount"
+        "enter_amount":"Enter Amount",
+        "sort_by": "Sort By",
+        "expression": "Expression"
     },
     "warehouse_opening_balance":{
         "unique_name":"Unique Name",

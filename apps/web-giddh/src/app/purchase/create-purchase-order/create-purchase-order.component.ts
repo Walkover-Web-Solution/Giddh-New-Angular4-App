@@ -369,10 +369,10 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     public translationLoaded: boolean = false;
     /** Length of entry description */
     public entryDescriptionLength: number = ENTRY_DESCRIPTION_LENGTH;
-    /** Stores the voucher API version of current company */
-    public voucherApiVersion: 1 | 2;
     /** True if form save in progress */
     public isFormSaveInProgress: boolean = false;
+    /** Stores the voucher API version of current company */
+    public voucherApiVersion: 1 | 2;
     /** List of discounts */
     public discountsList: any[] = [];
     /** Stores the current active entry */
@@ -3602,9 +3602,9 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                     transaction.rate = Number((transaction.stockList[0].rate / this.exchangeRate).toFixed(this.highPrecisionRate));
                 }
             } else {
-                transaction.stockList.push(obj);
                 transaction.stockUnit = additional.stock.stockUnit.uniqueName;
                 transaction.stockUnitCode = additional.stock.stockUnit.code;
+                transaction.stockList.push(obj);
             }
             transaction.stockDetails = _.omit(additional.stock, ['accountStockDetails', 'stockUnit']);
             transaction.isStockTxn = true;
@@ -4092,6 +4092,15 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         this.dialog.closeAll();
     }
 
+    /**
+     * Set barcode machine typing to false if user clicked on dropdown
+     *
+     * @memberof CreatePurchaseOrderComponent
+     */
+    public setUserManuallyClicked(): void {
+        this.isBarcodeMachineTyping = false;
+    }
+
     // CMD + G functionality
     @HostListener('document:keydown', ['$event'])
     public handleKeyboardDownEvent(event: KeyboardEvent): void {
@@ -4108,6 +4117,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
 
         if (event.timeStamp - this.startTime < 2) {
             this.isBarcodeMachineTyping = true;
+        } else {
+            this.isBarcodeMachineTyping = false;
         }
 
         if (uniqueName && this.startTime) {

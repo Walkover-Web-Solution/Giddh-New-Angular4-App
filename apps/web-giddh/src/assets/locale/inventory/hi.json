@@ -13,10 +13,11 @@
         "manufacturing":"उत्पादन",
         "warehouse_balance":"वेयरहाउस ओपनिंग बैलेंस",
         "custom_units":"कस्टम इकाई",
+        "master":"मास्टर",
         "recipe":"व्यंजन विधि",
         "create_manufacturing":"मैन्युफैक्चरिंग बनाएं",
         "report":"प्रतिवेदन",
-        "master":"मास्टर"
+        "create_branch_transfer":"शाखा स्थानांतरण बनाएँ"
     },
     "reports":{
         "transaction_count":"लेन-देन की संख्या",
@@ -88,7 +89,9 @@
         "category":"श्रेणी",
         "type":"प्रकार",
         "select_value":"कीमत चुनें",
-        "enter_amount":"राशि डालें"
+        "enter_amount":"राशि डालें",
+        "sort_by": "इसके अनुसार क्रमबद्ध करें",
+        "expression": "अभिव्यक्ति"
     },
      "warehouse_opening_balance":{
         "unique_name":"अनूठा नाम",

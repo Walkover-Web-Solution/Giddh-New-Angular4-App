@@ -69,7 +69,6 @@ inventory-sidebar {
 
 /*---- variant ----*/
 .option-value-field {
-
     text-field,
     select-field {
         input {
@@ -226,5 +225,49 @@ inventory-master {
                 height: 45px;
             }
         }
+    }
+}
+// Mat-Select search input
+.mat-mdc-option {
+    &.contains-mat-select-search {
+        background-color: var(--color-white);
+    }
+}
+
+// For Bulk Stock Edit
+.bulk-stock {
+    .bulk-stock-hide-show-button {
+        padding-left: 28px;
+        border: 1px solid var(--color-fields-border);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 6px;
+        height: 40px;
+        width: 40px;
+    }
+    &-body {
+        .bulk-stock-table {
+            table {
+                th,
+                td {
+                    input {
+                        width: 100%;
+                        height: inherit;
+                        border: none;
+                        padding: 6px 10px;
+                    }
+                    .vertical-margin {
+                        margin: 5.4px 0;
+                        padding: 0 10px;
+                    }
+                }
+            }
+        }
+    }
+}
+.max-height-50 {
+    &.mat-mdc-menu-panel {
+        max-height: 50vh;
     }
 }
