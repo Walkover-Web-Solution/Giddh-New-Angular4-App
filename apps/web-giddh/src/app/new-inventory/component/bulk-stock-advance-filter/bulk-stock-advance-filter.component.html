@@ -14,14 +14,14 @@
                         <div class="row">
                             <div class="col-lg-6 col-sm-6 col-12 mr-b15 pr-2">
                                 <dropdown-field [placeholder]="commonLocaleData?.app_select"
-                                    [options]="advanceSearchSortBy" (selectedOption)="selectCategory($event)"
-                                    [defaultValue]="advanceSearchFormObj.sortBy.label" [allowValueReset]="true"
-                                    (onClear)="advanceSearchFormObj.sortBy = ''"
-                                    [label]="localeData?.advance_search_filter?.sort_by"></dropdown-field>
+                                    [options]="advanceSearchFilterBy" (selectedOption)="selectCategory($event)"
+                                    [defaultValue]="advanceSearchFormObj.filterBy.label" [allowValueReset]="true"
+                                    (onClear)="advanceSearchFormObj.filterBy = ''"
+                                    [label]="localeData?.advance_search_filter?.filter_by"></dropdown-field>
                             </div>
                             <div class="col-lg-6 col-sm-6 col-12 mr-b15 pl-2">
                                 <dropdown-field [placeholder]="commonLocaleData?.app_select"
-                                    [options]="advanceSearchSortByOptions" (selectedOption)="selectCategoryType($event)"
+                                    [options]="advanceSearchFilterByOptions" (selectedOption)="selectCategoryType($event)"
                                     [defaultValue]="advanceSearchFormObj.type.label" [allowValueReset]="true"
                                     (onClear)="advanceSearchFormObj.type.value = { label: commonLocaleData?.app_rate, value: 'rate'}"
                                     [label]="localeData?.advance_search_filter?.type"></dropdown-field>
@@ -55,7 +55,7 @@
                         <div class="button-group d-flex justify-content-end column-gap15">
                             <button id="search-btn" mat-stroked-button color="primary" (click)="advanceSearchAction()"
                                 [disabled]="
-                                    !advanceSearchFormObj.sortBy ||
+                                    !advanceSearchFormObj.filterBy ||
                                     !advanceSearchFormObj.type ||
                                     !advanceSearchFormObj.expression ||
                                     !advanceSearchFormObj.amount
