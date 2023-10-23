@@ -683,7 +683,7 @@
                                                                         }"
                                                                         >{{
                                                                             txn?.selectedAccount
-                                                                                ? txn?.selectedAccount.name
+                                                                                ? txn.selectedAccount.name
                                                                                 : commonLocaleData?.app_select_accounts
                                                                         }}</span
                                                                     >
@@ -1843,9 +1843,9 @@
                                                         [mask]="inputMaskFormat"
                                                         [(ngModel)]="txn.total"
                                                         *ngIf="
-                                                            txn.selectedAccount?.stock?.variant?.salesTaxInclusive ||
-                                                            txn.selectedAccount?.stock?.variant?.purchaseTaxInclusive ||
-                                                            txn.selectedAccount?.stock?.variant?.fixedAssetTaxInclusive
+                                                            txn?.selectedAccount?.stock?.variant?.salesTaxInclusive ||
+                                                            txn?.selectedAccount?.stock?.variant?.purchaseTaxInclusive ||
+                                                            txn?.selectedAccount?.stock?.variant?.fixedAssetTaxInclusive
                                                         "
                                                         (input)="isTotalChanged = true; handleAmountInput(txn, true)"
                                                         (click)="showNewLedgerEntryPopup(txn); blankLedgerAmountClick()"
@@ -1860,7 +1860,7 @@
                                                         [mask]="inputMaskFormat"
                                                         [(ngModel)]="txn.amount"
                                                         *ngIf="
-                                                            !txn.selectedAccount?.stock?.variant?.salesTaxInclusive &&
+                                                            !txn?.selectedAccount?.stock?.variant?.salesTaxInclusive &&
                                                             !txn.selectedAccount?.stock?.variant
                                                                 ?.purchaseTaxInclusive &&
                                                             !txn.selectedAccount?.stock?.variant?.fixedAssetTaxInclusive
@@ -2299,9 +2299,9 @@
                                                         [mask]="inputMaskFormat"
                                                         [(ngModel)]="txn.total"
                                                         *ngIf="
-                                                            txn.selectedAccount?.stock?.variant?.salesTaxInclusive ||
-                                                            txn.selectedAccount?.stock?.variant?.purchaseTaxInclusive ||
-                                                            txn.selectedAccount?.stock?.variant?.fixedAssetTaxInclusive
+                                                            txn?.selectedAccount?.stock?.variant?.salesTaxInclusive ||
+                                                            txn?.selectedAccount?.stock?.variant?.purchaseTaxInclusive ||
+                                                            txn?.selectedAccount?.stock?.variant?.fixedAssetTaxInclusive
                                                         "
                                                         (input)="isTotalChanged = true; handleAmountInput(txn, true)"
                                                         (click)="showNewLedgerEntryPopup(txn); blankLedgerAmountClick()"
@@ -2316,7 +2316,7 @@
                                                         [mask]="inputMaskFormat"
                                                         [(ngModel)]="txn.amount"
                                                         *ngIf="
-                                                            !txn.selectedAccount?.stock?.variant?.salesTaxInclusive &&
+                                                            !txn?.selectedAccount?.stock?.variant?.salesTaxInclusive &&
                                                             !txn.selectedAccount?.stock?.variant
                                                                 ?.purchaseTaxInclusive &&
                                                             !txn.selectedAccount?.stock?.variant?.fixedAssetTaxInclusive

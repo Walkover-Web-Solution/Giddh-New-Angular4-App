@@ -2552,7 +2552,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 let stockName = '';
                 let stockUniqueName = '';
                 let stockUnitUniqueName = '';
-                const stockDetails = txn.selectedAccount.stock;
+                const stockDetails = txn?.selectedAccount.stock;
                 if (txn?.selectedAccount && stockDetails) {
                     const variantUnitRates = txn.selectedAccount?.stock?.variant?.unitRates;
                     const defaultUnit = {

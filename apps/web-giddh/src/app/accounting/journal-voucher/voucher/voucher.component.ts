@@ -742,7 +742,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this.totalDebitAmount = sumBy(debitTransactions, (o: any) => Number(o.amount));
         let creditTransactions = filter(this.requestObj.transactions, (o: any) => o.type === 'to');
         this.totalCreditAmount = sumBy(creditTransactions, (o: any) => Number(o.amount));
-        if (indx === lastIndx && this.requestObj.transactions[indx]?.selectedAccount.name) {
+        if (indx === lastIndx && this.requestObj.transactions[indx].selectedAccount.name) {
             if (this.totalCreditAmount < this.totalDebitAmount || (this.totalCreditAmount === 0 && this.totalDebitAmount === 0)) {
                 if (this.requestObj.voucherType !== VOUCHERS.RECEIPT) {
                     this.newEntryObj('to');
@@ -845,7 +845,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                                     inventory: [],
                                     isInclusiveTax: byEntry.isInclusiveTax,
                                     particular: byEntry.particular,
-                                    selectedAccount: byEntry?.selectedAccount,
+                                    selectedAccount: byEntry.selectedAccount,
                                     stocks: null,
                                     tax: taxAmount,
                                     taxes: adjustment.tax?.uniqueName ? [adjustment.tax?.uniqueName] : [],
@@ -881,7 +881,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                     }
                 });
                 let accUniqueName: string = maxBy(data.transactions, (o: any) => o.amount).selectedAccount?.UniqueName;
-                let indexOfMaxAmountEntry = findIndex(data.transactions, (o: any) => o?.selectedAccount?.UniqueName === accUniqueName);
+                let indexOfMaxAmountEntry = findIndex(data.transactions, (o: any) => o.selectedAccount?.UniqueName === accUniqueName);
                 if (this.requestObj.voucherType === VOUCHERS.RECEIPT) {
                     if (this.receiptEntries && this.receiptEntries.length > 0) {
                         data.transactions.splice(0, 2);
@@ -907,8 +907,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     }
 
     public validateForContraEntry(data) {
-        const debitEntryWithCashOrBank = data.transactions.find((trxn) => (trxn.type === 'by' && trxn?.selectedAccount && trxn.selectedAccount?.parentGroups.find((pg) => (pg?.uniqueName === 'bankaccounts' || pg?.uniqueName === 'cash' || (this.generalService.voucherApiVersion === 2 && pg?.uniqueName === 'loanandoverdraft')))));
-        const creditEntryWithCashOrBank = data.transactions.find((trxn) => (trxn.type === 'to' && trxn?.selectedAccount && trxn.selectedAccount?.parentGroups.find((pg) => (pg?.uniqueName === 'bankaccounts' || pg?.uniqueName === 'cash' || (this.generalService.voucherApiVersion === 2 && pg?.uniqueName === 'loanandoverdraft')))));
+        const debitEntryWithCashOrBank = data.transactions.find((trxn) => (trxn.type === 'by' && trxn.selectedAccount && trxn.selectedAccount?.parentGroups.find((pg) => (pg?.uniqueName === 'bankaccounts' || pg?.uniqueName === 'cash' || (this.generalService.voucherApiVersion === 2 && pg?.uniqueName === 'loanandoverdraft')))));
+        const creditEntryWithCashOrBank = data.transactions.find((trxn) => (trxn.type === 'to' && trxn.selectedAccount && trxn.selectedAccount?.parentGroups.find((pg) => (pg?.uniqueName === 'bankaccounts' || pg?.uniqueName === 'cash' || (this.generalService.voucherApiVersion === 2 && pg?.uniqueName === 'loanandoverdraft')))));
 
         if (debitEntryWithCashOrBank && creditEntryWithCashOrBank) {
             return true;
@@ -918,8 +918,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     }
 
     public validateForSalesAndPurchaseEntry(data) {
-        const debitEntryWithCashOrBank = data.transactions.find((trxn) => (trxn.type === 'by' && trxn?.selectedAccount && trxn.selectedAccount?.parentGroups.find((pg) => (pg?.uniqueName === 'revenuefromoperations' || pg?.uniqueName === 'currentassets' || pg?.uniqueName === 'currentliabilities' || pg?.uniqueName === 'purchases' || pg?.uniqueName === 'directexpenses'))));
-        const creditEntryWithCashOrBank = data.transactions.find((trxn) => (trxn.type === 'to' && trxn?.selectedAccount && trxn.selectedAccount?.parentGroups.find((pg) => (pg?.uniqueName === 'revenuefromoperations' || pg?.uniqueName === 'currentassets' || pg?.uniqueName === 'currentliabilities' || pg?.uniqueName === 'purchases' || pg?.uniqueName === 'directexpenses'))));
+        const debitEntryWithCashOrBank = data.transactions.find((trxn) => (trxn.type === 'by' && trxn.selectedAccount && trxn.selectedAccount?.parentGroups.find((pg) => (pg?.uniqueName === 'revenuefromoperations' || pg?.uniqueName === 'currentassets' || pg?.uniqueName === 'currentliabilities' || pg?.uniqueName === 'purchases' || pg?.uniqueName === 'directexpenses'))));
+        const creditEntryWithCashOrBank = data.transactions.find((trxn) => (trxn.type === 'to' && trxn.selectedAccount && trxn.selectedAccount?.parentGroups.find((pg) => (pg?.uniqueName === 'revenuefromoperations' || pg?.uniqueName === 'currentassets' || pg?.uniqueName === 'currentliabilities' || pg?.uniqueName === 'purchases' || pg?.uniqueName === 'directexpenses'))));
 
         if (debitEntryWithCashOrBank && creditEntryWithCashOrBank) {
             return true;
@@ -933,7 +933,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             const byOrTo = data.voucherType === VOUCHERS.PAYMENT ? 'to' : 'by';
             const toAccounts = data.transactions?.filter((acc) => acc.type === byOrTo);
             const AccountOfCashOrBank = toAccounts?.filter((acc) => {
-                const indexOfCashOrBank = acc?.selectedAccount?.parentGroups?.findIndex((pg) => pg?.uniqueName === 'cash' || pg?.uniqueName === 'bankaccounts' || (this.generalService.voucherApiVersion === 2 && pg?.uniqueName === 'loanandoverdraft'));
+                const indexOfCashOrBank = acc.selectedAccount?.parentGroups?.findIndex((pg) => pg?.uniqueName === 'cash' || pg?.uniqueName === 'bankaccounts' || (this.generalService.voucherApiVersion === 2 && pg?.uniqueName === 'loanandoverdraft'));
                 return indexOfCashOrBank !== -1 ? true : false;
             });
             return (AccountOfCashOrBank && AccountOfCashOrBank.length) ? true : false;
@@ -1204,7 +1204,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 }
                 return;
             }
-            if (transactionObj.selectedAccount.account !== transactionObj?.selectedAccount.name) {
+            if (transactionObj.selectedAccount.account !== transactionObj.selectedAccount.name) {
                 let message = this.localeData?.no_account_found;
                 message = message?.replace("[ACCOUNT]", transactionObj.selectedAccount.account);
                 this._toaster.errorToast(message);
@@ -1965,7 +1965,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             if (transaction.amount && Number(transaction.amount) > 0) {
                 if (this.requestObj.voucherType === VOUCHERS.RECEIPT) {
                     this.pendingInvoicesListParams.accountUniqueNames = [];
-                    this.pendingInvoicesListParams.accountUniqueNames.push(transaction?.selectedAccount?.UniqueName);
+                    this.pendingInvoicesListParams.accountUniqueNames.push(transaction.selectedAccount?.UniqueName);
                 }
 
                 this.getInvoiceListForReceiptVoucher();

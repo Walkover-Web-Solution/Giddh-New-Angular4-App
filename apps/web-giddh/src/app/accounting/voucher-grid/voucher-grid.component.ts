@@ -503,7 +503,7 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
         let lastIndx = this.requestObj.transactions?.length - 1;
         transactionObj.amount = Number(amount);
         transactionObj.total = transactionObj.amount;
-        if (indx === lastIndx && this.requestObj.transactions[indx]?.selectedAccount.name) {
+        if (indx === lastIndx && this.requestObj.transactions[indx].selectedAccount.name) {
             this.newEntryObj();
         }
         let debitTransactions = filter(this.requestObj.transactions, (o: any) => o.type === 'by');
@@ -567,8 +567,8 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
                 forEach(data.transactions, (element: any) => {
                     element.type = (element.type === 'by') ? 'credit' : 'debit';
                 });
-                let accUniqueName: string = maxBy(data.transactions, (o: any) => o.amount)?.selectedAccount?.UniqueName;
-                let indexOfMaxAmountEntry = findIndex(data.transactions, (o: any) => o?.selectedAccount?.UniqueName === accUniqueName);
+                let accUniqueName: string = maxBy(data.transactions, (o: any) => o.amount).selectedAccount?.UniqueName;
+                let indexOfMaxAmountEntry = findIndex(data.transactions, (o: any) => o.selectedAccount?.UniqueName === accUniqueName);
                 data.transactions.splice(indexOfMaxAmountEntry, 1);
                 data = this._tallyModuleService.prepareRequestForAPI(data);
                 this.store.dispatch(this._ledgerActions.CreateBlankLedger(data, accUniqueName));
@@ -584,8 +584,8 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
     }
 
     public validateForContraEntry(data) {
-        const debitEntryWithCashOrBank = data.transactions.find((trxn) => (trxn.type === 'by' && trxn?.selectedAccount && trxn.selectedAccount?.parentGroups.find((pg) => (pg?.uniqueName === 'bankaccounts' || pg?.uniqueName === 'cash' || (this.generalService.voucherApiVersion === 2 && pg?.uniqueName === 'loanandoverdraft')))));
-        const creditEntryWithCashOrBank = data.transactions.find((trxn) => (trxn.type === 'to' && trxn?.selectedAccount && trxn.selectedAccount?.parentGroups.find((pg) => (pg?.uniqueName === 'bankaccounts' || pg?.uniqueName === 'cash' || (this.generalService.voucherApiVersion === 2 && pg?.uniqueName === 'loanandoverdraft')))));
+        const debitEntryWithCashOrBank = data.transactions.find((trxn) => (trxn.type === 'by' && trxn.selectedAccount && trxn.selectedAccount?.parentGroups.find((pg) => (pg?.uniqueName === 'bankaccounts' || pg?.uniqueName === 'cash' || (this.generalService.voucherApiVersion === 2 && pg?.uniqueName === 'loanandoverdraft')))));
+        const creditEntryWithCashOrBank = data.transactions.find((trxn) => (trxn.type === 'to' && trxn.selectedAccount && trxn.selectedAccount?.parentGroups.find((pg) => (pg?.uniqueName === 'bankaccounts' || pg?.uniqueName === 'cash' || (this.generalService.voucherApiVersion === 2 && pg?.uniqueName === 'loanandoverdraft')))));
 
         if (debitEntryWithCashOrBank && creditEntryWithCashOrBank) {
             return true;
@@ -595,8 +595,8 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
     }
 
     public validateForSalesAndPurchaseEntry(data) {
-        const debitEntryWithCashOrBank = data.transactions.find((trxn) => (trxn.type === 'by' && trxn?.selectedAccount && trxn.selectedAccount?.parentGroups.find((pg) => (pg?.uniqueName === 'revenuefromoperations' || pg?.uniqueName === 'currentassets' || pg?.uniqueName === 'currentliabilities' || pg?.uniqueName === 'purchases' || pg?.uniqueName === 'directexpenses'))));
-        const creditEntryWithCashOrBank = data.transactions.find((trxn) => (trxn.type === 'to' && trxn?.selectedAccount && trxn.selectedAccount?.parentGroups.find((pg) => (pg?.uniqueName === 'revenuefromoperations' || pg?.uniqueName === 'currentassets' || pg?.uniqueName === 'currentliabilities' || pg?.uniqueName === 'purchases' || pg?.uniqueName === 'directexpenses'))));
+        const debitEntryWithCashOrBank = data.transactions.find((trxn) => (trxn.type === 'by' && trxn.selectedAccount && trxn.selectedAccount?.parentGroups.find((pg) => (pg?.uniqueName === 'revenuefromoperations' || pg?.uniqueName === 'currentassets' || pg?.uniqueName === 'currentliabilities' || pg?.uniqueName === 'purchases' || pg?.uniqueName === 'directexpenses'))));
+        const creditEntryWithCashOrBank = data.transactions.find((trxn) => (trxn.type === 'to' && trxn.selectedAccount && trxn.selectedAccount?.parentGroups.find((pg) => (pg?.uniqueName === 'revenuefromoperations' || pg?.uniqueName === 'currentassets' || pg?.uniqueName === 'currentliabilities' || pg?.uniqueName === 'purchases' || pg?.uniqueName === 'directexpenses'))));
 
         if (debitEntryWithCashOrBank && creditEntryWithCashOrBank) {
             return true;
@@ -610,7 +610,7 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
             const byOrTo = data.voucherType === 'Payment' ? 'to' : 'by';
             const toAccounts = data.transactions?.filter((acc) => acc.type === byOrTo);
             const AccountOfCashOrBank = toAccounts?.filter((acc) => {
-                const indexOfCashOrBank = acc?.selectedAccount?.parentGroups?.findIndex((pg) => pg?.uniqueName === 'cash' || pg?.uniqueName === 'bankaccounts' || (this.generalService.voucherApiVersion === 2 && pg?.uniqueName === 'loanandoverdraft'));
+                const indexOfCashOrBank = acc.selectedAccount?.parentGroups?.findIndex((pg) => pg?.uniqueName === 'cash' || pg?.uniqueName === 'bankaccounts' || (this.generalService.voucherApiVersion === 2 && pg?.uniqueName === 'loanandoverdraft'));
                 return indexOfCashOrBank !== -1 ? true : false;
             });
             return (AccountOfCashOrBank && AccountOfCashOrBank.length) ? true : false;
@@ -868,7 +868,7 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
             }
             return;
         }
-        if (transactionObj?.selectedAccount.account !== transactionObj?.selectedAccount.name) {
+        if (transactionObj.selectedAccount.account !== transactionObj.selectedAccount.name) {
             this._toaster.errorToast('No account found with name ' + transactionObj.selectedAccount.account);
             ev.preventDefault();
             return;

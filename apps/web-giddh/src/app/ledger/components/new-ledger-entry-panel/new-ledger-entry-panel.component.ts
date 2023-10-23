@@ -431,7 +431,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 this.blankLedger.isOtherTaxesApplicable = true;
             }
         }
-        if (changes?.selectedAccountDetails?.currentValue !== changes?.selectedAccountDetails?.previousValue && this.currentTxn?.isStock) {
+        if (changes?.selectedAccountDetails?.currentValue !== changes.selectedAccountDetails?.previousValue && this.currentTxn?.isStock) {
             this.loadStockVariants(this.currentTxn.stockUniqueName);
         }
         if (this.voucherApiVersion === 2 && changes?.invoiceList?.currentValue) {
@@ -457,7 +457,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         }
         if (this.currentTxn && this.currentTxn.selectedAccount && this.currentTxn.selectedAccount.stock && this.currentTxn.selectedAccount.stock.stockTaxes && this.currentTxn.selectedAccount.stock.stockTaxes.length) {
             this.taxListForStock = this.mergeInvolvedAccountsTaxes(this.currentTxn.selectedAccount.stock.stockTaxes, activeAccountTaxes);
-        } else if (this.currentTxn?.selectedAccount && this.currentTxn?.selectedAccount?.parentGroups && this.currentTxn?.selectedAccount?.parentGroups.length) {
+        } else if (this.currentTxn?.selectedAccount && this.currentTxn.selectedAccount?.parentGroups && this.currentTxn.selectedAccount?.parentGroups.length) {
             this.taxListForStock = this.mergeInvolvedAccountsTaxes(this.currentTxn.selectedAccount.applicableTaxes, activeAccountTaxes);
         } else {
             this.taxListForStock = [];
@@ -808,7 +808,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                     }
                 });
             }
-            if (transaction.inventory && transaction?.selectedAccount?.stock?.variant) {
+            if (transaction?.inventory && transaction.selectedAccount?.stock?.variant) {
                 transaction.inventory.taxInclusive = transaction.selectedAccount.stock.variant.salesTaxInclusive ||
                     transaction.selectedAccount.stock.variant.purchaseTaxInclusive ||
                     transaction.selectedAccount.stock.variant.fixedAssetTaxInclusive;
@@ -851,7 +851,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         let unit = unitRates?.find(p => p.stockUnitUniqueName === stockUnitUniqueName);
         this.currentTxn.inventory.unit = { code: unit.stockUnitCode, rate: unit.rate, stockUnitCode: unit.stockUnitCode, uniqueName: unit.stockUnitUniqueName };
         if (this.currentTxn?.inventory?.unit) {
-            const variant = this.currentTxn?.selectedAccount?.stock?.variant;
+            const variant = this.currentTxn.selectedAccount?.stock?.variant;
             if (variant) {
                 // If the unit rate of inclusive tax stock is changed then again calculate the amount inclusively
                 this.isInclusiveEntry = variant.purchaseTaxInclusive || variant.salesTaxInclusive || variant.fixedAssetTaxInclusive;
@@ -1690,7 +1690,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                     });
                 }, 300);
             } else {
-                this.currentTxn?.selectedAccount.accountApplicableDiscounts.forEach(element => {
+                this.currentTxn.selectedAccount.accountApplicableDiscounts.forEach(element => {
                     this.currentTxn?.discounts?.map(item => {
                         if (element?.uniqueName === item?.discountUniqueName) {
                             item.isActive = true;
