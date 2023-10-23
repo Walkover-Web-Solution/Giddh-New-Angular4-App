@@ -678,12 +678,12 @@
                                                                         [ngClass]="{
                                                                             'account-placeholder': true,
                                                                             'account-placeholder-text ':
-                                                                                txn.selectedAccount &&
+                                                                                txn?.selectedAccount &&
                                                                                 txn.selectedAccount.name
                                                                         }"
                                                                         >{{
-                                                                            txn.selectedAccount
-                                                                                ? txn.selectedAccount.name
+                                                                            txn?.selectedAccount
+                                                                                ? txn?.selectedAccount.name
                                                                                 : commonLocaleData?.app_select_accounts
                                                                         }}</span
                                                                     >
@@ -700,12 +700,12 @@
                                                                         [ngClass]="{
                                                                             'account-placeholder': true,
                                                                             'account-placeholder-text':
-                                                                                txn.selectedAccount &&
+                                                                                txn?.selectedAccount &&
                                                                                 txn.selectedAccount.name
                                                                         }"
                                                                         *ngIf="!txn.showDropdown"
                                                                         >{{
-                                                                            txn.selectedAccount
+                                                                            txn?.selectedAccount
                                                                                 ? txn.selectedAccount.name
                                                                                 : commonLocaleData?.app_select_accounts
                                                                         }}</span
@@ -982,11 +982,11 @@
                                                                         [ngClass]="{
                                                                             'account-placeholder': true,
                                                                             'account-placeholder-text ':
-                                                                                txn.selectedAccount &&
+                                                                                txn?.selectedAccount &&
                                                                                 txn.selectedAccount.name
                                                                         }"
                                                                         >{{
-                                                                            txn.selectedAccount
+                                                                            txn?.selectedAccount
                                                                                 ? txn.selectedAccount.name
                                                                                 : commonLocaleData?.app_select_accounts
                                                                         }}</span
@@ -1001,12 +1001,12 @@
                                                                         [ngClass]="{
                                                                             'account-placeholder': true,
                                                                             'account-placeholder-text ':
-                                                                                txn.selectedAccount &&
+                                                                                txn?.selectedAccount &&
                                                                                 txn.selectedAccount.name
                                                                         }"
                                                                         *ngIf="!txn.showDropdown"
                                                                         >{{
-                                                                            txn.selectedAccount
+                                                                            txn?.selectedAccount
                                                                                 ? txn.selectedAccount.name
                                                                                 : commonLocaleData?.app_select_accounts
                                                                         }}</span
