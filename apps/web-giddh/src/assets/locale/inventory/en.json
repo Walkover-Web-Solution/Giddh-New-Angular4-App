@@ -91,7 +91,8 @@
         "select_value":"Select Value",
         "enter_amount":"Enter Amount",
         "sort_by": "Sort By",
-        "expression": "Expression"
+        "expression": "Expression",
+        "filter_by": "Filter By"
     },
     "warehouse_opening_balance":{
         "unique_name":"Unique Name",

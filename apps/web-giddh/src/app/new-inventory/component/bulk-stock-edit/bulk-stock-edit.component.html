@@ -160,10 +160,8 @@
                                             </th>
                                             <!-- HSN -->
                                             <th *ngIf="hideShowForm.controls['hsnNo'].value"
-                                                class="cursor-pointer min-width-140">
-                                                <div class="d-flex align-items-center">
-                                                    <div (click)="toggleInput('hsn'); $event.stopPropagation();"
-                                                        class="w-100">
+                                                class="cursor-pointer min-width-140" (click)="toggleInput('hsn'); $event.stopPropagation();">                                               
+                                                    <div class="w-100">
                                                         <h3 *ngIf="!tableHeadInput.hsn"><span
                                                                 class="icon-search mr-r05"></span> {{
                                                             commonLocaleData?.app_hsn }} </h3>
@@ -172,12 +170,7 @@
                                                             <ng-container
                                                                 *ngTemplateOutlet="searchTemplate;context: {formControl: thStockGroupName}"></ng-container>
                                                         </div>
-                                                    </div>
-                                                    <button mat-icon-button class="sort-btn icon-font-22 p-0"
-                                                        (click)="sort('hsn')">
-                                                        <span class="icon-sort-asc text-light-2 d-block"></span>
-                                                    </button>
-                                                </div>
+                                                    </div>                                                
                                             </th>
                                             <!-- SAC -->
                                             <th *ngIf="hideShowForm.controls['sacNo'].value"
@@ -201,10 +194,9 @@
                                                 </div>
                                             </th>
                                             <!-- SKU Code -->
-                                            <th *ngIf="hideShowForm.controls['skuCode'].value" class="cursor-pointer">
-                                                <div class="d-flex align-items-center">
-                                                    <div (click)="toggleInput('skuCode'); $event.stopPropagation();"
-                                                        class="w-100">
+                                            <th *ngIf="hideShowForm.controls['skuCode'].value" class="cursor-pointer" 
+                                                (click)="toggleInput('skuCode'); $event.stopPropagation();">
+                                                    <div class="w-100">
                                                         <h3 *ngIf="!tableHeadInput.skuCode"><span
                                                                 class="icon-search mr-r05"></span> {{
                                                             commonLocaleData?.app_sku_code }} </h3>
@@ -214,11 +206,6 @@
                                                                 *ngTemplateOutlet="searchTemplate;context: {formControl: thSkuCode}"></ng-container>
                                                         </div>
                                                     </div>
-                                                    <button mat-icon-button class="sort-btn icon-font-22 p-0"
-                                                        (click)="sort('sku')">
-                                                        <span class="icon-sort-asc text-light-2 d-block"></span>
-                                                    </button>
-                                                </div>
                                             </th>
                                             <!--  Purchases Account Name -->
                                             <th
@@ -690,7 +677,7 @@
 </ng-container>
 
 <ng-template #bulkStockAdvanceFilter>
-    <bulk-stock-advance-filter [localeData]="localeData" [commonLocaleData]="commonLocaleData"
+    <bulk-stock-advance-filter [localeData]="localeData" [commonLocaleData]="commonLocaleData" [advanceSearchData]="advanceSearchData"
         (applyAdvanceSearchEvent)="applyAdvanceFilter($event)"
         (closeDailog)="advanceFilterDialogRef.close()"></bulk-stock-advance-filter>
 </ng-template>

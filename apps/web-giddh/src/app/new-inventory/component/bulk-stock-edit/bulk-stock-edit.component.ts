@@ -130,6 +130,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
                     inventoryType: this.inventoryType, page: 1, count: this.pageCount, body: {
                         "search": "",
                         "searchBy": "",
+                        "filterBy": "",
                         "sortBy": "",
                         "sort": "",
                         "expression": "GREATER_THAN",
@@ -326,7 +327,8 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
                 inventoryType: this.inventoryType, page: event.page, count: this.pageCount, body: {
                     "search": this.searchString !== null ? this.searchString : "",
                     "searchBy": this.searchStringKey !== null ? this.searchStringKey : "",
-                    "sortBy": this.advanceSearchData !== null ? this.advanceSearchData?.sortBy : (this.sortOrderKey !== null ? this.sortOrderKey : ""),
+                    "filterBy": this.advanceSearchData.filterBy !== null ? this.advanceSearchData.filterBy : "",
+                    "sortBy": this.sortOrderKey !== null ? this.sortOrderKey : "",
                     "sort": this.sortOrderStatus !== null ? this.sortOrderStatus : "asc",
                     "expression": this.advanceSearchData !== null ? this.advanceSearchData?.expression : "",
                     "rate": this.advanceSearchData !== null ? this.advanceSearchData?.amount : ""
@@ -632,10 +634,11 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
             inventoryType: this.inventoryType, page: this.pagination.currentPage, count: this.pageCount, body: {
                 "search": this.searchString !== null ? this.searchString : "",
                 "searchBy": this.searchStringKey !== null ? this.searchStringKey : "",
-                "sortBy": key,
+                "filterBy": this.advanceSearchData.filterBy !== null ? this.advanceSearchData.filterBy : "",
+                "sortBy": this.sortOrderKey,
                 "sort": this.sortOrderStatus,
-                "expression": "GREATER_THAN",
-                "rate": 0
+                "expression": this.advanceSearchData.expression !== null ? this.advanceSearchData.expression : "GREATER_THAN",
+                "rate":  this.advanceSearchData.amount !== null ? this.advanceSearchData.amount : 0,
             }
         }));
     }
@@ -655,8 +658,9 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
             bodyObj = {
                 "search": searchedText,
                 "searchBy": key,
-                "sortBy": this.advanceSearchData.sortBy,
-                "sort": this.advanceSearchData.sortOrder,
+                "filterBy": this.advanceSearchData.filterBy,
+                "sortBy": this.sortOrderKey !== null ? this.sortOrderKey : "",
+                "sort": this.sortOrderStatus !== null ? this.sortOrderStatus : "",
                 "expression": this.advanceSearchData.expression,
                 "rate": this.advanceSearchData.amount
             }
@@ -664,8 +668,9 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
             bodyObj = {
                 "search": searchedText,
                 "searchBy": key,
-                "sortBy": "",
-                "sort": "",
+                "sortBy": this.sortOrderKey !== null ? this.sortOrderKey : "",
+                "sort": this.sortOrderStatus !== null ? this.sortOrderStatus : "",
+                "filterBy": "",
                 "expression": "GREATER_THAN",
                 "rate": 0
             }
@@ -768,12 +773,14 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
         this.searchStringKey = null;
         this.advanceSearchData = null;
         this.sortOrderStatus = null;
+        this.advanceSearchData = null;
         this.hideTableHeadInput();
         this.isLoading = true;
         this.store.dispatch(this.inventoryAction.getBulkStockList({
             inventoryType: this.inventoryType, page: this.pagination.currentPage, count: this.pageCount, body: {
                 "search": "",
                 "searchBy": "",
+                "filterBy": "",
                 "sortBy": "",
                 "sort": "",
                 "expression": "GREATER_THAN",
@@ -793,26 +800,25 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
 
         // let checkColumnStatus: boolean;
 
-        // if (e.sortBy === 'fixed_asset_rate') {
+        // if (e.filterBy === 'fixed_asset_rate') {
         //     checkColumnStatus = this.hideShowForm.controls['fixedAssetRate'].value
-        // } else if (e.sortBy === 'sales_rate') {
+        // } else if (e.filterBy === 'sales_rate') {
         //     checkColumnStatus = this.hideShowForm.controls['salesRate'].value
-        // } else if (e.sortBy === 'purchase_rate') {
+        // } else if (e.filterBy === 'purchase_rate') {
         //     checkColumnStatus = this.hideShowForm.controls['purchaseRate'].value
         // }
         // if (checkColumnStatus) {
-        this.isLoading = true;
         this.advanceSearchData = event;
         this.isLoading = true;
         this.store.dispatch(this.inventoryAction.getBulkStockList({
             inventoryType: this.inventoryType, page: this.pagination.currentPage, count: this.pageCount, body: {
-                "sortBy": event.sortBy,
-                "expression": event.expression,
-                "rate": event.amount
+                "filterBy": this.advanceSearchData.filterBy,
+                "expression": this.advanceSearchData.expression,
+                "rate": this.advanceSearchData.amount
             }
         }));
         // } else {
-        //     this.toaster.errorToast("This column is Hidden, you cannot sort Hidden Column");
+        //     this.toaster.errorToast("This column is Hidden, you cannot Filter Hidden Column");
         // }
     }
 

@@ -11,15 +11,17 @@ export class BulkStockAdvanceFilterComponent implements OnInit {
     @Input() public commonLocaleData: any = {};
     /** Holds Locale Translate Data */
     @Input() public localeData: any = {};
+     /** Holds Advance Search Recent Searched Data */
+     @Input() public advanceSearchData: any = null;
     /** Output Emitter to emit advance search Info */
     @Output() public applyAdvanceSearchEvent: EventEmitter<string> = new EventEmitter();
     /** Output Emitter to emit dailog close status */
     @Output() public closeDailog: EventEmitter<string> = new EventEmitter();
 
-    /* Hold advance search SortBy   */
-    public advanceSearchSortBy: any[] = [];
-    /* Hold advance search SortBy options*/
-    public advanceSearchSortByOptions: any[] = [];
+    /* Hold advance search filterBy   */
+    public advanceSearchFilterBy: any[] = [];
+    /* Hold advance search filterBy options*/
+    public advanceSearchFilterByOptions: any[] = [];
     /* Hold Advance Search Expression*/
     public advanceSearchExpression: any[] = [];
     /** Instance of Advance Search Form*/
@@ -32,6 +34,20 @@ export class BulkStockAdvanceFilterComponent implements OnInit {
     public ngOnInit(): void {
         this.initDropdownValues();
         this.initializeForm();
+        if(this.advanceSearchData !== null){     
+            console.log("advanceSearchData", this.advanceSearchData)   
+            // this.advanceSearchFormObj = {
+            //     filterBy: this.advanceSearchData.filterBy,
+            //     type: this.advanceSearchData.type.value,
+            //     expression: this.advanceSearchData.expression,
+            //     amount: this.advanceSearchData
+            // };
+        }
+            // this.advanceSearchFormObj.filterBy = this.advanceSearchData.filterBy.value
+            // this.advanceSearchFormObj.type = this.advanceSearchData.type.value
+            // this.advanceSearchFormObj.expression = this.advanceSearchData.expression.value
+            // this.advanceSearchFormObj.amount = this.advanceSearchData.amount
+        
     }
 
     /**
@@ -39,7 +55,7 @@ export class BulkStockAdvanceFilterComponent implements OnInit {
      * @memberof BulkStockAdvanceFilterComponent
      */
     public initDropdownValues(): void {
-        this.advanceSearchSortBy = [
+        this.advanceSearchFilterBy = [
             {
                 value: "purchase_rate",
                 label: this.localeData?.purchase_rate,
@@ -53,7 +69,7 @@ export class BulkStockAdvanceFilterComponent implements OnInit {
                 label: this.localeData?.fixed_asset_rate,
             }
         ];
-        this.advanceSearchSortByOptions = [
+        this.advanceSearchFilterByOptions = [
             {
                 value: "rate",
                 label: this.commonLocaleData?.app_rate,
@@ -93,7 +109,7 @@ export class BulkStockAdvanceFilterComponent implements OnInit {
      */
     public initializeForm(): void {
         this.advanceSearchFormObj = {
-            sortBy: '',
+            filterBy: '',
             type: { label: this.commonLocaleData?.app_rate, value: 'rate' },
             expression: '',
             amount: ''
@@ -114,7 +130,7 @@ export class BulkStockAdvanceFilterComponent implements OnInit {
      * @memberof BulkStockAdvanceFilterComponent
      */
     public selectCategory(event: any): void {
-        this.advanceSearchFormObj.sortBy = event;
+        this.advanceSearchFormObj.filterBy = event;
     }
 
     /**
@@ -140,7 +156,7 @@ export class BulkStockAdvanceFilterComponent implements OnInit {
      * @memberof BulkStockAdvanceFilterComponent
      */
     public advanceSearchAction(): void {
-        this.advanceSearchFormObj.sortBy = this.advanceSearchFormObj.sortBy.value
+        this.advanceSearchFormObj.filterBy = this.advanceSearchFormObj.filterBy.value
         this.advanceSearchFormObj.type = this.advanceSearchFormObj.type.value
         this.advanceSearchFormObj.expression = this.advanceSearchFormObj.expression.value
         this.advanceSearchFormObj.amount = this.advanceSearchFormObj.amount
