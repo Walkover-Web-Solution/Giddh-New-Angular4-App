@@ -621,7 +621,7 @@
                                             </table>
                                         </div>
                                     </mat-expansion-panel>
-                                    <mat-expansion-panel>
+                                    <mat-expansion-panel [expanded]="isByProductExpanded">
                                         <mat-expansion-panel-header>
                                             <mat-panel-title class="p-0">
                                                 {{ commonLocaleData?.app_by_product_output }}
@@ -679,7 +679,6 @@
                                                                         [options]="byProductLinkedStocksList"
                                                                         (selectedOption)="
                                                                             byProductLinkedStock.selectedStock = $event;
-                                                                            validateSelectedByProductStock(i);
                                                                             getStockVariants(
                                                                                 byProductLinkedStock,
                                                                                 $event,
@@ -738,7 +737,6 @@
                                                                                 $event.label;
                                                                             byProductLinkedStock.variant.uniqueName =
                                                                                 $event.value;
-                                                                            validateByProductSelectedVariant(i)
                                                                         "
                                                                         [defaultValue]="
                                                                             byProductLinkedStock.variant.name
@@ -759,11 +757,10 @@
                                                                                 : '')
                                                                         "
                                                                         [type]="'number'"
-                                                                        [name]="'quantity' + i"
+                                                                        [name]="'byProductQuantity' + i"
                                                                         [(ngModel)]="byProductLinkedStock.quantity"
                                                                         [placeholder]="commonLocaleData?.app_quantity"
                                                                         (change)="
-                                                                            validateByProductQuantity(i);
                                                                             calculateRowTotal(byProductLinkedStock)
                                                                         "
                                                                         [readonly]="isCompany"
@@ -805,9 +802,7 @@
                                                                 <i
                                                                     [ngClass]="{
                                                                         'unvisible':
-                                                                            activeByProductLinkedStockIndex !== i ||
-                                                                            manufacturingObject.manufacturingDetails[0]
-                                                                                .byProducts?.length <= 1
+                                                                            activeByProductLinkedStockIndex !== i
                                                                     }"
                                                                     class="icon-trash cursor-pointer"
                                                                     aria-hidden="true"

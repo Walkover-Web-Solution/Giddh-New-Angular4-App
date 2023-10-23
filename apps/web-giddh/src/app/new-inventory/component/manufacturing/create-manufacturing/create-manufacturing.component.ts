@@ -121,6 +121,8 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
     public activeExpenseIndex: number = null;
     /** True if increase assets value*/
     private increaseExpenseAmount: boolean;
+    /** True ifi is by product expanded*/
+    private isByProductExpanded: boolean;
 
     constructor(
         private store: Store<AppState>,
@@ -443,11 +445,13 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
                 this.showBorder(this.manufacturingObject.manufacturingDetails[0].linkedStocks[0]);
                 this.showBorder(this.manufacturingObject.manufacturingDetails[0].byProducts[0]);
             }
-
             if (!this.manufactureUniqueName) {
                 this.initialLinkedStocks = cloneDeep(this.manufacturingObject.manufacturingDetails[0].linkedStocks);
                 this.initialByProductLinkedStocks = cloneDeep(this.manufacturingObject.manufacturingDetails[0].byProducts);
             }
+
+            this.isByProductExpanded = this.manufacturingObject.manufacturingDetails[0].byProducts[0]
+                ?.variant.uniqueName ? true : false;
 
             this.preventStocksApiCall = false;
 
@@ -540,7 +544,6 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
             delete linkedStock.cssClass;
             return linkedStock;
         });
-
         return manufacturingObject;
     }
 
@@ -569,14 +572,16 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
             });
 
             manufacturingDetail.byProducts?.forEach(linkedStock => {
-                byProducts.push({
-                    stockUniqueName: linkedStock.stockUniqueName,
-                    stockUnitUniqueName: linkedStock.stockUnitUniqueName,
-                    quantity: Number(linkedStock.quantity),
-                    variant: {
-                        uniqueName: linkedStock.variant?.uniqueName
-                    }
-                });
+                if (linkedStock.selectedStock.value) {
+                    byProducts.push({
+                        stockUniqueName: linkedStock.stockUniqueName,
+                        stockUnitUniqueName: linkedStock.stockUnitUniqueName,
+                        quantity: Number(linkedStock.quantity),
+                        variant: {
+                            uniqueName: linkedStock.variant?.uniqueName
+                        }
+                    });
+                }
             });
 
             recipeObject.manufacturingDetails.push({
@@ -826,7 +831,22 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
     * @memberof CreateManufacturingComponent
     */
     public removeByProductLinkedStock(index: number): void {
-        this.manufacturingObject.manufacturingDetails[0].byProducts = this.manufacturingObject.manufacturingDetails[0].byProducts?.filter((byProductLinkedStock, i) => i !== index);
+        if (this.manufacturingObject.manufacturingDetails[0].byProducts.length === 1) {
+            this.manufacturingObject.manufacturingDetails[0].byProducts = [
+                {
+                    selectedStock: { label: "", value: "", additional: { stockUnitCode: "", stockUnitUniqueName: "", unitsList: [] } },
+                    stockUniqueName: "",
+                    quantity: 1,
+                    stockUnitUniqueName: "",
+                    stockUnitCode: "",
+                    rate: 0,
+                    amount: 0,
+                    variant: { name: '', uniqueName: '' }
+                }
+            ]
+        } else {
+            this.manufacturingObject.manufacturingDetails[0].byProducts = this.manufacturingObject.manufacturingDetails[0].byProducts?.filter((byProductLinkedStock, i) => i !== index);
+        }
         this.calculateTotals();
     }
 
@@ -1089,48 +1109,6 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
     }
 
     /**
-    * Validates by product linked stock
-    *
-    * @param {number} linkedStockIndex
-    * @memberof CreateManufacturingComponent
-    */
-    public validateSelectedByProductStock(linkedStockIndex: number): void {
-        if (!this.manufacturingObject.manufacturingDetails[0].byProducts[linkedStockIndex].selectedStock?.value) {
-            this.manufacturingObject.manufacturingDetails[0].byProducts[linkedStockIndex].stockNameError = true;
-        } else {
-            this.manufacturingObject.manufacturingDetails[0].byProducts[linkedStockIndex].stockNameError = false;
-        }
-    }
-
-    /**
-     * Validates by product  linked variant
-     *
-     * @param {number} linkedStockIndex
-     * @memberof CreateManufacturingComponent
-     */
-    public validateByProductSelectedVariant(linkedStockIndex: number): void {
-        if (!this.manufacturingObject.manufacturingDetails[0].byProducts[linkedStockIndex].variant?.uniqueName) {
-            this.manufacturingObject.manufacturingDetails[0].byProducts[linkedStockIndex].variantNameError = true;
-        } else {
-            this.manufacturingObject.manufacturingDetails[0].byProducts[linkedStockIndex].variantNameError = false;
-        }
-    }
-
-    /**
-     * Validates  by product  linked quantity
-     *
-     * @param {number} linkedStockIndex
-     * @memberof CreateManufacturingComponent
-     */
-    public validateByProductQuantity(linkedStockIndex: number): void {
-        if (!this.manufacturingObject.manufacturingDetails[0].byProducts[linkedStockIndex].quantity) {
-            this.manufacturingObject.manufacturingDetails[0].byProducts[linkedStockIndex].quantityError = true;
-        } else {
-            this.manufacturingObject.manufacturingDetails[0].byProducts[linkedStockIndex].quantityError = false;
-        }
-    }
-
-    /**
      * Callback for scroll end event
      *
      * @param {*} stockObject
@@ -1196,11 +1174,15 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
                         variant: linkedStock.variant
                     });
                 });
-                this.manufacturingObject.manufacturingDetails[0].linkedStocks?.forEach(linkedStock => {
-                    if (linkedStock.selectedStock.value) {
-                        this.getStockVariants(linkedStock, { label: linkedStock.selectedStock.label, value: linkedStock.selectedStock.value, additional: { stockUnitCode: linkedStock.stockUnitCode, stockUnitUniqueName: linkedStock.stockUnitUniqueName } }, false, 0, true);
+
+                this.manufacturingObject.manufacturingDetails[0].linkedStocks = cloneDeep(linkedStocks);
+                this.initialLinkedStocks = cloneDeep(linkedStocks);
+                this.manufacturingObject.manufacturingDetails[0].linkedStocks?.forEach(linkStocks => {
+                    if (linkStocks.selectedStock.value) {
+                        this.getStockVariants(linkStocks, { label: linkStocks.selectedStock.label, value: linkStocks.selectedStock.value, additional: { stockUnitCode: linkStocks.stockUnitCode, stockUnitUniqueName: linkStocks.stockUnitUniqueName } }, false, 0, true);
                     }
                 });
+
                 if (!response.body.byProducts.length) {
                     this.manufacturingObject.manufacturingDetails[0].byProducts = [];
                     this.manufacturingObject.manufacturingDetails[0].byProducts.push(
@@ -1218,38 +1200,35 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
 
                 } else {
                     let byProductLinkedStocks = [];
-                    response.body.byProducts?.forEach(linkedStock => {
-                        let amount = linkedStock.rate * linkedStock.manufacturingQuantity;
+                    response.body.byProducts?.forEach(byProduct => {
+                        let amount = byProduct.rate * byProduct.manufacturingQuantity;
 
                         let unitsList = [];
 
-                        linkedStock?.stockUnits?.forEach(unit => {
+                        byProduct?.stockUnits?.forEach(unit => {
                             unitsList.push({ label: unit.code, value: unit.uniqueName });
                         });
 
                         byProductLinkedStocks.push({
-                            selectedStock: { label: linkedStock.stockName, value: linkedStock.stockUniqueName, additional: { stockUnitCode: linkedStock.manufacturingUnitCode, stockUnitUniqueName: linkedStock.manufacturingUnitUniqueName, unitsList: unitsList } },
-                            stockUniqueName: linkedStock.stockUniqueName,
-                            quantity: linkedStock.manufacturingQuantity,
-                            stockUnitUniqueName: linkedStock.manufacturingUnitUniqueName,
-                            stockUnitCode: linkedStock.manufacturingUnitCode,
-                            rate: linkedStock.rate,
+                            selectedStock: { label: byProduct.stockName, value: byProduct.stockUniqueName, additional: { stockUnitCode: byProduct.manufacturingUnitCode, stockUnitUniqueName: byProduct.manufacturingUnitUniqueName, unitsList: unitsList } },
+                            stockUniqueName: byProduct.stockUniqueName,
+                            quantity: byProduct.manufacturingQuantity,
+                            stockUnitUniqueName: byProduct.manufacturingUnitUniqueName,
+                            stockUnitCode: byProduct.manufacturingUnitCode,
+                            rate: byProduct.rate,
                             amount: isNaN(amount) ? 0 : giddhRoundOff(amount, this.giddhBalanceDecimalPlaces),
-                            variant: linkedStock.variant
+                            variant: byProduct.variant
                         });
                     });
                     this.manufacturingObject.manufacturingDetails[0].byProducts = byProductLinkedStocks;
-                    this.manufacturingObject.manufacturingDetails[0].byProducts?.forEach(linkedStock => {
-                        if (linkedStock.selectedStock.value) {
-                            this.getStockVariants(linkedStock, { label: linkedStock.selectedStock.label, value: linkedStock.selectedStock.value, additional: { stockUnitCode: linkedStock.stockUnitCode, stockUnitUniqueName: linkedStock.stockUnitUniqueName } }, false, 0, true);
+                    this.manufacturingObject.manufacturingDetails[0].byProducts?.forEach(byProduct => {
+                        if (byProduct.selectedStock.value) {
+                            this.getStockVariants(byProduct, { label: byProduct.selectedStock.label, value: byProduct.selectedStock.value, additional: { stockUnitCode: byProduct.stockUnitCode, stockUnitUniqueName: byProduct.stockUnitUniqueName } }, false, 0, true);
                         }
                     });
                     this.initialByProductLinkedStocks = cloneDeep(byProductLinkedStocks);
 
                 }
-                this.manufacturingObject.manufacturingDetails[0].linkedStocks = linkedStocks;
-
-                this.initialLinkedStocks = cloneDeep(linkedStocks);
 
                 let otherExpenses = [];
                 response.body.otherExpenses?.forEach(responseItem => {
@@ -1279,7 +1258,6 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
                 if (response.body.otherExpenses.length) {
                     this.manufacturingObject.manufacturingDetails[0].otherExpenses = otherExpenses;
                 }
-
                 this.preventStocksApiCall = false;
                 this.getStocks(this.manufacturingObject.manufacturingDetails[0].linkedStocks[0], 1, '', this.selectedInventoryType, (response: any) => {
                     if (response?.status === "success" && response.body?.results?.length) {
@@ -1462,12 +1440,12 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.manufacturingObject.manufacturingDetails[0].byProducts?.forEach(linkedStock => {
-            let selectedStock = this.initialByProductLinkedStocks?.find(stock => stock.variant?.uniqueName === linkedStock.variant?.uniqueName);
+        this.manufacturingObject.manufacturingDetails[0].byProducts?.forEach(byProduct => {
+            let selectedStock = this.initialByProductLinkedStocks?.find(stock => stock.variant?.uniqueName === byProduct.variant?.uniqueName);
 
             if (selectedStock) {
-                linkedStock.quantity = giddhRoundOff(selectedStock.quantity * finishedStockQuantity, this.giddhBalanceDecimalPlaces);
-                linkedStock.amount = giddhRoundOff(linkedStock.quantity * linkedStock.rate, this.giddhBalanceDecimalPlaces);
+                byProduct.quantity = giddhRoundOff(selectedStock.quantity * finishedStockQuantity, this.giddhBalanceDecimalPlaces);
+                byProduct.amount = giddhRoundOff(byProduct.quantity * byProduct.rate, this.giddhBalanceDecimalPlaces);
             }
         });
     }

@@ -78,8 +78,8 @@
                     </div>
                     <div class="col-8 pr-0">
                         <div class="row">
-                            <mat-accordion>
-                                <mat-expansion-panel [expanded]="true">
+                            <mat-accordion multi>
+                                <mat-expansion-panel [expanded]="isByLinkedStockExpanded">
                                     <mat-expansion-panel-header>
                                         <mat-panel-title class="p-0">
                                             {{ localeData?.raw_stock }}
@@ -203,7 +203,7 @@
                                         </div>
                                     </div>
                                 </mat-expansion-panel>
-                                <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+                                <mat-expansion-panel [expanded]="isByProductExpanded">
                                     <mat-expansion-panel-header>
                                         <mat-panel-title class="p-0"
                                             >{{ commonLocaleData?.app_by_product_output }}
@@ -233,7 +233,9 @@
                                                                 <select-field
                                                                     [cssClass]="'form-control mat-field-border'"
                                                                     [name]="'byProductStock_' + i + '_' + k"
-                                                                    [scrollableElementId]="'byProductStock_' + i + '_' + k"
+                                                                    [scrollableElementId]="
+                                                                        'byProductStock_' + i + '_' + k
+                                                                    "
                                                                     [placeholder]="commonLocaleData?.app_select_stock"
                                                                     [options]="byProductLinkedStock.stocks"
                                                                     (selectedOption)="
@@ -268,7 +270,9 @@
                                                                 <select-field
                                                                     [cssClass]="'form-control mat-field-border'"
                                                                     [name]="'byProductVariant_' + i + '_' + k"
-                                                                    [scrollableElementId]="'byProductVariant' + i + '_' + k"
+                                                                    [scrollableElementId]="
+                                                                        'byProductVariant' + i + '_' + k
+                                                                    "
                                                                     [placeholder]="commonLocaleData?.app_select_variant"
                                                                     [options]="byProductLinkedStock.variants"
                                                                     [defaultValue]="byProductLinkedStock.variant?.name"
@@ -299,7 +303,9 @@
                                                                 <select-field
                                                                     [cssClass]="'form-control mat-field-border'"
                                                                     [name]="'byProductUnit_' + i + '_' + k"
-                                                                    [scrollableElementId]="'byProductIUnit_' + i + '_' + k"
+                                                                    [scrollableElementId]="
+                                                                        'byProductIUnit_' + i + '_' + k
+                                                                    "
                                                                     [placeholder]="localeData?.select_stock_unit"
                                                                     [options]="byProductLinkedStock.units"
                                                                     [defaultValue]="byProductLinkedStock.stockUnitCode"
@@ -317,7 +323,6 @@
                                                             <a
                                                                 href="javascript:void(0);"
                                                                 class="d-flex justify-content-between align-item-center table-row-delete"
-                                                                *ngIf="recipe.byProducts?.length > 1"
                                                                 (click)="removeByProductLinkedStock(i, k)"
                                                             >
                                                                 <i class="icon-trash"></i>
