@@ -939,14 +939,14 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         let stockObjClone = cloneDeep(this.stockForm.variants);
         stockObjClone?.forEach((variant) => {
             updatedCustomFieldArray = variant?.customFields?.map((obj) => {
-               return {
+                return {
                     uniqueName: obj?.uniqueName,
-                   value: obj?.value,
-                    isMandatory:obj.isMandatory
+                    value: obj?.value,
+                    isMandatory: obj.isMandatory
                 }
             });
             updatedCustomFieldArray.forEach(field => {
-                if (field.isMandatory && (field.value === undefined|| field.value ===null)) {
+                if (field.isMandatory && (field.value === undefined || field.value === null)) {
                     this.isFormSubmitted = true;
                 }
 
@@ -1348,8 +1348,10 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 if (this.createRecipe.hasRecipeForStock()) {
                     this.createRecipe.saveRecipeFromStock();
                 }
+
                 this.getVariantCustomFields();
                 this.updateCustomFieldObjectInVariant();
+
                 if (this.createRecipe.newVariants?.length) {
                     this.createRecipe.stock.variants = response.body.variants;
                     this.createRecipe.variants = response.body.variants;
@@ -1520,7 +1522,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 this.stockForm.variants = this.stockForm.variants?.map(variant => {
                     if (variant?.customFields?.length) {
                         let customFieldFound = false;
-                       let variantMapped = variant?.customFields?.map(variantCustomField => {
+                        let variantMapped = variant?.customFields?.map(variantCustomField => {
                             const customFieldValue = variantCustomField.value;
                             let mergedObject = { ...variantCustomField, ...customField };
                             mergedObject.value = customFieldValue;
@@ -1529,7 +1531,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                                 variantCustomField = mergedObject;
                             }
                             return variantCustomField;
-                       });
+                        });
                         variant.customFields = variantMapped;
                         if (!customFieldFound) {
                             variant.customFields.push(cloneDeep(customField));
@@ -1668,7 +1670,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                     salesTaxInclusive: false,
                     purchaseTaxInclusive: false,
                     fixedAssetTaxInclusive: false,
-                    customFields: [] ,
+                    customFields: [],
                     salesInformation: [
                         {
                             rate: undefined,

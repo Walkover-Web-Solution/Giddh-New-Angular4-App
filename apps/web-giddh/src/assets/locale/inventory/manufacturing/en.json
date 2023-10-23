@@ -41,5 +41,6 @@
     "increase_value": "Increase Assets Value",
     "book_expense": "Book Expense",
     "liability_assets": "Liability/Asset A/c",
-    "expense_acc": "Expense A/c"
+    "expense_acc": "Expense A/c",
+    "by_product": "By Product"
 }

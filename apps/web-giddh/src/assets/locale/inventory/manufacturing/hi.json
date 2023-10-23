@@ -41,5 +41,6 @@
     "increase_value": "संपत्ति मूल्य बढ़ाएं",
     "book_expense": "खर्च पुस्तक",
     "liability_assets": "देयता/संपत्ति खाता",
-    "expense_acc": "खर्च खाता"
+    "expense_acc": "खर्च खाता",
+    "by_product": "उत्पाद द्वारा"
 }
