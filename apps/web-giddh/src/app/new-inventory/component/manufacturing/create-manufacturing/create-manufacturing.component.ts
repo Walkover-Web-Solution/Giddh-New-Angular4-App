@@ -1015,9 +1015,6 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
         if (!this.manufacturingObject.manufacturingDetails[0].linkedStocks?.length) {
             isValidForm = false;
         }
-        if (!this.manufacturingObject.manufacturingDetails[0].byProducts?.length) {
-            isValidForm = false;
-        }
         if (this.manufacturingObject.manufacturingDetails[0].linkedStocks?.length) {
             this.manufacturingObject.manufacturingDetails[0].linkedStocks.forEach(linkedStock => {
                 if (!linkedStock?.selectedStock?.value) {
@@ -1034,23 +1031,6 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
                 }
             });
         }
-        if (this.manufacturingObject.manufacturingDetails[0].byProducts?.length) {
-            this.manufacturingObject.manufacturingDetails[0].byProducts.forEach(byProductLinkedStock => {
-                if (!byProductLinkedStock?.selectedStock?.value) {
-                    byProductLinkedStock.stockNameError = true;
-                    isValidForm = false;
-                }
-                if (!byProductLinkedStock?.variant?.uniqueName) {
-                    byProductLinkedStock.variantNameError = true;
-                    isValidForm = false;
-                }
-                if (!byProductLinkedStock?.quantity) {
-                    byProductLinkedStock.quantityError = true;
-                    isValidForm = false;
-                }
-            });
-        }
-
         return isValidForm;
     }
 
