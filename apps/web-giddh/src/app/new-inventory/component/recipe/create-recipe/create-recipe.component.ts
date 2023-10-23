@@ -16,8 +16,6 @@ import { take, takeUntil } from 'rxjs/operators';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CreateRecipeComponent implements OnChanges, OnDestroy {
-    /** Hold mat expansion panel state */
-    public panelOpenState: boolean = false;
     /** Stock object */
     @Input() public stock: any = {};
     /** List of variants in stock form */
@@ -40,6 +38,10 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
     private recipeExists: boolean = false;
     /** Holds existing recipe */
     private existingRecipe: any = [];
+    /** True ifi is by product expanded*/
+    private isByProductExpanded: boolean;
+    /** True ifi is by product link expanded*/
+    private isByLinkedStockExpanded: boolean;
 
     constructor(
         private inventoryService: InventoryService,
@@ -143,6 +145,11 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
         if (!this.recipeObject.manufacturingDetails[this.recipeObject.manufacturingDetails?.length - 1]?.units?.length) {
             this.getStockUnits(this.recipeObject.manufacturingDetails[this.recipeObject.manufacturingDetails?.length - 1], this.stock.stockUnitUniqueName, true);
         }
+        this.recipeObject.manufacturingDetails.forEach(data => {
+            this.isByProductExpanded = true
+            this.isByLinkedStockExpanded = data?.linkedStocks[0]
+                ?.variant.uniqueName ? true : false;
+        });
 
         this.changeDetectionRef.detectChanges();
     }
@@ -448,7 +455,6 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
 
                             linkedStockIndex++;
                         });
-
                         if (!manufacturingDetail.byProducts.length) {
                             manufacturingDetail.byProducts.push(
                                 {
@@ -490,8 +496,14 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
                             byProductlinkedStockIndex++;
 
                         });
-                        index++;
                     });
+
+                    this.isByProductExpanded = this.recipeObject.manufacturingDetails[0]?.byProducts[0]
+                        ?.variant.uniqueName ? true : false;
+                    this.isByLinkedStockExpanded = this.recipeObject.manufacturingDetails[0]?.linkedStocks[0]
+                        ?.variant.uniqueName ? true : false;
+                    index++;
+
                 });
                 this.existingRecipe = this.formatRecipeRequest();
                 this.changeDetectionRef.detectChanges();
@@ -556,7 +568,23 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
 
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response) {
-                this.recipeObject.manufacturingDetails[recipeIndex].byProducts = this.recipeObject.manufacturingDetails[recipeIndex].byProducts?.filter((linkedStock, i) => i !== index);
+                if (this.recipeObject.manufacturingDetails[0].byProducts.length === 1) {
+                    this.recipeObject.manufacturingDetails[0].byProducts = [
+                        {
+                            stockName: '',
+                            stockUniqueName: '',
+                            stockUnitCode: '',
+                            stockUnitUniqueName: '',
+                            quantity: 1,
+                            variant: {
+                                name: '',
+                                uniqueName: ''
+                            }
+                        }
+                    ];
+                } else {
+                    this.recipeObject.manufacturingDetails[recipeIndex].byProducts = this.recipeObject.manufacturingDetails[recipeIndex].byProducts?.filter((linkedStock, i) => i !== index);
+                }
                 this.changeDetectionRef.detectChanges();
             }
         });
@@ -636,7 +664,6 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
                 });
             }
         });
-
         return recipeObject;
     }
 
