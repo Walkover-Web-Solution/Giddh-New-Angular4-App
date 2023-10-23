@@ -232,8 +232,8 @@
                                                             <div>
                                                                 <select-field
                                                                     [cssClass]="'form-control mat-field-border'"
-                                                                    [name]="'stock_' + i + '_' + k"
-                                                                    [scrollableElementId]="'stock_' + i + '_' + k"
+                                                                    [name]="'byProductStock_' + i + '_' + k"
+                                                                    [scrollableElementId]="'byProductStock_' + i + '_' + k"
                                                                     [placeholder]="commonLocaleData?.app_select_stock"
                                                                     [options]="byProductLinkedStock.stocks"
                                                                     (selectedOption)="
@@ -267,8 +267,8 @@
                                                             <div>
                                                                 <select-field
                                                                     [cssClass]="'form-control mat-field-border'"
-                                                                    [name]="'variant_' + i + '_' + k"
-                                                                    [scrollableElementId]="'variant' + i + '_' + k"
+                                                                    [name]="'byProductVariant_' + i + '_' + k"
+                                                                    [scrollableElementId]="'byProductVariant' + i + '_' + k"
                                                                     [placeholder]="commonLocaleData?.app_select_variant"
                                                                     [options]="byProductLinkedStock.variants"
                                                                     [defaultValue]="byProductLinkedStock.variant?.name"
@@ -288,7 +288,7 @@
                                                                     [cssClass]="'form-control mat-field-border'"
                                                                     class="text-right"
                                                                     [type]="'number'"
-                                                                    [name]="'quantity_' + i + '_' + k"
+                                                                    [name]="'byProductQuantity_' + i + '_' + k"
                                                                     [placeholder]="localeData?.enter_quantity"
                                                                     [(ngModel)]="byProductLinkedStock.quantity"
                                                                 ></text-field>
@@ -298,8 +298,8 @@
                                                             <div>
                                                                 <select-field
                                                                     [cssClass]="'form-control mat-field-border'"
-                                                                    [name]="'unit_' + i + '_' + k"
-                                                                    [scrollableElementId]="'unit_' + i + '_' + k"
+                                                                    [name]="'byProductUnit_' + i + '_' + k"
+                                                                    [scrollableElementId]="'byProductIUnit_' + i + '_' + k"
                                                                     [placeholder]="localeData?.select_stock_unit"
                                                                     [options]="byProductLinkedStock.units"
                                                                     [defaultValue]="byProductLinkedStock.stockUnitCode"
