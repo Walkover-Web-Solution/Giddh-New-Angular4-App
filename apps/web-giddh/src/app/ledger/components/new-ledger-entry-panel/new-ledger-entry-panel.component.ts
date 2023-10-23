@@ -431,7 +431,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 this.blankLedger.isOtherTaxesApplicable = true;
             }
         }
-        if (changes?.selectedAccountDetails?.currentValue !== changes?.selectedAccountDetails?.previousValue && this.currentTxn?.isStock) {
+        if (changes?.selectedAccountDetails?.currentValue !== changes.selectedAccountDetails?.previousValue && this.currentTxn?.isStock) {
             this.loadStockVariants(this.currentTxn.stockUniqueName);
         }
         if (this.voucherApiVersion === 2 && changes?.invoiceList?.currentValue) {
