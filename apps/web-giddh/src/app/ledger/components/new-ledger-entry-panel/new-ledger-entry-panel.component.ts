@@ -431,7 +431,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 this.blankLedger.isOtherTaxesApplicable = true;
             }
         }
-        if (changes?.selectedAccountDetails?.currentValue !== changes?.selectedAccountDetails?.previousValue && this.currentTxn?.isStock) {
+        if (changes?.selectedAccountDetails?.currentValue !== changes.selectedAccountDetails?.previousValue && this.currentTxn?.isStock) {
             this.loadStockVariants(this.currentTxn.stockUniqueName);
         }
         if (this.voucherApiVersion === 2 && changes?.invoiceList?.currentValue) {
@@ -457,7 +457,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         }
         if (this.currentTxn && this.currentTxn.selectedAccount && this.currentTxn.selectedAccount.stock && this.currentTxn.selectedAccount.stock.stockTaxes && this.currentTxn.selectedAccount.stock.stockTaxes.length) {
             this.taxListForStock = this.mergeInvolvedAccountsTaxes(this.currentTxn.selectedAccount.stock.stockTaxes, activeAccountTaxes);
-        } else if (this.currentTxn?.selectedAccount && this.currentTxn?.selectedAccount?.parentGroups && this.currentTxn?.selectedAccount?.parentGroups.length) {
+        } else if (this.currentTxn?.selectedAccount && this.currentTxn.selectedAccount?.parentGroups && this.currentTxn.selectedAccount?.parentGroups.length) {
             this.taxListForStock = this.mergeInvolvedAccountsTaxes(this.currentTxn.selectedAccount.applicableTaxes, activeAccountTaxes);
         } else {
             this.taxListForStock = [];
@@ -728,7 +728,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.taxControll.change();
         }
 
-        if (this.currentTxn.selectedAccount) {
+        if (this.currentTxn?.selectedAccount) {
             if (this.currentTxn.selectedAccount.stock) {
                 this.currentTxn.inventory.unit.rate = giddhRoundOff((this.currentTxn.amount / this.currentTxn.inventory.quantity), this.ratePrecision);
                 this.currentTxn.inventory.unit.highPrecisionRate = Number((this.currentTxn.amount / this.currentTxn.inventory.quantity).toFixed(this.highPrecisionRate));
@@ -808,7 +808,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                     }
                 });
             }
-            if (transaction.inventory && transaction.selectedAccount?.stock?.variant) {
+            if (transaction?.inventory && transaction.selectedAccount?.stock?.variant) {
                 transaction.inventory.taxInclusive = transaction.selectedAccount.stock.variant.salesTaxInclusive ||
                     transaction.selectedAccount.stock.variant.purchaseTaxInclusive ||
                     transaction.selectedAccount.stock.variant.fixedAssetTaxInclusive;
@@ -1680,7 +1680,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.currentTxn?.discounts?.map(item => { item.isActive = false; return item; });
             if (this.currentTxn?.discounts && this.currentTxn?.discounts?.length === 1) {
                 setTimeout(() => {
-                    this.currentTxn.selectedAccount.accountApplicableDiscounts.forEach(element => {
+                    this.currentTxn?.selectedAccount.accountApplicableDiscounts.forEach(element => {
                         this.currentTxn?.discounts?.map(item => {
                             if (element?.uniqueName === item?.discountUniqueName) {
                                 item.isActive = true;
@@ -1994,7 +1994,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.taxControll.change(true);
             this.calculateTotal();
         }
-        if (this.currentTxn.selectedAccount) {
+        if (this.currentTxn?.selectedAccount) {
             if (this.currentTxn.selectedAccount.stock) {
                 this.currentTxn.inventory.unit.rate = giddhRoundOff((this.currentTxn.amount / this.currentTxn.inventory.quantity), this.ratePrecision);
                 this.currentTxn.inventory.unit.highPrecisionRate = Number((this.currentTxn.amount / this.currentTxn.inventory.quantity).toFixed(this.highPrecisionRate));
@@ -2015,7 +2015,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         totalPercentage = this.currentTxn?.taxesVm?.reduce((pv, cv) => {
             return cv.isChecked ? pv + cv.amount : pv;
         }, 0);
-        if (this.generalService.isReceiptPaymentEntry(this.activeAccount, this.currentTxn.selectedAccount, this.blankLedger.voucherType) && !this.isAdvanceReceiptWithTds && !this.salesTaxInclusive && !this.purchaseTaxInclusive && !this.fixedAssetTaxInclusive) {
+        if (this.generalService.isReceiptPaymentEntry(this.activeAccount, this.currentTxn?.selectedAccount, this.blankLedger.voucherType) && !this.isAdvanceReceiptWithTds && !this.salesTaxInclusive && !this.purchaseTaxInclusive && !this.fixedAssetTaxInclusive) {
             this.currentTxn.tax = giddhRoundOff(this.generalService.calculateInclusiveOrExclusiveTaxes(false, this.currentTxn.taxInclusiveAmount, totalPercentage, this.currentTxn.discount), this.giddhBalanceDecimalPlaces);
         } else {
             this.currentTxn.tax = giddhRoundOff(this.generalService.calculateInclusiveOrExclusiveTaxes(this.isAdvanceReceipt || this.isInclusiveEntry, this.isInclusiveEntry ? this.currentTxn.total : this.currentTxn.amount, totalPercentage, this.currentTxn.discount), this.giddhBalanceDecimalPlaces);
