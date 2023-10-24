@@ -5,7 +5,6 @@ import { Store, select } from '@ngrx/store';
 import { SettingsBranchActions } from 'apps/web-giddh/src/app/actions/settings/branch/settings.branch.action';
 import { isEqual } from 'apps/web-giddh/src/app/lodash-optimized';
 import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
-import { LinkedStocks } from 'apps/web-giddh/src/app/manufacturing/manufacturing.utility';
 import { CreateManufacturing } from 'apps/web-giddh/src/app/models/api-models/Manufacturing';
 import { OrganizationType } from 'apps/web-giddh/src/app/models/user-login-state';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
@@ -1305,6 +1304,8 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
                     }
                 });
                 this.isLoadingManufacturing = false;
+                this.isByProductExpanded = this.manufacturingObject.manufacturingDetails[0].byProducts[0]
+                    ?.variant.uniqueName ? true : false;
                 this.changeDetectionRef.detectChanges();
             } else {
                 this.isLoadingManufacturing = false;
