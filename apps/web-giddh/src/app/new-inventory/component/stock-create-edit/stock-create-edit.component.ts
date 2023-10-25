@@ -1137,8 +1137,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                         name: variant.warehouseBalance[0].stockUnit?.name,
                         uniqueName: variant.warehouseBalance[0].stockUnit?.uniqueName
                     },
-                    openingQuantity: variant.warehouseBalance[0].openingQuantity,
-                    openingAmount: variant.warehouseBalance[0].openingAmount
+                    openingQuantity: variant.warehouseBalance[0]?.openingQuantity,
+                    openingAmount: variant.warehouseBalance[0]?.openingAmount
                 }
             ]
 
