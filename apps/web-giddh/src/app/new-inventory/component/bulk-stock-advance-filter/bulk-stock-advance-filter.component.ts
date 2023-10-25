@@ -11,15 +11,19 @@ export class BulkStockAdvanceFilterComponent implements OnInit {
     @Input() public commonLocaleData: any = {};
     /** Holds Locale Translate Data */
     @Input() public localeData: any = {};
+    /** Holds Advance Search Recent Searched Data */
+    @Input() public advanceSearchData: any = null;
+    /** Holds Inventory type */
+    @Input() public inventoryType: any = null;
     /** Output Emitter to emit advance search Info */
     @Output() public applyAdvanceSearchEvent: EventEmitter<string> = new EventEmitter();
     /** Output Emitter to emit dailog close status */
     @Output() public closeDailog: EventEmitter<string> = new EventEmitter();
 
-    /* Hold advance search SortBy   */
-    public advanceSearchSortBy: any[] = [];
-    /* Hold advance search SortBy options*/
-    public advanceSearchSortByOptions: any[] = [];
+    /* Hold advance search filterBy   */
+    public advanceSearchFilterBy: any[] = [];
+    /* Hold advance search filterBy options*/
+    public advanceSearchFilterByOptions: any[] = [];
     /* Hold Advance Search Expression*/
     public advanceSearchExpression: any[] = [];
     /** Instance of Advance Search Form*/
@@ -32,6 +36,9 @@ export class BulkStockAdvanceFilterComponent implements OnInit {
     public ngOnInit(): void {
         this.initDropdownValues();
         this.initializeForm();
+        if (this.advanceSearchData !== null) {
+            this.advanceSearchFormObj = this.advanceSearchData;
+        }
     }
 
     /**
@@ -39,21 +46,26 @@ export class BulkStockAdvanceFilterComponent implements OnInit {
      * @memberof BulkStockAdvanceFilterComponent
      */
     public initDropdownValues(): void {
-        this.advanceSearchSortBy = [
-            {
-                value: "purchase_rate",
-                label: this.localeData?.purchase_rate,
-            },
-            {
-                value: "sales_rate",
-                label: this.localeData?.sales_rate,
-            },
-            {
-                value: "fixed_asset_rate",
-                label: this.localeData?.fixed_asset_rate,
-            }
-        ];
-        this.advanceSearchSortByOptions = [
+        if (this.inventoryType === "FIXED_ASSETS") {
+            this.advanceSearchFilterBy = [
+                {
+                    value: "fixed_asset_rate",
+                    label: this.localeData?.fixed_asset_rate,
+                }
+            ];
+        } else {
+            this.advanceSearchFilterBy = [
+                {
+                    value: "purchase_rate",
+                    label: this.localeData?.purchase_rate,
+                },
+                {
+                    value: "sales_rate",
+                    label: this.localeData?.sales_rate,
+                }
+            ];
+        }
+        this.advanceSearchFilterByOptions = [
             {
                 value: "rate",
                 label: this.commonLocaleData?.app_rate,
@@ -93,7 +105,7 @@ export class BulkStockAdvanceFilterComponent implements OnInit {
      */
     public initializeForm(): void {
         this.advanceSearchFormObj = {
-            sortBy: '',
+            filterBy: '',
             type: { label: this.commonLocaleData?.app_rate, value: 'rate' },
             expression: '',
             amount: ''
@@ -114,7 +126,7 @@ export class BulkStockAdvanceFilterComponent implements OnInit {
      * @memberof BulkStockAdvanceFilterComponent
      */
     public selectCategory(event: any): void {
-        this.advanceSearchFormObj.sortBy = event;
+        this.advanceSearchFormObj.filterBy = event;
     }
 
     /**
@@ -140,10 +152,6 @@ export class BulkStockAdvanceFilterComponent implements OnInit {
      * @memberof BulkStockAdvanceFilterComponent
      */
     public advanceSearchAction(): void {
-        this.advanceSearchFormObj.sortBy = this.advanceSearchFormObj.sortBy.value
-        this.advanceSearchFormObj.type = this.advanceSearchFormObj.type.value
-        this.advanceSearchFormObj.expression = this.advanceSearchFormObj.expression.value
-        this.advanceSearchFormObj.amount = this.advanceSearchFormObj.amount
         this.applyAdvanceSearchEvent.emit(this.advanceSearchFormObj);
     }
 }

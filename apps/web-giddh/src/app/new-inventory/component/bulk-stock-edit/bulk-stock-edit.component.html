@@ -158,26 +158,23 @@
                                                 class="cursor-pointer">
                                                 <h3>{{ localeData?.stock_group_unique_name }}</h3>
                                             </th>
+                                            <!--  Stock Unit -->
+                                            <th *ngIf="hideShowForm.controls['stockUnit'].value">
+                                                <h3>{{ localeData?.stock_unit }}</h3>
+                                            </th>
                                             <!-- HSN -->
                                             <th *ngIf="hideShowForm.controls['hsnNo'].value"
-                                                class="cursor-pointer min-width-140">
-                                                <div class="d-flex align-items-center">
-                                                    <div (click)="toggleInput('hsn'); $event.stopPropagation();"
-                                                        class="w-100">
+                                                class="cursor-pointer min-width-140" (click)="toggleInput('hsn'); $event.stopPropagation();">                                               
+                                                    <div class="w-100">
                                                         <h3 *ngIf="!tableHeadInput.hsn"><span
                                                                 class="icon-search mr-r05"></span> {{
                                                             commonLocaleData?.app_hsn }} </h3>
                                                         <div *ngIf="tableHeadInput.hsn" class="border-line"
                                                             [ngClass]="{'active': tableHeadInput.hsn }">
                                                             <ng-container
-                                                                *ngTemplateOutlet="searchTemplate;context: {formControl: thStockGroupName}"></ng-container>
+                                                                *ngTemplateOutlet="searchTemplate;context: {formControl: thHsn}"></ng-container>
                                                         </div>
-                                                    </div>
-                                                    <button mat-icon-button class="sort-btn icon-font-22 p-0"
-                                                        (click)="sort('hsn')">
-                                                        <span class="icon-sort-asc text-light-2 d-block"></span>
-                                                    </button>
-                                                </div>
+                                                    </div>                                                
                                             </th>
                                             <!-- SAC -->
                                             <th *ngIf="hideShowForm.controls['sacNo'].value"
@@ -194,17 +191,12 @@
                                                                 *ngTemplateOutlet="searchTemplate;context: {formControl: thSac}"></ng-container>
                                                         </div>
                                                     </div>
-                                                    <button mat-icon-button class="sort-btn icon-font-22 p-0"
-                                                        (click)="sort('sac')">
-                                                        <span class="icon-sort-asc text-light-2 d-block"></span>
-                                                    </button>
                                                 </div>
                                             </th>
                                             <!-- SKU Code -->
-                                            <th *ngIf="hideShowForm.controls['skuCode'].value" class="cursor-pointer">
-                                                <div class="d-flex align-items-center">
-                                                    <div (click)="toggleInput('skuCode'); $event.stopPropagation();"
-                                                        class="w-100">
+                                            <th *ngIf="hideShowForm.controls['skuCode'].value" class="cursor-pointer" 
+                                                (click)="toggleInput('skuCode'); $event.stopPropagation();">
+                                                    <div class="w-100">
                                                         <h3 *ngIf="!tableHeadInput.skuCode"><span
                                                                 class="icon-search mr-r05"></span> {{
                                                             commonLocaleData?.app_sku_code }} </h3>
@@ -214,16 +206,11 @@
                                                                 *ngTemplateOutlet="searchTemplate;context: {formControl: thSkuCode}"></ng-container>
                                                         </div>
                                                     </div>
-                                                    <button mat-icon-button class="sort-btn icon-font-22 p-0"
-                                                        (click)="sort('sku')">
-                                                        <span class="icon-sort-asc text-light-2 d-block"></span>
-                                                    </button>
-                                                </div>
                                             </th>
                                             <!--  Purchases Account Name -->
                                             <th
-                                                *ngIf="(inventoryType === 'SERVICE' || inventoryType === 'PRODUCT') && hideShowForm.controls['purchaseAccountName'].value">
-                                                <h3>{{ localeData?.purchases_account_name }}</h3>
+                                                *ngIf="(inventoryType === 'SERVICE' || inventoryType === 'PRODUCT') && hideShowForm.controls['purchaseAccountName'].value">                                               
+                                                <h3>{{ localeData?.purchases_account_name }}</h3>                                                
                                             </th>
                                             <!--  Purchases Account UN -->
                                             <th
@@ -233,7 +220,13 @@
                                             <!--  Purchases Rate -->
                                             <th
                                                 *ngIf="(inventoryType === 'SERVICE' || inventoryType === 'PRODUCT') && hideShowForm.controls['purchaseRate'].value">
-                                                <h3>{{ localeData?.purchase_rate }}</h3>
+                                                <div class="d-flex align-items-center justify-content-space-between">
+                                                    <h3>{{ localeData?.purchase_rate }}</h3>
+                                                    <button mat-icon-button class="sort-btn icon-font-22 p-0"
+                                                        (click)="sort('purchase_rate')">
+                                                        <span class="icon-sort-asc text-light-2 d-block"></span>
+                                                    </button>
+                                                </div>
                                             </th>
                                             <!--  Purchases Unit  (Menu)-->
                                             <th
@@ -253,7 +246,13 @@
                                             <!--  Sales Rate -->
                                             <th
                                                 *ngIf="(inventoryType === 'SERVICE' || inventoryType === 'PRODUCT') && hideShowForm.controls['salesRate'].value">
-                                                <h3>{{ localeData?.sales_rate }}</h3>
+                                                <div class="d-flex align-items-center justify-content-space-between">
+                                                    <h3>{{ localeData?.sales_rate }}</h3>
+                                                    <button mat-icon-button class="sort-btn icon-font-22 p-0"
+                                                        (click)="sort('sales_rate')">
+                                                        <span class="icon-sort-asc text-light-2 d-block"></span>
+                                                    </button>
+                                                </div>
                                             </th>
                                             <!--  Sales Unit (Menu)-->
                                             <th
@@ -268,7 +267,13 @@
                                             <!-- Fixed Assets Rate -->
                                             <th
                                                 *ngIf="inventoryType === 'FIXED_ASSETS' && hideShowForm.controls['fixedAssetRate'].value">
-                                                <h3>{{ localeData?.fixed_asset_rate }}</h3>
+                                                <div class="d-flex align-items-center justify-content-space-between">
+                                                    <h3>{{ localeData?.fixed_asset_rate }}</h3>
+                                                    <button mat-icon-button class="sort-btn icon-font-22 p-0"
+                                                        (click)="sort('fixed_asset_rate')">
+                                                        <span class="icon-sort-asc text-light-2 d-block"></span>
+                                                    </button>
+                                                </div>
                                             </th>
                                             <!-- Fixed Assets AN -->
                                             <th
@@ -390,6 +395,17 @@
                                                                 {{x?.label}}
                                                             </mat-option>
                                                         </mat-select> -->
+                                                    </div>
+                                                </td>
+                                                 <!-- Stock Unit -->
+                                                 <td *ngIf="hideShowForm.controls['stockUnit'].value"
+                                                    (click)="getInputIndex(i,'stockUnit')" class="min-width-140">
+                                                    <div class="border-line">
+                                                        <div class="custom-padding"
+                                                            [matTooltip]="(row.get('stockUnitName').value) + '(' + (row.get('stockUnitCode').value) + ')'"
+                                                            matTooltipPosition="above">
+                                                          {{ (row.get('stockUnitName').value) + '(' + (row.get('stockUnitCode').value) + ')' }}
+                                                        </div>
                                                     </div>
                                                 </td>
                                                 <!-- HSN -->
@@ -674,12 +690,20 @@
                         </div>
 
                         <div class="pagination-wrapper mt-auto" *ngIf="pagination.totalPages > 1 && !isLoading">
-                            <pagination *ngIf="pagination" class="pagination-sm" [(ngModel)]="pagination.currentPage"
-                                [totalItems]="pagination.totalItems" [maxSize]="5" [boundaryLinks]="true"
-                                [itemsPerPage]="pagination.itemsPerPage" [rotate]="false"
-                                (pageChanged)="pageChanged($event)" [firstText]="commonLocaleData?.app_first"
-                                [previousText]="commonLocaleData?.app_previous" [nextText]="commonLocaleData?.app_next"
-                                [lastText]="commonLocaleData?.app_last"></pagination>
+                            <pagination
+                                class="pagination-sm" 
+                                [(ngModel)]="pagination.currentPage"
+                                [totalItems]="pagination.totalItems" 
+                                [maxSize]="5" 
+                                [boundaryLinks]="true"
+                                [itemsPerPage]="pagination.itemsPerPage" 
+                                [rotate]="false"
+                                (pageChanged)="pageChanged($event)"
+                                [firstText]="commonLocaleData?.app_first"
+                                [previousText]="commonLocaleData?.app_previous" 
+                                [nextText]="commonLocaleData?.app_next"
+                                [lastText]="commonLocaleData?.app_last"
+                                ></pagination>
                         </div>
                     </ng-container>
                 </div>
@@ -690,7 +714,7 @@
 </ng-container>
 
 <ng-template #bulkStockAdvanceFilter>
-    <bulk-stock-advance-filter [localeData]="localeData" [commonLocaleData]="commonLocaleData"
-        (applyAdvanceSearchEvent)="applyAdvanceFilter($event)"
+    <bulk-stock-advance-filter [localeData]="localeData" [commonLocaleData]="commonLocaleData" [advanceSearchData]="advanceSearchData"
+        (applyAdvanceSearchEvent)="applyAdvanceFilter($event)" [inventoryType]="inventoryType"
         (closeDailog)="advanceFilterDialogRef.close()"></bulk-stock-advance-filter>
 </ng-template>

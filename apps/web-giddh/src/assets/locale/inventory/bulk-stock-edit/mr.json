@@ -23,6 +23,7 @@
        "fixed_asset_tax_inclusive": "निश्चित मालमत्ता कर समावेशक",
        "customize_column": "स्तंभ सानुकूलित करा",
        "enter_rate": "दर प्रविष्ट करा",
-       "inclusive": "एमआरपी (समावेशक)",
-       "exclusive": "अनन्य"
+       "inclusive": "समावेशक",
+       "exclusive": "अनन्य",
+       "stock_unit": "स्टॉक युनिट"
     }

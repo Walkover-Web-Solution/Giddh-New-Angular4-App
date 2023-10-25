@@ -76,6 +76,10 @@
                         }
                     }
                 }
+                .no-data{
+                    height: calc(100vh - 420px);
+                    width: calc(100vw - 240px);
+                }
             }
         }
     }

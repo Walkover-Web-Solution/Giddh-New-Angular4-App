@@ -23,6 +23,7 @@
     "fixed_asset_tax_inclusive": "अचल संपत्ति कर सहित",
     "customize_column": "कॉलम अनुकूलित करें",
     "enter_rate": "दर दर्ज करें",
-    "app_include": "शामिल",
-    "app_exclude": "निकालना"
+    "inclusive": "सहित",
+    "exclusive": "अनन्य",
+    "stock_unit": "स्टॉक इकाई"
 }
