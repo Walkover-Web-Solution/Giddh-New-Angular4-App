@@ -326,7 +326,7 @@
                                                 ><span *ngIf="!isIciciBankSupportedCountry"
                                                     >{{ commonLocaleData?.app_ac }} #</span
                                                 >
-                                                {{ bankAccount?.iciciDetailsResource?.accountNumber }}</b
+                                                {{ bankAccount?.iciciDetailsResource?.accountNumber  | accountNumberMask }}</b
                                             ></span
                                         >
                                     </div>

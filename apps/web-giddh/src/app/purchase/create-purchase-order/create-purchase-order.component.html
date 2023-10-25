@@ -1694,7 +1694,7 @@
                         <td>{{ entryIdx + 1 }}</td>
                         <td>
                             <div class="product-name">
-                                <div class="ng-select-wrap">
+                                <div class="ng-select-wrap" (click)="setUserManuallyClicked()">
                                     <sh-select
                                         [options]="salesAccounts$ | async"
                                         #selectAccount

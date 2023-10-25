@@ -702,7 +702,21 @@
         (toggleOtherTaxesAsideMenu)="toggleOtherTaxesAsidePane()"
         [entrySide]="entrySide"
         [activeCompany]="activeCompany"
+        (showQuickAccountModalFromUpdateLedger)="toggleAsidePane()"
     ></update-ledger-entry-panel>
+</ng-template>
+
+<!-- aside menu section -->
+<ng-template #ledgerAsidePane>
+    <ledger-aside-pane
+        [class]="ledgerAsidePane"
+        [keyboardShortcut]="'esc'"
+        [localeData]="localeData"
+        [commonLocaleData]="commonLocaleData"
+        (onShortcutPress)="ledgerAsidePaneModal?.close()"
+        (closeAsideEvent)="ledgerAsidePaneModal?.close()"
+    >
+    </ledger-aside-pane>
 </ng-template>
 
 <!-- aside menu section -->

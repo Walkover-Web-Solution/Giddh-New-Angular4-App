@@ -137,21 +137,20 @@
                         </ng-container>
                         <span class="caret"></span>
                     </button>
-                    <ul *dropdownMenu class="dropdown-menu month-picker" role="menu" id="monthPicker">
-                        <li role="menuitem">
-                            <a class="dropdown-item" href="javascript:void(0)">
-                                <datepicker
-                                    [datepickerMode]="'month'"
-                                    name="fromDate"
-                                    (click)="$event.stopPropagation()"
-                                    [showWeeks]="false"
-                                    [minMode]="'month'"
-                                    (selectionDone)="periodChanged($event); monthWise?.hide()"
-                                    [(ngModel)]="selectedMonth"
-                                ></datepicker>
-                            </a>
-                        </li>
-                    </ul>
+                            <ul *dropdownMenu class="dropdown-menu month-picker" role="menu" id="monthPicker">
+                            <li role="menuitem">
+                                <a class="dropdown-item" href="javascript:void(0)">
+                                    <bs-datepicker-inline
+                                        name="fromDate"
+                                        (click)="$event.stopPropagation()"
+                                        (bsValueChange)="periodChanged($event); monthWise.hide()"
+                                        [bsConfig]="{ startView: 'month', dateInputFormat: 'MM/YYYY', adaptivePosition: true, minMode:'month' }"
+                                        [ngModelOptions]="{standalone: true}"
+                                    >
+                                    </bs-datepicker-inline>
+                                </a>
+                            </li>
+                        </ul>
                 </div>
                 <div class="datepicker-header" *ngIf="!showDate">
                     <ng-container *ngIf="isMonthSelected">

@@ -2661,7 +2661,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     accountApplicableDiscounts: data.body.applicableDiscounts,
                     parentGroups: event.additional.stock ? data.body.oppositeAccount.parentGroups : data.body.parentGroups, // added due to parentGroups is getting null in search API
                 };
-                if (txn.selectedAccount && txn.selectedAccount.stock) {
+                if (txn?.selectedAccount && txn.selectedAccount.stock) {
                     txn.selectedAccount.stock.rate = Number((txn.selectedAccount.stock.rate / this.lc.blankLedger?.exchangeRate).toFixed(RATE_FIELD_PRECISION));
                 }
                 if (!this.isHideBankLedgerPopup) {
@@ -2674,7 +2674,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 let stockUnitUniqueName = '';
 
                 //#region unit rates logic
-                if (txn.selectedAccount?.stock) {
+                if (txn?.selectedAccount?.stock) {
                     const defaultUnitRates = this.generalService.voucherApiVersion === 1 ? txn.selectedAccount?.stock?.unitRates : txn.selectedAccount?.stock?.variant?.unitRates;
                     const defaultUnit = {
                         stockUnitCode: defaultUnitRates[0].stockUnitCode,
