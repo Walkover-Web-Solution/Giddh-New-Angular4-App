@@ -34,7 +34,6 @@ export class BulkStockAdvanceFilterComponent implements OnInit {
      * @memberof BulkStockAdvanceFilterComponent
      */
     public ngOnInit(): void {
-        console.log("advanceSearchData", this.advanceSearchData);
         this.initDropdownValues();
         this.initializeForm();
         if (this.advanceSearchData !== null) {
