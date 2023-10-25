@@ -1274,7 +1274,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                             // parse normal response to multi currency response
                             let convertedRes1 = await this.modifyMulticurrencyRes(results[0]);
                             this.initializeWarehouse(results[0].warehouse);
-                            if (results[0].account.currency) {
+                            if (results[0].account?.currency) {
                                 this.companyCurrencyName = results[0].account.currency.code;
                             }
                             obj = cloneDeep(convertedRes1) as VoucherClass;
@@ -1332,7 +1332,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                             this.isRcmEntry = results[0]?.subVoucher === SubVoucher.ReverseCharge;
                         } else {
                             let convertedRes1 = await this.modifyMulticurrencyRes(results[0]);
-                            if (results[0].account.currency) {
+                            if (results[0].account?.currency) {
                                 this.companyCurrencyName = results[0].account.currency.code;
                             }
                             obj = cloneDeep(convertedRes1) as VoucherClass;
@@ -2201,7 +2201,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         }], 1, SEARCH_TYPE.CUSTOMER);
         this.makeCustomerList();
         if (this.isSalesInvoice || this.currentVoucherFormDetails?.depositAllowed) {
-            this.loadBankCashAccounts(data.currency);
+            this.loadBankCashAccounts(data?.currency);
         }
         if (this.isInvoiceRequestedFromPreviousPage) {
             this.invFormData.voucherDetails.customerUniquename = data?.uniqueName;
@@ -2225,8 +2225,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      */
     public initializeAccountCurrencyDetails(item: AccountResponseV2): void {
         // If currency of item is null or undefined then treat it to be equivalent of company currency
-        item.currency = item.currency || this.companyCurrency;
-        this.isMulticurrencyAccount = item.currency !== this.companyCurrency;
+        item.currency = item?.currency || this.companyCurrency;
+        this.isMulticurrencyAccount = item?.currency !== this.companyCurrency;
         if (item.addresses && item.addresses.length > 0) {
             item.addresses.forEach(address => {
                 if (address && address.isDefault) {
@@ -2237,8 +2237,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             });
         }
         if (this.isMulticurrencyAccount) {
-            this.customerCurrencyCode = item.currency;
-            this.companyCurrencyName = item.currency;
+            this.customerCurrencyCode = item?.currency;
+            this.companyCurrencyName = item?.currency;
         } else {
             this.customerCurrencyCode = this.companyCurrency;
         }
@@ -4126,19 +4126,19 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
             if (this.isMulticurrencyAccount) {
                 if (this.isCashInvoice) {
-                    this.invFormData.accountDetails.currencySymbol = event.additional.currency.symbol || this.baseCurrencySymbol;
+                    this.invFormData.accountDetails.currencySymbol = event.additional?.currency.symbol || this.baseCurrencySymbol;
                     this.depositCurrSymbol = this.invFormData.accountDetails.currencySymbol;
                 }
                 if (this.isSalesInvoice || (this.voucherApiVersion === 2 && this.isPurchaseInvoice)) {
 
-                    this.depositCurrSymbol = event.additional && event.additional.currency.symbol || this.baseCurrencySymbol;
+                    this.depositCurrSymbol = event.additional && event.additional?.currency.symbol || this.baseCurrencySymbol;
                 }
             } else {
                 this.invFormData.accountDetails.currencySymbol = this.baseCurrencySymbol;
             }
 
             if (this.isCashInvoice) {
-                this.companyCurrencyName = event.additional.currency.code;
+                this.companyCurrencyName = event.additional?.currency.code;
             }
         } else {
             this.depositAccountUniqueName = '';
@@ -7708,7 +7708,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             }
         } else if (searchType === SEARCH_TYPE.BANK) {
             const searchResultsOfSameCurrency = this.searchResults ? this.searchResults?.filter(result =>
-                !result.additional.currency || result.additional.currency === this.customerCurrencyCode || result.additional.currency === this.companyCurrency
+                !result.additional.currency || result.additional?.currency === this.customerCurrencyCode || result.additional.currency === this.companyCurrency
             ) : [];
             this.bankAccounts$ = observableOf(orderBy(searchResultsOfSameCurrency, 'label'));
         }

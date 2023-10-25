@@ -477,7 +477,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         };
 
         this.vm.isMultiCurrencyAvailable = this.multiCurrencyAccDetails ?
-            !!(this.multiCurrencyAccDetails.currency && this.multiCurrencyAccDetails.currency !== this.profileObj?.baseCurrency)
+            !!(this.multiCurrencyAccDetails?.currency && this.multiCurrencyAccDetails.currency !== this.profileObj?.baseCurrency)
             : false;
 
         this.vm.foreignCurrencyDetails = { code: this.profileObj?.baseCurrency, symbol: this.profileObj.baseCurrencySymbol };
@@ -1969,7 +1969,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         if (this.vm.selectedLedger?.voucherAdjustments?.adjustments?.length) {
             this.vm.selectedLedger.voucherAdjustments.adjustments.forEach(adjustment => {
                 adjustment.voucherNumber = this.generalService.getVoucherNumberLabel(adjustment.voucherType, adjustment.voucherNumber, this.commonLocaleData);
-                adjustment.accountCurrency = adjustment.accountCurrency ?? adjustment.currency ?? { symbol: this.activeCompany?.baseCurrencySymbol, code: this.activeCompany?.baseCurrency };
+                adjustment.accountCurrency = adjustment.accountCurrency ?? adjustment?.currency ?? { symbol: this.activeCompany?.baseCurrencySymbol, code: this.activeCompany?.baseCurrency };
             });
         }
     }
