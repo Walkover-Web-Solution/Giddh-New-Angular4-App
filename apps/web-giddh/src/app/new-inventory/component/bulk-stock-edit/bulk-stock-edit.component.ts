@@ -642,7 +642,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
         this.sortOrderKey = key;
         this.isLoading = true;
         this.store.dispatch(this.inventoryAction.getBulkStockList({
-            inventoryType: this.inventoryType, page: this.pagination.currentPage, count: this.pageCount, body: {
+            inventoryType: this.inventoryType, page: 1, count: this.pageCount, body: {
                 "search": this.searchString !== null ? this.searchString : "",
                 "searchBy": this.searchStringKey !== null ? this.searchStringKey : "",
                 "filterBy": this.advanceSearchData !== null ? this.advanceSearchData?.filterBy?.value : "",
@@ -688,7 +688,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
         }
         this.isLoading = true;
         this.store.dispatch(this.inventoryAction.getBulkStockList({
-            inventoryType: this.inventoryType, page: this.pagination.currentPage, count: this.pageCount, body: bodyObj
+            inventoryType: this.inventoryType, page: 1, count: this.pageCount, body: bodyObj
         }));
     }
 
@@ -787,7 +787,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
         this.hideTableHeadInput();
         this.isLoading = true;
         this.store.dispatch(this.inventoryAction.getBulkStockList({
-            inventoryType: this.inventoryType, page: this.pagination.currentPage, count: this.pageCount, body: {
+            inventoryType: this.inventoryType, page: 1, count: this.pageCount, body: {
                 "search": "",
                 "searchBy": "",
                 "filterBy": "",
@@ -810,7 +810,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
         this.advanceSearchData = event;
         this.isLoading = true;
         this.store.dispatch(this.inventoryAction.getBulkStockList({
-            inventoryType: this.inventoryType, page: this.pagination.currentPage, count: this.pageCount, body: {
+            inventoryType: this.inventoryType, page: 1, count: this.pageCount, body: {
                 "filterBy": this.advanceSearchData?.filterBy?.value,
                 "expression": this.advanceSearchData?.expression?.value,
                 "rate": this.advanceSearchData?.amount
