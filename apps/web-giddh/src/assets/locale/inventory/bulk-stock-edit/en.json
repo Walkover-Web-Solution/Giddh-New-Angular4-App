@@ -24,5 +24,6 @@
     "customize_column": "Customize Column",
     "enter_rate": "Enter Rate",
     "inclusive": "MRP (Inclusive)",
-    "exclusive": "Exclusive"
+    "exclusive": "Exclusive",
+    "stock_unit": "Stock Unit"
 }

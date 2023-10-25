@@ -11,8 +11,10 @@ export class BulkStockAdvanceFilterComponent implements OnInit {
     @Input() public commonLocaleData: any = {};
     /** Holds Locale Translate Data */
     @Input() public localeData: any = {};
-     /** Holds Advance Search Recent Searched Data */
-     @Input() public advanceSearchData: any = null;
+    /** Holds Advance Search Recent Searched Data */
+    @Input() public advanceSearchData: any = null;
+    /** Holds Inventory type */
+    @Input() public inventoryType: any = null;
     /** Output Emitter to emit advance search Info */
     @Output() public applyAdvanceSearchEvent: EventEmitter<string> = new EventEmitter();
     /** Output Emitter to emit dailog close status */
@@ -32,22 +34,12 @@ export class BulkStockAdvanceFilterComponent implements OnInit {
      * @memberof BulkStockAdvanceFilterComponent
      */
     public ngOnInit(): void {
+        console.log("advanceSearchData", this.advanceSearchData);
         this.initDropdownValues();
         this.initializeForm();
-        if(this.advanceSearchData !== null){     
-            console.log("advanceSearchData", this.advanceSearchData)   
-            // this.advanceSearchFormObj = {
-            //     filterBy: this.advanceSearchData.filterBy,
-            //     type: this.advanceSearchData.type.value,
-            //     expression: this.advanceSearchData.expression,
-            //     amount: this.advanceSearchData
-            // };
+        if (this.advanceSearchData !== null) {
+            this.advanceSearchFormObj = this.advanceSearchData;
         }
-            // this.advanceSearchFormObj.filterBy = this.advanceSearchData.filterBy.value
-            // this.advanceSearchFormObj.type = this.advanceSearchData.type.value
-            // this.advanceSearchFormObj.expression = this.advanceSearchData.expression.value
-            // this.advanceSearchFormObj.amount = this.advanceSearchData.amount
-        
     }
 
     /**
@@ -55,20 +47,25 @@ export class BulkStockAdvanceFilterComponent implements OnInit {
      * @memberof BulkStockAdvanceFilterComponent
      */
     public initDropdownValues(): void {
-        this.advanceSearchFilterBy = [
-            {
-                value: "purchase_rate",
-                label: this.localeData?.purchase_rate,
-            },
-            {
-                value: "sales_rate",
-                label: this.localeData?.sales_rate,
-            },
-            {
-                value: "fixed_asset_rate",
-                label: this.localeData?.fixed_asset_rate,
-            }
-        ];
+        if (this.inventoryType === "FIXED_ASSETS") {
+            this.advanceSearchFilterBy = [
+                {
+                    value: "fixed_asset_rate",
+                    label: this.localeData?.fixed_asset_rate,
+                }
+            ];
+        } else {
+            this.advanceSearchFilterBy = [
+                {
+                    value: "purchase_rate",
+                    label: this.localeData?.purchase_rate,
+                },
+                {
+                    value: "sales_rate",
+                    label: this.localeData?.sales_rate,
+                }
+            ];
+        }
         this.advanceSearchFilterByOptions = [
             {
                 value: "rate",
@@ -156,10 +153,6 @@ export class BulkStockAdvanceFilterComponent implements OnInit {
      * @memberof BulkStockAdvanceFilterComponent
      */
     public advanceSearchAction(): void {
-        this.advanceSearchFormObj.filterBy = this.advanceSearchFormObj.filterBy.value
-        this.advanceSearchFormObj.type = this.advanceSearchFormObj.type.value
-        this.advanceSearchFormObj.expression = this.advanceSearchFormObj.expression.value
-        this.advanceSearchFormObj.amount = this.advanceSearchFormObj.amount
         this.applyAdvanceSearchEvent.emit(this.advanceSearchFormObj);
     }
 }
