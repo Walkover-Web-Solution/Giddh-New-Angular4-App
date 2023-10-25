@@ -122,6 +122,8 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
     private increaseExpenseAmount: boolean;
     /** True ifi is by product expanded*/
     private isByProductExpanded: boolean;
+    /** True ifi is by other expenses expanded*/
+    private isOtherExpenseExpanded: boolean;
 
     constructor(
         private store: Store<AppState>,
@@ -451,7 +453,10 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
 
             this.isByProductExpanded = this.manufacturingObject.manufacturingDetails[0].byProducts[0]
                 ?.variant.uniqueName ? true : false;
-
+            this.isOtherExpenseExpanded = this.manufacturingObject.manufacturingDetails[0].otherExpenses[0]
+                .baseAccount.uniqueName
+                ? true
+                : false
             this.preventStocksApiCall = false;
 
             this.getStocks(this.manufacturingObject.manufacturingDetails[0].linkedStocks[0], 1, '', this.selectedInventoryType);
@@ -808,7 +813,27 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
      * @memberof CreateManufacturingComponent
      */
     public removeExpenseItem(index: number) {
-        this.manufacturingObject.manufacturingDetails[0].otherExpenses = this.manufacturingObject.manufacturingDetails[0].otherExpenses?.filter((expense, i) => i !== index);
+        if (this.manufacturingObject.manufacturingDetails[0].otherExpenses.length === 1) {
+            this.manufacturingObject.manufacturingDetails[0].otherExpenses = [
+                {
+                    baseAccount: {
+                        uniqueName: '',
+                        defaultName: ''
+                    },
+                    transactions: [
+                        {
+                            account: {
+                                uniqueName: '',
+                                defaultName: ''
+                            },
+                            amount: 0
+                        }
+                    ],
+                }
+            ]
+        } else {
+            this.manufacturingObject.manufacturingDetails[0].otherExpenses = this.manufacturingObject.manufacturingDetails[0].otherExpenses?.filter((expense, i) => i !== index);
+        }
         this.calculateTotals();
     }
 
@@ -1226,11 +1251,14 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
                         });
                     });
                     this.manufacturingObject.manufacturingDetails[0].byProducts = byProductLinkedStocks;
-                    this.manufacturingObject.manufacturingDetails[0].byProducts?.forEach(byProduct => {
-                        if (byProduct.selectedStock.value) {
-                            this.getStockVariants(byProduct, { label: byProduct.selectedStock.label, value: byProduct.selectedStock.value, additional: { stockUnitCode: byProduct.stockUnitCode, stockUnitUniqueName: byProduct.stockUnitUniqueName } }, false, 0, true);
-                        }
-                    });
+                    setTimeout(() => {
+                        this.manufacturingObject.manufacturingDetails[0].byProducts?.forEach(byProduct => {
+                            if (byProduct.selectedStock.value) {
+                                this.getStockVariants(byProduct, { label: byProduct.selectedStock.label, value: byProduct.selectedStock.value, additional: { stockUnitCode: byProduct.stockUnitCode, stockUnitUniqueName: byProduct.stockUnitUniqueName } }, false, 0, true);
+                            }
+                        });
+                    }, 700);
+
                     this.initialByProductLinkedStocks = cloneDeep(byProductLinkedStocks);
 
                 }
@@ -1306,6 +1334,10 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
                 this.isLoadingManufacturing = false;
                 this.isByProductExpanded = this.manufacturingObject.manufacturingDetails[0].byProducts[0]
                     ?.variant.uniqueName ? true : false;
+                this.isOtherExpenseExpanded = this.manufacturingObject.manufacturingDetails[0].otherExpenses[0]
+                    .baseAccount.uniqueName
+                    ? true
+                    : false
                 this.changeDetectionRef.detectChanges();
             } else {
                 this.isLoadingManufacturing = false;
