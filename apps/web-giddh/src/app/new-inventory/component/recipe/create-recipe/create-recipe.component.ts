@@ -505,16 +505,16 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
                             byProductlinkedStockIndex++;
 
                         });
-                    });
+                        index++;
+                        this.existingRecipe = this.formatRecipeRequest();
 
+                    });
                     this.isByProductExpanded = this.recipeObject.manufacturingDetails[0]?.byProducts[0]
                         ?.variant.uniqueName ? true : false;
                     this.isByLinkedStockExpanded = this.recipeObject.manufacturingDetails[0]?.linkedStocks[0]
                         ?.variant.uniqueName ? true : false;
-                    index++;
 
                 });
-                this.existingRecipe = this.formatRecipeRequest();
                 this.changeDetectionRef.detectChanges();
             } else {
                 this.recipeExists = false;
@@ -568,7 +568,7 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
             width: '585px',
             data: {
                 title: this.commonLocaleData?.app_confirmation,
-                body: this.localeData?.confirm_delete_recipe_linked_stock,
+                body: this.localeData?.confirm_delete_recipe_byproduct_stock,
                 ok: this.commonLocaleData?.app_yes,
                 cancel: this.commonLocaleData?.app_no,
                 permanentlyDeleteMessage: ' '
@@ -635,7 +635,8 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
         let recipeObject = { manufacturingDetails: [] };
 
         this.recipeObject.manufacturingDetails?.forEach(manufacturingDetail => {
-            if (manufacturingDetail?.variant?.uniqueName && manufacturingDetail?.linkedStocks?.length > 0 && manufacturingDetail?.byProducts?.length > 0 && manufacturingDetail.linkedStocks?.filter(linkedStock => linkedStock?.variant?.uniqueName)?.length > 0 && manufacturingDetail.byProducts?.filter(linkedStock => linkedStock?.variant?.uniqueName)?.length > 0) {
+
+            if (manufacturingDetail?.variant?.uniqueName && ((manufacturingDetail?.linkedStocks?.length > 0 && manufacturingDetail.linkedStocks?.filter(linkedStock => linkedStock?.variant?.uniqueName)?.length > 0)) || (manufacturingDetail.byProducts.length > 0 && manufacturingDetail.byProducts?.filter(linkedStock => linkedStock?.variant?.uniqueName)?.length > 0)) {
 
                 let linkedStocks = [];
                 let byProductLinkedStocks = [];
@@ -650,16 +651,20 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
                         }
                     });
                 });
-
-                manufacturingDetail.byProducts?.forEach(linkedStock => {
-                    byProductLinkedStocks.push({
-                        stockUniqueName: linkedStock.stockUniqueName,
-                        stockUnitUniqueName: linkedStock.stockUnitUniqueName,
-                        quantity: Number(linkedStock.quantity),
-                        variant: {
-                            uniqueName: linkedStock.variant?.uniqueName
-                        }
-                    });
+                manufacturingDetail.byProducts?.forEach(byProduct => {
+                    if (byProduct.stockUniqueName) {
+                        byProductLinkedStocks.push({
+                            stockUniqueName: byProduct.stockUniqueName,
+                            stockUnitUniqueName: byProduct.stockUnitUniqueName,
+                            quantity: Number(byProduct.quantity),
+                            variant: {
+                                uniqueName: byProduct.variant?.uniqueName
+                            }
+                        });
+                    }
+                    else {
+                        byProductLinkedStocks = [];
+                    }
                 });
 
                 recipeObject.manufacturingDetails.push({
