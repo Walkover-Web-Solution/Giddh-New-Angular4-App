@@ -446,12 +446,8 @@
                                         </div>
                                     </mat-expansion-panel>
                                     <mat-expansion-panel
-                                        [expanded]="
-                                            this.manufacturingObject.manufacturingDetails[0].otherExpenses[0]
-                                                .baseAccount.uniqueName
-                                                ? true
-                                                : false
-                                        "
+                                        [expanded]=
+                                         "isOtherExpenseExpanded"
                                     >
                                         <div class="col-8">
                                             <mat-slide-toggle
@@ -598,9 +594,7 @@
                                                                 <i
                                                                     [ngClass]="{
                                                                         'unvisible':
-                                                                            activeOtherExpenseIndex !== i ||
-                                                                            manufacturingObject.manufacturingDetails[0]
-                                                                                .otherExpenses?.length <= 1
+                                                                            activeOtherExpenseIndex !== i
                                                                     }"
                                                                     class="icon-trash cursor-pointer"
                                                                     aria-hidden="true"
