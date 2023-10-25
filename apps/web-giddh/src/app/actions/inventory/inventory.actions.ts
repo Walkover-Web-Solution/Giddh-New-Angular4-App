@@ -598,6 +598,8 @@ export class InventoryAction {
                 result.stockUniqueName = result?.stockUniqueName ? result.stockUniqueName : null,
                 result.stockGroupName = result?.stockGroupName ? result.stockGroupName : null,
                 result.stockGroupUniqueName = result?.stockGroupUniqueName ? result.stockGroupUniqueName : null,
+                result.stockUnitName = result?.stockUnitName ? result.stockUnitName : null,
+                result.stockUnitCode = result?.stockUnitCode ? result.stockUnitCode : null,
                 result.purchaseUnits = result?.purchaseUnits ? result.purchaseUnits : null,
                 result.purchaseAccountName = result?.purchaseAccountName ? result.purchaseAccountName : null,
                 result.purchaseAccountUniqueName = result?.purchaseAccountUniqueName ? result.purchaseAccountUniqueName : null,

@@ -119,6 +119,26 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         this.searchInputObservableInitialize();
+
+        this.store.pipe(select(select => select.inventory.bulkStock), takeUntil(this.destroyed$)).subscribe((res: any) => {
+            if (res) {
+                this.isLoading = false;
+                const bulkStockForm = this.bulkStockData;
+                bulkStockForm.clear();
+                this.setPaginationData(res);
+                this.noDataFound = res.totalItems === 0;
+
+                this.totalInventoryCount = res?.totalItems;
+                res.results.forEach((row, index) => {
+                    this.dropdownValues[index] = [];
+                    this.dropdownValues[index].salesUnits = row.salesUnits;
+                    this.dropdownValues[index].purchaseUnits = row.purchaseUnits;
+                    this.dropdownValues[index].fixedAssetUnits = row.fixedAssetUnits;
+                    this.addRow(row);
+                });
+            }
+        });
+
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             if (params?.type) {
                 this.inventoryType = params.type == 'fixedassets' ? 'FIXED_ASSETS' : params?.type.toUpperCase();
@@ -137,24 +157,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
                         "rate": 0
                     }
                 }));
-                this.store.pipe(select(select => select.inventory.bulkStock), takeUntil(this.destroyed$)).subscribe((res: any) => {
-                    if (res) {
-                        this.isLoading = false;
-                        const bulkStockForm = this.bulkStockData;
-                        bulkStockForm.clear();
-                        this.setPaginationData(res);
-                        this.noDataFound = res.totalItems === 0;
-
-                        this.totalInventoryCount = res?.totalItems;
-                        res.results.forEach((row, index) => {
-                            this.dropdownValues[index] = [];
-                            this.dropdownValues[index].salesUnits = row.salesUnits;
-                            this.dropdownValues[index].purchaseUnits = row.purchaseUnits;
-                            this.dropdownValues[index].fixedAssetUnits = row.fixedAssetUnits;
-                            this.addRow(row);
-                        });
-                    }
-                });
+                
             }
         });
         // this.getStockGroups();
@@ -163,7 +166,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
 
 
     /**
-     * This will use for init Hide Show formgroup      *
+     * This will use for init Hide Show formgroup
      * @private
      * @return {*} 
      * @memberof BulkStockEditComponent
@@ -178,6 +181,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
             stockUniqueName: [false],
             stockGroupName: [true],
             stockGroupUniqueName: [false],
+            stockUnit: [true],
 
             purchaseUnits: [false],
             purchaseAccountName: [false],
@@ -234,6 +238,8 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
             stockUniqueName: [controlValue.stockUniqueName, Validators.required],
             stockGroupName: [controlValue.stockGroupName, Validators.required],
             stockGroupUniqueName: [controlValue.stockGroupUniqueName, Validators.required],
+            stockUnitCode: [controlValue.stockUnitCode, Validators.required],
+            stockUnitName: [controlValue.stockUnitName, Validators.required],
 
             purchaseUnits: [(controlValue.purchaseUnits?.length && controlValue.purchaseUnits[0] !== null ? controlValue.purchaseUnits[0]?.uniqueName : ""), Validators.required],
             purchaseAccountName: [controlValue.purchaseAccountName, Validators.required],
@@ -309,7 +315,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
     public setPaginationData(data: any): void {
         this.pagination = {
             currentPage: data?.page,
-            itemsPerPage: data?.count,
+            itemsPerPage: this.pageCount,
             totalPages: data?.totalPages,
             totalItems: data?.totalItems
         }
@@ -327,10 +333,10 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
                 inventoryType: this.inventoryType, page: event.page, count: this.pageCount, body: {
                     "search": this.searchString !== null ? this.searchString : "",
                     "searchBy": this.searchStringKey !== null ? this.searchStringKey : "",
-                    "filterBy": this.advanceSearchData.filterBy !== null ? this.advanceSearchData.filterBy : "",
+                    "filterBy": this.advanceSearchData !== null ? this.advanceSearchData?.filterBy?.value : "",
                     "sortBy": this.sortOrderKey !== null ? this.sortOrderKey : "",
                     "sort": this.sortOrderStatus !== null ? this.sortOrderStatus : "asc",
-                    "expression": this.advanceSearchData !== null ? this.advanceSearchData?.expression : "",
+                    "expression": this.advanceSearchData !== null ? this.advanceSearchData?.expression?.value : "",
                     "rate": this.advanceSearchData !== null ? this.advanceSearchData?.amount : ""
                 }
             }));
@@ -404,6 +410,11 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
                 label: this.localeData?.stock_group_unique_name,
                 value: "stockGroupUniqueName",
                 checked: false
+            },
+            {
+                label: this.localeData?.stock_unit,
+                value: "stockUnit",
+                checked: true
             },
             {
                 label: this.commonLocaleData?.app_sku,
@@ -634,11 +645,11 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
             inventoryType: this.inventoryType, page: this.pagination.currentPage, count: this.pageCount, body: {
                 "search": this.searchString !== null ? this.searchString : "",
                 "searchBy": this.searchStringKey !== null ? this.searchStringKey : "",
-                "filterBy": this.advanceSearchData.filterBy !== null ? this.advanceSearchData.filterBy : "",
+                "filterBy": this.advanceSearchData !== null ? this.advanceSearchData?.filterBy?.value : "",
                 "sortBy": this.sortOrderKey,
                 "sort": this.sortOrderStatus,
-                "expression": this.advanceSearchData.expression !== null ? this.advanceSearchData.expression : "GREATER_THAN",
-                "rate":  this.advanceSearchData.amount !== null ? this.advanceSearchData.amount : 0,
+                "expression": this.advanceSearchData !== null ? this.advanceSearchData?.expression?.value : "GREATER_THAN",
+                "rate":  this.advanceSearchData !== null ? this.advanceSearchData?.amount : 0,
             }
         }));
     }
@@ -658,11 +669,11 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
             bodyObj = {
                 "search": searchedText,
                 "searchBy": key,
-                "filterBy": this.advanceSearchData.filterBy,
+                "filterBy": this.advanceSearchData?.filterBy?.value,
                 "sortBy": this.sortOrderKey !== null ? this.sortOrderKey : "",
                 "sort": this.sortOrderStatus !== null ? this.sortOrderStatus : "",
-                "expression": this.advanceSearchData.expression,
-                "rate": this.advanceSearchData.amount
+                "expression": this.advanceSearchData?.expression?.value,
+                "rate": this.advanceSearchData?.amount
             }
         } else {
             bodyObj = {
@@ -771,7 +782,6 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
         this.thSkuCode.reset();
         this.searchString = null;
         this.searchStringKey = null;
-        this.advanceSearchData = null;
         this.sortOrderStatus = null;
         this.advanceSearchData = null;
         this.hideTableHeadInput();
@@ -797,29 +807,15 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
      */
     public applyAdvanceFilter(event: any): void {
         this.advanceFilterDialogRef.close();
-
-        // let checkColumnStatus: boolean;
-
-        // if (e.filterBy === 'fixed_asset_rate') {
-        //     checkColumnStatus = this.hideShowForm.controls['fixedAssetRate'].value
-        // } else if (e.filterBy === 'sales_rate') {
-        //     checkColumnStatus = this.hideShowForm.controls['salesRate'].value
-        // } else if (e.filterBy === 'purchase_rate') {
-        //     checkColumnStatus = this.hideShowForm.controls['purchaseRate'].value
-        // }
-        // if (checkColumnStatus) {
         this.advanceSearchData = event;
         this.isLoading = true;
         this.store.dispatch(this.inventoryAction.getBulkStockList({
             inventoryType: this.inventoryType, page: this.pagination.currentPage, count: this.pageCount, body: {
-                "filterBy": this.advanceSearchData.filterBy,
-                "expression": this.advanceSearchData.expression,
-                "rate": this.advanceSearchData.amount
+                "filterBy": this.advanceSearchData?.filterBy?.value,
+                "expression": this.advanceSearchData?.expression?.value,
+                "rate": this.advanceSearchData?.amount
             }
         }));
-        // } else {
-        //     this.toaster.errorToast("This column is Hidden, you cannot Filter Hidden Column");
-        // }
     }
 
     /**
