@@ -1167,8 +1167,10 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                     this.purchaseOrder.company.shippingDetails.stateName = defaultAddress.stateName;
                     this.purchaseOrder.company.shippingDetails.gstNumber = defaultAddress.taxNumber;
                     this.purchaseOrder.company.shippingDetails.pincode = defaultAddress.pincode;
-                    this.purchaseOrder.company.shippingDetails.county.code = defaultAddress?.county?.code;
-                    this.purchaseOrder.company.shippingDetails.county.name = defaultAddress?.county?.name;
+                    this.purchaseOrder.company.shippingDetails.county = {
+                        code: defaultAddress?.county?.code,
+                        name: defaultAddress?.county?.name
+                    }
                     this.changeDetection.detectChanges();
                 } else {
                     this.resetShippingAddress();
@@ -2775,11 +2777,6 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                     this.purchaseOrder.company.billingDetails.state.name = this.purchaseOrderDetails.company.billingDetails.stateName;
                     this.purchaseOrder.company.shippingDetails.state.code = this.purchaseOrderDetails.company.shippingDetails.stateCode;
                     this.purchaseOrder.company.shippingDetails.state.name = this.purchaseOrderDetails.company.shippingDetails.stateName;
-
-                    this.purchaseOrder.company.billingDetails.county.code = this.purchaseOrderDetails.company.billingDetails?.county?.code;
-                    this.purchaseOrder.company.billingDetails.county.name = this.purchaseOrderDetails.company.billingDetails?.county?.name;
-                    this.purchaseOrder.company.shippingDetails.county.code = this.purchaseOrderDetails.company.shippingDetails?.county?.code;
-                    this.purchaseOrder.company.shippingDetails.county.name = this.purchaseOrderDetails.company.shippingDetails?.county?.name;
 
                     this.checkForAutoFillShippingAddress('company');
 
