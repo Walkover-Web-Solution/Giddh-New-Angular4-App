@@ -1543,19 +1543,19 @@
                                                                             ></mat-checkbox>
                                                                         </ng-container>
                                                                     </td> -->
-
-                                                                    <td
-                                                                       *ngIf="variant?.customFields?.length"
-                                                                        class="sales-purchase-info inventory-tab purchase-information-enable"
+                                                                    <ng-container
+                                                                        *ngFor="
+                                                                            let customField of variant?.customFields;
+                                                                            let k = index
+                                                                        "
                                                                     >
-                                                                        <ng-container
-                                                                            *ngFor="
-                                                                                let customField of variant?.customFields;
-                                                                                let k = index
-                                                                            "
+                                                                        <td
+                                                                            *ngIf="variant?.customFields?.length"
+                                                                            class="sales-purchase-info inventory-tab purchase-information-enable"
                                                                         >
                                                                             <div class="sales-purchase-wrapper">
                                                                                 <text-field
+                                                                                    class="d-block w-100 text-left"
                                                                                     *ngIf="
                                                                                         customField.fieldType?.type ===
                                                                                             availableFieldTypes.String ||
@@ -1590,6 +1590,7 @@
                                                                                         customField.fieldType?.type ===
                                                                                         availableFieldTypes.Number
                                                                                     "
+                                                                                    class="d-block w-100 text-left"
                                                                                     [cssClass]="
                                                                                         'custom-field form-control'
                                                                                     "
@@ -1634,8 +1635,8 @@
                                                                                     </mat-radio-button>
                                                                                 </mat-radio-group>
                                                                             </div>
-                                                                        </ng-container>
-                                                                    </td>
+                                                                        </td>
+                                                                    </ng-container>
                                                                     <td class="text-center archive">
                                                                         <mat-slide-toggle
                                                                             class="mt-1"

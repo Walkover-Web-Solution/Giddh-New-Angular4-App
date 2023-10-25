@@ -71,7 +71,6 @@ import { SelectFieldComponent } from '../theme/form-fields/select-field/select-f
 import { DropdownFieldComponent } from '../theme/form-fields/dropdown-field/dropdown-field.component';
 import { PageLeaveUtilityService } from '../services/page-leave-utility.service';
 import { CommonService } from '../services/common.service';
-import { CustomFieldsService } from '../services/custom-fields.service';
 
 /** Type of search: customer and item (product/service) search */
 const SEARCH_TYPE = {
@@ -809,8 +808,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         private http: HttpClient,
         public dialog: MatDialog,
         private pageLeaveUtilityService: PageLeaveUtilityService,
-        private commonService: CommonService,
-        private customFieldsService: CustomFieldsService
+        private commonService: CommonService
     ) {
         this.advanceReceiptAdjustmentData = new VoucherAdjustments();
         this.advanceReceiptAdjustmentData.adjustments = [];
@@ -2808,7 +2806,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             } else {
                 requestObject.depositAccountUniqueName = '';
             }
-
             requestObject.date = dayjs(voucherDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
             requestObject.type = VoucherTypeEnum.sales;
             let updatedData = requestObject;
@@ -8808,6 +8805,15 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         }
     }
 
+    /**
+     * Set barcode machine typing to false if user clicked on dropdown
+     *
+     * @memberof VoucherComponent
+     */
+    public setUserManuallyClicked(): void {
+        this.isBarcodeMachineTyping = false;
+    }
+
     // CMD + G functionality
     @HostListener('document:keydown', ['$event'])
     public handleKeyboardDownEvent(event: KeyboardEvent) {
@@ -8824,6 +8830,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
         if (event.timeStamp - this.startTime < 2) {
             this.isBarcodeMachineTyping = true;
+        } else {
+            this.isBarcodeMachineTyping = false;
         }
 
         if (uniqueName && this.startTime) {

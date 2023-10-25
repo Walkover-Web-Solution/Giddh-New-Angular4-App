@@ -2606,7 +2606,7 @@
                                     <td (click)="closeDiscountPopup(); closeTaxControlPopup()">{{ entryIdx + 1 }}</td>
                                     <td (click)="closeDiscountPopup(); closeTaxControlPopup()">
                                         <div class="product-name">
-                                            <div class="ng-select-wrap">
+                                            <div class="ng-select-wrap" (click)="setUserManuallyClicked()">
                                                 <select-field
                                                     #selectAccount
                                                     [isPaginationEnabled]="true"
