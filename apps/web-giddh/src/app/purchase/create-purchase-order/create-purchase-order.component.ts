@@ -1167,9 +1167,9 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                     this.purchaseOrder.company.shippingDetails.stateName = defaultAddress.stateName;
                     this.purchaseOrder.company.shippingDetails.gstNumber = defaultAddress.taxNumber;
                     this.purchaseOrder.company.shippingDetails.pincode = defaultAddress.pincode;
-                    if (defaultAddress?.county?.code || defaultAddress?.county?.name) {
-                        this.purchaseOrder.company.shippingDetails.county.code = defaultAddress?.county?.code;
-                        this.purchaseOrder.company.shippingDetails.county.name = defaultAddress?.county?.name;
+                    this.purchaseOrder.company.shippingDetails.county = {
+                        code: defaultAddress?.county?.code,
+                        name: defaultAddress?.county?.name
                     }
                     this.changeDetection.detectChanges();
                 } else {
