@@ -62,6 +62,8 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
     public selectedInventoryType: string = "";
     /** This will hold api calls if one is already in progress */
     public preventStocksApiCall: boolean = false;
+    /** This will hold api calls if one is already in progress for by product */
+    public preventByProductStocksApiCall: boolean = false;
     /** True if recipe exists for finished stock */
     private recipeExists: boolean = false;
     /** Holds existing recipe */
@@ -276,12 +278,12 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
     *
     * @memberof CreateManufacturingComponent
     */
-    public getAllStocks(stockObject: any, page: number = 1, q?: string, inventoryType?: string, callback?: Function): void {
-        if (page > stockObject.stocksTotalPages || this.preventStocksApiCall || q === undefined) {
+    public getAllStocks(stockObject: any, page: number = 1, q?: string, callback?: Function): void {
+        if (page > stockObject.stocksTotalPages || this.preventByProductStocksApiCall || q === undefined) {
             return;
         }
 
-        this.preventStocksApiCall = true;
+        this.preventByProductStocksApiCall = true;
 
         if (q) {
             stockObject.stocksQ = q;
@@ -318,7 +320,7 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
             this.changeDetectionRef.detectChanges();
 
             setTimeout(() => {
-                this.preventStocksApiCall = false;
+                this.preventByProductStocksApiCall = false;
             }, 500);
         });
     }
@@ -510,6 +512,7 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
                 ? true
                 : false
             this.preventStocksApiCall = false;
+            this.preventByProductStocksApiCall = false;
 
             this.getStocks(this.manufacturingObject.manufacturingDetails[0].linkedStocks[0], 1, '', this.selectedInventoryType);
 
@@ -798,8 +801,8 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
                 variant: { name: '', uniqueName: '' }
             }
         );
-        this.preventStocksApiCall = false;
-        this.getAllStocks(this.manufacturingObject.manufacturingDetails[0].byProducts[(this.manufacturingObject.manufacturingDetails[0].byProducts?.length - 1)], 1, '', '');
+        this.preventByProductStocksApiCall = false;
+        this.getAllStocks(this.manufacturingObject.manufacturingDetails[0].byProducts[(this.manufacturingObject.manufacturingDetails[0].byProducts?.length - 1)], 1, '');
     }
 
     /**
@@ -1014,6 +1017,7 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
         this.selectedWarehouseName = (this.warehouses?.length) ? this.warehouses[0].label : "";
         this.selectedInventoryType = "";
         this.preventStocksApiCall = false;
+        this.preventByProductStocksApiCall = false;
         this.errorFields = { date: false, finishedStockName: false, finishedStockVariant: false, finishedQuantity: false };
 
         this.calculateTotals();
@@ -1208,7 +1212,7 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
    */
     public byProductStockScrollEnd(stockObject: any): void {
         stockObject.stocksPageNumber = stockObject.stocksPageNumber + 1;
-        this.getAllStocks(stockObject, stockObject.stocksPageNumber, stockObject.stocksQ ?? '', '');
+        this.getAllStocks(stockObject, stockObject.stocksPageNumber, stockObject.stocksQ ?? '');
     }
 
     /**
@@ -1223,7 +1227,7 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
         stockObject.stocksPageNumber = 1;
         stockObject.stocksTotalPages = 1;
         if (type === 'byProduct') {
-            this.getAllStocks(stockObject, 1, "", '');
+            this.getAllStocks(stockObject, 1, "");
         } else {
             this.getStocks(stockObject, 1, "", inventoryType);
         }
@@ -1380,7 +1384,8 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
                     });
                 });
                 setTimeout(() => {
-                    this.getAllStocks(this.manufacturingObject.manufacturingDetails[0].byProducts[0], 1, '', '', (response: any) => {
+                    this.preventByProductStocksApiCall = false;
+                    this.getAllStocks(this.manufacturingObject.manufacturingDetails[0].byProducts[0], 1, '', (response: any) => {
                         if (response?.status === "success" && response.body?.results?.length) {
                             this.manufacturingObject.manufacturingDetails[0].byProducts?.forEach(byProducts => {
                                 byProducts.stocksPageNumber = 1;

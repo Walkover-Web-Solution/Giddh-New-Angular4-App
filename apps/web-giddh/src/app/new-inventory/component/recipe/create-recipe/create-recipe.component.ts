@@ -26,6 +26,8 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
     public variantsList: any[] = [];
     /** This will hold api calls if one is already in progress */
     public preventStocksApiCall: boolean = false;
+    /** This will hold api calls if one is already in progress for by product */
+    public preventByProductStocksApiCall: boolean = false;
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* This will hold local JSON data */
@@ -281,11 +283,11 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
    * @memberof CreateRecipeComponent
    */
     public getAllStocks(stockObject: any, page: number = 1, q?: string, callback?: Function, assignDataAndCallback: boolean = false): void {
-        if (page > stockObject.stocksTotalPages || this.preventStocksApiCall || q === undefined) {
+        if (page > stockObject.stocksTotalPages || this.preventByProductStocksApiCall || q === undefined) {
             return;
         }
 
-        this.preventStocksApiCall = true;
+        this.preventByProductStocksApiCall = true;
 
         if (q) {
             stockObject.stocksQ = q;
@@ -322,7 +324,7 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
             }
 
             setTimeout(() => {
-                this.preventStocksApiCall = false;
+                this.preventByProductStocksApiCall = false;
                 this.changeDetectionRef.detectChanges();
             }, 500);
         });
