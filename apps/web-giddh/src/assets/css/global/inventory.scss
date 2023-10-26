@@ -215,25 +215,6 @@ inventory-master {
     }
 }
 
-/*---- create-menufacturing ----*/
-.consumption-details-wrapper {
-    .mat-expansion-panel {
-        .mat-expansion-panel-header {
-            height: 45px;
-
-            &.mat-expanded {
-                height: 45px;
-            }
-        }
-    }
-}
-// Mat-Select search input
-.mat-mdc-option {
-    &.contains-mat-select-search {
-        background-color: var(--color-white);
-    }
-}
-
 // For Bulk Stock Edit
 .bulk-stock {
     .bulk-stock-hide-show-button {
@@ -246,22 +227,23 @@ inventory-master {
         height: 40px;
         width: 40px;
     }
-    &-body{
-        .bulk-stock-table{
-            table{                
-                    th,td{
-                        input{
-                            width: 100%;
-                            height: inherit;
-                            border: none;
-                            padding: 6px 10px;
-                            background: transparent;
-                        }                        
-                        .vertical-margin{
-                          margin: 5.4px 0;
-                          padding: 0 10px;
-                      }               
-                  } 
+    &-body {
+        .bulk-stock-table {
+            table {
+                th,
+                td {
+                    input {
+                        width: 100%;
+                        height: inherit;
+                        border: none;
+                        padding: 6px 10px;
+                        background: transparent;
+                    }
+                    .vertical-margin {
+                        margin: 5.4px 0;
+                        padding: 0 10px;
+                    }
+                }
             }
         }
     }
@@ -269,5 +251,25 @@ inventory-master {
 .max-height-50 {
     &.mat-mdc-menu-panel {
         max-height: 50vh;
+    }
+}
+
+/*---- create-menufacturing ----*/
+.consumption-details-wrapper {
+    .mat-expansion-panel {
+        .mat-expansion-panel-header {
+            height: 45px;
+
+            &.mat-expanded {
+                height: 45px;
+            }
+        }
+    }
+}
+
+// Mat-Select search input
+.mat-mdc-option {
+    &.contains-mat-select-search {
+        background-color: var(--color-white);
     }
 }
