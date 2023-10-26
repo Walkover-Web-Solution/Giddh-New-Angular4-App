@@ -246,22 +246,22 @@ inventory-master {
         height: 40px;
         width: 40px;
     }
-    &-body {
-        .bulk-stock-table {
-            table {
-                th,
-                td {
-                    input {
-                        width: 100%;
-                        height: inherit;
-                        border: none;
-                        padding: 6px 10px;
-                    }
-                    .vertical-margin {
-                        margin: 5.4px 0;
-                        padding: 0 10px;
-                    }
-                }
+    &-body{
+        .bulk-stock-table{
+            table{                
+                    th,td{
+                        input{
+                            width: 100%;
+                            height: inherit;
+                            border: none;
+                            padding: 6px 10px;
+                            background: transparent;
+                        }                        
+                        .vertical-margin{
+                          margin: 5.4px 0;
+                          padding: 0 10px;
+                      }               
+                  } 
             }
         }
     }

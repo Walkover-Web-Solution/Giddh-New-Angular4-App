@@ -590,10 +590,10 @@
                                                     (click)="getInputIndex(i,'archive')" class="min-width-140">
                                                     <div class="border-line">
                                                         <div class="custom-padding"
-                                                            [matTooltip]="row.get('archive').value ? commonLocaleData?.app_yes : commonLocaleData?.app_no"
+                                                            [matTooltip]="row.get('archive').value ? 'Yes' : 'No'"
                                                             matTooltipPosition="above">
-                                                            {{ row.get('archive').value ? commonLocaleData?.app_yes :
-                                                            commonLocaleData?.app_no }}
+                                                            {{ row.get('archive').value ? 'Yes' :
+                                                            'No' }}
                                                         </div>
                                                         <!-- <text-field [type]="'text'" formControlName="archive" [readonly]="true">
                                                         </text-field> -->
