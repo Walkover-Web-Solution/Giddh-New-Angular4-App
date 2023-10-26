@@ -22,7 +22,7 @@
     <div class="aside-body flexy-child vertical-align-middle aside-panel-ledger" *ngIf="!hideFirstScreen">
         <div class="buttons-wrapper column-gap15">
             <button mat-stroked-button color="primary" class="mb-2" (click)="toggleAccountPane()">
-                {{ localeData?.add_account }}
+                {{ commonLocaleData?.app_add_account }}
             </button>
             <button
                 *ngIf="voucherApiVersion !== 2"

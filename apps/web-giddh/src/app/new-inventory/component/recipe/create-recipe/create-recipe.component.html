@@ -78,124 +78,271 @@
                     </div>
                     <div class="col-8 pr-0">
                         <div class="row">
-                            <div class="consumption-details-wrapper w-100">
-                                <h1 class="section-head">{{ localeData?.raw_stock }}</h1>
-                                <div class="mt-2">
-                                    <table class="table-raw-stock">
-                                        <thead>
-                                            <tr>
-                                                <th>{{ commonLocaleData?.app_name }}</th>
-                                                <th>{{ commonLocaleData?.app_variant }}</th>
-                                                <th>{{ commonLocaleData?.app_quantity }}</th>
-                                                <th>{{ commonLocaleData?.app_unit }}</th>
-                                                <th></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr *ngFor="let linkedStock of recipe.linkedStocks; let j = index">
-                                                <td>
-                                                    <div>
-                                                        <select-field
-                                                            [cssClass]="'form-control mat-field-border'"
-                                                            [name]="'stock_' + i + '_' + j"
-                                                            [scrollableElementId]="'stock_' + i + '_' + j"
-                                                            [placeholder]="commonLocaleData?.app_select_stock"
-                                                            [options]="linkedStock.stocks"
-                                                            (selectedOption)="
-                                                                linkedStock.stockName = $event.label;
-                                                                linkedStock.stockUniqueName = $event.value;
-                                                                getStockVariants(linkedStock, $event);
-                                                                getStockUnits(
-                                                                    linkedStock,
-                                                                    $event.additional?.stockUnitUniqueName,
-                                                                    false
-                                                                )
-                                                            "
-                                                            [defaultValue]="linkedStock.stockName"
-                                                            [enableDynamicSearch]="true"
-                                                            [isPaginationEnabled]="true"
-                                                            (dynamicSearchedQuery)="getStocks(linkedStock, 1, $event)"
-                                                            (scrollEnd)="stockScrollEnd(linkedStock)"
-                                                            [allowValueReset]="true"
-                                                            (onClear)="
-                                                                linkedStock.stockName = '';
-                                                                linkedStock.stockUniqueName = ''
-                                                            "
-                                                        >
-                                                        </select-field>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div>
-                                                        <select-field
-                                                            [cssClass]="'form-control mat-field-border'"
-                                                            [name]="'variant_' + i + '_' + j"
-                                                            [scrollableElementId]="'variant' + i + '_' + j"
-                                                            [placeholder]="commonLocaleData?.app_select_variant"
-                                                            [options]="linkedStock.variants"
-                                                            [defaultValue]="linkedStock.variant?.name"
-                                                            (selectedOption)="
-                                                                linkedStock.variant.name = $event.label;
-                                                                linkedStock.variant.uniqueName = $event.value
-                                                            "
-                                                        >
-                                                        </select-field>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div>
-                                                        <text-field
-                                                            [cssClass]="'form-control mat-field-border'"
-                                                            class="text-right"
-                                                            [type]="'number'"
-                                                            [name]="'quantity_' + i + '_' + j"
-                                                            [placeholder]="localeData?.enter_quantity"
-                                                            [(ngModel)]="linkedStock.quantity"
-                                                        ></text-field>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div>
-                                                        <select-field
-                                                            [cssClass]="'form-control mat-field-border'"
-                                                            [name]="'unit_' + i + '_' + j"
-                                                            [scrollableElementId]="'unit_' + i + '_' + j"
-                                                            [placeholder]="localeData?.select_stock_unit"
-                                                            [options]="linkedStock.units"
-                                                            [defaultValue]="linkedStock.stockUnitCode"
-                                                            (selectedOption)="
-                                                                linkedStock.stockUnitCode = $event.label;
-                                                                linkedStock.stockUnitUniqueName = $event.value
-                                                            "
-                                                        >
-                                                        </select-field>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <a
-                                                        href="javascript:void(0);"
-                                                        class="
-                                                            d-flex
-                                                            justify-content-between
-                                                            align-item-center
-                                                            table-row-delete
-                                                        "
-                                                        *ngIf="recipe.linkedStocks?.length > 1"
-                                                        (click)="removeLinkedStock(i, j)"
-                                                    >
-                                                        <i class="icon-trash"></i>
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                    <div>
-                                        <a href="javascript:void(0);" (click)="addNewLinkedStockInRecipe(recipe)">
-                                            {{ localeData?.add_stock }}
-                                        </a>
+                            <mat-accordion multi>
+                                <mat-expansion-panel [expanded]="isByLinkedStockExpanded">
+                                    <mat-expansion-panel-header>
+                                        <mat-panel-title class="p-0">
+                                            {{ localeData?.raw_stock }}
+                                        </mat-panel-title>
+                                    </mat-expansion-panel-header>
+                                    <div class="consumption-details-wrapper w-100 pd-r1 pd-l1">
+                                        <div class="mt-2">
+                                            <table class="table-raw-stock">
+                                                <thead>
+                                                    <tr>
+                                                        <th>{{ commonLocaleData?.app_name }}</th>
+                                                        <th>{{ commonLocaleData?.app_variant }}</th>
+                                                        <th>{{ commonLocaleData?.app_quantity }}</th>
+                                                        <th>{{ commonLocaleData?.app_unit }}</th>
+                                                        <th></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr *ngFor="let linkedStock of recipe.linkedStocks; let j = index">
+                                                        <td>
+                                                            <div>
+                                                                <select-field
+                                                                    [cssClass]="'form-control mat-field-border'"
+                                                                    [name]="'stock_' + i + '_' + j"
+                                                                    [scrollableElementId]="'stock_' + i + '_' + j"
+                                                                    [placeholder]="commonLocaleData?.app_select_stock"
+                                                                    [options]="linkedStock.stocks"
+                                                                    (selectedOption)="
+                                                                        linkedStock.stockName = $event.label;
+                                                                        linkedStock.stockUniqueName = $event.value;
+                                                                        getStockVariants(linkedStock, $event);
+                                                                        getStockUnits(
+                                                                            linkedStock,
+                                                                            $event.additional?.stockUnitUniqueName,
+                                                                            false
+                                                                        )
+                                                                    "
+                                                                    [defaultValue]="linkedStock.stockName"
+                                                                    [enableDynamicSearch]="true"
+                                                                    [isPaginationEnabled]="true"
+                                                                    (dynamicSearchedQuery)="
+                                                                        getStocks(linkedStock, 1, $event)
+                                                                    "
+                                                                    (scrollEnd)="stockScrollEnd(linkedStock)"
+                                                                    [allowValueReset]="true"
+                                                                    (onClear)="
+                                                                        linkedStock.stockName = '';
+                                                                        linkedStock.stockUniqueName = ''
+                                                                    "
+                                                                >
+                                                                </select-field>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div>
+                                                                <select-field
+                                                                    [cssClass]="'form-control mat-field-border'"
+                                                                    [name]="'variant_' + i + '_' + j"
+                                                                    [scrollableElementId]="'variant' + i + '_' + j"
+                                                                    [placeholder]="commonLocaleData?.app_select_variant"
+                                                                    [options]="linkedStock.variants"
+                                                                    [defaultValue]="linkedStock.variant?.name"
+                                                                    (selectedOption)="
+                                                                        linkedStock.variant.name = $event.label;
+                                                                        linkedStock.variant.uniqueName = $event.value
+                                                                    "
+                                                                >
+                                                                </select-field>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div>
+                                                                <text-field
+                                                                    [cssClass]="'form-control mat-field-border'"
+                                                                    class="text-right"
+                                                                    [type]="'number'"
+                                                                    [name]="'quantity_' + i + '_' + j"
+                                                                    [placeholder]="localeData?.enter_quantity"
+                                                                    [(ngModel)]="linkedStock.quantity"
+                                                                ></text-field>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div>
+                                                                <select-field
+                                                                    [cssClass]="'form-control mat-field-border'"
+                                                                    [name]="'unit_' + i + '_' + j"
+                                                                    [scrollableElementId]="'unit_' + i + '_' + j"
+                                                                    [placeholder]="localeData?.select_stock_unit"
+                                                                    [options]="linkedStock.units"
+                                                                    [defaultValue]="linkedStock.stockUnitCode"
+                                                                    (selectedOption)="
+                                                                        linkedStock.stockUnitCode = $event.label;
+                                                                        linkedStock.stockUnitUniqueName = $event.value
+                                                                    "
+                                                                >
+                                                                </select-field>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <a
+                                                                href="javascript:void(0);"
+                                                                class="d-flex justify-content-between align-item-center table-row-delete"
+                                                                *ngIf="recipe.linkedStocks?.length > 1"
+                                                                (click)="removeLinkedStock(i, j)"
+                                                            >
+                                                                <i class="icon-trash"></i>
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                            <div class="mt-2 mb-3 pd-r1 pd-l1">
+                                                <a
+                                                    href="javascript:void(0);"
+                                                    (click)="addNewLinkedStockInRecipe(recipe)"
+                                                >
+                                                    {{ localeData?.add_stock }}
+                                                </a>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
+                                </mat-expansion-panel>
+                                <mat-expansion-panel [expanded]="isByProductExpanded">
+                                    <mat-expansion-panel-header>
+                                        <mat-panel-title class="p-0"
+                                            >{{ commonLocaleData?.app_by_product_output }}
+                                        </mat-panel-title>
+                                    </mat-expansion-panel-header>
+                                    <div class="consumption-details-wrapper w-100 pd-r1 pd-l1">
+                                        <div class="mt-2">
+                                            <table class="table-raw-stock">
+                                                <thead>
+                                                    <tr>
+                                                        <th>{{ commonLocaleData?.app_name }}</th>
+                                                        <th>{{ commonLocaleData?.app_variant }}</th>
+                                                        <th>{{ commonLocaleData?.app_quantity }}</th>
+                                                        <th>{{ commonLocaleData?.app_unit }}</th>
+                                                        <th></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr
+                                                        *ngFor="
+                                                            let byProductLinkedStock of recipe.byProducts;
+                                                            let k = index
+                                                        "
+                                                    >
+                                                        <td>
+                                                            <div>
+                                                                <select-field
+                                                                    [cssClass]="'form-control mat-field-border'"
+                                                                    [name]="'byProductStock_' + i + '_' + k"
+                                                                    [scrollableElementId]="
+                                                                        'byProductStock_' + i + '_' + k
+                                                                    "
+                                                                    [placeholder]="commonLocaleData?.app_select_stock"
+                                                                    [options]="byProductLinkedStock.stocks"
+                                                                    (selectedOption)="
+                                                                        byProductLinkedStock.stockName = $event.label;
+                                                                        byProductLinkedStock.stockUniqueName =
+                                                                            $event.value;
+                                                                        getStockVariants(byProductLinkedStock, $event);
+                                                                        getStockUnits(
+                                                                            byProductLinkedStock,
+                                                                            $event.additional?.stockUnitUniqueName,
+                                                                            false
+                                                                        )
+                                                                    "
+                                                                    [defaultValue]="byProductLinkedStock.stockName"
+                                                                    [enableDynamicSearch]="true"
+                                                                    [isPaginationEnabled]="true"
+                                                                    (dynamicSearchedQuery)="
+                                                                        getStocks(byProductLinkedStock, 1, $event)
+                                                                    "
+                                                                    (scrollEnd)="stockScrollEnd(byProductLinkedStock)"
+                                                                    [allowValueReset]="true"
+                                                                    (onClear)="
+                                                                        byProductLinkedStock.stockName = '';
+                                                                        byProductLinkedStock.stockUniqueName = ''
+                                                                    "
+                                                                >
+                                                                </select-field>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div>
+                                                                <select-field
+                                                                    [cssClass]="'form-control mat-field-border'"
+                                                                    [name]="'byProductVariant_' + i + '_' + k"
+                                                                    [scrollableElementId]="
+                                                                        'byProductVariant' + i + '_' + k
+                                                                    "
+                                                                    [placeholder]="commonLocaleData?.app_select_variant"
+                                                                    [options]="byProductLinkedStock.variants"
+                                                                    [defaultValue]="byProductLinkedStock.variant?.name"
+                                                                    (selectedOption)="
+                                                                        byProductLinkedStock.variant.name =
+                                                                            $event.label;
+                                                                        byProductLinkedStock.variant.uniqueName =
+                                                                            $event.value
+                                                                    "
+                                                                >
+                                                                </select-field>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div>
+                                                                <text-field
+                                                                    [cssClass]="'form-control mat-field-border'"
+                                                                    class="text-right"
+                                                                    [type]="'number'"
+                                                                    [name]="'byProductQuantity_' + i + '_' + k"
+                                                                    [placeholder]="localeData?.enter_quantity"
+                                                                    [(ngModel)]="byProductLinkedStock.quantity"
+                                                                ></text-field>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div>
+                                                                <select-field
+                                                                    [cssClass]="'form-control mat-field-border'"
+                                                                    [name]="'byProductUnit_' + i + '_' + k"
+                                                                    [scrollableElementId]="
+                                                                        'byProductIUnit_' + i + '_' + k
+                                                                    "
+                                                                    [placeholder]="localeData?.select_stock_unit"
+                                                                    [options]="byProductLinkedStock.units"
+                                                                    [defaultValue]="byProductLinkedStock.stockUnitCode"
+                                                                    (selectedOption)="
+                                                                        byProductLinkedStock.stockUnitCode =
+                                                                            $event.label;
+                                                                        byProductLinkedStock.stockUnitUniqueName =
+                                                                            $event.value
+                                                                    "
+                                                                >
+                                                                </select-field>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <a
+                                                                href="javascript:void(0);"
+                                                                class="d-flex justify-content-between align-item-center table-row-delete"
+                                                                (click)="removeByProductLinkedStock(i, k)"
+                                                            >
+                                                                <i class="icon-trash"></i>
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                            <div class="mt-2 mb-2 pd-r1 pd-l1">
+                                                <a
+                                                    href="javascript:void(0);"
+                                                    (click)="addNewByProductLinkedStockInRecipe(recipe)"
+                                                >
+                                                    {{ localeData?.add_stock }}
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </mat-expansion-panel>
+                            </mat-accordion>
                         </div>
                     </div>
                     <div class="col-12 mr-t15" *ngIf="recipe.isEdit">
@@ -228,14 +375,50 @@
                             </div>
                         </div>
                         <div class="col-1 d-flex justify-content-center"></div>
-                        <div class="col-8 pr-0">
+                        <div class="col-4 pr-0">
                             <div class="row">
-                                <div class="consumption-details-wrapper w-100">
+                                <div class="consumption-details-wrapper w-100 pd-r1 pd-l1">
                                     <h1 class="section-head" *ngIf="i === 0">{{ localeData?.raw_stock }}</h1>
                                     <div class="d-flex align-items-baseline">
                                         <table class="table-filled view-mode-table table-raw-stock">
                                             <tbody>
                                                 <tr *ngFor="let linkedStock of recipe.linkedStocks; let j = index">
+                                                    <td>
+                                                        <div>
+                                                            <p>{{ linkedStock.stockName }}</p>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div>
+                                                            <p>{{ linkedStock.variant?.name }}</p>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div>
+                                                            <p>
+                                                                {{ linkedStock.quantity }} ({{
+                                                                    linkedStock.stockUnitCode
+                                                                }})
+                                                            </p>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4 pr-0">
+                            <div class="row">
+                                <div class="consumption-details-wrapper w-100 pd-r1 pd-l1">
+                                    <h1 class="section-head" *ngIf="i == 0">
+                                        {{ commonLocaleData?.app_by_product_output }}
+                                    </h1>
+                                    <div class="d-flex align-items-baseline">
+                                        <table class="table-filled view-mode-table table-raw-stock">
+                                            <tbody>
+                                                <tr *ngFor="let linkedStock of recipe.byProducts; let j = index">
                                                     <td>
                                                         <div>
                                                             <p>{{ linkedStock.stockName }}</p>
@@ -303,7 +486,7 @@
                     </div>
                 </div>
             </div>
-            
+
         </div>
     </section> -->
 </ng-container>
