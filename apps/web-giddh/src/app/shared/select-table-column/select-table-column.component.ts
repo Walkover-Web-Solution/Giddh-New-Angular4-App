@@ -3,6 +3,7 @@ import { ReplaySubject, Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { CommonService } from "../../services/common.service";
 import { ToasterService } from "../../services/toaster.service";
+import { InventoryModuleName } from "../../new-inventory/inventory.enum";
 
 @Component({
     selector: "select-table-column",
@@ -19,6 +20,8 @@ export class SelectTableColumnComponent implements OnInit, OnChanges {
     @Input() public customiseColumns: any[] = [];
     /** Holds inventory type module  */
     @Input() public moduleType: string = "";
+    /** Holds module name for customised columns */
+    @Input() public moduleName: string = "";
     /** Holds mat tooltip position  */
     @Input() public matTooltipPosition: string = "";
     /** Holds mat tooltip name  */
@@ -68,7 +71,7 @@ export class SelectTableColumnComponent implements OnInit, OnChanges {
      * @memberof SelectTableColumnComponent
      */
     public ngOnChanges(changes: SimpleChanges): void {
-        if (changes?.moduleType?.currentValue !== changes?.moduleType?.previousValue) {
+        if (changes?.moduleType?.currentValue !== changes?.moduleType?.previousValue || changes?.moduleName?.currentValue !== changes?.moduleName?.previousValue) {
             this.getSelectedColumns();
         }
     }
@@ -131,7 +134,7 @@ export class SelectTableColumnComponent implements OnInit, OnChanges {
             if (response && response.body && response.status === 'success') {
                 if (response.body.columns) {
                     const displayColumnsSet = new Set(response.body.columns);
-                    this.customiseColumns.forEach(column => column.checked = displayColumnsSet.has(column.label));
+                    this.customiseColumns.forEach(column => column.checked = displayColumnsSet.has(column.value));
                 }
             }
             this.filteredDisplayColumns();
