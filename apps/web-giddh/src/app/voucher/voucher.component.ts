@@ -2225,7 +2225,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      */
     public initializeAccountCurrencyDetails(item: AccountResponseV2): void {
         // If currency of item is null or undefined then treat it to be equivalent of company currency
-        item.currency = item?.currency || this.companyCurrency;
+        item.currency = item.currency || this.companyCurrency;
         this.isMulticurrencyAccount = item?.currency !== this.companyCurrency;
         if (item.addresses && item.addresses.length > 0) {
             item.addresses.forEach(address => {
@@ -7708,7 +7708,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             }
         } else if (searchType === SEARCH_TYPE.BANK) {
             const searchResultsOfSameCurrency = this.searchResults ? this.searchResults?.filter(result =>
-                !result.additional.currency || result.additional?.currency === this.customerCurrencyCode || result.additional.currency === this.companyCurrency
+                !result.additional?.currency || result.additional?.currency === this.customerCurrencyCode || result.additional.currency === this.companyCurrency
             ) : [];
             this.bankAccounts$ = observableOf(orderBy(searchResultsOfSameCurrency, 'label'));
         }

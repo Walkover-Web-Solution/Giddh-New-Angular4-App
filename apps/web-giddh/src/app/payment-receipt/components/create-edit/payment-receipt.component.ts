@@ -1178,7 +1178,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
      */
     public initializeAccountCurrencyDetails(item: AccountResponseV2): void {
         // If currency of item is null or undefined then treat it to be equivalent of company currency
-        item.currency = item?.currency || this.companyCurrency;
+        item.currency = item.currency || this.companyCurrency;
         this.isMultiCurrencyAccount = item?.currency !== this.companyCurrency;
         if (item.addresses && item.addresses.length > 0) {
             item.addresses.forEach(address => {

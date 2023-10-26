@@ -320,7 +320,7 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
                     paymentMode.push({
                         label: account.name,
                         value: account.uniqueName,
-                        additional: { currency: account?.currency?.code || this.companyCurrencyName, currencySymbol: account.currency?.symbol || this.baseCurrencySymbol }
+                        additional: { currency: account?.currency?.code || this.companyCurrencyName, currencySymbol: account?.currency?.symbol || this.baseCurrencySymbol }
                     });
                 });
             }

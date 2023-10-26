@@ -1779,8 +1779,6 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
                         }
                     });
                 }
-                console.log(sourceFormGroup.get('uniqueName')?.value, this.destinationWarehouses, this.destinationWarehouses[sourceFormGroup.get('uniqueName')?.value]);
-
                 setTimeout(() => {
                     if (this.destinationWarehouses[sourceFormGroup.get('uniqueName')?.value].length === 1) {
                         let event = {

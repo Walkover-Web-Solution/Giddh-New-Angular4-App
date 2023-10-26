@@ -2338,7 +2338,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     }
                     this.foreignCurrencyDetails = { code: profile?.baseCurrency, symbol: profile.baseCurrencySymbol };
                     if (this.isLedgerAccountAllowsMultiCurrency) {
-                        this.baseCurrencyDetails = { code: accountDetails?.currency, symbol: accountDetails.currencySymbol };
+                        this.baseCurrencyDetails = { code: accountDetails?.currency, symbol: accountDetails?.currencySymbol };
                         this.getCurrencyRate();
                     } else {
                         this.baseCurrencyDetails = this.foreignCurrencyDetails;

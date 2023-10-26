@@ -720,7 +720,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             delete accountRequest['accountBankDetails'];
         }
 
-        if (!accountRequest?.currency) {
+        if (!accountRequest.currency) {
             this.selectedCurrency = this.companyCurrency;
             this.addAccountForm.get('currency')?.patchValue(this.selectedCurrency, { onlySelf: true });
             accountRequest.currency = this.selectedCurrency;
@@ -1779,7 +1779,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 }
 
                 this.addAccountForm?.patchValue(accountDetails);
-                if (accountDetails?.currency) {
+                if (accountDetails.currency) {
                     this.selectedCurrency = accountDetails.currency;
                     this.addAccountForm.get('currency')?.patchValue(this.selectedCurrency);
                 } else {
