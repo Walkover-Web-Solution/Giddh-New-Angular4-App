@@ -133,20 +133,19 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
      * @memberof SelectFieldComponent
      */
     public ngOnChanges(changes: SimpleChanges): void {
+        if (changes?.defaultValue) {
+            this.searchFormControl.setValue({ label: changes?.defaultValue.currentValue });
+            if (!this.options || this.options?.length === 0) {
+                if (this.enableDynamicSearch) {
+                    this.dynamicSearchedQuery.emit(changes?.defaultValue.currentValue);
+                } else {
+                    this.filterOptions(changes?.defaultValue.currentValue);
+                }
+            }
+        }
+
         if (changes?.options) {
             this.fieldFilteredOptions = changes.options.currentValue;
-        }
-        if (changes?.defaultValue) {
-            // setTimeout(() => {
-                this.searchFormControl.setValue({ label: changes?.defaultValue.currentValue });
-                if (!this.options || this.options?.length === 0) {
-                    if (this.enableDynamicSearch) {
-                        this.dynamicSearchedQuery.emit(changes?.defaultValue.currentValue);
-                    } else {
-                        this.filterOptions(changes?.defaultValue.currentValue);
-                    }
-                }
-            // }, 500);
         }
     }
 
