@@ -590,10 +590,10 @@
                                                     (click)="getInputIndex(i,'archive')" class="min-width-140">
                                                     <div class="border-line">
                                                         <div class="custom-padding"
-                                                            [matTooltip]="row.get('archive').value ? 'Yes' : 'No'"
+                                                            [matTooltip]="row.get('archive').value ?  commonLocaleData?.app_yes : commonLocaleData?.app_no"
                                                             matTooltipPosition="above">
-                                                            {{ row.get('archive').value ? 'Yes' :
-                                                            'No' }}
+                                                            {{ row.get('archive').value ? commonLocaleData?.app_yes :
+                                                            commonLocaleData?.app_no }}
                                                         </div>
                                                         <!-- <text-field [type]="'text'" formControlName="archive" [readonly]="true">
                                                         </text-field> -->
@@ -636,10 +636,10 @@
                                                     *ngIf="(inventoryType === 'SERVICE' || inventoryType === 'PRODUCT') && hideShowForm.controls['salesTaxInclusive'].value">
                                                     <div class="border-line">
                                                         <div class="custom-padding"
-                                                            [matTooltip]="row.get('salesTaxInclusive').value ? 'Inclusive' : 'Exclusive'"
+                                                            [matTooltip]="row.get('salesTaxInclusive').value ? localeData?.inclusive : localeData?.exclusive"
                                                             matTooltipPosition="above">
                                                             {{ row.get('salesTaxInclusive').value ?
-                                                            'Inclusive' : 'Exclusive' }}
+                                                            localeData?.inclusive : localeData?.exclusive }}
                                                         </div>
                                                         <!-- <text-field [type]="'text'" formControlName="salesTaxInclusive" [readonly]="true">
                                                         </text-field> -->
@@ -650,10 +650,10 @@
                                                     *ngIf="(inventoryType === 'SERVICE' || inventoryType === 'PRODUCT') && hideShowForm.controls['purchaseTaxInclusive'].value">
                                                     <div class="border-line">
                                                         <div class="custom-padding"
-                                                            [matTooltip]="row.get('purchaseTaxInclusive').value ? 'Inclusive' : 'Exclusive'"
+                                                            [matTooltip]="row.get('purchaseTaxInclusive').value ? localeData?.inclusive : localeData?.exclusive"
                                                             matTooltipPosition="above">
                                                             {{ row.get('purchaseTaxInclusive').value ?
-                                                            'Inclusive' : 'Exclusive' }}
+                                                            localeData?.inclusive : localeData?.exclusive }}
                                                         </div>
                                                         <!-- <text-field [type]="'text'"
                                                             formControlName="purchaseTaxInclusive" [readonly]="true">
@@ -665,10 +665,10 @@
                                                     *ngIf="inventoryType === 'FIXED_ASSETS' && hideShowForm.controls['fixedAssetTaxInclusive'].value">
                                                     <div class="border-line">
                                                         <div class="custom-padding"
-                                                            [matTooltip]="row.get('fixedAssetTaxInclusive').value ? 'Inclusive' : 'Exclusive'"
+                                                            [matTooltip]="row.get('fixedAssetTaxInclusive').value ? localeData?.inclusive : localeData?.exclusive"
                                                             matTooltipPosition="above">
                                                             {{ row.get('fixedAssetTaxInclusive').value ?
-                                                            'Inclusive' : 'Exclusive' }}
+                                                            localeData?.inclusive : localeData?.exclusive }}
                                                         </div>
                                                         <!-- <text-field [type]="'text'"
                                                             formControlName="fixedAssetTaxInclusive" [readonly]="true">
