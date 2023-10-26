@@ -477,7 +477,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         };
 
         this.vm.isMultiCurrencyAvailable = this.multiCurrencyAccDetails ?
-            !!(this.multiCurrencyAccDetails.currency && this.multiCurrencyAccDetails.currency !== this.profileObj?.baseCurrency)
+            !!(this.multiCurrencyAccDetails?.currency && this.multiCurrencyAccDetails.currency !== this.profileObj?.baseCurrency)
             : false;
 
         this.vm.foreignCurrencyDetails = { code: this.profileObj?.baseCurrency, symbol: this.profileObj.baseCurrencySymbol };

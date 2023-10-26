@@ -742,7 +742,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                         additional: res[key].callingCode
                     });
                     // Creating Country Currency List
-                    if (res[key].currency !== undefined && res[key].currency !== null) {
+                    if (res[key]?.currency !== undefined && res[key]?.currency !== null) {
                         this.countryCurrency[res[key].alpha2CountryCode] = [];
                         this.countryCurrency[res[key].alpha2CountryCode] = res[key].currency.code;
                     }
@@ -1051,7 +1051,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             uniqueName: [''],
             value: ['', (value?.isMandatory) ? Validators.required : undefined],
         });
-        
+
         if (value) {
             customFields?.patchValue(value);
         }
