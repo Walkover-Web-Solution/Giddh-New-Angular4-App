@@ -233,7 +233,7 @@ export class AllGiddhItemComponent implements OnInit, OnDestroy {
      * @param {*} subitem
      * @memberof AllGiddhItemComponent
      */
-    public redirectSubItemLink(subitem: any): void {
+    public redirectSubItemLink(subitem: any): void { 
         if (subitem) {
             if (subitem.submenu) {
                 this.createNewModalTitle = subitem.label
@@ -242,7 +242,11 @@ export class AllGiddhItemComponent implements OnInit, OnDestroy {
                     width: '630px'
                 });
             } else {
-                this.router.navigate([subitem.link]);
+                if(subitem?.additional?.tabIndex > 0 && subitem?.additional?.tab?.length){
+                    this.router.navigate([subitem.link], { queryParams: subitem?.additional} );
+                }else{
+                    this.router.navigate([subitem.link]);
+                }
             }
         }
     }
