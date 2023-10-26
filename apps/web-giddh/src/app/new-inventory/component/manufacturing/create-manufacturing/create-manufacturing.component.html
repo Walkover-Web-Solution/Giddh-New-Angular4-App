@@ -301,7 +301,8 @@
                                                                         (onClear)="
                                                                             resetStocks(
                                                                                 linkedStock,
-                                                                                selectedInventoryType
+                                                                                selectedInventoryType,
+                                                                                'linkedStock'
                                                                             )
                                                                         "
                                                                         [readonly]="isCompany"
@@ -688,21 +689,21 @@
                                                                         [enableDynamicSearch]="true"
                                                                         [isPaginationEnabled]="true"
                                                                         (dynamicSearchedQuery)="
-                                                                            getStocks(
+                                                                            getAllStocks(
                                                                                 byProductLinkedStock,
                                                                                 1,
-                                                                                $event,
-                                                                                selectedInventoryType
+                                                                                $event
                                                                             )
                                                                         "
                                                                         (scrollEnd)="
-                                                                            stockScrollEnd(byProductLinkedStock)
+                                                                            byProductStockScrollEnd(byProductLinkedStock)
                                                                         "
                                                                         [allowValueReset]="true"
                                                                         (onClear)="
                                                                             resetStocks(
                                                                                 byProductLinkedStock,
-                                                                                selectedInventoryType
+                                                                                selectedInventoryType,
+                                                                                'byProduct'
                                                                             )
                                                                         "
                                                                         [readonly]="isCompany"

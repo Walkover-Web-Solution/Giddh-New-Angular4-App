@@ -127,7 +127,9 @@
                                                                     [allowValueReset]="true"
                                                                     (onClear)="
                                                                         linkedStock.stockName = '';
-                                                                        linkedStock.stockUniqueName = ''
+                                                                        linkedStock.stockUniqueName = '';
+                                                                        linkedStock.stocksQ = '';
+                                                                        getStocks(linkedStock, 1, '')
                                                                     "
                                                                 >
                                                                 </select-field>
@@ -253,13 +255,17 @@
                                                                     [enableDynamicSearch]="true"
                                                                     [isPaginationEnabled]="true"
                                                                     (dynamicSearchedQuery)="
-                                                                        getStocks(byProductLinkedStock, 1, $event)
+                                                                        getAllStocks(byProductLinkedStock, 1, $event)
                                                                     "
-                                                                    (scrollEnd)="stockScrollEnd(byProductLinkedStock)"
+                                                                    (scrollEnd)="
+                                                                        byProductStockScrollEnd(byProductLinkedStock)
+                                                                    "
                                                                     [allowValueReset]="true"
                                                                     (onClear)="
                                                                         byProductLinkedStock.stockName = '';
-                                                                        byProductLinkedStock.stockUniqueName = ''
+                                                                        byProductLinkedStock.stockUniqueName = '';
+                                                                        byProductLinkedStock.stocksQ = '';
+                                                                        getAllStocks(byProductLinkedStock, 1, '')
                                                                     "
                                                                 >
                                                                 </select-field>
