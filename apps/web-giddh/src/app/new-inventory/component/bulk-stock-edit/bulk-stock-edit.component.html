@@ -590,17 +590,10 @@
                                                     (click)="getInputIndex(i,'archive')" class="min-width-140">
                                                     <div class="border-line">
                                                         <div class="custom-padding"
-<<<<<<< HEAD
-                                                            [matTooltip]="row.get('archive').value ? 'Yes' : 'No'"
-                                                            matTooltipPosition="above">
-                                                            {{ row.get('archive').value ? 'Yes' :
-                                                            'No' }}
-=======
                                                             [matTooltip]="row.get('archive').value ?  commonLocaleData?.app_yes : commonLocaleData?.app_no"
                                                             matTooltipPosition="above">
                                                             {{ row.get('archive').value ? commonLocaleData?.app_yes :
                                                             commonLocaleData?.app_no }}
->>>>>>> e03dff6d214063951c21e5811f81920db841b7be
                                                         </div>
                                                         <!-- <text-field [type]="'text'" formControlName="archive" [readonly]="true">
                                                         </text-field> -->
