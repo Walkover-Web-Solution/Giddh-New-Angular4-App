@@ -7708,7 +7708,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             }
         } else if (searchType === SEARCH_TYPE.BANK) {
             const searchResultsOfSameCurrency = this.searchResults ? this.searchResults?.filter(result =>
-                !result.additional?.currency || result.additional?.currency === this.customerCurrencyCode || result.additional.currency === this.companyCurrency
+                !result.additional?.currency || result.additional?.currency === this.customerCurrencyCode || result.additional?.currency === this.companyCurrency
             ) : [];
             this.bankAccounts$ = observableOf(orderBy(searchResultsOfSameCurrency, 'label'));
         }
