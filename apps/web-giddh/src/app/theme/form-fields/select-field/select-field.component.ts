@@ -133,9 +133,6 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
      * @memberof SelectFieldComponent
      */
     public ngOnChanges(changes: SimpleChanges): void {
-        if (changes?.options) {
-            this.fieldFilteredOptions = changes.options.currentValue;
-        }
         if (changes?.defaultValue) {
             this.searchFormControl.setValue({ label: changes?.defaultValue.currentValue });
             if (!this.options || this.options?.length === 0) {
@@ -145,6 +142,9 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
                     this.filterOptions(changes?.defaultValue.currentValue);
                 }
             }
+        }
+        if (changes?.options) {
+            this.fieldFilteredOptions = changes.options.currentValue;
         }
     }
 
