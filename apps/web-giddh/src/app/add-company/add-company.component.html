@@ -40,7 +40,8 @@
                             </div>
                             <div class="col-6 country-space">
                                 <dropdown-field
-                                    [name]="'company-country-name'"
+                                    [name]="'country'"
+                                    [autocomplete]="'disabled'"
                                     [label]="commonLocaleData?.app_country + '*'"
                                     [placeholder]="localeData?.enter_country_name"
                                     [options]="countries"
