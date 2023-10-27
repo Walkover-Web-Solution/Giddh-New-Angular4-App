@@ -164,11 +164,9 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
                 this.params = params;
                 this.getDetailedPurchaseRequestFilter.branchUniqueName = params.branchUniqueName;
                 this.setDataPickerDateRange();
-                this.getDetailedPurchaseReport(this.getDetailedPurchaseRequestFilter);
-            } else {
-                this.getDetailedPurchaseReport(this.getDetailedPurchaseRequestFilter);
             }
         });
+        this.getDetailedPurchaseReport(this.getDetailedPurchaseRequestFilter);
         this.purchaseRegisteDetailedResponse$
             .pipe(takeUntil(this.destroyed$))
             .subscribe((res: PurchaseRegisteDetailedResponse) => {

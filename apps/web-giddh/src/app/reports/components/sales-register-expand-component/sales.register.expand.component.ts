@@ -145,11 +145,9 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
                 this.params = params;
                 this.getDetailedsalesRequestFilter.branchUniqueName = params.branchUniqueName;
                 this.setDataPickerDateRange();
-                this.getDetailedSalesReport(this.getDetailedsalesRequestFilter);
-            } else {
-                this.getDetailedSalesReport(this.getDetailedsalesRequestFilter);
             }
         });
+        this.getDetailedSalesReport(this.getDetailedsalesRequestFilter);
         this.salesRegisteDetailedResponse$.pipe(takeUntil(this.destroyed$)).subscribe((res: SalesRegisteDetailedResponse) => {
             if (res) {
                 this.SalesRegisteDetailedItems = res;
