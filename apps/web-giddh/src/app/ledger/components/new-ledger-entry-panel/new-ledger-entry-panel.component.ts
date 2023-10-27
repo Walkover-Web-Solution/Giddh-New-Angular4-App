@@ -1732,7 +1732,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 if (this.currentTxn) {
                     this.currentTxn.discount = giddhRoundOff(this.discountControl.generateTotal());
                 }
-                this.discountControl.discountTotal = this.currentTxn.discount;
+                this.discountControl.discountTotal = this.currentTxn?.discount;
             }
         }
     }
