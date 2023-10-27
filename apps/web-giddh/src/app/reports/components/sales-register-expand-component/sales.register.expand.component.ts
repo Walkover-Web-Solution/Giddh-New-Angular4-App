@@ -138,8 +138,12 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
 
         this.activeRoute.queryParams.pipe(take(1)).subscribe(params => {
             if (params.from && params.to) {
-                this.params = params;
+                this.from = params.from;
+                this.to = params.to;
+                this.getDetailedsalesRequestFilter.from = this.from;
+                this.getDetailedsalesRequestFilter.to = this.to;
                 this.getDetailedsalesRequestFilter.branchUniqueName = params.branchUniqueName;
+                this.params = params;
                 this.setDataPickerDateRange();
             }
         });

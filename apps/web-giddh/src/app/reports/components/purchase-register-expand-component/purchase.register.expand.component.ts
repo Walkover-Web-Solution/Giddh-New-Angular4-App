@@ -156,8 +156,12 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
             });
         this.activeRoute.queryParams.pipe(take(1)).subscribe((params) => {
             if (params.from && params.to) {
-                this.params = params;
+                this.from = params.from;
+                this.to = params.to;
+                this.getDetailedPurchaseRequestFilter.from = this.from;
+                this.getDetailedPurchaseRequestFilter.to = this.to;
                 this.getDetailedPurchaseRequestFilter.branchUniqueName = params.branchUniqueName;
+                this.params = params;
                 this.setDataPickerDateRange();
             }
         });
