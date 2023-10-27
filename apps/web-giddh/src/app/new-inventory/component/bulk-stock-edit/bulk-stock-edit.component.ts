@@ -810,17 +810,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
      * @param {*} event
      * @memberof BulkStockEditComponent
      */
-    public setDisplayColumns(event: any): void {
-        let columns = ['variant_name',
-            'purchase_rate',
-            'stock_name',
-            'stock_group_name',
-            'sac',
-            'archive',
-            'hsn',
-            'stock_unit',
-            'sales_rate',
-            'fixed_asset_rate'];
+    public setDisplayColumns(columns: any): void {
         if (columns.includes('variant_name') && columns.includes('stock_name') && columns.includes('purchase_rate') && columns.includes('stock_group_name') && columns.includes('sac') && columns.includes('archive') && columns.includes('hsn') && columns.includes('stock_unit') && columns.includes('stock_unit') && columns.includes('sales_rate') && columns.includes('fixed_asset_rate')) {
             this.tableHeaderShowHide.variantName = true;
             this.tableHeaderShowHide.stockName = true;
@@ -832,7 +822,6 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
             this.tableHeaderShowHide.stockUnit = true;
             this.tableHeaderShowHide.salesRate = true;
             this.tableHeaderShowHide.fixedAssetRate = true;
-
         } else {
             this.tableHeaderShowHide.variantName = columns?.includes('variant_name');
             this.tableHeaderShowHide.variantUniqueName = columns?.includes('variant_unique_name');
