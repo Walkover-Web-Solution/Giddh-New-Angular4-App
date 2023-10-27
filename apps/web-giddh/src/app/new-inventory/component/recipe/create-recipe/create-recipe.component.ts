@@ -509,6 +509,7 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
                         this.recipeObject.manufacturingDetails[index].variant = manufacturingDetail.variant;
                         this.recipeObject.manufacturingDetails[index].linkedStocks = [];
 
+
                         this.getStockUnits(this.recipeObject.manufacturingDetails[index], this.stock.stockUnitUniqueName, true, true);
 
                         let linkedStockIndex = 0;
@@ -551,12 +552,19 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
                     });
                     let index = 0;
                     response?.body?.manufacturingDetails?.forEach(manufacturingDetail => {
+                        if (!this.recipeObject.manufacturingDetails) {
+                            this.recipeObject.manufacturingDetails = [];
+                            this.recipeObject.manufacturingDetails[index] = [];
+                        }
+                        if (!this.recipeObject.manufacturingDetails[index]) {
+                            this.recipeObject.manufacturingDetails[index] = [];
+                        }
+
                         this.recipeObject.manufacturingDetails[index].byProducts = [];
-
                         this.getStockUnits(this.recipeObject.manufacturingDetails[index], this.stock.stockUnitUniqueName, true, true);
+                        if (!response?.body?.manufacturingDetails?.byProducts?.length) {
 
-                        if (!manufacturingDetail.byProducts.length) {
-                            manufacturingDetail.byProducts.push(
+                            manufacturingDetail?.byProducts?.push(
                                 {
                                     stockName: '',
                                     stockUniqueName: '',
@@ -573,7 +581,7 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
                                 });
                         }
                         let byProductlinkedStockIndex = 0;
-                        manufacturingDetail.byProducts?.forEach(linkedStock => {
+                        manufacturingDetail?.byProducts?.forEach(linkedStock => {
                             let unitsList = [];
                             linkedStock?.stockUnits?.forEach(unit => {
                                 unitsList.push({ label: unit.code, value: unit.uniqueName });
