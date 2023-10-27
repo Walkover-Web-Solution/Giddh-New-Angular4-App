@@ -25,5 +25,10 @@
     "enter_rate": "Enter Rate",
     "inclusive": "Inclusive",
     "exclusive": "Exclusive",
-    "stock_unit": "Stock Unit"
+    "stock_unit": "Stock Unit",
+    "sku": "SKU",
+     "tax": "Tax",
+    "hsn": "HSN",
+    "sac":"SAC",
+    "archive": "Archive"
 }

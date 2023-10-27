@@ -25,5 +25,10 @@
     "enter_rate": "दर दर्ज करें",
     "inclusive": "सहित",
     "exclusive": "अनन्य",
-    "stock_unit": "स्टॉक इकाई"
+    "stock_unit": "स्टॉक इकाई",
+    "sku": "एसकेयू",
+    "tax": "कर",
+    "hsn": "एचएसएन",
+    "sac": "एसएसए",
+    "archive": "आर्काइव"
 }
