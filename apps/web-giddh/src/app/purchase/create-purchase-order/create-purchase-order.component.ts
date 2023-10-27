@@ -2777,10 +2777,14 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                     this.purchaseOrder.company.billingDetails.state.name = this.purchaseOrderDetails.company.billingDetails.stateName;
                     this.purchaseOrder.company.shippingDetails.state.code = this.purchaseOrderDetails.company.shippingDetails.stateCode;
                     this.purchaseOrder.company.shippingDetails.state.name = this.purchaseOrderDetails.company.shippingDetails.stateName;
-                    this.purchaseOrder.company.billingDetails.county.code = this.purchaseOrderDetails.company.billingDetails?.county?.code;
-                    this.purchaseOrder.company.billingDetails.county.name = this.purchaseOrderDetails.company.billingDetails?.county?.name;
-                    this.purchaseOrder.company.shippingDetails.county.code = this.purchaseOrderDetails.company.shippingDetails?.county?.code;
-                    this.purchaseOrder.company.shippingDetails.county.name = this.purchaseOrderDetails.company.shippingDetails?.county?.name;
+                    this.purchaseOrder.company.billingDetails.county = {
+                        code: this.purchaseOrderDetails.company.billingDetails?.county?.code,
+                        name: this.purchaseOrderDetails.company.billingDetails?.county?.name
+                    }
+                    this.purchaseOrder.company.shippingDetails.county = {
+                        code: this.purchaseOrderDetails.company.shippingDetails?.county?.code,
+                        name: this.purchaseOrderDetails.company.shippingDetails?.county?.name
+                    }
                     this.checkForAutoFillShippingAddress('company');
 
                     if (this.isUpdateMode) {
