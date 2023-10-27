@@ -705,5 +705,6 @@
         "yes": "पेज छोड़ें"
     },
     "app_region": "क्षेत्र",
-    "app_select_region": "क्षेत्र चुनें"
+    "app_select_region": "क्षेत्र चुनें",
+    "app_by_product_output" :"उत्पाद द्वारा (आउटपुट)"
 }

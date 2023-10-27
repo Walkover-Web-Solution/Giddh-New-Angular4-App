@@ -282,7 +282,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     public ngAfterViewInit(): void {
         this.searchElement?.nativeElement.focus();
         fromEvent(this.searchElement?.nativeElement, 'input')
-            .pipe(
+            ?.pipe(
                 debounceTime(500),
                 distinctUntilChanged(),
                 map((ev: any) => ev.target?.value),
