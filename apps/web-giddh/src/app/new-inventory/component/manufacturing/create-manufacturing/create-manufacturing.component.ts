@@ -261,13 +261,13 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
                 stockObject.stocks = [];
                 stockObject.stocksTotalPages = 1;
             }
+            this.changeDetectionRef.detectChanges();
 
             setTimeout(() => {
                 this.preventStocksApiCall = false;
             }, 500);
         });
 
-        this.changeDetectionRef.detectChanges();
     }
 
     /**
@@ -317,13 +317,13 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
                 stockObject.stocks = [];
                 stockObject.stocksTotalPages = 1;
             }
+            this.changeDetectionRef.detectChanges();
 
             setTimeout(() => {
                 this.preventByProductStocksApiCall = false;
             }, 500);
         });
 
-        this.changeDetectionRef.detectChanges();
     }
 
     /**
