@@ -31,6 +31,7 @@ export class ManufacturingLinkedStock {
         this.stocksQ = "";
     }
 }
+
 export class ManufacturingBaseAccount {
     uniqueName: string;
     defaultName: string;
@@ -62,6 +63,7 @@ export class CreateManufacturingClass {
     manufacturingQuantity: number;
     date: string;
     linkedStocks: ManufacturingLinkedStock[];
+    byProducts: ManufacturingLinkedStock[];
     otherExpenses: ManufacturingExpense[];
     increaseAssetValue: boolean;
     warehouseUniqueName: string;
@@ -82,6 +84,7 @@ export class CreateManufacturingClass {
         this.manufacturingMultipleOf = 1;
         this.date = '';
         this.linkedStocks = [];
+        this.byProducts = [];
         this.otherExpenses = [];
         this.increaseAssetValue = true;
         this.variant = new ManufacturingVariant();
