@@ -53,10 +53,6 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
     public selectedDateRangeUi: any;
     /* This will store available date ranges */
     public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
-    /* Selected from date */
-    public fromDate: string;
-    /* Selected to date */
-    public toDate: string;
     /* Selected range label */
     public selectedRangeLabel: any = "";
     /** Date format type */
@@ -114,7 +110,7 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
     /** True if api call in progress */
     public isLoading: boolean = false;
     /** Hold initial params data */
-    private params: any = null;
+    private params: any = { from: '', to: '' };
 
     constructor(private store: Store<AppState>, private invoiceReceiptActions: InvoiceReceiptActions, private activeRoute: ActivatedRoute, private router: Router, private _cd: ChangeDetectorRef, private breakPointObservar: BreakpointObserver, private generalService: GeneralService, private modalService: BsModalService, private dialog: MatDialog) {
         this.salesRegisteDetailedResponse$ = this.store.pipe(select(appState => appState.receipt.SalesRegisteDetailedResponse), takeUntil(this.destroyed$));
@@ -439,8 +435,8 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
         this.getDetailedsalesRequestFilter.q = '';
         this.getDetailedsalesRequestFilter.sort = null;
         this.getDetailedsalesRequestFilter.sortBy = null;
-        this.getDetailedsalesRequestFilter.from = this.params.from;
-        this.getDetailedsalesRequestFilter.to = this.params.to;
+        this.getDetailedsalesRequestFilter.from = this.params?.from;
+        this.getDetailedsalesRequestFilter.to = this.params?.to;
         this.setDataPickerDateRange();
         this.getDetailedSalesReport(this.getDetailedsalesRequestFilter);
     }
@@ -536,13 +532,11 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
-            this.fromDate = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
-            this.toDate = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
-            this.from = this.fromDate;
-            this.to = this.toDate;
+            this.from = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.to = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
             this.showClearFilter = true;
-            this.getDetailedsalesRequestFilter.from = this.fromDate;
-            this.getDetailedsalesRequestFilter.to = this.toDate;
+            this.getDetailedsalesRequestFilter.from = this.from;
+            this.getDetailedsalesRequestFilter.to = this.to;
             this.getDetailedSalesReport(this.getDetailedsalesRequestFilter);
         }
     }
@@ -554,7 +548,7 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
      */
     private setDataPickerDateRange(): void {
         let dateRange = { fromDate: '', toDate: '' };
-        dateRange = this.generalService.dateConversionToSetComponentDatePicker(this.params.from, this.params.to);
+        dateRange = this.generalService.dateConversionToSetComponentDatePicker(this.params?.from, this.params?.to);
         this.selectedDateRange = { startDate: dayjs(dateRange.fromDate, GIDDH_DATE_FORMAT_MM_DD_YYYY), endDate: dayjs(dateRange.toDate, GIDDH_DATE_FORMAT_MM_DD_YYYY) };
         this.selectedDateRangeUi = dayjs(dateRange.fromDate, GIDDH_DATE_FORMAT_MM_DD_YYYY).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateRange.toDate, GIDDH_DATE_FORMAT_MM_DD_YYYY).format(GIDDH_NEW_DATE_FORMAT_UI);
     }

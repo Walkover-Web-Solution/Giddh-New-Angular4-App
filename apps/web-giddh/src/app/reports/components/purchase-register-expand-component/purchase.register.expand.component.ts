@@ -96,10 +96,6 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
     public selectedDateRangeUi: any;
     /* This will store available date ranges */
     public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
-    /* Selected from date */
-    public fromDate: string;
-    /* Selected to date */
-    public toDate: string;
     /* Selected range label */
     public selectedRangeLabel: any = "";
     /** Date format type */
@@ -109,7 +105,7 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
     /** Modal reference */
     public modalRef: BsModalRef;
     /** Hold initial params data */
-    private params: any = null;
+    private params: any = { from: '', to: '' };
 
     constructor(
         private store: Store<AppState>,
@@ -160,7 +156,6 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
             });
         this.activeRoute.queryParams.pipe(take(1)).subscribe((params) => {
             if (params.from && params.to) {
-
                 this.params = params;
                 this.getDetailedPurchaseRequestFilter.branchUniqueName = params.branchUniqueName;
                 this.setDataPickerDateRange();
@@ -484,8 +479,8 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
         this.getDetailedPurchaseRequestFilter.q = "";
         this.getDetailedPurchaseRequestFilter.sort = null;
         this.getDetailedPurchaseRequestFilter.sortBy = null;
-        this.getDetailedPurchaseRequestFilter.from = this.params.from;
-        this.getDetailedPurchaseRequestFilter.to = this.params.to;
+        this.getDetailedPurchaseRequestFilter.from = this.params?.from;
+        this.getDetailedPurchaseRequestFilter.to = this.params?.to;
         this.setDataPickerDateRange();
         this.getDetailedPurchaseReport(this.getDetailedPurchaseRequestFilter);
     }
@@ -581,13 +576,11 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
-            this.fromDate = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
-            this.toDate = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
-            this.from = this.fromDate;
-            this.to = this.toDate;
+            this.from = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.to = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
             this.showClearFilter = true;
-            this.getDetailedPurchaseRequestFilter.from = this.fromDate;
-            this.getDetailedPurchaseRequestFilter.to = this.toDate;
+            this.getDetailedPurchaseRequestFilter.from = this.from;
+            this.getDetailedPurchaseRequestFilter.to = this.to;
             this.getDetailedPurchaseReport(this.getDetailedPurchaseRequestFilter);
         }
     }
@@ -599,7 +592,7 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
      */
     private setDataPickerDateRange(): void {
         let dateRange = { fromDate: '', toDate: '' };
-        dateRange = this.generalService.dateConversionToSetComponentDatePicker(this.params.from, this.params.to);
+        dateRange = this.generalService.dateConversionToSetComponentDatePicker(this.params?.from, this.params?.to);
         this.selectedDateRange = { startDate: dayjs(dateRange.fromDate, GIDDH_DATE_FORMAT_MM_DD_YYYY), endDate: dayjs(dateRange.toDate, GIDDH_DATE_FORMAT_MM_DD_YYYY) };
         this.selectedDateRangeUi = dayjs(dateRange.fromDate, GIDDH_DATE_FORMAT_MM_DD_YYYY).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateRange.toDate, GIDDH_DATE_FORMAT_MM_DD_YYYY).format(GIDDH_NEW_DATE_FORMAT_UI);
     }
