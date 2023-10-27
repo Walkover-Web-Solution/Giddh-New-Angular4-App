@@ -136,8 +136,6 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
         archive: true,
         taxes: false
     };
-    /** Holds report unique name */
-    public reportUniqueName: string = '';
 
 
     constructor(
