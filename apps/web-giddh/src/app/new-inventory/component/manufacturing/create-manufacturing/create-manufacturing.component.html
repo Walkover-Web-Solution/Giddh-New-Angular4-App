@@ -446,10 +446,7 @@
                                             </table>
                                         </div>
                                     </mat-expansion-panel>
-                                    <mat-expansion-panel
-                                        [expanded]=
-                                         "isOtherExpenseExpanded"
-                                    >
+                                    <mat-expansion-panel [expanded]="isOtherExpenseExpanded">
                                         <div class="col-8">
                                             <mat-slide-toggle
                                                 color="primary"
@@ -594,8 +591,7 @@
                                                             <td class="table-amount">
                                                                 <i
                                                                     [ngClass]="{
-                                                                        'unvisible':
-                                                                            activeOtherExpenseIndex !== i
+                                                                        'unvisible': activeOtherExpenseIndex !== i
                                                                     }"
                                                                     class="icon-trash cursor-pointer"
                                                                     aria-hidden="true"
@@ -681,7 +677,8 @@
                                                                                 i,
                                                                                 false,
                                                                                 false
-                                                                            )
+                                                                            );
+                                                                            calculateTotals(byProductLinkedStock)
                                                                         "
                                                                         [defaultValue]="
                                                                             byProductLinkedStock.selectedStock?.label
@@ -696,7 +693,9 @@
                                                                             )
                                                                         "
                                                                         (scrollEnd)="
-                                                                            byProductStockScrollEnd(byProductLinkedStock)
+                                                                            byProductStockScrollEnd(
+                                                                                byProductLinkedStock
+                                                                            )
                                                                         "
                                                                         [allowValueReset]="true"
                                                                         (onClear)="
@@ -731,7 +730,7 @@
                                                                             byProductLinkedStock.variant.name =
                                                                                 $event.label;
                                                                             byProductLinkedStock.variant.uniqueName =
-                                                                                $event.value;
+                                                                                $event.value
                                                                         "
                                                                         [defaultValue]="
                                                                             byProductLinkedStock.variant.name
