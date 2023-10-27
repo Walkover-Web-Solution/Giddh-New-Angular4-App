@@ -47,6 +47,7 @@
                                     (selectedOption)="selectCountry($event)"
                                     [defaultValue]="selectedCountry"
                                     [showError]="isFormSubmitted && !firstStepForm.get('country')?.value"
+                                    autocomplete="off"
                                 >
                                 </dropdown-field>
                             </div>
@@ -85,7 +86,12 @@
                                 <span id="init-contact-proforma-error-msg" class="d-none"></span>
                             </div>
                             <div class="col-6 mobile-no-action-buttons" *ngIf="showMobileField">
-                                <button mat-stroked-button (click)="reVerifyNumber()" *ngIf="isMobileNumberVerified || showOtpField" class="btn-min-width">
+                                <button
+                                    mat-stroked-button
+                                    (click)="reVerifyNumber()"
+                                    *ngIf="isMobileNumberVerified || showOtpField"
+                                    class="btn-min-width"
+                                >
                                     {{ localeData?.change }}
                                 </button>
 
