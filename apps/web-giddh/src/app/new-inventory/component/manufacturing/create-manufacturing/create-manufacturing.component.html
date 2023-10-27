@@ -667,7 +667,7 @@
                                                                         [placeholder]="
                                                                             commonLocaleData?.app_select_stock
                                                                         "
-                                                                        [options]="byProductLinkedStocksList"
+                                                                        [options]="byProductLinkedStock.stocks"
                                                                         (selectedOption)="
                                                                             byProductLinkedStock.selectedStock = $event;
                                                                             getStockVariants(

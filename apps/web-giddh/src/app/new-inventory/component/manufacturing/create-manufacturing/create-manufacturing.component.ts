@@ -116,8 +116,6 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
     };
     /** Stores the list of accounts */
     public liabilitiesAssetAccounts: IOption[];
-    /** Stores the list of by products stock list */
-    public byProductLinkedStocksList: IOption[];
     /** Index of active linked item */
     public activeExpenseIndex: number = null;
     /** True if increase assets value*/
@@ -283,7 +281,6 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
      * @memberof CreateManufacturingComponent
      */
     public getAllStocks(stockObject: any, page: number = 1, q?: string, callback?: Function): void {
-        this.byProductLinkedStocksList = [];
         if (page > stockObject.stocksTotalPages || this.preventByProductStocksApiCall || q === undefined) {
             return;
         }
@@ -312,7 +309,6 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
                         });
 
                         stockObject.stocks.push({ label: stock?.name, value: stock?.uniqueName, additional: { stockUnitCode: stock?.stockUnits[0]?.code, stockUnitUniqueName: stock?.stockUnits[0]?.uniqueName, inventoryType: stock.inventoryType, unitsList: unitsList } });
-                        this.byProductLinkedStocksList = stockObject.stocks;
                     });
                 } else {
                     callback(response);
