@@ -21,7 +21,7 @@
         "entitlements": "./../../../electron-sign/default.entitlements.mas.plist",
         "entitlementsInherit": "./../../../electron-sign/default.entitlements.mas.inherit.plist",
         "provisioningProfile": "./../../../electron-sign/embedded.provisionprofile",
-        "icon": "icon.icns",
+        "icon": "resources/icon.icns",
         "hardenedRuntime": true,
         "gatekeeperAssess": false
     },
