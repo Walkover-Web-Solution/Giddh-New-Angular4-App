@@ -1151,7 +1151,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
             uniqueName: data?.uniqueName
         }], 1, "customer");
         this.makeCustomerList();
-        this.loadBankCashAccounts(data.currency);
+        this.loadBankCashAccounts(data?.currency);
 
         this.getUpdatedStateCodes(data.country?.countryCode).then(() => {
             if (data.addresses && data.addresses.length) {
@@ -1159,7 +1159,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
             }
             // auto fill all the details
             this.voucherFormData.account = new AccountDetailsClass(data);
-            this.voucherFormData.account.currencyCode = this.voucherFormData.account.currency.code;
+            this.voucherFormData.account.currencyCode = this.voucherFormData.account?.currency.code;
 
             this.searchBillingStates.setValue({ label: this.voucherFormData.account.billingDetails?.state?.name });
             this.searchShippingStates.setValue({ label: this.voucherFormData.account.shippingDetails?.state?.name });
@@ -1179,7 +1179,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
     public initializeAccountCurrencyDetails(item: AccountResponseV2): void {
         // If currency of item is null or undefined then treat it to be equivalent of company currency
         item.currency = item.currency || this.companyCurrency;
-        this.isMultiCurrencyAccount = item.currency !== this.companyCurrency;
+        this.isMultiCurrencyAccount = item?.currency !== this.companyCurrency;
         if (item.addresses && item.addresses.length > 0) {
             item.addresses.forEach(address => {
                 if (address && address.isDefault) {
@@ -1190,7 +1190,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
             });
         }
         if (this.isMultiCurrencyAccount) {
-            this.companyCurrencyName = item.currency;
+            this.companyCurrencyName = item?.currency;
         }
 
         if (item && item.currency && item.currency !== this.companyCurrency) {

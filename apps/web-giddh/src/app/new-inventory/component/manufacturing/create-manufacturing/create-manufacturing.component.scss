@@ -46,6 +46,10 @@
             }
         }
 
+        .field-max-width {
+            max-width: 241px;
+        }
+
         .consumption-details-wrapper {
             .mat-accordion {
                 .mat-expansion-panel {
@@ -98,7 +102,7 @@
                                 line-height: unset !important;
                                 font-size: var(--font-size-12) !important;
                             }
-                            .table-column-width{
+                            .table-column-width {
                                 max-width: 250px;
                                 column-gap: 20px;
                             }
@@ -234,9 +238,9 @@
                                 .table-column-width {
                                     column-gap: 8px;
                                 }
-                            } 
+                            }
                         }
-                    } 
+                    }
                 }
             }
         }
@@ -257,22 +261,22 @@
 }
 
 @media screen and (max-width: 1280px) {
-    #create-manufacturing{
+    #create-manufacturing {
         .manufacturing-wrapper {
             .custom-card {
                 min-width: 160px;
             }
-        } 
-    } 
+        }
+    }
 }
 
 @media screen and (max-width: 1080px) {
-    #create-manufacturing{
+    #create-manufacturing {
         .manufacturing-wrapper {
             .custom-card {
                 min-width: 120px;
                 padding: 12px;
             }
-        } 
-    } 
+        }
+    }
 }

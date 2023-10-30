@@ -722,7 +722,24 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public regionsSource: IOption[] = [];
     /* This will hold company's country regions */
     public companyRegionsSource: IOption[] = [];
-
+    /** This will hold barcode value*/
+    public barcodeValue: string = "";
+    /** Custom fields request */
+    public customFieldsRequest: any = {
+        page: 0,
+        count: 0,
+        moduleUniqueName: 'variant'
+    };
+    /**Hold barcode scan start time */
+    public startTime: number = 0;
+    /**Hold barcode scan end time */
+    public endTime: number = 0;
+    /**Hold barcode scan total time */
+    public totalTime: number = 0;
+    /**Hold barcode last scanned key */
+    public lastScannedKey: string = '';
+    /** True if barcode maching is typing */
+    public isBarcodeMachineTyping: boolean = false;
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -1257,7 +1274,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                             // parse normal response to multi currency response
                             let convertedRes1 = await this.modifyMulticurrencyRes(results[0]);
                             this.initializeWarehouse(results[0].warehouse);
-                            if (results[0].account.currency) {
+                            if (results[0].account?.currency) {
                                 this.companyCurrencyName = results[0].account.currency.code;
                             }
                             obj = cloneDeep(convertedRes1) as VoucherClass;
@@ -1315,7 +1332,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                             this.isRcmEntry = results[0]?.subVoucher === SubVoucher.ReverseCharge;
                         } else {
                             let convertedRes1 = await this.modifyMulticurrencyRes(results[0]);
-                            if (results[0].account.currency) {
+                            if (results[0].account?.currency) {
                                 this.companyCurrencyName = results[0].account.currency.code;
                             }
                             obj = cloneDeep(convertedRes1) as VoucherClass;
@@ -2184,7 +2201,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         }], 1, SEARCH_TYPE.CUSTOMER);
         this.makeCustomerList();
         if (this.isSalesInvoice || this.currentVoucherFormDetails?.depositAllowed) {
-            this.loadBankCashAccounts(data.currency);
+            this.loadBankCashAccounts(data?.currency);
         }
         if (this.isInvoiceRequestedFromPreviousPage) {
             this.invFormData.voucherDetails.customerUniquename = data?.uniqueName;
@@ -2209,7 +2226,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public initializeAccountCurrencyDetails(item: AccountResponseV2): void {
         // If currency of item is null or undefined then treat it to be equivalent of company currency
         item.currency = item.currency || this.companyCurrency;
-        this.isMulticurrencyAccount = item.currency !== this.companyCurrency;
+        this.isMulticurrencyAccount = item?.currency !== this.companyCurrency;
         if (item.addresses && item.addresses.length > 0) {
             item.addresses.forEach(address => {
                 if (address && address.isDefault) {
@@ -2220,8 +2237,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             });
         }
         if (this.isMulticurrencyAccount) {
-            this.customerCurrencyCode = item.currency;
-            this.companyCurrencyName = item.currency;
+            this.customerCurrencyCode = item?.currency;
+            this.companyCurrencyName = item?.currency;
         } else {
             this.customerCurrencyCode = this.companyCurrency;
         }
@@ -2789,7 +2806,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             } else {
                 requestObject.depositAccountUniqueName = '';
             }
-
             requestObject.date = dayjs(voucherDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
             requestObject.type = VoucherTypeEnum.sales;
             let updatedData = requestObject;
@@ -3444,9 +3460,16 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         return res;
     }
 
-    public onSelectSalesAccount(selectedAcc: any, txn: SalesTransactionItemClass, entry: SalesEntryClass, isBulkItem: boolean = false, isLinkedPoItem: boolean = false, entryIndex: number): any {
-        this.invFormData.entries[entryIndex] = entry;
-        this.invFormData.entries[entryIndex].transactions[0] = txn;
+    public onSelectSalesAccount(selectedAcc: any, txn: SalesTransactionItemClass, entry: SalesEntryClass, isBulkItem: boolean = false, isLinkedPoItem: boolean = false, entryIndex: number, fromBarcode: boolean = false): any {
+        if (this.isBarcodeMachineTyping) {
+            this.removeTransaction(entryIndex);
+            return;
+        }
+
+        if (!fromBarcode) {
+            this.invFormData.entries[entryIndex] = entry;
+            this.invFormData.entries[entryIndex].transactions[0] = txn;
+        }
         if ((selectedAcc?.value || isBulkItem) && selectedAcc.additional && selectedAcc.additional?.uniqueName) {
             let params;
             if (selectedAcc.additional.stock) {
@@ -3462,6 +3485,11 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 params: params,
                 entryIndex: entryIndex
             };
+
+            if (fromBarcode) {
+                this.currentTxnRequestObject[this.activeIndx].params.variantUniqueName = selectedAcc.additional?.stock?.variant?.uniqueName;
+            }
+
             if (isBulkItem) {
                 const allStockVariants = this.stockVariants.getValue();
                 allStockVariants[this.activeIndx] = observableOf(selectedAcc.variants);
@@ -4098,19 +4126,19 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
             if (this.isMulticurrencyAccount) {
                 if (this.isCashInvoice) {
-                    this.invFormData.accountDetails.currencySymbol = event.additional.currency.symbol || this.baseCurrencySymbol;
+                    this.invFormData.accountDetails.currencySymbol = event.additional?.currency.symbol || this.baseCurrencySymbol;
                     this.depositCurrSymbol = this.invFormData.accountDetails.currencySymbol;
                 }
                 if (this.isSalesInvoice || (this.voucherApiVersion === 2 && this.isPurchaseInvoice)) {
 
-                    this.depositCurrSymbol = event.additional && event.additional.currency.symbol || this.baseCurrencySymbol;
+                    this.depositCurrSymbol = event.additional && event.additional?.currency.symbol || this.baseCurrencySymbol;
                 }
             } else {
                 this.invFormData.accountDetails.currencySymbol = this.baseCurrencySymbol;
             }
 
             if (this.isCashInvoice) {
-                this.companyCurrencyName = event.additional.currency.code;
+                this.companyCurrencyName = event.additional?.currency.code;
             }
         } else {
             this.depositAccountUniqueName = '';
@@ -7680,7 +7708,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             }
         } else if (searchType === SEARCH_TYPE.BANK) {
             const searchResultsOfSameCurrency = this.searchResults ? this.searchResults?.filter(result =>
-                !result.additional.currency || result.additional.currency === this.customerCurrencyCode || result.additional.currency === this.companyCurrency
+                !result.additional?.currency || result.additional?.currency === this.customerCurrencyCode || result.additional?.currency === this.companyCurrency
             ) : [];
             this.bankAccounts$ = observableOf(orderBy(searchResultsOfSameCurrency, 'label'));
         }
@@ -8777,12 +8805,266 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         }
     }
 
+    /**
+     * Set barcode machine typing to false if user clicked on dropdown
+     *
+     * @memberof VoucherComponent
+     */
+    public setUserManuallyClicked(): void {
+        this.isBarcodeMachineTyping = false;
+    }
+
     // CMD + G functionality
     @HostListener('document:keydown', ['$event'])
-    public handleKeyboardUpEvent(event: KeyboardEvent) {
+    public handleKeyboardDownEvent(event: KeyboardEvent) {
         if ((event.metaKey || event.ctrlKey) && (event.which === 75 || event.which === 71)) {
             this.isCreatingNewAccount = false;
         }
+        this.startTime = event.timeStamp;
+    }
+
+    // detecting keyup event for barcode scan
+    @HostListener('document:keyup', ['$event'])
+    public handleKeyboardUpEvent(event: KeyboardEvent): void {
+        let uniqueName = this.detectBarcode(event);
+
+        if (event.timeStamp - this.startTime < 2) {
+            this.isBarcodeMachineTyping = true;
+        } else {
+            this.isBarcodeMachineTyping = false;
+        }
+
+        if (uniqueName && this.startTime) {
+            this.endTime = event.timeStamp;
+            const scanTime = this.endTime - this.startTime;
+            this.totalTime += scanTime;
+            if (scanTime < 8) {
+                this.isBarcodeMachineTyping = false;
+                this.getStockByBarcode();
+            }
+            this.startTime = null;
+            this.barcodeValue = '';
+        }
+
+        if (!this.isBarcodeMachineTyping) {
+            this.barcodeValue = "";
+        }
+    }
+
+    /**
+     * Returns the string when barcode machine finishes typing the word
+     *
+     * @param {KeyboardEvent} event
+     * @returns {(string | null)}
+     * @memberof VoucherComponent
+     */
+    public detectBarcode(event: KeyboardEvent): string | null {
+        let ignoreKeyList = ['Shift', 'Meta', 'Backspace'];
+        const key = event.key;
+        if (key === 'Enter') {
+            if (this.barcodeValue.length) {
+                return this.barcodeValue;
+            } else {
+                return null;
+            }
+        } else {
+            if (!ignoreKeyList.includes(key)) {
+                this.barcodeValue += (this.lastScannedKey === 'Shift') ? key.toUpperCase() : key;
+            }
+            this.lastScannedKey = key;
+            return null;
+        }
+    }
+
+    /**
+     * Get stock details by barcode and create transaction for it
+     *
+     * @returns {void}
+     * @memberof VoucherComponent
+     */
+    public getStockByBarcode(): void {
+        if (!this.barcodeValue) {
+            return;
+        }
+
+        this.commonService.getBarcodeScanData(this.barcodeValue).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response && response.body && response.status === 'success') {
+                this.barcodeValue = '';
+                let stockObj = response.body?.stocks[0];
+                let variantObj = stockObj?.variants[0];
+
+                let group = (this.invoiceType === VoucherTypeEnum.debitNote || this.invoiceType === VoucherTypeEnum.purchase || this.invoiceType === VoucherTypeEnum.cashBill || this.invoiceType === VoucherTypeEnum.cashDebitNote) ?
+                    'purchase' : 'sales';
+                let unitRates = group === 'purchase' ? variantObj?.purchaseAccountDetails?.unitRates ?? variantObj?.fixedAssetAccountDetails?.unitRates : variantObj?.salesAccountDetails?.unitRates ?? variantObj?.fixedAssetAccountDetails?.unitRates;
+
+                let accountUniqueName = group === 'purchase' ? variantObj?.purchaseAccountDetails?.accountUniqueName ?? variantObj?.fixedAssetAccountDetails?.accountUniqueName : variantObj?.salesAccountDetails?.accountUniqueName ?? variantObj?.fixedAssetAccountDetails?.accountUniqueName
+                let accountName = group === 'purchase' ? variantObj?.purchaseAccountDetails?.accountName ?? variantObj?.fixedAssetAccountDetails?.accountName : variantObj?.salesAccountDetails?.accountName ?? variantObj?.fixedAssetAccountDetails?.accountName;
+
+                let isInclusiveTax = group === 'purchase' ? variantObj?.purchaseTaxInclusive ?? variantObj?.fixedAssetTaxInclusive : variantObj?.salesTaxInclusive ?? variantObj?.fixedAssetTaxInclusive;
+
+                if (!accountUniqueName) {
+                    this.toaster.showSnackBar("warning", group + " " + this.localeData?.account_missing_in_stock);
+                    return;
+                }
+
+                let selectedAcc = {
+                    value: group + stockObj.uniqueName,
+                    label: stockObj.name,
+                    additional: {
+                        type: "ACCOUNT",
+                        name: accountName,
+                        uniqueName: accountUniqueName,
+                        stock: {
+                            name: stockObj.name,
+                            uniqueName: stockObj.uniqueName,
+                            stockUnitCode: stockObj.stockUnit.code,
+                            rate: 1,
+                            stockUnitName: stockObj.stockUnit.name,
+                            stockUnitUniqueName: stockObj.stockUnit.uniqueName,
+                            taxes: stockObj.taxes,
+                            groupTaxes: [],
+                            skuCodeHeading: stockObj.skuCodeHeading,
+                            customField1Heading: stockObj.customField1Heading,
+                            customField1Value: stockObj.customField1Value,
+                            customField2Heading: stockObj.customField2Heading,
+                            customField2Value: stockObj.customField2Value,
+                            variant: {
+                                uniqueName: variantObj.uniqueName,
+                                salesTaxInclusive: variantObj.salesTaxInclusive,
+                                purchaseTaxInclusive: variantObj.purchaseTaxInclusive,
+                                unitRates: []
+                            }
+                        },
+                        parentGroups: [],
+                        route: '',
+                        label: stockObj.name,
+                        value: group + stockObj.uniqueName,
+                        applicableTaxes: [],
+                        currency: {
+                            code: "",
+                            symbol: ""
+                        },
+                        nameStr: "",
+                        hsnNumber: stockObj.hsnNumber,
+                        sacNumber: stockObj.sacNumber,
+                        uNameStr: "",
+                        category: ""
+                    }
+                };
+
+                this.salesAccounts$.pipe(takeUntil(this.destroyed$)).subscribe(accounts => {
+                    const stockExists = accounts?.filter(account => account.value === selectedAcc.value);
+                    if (!stockExists?.length) {
+                        accounts.unshift(selectedAcc);
+                    }
+                });
+
+                let isExistingEntry = -1;
+                this.invFormData.entries?.forEach((entry, index) => {
+                    if (isExistingEntry === -1 && entry.transactions[0]?.stockDetails?.variant?.uniqueName === variantObj.uniqueName) {
+                        entry.transactions[0].quantity = entry.transactions[0].quantity + 1;
+                        isExistingEntry = index;
+                    }
+                });
+
+                if (isExistingEntry === -1) {
+                    if (this.invFormData.entries[this.invFormData.entries.length - 1].transactions[0].fakeAccForSelect2) {
+                        this.addBlankRow(null);
+                    }
+                    let activeEntryIndex = this.invFormData.entries.length - 1;
+                    this.invFormData.entries[activeEntryIndex].transactions[0].sku_and_customfields = null;
+                    let description = [];
+                    let skuCodeHeading = stockObj.skuCodeHeading ? stockObj.skuCodeHeading : this.commonLocaleData?.app_sku_code;
+                    if (stockObj.skuCode) {
+                        description.push(skuCodeHeading + ':' + stockObj.skuCode);
+                    }
+
+                    let customField1Heading = stockObj.customField1Heading ? stockObj.customField1Heading : this.localeData?.custom_field1;
+                    if (stockObj.customField1Value) {
+                        description.push(customField1Heading + ':' + stockObj.customField1Value);
+                    }
+
+                    let customField2Heading = stockObj.customField2Heading ? stockObj.customField2Heading : this.localeData?.custom_field2;
+                    if (stockObj.customField2Value) {
+                        description.push(customField2Heading + ':' + stockObj.customField2Value);
+                    }
+
+                    if (stockObj) {
+                        let obj: IStockUnit = {
+                            id: stockObj.stockUnit.uniqueName,
+                            text: stockObj.stockUnit.code
+                        };
+                        this.invFormData.entries[activeEntryIndex].transactions[0].stockList = [];
+                        if (unitRates.length) {
+                            this.invFormData.entries[activeEntryIndex].transactions[0].stockList = this.prepareUnitArr(unitRates);
+                            this.invFormData.entries[activeEntryIndex].transactions[0].stockUnit = this.invFormData.entries[activeEntryIndex].transactions[0].stockList[0].id;
+                            this.invFormData.entries[activeEntryIndex].transactions[0].stockUnitCode = this.invFormData.entries[activeEntryIndex].transactions[0].stockList[0].text;
+                        } else {
+                            this.invFormData.entries[activeEntryIndex].transactions[0].stockList.push(obj);
+                            this.invFormData.entries[activeEntryIndex].transactions[0].stockUnit = stockObj.stockUnit.uniqueName;
+                            this.invFormData.entries[activeEntryIndex].transactions[0].stockUnitCode = stockObj.stockUnit.code;
+                        }
+                    }
+                    this.invFormData.entries[activeEntryIndex].transactions[0].sku_and_customfields = description.join(', ');
+                    this.invFormData.entries[activeEntryIndex].transactions[0].fakeAccForSelect2 = selectedAcc.value;
+                    this.invFormData.entries[activeEntryIndex].transactions[0].accountName = accountName;
+                    this.invFormData.entries[activeEntryIndex].transactions[0].accountUniqueName = accountUniqueName;
+                    this.invFormData.entries[activeEntryIndex].transactions[0].quantity = 1;
+                    this.invFormData.entries[activeEntryIndex].transactions[0].rate = unitRates?.length ? unitRates[0]?.rate : 1;
+                    this.invFormData.entries[activeEntryIndex].transactions[0].isStockTxn = true;
+                    this.invFormData.entries[activeEntryIndex].transactions[0].applicableTaxes = stockObj.taxes;
+                    this.invFormData.entries[activeEntryIndex].transactions[0].showCodeType = stockObj.hsnNumber ? 'hsn' : 'sac';
+                    this.invFormData.entries[activeEntryIndex].transactions[0].hsnNumber = stockObj.hsnNumber;
+                    this.invFormData.entries[activeEntryIndex].transactions[0].sacNumber = stockObj.sacNumber;
+                    this.invFormData.entries[activeEntryIndex].transactions[0].stockDetails =
+                    {
+                        name: stockObj.name,
+                        uniqueName: stockObj.uniqueName,
+                        stockUnitCode: stockObj.stockUnit.code,
+                        rate: unitRates?.length ? unitRates[0].rate : [],
+                        quantity: 1,
+                        stockUnitName: stockObj.stockUnit.name,
+                        stockUnitUniqueName: stockObj.stockUnit.uniqueName,
+                        taxes: stockObj.taxes,
+                        groupTaxes: [],
+                        skuCodeHeading: stockObj.skuCodeHeading,
+                        customField1Heading: stockObj.customField1Heading,
+                        customField1Value: stockObj.customField1Value,
+                        customField2Heading: stockObj.customField2Heading,
+                        customField2Value: stockObj.customField2Value,
+                        variant: {
+                            uniqueName: variantObj.uniqueName,
+                            salesTaxInclusive: variantObj.salesTaxInclusive,
+                            purchaseTaxInclusive: variantObj.purchaseTaxInclusive,
+                            unitRates: unitRates
+                        }
+                    };
+                    this.invFormData.entries[activeEntryIndex].transactions[0].variant = {
+                        name: variantObj.name,
+                        uniqueName: variantObj.uniqueName
+                    };
+
+                    this.activeIndx = activeEntryIndex;
+                    if (isInclusiveTax) {
+                        setTimeout(() => {
+                            this.invFormData.entries[activeEntryIndex].transactions[0].total = this.invFormData.entries[activeEntryIndex].transactions[0].quantity * this.invFormData.entries[activeEntryIndex].transactions[0].rate;
+                            this.calculateTransactionValueInclusively(this.invFormData.entries[activeEntryIndex], this.invFormData.entries[activeEntryIndex].transactions[0]);
+                        });
+                    } else {
+                        this.invFormData.entries[activeEntryIndex].transactions[0].setAmount(this.invFormData.entries[activeEntryIndex]);
+                        this.calculateWhenTrxAltered(this.invFormData.entries[activeEntryIndex], this.invFormData.entries[activeEntryIndex].transactions[0]);
+                        this.calculateStockEntryAmount(this.invFormData.entries[activeEntryIndex].transactions[0]);
+                    }
+                    this.onSelectSalesAccount(selectedAcc, this.invFormData.entries[activeEntryIndex].transactions[0], this.invFormData.entries[activeEntryIndex], false, false, 0, true);
+                } else {
+                    this.activeIndx = isExistingEntry;
+                    this.handleQuantityBlur(this.invFormData.entries[isExistingEntry], this.invFormData.entries[isExistingEntry].transactions[0]);
+                }
+            } else {
+                this.toaster.showSnackBar("error", response.message);
+            }
+            this.changeDetectorRef.detectChanges();
+        });
     }
 
     /**

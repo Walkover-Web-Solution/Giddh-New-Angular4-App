@@ -5,9 +5,9 @@
     [matTooltip]="matTooltip"
     [ngClass]="cssClass"
 >
-    <i [ngClass]="iconClass"> </i> {{ buttonText }}
+    <i [ngClass]="iconClass"> </i> <span class="pl-3">{{ buttonText }}</span>
 </button>
-<mat-menu #menu="matMenu" class="columns-wrapper">
+<mat-menu #menu="matMenu" [class]="'columns-wrapper ' + additionalMenuCssClass">
     <ng-container *ngFor="let item of customiseColumns">
         <button
             class="menu-buttons"

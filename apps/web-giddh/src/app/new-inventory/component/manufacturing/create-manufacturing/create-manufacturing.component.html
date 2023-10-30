@@ -223,7 +223,7 @@
                                                 {{ localeData?.raw_stock }}
                                             </mat-panel-title>
                                         </mat-expansion-panel-header>
-                                        <div class="mt-2 pd-r1 pd-l1">
+                                        <div class="pd-r1 pd-l1">
                                             <table id="table-raw-stock">
                                                 <thead>
                                                     <tr>
@@ -253,7 +253,8 @@
                                                                 activeLinkedStockIndex = i; showBorder(linkedStock)
                                                             "
                                                             (mouseleave)="
-                                                                activeLinkedStockIndex = null; hideBorder('linkedStock',linkedStock)
+                                                                activeLinkedStockIndex = null;
+                                                                hideBorder('linkedStock', linkedStock)
                                                             "
                                                         >
                                                             <td class="table-name">
@@ -300,7 +301,8 @@
                                                                         (onClear)="
                                                                             resetStocks(
                                                                                 linkedStock,
-                                                                                selectedInventoryType
+                                                                                selectedInventoryType,
+                                                                                'linkedStock'
                                                                             )
                                                                         "
                                                                         [readonly]="isCompany"
@@ -444,7 +446,7 @@
                                             </table>
                                         </div>
                                     </mat-expansion-panel>
-                                   <mat-expansion-panel [expanded]="this.manufacturingObject.manufacturingDetails[0].otherExpenses[0].baseAccount.uniqueName ? true : false">
+                                    <mat-expansion-panel [expanded]="isOtherExpenseExpanded">
                                         <div class="col-8">
                                             <mat-slide-toggle
                                                 color="primary"
@@ -464,7 +466,7 @@
                                                 {{ localeData?.app_expense }}
                                             </mat-panel-title>
                                         </mat-expansion-panel-header>
-                                        <div class="mt-2 pd-r1 pd-l1">
+                                        <div class="pd-r1 pd-l1">
                                             <table id="table-raw-stock">
                                                 <thead>
                                                     <tr>
@@ -478,7 +480,7 @@
                                                         <th class="table-delete">&nbsp;</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody  (mouseleave)="activeOtherExpenseIndex = null">
+                                                <tbody (mouseleave)="activeOtherExpenseIndex = null">
                                                     <ng-container
                                                         *ngFor="
                                                             let expense of manufacturingObject.manufacturingDetails[0]
@@ -487,12 +489,14 @@
                                                         "
                                                     >
                                                         <tr
-                                                             (mouseenter)="
+                                                            (mouseenter)="
                                                                 activeOtherExpenseIndex = i; showBorder(expense)
                                                             "
                                                             (mouseleave)="
-                                                                activeOtherExpenseIndex = null; hideBorder('expense',expense)
-                                                            ">
+                                                                activeOtherExpenseIndex = null;
+                                                                hideBorder('expense', expense)
+                                                            "
+                                                        >
                                                             <td class="table-name">
                                                                 <div
                                                                     class="field-m-width table-column-width d-flex align-items-center"
@@ -591,10 +595,7 @@
                                                             <td class="table-amount">
                                                                 <i
                                                                     [ngClass]="{
-                                                                        'unvisible':
-                                                                            activeOtherExpenseIndex !== i  ||
-                                                                            manufacturingObject.manufacturingDetails[0]
-                                                                                .otherExpenses?.length <= 1
+                                                                        'unvisible': activeOtherExpenseIndex !== i
                                                                     }"
                                                                     class="icon-trash cursor-pointer"
                                                                     aria-hidden="true"
@@ -612,6 +613,223 @@
                                                         </td>
                                                     </tr>
                                                 </tbody>
+                                            </table>
+                                        </div>
+                                    </mat-expansion-panel>
+                                    <mat-expansion-panel [expanded]="isByProductExpanded">
+                                        <mat-expansion-panel-header>
+                                            <mat-panel-title class="p-0">
+                                                {{ commonLocaleData?.app_by_product_output }}
+                                            </mat-panel-title>
+                                        </mat-expansion-panel-header>
+                                        <div class="pd-r1 pd-l1">
+                                            <table id="table-raw-stock">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="table-name2">{{ commonLocaleData?.app_name }}</th>
+                                                        <th class="table-name2">
+                                                            {{ commonLocaleData?.app_variant }}
+                                                        </th>
+                                                        <th class="table-quantity">
+                                                            {{ commonLocaleData?.app_quantity }}
+                                                        </th>
+                                                        <th class="table-unit">{{ commonLocaleData?.app_unit }}</th>
+                                                        <th>&nbsp;</th>
+                                                    </tr>
+                                                </thead>
+
+                                                <tbody (mouseleave)="activeByProductLinkedStockIndex = null">
+                                                    <ng-container
+                                                        *ngFor="
+                                                            let byProductLinkedStock of manufacturingObject
+                                                                .manufacturingDetails[0].byProducts;
+                                                            let i = index
+                                                        "
+                                                    >
+                                                        <tr
+                                                            (mouseenter)="
+                                                                activeByProductLinkedStockIndex = i;
+                                                                showBorder(byProductLinkedStock)
+                                                            "
+                                                            (mouseleave)="
+                                                                activeByProductLinkedStockIndex = null;
+                                                                hideBorder('byProductLinkedStock', byProductLinkedStock)
+                                                            "
+                                                        >
+                                                            <td class="table-name">
+                                                                <div class="field-max-width">
+                                                                    <select-field
+                                                                        [cssClass]="
+                                                                            'disable-bg ' +
+                                                                            byProductLinkedStock.cssClass +
+                                                                            (byProductLinkedStock.stockNameError
+                                                                                ? ' required-field-error'
+                                                                                : '')
+                                                                        "
+                                                                        [name]="'byproduct-stock' + i"
+                                                                        [scrollableElementId]="'byproduct-stock' + i"
+                                                                        [placeholder]="
+                                                                            commonLocaleData?.app_select_stock
+                                                                        "
+                                                                        [options]="byProductLinkedStock.stocks"
+                                                                        (selectedOption)="
+                                                                            byProductLinkedStock.selectedStock = $event;
+                                                                            getStockVariants(
+                                                                                byProductLinkedStock,
+                                                                                $event,
+                                                                                false,
+                                                                                i,
+                                                                                false,
+                                                                                false
+                                                                            );
+                                                                            calculateTotals(byProductLinkedStock)
+                                                                        "
+                                                                        [defaultValue]="
+                                                                            byProductLinkedStock.selectedStock?.label
+                                                                        "
+                                                                        [enableDynamicSearch]="true"
+                                                                        [isPaginationEnabled]="true"
+                                                                        (dynamicSearchedQuery)="
+                                                                            getAllStocks(
+                                                                                byProductLinkedStock,
+                                                                                1,
+                                                                                $event
+                                                                            )
+                                                                        "
+                                                                        (scrollEnd)="
+                                                                            byProductStockScrollEnd(
+                                                                                byProductLinkedStock
+                                                                            )
+                                                                        "
+                                                                        [allowValueReset]="true"
+                                                                        (onClear)="
+                                                                            resetStocks(
+                                                                                byProductLinkedStock,
+                                                                                selectedInventoryType,
+                                                                                'byProduct'
+                                                                            )
+                                                                        "
+                                                                        [readonly]="isCompany"
+                                                                    >
+                                                                    </select-field>
+                                                                </div>
+                                                            </td>
+                                                            <td class="table-variant">
+                                                                <div class="field-max-width">
+                                                                    <select-field
+                                                                        [cssClass]="
+                                                                            'disable-bg ' +
+                                                                            byProductLinkedStock.cssClass +
+                                                                            (byProductLinkedStock.variantNameError
+                                                                                ? ' required-field-error'
+                                                                                : '')
+                                                                        "
+                                                                        [name]="'variantUniqueName' + i"
+                                                                        [scrollableElementId]="'variant' + i"
+                                                                        [placeholder]="
+                                                                            commonLocaleData?.app_select_variant
+                                                                        "
+                                                                        [options]="byProductLinkedStock.variants"
+                                                                        (selectedOption)="
+                                                                            byProductLinkedStock.variant.name =
+                                                                                $event.label;
+                                                                            byProductLinkedStock.variant.uniqueName =
+                                                                                $event.value
+                                                                        "
+                                                                        [defaultValue]="
+                                                                            byProductLinkedStock.variant.name
+                                                                        "
+                                                                        [readonly]="isCompany"
+                                                                    >
+                                                                    </select-field>
+                                                                </div>
+                                                            </td>
+                                                            <td class="table-quantity">
+                                                                <div class="field-max-width">
+                                                                    <text-field
+                                                                        [cssClass]="
+                                                                            'disable-bg ' +
+                                                                            byProductLinkedStock.cssClass +
+                                                                            (byProductLinkedStock.quantityError
+                                                                                ? ' required-field-error'
+                                                                                : '')
+                                                                        "
+                                                                        [type]="'number'"
+                                                                        [name]="'byProductQuantity' + i"
+                                                                        [(ngModel)]="byProductLinkedStock.quantity"
+                                                                        [placeholder]="commonLocaleData?.app_quantity"
+                                                                        (change)="
+                                                                            calculateRowTotal(byProductLinkedStock)
+                                                                        "
+                                                                        [readonly]="isCompany"
+                                                                    >
+                                                                    </text-field>
+                                                                </div>
+                                                            </td>
+                                                            <td class="table-unit">
+                                                                <div class="text-field-right">
+                                                                    <div class="field-max-width">
+                                                                        <select-field
+                                                                            [cssClass]="
+                                                                                'disable-bg' +
+                                                                                byProductLinkedStock.cssClass
+                                                                            "
+                                                                            [name]="'variantUnit' + i"
+                                                                            [scrollableElementId]="'variantUnit' + i"
+                                                                            [placeholder]="commonLocaleData?.app_unit"
+                                                                            [options]="
+                                                                                byProductLinkedStock.selectedStock
+                                                                                    ?.additional?.unitsList
+                                                                            "
+                                                                            (selectedOption)="
+                                                                                byProductLinkedStock.stockUnitUniqueName =
+                                                                                    $event.value;
+                                                                                byProductLinkedStock.stockUnitCode =
+                                                                                    $event.label
+                                                                            "
+                                                                            [defaultValue]="
+                                                                                byProductLinkedStock.stockUnitCode
+                                                                            "
+                                                                            [readonly]="isCompany"
+                                                                        >
+                                                                        </select-field>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                            <td class="table-amount">
+                                                                <i
+                                                                    [ngClass]="{
+                                                                        'unvisible':
+                                                                            activeByProductLinkedStockIndex !== i
+                                                                    }"
+                                                                    class="icon-trash cursor-pointer"
+                                                                    aria-hidden="true"
+                                                                    (click)="removeByProductLinkedStock(i)"
+                                                                    *ngIf="!isCompany"
+                                                                ></i>
+                                                            </td>
+                                                        </tr>
+                                                    </ng-container>
+                                                    <tr *ngIf="!isCompany">
+                                                        <td colspan="7">
+                                                            <a
+                                                                class="mb-2"
+                                                                (click)="addNewByProductsLinkedStock()"
+                                                                href="javascript:;"
+                                                            >
+                                                                {{ localeData?.add_stock }}
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                                <tfoot>
+                                                    <tr>
+                                                        <td>{{ commonLocaleData?.app_total }}</td>
+                                                        <td colspan="2">{{ totals.totalStockQuantity }}</td>
+                                                        <td colspan="2"></td>
+                                                        <td>&nbsp;</td>
+                                                    </tr>
+                                                </tfoot>
                                             </table>
                                         </div>
                                     </mat-expansion-panel>
