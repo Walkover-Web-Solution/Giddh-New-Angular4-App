@@ -92,7 +92,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         headQuarterAlias: '',
         balanceDisplayFormat: '',
         taxType: '',
-        manageInventory: false
+        manageInventory: false,
+        portalDomain: ''
     };
     public stateStream$: Observable<States[]>;
     public statesSource$: Observable<IOption[]> = observableOf([]);
@@ -1101,6 +1102,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
      * @memberof SettingProfileComponent
      */
     private handleCompanyProfileResponse(response: any): void {
+        console.log(response);
+
         if (response.profileRequest || 1 === 1) {
             let profileObj = cloneDeep(response);
             if (profileObj.contactNo && profileObj.contactNo?.indexOf('-') > -1) {
@@ -1134,6 +1137,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 headQuarterAlias: profileObj.headQuarterAlias,
                 nameAlias: profileObj.nameAlias,
                 uniqueName: profileObj?.uniqueName,
+                portalDomain: profileObj?.portalDomain,
                 country: {
                     countryName: profileObj.countryV2 ? profileObj.countryV2.countryName : '',
                     countryCode: profileObj.countryV2 ? profileObj.countryV2.alpha2CountryCode?.toLowerCase() : '',
