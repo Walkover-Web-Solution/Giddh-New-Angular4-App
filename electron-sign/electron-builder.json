@@ -14,14 +14,15 @@
     "mac": {
         "category": "public.app-category.finance",
         "target": [
-            "pkg"
+            "pkg",
+            "mas"
         ],
         "identity": "Walkover Web Solutions Private Limited (F3U6Z5L2EJ)",
         "type": "distribution",
         "entitlements": "./../../../electron-sign/default.entitlements.mas.plist",
         "entitlementsInherit": "./../../../electron-sign/default.entitlements.mas.inherit.plist",
         "provisioningProfile": "./../../../electron-sign/embedded.provisionprofile",
-        "icon": "resources/icon.icns",
+        "icon": "./resources/icon.icns",
         "hardenedRuntime": true,
         "gatekeeperAssess": false
     },

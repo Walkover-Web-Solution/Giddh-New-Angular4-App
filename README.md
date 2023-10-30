@@ -349,3 +349,9 @@ Just like files, functions also follow the single responsibility princinple. Def
 ## Lifecycle Hooks
 
 Implement the lifecycle hook interfaces. Don't just use methods without implementing the Lifecycle Hook Interfaces.
+
+## Sign electron mac app
+
+codesign --sign "3rd Party Mac Developer Application: Company Name (************)" dist/apps/electrongiddh-packages/giddh-1.1.80.pkg
+
+productsign --sign "3rd Party Mac Developer Installer: Company Name (************)" dist/apps/electrongiddh-packages/file.pkg dist/apps/electrongiddh-packages/signed-file.pkg
