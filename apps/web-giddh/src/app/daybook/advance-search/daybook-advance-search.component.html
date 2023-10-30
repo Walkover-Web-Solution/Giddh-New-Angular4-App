@@ -126,6 +126,52 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="col-xs-12 col-sm-12 mr-t2 pd-t2 bd-rt">
+                        <div class="row">
+                            <div class="col-sm-5 col-xs-12">
+                                <label>{{ localeData?.tags }}</label>
+                            </div>
+                            <div class="col-sm-7 col-xs-12">
+                                <div class="row">
+                                    <div class="col-6 col-sm-6">
+                                        <mat-slide-toggle
+                                            color="primary"
+                                            id="includeTag"
+                                            formControlName="includeTag"
+                                        >
+                                            <span
+                                                class="pull-left"
+                                                *ngIf="advanceSearchForm.get('includeTag')?.value"
+                                                >{{ commonLocaleData?.app_include }}</span
+                                            >
+                                            <span
+                                                class="pull-right"
+                                                *ngIf="!advanceSearchForm.get('includeTag')?.value"
+                                                >{{ commonLocaleData?.app_exclude }}</span
+                                            >
+                                        </mat-slide-toggle>
+                                    </div>
+                                    <div class="col-6 col-sm-6">
+                                        <div class="form-group">
+                                            <sh-select
+                                                [options]="tags$ | async"
+                                                name="tags"
+                                                formControlName="tags"
+                                                (onClear)="onDDClear('tags')"
+                                                (selected)="onDDElementSelect('tags', $event)"
+                                                [isFilterEnabled]="true"
+                                                [multiple]="true"
+                                                [placeholder]="localeData?.select_tags"
+                                                [ItemHeight]="33"
+                                            ></sh-select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="col-xs-12 col-sm-12">
                         <div class="row">
                             <div class="col-sm-5 col-xs-12">
