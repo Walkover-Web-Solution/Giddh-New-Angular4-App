@@ -1102,8 +1102,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
      * @memberof SettingProfileComponent
      */
     private handleCompanyProfileResponse(response: any): void {
-        console.log(response);
-
         if (response.profileRequest || 1 === 1) {
             let profileObj = cloneDeep(response);
             if (profileObj.contactNo && profileObj.contactNo?.indexOf('-') > -1) {
