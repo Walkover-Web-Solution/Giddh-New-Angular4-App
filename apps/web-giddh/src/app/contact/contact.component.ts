@@ -1178,7 +1178,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         sortBy: string = "", order: string = "asc", branchUniqueName?: string): void {
         this.isGetAccountsInProcess = true;
         pageNumber = pageNumber ? pageNumber : 1;
-        refresh = refresh ? refresh : "false";
+        refresh = "false";
         fromDate = (fromDate) ? fromDate : "";
         toDate = (toDate) ? toDate : "";
         this.currentPage = pageNumber;

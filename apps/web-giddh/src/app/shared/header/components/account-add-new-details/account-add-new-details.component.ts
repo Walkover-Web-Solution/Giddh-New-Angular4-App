@@ -402,9 +402,18 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                     ifsc: [''],
                     beneficiaryName: [''],
                     branchName: [''],
-                    swiftCode: ['']
-
-                })
+                    swiftCode: [''],
+                }),
+            ]),
+            portalDomain: this._fb.array([
+                this._fb.group({
+                    name: [''],
+                    uniqueName: [''],
+                    email: ['', Validators.pattern(EMAIL_VALIDATION_REGEX)],
+                    contactNo: ['', Validators.required],
+                    operationType: [''],
+                    isDefault: ['']
+                }),
             ]),
             closingBalanceTriggerAmount: ['', Validators.compose([digitsOnly])],
             closingBalanceTriggerAmountType: ['CREDIT'],
@@ -443,6 +452,36 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         return gstFields;
     }
 
+    /**
+ * Add new unit mapping
+ *
+ * @param {*} [mapping]
+ * @memberof CreateNewUnitComponent
+ */
+    public addNewAddress(mapping?: any): void {
+
+        let mappings = this.addAccountForm.get('portalDomain') as UntypedFormArray;
+        console.log(mapping);
+
+        let mappingForm = this._fb.group({
+            mail: [''],
+            too: [''],
+            countCode: ['']
+        });
+        mappings.push(mappingForm);
+    }
+
+    /**
+ * Removes mapped unit
+ *
+ * @param {number} index
+ * @memberof CreateNewUnitComponent
+ */
+    public removeAddress(index: number): void {
+        let mappings = this.addAccountForm.get('portalDomain') as UntypedFormArray;
+        mappings.removeAt(index);
+    }
+
     public resetGstStateForm() {
         this.forceClear$ = observableOf({ status: true });
 
@@ -466,6 +505,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             control.get('ifsc')?.setValue("");
         }
     }
+
 
     public addGstDetailsForm(value?: string) {    // commented code because we no need GSTIN No. to add new address
         const addresses = this.addAccountForm.get('addresses') as UntypedFormArray;

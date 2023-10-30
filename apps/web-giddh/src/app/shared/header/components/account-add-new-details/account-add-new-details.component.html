@@ -495,7 +495,63 @@
                     </div>
                 </div>
             </tab>
-
+            <tab [heading]="'Portal Tab'" class="contact-form-wrap">
+                <div class="unit-quantity" formArrayName="portalDomain">
+                    <div
+                        class="row align-items-center"
+                        *ngFor="let domain of addAccountForm?.get('portalDomain')['controls']; let i = index"
+                        [formGroupName]="i"
+                    >
+                        <div class="col-xl-4 col-lg-5 col-md-5 col-sm-6 unit-equal">
+                            <div class="form-group">
+                                <label>{{ commonLocaleData?.app_email_id }}</label>
+                                <input type="email" class="form-control" formControlName="mail" name="mail_{{ i }}" />
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-2 pr-0 unit-responsive">
+                            <div class="form-group">
+                                <label>Attention To </label>
+                                <input type="text" class="form-control" formControlName="too" name="too_{{ i }}" />
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 pr-0">
+                            <div class="form-group">
+                                <label>{{ commonLocaleData?.app_mobile_number }}</label>
+                                <div class="d-flex">
+                                    <input
+                                        name="count_{{ i }}"
+                                        type="tel"
+                                        #initContactAdd
+                                        class="flag-input"
+                                        id="init-contact-add"
+                                        formControlName="countCode"
+                                        [placeholder]="localeData?.mobile_no_placeholder"
+                                    />
+                                </div>
+                                <span id="init-contact-add-valid-msg" class="d-none"> </span>
+                                <span id="init-contact-add-error-msg" class="d-none"> </span>
+                            </div>
+                        </div>
+                        <div class="col-xl-1 col-lg-1 col-md-2 col-sm-12 pl-0">
+                            <div class="inc-dec">
+                                <div class="plus-minus">
+                                    <button class="btn mr-0" (click)="removeAddress(i)">
+                                        <i class="icon-trash delete"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <a class="btn mr-0 add-new" href="javascript:void(0);" (click)="addNewAddress()">
+                                <i class="icon-plus"></i> {{ localeData?.add_address }}
+                            </a>
+                            <!-- <button class="btn mr-0 add-new" (click)="addNewAddress()">Add New</button> -->
+                        </div>
+                    </div>
+                </div>
+            </tab>
             <!-- bank details visible when sundry credtiors selected , right now is hide -->
             <tab [heading]="localeData?.tabs?.bank_details" class="bank-details-form" *ngIf="showBankDetail">
                 <div *ngIf="showBankDetail">
