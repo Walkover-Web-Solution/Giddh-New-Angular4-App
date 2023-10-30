@@ -46,6 +46,7 @@ export interface DayBookRequestModel {
     particulars: any[];
     vouchers: any[];
     inventory: Inventory;
+    tags?: any[];
 }
 
 export interface Inventory {
