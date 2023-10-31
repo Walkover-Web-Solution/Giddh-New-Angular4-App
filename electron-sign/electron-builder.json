@@ -29,10 +29,15 @@
     "dmg": {
         "sign": false
     },
+    "pkg": {
+        "isRelocatable": false,
+        "overwriteAction": "upgrade"
+    },    
     "mas": {
         "entitlements": "./../../../electron-sign/default.entitlements.mas.plist",
         "entitlementsInherit": "./../../../electron-sign/default.entitlements.mas.inherit.plist",
-        "provisioningProfile": "./../../../electron-sign/embedded.provisionprofile"
+        "provisioningProfile": "./../../../electron-sign/embedded.provisionprofile",
+        "hardenedRuntime": false
     },
     "linux": {
         "icon": "icon.png",
