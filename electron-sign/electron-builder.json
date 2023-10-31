@@ -36,7 +36,9 @@
     "mas": {
         "entitlements": "./../../../electron-sign/default.entitlements.mas.plist",
         "entitlementsInherit": "./../../../electron-sign/default.entitlements.mas.inherit.plist",
+        "entitlementsLoginHelper": "./../../../electron-sign/default.entitlements.mas.loginhelper.plist",
         "provisioningProfile": "./../../../electron-sign/embedded.provisionprofile",
+        "type": "distribution",
         "hardenedRuntime": false
     },
     "linux": {
