@@ -515,7 +515,6 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
                         this.recipeObject.manufacturingDetails[index].variant = manufacturingDetail.variant;
                         this.recipeObject.manufacturingDetails[index].linkedStocks = [];
 
-
                         this.getStockUnits(this.recipeObject.manufacturingDetails[index], this.stock.stockUnitUniqueName, true, true);
 
                         let linkedStockIndex = 0;
