@@ -27,7 +27,6 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 import { LedgerService } from '../services/ledger.service';
 import { Router } from '@angular/router';
 import { saveAs } from 'file-saver';
-import { ShSelectComponent } from '../theme/ng-virtual-select/sh-select.component';
 import { PageLeaveUtilityService } from '../services/page-leave-utility.service';
 
 @Component({
@@ -390,6 +389,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
                     exportBodyRequest.showEntryVoucher = response.showEntryVoucher;
                     exportBodyRequest.sort = response.order?.toUpperCase();
                     exportBodyRequest.fileType = "CSV";
+                    exportBodyRequest.tagNames = this.searchFilterData?.tags;
                     this.ledgerService.exportData(exportBodyRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                         if (response?.status === 'success') {
                             if (typeof response?.body === "string") {

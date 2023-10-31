@@ -712,8 +712,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public hasUnsavedChanges: boolean = false;
     /** True if entry datepicker is open */
     public isEntryDatepickerOpen: boolean = false;
-    /** True, if the linking with PO is in progress */
-    private isPoLinkingInProgress: boolean = false;
     /**Hold voucher type */
     public voucherTypes: any[] = [VoucherTypeEnum.cashCreditNote, VoucherTypeEnum.cash, VoucherTypeEnum.cashDebitNote, VoucherTypeEnum.cashBill];
     /** This will hold invoice text */
@@ -722,6 +720,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public regionsSource: IOption[] = [];
     /* This will hold company's country regions */
     public companyRegionsSource: IOption[] = [];
+    /** True, if the linking with PO is in progress */
+    private isPoLinkingInProgress: boolean = false;
     /** This will hold barcode value*/
     public barcodeValue: string = "";
     /** Custom fields request */
@@ -2949,6 +2949,12 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      */
     public closeAsideMenuProductServiceModal(): void {
         this.asideMenuStateForProductService?.close();
+
+        setTimeout(() => {
+            if (this.showPageLeaveConfirmation) {
+                this.pageLeaveUtilityService.addBrowserConfirmationDialog();
+            }
+        }, 100);
     }
 
     public toggleBodyClass() {
@@ -8420,9 +8426,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 data.addresses = [find(data.addresses, (tax) => tax.isDefault)];
             }
             // auto fill all the details
-            if (!this.isUpdateMode) {
-                this.invFormData.accountDetails = new AccountDetailsClass(data);
-            }
+            this.invFormData.accountDetails = new AccountDetailsClass(data);
+
             if (this.invFormData.accountDetails) {
                 this.getStateCode('billingDetails');
                 this.autoFillShippingDetails();
@@ -8721,10 +8726,10 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     }
 
     /**
-     * This will use for delete attachment confirmation
-     *
-     * @memberof VoucherComponent
-     */
+    * This will use for delete attachment confirmation
+    *
+    * @memberof VoucherComponent
+    */
     public deleteAttachementConfirmation(): void {
         this.attachmentDeleteConfiguration = this.generalService.getAttachmentDeleteConfiguration(this.localeData, this.commonLocaleData);
         let dialogRef = this.dialog.open(this.attachmentDeleteConfirmationModel, {

@@ -15,17 +15,19 @@
                     class="form-inline clearfix"
                     autocomplete="off"
                 >
-                    <div class="input-group form-group w-100">
-                        <input
-                            name="userEmail"
-                            type="email"
-                            [(ngModel)]="email"
-                            required
-                            [placeholder]="commonLocaleData?.app_email_id"
-                            class="form-control"
-                            [pattern]="giddhEmailRegex"
-                        />
-                        <div class="input-group-btn">
+                    <div class="input-group form-group w-100 d-flex justify-content-between">
+                        <div class="input-share-width">
+                            <input
+                                name="userEmail"
+                                type="email"
+                                [(ngModel)]="email"
+                                required
+                                [placeholder]="commonLocaleData?.app_email_id"
+                                class="form-control w-100 mr-0"
+                                [pattern]="giddhEmailRegex"
+                            />
+                        </div>
+                        <div class="input-group-btn d-flex justify-content-between">
                             <select
                                 name="selectedPermission"
                                 class="form-control selected-permission"

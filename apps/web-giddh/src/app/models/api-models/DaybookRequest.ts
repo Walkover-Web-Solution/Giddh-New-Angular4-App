@@ -25,12 +25,13 @@ export class ExportBodyRequest {
     accountUniqueName?: string;
     exportType?: string;
     branchUniqueName?: string;
-    fileType?: string;
     tagName?: string;
+    fileType?: string;
     interval?: string;
     isExpanded?: boolean;
     columnsToExport?: any[];
     q?: any;
+    tagNames?: any[];
 }
 
 export interface DayBookRequestModel {
@@ -46,6 +47,7 @@ export interface DayBookRequestModel {
     particulars: any[];
     vouchers: any[];
     inventory: Inventory;
+    tags?: any[];
 }
 
 export interface Inventory {

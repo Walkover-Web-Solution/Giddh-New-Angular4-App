@@ -115,6 +115,7 @@
 
             .items {
                 font-size: var(--font-size-15);
+                height: auto;
                 cursor: pointer;
                 &.map-item {
                     .mat-list-item-content {
