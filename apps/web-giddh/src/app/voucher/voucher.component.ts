@@ -8426,9 +8426,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 data.addresses = [find(data.addresses, (tax) => tax.isDefault)];
             }
             // auto fill all the details
-            if (!this.isUpdateMode) {
-                this.invFormData.accountDetails = new AccountDetailsClass(data);
-            }
+            this.invFormData.accountDetails = new AccountDetailsClass(data);
+
             if (this.invFormData.accountDetails) {
                 this.getStateCode('billingDetails');
                 this.autoFillShippingDetails();
