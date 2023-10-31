@@ -246,6 +246,19 @@ export class AccountService {
             catchError((e) => this.errorHandler.HandleCatch<AccountResponseV2, AccountRequestV2>(e, model, { groupUniqueName })));
     }
 
+    public createPortalUser(model: any): Observable<BaseResponse<any, any>> {
+        console.log(model);
+
+        const companyUniqueName = this.generalService.companyUniqueName;
+        const contextPath = ACCOUNTS_API.CREATE_UPDATE_DELETE?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName))?.replace(':accountUniqueName', encodeURIComponent(model?.accountUniqueName));
+        return this.http.patch(this.config.apiUrl + contextPath, model).pipe(
+            map((response) => {
+                let data: BaseResponse<any, any> = response;
+                data.request = model;
+                return data;
+            }), catchError((error) => this.errorHandler.HandleCatch<any, any>(error, model)));
+    }
+
     public UpdateAccountV2(model: AccountRequestV2, reqObj: { groupUniqueName: string, accountUniqueName: string, isMasterOpen?: boolean }): Observable<BaseResponse<AccountResponseV2, AccountRequestV2>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.put(this.config.apiUrl + ACCOUNTS_API_V2.UPDATE?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))

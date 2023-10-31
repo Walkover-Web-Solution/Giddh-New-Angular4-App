@@ -1,5 +1,5 @@
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
-import { debounceTime, take, takeUntil } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import {
     AfterViewInit,
     ChangeDetectorRef,
@@ -249,6 +249,44 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             }
         });
 
+
+        this.addAccountForm.valueChanges.pipe(
+            debounceTime(700),
+            distinctUntilChanged(),
+            takeUntil(this.destroyed$))
+            .subscribe(value => {
+                const users = this.addAccountForm.get('portalDomain') as UntypedFormArray;
+                const isDefault = users.controls.some(control => (control.get('isDefaultUsers')?.value === true));
+                if (isDefault) {
+                    let user = users.controls.find(control => control.get('isDefaultUsers')?.value === true);
+                    user?.get('name').setValue(value.attentionTo);
+                    user?.get('email').setValue(value.email);
+                    user?.get('contactNo').setValue(value.mobileNo);
+                    user?.get('isDefaultUsers').setValue(true);
+                } else {
+                    users.controls?.forEach((control, index) => {
+                        console.log("control", control, index);
+                        if (control.get('name')?.value || control.get('email')?.value) {
+                            users.push(this._fb.group({
+                                name: [value.attentionTo],
+                                email: [value.email, [Validators.pattern(EMAIL_VALIDATION_REGEX)]],
+                                contactNo: [value.mobileNo],
+                                isDefaultUsers: [true]
+                            }));
+                        } else {
+                            control?.get('name').setValue(value.attentionTo);
+                            control?.get('email').setValue(value.email);
+                            control?.get('contactNo').setValue(value.mobileNo);
+                            control?.get('isDefaultUsers').setValue(true);
+                        }
+                    });
+
+                }
+            });
+
+
+
+
         // get country code value change
         this.addAccountForm.get('country').get('countryCode').valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(a => {
             if (a) {
@@ -329,6 +367,9 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public ngAfterViewInit() {
         setTimeout(() => {
             this.onlyPhoneNumber();
+        }, 1000);
+        setTimeout(() => {
+            this.onlyPhoneNumberPortal();
         }, 1000);
         this.addAccountForm.get('country').get('countryCode').setValidators(Validators.required);
         let activegroupName = this.addAccountForm.get('activeGroupUniqueName')?.value;
@@ -412,7 +453,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                     email: ['', Validators.pattern(EMAIL_VALIDATION_REGEX)],
                     contactNo: ['', Validators.required],
                     operationType: [''],
-                    isDefault: ['']
+                    isDefaultUsers: [false]
                 }),
             ]),
             closingBalanceTriggerAmount: ['', Validators.compose([digitsOnly])],
@@ -458,15 +499,16 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
  * @param {*} [mapping]
  * @memberof CreateNewUnitComponent
  */
-    public addNewAddress(mapping?: any): void {
-
+    public addNewUsers(mapping?: any): void {
         let mappings = this.addAccountForm.get('portalDomain') as UntypedFormArray;
         console.log(mapping);
-
         let mappingForm = this._fb.group({
-            mail: [''],
-            too: [''],
-            countCode: ['']
+            email: [''],
+            name: [''],
+            uniqueName: [''],
+            contactNo: [''],
+            operationType: [''],
+            isDefaultUsers: [false]
         });
         mappings.push(mappingForm);
     }
@@ -477,7 +519,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
  * @param {number} index
  * @memberof CreateNewUnitComponent
  */
-    public removeAddress(index: number): void {
+    public removeUsers(index: number): void {
         let mappings = this.addAccountForm.get('portalDomain') as UntypedFormArray;
         mappings.removeAt(index);
     }
@@ -1450,4 +1492,100 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             });
         }
     }
+
+    /**
+  *This will use for  fetch mobile number
+ *
+ * @memberof AccountAddNewDetailsComponent
+ */
+    public onlyPhoneNumberPortal(): void {
+        let input = document.getElementById('init-contact-portal');
+        const errorMsg = document.querySelector("#init-contact-portal-error-msg");
+        const validMsg = document.querySelector("#init-contact-portal-valid-msg");
+        let errorMap = [this.localeData?.invalid_contact_number, this.commonLocaleData?.app_invalid_country_code, this.commonLocaleData?.app_invalid_contact_too_short, this.commonLocaleData?.app_invalid_contact_too_long, this.localeData?.invalid_contact_number];
+        const intlTelInput = !isElectron ? window['intlTelInput'] : window['intlTelInputGlobals']['electron'];
+        if (intlTelInput && input) {
+            this.intl = intlTelInput(input, {
+                nationalMode: true,
+                utilsScript: MOBILE_NUMBER_UTIL_URL,
+                autoHideDialCode: false,
+                separateDialCode: false,
+                initialCountry: 'auto',
+                geoIpLookup: (success, failure) => {
+                    let countryCode = 'in';
+                    const fetchIPApi = this.http.get<any>(MOBILE_NUMBER_SELF_URL);
+                    fetchIPApi.subscribe(
+                        (res) => {
+                            if (res?.ipAddress) {
+                                const fetchCountryByIpApi = this.http.get<any>(MOBILE_NUMBER_IP_ADDRESS_URL + `${res.ipAddress}`);
+                                fetchCountryByIpApi.subscribe(
+                                    (fetchCountryByIpApiRes) => {
+                                        if (fetchCountryByIpApiRes?.countryCode) {
+                                            return success(fetchCountryByIpApiRes.countryCode);
+                                        } else {
+                                            return success(countryCode);
+                                        }
+                                    },
+                                    (fetchCountryByIpApiErr) => {
+                                        const fetchCountryByIpInfoApi = this.http.get<any>(MOBILE_NUMBER_ADDRESS_JSON_URL + `${res.ipAddress}`);
+
+                                        fetchCountryByIpInfoApi.subscribe(
+                                            (fetchCountryByIpInfoApiRes) => {
+                                                if (fetchCountryByIpInfoApiRes?.country) {
+                                                    return success(fetchCountryByIpInfoApiRes.country);
+                                                } else {
+                                                    return success(countryCode);
+                                                }
+                                            },
+                                            (fetchCountryByIpInfoApiErr) => {
+                                                return success(countryCode);
+                                            }
+                                        );
+                                    }
+                                );
+                            } else {
+                                return success(countryCode);
+                            }
+                        },
+                        (err) => {
+                            return success(countryCode);
+                        }
+                    );
+                },
+            });
+            let reset = () => {
+                input?.classList?.remove("error");
+                if (errorMsg && validMsg) {
+                    errorMsg.innerHTML = "";
+                    errorMsg.classList.add("d-none");
+                    validMsg.classList.add("d-none");
+                }
+            };
+            input.addEventListener('blur', () => {
+                let phoneNumber = this.intl?.getNumber();
+                reset();
+                if (input) {
+                    if (phoneNumber?.length) {
+                        if (this.intl?.isValidNumber()) {
+                            validMsg?.classList?.remove("d-none");
+                            this.isMobileNumberInvalid = false;
+                        } else {
+                            input?.classList?.add("error");
+                            this.isMobileNumberInvalid = true;
+                            let errorCode = this.intl?.getValidationError();
+                            if (errorMsg && errorMap[errorCode]) {
+                                this._toaster.errorToast(this.localeData?.invalid_contact_number);
+                                errorMsg.innerHTML = errorMap[errorCode];
+                                errorMsg.classList.remove("d-none");
+                            }
+                        }
+                    } else {
+                        this.isMobileNumberInvalid = false;
+                    }
+                }
+            });
+        }
+    }
 }
+
+

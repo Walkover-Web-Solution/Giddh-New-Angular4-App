@@ -102,6 +102,10 @@ export class AccountsAction {
                 if (response?.status === 'success') {
                     this.store.dispatch(this.hasUnsavedChanges(false));
                     this.store.dispatch(this.groupWithAccountsAction.hideAddAccountForm());
+                    // this._accountService.createPortalUser(accRequestObject.accountRequest['portalDomain']).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                    //     console.log(response);
+
+                    // });
                 }
                 return this.createAccountResponseV2(response);
             })));
