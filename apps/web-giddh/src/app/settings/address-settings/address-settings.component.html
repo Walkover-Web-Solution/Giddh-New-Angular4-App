@@ -295,7 +295,7 @@
             </div>
         </div>
         <!-- branch profile element end -->
-        <div *ngIf="organizationType === 'COMPANY'" class="w-100 text-center">
+        <div *ngIf="organizationType === 'COMPANY'" class="w-100 text-center mt-4">
             <pagination
                 [(ngModel)]="paginationConfig.page"
                 *ngIf="!shouldShowLoader && paginationConfig?.totalItems > paginationLimit"

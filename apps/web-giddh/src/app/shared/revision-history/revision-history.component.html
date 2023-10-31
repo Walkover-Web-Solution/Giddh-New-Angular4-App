@@ -37,11 +37,11 @@
                 </div>
             </ng-container>
             <pagination
-                *ngIf="purchaseVersions.totalPages > 1"
-                class="pagination"
+                *ngIf="purchaseVersions.totalPages > 1 || true"
+                class="pagination mt-4"
                 [(ngModel)]="purchaseVersions.page"
                 [totalItems]="purchaseVersions.totalItems"
-                [itemsPerPage]="purchaseVersions.count"
+                [itemsPerPage]="1"
                 [maxSize]="5"
                 [boundaryLinks]="true"
                 [rotate]="false"

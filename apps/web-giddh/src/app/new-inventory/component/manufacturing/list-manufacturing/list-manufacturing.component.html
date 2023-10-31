@@ -183,7 +183,7 @@
                 <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
             </table>
         </section>
-        <div class="pagination-wrapper mt-1" [hidden]="totalItems <= paginationLimit">
+        <div class="pagination-wrapper mt-4" [hidden]="totalItems <= paginationLimit">
             <pagination
                 [totalItems]="totalItems"
                 [maxSize]="5"
