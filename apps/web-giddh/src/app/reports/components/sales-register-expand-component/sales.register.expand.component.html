@@ -638,7 +638,7 @@
                 </table>
             </div>
 
-            <div class="text-center" *ngIf="(salesRegisteDetailedResponse$ | async).totalItems > paginationLimit">
+            <div class="text-center mt-4" *ngIf="(salesRegisteDetailedResponse$ | async).totalItems > paginationLimit">
                 <pagination
                     [totalItems]="(salesRegisteDetailedResponse$ | async).totalItems"
                     [(ngModel)]="getDetailedsalesRequestFilter.page"

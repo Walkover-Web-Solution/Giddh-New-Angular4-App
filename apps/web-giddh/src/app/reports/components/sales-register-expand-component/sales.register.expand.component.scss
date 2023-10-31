@@ -359,10 +359,3 @@ table th {
         }
     }
 }
-
-@media (min-width: 769px) {
-    .table-responsive {
-        max-height: calc(100vh - 275px);
-        overflow-y: auto;
-    }
-}

@@ -429,11 +429,6 @@ tfoot td .table-sec.form-group {
     font-size: 10px;
 }
 /* responsive starts here*/
-@media (max-width: 1280px) {
-    #table-receipt {
-        width: calc(100% - 50px);
-    }
-}
 @media (max-width: 768px) {
     .select-action-button {
         display: flex;
