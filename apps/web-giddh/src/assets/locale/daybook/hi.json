@@ -15,5 +15,7 @@
     "vouchers_selected_message": "डिफ़ॉल्ट रूप से सभी वाउचर चुने जाते हैं",
     "cheque_details": "विवरण की जाँच करें",
     "cheque_number": "चेक नंबर",
-    "clearance_date": "क्लीयरेंस की तारीख"
+    "clearance_date": "क्लीयरेंस की तारीख",
+    "tags": "टैग",
+    "select_tags": "टैग का चयन करें"
 }

@@ -37,11 +37,6 @@
 button {
     &.mat-mdc-outlined-button {
         &.mat-primary {
-            &:disabled {
-                .ladda-label {
-                    color: transparent;
-                }
-            }
             &.ladda-button {
                 &:not(:disabled) {
                     .ladda-label {

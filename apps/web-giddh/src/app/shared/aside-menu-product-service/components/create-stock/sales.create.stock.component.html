@@ -337,11 +337,10 @@
                                 </div>
                             </ng-container>
                         </div>
-
                         <div class="pd-l05 pd-r05 pd-t05 row">
                             <div class="col-6 col-sm-6">
                                 <div class="checkbox">
-                                    <label class="" for="enablePurchase">
+                                    <label for="enablePurchase">
                                         <input
                                             type="checkbox"
                                             formControlName="enablePurchase"
@@ -437,7 +436,7 @@
 
                             <div class="col-6 col-sm-6">
                                 <div class="checkbox">
-                                    <label class="" for="enableSales">
+                                    <label for="enableSales">
                                         <input
                                             type="checkbox"
                                             formControlName="enableSales"
@@ -450,7 +449,7 @@
                                     >
                                 </div>
                                 <div class="form-group">
-                                    <label class="">Account Name</label>
+                                    <label >Account Name</label>
                                     <sh-select
                                         [options]="salesAccountsDropDown$ | async"
                                         #salesAccountUniqueName
@@ -536,7 +535,7 @@
                         <div class="mr-t1 pd-l05 pd-r05 row">
                             <div class="col-12 col-sm-12">
                                 <div class="checkbox">
-                                    <label class="" for="isFsStock">
+                                    <label for="isFsStock">
                                         <input
                                             #isFsStock
                                             type="checkbox"

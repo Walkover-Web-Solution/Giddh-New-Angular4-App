@@ -177,7 +177,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
         });
 
         this.store.pipe(select(state => state.session.currentLocale), takeUntil(this.destroyed$)).subscribe(response => {
-            if (this.activeLocale && this.activeLocale !== response?.value) {
+            if(this.activeLocale && this.activeLocale !== response?.value) {
                 this.localeService.getLocale('settings', response?.value).subscribe(response => {
                     this.localeData = response;
                 });

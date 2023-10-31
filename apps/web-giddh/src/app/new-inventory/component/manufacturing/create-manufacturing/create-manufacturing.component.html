@@ -261,7 +261,7 @@
                                                                 <div class="field-m-width">
                                                                     <select-field
                                                                         [cssClass]="
-                                                                            'disable-bg ' +
+                                                                            'disable-bg w-100 ' +
                                                                             linkedStock.cssClass +
                                                                             (linkedStock.stockNameError
                                                                                 ? ' required-field-error'
@@ -314,7 +314,7 @@
                                                                 <div class="field-m-width">
                                                                     <select-field
                                                                         [cssClass]="
-                                                                            'disable-bg ' +
+                                                                            'disable-bg w-100 ' +
                                                                             linkedStock.cssClass +
                                                                             (linkedStock.variantNameError
                                                                                 ? ' required-field-error'
@@ -343,7 +343,7 @@
                                                                 <div class="field-m-width">
                                                                     <text-field
                                                                         [cssClass]="
-                                                                            'disable-bg ' +
+                                                                            'disable-bg w-100 ' +
                                                                             linkedStock.cssClass +
                                                                             (linkedStock.quantityError
                                                                                 ? ' required-field-error'
@@ -367,7 +367,7 @@
                                                                     <div class="field-m-width">
                                                                         <select-field
                                                                             [cssClass]="
-                                                                                'disable-bg' + linkedStock.cssClass
+                                                                                'disable-bg w-100 ' + linkedStock.cssClass
                                                                             "
                                                                             [name]="'variantUnit' + i"
                                                                             [scrollableElementId]="'variantUnit' + i"
@@ -394,7 +394,7 @@
                                                                 <div class="field-m-width">
                                                                     <text-field
                                                                         [cssClass]="
-                                                                            'disable-bg ' + linkedStock.cssClass
+                                                                            'disable-bg w-100 ' + linkedStock.cssClass
                                                                         "
                                                                         [type]="'number'"
                                                                         [name]="'rate' + i"
@@ -502,7 +502,9 @@
                                                                     class="field-m-width table-column-width d-flex align-items-center"
                                                                 >
                                                                     <select-field
-                                                                        [cssClass]="'disable-bg ' + expense.cssClass"
+                                                                        [cssClass]="
+                                                                                'disable-bg w-100 ' + expense.cssClass
+                                                                            "
                                                                         [name]="'baseAccountUniqueName_' + i"
                                                                         [placeholder]="localeData?.liability_assets"
                                                                         [options]="liabilitiesAssetAccounts"
@@ -537,9 +539,11 @@
                                                                 </div>
                                                             </td>
                                                             <td class="table-variant">
-                                                                <div class="">
+                                                                <div >
                                                                     <select-field
-                                                                        [cssClass]="'disable-bg ' + expense.cssClass"
+                                                                              [cssClass]="
+                                                                                'disable-bg w-100 ' + expense.cssClass
+                                                                            "
                                                                         [name]="'expenseAccount_' + i"
                                                                         [placeholder]="localeData?.expense_acc"
                                                                         [options]="expenseAccounts"
@@ -569,11 +573,11 @@
                                                                 </div>
                                                             </td>
                                                             <td class="table-rate">
-                                                                <div class="">
+                                                                <div>
                                                                     <text-field
-                                                                        [cssClass]="
-                                                                            'disable-bg  text-right ' + expense.cssClass
-                                                                        "
+                                                                                [cssClass]="
+                                                                                'disable-bg w-100 text-right ' + expense.cssClass
+                                                                            "
                                                                         [type]="'text'"
                                                                         [name]="'amount' + i"
                                                                         [(ngModel)]="expense.transactions[0].amount"
