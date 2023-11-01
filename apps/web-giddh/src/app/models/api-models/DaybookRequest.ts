@@ -32,6 +32,7 @@ export class ExportBodyRequest {
     columnsToExport?: any[];
     q?: any;
     tagNames?: any[];
+    includeTag?: boolean;
 }
 
 export interface DayBookRequestModel {

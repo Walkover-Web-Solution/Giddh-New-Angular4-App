@@ -390,6 +390,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
                     exportBodyRequest.sort = response.order?.toUpperCase();
                     exportBodyRequest.fileType = "CSV";
                     exportBodyRequest.tagNames = this.searchFilterData?.tags;
+                    exportBodyRequest.includeTag = this.searchFilterData?.includeTag;
                     this.ledgerService.exportData(exportBodyRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                         if (response?.status === 'success') {
                             if (typeof response?.body === "string") {
