@@ -592,7 +592,7 @@
                                                                     </text-field>
                                                                 </div>
                                                             </td>
-                                                            <td class="table-amount">
+                                                            <td class="table-delete">
                                                                 <i
                                                                     [ngClass]="{
                                                                         'unvisible': activeOtherExpenseIndex !== i
@@ -634,7 +634,7 @@
                                                             {{ commonLocaleData?.app_quantity }}
                                                         </th>
                                                         <th class="table-unit">{{ commonLocaleData?.app_unit }}</th>
-                                                        <th>&nbsp;</th>
+                                                        <th class="table-delete">&nbsp;</th>
                                                     </tr>
                                                 </thead>
 
@@ -656,11 +656,11 @@
                                                                 hideBorder('byProductLinkedStock', byProductLinkedStock)
                                                             "
                                                         >
-                                                            <td class="table-name">
+                                                            <td class="table-name2">
                                                                 <div class="field-max-width">
                                                                     <select-field
                                                                         [cssClass]="
-                                                                            'disable-bg ' +
+                                                                            'disable-bg w-100 ' +
                                                                             byProductLinkedStock.cssClass +
                                                                             (byProductLinkedStock.stockNameError
                                                                                 ? ' required-field-error'
@@ -714,11 +714,11 @@
                                                                     </select-field>
                                                                 </div>
                                                             </td>
-                                                            <td class="table-variant">
+                                                            <td class="table-name2">
                                                                 <div class="field-max-width">
                                                                     <select-field
                                                                         [cssClass]="
-                                                                            'disable-bg ' +
+                                                                            'disable-bg w-100 ' +
                                                                             byProductLinkedStock.cssClass +
                                                                             (byProductLinkedStock.variantNameError
                                                                                 ? ' required-field-error'
@@ -748,7 +748,7 @@
                                                                 <div class="field-max-width">
                                                                     <text-field
                                                                         [cssClass]="
-                                                                            'disable-bg ' +
+                                                                            'disable-bg w-100 ' +
                                                                             byProductLinkedStock.cssClass +
                                                                             (byProductLinkedStock.quantityError
                                                                                 ? ' required-field-error'
@@ -771,7 +771,7 @@
                                                                     <div class="field-max-width">
                                                                         <select-field
                                                                             [cssClass]="
-                                                                                'disable-bg' +
+                                                                                'disable-bg w-100 ' +
                                                                                 byProductLinkedStock.cssClass
                                                                             "
                                                                             [name]="'variantUnit' + i"
@@ -796,7 +796,7 @@
                                                                     </div>
                                                                 </div>
                                                             </td>
-                                                            <td class="table-amount">
+                                                            <td class="table-delete">
                                                                 <i
                                                                     [ngClass]="{
                                                                         'unvisible':
