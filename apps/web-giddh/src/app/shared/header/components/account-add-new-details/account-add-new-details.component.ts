@@ -1,4 +1,4 @@
-import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
+import { combineLatest, Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import {
     AfterViewInit,
@@ -37,6 +37,8 @@ import { CustomFieldsService } from 'apps/web-giddh/src/app/services/custom-fiel
 import { FieldTypes } from 'apps/web-giddh/src/app/custom-fields/custom-fields.constant';
 import { HttpClient } from '@angular/common/http';
 import { AccountsAction } from 'apps/web-giddh/src/app/actions/accounts.actions';
+import { INameUniqueName } from 'apps/web-giddh/src/app/models/api-models/Inventory';
+import { AccountService } from 'apps/web-giddh/src/app/services/account.service';
 
 @Component({
     selector: 'account-add-new-details',
@@ -176,9 +178,12 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public isMobileNumberInvalid: boolean = false;
     /** This will hold mobile number field input  */
     public intl: any;
+    /** Hold newly create account observable  */
+    public newlyCreatedAc$: Observable<INameUniqueName>;
 
     constructor(
         private _fb: UntypedFormBuilder,
+        private accountService: AccountService,
         private store: Store<AppState>,
         private _toaster: ToasterService,
         private commonActions: CommonActions,
@@ -192,6 +197,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         private http: HttpClient,
         private accountsAction: AccountsAction) {
         this.activeGroup$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroup), takeUntil(this.destroyed$));
+        this.newlyCreatedAc$ = this.store.pipe(select(p => p.groupwithaccounts.newlyCreatedAccount), takeUntil(this.destroyed$));
     }
 
     /**
@@ -249,43 +255,43 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             }
         });
 
-
-        this.addAccountForm.valueChanges.pipe(
+        combineLatest([this.addAccountForm.get('attentionTo').valueChanges, this.addAccountForm.get('mobileNo').valueChanges, this.addAccountForm.get('email').valueChanges]).pipe(
             debounceTime(700),
             distinctUntilChanged(),
             takeUntil(this.destroyed$))
-            .subscribe(value => {
+            .subscribe(([attentionTo, mobileNo, email]) => {
                 const users = this.addAccountForm.get('portalDomain') as UntypedFormArray;
-                const isDefault = users.controls.some(control => (control.get('isDefaultUsers')?.value === true));
-                if (isDefault) {
-                    let user = users.controls.find(control => control.get('isDefaultUsers')?.value === true);
-                    user?.get('name').setValue(value.attentionTo);
-                    user?.get('email').setValue(value.email);
-                    user?.get('contactNo').setValue(value.mobileNo);
-                    user?.get('isDefaultUsers').setValue(true);
-                } else {
-                    users.controls?.forEach((control, index) => {
-                        console.log("control", control, index);
-                        if (control.get('name')?.value || control.get('email')?.value) {
-                            users.push(this._fb.group({
-                                name: [value.attentionTo],
-                                email: [value.email, [Validators.pattern(EMAIL_VALIDATION_REGEX)]],
-                                contactNo: [value.mobileNo],
-                                isDefaultUsers: [true]
-                            }));
-                        } else {
-                            control?.get('name').setValue(value.attentionTo);
-                            control?.get('email').setValue(value.email);
-                            control?.get('contactNo').setValue(value.mobileNo);
-                            control?.get('isDefaultUsers').setValue(true);
+                if (attentionTo || mobileNo || email) {
+                    const isDefault = users.controls.some(control => (control.get('isDefaultUsers')?.value === true));
+                    if (isDefault) {
+                        let user = users.controls.find(control => control.get('isDefaultUsers')?.value === true);
+                        user?.get('name').setValue(attentionTo);
+                        user?.get('email').setValue(email);
+                        user?.get('contactNo').setValue(mobileNo);
+                        user?.get('isDefaultUsers').setValue(true);
+                    } else {
+                        let setValue = false;
+                        users.controls?.find((control) => {
+                            if (!control.get('name')?.value || !control.get('email')?.value || !control.get('contactNo')?.value) {
+                                control.patchValue({ name: attentionTo, email: email, contactNo: mobileNo, isDefaultUsers: true });
+                                setValue = true;
+                                return true;
+                            }
+                        });
+                        if (!setValue) {
+                            let data = { name: attentionTo, email: email, contactNo: mobileNo, isDefaultUsers: true };
+                            this.addNewUsers(data);
                         }
-                    });
-
+                    }
+                } else {
+                    for (let i = users.length - 1; i >= 0; i--) {
+                        const control = users.at(i);
+                        if (control.get('isDefaultUsers')?.value === true) {
+                            users.removeAt(i);
+                        }
+                    }
                 }
             });
-
-
-
 
         // get country code value change
         this.addAccountForm.get('country').get('countryCode').valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(a => {
@@ -343,6 +349,11 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
         this.createAccountIsSuccess$?.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
+                // listen for new add account utils
+                this.newlyCreatedAc$.pipe(takeUntil(this.destroyed$)).subscribe((response: INameUniqueName) => {
+
+                });
+                console.log("success", response);
                 this.store.dispatch(this.accountsAction.hasUnsavedChanges(false));
                 this.addAccountForm?.markAsPristine();
             }
@@ -366,10 +377,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
     public ngAfterViewInit() {
         setTimeout(() => {
-            this.onlyPhoneNumber();
-        }, 1000);
-        setTimeout(() => {
-            this.onlyPhoneNumberPortal();
+            this.onlyPhoneNumber('init-contact-add');
+            this.onlyPhoneNumber('init-contact-portal_0');
         }, 1000);
         this.addAccountForm.get('country').get('countryCode').setValidators(Validators.required);
         let activegroupName = this.addAccountForm.get('activeGroupUniqueName')?.value;
@@ -449,10 +458,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             portalDomain: this._fb.array([
                 this._fb.group({
                     name: [''],
-                    uniqueName: [''],
                     email: ['', Validators.pattern(EMAIL_VALIDATION_REGEX)],
                     contactNo: ['', Validators.required],
-                    operationType: [''],
                     isDefaultUsers: [false]
                 }),
             ]),
@@ -499,18 +506,30 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
  * @param {*} [mapping]
  * @memberof CreateNewUnitComponent
  */
-    public addNewUsers(mapping?: any): void {
+    public addNewUsers(users?: any): void {
         let mappings = this.addAccountForm.get('portalDomain') as UntypedFormArray;
-        console.log(mapping);
         let mappingForm = this._fb.group({
-            email: [''],
             name: [''],
+            email: [''],
             uniqueName: [''],
             contactNo: [''],
-            operationType: [''],
             isDefaultUsers: [false]
         });
         mappings.push(mappingForm);
+        if (users) {
+            mappings.controls.forEach((control, index) => {
+                if (!control?.get('name').value || !control?.get('email').value || !control?.get('contactNo').value) {
+                    control?.get('name').setValue(users.name);
+                    control?.get('email').setValue(users.email);
+                    control?.get('contactNo').setValue(users.contactNo);
+                    control?.get('isDefaultUsers').setValue(true);
+                    control?.get('uniqueName').setValue('');
+                }
+            });
+        }
+        setTimeout(() => {
+            this.onlyPhoneNumber('init-contact-portal_' + (mappings.controls.length - 1))
+        }, 100);
     }
 
     /**
@@ -722,6 +741,12 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 }
             });
         }
+
+        accountRequest['portalDomain'] = accountRequest['portalDomain'].filter(portalDomain => portalDomain.isDefaultUsers !== true);
+        accountRequest['portalDomain'].forEach(portalDomain => {
+            delete portalDomain.isDefaultUsers;
+            delete portalDomain.uniqueName;
+        })
 
         this.submitClicked.emit({
             activeGroupUniqueName: this.activeGroupUniqueName,
@@ -1404,10 +1429,10 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
      *
      * @memberof AccountAddNewDetailsComponent
      */
-    public onlyPhoneNumber(): void {
-        let input = document.getElementById('init-contact-add');
-        const errorMsg = document.querySelector("#init-contact-add-error-msg");
-        const validMsg = document.querySelector("#init-contact-add-valid-msg");
+    public onlyPhoneNumber(id: string): void {
+        let input = document.getElementById(id);
+        const errorMsg = document.querySelector(`#${id}-error-msg`);
+        const validMsg = document.querySelector(`#${id}-valid-msg`);
         let errorMap = [this.localeData?.invalid_contact_number, this.commonLocaleData?.app_invalid_country_code, this.commonLocaleData?.app_invalid_contact_too_short, this.commonLocaleData?.app_invalid_contact_too_long, this.localeData?.invalid_contact_number];
         const intlTelInput = !isElectron ? window['intlTelInput'] : window['intlTelInputGlobals']['electron'];
         if (intlTelInput && input) {
@@ -1493,99 +1518,5 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         }
     }
 
-    /**
-  *This will use for  fetch mobile number
- *
- * @memberof AccountAddNewDetailsComponent
- */
-    public onlyPhoneNumberPortal(): void {
-        let input = document.getElementById('init-contact-portal');
-        const errorMsg = document.querySelector("#init-contact-portal-error-msg");
-        const validMsg = document.querySelector("#init-contact-portal-valid-msg");
-        let errorMap = [this.localeData?.invalid_contact_number, this.commonLocaleData?.app_invalid_country_code, this.commonLocaleData?.app_invalid_contact_too_short, this.commonLocaleData?.app_invalid_contact_too_long, this.localeData?.invalid_contact_number];
-        const intlTelInput = !isElectron ? window['intlTelInput'] : window['intlTelInputGlobals']['electron'];
-        if (intlTelInput && input) {
-            this.intl = intlTelInput(input, {
-                nationalMode: true,
-                utilsScript: MOBILE_NUMBER_UTIL_URL,
-                autoHideDialCode: false,
-                separateDialCode: false,
-                initialCountry: 'auto',
-                geoIpLookup: (success, failure) => {
-                    let countryCode = 'in';
-                    const fetchIPApi = this.http.get<any>(MOBILE_NUMBER_SELF_URL);
-                    fetchIPApi.subscribe(
-                        (res) => {
-                            if (res?.ipAddress) {
-                                const fetchCountryByIpApi = this.http.get<any>(MOBILE_NUMBER_IP_ADDRESS_URL + `${res.ipAddress}`);
-                                fetchCountryByIpApi.subscribe(
-                                    (fetchCountryByIpApiRes) => {
-                                        if (fetchCountryByIpApiRes?.countryCode) {
-                                            return success(fetchCountryByIpApiRes.countryCode);
-                                        } else {
-                                            return success(countryCode);
-                                        }
-                                    },
-                                    (fetchCountryByIpApiErr) => {
-                                        const fetchCountryByIpInfoApi = this.http.get<any>(MOBILE_NUMBER_ADDRESS_JSON_URL + `${res.ipAddress}`);
-
-                                        fetchCountryByIpInfoApi.subscribe(
-                                            (fetchCountryByIpInfoApiRes) => {
-                                                if (fetchCountryByIpInfoApiRes?.country) {
-                                                    return success(fetchCountryByIpInfoApiRes.country);
-                                                } else {
-                                                    return success(countryCode);
-                                                }
-                                            },
-                                            (fetchCountryByIpInfoApiErr) => {
-                                                return success(countryCode);
-                                            }
-                                        );
-                                    }
-                                );
-                            } else {
-                                return success(countryCode);
-                            }
-                        },
-                        (err) => {
-                            return success(countryCode);
-                        }
-                    );
-                },
-            });
-            let reset = () => {
-                input?.classList?.remove("error");
-                if (errorMsg && validMsg) {
-                    errorMsg.innerHTML = "";
-                    errorMsg.classList.add("d-none");
-                    validMsg.classList.add("d-none");
-                }
-            };
-            input.addEventListener('blur', () => {
-                let phoneNumber = this.intl?.getNumber();
-                reset();
-                if (input) {
-                    if (phoneNumber?.length) {
-                        if (this.intl?.isValidNumber()) {
-                            validMsg?.classList?.remove("d-none");
-                            this.isMobileNumberInvalid = false;
-                        } else {
-                            input?.classList?.add("error");
-                            this.isMobileNumberInvalid = true;
-                            let errorCode = this.intl?.getValidationError();
-                            if (errorMsg && errorMap[errorCode]) {
-                                this._toaster.errorToast(this.localeData?.invalid_contact_number);
-                                errorMsg.innerHTML = errorMap[errorCode];
-                                errorMsg.classList.remove("d-none");
-                            }
-                        }
-                    } else {
-                        this.isMobileNumberInvalid = false;
-                    }
-                }
-            });
-        }
-    }
 }
-
 

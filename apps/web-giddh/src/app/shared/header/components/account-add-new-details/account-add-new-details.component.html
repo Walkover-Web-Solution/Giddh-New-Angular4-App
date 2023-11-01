@@ -495,7 +495,7 @@
                     </div>
                 </div>
             </tab>
-            <tab [heading]="'Portal Tab'" class="contact-form-wrap">
+            <tab [heading]="'Portal'" class="contact-form-wrap">
                 <div class="unit-quantity" formArrayName="portalDomain">
                     <div
                         class="row align-items-center"
@@ -523,13 +523,13 @@
                                         type="tel"
                                         #initContactAdd2
                                         class="flag-input"
-                                        id="init-contact-portal"
+                                        id="init-contact-portal_{{ i }}"
                                         formControlName="contactNo"
                                         [placeholder]="localeData?.mobile_no_placeholder"
                                     />
                                 </div>
-                                <span id="init-contact-portal-valid-msg" class="d-none"> </span>
-                                <span id="init-contact-portal-error-msg" class="d-none"> </span>
+                                <span id="init-contact-portal_{{ i }}-valid-msg" class="d-none"> </span>
+                                <span id="init-contact-portal_{{ i }}-error-msg" class="d-none"> </span>
                             </div>
                         </div>
                         <div class="col-xl-1 col-lg-1 col-md-2 col-sm-12 pl-0">

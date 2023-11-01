@@ -1,4 +1,4 @@
-import { map, switchMap, take } from 'rxjs/operators';
+import { map, switchMap, take, takeUntil } from 'rxjs/operators';
 import { ShareRequestForm } from '../models/api-models/Permission';
 import { AccountMergeRequest, AccountMoveRequest, AccountRequest, AccountRequestV2, AccountResponse, AccountResponseV2, AccountSharedWithResponse, AccountsTaxHierarchyResponse, AccountUnMergeRequest, ShareAccountRequest, ShareEntityRequest } from '../models/api-models/Account';
 import { ApplyTaxRequest } from '../models/api-models/ApplyTax';
@@ -98,15 +98,18 @@ export class AccountsAction {
         .pipe(
             ofType(AccountsAction.CREATE_ACCOUNTV2),
             switchMap((action: CustomActions) => this._accountService.CreateAccountV2(action.payload.account, action.payload.accountUniqueName)),
-            map(response => {
+            map((response) => {
                 if (response?.status === 'success') {
                     this.store.dispatch(this.hasUnsavedChanges(false));
                     this.store.dispatch(this.groupWithAccountsAction.hideAddAccountForm());
-                    // this._accountService.createPortalUser(accRequestObject.accountRequest['portalDomain']).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                    //     console.log(response);
-
-                    // });
                 }
+                console.log(response);
+
+                this._accountService.createPortalUser(response.request.portalDomain, response.body.uniqueName).pipe(take(1)).subscribe(data => {
+                    if (data?.status === 'error') {
+                        this._toasty.errorToast(data.message, data.code);
+                    }
+                });
                 return this.createAccountResponseV2(response);
             })));
 

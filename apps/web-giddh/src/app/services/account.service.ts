@@ -246,11 +246,11 @@ export class AccountService {
             catchError((e) => this.errorHandler.HandleCatch<AccountResponseV2, AccountRequestV2>(e, model, { groupUniqueName })));
     }
 
-    public createPortalUser(model: any): Observable<BaseResponse<any, any>> {
+    public createPortalUser(model: any, accountUniqueName: string): Observable<BaseResponse<any, any>> {
         console.log(model);
 
         const companyUniqueName = this.generalService.companyUniqueName;
-        const contextPath = ACCOUNTS_API.CREATE_UPDATE_DELETE?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName))?.replace(':accountUniqueName', encodeURIComponent(model?.accountUniqueName));
+        const contextPath = ACCOUNTS_API.CREATE_UPDATE_DELETE?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName))?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName));
         return this.http.patch(this.config.apiUrl + contextPath, model).pipe(
             map((response) => {
                 let data: BaseResponse<any, any> = response;
@@ -258,6 +258,17 @@ export class AccountService {
                 return data;
             }), catchError((error) => this.errorHandler.HandleCatch<any, any>(error, model)));
     }
+
+    public getPortalUsers(accountUniqueName: string): Observable<BaseResponse<any, string>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.get(this.config.apiUrl + ACCOUNTS_API.CREATE_UPDATE_DELETE?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName))).pipe(map((res) => {
+            let data: BaseResponse<any, string> = res;
+            data.queryString = { accountUniqueName };
+            data.request = accountUniqueName;
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
+    }
+
 
     public UpdateAccountV2(model: AccountRequestV2, reqObj: { groupUniqueName: string, accountUniqueName: string, isMasterOpen?: boolean }): Observable<BaseResponse<AccountResponseV2, AccountRequestV2>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
