@@ -1131,7 +1131,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             if (accountDetails) {
                 this.hideDepositSectionForCashBankGroups(accountDetails);
                 this.accountAddressList = accountDetails.addresses;
-                this.updateAccountDetails(accountDetails);
+                this.updateAccountDetails(accountDetails, true);
             }
         });
         this.getOnboardingFormInProcess$.subscribe(inProcess => {
@@ -2214,7 +2214,10 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         }
 
         this.checkIfNeedToExcludeTax(data);
-        this.updateAccountDetails(data);
+
+        const forceUpdateAddress = data?.uniqueName !== this.invFormData.accountDetails?.uniqueName;
+
+        this.updateAccountDetails(data, forceUpdateAddress);
     }
 
     /**
@@ -8414,13 +8417,15 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     * @param {*} data
     * @memberof VoucherComponent
     */
-    private updateAccountDetails(data: any): void {
+    private updateAccountDetails(data: any, forceUpdateAddress: boolean = false): void {
         this.getUpdatedStateCodes(data.country.countryCode).then(() => {
             if (data.addresses && data.addresses.length) {
                 data.addresses = [find(data.addresses, (tax) => tax.isDefault)];
             }
-            // auto fill all the details
-            this.invFormData.accountDetails = new AccountDetailsClass(data);
+            if (forceUpdateAddress) {
+                // auto fill all the details
+                this.invFormData.accountDetails = new AccountDetailsClass(data);
+            }
 
             if (this.invFormData.accountDetails) {
                 this.getStateCode('billingDetails');
