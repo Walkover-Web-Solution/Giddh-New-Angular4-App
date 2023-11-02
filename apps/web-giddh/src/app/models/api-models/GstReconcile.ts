@@ -389,3 +389,9 @@ export class Gstr3bOverviewResult {
 export class GstrJsonDownloadRequest extends GstOverViewRequest {
     public type: string;
 }
+
+export class FilingStatusRequest extends GstOverViewRequest {
+    public gsp: 'TAXPRO';
+    public page: string;
+    public count: string;
+}

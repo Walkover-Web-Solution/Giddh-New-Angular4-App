@@ -6,7 +6,7 @@ import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { GST_RECONCILE_API } from './apiurls/gst-reconcile.api';
-import { FileGstr1Request, GetGspSessionResponse, GstOverViewRequest, GstOverViewResult, Gstr1SummaryRequest, Gstr1SummaryResponse, GstReconcileInvoiceRequest, GstReconcileInvoiceResponse, GstrSheetDownloadRequest, GstSaveGspSessionRequest, GStTransactionRequest, GstTransactionResult, VerifyOtpRequest, Gstr3bOverviewResult, GstrJsonDownloadRequest } from '../models/api-models/GstReconcile';
+import { FileGstr1Request, GetGspSessionResponse, GstOverViewRequest, GstOverViewResult, Gstr1SummaryRequest, Gstr1SummaryResponse, GstReconcileInvoiceRequest, GstReconcileInvoiceResponse, GstrSheetDownloadRequest, GstSaveGspSessionRequest, GStTransactionRequest, GstTransactionResult, VerifyOtpRequest, Gstr3bOverviewResult, GstrJsonDownloadRequest, FilingStatusRequest } from '../models/api-models/GstReconcile';
 import { catchError, map } from 'rxjs/operators';
 import { GSTR_API } from './apiurls/gst-r.api';
 import { GST_RETURN_API } from './apiurls/purchase-invoice.api';
@@ -266,5 +266,23 @@ export class GstReconcileService {
             data.queryString = reqObj;
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<any, GstrJsonDownloadRequest>(e)));
+    }
+
+       
+    public getFilingStatusReferenceIdList(request: FilingStatusRequest): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        let apiUrl = GSTR_API.GET_FILING_STATUS_REFERENCE_ID
+            ?.replace(':companyUniqueName', this.companyUniqueName)
+            ?.replace(':from', request.from)
+            ?.replace(':to', request.to)
+            ?.replace(':page', request.page)
+            ?.replace(':count', request.count)
+            ?.replace(':gstIn', request.gstin)
+            ?.replace(':gsp', request.gsp);
+        return this.http.post(this.config.apiUrl + apiUrl, {}).pipe(map((res) => {
+            let data: BaseResponse<any, FilingStatusRequest> = res;
+            data.queryString = request;
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<any, FilingStatusRequest>(e)));
     }
 }
