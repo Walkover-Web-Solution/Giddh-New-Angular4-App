@@ -15,5 +15,7 @@
     "vouchers_selected_message": "डीफॉल्टनुसार सर्व व्हाउचर निवडले जातात",
     "cheque_details": "चेक तपशील",
     "cheque_number": "चेक संख्या",
-    "clearance_date": "मंजुरीची तारीख"
+    "clearance_date": "मंजुरीची तारीख",
+    "tags": "टॅग्ज",
+    "select_tags": "टॅग निवडा"
 }
