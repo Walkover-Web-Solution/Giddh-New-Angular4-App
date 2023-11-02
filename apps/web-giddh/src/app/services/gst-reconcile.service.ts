@@ -6,7 +6,7 @@ import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { GST_RECONCILE_API } from './apiurls/gst-reconcile.api';
-import { FileGstr1Request, GetGspSessionResponse, GstOverViewRequest, GstOverViewResult, Gstr1SummaryRequest, Gstr1SummaryResponse, GstReconcileInvoiceRequest, GstReconcileInvoiceResponse, GstrSheetDownloadRequest, GstSaveGspSessionRequest, GStTransactionRequest, GstTransactionResult, VerifyOtpRequest, Gstr3bOverviewResult, GstrJsonDownloadRequest, FilingStatusRequest } from '../models/api-models/GstReconcile';
+import { FileGstr1Request, GetGspSessionResponse, GstOverViewRequest, GstOverViewResult, Gstr1SummaryRequest, Gstr1SummaryResponse, GstReconcileInvoiceRequest, GstReconcileInvoiceResponse, GstrSheetDownloadRequest, GstSaveGspSessionRequest, GStTransactionRequest, GstTransactionResult, VerifyOtpRequest, Gstr3bOverviewResult, GstrJsonDownloadRequest, FilingStatusListRequest, FilingStatusRequest } from '../models/api-models/GstReconcile';
 import { catchError, map } from 'rxjs/operators';
 import { GSTR_API } from './apiurls/gst-r.api';
 import { GST_RETURN_API } from './apiurls/purchase-invoice.api';
@@ -268,20 +268,43 @@ export class GstReconcileService {
         }), catchError((e) => this.errorHandler.HandleCatch<any, GstrJsonDownloadRequest>(e)));
     }
 
-       
-    public getFilingStatusReferenceIdList(request: FilingStatusRequest): Observable<BaseResponse<any, any>> {
+    /**
+     * Get GST Return Filling Reference List
+     *
+     * @param {FilingStatusListRequest} request
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof GstReconcileService
+     */
+    public getFilingStatusReferenceIdList(request: FilingStatusListRequest): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let apiUrl = GSTR_API.GET_FILING_STATUS_REFERENCE_ID
             ?.replace(':companyUniqueName', this.companyUniqueName)
             ?.replace(':from', request.from)
             ?.replace(':to', request.to)
-            ?.replace(':page', request.page)
-            ?.replace(':count', request.count)
+            ?.replace(':page', encodeURIComponent(request.page?.toString()))
+            ?.replace(':count', encodeURIComponent(request.count?.toString()))
             ?.replace(':gstIn', request.gstin)
             ?.replace(':gsp', request.gsp);
-        return this.http.post(this.config.apiUrl + apiUrl, {}).pipe(map((res) => {
+        return this.http.get(this.config.apiUrl + apiUrl).pipe(map((res) => {
+            let data: BaseResponse<any, FilingStatusListRequest> = res;
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<any, FilingStatusListRequest>(e)));
+    }
+    
+    /**
+     * Get GST Return Filling Reference Id Status
+     *
+     * @param {FilingStatusRequest} request
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof GstReconcileService
+     */
+    public getFilingStatus(request: FilingStatusRequest): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        let apiUrl = GSTR_API.GET_FILING_STATUS_RESPONSE
+            ?.replace(':companyUniqueName', this.companyUniqueName)
+            ?.replace(':referenceId', request.referenceId)
+        return this.http.get(this.config.apiUrl + apiUrl).pipe(map((res) => {
             let data: BaseResponse<any, FilingStatusRequest> = res;
-            data.queryString = request;
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<any, FilingStatusRequest>(e)));
     }

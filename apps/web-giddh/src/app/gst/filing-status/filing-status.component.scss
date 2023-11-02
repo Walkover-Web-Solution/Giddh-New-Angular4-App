@@ -1,20 +1,12 @@
-.filing-status{
-    // border: 2px dashed blue;
-
-    &-header{
-        // border: 2px dashed greenyellow;
-    }
-
-
-    &-table{
-        // border: 2px dashed yellow;
-        .table-loader{
-            // border: 2px dashed red;
+.filing-status {
+    &-table {
+        .table-loader {
             height: calc(100vh - 200px);
         }
-        table{
-            tr{
-                &:hover{
+        table {
+            background-color: var(--color-transparent-background);
+            tr {
+                &:hover {
                     background-color: var(--color-table-row-hover-primary-background);
                 }
             }
@@ -23,8 +15,8 @@
 }
 .example-month-picker .mat-calendar-period-button {
     pointer-events: none;
-  }
-  
-  .example-month-picker .mat-calendar-arrow {
+}
+
+.example-month-picker .mat-calendar-arrow {
     display: none;
-  }
+}

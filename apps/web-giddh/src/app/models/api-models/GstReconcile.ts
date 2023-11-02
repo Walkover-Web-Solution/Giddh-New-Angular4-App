@@ -390,8 +390,25 @@ export class GstrJsonDownloadRequest extends GstOverViewRequest {
     public type: string;
 }
 
-export class FilingStatusRequest extends GstOverViewRequest {
+/**
+ * Filing Status List Request
+ *
+ * @export
+ * @class FilingStatusListRequest
+ * @extends {GstOverViewRequest}
+ */
+export class FilingStatusListRequest extends GstOverViewRequest {
     public gsp: 'TAXPRO';
-    public page: string;
-    public count: string;
+    public page: number;
+    public count: number;
+}
+
+/**
+ * Filing Status Request
+ *
+ * @export
+ * @class FilingStatusRequest
+ */
+export class FilingStatusRequest {
+    public referenceId: string;
 }
