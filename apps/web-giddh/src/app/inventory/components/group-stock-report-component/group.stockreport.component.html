@@ -226,10 +226,9 @@
         <div class="mobile-card-wrapper">
             <table
                 class="table basic table-border inventory-stock-table on-mobile-view table-responsive"
-                [ngClass]="{
-                    'mr-b100':
-                        groupStockReport && groupStockReport.stockReport && groupStockReport.stockReport.length > 6
-                }"
+                [ngClass]="{ 'mr-b100': groupStockReport && groupStockReport.stockReport && groupStockReport.stockReport.length > 6 }
+                            ||
+                           {'mb-5': groupStockReport && groupStockReport.totalPages > 1}"
             >
                 <thead>
                     <tr>
