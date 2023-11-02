@@ -241,7 +241,8 @@
                         <div class="gstin-form" formArrayName="addresses">
                             <ng-container
                                 *ngFor="
-                                    let gst of addAccountForm.get('addresses')['controls'] | slice: 0:gstDetailsLength;
+                                    let gst of addAccountForm.get('addresses')['controls']
+                                        | slice : 0 : gstDetailsLength;
                                     let i = index;
                                     let f = first;
                                     let l = last
@@ -510,7 +511,7 @@
                     </div>
                 </div>
             </tab>
-          <tab [heading]="'Portal'" class="contact-form-wrap">
+            <tab [heading]="'Portal'" class="contact-form-wrap">
                 <div class="unit-quantity" formArrayName="portalDomain">
                     <div
                         class="row align-items-center"
@@ -531,6 +532,7 @@
                         </div>
                         <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 pr-0">
                             <div class="form-group">
+                                {{ domain.get("contactNo").value }}
                                 <label>{{ commonLocaleData?.app_mobile_number }}</label>
                                 <div class="d-flex">
                                     <input
@@ -541,6 +543,7 @@
                                         id="init-contact-portal_{{ i }}"
                                         formControlName="contactNo"
                                         [placeholder]="localeData?.mobile_no_placeholder"
+                                        (input)="onContactNoChange(i, $event.target.value)"
                                     />
                                 </div>
                                 <span id="init-contact-portal_{{ i }}-valid-msg" class="d-none"> </span>
@@ -559,10 +562,9 @@
                     </div>
                     <div class="row">
                         <div class="col-lg-12">
-                            <a class="btn mr-0 add-new" href="javascript:void(0);" (click)="addNewUsers()">
+                            <a class="mr-0 add-new" href="javascript:void(0);" (click)="addNewUsers()">
                                 <i class="icon-plus"></i>Add Users
                             </a>
-                            <!-- <button class="btn mr-0 add-new" (click)="addNewAddress()">Add New</button> -->
                         </div>
                     </div>
                 </div>

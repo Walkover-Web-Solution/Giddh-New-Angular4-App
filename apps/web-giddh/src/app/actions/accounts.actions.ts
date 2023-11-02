@@ -103,8 +103,6 @@ export class AccountsAction {
                     this.store.dispatch(this.hasUnsavedChanges(false));
                     this.store.dispatch(this.groupWithAccountsAction.hideAddAccountForm());
                 }
-                console.log(response);
-
                 this._accountService.createPortalUser(response.request.portalDomain, response.body.uniqueName).pipe(take(1)).subscribe(data => {
                     if (data?.status === 'error') {
                         this._toasty.errorToast(data.message, data.code);
@@ -157,6 +155,8 @@ export class AccountsAction {
             switchMap((action: CustomActions) => this._accountService.UpdateAccount(action.payload.account, action.payload.accountUniqueName)),
             map(response => {
                 if (response && response.body && response.queryString) {
+                    console.log(response);
+
                     const updateIndexDb: IUpdateDbRequest = {
                         newUniqueName: response.body?.uniqueName,
                         oldUniqueName: response.queryString.accountUniqueName,
@@ -167,6 +167,11 @@ export class AccountsAction {
                         name: response.body?.name
                     }
                     this.store.dispatch(this._generalActions.updateIndexDb(updateIndexDb));
+                    // this._accountService.createPortalUser(response.request.portalDomain, response.body.uniqueName).pipe(take(1)).subscribe(data => {
+                    //     if (data?.status === 'error') {
+                    //         this._toasty.errorToast(data.message, data.code);
+                    //     }
+                    // });
                 }
                 return this.updateAccountResponse(response);
             })));

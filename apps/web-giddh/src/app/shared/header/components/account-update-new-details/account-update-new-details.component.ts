@@ -64,6 +64,10 @@ import { HttpClient } from '@angular/common/http';
 })
 
 export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit {
+    /** Mobile Number state instance */
+    @ViewChild('initContactAdd2', { static: false }) initContactAdd2: ElementRef;
+    /** Mobile Number state instance */
+    @ViewChild('initContactUpdate', { static: false }) initContactUpdate: ElementRef;
     public addAccountForm: UntypedFormGroup;
     @Input() public activeGroupUniqueName: string;
     @Input() public flatGroupsOptions: IOption[];
@@ -220,6 +224,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public isMobileNumberInvalid: boolean = false;
     /** This will hold mobile number field input  */
     public intl: any;
+    public removedPortalUsers: any[] = [];
 
     constructor(
         private _fb: UntypedFormBuilder,
@@ -309,33 +314,42 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             distinctUntilChanged(),
             takeUntil(this.destroyed$))
             .subscribe(([attentionTo, mobileNo, email]) => {
+                console.log(attentionTo, mobileNo, email);
+
                 const users = this.addAccountForm.get('portalDomain') as UntypedFormArray;
                 if (attentionTo || mobileNo || email) {
-                    const isDefault = users.controls.some(control => (control.get('isDefaultUsers')?.value === true));
+                    let updatedNumber = '';
+                    if (mobileNo) {
+                        updatedNumber = '+' + mobileNo;
+                        this.intl?.setNumber(updatedNumber);
+                    }
+                    const isDefault = users.controls.some(control => (control.get('default')?.value === true));
                     if (isDefault) {
-                        let user = users.controls.find(control => control.get('isDefaultUsers')?.value === true);
-                        user?.get('name').setValue(attentionTo);
-                        user?.get('email').setValue(email);
-                        user?.get('contactNo').setValue(mobileNo);
-                        user?.get('isDefaultUsers').setValue(true);
+                        let user = users.controls.find(control => control.get('default')?.value === true);
+                        user?.get('name').patchValue(attentionTo);
+                        user?.get('email').patchValue(email);
+                        user?.get('contactNo').patchValue(updatedNumber);
+                        user?.get('default').patchValue(true);
+                        user?.get('isModified').patchValue(true);
+                        user?.get('operationType').patchValue('');
                     } else {
                         let setValue = false;
                         users.controls?.find((control) => {
                             if (!control.get('name')?.value || !control.get('email')?.value || !control.get('contactNo')?.value) {
-                                control.patchValue({ name: attentionTo, email: email, contactNo: mobileNo, isDefaultUsers: true });
+                                control.patchValue({ name: attentionTo, email: email, contactNo: updatedNumber, default: true, isModified: true, operationType: '' });
                                 setValue = true;
                                 return true;
                             }
                         });
                         if (!setValue) {
-                            let data = { name: attentionTo, email: email, contactNo: mobileNo, isDefaultUsers: true };
+                            let data = { name: attentionTo, email: email, contactNo: updatedNumber, default: true, isModified: true, operationType: '' };
                             this.addNewUsers(data);
                         }
                     }
                 } else {
                     for (let i = users.length - 1; i >= 0; i--) {
                         const control = users.at(i);
-                        if (control.get('isDefaultUsers')?.value === true) {
+                        if (control.get('default')?.value === true) {
                             users.removeAt(i);
                         }
                     }
@@ -373,7 +387,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public ngAfterViewInit() {
         setTimeout(() => {
             this.onlyPhoneNumber('init-contact-update');
-            this.onlyPhoneNumber('init-contact-portal_0');
+            this.onlyPhoneNumber('init-contact-portal_');
         }, 1000);
         if (this.flatGroupsOptions === undefined) {
             this.getAccount();
@@ -542,7 +556,10 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     name: [''],
                     email: ['', Validators.pattern(EMAIL_VALIDATION_REGEX)],
                     contactNo: ['', Validators.required],
-                    isDefaultUsers: [false]
+                    default: [false],
+                    uniqueName: [''],
+                    isModified: [false],
+                    operationType: ['']
                 }),
             ]),
         });
@@ -622,23 +639,45 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             email: [''],
             uniqueName: [''],
             contactNo: [''],
-            isDefaultUsers: [false]
+            default: [false],
+            isModified: [false],
+            operationType: ['']
         });
         mappings.push(mappingForm);
         if (users) {
+            let updatedNumber = '';
+            if (users?.contactNo) {
+                updatedNumber = '+' + users?.contactNo;
+                this.intl?.setNumber(updatedNumber);
+            }
             mappings.controls.forEach((control, index) => {
+                console.log(control);
                 if (!control?.get('name').value || !control?.get('email').value || !control?.get('contactNo').value) {
                     control?.get('name')?.patchValue(users.name ?? '');
                     control?.get('email')?.patchValue(users.email ?? '');
-                    control?.get('contactNo')?.patchValue(users.contactNo ?? '');
-                    control?.get('isDefaultUsers')?.patchValue(users.isDefaultUsers ?? true);
+                    control?.get('contactNo')?.patchValue(updatedNumber ?? '');
+                    control?.get('default')?.patchValue(users.default ?? false);
                     control?.get('uniqueName')?.patchValue(users.uniqueName ?? '');
+                    control?.get('isModified')?.patchValue(users.isModified ?? false);
+                    control?.get('operationType')?.patchValue(users.operationType ?? '');
                 }
             });
         }
         setTimeout(() => {
             this.onlyPhoneNumber('init-contact-portal_' + (mappings.controls.length - 1))
-        }, 1000);
+        });
+    }
+
+    public removeUsers(index: number): void {
+        let mappings = this.addAccountForm.get('portalDomain') as UntypedFormArray;
+        let group = mappings.at(index);
+        group?.get('isModified').patchValue(true);
+        group?.get('operationType').patchValue('DELETE');
+        let savedData = cloneDeep(group.value);
+
+        this.removedPortalUsers.push(savedData);
+        console.log(this.removedPortalUsers, group, mappings);
+        mappings.removeAt(index);
     }
 
     public addGstDetailsForm(value: string) {         // commented code because we no need GSTIN No. to add new address
@@ -824,6 +863,9 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             });
         }
 
+        accountRequest['portalDomain'] = accountRequest['portalDomain'].filter(portalDomain => portalDomain.isDefaultUsers !== true);
+        console.log(accountRequest);
+        return;
         this.submitClicked.emit({
             value: { groupUniqueName: this.activeGroupUniqueName, accountUniqueName: this.activeAccountName },
             accountRequest
@@ -834,6 +876,13 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         if (Number(this.addAccountForm.get('closingBalanceTriggerAmount')?.value) > 0) {
             this.addAccountForm.get('closingBalanceTriggerAmountType')?.patchValue(type);
         }
+    }
+
+    onContactNoChange(index: number, newValue: string) {
+        const portal = this.addAccountForm.get('portalDomain') as UntypedFormArray;
+        let portalFormGroup = portal.at(index) as UntypedFormGroup;
+        portalFormGroup.get('contactNo').setValue(newValue);
+        portalFormGroup.get('isModified').setValue(true);
     }
 
     /**
@@ -1842,26 +1891,20 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                         }
                         uniq(this.selectedDiscounts);
                     });
-
+                    setTimeout(() => {
                     this._accountService
                         .getPortalUsers(accountDetails?.uniqueName)
                         .pipe(takeUntil(this.destroyed$))
                         .subscribe((response) => {
                             if (response?.status === 'success') {
-                                console.log('get', response);
-                                const portalDomainArray = this.addAccountForm.get('portalDomain') as UntypedFormArray;
+                                let mappings = this.addAccountForm.get('portalDomain') as UntypedFormArray;
+                                mappings.clear();
                                 response.body?.forEach((item) => {
-                                    this.addNewUsers(item)
-                                    // portalDomainArray.push(
-                                    //     this._fb.group({
-                                    //         name: [item.name],
-                                    //         email: [item.email, Validators.pattern(EMAIL_VALIDATION_REGEX)],
-                                    //         contactNo: [item.contactNo, Validators.required]
-                                    //     })
-                                    // );
+                                    this.addNewUsers(item);
                                 });
                             }
                         });
+                    }, 1500);
 
                 }
 

@@ -532,8 +532,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         }, 100);
     }
 
-    /**
- * Removes mapped unit
+/**
+ * Removes portal users
  *
  * @param {number} index
  * @memberof CreateNewUnitComponent
@@ -746,7 +746,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         accountRequest['portalDomain'].forEach(portalDomain => {
             delete portalDomain.isDefaultUsers;
             delete portalDomain.uniqueName;
-        })
+        });
 
         this.submitClicked.emit({
             activeGroupUniqueName: this.activeGroupUniqueName,
