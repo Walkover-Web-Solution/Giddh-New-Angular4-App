@@ -183,14 +183,16 @@
                 <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
             </table>
         </section>
-        <div class="pagination-wrapper mt-4" [hidden]="totalItems <= paginationLimit">
+        <div class="pagination-wrapper mt-4" *ngIf="totalItems >= paginationLimit">
             <pagination
                 [totalItems]="totalItems"
                 [maxSize]="5"
+                [(ngModel)]="currentPage"
                 class="pagination-sm"
                 [boundaryLinks]="true"
                 [itemsPerPage]="paginationLimit"
                 [rotate]="false"
+                (pageChanged)="pageChanged($event)"
                 [firstText]="commonLocaleData?.app_first"
                 [previousText]="commonLocaleData?.app_previous"
                 [nextText]="commonLocaleData?.app_next"
