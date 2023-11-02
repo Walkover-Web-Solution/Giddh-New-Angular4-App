@@ -353,7 +353,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 this.newlyCreatedAc$.pipe(takeUntil(this.destroyed$)).subscribe((response: INameUniqueName) => {
 
                 });
-                console.log("success", response);
                 this.store.dispatch(this.accountsAction.hasUnsavedChanges(false));
                 this.addAccountForm?.markAsPristine();
             }
@@ -532,12 +531,12 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         }, 100);
     }
 
-/**
- * Removes portal users
- *
- * @param {number} index
- * @memberof CreateNewUnitComponent
- */
+    /**
+     * Removes portal users
+     *
+     * @param {number} index
+     * @memberof CreateNewUnitComponent
+     */
     public removeUsers(index: number): void {
         let mappings = this.addAccountForm.get('portalDomain') as UntypedFormArray;
         mappings.removeAt(index);

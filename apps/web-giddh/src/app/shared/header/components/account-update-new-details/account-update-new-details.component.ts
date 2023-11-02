@@ -225,6 +225,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     /** This will hold mobile number field input  */
     public intl: any;
     public removedPortalUsers: any[] = [];
+    public isModifiedPortalUsers: any[] = [];
 
     constructor(
         private _fb: UntypedFormBuilder,
@@ -314,8 +315,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             distinctUntilChanged(),
             takeUntil(this.destroyed$))
             .subscribe(([attentionTo, mobileNo, email]) => {
-                console.log(attentionTo, mobileNo, email);
-
                 const users = this.addAccountForm.get('portalDomain') as UntypedFormArray;
                 if (attentionTo || mobileNo || email) {
                     let updatedNumber = '';
@@ -651,7 +650,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 this.intl?.setNumber(updatedNumber);
             }
             mappings.controls.forEach((control, index) => {
-                console.log(control);
                 if (!control?.get('name').value || !control?.get('email').value || !control?.get('contactNo').value) {
                     control?.get('name')?.patchValue(users.name ?? '');
                     control?.get('email')?.patchValue(users.email ?? '');
@@ -674,9 +672,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         group?.get('isModified').patchValue(true);
         group?.get('operationType').patchValue('DELETE');
         let savedData = cloneDeep(group.value);
-
         this.removedPortalUsers.push(savedData);
-        console.log(this.removedPortalUsers, group, mappings);
         mappings.removeAt(index);
     }
 
@@ -863,9 +859,12 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             });
         }
 
-        accountRequest['portalDomain'] = accountRequest['portalDomain'].filter(portalDomain => portalDomain.isDefaultUsers !== true);
-        console.log(accountRequest);
-        return;
+        let mergedModifiedDeleteData = this.isModifiedPortalUsers.concat(this.removedPortalUsers)
+        let data = mergedModifiedDeleteData.filter(portalUser => portalUser.operationType === 'DELETE' || portalUser.isModified === true);
+        accountRequest['portalDomain'] = [];
+        data.forEach(user => {
+            accountRequest['portalDomain'].push(user);
+        });
         this.submitClicked.emit({
             value: { groupUniqueName: this.activeGroupUniqueName, accountUniqueName: this.activeAccountName },
             accountRequest
@@ -878,11 +877,32 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         }
     }
 
-    onContactNoChange(index: number, newValue: string) {
-        const portal = this.addAccountForm.get('portalDomain') as UntypedFormArray;
-        let portalFormGroup = portal.at(index) as UntypedFormGroup;
-        portalFormGroup.get('contactNo').setValue(newValue);
-        portalFormGroup.get('isModified').setValue(true);
+    public onPortalDataChange(portal: UntypedFormGroup, newValue: string, type: string): void {
+        if (newValue) {
+            if (type === 'name') {
+                portal.get('name').patchValue(newValue);
+                portal.get('isModified').patchValue(true);
+
+            }
+            if (type === 'email') {
+                portal.get('email').patchValue(newValue);
+                portal.get('isModified').patchValue(true);
+
+            }
+            if (type === 'contact') {
+                portal.get('contactNo').patchValue(newValue);
+                portal.get('isModified').patchValue(true);
+
+            }
+            if (portal.value.uniqueName) {
+                const existingUserIndex = this.isModifiedPortalUsers.findIndex(user => user.uniqueName === portal.value.uniqueName);
+                if (existingUserIndex !== -1) {
+                    this.isModifiedPortalUsers[existingUserIndex] = portal.value;
+                } else {
+                    this.isModifiedPortalUsers.push(portal.value);
+                }
+            }
+        }
     }
 
     /**
@@ -1892,18 +1912,18 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                         uniq(this.selectedDiscounts);
                     });
                     setTimeout(() => {
-                    this._accountService
-                        .getPortalUsers(accountDetails?.uniqueName)
-                        .pipe(takeUntil(this.destroyed$))
-                        .subscribe((response) => {
-                            if (response?.status === 'success') {
-                                let mappings = this.addAccountForm.get('portalDomain') as UntypedFormArray;
-                                mappings.clear();
-                                response.body?.forEach((item) => {
-                                    this.addNewUsers(item);
-                                });
-                            }
-                        });
+                        this._accountService
+                            .getPortalUsers(accountDetails?.uniqueName)
+                            .pipe(takeUntil(this.destroyed$))
+                            .subscribe((response) => {
+                                if (response?.status === 'success') {
+                                    let mappings = this.addAccountForm.get('portalDomain') as UntypedFormArray;
+                                    mappings.clear();
+                                    response.body?.forEach((item) => {
+                                        this.addNewUsers(item);
+                                    });
+                                }
+                            });
                     }, 1500);
 
                 }

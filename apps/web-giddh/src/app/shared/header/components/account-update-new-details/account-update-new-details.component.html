@@ -521,13 +521,25 @@
                         <div class="col-xl-4 col-lg-5 col-md-5 col-sm-6 unit-equal">
                             <div class="form-group">
                                 <label>Attention To </label>
-                                <input type="text" class="form-control" formControlName="name" name="name_{{ i }}" />
+                                <input
+                                    type="text"
+                                    (input)="onPortalDataChange(domain, $event.target.value, 'name')"
+                                    class="form-control"
+                                    formControlName="name"
+                                    name="name_{{ i }}"
+                                />
                             </div>
                         </div>
                         <div class="col-xl-4 col-lg-3 col-md-3 col-sm-2 pr-0 unit-responsive">
                             <div class="form-group">
                                 <label>{{ commonLocaleData?.app_email_id }}</label>
-                                <input type="email" class="form-control" formControlName="email" name="email_{{ i }}" />
+                                <input
+                                    type="email"
+                                    class="form-control"
+                                    (input)="onPortalDataChange(domain, $event.target.value, 'email')"
+                                    formControlName="email"
+                                    name="email_{{ i }}"
+                                />
                             </div>
                         </div>
                         <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 pr-0">
@@ -543,7 +555,7 @@
                                         id="init-contact-portal_{{ i }}"
                                         formControlName="contactNo"
                                         [placeholder]="localeData?.mobile_no_placeholder"
-                                        (input)="onContactNoChange(i, $event.target.value)"
+                                        (input)="onPortalDataChange(domain, $event.target.value, 'contact')"
                                     />
                                 </div>
                                 <span id="init-contact-portal_{{ i }}-valid-msg" class="d-none"> </span>
