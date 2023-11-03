@@ -19,8 +19,8 @@ import { GroupResponse } from 'apps/web-giddh/src/app/models/api-models/Group';
 import { IDiscountList } from 'apps/web-giddh/src/app/models/api-models/SettingsDiscount';
 import { AccountService } from 'apps/web-giddh/src/app/services/account.service';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { combineLatest, Observable, of as observableOf, pipe, ReplaySubject, timer } from 'rxjs';
-import { take, takeUntil, debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { combineLatest, Observable, of as observableOf, of, pipe, ReplaySubject, timer } from 'rxjs';
+import { take, takeUntil, debounceTime, distinctUntilChanged, startWith } from 'rxjs/operators';
 import { AccountsAction } from '../../../../actions/accounts.actions';
 import { CommonActions } from '../../../../actions/common.actions';
 import { CompanyActions } from '../../../../actions/company.actions';
@@ -64,10 +64,6 @@ import { HttpClient } from '@angular/common/http';
 })
 
 export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit {
-    /** Mobile Number state instance */
-    @ViewChild('initContactAdd2', { static: false }) initContactAdd2: ElementRef;
-    /** Mobile Number state instance */
-    @ViewChild('initContactUpdate', { static: false }) initContactUpdate: ElementRef;
     public addAccountForm: UntypedFormGroup;
     @Input() public activeGroupUniqueName: string;
     @Input() public flatGroupsOptions: IOption[];
@@ -613,11 +609,11 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     }
 
     /**
-    * Add new unit mapping
-    *
-    * @param {*} [mapping]
-    * @memberof CreateNewUnitComponent
-    */
+     * This will be use for add new portal user
+     *
+     * @param {*} [user]
+     * @memberof AccountUpdateNewDetailsComponent
+     */
     public addNewPortalUser(user?: any): void {
         let mappings = this.addAccountForm.get('portalDomain') as UntypedFormArray;
         let mappingForm = this._fb.group({
@@ -627,9 +623,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             contactNo: [''],
             default: [false]
         });
-
         mappings.push(mappingForm);
-
         if (user) {
             mappings.controls.forEach(control => {
                 if (!control?.get('name').value && !control?.get('email').value && !control?.get('contactNo').value) {
@@ -643,7 +637,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         }
         setTimeout(() => {
             this.onlyPhoneNumber('init-contact-portal_' + (mappings.controls.length - 1))
-        });
+        }, 100);
     }
 
     /**
@@ -672,7 +666,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             }
             this._accountService.createPortalUser(data, this.activeAccountName).pipe(take(1)).subscribe(data => {
                 if (data?.status === 'success') {
-                    this._toaster.successToast('Portal User Deleted Successfully');
+                    this._toaster.successToast(this.localeData?.portal_deleted_successfully, 'Success');
                 } else {
                     this._toaster.errorToast(data.message, data.code);
                 }
@@ -687,33 +681,39 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      * @memberof AccountUpdateNewDetailsComponent
      */
     public onPortalDataChange(index: number): void {
-        let portalFormArray = this.addAccountForm.get('portalDomain') as UntypedFormArray
-        let portalFormGroup = portalFormArray.at(index);
-        portalFormGroup.valueChanges.pipe(
-            debounceTime(1000),
-            distinctUntilChanged(),
-            takeUntil(this.destroyed$))
-            .subscribe((user) => {
-                let data = [{
-                    name: user.name,
-                    email: user.email,
-                    uniqueName: user.uniqueName,
-                    contactNo: user.contactNo
-                }];
+        let mappings = this.addAccountForm.get('portalDomain') as UntypedFormArray;
+        let portalFormGroup = mappings.at(index);
+        const nameChanges = portalFormGroup.get('name')?.valueChanges.pipe(startWith('')) || of('');
+        const contactNoChanges = portalFormGroup.get('contactNo')?.valueChanges.pipe(startWith('')) || of('');
+        const emailChanges = portalFormGroup.get('email')?.valueChanges.pipe(startWith('')) || of('');
+
+        combineLatest([nameChanges, contactNoChanges, emailChanges])
+            .pipe(
+                debounceTime(1000),
+                distinctUntilChanged(),
+                takeUntil(this.destroyed$))
+            .subscribe(([name, contactNo, email]) => {
                 if (this.accountDetails) {
                     this.activeAccountName = this.accountDetails.uniqueName;
                 } else {
                     this.activeAccount$.pipe(take(1)).subscribe(activeAccountState => this.activeAccountName = activeAccountState?.uniqueName);
                 }
-                this._accountService.createPortalUser(data, this.activeAccountName).pipe(take(1)).subscribe(data => {
-                    if (data?.status === 'success') {
-                        this._toaster.successToast('Portal User Updated Successfully');
-                    } else {
-                        this._toaster.errorToast(data.message, data.code);
-                    }
-                });
+                if (name || contactNo || email) {
+                    let data = [{
+                        name: name,
+                        email: email,
+                        uniqueName: portalFormGroup.get('uniqueName')?.value,
+                        contactNo: contactNo
+                    }];
+                    this._accountService.createPortalUser(data, this.activeAccountName).pipe(take(1)).subscribe(data => {
+                        if (data?.status === 'success') {
+                            this._toaster.successToast(this.localeData?.portal_updated_successfully, 'Success');
+                        } else {
+                            this._toaster.errorToast(data.message, data.code);
+                        }
+                    });
+                }
             });
-
     }
 
     public addGstDetailsForm(value: string) {         // commented code because we no need GSTIN No. to add new address
@@ -1918,18 +1918,18 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                         }
                         uniq(this.selectedDiscounts);
                     });
-                        this._accountService
-                            .getPortalUsers(accountDetails?.uniqueName)
-                            .pipe(takeUntil(this.destroyed$))
-                            .subscribe((response) => {
-                                if (response?.status === 'success') {
-                                    let mappings = this.addAccountForm.get('portalDomain') as UntypedFormArray;
-                                    mappings.clear();
-                                    response.body?.forEach((item) => {
-                                        this.addNewPortalUser(item);
-                                    });
-                                }
-                            });
+                    this._accountService
+                        .getPortalUsers(accountDetails?.uniqueName)
+                        .pipe(takeUntil(this.destroyed$))
+                        .subscribe((response) => {
+                            if (response?.status === 'success') {
+                                let mappings = this.addAccountForm.get('portalDomain') as UntypedFormArray;
+                                mappings.clear();
+                                response.body?.forEach((item) => {
+                                    this.addNewPortalUser(item);
+                                });
+                            }
+                        });
                 }
 
                 accountDetails.addresses.forEach(address => {

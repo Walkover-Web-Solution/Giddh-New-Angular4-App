@@ -178,8 +178,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public isMobileNumberInvalid: boolean = false;
     /** This will hold mobile number field input  */
     public intl: any;
-    /** Hold newly create account observable  */
-    public newlyCreatedAc$: Observable<INameUniqueName>;
 
     constructor(
         private _fb: UntypedFormBuilder,
@@ -197,7 +195,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         private http: HttpClient,
         private accountsAction: AccountsAction) {
         this.activeGroup$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroup), takeUntil(this.destroyed$));
-        this.newlyCreatedAc$ = this.store.pipe(select(p => p.groupwithaccounts.newlyCreatedAccount), takeUntil(this.destroyed$));
     }
 
     /**
@@ -348,9 +345,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         this.createAccountIsSuccess$?.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 // listen for new add account utils
-                this.newlyCreatedAc$.pipe(takeUntil(this.destroyed$)).subscribe((response: INameUniqueName) => {
-
-                });
                 this.store.dispatch(this.accountsAction.hasUnsavedChanges(false));
                 this.addAccountForm?.markAsPristine();
             }
@@ -497,12 +491,12 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         return gstFields;
     }
 
-    /**
-     * Add new unit mapping
-     *
-     * @param {*} [mapping]
-     * @memberof CreateNewUnitComponent
-     */
+/**
+ * This will be use for add new portal user
+ *
+ * @param {*} [user]
+ * @memberof AccountAddNewDetailsComponent
+ */
     public addNewPortalUser(user?: any): void {
         let mappings = this.addAccountForm.get('portalDomain') as UntypedFormArray;
         let mappingForm = this._fb.group({
@@ -512,9 +506,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             contactNo: [''],
             default: [false]
         });
-
         mappings.push(mappingForm);
-
         if (user) {
             mappings.controls.forEach(control => {
                 if (!control?.get('name').value && !control?.get('email').value && !control?.get('contactNo').value) {
@@ -531,12 +523,12 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         }, 100);
     }
 
-    /**
-     * Removes portal user
-     *
-     * @param {number} index
-     * @memberof CreateNewUnitComponent
-     */
+/**
+ * This will be use for remove portal user
+ *
+ * @param {number} index
+ * @memberof AccountAddNewDetailsComponent
+ */
     public removePortalUser(index: number): void {
         let mappings = this.addAccountForm.get('portalDomain') as UntypedFormArray;
         mappings.removeAt(index);

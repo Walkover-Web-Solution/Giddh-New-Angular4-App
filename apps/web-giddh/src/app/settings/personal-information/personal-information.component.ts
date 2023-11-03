@@ -86,7 +86,7 @@ export class PersonalInformationComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This will be use for check porta; domain
+     * This will be use for check portal domain validation
      *
      * @param {*} keyName
      * @return {*}  {void}

@@ -511,7 +511,7 @@
                     </div>
                 </div>
             </tab>
-            <tab [heading]="'Portal'" class="contact-form-wrap">
+            <tab [heading]="localeData?.tabs?.portal" class="contact-form-wrap">
                 <div class="unit-quantity" formArrayName="portalDomain">
                     <div
                         class="row align-items-center"
@@ -521,7 +521,7 @@
                         <ng-container *ngIf="domain.get('operationType')?.value !== 'DELETED'">
                             <div class="col-xl-4 col-lg-5 col-md-5 col-sm-6 unit-equal">
                                 <div class="form-group">
-                                    <label>Attention To </label>
+                                    <label>{{ localeData?.portal_attention_to }} </label>
                                     <input
                                         type="text"
                                         (input)="onPortalDataChange(i)"
@@ -562,10 +562,10 @@
                                     <span id="init-contact-portal_{{ i }}-error-msg" class="d-none"> </span>
                                 </div>
                             </div>
-                            <div class="col-xl-1 col-lg-1 col-md-2 col-sm-12 pl-0">
+                            <div class="col-xl-1 col-lg-1 col-md-2 col-sm-12 pl-0 remove-user">
                                 <div class="inc-dec">
                                     <div class="plus-minus">
-                                        <button class="btn mr-0" (click)="removePortalUser(domain,i )">
+                                        <button class="btn mr-0" (click)="removePortalUser(domain, i)">
                                             <i class="icon-trash delete"></i>
                                         </button>
                                     </div>
@@ -576,7 +576,7 @@
                     <div class="row">
                         <div class="col-lg-12">
                             <a class="mr-0 add-new" href="javascript:void(0);" (click)="addNewPortalUser()">
-                                <i class="icon-plus"></i>Add User
+                                <i class="icon-plus"></i> {{ localeData?.portal_add_user }}
                             </a>
                         </div>
                     </div>
