@@ -524,7 +524,7 @@
                                     <label>Attention To </label>
                                     <input
                                         type="text"
-                                        (input)="onPortalDataChange(domain)"
+                                        (input)="onPortalDataChange(i)"
                                         class="form-control"
                                         formControlName="name"
                                         name="name_{{ i }}"
@@ -537,7 +537,7 @@
                                     <input
                                         type="email"
                                         class="form-control"
-                                        (input)="onPortalDataChange(domain)"
+                                        (input)="onPortalDataChange(i)"
                                         formControlName="email"
                                         name="email_{{ i }}"
                                     />
@@ -555,7 +555,7 @@
                                             id="init-contact-portal_{{ i }}"
                                             formControlName="contactNo"
                                             [placeholder]="localeData?.mobile_no_placeholder"
-                                            (input)="onPortalDataChange(domain)"
+                                            (input)="onPortalDataChange(i)"
                                         />
                                     </div>
                                     <span id="init-contact-portal_{{ i }}-valid-msg" class="d-none"> </span>
@@ -565,7 +565,7 @@
                             <div class="col-xl-1 col-lg-1 col-md-2 col-sm-12 pl-0">
                                 <div class="inc-dec">
                                     <div class="plus-minus">
-                                        <button class="btn mr-0" (click)="removePortalUser(i)">
+                                        <button class="btn mr-0" (click)="removePortalUser(domain,i )">
                                             <i class="icon-trash delete"></i>
                                         </button>
                                     </div>

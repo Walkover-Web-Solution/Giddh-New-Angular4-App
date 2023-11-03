@@ -19,7 +19,7 @@ import { GroupResponse } from 'apps/web-giddh/src/app/models/api-models/Group';
 import { IDiscountList } from 'apps/web-giddh/src/app/models/api-models/SettingsDiscount';
 import { AccountService } from 'apps/web-giddh/src/app/services/account.service';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { combineLatest, Observable, of as observableOf, ReplaySubject, timer } from 'rxjs';
+import { combineLatest, Observable, of as observableOf, pipe, ReplaySubject, timer } from 'rxjs';
 import { take, takeUntil, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { AccountsAction } from '../../../../actions/accounts.actions';
 import { CommonActions } from '../../../../actions/common.actions';
@@ -224,8 +224,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public isMobileNumberInvalid: boolean = false;
     /** This will hold mobile number field input  */
     public intl: any;
-    public removedPortalUsers: any[] = [];
-    public isModifiedPortalUsers: any[] = [];
 
     constructor(
         private _fb: UntypedFormBuilder,
@@ -317,30 +315,23 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             .subscribe(([attentionTo, mobileNo, email]) => {
                 const users = this.addAccountForm.get('portalDomain') as UntypedFormArray;
                 if (attentionTo || mobileNo || email) {
-                    let updatedNumber = '';
-                    if (mobileNo) {
-                        updatedNumber = '+' + mobileNo;
-                        this.intl?.setNumber(updatedNumber);
-                    }
                     let user = users.controls.find(control => control.get('default')?.value === true);
                     if (user) {
                         user?.get('name').patchValue(attentionTo);
                         user?.get('email').patchValue(email);
-                        user?.get('contactNo').patchValue(updatedNumber);
+                        user?.get('contactNo').patchValue(mobileNo);
                         user?.get('default').patchValue(true);
-                        user?.get('isModified').patchValue(true);
-                        user?.get('operationType').patchValue(null);
                     } else {
                         let setValue = false;
                         users.controls?.find((control) => {
                             if (!control.get('name')?.value && !control.get('email')?.value && !control.get('contactNo')?.value) {
-                                control.patchValue({ name: attentionTo, email: email, contactNo: updatedNumber, default: true, isModified: true, operationType: null });
+                                control.patchValue({ name: attentionTo, email: email, contactNo: mobileNo, default: true });
                                 setValue = true;
                                 return true;
                             }
                         });
                         if (!setValue) {
-                            let data = { name: attentionTo, email: email, contactNo: updatedNumber, default: true, isModified: true, operationType: null };
+                            let data = { name: attentionTo, email: email, contactNo: mobileNo, default: true };
                             this.addNewPortalUser(data);
                         }
                     }
@@ -554,9 +545,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     email: ['', Validators.pattern(EMAIL_VALIDATION_REGEX)],
                     contactNo: ['', Validators.required],
                     default: [false],
-                    uniqueName: [''],
-                    isModified: [false],
-                    operationType: [null]
+                    uniqueName: ['']
                 })
             ])
         });
@@ -636,28 +625,19 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             email: [''],
             uniqueName: [''],
             contactNo: [''],
-            default: [false],
-            isModified: [false],
-            operationType: [null]
+            default: [false]
         });
 
         mappings.push(mappingForm);
 
         if (user) {
-            let updatedNumber = '';
-            if (user?.contactNo) {
-                updatedNumber = '+' + user?.contactNo;
-                this.intl?.setNumber(updatedNumber);
-            }
             mappings.controls.forEach(control => {
                 if (!control?.get('name').value && !control?.get('email').value && !control?.get('contactNo').value) {
                     control?.get('name')?.patchValue(user.name ?? '');
                     control?.get('email')?.patchValue(user.email ?? '');
-                    control?.get('contactNo')?.patchValue(updatedNumber ?? '');
+                    control?.get('contactNo')?.patchValue(user.mobileNo ?? '');
                     control?.get('default')?.patchValue(user.default ?? false);
                     control?.get('uniqueName')?.patchValue(user.uniqueName ?? '');
-                    control?.get('isModified')?.patchValue(user.isModified ?? false);
-                    control?.get('operationType')?.patchValue(user.operationType ?? null);
                 }
             });
         }
@@ -666,16 +646,74 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         });
     }
 
-    public removePortalUser(index: number): void {
-        let mappings = this.addAccountForm.get('portalDomain') as UntypedFormArray;
-        let group = mappings.at(index);
-
-        group?.get('isModified').patchValue(true);
-        group?.get('operationType').patchValue('DELETE');
+    /**
+     * This will be use for remove portal users
+     *
+     * @param {UntypedFormGroup} portal
+     * @param {number} index
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    public removePortalUser(portal: UntypedFormGroup, index: number): void {
+        if (portal) {
+            let mappings = this.addAccountForm.get('portalDomain') as UntypedFormArray;
+            mappings.removeAt(index);
+            let data = [{
+                name: portal.value.name,
+                email: portal.value.email,
+                uniqueName: portal.value.uniqueName,
+                contactNo: portal.value.contactNo,
+                default: portal.value.default,
+                operationType: 'DELETE'
+            }];
+            if (this.accountDetails) {
+                this.activeAccountName = this.accountDetails.uniqueName;
+            } else {
+                this.activeAccount$.pipe(take(1)).subscribe(activeAccountState => this.activeAccountName = activeAccountState?.uniqueName);
+            }
+            this._accountService.createPortalUser(data, this.activeAccountName).pipe(take(1)).subscribe(data => {
+                if (data?.status === 'success') {
+                    this._toaster.successToast('Portal User Deleted Successfully');
+                } else {
+                    this._toaster.errorToast(data.message, data.code);
+                }
+            });
+        }
     }
 
-    public onPortalDataChange(portal: UntypedFormGroup): void {
-        portal.get('isModified').patchValue(true);
+    /**
+     * This will be use for on portal data changes
+     *
+     * @param {number} index
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    public onPortalDataChange(index: number): void {
+        let portalFormArray = this.addAccountForm.get('portalDomain') as UntypedFormArray
+        let portalFormGroup = portalFormArray.at(index);
+        portalFormGroup.valueChanges.pipe(
+            debounceTime(1000),
+            distinctUntilChanged(),
+            takeUntil(this.destroyed$))
+            .subscribe((user) => {
+                let data = [{
+                    name: user.name,
+                    email: user.email,
+                    uniqueName: user.uniqueName,
+                    contactNo: user.contactNo
+                }];
+                if (this.accountDetails) {
+                    this.activeAccountName = this.accountDetails.uniqueName;
+                } else {
+                    this.activeAccount$.pipe(take(1)).subscribe(activeAccountState => this.activeAccountName = activeAccountState?.uniqueName);
+                }
+                this._accountService.createPortalUser(data, this.activeAccountName).pipe(take(1)).subscribe(data => {
+                    if (data?.status === 'success') {
+                        this._toaster.successToast('Portal User Updated Successfully');
+                    } else {
+                        this._toaster.errorToast(data.message, data.code);
+                    }
+                });
+            });
+
     }
 
     public addGstDetailsForm(value: string) {         // commented code because we no need GSTIN No. to add new address
@@ -861,14 +899,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             });
         }
 
-        let mappings = this.addAccountForm.get('portalDomain') as UntypedFormArray;
-        const portalUsers = mappings?.value?.map(user => {
-            if (!user?.operationType) {
-                delete user.operationType;
-            }
-            return user;
-        });
-        accountRequest['portalDomain'] = portalUsers;
+        delete accountRequest['portalDomain'];
         this.submitClicked.emit({
             value: { groupUniqueName: this.activeGroupUniqueName, accountUniqueName: this.activeAccountName },
             accountRequest
@@ -1887,7 +1918,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                         }
                         uniq(this.selectedDiscounts);
                     });
-                    setTimeout(() => {
                         this._accountService
                             .getPortalUsers(accountDetails?.uniqueName)
                             .pipe(takeUntil(this.destroyed$))
@@ -1900,8 +1930,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                                     });
                                 }
                             });
-                    }, 1500);
-
                 }
 
                 accountDetails.addresses.forEach(address => {
