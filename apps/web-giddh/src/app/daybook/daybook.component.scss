@@ -181,12 +181,6 @@ button.btn.btn-filter {
         vertical-align: middle;
     }
 }
-@media (min-width: 769px) {
-    .table-responsive {
-        max-height: calc(100vh - 245px);
-        overflow-y: auto;
-    }
-}
 .daybook-table-tbody > tr {
     cursor: pointer;
 }
