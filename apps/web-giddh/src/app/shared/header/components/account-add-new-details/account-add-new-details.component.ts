@@ -17,7 +17,7 @@ import { AbstractControl, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup
 import { digitsOnly } from '../../../helpers';
 import { AppState } from '../../../../store';
 import { select, Store } from '@ngrx/store';
-import { AccountRequestV2, CustomFieldsData } from '../../../../models/api-models/Account';
+import { AccountRequestV2 } from '../../../../models/api-models/Account';
 import { ToasterService } from '../../../../services/toaster.service';
 import { CompanyResponse, StateList, StatesRequest } from '../../../../models/api-models/Company';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
@@ -262,34 +262,32 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             .subscribe(([attentionTo, mobileNo, email]) => {
                 const users = this.addAccountForm.get('portalDomain') as UntypedFormArray;
                 if (attentionTo || mobileNo || email) {
-                    const isDefault = users.controls.some(control => (control.get('isDefaultUsers')?.value === true));
-                    if (isDefault) {
-                        let user = users.controls.find(control => control.get('isDefaultUsers')?.value === true);
+                    let user = users.controls.find(control => control.get('default')?.value === true);
+                    if (user) {
                         user?.get('name').setValue(attentionTo);
                         user?.get('email').setValue(email);
                         user?.get('contactNo').setValue(mobileNo);
-                        user?.get('isDefaultUsers').setValue(true);
+                        user?.get('default').setValue(true);
                     } else {
                         let setValue = false;
                         users.controls?.find((control) => {
-                            if (!control.get('name')?.value || !control.get('email')?.value || !control.get('contactNo')?.value) {
-                                control.patchValue({ name: attentionTo, email: email, contactNo: mobileNo, isDefaultUsers: true });
+                            if (!control.get('name')?.value && !control.get('email')?.value && !control.get('contactNo')?.value) {
+                                control.patchValue({ name: attentionTo, email: email, contactNo: mobileNo, default: true });
                                 setValue = true;
                                 return true;
                             }
                         });
                         if (!setValue) {
-                            let data = { name: attentionTo, email: email, contactNo: mobileNo, isDefaultUsers: true };
-                            this.addNewUsers(data);
+                            let data = { name: attentionTo, email: email, contactNo: mobileNo, default: true };
+                            this.addNewPortalUser(data);
                         }
                     }
                 } else {
-                    for (let i = users.length - 1; i >= 0; i--) {
-                        const control = users.at(i);
-                        if (control.get('isDefaultUsers')?.value === true) {
+                    users.controls?.forEach((control, i) => {
+                        if (control.get('default')?.value === true) {
                             users.removeAt(i);
                         }
-                    }
+                    });
                 }
             });
 
@@ -459,7 +457,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                     name: [''],
                     email: ['', Validators.pattern(EMAIL_VALIDATION_REGEX)],
                     contactNo: ['', Validators.required],
-                    isDefaultUsers: [false]
+                    default: [false]
                 }),
             ]),
             closingBalanceTriggerAmount: ['', Validators.compose([digitsOnly])],
@@ -500,28 +498,30 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     /**
- * Add new unit mapping
- *
- * @param {*} [mapping]
- * @memberof CreateNewUnitComponent
- */
-    public addNewUsers(users?: any): void {
+     * Add new unit mapping
+     *
+     * @param {*} [mapping]
+     * @memberof CreateNewUnitComponent
+     */
+    public addNewPortalUser(user?: any): void {
         let mappings = this.addAccountForm.get('portalDomain') as UntypedFormArray;
         let mappingForm = this._fb.group({
             name: [''],
             email: [''],
             uniqueName: [''],
             contactNo: [''],
-            isDefaultUsers: [false]
+            default: [false]
         });
+
         mappings.push(mappingForm);
-        if (users) {
-            mappings.controls.forEach((control, index) => {
-                if (!control?.get('name').value || !control?.get('email').value || !control?.get('contactNo').value) {
-                    control?.get('name').setValue(users.name);
-                    control?.get('email').setValue(users.email);
-                    control?.get('contactNo').setValue(users.contactNo);
-                    control?.get('isDefaultUsers').setValue(true);
+
+        if (user) {
+            mappings.controls.forEach(control => {
+                if (!control?.get('name').value && !control?.get('email').value && !control?.get('contactNo').value) {
+                    control?.get('name').setValue(user.name);
+                    control?.get('email').setValue(user.email);
+                    control?.get('contactNo').setValue(user.contactNo);
+                    control?.get('default').setValue(true);
                     control?.get('uniqueName').setValue('');
                 }
             });
@@ -532,12 +532,12 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     /**
-     * Removes portal users
+     * Removes portal user
      *
      * @param {number} index
      * @memberof CreateNewUnitComponent
      */
-    public removeUsers(index: number): void {
+    public removePortalUser(index: number): void {
         let mappings = this.addAccountForm.get('portalDomain') as UntypedFormArray;
         mappings.removeAt(index);
     }
@@ -741,9 +741,9 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             });
         }
 
-        accountRequest['portalDomain'] = accountRequest['portalDomain'].filter(portalDomain => portalDomain.isDefaultUsers !== true);
+        accountRequest['portalDomain'] = accountRequest['portalDomain'].filter(portalDomain => portalDomain.default !== true);
         accountRequest['portalDomain'].forEach(portalDomain => {
-            delete portalDomain.isDefaultUsers;
+            delete portalDomain.default;
             delete portalDomain.uniqueName;
         });
 
