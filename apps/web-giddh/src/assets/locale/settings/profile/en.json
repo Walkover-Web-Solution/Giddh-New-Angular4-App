@@ -53,5 +53,6 @@
     "language": "Language",
     "select_language": "Select Language",
     "theme": "Theme",
-    "select_theme": "Select Theme"
+    "select_theme": "Select Theme",
+    "portal_domain": "Portal Domain"
 }

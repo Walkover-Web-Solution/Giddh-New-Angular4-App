@@ -17,7 +17,7 @@ import { AbstractControl, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup
 import { digitsOnly } from '../../../helpers';
 import { AppState } from '../../../../store';
 import { select, Store } from '@ngrx/store';
-import { AccountRequestV2 } from '../../../../models/api-models/Account';
+import { AccountRequestV2, CustomFieldsData } from '../../../../models/api-models/Account';
 import { ToasterService } from '../../../../services/toaster.service';
 import { CompanyResponse, StateList, StatesRequest } from '../../../../models/api-models/Company';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
@@ -37,7 +37,6 @@ import { CustomFieldsService } from 'apps/web-giddh/src/app/services/custom-fiel
 import { FieldTypes } from 'apps/web-giddh/src/app/custom-fields/custom-fields.constant';
 import { HttpClient } from '@angular/common/http';
 import { AccountsAction } from 'apps/web-giddh/src/app/actions/accounts.actions';
-import { INameUniqueName } from 'apps/web-giddh/src/app/models/api-models/Inventory';
 import { AccountService } from 'apps/web-giddh/src/app/services/account.service';
 
 @Component({
