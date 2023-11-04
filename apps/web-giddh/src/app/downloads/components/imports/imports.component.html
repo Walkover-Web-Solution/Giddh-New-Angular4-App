@@ -187,7 +187,7 @@
         <h1>{{ commonLocaleData?.app_no_record_found }}</h1>
     </div>
 </section>
-<div class="pagination-wrapper" *ngIf="importRequest?.totalItems > importRequest.count && !isLoading">
+<div class="pagination-wrapper mt-4" *ngIf="importRequest?.totalItems > importRequest.count && !isLoading">
     <pagination
         [totalItems]="importRequest?.totalItems"
         [(ngModel)]="importRequest.page"

@@ -172,16 +172,13 @@
                 </div>
                 <ng-container *ngTemplateOutlet="mainTable"></ng-container>
             </div>
-            <div class="no-data">
-                <div
-                    class="align-item-center"
-                    *ngIf="
-                        !(dueAmountReportData$ | async)?.results?.length &&
-                        !(getAgingReportRequestInProcess$ | async) &&
-                        !showClearFilter &&
-                        !isAdvanceSearchApplied
-                    "
-                >
+            <div class="no-data"  *ngIf="
+            !(dueAmountReportData$ | async)?.results?.length &&
+            !(getAgingReportRequestInProcess$ | async) &&
+            !showClearFilter &&
+            !isAdvanceSearchApplied
+        ">
+                <div class="align-item-center">
                     <img class="customer-img" src="{{ imgPath }}customer-vendor/stock-photo.png" alt="" />
                     <button mat-stroked-button color="primary" (click)="createNewCustomerEvent.emit(true)">
                         {{ localeData?.new_customer }}
@@ -509,7 +506,7 @@
 
     <div
         *ngIf="(dueAmountReportData$ | async)?.totalPages > 1"
-        class="pagination-wrapper"
+        class="pagination-wrapper mt-4"
         [hidden]="getAgingReportRequestInProcess$ | async"
     >
         <div class="xs-pl-0">
