@@ -125,7 +125,7 @@
         <div *ngIf="isLoading">
             <giddh-page-loader></giddh-page-loader>
         </div>
-        <div class="table-content" *ngIf="!isLoading">
+        <div *ngIf="!isLoading">
             <table
                 mat-table
                 [dataSource]="dataSource"
