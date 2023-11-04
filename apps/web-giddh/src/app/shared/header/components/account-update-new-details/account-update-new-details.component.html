@@ -524,7 +524,6 @@
                                     <label>{{ localeData?.portal_attention_to }} </label>
                                     <input
                                         type="text"
-                                        (input)="onPortalDataChange(i)"
                                         class="form-control"
                                         formControlName="name"
                                         name="name_{{ i }}"
@@ -537,7 +536,6 @@
                                     <input
                                         type="email"
                                         class="form-control"
-                                        (input)="onPortalDataChange(i)"
                                         formControlName="email"
                                         name="email_{{ i }}"
                                     />
@@ -555,7 +553,6 @@
                                             id="init-contact-portal_{{ i }}"
                                             formControlName="contactNo"
                                             [placeholder]="localeData?.mobile_no_placeholder"
-                                            (input)="onPortalDataChange(i)"
                                         />
                                     </div>
                                     <span id="init-contact-portal_{{ i }}-valid-msg" class="d-none"> </span>
