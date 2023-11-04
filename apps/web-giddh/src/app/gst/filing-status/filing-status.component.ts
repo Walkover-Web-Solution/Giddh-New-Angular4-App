@@ -87,6 +87,11 @@ export class FilingStatusComponent implements OnInit, OnDestroy {
         document.querySelector('body').classList.add('gst-sidebar-open');
     }
 
+    /**
+     * Get list of gst references
+     *
+     * @memberof FilingStatusComponent
+     */
     public getGstrReferences(): void {
         this.gstReconcileService.getTaxDetails().pipe(takeUntil(this.destroyed$)).subscribe((res: any) => {
             this.activeCompanyGstNumber = res?.body[0];
@@ -195,7 +200,7 @@ export class FilingStatusComponent implements OnInit, OnDestroy {
      * @return {*} 
      * @memberof FilingStatusComponent
      */
-    private generateToasterMessage(data: any) {
+    private generateToasterMessage(data: any): string {
         let json = JSON.parse(data);
         if (json.status_cd === "PE") {
             return this.localeData?.filing?.processed_with_error;
