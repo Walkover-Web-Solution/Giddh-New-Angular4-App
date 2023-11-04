@@ -116,7 +116,12 @@
         "excel_file_support":"1. ही एक्सेल फाइल जीएसटीआयएन पोर्टल ऑफलाइन टूलला सपोर्ट करते.",
         "organised_accountant":"2. कोणत्याही अकाउंटंट/सीएला देण्याचा हा एक संघटित मार्ग आहे.",
         "json_support":"1. जीएसटी पोर्टलद्वारे समर्थित JSON फाइल",
-        "download_json":"JSON डाउनलोड करा"
+        "download_json":"JSON डाउनलोड करा",
+		"reference_id": "संदर्भ आयडी",
+		"get_status": "स्टेटस मिळवा",
+		"processed_with_error": "त्रुटीसह प्रक्रिया केली",
+        "processed": "प्रक्रिया केली",
+        "in_progress": "प्रगतीपथावर आहे"
 	},
 	"gstr3b": {
 		"gstr3b_summary": "जीएसटीआर 3 बी सारांश",
