@@ -496,7 +496,7 @@
                 </div>
             </tab>
             <tab [heading]="localeData?.tabs?.portal" class="contact-form-wrap">
-                <div class="unit-quantity" formArrayName="portalDomain">
+                <div formArrayName="portalDomain">
                     <div
                         class="row align-items-center"
                         *ngFor="let domain of addAccountForm?.get('portalDomain')['controls']; let i = index"
