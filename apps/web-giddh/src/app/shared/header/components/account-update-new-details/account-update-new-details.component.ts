@@ -19,8 +19,8 @@ import { GroupResponse } from 'apps/web-giddh/src/app/models/api-models/Group';
 import { IDiscountList } from 'apps/web-giddh/src/app/models/api-models/SettingsDiscount';
 import { AccountService } from 'apps/web-giddh/src/app/services/account.service';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { combineLatest, Observable, of as observableOf, of, pipe, ReplaySubject, timer } from 'rxjs';
-import { take, takeUntil, debounceTime, distinctUntilChanged, startWith, pairwise, map } from 'rxjs/operators';
+import { combineLatest, Observable, of as observableOf, ReplaySubject, timer } from 'rxjs';
+import { take, takeUntil, debounceTime, distinctUntilChanged, pairwise } from 'rxjs/operators';
 import { AccountsAction } from '../../../../actions/accounts.actions';
 import { CommonActions } from '../../../../actions/common.actions';
 import { CompanyActions } from '../../../../actions/company.actions';
@@ -404,7 +404,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public ngAfterViewInit() {
         setTimeout(() => {
             this.onlyPhoneNumber('init-contact-update');
-            this.onlyPhoneNumber('init-contact-portal_');
         }, 1000);
         if (this.flatGroupsOptions === undefined) {
             this.getAccount();

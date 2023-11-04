@@ -54,5 +54,6 @@
     "select_language": "Select Language",
     "theme": "Theme",
     "select_theme": "Select Theme",
-    "portal_domain": "Portal Domain"
+    "portal_domain": "Portal Domain",
+    "domain_error_message":"Special characters other than Hyphen (-) are not allowed"
 }

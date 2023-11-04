@@ -4,6 +4,7 @@ import { debounceTime, takeUntil } from 'rxjs/operators';
 import { OrganizationType } from '../../models/user-login-state';
 import { OrganizationProfile } from '../constants/settings.constant';
 import { GeneralService } from '../../services/general.service';
+import { ToasterService } from '../../services/toaster.service';
 
 @Component({
     selector: 'personal-information',
@@ -51,7 +52,7 @@ export class PersonalInformationComponent implements OnInit, OnDestroy {
     /** Portal Domain name validation with regex pattern */
     public isValidDomain: boolean;
 
-    constructor(private generalService: GeneralService,) { }
+    constructor(private generalService: GeneralService, private toasty: ToasterService) { }
 
     /**
      * Initializes the component
@@ -98,7 +99,7 @@ export class PersonalInformationComponent implements OnInit, OnDestroy {
         if (this.isValidDomain) {
             this.profileUpdated('portalDomain');
         } else {
-            return;
+            this.toasty.errorToast(this.localeData.domain_error_message);
         }
     }
 
