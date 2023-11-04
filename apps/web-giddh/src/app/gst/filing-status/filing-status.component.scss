@@ -13,10 +13,11 @@
         }
     }
 }
-.example-month-picker .mat-calendar-period-button {
-    pointer-events: none;
-}
+.month-selection {
+    color: var(--color-nero) !important;
+    background: var(--color-denary-button-background) !important;
 
-.example-month-picker .mat-calendar-arrow {
-    display: none;
+    &::placeholder {
+        color: var(--color-nero) !important;
+    }
 }

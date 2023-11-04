@@ -43,6 +43,10 @@ import { PushToPortalComponent } from './modals/push-to-portal/push-to-portal.co
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { FilingStatusComponent } from './filing-status/filing-status.component';
 import { MatTableModule } from '@angular/material/table';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 
 @NgModule({
     declarations: [FileGstR3Component,
@@ -79,7 +83,11 @@ import { MatTableModule } from '@angular/material/table';
         MatGridListModule,
         FormFieldsModule,
         MatButtonModule,
-        MatTableModule
+        MatTableModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatDatepickerModule,
+        MatNativeDateModule
     ],
     providers: [],
     exports: [ViewTransactionsComponent]

@@ -11,14 +11,18 @@
         <div class="filing-status pd-15">
             <div class="py-2">
                 <div class="d-flex align-items-center">
-                    <!-- Write Date Picker Code Here -->
+                    <div class="form-group date-picker-invoice invoice-lock-date mb-0 custom-input-field">
+                        <mat-form-field [appearance]="'fill'" [floatLabel]="'auto'">
+                            <input matInput [matDatepicker]="picker" [placeholder]="date?.value" autocomplete="off"
+                                (focus)="picker.open()" (click)="picker.open()"
+                                [class]="'mat-field-border month-selection form-control text-align-center'" name="date" readonly />
+                            <mat-datepicker (monthSelected)="setMonthAndYear($event, picker)" [startView]="'year'"
+                                [startAt]="startAt" #picker></mat-datepicker>
+                        </mat-form-field>
 
-                    <!--
-                    
-                    =====Reset Button Condition set to false becuase it will work after implementation of  Date picker =======
-                
-                    -->
-                    <button class="ml-5" mat-stroked-button (click)="resetAdvanceSearch()" *ngIf="!isLoading && false">
+                    </div>
+
+                    <button class="ml-5" mat-stroked-button (click)="initializeForm()" *ngIf="customMonthSelected">
                         <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_filter }}
                     </button>
                 </div>

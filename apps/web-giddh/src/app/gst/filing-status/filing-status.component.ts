@@ -1,19 +1,36 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
 import { ReplaySubject, takeUntil } from "rxjs";
 import { Router } from "@angular/router";
 import { ToasterService } from "../../services/toaster.service";
 import { PAGINATION_LIMIT } from "../../app.constant";
 import { saveAs } from 'file-saver';
 import { GstReconcileService } from "../../services/gst-reconcile.service";
+import { GIDDH_DATE_FORMAT } from "../../shared/helpers/defaultDateFormat";
+import * as dayjs from 'dayjs';
+import { MAT_DATE_FORMATS } from '@angular/material/core';
+import { MatDatepicker } from "@angular/material/datepicker";
+import { FormControl } from "@angular/forms";
 
-const GSP = 'TAXPRO'
+export const MY_FORMATS = {
+    parse: {
+        dateInput: 'MM/YYYY',
+    },
+    display: {
+        dateInput: 'MM/YYYY',
+        monthYearLabel: 'MMM YYYY',
+        dateA11yLabel: 'LL',
+        monthYearA11yLabel: 'MMMM YYYY',
+    },
+};
+
 @Component({
     selector: 'filing-status',
     templateUrl: './filing-status.component.html',
     styleUrls: ['./filing-status.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [
+        { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
+    ]
 })
-
 export class FilingStatusComponent implements OnInit, OnDestroy {
     /** This will hold the value out/in to open/close setting sidebar popup */
     public asideGstSidebarMenuState: string = 'in';
@@ -24,9 +41,9 @@ export class FilingStatusComponent implements OnInit, OnDestroy {
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
     /** Holds Date range from  */
-    public from: string = '01-10-2023';
+    public from: string = '';
     /** Holds Date range to  */
-    public to: string = '31-10-2023';
+    public to: string = '';
     /** True if api call in progress */
     public isLoading: boolean = false;
     /**Holds Page count in single page for Pagination */
@@ -44,6 +61,12 @@ export class FilingStatusComponent implements OnInit, OnDestroy {
     public displayedColumns: string[] = ['referenceId', 'status'];
     /** Holds data get from api to display Reference ID list */
     public dataSource: any[] = [];
+    /** True if user selected month */
+    public customMonthSelected: boolean = false;
+    /** Custom selected month */
+    public customMonth: string = '';
+    public startAt: Date = new Date();
+    public date: FormControl = new FormControl();
 
     constructor(
         private gstReconcileService: GstReconcileService,
@@ -58,7 +81,11 @@ export class FilingStatusComponent implements OnInit, OnDestroy {
      * @memberof FilingStatusComponent
      */
     public ngOnInit(): void {
+        this.initializeForm();
         document.querySelector('body').classList.add('gst-sidebar-open');
+    }
+
+    public getGstrReferences(): void {
         this.gstReconcileService.getTaxDetails().pipe(takeUntil(this.destroyed$)).subscribe((res: any) => {
             this.activeCompanyGstNumber = res?.body[0];
             if (this.activeCompanyGstNumber !== '') {
@@ -68,17 +95,21 @@ export class FilingStatusComponent implements OnInit, OnDestroy {
                     "page": this.pagination.page,
                     "count": this.pagination.count,
                     "gstin": this.activeCompanyGstNumber,
-                    "gsp": GSP
+                    "gsp": 'TAXPRO'
                 }).pipe(takeUntil(this.destroyed$)).subscribe((res: any) => {
-                    if (res?.body?.results?.length) {
-                        this.dataSource = res.body?.results;
+                    if (res?.status === "success") {
+                        if (res?.body?.results?.length) {
+                            this.dataSource = res.body?.results;
+                        } else {
+                            this.dataSource = [];
+                        }
                     } else {
-                        this.dataSource = [];
+                        this.toasty.showSnackBar("error", res?.message);
                     }
                     this.changeDetectionRef.detectChanges();
                 })
             }
-        })
+        });
     }
 
     /**
@@ -90,29 +121,23 @@ export class FilingStatusComponent implements OnInit, OnDestroy {
         this.router.navigate(['pages', 'gstfiling']);
     }
 
-
     /**
-     *  Reset Date filter
+     *  Initialize Date filter
      *
      * @memberof FilingStatusComponent
      */
-    public resetAdvanceSearch(): void {
-        this.isLoading = false;
-        this.gstReconcileService.getFilingStatusReferenceIdList({
-            "from": this.from,
-            "to": this.to,
-            "page": 1,
-            "count": this.pagination.count,
-            "gstin": this.activeCompanyGstNumber,
-            "gsp": GSP
-        }).pipe(takeUntil(this.destroyed$)).subscribe((res: any) => {
-            if (res?.body?.results?.length) {
-                this.dataSource = res.body?.results;
-            } else {
-                this.dataSource = [];
-            }
-            this.changeDetectionRef.detectChanges();
-        })
+    public initializeForm(): void {
+        this.customMonthSelected = false;
+        let currentMonth = new Date();
+        let firstDay = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1);
+        let lastDay = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 0);
+
+        this.customMonth = currentMonth.toLocaleString('en-us', { month: 'long', year: 'numeric' });
+        this.date.setValue(this.customMonth);
+        this.from = dayjs(firstDay).format(GIDDH_DATE_FORMAT);
+        this.to = dayjs(lastDay).format(GIDDH_DATE_FORMAT);
+
+        this.getGstrReferences();
     }
 
     /**
@@ -124,22 +149,7 @@ export class FilingStatusComponent implements OnInit, OnDestroy {
     public pageChanged(event: any): void {
         if (event.page !== this.pagination.page) {
             this.pagination.page = event.page;
-
-            this.gstReconcileService.getFilingStatusReferenceIdList({
-                "from": this.from,
-                "to": this.to,
-                "page": this.pagination.page,
-                "count": this.pagination.count,
-                "gstin": this.activeCompanyGstNumber,
-                "gsp": GSP
-            }).pipe(takeUntil(this.destroyed$)).subscribe((res: any) => {
-                if (res?.body?.results?.length) {
-                    this.dataSource = res.body?.results;
-                } else {
-                    this.dataSource = [];
-                }
-                this.changeDetectionRef.detectChanges();
-            })
+            this.getGstrReferences();
         }
     }
 
@@ -150,21 +160,28 @@ export class FilingStatusComponent implements OnInit, OnDestroy {
      * @memberof FilingStatusComponent
      */
     public getGstFilingStatus(referenceId: string): void {
+        if (this.isLoading) {
+            return;
+        }
+
         this.isLoading = true;
 
-        this.gstReconcileService.getFilingStatus({
-            "referenceId": referenceId,
-        }).pipe(takeUntil(this.destroyed$)).subscribe((res: any) => {
+        this.gstReconcileService.getFilingStatus({ "referenceId": referenceId }).pipe(takeUntil(this.destroyed$)).subscribe((res: any) => {
             this.isLoading = false;
             this.changeDetectionRef.detectChanges();
-            const toasterMsg = this.generateToasterMessage(res?.body);
-            if (toasterMsg !== "INVAILD_CODE") {
-                this.toasty.showSnackBar("success", toasterMsg);
+
+            if (res?.status === "success") {
+                const toasterMsg = this.generateToasterMessage(res?.body);
+                if (toasterMsg !== "INVALID_CODE") {
+                    this.toasty.showSnackBar("success", toasterMsg);
+                }
+                var blob = new Blob([res?.body], { type: "application/json;charset=utf-8" });
+                setTimeout(() => {
+                    saveAs(blob, `${referenceId}.json`);
+                }, 500);
+            } else {
+                this.toasty.showSnackBar("error", res?.message);
             }
-            var blob = new Blob([res?.body], { type: "application/json;charset=utf-8" });
-            setTimeout(() => {
-                saveAs(blob, `${referenceId}.json`);
-            }, 2500)
         })
     }
 
@@ -185,7 +202,7 @@ export class FilingStatusComponent implements OnInit, OnDestroy {
         } else if (json.status_cd === "IP") {
             return this.localeData?.filing?.in_progress
         } else {
-            return "INVAILD_CODE"
+            return "INVALID_CODE"
         }
     }
 
@@ -201,4 +218,34 @@ export class FilingStatusComponent implements OnInit, OnDestroy {
         document.querySelector('body').classList.remove('gst-sidebar-open');
     }
 
+    /**
+     * Selects date and calls api
+     *
+     * @param {*} event
+     * @memberof FilingStatusComponent
+     */
+    public dateSelected(event: any): void {
+        this.customMonthSelected = true;
+        this.from = dayjs(event[0]).format(GIDDH_DATE_FORMAT);
+        this.to = dayjs(event[1]).format(GIDDH_DATE_FORMAT);
+
+        this.customMonth = event[0].toLocaleString('en-us', { month: 'long', year: 'numeric' });
+        this.date.setValue(this.customMonth);
+        this.getGstrReferences();
+    }
+
+    /**
+     * Sets month/year
+     *
+     * @param {*} date
+     * @param {MatDatepicker<dayjs.Dayjs>} datepicker
+     * @memberof FilingStatusComponent
+     */
+    public setMonthAndYear(date: any, datepicker: MatDatepicker<dayjs.Dayjs>): void {
+        datepicker.close();
+        let selectedMonth = new Date(date);
+        let firstDay = new Date(selectedMonth.getFullYear(), selectedMonth.getMonth(), 1);
+        let lastDay = new Date(selectedMonth.getFullYear(), selectedMonth.getMonth() + 1, 0);
+        this.dateSelected([firstDay, lastDay]);
+    }
 }
