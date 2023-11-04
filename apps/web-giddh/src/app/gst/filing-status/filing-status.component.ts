@@ -65,7 +65,9 @@ export class FilingStatusComponent implements OnInit, OnDestroy {
     public customMonthSelected: boolean = false;
     /** Custom selected month */
     public customMonth: string = '';
+    /** Holds start month/year */
     public startAt: Date = new Date();
+    /** Holds selected date */
     public date: FormControl = new FormControl();
 
     constructor(
