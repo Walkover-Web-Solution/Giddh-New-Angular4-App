@@ -18,9 +18,7 @@
                     <div
                         class="btn-group d-inline-block mr-b1"
                         dropdown
-                        triggers="mouseover"
                         #dp="bs-dropdown"
-                        (mouseleave)="dp.hide()"
                     >
                         <button
                             dropdownToggle
@@ -388,7 +386,7 @@
                 [hidden]="
                     (isGetAllRequestInProcess$ | async) || (getLedgerDataInProcess$ | async) || generateVoucherInProcess
                 "
-                class="pagination-wrapper"
+                class="pagination-wrapper mt-4"
             >
                 <div class="text-center">
                     <pagination

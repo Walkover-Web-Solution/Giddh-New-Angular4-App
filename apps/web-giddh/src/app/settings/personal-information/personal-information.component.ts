@@ -10,6 +10,7 @@ import { GeneralService } from '../../services/general.service';
     templateUrl: './personal-information.component.html',
     styleUrls: ['./personal-information.component.scss']
 })
+
 export class PersonalInformationComponent implements OnInit, OnDestroy {
 
     /** Decides when to emit the value for UPDATE operation */
@@ -58,7 +59,7 @@ export class PersonalInformationComponent implements OnInit, OnDestroy {
      * @memberof PersonalInformationComponent
      */
     public ngOnInit(): void {
-        this.saveProfileSubject.pipe(debounceTime(5000), takeUntil(this.destroyed$)).subscribe(() => {
+        this.saveProfileSubject.pipe(debounceTime(2000), takeUntil(this.destroyed$)).subscribe(() => {
             this.saveProfile.emit(this.updatedData);
         });
         this.isValidDomain = this.generalService.checkDashCharacterNumberPattern(this.profileData.portalDomain)

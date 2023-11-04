@@ -50,6 +50,10 @@
     .modal-dialog {
         max-width: unset !important;
         width: 980px;
+
+        &.modal-md{     
+            width: 600px;
+        }
         .close-modal {
             right: 38px;
         }

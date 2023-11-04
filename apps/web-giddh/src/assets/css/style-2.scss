@@ -15,11 +15,13 @@ $custom-typography: mat-typography-config(
 @import "../css/global/onboarding.scss";
 @import "../css/global/custom-fields.scss";
 @import "../css/global/inventory.scss";
-@import "../css/global/mat-button.scss";
-@import "../css/global/search.scss";
 @import "../css/global/all-items.scss";
-@import "../css/global/vat-report.scss";
 @import "../css/global/header.scss";
+@import "../css/global/search.scss";
+@import "../css/global/mat-button.scss";
+@import "../css/global/vat-report.scss";
+@import "../css/global/help-support.scss";
+@import "../css/global/sales-register-expand.scss";
 @import "../css/global/setting-integration.scss";
 @import "../css/global/help-support.scss";
 @import "../css/global/sales-register-expand.scss";
@@ -94,13 +96,6 @@ textarea {
         width: 18.2% !important;
     }
 }
-
-.billing-details {
-    .mat-form-field-infix {
-        border-top: 0 !important;
-    }
-}
-
 .all-table {
     .mat-column-contact {
         text-transform: lowercase;
@@ -118,7 +113,11 @@ textarea {
         min-width: 170px !important;
     }
 }
-
+.billing-details {
+    .mat-form-field-infix {
+        border-top: 0 !important;
+    }
+}
 .branch-profile-wrapper {
     float: left !important;
     width: auto !important;
@@ -128,6 +127,10 @@ textarea {
     thead {
         z-index: 9 !important;
         position: relative !important;
+    }
+    tbody{
+        z-index: 1;
+        position: relative;
     }
 }
 
@@ -191,7 +194,7 @@ textarea {
             right: 44% !important;
             margin-top: -35px !important;
             z-index: 0 !important;
-            top: 14px;
+            top: 17px;
         }
 
         giddh-datepicker {
@@ -796,6 +799,21 @@ textarea {
 
 .purchase-customise-column-button {
     float: right !important;
+}
+
+/*--- custom ---*/
+.obj-gap {
+    column-gap: 5px;
+}
+/*---- custom -----*/
+.inline-adjustment {
+    .adjustments-list {
+        height: auto !important;
+        overflow-y: unset !important;
+    }
+    advance-receipt-adjustment-component {
+        min-width: 750px;
+    }
 }
 
 @media screen and (max-width: 1366px) and (orientation: portrait) {
@@ -1638,7 +1656,6 @@ input {
 .invoice-control .invoice-nav.navbar-nav > li > a.active {
     background-color: var(--color-white);
 }
-
 .navbar {
     min-height: auto;
     margin-bottom: 10px;
@@ -2388,7 +2405,7 @@ modal-container.modal {
 .form-box .btn {
     min-width: 73px;
     margin-right: 2px;
-    width: 95px;
+    width: 110px;
     color: var(--color-secondary-button-text);
 }
 
@@ -2634,11 +2651,12 @@ modal-container.modal {
 }
 
 /* my css end */
+
 /*input*/
 .form-control {
     background: var(--color-secondary-input-bar-background) !important;
     border: 1px solid var(--color-secondary-input-bar-border);
-    border-radius: 5px !important;
+    border-radius: 5px;
     padding: 6px !important;
     outline: 0;
     color: var(--color-nero) !important;
@@ -3906,7 +3924,7 @@ a.btn.btn-xs.btn-link.pull-right {
 .multi-select input.form-control {
     background-image: var(--color-caret-image) !important;
     background-size: 10px !important;
-    background-position: 96% !important;
+    background-position: 97% !important;
     background-repeat: no-repeat !important;
     background-color: var(--color-white) !important;
     padding-right: 24px !important;
@@ -3928,7 +3946,7 @@ a.btn.btn-xs.btn-link.pull-right {
 #tax-control-multi-select.multi-select input.form-control[readonly] {
     background-image: var(--color-caret-image) !important;
     background-color: var(--color-white) !important;
-    background-position: 98.5% !important;
+    background-position: 95% !important;
 
     &.field-disabled {
         background-color: var(--color-primary-input-bar-background) !important;
@@ -4060,10 +4078,10 @@ a.btn.btn-xs.btn-link.pull-right {
     position: relative;
     background: var(--color-primary-header-background) !important;
     color: var(--color-white);
+    border-color: var(--color-primary-popup-list-header-bottom-border);
     height: 65px;
     display: flex;
     align-items: center;
-    border-color: var(--color-primary-popup-list-header-bottom-border);
 }
 
 .modal-body,
@@ -6658,7 +6676,7 @@ GST filing
 .tax-engine .list-filter {
     padding: 15px !important;
     border-bottom: 1px solid var(--color-common-secondary-border) !important;
-    height: 80px;
+    min-height: 80px;
 }
 
 .tax-engine .transactions-list .list-filter .btn-toolbar {
@@ -7647,6 +7665,41 @@ footer#footer.absolute-footer {
                 }
             }
         }
+        .scroll-container {
+            .wrap-account-sidebar {
+                .grp-wrapper {
+                    .col-wrapper {
+                        border-color: var(--color-common-secondary-border);
+                        &:nth-child(1) {
+                            background-color: var(--color-common-primary-background-for-all-components);
+                        }
+                    }
+                }
+            }
+        }
+
+        .manage-group-acc {
+            account-operations {
+                #middleBody {
+                    .top-bar {
+                        border-color: var(--color-common-secondary-border) !important;
+                    }
+                };
+            }
+        }
+    }
+    login {
+        .modal.fade {
+            .modal-body.clearfix {
+                #authModal {
+                    button[type="login"].ladda-button {
+                        .ladda-label {
+                            color: var(--color-secondary-button-text);
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -7827,6 +7880,7 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
     text-align: center;
     display: flex;
     justify-content: center;
+    margin-bottom: 3rem;
 }
 
 .pagination > li > a,
@@ -8487,10 +8541,6 @@ button.ladda-button .ladda-label {
 
 .panel {
     border-radius: 2px;
-}
-
-.invoice-modal-content .app-aside-menu-other-taxes:host {
-    top: 60px !important;
 }
 
 .mat-chip-list {
@@ -9946,7 +9996,7 @@ giddh-datepicker {
     }
 
     overflow-y: auto !important;
-
+    height: auto;
     .advance-search {
         #export-body {
             sh-select {
@@ -10797,6 +10847,25 @@ body.update-scroll-hidden {
                     }
                 }
             }
+            .modal-body {
+                sh-select-menu {
+                    .menu {
+                        virtual-scroll {
+                            .total-padding {
+                                height: auto;
+                            }
+                        }
+                        .mat-dialog-container {
+                            .modal-body {
+                                input,
+                                textarea {
+                                    border: 1px solid var(--color-secondary-input-bar-border);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         .cdk-overlay-connected-position-bounding-box {
@@ -10809,6 +10878,35 @@ body.update-scroll-hidden {
                 }
             }
         }
+    }
+}
+.ledger-attachments-popup {
+    .cdk-overlay-container {
+        .mat-dialog-container {
+            background-color: var(--color-popup-background);
+        }
+
+        .cdk-overlay-connected-position-bounding-box {
+            .mat-menu-panel {
+                .mat-menu-content {
+                    button:focus {
+                        box-shadow: none !important;
+                        background-color: var(--color-dropdown-list-hover-background);
+                    }
+                }
+            }
+        }
+    }
+
+    button.mat-menu-item {
+        height: 40px;
+        display: flex;
+        align-items: center;
+        padding: 0 16px !important;
+    }
+    .mat-menu-content {
+        padding-top: 2px !important;
+        padding-bottom: 2px !important;
     }
 }
 
@@ -10952,8 +11050,14 @@ inventory-master {
     }
 
     .main-table {
-        tbody > tr > td:first-child {
-            min-width: 242px !important;
+        tbody {
+            tr {
+                td {
+                    &:first-child {
+                        min-width: 242px !important;
+                    }
+                }
+            }
         }
     }
 
@@ -11035,13 +11139,11 @@ inventory-master {
     .right-bar {
         width: 100% !important;
     }
-
     .activity-log-page {
         .cdk-overlay-container {
             z-index: 99999;
         }
     }
-
     .unit-mapping-page {
         .unit-mapping-grid-list {
             .grid-box-content {
@@ -12804,7 +12906,7 @@ inventory-master {
 
     .top-content {
         .count-box {
-            min-width: auto !important;
+            min-width: fit-content !important;
         }
     }
 
@@ -13052,15 +13154,6 @@ body.prevent-body-scroll {
             }
         }
     }
-
-    .mat-form-field-wrapper {
-        .mat-form-field-infix {
-            .mat-input-element.mat-form-field-autofill-control.mat-datepicker-input {
-                padding-left: 32px !important;
-            }
-        }
-    }
-
     .invoice-date-due-date {
         .mat-datepicker-toggle {
             .mat-button-wrapper {
@@ -13707,6 +13800,10 @@ hamburger-menu {
     .cdk-overlay-container-z-index {
         z-index: 1000 !important;
     }
+
+    .cdk-overlay-container {
+        z-index: 9999 !important;
+    }
 }
 
 //inventory control styling
@@ -14278,6 +14375,7 @@ voucher-component {
 .mat-form-field-suffix {
     margin-left: 3px;
 }
+
 .cdk-virtual-scroll-content-wrapper {
     width: 100%;
     height: auto;
@@ -14436,6 +14534,9 @@ activity-compare-json {
     }
 }
 
+.mat-snack-bar-wrapper {
+    z-index: 99999 !important;
+}
 /*---- aside-button ----*/
 aside-menu-product-service {
     .mat-mdc-outlined-button {

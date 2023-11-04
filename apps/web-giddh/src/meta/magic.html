@@ -128,16 +128,16 @@
                                                             <!-- | number: '1.2-2'  -->
                                                             <span
                                                                 v-if="legderBalanceData.forwardedBalance.type === 'DEBIT'"
-                                                                class="">{{ legderBalanceData.forwardedBalance.amount |
+                                                                >{{ legderBalanceData.forwardedBalance.amount |
                                                                 currency }}</span>
                                                             <span
                                                                 v-if="legderBalanceData.forwardedBalance.type === 'CREDIT'"
-                                                                class="">0</span>
+                                                                >0</span>
                                                         </td>
                                                     </tr>
                                                     <tr class="ledger-row bd-rb"
                                                         v-if="(legderBalanceData.forwardedBalance.type !== 'DEBIT') || (legderBalanceData.forwardedBalance.amount == 0)">
-                                                        <td colspan="3" class="">&nbsp;</td>
+                                                        <td colspan="3" >&nbsp;</td>
                                                     </tr>
                                                     <!-- v-if="ledger.hasDebit" -->
                                                     <!-- v-for="item in items" -->
@@ -197,7 +197,7 @@
                                                     <tr class="total-col row mr-0 ml-0"
                                                         v-if="legderBalanceData.closingBalance.type === 'CREDIT' && isResponsive">
                                                         <td colspan="12" class="col-12 text-right h32">
-                                                            <span v-tooltip="'(-) Asset ( ohh no!)'" class="">
+                                                            <span v-tooltip="'(-) Asset ( ohh no!)'" >
                                                                 <!-- | number: '1.2-2'  -->
                                                                 To Balance C/F: {{legderBalanceData.forwardedBalance ?
                                                                 legderBalanceData.forwardedBalance.type === 'CREDIT' ?
@@ -499,7 +499,7 @@
                                                 </ul>
                                             </div>
 
-                                            <div class="">
+                                            <div >
                                                 <ul class="list-style-ul menu-item" id="menu-primary-menu">
                                                     <li><a target="_blank"
                                                             href="https://giddh.com/make-the-switch/">Make The
@@ -546,7 +546,7 @@
                                                 </ul>
                                             </div>
 
-                                            <div class="">
+                                            <div >
                                                 <ul class="list-style-ul menu-item" id="menu-primary-menu">
                                                     <li><a target="_blank"
                                                             href="https://giddh.com/privacy-policy/">Privacy Policy</a>
