@@ -53,5 +53,7 @@
 	"language": "भाषा",
 	"select_language": "भाषा का चयन करें",
     "theme": "थीम",
-    "select_theme": "थीम का चयन करें"
+    "select_theme": "थीम का चयन करें",
+    "portal_domain": "पोर्टल डोमेन",
+    "domain_error_message":"हाइफ़न (-) के अलावा अन्य विशेष वर्णों की अनुमति नहीं है"
 }

@@ -98,11 +98,16 @@ export class AccountsAction {
         .pipe(
             ofType(AccountsAction.CREATE_ACCOUNTV2),
             switchMap((action: CustomActions) => this._accountService.CreateAccountV2(action.payload.account, action.payload.accountUniqueName)),
-            map(response => {
+            map((response) => {
                 if (response?.status === 'success') {
                     this.store.dispatch(this.hasUnsavedChanges(false));
                     this.store.dispatch(this.groupWithAccountsAction.hideAddAccountForm());
                 }
+                this._accountService.createPortalUser(response.request.portalDomain, response.body.uniqueName).pipe(take(1)).subscribe(data => {
+                    if (data?.status === 'error') {
+                        this._toasty.errorToast(data.message, data.code);
+                    }
+                });
                 return this.createAccountResponseV2(response);
             })));
 

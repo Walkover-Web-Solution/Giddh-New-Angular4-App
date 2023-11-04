@@ -91,7 +91,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         headQuarterAlias: '',
         balanceDisplayFormat: '',
         taxType: '',
-        manageInventory: false
+        manageInventory: false,
+        portalDomain: ''
     };
     public stateStream$: Observable<States[]>;
     public statesSource$: Observable<IOption[]> = observableOf([]);
@@ -1117,6 +1118,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 headQuarterAlias: profileObj.headQuarterAlias,
                 nameAlias: profileObj.nameAlias,
                 uniqueName: profileObj?.uniqueName,
+                portalDomain: profileObj?.portalDomain,
                 country: {
                     countryName: profileObj.countryV2 ? profileObj.countryV2.countryName : '',
                     countryCode: profileObj.countryV2 ? profileObj.countryV2.alpha2CountryCode?.toLowerCase() : '',

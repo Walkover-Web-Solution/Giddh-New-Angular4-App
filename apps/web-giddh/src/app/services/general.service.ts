@@ -1559,4 +1559,16 @@ export class GeneralService {
     public isCidr(cidr: string): boolean {
         return (/^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/([0-9]|[1-2][0-9]|3[0-2]))?$/g).test(cidr);
     };
+
+    /**
+     * Check pattern for matching with dash (-) , characters and numbers
+     *
+     * @param {string} checkDashCharacterNumberPattern
+     * @return {*}  {boolean}
+     * @memberof GeneralService
+     */
+    public checkDashCharacterNumberPattern(value: string): boolean {
+        let checkPattern = new RegExp("^[A-Za-z0-9-]+$");
+        return checkPattern.test(value);
+    };
 }
