@@ -16,7 +16,7 @@
                             <input matInput [matDatepicker]="picker" [placeholder]="date?.value" autocomplete="off"
                                 (focus)="picker.open()" (click)="picker.open()"
                                 [class]="'mat-field-border month-selection form-control text-align-center'" name="date" readonly />
-                            <mat-datepicker (monthSelected)="setMonthAndYear($event, picker)" [startView]="'year'"
+                            <mat-datepicker (monthSelected)="setMonthAndYear($event, picker)" [startView]="'multi-year'"
                                 [startAt]="startAt" #picker></mat-datepicker>
                         </mat-form-field>
 
@@ -34,6 +34,13 @@
                 </div>
                 <ng-container *ngIf="!isLoading && dataSource.length">
                     <table mat-table [dataSource]="dataSource" class="mb-5 w-100">
+                        <!-- Date Column -->
+                        <ng-container matColumnDef="date">
+                            <th mat-header-cell *matHeaderCellDef width="90%"> {{ commonLocaleData?.app_date }}
+                            </th>
+                            <td mat-cell *matCellDef="let element" width="90%"> {{element.ret_period}} </td>
+                        </ng-container>
+
                         <!-- Reference Id Column -->
                         <ng-container matColumnDef="referenceId">
                             <th mat-header-cell *matHeaderCellDef width="90%"> {{ localeData?.filing?.reference_id }}

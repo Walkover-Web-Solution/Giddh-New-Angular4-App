@@ -220,5 +220,6 @@
     "impg": "IMPG",
     "imps": "IMPS",
     "registered": "Registered",
-    "unregistered": "Unregistered"
+    "unregistered": "Unregistered",
+    "status_unavailable": "Status unavailable! Please try again later."
 }

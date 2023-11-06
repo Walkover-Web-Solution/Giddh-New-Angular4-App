@@ -50,7 +50,7 @@ export class FilingStatusComponent implements OnInit, OnDestroy {
     private pageCount = PAGINATION_LIMIT;
     /** Holds Pagination Data */
     private pagination: any = {
-        "page": 2,
+        "page": 1,
         "count": this.pageCount,
         "totalPages": 1,
         "totalItems": 1,
@@ -58,7 +58,7 @@ export class FilingStatusComponent implements OnInit, OnDestroy {
     /** Holds Active GSTIN Number */
     public activeCompanyGstNumber: string = '';
     /** Holds mat table column */
-    public displayedColumns: string[] = ['referenceId', 'status'];
+    public displayedColumns: string[] = ['referenceId', 'status', 'date'];
     /** Holds data get from api to display Reference ID list */
     public dataSource: any[] = [];
     /** True if user selected month */
@@ -178,14 +178,18 @@ export class FilingStatusComponent implements OnInit, OnDestroy {
             this.changeDetectionRef.detectChanges();
 
             if (res?.status === "success") {
-                const toasterMsg = this.generateToasterMessage(res?.body);
-                if (toasterMsg !== "INVALID_CODE") {
-                    this.toasty.showSnackBar("success", toasterMsg);
+                if (res?.body) {
+                    const toasterMsg = this.generateToasterMessage(res?.body);
+                    if (toasterMsg !== "INVALID_CODE") {
+                        this.toasty.showSnackBar("success", toasterMsg);
+                    }
+                    var blob = new Blob([res?.body], { type: "application/json;charset=utf-8" });
+                    setTimeout(() => {
+                        saveAs(blob, `${referenceId}.json`);
+                    }, 500);
+                } else {
+                    this.toasty.showSnackBar("error", this.localeData?.status_unavailable);
                 }
-                var blob = new Blob([res?.body], { type: "application/json;charset=utf-8" });
-                setTimeout(() => {
-                    saveAs(blob, `${referenceId}.json`);
-                }, 500);
             } else {
                 this.toasty.showSnackBar("error", res?.message);
             }

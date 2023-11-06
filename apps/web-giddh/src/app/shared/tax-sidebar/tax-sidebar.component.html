@@ -172,6 +172,9 @@
                             href="javascript:void(0);"
                             [routerLink]="['/pages/gstfiling/filing-status']"
                             class="d-block clearfix"
+                            routerLinkActive
+                            #filingstatus="routerLinkActive"
+                            [class.active]="filingstatus.isActive"
                         >
                             <span><i class="icon-GSTR"></i></span>
                             <span>{{ localeData?.filing_status }}</span>
