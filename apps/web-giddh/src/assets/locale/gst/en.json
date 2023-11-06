@@ -116,7 +116,12 @@
         "excel_file_support":"1. This Excel file support GSTIN Portal Offline tool.",
         "organised_accountant":"2. It's an organised way to give to any accountant/CA.",
         "json_support":"1. JSON file supported by GST Portal",
-        "download_json":"Download JSON"
+        "download_json":"Download JSON",
+        "reference_id": "Reference Id",
+        "get_status": "Get Status",
+        "processed_with_error": "Your filing status has been PROCESSED WIITH ERROR. Please check the file.",
+        "processed": "Your filing status has been PROCESSED.",
+        "in_progress": "Your filing status is in IN-PROGRESS. Please check after sometime."
     },
     "gstr3b": {
         "gstr3b_summary": "GSTR 3B Summary",
@@ -215,5 +220,6 @@
     "impg": "IMPG",
     "imps": "IMPS",
     "registered": "Registered",
-    "unregistered": "Unregistered"
+    "unregistered": "Unregistered",
+    "status_unavailable": "Status unavailable! Please try again later."
 }
