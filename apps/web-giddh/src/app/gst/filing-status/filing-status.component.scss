@@ -1,0 +1,23 @@
+.filing-status {
+    &-table {
+        .table-loader {
+            height: calc(100vh - 200px);
+        }
+        table {
+            background-color: var(--color-transparent-background);
+            tr {
+                &:hover {
+                    background-color: var(--color-table-row-hover-primary-background);
+                }
+            }
+        }
+    }
+}
+.month-selection {
+    color: var(--color-nero) !important;
+    background: var(--color-denary-button-background) !important;
+
+    &::placeholder {
+        color: var(--color-nero) !important;
+    }
+}
