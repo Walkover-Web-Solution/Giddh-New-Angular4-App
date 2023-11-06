@@ -220,5 +220,6 @@
 	"impg": "आईएमपीजी",
 	"imps": "आयएमपीएस",
 	"registered": "दर्ज कराई",
-	"unregistered": "अपंजीकृत"
+	"unregistered": "अपंजीकृत",
+    "status_unavailable": "स्थिति अनुपलब्ध! कृपया बाद में पुन: प्रयास करें।"
 }
