@@ -119,9 +119,9 @@
         "download_json":"Download JSON",
         "reference_id": "Reference Id",
         "get_status": "Get Status",
-        "processed_with_error": "Processed with error",
-        "processed": "Processed",
-        "in_progress": "In Progress"
+        "processed_with_error": "Your filing status has been PROCESSED WIITH ERROR. Please check the file.",
+        "processed": "Your filing status has been PROCESSED.",
+        "in_progress": "Your filing status is in IN-PROGRESS. Please check after sometime."
     },
     "gstr3b": {
         "gstr3b_summary": "GSTR 3B Summary",
