@@ -39,6 +39,8 @@ export class TokenVerifyComponent implements OnInit, OnDestroy {
      * @memberof TokenVerifyComponent
      */
     public ngOnInit() {
+        this.generalService.removeLocalStorageParameter("session");
+        
         window.addEventListener("online", (event) => {
             if (!this.isConnected) {
                 this.isConnected = true;
