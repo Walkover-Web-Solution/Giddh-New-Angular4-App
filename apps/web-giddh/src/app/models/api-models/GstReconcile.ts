@@ -88,6 +88,7 @@ export class GstOverViewRequest {
     public gstin: string;
     public from: string;
     public to: string;
+    public currentDateTime?: string;
 }
 
 export class GstrSheetDownloadRequest extends GstOverViewRequest {
@@ -388,4 +389,27 @@ export class Gstr3bOverviewResult {
 }
 export class GstrJsonDownloadRequest extends GstOverViewRequest {
     public type: string;
+}
+
+/**
+ * Filing Status List Request
+ *
+ * @export
+ * @class FilingStatusListRequest
+ * @extends {GstOverViewRequest}
+ */
+export class FilingStatusListRequest extends GstOverViewRequest {
+    public gsp: 'TAXPRO';
+    public page: number;
+    public count: number;
+}
+
+/**
+ * Filing Status Request
+ *
+ * @export
+ * @class FilingStatusRequest
+ */
+export class FilingStatusRequest {
+    public referenceId: string;
 }
