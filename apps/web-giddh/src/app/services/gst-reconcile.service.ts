@@ -214,7 +214,8 @@ export class GstReconcileService {
             ?.replace(':company_gstin', model.gstin)
             ?.replace(':gsp', model.gsp)
             ?.replace(':from', model.from)
-            ?.replace(':to', model.to), {})
+            ?.replace(':to', model.to)
+            ?.replace(':currentDateTime', model.currentDateTime), {})
             .pipe(map((res) => {
                 let data: BaseResponse<string, FileGstr1Request> = res;
                 data.queryString = model;

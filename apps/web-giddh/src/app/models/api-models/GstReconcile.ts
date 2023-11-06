@@ -88,6 +88,7 @@ export class GstOverViewRequest {
     public gstin: string;
     public from: string;
     public to: string;
+    public currentDateTime?: string;
 }
 
 export class GstrSheetDownloadRequest extends GstOverViewRequest {
