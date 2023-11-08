@@ -1,5 +1,5 @@
 import { combineLatest, Observable, of as observableOf, ReplaySubject } from 'rxjs';
-import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, take, takeUntil, pairwise } from 'rxjs/operators';
 import {
     AfterViewInit,
     ChangeDetectorRef,
@@ -32,7 +32,7 @@ import { API_COUNT_LIMIT, BootstrapToggleSwitch, EMAIL_VALIDATION_REGEX, MOBILE_
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
-import { clone, cloneDeep, uniqBy } from 'apps/web-giddh/src/app/lodash-optimized';
+import { clone, cloneDeep, isEqual, uniqBy } from 'apps/web-giddh/src/app/lodash-optimized';
 import { CustomFieldsService } from 'apps/web-giddh/src/app/services/custom-fields.service';
 import { FieldTypes } from 'apps/web-giddh/src/app/custom-fields/custom-fields.constant';
 import { HttpClient } from '@angular/common/http';
@@ -176,7 +176,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     /** This will hold isMobileNumberInvalid */
     public isMobileNumberInvalid: boolean = false;
     /** This will hold mobile number field input  */
-    public intl: any;
+    public intl: { [key: string]: any } = {};
 
     constructor(
         private _fb: UntypedFormBuilder,
@@ -251,6 +251,23 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             }
         });
 
+        // email: ['', Validators.pattern(EMAIL_VALIDATION_REGEX)],
+        //     contactNo: ['', Validators.required],
+        //             control.get('bankAccountNo').setValidators([Validators.minLength(9), Validators.maxLength(18)]);
+        let mappings = this.addAccountForm.get('portalDomain') as UntypedFormArray;
+        mappings.valueChanges.pipe(debounceTime(1000), distinctUntilChanged(isEqual), pairwise()).subscribe(([previous, current]) => {
+            console.log(previous, current);
+            let change = current.find((value, index) => previous?.[index] && !isEqual(value, previous[index]));
+            if (change) {
+                if (change?.default) {
+                    this.addAccountForm.patchValue({
+                        attentionTo: change?.name,
+                        mobileNo: change?.contactNo,
+                        email: change?.email
+                    });
+                }
+            }
+        });
         combineLatest([this.addAccountForm.get('attentionTo').valueChanges, this.addAccountForm.get('mobileNo').valueChanges, this.addAccountForm.get('email').valueChanges]).pipe(
             debounceTime(700),
             distinctUntilChanged(),
@@ -368,7 +385,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public ngAfterViewInit() {
         setTimeout(() => {
             this.onlyPhoneNumber('init-contact-add');
-            this.onlyPhoneNumber('init-contact-portal_0');
         }, 1000);
         this.addAccountForm.get('country').get('countryCode').setValidators(Validators.required);
         let activegroupName = this.addAccountForm.get('activeGroupUniqueName')?.value;
@@ -448,8 +464,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             portalDomain: this._fb.array([
                 this._fb.group({
                     name: [''],
-                    email: ['', Validators.pattern(EMAIL_VALIDATION_REGEX)],
-                    contactNo: ['', Validators.required],
+                    email: [''],
+                    contactNo: [''],
                     default: [false]
                 }),
             ]),
@@ -517,8 +533,14 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 }
             });
         }
+        const lastIndex = mappings.controls.length - 1;
+
         setTimeout(() => {
-            this.onlyPhoneNumber('init-contact-portal_' + (mappings.controls.length - 1))
+            this.onlyPhoneNumber('init-contact-portal_' + (lastIndex));
+            setTimeout(() => {
+                const updateNumber = user?.contactNo?.replace('+', '');
+                this.intl?.['init-contact-portal_' + (lastIndex)]?.setNumber(updateNumber ? '+' + updateNumber : '');
+            }, 500);
         }, 100);
     }
 
@@ -713,8 +735,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         if (this.isHsnSacEnabledAcc || this.activeGroupUniqueName === 'discount') {
             delete accountRequest['addresses'];
         }
-
-        let mobileNo = this.intl?.getNumber();
+        let mobileNo = this.intl?.['init-contact-add']?.getNumber();
         accountRequest['mobileNo'] = mobileNo;
 
         accountRequest['hsnNumber'] = (accountRequest["hsnOrSac"] === "hsn") ? accountRequest['hsnNumber'] : "";
@@ -1426,7 +1447,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         let errorMap = [this.localeData?.invalid_contact_number, this.commonLocaleData?.app_invalid_country_code, this.commonLocaleData?.app_invalid_contact_too_short, this.commonLocaleData?.app_invalid_contact_too_long, this.localeData?.invalid_contact_number];
         const intlTelInput = !isElectron ? window['intlTelInput'] : window['intlTelInputGlobals']['electron'];
         if (intlTelInput && input) {
-            this.intl = intlTelInput(input, {
+            this.intl[id] = intlTelInput(input, {
                 nationalMode: true,
                 utilsScript: MOBILE_NUMBER_UTIL_URL,
                 autoHideDialCode: false,
@@ -1483,17 +1504,17 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 }
             };
             input.addEventListener('blur', () => {
-                let phoneNumber = this.intl?.getNumber();
+                let phoneNumber = this.intl?.[id]?.getNumber();
                 reset();
                 if (input) {
                     if (phoneNumber?.length) {
-                        if (this.intl?.isValidNumber()) {
+                        if (this.intl?.[id]?.isValidNumber()) {
                             validMsg?.classList?.remove("d-none");
                             this.isMobileNumberInvalid = false;
                         } else {
                             input?.classList?.add("error");
                             this.isMobileNumberInvalid = true;
-                            let errorCode = this.intl?.getValidationError();
+                            let errorCode = this.intl?.[id]?.getValidationError();
                             if (errorMsg && errorMap[errorCode]) {
                                 this._toaster.errorToast(this.localeData?.invalid_contact_number);
                                 errorMsg.innerHTML = errorMap[errorCode];
