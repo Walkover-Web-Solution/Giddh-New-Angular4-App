@@ -4,7 +4,7 @@ import { AppState } from '../../../store';
 import { InvoiceReceiptActions } from '../../../actions/invoice/receipt/receipt.actions';
 import { ReportsDetailedRequestFilter, SalesRegisteDetailedResponse } from '../../../models/api-models/Reports';
 import { ActivatedRoute, Router } from '@angular/router';
-import { take, takeUntil, debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { take, takeUntil, debounceTime, distinctUntilChanged, skip } from 'rxjs/operators';
 import { ReplaySubject, Observable } from 'rxjs';
 import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
 import { UntypedFormControl } from '@angular/forms';
@@ -49,8 +49,6 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
 
     /** Universal date observer */
     public universalDate$: Observable<any>;
-    /** Holds universal date subscription response count */
-    public universalDateCallbackCount: number = 0;
     /* This will store selected date range to use in api */
     public selectedDateRange: any;
     /* This will store selected date range to show on UI */
@@ -125,7 +123,7 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.isMobileScreen = result.matches;
         });
-        this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
+        this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), skip(1), takeUntil(this.destroyed$));
     }
 
     public ngOnInit(): void {
@@ -156,11 +154,8 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
         /** Universal date observer */
         this.universalDate$.subscribe(dateObj => {
             if (dateObj) {
-                this.universalDateCallbackCount++;
-                if (this.universalDateCallbackCount > 1) {
-                    this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
-                    this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-                }
+                this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
+                this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
             }
         });
 
