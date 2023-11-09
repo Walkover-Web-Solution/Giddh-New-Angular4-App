@@ -510,13 +510,29 @@
                         </div>
                         <div class="col-xl-4 col-lg-3 col-md-3 col-sm-2 pr-0 unit-responsive">
                             <div class="form-group">
-                                <label>{{ commonLocaleData?.app_email_id }}</label>
+                                <label>{{ commonLocaleData?.app_email_id }} <span class="red-text">*</span></label>
                                 <input type="email" class="form-control" formControlName="email" name="email_{{ i }}" />
+                                <span
+                                    class="error-msg"
+                                    *ngIf="
+                                        domain.get('email').dirty &&
+                                        domain.get('email').hasError('required') &&
+                                        !domain.get('email').hasError('duplicate')
+                                    "
+                                    id="emailError_{{ i }}"
+                                    >{{ localeData?.email_id_error }}
+                                </span>
+                                <span
+                                    class="error-msg"
+                                    *ngIf="domain.get('email').hasError('duplicate') && i === lastDuplicateEmailIndex"
+                                    id="emailValidationError_{{ i }}"
+                                    >{{ localeData?.duplicate_email }}
+                                </span>
                             </div>
                         </div>
-                        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 pr-0">
+                        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 pr-0 mobile-number-portal-wrapper">
                             <div class="form-group">
-                                <label>{{ commonLocaleData?.app_mobile_number }}</label>
+                                <label>{{ commonLocaleData?.app_mobile_number }} </label>
                                 <div class="d-flex">
                                     <input
                                         name="contactNo_{{ i }}"

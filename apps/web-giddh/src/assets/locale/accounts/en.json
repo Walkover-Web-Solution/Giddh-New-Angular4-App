@@ -76,5 +76,6 @@
     "portal_deleted_successfully": "Portal user deleted successfully",
     "export_group_ledger": "Export Group Ledger",
     "bank_details_error_message": "All the bank fields are mandatory if you provide data for any of them",
-    "item_no": "Item #[ITEM_NO]"
+    "item_no": "Item #[ITEM_NO]",
+    "duplicate_email":"Duplicate email are not allowed"
 }

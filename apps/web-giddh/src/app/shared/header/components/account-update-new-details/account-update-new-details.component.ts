@@ -220,6 +220,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public isMobileNumberInvalid: boolean = false;
     /** This will hold mobile number field input  */
     public intl: { [key: string]: any } = {};
+    /** True if last duplicate email in portal  users */
+    public lastDuplicateEmailIndex: number | null = null;
 
     constructor(
         private _fb: UntypedFormBuilder,
@@ -306,26 +308,41 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
         let mappings = this.addAccountForm.get('portalDomain') as UntypedFormArray;
         mappings.valueChanges.pipe(debounceTime(1000), distinctUntilChanged(isEqual), pairwise()).subscribe(([previous, current]) => {
+            const index = current.findIndex((value, index) => previous?.[index] && !isEqual(value, previous[index]));
             let change = current.find((value, index) => previous?.[index] && !isEqual(value, previous[index]));
             if (change) {
-                if (change?.default) {
-                    this.addAccountForm.patchValue({
-                        attentionTo: change?.name,
-                        mobileNo: change?.contactNo,
-                        email: change?.email
-                    });
-                }
                 if (this.accountDetails) {
                     this.activeAccountName = this.accountDetails.uniqueName;
                 } else {
                     this.activeAccount$.pipe(take(1)).subscribe(activeAccountState => this.activeAccountName = activeAccountState?.uniqueName);
                 }
                 let updateUser = [change];
-                if (!updateUser[0]?.uniqueName && (!updateUser[0]?.name || !updateUser[0]?.email || !updateUser[0]?.contactNo)) {
-                    return;
-                } else if (!this.isMobileNumberInvalid) {
-                    return;
+                const mappingFormGroup = mappings.at(index)
+                if (updateUser[0]?.email) {
+                    mappingFormGroup.get('email')?.setValidators([Validators.required, Validators.pattern(EMAIL_VALIDATION_REGEX)]);
+                    mappingFormGroup.get('email')?.updateValueAndValidity();
                 } else {
+                    mappingFormGroup.get('email')?.clearValidators();
+                    mappingFormGroup.get('email')?.updateValueAndValidity();
+                }
+
+                // Your existing code to find duplicates
+                let lastOccurrenceIndex = -1;
+
+                for (let i = 0; i < current.length; i++) {
+                    const currentEmail = current[i].email;
+                    const index = current.findIndex((value, idx) => idx !== i && value.email === currentEmail);
+                    if (index === -1) {
+                        // This email is not a duplicate
+                        mappings.at(i).get('email').setErrors(null);
+                    } else {
+                        // This email is a duplicate
+                        lastOccurrenceIndex = i;
+                        mappings.at(i).get('email').setErrors({ duplicate: true });
+                    }
+                }
+                this.lastDuplicateEmailIndex = lastOccurrenceIndex;
+                if (this.lastDuplicateEmailIndex === -1) {
                     this._accountService.createPortalUser(updateUser, this.activeAccountName).pipe(take(1)).subscribe(data => {
                         if (data?.status === 'success') {
                             this._toaster.successToast(this.localeData?.portal_updated_successfully, 'Success');
@@ -353,7 +370,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     } else {
                         let setValue = false;
                         users.controls?.find((control) => {
-                            if (!control.get('name')?.value && !control.get('email')?.value && !control.get('contactNo')?.value) {
+                            if (!control.get('name')?.value || !control.get('email')?.value || !control.get('contactNo')?.value) {
                                 control.patchValue({ name: attentionTo, email: email, contactNo: mobileNo, default: true });
                                 setValue = true;
                                 return true;
@@ -570,8 +587,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             portalDomain: this._fb.array([
                 this._fb.group({
                     name: [''],
-                    email: ['', Validators.pattern(EMAIL_VALIDATION_REGEX)],
-                    contactNo: ['', Validators.required],
+                    email: [''],
+                    contactNo: [''],
                     default: [false],
                     uniqueName: ['']
                 })
