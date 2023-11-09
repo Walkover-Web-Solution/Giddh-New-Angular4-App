@@ -47,6 +47,10 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
     /** Directive to get reference of element */
     @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
 
+    /** Universal date observer */
+    public universalDate$: Observable<any>;
+    /** Holds universal date subscription response count */
+    public universalDateCallbackCount: number = 0;
     /* This will store selected date range to use in api */
     public selectedDateRange: any;
     /* This will store selected date range to show on UI */
@@ -121,6 +125,7 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.isMobileScreen = result.matches;
         });
+        this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
     }
 
     public ngOnInit(): void {
@@ -147,6 +152,18 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
                 this.setDataPickerDateRange();
             }
         });
+
+        /** Universal date observer */
+        this.universalDate$.subscribe(dateObj => {
+            if (dateObj) {
+                this.universalDateCallbackCount++;
+                if (this.universalDateCallbackCount > 1) {
+                    this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
+                    this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                }
+            }
+        });
+
         this.getDetailedSalesReport(this.getDetailedsalesRequestFilter);
         this.salesRegisteDetailedResponse$.pipe(takeUntil(this.destroyed$)).subscribe((res: SalesRegisteDetailedResponse) => {
             if (res) {
