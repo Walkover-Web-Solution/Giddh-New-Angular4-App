@@ -5,6 +5,7 @@
     (localeData)="localeData = $event"
     (translationComplete)="translationComplete($event)"
 >
+    <hamburger-menu class="hamburger-menu"></hamburger-menu>
     <giddh-page-loader *ngIf="isLoading"></giddh-page-loader>
     <div class="stock-balance-wrapper" *ngIf="!isLoading">
         <div class="stock-balance-top-bar">

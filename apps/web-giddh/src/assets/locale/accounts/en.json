@@ -67,8 +67,13 @@
         "contact": "Contact",
         "bank_details": "Bank Details",
         "others": "Others",
-        "custom": "Custom"
+        "custom": "Custom",
+        "portal": "Portal"
     },
+    "portal_attention_to": "Attention to",
+    "portal_add_user": "Add User",
+    "portal_updated_successfully": "Portal user updated successfully",
+    "portal_deleted_successfully": "Portal user deleted successfully",
     "export_group_ledger": "Export Group Ledger",
     "bank_details_error_message": "All the bank fields are mandatory if you provide data for any of them",
     "item_no": "Item #[ITEM_NO]"
