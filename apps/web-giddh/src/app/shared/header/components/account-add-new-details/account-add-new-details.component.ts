@@ -179,6 +179,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public intl: { [key: string]: any } = {};
     /** True if last duplicate email in portal  users */
     public lastDuplicateEmailIndex: number = -1;
+    /** True if last duplicate email in portal  users */
+    public portalIndex: number;
 
     constructor(
         private _fb: UntypedFormBuilder,
@@ -254,70 +256,76 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         });
 
         let mappings = this.addAccountForm.get('portalDomain') as UntypedFormArray;
-        mappings.valueChanges.pipe(debounceTime(1000), distinctUntilChanged(isEqual), pairwise()).subscribe(([previous, current]) => {
-            let change = current.find((value, index) => previous?.[index] && !isEqual(value, previous[index]));
-            const index = current.findIndex((value, index) => previous?.[index] && !isEqual(value, previous[index]));
+        mappings.valueChanges.pipe(debounceTime(1000), takeUntil(this.destroyed$), distinctUntilChanged(isEqual)).subscribe((res) => {
+
+            if (this.portalIndex === null || this.portalIndex === undefined) {
+                return;
+            }
+            const index = this.portalIndex;
+            let change = mappings.at(index);
+            let defaultUser = mappings.controls.find(control => control.get('default')?.value === true);
+            if (defaultUser) {
+                this.addAccountForm.patchValue({
+                    attentionTo: defaultUser.get('name').value,
+                    contactNo: defaultUser.get('contactNo').value,
+                    email: defaultUser.get('email').value
+                });
+            }
             if (change) {
-                if (change?.default) {
-                    this.addAccountForm.patchValue({
-                        attentionTo: change?.name,
-                        mobileNo: change?.contactNo,
-                        email: change?.email
-                    });
+                if (change.invalid) {
+                    this.portalIndex = undefined;
+                    return;
                 }
-                let updateUser = [change];
-                const mappingFormGroup = mappings.at(index)
-                if (updateUser[0]?.email) {
-                    mappingFormGroup.get('email')?.setValidators([Validators.required, Validators.pattern(EMAIL_VALIDATION_REGEX)]);
-                    mappingFormGroup.get('email')?.updateValueAndValidity();
+
+                if (change.get('email').value) {
+                    change.get('email')?.setValidators([Validators.required, Validators.pattern(EMAIL_VALIDATION_REGEX)]);
+                    change.get('email')?.updateValueAndValidity();
                 } else {
-                    mappingFormGroup.get('email')?.clearValidators();
-                    mappingFormGroup.get('email')?.updateValueAndValidity();
+                    change.get('email')?.setValidators([Validators.pattern(EMAIL_VALIDATION_REGEX)]);
+                    change.get('email')?.updateValueAndValidity();
                 }
-
-                // Your existing code to find duplicates
+                if (change.get('contactNo').value) {
+                    const updateNumber = change.get('contactNo').value?.replace('+', '');
+                    change.get('contactNo').setValue(updateNumber);
+                }
                 let lastOccurrenceIndex = -1;
-
-                for (let i = 0; i < current.length; i++) {
-                    const currentEmail = current[i].email;
-                    const index = current.findIndex((value, idx) => idx !== i && value.email === currentEmail);
-                    if (index === -1) {
-                        // This email is not a duplicate
-                        mappings.at(i).get('email').setErrors(null);
-                    } else {
-                        // This email is a duplicate
-                        lastOccurrenceIndex = i;
-                        mappings.at(i).get('email').setErrors({ duplicate: true });
+                let currentEmail = change.get('email')?.value;
+                mappings.controls.forEach((control, i) => {
+                    if (lastOccurrenceIndex === -1 && index !== i && control.get('email')?.value === currentEmail) {
+                        lastOccurrenceIndex = index;
+                        change.get('email').setErrors({ duplicate: true });
                     }
-                }
+                });
+                this.portalIndex = undefined;
+
                 this.lastDuplicateEmailIndex = lastOccurrenceIndex;
             }
         });
 
-        combineLatest([this.addAccountForm.get('attentionTo').valueChanges, this.addAccountForm.get('mobileNo').valueChanges, this.addAccountForm.get('email').valueChanges]).pipe(
+        this.addAccountForm.valueChanges.pipe(
             debounceTime(700),
-            distinctUntilChanged(),
+            distinctUntilChanged((prev, curr) => (prev?.attentionTo === curr?.attentionTo) && (prev?.mobileNo === curr?.mobileNo) && (prev?.email === curr?.email)),
             takeUntil(this.destroyed$))
-            .subscribe(([attentionTo, mobileNo, email]) => {
+            .subscribe((response) => {
                 const users = this.addAccountForm.get('portalDomain') as UntypedFormArray;
-                if (attentionTo || mobileNo || email) {
+                if (response?.attentionTo || response?.mobileNo || response?.email) {
                     let user = users.controls.find(control => control.get('default')?.value === true);
                     if (user) {
-                        user?.get('name').setValue(attentionTo);
-                        user?.get('email').setValue(email);
-                        user?.get('contactNo').setValue(mobileNo);
+                        user?.get('name').setValue(response?.attentionTo);
+                        user?.get('email').setValue(response?.email);
+                        user?.get('contactNo').setValue(response?.mobileNo);
                         user?.get('default').setValue(true);
                     } else {
                         let setValue = false;
                         users.controls?.find((control) => {
                             if (!control.get('name')?.value && !control.get('email')?.value && !control.get('contactNo')?.value) {
-                                control.patchValue({ name: attentionTo, email: email, contactNo: mobileNo, default: true });
+                                control.patchValue({ name: response?.attentionTo, email: response?.email, contactNo: response?.mobileNo, default: true });
                                 setValue = true;
                                 return true;
                             }
                         });
                         if (!setValue) {
-                            let data = { name: attentionTo, email: email, contactNo: mobileNo, default: true };
+                            let data = { name: response?.attentionTo, email: response?.email, contactNo: response?.mobileNo, default: true };
                             this.addNewPortalUser(data);
                         }
                     }
@@ -329,76 +337,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                     });
                 }
             });
-        // this.addAccountForm.get('attentionTo').valueChanges.pipe(
-        //     debounceTime(1000),
-        //     distinctUntilChanged(),
-        //     takeUntil(this.destroyed$))
-        //     .subscribe((attentionTo) => {
-        //         const users = this.addAccountForm.get('portalDomain') as UntypedFormArray;
-        //         if (attentionTo) {
-        //             let user = users.controls.find(control => control.get('default')?.value === true);
-        //             if (user) {
-        //                 user?.get('name').setValue(attentionTo);
-        //                 user?.get('email').setValue('');
-        //                 user?.get('contactNo').setValue('');
-        //                 user?.get('default').setValue(true);
-        //             } else {
-        //                 let setValue = false;
-        //                 users.controls?.find((control) => {
-        //                     if (!control.get('name')?.value) {
-        //                         control.patchValue({ name: attentionTo, email: '', contactNo: '', default: true });
-        //                         setValue = true;
-        //                         return true;
-        //                     }
-        //                 });
-        //                 if (!setValue) {
-        //                     let data = { name: attentionTo, email: '', contactNo: '', default: true };
-        //                     this.addNewPortalUser(data);
-        //                 }
-        //             }
-        //         } else {
-        //             users.controls?.forEach((control, i) => {
-        //                 if (control.get('default')?.value === true) {
-        //                     users.removeAt(i);
-        //                 }
-        //             });
-        //         }
-        //     });
-        // combineLatest([this.addAccountForm.get('attentionTo').valueChanges, this.addAccountForm.get('mobileNo').valueChanges, this.addAccountForm.get('email').valueChanges]).pipe(
-        //     debounceTime(700),
-        //     distinctUntilChanged(),
-        //     takeUntil(this.destroyed$))
-        //     .subscribe(([attentionTo, mobileNo, email]) => {
-        //         const users = this.addAccountForm.get('portalDomain') as UntypedFormArray;
-        //         if (attentionTo || mobileNo || email) {
-        //             let user = users.controls.find(control => control.get('default')?.value === true);
-        //             if (user) {
-        //                 user?.get('name').setValue(attentionTo);
-        //                 user?.get('email').setValue(email);
-        //                 user?.get('contactNo').setValue(mobileNo);
-        //                 user?.get('default').setValue(true);
-        //             } else {
-        //                 let setValue = false;
-        //                 users.controls?.find((control) => {
-        //                     if (!control.get('name')?.value && !control.get('email')?.value && !control.get('contactNo')?.value) {
-        //                         control.patchValue({ name: attentionTo, email: email, contactNo: mobileNo, default: true });
-        //                         setValue = true;
-        //                         return true;
-        //                     }
-        //                 });
-        //                 if (!setValue) {
-        //                     let data = { name: attentionTo, email: email, contactNo: mobileNo, default: true };
-        //                     this.addNewPortalUser(data);
-        //                 }
-        //             }
-        //         } else {
-        //             users.controls?.forEach((control, i) => {
-        //                 if (control.get('default')?.value === true) {
-        //                     users.removeAt(i);
-        //                 }
-        //             });
-        //         }
-        //     });
+
 
         // get country code value change
         this.addAccountForm.get('country').get('countryCode').valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(a => {
