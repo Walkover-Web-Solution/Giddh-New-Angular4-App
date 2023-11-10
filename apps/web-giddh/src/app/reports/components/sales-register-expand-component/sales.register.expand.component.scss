@@ -8,7 +8,6 @@
 .basic > tfoot > tr > th {
     white-space: nowrap !important;
 }
-
 .td-search-box {
     padding: 0px !important;
     position: relative;
@@ -358,12 +357,5 @@ table th {
                 font-size: var(--font-size-15);
             }
         }
-    }
-}
-
-@media (min-width: 769px) {
-    .table-responsive {
-        max-height: calc(100vh - 275px);
-        overflow-y: auto;
     }
 }

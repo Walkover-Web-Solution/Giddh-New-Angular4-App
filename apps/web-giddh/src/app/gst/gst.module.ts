@@ -32,15 +32,21 @@ import { FilingOverviewComponent } from './filing/tabs/overview/overview.compone
 import { GstRoutingModule } from './gst.routing.module';
 import { ConfirmModalModule } from '../theme/confirm-modal';
 import { GstAsideMenuComponent } from './modals/gst-aside-menu/gst-aside-menu.component';
+import { SharedModule } from '../shared/shared.module';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { TaxSidebarModule } from '../shared/tax-sidebar/tax-sidebar.module';
-import { SharedModule } from '../shared/shared.module';
 import { UnitMappingComponent } from './unit-mapping/unit-mapping.component';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { MatButtonModule } from '@angular/material/button';
 import { PushToPortalComponent } from './modals/push-to-portal/push-to-portal.component';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { FilingStatusComponent } from './filing-status/filing-status.component';
+import { MatTableModule } from '@angular/material/table';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 
 @NgModule({
     declarations: [FileGstR3Component,
@@ -48,7 +54,7 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
         ReconcileComponent, PushToGstInComponent, ViewTransactionsComponent,
         OverviewSummaryComponent, TransactionSummaryComponent,
         PushToGstInComponent, NilSummaryComponent, HsnSummaryComponent, B2csSummaryComponent,
-        DocumentIssuedComponent, FailedTransactionsComponent, GstAsideMenuComponent, UnitMappingComponent, PushToPortalComponent],
+        DocumentIssuedComponent, FailedTransactionsComponent, GstAsideMenuComponent, UnitMappingComponent, PushToPortalComponent,FilingStatusComponent],
     imports: [
         GstRoutingModule,
         CollapseModule,
@@ -77,6 +83,11 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
         MatGridListModule,
         FormFieldsModule,
         MatButtonModule,
+        MatTableModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatDatepickerModule,
+        MatNativeDateModule
     ],
     providers: [],
     exports: [ViewTransactionsComponent]

@@ -144,7 +144,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public exportInvoiceRequestInProcess$: Observable<boolean> = of(false);
     public exportedInvoiceBase64res$: Observable<any>;
     public isFabclicked: boolean = false;
-    public exportInvoiceType: string = '';
     public sortRequestForUi: { sortBy: string, sort: string } = { sortBy: '', sort: '' };
     public appSideMenubarIsOpen: boolean;
     public invoiceSelectedDate: any = {
@@ -199,16 +198,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public selectedInvoices: any[] = [];
     /** This will hold the search value */
     public invoiceSearch: any = "";
-    /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
-    public isCompany: boolean;
-    /** Current branches */
-    public branches: Array<any>;
-    /** This will hold if updated is account in master to refresh the list of vouchers */
-    public isAccountUpdated: boolean = false;
-    /* This will hold local JSON data */
-    public localeData: any = {};
-    /* This will hold common JSON data */
-    public commonLocaleData: any = {};
     /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** directive to get reference of element */
@@ -223,6 +212,16 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public selectedRangeLabel: any = "";
     /** This will store the x/y position of the field to show datepicker under it */
     public dateFieldPosition: any = { x: 0, y: 0 };
+    /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
+    public isCompany: boolean;
+    /** Current branches */
+    public branches: Array<any>;
+    /** This will hold if updated is account in master to refresh the list of vouchers */
+    public isAccountUpdated: boolean = false;
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
     /** True, if user has enable GST E-invoice */
     public gstEInvoiceEnable: boolean;
     /** True if selected items needs to be updated */
@@ -328,7 +327,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                     }) :
                     this._receiptServices.GetPurchaseRecordDetails(a.accountUniqueName, a.purchaseRecordUniqueName);
                 apiCallObservable.pipe(takeUntil(this.destroyed$)).subscribe((res: any) => {
-                    if (res && res.body) {
+                    if (res?.body) {
                         if (res.body.date) {
                             this.invoiceSearchRequest.from = res.body.date;
                             this.invoiceSearchRequest.to = res.body.date;
@@ -818,7 +817,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             this.store.dispatch(this.invoiceActions.ActionOnInvoice(data.uniqueName, data));
         }
     }
-    
+
     /**
      * Closes payment popup
      *
@@ -866,7 +865,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
      */
     public downloadFile() {
         let blob = this.generalService.base64ToBlob(this.base64Data, 'application/pdf', 512);
-            return saveAs(blob, `${this.commonLocaleData?.app_invoice}-${this.selectedInvoice.account?.uniqueName}.pdf`);
+        return saveAs(blob, `${this.commonLocaleData?.app_invoice}-${this.selectedInvoice.account?.uniqueName}.pdf`);
     }
 
     public sortButtonClicked(type: 'asc' | 'desc', columnName: string) {
@@ -1118,6 +1117,9 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         if (action) {
             this.selectedInvoices = this.generalService.addValueInArray(this.selectedInvoices, item?.uniqueName);
             this.selectedItems.push(item?.uniqueName);
+            if (this.voucherData.items.length === this.selectedItems.length) {
+                this.allItemsSelected = true
+            }
         } else {
             this.selectedInvoices = this.generalService.removeValueFromArray(this.selectedInvoices, item?.uniqueName);
             this.selectedItems = this.selectedItems?.filter(selectedItem => selectedItem !== item?.uniqueName);
@@ -1185,13 +1187,9 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             this.selectedInvoicesList.push(item);     // Array of checked seleted Items of the list
         }
 
-        if (this.selectedInvoicesList?.length === 1) {
-            this.exportInvoiceType = this.selectedInvoicesList[0].account?.uniqueName;
+        if (this.selectedInvoicesList?.length > 0) {
             this.isExported = true;
         }
-        this.isExported = this.selectedInvoicesList.every(ele => {
-            return ele.account?.uniqueName === this.exportInvoiceType;
-        });
         this.selectedInvoicesList = this.selectedInvoicesList?.filter(s => s.isSelected);
     }
 
@@ -1346,11 +1344,14 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public exportCsvDownload() {
         this.exportcsvRequest.from = this.invoiceSearchRequest.from;
         this.exportcsvRequest.to = this.invoiceSearchRequest.to;
-        let dataTosend = { accountUniqueName: '' };
+        let dataTosend = { accountUniqueName: '', uniqueNames: [] };
         if (this.selectedInvoicesList?.length > 0) {
             dataTosend.accountUniqueName = this.allItemsSelected ? '' : this.selectedInvoicesList[0].account?.uniqueName;
         } else {
             dataTosend.accountUniqueName = '';
+        }
+        if (this.selectedItems.length) {
+            dataTosend.uniqueNames = this.selectedItems;
         }
         this.exportcsvRequest.dataToSend = dataTosend;
         this.store.dispatch(this.invoiceActions.DownloadExportedInvoice(this.exportcsvRequest));
@@ -1358,8 +1359,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             if (res) {
                 if (res.status === 'success') {
                     let blob = this.generalService.base64ToBlob(res.body, 'application/xls', 512);
-                        this.selectedInvoicesList = [];
-                        return saveAs(blob, `${dataTosend.accountUniqueName}${this.localeData?.all_invoices}.xls`);
+                    this.selectedInvoicesList = [];
+                    return saveAs(blob, `${dataTosend.accountUniqueName}${this.localeData?.all_invoices}.xls`);
                 } else {
                     this._toaster.errorToast(res.message);
                 }
@@ -1643,7 +1644,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof InvoicePreviewComponent
      */
     public openSendMailModal(template: TemplateRef<any>, item: any): void {
-        this.sendEmailRequest.email = item.account?.email;
+        this.sendEmailRequest.email = item?.account?.email;
         this.sendEmailRequest.uniqueName = item?.uniqueName;
         this.sendEmailRequest.accountUniqueName = item.account?.uniqueName;
         this.sendEmailRequest.companyUniqueName = this.companyUniqueName;
@@ -1907,7 +1908,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                             // }, 0);
                             this.showExportButton = voucherData.items.every(s => s.account?.uniqueName === voucherData.items[0].account?.uniqueName);
                         } else {
-                            // this.totalSale = 0;
                             if (voucherData.page > 1) {
                                 voucherData.totalItems = voucherData.count * (voucherData.page - 1);
                                 this.advanceSearchFilter.page = Math.ceil(voucherData.totalItems / voucherData.count);
@@ -1938,7 +1938,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                             allItems.unshift(removedItem);
                             this.toggleBodyClass();
                             setTimeout(() => {
-                                this.selectedInvoiceForDetails = allItems[0];
+                                const itemIndex = allItems.findIndex(item => item.voucherNumber === res[1]);
+                                this.selectedInvoiceForDetails = allItems[itemIndex];
                                 this.itemsListForDetails = cloneDeep(allItems);
                                 this.store.dispatch(this.invoiceReceiptActions.setVoucherForDetails(null, null));
                             }, 1000);
@@ -1946,6 +1947,9 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                     }
                     setTimeout(() => {
                         this.voucherData = cloneDeep(res[0]);
+                        this.voucherData.items.forEach((item) => {
+                            item.isSelected = false;
+                        });
                         if (!this.cdr['destroyed']) {
                             this.cdr.detectChanges();
                         }

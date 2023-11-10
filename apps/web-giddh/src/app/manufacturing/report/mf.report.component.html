@@ -1,5 +1,4 @@
 <section id="manufacture" class="clearfix">
-    <!-- page Title -->
     <hamburger-menu *ngIf="!isInventoryPage" [pageHeading]="'Mfg. Journal Register'"></hamburger-menu>
     <div class="clearfix mr-r15 create-btn" *ngIf="isMobileScreen">
         <div class="mr-r15" *ngIf="showClearFilter()">
@@ -214,7 +213,7 @@
         <h1>Do search with some other dates</h1>
     </div>
     <section *ngIf="!(isReportLoading$ | async) && reportData && reportData.results?.length > 0">
-        <div class="" id="mfReportTbl">
+        <div id="mfReportTbl">
             <div class="col-12 col-sm-12 table-responsive">
                 <table class="table basic table-bordered giddh-table on-mobile-view manufacture-table">
                     <thead>
@@ -273,7 +272,7 @@
                         </tr>
                     </tbody>
                 </table>
-                <div *ngIf="reportData?.totalPages > 1" class="pagination-wrapper">
+                <div *ngIf="reportData?.totalPages > 1" class="pagination-wrapper mt-4">
                     <div class="text-center">
                         <pagination
                             [totalItems]="reportData.totalItems"

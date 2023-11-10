@@ -30,6 +30,11 @@
 
 .template-meta {
     padding: 15px 0 0;
+
+    .text-ellipsis{
+        width: 200px;
+        display: inline-block;
+    }
 }
 
 .btn-warning {
@@ -102,5 +107,11 @@
     .template-grid {
         background: var(--color-wild-sand);
         max-width: 100%;
+    }
+}
+
+@media (max-width: 1024px) {
+    .template-preview-container {
+        z-index: 99999;
     }
 }

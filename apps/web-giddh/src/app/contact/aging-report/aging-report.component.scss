@@ -42,12 +42,6 @@
     background: transparent;
 }
 
-.pagination-wrapper {
-    width: 80%;
-    padding: 20px 0;
-    position: fixed;
-    bottom: 20px;
-}
 
 .wrap-searching-aging {
     display: none !important;
@@ -192,8 +186,10 @@ tr.mat-header-row {
     }
     .mat-table tbody {
         tr {
-            td:first-child {
-                padding-left: 18px;
+            td {
+                &:first-child {
+                    padding-left: 18px;
+                }
             }
         }
     }
@@ -252,8 +248,10 @@ tr.mat-header-row {
     .main-table {
         tbody {
             tr {
-                td:first-child {
-                    min-width: 242px !important;
+                td {
+                    &:first-child {
+                        min-width: 242px !important;
+                    }
                 }
             }
         }
@@ -262,8 +260,10 @@ tr.mat-header-row {
 @media (max-width: 1024px) {
     .main-table {
         th {
-            .mat-header-cell:first-of-type {
-                min-width: 242px !important;
+            .mat-header-cell {
+                &:first-of-type {
+                    min-width: 242px !important;
+                }
             }
         }
     }
@@ -284,11 +284,6 @@ tr.mat-header-row {
     .main-table {
         margin-top: 0;
         float: left;
-    }
-    .pagination-wrapper {
-        margin-bottom: 0px;
-        position: relative;
-        margin-top: 20px;
     }
     .wrap-searching-aging .max-width-250.default-width {
         max-width: calc(100% - 90px);
@@ -399,16 +394,6 @@ tr.mat-header-row {
 @media (max-width: 375px) {
     .wrap-searching-aging + .btn-group {
         float: left !important;
-    }
-}
-
-@media (min-width: 769px) {
-    .mobile-card-wrapper {
-        .table-responsive {
-            max-height: calc(100vh - 295px);
-            overflow-y: auto;
-            min-height: auto !important;
-        }
     }
 }
 

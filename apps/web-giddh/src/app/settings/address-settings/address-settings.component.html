@@ -295,7 +295,7 @@
             </div>
         </div>
         <!-- branch profile element end -->
-        <div *ngIf="organizationType === 'COMPANY'" class="w-100 text-center">
+        <div *ngIf="organizationType === 'COMPANY'" class="w-100 text-center mt-4 mb-5">
             <pagination
                 [(ngModel)]="paginationConfig.page"
                 *ngIf="!shouldShowLoader && paginationConfig?.totalItems > paginationLimit"
@@ -371,7 +371,7 @@
                     <i class="icon-cross text-right close-modal" aria-hidden="true" (click)="onCancel()"></i>
                 </div>
                 <div class="modal-body pd-l2 pd-r2 clearfix" id="export-body">
-                    <form name="newRole" novalidate class="" autocomplete="off">
+                    <form name="newRole" novalidate autocomplete="off">
                         <div class="modal-wrap mr-b2">
                             <h3>{{ localeData?.want_to_continue }}</h3>
                         </div>

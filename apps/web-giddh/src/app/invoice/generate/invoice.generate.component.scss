@@ -100,12 +100,10 @@ table {
 }
 
 .more-btn-dropdown {
-    border: 0 !important;
+    border: 1px solid var(--color-primary-button-border) !important;
     background: transparent !important;
     box-shadow: none !important;
-    border-radius: 0 !important;
     font-size: var(--font-size-16);
-    padding: 0;
     color: var(--color-common-primary-text);
 }
 
@@ -498,12 +496,5 @@ span.close-modal.cp.pull-right {
         flex-direction: row !important;
         margin-top: 10px !important;
         width: 100%;
-    }
-}
-
-@media (min-width: 769px) {
-    .table-responsive {
-        max-height: calc(100vh - 295px);
-        overflow-y: auto;
     }
 }
