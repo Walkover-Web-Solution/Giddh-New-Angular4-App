@@ -1561,6 +1561,18 @@ export class GeneralService {
     };
 
     /**
+     * Check pattern for matching with dash (-) , characters and numbers
+     *
+     * @param {string} checkDashCharacterNumberPattern
+     * @return {*}  {boolean}
+     * @memberof GeneralService
+     */
+    public checkDashCharacterNumberPattern(value: string): boolean {
+        let checkPattern = new RegExp("^[A-Za-z0-9-]+$");
+        return checkPattern.test(value);
+    };
+
+    /**
      * Get current date/time in this format - 06-11-2023 02:08:45
      *
      * @returns {string}
