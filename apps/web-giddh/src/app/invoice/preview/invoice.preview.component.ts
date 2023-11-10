@@ -144,7 +144,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public exportInvoiceRequestInProcess$: Observable<boolean> = of(false);
     public exportedInvoiceBase64res$: Observable<any>;
     public isFabclicked: boolean = false;
-    public exportInvoiceType: string = '';
     public sortRequestForUi: { sortBy: string, sort: string } = { sortBy: '', sort: '' };
     public appSideMenubarIsOpen: boolean;
     public invoiceSelectedDate: any = {
@@ -1114,14 +1113,19 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public toggleItem(item: any, action: boolean) {
-        item.isSelected = action;
-        if (action) {
+        item.isSelected = action;        
+        if (action) {     
             this.selectedInvoices = this.generalService.addValueInArray(this.selectedInvoices, item?.uniqueName);
             this.selectedItems.push(item?.uniqueName);
         } else {
             this.selectedInvoices = this.generalService.removeValueFromArray(this.selectedInvoices, item?.uniqueName);
             this.selectedItems = this.selectedItems?.filter(selectedItem => selectedItem !== item?.uniqueName);
             this.allItemsSelected = false;
+        }
+        if(this.voucherData.items.length === this.selectedItems.length){
+            this.allItemsSelected = true
+        }else{
+            this.allItemsSelected = false
         }
         this.itemStateChanged(item);
     }
@@ -1185,13 +1189,9 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             this.selectedInvoicesList.push(item);     // Array of checked seleted Items of the list
         }
 
-        if (this.selectedInvoicesList?.length === 1) {
-            this.exportInvoiceType = this.selectedInvoicesList[0].account?.uniqueName;
+        if (this.selectedInvoicesList?.length > 0) {
             this.isExported = true;
         }
-        this.isExported = this.selectedInvoicesList.every(ele => {
-            return ele.account?.uniqueName === this.exportInvoiceType;
-        });
         this.selectedInvoicesList = this.selectedInvoicesList?.filter(s => s.isSelected);
     }
 
@@ -1346,13 +1346,16 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public exportCsvDownload() {
         this.exportcsvRequest.from = this.invoiceSearchRequest.from;
         this.exportcsvRequest.to = this.invoiceSearchRequest.to;
-        let dataTosend = { accountUniqueName: '' };
+        let dataTosend = { accountUniqueName: '', uniqueNames: [] };
         if (this.selectedInvoicesList?.length > 0) {
             dataTosend.accountUniqueName = this.allItemsSelected ? '' : this.selectedInvoicesList[0].account?.uniqueName;
         } else {
             dataTosend.accountUniqueName = '';
         }
-        this.exportcsvRequest.dataToSend = dataTosend;
+        if(this.selectedItems.length){
+            dataTosend.uniqueNames = this.selectedItems;
+        }
+        this.exportcsvRequest.dataToSend = dataTosend;        
         this.store.dispatch(this.invoiceActions.DownloadExportedInvoice(this.exportcsvRequest));
         this.exportedInvoiceBase64res$.pipe(debounceTime(800), take(1)).subscribe(res => {
             if (res) {
@@ -1946,6 +1949,9 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                     }
                     setTimeout(() => {
                         this.voucherData = cloneDeep(res[0]);
+                        this.voucherData.items.forEach((item)=> {
+                            item.isSelected = false;
+                        });
                         if (!this.cdr['destroyed']) {
                             this.cdr.detectChanges();
                         }
