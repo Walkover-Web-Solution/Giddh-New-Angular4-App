@@ -817,7 +817,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             this.store.dispatch(this.invoiceActions.ActionOnInvoice(data.uniqueName, data));
         }
     }
-    
+
     /**
      * Closes payment popup
      *
@@ -865,7 +865,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
      */
     public downloadFile() {
         let blob = this.generalService.base64ToBlob(this.base64Data, 'application/pdf', 512);
-            return saveAs(blob, `${this.commonLocaleData?.app_invoice}-${this.selectedInvoice.account?.uniqueName}.pdf`);
+        return saveAs(blob, `${this.commonLocaleData?.app_invoice}-${this.selectedInvoice.account?.uniqueName}.pdf`);
     }
 
     public sortButtonClicked(type: 'asc' | 'desc', columnName: string) {
@@ -1113,17 +1113,17 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public toggleItem(item: any, action: boolean) {
-        item.isSelected = action;        
-        if (action) {     
+        item.isSelected = action;
+        if (action) {
             this.selectedInvoices = this.generalService.addValueInArray(this.selectedInvoices, item?.uniqueName);
             this.selectedItems.push(item?.uniqueName);
+            if (this.voucherData.items.length === this.selectedItems.length) {
+                this.allItemsSelected = true
+            }
         } else {
             this.selectedInvoices = this.generalService.removeValueFromArray(this.selectedInvoices, item?.uniqueName);
             this.selectedItems = this.selectedItems?.filter(selectedItem => selectedItem !== item?.uniqueName);
             this.allItemsSelected = false;
-        }
-        if(this.voucherData.items.length === this.selectedItems.length){
-            this.allItemsSelected = true
         }
         this.itemStateChanged(item);
     }
@@ -1350,17 +1350,17 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         } else {
             dataTosend.accountUniqueName = '';
         }
-        if(this.selectedItems.length){
+        if (this.selectedItems.length) {
             dataTosend.uniqueNames = this.selectedItems;
         }
-        this.exportcsvRequest.dataToSend = dataTosend;        
+        this.exportcsvRequest.dataToSend = dataTosend;
         this.store.dispatch(this.invoiceActions.DownloadExportedInvoice(this.exportcsvRequest));
         this.exportedInvoiceBase64res$.pipe(debounceTime(800), take(1)).subscribe(res => {
             if (res) {
                 if (res.status === 'success') {
                     let blob = this.generalService.base64ToBlob(res.body, 'application/xls', 512);
-                        this.selectedInvoicesList = [];
-                        return saveAs(blob, `${dataTosend.accountUniqueName}${this.localeData?.all_invoices}.xls`);
+                    this.selectedInvoicesList = [];
+                    return saveAs(blob, `${dataTosend.accountUniqueName}${this.localeData?.all_invoices}.xls`);
                 } else {
                     this._toaster.errorToast(res.message);
                 }
@@ -1947,7 +1947,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                     }
                     setTimeout(() => {
                         this.voucherData = cloneDeep(res[0]);
-                        this.voucherData.items.forEach((item)=> {
+                        this.voucherData.items.forEach((item) => {
                             item.isSelected = false;
                         });
                         if (!this.cdr['destroyed']) {
