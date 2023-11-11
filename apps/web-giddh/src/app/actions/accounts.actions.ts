@@ -103,11 +103,13 @@ export class AccountsAction {
                     this.store.dispatch(this.hasUnsavedChanges(false));
                     this.store.dispatch(this.groupWithAccountsAction.hideAddAccountForm());
                 }
-                this._accountService.createPortalUser(response.request.portalDomain, response.body.uniqueName).pipe(take(1)).subscribe(data => {
-                    if (data?.status === 'error') {
-                        this._toasty.errorToast(data.message, data.code);
-                    }
-                });
+                if (response.request.portalDomain) {
+                    this._accountService.createPortalUser(response.request.portalDomain, response.body.uniqueName).pipe(take(1)).subscribe(data => {
+                        if (data?.status === 'error') {
+                            this._toasty.errorToast(data.message, data.code);
+                        }
+                    });
+                }
                 return this.createAccountResponseV2(response);
             })));
 

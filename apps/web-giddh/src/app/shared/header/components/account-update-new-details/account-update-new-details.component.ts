@@ -220,6 +220,10 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public isMobileNumberInvalid: boolean = false;
     /** This will hold mobile number field input  */
     public intl: { [key: string]: any } = {};
+    /** True if last duplicate email in portal  users */
+    public lastDuplicateEmailIndex: number | null = null;
+    /** True if last duplicate email in portal  users */
+    public portalIndex: number;
 
     constructor(
         private _fb: UntypedFormBuilder,
@@ -305,28 +309,56 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         });
 
         let mappings = this.addAccountForm.get('portalDomain') as UntypedFormArray;
-        mappings.valueChanges.pipe(debounceTime(1000), distinctUntilChanged(isEqual), pairwise()).subscribe(([previous, current]) => {
-            let change = current.find((value, index) => previous?.[index] && !isEqual(value, previous[index]));
+        mappings.valueChanges.pipe(debounceTime(1000), takeUntil(this.destroyed$), distinctUntilChanged(isEqual)).subscribe((res) => {
+
+            if (this.portalIndex === null || this.portalIndex === undefined) {
+                return;
+            }
+            const index = this.portalIndex;
+            let change = mappings.at(index);
+
+            let defaultUser = mappings.controls.find(control => control.get('default')?.value === true);
+            if (defaultUser) {
+                this.addAccountForm.patchValue({
+                    attentionTo: defaultUser.get('name').value,
+                    contactNo: defaultUser.get('contactNo').value,
+                    email: defaultUser.get('email').value
+                });
+            }
             if (change) {
-                if (change?.default) {
-                    this.addAccountForm.patchValue({
-                        attentionTo: change?.name,
-                        mobileNo: change?.contactNo,
-                        email: change?.email
-                    });
+                if (change.invalid) {
+                    this.portalIndex = undefined;
+                    return;
                 }
                 if (this.accountDetails) {
                     this.activeAccountName = this.accountDetails.uniqueName;
                 } else {
                     this.activeAccount$.pipe(take(1)).subscribe(activeAccountState => this.activeAccountName = activeAccountState?.uniqueName);
                 }
-                let updateUser = [change];
-                if (!updateUser[0]?.uniqueName && (!updateUser[0]?.name || !updateUser[0]?.email || !updateUser[0]?.contactNo)) {
-                    return;
-                } else if (!this.isMobileNumberInvalid) {
-                    return;
+                if (change.get('email').value) {
+                    change.get('email')?.setValidators([Validators.required, Validators.pattern(EMAIL_VALIDATION_REGEX)]);
+                    change.get('email')?.updateValueAndValidity();
                 } else {
-                    this._accountService.createPortalUser(updateUser, this.activeAccountName).pipe(take(1)).subscribe(data => {
+                    change.get('email')?.setValidators([Validators.pattern(EMAIL_VALIDATION_REGEX)]);
+                    change.get('email')?.updateValueAndValidity();
+                }
+                if (change.get('contactNo').value) {
+                    const updateNumber = change.get('contactNo').value?.replace('+', '');
+                    change.get('contactNo').setValue(updateNumber);
+                }
+                let lastOccurrenceIndex = -1;
+                let currentEmail = change.get('email')?.value;
+                mappings.controls.forEach((control, i) => {
+                    if (lastOccurrenceIndex === -1 && index !== i && control.get('email')?.value === currentEmail) {
+                        lastOccurrenceIndex = index;
+                        change.get('email').setErrors({ duplicate: true });
+                    }
+                });
+                this.portalIndex = undefined;
+
+                this.lastDuplicateEmailIndex = lastOccurrenceIndex;
+                if (this.lastDuplicateEmailIndex === -1 && !this.isMobileNumberInvalid) {
+                    this._accountService.createPortalUser([change.value], this.activeAccountName).pipe(take(1)).subscribe(data => {
                         if (data?.status === 'success') {
                             this._toaster.successToast(this.localeData?.portal_updated_successfully, 'Success');
                         } else {
@@ -337,30 +369,30 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             }
         });
 
-        combineLatest([this.addAccountForm.get('attentionTo').valueChanges, this.addAccountForm.get('mobileNo').valueChanges, this.addAccountForm.get('email').valueChanges]).pipe(
+        this.addAccountForm.valueChanges.pipe(
             debounceTime(700),
-            distinctUntilChanged(),
+            distinctUntilChanged((prev, curr) => (prev?.attentionTo === curr?.attentionTo) && (prev?.mobileNo === curr?.mobileNo) && (prev?.email === curr?.email)),
             takeUntil(this.destroyed$))
-            .subscribe(([attentionTo, mobileNo, email]) => {
+            .subscribe((response) => {
                 const users = this.addAccountForm.get('portalDomain') as UntypedFormArray;
-                if (attentionTo || mobileNo || email) {
+                if (response?.attentionTo || response?.mobileNo || response?.email) {
                     let user = users.controls.find(control => control.get('default')?.value === true);
                     if (user) {
-                        user?.get('name').patchValue(attentionTo);
-                        user?.get('email').patchValue(email);
-                        user?.get('contactNo').patchValue(mobileNo);
-                        user?.get('default').patchValue(true);
+                        user?.get('name').setValue(response?.attentionTo);
+                        user?.get('email').setValue(response?.email);
+                        user?.get('contactNo').setValue(response?.mobileNo);
+                        user?.get('default').setValue(true);
                     } else {
                         let setValue = false;
                         users.controls?.find((control) => {
                             if (!control.get('name')?.value && !control.get('email')?.value && !control.get('contactNo')?.value) {
-                                control.patchValue({ name: attentionTo, email: email, contactNo: mobileNo, default: true });
+                                control.patchValue({ name: response?.attentionTo, email: response?.email, contactNo: response?.mobileNo, default: true });
                                 setValue = true;
                                 return true;
                             }
                         });
                         if (!setValue) {
-                            let data = { name: attentionTo, email: email, contactNo: mobileNo, default: true };
+                            let data = { name: response?.attentionTo, email: response?.email, contactNo: response?.mobileNo, default: true };
                             this.addNewPortalUser(data);
                         }
                     }
@@ -571,7 +603,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 this._fb.group({
                     name: [''],
                     email: ['', Validators.pattern(EMAIL_VALIDATION_REGEX)],
-                    contactNo: ['', Validators.required],
+                    contactNo: [''],
                     default: [false],
                     uniqueName: ['']
                 })
@@ -650,7 +682,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         let mappings = this.addAccountForm.get('portalDomain') as UntypedFormArray;
         let mappingForm = this._fb.group({
             name: [''],
-            email: [''],
+            email: ['', Validators.pattern(EMAIL_VALIDATION_REGEX)],
             uniqueName: [''],
             contactNo: [''],
             default: [false]
