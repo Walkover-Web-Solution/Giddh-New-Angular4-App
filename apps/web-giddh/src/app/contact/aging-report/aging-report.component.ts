@@ -558,6 +558,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
             }
         });
         this.unpaidInvoiceData = [];
+        this.unpaidInvoicePaginationData = undefined;
         this.getAllInvoices(accountUniqueName, range);
     }
 
