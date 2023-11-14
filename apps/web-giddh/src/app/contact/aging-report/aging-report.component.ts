@@ -131,6 +131,8 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     public unpaidInvoicePaginationData: any;
     /** Holds Account unique name and range */
     private unpaidInvoiceListInput: any;
+    /** Holds Unpaid Invoice API Loading Status */
+    public unpaidInvoiceIsLoading: boolean = false;
 
     constructor(
         public dialog: MatDialog,
@@ -577,9 +579,19 @@ export class AgingReportComponent implements OnInit, OnDestroy {
                 voucherNumber: undefined,
                 total: ""
             };
-            this.isLoading = true;
+
+            this.unpaidInvoiceDailogRef = this.dialog.open(this.unpaidInvoice, {
+                height: '100vh',
+                width: '760px',
+                maxWidth: '65vw',
+                position: {
+                    right: '0'
+                }
+            });
+            
+            this.unpaidInvoiceIsLoading = true;
             this.receiptService.GetAllReceipt(model, this.selectedVoucher).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-                this.isLoading = false;
+                this.unpaidInvoiceIsLoading = false;
                 if (res?.body?.items?.length) {
                     this.unpaidInvoiceData = res?.body?.items;
                     this.unpaidInvoicePaginationData = {
@@ -587,14 +599,6 @@ export class AgingReportComponent implements OnInit, OnDestroy {
                         totalItems: res?.body?.totalItems,
                         totalPages: res?.body?.totalPages
                     }
-                    this.unpaidInvoiceDailogRef = this.dialog.open(this.unpaidInvoice, {
-                        height: '100vh',
-                        width: '760px',
-                        maxWidth: '65vw',
-                        position: {
-                            right: '0'
-                        }
-                    });
                 }
                 this.cdr.detectChanges();
             });

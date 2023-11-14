@@ -550,7 +550,7 @@
             </button>
         </div>
         <div class="list-wrapper pd-15">
-            <mat-list class="p-0">
+            <mat-list class="p-0" *ngIf="!unpaidInvoiceIsLoading">
                 <cdk-virtual-scroll-viewport [itemSize]="62" class="list-viewport">
                     <mat-list-item class="list-item px-2 cursor-pointer"  *cdkVirtualFor="let item of unpaidInvoiceData">
                         <a [href]="'/pages/invoice/preview/sales?voucherUniqueName=' + item?.uniqueName + '&accountUniqueName=' + item?.account?.uniqueName" target="_blank">
@@ -572,6 +572,9 @@
                         </mat-list-item>
                 </cdk-virtual-scroll-viewport>
             </mat-list>
+            <div *ngIf="unpaidInvoiceIsLoading">
+                <giddh-page-loader></giddh-page-loader>
+            </div>
         </div>
     </div>
 </ng-template>
