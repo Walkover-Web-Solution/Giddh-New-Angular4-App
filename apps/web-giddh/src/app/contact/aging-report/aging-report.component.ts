@@ -126,7 +126,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     /** Holds Voucher name constant for Unpaid Invoice Get All API */
     public selectedVoucher: VoucherTypeEnum = VoucherTypeEnum.sales;
     /** Holds Unpaid Invoice All Data */
-    public unpaidInvoiceData: any;
+    public unpaidInvoiceData: any[] = [];
     /** Holds Unpaid Invoice Paginaton data */
     public unpaidInvoicePaginationData: any;
     /** Holds Account unique name and range */
@@ -283,10 +283,9 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         });
 
         this.scrollDispatcher.scrolled().pipe(takeUntil(this.destroyed$)).subscribe((event: any) => {
-            if (event && event?.getDataLength() - event?.getRenderedRange().end < PAGINATION_LIMIT) {
-                if (this.unpaidInvoicePaginationData.page < this.unpaidInvoicePaginationData.totalPages) {
-                    this.showUnpaidInvoiceList(this.unpaidInvoiceListInput.accountUniqueName, this.unpaidInvoiceListInput.range)
-                }
+            if (event && event?.getDataLength() - event?.getRenderedRange().end < 50 && !this.unpaidInvoiceIsLoading && this.unpaidInvoicePaginationData.page < this.unpaidInvoicePaginationData.totalPages) {
+                this.unpaidInvoicePaginationData.page++;
+                this.getAllInvoices(this.unpaidInvoiceListInput.accountUniqueName, this.unpaidInvoiceListInput.range);
             }
         });
     }
@@ -550,6 +549,27 @@ export class AgingReportComponent implements OnInit, OnDestroy {
      * @memberof AgingReportComponent
      */
     public showUnpaidInvoiceList(accountUniqueName: string, range: string): void {
+        this.unpaidInvoiceDailogRef = this.dialog.open(this.unpaidInvoice, {
+            height: '100vh',
+            width: '760px',
+            maxWidth: '65vw',
+            position: {
+                right: '0'
+            }
+        });
+        this.unpaidInvoiceData = [];
+        this.getAllInvoices(accountUniqueName, range);
+    }
+
+    /**
+     * Get All Invoices API Call
+     *
+     * @private
+     * @param {string} accountUniqueName
+     * @param {string} range
+     * @memberof AgingReportComponent
+     */
+    private getAllInvoices(accountUniqueName: string, range: string): void {
         let dateInterval = this.calculateDateRangeInterval(range);
 
         this.unpaidInvoiceListInput = {
@@ -580,27 +600,24 @@ export class AgingReportComponent implements OnInit, OnDestroy {
                 total: ""
             };
 
-            this.unpaidInvoiceDailogRef = this.dialog.open(this.unpaidInvoice, {
-                height: '100vh',
-                width: '760px',
-                maxWidth: '65vw',
-                position: {
-                    right: '0'
-                }
-            });
-            
             this.unpaidInvoiceIsLoading = true;
             this.receiptService.GetAllReceipt(model, this.selectedVoucher).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 this.unpaidInvoiceIsLoading = false;
                 if (res?.body?.items?.length) {
-                    this.unpaidInvoiceData = res?.body?.items;
+                    if (this.unpaidInvoiceData?.length) {
+                        this.unpaidInvoiceData = this.unpaidInvoiceData.concat(res?.body?.items);
+                    } else {
+                        this.unpaidInvoiceData = res?.body?.items;
+                    }
                     this.unpaidInvoicePaginationData = {
                         page: res?.body?.page,
                         totalItems: res?.body?.totalItems,
                         totalPages: res?.body?.totalPages
                     }
                 }
-                this.cdr.detectChanges();
+                setTimeout(() => {
+                    this.cdr.detectChanges();
+                }, 100);
             });
         }
     }

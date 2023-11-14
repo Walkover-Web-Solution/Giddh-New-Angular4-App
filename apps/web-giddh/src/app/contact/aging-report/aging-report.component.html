@@ -554,7 +554,7 @@
                 <cdk-virtual-scroll-viewport [itemSize]="62" class="list-viewport">
                     <mat-list-item class="list-item px-2 cursor-pointer"  *cdkVirtualFor="let item of unpaidInvoiceData">
                         <a [href]="'/pages/invoice/preview/sales?voucherUniqueName=' + item?.uniqueName + '&accountUniqueName=' + item?.account?.uniqueName" target="_blank">
-                        <div class="d-flex justify-content-space-between align-items-center">
+                            <div class="d-flex justify-content-space-between align-items-center">
                                 <div>
                                     <p class="font-14"> <span class="color-primary">{{ item?.voucherNumber }}</span> |  <span class="light-gray">{{ item?.voucherDate }}</span></p>
                                     <p class="customer-name font-16">{{ item?.account?.customerName || item?.account?.name }}</p>
