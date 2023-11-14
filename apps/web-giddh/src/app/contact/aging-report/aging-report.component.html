@@ -197,7 +197,7 @@
             </div>
         </div>
     </div>
-        <div *ngIf="isLoading">
+    <div *ngIf="isLoading">
         <giddh-page-loader></giddh-page-loader>
     </div>
 </div>
@@ -352,7 +352,7 @@
                         '0 - ' + (agingDropDownoptions$ | async)?.fourth + ' ' + commonLocaleData?.app_days
                     "
                 >
-                    <span class="d-flex justify-content-end">
+                    <span class="d-flex justify-content-end" [ngClass]="{'cursor-pointer' : element.currentAndPastDueAmount[0].dueAmount > 0}" (click)="element.currentAndPastDueAmount[0].dueAmount > 0 ? showUnpaidInvoiceList(element?.uniqueName, 'range0') : ''">
                         <amount-field
                             [amount]="element.currentAndPastDueAmount[0].dueAmount"
                             [currencySymbol]="false"
@@ -394,7 +394,7 @@
                     "
                 >
                     <span (click)="openAgingDropDown()">
-                        <span class="d-flex justify-content-end">
+                        <span class="d-flex justify-content-end" [ngClass]="{'cursor-pointer' : element.currentAndPastDueAmount[1].dueAmount > 0}" (click)="element.currentAndPastDueAmount[1].dueAmount > 0 ? showUnpaidInvoiceList(element?.uniqueName, 'range1') : ''">
                             <amount-field
                                 [amount]="element.currentAndPastDueAmount[1].dueAmount"
                                 [currencySymbol]="false"
@@ -436,7 +436,7 @@
                         commonLocaleData?.app_days
                     "
                 >
-                    <span class="d-flex justify-content-end">
+                    <span class="d-flex justify-content-end" [ngClass]="{'cursor-pointer' : element.currentAndPastDueAmount[2].dueAmount > 0}" (click)="element.currentAndPastDueAmount[2].dueAmount > 0 ? showUnpaidInvoiceList(element?.uniqueName, 'range2') : ''">
                         <amount-field
                             [amount]="element.currentAndPastDueAmount[2].dueAmount"
                             [currencySymbol]="false"
@@ -467,7 +467,7 @@
                     *matCellDef="let element"
                     [attr.data-title]="(agingDropDownoptions$ | async)?.sixth + 1 + ' ' + commonLocaleData?.app_days"
                 >
-                    <span class="d-flex justify-content-end">
+                    <span class="d-flex justify-content-end" [ngClass]="{'cursor-pointer' : element.currentAndPastDueAmount[3].dueAmount > 0}" (click)="element.currentAndPastDueAmount[3].dueAmount > 0 ? showUnpaidInvoiceList(element?.uniqueName, 'range3') : ''">
                         <amount-field
                             [amount]="element.currentAndPastDueAmount[3].dueAmount"
                             [currencySymbol]="false"
@@ -538,5 +538,40 @@
             [formControl]="formControl"
             [autoFocus]="show"
         ></text-field>
+    </div>
+</ng-template>
+
+<ng-template #unpaidInvoice>
+    <div class="unpaid-invoice-aside-pane">
+        <div class="header d-flex justify-content-space-between align-items-center">
+            <h3>{{ localeData?.unpaid_invoices }}</h3>
+            <button mat-button class="rounded-circle" (click)="unpaidInvoiceDailogRef.close()">
+                <i class="icon-cross"></i>
+            </button>
+        </div>
+        <div class="list-wrapper pd-15">
+            <mat-list class="p-0">
+                <cdk-virtual-scroll-viewport [itemSize]="62" class="list-viewport">
+                    <mat-list-item class="list-item px-2 cursor-pointer"  *cdkVirtualFor="let item of unpaidInvoiceData">
+                        <a [href]="'/pages/invoice/preview/sales?voucherUniqueName=' + item?.uniqueName + '&accountUniqueName=' + item?.account?.uniqueName" target="_blank">
+                        <div class="d-flex justify-content-space-between align-items-center">
+                                <div>
+                                    <p class="font-14"> <span class="color-primary">{{ item?.voucherNumber }}</span> |  <span class="light-gray">{{ item?.voucherDate }}</span></p>
+                                    <p class="customer-name font-16">{{ item?.account?.customerName || item?.account?.name }}</p>
+                                </div>
+                                <div>
+                                    <amount-field
+                                        [amount]="item.totalBalance?.amountForAccount"
+                                        [currencySymbol]="item.accountCurrencySymbol"
+                                        [currencyCode]="item?.account?.currency?.code"
+                                    >
+                                    </amount-field>
+                                </div>
+                            </div>
+                        </a>                           
+                        </mat-list-item>
+                </cdk-virtual-scroll-viewport>
+            </mat-list>
+        </div>
     </div>
 </ng-template>

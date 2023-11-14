@@ -9,6 +9,7 @@ import {
     Input,
     OnDestroy,
     TemplateRef,
+    ChangeDetectionStrategy,
 } from "@angular/core";
 import {
     AgingAdvanceSearchModal,
@@ -33,17 +34,23 @@ import { GeneralService } from "../../services/general.service";
 import { SettingsBranchActions } from "../../actions/settings/branch/settings.branch.action";
 import { OrganizationType } from "../../models/user-login-state";
 import { UntypedFormControl } from "@angular/forms";
-import { MatDialog } from "@angular/material/dialog";
+import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { MatTableDataSource } from "@angular/material/table";
 import { MatMenuTrigger } from "@angular/material/menu";
 import { PAGINATION_LIMIT } from "../../app.constant";
 import { AgingreportingService } from "../../services/agingreporting.service";
 import { ToasterService } from "../../services/toaster.service";
 import { Router } from "@angular/router";
+import { VoucherTypeEnum } from "../../models/api-models/Sales";
+import { ReceiptService } from "../../services/receipt.service";
+import { InvoiceReceiptFilter } from "../../models/api-models/recipt";
+import { GIDDH_DATE_FORMAT } from "../../shared/helpers/defaultDateFormat";
+import { ScrollDispatcher } from "@angular/cdk/scrolling";
 @Component({
     selector: "aging-report",
     templateUrl: "aging-report.component.html",
     styleUrls: ["aging-report.component.scss"],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AgingReportComponent implements OnInit, OnDestroy {
     /* This will hold local JSON data */
@@ -74,6 +81,8 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     @ViewChild("advanceSearch") advanceSearchTemplate: TemplateRef<any>;
     @ViewChild("paginationChild", { static: false }) public paginationChild: ElementViewContainerRef;
     @ViewChild("filterDropDownList", { static: true }) public filterDropDownList: BsDropdownDirective;
+    /** Holds Template Reference for Unpaid Invoice Asidepane */
+    @ViewChild("unpaidInvoice") public unpaidInvoice: TemplateRef<any>;
     /** Advance search component instance */
     @ViewChild("agingReportAdvanceSearch", { read: ContactAdvanceSearchComponent, static: true }) public agingReportAdvanceSearch: ContactAdvanceSearchComponent;
     @Output() public createNewCustomerEvent: EventEmitter<boolean> = new EventEmitter();
@@ -112,6 +121,16 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     public isLoading: boolean = false;
     /** Stores the voucher API version of company */
     public voucherApiVersion: 1 | 2;
+    /** Holds Unpaid invoice Dailog ref */
+    public unpaidInvoiceDailogRef: MatDialogRef<any>;
+    /** Holds Voucher name constant for Unpaid Invoice Get All API */
+    public selectedVoucher: VoucherTypeEnum = VoucherTypeEnum.sales;
+    /** Holds Unpaid Invoice All Data */
+    public unpaidInvoiceData: any;
+    /** Holds Unpaid Invoice Paginaton data */
+    public unpaidInvoicePaginationData: any;
+    /** Holds Account unique name and range */
+    private unpaidInvoiceListInput: any;
 
     constructor(
         public dialog: MatDialog,
@@ -124,7 +143,9 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         private settingsBranchAction: SettingsBranchActions,
         private generalService: GeneralService,
         private router: Router,
-        private agingReportService: AgingreportingService) {
+        private agingReportService: AgingreportingService,
+        private receiptService: ReceiptService,
+        private scrollDispatcher: ScrollDispatcher) {
         this.agingDropDownoptions$ = this.store.pipe(select(s => s.agingreport.agingDropDownoptions), takeUntil(this.destroyed$));
         this.dueAmountReportRequest = new DueAmountReportQueryRequest();
         this.dueAmountReportRequest.count = PAGINATION_LIMIT;
@@ -255,6 +276,14 @@ export class AgingReportComponent implements OnInit, OnDestroy {
                 if (this.isDueRangeRequestInProgress) {
                     this.isDueRangeRequestInProgress = false;
                     this.getDueReport();
+                }
+            }
+        });
+
+        this.scrollDispatcher.scrolled().pipe(takeUntil(this.destroyed$)).subscribe((event: any) => {
+            if (event && event?.getDataLength() - event?.getRenderedRange().end < PAGINATION_LIMIT) {
+                if (this.unpaidInvoicePaginationData.page < this.unpaidInvoicePaginationData.totalPages) {
+                    this.showUnpaidInvoiceList(this.unpaidInvoiceListInput.accountUniqueName, this.unpaidInvoiceListInput.range)
                 }
             }
         });
@@ -511,5 +540,115 @@ export class AgingReportComponent implements OnInit, OnDestroy {
                 this.toaster.showSnackBar("error", response?.message);
             }
         });
+    }
+
+    /**
+     * It will open Popup and show Unpaid/ Partial paid invoice list
+     *
+     * @memberof AgingReportComponent
+     */
+    public showUnpaidInvoiceList(accountUniqueName: string, range: string): void {
+        let dateInterval = this.calculateDateRangeInterval(range);
+
+        this.unpaidInvoiceListInput = {
+            accountUniqueName: accountUniqueName,
+            range: range
+        };
+
+        if (dateInterval) {
+            let model: InvoiceReceiptFilter = {
+                page: this.unpaidInvoicePaginationData ? this.unpaidInvoicePaginationData.page : 1,
+                count: PAGINATION_LIMIT,
+                from: dateInterval?.from,
+                to: dateInterval?.to,
+                balanceStatus: ["UNPAID", "PARTIAL-PAID"],
+                accountUniqueName: accountUniqueName,
+                q: "",
+                sort: "",
+                sortBy: "",
+                totalEqual: false,
+                totalLessThan: false,
+                totalMoreThan: false,
+                dueDateEqual: false,
+                dueDateAfter: false,
+                dueDateBefore: false,
+                invoiceDate: undefined,
+                dueDate: undefined,
+                voucherNumber: undefined,
+                total: ""
+            };
+            this.isLoading = true;
+            this.receiptService.GetAllReceipt(model, this.selectedVoucher).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+                this.isLoading = false;
+                if (res?.body?.items?.length) {
+                    this.unpaidInvoiceData = res?.body?.items;
+                    this.unpaidInvoicePaginationData = {
+                        page: res?.body?.page,
+                        totalItems: res?.body?.totalItems,
+                        totalPages: res?.body?.totalPages
+                    }
+                    this.unpaidInvoiceDailogRef = this.dialog.open(this.unpaidInvoice, {
+                        height: '100vh',
+                        width: '760px',
+                        maxWidth: '65vw',
+                        position: {
+                            right: '0'
+                        }
+                    });
+                }
+                this.cdr.detectChanges();
+            });
+        }
+    }
+
+    /**
+     * Calulate Range and returns the to and from Date
+     *
+     * @private
+     * @param {string} range
+     * @memberof AgingReportComponent
+     */
+    private calculateDateRangeInterval(range: string): any {
+        var dateObj;
+
+        switch (range) {
+            case "range0": dateObj = this.getPriorDate(0, this.agingDropDownoptions?.fourth);
+                break;
+            case "range1": dateObj = this.getPriorDate(this.agingDropDownoptions?.fourth + 1, this.agingDropDownoptions?.fifth - (this.agingDropDownoptions?.fourth + 1));
+                break;
+            case "range2": dateObj = this.getPriorDate(this.agingDropDownoptions?.fifth + 1, this.agingDropDownoptions?.sixth - (this.agingDropDownoptions?.fifth + 1));
+                break;
+            case "range3": dateObj = this.getPriorDate(this.agingDropDownoptions?.sixth + 1, null);
+                break;
+        }
+        return dateObj;
+    }
+
+    /**
+     * This function returns object with to and from date 
+     *
+     * @private
+     * @param {number} intervalCount
+     * @param {number} intervaldays
+     * @return {*} 
+     * @memberof AgingReportComponent
+     */
+    private getPriorDate(intervalCount: number, intervaldays: number): any {
+        let currentDate = new Date();
+        let priorDate;
+
+        if (intervalCount === 0 && intervaldays) {
+            priorDate = new Date();
+            priorDate.setDate(priorDate.getDate() - intervaldays);
+        } else if (intervaldays !== null) {
+            currentDate.setDate(currentDate.getDate() - intervalCount);
+            priorDate = cloneDeep(currentDate);
+            priorDate.setDate(priorDate.getDate() - intervaldays);
+        } else {
+            priorDate = cloneDeep(currentDate);
+            priorDate.setDate(priorDate.getDate() - intervalCount);
+        }
+
+        return { to: intervaldays ? dayjs(currentDate).format(GIDDH_DATE_FORMAT) : null, from: dayjs(priorDate).format(GIDDH_DATE_FORMAT) }
     }
 }

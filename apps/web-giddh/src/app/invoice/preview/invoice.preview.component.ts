@@ -302,6 +302,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public ngOnInit() {
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
         document.querySelector("body")?.classList?.add("invoice-preview-page");
         this._breakPointObservar.observe([
             '(max-width: 1023px)'
@@ -318,46 +319,16 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         });
         this.advanceSearchFilter.page = 1;
         this.advanceSearchFilter.count = PAGINATION_LIMIT;
+
+        this._activatedRoute.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(a => {
+            if (a && a.accountUniqueName && a.voucherUniqueName) {
+                this.getVoucherDetails(VoucherTypeEnum.sales, a.accountUniqueName, a.voucherUniqueName);
+            }
+        });
+
         this._activatedRoute.params.pipe(takeUntil(this.destroyed$)).subscribe(a => {
             if (a && a.accountUniqueName && a.purchaseRecordUniqueName) {
-                const apiCallObservable = this.voucherApiVersion === 2 ?
-                    this._receiptServices.getVoucherDetailsV4(a.accountUniqueName, {
-                        invoiceNumber: '',
-                        voucherType: VoucherTypeEnum.purchase,
-                        uniqueName: a.purchaseRecordUniqueName
-                    }) :
-                    this._receiptServices.GetPurchaseRecordDetails(a.accountUniqueName, a.purchaseRecordUniqueName);
-                apiCallObservable.pipe(takeUntil(this.destroyed$)).subscribe((res: any) => {
-                    if (res && res.body) {
-                        if (res.body.date) {
-                            this.invoiceSearchRequest.from = res.body.date;
-                            this.invoiceSearchRequest.to = res.body.date;
-                            this.getVoucher(false);
-                        }
-
-                        this.purchaseRecord = {
-                            balanceStatus: '',
-                            dueDate: res.body.dueDate,
-                            grandTotal: res.body.grandTotal,
-                            account: {
-                                accountType: (res.body.account) ? res.body.account.type : null,
-                                uniqueName: (res.body.account) ? res.body.account?.uniqueName : null,
-                                name: (res.body.account) ? res.body.account.name : null
-                            },
-                            uniqueName: res.body?.uniqueName,
-                            voucherDate: res.body.date,
-                            voucherNumber: res.body.number,
-                            balanceDue: res.body.balanceTotal,
-                            isSelected: false,
-                            dueDays: null,
-                            cashInvoice: false
-                        };
-                        this.selectedVoucher = VoucherTypeEnum.purchase;
-                        if (this.itemsListForDetails) {
-                            this.onSelectInvoice(this.purchaseRecord);
-                        }
-                    }
-                });
+                this.getVoucherDetails(VoucherTypeEnum.purchase, a.accountUniqueName, a.purchaseRecordUniqueName);
             }
 
             if (!(a && a.voucherType)) {
@@ -591,9 +562,50 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this.store.pipe(select(state => state.receipt.hasVoucherListPermissions), takeUntil(this.destroyed$)).subscribe(response => {
             this.hasVoucherListPermissions = response;
         });
-        this.voucherApiVersion = this.generalService.voucherApiVersion;
 
         this.store.dispatch(this.purchaseOrderActions.setPurchaseOrderFilters({}));
+    }
+
+    private getVoucherDetails(voucherType: VoucherTypeEnum, accountUniqueName: string, voucherUniqueName: string): void {
+        const apiCallObservable = this.voucherApiVersion === 2 ?
+            this._receiptServices.getVoucherDetailsV4(accountUniqueName, {
+                invoiceNumber: '',
+                voucherType: voucherType,
+                uniqueName: voucherUniqueName
+            }) :
+            this._receiptServices.GetPurchaseRecordDetails(accountUniqueName, voucherUniqueName);
+
+        apiCallObservable.pipe(takeUntil(this.destroyed$)).subscribe((res: any) => {
+            if (res && res.body) {
+                if (res.body.date) {
+                    this.invoiceSearchRequest.from = res.body.date;
+                    this.invoiceSearchRequest.to = res.body.date;
+                    this.getVoucher(false);
+                }
+
+                this.purchaseRecord = {
+                    balanceStatus: '',
+                    dueDate: res.body.dueDate,
+                    grandTotal: res.body.grandTotal,
+                    account: {
+                        accountType: (res.body.account) ? res.body.account.type : null,
+                        uniqueName: (res.body.account) ? res.body.account?.uniqueName : null,
+                        name: (res.body.account) ? res.body.account.name : null
+                    },
+                    uniqueName: res.body?.uniqueName,
+                    voucherDate: res.body.date,
+                    voucherNumber: res.body.number,
+                    balanceDue: res.body.balanceTotal,
+                    isSelected: false,
+                    dueDays: null,
+                    cashInvoice: false
+                };
+                this.selectedVoucher = voucherType;
+                if (this.itemsListForDetails) {
+                    this.onSelectInvoice(this.purchaseRecord);
+                }
+            }
+        });
     }
 
     public ngOnChanges(changes: SimpleChanges): void {
@@ -818,7 +830,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             this.store.dispatch(this.invoiceActions.ActionOnInvoice(data.uniqueName, data));
         }
     }
-    
+
     /**
      * Closes payment popup
      *
@@ -866,7 +878,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
      */
     public downloadFile() {
         let blob = this.generalService.base64ToBlob(this.base64Data, 'application/pdf', 512);
-            return saveAs(blob, `${this.commonLocaleData?.app_invoice}-${this.selectedInvoice.account?.uniqueName}.pdf`);
+        return saveAs(blob, `${this.commonLocaleData?.app_invoice}-${this.selectedInvoice.account?.uniqueName}.pdf`);
     }
 
     public sortButtonClicked(type: 'asc' | 'desc', columnName: string) {
@@ -1358,8 +1370,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             if (res) {
                 if (res.status === 'success') {
                     let blob = this.generalService.base64ToBlob(res.body, 'application/xls', 512);
-                        this.selectedInvoicesList = [];
-                        return saveAs(blob, `${dataTosend.accountUniqueName}${this.localeData?.all_invoices}.xls`);
+                    this.selectedInvoicesList = [];
+                    return saveAs(blob, `${dataTosend.accountUniqueName}${this.localeData?.all_invoices}.xls`);
                 } else {
                     this._toaster.errorToast(res.message);
                 }
