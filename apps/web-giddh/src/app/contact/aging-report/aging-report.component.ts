@@ -46,6 +46,7 @@ import { ReceiptService } from "../../services/receipt.service";
 import { InvoiceReceiptFilter } from "../../models/api-models/recipt";
 import { GIDDH_DATE_FORMAT } from "../../shared/helpers/defaultDateFormat";
 import { ScrollDispatcher } from "@angular/cdk/scrolling";
+import { SettingsFinancialYearActions } from "../../actions/settings/financial-year/financial-year.action";
 @Component({
     selector: "aging-report",
     templateUrl: "aging-report.component.html",
@@ -133,6 +134,8 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     private unpaidInvoiceListInput: any;
     /** Holds Unpaid Invoice API Loading Status */
     public unpaidInvoiceIsLoading: boolean = false;
+    /** Holds Start Date of Financial Year */
+    public minDate: any
 
     constructor(
         public dialog: MatDialog,
@@ -147,7 +150,8 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         private router: Router,
         private agingReportService: AgingreportingService,
         private receiptService: ReceiptService,
-        private scrollDispatcher: ScrollDispatcher) {
+        private scrollDispatcher: ScrollDispatcher,
+        private settingsFinancialYearActions: SettingsFinancialYearActions) {
         this.agingDropDownoptions$ = this.store.pipe(select(s => s.agingreport.agingDropDownoptions), takeUntil(this.destroyed$));
         this.dueAmountReportRequest = new DueAmountReportQueryRequest();
         this.dueAmountReportRequest.count = PAGINATION_LIMIT;
@@ -189,6 +193,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
+        this.store.dispatch(this.settingsFinancialYearActions.getFinancialYearLimits());
         this.getDueReport();
         this.imgPath = isElectron ? "assets/images/" : AppUrl + APP_FOLDER + "assets/images/";
         this.getDueAmountreportData();
@@ -286,6 +291,12 @@ export class AgingReportComponent implements OnInit, OnDestroy {
             if (event && event?.getDataLength() - event?.getRenderedRange().end < 50 && !this.unpaidInvoiceIsLoading && this.unpaidInvoicePaginationData.page < this.unpaidInvoicePaginationData.totalPages) {
                 this.unpaidInvoicePaginationData.page++;
                 this.getAllInvoices(this.unpaidInvoiceListInput.accountUniqueName, this.unpaidInvoiceListInput.range);
+            }
+        });
+
+        this.store.pipe(select(state => state.settings.financialYearLimits), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response && response.startDate && response.endDate) {
+                this.minDate = dayjs(response.startDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
             }
         });
     }
@@ -658,6 +669,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     private getPriorDate(intervalCount: number, intervaldays: number): any {
         let currentDate = new Date();
         let priorDate;
+        let isLast = false;
 
         if (intervalCount === 0 && intervaldays) {
             priorDate = new Date();
@@ -669,8 +681,13 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         } else {
             priorDate = cloneDeep(currentDate);
             priorDate.setDate(priorDate.getDate() - intervalCount);
+            isLast = true;
         }
 
-        return { to: intervaldays ? dayjs(currentDate).format(GIDDH_DATE_FORMAT) : null, from: dayjs(priorDate).format(GIDDH_DATE_FORMAT) }
+        if (isLast) {
+            return { to: dayjs(priorDate).format(GIDDH_DATE_FORMAT), from: this.minDate };
+        } else {
+            return { to: dayjs(currentDate).format(GIDDH_DATE_FORMAT), from: dayjs(priorDate).format(GIDDH_DATE_FORMAT) };
+        }
     }
 }
