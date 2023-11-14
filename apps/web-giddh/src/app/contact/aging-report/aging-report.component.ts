@@ -8,8 +8,7 @@ import {
     ChangeDetectorRef,
     Input,
     OnDestroy,
-    TemplateRef,
-    ChangeDetectionStrategy,
+    TemplateRef
 } from "@angular/core";
 import {
     AgingAdvanceSearchModal,
@@ -50,8 +49,7 @@ import { SettingsFinancialYearActions } from "../../actions/settings/financial-y
 @Component({
     selector: "aging-report",
     templateUrl: "aging-report.component.html",
-    styleUrls: ["aging-report.component.scss"],
-    changeDetection: ChangeDetectionStrategy.OnPush,
+    styleUrls: ["aging-report.component.scss"]
 })
 export class AgingReportComponent implements OnInit, OnDestroy {
     /* This will hold local JSON data */
