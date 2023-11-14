@@ -25,8 +25,8 @@ export class ExportBodyRequest {
     accountUniqueName?: string;
     exportType?: string;
     branchUniqueName?: string;
-    fileType?: string;
     tagName?: string;
+    fileType?: string;
     interval?: string;
     isExpanded?: boolean;
     columnsToExport?: any[];

@@ -60,6 +60,8 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
     public getCurrentPeriod$: Observable<any> = of(null);
     /** Holds images folder path */
     public imgPath: string = "";
+    /** True if active country is UK */
+    public isUKCompany: boolean = false;
 
     constructor(
         private router: Router,

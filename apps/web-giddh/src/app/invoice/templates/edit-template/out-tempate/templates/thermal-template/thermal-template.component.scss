@@ -87,6 +87,7 @@ p {
 }
 /* table */
 #thermal_template table {
+    table-layout: fixed;
     width: 100%;
     border-collapse: inherit;
     border-top: 1px dashed;
@@ -556,7 +557,4 @@ table.tax-table.item {
     span {
         word-break: break-all;
     }
-}
-.qty-number {
-    padding-left: 21px;
 }

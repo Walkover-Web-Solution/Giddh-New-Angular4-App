@@ -1258,6 +1258,12 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Get manufacturing details
+     *
+     * @param {string} uniqueName
+     * @memberof CreateManufacturingComponent
+     */
     public getManufacturingDetails(uniqueName: string): void {
         this.isLoadingManufacturing = true;
         this.changeDetectionRef.detectChanges();

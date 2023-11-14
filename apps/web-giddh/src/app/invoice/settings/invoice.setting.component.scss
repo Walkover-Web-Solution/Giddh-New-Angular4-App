@@ -188,7 +188,7 @@ span.viasocket a {
     color: var(--color-teal);
     padding: 6px 10px;
     margin-right: 10px;
-    margin-left: 10px;
+    margin-left: 0;
 }
 .delete-verified-icon {
     padding: 6px 10px;
@@ -209,7 +209,9 @@ span.viasocket a {
         border-radius: 5px !important;
     }
 }
-
+.input-group-addon{
+    border-radius: 0 5px 5px 0 !important;
+}
 @media (max-width: 991px) {
     /*--- custom ---*/
     .left-gap {
