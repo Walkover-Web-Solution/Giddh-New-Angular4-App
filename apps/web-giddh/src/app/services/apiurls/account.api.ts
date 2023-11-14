@@ -18,4 +18,5 @@ export const ACCOUNTS_API = {
     SHARED_WITH: COMMON_URL_FOR_ACCOUNT + '/shared-with',
     TAX_HIERARCHY: COMMON_URL_FOR_ACCOUNT + '/tax-hierarchy', // get call
     FLATTEN_ACCOUNTS: 'company/:companyUniqueName/flatten-accounts?q=:q&page=:page&count=:count', // get call
+    CREATE_UPDATE_DELETE: 'company/:companyUniqueName/accounts/:accountUniqueName/contacts'
 };

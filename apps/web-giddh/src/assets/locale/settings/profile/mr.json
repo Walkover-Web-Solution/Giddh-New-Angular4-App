@@ -53,5 +53,7 @@
 	"language": "भाषा",
 	"select_language": "भाषा निवडा",
     "theme": "थीम",
-    "select_theme": "थीम निवडा"
+    "select_theme": "थीम निवडा",
+    "portal_domain": "पोर्टल डोमेन",
+    "domain_error_message":"हायफन (-) व्यतिरिक्त इतर विशेष वर्णांना परवानगी नाही"
 }

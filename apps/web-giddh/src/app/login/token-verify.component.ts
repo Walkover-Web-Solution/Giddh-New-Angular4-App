@@ -39,6 +39,8 @@ export class TokenVerifyComponent implements OnInit, OnDestroy {
      * @memberof TokenVerifyComponent
      */
     public ngOnInit() {
+        this.generalService.removeLocalStorageParameter("session");
+        
         window.addEventListener("online", (event) => {
             if (!this.isConnected) {
                 this.isConnected = true;
@@ -50,7 +52,7 @@ export class TokenVerifyComponent implements OnInit, OnDestroy {
             this.isConnected = false;
         });
 
-        if (this.route.snapshot.queryParams['signup'] && this.generalService.user) {
+        if (this.generalService.user) {
             this.authService.ClearSession().pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response?.status === 'success') {
                     this.store.dispatch(this.loginAction.socialLogoutAttempt());

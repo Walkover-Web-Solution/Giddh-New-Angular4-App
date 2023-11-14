@@ -155,7 +155,7 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
      * @memberof InventoryMasterComponent
      */
     public getMasters(stockGroup: any, currentIndex: number, isRefresh: boolean = false, isLoadMore: boolean = false): void {
-        if (!stockGroup) {
+        if (!stockGroup?.uniqueName) {
             return;
         }
         if (!isLoadMore) {
@@ -225,9 +225,9 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
                 this.masterColumnsData = cloneDeep(masterColumnsData);
                 if (this.masterColumnsData?.length && this.masterColumnsData[this.masterColumnsData.length - 1] && this.masterColumnsData[this.masterColumnsData.length - 1]?.results?.length) {
                     if (this.masterColumnsData[this.masterColumnsData.length - 1]?.results[0]?.entity === "STOCK") {
-                        this.currentStock = this.masterColumnsData[this.masterColumnsData.length - 1]?.results[0];
+                        this.editStock(this.masterColumnsData[this.masterColumnsData.length - 1]?.results[0], this.masterColumnsData.length - 1);
                     } else {
-                        this.currentGroup = this.masterColumnsData[this.masterColumnsData.length - 1]?.results[0];
+                        this.editGroup(this.masterColumnsData[this.masterColumnsData.length - 1]?.results[0], this.masterColumnsData.length - 1);
                     }
                 }
 
@@ -353,6 +353,8 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
      * @memberof InventoryMasterComponent
      */
     public editStock(masterData: any, index: number): void {
+        this.masterColumnsData = this.masterColumnsData.slice(0, index + 1);
+        this.isTopLevel = false;
         this.resetCurrentStockAndGroup();
         this.currentStock = masterData;
         this.showCreateButtons = false;
@@ -374,6 +376,11 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
      * @memberof InventoryMasterComponent
      */
     public editGroup(masterData: any, index): void {
+        if (index === -1) {
+            this.isTopLevel = true;
+        } else {
+            this.isTopLevel = false;
+        }
         this.resetCurrentStockAndGroup();
         this.currentGroup = masterData;
         this.showCreateButtons = false;
@@ -410,23 +417,42 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
      * @memberof InventoryMasterComponent
      */
     public closeGroup(event: any): void {
-        this.showCreateButtons = false;
-        this.createUpdateGroup = false;
+        if (this.isSearching) {
+            this.searchInventory(this.searchFormControl.value);
+        } else {
+            this.showCreateButtons = false;
 
-        if (!event) {
             if (this.isTopLevel) {
                 this.breadcrumbs = [];
                 this.getTopLevelGroups();
-                this.masterColumnsData = [];
+
+                if (event) {
+                    this.createUpdateGroup = true;
+                } else {
+                    this.masterColumnsData = [];
+                }
             } else {
-                this.getMasters(this.masterColumnsData[this.activeIndex]?.stockGroup, this.activeIndex - 1);
+                let createUpdateGroup = false;
+                if (!this.currentGroup?.uniqueName || !event) {
+                    createUpdateGroup = false;
+                } else {
+                    createUpdateGroup = true;
+                }
+
+                if (!createUpdateGroup) {
+                    this.getMasters(this.masterColumnsData[this.activeIndex]?.stockGroup, this.activeIndex - 1);
+                } else {
+                    this.masterColumnsData[this.activeIndex].page = 0;
+                    this.masterColumnsData[this.activeIndex].results = [];
+                    this.getMasters(this.masterColumnsData[this.activeIndex]?.stockGroup, this.activeIndex, false, true);
+                }
+
                 if (this.activeIndex <= 1) {
                     this.getTopLevelGroups();
                 }
+
+                this.createUpdateGroup = createUpdateGroup;
             }
-        } else {
-            this.resetCurrentStockAndGroup();
-            this.createBreadcrumbs();
         }
     }
 
@@ -483,7 +509,7 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
      * @memberof InventoryMasterComponent
      */
     public createBreadcrumbFromParentGroups(masterData: any, index: number): void {
-        if (!masterData?.parentUniqueName) {
+        if (!masterData?.parentUniqueName && index >= 0) {
             masterData.parentName = this.masterColumnsData[index].parentName;
             masterData.parentUniqueName = this.masterColumnsData[index].parentUniqueName;
         }
