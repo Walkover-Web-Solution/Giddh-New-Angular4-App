@@ -50,6 +50,8 @@ export class PersonalInformationComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Portal Domain name validation with regex pattern */
     public isValidDomain: boolean;
+    /** Stores the voucher API version of company */
+    public voucherApiVersion: 1 | 2;
 
     constructor(private generalService: GeneralService, private toasty: ToasterService) { }
 
@@ -59,6 +61,7 @@ export class PersonalInformationComponent implements OnInit, OnDestroy {
      * @memberof PersonalInformationComponent
      */
     public ngOnInit(): void {
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.saveProfileSubject.pipe(debounceTime(5000), takeUntil(this.destroyed$)).subscribe(() => {
             this.saveProfile.emit(this.updatedData);
         });

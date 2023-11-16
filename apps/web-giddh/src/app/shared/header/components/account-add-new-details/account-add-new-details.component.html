@@ -495,7 +495,7 @@
                     </div>
                 </div>
             </tab>
-            <tab [heading]="localeData?.tabs?.portal" class="contact-form-wrap">
+            <tab [heading]="localeData?.tabs?.portal" class="contact-form-wrap" *ngIf="voucherApiVersion === 2">
                 <div formArrayName="portalDomain">
                     <div
                         class="row align-items-center"
@@ -526,7 +526,7 @@
                                 />
                                 <span
                                     class="error-msg"
-                                      *ngIf="
+                                    *ngIf="
                                         domain.get('email').dirty &&
                                         (domain.get('email').hasError('required') || domain.get('email').invalid) &&
                                         !domain.get('email').hasError('duplicate')
@@ -536,7 +536,7 @@
                                 </span>
                                 <span
                                     class="error-msg"
-                                         *ngIf="domain.get('email').hasError('duplicate') && i === lastDuplicateEmailIndex"
+                                    *ngIf="domain.get('email').hasError('duplicate') && i === lastDuplicateEmailIndex"
                                     id="emailValidationError_{{ i }}"
                                     >{{ localeData?.duplicate_email }}
                                 </span>

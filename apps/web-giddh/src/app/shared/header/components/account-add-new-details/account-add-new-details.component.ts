@@ -181,6 +181,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public lastDuplicateEmailIndex: number = -1;
     /** True if last duplicate email in portal  users */
     public portalIndex: number;
+    /** Stores the voucher API version of company */
+    public voucherApiVersion: 1 | 2;
 
     constructor(
         private _fb: UntypedFormBuilder,
@@ -206,6 +208,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
      * @memberof AccountAddNewDetailsComponent
      */
     public ngOnInit(): void {
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.getCountry();
         this.getCallingCodes();
         this.getPartyTypes();
