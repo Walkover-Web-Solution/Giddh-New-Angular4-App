@@ -1366,15 +1366,19 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             dataTosend.uniqueNames = this.selectedItems;
         }
         this.exportcsvRequest.dataToSend = dataTosend;
-        this.store.dispatch(this.invoiceActions.DownloadExportedInvoice(this.exportcsvRequest));
-        this.exportedInvoiceBase64res$.pipe(debounceTime(800), take(1)).subscribe(res => {
-            if (res) {
-                if (res.status === 'success') {
-                    let blob = this.generalService.base64ToBlob(res.body, 'application/xls', 512);
+        this._invoiceService.exportCsvInvoiceDownload(this.exportcsvRequest).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            if (response) {
+                if (response.status === 'success') {
                     this.selectedInvoicesList = [];
-                    return saveAs(blob, `${dataTosend.accountUniqueName}${this.localeData?.all_invoices}.xls`);
+                    this.selectedItems = [];
+                    this.allItemsSelected = false;
+                    this.voucherData.items.forEach((item) => {
+                        item.isSelected = false;
+                    });
+                    let blob = this.generalService.base64ToBlob(response.body, 'application/xls', 512);
+                    return saveAs(blob, `${dataTosend?.accountUniqueName}${this.localeData?.all_invoices}.xls`);
                 } else {
-                    this._toaster.errorToast(res.message);
+                    this._toaster.errorToast(response.message);
                 }
             }
         });
@@ -1959,9 +1963,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                     }
                     setTimeout(() => {
                         this.voucherData = cloneDeep(res[0]);
-                        this.voucherData.items.forEach((item) => {
-                            item.isSelected = false;
-                        });
                         if (!this.cdr['destroyed']) {
                             this.cdr.detectChanges();
                         }
