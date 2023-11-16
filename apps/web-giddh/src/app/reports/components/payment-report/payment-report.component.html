@@ -468,7 +468,7 @@
                 </table>
             </div>
 
-            <div [hidden]="isLoading" *ngIf="pageConfiguration.totalItems > paginationLimit" class="pagination-wrapper">
+            <div [hidden]="isLoading" *ngIf="pageConfiguration.totalItems > paginationLimit" class="pagination-wrapper mt-2">
                 <pagination
                     [totalItems]="pageConfiguration.totalItems"
                     [(ngModel)]="pageConfiguration.currentPage"

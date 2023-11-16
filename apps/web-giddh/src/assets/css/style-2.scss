@@ -7828,6 +7828,7 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
     text-align: center;
     display: flex;
     justify-content: center;
+    margin-bottom: 3rem;
 }
 
 .pagination > li > a,
@@ -13739,7 +13740,7 @@ hamburger-menu {
 
         .icon-input {
             float: left;
-            width: 80%;
+            width: 100%;
         }
 
         .search-icon {
@@ -13759,7 +13760,10 @@ hamburger-menu {
             border-top-right-radius: 20px;
             border-bottom-right-radius: 20px;
             height: 100%;
-            width: 20%;
+            width: 100%;
+            float: right;
+            max-width: 280px;
+            margin-left: auto;
 
             .advance-filter-button {
                 border-left: 1px solid var(--color-gray);

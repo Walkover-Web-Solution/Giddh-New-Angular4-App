@@ -709,5 +709,6 @@
         "yes": "Leave page"
     },
     "app_region": "Region",
-    "app_select_region": "Select Region"
+    "app_select_region": "Select Region",
+    "app_by_product_output" :"By Product (Output)"
 }

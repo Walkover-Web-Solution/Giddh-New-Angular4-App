@@ -235,8 +235,7 @@
             }
             .pay-now {
                 margin-top: 11px;
-                width: 102px;
-                font-weight: bolder;
+                min-width: 102px;
                 height: 38px;
                 font-size: var(--font-size-16);
             }

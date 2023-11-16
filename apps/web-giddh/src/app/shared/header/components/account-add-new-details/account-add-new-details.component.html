@@ -77,10 +77,10 @@
                         <label>{{ localeData?.opening_balance }}</label>
                         <div [ngClass]="{ 'input-group': addAccountForm.get('openingBalance')?.value > 0 }">
                             <input
-                                type="tel"
+                                type="number"
                                 min="0"
                                 class="form-control text-right mr-1"
-                                decimalDigitsDirective
+                                digitsOnlyDirective
                                 formControlName="openingBalance"
                                 [placeholder]="
                                     commonLocaleData?.app_numbers?.zero +
@@ -241,7 +241,8 @@
                         <div class="gstin-form" formArrayName="addresses">
                             <ng-container
                                 *ngFor="
-                                    let gst of addAccountForm.get('addresses')['controls'] | slice: 0:gstDetailsLength;
+                                    let gst of addAccountForm.get('addresses')['controls']
+                                        | slice : 0 : gstDetailsLength;
                                     let i = index;
                                     let f = first;
                                     let l = last

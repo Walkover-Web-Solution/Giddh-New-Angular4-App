@@ -81,6 +81,8 @@ import { NoDataModule } from "../shared/no-data/no-data.module";
 import { DragDropModule } from "@angular/cdk/drag-drop";
 import { CdkScrollModule } from "../theme/form-fields/cdk-scroll/cdk-scroll.module";
 import { CustomPriceModule } from "./component/custom-price/custom-price.module";
+import { BulkStockEditComponent } from "./component/bulk-stock-edit/bulk-stock-edit.component";
+import { BulkStockAdvanceFilterComponent } from "./component/bulk-stock-advance-filter/bulk-stock-advance-filter.component";
 
 @NgModule({
     declarations: [
@@ -125,7 +127,9 @@ import { CustomPriceModule } from "./component/custom-price/custom-price.module"
         CreateUnitGroupComponent,
         AsideCreateUnitGroupComponent,
         CustomUnitsComponent,
-        InventoryMasterComponent
+        InventoryMasterComponent,
+        BulkStockEditComponent,
+        BulkStockAdvanceFilterComponent
     ],
     imports: [
         NewInventoryRoutingModule,
@@ -201,7 +205,8 @@ import { CustomPriceModule } from "./component/custom-price/custom-price.module"
         DashboardSalesReport,
         DashboardSellingReport,
         ReportFiltersComponent,
-        MatDivider
+        MatDivider,
+        BulkStockAdvanceFilterComponent
     ]
 })
 export class NewInventoryModule { }

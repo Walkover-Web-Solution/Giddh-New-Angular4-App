@@ -2331,14 +2331,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     this.accountUniquename = accountDetails?.uniqueName;
 
                     this.isBankOrCashAccount = accountDetails?.parentGroups?.some((grp) => grp?.uniqueName === 'bankaccounts' || grp?.uniqueName === 'loanandoverdraft');
-                    if (accountDetails.currency && profile?.baseCurrency) {
+                    if (accountDetails?.currency && profile?.baseCurrency) {
                         this.isLedgerAccountAllowsMultiCurrency = accountDetails.currency && accountDetails.currency !== profile?.baseCurrency;
                     } else {
                         this.isLedgerAccountAllowsMultiCurrency = false;
                     }
                     this.foreignCurrencyDetails = { code: profile?.baseCurrency, symbol: profile.baseCurrencySymbol };
                     if (this.isLedgerAccountAllowsMultiCurrency) {
-                        this.baseCurrencyDetails = { code: accountDetails.currency, symbol: accountDetails.currencySymbol };
+                        this.baseCurrencyDetails = { code: accountDetails?.currency, symbol: accountDetails?.currencySymbol };
                         this.getCurrencyRate();
                     } else {
                         this.baseCurrencyDetails = this.foreignCurrencyDetails;
@@ -2660,7 +2660,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     accountApplicableDiscounts: data.body.applicableDiscounts,
                     parentGroups: event.additional.stock ? data.body.oppositeAccount.parentGroups : data.body.parentGroups, // added due to parentGroups is getting null in search API
                 };
-                if (txn.selectedAccount && txn.selectedAccount.stock) {
+                if (txn?.selectedAccount && txn.selectedAccount.stock) {
                     txn.selectedAccount.stock.rate = Number((txn.selectedAccount.stock.rate / this.lc.blankLedger?.exchangeRate).toFixed(RATE_FIELD_PRECISION));
                 }
                 if (!this.isHideBankLedgerPopup) {
@@ -2673,7 +2673,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 let stockUnitUniqueName = '';
 
                 //#region unit rates logic
-                if (txn.selectedAccount?.stock) {
+                if (txn?.selectedAccount?.stock) {
                     const defaultUnitRates = this.generalService.voucherApiVersion === 1 ? txn.selectedAccount?.stock?.unitRates : txn.selectedAccount?.stock?.variant?.unitRates;
                     const defaultUnit = {
                         stockUnitCode: defaultUnitRates[0].stockUnitCode,

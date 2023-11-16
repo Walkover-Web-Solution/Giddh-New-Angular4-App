@@ -1199,7 +1199,7 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
                             if (this.branchTransferMode === 'delivery-challan') {
                             }
                         }
-                        this.resetDestinationWarehouses(index);
+                        this.resetDestinationWarehouses(index, true);
                         this.detectChanges();
                     }
                 });
@@ -1241,7 +1241,7 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
                             });
                             this.branches = branchesWithSameTax;
                         }
-                        this.resetSourceWarehouses(index);
+                        this.resetSourceWarehouses(index, false);
                     }
                 });
             } else {
@@ -1525,7 +1525,7 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
                         sourceGroup.get('warehouse.stockDetails.rate')?.patchValue(productGroup?.get('stockDetails.rate').value);
                         this.calculateRowTotal(sourcesWarehouseFormGroup);
                     }
-                    this.resetSourceWarehouses(index, true);
+                    this.resetSourceWarehouses(index, true, true);
                 }
             } else {
                 const destinationsArray = this.branchTransferCreateEditForm.get('destinations') as UntypedFormArray;
@@ -1559,7 +1559,7 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
                         destinationsFormGroup.get('warehouse.stockDetails.rate')?.patchValue(productGroup?.get('stockDetails.rate').value);
                         this.calculateRowTotal(destinationsWarehouseFormGroup);
                     }
-                    this.resetDestinationWarehouses(index, true);
+                    this.resetDestinationWarehouses(index, true, true);
                 }
             }
         }
@@ -1594,10 +1594,10 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
                     sourcesStockDetailsFormGroup.get('quantity')?.setValue(null);
                 }
             }
-            this.resetSourceWarehouses(index, true);
+            this.resetSourceWarehouses(index, true, true);
             if (destinationsFormGroup && destinationsWarehouseFormGroup &&
                 destinationsWarehouseFormGroup.get('uniqueName')?.value === null) {
-                this.resetDestinationWarehouses(index, true);
+                this.resetDestinationWarehouses(index, true, true);
             }
         } else {
             if (destinationsArray && destinationsWarehouseFormGroup) {
@@ -1609,10 +1609,10 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
                     destinationsStockDetailsFormGroup.get('quantity')?.setValue(null);
                 }
             }
-            this.resetDestinationWarehouses(index, true);
+            this.resetDestinationWarehouses(index, true, true);
             if (sourceFormGroup && sourcesWarehouseFormGroup &&
                 sourcesStockDetailsFormGroup.get('uniqueName')?.value === null) {
-                this.resetSourceWarehouses(index, true);
+                this.resetSourceWarehouses(index, true, true);
             }
         }
     }
@@ -1624,7 +1624,7 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
      * @param {boolean} [reInitializeWarehouses]
      * @memberof CreateBranchTransferComponent
      */
-    public resetSourceWarehouses(index: number, reInitializeWarehouses?: boolean): void {
+    public resetSourceWarehouses(index: number, withBranches: boolean = true, reInitializeWarehouses?: boolean): void {
         let sourcesArray = this.branchTransferCreateEditForm.get('sources') as UntypedFormArray;
         let sourceFormGroup = sourcesArray?.at(index) as UntypedFormGroup;
         let sourcesWarehouseFormGroup = sourceFormGroup?.get('warehouse') as UntypedFormGroup;
@@ -1669,7 +1669,9 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
                                 label: this.senderWarehouses[sourceFormGroup.get('uniqueName')?.value][0]?.label,
                                 value: this.senderWarehouses[sourceFormGroup.get('uniqueName')?.value][0]?.value
                             }
-                            this.selectSenderWarehouse(event, index);
+                            if (withBranches) {
+                                this.selectSenderWarehouse(event, index);
+                            }
                         }
                     }, 100);
                 }
@@ -1735,7 +1737,7 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
      * @param {boolean} [reInitializeWarehouses]
      * @memberof CreateBranchTransferComponent
      */
-    public resetDestinationWarehouses(index, reInitializeWarehouses?: boolean): void {
+    public resetDestinationWarehouses(index, withBranches: boolean = true, reInitializeWarehouses?: boolean): void {
         let sourcesArray = this.branchTransferCreateEditForm.get('sources') as UntypedFormArray;
 
         let sourceFormGroup = sourcesArray?.at(index) as UntypedFormGroup;
@@ -1783,7 +1785,9 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
                             label: this.destinationWarehouses[destinationsFormGroup.get('uniqueName')?.value][0]?.label,
                             value: this.destinationWarehouses[destinationsFormGroup.get('uniqueName')?.value][0]?.value
                         }
-                        this.selectReceiverWarehouse(event, index);
+                        if (withBranches) {
+                            this.selectReceiverWarehouse(event, index);
+                        }
                     }
                 }, 100);
             }
