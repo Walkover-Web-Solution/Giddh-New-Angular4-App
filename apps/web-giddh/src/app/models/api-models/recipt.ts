@@ -10,6 +10,7 @@ export class InvoiceReceiptFilter extends InvoiceFilterClassForInvoicePreview {
     public purchaseOrderNumber?: any;
     public balanceStatus?: any;
     public accountUniqueName?: string;
+    public source?: string;
 }
 
 export interface ReciptDeleteRequest {
