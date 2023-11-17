@@ -607,7 +607,8 @@ export class AgingReportComponent implements OnInit, OnDestroy {
                 invoiceDate: undefined,
                 dueDate: undefined,
                 voucherNumber: undefined,
-                total: ""
+                total: "",
+                source: "AGING_REPORT"
             };
 
             this.unpaidInvoiceIsLoading = true;
