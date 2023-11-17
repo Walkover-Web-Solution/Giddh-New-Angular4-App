@@ -603,6 +603,10 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                 if (this.itemsListForDetails) {
                     this.onSelectInvoice(this.purchaseRecord);
                 }
+
+                if (voucherType === VoucherTypeEnum.sales) {
+                    this.purchaseRecord = null;
+                }
             }
         });
     }
@@ -788,7 +792,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                     this._invoiceBulkUpdateService.bulkUpdateInvoice(bulkDeleteModel, 'delete').subscribe(response => {
                         if (response) {
                             if (response.status === "success") {
-                                this.getVoucher(this.isUniversalDateApplicable);
                                 this._toaster.successToast(response.body);
                                 this.getVoucher(false);
                                 this.toggleAllItems(false);
