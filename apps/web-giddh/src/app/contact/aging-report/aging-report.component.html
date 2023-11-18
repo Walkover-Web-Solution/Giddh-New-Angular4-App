@@ -317,7 +317,7 @@
                     </div>
                 </th>
                 <td mat-cell *matCellDef="let element" [attr.data-title]="commonLocaleData?.app_due_amount">
-                    <span class="d-flex justify-content-end">
+                    <span class="d-flex justify-content-end" [ngClass]="{'cursor-pointer' : element.futureDueAmount > 0}" (click)="element.futureDueAmount > 0 ? showUnpaidInvoiceList(element?.uniqueName, 'upcoming-due') : ''">
                         <amount-field
                             [amount]="element.futureDueAmount"
                             [currencySymbol]="false"
@@ -487,7 +487,7 @@
                     </div>
                 </th>
                 <td mat-cell *matCellDef="let element" [attr.data-title]="commonLocaleData?.app_total_amount">
-                    <span class="d-flex justify-content-end">
+                    <span class="d-flex justify-content-end" [ngClass]="{'cursor-pointer' : element.totalDueAmount > 0}" (click)="element.totalDueAmount > 0 ? showUnpaidInvoiceList(element?.uniqueName, 'total-due') : ''">
                         <amount-field [amount]="element.totalDueAmount" [currencySymbol]="false" [currencyCode]="false">
                         </amount-field>
                     </span>

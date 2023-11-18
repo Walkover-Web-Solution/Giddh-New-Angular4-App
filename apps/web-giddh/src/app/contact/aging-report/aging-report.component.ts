@@ -8,7 +8,8 @@ import {
     ChangeDetectorRef,
     Input,
     OnDestroy,
-    TemplateRef
+    TemplateRef,
+    ApplicationRef
 } from "@angular/core";
 import {
     AgingAdvanceSearchModal,
@@ -133,7 +134,9 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     /** Holds Unpaid Invoice API Loading Status */
     public unpaidInvoiceIsLoading: boolean = false;
     /** Holds Start Date of Financial Year */
-    public minDate: any
+    public minDate: any;
+    /** Holds End Date of Financial Year */
+    public maxDate: any;
 
     constructor(
         public dialog: MatDialog,
@@ -149,7 +152,8 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         private agingReportService: AgingreportingService,
         private receiptService: ReceiptService,
         private scrollDispatcher: ScrollDispatcher,
-        private settingsFinancialYearActions: SettingsFinancialYearActions) {
+        private settingsFinancialYearActions: SettingsFinancialYearActions,
+        private appRef: ApplicationRef) {
         this.agingDropDownoptions$ = this.store.pipe(select(s => s.agingreport.agingDropDownoptions), takeUntil(this.destroyed$));
         this.dueAmountReportRequest = new DueAmountReportQueryRequest();
         this.dueAmountReportRequest.count = PAGINATION_LIMIT;
@@ -286,7 +290,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         });
 
         this.scrollDispatcher.scrolled().pipe(takeUntil(this.destroyed$)).subscribe((event: any) => {
-            if (event && event?.getDataLength() - event?.getRenderedRange().end < 50 && !this.unpaidInvoiceIsLoading && this.unpaidInvoicePaginationData.page < this.unpaidInvoicePaginationData.totalPages) {
+            if (event && event?.getDataLength() - event?.getRenderedRange().end < 10 && !this.unpaidInvoiceIsLoading && this.unpaidInvoicePaginationData.page < this.unpaidInvoicePaginationData.totalPages) {
                 this.unpaidInvoicePaginationData.page++;
                 this.getAllInvoices(this.unpaidInvoiceListInput.accountUniqueName, this.unpaidInvoiceListInput.range);
             }
@@ -295,6 +299,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         this.store.pipe(select(state => state.settings.financialYearLimits), takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.startDate && response.endDate) {
                 this.minDate = dayjs(response.startDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                this.maxDate = dayjs(response.endDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
             }
         });
     }
@@ -627,7 +632,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
                     }
                 }
                 setTimeout(() => {
-                    this.cdr.detectChanges();
+                    this.appRef.tick();
                 }, 100);
             });
         }
@@ -651,6 +656,10 @@ export class AgingReportComponent implements OnInit, OnDestroy {
             case "range2": dateObj = this.getPriorDate(this.agingDropDownoptions?.fifth + 1, this.agingDropDownoptions?.sixth - (this.agingDropDownoptions?.fifth + 1));
                 break;
             case "range3": dateObj = this.getPriorDate(this.agingDropDownoptions?.sixth + 1, null);
+                break;
+            case "upcoming-due": dateObj = { to: this.maxDate, from: dayjs(new Date()).format(GIDDH_DATE_FORMAT) };
+                break;
+            case "total-due": dateObj = { to: this.maxDate, from: this.minDate };
                 break;
         }
         return dateObj;
