@@ -1,6 +1,9 @@
 import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
+import { ActivatedRoute } from "@angular/router";
 import { PAGINATION_LIMIT } from "apps/web-giddh/src/app/app.constant";
+import { InventoryService } from "apps/web-giddh/src/app/services/inventory.service";
+import { ReplaySubject, takeUntil } from "rxjs";
 
 export interface PeriodicElement {
     name: string;
@@ -14,7 +17,7 @@ export interface PeriodicElement {
 const ELEMENT_DATA: any[] = [
     { name: 'Variant', price: '1.0079', radio: 'H', discount: '', quantity: '', delete: '' },
     { name: 'Variant', price: '1.0079', radio: 'H', discount: '', quantity: '', delete: '' },
-    { name: 'Variant', price: '1.0079', radio: 'H', discount: '', quantity: '', delete: ''},
+    { name: 'Variant', price: '1.0079', radio: 'H', discount: '', quantity: '', delete: '' },
     { name: 'Variant', price: '1.0079', radio: 'H', discount: '', quantity: '', delete: '' }
 ];
 
@@ -36,10 +39,17 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /** Pagination limit */
     public paginationLimit: number = PAGINATION_LIMIT;
-    public commandkDialogRef: MatDialogRef<any>;
+    /** Holds Mat Dailog Reference*/
+    public dialogRef: MatDialogRef<any>;
+    /* Observable to unsubscribe all the store listeners */
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Holds Group uniques name from Params */
+    private groupUniqueName: 'sundrydebtors' | 'sundrycreditors';
 
     constructor(
-        private dialog: MatDialog
+        private dialog: MatDialog,
+        private inventoryService: InventoryService,
+        private route: ActivatedRoute
     ) {
 
     }
@@ -50,8 +60,10 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
      * @memberof CustomerWiseComponent
      */
     public ngOnInit(): void {
-
-
+        this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
+            this.groupUniqueName =  params.type === 'customer-wise'? 'sundrydebtors' : 'sundrycreditors';            
+        });
+        console.log("groupUniqueName",this.groupUniqueName);
     }
 
     /**
@@ -60,11 +72,10 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
      * @memberof CustomerWiseComponent
      */
     public openSearchModal(): void {
-        this.dialog.open(this.addSearchModal, {
+        this.dialogRef  = this.dialog.open(this.addSearchModal, {
             width: '650px'
         });
     }
-    
 
     /**
      * Lifecycle hook for destroy component
@@ -72,5 +83,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
      * @memberof CustomerWiseComponent
      */
     public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 }

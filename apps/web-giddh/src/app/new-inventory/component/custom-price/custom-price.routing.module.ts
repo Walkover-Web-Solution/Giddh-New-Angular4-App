@@ -9,7 +9,12 @@ const routes: Routes = [
         component: MainComponent,
         children: [
             {
-                path: "list",
+                path: "",
+                redirectTo: "customer-wise",
+                pathMatch: "full"
+            },
+            {
+                path: ":type",
                 component: CustomerWiseComponent
             }
         ]
