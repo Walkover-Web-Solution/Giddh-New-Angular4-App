@@ -8,8 +8,7 @@ import {
     ChangeDetectorRef,
     Input,
     OnDestroy,
-    TemplateRef,
-    ApplicationRef
+    TemplateRef
 } from "@angular/core";
 import {
     AgingAdvanceSearchModal,
@@ -152,8 +151,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         private agingReportService: AgingreportingService,
         private receiptService: ReceiptService,
         private scrollDispatcher: ScrollDispatcher,
-        private settingsFinancialYearActions: SettingsFinancialYearActions,
-        private appRef: ApplicationRef) {
+        private settingsFinancialYearActions: SettingsFinancialYearActions) {
         this.agingDropDownoptions$ = this.store.pipe(select(s => s.agingreport.agingDropDownoptions), takeUntil(this.destroyed$));
         this.dueAmountReportRequest = new DueAmountReportQueryRequest();
         this.dueAmountReportRequest.count = PAGINATION_LIMIT;
@@ -290,7 +288,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         });
 
         this.scrollDispatcher.scrolled().pipe(takeUntil(this.destroyed$)).subscribe((event: any) => {
-            if (event && event?.getDataLength() - event?.getRenderedRange().end < 10 && !this.unpaidInvoiceIsLoading && this.unpaidInvoicePaginationData.page < this.unpaidInvoicePaginationData.totalPages) {
+            if (event && event?.getDataLength() - event?.getRenderedRange().end < 20 && !this.unpaidInvoiceIsLoading && this.unpaidInvoicePaginationData.page < this.unpaidInvoicePaginationData.totalPages) {
                 this.unpaidInvoicePaginationData.page++;
                 this.getAllInvoices(this.unpaidInvoiceListInput.accountUniqueName, this.unpaidInvoiceListInput.range);
             }
@@ -616,9 +614,13 @@ export class AgingReportComponent implements OnInit, OnDestroy {
                 source: "AGING_REPORT"
             };
 
-            this.unpaidInvoiceIsLoading = true;
+            if (model.page === 1) {
+                this.unpaidInvoiceIsLoading = true;
+            }
             this.receiptService.GetAllReceipt(model, this.selectedVoucher).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-                this.unpaidInvoiceIsLoading = false;
+                if (model.page === 1) {
+                    this.unpaidInvoiceIsLoading = false;
+                }
                 if (res?.body?.items?.length) {
                     if (this.unpaidInvoiceData?.length) {
                         this.unpaidInvoiceData = this.unpaidInvoiceData.concat(res?.body?.items);
@@ -631,11 +633,21 @@ export class AgingReportComponent implements OnInit, OnDestroy {
                         totalPages: res?.body?.totalPages
                     }
                 }
-                setTimeout(() => {
-                    this.appRef.tick();
-                }, 100);
+                this.changeDetection();
             });
         }
+    }
+
+    /**
+     * Call Change Detection after 100ms
+     *
+     * @private
+     * @memberof AgingReportComponent
+     */
+    private changeDetection(): void {
+        setTimeout(() => {
+            this.cdr.detectChanges();
+        }, 100);
     }
 
     /**
