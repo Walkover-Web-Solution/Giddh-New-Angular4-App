@@ -150,6 +150,7 @@ export function ProformaReducer(state: ProformaState = initialState, action: Cus
             let vouchers = { ...state.vouchers };
             let result = action.payload as BaseResponse<any, VoucherClass>;
             if (result?.status === 'success') {
+                console.log('result', result);
                 return {
                     ...state,
                     isUpdateProformaInProcess: false,

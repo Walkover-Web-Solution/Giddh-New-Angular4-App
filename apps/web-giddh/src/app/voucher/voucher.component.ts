@@ -1634,6 +1634,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         });
 
         this.updateVoucherSuccess$.subscribe(result => {
+            console.log(result);
             if (result) {
                 this.doAction(ActionTypeAfterVoucherGenerateOrUpdate.updateSuccess);
                 this.postResponseAction(this.invoiceNo);
@@ -3987,7 +3988,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     }
 
     public postResponseAction(voucherNo: string) {
+        console.log(ActionTypeAfterVoucherGenerateOrUpdate);
         switch (this.actionAfterGenerateORUpdate) {
+
             case ActionTypeAfterVoucherGenerateOrUpdate.generate: {
 
                 this.getAllLastInvoices();
@@ -5266,16 +5269,16 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     }
 
     private updateVoucherSuccess() {
+        console.log('updated Voucher');
         this.startLoader(false);
         this.fireActionAfterGenOrUpdVoucher(this.invoiceNo, ActionTypeAfterVoucherGenerateOrUpdate.updateSuccess);
         this.cancelVoucherUpdate.emit(true);
     }
 
     private fireActionAfterGenOrUpdVoucher(voucherNo: string, action: ActionTypeAfterVoucherGenerateOrUpdate) {
-        if (this.isProformaInvoice || this.isEstimateInvoice) {
+        console.log(voucherNo, action, this.isProformaInvoice, this.isEstimateInvoice, this.isPurchaseInvoice);
+        if ((this.isProformaInvoice || this.isEstimateInvoice) || !this.isPurchaseInvoice) {
             this.store.dispatch(this.proformaActions.setVoucherForDetails(voucherNo, action));
-        } else if (!this.isPurchaseInvoice) {
-            this.store.dispatch(this.invoiceReceiptActions.setVoucherForDetails(voucherNo, action));
         }
     }
 
@@ -5902,12 +5905,15 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             if (this.billingState && this.billingState.nativeElement) {
                 this.billingState.nativeElement.classList.remove('error-box');
             }
-            this.invFormData.accountDetails.billingDetails.state.name = stateName;
-            this.invFormData.accountDetails.billingDetails.stateName = stateName;
-            this.invFormData.accountDetails.billingDetails.stateCode = stateCode;
-            this.invFormData.accountDetails.billingDetails.state.code = stateCode;
-            this.invFormData.accountDetails.billingDetails.county.name = stateName;
-            this.invFormData.accountDetails.billingDetails.county.code = stateCode;
+            if (this.selectedCompany.country === 'India') {
+                this.invFormData.accountDetails.billingDetails.state.name = stateName;
+                this.invFormData.accountDetails.billingDetails.stateName = stateName;
+                this.invFormData.accountDetails.billingDetails.stateCode = stateCode;
+                this.invFormData.accountDetails.billingDetails.state.code = stateCode;
+            } else {
+                this.invFormData.accountDetails.billingDetails.county.name = stateName;
+                this.invFormData.accountDetails.billingDetails.county.code = stateCode;
+            }
         } else {
             if (this.shippingState && this.shippingState.nativeElement) {
                 this.shippingState.nativeElement.classList.remove('error-box');
@@ -5915,12 +5921,15 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             // if it's not billing address then only update shipping details
             // check if it's not auto fill shipping address from billing address then and then only update shipping details
             if (!this.autoFillShipping) {
-                this.invFormData.accountDetails.shippingDetails.stateName = stateName;
-                this.invFormData.accountDetails.shippingDetails.stateCode = stateCode;
-                this.invFormData.accountDetails.shippingDetails.state.name = stateName;
-                this.invFormData.accountDetails.shippingDetails.state.code = stateCode;
-                this.invFormData.accountDetails.shippingDetails.county.name = stateName;
-                this.invFormData.accountDetails.shippingDetails.county.code = stateCode
+                if (this.selectedCompany.country === 'India') {
+                    this.invFormData.accountDetails.shippingDetails.stateName = stateName;
+                    this.invFormData.accountDetails.shippingDetails.stateCode = stateCode;
+                    this.invFormData.accountDetails.shippingDetails.state.name = stateName;
+                    this.invFormData.accountDetails.shippingDetails.state.code = stateCode;
+                } else {
+                    this.invFormData.accountDetails.shippingDetails.county.name = stateName;
+                    this.invFormData.accountDetails.shippingDetails.county.code = stateCode;
+                }
             }
         }
     }
@@ -7422,12 +7431,15 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             if (this.billingStateCompany && this.billingStateCompany.nativeElement) {
                 this.billingStateCompany.nativeElement.classList.remove('error-box');
             }
-            this.purchaseBillCompany.billingDetails.state.name = stateName;
-            this.purchaseBillCompany.billingDetails.stateName = stateName;
-            this.purchaseBillCompany.billingDetails.stateCode = stateCode;
-            this.purchaseBillCompany.billingDetails.state.code = stateCode;
-            this.purchaseBillCompany.billingDetails.county.name = stateName;
-            this.purchaseBillCompany.billingDetails.county.code = stateCode;
+            if (this.selectedCompany.country === 'India') {
+                this.purchaseBillCompany.billingDetails.state.name = stateName;
+                this.purchaseBillCompany.billingDetails.stateName = stateName;
+                this.purchaseBillCompany.billingDetails.stateCode = stateCode;
+                this.purchaseBillCompany.billingDetails.state.code = stateCode;
+            } else {
+                this.purchaseBillCompany.billingDetails.county.name = stateName;
+                this.purchaseBillCompany.billingDetails.county.code = stateCode;
+            }
         } else {
             if (this.shippingStateCompany && this.shippingStateCompany.nativeElement) {
                 this.shippingStateCompany.nativeElement.classList.remove('error-box');
@@ -7435,12 +7447,15 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             // if it's not billing address then only update shipping details
             // check if it's not auto fill shipping address from billing address then and then only update shipping details
             if (!this.autoFillCompanyShipping) {
-                this.purchaseBillCompany.shippingDetails.stateName = stateName;
-                this.purchaseBillCompany.shippingDetails.stateCode = stateCode;
-                this.purchaseBillCompany.shippingDetails.state.name = stateName;
-                this.purchaseBillCompany.shippingDetails.state.code = stateCode;
-                this.purchaseBillCompany.shippingDetails.county.name = stateName;
-                this.purchaseBillCompany.shippingDetails.county.code = stateCode;
+                if (this.selectedCompany.country === 'India') {
+                    this.purchaseBillCompany.shippingDetails.stateName = stateName;
+                    this.purchaseBillCompany.shippingDetails.stateCode = stateCode;
+                    this.purchaseBillCompany.shippingDetails.state.name = stateName;
+                    this.purchaseBillCompany.shippingDetails.state.code = stateCode;
+                } else {
+                    this.purchaseBillCompany.shippingDetails.county.name = stateName;
+                    this.purchaseBillCompany.shippingDetails.county.code = stateCode;
+                }
             }
         }
         this.changeDetectorRef.detectChanges();
