@@ -8,6 +8,9 @@ export class InvoiceReceiptFilter extends InvoiceFilterClassForInvoicePreview {
     public sortBy: any;
     public isLastInvoicesRequest?: boolean = false;
     public purchaseOrderNumber?: any;
+    public balanceStatus?: any;
+    public accountUniqueName?: string;
+    public source?: string;
 }
 
 export interface ReciptDeleteRequest {
