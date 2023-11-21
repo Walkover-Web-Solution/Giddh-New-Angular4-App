@@ -37,7 +37,7 @@ export class GiddhHttpInterceptor implements HttpInterceptor {
 
     public intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         var session = JSON.parse(localStorage.getItem("session"));
-        if (session && this.generalService.user) {
+        if (session?.user?.session?.expiresAt && this.generalService.user) {
             let sessionExpiresAt: any = dayjs((session.user.session.expiresAt), GIDDH_DATE_FORMAT + " h:m:s");
             if (sessionExpiresAt && sessionExpiresAt.diff(dayjs(), 'hours') < 0) {
                 this.store.dispatch(this.loginAction.LogOut());
