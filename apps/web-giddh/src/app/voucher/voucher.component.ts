@@ -1634,7 +1634,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         });
 
         this.updateVoucherSuccess$.subscribe(result => {
-            console.log(result);
             if (result) {
                 this.doAction(ActionTypeAfterVoucherGenerateOrUpdate.updateSuccess);
                 this.postResponseAction(this.invoiceNo);
@@ -3987,7 +3986,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     }
 
     public postResponseAction(voucherNo: string) {
-        console.log(ActionTypeAfterVoucherGenerateOrUpdate);
         switch (this.actionAfterGenerateORUpdate) {
 
             case ActionTypeAfterVoucherGenerateOrUpdate.generate: {
@@ -5268,14 +5266,12 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     }
 
     private updateVoucherSuccess() {
-        console.log('updated Voucher');
         this.startLoader(false);
         this.fireActionAfterGenOrUpdVoucher(this.invoiceNo, ActionTypeAfterVoucherGenerateOrUpdate.updateSuccess);
         this.cancelVoucherUpdate.emit(true);
     }
 
     private fireActionAfterGenOrUpdVoucher(voucherNo: string, action: ActionTypeAfterVoucherGenerateOrUpdate) {
-        console.log(voucherNo, action, this.isProformaInvoice, this.isEstimateInvoice, this.isPurchaseInvoice);
         if (this.isProformaInvoice || this.isEstimateInvoice) {
             this.store.dispatch(this.proformaActions.setVoucherForDetails(voucherNo, action));
         } else if (!this.isPurchaseInvoice) {

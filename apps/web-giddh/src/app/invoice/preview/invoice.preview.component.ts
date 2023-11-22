@@ -933,13 +933,11 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         } else {
             request = this.prepareModelForInvoiceReceiptApi(isUniversalDateSelected);
         }
-        console.log('936', cloneDeep(this.lastListingFilters));
 
         if (!request.invoiceDate && !request.dueDate) {
             request.from = this.invoiceSearchRequest.from;
             request.to = this.invoiceSearchRequest.to;
         }
-        console.log('947', cloneDeep(this.lastListingFilters));
 
         this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(request, this.selectedVoucher));
         this._receiptServices.getAllReceiptBalanceDue(request, this.selectedVoucher).pipe(takeUntil(this.destroyed$)).subscribe(res => {
