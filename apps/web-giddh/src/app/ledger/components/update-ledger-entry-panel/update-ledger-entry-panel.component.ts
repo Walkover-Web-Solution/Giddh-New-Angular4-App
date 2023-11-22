@@ -615,7 +615,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 txn.particular.name = e.label;
             }
             // if ther's stock entry
-            if (e.additional.stock) {
+            if (e.additional?.stock) {
                 // check if we aleready have stock entry
                 if (this.vm.isThereStockEntry(e?.value)) {
                     selectCmp?.clear();
@@ -2154,14 +2154,14 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.makeAdjustmentCalculation();
 
         if (this.isPettyCash) {
-            this.vm.selectedLedger.transactions.forEach(item => {
+            this.vm.selectedLedger.transactions?.forEach(item => {
                 item.type = (item.type === 'cr' || item.type === 'CREDIT') ? 'CREDIT' : 'DEBIT';
             });
             // create missing property for petty cash
-            this.vm.selectedLedger.transactions.forEach(item => {
+            this.vm.selectedLedger.transactions?.forEach(item => {
                 item.type = (item.type === 'cr' || item.type === 'CREDIT') ? 'CREDIT' : 'DEBIT';
             });
-            this.vm.selectedLedger.transactions.forEach(f => {
+            this.vm.selectedLedger.transactions?.forEach(f => {
                 f.isDiscount = false;
                 f.isTax = false;
 
@@ -2516,7 +2516,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     private assignStockDetails(event: IOption, txn: ILedgerTransactionItem, requestObject?: any): void {
         const currentLedgerCategory = this.activeAccount ? this.generalService.getAccountCategory(this.activeAccount, this.activeAccount?.uniqueName) : '';
         // If current ledger is of income or expense category then send current ledger unique name else send particular account unique name
-        const accountUniqueName = event.additional.stock && (currentLedgerCategory === 'income' || currentLedgerCategory === 'expenses') ?
+        const accountUniqueName = event.additional?.stock && (currentLedgerCategory === 'income' || currentLedgerCategory === 'expenses') ?
             this.activeAccount ? this.activeAccount?.uniqueName : '' :
             event.additional?.uniqueName;
         this.searchService.loadDetails(accountUniqueName, requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {

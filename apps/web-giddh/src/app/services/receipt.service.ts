@@ -64,8 +64,8 @@ export class ReceiptService {
         };
 
         if (this.generalService.voucherApiVersion === 2) {
-            body.from = null;
-            body.to = null;
+            delete body.from;
+            delete body.to;
         }
 
         let url = this.createQueryString(this.config.apiUrl + contextPath, (type === VoucherTypeEnum.purchase && this.generalService.voucherApiVersion !== 2) ? requestParameter : { ...requestParameter, type });
@@ -283,8 +283,8 @@ export class ReceiptService {
             page: body?.page, count: body?.count, from: body?.from, to: body?.to, type: requestType, q: body?.q ? encodeURIComponent(body?.q) : body?.q, sort: body?.sort, sortBy: body?.sortBy
         });
         if (this.generalService.voucherApiVersion === 2) {
-            body.from = null;
-            body.to = null;
+            delete body.from;
+            delete body.to;
             url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
         }
         return this.http.post(url
