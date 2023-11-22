@@ -317,7 +317,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             subVoucher: SubVoucher.AdvanceReceipt
         }]);
 
-        this.currentTxn.taxInclusiveAmount = this.currentTxn.amount;
+        this.currentTxn.taxInclusiveAmount = this.currentTxn?.amount;
         this.activeAccount$.subscribe(acc => {
             if (acc) {
                 this.assignUpdateActiveAccount(acc);

@@ -1652,7 +1652,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         ])
             .pipe(takeUntil(this.destroyed$))
             .subscribe(result => {
-
                 let arr: PreviousInvoicesVm[] = [];
                 if (!this.isProformaInvoice && !this.isEstimateInvoice) {
                     if (result[0]) {
@@ -2574,7 +2573,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     // filter active taxes
                     entry.taxes = entry.taxes?.filter(tax => tax.isChecked);
                     entry.voucherType = this.voucherUtilityService.parseVoucherType(invoiceType);
-                    entry.taxList = entry.taxes.map(m => m?.uniqueName);
+                    entry.taxList = entry.taxes?.map(m => m?.uniqueName);
                     entry.tcsCalculationMethod = entry.otherTaxModal.tcsCalculationMethod;
 
                     if (entry.isOtherTaxApplicable) {
@@ -5277,8 +5276,10 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
     private fireActionAfterGenOrUpdVoucher(voucherNo: string, action: ActionTypeAfterVoucherGenerateOrUpdate) {
         console.log(voucherNo, action, this.isProformaInvoice, this.isEstimateInvoice, this.isPurchaseInvoice);
-        if ((this.isProformaInvoice || this.isEstimateInvoice) || !this.isPurchaseInvoice) {
+        if (this.isProformaInvoice || this.isEstimateInvoice) {
             this.store.dispatch(this.proformaActions.setVoucherForDetails(voucherNo, action));
+        } else if (!this.isPurchaseInvoice) {
+            this.store.dispatch(this.invoiceReceiptActions.setVoucherForDetails(voucherNo, action));
         }
     }
 
@@ -7236,7 +7237,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             isBlankItemPresent = false;
         }
 
-        entries.forEach(entry => {
+        entries?.forEach(entry => {
             let transactionLoop = 0;
 
             if (entry.totalQuantity && entry.usedQuantity && entry.transactions && entry.transactions[0] && entry.transactions[0].stock) {
@@ -7247,7 +7248,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 }
             }
 
-            entry.transactions.forEach(item => {
+            entry.transactions?.forEach(item => {
                 if (item.stock) {
                     let stockUniqueName = item.stock.uniqueName;
                     item.stock.uniqueName = "purchases#" + item.stock.uniqueName;
@@ -7334,7 +7335,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             this.startLoader(true);
             setTimeout(() => {
                 let selectedPoItems = [];
-                this.selectedPoItems.forEach(order => {
+                this.selectedPoItems?.forEach(order => {
                     if (!this.linkedPo.includes(order)) {
                         let entries = (this.linkedPoNumbers[order]) ? this.linkedPoNumbers[order]['items'] : [];
 
@@ -7666,7 +7667,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.onSearchQueryChanged('', 1, SEARCH_TYPE.CUSTOMER, (response) => {
             let selectedAccountDetails;
             if (this.isUpdateMode) {
-                this.selectedAccountDetails$.pipe(take(1)).subscribe(accountDetails => {
+                this.selectedAccountDetails$?.pipe(take(1)).subscribe(accountDetails => {
                     selectedAccountDetails = accountDetails;
                 });
                 if (selectedAccountDetails) {
