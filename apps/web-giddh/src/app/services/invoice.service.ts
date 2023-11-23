@@ -647,8 +647,8 @@ export class InvoiceService {
         let url = this.config.apiUrl + INVOICE_API.DOWNLOAD_INVOICE_EXPORT_CSV?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':from', encodeURIComponent(model.from))?.replace(':to', encodeURIComponent(model.to));
 
         if (this.generalService.voucherApiVersion === 2) {
-            model.dataToSend.from = null;
-            model.dataToSend.to = null;
+            delete model.dataToSend.from;
+            delete model.dataToSend.to;
             url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
         }
 

@@ -240,7 +240,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         this.store.pipe(select(response => response.common.onboardingform), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 if (response.fields) {
-                    Object.keys(response.fields).forEach(key => {
+                    Object.keys(response.fields)?.forEach(key => {
                         if (response.fields[key]) {
                             this.formFields[response.fields[key].name] = [];
                             this.formFields[response.fields[key].name] = response.fields[key];
@@ -250,7 +250,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
                 }
                 if (response.applicableTaxes) {
                     this.taxesList = [];
-                    Object.keys(response.applicableTaxes).forEach(key => {
+                    Object.keys(response.applicableTaxes)?.forEach(key => {
                         if (response.applicableTaxes[key]) {
                             this.taxesList.push({
                                 label: response.applicableTaxes[key]?.name,
