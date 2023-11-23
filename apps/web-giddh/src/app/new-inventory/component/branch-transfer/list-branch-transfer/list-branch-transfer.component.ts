@@ -556,8 +556,10 @@ export class ListBranchTransferComponent implements OnInit {
      * @memberof ListBranchTransfer
      */
     public pageChanged(event: any): void {
-        this.branchTransferPaginationObject.page = event?.page;
-        this.getBranchTransferList(false);
+        if (this.branchTransferPaginationObject.page !== event.page) {
+            this.branchTransferPaginationObject.page = event?.page;
+            this.getBranchTransferList(false);
+        }
     }
 
     /**
