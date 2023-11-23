@@ -913,8 +913,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public getVoucher(isUniversalDateSelected: boolean) {
         this.lastListingFilters = this.prepareModelForInvoiceReceiptApi(isUniversalDateSelected);
         if (this.lastListingFilters) {
-            this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(this.lastListingFilters, this.selectedVoucher));
-            this._receiptServices.getAllReceiptBalanceDue(this.lastListingFilters, this.selectedVoucher).pipe(takeUntil(this.destroyed$)).subscribe(res => {
+            this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(cloneDeep(this.lastListingFilters), this.selectedVoucher));
+            this._receiptServices.getAllReceiptBalanceDue(cloneDeep(this.lastListingFilters), this.selectedVoucher).pipe(takeUntil(this.destroyed$)).subscribe(res => {
                 this.parseBalRes(res);
             });
         }
@@ -928,7 +928,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
      */
     public getVouchersList(isUniversalDateSelected: boolean): void {
         let request;
-
         if (this.lastListingFilters) {
             request = this.lastListingFilters;
         } else {
@@ -1228,7 +1227,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             request.voucherDate = request.invoiceDate;
             delete request['invoiceDate'];
         }
-
         this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(request, this.selectedVoucher));
         this._receiptServices.getAllReceiptBalanceDue(request, this.selectedVoucher).pipe(takeUntil(this.destroyed$)).subscribe(res => {
             this.parseBalRes(res);
