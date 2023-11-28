@@ -32,7 +32,7 @@
     "pkg": {
         "isRelocatable": false,
         "overwriteAction": "upgrade"
-    },    
+    },
     "mas": {
         "entitlements": "./../../../electron-sign/default.entitlements.mas.plist",
         "entitlementsInherit": "./../../../electron-sign/default.entitlements.mas.inherit.plist",

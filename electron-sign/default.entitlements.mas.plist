@@ -6,6 +6,10 @@
         <true/>
         <key>com.apple.security.cs.allow-unsigned-executable-memory</key>
         <true/>
+        <key>com.apple.security.network.client</key>
+        <true/>
+        <key>com.apple.security.network.server</key>
+        <true/>
         <key>com.apple.application-identifier</key>
         <string>F3U6Z5L2EJ.com.giddh.prod</string>
         <key>com.apple.developer.team-identifier</key>
