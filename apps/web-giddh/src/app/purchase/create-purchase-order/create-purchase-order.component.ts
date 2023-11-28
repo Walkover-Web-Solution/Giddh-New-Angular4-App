@@ -1167,8 +1167,10 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                     this.purchaseOrder.company.shippingDetails.stateName = defaultAddress.stateName;
                     this.purchaseOrder.company.shippingDetails.gstNumber = defaultAddress.taxNumber;
                     this.purchaseOrder.company.shippingDetails.pincode = defaultAddress.pincode;
-                    this.purchaseOrder.company.shippingDetails.county.code = defaultAddress?.county?.code;
-                    this.purchaseOrder.company.shippingDetails.county.name = defaultAddress?.county?.name;
+                    this.purchaseOrder.company.shippingDetails.county = {
+                        code: defaultAddress?.county?.code,
+                        name: defaultAddress?.county?.name
+                    }
                     this.changeDetection.detectChanges();
                 } else {
                     this.resetShippingAddress();
@@ -2775,12 +2777,14 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                     this.purchaseOrder.company.billingDetails.state.name = this.purchaseOrderDetails.company.billingDetails.stateName;
                     this.purchaseOrder.company.shippingDetails.state.code = this.purchaseOrderDetails.company.shippingDetails.stateCode;
                     this.purchaseOrder.company.shippingDetails.state.name = this.purchaseOrderDetails.company.shippingDetails.stateName;
-
-                    this.purchaseOrder.company.billingDetails.county.code = this.purchaseOrderDetails.company.billingDetails?.county?.code;
-                    this.purchaseOrder.company.billingDetails.county.name = this.purchaseOrderDetails.company.billingDetails?.county?.name;
-                    this.purchaseOrder.company.shippingDetails.county.code = this.purchaseOrderDetails.company.shippingDetails?.county?.code;
-                    this.purchaseOrder.company.shippingDetails.county.name = this.purchaseOrderDetails.company.shippingDetails?.county?.name;
-
+                    this.purchaseOrder.company.billingDetails.county = {
+                        code: this.purchaseOrderDetails.company.billingDetails?.county?.code,
+                        name: this.purchaseOrderDetails.company.billingDetails?.county?.name
+                    };
+                    this.purchaseOrder.company.shippingDetails.county = {
+                        code: this.purchaseOrderDetails.company.shippingDetails?.county?.code,
+                        name: this.purchaseOrderDetails.company.shippingDetails?.county?.name
+                    };
                     this.checkForAutoFillShippingAddress('company');
 
                     if (this.isUpdateMode) {
@@ -4092,6 +4096,15 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         this.dialog.closeAll();
     }
 
+    /**
+     * Set barcode machine typing to false if user clicked on dropdown
+     *
+     * @memberof CreatePurchaseOrderComponent
+     */
+    public setUserManuallyClicked(): void {
+        this.isBarcodeMachineTyping = false;
+    }
+
     // CMD + G functionality
     @HostListener('document:keydown', ['$event'])
     public handleKeyboardDownEvent(event: KeyboardEvent): void {
@@ -4108,6 +4121,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
 
         if (event.timeStamp - this.startTime < 2) {
             this.isBarcodeMachineTyping = true;
+        } else {
+            this.isBarcodeMachineTyping = false;
         }
 
         if (uniqueName && this.startTime) {
@@ -4169,11 +4184,12 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                 let variantObj = stockObj?.variants[0];
 
 
-                let unitRates = variantObj?.purchaseAccountDetails?.unitRates;
-                let accountUniqueName =  variantObj?.purchaseAccountDetails?.accountUniqueName;
-                let accountName = variantObj?.purchaseAccountDetails?.accountName;
+                let unitRates = variantObj?.purchaseAccountDetails?.unitRates ?? variantObj?.fixedAssetAccountDetails?.unitRates;
+                let accountUniqueName = variantObj?.purchaseAccountDetails?.accountUniqueName ?? variantObj?.fixedAssetAccountDetails?.accountUniqueName;
+                let accountName = variantObj?.purchaseAccountDetails?.accountName ?? variantObj?.fixedAssetAccountDetails?.accountName;
 
-                if (!accountUniqueName) {
+                let isInclusiveTax =variantObj?.purchaseTaxInclusive ?? variantObj?.fixedAssetTaxInclusive;
+              if (!accountUniqueName) {
                     this.toaster.showSnackBar("warning", 'purchase' + " " + this.localeData?.account_missing_in_stock);
                     return;
                 }
@@ -4216,8 +4232,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                             symbol: ""
                         },
                         nameStr: "",
-                        hsnNumber: null,
-                        sacNumber: null,
+                        hsnNumber: stockObj.hsnNumber,
+                        sacNumber: stockObj.sacNumber,
                         uNameStr: "",
                         category: ""
                     }
@@ -4244,14 +4260,50 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                     }
 
                     let activeEntryIndex = this.purchaseOrder.entries.length - 1;
+                    this.purchaseOrder.entries[activeEntryIndex].transactions[0].sku_and_customfields = null;
+                    let description = [];
+                    let skuCodeHeading = stockObj.skuCodeHeading ? stockObj.skuCodeHeading : this.commonLocaleData?.app_sku_code;
+                    if (stockObj.skuCode) {
+                        description.push(skuCodeHeading + ':' + stockObj.skuCode);
+                    }
 
+                    let customField1Heading = stockObj.customField1Heading ? stockObj.customField1Heading : this.localeData?.custom_field1;
+                    if (stockObj.customField1Value) {
+                        description.push(customField1Heading + ':' + stockObj.customField1Value);
+                    }
+
+                    let customField2Heading = stockObj.customField2Heading ? stockObj.customField2Heading : this.localeData?.custom_field2;
+                    if (stockObj.customField2Value) {
+                        description.push(customField2Heading + ':' + stockObj.customField2Value);
+                    }
+
+                    if (stockObj) {
+                        let obj: IStockUnit = {
+                            id: stockObj.stockUnit.uniqueName,
+                            text: stockObj.stockUnit.code
+                        };
+                        this.purchaseOrder.entries[activeEntryIndex].transactions[0].stockList = [];
+                        if (unitRates.length) {
+                            this.purchaseOrder.entries[activeEntryIndex].transactions[0].stockList = this.prepareUnitArr(unitRates);
+                            this.purchaseOrder.entries[activeEntryIndex].transactions[0].taxInclusive = isInclusiveTax;
+                            this.purchaseOrder.entries[activeEntryIndex].transactions[0].stockUnit = this.purchaseOrder.entries[activeEntryIndex].transactions[0].stockList[0].id;
+                            this.purchaseOrder.entries[activeEntryIndex].transactions[0].stockUnitCode = this.purchaseOrder.entries[activeEntryIndex].transactions[0].stockList[0].text;
+                        } else {
+                            this.purchaseOrder.entries[activeEntryIndex].transactions[0].stockList.push(obj);
+                            this.purchaseOrder.entries[activeEntryIndex].transactions[0].stockUnit = stockObj.stockUnit.uniqueName;
+                            this.purchaseOrder.entries[activeEntryIndex].transactions[0].stockUnitCode = stockObj.stockUnit.code;
+                        }
+                    }
+                    this.purchaseOrder.entries[activeEntryIndex].transactions[0].sku_and_customfields = description.join(', ');
                     this.purchaseOrder.entries[activeEntryIndex].transactions[0].fakeAccForSelect2 = selectedAcc.value;
                     this.purchaseOrder.entries[activeEntryIndex].transactions[0].accountName = accountName;
                     this.purchaseOrder.entries[activeEntryIndex].transactions[0].accountUniqueName = accountUniqueName;
                     this.purchaseOrder.entries[activeEntryIndex].transactions[0].quantity = 1;
-                    this.purchaseOrder.entries[activeEntryIndex].transactions[0].stockList = this.prepareUnitArr(unitRates);
-                    this.purchaseOrder.entries[activeEntryIndex].transactions[0].stockUnit = unitRates?.length ? unitRates[0]?.stockUnitUniqueName : "";
                     this.purchaseOrder.entries[activeEntryIndex].transactions[0].rate = unitRates?.length ? unitRates[0]?.rate : 1;
+                    this.purchaseOrder.entries[activeEntryIndex].transactions[0].applicableTaxes = stockObj.taxes;
+                    this.purchaseOrder.entries[activeEntryIndex].transactions[0].showCodeType = stockObj.hsnNumber ? 'hsn' : 'sac';
+                    this.purchaseOrder.entries[activeEntryIndex].transactions[0].hsnNumber = stockObj.hsnNumber;
+                    this.purchaseOrder.entries[activeEntryIndex].transactions[0].sacNumber = stockObj.sacNumber;
                     this.purchaseOrder.entries[activeEntryIndex].transactions[0].isStockTxn = true;
                     this.purchaseOrder.entries[activeEntryIndex].transactions[0].stockDetails =
                     {
@@ -4281,12 +4333,18 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                         name: variantObj.name,
                         uniqueName: variantObj.uniqueName
                     };
-
                     this.activeIndex = activeEntryIndex;
+                    if (isInclusiveTax) {
+                        setTimeout(() => {
+                            this.purchaseOrder.entries[activeEntryIndex].transactions[0].total = this.purchaseOrder.entries[activeEntryIndex].transactions[0].quantity * this.purchaseOrder.entries[activeEntryIndex].transactions[0].rate;
+                            this.calculateTransactionValueInclusively(this.purchaseOrder.entries[activeEntryIndex], this.purchaseOrder.entries[activeEntryIndex].transactions[0]);
+                        });
+                    } else {
+                        this.purchaseOrder.entries[activeEntryIndex].transactions[0].setAmount(this.purchaseOrder.entries[activeEntryIndex]);
+                        this.calculateWhenTrxAltered(this.purchaseOrder.entries[activeEntryIndex], this.purchaseOrder.entries[activeEntryIndex].transactions[0]);
+                        this.calculateStockEntryAmount(this.purchaseOrder.entries[activeEntryIndex].transactions[0]);
+                    }
                     this.onSelectSalesAccount(selectedAcc, this.purchaseOrder.entries[activeEntryIndex].transactions[0], this.purchaseOrder.entries[activeEntryIndex], false, 0, true);
-
-                    this.calculateStockEntryAmount(this.purchaseOrder.entries[activeEntryIndex].transactions[0]);
-                    this.calculateWhenTrxAltered(this.purchaseOrder.entries[activeEntryIndex], this.purchaseOrder.entries[activeEntryIndex].transactions[0]);
                 } else {
                     this.activeIndex = isExistingEntry;
                     this.handleQuantityBlur(this.purchaseOrder.entries[isExistingEntry], this.purchaseOrder.entries[isExistingEntry].transactions[0]);

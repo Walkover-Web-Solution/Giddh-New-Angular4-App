@@ -16,6 +16,8 @@ import { SalesActions } from '../sales/sales.action';
 
 @Injectable()
 export class InventoryAction {
+    /** Holds Get bulk list stock key name  */
+    public static GET_BULK_STOCK_LIST = 'GetBulkStockList';
 
     public addNewGroup$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -307,6 +309,18 @@ export class InventoryAction {
                 return { type: 'EmptyAction' };
             })));
 
+    /**
+     * Call API Using Effect and send response in store
+     *
+     * @type {Observable<Action>}
+     * @memberof InventoryAction
+     */
+    public getBulkStockList$: Observable<Action> = createEffect(() => this.action$
+        .pipe(
+            ofType(InventoryAction.GET_BULK_STOCK_LIST),
+            switchMap((action: CustomActions) => this._inventoryService.getBulkStockList(action.payload)),
+            map(response => this.getBulkStockListResponse(response))));
+
     constructor(private store: Store<AppState>, private _inventoryService: InventoryService, private action$: Actions,
         private _toasty: ToasterService, private router: Router, private _salesActions: SalesActions) {
 
@@ -553,6 +567,63 @@ export class InventoryAction {
         return {
             type: InventoryActionsConst.MoveStockResponse,
             payload: response
+        };
+    }
+    /**
+     * Use to Call Bulk Stock list API
+     *
+     * @param {*} response
+     * @return {*}  {CustomActions}
+     * @memberof InventoryAction
+     */
+    public getBulkStockList(response): CustomActions {
+        return {
+            type: InventoryAction.GET_BULK_STOCK_LIST,
+            payload: response
+        };
+    }
+    /**
+     * Set api data to custom key
+     *
+     * @param {BaseResponse<any, any>} value
+     * @return {*}  {CustomActions}
+     * @memberof InventoryAction
+     */
+    public getBulkStockListResponse(value: BaseResponse<any, any>): CustomActions {
+        const data = value.body;
+        data.results.forEach((result) => {
+                result.variantName = result?.variantName ? result.variantName : null,
+                result.variantUniqueName = result?.variantUniqueName ? result.variantUniqueName : null,
+                result.stockName = result?.stockName ? result.stockName : null,
+                result.stockUniqueName = result?.stockUniqueName ? result.stockUniqueName : null,
+                result.stockGroupName = result?.stockGroupName ? result.stockGroupName : null,
+                result.stockGroupUniqueName = result?.stockGroupUniqueName ? result.stockGroupUniqueName : null,
+                result.stockUnitName = result?.stockUnitName ? result.stockUnitName : null,
+                result.stockUnitCode = result?.stockUnitCode ? result.stockUnitCode : null,
+                result.purchaseUnits = result?.purchaseUnits ? result.purchaseUnits : null,
+                result.purchaseAccountName = result?.purchaseAccountName ? result.purchaseAccountName : null,
+                result.purchaseAccountUniqueName = result?.purchaseAccountUniqueName ? result.purchaseAccountUniqueName : null,
+                result.purchaseRate = result?.purchaseRate ? result.purchaseRate : null,
+                result.purchaseTaxInclusive = result.purchaseTaxInclusive === true || result?.purchaseTaxInclusive === false ? result.purchaseTaxInclusive : null,
+                result.salesUnits = result?.salesUnits ? result.salesUnits : null,
+                result.salesAccountName = result?.salesAccountName ? result.salesAccountName : null,
+                result.salesAccountUniqueName = result?.salesAccountUniqueName ? result.salesAccountUniqueName : null,
+                result.salesRate = result?.salesRate ? result.salesRate : null,
+                result.salesTaxInclusive = result.salesTaxInclusive === true || result?.salesTaxInclusive === false ? result.salesTaxInclusive : null,
+                result.fixedAssetTaxInclusive = result.fixedAssetTaxInclusive === true || result?.fixedAssetTaxInclusive === false ? result.fixedAssetTaxInclusive : null,
+                result.fixedAssetRate = result?.fixedAssetRate ? result.fixedAssetRate : null,
+                result.fixedAssetUnits = result?.fixedAssetUnits ? result.fixedAssetUnits : null,
+                result.fixedAssetAccountName = result?.fixedAssetAccountName ? result.fixedAssetAccountName : null,
+                result.fixedAssetAccountUniqueName = result?.fixedAssetAccountUniqueName ? result.fixedAssetAccountUniqueName : null,
+                result.hsnNo = result?.hsnNo ? result.hsnNo : null,
+                result.sacNo = result?.sacNo ? result.sacNo : null,
+                result.skuCode = result?.skuCode ? result.skuCode : null,
+                result.archive = result?.archive === true || result?.archive === false ? result.archive : null,
+                result.taxes = result?.taxes ? result.taxes : null
+        })
+        return {
+            type: InventoryActionsConst.BulkStockResponse,
+            payload: data
         };
     }
 }

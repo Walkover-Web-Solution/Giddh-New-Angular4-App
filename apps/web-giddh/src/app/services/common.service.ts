@@ -224,7 +224,7 @@ export class CommonService {
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
     }
-    
+
     /**
      * This will be use for get Barcode Scan Data
      *
@@ -240,7 +240,7 @@ export class CommonService {
             map((res) => {
                 let data: BaseResponse<CountryResponse, any> = res;
                 return data;
-            }));
+            }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
     }
 
 }

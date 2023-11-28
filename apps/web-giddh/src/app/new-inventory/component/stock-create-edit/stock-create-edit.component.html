@@ -1543,7 +1543,6 @@
                                                                             ></mat-checkbox>
                                                                         </ng-container>
                                                                     </td> -->
-
                                                                     <ng-container
                                                                         *ngFor="
                                                                             let customField of variant?.customFields;
@@ -1551,10 +1550,12 @@
                                                                         "
                                                                     >
                                                                         <td
+                                                                            *ngIf="variant?.customFields?.length"
                                                                             class="sales-purchase-info inventory-tab purchase-information-enable"
                                                                         >
                                                                             <div class="sales-purchase-wrapper">
                                                                                 <text-field
+                                                                                    class="d-block w-100 text-left"
                                                                                     *ngIf="
                                                                                         customField.fieldType?.type ===
                                                                                             availableFieldTypes.String ||
@@ -1589,6 +1590,7 @@
                                                                                         customField.fieldType?.type ===
                                                                                         availableFieldTypes.Number
                                                                                     "
+                                                                                    class="d-block w-100 text-left"
                                                                                     [cssClass]="
                                                                                         'custom-field form-control'
                                                                                     "

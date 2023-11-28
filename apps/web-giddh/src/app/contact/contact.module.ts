@@ -41,6 +41,9 @@ import { AccountUpdateNewDetailsModule } from '../shared/header/components/accou
 import { AsideMenuAccountModule } from '../shared/aside-menu-account/aside.menu.account.module';
 import { SelectTableColumnModule } from '../shared/select-table-column/select-table-column.module';
 import { GiddhPageLoaderModule } from '../shared/giddh-page-loader/giddh-page-loader.module';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatListModule } from '@angular/material/list';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 @NgModule({
     declarations: [
@@ -93,7 +96,10 @@ import { GiddhPageLoaderModule } from '../shared/giddh-page-loader/giddh-page-lo
         AccountUpdateNewDetailsModule,
         AsideMenuAccountModule,
         SelectTableColumnModule,
-        GiddhPageLoaderModule
+        GiddhPageLoaderModule,
+        MatSlideToggleModule,
+        MatListModule,
+        ScrollingModule
     ],
     providers: [
         GiddhCurrencyPipe

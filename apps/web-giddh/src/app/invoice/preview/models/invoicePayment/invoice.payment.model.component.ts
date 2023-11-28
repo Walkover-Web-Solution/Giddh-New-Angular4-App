@@ -248,7 +248,7 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
             this.paymentMode = paymentModeChanges;
             if (this.baseCurrencySymbol !== c.selectedInvoiceForPayment.currentValue.accountCurrencySymbol) {
                 this.isMulticurrencyAccount = true;
-                this.accountCurrency = this.selectedInvoiceForPayment.account.currency ? this.selectedInvoiceForPayment.account.currency.code : null;
+                this.accountCurrency = this.selectedInvoiceForPayment.account?.currency ? this.selectedInvoiceForPayment.account.currency.code : null;
                 this.getCurrencyRate(this.accountCurrency, this.companyCurrencyName);
             } else {
                 this.isMulticurrencyAccount = false;
@@ -320,7 +320,7 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
                     paymentMode.push({
                         label: account.name,
                         value: account.uniqueName,
-                        additional: { currency: account.currency?.code || this.companyCurrencyName, currencySymbol: account.currency?.symbol || this.baseCurrencySymbol }
+                        additional: { currency: account?.currency?.code || this.companyCurrencyName, currencySymbol: account?.currency?.symbol || this.baseCurrencySymbol }
                     });
                 });
             }

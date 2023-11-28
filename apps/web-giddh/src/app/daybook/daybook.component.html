@@ -606,7 +606,7 @@
                     </table>
                 </div>
 
-                <div class="mr-t2 text-center" [hidden]="!daybookData?.entries?.length">
+                <div class="mt-5 text-center" [hidden]="!daybookData?.entries?.length">
                     <small class="grey" *ngIf="daybookData?.totalItems"
                         >{{ daybookData?.totalItems }}
                         {{ commonLocaleData?.app_transactions }}
@@ -619,7 +619,7 @@
 
                 <!-- pagination -->
                 <div
-                    class="mt-1"
+                    class="pagination-wrapper mt-1"
                     [hidden]="!daybookData?.entries?.length || daybookData?.totalItems <= daybookData?.count"
                 >
                     <pagination
@@ -702,7 +702,21 @@
         (toggleOtherTaxesAsideMenu)="toggleOtherTaxesAsidePane()"
         [entrySide]="entrySide"
         [activeCompany]="activeCompany"
+        (showQuickAccountModalFromUpdateLedger)="toggleAsidePane()"
     ></update-ledger-entry-panel>
+</ng-template>
+
+<!-- aside menu section -->
+<ng-template #ledgerAsidePane>
+    <ledger-aside-pane
+        [class]="ledgerAsidePane"
+        [keyboardShortcut]="'esc'"
+        [localeData]="localeData"
+        [commonLocaleData]="commonLocaleData"
+        (onShortcutPress)="ledgerAsidePaneModal?.close()"
+        (closeAsideEvent)="ledgerAsidePaneModal?.close()"
+    >
+    </ledger-aside-pane>
 </ng-template>
 
 <!-- aside menu section -->

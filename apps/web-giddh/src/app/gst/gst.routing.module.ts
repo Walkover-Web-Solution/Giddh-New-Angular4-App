@@ -7,6 +7,7 @@ import { FileGstR3Component } from './gstR3/gstR3.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { UnitMappingComponent } from './unit-mapping/unit-mapping.component';
+import { FilingStatusComponent } from './filing-status/filing-status.component';
 
 const GST_ROUTES: Routes = [
     { path: '', component: GstComponent },
@@ -20,6 +21,7 @@ const GST_ROUTES: Routes = [
         ]
     },
     { path: 'unit-mapping', component: UnitMappingComponent },
+    { path: 'filing-status', component: FilingStatusComponent }
 ];
 
 @NgModule({

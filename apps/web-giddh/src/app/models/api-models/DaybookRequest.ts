@@ -31,6 +31,8 @@ export class ExportBodyRequest {
     isExpanded?: boolean;
     columnsToExport?: any[];
     q?: any;
+    tagNames?: any[];
+    includeTag?: boolean;
 }
 
 export interface DayBookRequestModel {
@@ -46,6 +48,7 @@ export interface DayBookRequestModel {
     particulars: any[];
     vouchers: any[];
     inventory: Inventory;
+    tags?: any[];
 }
 
 export interface Inventory {
