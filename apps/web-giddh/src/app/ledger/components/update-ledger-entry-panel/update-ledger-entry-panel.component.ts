@@ -477,7 +477,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         };
 
         this.vm.isMultiCurrencyAvailable = this.multiCurrencyAccDetails ?
-            !!(this.multiCurrencyAccDetails.currency && this.multiCurrencyAccDetails.currency !== this.profileObj?.baseCurrency)
+            !!(this.multiCurrencyAccDetails?.currency && this.multiCurrencyAccDetails.currency !== this.profileObj?.baseCurrency)
             : false;
 
         this.vm.foreignCurrencyDetails = { code: this.profileObj?.baseCurrency, symbol: this.profileObj.baseCurrencySymbol };
@@ -603,7 +603,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 }
             }
             // check if txn.selectedAccount is aleready set so it means account name is changed without firing deselect event
-            if (txn.selectedAccount) {
+            if (txn?.selectedAccount) {
                 // check if discount is added and update component as needed
                 this.vm.discountArray.map(d => {
                     if (d.particular === txn.selectedAccount?.uniqueName) {
@@ -615,7 +615,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 txn.particular.name = e.label;
             }
             // if ther's stock entry
-            if (e.additional.stock) {
+            if (e.additional?.stock) {
                 // check if we aleready have stock entry
                 if (this.vm.isThereStockEntry(e?.value)) {
                     selectCmp?.clear();
@@ -2153,14 +2153,14 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.makeAdjustmentCalculation();
 
         if (this.isPettyCash) {
-            this.vm.selectedLedger.transactions.forEach(item => {
+            this.vm.selectedLedger.transactions?.forEach(item => {
                 item.type = (item.type === 'cr' || item.type === 'CREDIT') ? 'CREDIT' : 'DEBIT';
             });
             // create missing property for petty cash
-            this.vm.selectedLedger.transactions.forEach(item => {
+            this.vm.selectedLedger.transactions?.forEach(item => {
                 item.type = (item.type === 'cr' || item.type === 'CREDIT') ? 'CREDIT' : 'DEBIT';
             });
-            this.vm.selectedLedger.transactions.forEach(f => {
+            this.vm.selectedLedger.transactions?.forEach(f => {
                 f.isDiscount = false;
                 f.isTax = false;
 
@@ -2515,7 +2515,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     private assignStockDetails(event: IOption, txn: ILedgerTransactionItem, requestObject?: any): void {
         const currentLedgerCategory = this.activeAccount ? this.generalService.getAccountCategory(this.activeAccount, this.activeAccount?.uniqueName) : '';
         // If current ledger is of income or expense category then send current ledger unique name else send particular account unique name
-        const accountUniqueName = event.additional.stock && (currentLedgerCategory === 'income' || currentLedgerCategory === 'expenses') ?
+        const accountUniqueName = event.additional?.stock && (currentLedgerCategory === 'income' || currentLedgerCategory === 'expenses') ?
             this.activeAccount ? this.activeAccount?.uniqueName : '' :
             event.additional?.uniqueName;
         this.searchService.loadDetails(accountUniqueName, requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
@@ -2544,7 +2544,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     uNameStr: data.body.parentGroups.join(', '),
                     category: data.body.category
                 };
-                if (txn.selectedAccount && txn.selectedAccount.stock) {
+                if (txn?.selectedAccount && txn.selectedAccount.stock) {
                     txn.selectedAccount.stock.rate = Number((txn.selectedAccount.stock.rate / this.vm.selectedLedger?.exchangeRate).toFixed(RATE_FIELD_PRECISION));
                 }
                 let rate = 0;
@@ -2552,8 +2552,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 let stockName = '';
                 let stockUniqueName = '';
                 let stockUnitUniqueName = '';
-                const stockDetails = txn.selectedAccount.stock;
-                if (txn.selectedAccount && stockDetails) {
+                const stockDetails = txn?.selectedAccount.stock;
+                if (txn?.selectedAccount && stockDetails) {
                     const variantUnitRates = txn.selectedAccount?.stock?.variant?.unitRates;
                     const defaultUnit = {
                         stockUnitCode: variantUnitRates[0].stockUnitCode,
@@ -2612,7 +2612,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     let incomeExpenseEntryLength = this.vm.isThereIncomeOrExpenseEntry();
                     this.vm.showNewEntryPanel = incomeExpenseEntryLength === 1;
                 }
-                const category = txn.selectedAccount.category;
+                const category = txn?.selectedAccount.category;
                 if (stockDetails && ((stockDetails.variant?.salesTaxInclusive && category === 'income') ||
                     (stockDetails.variant?.purchaseTaxInclusive && category === 'expenses') ||
                     (stockDetails.variant?.fixedAssetTaxInclusive && category === 'fixedassets'))) {

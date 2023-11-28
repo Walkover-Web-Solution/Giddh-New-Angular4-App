@@ -94,5 +94,6 @@ export const INVENTORY_API = {
         TOP_INVENTORY_GROUPS: 'company/:companyUniqueName/top-inventory-groups?inventoryType=:inventoryType&page=:page&count=:count',
         GET_MASTER: 'company/:companyUniqueName/inventory/:stockGroupUniqueName/masters?page=:page&count=:count',
         SEARCH: 'company/:companyUniqueName/stock-groups-with-stocks?inventoryType=:inventoryType&q=:q'
-    }
+    },
+    GET_BULK_STOCK_WITH_INVENTROY_TYPE: 'v2/company/:companyUniqueName/stock?page=:page&count=:count&inventoryType=:inventoryType', // POST call
 };

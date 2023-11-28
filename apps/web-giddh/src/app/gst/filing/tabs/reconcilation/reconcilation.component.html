@@ -34,7 +34,7 @@
                             <ng-container *ngTemplateOutlet="loaderTmpl"></ng-container>
 
                             <div
-                                class="filings-empty-state"
+                                class="filings-empty-state mb-5"
                                 *ngIf="
                                     !(gstReconcileInvoiceRequestInProcess$ | async) &&
                                     (gstNotFoundOnPortalData$ | async)?.data?.totalItems >
@@ -85,7 +85,7 @@
                             <ng-container *ngTemplateOutlet="loaderTmpl"></ng-container>
 
                             <div
-                                class="filings-empty-state"
+                                class="filings-empty-state mb-5"
                                 *ngIf="
                                     !(gstReconcileInvoiceRequestInProcess$ | async) &&
                                     (gstNotFoundOnGiddhData$ | async)?.data?.totalItems >
@@ -136,7 +136,7 @@
                             <ng-container *ngTemplateOutlet="loaderTmpl"></ng-container>
 
                             <div
-                                class="filings-empty-state"
+                                class="filings-empty-state mb-5"
                                 *ngIf="
                                     !(gstReconcileInvoiceRequestInProcess$ | async) &&
                                     (gstPartiallyMatchedData$ | async)?.data?.totalItems >
@@ -187,7 +187,7 @@
                             <ng-container *ngTemplateOutlet="loaderTmpl"></ng-container>
 
                             <div
-                                class="filings-empty-state"
+                                class="filings-empty-state mb-5"
                                 *ngIf="
                                     !(gstReconcileInvoiceRequestInProcess$ | async) &&
                                     (gstMatchedData$ | async)?.data?.totalItems > (gstMatchedData$ | async)?.data?.count
