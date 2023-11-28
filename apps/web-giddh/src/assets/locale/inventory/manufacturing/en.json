@@ -29,6 +29,7 @@
     "variant_already_selected": "Variant is already selected.",
     "confirm_delete_recipe": "Do you want to delete the recipe?",
     "confirm_delete_recipe_linked_stock": "Do you want to delete the raw stock?",
+    "confirm_delete_recipe_byproduct_stock": "Do you want to delete the by product stock?",
     "save_variants": "Please update stock to create recipe",
     "select_output_variant": "Select Output Variant",
     "enter_output_quantity": "Enter Output Quantity",
@@ -41,5 +42,6 @@
     "increase_value": "Increase Assets Value",
     "book_expense": "Book Expense",
     "liability_assets": "Liability/Asset A/c",
-    "expense_acc": "Expense A/c"
+    "expense_acc": "Expense A/c",
+    "by_product": "By Product"
 }

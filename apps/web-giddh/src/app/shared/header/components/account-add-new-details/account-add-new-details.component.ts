@@ -1,5 +1,5 @@
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
-import { take, takeUntil } from 'rxjs/operators';
+import { debounceTime, take, takeUntil } from 'rxjs/operators';
 import {
     AfterViewInit,
     ChangeDetectorRef,
@@ -429,7 +429,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 name: [''],
                 stateGstCode: ['']
             }),
-            stateCode: [{ value: '', disabled: false }, (this.stateList?.length ? (this.isStateRequired ? Validators.required:""):"")],
+            stateCode: [{ value: '', disabled: false }, (this.stateList?.length ? (this.isStateRequired ? Validators.required : "") : "")],
             county: this._fb.group({
                 code: [''],
                 name: ['']
@@ -741,7 +741,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                         additional: res[key].callingCode
                     });
                     // Creating Country Currency List
-                    if (res[key].currency !== undefined && res[key].currency !== null) {
+                    if (res[key]?.currency !== undefined && res[key]?.currency !== null) {
                         this.countryCurrency[res[key].alpha2CountryCode] = [];
                         this.countryCurrency[res[key].alpha2CountryCode] = res[key].currency.code;
                     }
@@ -1045,14 +1045,16 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
      * @returns {FormGroup}
      * @memberof AccountAddNewDetailsComponent
      */
-    public initialCustomFieldDetailsForm(value: CustomFieldsData = null): UntypedFormGroup {
+    public initialCustomFieldDetailsForm(value: any = null): UntypedFormGroup {
         let customFields = this._fb.group({
             uniqueName: [''],
             value: ['', (value?.isMandatory) ? Validators.required : undefined],
         });
+
         if (value) {
             customFields?.patchValue(value);
         }
+
         return customFields;
     }
 

@@ -1,4 +1,5 @@
 {
+    "account_missing_in_stock": "खाता स्टॉक से लिंक नहीं है।",
     "bulk_update": "थोक अद्यतन",
     "convert_tobill": "बिल में परिवर्तित करें",
     "expired": "समय सीमा समाप्त",
