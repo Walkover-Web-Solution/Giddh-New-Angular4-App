@@ -1167,8 +1167,10 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                     this.purchaseOrder.company.shippingDetails.stateName = defaultAddress.stateName;
                     this.purchaseOrder.company.shippingDetails.gstNumber = defaultAddress.taxNumber;
                     this.purchaseOrder.company.shippingDetails.pincode = defaultAddress.pincode;
-                    this.purchaseOrder.company.shippingDetails.county.code = defaultAddress?.county?.code;
-                    this.purchaseOrder.company.shippingDetails.county.name = defaultAddress?.county?.name;
+                    this.purchaseOrder.company.shippingDetails.county = {
+                        code: defaultAddress?.county?.code,
+                        name: defaultAddress?.county?.name
+                    }
                     this.changeDetection.detectChanges();
                 } else {
                     this.resetShippingAddress();
@@ -2775,12 +2777,14 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                     this.purchaseOrder.company.billingDetails.state.name = this.purchaseOrderDetails.company.billingDetails.stateName;
                     this.purchaseOrder.company.shippingDetails.state.code = this.purchaseOrderDetails.company.shippingDetails.stateCode;
                     this.purchaseOrder.company.shippingDetails.state.name = this.purchaseOrderDetails.company.shippingDetails.stateName;
-
-                    this.purchaseOrder.company.billingDetails.county.code = this.purchaseOrderDetails.company.billingDetails?.county?.code;
-                    this.purchaseOrder.company.billingDetails.county.name = this.purchaseOrderDetails.company.billingDetails?.county?.name;
-                    this.purchaseOrder.company.shippingDetails.county.code = this.purchaseOrderDetails.company.shippingDetails?.county?.code;
-                    this.purchaseOrder.company.shippingDetails.county.name = this.purchaseOrderDetails.company.shippingDetails?.county?.name;
-
+                    this.purchaseOrder.company.billingDetails.county = {
+                        code: this.purchaseOrderDetails.company.billingDetails?.county?.code,
+                        name: this.purchaseOrderDetails.company.billingDetails?.county?.name
+                    };
+                    this.purchaseOrder.company.shippingDetails.county = {
+                        code: this.purchaseOrderDetails.company.shippingDetails?.county?.code,
+                        name: this.purchaseOrderDetails.company.shippingDetails?.county?.name
+                    };
                     this.checkForAutoFillShippingAddress('company');
 
                     if (this.isUpdateMode) {
@@ -4092,6 +4096,15 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         this.dialog.closeAll();
     }
 
+    /**
+     * Set barcode machine typing to false if user clicked on dropdown
+     *
+     * @memberof CreatePurchaseOrderComponent
+     */
+    public setUserManuallyClicked(): void {
+        this.isBarcodeMachineTyping = false;
+    }
+
     // CMD + G functionality
     @HostListener('document:keydown', ['$event'])
     public handleKeyboardDownEvent(event: KeyboardEvent): void {
@@ -4108,6 +4121,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
 
         if (event.timeStamp - this.startTime < 2) {
             this.isBarcodeMachineTyping = true;
+        } else {
+            this.isBarcodeMachineTyping = false;
         }
 
         if (uniqueName && this.startTime) {

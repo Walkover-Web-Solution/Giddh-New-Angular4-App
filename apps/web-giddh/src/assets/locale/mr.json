@@ -706,5 +706,6 @@
         "yes": "पृष्ठ सोडा"
     },
     "app_region": "क्षेत्र",
-    "app_select_region": "क्षेत्र निवडा"
+    "app_select_region": "क्षेत्र निवडा",
+    "app_by_product_output" :"उत्पादनानुसार (आउटपुट)"
 }
