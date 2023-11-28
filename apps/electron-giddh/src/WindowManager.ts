@@ -78,7 +78,8 @@ export default class WindowManager {
                 webPreferences: {
                     nodeIntegration: true
                 },
-                tabbingIdentifier: 'giddh'
+                tabbingIdentifier: 'giddh',
+                fullscreen: true
             };
 
             let isMaximized = true;
