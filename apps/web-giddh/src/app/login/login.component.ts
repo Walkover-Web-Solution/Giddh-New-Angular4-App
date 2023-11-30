@@ -4,7 +4,7 @@ import { AppState } from "../store";
 import { Component, Inject, NgZone, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 import { ModalDirective } from "ngx-bootstrap/modal";
-import { Configuration, OTP_PROVIDER_URL } from "../app.constant";
+import { APPLE_LOGIN_URL, Configuration, OTP_PROVIDER_URL } from "../app.constant";
 import { Store, select } from "@ngrx/store";
 import { Observable, ReplaySubject } from "rxjs";
 import {
@@ -29,6 +29,7 @@ import { AuthenticationService } from "../services/authentication.service";
 import { CommonActions } from "../actions/common.actions";
 
 declare var initSendOTP: any;
+declare var AppleID;
 
 @Component({
     selector: "login",
@@ -199,6 +200,29 @@ export class LoginComponent implements OnInit, OnDestroy {
                     }
                 });
             });
+
+            if (navigator.userAgent.indexOf("Mac") > -1) {
+                let scriptTag = document.createElement('script');
+                scriptTag.src = APPLE_LOGIN_URL;
+                scriptTag.type = 'text/javascript';
+                scriptTag.defer = true;
+                scriptTag.onload = () => {
+
+                };
+                document.body.appendChild(scriptTag);
+            }
+
+        } else {
+            if (navigator.userAgent.indexOf("Mac") > -1) {
+                let scriptTag = document.createElement('script');
+                scriptTag.src = APPLE_LOGIN_URL;
+                scriptTag.type = 'text/javascript';
+                scriptTag.defer = true;
+                scriptTag.onload = () => {
+
+                };
+                document.body.appendChild(scriptTag);
+            }
         }
 
         //  get login state and check if twoWayAuth is needed
@@ -454,5 +478,63 @@ export class LoginComponent implements OnInit, OnDestroy {
                 this.toaster.errorToast(response?.message);
             }
         });
+    }
+
+    public parseJwt(token: any): any {
+        var base64Url = token.split('.')[1];
+        var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        var jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+
+        return JSON.parse(jsonPayload);
+    };
+
+    public async apple() {
+        // var width = 600;
+        // var height = 500;
+        // var left = (screen.width / 2) - (width / 2);
+        // var top = (screen.height / 2) - (height / 2);
+        // window.open("https://appleid.apple.com/auth/authorize?client_id=com.giddh.appsignin.client&redirect_uri=https://test.giddh.com/apple-login-callback&scope=name email&response_type=code id_token&response_mode=form_post", "Giddh - Apple Login", 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=' + width + ', height=' + height + ', top=' + top + ', left=' + left);
+
+        // window.addEventListener('message', async event => {
+        //     console.log(event);
+        // const decodedToken = this.parseJwt(event.data.id_token);
+        // let requestData = {}
+        // if (event.data.user) {
+        //     const userName = JSON.parse(event.data.user);
+        //     requestData = {
+        //         "email": decodedToken.email,
+        //         "name": `${userName.name.firstName} ${userName.name.lastName}`,
+        //         "socialId": decodedToken.sub,
+        //     };
+        // } else {
+        //     requestData = {
+        //         "email": decodedToken.email,
+        //         "socialId": decodedToken.sub,
+        //     };
+        // }
+        // console.log(`User Data : ${requestData}`);
+        // do your next stuff here
+        // });
+
+        // window.addEventListener('message', async event => {
+        //     console.log(event);
+        // });
+
+        try {
+            AppleID.auth.init({
+                clientId: 'com.giddh.appsignin.client',
+                scope: 'name email',
+                redirectURI: 'https://test.giddh.com/apple-login-callback',
+                state: 'init',
+                nonce: 'test',
+                usePopup: true
+            });
+            const data = await AppleID.auth.signIn();
+            console.log(this.parseJwt(data.authorization.id_token));
+        } catch (error) {
+            console.log(error);
+        }
     }
 }
