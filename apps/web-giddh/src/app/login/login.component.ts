@@ -79,6 +79,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     /** To Observe is google login inprocess */
     public isLoginWithGoogleInProcess$: Observable<boolean>;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    public showAppleLogin: boolean = false;
 
     // tslint:disable-next-line:no-empty
     constructor(private _fb: UntypedFormBuilder,
@@ -199,25 +200,18 @@ export class LoginComponent implements OnInit, OnDestroy {
             });
 
             if (navigator.userAgent.indexOf("Mac") > -1) {
+                this.showAppleLogin = true;
                 let scriptTag = document.createElement('script');
                 scriptTag.src = APPLE_LOGIN_URL;
                 scriptTag.type = 'text/javascript';
-                scriptTag.defer = true;
-                scriptTag.onload = () => {
-
-                };
                 document.body.appendChild(scriptTag);
             }
-
         } else {
             if (navigator.userAgent.indexOf("Mac") > -1) {
+                this.showAppleLogin = true;
                 let scriptTag = document.createElement('script');
                 scriptTag.src = APPLE_LOGIN_URL;
                 scriptTag.type = 'text/javascript';
-                scriptTag.defer = true;
-                scriptTag.onload = () => {
-
-                };
                 document.body.appendChild(scriptTag);
             }
         }
@@ -477,6 +471,13 @@ export class LoginComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Parse the JWT token and provide data
+     *
+     * @param {*} token
+     * @returns {*}
+     * @memberof LoginComponent
+     */
     public parseJwt(token: any): any {
         var base64Url = token.split('.')[1];
         var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
@@ -487,38 +488,13 @@ export class LoginComponent implements OnInit, OnDestroy {
         return JSON.parse(jsonPayload);
     };
 
-    public async apple() {
-        // var width = 600;
-        // var height = 500;
-        // var left = (screen.width / 2) - (width / 2);
-        // var top = (screen.height / 2) - (height / 2);
-        // window.open("https://appleid.apple.com/auth/authorize?client_id=com.giddh.appsignin.client&redirect_uri=https://test.giddh.com/apple-login-callback&scope=name email&response_type=code id_token&response_mode=form_post", "Giddh - Apple Login", 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=' + width + ', height=' + height + ', top=' + top + ', left=' + left);
-
-        // window.addEventListener('message', async event => {
-        //     console.log(event);
-        // const decodedToken = this.parseJwt(event.data.id_token);
-        // let requestData = {}
-        // if (event.data.user) {
-        //     const userName = JSON.parse(event.data.user);
-        //     requestData = {
-        //         "email": decodedToken.email,
-        //         "name": `${userName.name.firstName} ${userName.name.lastName}`,
-        //         "socialId": decodedToken.sub,
-        //     };
-        // } else {
-        //     requestData = {
-        //         "email": decodedToken.email,
-        //         "socialId": decodedToken.sub,
-        //     };
-        // }
-        // console.log(`User Data : ${requestData}`);
-        // do your next stuff here
-        // });
-
-        // window.addEventListener('message', async event => {
-        //     console.log(event);
-        // });
-
+    /**
+     * Shows apple login
+     *
+     * @returns {Promise<void>}
+     * @memberof LoginComponent
+     */
+    public async appleLogin(): Promise<void> {
         try {
             AppleID.auth.init({
                 clientId: 'com.giddh.appsignin.client',
@@ -529,6 +505,7 @@ export class LoginComponent implements OnInit, OnDestroy {
                 usePopup: true
             });
             const data = await AppleID.auth.signIn();
+            console.log(this.parseJwt(data));
             console.log(this.parseJwt(data.authorization.id_token));
         } catch (error) {
             console.log(error);
