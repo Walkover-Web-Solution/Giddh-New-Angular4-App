@@ -253,6 +253,18 @@ export class LoginComponent implements OnInit, OnDestroy {
                 this.store.dispatch(this.loginAction.hideTwoWayOtpPopup());
             }
         });
+
+        // Listen for authorization success.
+        document.addEventListener('AppleIDSignInOnSuccess', (event) => {
+            // Handle successful response.
+            console.log(event);
+        });
+
+        // Listen for authorization failures.
+        document.addEventListener('AppleIDSignInOnFailure', (event) => {
+            // Handle error.
+            console.log(event);
+        });
     }
 
     public onHiddenAuthModal(event: any): void {
@@ -510,8 +522,40 @@ export class LoginComponent implements OnInit, OnDestroy {
             const data = await AppleID.auth.signIn();
             console.log(data);
             console.log(this.parseJwt(data.authorization.id_token));
+
+            this.loginWithApple(data, this.parseJwt(data.authorization.id_token));
         } catch (error) {
             console.log(error);
         }
+    }
+
+    /**
+     * This will login with apple
+     *
+     * @param {*} data
+     * @param {*} parsedData
+     * @memberof LoginComponent
+     */
+    public loginWithApple(data: any, parsedData: any): void {
+        let model = {
+            authorizationCode: data.authorization?.code,
+            email: parsedData.email,
+            identityToken: data.authorization?.id_token,
+            state: data.state,
+            fullName: "",
+            user: ""
+        };
+
+        this.authenticationService.loginWithApple(model).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success") {
+                if (response.body?.user?.isVerified) {
+                    this.store.dispatch(this.loginAction.LoginSuccess());
+                } else {
+                    this.toaster.errorToast("Your account is not verified. Please verify account.");    
+                }
+            } else {
+                this.toaster.errorToast(response?.message);
+            }
+        });
     }
 }
