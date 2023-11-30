@@ -541,3 +541,4 @@ export const SAMPLE_FILES_URL = 'https://giddh-import-sample-files.s3.ap-south-1
 
 export const OTP_WIDGET_ID_NEW = '33686b716134333831313239';
 export const OTP_WIDGET_TOKEN_NEW = '205968TmXguUAwoD633af103P1';
+export const APPLE_LOGIN_URL = 'https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js';
