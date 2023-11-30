@@ -334,7 +334,7 @@
             </table>
         </div>
         <!-- pagination -->
-        <div class="text-center" *ngIf="(viewTransaction$ | async)?.totalPages > 1">
+        <div class="pagination-wrapper text-center" *ngIf="(viewTransaction$ | async)?.totalPages > 1">
             <pagination
                 [maxSize]="6"
                 [totalItems]="(viewTransaction$ | async)?.totalItems"

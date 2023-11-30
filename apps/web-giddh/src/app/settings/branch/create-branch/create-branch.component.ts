@@ -123,8 +123,8 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
                     country: {
                         countryName: response.countryV2 ? response.countryV2.countryName : '',
                         countryCode: response.countryV2 ? response.countryV2.alpha2CountryCode?.toLowerCase() : '',
-                        currencyCode: response.countryV2 && response.countryV2.currency ? response.countryV2.currency.code : '',
-                        currencyName: response.countryV2 && response.countryV2.currency ? response.countryV2.currency.symbol : ''
+                        currencyCode: response.countryV2 && response.countryV2?.currency ? response.countryV2.currency.code : '',
+                        currencyName: response.countryV2 && response.countryV2?.currency ? response.countryV2.currency.symbol : ''
                     }
                 }
                 this.branchForm.get('name')?.patchValue(this.companyDetails.name);

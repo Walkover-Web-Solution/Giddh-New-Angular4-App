@@ -465,7 +465,7 @@
                 </table>
             </div>
 
-            <div class="pagination-wrapper" *ngIf="(recurringData$ | async)?.totalItems > 20" [hidden]="isLoading">
+            <div class="pagination-wrapper mt-4" *ngIf="(recurringData$ | async)?.totalItems > 20" [hidden]="isLoading">
                 <div class="text-center">
                     <pagination
                         [maxSize]="5"
