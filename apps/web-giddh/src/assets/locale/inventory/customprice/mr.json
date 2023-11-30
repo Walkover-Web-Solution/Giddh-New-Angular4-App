@@ -4,5 +4,6 @@
     "price": "किंमत",
     "add_customer_group": "+ ग्राहक/गट जोडा",
     "exclusive": "अनन्य",
-    "inclusive": "समावेशक"
+    "inclusive": "समावेशक",
+    "delete_message": "तुम्हाला हटवायचे आहे का?"
 }

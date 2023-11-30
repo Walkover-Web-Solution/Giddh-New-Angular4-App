@@ -1,12 +1,11 @@
-<ng-container 
-    appTranslate 
-    [file]="'inventory/customprice'" 
-    (commonLocaleData)="commonLocaleData = $event"
-    (localeData)="localeData = $event"
->
+<ng-container appTranslate [file]="'inventory/customprice'" (commonLocaleData)="commonLocaleData = $event"
+    (localeData)="localeData = $event">
     <!-- page Title -->
     <hamburger-menu></hamburger-menu>
-    <div class="custom-grid-wrapper">
+    <div *ngIf="isLoading">
+        <giddh-page-loader></giddh-page-loader>
+    </div>
+    <div class="custom-grid-wrapper" *ngIf="!isLoading">
         <div class="mat-list-wrap">
             <div class="horizontal-scroll" id="horizontal-scroll">
                 <div class="inventory-sideabar border-grid">
@@ -14,165 +13,148 @@
                         <mat-list class="item-list border-grid pt-0">
                             <div class="list-head-gap">
                                 <div class="search-list position-relative mr-t15 mr-b15">
-                                    <text-field
-                                        type="text"
-                                        [placeholder]="'Search'"
-                                        [cssClass]="'form-control name-width'"
-                                    ></text-field>
+                                    <text-field type="text" [placeholder]="'Search'"
+                                        [cssClass]="'form-control name-width'"></text-field>
                                     <span>
                                         <i class="icon-search"></i>
                                     </span>
                                 </div>
                                 <div class="mr-b1">
-                                    <button mat-stroked-button color="primary" (click)="openSearchModal()">{{ localeData?.add_customer_group }}</button>
+                                    <button mat-stroked-button color="primary" (click)="openSearchModal('users')">{{
+                                        localeData?.add_customer_group }}</button>
                                 </div>
                             </div>
-                            <mat-list-item>
-                                <a href="javascript:;">
-                                    <span>Customer 1</span>
-                                    <span class="customer-delete"><i class="icon-trash"></i></span>
-                                </a>
-                            </mat-list-item>
-                            <mat-list-item>
-                                <a href="javascript:;">
-                                   <span>Customer 2</span>
-                                   <span class="customer-delete"><i class="icon-trash"></i></span>
-                                </a>
-                            </mat-list-item>
-                            <mat-list-item>
-                                <a href="javascript:;">
-                                    <span>Customer 3</span>
-                                    <span class="customer-delete"><i class="icon-trash"></i></span>
-                                </a>
-                            </mat-list-item>
-                            <mat-list-item>
-                                <a href="javascript:;">
-                                   <span>Customer 4</span>
-                                    <span class="customer-delete"><i class="icon-trash"></i></span>
-                                </a>
-                            </mat-list-item>
-                            <mat-list-item>
-                                <a href="javascript:;">
-                                    <span>Group 1</span>
-                                    <span class="customer-delete"><i class="icon-trash"></i></span>
-                                </a>
-                            </mat-list-item>
-                            <mat-list-item>
-                                <a href="javascript:;">
-                                    <span>Group 2</span>
-                                    <span class="customer-delete"><i class="icon-trash"></i></span>
-                                </a>
-                            </mat-list-item>
-                            <mat-list-item>
-                                <a href="javascript:;">
-                                    <span>Group 3</span>
-                                    <span class="customer-delete"><i class="icon-trash"></i></span>
-                                </a>
-                            </mat-list-item>
-                            <mat-list-item>
-                                <a href="javascript:;">
-                                    <span>Group 4</span>
-                                    <span class="customer-delete"><i class="icon-trash"></i></span>
+                            <mat-list-item *ngFor="let user of userList"
+                                [ngClass]="{'active' : user?.uniqueName === currentUser?.uniqueName}">
+                                <a href="javascript:;" (click)="selectUser(user)">
+                                    <span>{{ user?.name }}</span>
+                                    <span (click)="confirmationPopup(user?.uniqueName, 'user'); "
+                                        class="customer-delete"><i class="icon-trash"></i></span>
                                 </a>
                             </mat-list-item>
                         </mat-list>
                         <div class="customer-right-side">
-                            <div class="right-heading">
-                                <button mat-stroked-button color="primary" (click)="openSearchModal()"> {{ localeData?.add_inventory }} </button>
+                            <div class="right-heading" *ngIf="currentStock">
+                                <button mat-stroked-button color="primary" (click)="openSearchModal('stocks')"> {{
+                                    localeData?.add_inventory }} </button>
                                 <div class="search-list position-relative">
-                                    <text-field
-                                        type="text"
-                                        [placeholder]="'Search'"
-                                        [cssClass]="'form-control name-width'"
-                                    ></text-field>
+                                    <text-field type="text" [placeholder]="'Search'"
+                                        [cssClass]="'form-control name-width'"></text-field>
                                     <span>
                                         <i class="icon-search"></i>
                                     </span>
                                 </div>
                             </div>
-                            <div class="mr-t2">
-                                <div class="table-inventory">
-                                    <p class="inventory-head">
-                                        <strong>{{ commonLocaleData?.app_inventory }}</strong>
-                                    </p>
-                                    <div class="table-responsive mr-t05 mr-b15">
-                                        <table mat-table [dataSource]="dataSource" multiTemplateDataRows>
-                                            <ng-container matColumnDef="name">
-                                                <td mat-cell *matCellDef="let element">
-                                                    {{element.name}}
-                                                </td>
-                                                <td mat-footer-cell *matFooterCellDef>
-                                                    <a href="javascript:;">{{ localeData?.add_variant }}</a>
-                                                </td>
-                                            </ng-container>
-                                            <ng-container matColumnDef="price">
-                                                <td mat-cell *matCellDef="let element" class="price-width"> 
-                                                    <input-field
-                                                        [placeholder]="'00'"
-                                                        [label]="localeData?.price"
-                                                        [type]="'number'"
-                                                        [cssClass]="'text-right'"
-                                                    ></input-field>
-                                                </td>
-                                                <td mat-footer-cell *matFooterCellDef> </td>
-                                            </ng-container>
-                                            <ng-container matColumnDef="radio">
-                                                <td mat-cell *matCellDef="let element" class="child-td-nam">
-                                                    <div class="toggle-wrap">
-                                                        <mat-slide-toggle
-                                                            class="example-margin"
-                                                            color="primary"
-                                                            name="inclusiveExclusive" [(ngModel)]="inclusiveExclusive"
-                                                        >
-                                                        <span>
-                                                            {{
-                                                                inclusiveExclusive ? localeData?.inclusive : localeData?.exclusive
-                                                            }}
-                                                        </span>
-                                                        </mat-slide-toggle>
+                            <ng-container *ngIf="currentStock">
+                                <div class="mr-t2">
+                                    <div class="table-inventory">
+                                        <div class="float-right">
+                                            <button mat-stroked-button class="delete-icon mb-2 mr-r1"
+                                                (click)="confirmationPopup('stockUniqueName', 'stock')">
+                                                <i class="icon-trash"></i>
+                                            </button>
+                                        </div>
+                                        <div [formGroup]="discountForm">
+                                            <!-- <div class="d-flex align-items-center justify-content-space-between"> -->
+                                            <p class="inventory-head">
+                                                <strong>{{ commonLocaleData?.app_inventory }}</strong>
+                                            </p>
+                                            <!-- </div> -->
+                                            <ng-container
+                                                *ngFor="let discountCollection of discountForm.get('discountInfo')['controls']; let i = index">
+                                                    <div class="table-responsive mr-t05 mr-b15" [formGroupName]="i">
+                                                        <table class="table table-bordered">
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td>
+                                                                        Name of Variant
+                                                                    </td>
+
+                                                                    <td class="price-width">
+                                                                        <input-field [placeholder]="'00'"
+                                                                            [label]="localeData?.price"
+                                                                            [type]="'number'" [cssClass]="'text-right'"
+                                                                            formControlName="price"></input-field>
+                                                                    </td>
+
+
+
+                                                                    <td class="child-td-nam">
+                                                                        <div class="toggle-wrap">
+                                                                            <mat-slide-toggle class="example-margin"
+                                                                                color="primary"
+                                                                                name="inclusiveExclusive"
+                                                                                [(ngModel)]="inclusiveExclusive"
+                                                                                formControlName="discountExclusive">
+                                                                                <span>
+                                                                                    {{
+                                                                                    inclusiveExclusive ?
+                                                                                    localeData?.inclusive :
+                                                                                    localeData?.exclusive
+                                                                                    }}
+                                                                                </span>
+                                                                            </mat-slide-toggle>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td class="overflow-visible">
+                                                                        <!-- <input-field [placeholder]="'00'"
+                                                                        [label]="commonLocaleData?.app_discount" [type]="'number'"
+                                                                        [cssClass]="'text-right'">
+                                                                    </input-field> -->
+                                                                        <div
+                                                                            class="text-right flex-fill discount-input">
+                                                                            <discount-control-component
+                                                                                #discountComponent
+                                                                                [discountMenu]="false"
+                                                                                [discountsList]="discountsList"
+                                                                                [discountAccountsDetails]="[]"
+                                                                                [discountSum]="50"
+                                                                                formControlName="discountValue"
+                                                                                [showHeaderText]="false"
+                                                                                [maskInput]="inputMaskFormat"
+                                                                                [prefixInput]="'₹'" [suffixInput]="''"
+                                                                                [commonLocaleData]="commonLocaleData"
+                                                                                [readonly]="false">
+                                                                            </discount-control-component>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td>
+                                                                        <input-field [placeholder]="'00'"
+                                                                            formControlName="quantity"
+                                                                            [label]="commonLocaleData?.app_defaultquantity"
+                                                                            [type]="'number'" [matSuffix]="'kg'"
+                                                                            [cssClass]="'text-right'"></input-field>
+                                                                    </td>
+                                                                    <td class="delete-width">
+                                                                        <div class="delete-show">
+                                                                            <button mat-stroked-button
+                                                                                class="delete-icon"
+                                                                                (click)="confirmationPopup('variantUniqueName', 'variant')">
+                                                                                <i class="icon-trash"></i>
+                                                                            </button>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                            <tfoot>
+                                                                <tr>
+                                                                    <td *ngIf="false" colspan="6">
+                                                                        <a href="javascript:;">
+                                                                            {{ localeData?.add_variant }}
+                                                                        </a>
+                                                                    </td>
+                                                                    <td colspan="6" class="text-right px-0 mt-3">
+                                                                        <button *ngIf="true" mat-stroked-button
+                                                                            color="primary" class="my-3">Save</button>
+                                                                    </td>
+                                                                </tr>
+                                                            </tfoot>
+                                                        </table>
                                                     </div>
-                                                </td>
-                                                <td mat-footer-cell *matFooterCellDef> </td>
                                             </ng-container>
-                                            <ng-container matColumnDef="discount">
-                                                <td mat-cell *matCellDef="let element"> 
-                                                    <input-field
-                                                        [placeholder]="'00'"
-                                                        [label]="commonLocaleData?.app_discount"
-                                                        [type]="'number'"
-                                                        [cssClass]="'text-right'"
-                                                    ></input-field>
-                                                </td>
-                                                <td mat-footer-cell *matFooterCellDef> </td>
-                                            </ng-container>
-                                            <ng-container matColumnDef="quantity">
-                                                <td mat-cell *matCellDef="let element">
-                                                    <input-field
-                                                        [placeholder]="'00'"
-                                                        [label]="commonLocaleData?.app_defaultquantity"
-                                                        [type]="'number'"
-                                                        [matSuffix]="'kg'"
-                                                        [cssClass]="'text-right'"
-                                                    ></input-field>
-                                                </td>
-                                                <td mat-footer-cell *matFooterCellDef> </td>
-                                            </ng-container>
-                                            <ng-container matColumnDef="delete">
-                                                <td mat-cell *matCellDef="let element" class="delete-width">
-                                                    <div class="delete-show">
-                                                        <button mat-stroked-button class="delete-icon">
-                                                            <i class="icon-trash"></i>
-                                                        </button>
-                                                    </div>
-                                                </td>
-                                                <td mat-footer-cell *matFooterCellDef> </td>
-                                            </ng-container>
-                                            <tr class="child-row" mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-                                            <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
-                                        </table>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="table-inventory">
+                                    <!-- <div class="table-inventory">
                                     <p class="inventory-head">
                                         <strong>{{ commonLocaleData?.app_inventory }}</strong>
                                     </p>
@@ -251,22 +233,18 @@
                                             <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
                                         </table>
                                     </div>
+                                </div> -->
                                 </div>
-                            </div>
-                            <div class="pagination-wrapper">
-                                <pagination
-                                    [totalItems]="500"
-                                    [maxSize]="3"
-                                    class="pagination-sm"
-                                    [boundaryLinks]="true"
-                                    [itemsPerPage]="paginationLimit"
-                                    [rotate]="false"
-                                    [firstText]="'First'"
-                                    [previousText]="'Previous'"
-                                    [nextText]="'Next'"
-                                    [lastText]="'Last'"
-                                ></pagination>
-                            </div>
+                                <div class="pagination-wrapper">
+                                    <pagination [totalItems]="pagination.stock.totalPages" [maxSize]="3"
+                                        class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="paginationLimit"
+                                        (pageChanged)="pageChanged($event, 'stock')" [(ngModel)]="pagination.stock.page"
+                                        [rotate]="false" [firstText]="commonLocaleData?.app_first"
+                                        [previousText]="commonLocaleData?.app_previous"
+                                        [nextText]="commonLocaleData?.app_next" [lastText]="commonLocaleData?.app_last">
+                                    </pagination>
+                                </div>
+                            </ng-container>
                         </div>
                     </div>
                 </div>
@@ -282,27 +260,21 @@
 
 
 
-    <!--CMD + G modal  -->
-    <ng-template #addSearchModal>
-        <command-k
-            (newTeamCreationEmitter)="handleNewTeamCreationEmitter($event)"
-            (groupEmitter)="makeGroupEntryInDB($event)"
-            (selectedItemEmitter)="onItemSelected($event)"
-            [parentEle]="mdl"
-            [isOpen]="true"
-            [setParentWidth]="true"
-        ></command-k>
-        <div class="shortcuts">
-            <strong>↑</strong> <strong>↓</strong>&nbsp; {{ localeData?.to_navigate }}
-            <strong class="mr-l1" [attr.aria-label]="commonLocaleData?.app_return">↵</strong>&nbsp;
-            {{ localeData?.to_select }}
-            <strong class="mr-l1" [attr.aria-label]="commonLocaleData?.app_escape">{{
-                commonLocaleData?.app_esc
-            }}</strong
-            >&nbsp;
-            {{ localeData?.to_dismiss }}
-        </div>
-    </ng-template>
+<!--CMD + G modal  -->
+<ng-template #addSearchModal>
+    <items-list-popup (newTeamCreationEmitter)="handleNewTeamCreationEmitter($event)"
+        (selectedItemEmitter)="onItemSelected($event?.item, $event?.type)" (closeDailogEmitter)="dialogRef.close()"
+        [parentEle]="mdl" [isOpen]="true" [setParentWidth]="true" [apiData]="apiData"></items-list-popup>
+    <div class="shortcuts">
+        <strong>↑</strong> <strong>↓</strong>&nbsp; {{ localeData?.to_navigate }}
+        <strong class="mr-l1" [attr.aria-label]="commonLocaleData?.app_return">↵</strong>&nbsp;
+        {{ localeData?.to_select }}
+        <strong class="mr-l1" [attr.aria-label]="commonLocaleData?.app_escape">{{
+            commonLocaleData?.app_esc
+            }}</strong>&nbsp;
+        {{ localeData?.to_dismiss }}
+    </div>
+</ng-template>
 
 <!-- add variant modal -->
 <!-- <ng-template #addVariant>

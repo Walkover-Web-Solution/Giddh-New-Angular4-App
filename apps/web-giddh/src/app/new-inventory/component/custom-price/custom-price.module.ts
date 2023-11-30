@@ -7,7 +7,7 @@ import { FormFieldsModule } from '../../../theme/form-fields/form-fields.module'
 import { MatButtonModule } from '@angular/material/button';
 import { MatChipsModule } from '@angular/material/chips';
 import { TranslateDirectiveModule } from '../../../theme/translate/translate.directive.module';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { CustomerWiseComponent } from './customer-wise/customer-wise.component';
 import { CustomPriceRoutingModule } from './custom-price.routing.module';
@@ -17,6 +17,11 @@ import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { MatDialogModule } from '@angular/material/dialog';
 import { CommandKModule } from '../../../theme/command-k/command.k.module';
+import { GiddhPageLoaderModule } from '../../../shared/giddh-page-loader/giddh-page-loader.module';
+import { AdvanceListItemsPopupComponent } from './advance-list-items-popup/advance-list-items-popup.component';
+import { ScrollingModule } from '@angular/cdk/scrolling';
+import { NewConfirmModalModule } from '../../../theme/new-confirm-modal';
+import { DiscountControlModule } from '../../../theme/discount-control/discount-control.module';
 
 @NgModule({
     imports: [
@@ -35,11 +40,17 @@ import { CommandKModule } from '../../../theme/command-k/command.k.module';
         MatSlideToggleModule,
         PaginationModule,
         MatDialogModule,
-        CommandKModule
+        CommandKModule,
+        GiddhPageLoaderModule,
+        ScrollingModule,
+        ReactiveFormsModule,
+        NewConfirmModalModule,
+        DiscountControlModule
     ],
     exports: [
-        CustomerWiseComponent
+        CustomerWiseComponent,
+        AdvanceListItemsPopupComponent
     ],
-    declarations: [MainComponent, CustomerWiseComponent]
+    declarations: [MainComponent, CustomerWiseComponent, AdvanceListItemsPopupComponent]
 })
 export class CustomPriceModule { }

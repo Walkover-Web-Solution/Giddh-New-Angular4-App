@@ -9,7 +9,8 @@
                         color: var(--color-common-primary-text);
                     }
                 }
-                &:hover {
+                &:hover,
+                &.active {
                     background-color: var(--color-giddh-blue);
                     .mdc-list-item__content {
                         a {
@@ -46,17 +47,29 @@
                                 &.delete-width {
                                     width: 5%;
                                 }
-                                .delete-show {
-                                    display: none;
-                                }
-                            }
-                            &:hover {
-                                td {
-                                    .delete-show {
-                                        display: block;
+                                .discount-input {
+                                    width: 200px;
+
+                                    .multi-select {
+                                        input {
+                                            height: 48px;
+                                            &:focus{
+                                                border-color: var(--color-giddh-blue) !important;
+                                            }
+                                        }
                                     }
                                 }
+                                // .delete-show {
+                                //     display: none;
+                                // }
                             }
+                            // &:hover {
+                            //     td {
+                            //         .delete-show {
+                            //             display: block;
+                            //         }
+                            //     }
+                            // }
                         }
                     }
                 }

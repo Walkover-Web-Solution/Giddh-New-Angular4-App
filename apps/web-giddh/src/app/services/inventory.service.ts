@@ -1478,16 +1478,86 @@ export class InventoryService {
         }), catchError((e) => this.errorHandler.HandleCatch<any[], string>(e, '', {})));
     }
 
-     /**
-     * Get Bulk stock list
-     *
-     * @param {string} request
-     * @returns {Observable<BaseResponse<any, string>>}
-     * @memberof InventoryService
-     */
+    /**
+    * Get Bulk stock list
+    *
+    * @param {string} request
+    * @returns {Observable<BaseResponse<any, string>>}
+    * @memberof InventoryService
+    */
     public getBulkStockList(request: any): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let apiUrl = this.config.apiUrl + INVENTORY_API.GET_BULK_STOCK_WITH_INVENTROY_TYPE?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':page', encodeURIComponent(request.page))?.replace(':count', encodeURIComponent(request.count))?.replace(':inventoryType', encodeURIComponent(request.inventoryType));
-        return this.http.post(apiUrl,request.body);
+        return this.http.post(apiUrl, request.body);
+    }
+
+    /**
+     * Get Customer/Vendor Wise Discount Default Customer list
+     *
+     * @param {*} request
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof InventoryService
+     */
+    public getCustomerVendorDiscountUserList(request: any): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        let apiUrl = this.config.apiUrl + INVENTORY_API.GET_CUSTOMER_VENDOR_DISCOUNT_USERS?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':page', encodeURIComponent(request.page))?.replace(':count', encodeURIComponent(request.count))?.replace(':group', encodeURIComponent(request.group));
+
+        return this.http.get(apiUrl);
+    }
+
+    /**
+     * Get Customer/Vendor Wise Discount All Customer and Group list
+     *
+     * @param {*} request
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof InventoryService
+     */
+    public getFlattenAccountsList(request: any): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        let apiUrl = this.config.apiUrl + INVENTORY_API.GET_FLATTEN_ACCOUNTS?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':page', encodeURIComponent(request.page))?.replace(':count', encodeURIComponent(request.count))?.replace(':group', encodeURIComponent(request.group))?.replace(':query', encodeURIComponent(request.query || ''));
+
+        return this.http.get(apiUrl);
+    }
+
+    /**
+    * Get Customer/Vendor Wise Discount Customer list
+    *
+    * @param {*} request
+    * @return {*}  {Observable<BaseResponse<any, any>>}
+    * @memberof InventoryService
+    */
+    public getStockList(request: any): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        let apiUrl = this.config.apiUrl + INVENTORY_API.GET_ALL_STOCKS?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':page', encodeURIComponent(request.page))?.replace(':count', encodeURIComponent(request.count))?.replace(':query', encodeURIComponent(request.query || ''));
+
+        return this.http.get(apiUrl);
+    }
+
+    /**
+     * Get list of stock and its variant based on user (uniqueName)
+     *
+     * @param {*} request
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof InventoryService
+     */
+    public getAllDiscount(request: any): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        let apiUrl = this.config.apiUrl + INVENTORY_API.GET_ALL_DISCOUNTS?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':page', encodeURIComponent(request.page))?.replace(':count', encodeURIComponent(request.count))?.replace(':uniqueName', encodeURIComponent(request.uniqueName));
+
+        return this.http.get(apiUrl);
+    }
+
+    public deleteDiscountRecord(request: any): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        let apiUrl = this.config.apiUrl + INVENTORY_API.DELETE_DISCOUNT_RECORD?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':stockUniqueName', encodeURIComponent(request.stockUniqueName))?.replace(':variantUniqueName', encodeURIComponent(request.variantUniqueName))?.replace(':userUniqueName', encodeURIComponent(request.userUniqueName));
+
+        return this.http.delete(apiUrl);
+    }
+
+    public getStockVariants(stockUniqueName: string): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        let apiUrl = this.config.apiUrl + INVENTORY_API.GET_STOCK_ALL_VARIANTS?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':stockUniqueName', encodeURIComponent(stockUniqueName));
+
+        return this.http.get(apiUrl);
     }
 }

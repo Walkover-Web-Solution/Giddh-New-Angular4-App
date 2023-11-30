@@ -9,18 +9,22 @@
                 height: 100%;
                 position: relative;
                 min-height: calc(100vh - 120px);
+                min-width: 218px;
                 .mat-mdc-list-item {
                     cursor: pointer;
                     height: 32px;
                     a {
                         .customer-delete {
                             display: none;
+                            &:hover{
+                                animation: scaleMe 200ms ease forwards;
+                            }
                         }
                     }
                     &:hover {
                         a {
                             .customer-delete {
-                                display: block;
+                                display: block;                                
                             }
                         }
                     }
@@ -63,22 +67,22 @@
                                 }
                             }
                         }
-                        .delete-icon {
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                            height: 32px;
-                            min-width: 42px;
-                            border-radius: 5px;
-                            color: var(--color-tertiary-button-text);
-                            border: 1px solid var(--color-common-secondary-border);
-                            background-color: var(--color-tertiary-button-background);
-                            i {
-                                font-size: var(--font-size-15);
-                                position: relative;
-                                top: 2px;
-                            }
-                        }
+                    }
+                }
+                .delete-icon {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    height: 32px;
+                    min-width: 42px;
+                    border-radius: 5px;
+                    color: var(--color-tertiary-button-text);
+                    border: 1px solid var(--color-common-secondary-border);
+                    background-color: var(--color-tertiary-button-background);
+                    i {
+                        font-size: var(--font-size-15);
+                        position: relative;
+                        top: 2px;
                     }
                 }
             }
@@ -121,5 +125,14 @@
                 }
             }
         }
+    }
+}
+
+@keyframes scaleMe {
+    from {
+        transform: scale(1);
+    }
+    to {
+        transform: scale(1.2);
     }
 }
