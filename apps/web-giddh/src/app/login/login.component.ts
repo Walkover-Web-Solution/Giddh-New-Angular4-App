@@ -508,7 +508,7 @@ export class LoginComponent implements OnInit, OnDestroy {
                 usePopup: true
             });
             const data = await AppleID.auth.signIn();
-            console.log(this.parseJwt(data));
+            console.log(data);
             console.log(this.parseJwt(data.authorization.id_token));
         } catch (error) {
             console.log(error);
