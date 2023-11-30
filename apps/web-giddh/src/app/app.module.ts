@@ -35,6 +35,7 @@ import { MobileRestrictedComponent } from './mobile-restricted/mobile-restricted
 import { LoaderModule } from './loader/loader.module';
 import { PageModule } from './page/page.module';
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import { AppleLoginCallbackComponent } from './apple-login-callback/apple-login-callback.component';
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -62,7 +63,8 @@ if (!environment.production) {
     declarations: [
         AppComponent,
         AppLoginSuccessComponent,
-        MobileRestrictedComponent
+        MobileRestrictedComponent,
+        AppleLoginCallbackComponent
     ],
     /**
      * Import Angular's modules.
