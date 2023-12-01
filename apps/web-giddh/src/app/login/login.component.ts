@@ -502,7 +502,7 @@ export class LoginComponent implements OnInit, OnDestroy {
             AppleID.auth.init({
                 clientId: 'com.giddh.appsignin.client',
                 scope: 'name email',
-                redirectURI: 'https://test.giddh.com/apple-login-callback',
+                redirectURI: PRODUCTION_ENV || isElectron ? 'https://app.giddh.com' : 'https://test.giddh.com' + '/apple-login-callback',
                 state: 'init',
                 nonce: 'test',
                 usePopup: true
@@ -530,9 +530,9 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.authenticationService.loginWithApple(model).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
                 if (response.body?.user?.isVerified) {
-                    this.store.dispatch(this.loginAction.LoginWithPasswdResponse(response.body));
+                    this.store.dispatch(this.loginAction.LoginWithPasswdResponse(response));
                 } else {
-                    this.toaster.errorToast("Your account is not verified. Please verify account.");
+                    this.toaster.errorToast("Your account is not verified. Please contact support.");
                 }
             } else {
                 this.toaster.errorToast(response?.message);
