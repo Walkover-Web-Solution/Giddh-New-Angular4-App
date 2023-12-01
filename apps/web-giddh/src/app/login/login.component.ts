@@ -530,7 +530,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.authenticationService.loginWithApple(model).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
                 if (response.body?.user?.isVerified) {
-                    this.store.dispatch(this.loginAction.LoginSuccess());
+                    this.store.dispatch(this.loginAction.LoginWithPasswdResponse(response.body));
                 } else {
                     this.toaster.errorToast("Your account is not verified. Please verify account.");
                 }
