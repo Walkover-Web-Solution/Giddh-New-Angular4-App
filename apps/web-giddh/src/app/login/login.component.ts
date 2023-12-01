@@ -517,10 +517,7 @@ export class LoginComponent implements OnInit, OnDestroy {
                 usePopup: true
             });
             const data = await AppleID.auth.signIn();
-            console.log(data);
-            console.log(this.parseJwt(data.authorization.id_token));
-
-            this.loginWithApple(data, this.parseJwt(data.authorization.id_token));
+            this.loginWithApple(data?.authorization?.code);
         } catch (error) {
             console.log(error);
         }
@@ -533,14 +530,9 @@ export class LoginComponent implements OnInit, OnDestroy {
      * @param {*} parsedData
      * @memberof LoginComponent
      */
-    public loginWithApple(data: any, parsedData: any): void {
+    public loginWithApple(authorizationCode: string): void {
         let model = {
-            authorizationCode: data.authorization?.code,
-            email: parsedData.email,
-            identityToken: data.authorization?.id_token,
-            state: data.state,
-            fullName: "",
-            user: ""
+            authorizationCode: authorizationCode
         };
 
         this.authenticationService.loginWithApple(model).pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -548,7 +540,7 @@ export class LoginComponent implements OnInit, OnDestroy {
                 if (response.body?.user?.isVerified) {
                     this.store.dispatch(this.loginAction.LoginSuccess());
                 } else {
-                    this.toaster.errorToast("Your account is not verified. Please verify account.");    
+                    this.toaster.errorToast("Your account is not verified. Please verify account.");
                 }
             } else {
                 this.toaster.errorToast(response?.message);
