@@ -322,6 +322,12 @@ small {
     height: 18px;
 }
 
+.ico-apple img {
+    width: 21px !important;
+    height: 21px !important;
+    margin-bottom: 3px;
+}
+
 .login-option,
 .login-option a {
     color: var(--color-blue);
