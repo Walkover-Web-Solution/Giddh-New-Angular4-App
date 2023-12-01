@@ -266,14 +266,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             }
             const index = this.portalIndex;
             let change = mappings.at(index);
-            let defaultUser = mappings.controls.find(control => control.get('default')?.value === true);
-            if (defaultUser) {
-                this.addAccountForm.patchValue({
-                    attentionTo: defaultUser.get('name').value,
-                    contactNo: defaultUser.get('contactNo').value,
-                    email: defaultUser.get('email').value
-                });
-            }
             if (change) {
                 if (change.invalid) {
                     this.portalIndex = undefined;
@@ -314,10 +306,14 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 if (response?.attentionTo || response?.mobileNo || response?.email) {
                     let user = users.controls.find(control => control.get('default')?.value === true);
                     if (user) {
-                        user?.get('name').setValue(response?.attentionTo);
-                        user?.get('email').setValue(response?.email);
-                        user?.get('contactNo').setValue(response?.mobileNo);
-                        user?.get('default').setValue(true);
+                        if (user?.get('name')?.value && user?.get('email')?.value && user?.get('contactNo')?.value) {
+                            return;
+                        } else {
+                            user?.get('name').setValue(response?.attentionTo);
+                            user?.get('email').setValue(response?.email);
+                            user?.get('contactNo').setValue(response?.mobileNo);
+                            user?.get('default').setValue(true);
+                        }
                     } else {
                         let setValue = false;
                         users.controls?.find((control) => {
@@ -332,12 +328,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                             this.addNewPortalUser(data);
                         }
                     }
-                } else {
-                    users.controls?.forEach((control, i) => {
-                        if (control.get('default')?.value === true) {
-                            users.removeAt(i);
-                        }
-                    });
                 }
             });
 
@@ -792,7 +782,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             });
         }
 
-        accountRequest['portalDomain'] = accountRequest['portalDomain'].filter(portalDomain => portalDomain.default !== true);
         accountRequest['portalDomain'].forEach(portalDomain => {
             delete portalDomain.default;
             delete portalDomain.uniqueName;
