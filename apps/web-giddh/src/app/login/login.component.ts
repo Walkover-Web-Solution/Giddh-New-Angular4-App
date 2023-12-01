@@ -250,18 +250,6 @@ export class LoginComponent implements OnInit, OnDestroy {
                 this.store.dispatch(this.loginAction.hideTwoWayOtpPopup());
             }
         });
-
-        // Listen for authorization success.
-        document.addEventListener('AppleIDSignInOnSuccess', (event) => {
-            // Handle successful response.
-            console.log(event);
-        });
-
-        // Listen for authorization failures.
-        document.addEventListener('AppleIDSignInOnFailure', (event) => {
-            // Handle error.
-            console.log(event);
-        });
     }
 
     public onHiddenAuthModal(event: any): void {
@@ -532,7 +520,8 @@ export class LoginComponent implements OnInit, OnDestroy {
      */
     public loginWithApple(authorizationCode: string): void {
         let model = {
-            authorizationCode: authorizationCode
+            authorizationCode: authorizationCode,
+            requestFromWeb: true
         };
 
         this.authenticationService.loginWithApple(model).pipe(takeUntil(this.destroyed$)).subscribe(response => {
