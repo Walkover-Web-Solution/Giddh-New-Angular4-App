@@ -215,6 +215,13 @@ inventory-master {
     }
 }
 
+// Mat-Select search input
+.mat-mdc-option {
+    &.contains-mat-select-search {
+        background-color: var(--color-white);
+    }
+}
+
 // For Bulk Stock Edit
 .bulk-stock {
     .bulk-stock-hide-show-button {
@@ -254,18 +261,18 @@ inventory-master {
     }
 }
 
-/*---- create-menufacturing ----*/
-.consumption-details-wrapper {
-    .mat-expansion-panel {
-        .mat-expansion-panel-header {
-            height: 45px;
-
-            &.mat-expanded {
+    /*---- create-menufacturing ----*/
+    .consumption-details-wrapper {
+        .mat-expansion-panel {
+            .mat-expansion-panel-header {
                 height: 45px;
+
+                &.mat-expanded {
+                    height: 45px;
+                }
             }
         }
     }
-}
 
 // Mat-Select search input
 .mat-mdc-option {
