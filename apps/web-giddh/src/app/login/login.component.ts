@@ -80,6 +80,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     /** To Observe is google login inprocess */
     public isLoginWithGoogleInProcess$: Observable<boolean>;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Show apple login if electron app and mac user */
     public showAppleLogin: boolean = false;
 
     // tslint:disable-next-line:no-empty
@@ -201,14 +202,6 @@ export class LoginComponent implements OnInit, OnDestroy {
                     }
                 });
             });
-
-            if (navigator.userAgent.indexOf("Mac") > -1) {
-                this.showAppleLogin = true;
-                let scriptTag = document.createElement('script');
-                scriptTag.src = APPLE_LOGIN_URL;
-                scriptTag.type = 'text/javascript';
-                document.body.appendChild(scriptTag);
-            }
         } else {
             if (navigator.userAgent.indexOf("Mac") > -1) {
                 this.showAppleLogin = true;
