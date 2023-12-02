@@ -14564,3 +14564,9 @@ aside-menu-product-service {
         }
     }
 }
+
+.dailog-fixed-header{
+    position: sticky !important;
+    top: 0;
+    z-index: 1;
+}
