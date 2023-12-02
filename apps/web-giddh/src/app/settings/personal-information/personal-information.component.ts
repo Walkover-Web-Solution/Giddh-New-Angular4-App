@@ -5,6 +5,7 @@ import { OrganizationType } from '../../models/user-login-state';
 import { OrganizationProfile } from '../constants/settings.constant';
 import { GeneralService } from '../../services/general.service';
 import { ToasterService } from '../../services/toaster.service';
+import { ClipboardService } from 'ngx-clipboard';
 
 @Component({
     selector: 'personal-information',
@@ -52,8 +53,10 @@ export class PersonalInformationComponent implements OnInit, OnDestroy {
     public isValidDomain: boolean;
     /** Stores the voucher API version of company */
     public voucherApiVersion: 1 | 2;
+    /** This will hold isCopied */
+    public isCopied: boolean = false;
 
-    constructor(private generalService: GeneralService, private toasty: ToasterService) { }
+    constructor(private generalService: GeneralService, private toasty: ToasterService, private clipboardService: ClipboardService) { }
 
     /**
      * Initializes the component
@@ -103,6 +106,20 @@ export class PersonalInformationComponent implements OnInit, OnDestroy {
         } else {
             this.toasty.errorToast(this.localeData.domain_error_message);
         }
+    }
+
+    /**
+     *This will use for copy api url link and display copied
+     *
+     * @memberof PersonalInformationComponent
+     */
+    public copyUrl(): void {
+        const urlToCopy = 'https://portal.giddh.com/' + this.profileData.portalDomain;
+        this.clipboardService.copyFromContent(urlToCopy);
+        this.isCopied = true;
+        setTimeout(() => {
+            this.isCopied = false;
+        }, 3000);
     }
 
 }

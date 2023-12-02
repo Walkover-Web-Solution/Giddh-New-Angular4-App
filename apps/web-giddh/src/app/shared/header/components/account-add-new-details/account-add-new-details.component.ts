@@ -266,6 +266,14 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             }
             const index = this.portalIndex;
             let change = mappings.at(index);
+            let defaultUser = mappings.controls.find(control => control.get('default')?.value === true);
+            if (defaultUser) {
+                this.addAccountForm.patchValue({
+                    attentionTo: defaultUser.get('name').value,
+                    contactNo: defaultUser.get('contactNo').value,
+                    email: defaultUser.get('email').value
+                });
+            }
             if (change) {
                 if (change.invalid) {
                     this.portalIndex = undefined;
@@ -781,7 +789,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 }
             });
         }
-
+        accountRequest['portalDomain'] = accountRequest['portalDomain'].filter(portalDomain => portalDomain.default !== true);
         accountRequest['portalDomain'].forEach(portalDomain => {
             delete portalDomain.default;
             delete portalDomain.uniqueName;

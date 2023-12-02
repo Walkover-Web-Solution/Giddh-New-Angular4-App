@@ -256,4 +256,37 @@ export class SettingsProfileService {
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<SmsKeyClass, string>(e)));
     }
+
+    /**
+     * This will be use for get domain list
+     *
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof SettingsProfileService
+     */
+    public getDomainList(): Observable<BaseResponse<any, any>> {
+        const companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.get(this.config.apiUrl + SETTINGS_PROFILE_API.GET_DOMAIN_LIST?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName))).pipe(map((res) => {
+            let data: BaseResponse<any, any> = res;
+            data.queryString = {};
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
+    }
+
+    /**
+     * This will be use for verify whilte lable url
+     *
+     * @param {*} model
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof SettingsProfileService
+     */
+    public verifyPortalWhilteLabel(model: any): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.post(this.config.apiUrl + SETTINGS_PROFILE_API.VERIFY_PORTAL_WHITE_LABEL?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(
+            map((res) => {
+                let data: BaseResponse<any, any> = res;
+                data.request = model;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
+    }
 }
