@@ -319,6 +319,10 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             }
             const index = this.portalIndex;
             let change = mappings.at(index);
+            let defaultUser = mappings.controls.find(control => control.get('default')?.value === true);
+            if (defaultUser) {
+                defaultUser.get('default').patchValue(false);
+            }
             if (change) {
                 if (change.invalid) {
                     this.portalIndex = undefined;
