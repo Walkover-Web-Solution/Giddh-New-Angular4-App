@@ -4,7 +4,7 @@ import { AppState } from "../store";
 import { Component, Inject, NgZone, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 import { ModalDirective } from "ngx-bootstrap/modal";
-import { APPLE_LOGIN_URL, Configuration, OTP_PROVIDER_URL } from "../app.constant";
+import { Configuration, OTP_PROVIDER_URL } from "../app.constant";
 import { Store, select } from "@ngrx/store";
 import { Observable, ReplaySubject } from "rxjs";
 import {
@@ -29,7 +29,6 @@ import { AuthenticationService } from "../services/authentication.service";
 import { CommonActions } from "../actions/common.actions";
 
 declare var initSendOTP: any;
-declare var AppleID;
 
 @Component({
     selector: "login",
@@ -202,13 +201,12 @@ export class LoginComponent implements OnInit, OnDestroy {
                     }
                 });
             });
+            this.showAppleLogin = false;
         } else {
             if (navigator.userAgent.indexOf("Mac") > -1) {
                 this.showAppleLogin = true;
-                let scriptTag = document.createElement('script');
-                scriptTag.src = APPLE_LOGIN_URL;
-                scriptTag.type = 'text/javascript';
-                document.body.appendChild(scriptTag);
+            } else {
+                this.showAppleLogin = false;
             }
         }
 
@@ -244,6 +242,19 @@ export class LoginComponent implements OnInit, OnDestroy {
             if (res) {
                 this.showTwoWayAuthModal();
                 this.store.dispatch(this.loginAction.hideTwoWayOtpPopup());
+            }
+        });
+
+        window.addEventListener('message', event => {
+            if (event?.data && typeof event?.data === "string") {
+                const data: any = event?.data?.split("&").reduce(function(prev, curr, i, arr) {
+                    var params = curr.split("=");
+                    prev[decodeURIComponent(params[0])] = decodeURIComponent(params[1]);
+                    return prev;
+                }, {});
+                if (data && data.id_token) {
+                    this.loginWithApple(data.code);
+                }
             }
         });
     }
@@ -468,43 +479,17 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Parse the JWT token and provide data
-     *
-     * @param {*} token
-     * @returns {*}
-     * @memberof LoginComponent
-     */
-    public parseJwt(token: any): any {
-        var base64Url = token.split('.')[1];
-        var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-        var jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
-            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-        }).join(''));
-
-        return JSON.parse(jsonPayload);
-    };
-
-    /**
      * Shows apple login
      *
      * @returns {Promise<void>}
      * @memberof LoginComponent
      */
     public async appleLogin(): Promise<void> {
-        try {
-            AppleID.auth.init({
-                clientId: 'com.giddh.appsignin.client',
-                scope: 'name email',
-                redirectURI: PRODUCTION_ENV || isElectron ? 'https://app.giddh.com' : 'https://test.giddh.com' + '/apple-login-callback',
-                state: 'init',
-                nonce: 'test',
-                usePopup: true
-            });
-            const data = await AppleID.auth.signIn();
-            this.loginWithApple(data?.authorization?.code);
-        } catch (error) {
-            console.log(error);
-        }
+        const CLIENT_ID = "com.giddh.appsignin.client"
+        const url = PRODUCTION_ENV || isElectron ? 'https://api.giddh.com' : 'https://apitest.giddh.com';
+        const REDIRECT_API_URL = url + "/v2/apple-login-callback";
+
+        window.open(`https://appleid.apple.com/auth/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_API_URL)}&response_type=code id_token&scope=name email&response_mode=form_post`, '_blank');
     }
 
     /**
