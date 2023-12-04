@@ -55,5 +55,14 @@
     "theme": "थीम",
     "select_theme": "थीम निवडा",
     "portal_domain": "पोर्टल डोमेन",
-    "domain_error_message":"हायफन (-) व्यतिरिक्त इतर विशेष वर्णांना परवानगी नाही"
+    "domain_error_message":"हायफन (-) व्यतिरिक्त इतर विशेष वर्णांना परवानगी नाही",
+    "unverified": "असत्यापित",
+    "verified": "सत्यापित",
+    "verify": "सत्यापित करा",
+    "portal_heading": "डोमेन सेटिंग्स",
+    "portal_label": "डोमेन यूआरएल",
+    "add_domain": "डोमेन जोडा",
+    "hostname": "होस्टनेम",
+    "no_domains_found": "कोणतेही डोमेन सापडले नाहीत",
+    "copied": "कॉपी केले.."
 }
