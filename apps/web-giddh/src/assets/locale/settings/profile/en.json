@@ -55,5 +55,14 @@
     "theme": "Theme",
     "select_theme": "Select Theme",
     "portal_domain": "Portal Domain",
-    "domain_error_message":"Special characters other than Hyphen (-) are not allowed"
+    "domain_error_message":"Special characters other than Hyphen (-) are not allowed",
+    "unverified": "Unverified",
+    "verified": "Verified",
+    "verify": "Verify",
+    "portal_heading":"Domain Settings",
+    "portal_label":"Domain URL",
+    "add_domain": "Add Domain",
+    "hostname": "Hostname",
+    "no_domains_found": "No domains found",
+    "copied": "Copied.."
 }

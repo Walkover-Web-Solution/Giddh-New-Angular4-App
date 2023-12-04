@@ -1,10 +1,12 @@
-import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, HostListener, Input, OnInit } from '@angular/core';
 import { OrganizationType } from '../../models/user-login-state';
 import { ReplaySubject, debounceTime, distinctUntilChanged, takeUntil } from 'rxjs';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { SettingsProfileService } from '../../services/settings.profile.service';
 import { ToasterService } from '../../services/toaster.service';
+import { GeneralService } from '../../services/general.service';
+import { ClipboardService } from 'ngx-clipboard';
 
 @Component({
     selector: 'portal-white-label',
@@ -36,15 +38,23 @@ export class PortalWhiteLabelComponent implements OnInit {
     public portalWhilteLabelForm: UntypedFormGroup;
     /** Stores the white label Random generate string */
     public generatedString: string;
-    /** Hold verify url name */
-    public urlVerifiedButtonName: string = 'Verify';
     /** True if user is verified*/
-    public verifiedButton: boolean = false;
+    public showDomainButton: boolean = false;
     /** True if API is in progress */
     public shouldShowLoader: boolean;
+    /** Hold domain list */
     public domainList: any[] = [];
+    /** This will hold isCopied */
+    public isHostNameCopied: boolean = false;
+    /** This will hold isCopied */
+    public isValueCopied: boolean = false;
 
-    constructor(private fb: UntypedFormBuilder, private settingsProfileService: SettingsProfileService, private toaster: ToasterService, private changeDetectorRef: ChangeDetectorRef) { }
+    constructor(private fb: UntypedFormBuilder,
+        private settingsProfileService: SettingsProfileService,
+        private toaster: ToasterService,
+        private changeDetectorRef: ChangeDetectorRef,
+        private generalService: GeneralService,
+        private clipboardService: ClipboardService) { }
 
     /**
      * This will be use for component initialization
@@ -54,10 +64,13 @@ export class PortalWhiteLabelComponent implements OnInit {
      */
     public ngOnInit(): void {
         this.initializeForm();
-        if (this.portalWhilteLabelForm.value.url.length) {
-            return;
-        } else {
-            this.getDomainList();
+        this.getDomainList();
+    }
+
+    @HostListener('paste', ['$event'])
+    public onPaste(event) {
+        if (event) {
+            this.subscribeToFormChanges();
         }
     }
 
@@ -73,21 +86,23 @@ export class PortalWhiteLabelComponent implements OnInit {
                 takeUntil(this.destroyed$))
             .subscribe((value) => {
                 if (value) {
+                    console.log(value);
                     const urlWithoutProtocol = this.removeProtocol(value);
-                    this.generatedString = this.generateRandomString(urlWithoutProtocol);
+                    this.generatedString = this.generalService.generateRandomString(urlWithoutProtocol);
+                    this.showDomainButton = true;
                 } else {
                     this.generatedString = '';
+                    this.showDomainButton = false;
                 }
             });
     }
     /**
-     * This will be use for input change
+     * This will be use for input changef
      *
      * @memberof PortalWhiteLabelComponent
      */
     public onInputChange(): void {
-        this.verifiedButton = false;
-        this.urlVerifiedButtonName = 'Verify';
+        this.showDomainButton = true;
         this.subscribeToFormChanges();
     }
 
@@ -111,12 +126,15 @@ export class PortalWhiteLabelComponent implements OnInit {
         this.shouldShowLoader = true;
         this.settingsProfileService.getDomainList().pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response && response.status === 'success') {
+                this.domainList = [];
                 this.shouldShowLoader = false;
                 if (response?.body?.domainList?.length) {
-                    this.portalWhilteLabelForm.get('url')?.setValue(response?.body?.domainList[0]);
-                    this.generatedString = response?.body?.domainList[1];
-                    this.urlVerifiedButtonName = response?.body?.verified ? 'Verified' : 'Verify';
-                    this.verifiedButton = response.body.verified;
+                    this.domainList = [{
+                        type: 'CNAME',
+                        hostname: response.body?.domainList[0],
+                        value: response.body?.domainList[1],
+                        status: response.body.verified
+                    }];
                 }
             } else {
                 this.shouldShowLoader = false;
@@ -139,40 +157,45 @@ export class PortalWhiteLabelComponent implements OnInit {
     }
 
     /**
-     * This will be use for generating random URLs
-     *
-     * @param {string} value
-     * @return {*}  {string}
-     * @memberof PortalWhiteLabelComponent
-     */
-    public generateRandomString(value: string): string {
-        const randomLength = 8; // Adjust the length of the random string as needed
-        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        let result = '';
-        for (let i = 0; i < randomLength; i++) {
-            const randomIndex = Math.floor(Math.random() * characters.length);
-            result += characters.charAt(randomIndex);
-        }
-        return result + '.' + value;
-    }
-
-    /**
      * This wll be use for submit form
      *
      * @memberof PortalWhiteLabelComponent
      */
     public submitForm(): void {
         const urlWithoutProtocol = this.removeProtocol(this.portalWhilteLabelForm.get('url')?.value);
-        let requestData = [urlWithoutProtocol, this.generatedString];
+        let requestData = [urlWithoutProtocol, 'api.giddh.com'];
         this.settingsProfileService.verifyPortalWhilteLabel(requestData).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response && response.status === 'success') {
-                this.urlVerifiedButtonName = 'Verified';
-                this.verifiedButton = true;
+                this.toaster.successToast('Domain successfully added')
+                this.getDomainList();
+                this.portalWhilteLabelForm.reset();
             } else {
                 this.toaster.errorToast(response.message);
             }
             this.changeDetectorRef.detectChanges();
         });
+    }
+
+    /**
+    *This will use for copy api url link and display copied
+    *
+    * @memberof PersonalInformationComponent
+    */
+    public copyUrl(value: any, type: any): void {
+        const urlToCopy = value;
+        this.clipboardService.copyFromContent(urlToCopy);
+        if (type === 'host') {
+            this.isHostNameCopied = true;
+        } else {
+            this.isValueCopied = true;
+        }
+        setTimeout(() => {
+            if (type === 'host') {
+                this.isHostNameCopied = false;
+            } else {
+                this.isValueCopied = false;
+            }
+        }, 3000);
     }
 
     /**

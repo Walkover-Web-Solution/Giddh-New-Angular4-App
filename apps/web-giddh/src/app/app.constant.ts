@@ -518,6 +518,7 @@ export const JOURNAL_VOUCHER_ALLOWED_DOMAINS = [
     'whozzat.com',
 ];
 
+export const PORTAL_URL = "https://portal.giddh.com/";
 /**
  * Enum for switching toggle button On and Off and changing its size
  *

@@ -1325,8 +1325,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 case 'address':
                     pageHeading = this.companyProfileObj?.taxType ? (this.localeData?.address + this.companyProfileObj?.taxType) : this.localeData?.addresses;
                     break;
-                case 'whitelabel':
-                    pageHeading = 'White Label';
+                case 'portal':
+                    pageHeading = this.localeData?.portal_heading;
                     break;
                 case 'other':
                     pageHeading = this.localeData?.other;
