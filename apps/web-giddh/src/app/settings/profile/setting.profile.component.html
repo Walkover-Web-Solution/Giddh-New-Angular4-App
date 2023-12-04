@@ -76,6 +76,7 @@
                 </other-settings>
             </tab>
             <tab
+                *ngIf="voucherApiVersion === 2"
                 [active]="this.currentTab === 'whitelabel'"
                 (selectTab)="handleTabChanged('whitelabel')"
                 [heading]="'Portal White Label'"

@@ -181,6 +181,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     public taxType: string = '';
     /** True if initial data is fetched */
     public showTaxColumn: boolean;
+    /** Stores the voucher API version of company */
+    public voucherApiVersion: 1 | 2;
 
     constructor(
         private commonService: CommonService,
@@ -200,7 +202,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         private localeService: LocaleService,
         private breakPointObservar: BreakpointObserver
     ) {
-
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.breakPointObservar.observe([
             '(max-width: 767px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
