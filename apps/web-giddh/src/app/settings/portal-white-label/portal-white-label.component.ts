@@ -40,6 +40,9 @@ export class PortalWhiteLabelComponent implements OnInit {
     public urlVerifiedButtonName: string = 'Verify';
     /** True if user is verified*/
     public verifiedButton: boolean = false;
+    /** True if API is in progress */
+    public shouldShowLoader: boolean;
+    public domainList: any[] = [];
 
     constructor(private fb: UntypedFormBuilder, private settingsProfileService: SettingsProfileService, private toaster: ToasterService, private changeDetectorRef: ChangeDetectorRef) { }
 
@@ -105,8 +108,10 @@ export class PortalWhiteLabelComponent implements OnInit {
      * @memberof PortalWhiteLabelComponent
      */
     public getDomainList(): void {
+        this.shouldShowLoader = true;
         this.settingsProfileService.getDomainList().pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response && response.status === 'success') {
+                this.shouldShowLoader = false;
                 if (response?.body?.domainList?.length) {
                     this.portalWhilteLabelForm.get('url')?.setValue(response?.body?.domainList[0]);
                     this.generatedString = response?.body?.domainList[1];
@@ -114,6 +119,7 @@ export class PortalWhiteLabelComponent implements OnInit {
                     this.verifiedButton = response.body.verified;
                 }
             } else {
+                this.shouldShowLoader = false;
                 this.toaster.errorToast(response.message);
             }
         });
