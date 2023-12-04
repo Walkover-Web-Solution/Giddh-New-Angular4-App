@@ -46,6 +46,8 @@ import { InvoiceReceiptFilter } from "../../models/api-models/recipt";
 import { GIDDH_DATE_FORMAT } from "../../shared/helpers/defaultDateFormat";
 import { ScrollDispatcher } from "@angular/cdk/scrolling";
 import { SettingsFinancialYearActions } from "../../actions/settings/financial-year/financial-year.action";
+import { DomSanitizer } from "@angular/platform-browser";
+
 @Component({
     selector: "aging-report",
     templateUrl: "aging-report.component.html",
@@ -151,7 +153,8 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         private agingReportService: AgingreportingService,
         private receiptService: ReceiptService,
         private scrollDispatcher: ScrollDispatcher,
-        private settingsFinancialYearActions: SettingsFinancialYearActions) {
+        private settingsFinancialYearActions: SettingsFinancialYearActions,
+        private sanitizer: DomSanitizer) {
         this.agingDropDownoptions$ = this.store.pipe(select(s => s.agingreport.agingDropDownoptions), takeUntil(this.destroyed$));
         this.dueAmountReportRequest = new DueAmountReportQueryRequest();
         this.dueAmountReportRequest.count = PAGINATION_LIMIT;
@@ -709,5 +712,16 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         } else {
             return { to: dayjs(currentDate).format(GIDDH_DATE_FORMAT), from: dayjs(priorDate).format(GIDDH_DATE_FORMAT) };
         }
+    }
+
+    /**
+     * Angular's sanitizer service to bypass security and trust the provided string as a resource URL
+     *
+     * @param {string} str
+     * @return {*}  {*}
+     * @memberof AgingReportComponent
+     */
+    public domSantizer(str: string): any {
+        return this.sanitizer.bypassSecurityTrustResourceUrl(str);
     }
 }
