@@ -18,6 +18,8 @@ import { GeneralService } from '../../services/general.service';
 import { OrganizationType } from '../../models/user-login-state';
 import { cloneDeep, concat, isEmpty, isEqual } from '../../lodash-optimized';
 import { BootstrapToggleSwitch } from '../../app.constant'
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-modal.component';
 
 @Component({
     selector: 'app-invoice-setting',
@@ -86,7 +88,8 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
         private _authenticationService: AuthenticationService,
         public _route: ActivatedRoute,
         private router: Router,
-        private generalService: GeneralService
+        private generalService: GeneralService,
+        private dialog: MatDialog
     ) {
         this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl?.replace(':redirect_url', this.getRedirectUrl(AppUrl))?.replace(':client_id', GOOGLE_CLIENT_ID);
         this.gmailAuthCodeUrl$ = observableOf(this.gmailAuthCodeStaticUrl);
@@ -94,7 +97,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
-        
+
         this.store.dispatch(this.settingsIntegrationActions.GetGmailIntegrationStatus());
         this.activeCompany$ = this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$));
         this.store.pipe(select(s => s.settings.isGmailIntegrated), takeUntil(this.destroyed$)).subscribe(result => {
@@ -561,5 +564,30 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
                 }
             }
         });
+    }
+
+    /**
+     * Set Auto Generate Voucher From Entry Status
+     *
+     * @memberof InvoiceSettingComponent
+     */
+    public openAutopaidForEntriesConfirmationDialog(autoPaidStatus: boolean): void {
+        if (autoPaidStatus) {
+            let dialogRef = this.dialog.open(ConfirmModalComponent, {
+                width: '560px',
+                data: {
+                    title: this.commonLocaleData?.app_confirm,
+                    body: this.localeData?.auto_paid_confirmation_message,
+                    ok: this.commonLocaleData?.app_yes,
+                    cancel: this.commonLocaleData?.app_no
+                }
+            }).afterClosed()
+                .subscribe((response: boolean) => {
+                    dialogRef.unsubscribe();
+                    this.invoiceSetting.autoGenerateVoucherFromEntry = response ? true : false;
+                });
+        } else {
+            this.invoiceSetting.autoGenerateVoucherFromEntry = false;
+        }
     }
 }

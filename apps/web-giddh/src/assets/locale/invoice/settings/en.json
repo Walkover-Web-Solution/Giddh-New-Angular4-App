@@ -46,5 +46,8 @@
     "e_invoice_fields_required_error_message": "All fields are required for E-invoicing Authentication",
     "e_invoice_invalid_gstin_error_message": "Please provide a valid GSTIN",
     "apply_sales_round_off": "Apply round off on sales/cash voucher",
-    "apply_credit_note_round_off": "Apply round off on credit note voucher"
+    "apply_credit_note_round_off": "Apply round off on credit note voucher",
+    "run_auto_paid_for_all_the_accounts": "Run Auto-paid for all the accounts",
+    "auto_paid_confirmation_message": "Do you want to generate the vouchers for the entries present in the account to run the auto-paid?"
+
 }
