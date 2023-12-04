@@ -765,7 +765,7 @@
                                         <div class="col-sm-12 col-md-12 col-lg-3">
                                             <mat-slide-toggle
                                                 [(ngModel)]="invoiceSetting.autoPaid"
-                                                (change)="openAutopaidForEntriesConfirmationDialog(invoiceSetting.autoPaid)"
+                                                (ngModelChange)="openAutoPaidForEntriesConfirmationDialog(invoiceSetting.autoPaid)"
                                                 name="autoPaid"
                                                 class="show-on-mobile"
                                                 color="primary"
@@ -776,7 +776,7 @@
                                         <div class="col-sm-12 col-md-9 form-group">
                                             <mat-slide-toggle
                                                 [(ngModel)]="invoiceSetting.autoPaid"
-                                                (change)="openAutopaidForEntriesConfirmationDialog(invoiceSetting.autoPaid)" 
+                                                (ngModelChange)="openAutoPaidForEntriesConfirmationDialog(invoiceSetting.autoPaid)" 
                                                 name="autoPaid"
                                                 class="hide-on-mobile"
                                                 color="primary"

@@ -281,7 +281,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     /** Holds Aside Menu State For Other Taxes DialogRef */
     public asideMenuStateForOtherTaxesDialogRef: any;
     /** Holds true if branch is select in company mode */
-    public isBranchTranscationSelected: boolean = false; 
+    public isBranchTransactionSelected: boolean = false; 
 
     constructor(
         private store: Store<AppState>,
@@ -1969,7 +1969,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @memberof LedgerComponent
      */
     public handleBranchChange(selectedEntity: any): void {
-        this.isBranchTranscationSelected = !(selectedEntity?.isCompany);
+        this.isBranchTransactionSelected = !(selectedEntity?.isCompany);
         this.currentBranch.name = selectedEntity.label;
         this.trxRequest.branchUniqueName = selectedEntity?.value;
         this.advanceSearchRequest.branchUniqueName = selectedEntity?.value;

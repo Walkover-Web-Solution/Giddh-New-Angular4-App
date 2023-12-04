@@ -571,7 +571,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
      *
      * @memberof InvoiceSettingComponent
      */
-    public openAutopaidForEntriesConfirmationDialog(autoPaidStatus: boolean): void {
+    public openAutoPaidForEntriesConfirmationDialog(autoPaidStatus: boolean): void {
         if (autoPaidStatus) {
             let dialogRef = this.dialog.open(ConfirmModalComponent, {
                 width: '560px',
