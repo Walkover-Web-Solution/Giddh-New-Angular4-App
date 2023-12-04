@@ -75,6 +75,23 @@
                 >
                 </other-settings>
             </tab>
+            <tab
+                *ngIf="voucherApiVersion === 2"
+                [active]="this.currentTab === 'whitelabel'"
+                (selectTab)="handleTabChanged('whitelabel')"
+                [heading]="'Portal White Label'"
+                [id]="currentTab === 'whitelabel' ? 'giddh-page-heading' : ''"
+            >
+                <portal-white-label
+                    *ngIf="!(getCompanyProfileInProgress$ | async) && currentTab === 'whitelabel'"
+                    (saveProfile)="handleSaveProfile($event)"
+                    [profileData]="companyProfileObj"
+                    [organizationType]="currentOrganizationType"
+                    [localeData]="localeData"
+                    [commonLocaleData]="commonLocaleData"
+                >
+                </portal-white-label>
+            </tab>
         </tabset>
     </div>
     <div class="settings-profile-tabs" *ngIf="addressOnly">

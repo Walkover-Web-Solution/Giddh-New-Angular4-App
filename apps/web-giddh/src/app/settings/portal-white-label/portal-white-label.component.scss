@@ -64,13 +64,7 @@
 .container-fluid {
     padding-left: 0;
 }
-.input-group-btn {
-    font-size: 21px;
-    color: var(--color-rectangular-tab-active-primary-text) !important;
-    cursor: pointer;
-    margin-right: 5px;
-    padding-top: 5px;
-}
+
 @media (max-width: 767px) {
     label {
         line-height: 2.3;

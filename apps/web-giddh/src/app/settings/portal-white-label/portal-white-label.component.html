@@ -1,0 +1,72 @@
+<div class="row">
+    <div class="col-md-12 mr-t4 border-bottom pd-b15">
+        <div class="row pd-b1">
+            <div class="col-lg-3 col-md-6 col-sm-12 col-lg-3 col-xl-2 d-flex align-items-center">
+                <label *ngIf="organizationType === 'COMPANY'" class="font-15">White Label URL</label>
+            </div>
+            <div class="col-lg-4 col-md-6 col-sm-12 col-lg-4 col-xl-3">
+                <form [formGroup]="portalWhilteLabelForm">
+                    <div class="form-group mb-0 d-flex">
+                        <br class="input-group" />
+                        <input
+                            *ngIf="organizationType === 'COMPANY'"
+                            formControlName="url"
+                            type="text"
+                            name="companyName"
+                            class="form-control"
+                            (input)="onInputChange()"
+                        />
+                        <button
+                            *ngIf="portalWhilteLabelForm.get('url')?.value"
+                            type="button"
+                            class="btn btn-sky-blue mr-l05"
+                            (click)="submitForm()"
+                            [disabled]="verifiedButton"
+                        >
+                            {{ urlVerifiedButtonName }}
+                        </button>
+                    </div>
+                    <span>{{ generatedString }}</span>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- <div *ngIf="organizationType === 'COMPANY'" class="w-100">
+    <div class="table-responsive">
+        <table class="table basic table-bordered giddh-table on-mobile-view">
+            <thead>
+                <tr>
+                    <th class="min-wid-check" width="2%">
+                        <div>#</div>
+                    </th>
+                    <th #searchAddressNameInputField width="15%" class="td-search-box">Type</th>
+                    <th #searchAddressInputField width="25%">Hostname</th>
+                    <ng-container>
+                        <th #searchTaxInputField width="25%" class="td-search-box">Value</th>
+                    </ng-container>
+                    <th #searchStateInputField width="15%" class="td-search-box">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="cursor-pointer" *ngFor="let address of addresses; index as addressIndex">
+                    <td data-title="#">
+                        <div>{{ addressIndex + 1 }}.</div>
+                    </td>
+                    <td [attr.data-title]="'type'">
+                        <div>{{ address.name }}</div>
+                    </td>
+                    <td [attr.data-title]="'hostname'">Host Name</td>
+                    <td [attr.data-title]="'value'">Value</td>
+        <td [attr.data-title]="'status'">
+                                Status
+                            </td>
+                </tr>
+            </tbody>
+        </table>
+        <giddh-page-loader *ngIf="shouldShowLoader"></giddh-page-loader>
+        <div class="no-data" *ngIf="addresses?.length === 0 && !shouldShowLoader">
+            <h1>No domains found</h1>
+        </div>
+    </div>
+</div> -->
