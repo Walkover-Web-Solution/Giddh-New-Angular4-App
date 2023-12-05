@@ -1952,7 +1952,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                         .getPortalUsers(accountDetails?.uniqueName)
                         .pipe(takeUntil(this.destroyed$))
                         .subscribe((response) => {
-                            console.log(response);
                             if (response?.status === 'success') {
                                 let mappings = this.addAccountForm.get('portalDomain') as UntypedFormArray;
                                 mappings.clear();

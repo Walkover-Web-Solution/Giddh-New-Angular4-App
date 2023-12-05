@@ -86,7 +86,6 @@ export class PortalWhiteLabelComponent implements OnInit {
                 takeUntil(this.destroyed$))
             .subscribe((value) => {
                 if (value) {
-                    console.log(value);
                     const urlWithoutProtocol = this.removeProtocol(value);
                     this.generatedString = this.generalService.generateRandomString(urlWithoutProtocol);
                     this.showDomainButton = true;
