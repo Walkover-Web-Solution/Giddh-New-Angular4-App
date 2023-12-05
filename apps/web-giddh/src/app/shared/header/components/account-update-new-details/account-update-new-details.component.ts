@@ -226,6 +226,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public portalIndex: number;
     /** Stores the voucher API version of company */
     public voucherApiVersion: 1 | 2;
+    /** This will hold is portal default */
+    public isPortalDefault: boolean;
 
     constructor(
         private _fb: UntypedFormBuilder,
@@ -375,14 +377,17 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 const users = this.addAccountForm.get('portalDomain') as UntypedFormArray;
                 if (response?.attentionTo || response?.mobileNo || response?.email) {
                     let user = users.controls.find(control => control.get('default')?.value === true);
+
                     if (user) {
-                        if (user?.get('name')?.value && user?.get('email')?.value && user?.get('contactNo')?.value) {
-                            return;
-                        } else {
-                            user?.get('name').setValue(response?.attentionTo);
-                            user?.get('email').setValue(response?.email);
-                            user?.get('contactNo').setValue(response?.mobileNo);
-                            user?.get('default').setValue(true);
+                        if (!this.isPortalDefault) {
+                            if (user?.get('name')?.value && user?.get('email')?.value && user?.get('contactNo')?.value) {
+                                return;
+                            } else {
+                                user?.get('name').setValue(response?.attentionTo);
+                                user?.get('email').setValue(response?.email);
+                                user?.get('contactNo').setValue(response?.mobileNo);
+                                user?.get('default').setValue(true);
+                            }
                         }
                     } else {
                         let setValue = false;
@@ -1951,6 +1956,11 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                                 let mappings = this.addAccountForm.get('portalDomain') as UntypedFormArray;
                                 mappings.clear();
                                 response.body?.forEach((item) => {
+                                    if (item && (item.name || item.email) && item.default === true) {
+                                        this.isPortalDefault = true;
+                                    } else {
+                                        this.isPortalDefault = false;
+                                    }
                                     this.addNewPortalUser(item);
                                 });
                             }

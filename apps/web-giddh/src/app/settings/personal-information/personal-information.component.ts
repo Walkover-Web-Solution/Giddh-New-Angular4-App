@@ -6,6 +6,7 @@ import { OrganizationProfile } from '../constants/settings.constant';
 import { GeneralService } from '../../services/general.service';
 import { ToasterService } from '../../services/toaster.service';
 import { ClipboardService } from 'ngx-clipboard';
+import { PORTAL_URL } from '../../app.constant';
 
 @Component({
     selector: 'personal-information',
@@ -56,6 +57,8 @@ export class PersonalInformationComponent implements OnInit, OnDestroy {
     public voucherApiVersion: 1 | 2;
     /** This will hold isCopied */
     public isCopied: boolean = false;
+    /** This will hold portal url */
+    public portalUrl: any = PORTAL_URL;
 
     constructor(private generalService: GeneralService, private toasty: ToasterService, private clipboardService: ClipboardService) { }
 
@@ -115,7 +118,7 @@ export class PersonalInformationComponent implements OnInit, OnDestroy {
      * @memberof PersonalInformationComponent
      */
     public copyUrl(): void {
-        const urlToCopy = 'https://portal.giddh.com/' + this.profileData.portalDomain;
+        const urlToCopy = this.portalUrl + this.profileData.portalDomain;
         this.clipboardService.copyFromContent(urlToCopy);
         this.isCopied = true;
         setTimeout(() => {

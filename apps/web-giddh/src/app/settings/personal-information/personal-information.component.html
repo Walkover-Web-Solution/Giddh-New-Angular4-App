@@ -97,8 +97,8 @@
                 <div class="col-lg-4 col-md-6 col-sm-12 col-lg-4 col-xl-3">
                     <div class="form-group mb-0">
                         <div class="input-group align-items-center">
-                            <a [href]="'https://portal.giddh.com/' + profileData.portalDomain" target="_blank"
-                                >https://portal.giddh.com/{{ profileData.portalDomain }}</a
+                            <a [href]="portalUrl + profileData.portalDomain" target="_blank"
+                                >{{ portalUrl }}{{ profileData.portalDomain }}</a
                             >
                             <span class="input-group-btn mr-l05">
                                 <i

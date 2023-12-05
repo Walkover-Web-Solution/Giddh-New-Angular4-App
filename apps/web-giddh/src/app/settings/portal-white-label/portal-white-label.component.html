@@ -2,7 +2,7 @@
     <div class="col-md-12 mr-t4 border-bottom pd-b15">
         <div class="row pd-b1">
             <div class="col-lg-3 col-md-6 col-sm-12 col-lg-3 col-xl-2 d-flex align-items-center">
-                <label *ngIf="organizationType === 'COMPANY'" class="font-15">White Label URL</label>
+                <label *ngIf="organizationType === 'COMPANY'" class="font-15">{{ localeData?.portal_label }}</label>
             </div>
             <div class="col-lg-4 col-md-6 col-sm-12 col-lg-4 col-xl-3">
                 <form [formGroup]="portalWhilteLabelForm">
@@ -15,15 +15,15 @@
                             name="companyName"
                             class="form-control"
                             (input)="onInputChange()"
+                            autocomplete="off"
                         />
                         <button
-                            *ngIf="portalWhilteLabelForm.get('url')?.value"
+                            *ngIf="showDomainButton"
                             type="button"
-                            class="btn btn-sky-blue mr-l05"
+                            class="btn btn-sky-blue mr-l05 w-50"
                             (click)="submitForm()"
-                            [disabled]="verifiedButton"
                         >
-                            {{ urlVerifiedButtonName }}
+                            {{ localeData?.add_domain }}
                         </button>
                     </div>
                     <span>{{ generatedString }}</span>
@@ -32,7 +32,7 @@
         </div>
     </div>
 </div>
-<!-- <div *ngIf="organizationType === 'COMPANY'" class="w-100">
+<div *ngIf="organizationType === 'COMPANY'" class="w-100">
     <div class="table-responsive">
         <table class="table basic table-bordered giddh-table on-mobile-view">
             <thead>
@@ -40,33 +40,57 @@
                     <th class="min-wid-check" width="2%">
                         <div>#</div>
                     </th>
-                    <th #searchAddressNameInputField width="15%" class="td-search-box">Type</th>
-                    <th #searchAddressInputField width="25%">Hostname</th>
+                    <th #searchAddressNameInputField width="15%" class="td-search-box">
+                        {{ commonLocaleData?.app_type }}
+                    </th>
+                    <th #searchAddressInputField width="25%">{{ localeData?.hostname }}</th>
                     <ng-container>
-                        <th #searchTaxInputField width="25%" class="td-search-box">Value</th>
+                        <th #searchTaxInputField width="25%" class="td-search-box">
+                            {{ commonLocaleData?.app_value }}
+                        </th>
                     </ng-container>
-                    <th #searchStateInputField width="15%" class="td-search-box">Status</th>
+                    <th #searchStateInputField width="15%" class="td-search-box">{{ commonLocaleData?.app_status }}</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr class="cursor-pointer" *ngFor="let address of addresses; index as addressIndex">
+            <tbody *ngIf="domainList?.length">
+                <tr class="cursor-pointer" *ngFor="let domain of domainList; index as domainIndex">
                     <td data-title="#">
-                        <div>{{ addressIndex + 1 }}.</div>
+                        <div>{{ domainIndex + 1 }}.</div>
                     </td>
                     <td [attr.data-title]="'type'">
-                        <div>{{ address.name }}</div>
+                        <div>{{ domain.type }}</div>
                     </td>
-                    <td [attr.data-title]="'hostname'">Host Name</td>
-                    <td [attr.data-title]="'value'">Value</td>
-        <td [attr.data-title]="'status'">
-                                Status
-                            </td>
+                    <td [attr.data-title]="domain?.hostname">
+                        <span class="text-lowercase"> {{ domain?.hostname | lowercase }}</span>
+                        <span class="input-group-btn mr-l05">
+                            <i
+                                class="icon-copy-file"
+                                (click)="copyUrl(domain?.hostname, 'host')"
+                                [tooltip]="commonLocaleData?.app_copy"
+                            ></i>
+                        </span>
+                        <span class="success mr-l05 copied-url" *ngIf="isHostNameCopied">{{ localeData?.copied }}</span>
+                    </td>
+                    <td [attr.data-title]="domain?.value">
+                        <span class="text-lowercase"> {{ domain?.value | lowercase }}</span>
+                        <span class="input-group-btn mr-l05">
+                            <i
+                                class="icon-copy-file"
+                                (click)="copyUrl(domain?.value, 'value')"
+                                [tooltip]="commonLocaleData?.app_copy"
+                            ></i>
+                        </span>
+                        <span class="success mr-l05 copied-url" *ngIf="isValueCopied">{{ localeData?.copied }}</span>
+                    </td>
+                    <td [attr.data-title]="domain?.status">
+                        {{ domain?.status === true ? localeData?.verified : localeData?.unverified }}
+                    </td>
                 </tr>
             </tbody>
         </table>
         <giddh-page-loader *ngIf="shouldShowLoader"></giddh-page-loader>
-        <div class="no-data" *ngIf="addresses?.length === 0 && !shouldShowLoader">
-            <h1>No domains found</h1>
+        <div class="no-data" *ngIf="!domainList?.length && !shouldShowLoader">
+            <h1>{{ localeData?.no_domains_found }}</h1>
         </div>
     </div>
-</div> -->
+</div>
