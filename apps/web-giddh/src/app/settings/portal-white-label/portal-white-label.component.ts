@@ -1,12 +1,14 @@
-import { ChangeDetectorRef, Component, HostListener, Input, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, HostListener, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { OrganizationType } from '../../models/user-login-state';
-import { ReplaySubject, debounceTime, distinctUntilChanged, takeUntil } from 'rxjs';
+import { ReplaySubject, debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { SettingsProfileService } from '../../services/settings.profile.service';
 import { ToasterService } from '../../services/toaster.service';
 import { GeneralService } from '../../services/general.service';
 import { ClipboardService } from 'ngx-clipboard';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-modal.component';
 
 @Component({
     selector: 'portal-white-label',
@@ -32,6 +34,10 @@ export class PortalWhiteLabelComponent implements OnInit {
     @Input() public localeData: any = {};
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
+    /** Share domain popup template ref */
+    @ViewChild('shareDomain') shareDomain: TemplateRef<any>;
+    /** Add domain popup template ref */
+    @ViewChild('addDomain') addDomain: TemplateRef<any>;
     /** Subject to release subscriptions */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Instance of portal while label form */
@@ -48,13 +54,20 @@ export class PortalWhiteLabelComponent implements OnInit {
     public isHostNameCopied: boolean = false;
     /** This will hold isCopied */
     public isValueCopied: boolean = false;
+    /** Table columns */
+    public displayedColumns: string[] = ['type', 'hostName', 'value', 'status'];
+    /** Holds list of data */
+    public dataSource: any = [
+        { type: 'CNAME', hostName: 'hrishabh.elitevysya.com', value: 'v=spfl include:mailer91.com', status: true },
+        { type: 'CNAME', hostName: 'hrishabh.elitevysya.com', value: 'v=spfl include:mailer91.com', status: false }];
 
     constructor(private fb: UntypedFormBuilder,
         private settingsProfileService: SettingsProfileService,
         private toaster: ToasterService,
         private changeDetectorRef: ChangeDetectorRef,
         private generalService: GeneralService,
-        private clipboardService: ClipboardService) { }
+        private clipboardService: ClipboardService,
+        private dialog: MatDialog) { }
 
     /**
      * This will be use for component initialization
@@ -100,7 +113,9 @@ export class PortalWhiteLabelComponent implements OnInit {
      *
      * @memberof PortalWhiteLabelComponent
      */
-    public onInputChange(): void {
+    public onInputChange(event): void {
+        console.log("event", event);
+        return;
         this.showDomainButton = true;
         this.subscribeToFormChanges();
     }
@@ -195,6 +210,40 @@ export class PortalWhiteLabelComponent implements OnInit {
                 this.isValueCopied = false;
             }
         }, 3000);
+    }
+
+    public deleteConfirmationDialog(): void {
+        let dialogRef = this.dialog.open(ConfirmModalComponent, {
+            data: {
+                title: this.commonLocaleData?.app_delete,
+                body: this.localeData?.delete_message,
+                ok: this.commonLocaleData?.app_yes,
+                cancel: this.commonLocaleData?.app_no,
+                permanentlyDeleteMessage: this.commonLocaleData?.app_permanently_delete_message
+            },
+            width: '600px'
+        });
+
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            if (response) {
+                console.log("Deleted");
+
+            } else {
+                console.log("Cancel Deleted");
+            }
+        });
+    }
+
+    public openShareDomainDialog(): void {
+        this.dialog.open(this.shareDomain, {
+            width: '500px'
+        });
+    }
+
+    public openAddDomainDialog(): void {
+        this.dialog.open(this.addDomain, {
+            width: '650px'
+        });
     }
 
     /**
