@@ -504,9 +504,8 @@
                                     >
                                         <i class="icon-refresh lh-0 font-16"></i>
                                     </a>
-
                                     <a
-                                        *ngIf="voucherApiVersion === 2 && enableAutopaid"
+                                        *ngIf="voucherApiVersion === 2 && enableAutopaid && (currentOrganizationType !== 'COMPANY' || (currentCompanyBranches?.length <= 2) || isBranchTransactionSelected)"
                                         mat-button
                                         class="icomoon-ico d-flex align-items-center"
                                         id="autopaid"
