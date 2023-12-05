@@ -68,7 +68,6 @@ export class PersonalInformationComponent implements OnInit, OnDestroy {
      * @memberof PersonalInformationComponent
      */
     public ngOnInit(): void {
-        console.log(this.localeData);
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.saveProfileSubject.pipe(debounceTime(5000), takeUntil(this.destroyed$)).subscribe(() => {
             this.saveProfile.emit(this.updatedData);
