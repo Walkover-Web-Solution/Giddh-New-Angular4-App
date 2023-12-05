@@ -266,11 +266,13 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             }
             const index = this.portalIndex;
             let change = mappings.at(index);
+            let mobileNo = '';
+            mobileNo = this.intl?.['init-contact-portal_' + (index)]?.getNumber();
             let defaultUser = mappings.controls.find(control => control.get('default')?.value === true);
             if (defaultUser) {
                 this.addAccountForm.patchValue({
                     attentionTo: defaultUser.get('name').value,
-                    contactNo: defaultUser.get('contactNo').value,
+                    contactNo: mobileNo,
                     email: defaultUser.get('email').value
                 });
             }
@@ -287,10 +289,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                     change.get('email')?.setValidators([Validators.pattern(EMAIL_VALIDATION_REGEX)]);
                     change.get('email')?.updateValueAndValidity();
                 }
-                if (change.get('contactNo').value) {
-                    const updateNumber = change.get('contactNo').value?.replace('+', '');
-                    change.get('contactNo').setValue(updateNumber);
-                }
+                change.get('contactNo')?.setValue(mobileNo);
                 let lastOccurrenceIndex = -1;
                 let currentEmail = change.get('email')?.value;
                 mappings.controls.forEach((control, i) => {
@@ -311,7 +310,11 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             takeUntil(this.destroyed$))
             .subscribe((response) => {
                 const users = this.addAccountForm.get('portalDomain') as UntypedFormArray;
+                let mobileNo = '';
                 if (response?.attentionTo || response?.mobileNo || response?.email) {
+                    if (response?.mobileNo) {
+                        mobileNo = this.intl?.['init-contact-add']?.getNumber();
+                    }
                     let user = users.controls.find(control => control.get('default')?.value === true);
                     if (user) {
                         if (user?.get('name')?.value && user?.get('email')?.value && user?.get('contactNo')?.value) {
@@ -319,20 +322,20 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                         } else {
                             user?.get('name').setValue(response?.attentionTo);
                             user?.get('email').setValue(response?.email);
-                            user?.get('contactNo').setValue(response?.mobileNo);
+                            user?.get('contactNo').setValue(mobileNo);
                             user?.get('default').setValue(true);
                         }
                     } else {
                         let setValue = false;
                         users.controls?.find((control) => {
                             if (!control.get('name')?.value && !control.get('email')?.value && !control.get('contactNo')?.value) {
-                                control.patchValue({ name: response?.attentionTo, email: response?.email, contactNo: response?.mobileNo, default: true });
+                                control.patchValue({ name: response?.attentionTo, email: response?.email, contactNo: mobileNo, default: true });
                                 setValue = true;
                                 return true;
                             }
                         });
                         if (!setValue) {
-                            let data = { name: response?.attentionTo, email: response?.email, contactNo: response?.mobileNo, default: true };
+                            let data = { name: response?.attentionTo, email: response?.email, contactNo: mobileNo, default: true };
                             this.addNewPortalUser(data);
                         }
                     }
@@ -575,8 +578,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         setTimeout(() => {
             this.onlyPhoneNumber('init-contact-portal_' + (lastIndex));
             setTimeout(() => {
-                const updateNumber = user?.contactNo?.replace('+', '');
-                this.intl?.['init-contact-portal_' + (lastIndex)]?.setNumber(updateNumber ? '+' + updateNumber : '');
+                const updateNumber = user?.contactNo;
+                this.intl?.['init-contact-portal_' + (lastIndex)]?.setNumber(updateNumber ?? '');
             }, 500);
         }, 100);
     }
@@ -772,6 +775,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         if (this.isHsnSacEnabledAcc || this.activeGroupUniqueName === 'discount') {
             delete accountRequest['addresses'];
         }
+
         let mobileNo = this.intl?.['init-contact-add']?.getNumber();
         accountRequest['mobileNo'] = mobileNo;
 
@@ -795,7 +799,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             delete portalDomain.uniqueName;
         });
 
-        if (!accountRequest['portalDomain'][0]?.email) {
+        if (!accountRequest['portalDomain'][0]?.name && !accountRequest['portalDomain'][0]?.email && !accountRequest['portalDomain'][0]?.contactNo) {
             delete accountRequest['portalDomain'];
         }
 

@@ -321,6 +321,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             }
             const index = this.portalIndex;
             let change = mappings.at(index);
+            let mobileNo = '';
+            mobileNo = this.intl?.['init-contact-portal_' + (index)]?.getNumber();
             let defaultUser = mappings.controls.find(control => control.get('default')?.value === true);
             if (defaultUser) {
                 defaultUser.get('default').patchValue(false);
@@ -342,10 +344,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     change.get('email')?.setValidators([Validators.pattern(EMAIL_VALIDATION_REGEX)]);
                     change.get('email')?.updateValueAndValidity();
                 }
-                if (change.get('contactNo').value) {
-                    const updateNumber = change.get('contactNo').value?.replace('+', '');
-                    change.get('contactNo').setValue(updateNumber);
-                }
+                change.get('contactNo')?.setValue(mobileNo);
                 let lastOccurrenceIndex = -1;
                 let currentEmail = change.get('email')?.value;
                 mappings.controls.forEach((control, i) => {
@@ -377,7 +376,10 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 const users = this.addAccountForm.get('portalDomain') as UntypedFormArray;
                 if (response?.attentionTo || response?.mobileNo || response?.email) {
                     let user = users.controls.find(control => control.get('default')?.value === true);
-
+                    let mobileNo = '';
+                    if (response?.mobileNo) {
+                        mobileNo = this.intl?.['init-contact-add']?.getNumber();
+                    }
                     if (user) {
                         if (!this.isPortalDefault) {
                             if (user?.get('name')?.value && user?.get('email')?.value && user?.get('contactNo')?.value) {
@@ -385,7 +387,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                             } else {
                                 user?.get('name').setValue(response?.attentionTo);
                                 user?.get('email').setValue(response?.email);
-                                user?.get('contactNo').setValue(response?.mobileNo);
+                                user?.get('contactNo').setValue(mobileNo);
                                 user?.get('default').setValue(true);
                             }
                         }
@@ -393,13 +395,13 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                         let setValue = false;
                         users.controls?.find((control) => {
                             if (!control.get('name')?.value && !control.get('email')?.value && !control.get('contactNo')?.value) {
-                                control.patchValue({ name: response?.attentionTo, email: response?.email, contactNo: response?.mobileNo, default: true });
+                                control.patchValue({ name: response?.attentionTo, email: response?.email, contactNo: mobileNo, default: true });
                                 setValue = true;
                                 return true;
                             }
                         });
                         if (!setValue) {
-                            let data = { name: response?.attentionTo, email: response?.email, contactNo: response?.mobileNo, default: true };
+                            let data = { name: response?.attentionTo, email: response?.email, contactNo: mobileNo, default: true };
                             this.addNewPortalUser(data);
                         }
                     }
@@ -680,6 +682,13 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      * @memberof AccountUpdateNewDetailsComponent
      */
     public addNewPortalUser(user?: any): void {
+        const mobileStartWithPlus = user?.contactNo.startsWith('+');
+        let mobileNo = '';
+        if (user?.contactNo && mobileStartWithPlus) {
+            mobileNo = user?.contactNo ?? '';
+        } else {
+            mobileNo = user?.contactNo ? ('+' + user?.contactNo) : '';
+        }
         let mappings = this.addAccountForm.get('portalDomain') as UntypedFormArray;
         let mappingForm = this._fb.group({
             name: [''],
@@ -694,19 +703,18 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 if (!control?.get('name').value && !control?.get('email').value && !control?.get('contactNo').value) {
                     control?.get('name')?.patchValue(user.name ?? '');
                     control?.get('email')?.patchValue(user.email ?? '');
-                    control?.get('contactNo')?.patchValue(user.contactNo ?? '');
+                    control?.get('contactNo')?.patchValue(mobileNo ?? '');
                     control?.get('default')?.patchValue(user.default ?? false);
                     control?.get('uniqueName')?.patchValue(user.uniqueName ?? '');
                 }
             });
         }
         const lastIndex = mappings.controls.length - 1;
-
+        const updateNumber = mobileNo;
         setTimeout(() => {
             this.onlyPhoneNumber('init-contact-portal_' + (lastIndex));
             setTimeout(() => {
-                const updateNumber = user?.contactNo?.replace('+', '');
-                this.intl?.['init-contact-portal_' + (lastIndex)]?.setNumber(updateNumber ? '+' + updateNumber : '');
+                this.intl?.['init-contact-portal_' + (lastIndex)]?.setNumber(updateNumber ?? '');
             }, 500);
         }, 100);
     }
