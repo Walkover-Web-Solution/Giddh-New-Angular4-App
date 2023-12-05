@@ -135,12 +135,10 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                 });
             }
         });
-        this.searchForm.get("userSearch").valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(selectedValue => {
-            console.log('userSearch value changed')
+        this.searchForm.get("userSearch").valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(selectedValue => {        
             console.log(selectedValue);
         });
         this.searchForm.get("stockSearch").valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(selectedValue => {
-            console.log('stockSearch value changed')
             console.log(selectedValue);
         });
     }
@@ -153,7 +151,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
             discountValue: [''],
             price: [discount?.variants?.price],
             quantity: [''],
-            discountExclusive: [''],
+            inclusiveExclusive: [''],
             stockUnitUniqueName: [''],
             variantUniqueName: [''],
             discountUniqueName: ['']
@@ -189,8 +187,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
         if (isTempUser === -1) {
             this._inventoryService.getAllDiscount(model).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
                 //response?.body?.length THIS IS TEMPORY CODE IT WILL CHANGE AFTER API CHANGE (PAGINATED DATA WILL COME IN FUTURE)
-                if (response && response?.body?.length) {
-                    this.currentStock = response?.body;
+                if (response && response?.body?.length) {                    
                     console.log("getAllDiscount",response);
                     this.discountForm.get('customerVendorAccountUniqueName').patchValue(userData?.uniqueName);
                     const discounts = this.discountForm.get('discountInfo') as UntypedFormArray;
@@ -199,8 +196,8 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                         discounts.push(this.initDiscountForm(res));
                     });
 
-                    console.log("this.discountForm",this.discountForm);
-                    
+                    console.log("this.discountForm", this.discountForm.get('discountInfo')['controls']);
+                    this.currentStock = response?.body;
                 }
             });
         }

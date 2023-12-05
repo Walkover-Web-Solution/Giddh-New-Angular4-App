@@ -12,8 +12,8 @@
                     <div class="inventory-sub-sideabar">
                         <mat-list class="item-list border-grid pt-0">
                             <div class="list-head-gap">
-                                <div class="search-list position-relative mr-t15 mr-b15">
-                                    <text-field type="text" [placeholder]="'Search'"
+                                <div class="search-list position-relative mr-t15 mr-b15" [formGroup]="searchForm">
+                                    <text-field type="text" [placeholder]="'Search'" formControlName="userSearch"
                                         [cssClass]="'form-control name-width'"></text-field>
                                     <span>
                                         <i class="icon-search"></i>
@@ -37,9 +37,9 @@
                             <div class="right-heading" *ngIf="currentStock">
                                 <button mat-stroked-button color="primary" (click)="openSearchModal('stocks')"> {{
                                     localeData?.add_inventory }} </button>
-                                <div class="search-list position-relative">
+                                <div class="search-list position-relative" [formGroup]="searchForm">
                                     <text-field type="text" [placeholder]="'Search'"
-                                        [cssClass]="'form-control name-width'"></text-field>
+                                        [cssClass]="'form-control name-width'" formControlName="stockSearch"></text-field>
                                     <span>
                                         <i class="icon-search"></i>
                                     </span>
@@ -62,8 +62,9 @@
                                             <!-- </div> -->
                                             <ng-container
                                                 *ngFor="let discountCollection of discountForm.get('discountInfo')['controls']; let i = index">
-                                                    <div class="table-responsive mr-t05 mr-b15" [formGroupName]="i">
-                                                        <table class="table table-bordered">
+
+                                                   <div class="table-responsive mr-t05 mr-b15" [formGroupName]="i">
+                                                        <table class="table">
                                                             <tbody>
                                                                 <tr>
                                                                     <td>
@@ -84,8 +85,7 @@
                                                                             <mat-slide-toggle class="example-margin"
                                                                                 color="primary"
                                                                                 name="inclusiveExclusive"
-                                                                                [(ngModel)]="inclusiveExclusive"
-                                                                                formControlName="discountExclusive">
+                                                                                formControlName="inclusiveExclusive">
                                                                                 <span>
                                                                                     {{
                                                                                     inclusiveExclusive ?
