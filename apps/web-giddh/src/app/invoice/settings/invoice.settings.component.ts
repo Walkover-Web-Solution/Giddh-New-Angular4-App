@@ -584,7 +584,8 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
             }).afterClosed()
                 .subscribe((response: boolean) => {
                     dialogRef.unsubscribe();
-                    this.invoiceSetting.autoGenerateVoucherFromEntry = response ? true : false;
+                    this.invoiceSetting.autoGenerateVoucherFromEntry = response;
+                    
                 });
         } else {
             this.invoiceSetting.autoGenerateVoucherFromEntry = false;
