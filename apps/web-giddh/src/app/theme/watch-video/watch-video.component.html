@@ -1,0 +1,23 @@
+<span>
+    <ng-container *ngIf="buttonName && !toggleIcon">
+        <button class="toggle-btn">{{buttonName}}</button>
+    </ng-container>
+    <ng-container *ngIf="toggleIcon && !buttonName">
+        <button class="toggle-btn" mat-button>
+            <img [src]="toggleIcon"  [height]="toggleIconHeight" [width]="toggleIconWidth" />
+        </button>
+    </ng-container>
+</span>
+
+<ng-template #videoTutorial>
+    <div class="video-wrapper">
+        <iframe
+            width="100%"
+            height="100%"
+            src="`${videoLink}&rel=0&autoplay=${autoplay}`"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen
+        ></iframe>
+    </div>
+</ng-template>
