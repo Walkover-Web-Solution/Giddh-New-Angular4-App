@@ -313,10 +313,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 const users = this.addAccountForm.get('portalDomain') as UntypedFormArray;
                 let mobileNo = '';
                 if (response?.attentionTo || response?.mobileNo || response?.email) {
-                    if (response?.mobileNo) {
-                        if (this.intl) {
-                            mobileNo = this.intl['init-contact-add']?.getNumber();
-                        }
+                    if (response?.mobileNo && this.intl) {
+                        mobileNo = this.intl['init-contact-add']?.getNumber();
                     }
                     let user = users.controls.find(control => control.get('default')?.value === true);
                     if (user) {
