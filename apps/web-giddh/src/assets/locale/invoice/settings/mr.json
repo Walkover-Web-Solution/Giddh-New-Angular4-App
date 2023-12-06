@@ -48,5 +48,5 @@
     "apply_sales_round_off": "विक्री/नगदी व्हाउचरवर राउंड ऑफ लागू करा",
     "apply_credit_note_round_off": "क्रेडिट नोट व्हाउचरवर राउंड ऑफ लागू करा",
     "run_auto_paid_for_all_the_accounts": "सर्व खात्यांसाठी ऑटो-पेड सुरू करा",
-    "auto_paid_confirmation_message": "क्या आपल्याकडून खात्यातील प्रविष्टिंसाठी ऑटो-पेड सुरू करण्यासाठी वाउचर उत्पन्न करायचं आहे का?"
+    "automatically_generate_voucher_for_the_entries_present_in_the_ledger": "लेजरमध्ये उपस्थित प्रविष्ट्यांसाठी स्वयंमुद्रित वाउचर उत्पन्न करा"
 }
