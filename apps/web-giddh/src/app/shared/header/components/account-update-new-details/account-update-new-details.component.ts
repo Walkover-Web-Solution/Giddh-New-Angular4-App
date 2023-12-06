@@ -362,6 +362,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     this._accountService.createPortalUser([change.value], this.activeAccountName).pipe(take(1)).subscribe(data => {
                         if (data?.status === 'success') {
                             this._toaster.successToast(this.localeData?.portal_updated_successfully, 'Success');
+                            change.get('uniqueName')?.setValue(data?.body[0]?.uniqueName);
                         } else {
                             this._toaster.errorToast(data.message, data.code);
                         }
@@ -684,7 +685,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      * @memberof AccountUpdateNewDetailsComponent
      */
     public addNewPortalUser(user?: any): void {
-        const mobileStartWithPlus = user?.contactNo.startsWith('+');
+        const mobileStartWithPlus = user?.contactNo?.startsWith('+');
         let mobileNo = '';
         if (user?.contactNo && mobileStartWithPlus) {
             mobileNo = user?.contactNo ?? '';
@@ -731,7 +732,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      * @memberof AccountUpdateNewDetailsComponent
      */
     public removePortalUser(portal: UntypedFormGroup, index: number): void {
-        if (portal && portal.value.uniqueName) {
+        if (portal) {
             let mappings = this.addAccountForm.get('portalDomain') as UntypedFormArray;
             mappings.removeAt(index);
             let data = [{
@@ -747,13 +748,15 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             } else {
                 this.activeAccount$.pipe(take(1)).subscribe(activeAccountState => this.activeAccountName = activeAccountState?.uniqueName);
             }
-            this._accountService.createPortalUser(data, this.activeAccountName).pipe(take(1)).subscribe(data => {
-                if (data?.status === 'success') {
-                    this._toaster.successToast(this.localeData?.portal_deleted_successfully, 'Success');
-                } else {
-                    this._toaster.errorToast(data.message, data.code);
-                }
-            });
+            if (portal.value?.uniqueName) {
+                this._accountService.createPortalUser(data, this.activeAccountName).pipe(take(1)).subscribe(data => {
+                    if (data?.status === 'success') {
+                        this._toaster.successToast(this.localeData?.portal_deleted_successfully, 'Success');
+                    } else {
+                        this._toaster.errorToast(data.message, data.code);
+                    }
+                });
+            }
         }
     }
 
