@@ -242,7 +242,7 @@ export class PortalWhiteLabelComponent implements OnInit {
 
     public openAddDomainDialog(): void {
         this.dialog.open(this.addDomain, {
-            width: '650px'
+            width: '550px'
         });
     }
 

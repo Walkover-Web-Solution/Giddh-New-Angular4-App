@@ -13,9 +13,10 @@
     }
     .portal-body {
         table {
+            background: var(--color-transparent-backgrounds);
             .status {
                 border-radius: 16px;
-                padding: 7px 14px;
+                padding: 6px 12px;
             }
             .verified {
                 color: var(--color-success-enable);
