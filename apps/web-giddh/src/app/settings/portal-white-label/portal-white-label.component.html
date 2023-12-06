@@ -2,7 +2,7 @@
     (commonLocaleData)="commonLocaleData = $event">
     <div class="portal mt-5 pd-t15 pd-b15">
         <div class="portal-header">
-            <div class="d-flex align-items-center justify-content-lg-start justify-content-between">
+            <div class="d-flex align-items-center">
                 <div class="dropdown-wrapper mr-r2" *ngIf="true">
                     <dropdown-field [name]="'country'" [placeholder]="localeData?.select_domain" [options]="domainList"
                         (selectedOption)="onInputChange($event)" [defaultValue]="''">
