@@ -267,7 +267,9 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             const index = this.portalIndex;
             let change = mappings.at(index);
             let mobileNo = '';
-            mobileNo = this.intl?.['init-contact-portal_' + (index)]?.getNumber();
+            if (this.intl) {
+                mobileNo = this.intl['init-contact-portal_' + (index)]?.getNumber();
+            }
             let defaultUser = mappings.controls.find(control => control.get('default')?.value === true);
             if (defaultUser) {
                 this.addAccountForm.patchValue({
@@ -313,7 +315,9 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 let mobileNo = '';
                 if (response?.attentionTo || response?.mobileNo || response?.email) {
                     if (response?.mobileNo) {
-                        mobileNo = this.intl?.['init-contact-add']?.getNumber();
+                        if (this.intl) {
+                            mobileNo = this.intl['init-contact-add']?.getNumber();
+                        }
                     }
                     let user = users.controls.find(control => control.get('default')?.value === true);
                     if (user) {
@@ -579,7 +583,9 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             this.onlyPhoneNumber('init-contact-portal_' + (lastIndex));
             setTimeout(() => {
                 const updateNumber = user?.contactNo;
-                this.intl?.['init-contact-portal_' + (lastIndex)]?.setNumber(updateNumber ?? '');
+                if (this.intl) {
+                    this.intl['init-contact-portal_' + (lastIndex)]?.setNumber(updateNumber ?? '');
+                }
             }, 500);
         }, 100);
     }
@@ -775,9 +781,10 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         if (this.isHsnSacEnabledAcc || this.activeGroupUniqueName === 'discount') {
             delete accountRequest['addresses'];
         }
-
-        let mobileNo = this.intl?.['init-contact-add']?.getNumber();
-        accountRequest['mobileNo'] = mobileNo;
+        if (this.intl) {
+            let mobileNo = this.intl['init-contact-add']?.getNumber();
+            accountRequest['mobileNo'] = mobileNo;
+        }
 
         accountRequest['hsnNumber'] = (accountRequest["hsnOrSac"] === "hsn") ? accountRequest['hsnNumber'] : "";
         accountRequest['sacNumber'] = (accountRequest["hsnOrSac"] === "sac") ? accountRequest['sacNumber'] : "";

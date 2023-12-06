@@ -322,7 +322,9 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             const index = this.portalIndex;
             let change = mappings.at(index);
             let mobileNo = '';
-            mobileNo = this.intl?.['init-contact-portal_' + (index)]?.getNumber();
+            if (this.intl) {
+                mobileNo = this.intl['init-contact-portal_' + (index)]?.getNumber();
+            }
             let defaultUser = mappings.controls.find(control => control.get('default')?.value === true);
             if (defaultUser) {
                 defaultUser.get('default').patchValue(false);
@@ -377,8 +379,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 if (response?.attentionTo || response?.mobileNo || response?.email) {
                     let user = users.controls.find(control => control.get('default')?.value === true);
                     let mobileNo = '';
-                    if (response?.mobileNo) {
-                        mobileNo = this.intl?.['init-contact-add']?.getNumber();
+                    if (response?.mobileNo && this.intl) {
+                        mobileNo = this.intl['init-contact-add']?.getNumber();
                     }
                     if (user) {
                         if (!this.isPortalDefault) {
@@ -714,7 +716,9 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         setTimeout(() => {
             this.onlyPhoneNumber('init-contact-portal_' + (lastIndex));
             setTimeout(() => {
-                this.intl?.['init-contact-portal_' + (lastIndex)]?.setNumber(updateNumber ?? '');
+                if (this.intl) {
+                    this.intl['init-contact-portal_' + (lastIndex)]?.setNumber(updateNumber ?? '');
+                }
             }, 500);
         }, 100);
     }
@@ -727,7 +731,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      * @memberof AccountUpdateNewDetailsComponent
      */
     public removePortalUser(portal: UntypedFormGroup, index: number): void {
-        if (portal) {
+        if (portal && portal.value.uniqueName) {
             let mappings = this.addAccountForm.get('portalDomain') as UntypedFormArray;
             mappings.removeAt(index);
             let data = [{
@@ -918,9 +922,10 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             this.addAccountForm.get('currency')?.patchValue(this.selectedCurrency, { onlySelf: true });
             accountRequest.currency = this.selectedCurrency;
         }
-
-        let mobileNo = this.intl?.['init-contact-update']?.getNumber();
-        accountRequest['mobileNo'] = mobileNo;
+        if (this.intl) {
+            let mobileNo = this.intl['init-contact-update']?.getNumber();
+            accountRequest['mobileNo'] = mobileNo;
+        }
 
         accountRequest['hsnNumber'] = (accountRequest["hsnOrSac"] === "hsn") ? accountRequest['hsnNumber'] : "";
         accountRequest['sacNumber'] = (accountRequest["hsnOrSac"] === "sac") ? accountRequest['sacNumber'] : "";
@@ -1920,7 +1925,9 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                         .subscribe(_ => {
                             if (results[0]?.mobileNo) {
                                 let updatedNumber = '+' + results[0]?.mobileNo;
-                                this.intl?.['init-contact-update']?.setNumber(updatedNumber);
+                                if (this.intl) {
+                                    this.intl['init-contact-update']?.setNumber(updatedNumber);
+                                }
                             }
                         });
                     this.store.pipe(select(appStore => appStore.groupwithaccounts.activeGroupUniqueName), take(1)).subscribe(response => {
