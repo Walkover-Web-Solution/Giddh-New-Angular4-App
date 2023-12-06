@@ -323,9 +323,25 @@ small {
 }
 
 .ico-apple img {
-    width: 21px !important;
-    height: 21px !important;
+    width: 100% !important;
+    height: 100% !important;
     margin-bottom: 3px;
+}
+
+.msg91-ico {
+    a {
+        width: 201px !important;
+        padding-left: 34px !important;
+    }
+}
+
+.apple-ico {
+    a {
+        background-color: var(--color-default-button);
+        border-color: var(--color-default-button) !important;
+        width: 201px;
+        padding-left: 32px !important;
+    }
 }
 
 .login-option,

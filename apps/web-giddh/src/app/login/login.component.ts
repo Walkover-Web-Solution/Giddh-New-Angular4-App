@@ -26,6 +26,7 @@ import { contriesWithCodes } from "../shared/helpers/countryWithCodes";
 import { LoaderService } from "../loader/loader.service";
 import { ToasterService } from "../services/toaster.service";
 import { AuthenticationService } from "../services/authentication.service";
+import { GeneralService } from "../services/general.service";
 
 declare var initSendOTP: any;
 
@@ -90,7 +91,8 @@ export class LoginComponent implements OnInit, OnDestroy {
         private loaderService: LoaderService,
         private toaster: ToasterService,
         private authenticationService: AuthenticationService,
-        private ngZone: NgZone
+        private ngZone: NgZone,
+        private generalService: GeneralService
     ) {
         this.urlPath = isElectron ? "" : AppUrl + APP_FOLDER;
         this.isLoginWithEmailInProcess$ = this.store.pipe(select(state => {
@@ -478,15 +480,10 @@ export class LoginComponent implements OnInit, OnDestroy {
     /**
      * Shows apple login
      *
-     * @returns {Promise<void>}
      * @memberof LoginComponent
      */
-    public async appleLogin(): Promise<void> {
-        const CLIENT_ID = "com.giddh.appsignin.client"
-        const url = PRODUCTION_ENV || isElectron ? 'https://api.giddh.com' : 'https://apitest.giddh.com';
-        const REDIRECT_API_URL = url + "/v2/apple-login-callback";
-
-        window.open(`https://appleid.apple.com/auth/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_API_URL)}&response_type=code id_token&scope=name email&response_mode=form_post`, '_blank');
+    public appleLogin(): void {
+        window.open(this.generalService.getAppleLoginUrl(), '_blank');
     }
 
     /**
