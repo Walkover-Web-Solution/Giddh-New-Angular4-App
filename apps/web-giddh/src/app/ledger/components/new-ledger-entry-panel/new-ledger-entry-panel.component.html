@@ -903,6 +903,7 @@
                             name="generateInvoice"
                             [disabled]="
                                 (voucherApiVersion === 2 && isAdvanceReceipt) ||
+                                autoGenerateVoucherFromEntry ||
                                 currentTxn?.voucherAdjustments?.adjustments?.length ||
                                 currentTxn?.invoiceLinkingRequest?.linkedInvoices?.length ||
                                 currentTxn?.referenceVoucher?.uniqueName ||
@@ -914,6 +915,9 @@
                             (change)="manualGenerateVoucherChecked = $event?.checked"
                             >{{ commonLocaleData?.app_generate_voucher }}</mat-checkbox
                         >
+                        <span class="icon-info position-relative pd-l05" *ngIf="autoGenerateVoucherFromEntry">
+                            <a href="/pages/invoice/preview/settings/sales" class="pd-l1" target="_blank">Go to Invoice Settings</a>
+                        </span>
                     </label>
                 </div>
                 <div class="pull-right">

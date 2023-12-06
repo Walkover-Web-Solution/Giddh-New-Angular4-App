@@ -111,6 +111,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     @Input() public selectedAccountDetails: IOption;
     /** Total pages for reference vouchers */
     @Input() private referenceVouchersTotalPages: number = 1;
+    /** Holds Invoice Setting for auto Generate Voucher From Entry */
+    @Input() public autoGenerateVoucherFromEntry: boolean;
     public isAmountFirst: boolean = false;
     public isTotalFirts: boolean = false;
     public selectedInvoices: string[] = [];

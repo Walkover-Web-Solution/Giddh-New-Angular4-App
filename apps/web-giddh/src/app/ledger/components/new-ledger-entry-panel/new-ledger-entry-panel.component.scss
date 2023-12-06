@@ -173,6 +173,23 @@
     min-width: auto !important;
 }
 
+span {
+    &.icon-info {
+        line-height: 40px;        
+        a {
+            display: none;
+            position: absolute;
+            left: 100%;
+            width: max-content;
+        }
+        &:hover {
+            a {
+                display: inline;
+            }
+        }
+    }
+}
+
 /* Rotate animation for spinner in uploading file */
 
 .rotate {

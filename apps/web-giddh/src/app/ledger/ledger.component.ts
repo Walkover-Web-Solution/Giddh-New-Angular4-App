@@ -280,6 +280,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
     /** Holds Aside Menu State For Other Taxes DialogRef */
     public asideMenuStateForOtherTaxesDialogRef: any;
+    /** Holds Invoice Setting for auto Generate Voucher From Entry */
+    public autoGenerateVoucherFromEntryStatus: boolean; 
 
     constructor(
         private store: Store<AppState>,
@@ -2561,7 +2563,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @memberof LedgerComponent
      */
     public getPurchaseSettings(): void {
-        this.store.pipe(select(state => state.invoice.settings), takeUntil(this.destroyed$)).subscribe(response => {
+        this.store.pipe(select(state => state.invoice.settings), takeUntil(this.destroyed$)).subscribe(response => {  
+            this.autoGenerateVoucherFromEntryStatus = response?.invoiceSettings?.autoGenerateVoucherFromEntry;             
             if (response?.purchaseBillSettings && !response?.purchaseBillSettings?.enableVoucherDownload) {
                 this.restrictedVouchersForDownload.push(AdjustedVoucherType.PurchaseInvoice);
             } else {
