@@ -3658,6 +3658,10 @@ input[type="number"]::-webkit-inner-spin-button {
     cursor: pointer !important;
 }
 
+.cursor-default{
+    cursor: default !important;
+}
+
 footer {
     padding: 10px 20px;
     text-align: center;
