@@ -511,7 +511,12 @@
                     </div>
                 </div>
             </tab>
-            <tab [heading]="localeData?.tabs?.portal" class="contact-form-wrap" *ngIf="voucherApiVersion === 2">
+            <tab
+                [heading]="localeData?.tabs?.portal"
+                class="contact-form-wrap"
+                *ngIf="voucherApiVersion === 2"
+                (selectTab)="tabChanged('portal')"
+            >
                 <div formArrayName="portalDomain">
                     <div
                         class="row align-items-center"
