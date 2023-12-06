@@ -1,0 +1,8 @@
+{
+    "add_domain": "Add Domain",
+    "select_domain": "Select Domain",
+    "hostname": "Hostname",
+    "share_dns_record_to_developer": "Share DNS record to developer",
+    "add_subdomain_or_domain": "Add subdomain/domain",
+    "copied":"Copied..."
+}
