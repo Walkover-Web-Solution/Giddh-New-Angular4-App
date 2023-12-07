@@ -16,7 +16,7 @@ export class WatchVideoComponent implements OnInit {
     /** Holds text inside toggle button */
     @Input() public displayText: string = null;
     /** Holds boolean value as enable/disable video autoplay*/
-    @Input() public autoplay: any = true;
+    @Input() public autoplay: number = 1;
     /** Holds Image URL to display inside toggle button */
     @Input() public displayIcon: string = null;
     /** Holds Image width */
@@ -43,9 +43,7 @@ export class WatchVideoComponent implements OnInit {
     */
     public ngOnInit(): void {
         this.videoLink = VIDEOLINK[this.moduleName];
-        this.autoplay = this.autoplay ? 1 : 0;
-        this.videoLink = `${this.videoLink}&rel=0&autoplay=${this.autoplay}`;
-        this.videoLink = this.domSantizer(this.videoLink);
+        this.videoLink = this.domSantizer(`${this.videoLink}&rel=0&autoplay=${this.autoplay}`);
     }
 
     /**
