@@ -500,7 +500,7 @@
             <tab
                 [heading]="localeData?.tabs?.portal"
                 class="contact-form-wrap"
-                *ngIf="voucherApiVersion === 2"
+                *ngIf="voucherApiVersion === 2 && isDebtorCreditor"
             >
                 <div formArrayName="portalDomain">
                     <div
