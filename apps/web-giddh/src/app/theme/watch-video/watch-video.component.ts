@@ -55,7 +55,7 @@ export class WatchVideoComponent implements OnInit {
      *
      * @memberof WatchVideoComponent
      */
-    public openVideoTutorialDailog(): void {
+    public openVideoTutorialDialog(): void {
         this.dialog.open(this.videoTutorial, {
             width: '800px',
             height: 'auto'

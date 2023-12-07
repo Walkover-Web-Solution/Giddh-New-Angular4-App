@@ -1,9 +1,9 @@
 <span>
     <ng-container *ngIf="displayText && !displayIcon">
-        <button [disableRipple]="true" class="toggle-btn" (click)="openVideoTutorialDailog()" [ngClass]="cssClass">{{displayText}}</button>
+        <button class="toggle-btn" (click)="openVideoTutorialDialog()" [ngClass]="cssClass">{{displayText}}</button>
     </ng-container>
     <ng-container *ngIf="displayIcon && !displayText">
-        <button [disableRipple]="true" class="toggle-btn" mat-button (click)="openVideoTutorialDailog()" [ngClass]="cssClass">
+        <button class="toggle-btn" (click)="openVideoTutorialDialog()" [ngClass]="cssClass">
             <img [src]="displayIcon" [height]="displayIconHeight" [width]="displayIconWidth" />
         </button>
     </ng-container>
