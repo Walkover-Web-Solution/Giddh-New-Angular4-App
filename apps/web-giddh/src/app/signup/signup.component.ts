@@ -69,8 +69,6 @@ export class SignupComponent implements OnInit, OnDestroy {
     /** To Observe is google login inprocess */
     public isLoginWithGoogleInProcess$: Observable<boolean>;
     public isLoginWithPasswordIsShowVerifyOtp$: Observable<boolean>;
-    /** Show apple login if electron app and mac user */
-    public showAppleLogin: boolean = false;
 
     // tslint:disable-next-line:no-empty
     constructor(private fb: UntypedFormBuilder,
@@ -173,13 +171,6 @@ export class SignupComponent implements OnInit, OnDestroy {
                     }
                 });
             });
-            this.showAppleLogin = false;
-        } else {
-            if (navigator.userAgent.indexOf("Mac") > -1) {
-                this.showAppleLogin = true;
-            } else {
-                this.showAppleLogin = false;
-            }
         }
 
         //  get login state and check if twoWayAuth is needed
@@ -207,19 +198,6 @@ export class SignupComponent implements OnInit, OnDestroy {
         this.signupVerifyEmail$.subscribe(a => {
             if (a) {
                 this.signupVerifyForm.get("email")?.patchValue(a);
-            }
-        });
-
-        window.addEventListener('message', event => {
-            if (event?.data && typeof event?.data === "string") {
-                const data: any = event?.data?.split("&").reduce(function(prev, curr, i, arr) {
-                    var params = curr.split("=");
-                    prev[decodeURIComponent(params[0])] = decodeURIComponent(params[1]);
-                    return prev;
-                }, {});
-                if (data && data.id_token) {
-                    this.loginWithApple(data.code);
-                }
             }
         });
     }
@@ -419,41 +397,6 @@ export class SignupComponent implements OnInit, OnDestroy {
         this.authenticationService.loginWithOtp({ accessToken: data?.message }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
                 this.store.dispatch(this.loginAction.LoginWithPasswdResponse(response));
-            } else {
-                this.toaster.errorToast(response?.message);
-            }
-        });
-    }
-
-    /**
-     * Shows apple login
-     *
-     * @memberof SignupComponent
-     */
-    public appleLogin(): void {
-        window.open(this.generalService.getAppleLoginUrl(), '_blank');
-    }
-
-    /**
-     * This will login with apple
-     *
-     * @param {*} data
-     * @param {*} parsedData
-     * @memberof SignupComponent
-     */
-    public loginWithApple(authorizationCode: string): void {
-        let model = {
-            authorizationCode: authorizationCode,
-            requestFromWeb: true
-        };
-
-        this.authenticationService.loginWithApple(model).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response?.status === "success") {
-                if (response.body?.user?.isVerified) {
-                    this.store.dispatch(this.loginAction.LoginWithPasswdResponse(response));
-                } else {
-                    this.toaster.errorToast("Your account is not verified. Please contact support.");
-                }
             } else {
                 this.toaster.errorToast(response?.message);
             }

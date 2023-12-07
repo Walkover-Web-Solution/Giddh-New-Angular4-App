@@ -220,7 +220,7 @@
                                             email and password</a
                                         >
                                     </p>
-                                    <div class="d-flex align-items-center account mt-1">
+                                    <div class="d-flex align-items-center account mt-1" *ngIf="!showAppleLogin">
                                         <p class="mb-0 mr-2 bold text-light-2">Don't have an account?</p>
                                         <a routerLink="/signup" class="btn btn-secondary"> Signup</a>
                                     </div>
