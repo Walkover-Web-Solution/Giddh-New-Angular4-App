@@ -42,8 +42,6 @@ export class WatchVideoComponent implements OnInit {
     * @memberof WatchVideoComponent
     */
     public ngOnInit(): void {
-        console.log("displayIconWidth", this.displayIconWidth);
-
         this.videoLink = VIDEOLINK[this.moduleName];
         this.autoplay = this.autoplay ? 1 : 0;
         this.videoLink = `${this.videoLink}&rel=0&autoplay=${this.autoplay}`;
