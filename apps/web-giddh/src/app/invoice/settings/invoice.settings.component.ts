@@ -78,8 +78,6 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     public voucherApiVersion: 1 | 2;
     /** This will hold toggle buttons value and size */
     public bootstrapToggleSwitch = BootstrapToggleSwitch;
-    /** This will hold active tab index */
-    public activeTabIndex: number = 0;
 
     constructor(
         private commonActions: CommonActions,
