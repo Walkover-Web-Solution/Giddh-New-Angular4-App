@@ -440,6 +440,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.invoiceList$ = observableOf(this.invoiceList);
             this.referenceVouchersCurrentPage = 2;
         }
+        if (this.autoGenerateVoucherFromEntry) {
+            this.blankLedger.generateInvoice = true;
+        }
     }
 
     /**

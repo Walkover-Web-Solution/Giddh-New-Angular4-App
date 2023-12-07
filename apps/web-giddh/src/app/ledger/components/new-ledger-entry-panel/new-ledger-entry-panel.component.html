@@ -915,9 +915,15 @@
                             (change)="manualGenerateVoucherChecked = $event?.checked"
                             >{{ commonLocaleData?.app_generate_voucher }}</mat-checkbox
                         >
-                        <span class="icon-info position-relative pd-l05" *ngIf="autoGenerateVoucherFromEntry">
-                            <a href="/pages/invoice/preview/settings/sales" class="pd-l1" target="_blank">Go to Invoice Settings</a>
-                        </span>
+                        <span class="pd-l05" *ngIf="autoGenerateVoucherFromEntry" >
+                            <a 
+                                class="icon-info text-dark" 
+                                href="/pages/invoice/preview/settings/sales?tabIndex=4" 
+                                target="_blank"
+                                [matTooltip]="localeData?.uncheck_auto_generate_tooltip_message"
+                                matTooltipPosition="above"
+                            ></a>
+                        </span>                        
                     </label>
                 </div>
                 <div class="pull-right">

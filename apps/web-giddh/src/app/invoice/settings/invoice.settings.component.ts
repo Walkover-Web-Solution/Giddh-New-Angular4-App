@@ -1,7 +1,7 @@
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import * as dayjs from 'dayjs';
 import { CompanyCashFreeSettings, CompanyEmailSettings, EstimateSettings, InvoiceSetting, InvoiceSettings, InvoiceWebhooks, ProformaSettings } from '../../models/interfaces/invoice.setting.interface';
 import { AppState } from '../../store';
@@ -18,6 +18,7 @@ import { GeneralService } from '../../services/general.service';
 import { OrganizationType } from '../../models/user-login-state';
 import { cloneDeep, concat, isEmpty, isEqual } from '../../lodash-optimized';
 import { BootstrapToggleSwitch } from '../../app.constant'
+import { TabsetComponent } from 'ngx-bootstrap/tabs';
 
 @Component({
     selector: 'app-invoice-setting',
@@ -27,6 +28,7 @@ import { BootstrapToggleSwitch } from '../../app.constant'
 })
 export class InvoiceSettingComponent implements OnInit, OnDestroy {
 
+    @ViewChild('staticTabsSettings', { static: true }) public staticTabs: TabsetComponent;
     public invoiceSetting: InvoiceSettings = new InvoiceSettings();
     public proformaSetting: ProformaSettings = new ProformaSettings();
     public estimateSetting: EstimateSettings = new EstimateSettings();
@@ -76,6 +78,8 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     public voucherApiVersion: 1 | 2;
     /** This will hold toggle buttons value and size */
     public bootstrapToggleSwitch = BootstrapToggleSwitch;
+    /** This will hold active tab index */
+    public activeTabIndex: number = 0;
 
     constructor(
         private commonActions: CommonActions,
@@ -94,7 +98,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
-        
+
         this.store.dispatch(this.settingsIntegrationActions.GetGmailIntegrationStatus());
         this.activeCompany$ = this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$));
         this.store.pipe(select(s => s.settings.isGmailIntegrated), takeUntil(this.destroyed$)).subscribe(result => {
@@ -103,6 +107,9 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
         this.initSettingObj();
 
         this._route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((val) => {
+            if (val && val.tabIndex) {
+                this.selectTab(val.tabIndex);
+            }
             if (val.code) {
                 this.saveGmailAuthCode(val.code);
             }
@@ -561,5 +568,17 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
                 }
             }
         });
+    }
+
+    /**
+     * Set Active Tab
+     *
+     * @param {number} id
+     * @memberof InvoiceSettingComponent
+     */
+    public selectTab(id: number) {
+        if (this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[id]) {
+            this.staticTabs.tabs[id].active = true;
+        }
     }
 }

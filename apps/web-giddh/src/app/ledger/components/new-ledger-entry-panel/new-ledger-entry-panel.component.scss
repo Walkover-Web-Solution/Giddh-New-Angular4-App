@@ -173,20 +173,9 @@
     min-width: auto !important;
 }
 
-span {
+a {
     &.icon-info {
         line-height: 40px;        
-        a {
-            display: none;
-            position: absolute;
-            left: 100%;
-            width: max-content;
-        }
-        &:hover {
-            a {
-                display: inline;
-            }
-        }
     }
 }
 
