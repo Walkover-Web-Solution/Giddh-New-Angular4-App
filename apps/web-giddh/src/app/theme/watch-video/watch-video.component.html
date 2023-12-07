@@ -1,12 +1,9 @@
 <span>
-    <ng-container *ngIf="displayText && !displayIcon">
-        <button class="toggle-btn" (click)="openVideoTutorialDialog()" [ngClass]="cssClass">{{displayText}}</button>
-    </ng-container>
-    <ng-container *ngIf="displayIcon && !displayText">
-        <button class="toggle-btn" (click)="openVideoTutorialDialog()" [ngClass]="cssClass">
-            <img [src]="displayIcon" [height]="displayIconHeight" [width]="displayIconWidth" />
-        </button>
-    </ng-container>
+    <button *ngIf="displayText" class="toggle-btn" (click)="openVideoTutorialDialog()"
+        [ngClass]="cssClass">{{displayText}}</button>
+    <button *ngIf="displayIcon" class="toggle-btn" (click)="openVideoTutorialDialog()" [ngClass]="cssClass">
+        <img [src]="displayIcon" [height]="displayIconHeight" [width]="displayIconWidth" />
+    </button>
 </span>
 
 <ng-template #videoTutorial>
