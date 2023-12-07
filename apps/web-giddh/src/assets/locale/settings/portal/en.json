@@ -1,0 +1,11 @@
+{
+    "add_domain": "Add Domain",
+    "select_domain": "Select Domain",
+    "hostname": "Hostname",
+    "share_dns_record_to_developer": "Share DNS record to developer",
+    "add_subdomain_or_domain": "Add subdomain/domain",
+    "copied":"Copied...",
+    "verified": "Verified",
+    "unverified": "Unverified",
+    "login_to_your_domain_registrar_to_add_the_following_details_in_your_dns_setting": "Login to your Domain Registrar to add the following details in your DNS setting."
+}

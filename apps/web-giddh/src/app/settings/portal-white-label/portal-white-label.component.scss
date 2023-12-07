@@ -1,76 +1,32 @@
-.custom-file {
-    border: 1px dashed var(--color-iron);
-    border-radius: 2px;
-    background: var(--color-white);
-    width: 100px;
-    height: 100px;
-}
-
-.custom-file-input~.custom-file-label::after {
-    content: "";
-}
-
-.has-error {
-    border: 1px solid var(--color-danger);
-}
-
-.custom-file-label {
-    border: none;
-    padding: 30px;
-    background: var(--color-white);
-    height: 100%;
-
-    &::after {
-        height: 0 !important;
-        padding: 0 !important;
-    }
-
-    .icon-plus {
-        font-size: 40px;
-        color: var(--color-dark-fog);
-    }
-}
-
-.unique-name,
-.country-name,
-.parent-name {
-    color: var(--color-abbey);
-
-    .country-info {
-        display: inherit;
-
-        .country-flag {
-            display: inline-block;
-            margin-right: 8px;
-            width: 24px;
+.portal {
+    position: relative;
+    min-height: calc(100vh - 284px);
+    .portal-header {
+        .dropdown-wrapper {
+            width: 300px;
+        }
+        .position-center {
+            position: absolute;
+            top: 40%;
+            left: 50%;
         }
     }
-}
+    .portal-body {
+        table {
+            background: var(--color-transparent-backgrounds);
+            .status {
+                border-radius: 16px;
+                padding: 6px 12px;
+            }
+            .verified {
+                color: var(--color-success-enable);
+                background: rgba(#36b283, 0.1);
+            }
 
-.personal-other-details {
-    label {
-        line-height: 2.3;
-    }
-
-    .form-group {
-        margin-bottom: 0;
-    }
-}
-
-.img-size {
-    color: var(--color-abbey);
-}
-
-.container-fluid {
-    padding-left: 0;
-}
-
-@media (max-width: 767px) {
-    label {
-        line-height: 2.3;
-    }
-
-    .border-bottom {
-        margin-top: 5px;
+            .unverified {
+                color: var(--color-danger);
+                background: rgba(#e54556, 0.1);
+            }
+        }
     }
 }
