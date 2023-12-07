@@ -1,6 +1,7 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Inject, Input, OnDestroy, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
+import { ChangeDetectionStrategy, Component, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { VIDEOLINK } from './video-link.const';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
     selector: 'watch-video',
@@ -8,51 +9,67 @@ import { VIDEOLINK } from './video-link.const';
     styleUrls: ['./watch-video.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class WatchVideoComponent implements OnInit, OnDestroy  {
+export class WatchVideoComponent implements OnInit {
+    /** Holds template reference for video  */
     @ViewChild('videoTutorial') videoTutorial: TemplateRef<any>;
 
-    public videoTutorialDialogRef: MatDialogRef<any>;
-    @Input() public buttonName: string = null;
+    /** Holds text inside toggle button */
+    @Input() public displayText: string = null;
+    /** Holds boolean value as enable/disable video autoplay*/
     @Input() public autoplay: any = true;
-    @Input() public toggleIcon: string = null;
-    @Input() public toggleIconWidth: string = '25px';
-    @Input() public toggleIconHeight: string = '25px';
+    /** Holds Image URL to display inside toggle button */
+    @Input() public displayIcon: string = null;
+    /** Holds Image width */
+    @Input() public displayIconWidth: number = 25;
+    /** Holds Image height */
+    @Input() public displayIconHeight: number = 25;
+    /** Holds Module Name by which video link will be selected */
     @Input() public moduleName: string = null;
-    @Output() public videoClose: EventEmitter<any> = new EventEmitter<any>();
+    /** Holds CSS class for custom code */
+    @Input() public cssClass: string = null;
 
-    public videoLink;
-    
-    constructor(public dialog: MatDialog) {}
+    /** Holds final youtube video link  */
+    public videoLink: string = '';
 
-     /**
-     * Initializes the component
+    constructor(
+        public dialog: MatDialog,
+        private sanitizer: DomSanitizer
+    ) { }
+
+    /**
+    * Initializes the component
+    *
+    * @memberof WatchVideoComponent
+    */
+    public ngOnInit(): void {
+        console.log("displayIconWidth", this.displayIconWidth);
+
+        this.videoLink = VIDEOLINK[this.moduleName];
+        this.autoplay = this.autoplay ? 1 : 0;
+        this.videoLink = `${this.videoLink}&rel=0&autoplay=${this.autoplay}`;
+        this.videoLink = this.domSantizer(this.videoLink);
+    }
+
+    /**
+     *  Open video Dialog 
      *
      * @memberof WatchVideoComponent
      */
-     public ngOnInit(): void {
-        this.videoLink = VIDEOLINK.VOUCHER;
-        console.log("autoplay",this.autoplay)
-        this.autoplay = this.autoplay ? 1 : 0;
-        console.log("autoplay",this.autoplay)
-         console.log("VIDEOLINK",VIDEOLINK);
-     }
     public openVideoTutorialDailog(): void {
-        this.videoTutorialDialogRef = this.dialog.open(this.videoTutorial, {
+        this.dialog.open(this.videoTutorial, {
             width: '800px',
-            height: '450px'
+            height: 'auto'
         });
     }
 
-    // /**
-    //  * This will close the dialog and will send response
-    //  *
-    //  * @param {*} response
-    //  * @memberof WatchVideoComponent
-    //  */
-    // public sendResponse(response: any): void {
-    //     this.dialogRef.close(response);
-    // }
-    public ngOnDestroy() {
-        
+    /**
+    * Angular's sanitizer service to bypass security and trust the provided string as a resource URL
+    *
+    * @param {string} str
+    * @return {*}  {*}
+    * @memberof WatchVideoComponent
+    */
+    public domSantizer(str: string): any {
+        return this.sanitizer.bypassSecurityTrustResourceUrl(str);
     }
 }
