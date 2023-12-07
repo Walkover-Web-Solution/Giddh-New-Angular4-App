@@ -1,10 +1,12 @@
 .portal {
     position: relative;
     min-height: calc(100vh - 284px);
+
     .portal-header {
         .dropdown-wrapper {
             width: 300px;
         }
+
         .position-center {
             position: absolute;
             top: 40%;
@@ -14,10 +16,12 @@
     .portal-body {
         table {
             background: var(--color-transparent-backgrounds);
+
             .status {
                 border-radius: 16px;
                 padding: 6px 12px;
             }
+
             .verified {
                 color: var(--color-success-enable);
                 background: rgba(#36b283, 0.1);
@@ -29,4 +33,11 @@
             }
         }
     }
+}
+.default-status {
+    color: var(--color-white);
+}
+
+.fill-status {
+    color: var(--color-blue);
 }

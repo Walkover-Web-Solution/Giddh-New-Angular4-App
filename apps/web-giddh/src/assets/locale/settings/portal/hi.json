@@ -7,5 +7,6 @@
     "copied":"कॉपी किया गया...",
     "verified": "सत्यापित",
     "unverified": "असत्यापित",
-    "login_to_your_domain_registrar_to_add_the_following_details_in_your_dns_setting": "अपने डोमेन रजिस्ट्रार में लॉगिन करें और निम्नलिखित विवरण को अपने DNS सेटिंग में जोड़ें।"
+    "login_to_your_domain_registrar_to_add_the_following_details_in_your_dns_setting": "अपने डोमेन रजिस्ट्रार में लॉगिन करें और निम्नलिखित विवरण को अपने DNS सेटिंग में जोड़ें।",
+    "invalid_email": "[EMAIL] अमान्य ईमेल है!"
 }

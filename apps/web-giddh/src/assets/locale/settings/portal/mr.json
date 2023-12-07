@@ -7,5 +7,6 @@
     "copied":"कॉपी केले...",
     "verified": "सत्यापित",
     "unverified": "असत्यापित",
-    "login_to_your_domain_registrar_to_add_the_following_details_in_your_dns_setting": "आपल्या डोमेन रजिस्ट्रारवर लॉगिन करून आपल्या DNS सेटिंगमध्ये खालील माहिती जोडा."
+    "login_to_your_domain_registrar_to_add_the_following_details_in_your_dns_setting": "आपल्या डोमेन रजिस्ट्रारवर लॉगिन करून आपल्या DNS सेटिंगमध्ये खालील माहिती जोडा.",
+    "invalid_email": "[EMAIL] अवैध ईमेल आहे!"
 }

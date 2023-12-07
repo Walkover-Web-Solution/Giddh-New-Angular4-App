@@ -9,7 +9,18 @@ import { GeneralService } from '../../services/general.service';
 import { ClipboardService } from 'ngx-clipboard';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-modal.component';
-
+import { IOption } from '../../theme/ng-select/option.interface';
+import { EMAIL_VALIDATION_REGEX } from '../../app.constant';
+export interface GetDomainList {
+    type: any;
+    hostName: any;
+    value: any;
+    status: any;
+    isCopiedHostName: boolean;
+    isCopiedValue: boolean;
+}
+/** Hold information of activity logs */
+const ELEMENT_DATA: GetDomainList[] = [];
 @Component({
     selector: 'portal-white-label',
     templateUrl: './portal-white-label.component.html',
@@ -42,30 +53,28 @@ export class PortalWhiteLabelComponent implements OnInit {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Instance of portal while label form */
     public portalWhilteLabelForm: UntypedFormGroup;
+    /** Instance of portal shared email form */
+    public shareEmailForm: UntypedFormGroup;
     /** Stores the white label Random generate string */
     public generatedString: string;
-    /** True if user is verified*/
-    public showDomainButton: boolean = false;
     /** True if API is in progress */
     public shouldShowLoader: boolean;
     /** Hold domain list */
-    public domainList: any[] = [];
-    /** This will hold isCopied */
-    public isHostNameCopied: boolean = false;
-    /** This will hold isCopied */
-    public isValueCopied: boolean = false;
-    /** Table columns */
+    public domainList: IOption[] = [];
+    /** Hold the data of activity logs */
+    public dataSource = ELEMENT_DATA;
+    /** This will use for table heading */
     public displayedColumns: string[] = ['type', 'hostName', 'value', 'status'];
-    /** Holds list of data */
-    public dataSource: any = [
-        { type: 'CNAME', hostName: 'hrishabh.elitevysya.com', value: 'v=spfl include:mailer91.com', status: true },
-        { type: 'CNAME', hostName: 'hrishabh.elitevysya.com', value: 'v=spfl include:mailer91.com', status: false }];
+    /** This will hold domain unique name */
+    public domain: any = {
+        name: '',
+        uniqueName: ''
+    };
 
     constructor(private fb: UntypedFormBuilder,
         private settingsProfileService: SettingsProfileService,
         private toaster: ToasterService,
         private changeDetectorRef: ChangeDetectorRef,
-        private generalService: GeneralService,
         private clipboardService: ClipboardService,
         private dialog: MatDialog) { }
 
@@ -100,11 +109,9 @@ export class PortalWhiteLabelComponent implements OnInit {
             .subscribe((value) => {
                 if (value) {
                     const urlWithoutProtocol = this.removeProtocol(value);
-                    this.generatedString = this.generalService.generateRandomString(urlWithoutProtocol);
-                    this.showDomainButton = true;
+                    this.generatedString = new Date().getTime() + '.' + urlWithoutProtocol;
                 } else {
                     this.generatedString = '';
-                    this.showDomainButton = false;
                 }
             });
     }
@@ -114,9 +121,6 @@ export class PortalWhiteLabelComponent implements OnInit {
      * @memberof PortalWhiteLabelComponent
      */
     public onInputChange(event): void {
-        console.log("event", event);
-        return;
-        this.showDomainButton = true;
         this.subscribeToFormChanges();
     }
 
@@ -129,29 +133,154 @@ export class PortalWhiteLabelComponent implements OnInit {
         this.portalWhilteLabelForm = this.fb.group({
             url: ['']
         });
+        this.shareEmailForm = this.fb.group({
+            recipients: ['']
+        });
     }
 
     /**
-     * This will be use for get domain list
+     * This will be use for verify domain
+     *
+     * @memberof PortalWhiteLabelComponent
+     */
+    public verifyDomain(): void {
+        this.shouldShowLoader = true;
+        this.settingsProfileService.verifyPortalWhilteLabel(this.domain.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            if (response && response.status === 'success') {
+                this.toaster.successToast(response.message);
+                this.shouldShowLoader = false;
+                this.getDomainList();
+            } else {
+                this.shouldShowLoader = false;
+                this.toaster.errorToast(response.message);
+            }
+        });
+        this.changeDetectorRef.detectChanges();
+    }
+
+    /**
+     * This will be use for select domain
+     *
+     * @param {*} event
+     * @memberof PortalWhiteLabelComponent
+     */
+    public selectDomain(event: any): void {
+        this.domain.name = event?.label;
+        this.domain.uniqueName = event?.value;
+        this.getDomainListData(this.domain.uniqueName);
+    }
+
+    /**
+     * This will be use for send email
+     *
+     * @return {*}  {void}
+     * @memberof PortalWhiteLabelComponent
+     */
+    public sendEmail(): void {
+        let validRecipients: boolean = true;
+        if (this.shareEmailForm.get('recipients')?.value) {
+            let recipients = this.shareEmailForm.get('recipients')?.value.split(",");
+            let validEmails = [];
+            if (recipients && recipients.length > 0) {
+                recipients.forEach(email => {
+                    if (validRecipients && email.trim() && !EMAIL_VALIDATION_REGEX.test(email.trim())) {
+                        this.toaster.clearAllToaster();
+
+                        let invalidEmail = this.localeData?.invalid_email;
+                        invalidEmail = invalidEmail?.replace("[EMAIL]", email);
+                        this.toaster.errorToast(invalidEmail);
+                        validRecipients = false;
+                    }
+
+                    if (validRecipients && email.trim() && EMAIL_VALIDATION_REGEX.test(email.trim())) {
+                        validEmails.push(email.trim());
+                    }
+                });
+            }
+        }
+
+        if (!validRecipients) {
+            return;
+        }
+    }
+
+    /**
+     * This will be use for get domain information
+     *
+     * @param {string} uniqueName
+     * @memberof PortalWhiteLabelComponent
+     */
+    public getDomainListData(uniqueName: string): void {
+        this.shouldShowLoader = true;
+        this.settingsProfileService.getDomainListTableData(uniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            if (response && response.status === 'success') {
+                this.shouldShowLoader = false;
+                if (response?.body?.length) {
+                    this.dataSource = response.body?.map(portal => {
+                        return { type: 'CNAME', hostName: portal.domainName, value: 'portal.giddh.com', status: portal.verified, isCopiedHostName: false, isCopiedValue: false };
+                    });
+                }
+            } else {
+                this.toaster.errorToast(response.message);
+                this.shouldShowLoader = false;
+            }
+        });
+        this.changeDetectorRef.detectChanges();
+    }
+
+    /**
+     * This will be use for set primary domain
+     *
+     * @param {string} operation
+     * @param {string} [uniqueName]
+     * @memberof PortalWhiteLabelComponent
+     */
+    public setPrimaryDeteleDomain(operation: string, uniqueName?: string): void {
+        this.settingsProfileService.setPrimaryDeleteDomain(uniqueName, operation).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            if (response && response.status === 'success') {
+                if (operation === 'set-primary') {
+                    this.toaster.successToast('Primary domain set successfully')
+                } else {
+                    this.toaster.successToast('Domain successfully deleted')
+                }
+                this.getDomainList();
+                if (operation === 'delete') {
+                    this.portalWhilteLabelForm.reset();
+                    let event = {
+                        label: response.body[0].domainName,
+                        value: response.body[0].uniqueName,
+                        status: response.body[0].primary
+                    }
+                    this.selectDomain(event)
+                    this.dialog.closeAll();
+                }
+            } else {
+                this.toaster.errorToast(response.message);
+            }
+            this.changeDetectorRef.detectChanges();
+        });
+    }
+
+    /**
+     * This will be use for get dropdown domain list
      *
      * @memberof PortalWhiteLabelComponent
      */
     public getDomainList(): void {
-        this.shouldShowLoader = true;
         this.settingsProfileService.getDomainList().pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response && response.status === 'success') {
-                this.domainList = [];
-                this.shouldShowLoader = false;
-                if (response?.body?.domainList?.length) {
-                    this.domainList = [{
-                        type: 'CNAME',
-                        hostname: response.body?.domainList[0],
-                        value: response.body?.domainList[1],
-                        status: response.body.verified
-                    }];
+                if (response?.body?.length) {
+                    let event = {
+                        label: response.body[0].domainName,
+                        value: response.body[0].uniqueName,
+                        status: response.body[0].primary
+                    }
+                    this.selectDomain(event);
+                    this.domainList = response.body?.map(portal => {
+                        return { label: portal.domainName, value: portal.uniqueName, status: portal.primary };
+                    });
                 }
             } else {
-                this.shouldShowLoader = false;
                 this.toaster.errorToast(response.message);
             }
         });
@@ -177,12 +306,19 @@ export class PortalWhiteLabelComponent implements OnInit {
      */
     public submitForm(): void {
         const urlWithoutProtocol = this.removeProtocol(this.portalWhilteLabelForm.get('url')?.value);
-        let requestData = [urlWithoutProtocol, 'api.giddh.com'];
-        this.settingsProfileService.verifyPortalWhilteLabel(requestData).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+        let requestData = [urlWithoutProtocol, this.generatedString];
+        this.settingsProfileService.addPortalDomain(requestData).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response && response.status === 'success') {
                 this.toaster.successToast('Domain successfully added')
-                this.getDomainList();
                 this.portalWhilteLabelForm.reset();
+                this.getDomainList();
+                let event = {
+                    label: response.body[0].domainName,
+                    value: response.body[0].uniqueName,
+                    status: response.body[0].primary
+                }
+                this.selectDomain(event)
+                this.dialog.closeAll();
             } else {
                 this.toaster.errorToast(response.message);
             }
@@ -195,23 +331,25 @@ export class PortalWhiteLabelComponent implements OnInit {
     *
     * @memberof PersonalInformationComponent
     */
-    public copyUrl(value: any, type: any): void {
+    public copyUrl(value: any, host: any, type: any): void {
         const urlToCopy = value;
         this.clipboardService.copyFromContent(urlToCopy);
         if (type === 'host') {
-            this.isHostNameCopied = true;
+            host.isCopiedHostName = true;
         } else {
-            this.isValueCopied = true;
+            host.isCopiedValue = true;
         }
         setTimeout(() => {
-            if (type === 'host') {
-                this.isHostNameCopied = false;
-            } else {
-                this.isValueCopied = false;
-            }
+            host.isCopiedHostName = false;
+            host.isCopiedValue = false;
         }, 3000);
     }
 
+    /**
+     * This will be use for delete confirmation popup
+     *
+     * @memberof PortalWhiteLabelComponent
+     */
     public deleteConfirmationDialog(): void {
         let dialogRef = this.dialog.open(ConfirmModalComponent, {
             data: {
@@ -226,20 +364,29 @@ export class PortalWhiteLabelComponent implements OnInit {
 
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response) {
-                console.log("Deleted");
-
+                this.setPrimaryDeteleDomain('delete', this.domain.uniqueName);
             } else {
-                console.log("Cancel Deleted");
+                this.dialog.closeAll();
             }
         });
     }
 
+    /**
+     * This wll be use for open send email dialog
+     *
+     * @memberof PortalWhiteLabelComponent
+     */
     public openShareDomainDialog(): void {
         this.dialog.open(this.shareDomain, {
             width: '500px'
         });
     }
 
+    /**
+     * This wll be use for open add domain dialog
+     *
+     * @memberof PortalWhiteLabelComponent
+     */
     public openAddDomainDialog(): void {
         this.dialog.open(this.addDomain, {
             width: '550px'
