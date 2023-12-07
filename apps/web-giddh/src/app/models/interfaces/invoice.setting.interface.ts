@@ -95,6 +95,7 @@ export class InvoiceSettings {
     email?: any;
     emailVerified?: any;
     autoEntryVoucherAndEmail: boolean;
+    autoGenerateVoucherFromEntry: boolean;
     lockDate: string;
     useCustomInvoiceNumber: boolean;
     useCustomCreditNoteNumber: boolean;
