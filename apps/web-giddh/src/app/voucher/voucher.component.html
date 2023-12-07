@@ -6,14 +6,14 @@
     (translationComplete)="translationComplete($event)"
 >
     <giddh-page-loader *ngIf="(showLoader && isUpdateMode) || isShowLoader"></giddh-page-loader>
+    <hamburger-menu
+        [pageHeading]="(isCashInvoice ? localeData?.invoice_types?.cash : getInvoiceType()) | titlecase"
+    >
+    </hamburger-menu>
     <div [ngStyle]="{ 'display': (!isUpdateMode || !showLoader) && !isShowLoader ? 'block' : 'none' }">
         <div class="d-flex border-bottom mobile-view-padding">
-            <hamburger-menu
-                [pageHeading]="(isCashInvoice ? localeData?.invoice_types?.cash : getInvoiceType()) | titlecase"
-            >
-            </hamburger-menu>
-            <div class="form-group mr-b05 clearfix pro-invoice-heading">
-                <div class="clearfix">
+            <div class="form-group mr-b05 clearfix pro-invoice-heading w-100">
+                <div class="d-flex justify-content-between align-items-center pd-l15 pd-r15">
                     <div class="btn-group proforma-sales-time">
                         <button
                             id="giddh-page-heading-link"
@@ -27,6 +27,7 @@
                             <small *ngIf="invoiceType === 'estimates'"> ({{ commonLocaleData?.app_beta }}) </small>
                         </button>
                     </div>
+                    <watch-video [displayText]="localeData?.watch_video_text" [cssClass]="'text-primary'" [moduleName]="'VOUCHER'"></watch-video>
                 </div>
             </div>
         </div>

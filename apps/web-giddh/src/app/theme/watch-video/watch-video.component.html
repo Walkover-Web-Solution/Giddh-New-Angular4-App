@@ -1,0 +1,18 @@
+<span>
+    <ng-container *ngIf="displayText && !displayIcon">
+        <button [disableRipple]="true" class="toggle-btn" (click)="openVideoTutorialDailog()" [ngClass]="cssClass">{{displayText}}</button>
+    </ng-container>
+    <ng-container *ngIf="displayIcon && !displayText">
+        <button [disableRipple]="true" class="toggle-btn" mat-button (click)="openVideoTutorialDailog()" [ngClass]="cssClass">
+            <img [src]="displayIcon" [height]="displayIconHeight" [width]="displayIconWidth" />
+        </button>
+    </ng-container>
+</span>
+
+<ng-template #videoTutorial>
+    <div class="video-wrapper">
+        <iframe width="100%" height="100%" [src]="videoLink" frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen></iframe>
+    </div>
+</ng-template>
