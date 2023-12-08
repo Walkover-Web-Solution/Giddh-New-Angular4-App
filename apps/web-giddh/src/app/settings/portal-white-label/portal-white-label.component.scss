@@ -25,12 +25,12 @@
 
             .verified {
                 color: var(--color-success-enable);
-                background: rgba(#36b283, 0.1);
+                background: var(--color-success-enable-bg-light);
             }
 
             .unverified {
                 color: var(--color-danger);
-                background: rgba(#e54556, 0.1);
+                background: var(--color-danger-bg-light);
             }
         }
     }
