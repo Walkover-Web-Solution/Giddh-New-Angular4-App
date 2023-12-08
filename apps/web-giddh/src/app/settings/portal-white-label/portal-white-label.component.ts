@@ -5,7 +5,6 @@ import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { SettingsProfileService } from '../../services/settings.profile.service';
 import { ToasterService } from '../../services/toaster.service';
-import { GeneralService } from '../../services/general.service';
 import { ClipboardService } from 'ngx-clipboard';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-modal.component';
@@ -68,7 +67,8 @@ export class PortalWhiteLabelComponent implements OnInit {
     /** This will hold domain unique name */
     public domain: any = {
         name: '',
-        uniqueName: ''
+        uniqueName: '',
+        status: ''
     };
 
     constructor(private fb: UntypedFormBuilder,
@@ -86,11 +86,11 @@ export class PortalWhiteLabelComponent implements OnInit {
      */
     public ngOnInit(): void {
         this.initializeForm();
-        this.getDomainList();
+        this.getDomainList(true);
     }
 
     @HostListener('paste', ['$event'])
-    public onPaste(event) {
+    public onPaste(event): void {
         if (event) {
             this.subscribeToFormChanges();
         }
@@ -115,13 +115,16 @@ export class PortalWhiteLabelComponent implements OnInit {
                 }
             });
     }
+
     /**
      * This will be use for input changef
      *
      * @memberof PortalWhiteLabelComponent
      */
-    public onInputChange(event): void {
-        this.subscribeToFormChanges();
+    public onInputChange(event: any): void {
+        if (event) {
+            this.subscribeToFormChanges();
+        }
     }
 
     /**
@@ -147,9 +150,15 @@ export class PortalWhiteLabelComponent implements OnInit {
         this.shouldShowLoader = true;
         this.settingsProfileService.verifyPortalWhilteLabel(this.domain.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response && response.status === 'success') {
-                this.toaster.successToast(response.message);
+                this.toaster.successToast(response.body);
                 this.shouldShowLoader = false;
-                this.getDomainList();
+                this.getDomainList(false);
+                let event = {
+                    label: this.domain.name,
+                    value: this.domain.uniqueName,
+                    status: this.domain.status
+                }
+                this.selectDomain(event);
             } else {
                 this.shouldShowLoader = false;
                 this.toaster.errorToast(response.message);
@@ -165,9 +174,12 @@ export class PortalWhiteLabelComponent implements OnInit {
      * @memberof PortalWhiteLabelComponent
      */
     public selectDomain(event: any): void {
-        this.domain.name = event?.label;
-        this.domain.uniqueName = event?.value;
-        this.getDomainListData(this.domain.uniqueName);
+        if (event) {
+            this.domain.name = event.label;
+            this.domain.uniqueName = event.value;
+            this.domain.status = event.status;
+            this.getDomainListData(this.domain.uniqueName);
+        }
     }
 
     /**
@@ -185,7 +197,6 @@ export class PortalWhiteLabelComponent implements OnInit {
                 recipients.forEach(email => {
                     if (validRecipients && email.trim() && !EMAIL_VALIDATION_REGEX.test(email.trim())) {
                         this.toaster.clearAllToaster();
-
                         let invalidEmail = this.localeData?.invalid_email;
                         invalidEmail = invalidEmail?.replace("[EMAIL]", email);
                         this.toaster.errorToast(invalidEmail);
@@ -196,9 +207,18 @@ export class PortalWhiteLabelComponent implements OnInit {
                         validEmails.push(email.trim());
                     }
                 });
+                this.settingsProfileService.sharedDomainEmail(validEmails, this.domain.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+                    if (response && response.status === 'success') {
+                        this.toaster.successToast(response.body)
+                        this.dialog?.closeAll();
+                        this.shareEmailForm.reset();
+                    } else {
+                        this.toaster.errorToast(response.message);
+                    }
+                    this.changeDetectorRef.detectChanges();
+                });
             }
         }
-
         if (!validRecipients) {
             return;
         }
@@ -239,20 +259,21 @@ export class PortalWhiteLabelComponent implements OnInit {
         this.settingsProfileService.setPrimaryDeleteDomain(uniqueName, operation).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response && response.status === 'success') {
                 if (operation === 'set-primary') {
-                    this.toaster.successToast('Primary domain set successfully')
+                    this.toaster.successToast(this.localeData?.primary_domain_set);
                 } else {
-                    this.toaster.successToast('Domain successfully deleted')
+                    this.toaster.successToast(this.localeData?.delete_domain);
                 }
-                this.getDomainList();
                 if (operation === 'delete') {
+                    this.getDomainList(true);
                     this.portalWhilteLabelForm.reset();
-                    let event = {
-                        label: response.body[0].domainName,
-                        value: response.body[0].uniqueName,
-                        status: response.body[0].primary
-                    }
-                    this.selectDomain(event)
                     this.dialog.closeAll();
+                }
+                for (const item of this.domainList as any) {
+                    if (item.value === uniqueName) {
+                        item.status = true;
+                    } else {
+                        item.status = false;
+                    }
                 }
             } else {
                 this.toaster.errorToast(response.message);
@@ -266,16 +287,18 @@ export class PortalWhiteLabelComponent implements OnInit {
      *
      * @memberof PortalWhiteLabelComponent
      */
-    public getDomainList(): void {
+    public getDomainList(apiCall: boolean): void {
         this.settingsProfileService.getDomainList().pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response && response.status === 'success') {
                 if (response?.body?.length) {
-                    let event = {
-                        label: response.body[0].domainName,
-                        value: response.body[0].uniqueName,
-                        status: response.body[0].primary
+                    if (apiCall) {
+                        let event = {
+                            label: response.body[0].domainName,
+                            value: response.body[0].uniqueName,
+                            status: response.body[0].primary
+                        }
+                        this.selectDomain(event);
                     }
-                    this.selectDomain(event);
                     this.domainList = response.body?.map(portal => {
                         return { label: portal.domainName, value: portal.uniqueName, status: portal.primary };
                     });
@@ -289,13 +312,12 @@ export class PortalWhiteLabelComponent implements OnInit {
 
     /**
      * This will be use for remove protocol from url
-     *
+     * Remove 'http://' or 'https://'
      * @param {string} value
      * @return {*}  {string}
      * @memberof PortalWhiteLabelComponent
      */
     public removeProtocol(value: string): string {
-        // Remove 'http://' or 'https://'
         return value.replace(/^(https?|ftp):\/\//, '');
     }
 
@@ -309,13 +331,13 @@ export class PortalWhiteLabelComponent implements OnInit {
         let requestData = [urlWithoutProtocol, this.generatedString];
         this.settingsProfileService.addPortalDomain(requestData).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response && response.status === 'success') {
-                this.toaster.successToast('Domain successfully added')
+                this.toaster.successToast(this.localeData?.add_domain_succesfully);
                 this.portalWhilteLabelForm.reset();
-                this.getDomainList();
+                this.getDomainList(false);
                 let event = {
                     label: response.body[0].domainName,
                     value: response.body[0].uniqueName,
-                    status: response.body[0].primary
+                    status: response.body[0].primary || false
                 }
                 this.selectDomain(event)
                 this.dialog.closeAll();

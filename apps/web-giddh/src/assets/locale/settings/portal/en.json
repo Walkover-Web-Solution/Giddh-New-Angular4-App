@@ -7,6 +7,9 @@
     "copied":"Copied...",
     "verified": "Verified",
     "unverified": "Unverified",
-    "login_to_your_domain_registrar_to_add_the_following_details_in_your_dns_setting": "Login to your Domain Registrar to add the following details in your DNS setting.",
-    "invalid_email": "[EMAIL] is invalid email!"
+    "domain_registrar": "Login to your Domain Registrar to add the following details in your DNS setting.",
+    "invalid_email": "[EMAIL] is invalid email!",
+    "primary_domain_set":"'Primary domain set successfully'",
+    "add_domain_succesfully:":"Domain added successfully",
+    "delete_domain":"Domain deleted successfully"
 }

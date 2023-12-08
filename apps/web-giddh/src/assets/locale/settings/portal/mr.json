@@ -8,5 +8,8 @@
     "verified": "सत्यापित",
     "unverified": "असत्यापित",
     "login_to_your_domain_registrar_to_add_the_following_details_in_your_dns_setting": "आपल्या डोमेन रजिस्ट्रारवर लॉगिन करून आपल्या DNS सेटिंगमध्ये खालील माहिती जोडा.",
-    "invalid_email": "[EMAIL] अवैध ईमेल आहे!"
+    "invalid_email": "[EMAIL] अवैध ईमेल आहे!",
+    "primary_domain_set": "प्रमुख डोमेन सफलतेने सेट केला गेला",
+    "add_domain_succesfully": "डोमेन सफलतेने जोडला गेला",
+    "delete_domain": "डोमेन सफलतेने हटवला गेला"
 }

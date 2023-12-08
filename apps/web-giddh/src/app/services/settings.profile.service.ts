@@ -289,6 +289,13 @@ export class SettingsProfileService {
             catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
     }
 
+    /**
+     * This will be use for add portal domain
+     *
+     * @param {*} model
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof SettingsProfileService
+     */
     public addPortalDomain(model: any): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.post(this.config.apiUrl + SETTINGS_PROFILE_API.ADD_PORTAL_DOMAIN?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(
@@ -300,6 +307,31 @@ export class SettingsProfileService {
             catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
     }
 
+    /**
+     * This will be use for shared domain email
+     *
+     * @param {*} model
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof SettingsProfileService
+     */
+    public sharedDomainEmail(model: any, domainUniqueName: string): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.post(this.config.apiUrl + SETTINGS_PROFILE_API.SHARE_PORTAL_DOMAIN?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':domainUniqueName', encodeURIComponent(domainUniqueName)), model).pipe(
+            map((res) => {
+                let data: BaseResponse<any, any> = res;
+                data.request = model;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
+    }
+
+    /**
+     * This will be use for get domain list with unique name
+     *
+     * @param {string} domainUniqueName
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof SettingsProfileService
+     */
     public getDomainListTableData(domainUniqueName: string): Observable<BaseResponse<any, any>> {
         const companyUniqueName = this.generalService.companyUniqueName;
         return this.http.get(this.config.apiUrl + SETTINGS_PROFILE_API.GET_DOMAIN_LIST_DATA?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName))?.replace(':domainUniqueName', encodeURIComponent(domainUniqueName))).pipe(map((res) => {
@@ -309,6 +341,14 @@ export class SettingsProfileService {
         }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
     }
 
+    /**
+     * This will be use for set primary domain
+     *
+     * @param {string} domainUniqueName
+     * @param {string} operation
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof SettingsProfileService
+     */
     public setPrimaryDeleteDomain(domainUniqueName: string, operation: string): Observable<BaseResponse<any, any>> {
         const companyUniqueName = this.generalService.companyUniqueName;
         return this.http.patch(this.config.apiUrl + SETTINGS_PROFILE_API.PRIMARY_DELETE_DOMAIN_SET?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName))?.replace(':domainUniqueName', encodeURIComponent(domainUniqueName))?.replace(':operation', encodeURIComponent(operation)), '').pipe(map((res) => {

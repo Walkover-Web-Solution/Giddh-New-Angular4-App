@@ -815,6 +815,11 @@ textarea {
     float: right !important;
 }
 
+.domain-options {
+    .mdc-list-item__primary-text {
+        width: 100%;
+    }
+}
 @media screen and (max-width: 1366px) and (orientation: portrait) {
     .subscription-form-select {
         float: left !important;
