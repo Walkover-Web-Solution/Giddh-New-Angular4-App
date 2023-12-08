@@ -81,9 +81,8 @@
                     </li>
                 </ul>
                 <ul>
-                    <li>
+                    <li *ngIf="showGstMenus">
                         <a
-                            *ngIf="showGstMenus"
                             href="javascript:void(0);"
                             [routerLink]="['/pages/invoice/ewaybill']"
                             class="d-block clearfix"
@@ -121,9 +120,8 @@
                             <span>{{ localeData?.setting }}</span>
                         </a>
                     </li>
-                    <li>
+                    <li *ngIf="showGstMenus">
                         <a
-                            *ngIf="showGstMenus"
                             href="javascript:void(0);"
                             class="d-block clearfix"
                             routerLinkActive
@@ -144,8 +142,7 @@
                             routerLinkActive
                             #vatReport="routerLinkActive"
                             [class.active]="vatReport.isActive"
-                            [routerLink]="['/pages/vat-report']"
-                        >
+                            [routerLink]="['/pages/vat-report']">
                             <span><i class="icon-vat1"></i></span>
                             <span>{{ localeData?.vat_report }}</span>
                         </a>
@@ -167,6 +164,19 @@
                                     ? localeData?.add_gst
                                     : localeData?.add_address
                             }}</span>
+                        </a>
+                    </li>
+                    <li *ngIf="showGstMenus">
+                        <a
+                            href="javascript:void(0);"
+                            [routerLink]="['/pages/gstfiling/filing-status']"
+                            class="d-block clearfix"
+                            routerLinkActive
+                            #filingstatus="routerLinkActive"
+                            [class.active]="filingstatus.isActive"
+                        >
+                            <span><i class="icon-GSTR"></i></span>
+                            <span>{{ localeData?.filing_status }}</span>
                         </a>
                     </li>
                 </ul>

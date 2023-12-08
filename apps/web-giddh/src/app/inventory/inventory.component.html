@@ -80,6 +80,7 @@
                     heading="Job Work"
                     (selectTab)="redirectUrlToActiveTab('jobwork', $event)"
                     [active]="activeTabIndex === 1"
+                    [id]="activeTabIndex === 1 ? 'giddh-page-heading' : ''"
                 >
                     <ng-container *ngIf="activeTabIndex === 1">
                         <jobwork></jobwork>

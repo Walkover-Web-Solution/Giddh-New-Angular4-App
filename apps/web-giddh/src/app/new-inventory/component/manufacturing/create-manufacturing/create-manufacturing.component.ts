@@ -514,7 +514,34 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
                 : false
             this.preventStocksApiCall = false;
             this.preventByProductStocksApiCall = false;
-
+            if (!this.manufacturingObject.manufacturingDetails[0].linkedStocks.length) {
+                this.manufacturingObject.manufacturingDetails[0].linkedStocks.push(
+                    {
+                        selectedStock: { label: "", value: "", additional: { stockUnitCode: "", stockUnitUniqueName: "", unitsList: [] } },
+                        stockUniqueName: "",
+                        quantity: 1,
+                        stockUnitUniqueName: "",
+                        stockUnitCode: "",
+                        rate: 0,
+                        amount: 0,
+                        variant: { name: '', uniqueName: '' }
+                    }
+                );
+            }
+            if (!this.manufacturingObject.manufacturingDetails[0].byProducts.length) {
+                this.manufacturingObject.manufacturingDetails[0].byProducts.push(
+                    {
+                        selectedStock: { label: "", value: "", additional: { stockUnitCode: "", stockUnitUniqueName: "", unitsList: [] } },
+                        stockUniqueName: "",
+                        quantity: 1,
+                        stockUnitUniqueName: "",
+                        stockUnitCode: "",
+                        rate: 0,
+                        amount: 0,
+                        variant: { name: '', uniqueName: '' },
+                    }
+                );
+            }
             this.getStocks(this.manufacturingObject.manufacturingDetails[0].linkedStocks[0], 1, '', this.selectedInventoryType);
             this.getAllStocks(this.manufacturingObject.manufacturingDetails[0].byProducts[0], 1, '');
             this.calculateTotals();
@@ -1231,6 +1258,12 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Get manufacturing details
+     *
+     * @param {string} uniqueName
+     * @memberof CreateManufacturingComponent
+     */
     public getManufacturingDetails(uniqueName: string): void {
         this.isLoadingManufacturing = true;
         this.changeDetectionRef.detectChanges();

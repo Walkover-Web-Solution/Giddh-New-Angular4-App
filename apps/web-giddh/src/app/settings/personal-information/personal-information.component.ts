@@ -13,6 +13,7 @@ import { PORTAL_URL } from '../../app.constant';
     templateUrl: './personal-information.component.html',
     styleUrls: ['./personal-information.component.scss']
 })
+
 export class PersonalInformationComponent implements OnInit, OnDestroy {
 
     /** Decides when to emit the value for UPDATE operation */

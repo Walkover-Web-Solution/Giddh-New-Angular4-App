@@ -209,5 +209,6 @@
     "autopaid_confirmation": "Autopaid will run for Sales and Purchase voucher only and will be adjusted as per FIFO method. Are you sure you want to continue?",
     "download_sample_xls": "Download a sample Excel file",
     "download_sample_csv": "Download a sample CSV file",
-    "select_variant": "Select Variant"
+    "select_variant": "Select Variant",
+    "uncheck_auto_generate_tooltip_message": "You cannot uncheck the checkbox as \"Automatically generate voucher for the entries\" setting is enabled. If you wish to disable it, click here to go to Invoice > Settings page."
 }

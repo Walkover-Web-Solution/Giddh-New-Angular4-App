@@ -172,16 +172,13 @@
                 </div>
                 <ng-container *ngTemplateOutlet="mainTable"></ng-container>
             </div>
-            <div class="no-data">
-                <div
-                    class="align-item-center"
-                    *ngIf="
-                        !(dueAmountReportData$ | async)?.results?.length &&
-                        !(getAgingReportRequestInProcess$ | async) &&
-                        !showClearFilter &&
-                        !isAdvanceSearchApplied
-                    "
-                >
+            <div class="no-data"  *ngIf="
+            !(dueAmountReportData$ | async)?.results?.length &&
+            !(getAgingReportRequestInProcess$ | async) &&
+            !showClearFilter &&
+            !isAdvanceSearchApplied
+        ">
+                <div class="align-item-center">
                     <img class="customer-img" src="{{ imgPath }}customer-vendor/stock-photo.png" alt="" />
                     <button mat-stroked-button color="primary" (click)="createNewCustomerEvent.emit(true)">
                         {{ localeData?.new_customer }}
@@ -200,7 +197,7 @@
             </div>
         </div>
     </div>
-        <div *ngIf="isLoading">
+    <div *ngIf="isLoading">
         <giddh-page-loader></giddh-page-loader>
     </div>
 </div>
@@ -320,7 +317,7 @@
                     </div>
                 </th>
                 <td mat-cell *matCellDef="let element" [attr.data-title]="commonLocaleData?.app_due_amount">
-                    <span class="d-flex justify-content-end">
+                    <span class="d-flex justify-content-end" [ngClass]="{'cursor-pointer' : element.futureDueAmount > 0}" (click)="element.futureDueAmount > 0 ? showUnpaidInvoiceList(element?.uniqueName, 'upcoming-due') : ''">
                         <amount-field
                             [amount]="element.futureDueAmount"
                             [currencySymbol]="false"
@@ -355,7 +352,7 @@
                         '0 - ' + (agingDropDownoptions$ | async)?.fourth + ' ' + commonLocaleData?.app_days
                     "
                 >
-                    <span class="d-flex justify-content-end">
+                    <span class="d-flex justify-content-end" [ngClass]="{'cursor-pointer' : element.currentAndPastDueAmount[0].dueAmount > 0}" (click)="element.currentAndPastDueAmount[0].dueAmount > 0 ? showUnpaidInvoiceList(element?.uniqueName, 'range0') : ''">
                         <amount-field
                             [amount]="element.currentAndPastDueAmount[0].dueAmount"
                             [currencySymbol]="false"
@@ -397,7 +394,7 @@
                     "
                 >
                     <span (click)="openAgingDropDown()">
-                        <span class="d-flex justify-content-end">
+                        <span class="d-flex justify-content-end" [ngClass]="{'cursor-pointer' : element.currentAndPastDueAmount[1].dueAmount > 0}" (click)="element.currentAndPastDueAmount[1].dueAmount > 0 ? showUnpaidInvoiceList(element?.uniqueName, 'range1') : ''">
                             <amount-field
                                 [amount]="element.currentAndPastDueAmount[1].dueAmount"
                                 [currencySymbol]="false"
@@ -439,7 +436,7 @@
                         commonLocaleData?.app_days
                     "
                 >
-                    <span class="d-flex justify-content-end">
+                    <span class="d-flex justify-content-end" [ngClass]="{'cursor-pointer' : element.currentAndPastDueAmount[2].dueAmount > 0}" (click)="element.currentAndPastDueAmount[2].dueAmount > 0 ? showUnpaidInvoiceList(element?.uniqueName, 'range2') : ''">
                         <amount-field
                             [amount]="element.currentAndPastDueAmount[2].dueAmount"
                             [currencySymbol]="false"
@@ -470,7 +467,7 @@
                     *matCellDef="let element"
                     [attr.data-title]="(agingDropDownoptions$ | async)?.sixth + 1 + ' ' + commonLocaleData?.app_days"
                 >
-                    <span class="d-flex justify-content-end">
+                    <span class="d-flex justify-content-end" [ngClass]="{'cursor-pointer' : element.currentAndPastDueAmount[3].dueAmount > 0}" (click)="element.currentAndPastDueAmount[3].dueAmount > 0 ? showUnpaidInvoiceList(element?.uniqueName, 'range3') : ''">
                         <amount-field
                             [amount]="element.currentAndPastDueAmount[3].dueAmount"
                             [currencySymbol]="false"
@@ -490,7 +487,7 @@
                     </div>
                 </th>
                 <td mat-cell *matCellDef="let element" [attr.data-title]="commonLocaleData?.app_total_amount">
-                    <span class="d-flex justify-content-end">
+                    <span class="d-flex justify-content-end" [ngClass]="{'cursor-pointer' : element.totalDueAmount > 0}" (click)="element.totalDueAmount > 0 ? showUnpaidInvoiceList(element?.uniqueName, 'total-due') : ''">
                         <amount-field [amount]="element.totalDueAmount" [currencySymbol]="false" [currencyCode]="false">
                         </amount-field>
                     </span>
@@ -509,7 +506,7 @@
 
     <div
         *ngIf="(dueAmountReportData$ | async)?.totalPages > 1"
-        class="pagination-wrapper"
+        class="pagination-wrapper mt-4"
         [hidden]="getAgingReportRequestInProcess$ | async"
     >
         <div class="xs-pl-0">
@@ -541,5 +538,43 @@
             [formControl]="formControl"
             [autoFocus]="show"
         ></text-field>
+    </div>
+</ng-template>
+
+<ng-template #unpaidInvoice>
+    <div class="unpaid-invoice-aside-pane">
+        <div class="header d-flex justify-content-space-between align-items-center">
+            <h3>{{ localeData?.unpaid_invoices }}</h3>
+            <button mat-button class="rounded-circle" (click)="unpaidInvoiceDailogRef.close()">
+                <i class="icon-cross"></i>
+            </button>
+        </div>
+        <div class="list-wrapper pd-15">
+            <mat-list class="p-0" *ngIf="!unpaidInvoiceIsLoading">
+                <cdk-virtual-scroll-viewport [itemSize]="62" class="list-viewport">
+                    <mat-list-item class="list-item px-2"  *cdkVirtualFor="let item of unpaidInvoiceData">
+                        <a [href]="item?.voucherNumber !== 'OPENING BALANCE' ? ('/pages/invoice/preview/sales?voucherUniqueName=' + item?.uniqueName + '&accountUniqueName=' + item?.account?.uniqueName) : domSantizer('javascript:;')" [attr.target]="item?.voucherNumber !== 'OPENING BALANCE' ? '_blank' : undefined" [ngClass]="{ 'cursor-default' : item?.voucherNumber === 'OPENING BALANCE'}">
+                            <div class="d-flex justify-content-space-between align-items-center">
+                                <div>
+                                    <p class="font-14"> <span class="color-primary">{{ item?.voucherNumber }}</span> |  <span class="light-gray">{{ item?.voucherDate }}</span></p>
+                                    <p class="customer-name font-16">{{ item?.account?.customerName || item?.account?.name }}</p>
+                                </div>
+                                <div>
+                                    <amount-field
+                                        [amount]="item.totalBalance?.amountForAccount"
+                                        [currencySymbol]="item.accountCurrencySymbol"
+                                        [currencyCode]="item?.account?.currency?.code"
+                                    >
+                                    </amount-field>
+                                </div>
+                            </div>
+                        </a>                           
+                        </mat-list-item>
+                </cdk-virtual-scroll-viewport>
+            </mat-list>
+            <div *ngIf="unpaidInvoiceIsLoading">
+                <giddh-page-loader></giddh-page-loader>
+            </div>
+        </div>
     </div>
 </ng-template>

@@ -111,6 +111,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     @Input() public selectedAccountDetails: IOption;
     /** Total pages for reference vouchers */
     @Input() private referenceVouchersTotalPages: number = 1;
+    /** Holds Invoice Setting for auto Generate Voucher From Entry */
+    @Input() public autoGenerateVoucherFromEntry: boolean;
     public isAmountFirst: boolean = false;
     public isTotalFirts: boolean = false;
     public selectedInvoices: string[] = [];
@@ -223,7 +225,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     /** Stores the voucher API version of current company */
     public voucherApiVersion: 1 | 2;
     /** True if user itself checked the generate voucher  */
-    public manualGenerateVoucherChecked: boolean = false;
+    public manualGenerateVoucherChecked: boolean = true;
     /** Holds input to get invoice list request params */
     public invoiceListRequestParams: any = {};
     /** Round off amount */
@@ -317,7 +319,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             subVoucher: SubVoucher.AdvanceReceipt
         }]);
 
-        this.currentTxn.taxInclusiveAmount = this.currentTxn.amount;
+        this.currentTxn.taxInclusiveAmount = this.currentTxn?.amount;
         this.activeAccount$.subscribe(acc => {
             if (acc) {
                 this.assignUpdateActiveAccount(acc);
@@ -437,6 +439,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         if (this.voucherApiVersion === 2 && changes?.invoiceList?.currentValue) {
             this.invoiceList$ = observableOf(this.invoiceList);
             this.referenceVouchersCurrentPage = 2;
+        }
+        if (this.autoGenerateVoucherFromEntry) {
+            this.blankLedger.generateInvoice = true;
         }
     }
 
@@ -1428,7 +1433,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         if (this.isAdjustReceiptSelected || this.isAdjustAdvanceReceiptSelected || this.isAdjustVoucherSelected) {
             this.prepareAdjustVoucherConfiguration();
             this.openAdjustPaymentModal();
-            this.blankLedger.generateInvoice = true;
         } else {
             this.removeAdjustment();
         }

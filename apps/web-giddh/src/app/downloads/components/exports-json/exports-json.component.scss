@@ -5,5 +5,6 @@
     background-color: var(--color-secondary-right-side-popup-body-background);
     .modal-header {
         height: 57px;
+        border-radius: 0 !important;
     }
 }

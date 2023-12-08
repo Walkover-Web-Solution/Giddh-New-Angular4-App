@@ -712,8 +712,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public hasUnsavedChanges: boolean = false;
     /** True if entry datepicker is open */
     public isEntryDatepickerOpen: boolean = false;
-    /** True, if the linking with PO is in progress */
-    private isPoLinkingInProgress: boolean = false;
     /**Hold voucher type */
     public voucherTypes: any[] = [VoucherTypeEnum.cashCreditNote, VoucherTypeEnum.cash, VoucherTypeEnum.cashDebitNote, VoucherTypeEnum.cashBill];
     /** This will hold invoice text */
@@ -722,6 +720,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public regionsSource: IOption[] = [];
     /* This will hold company's country regions */
     public companyRegionsSource: IOption[] = [];
+    /** True, if the linking with PO is in progress */
+    private isPoLinkingInProgress: boolean = false;
     /** This will hold barcode value*/
     public barcodeValue: string = "";
     /** Custom fields request */
@@ -1131,7 +1131,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             if (accountDetails) {
                 this.hideDepositSectionForCashBankGroups(accountDetails);
                 this.accountAddressList = accountDetails.addresses;
-                this.updateAccountDetails(accountDetails);
+                this.updateAccountDetails(accountDetails, true);
             }
         });
         this.getOnboardingFormInProcess$.subscribe(inProcess => {
@@ -1651,7 +1651,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         ])
             .pipe(takeUntil(this.destroyed$))
             .subscribe(result => {
-
                 let arr: PreviousInvoicesVm[] = [];
                 if (!this.isProformaInvoice && !this.isEstimateInvoice) {
                     if (result[0]) {
@@ -2214,7 +2213,10 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         }
 
         this.checkIfNeedToExcludeTax(data);
-        this.updateAccountDetails(data);
+
+        const forceUpdateAddress = data?.uniqueName !== this.invFormData.accountDetails?.uniqueName;
+
+        this.updateAccountDetails(data, forceUpdateAddress);
     }
 
     /**
@@ -2570,7 +2572,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     // filter active taxes
                     entry.taxes = entry.taxes?.filter(tax => tax.isChecked);
                     entry.voucherType = this.voucherUtilityService.parseVoucherType(invoiceType);
-                    entry.taxList = entry.taxes.map(m => m?.uniqueName);
+                    entry.taxList = entry.taxes?.map(m => m?.uniqueName);
                     entry.tcsCalculationMethod = entry.otherTaxModal.tcsCalculationMethod;
 
                     if (entry.isOtherTaxApplicable) {
@@ -2949,6 +2951,12 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      */
     public closeAsideMenuProductServiceModal(): void {
         this.asideMenuStateForProductService?.close();
+
+        setTimeout(() => {
+            if (this.showPageLeaveConfirmation) {
+                this.pageLeaveUtilityService.addBrowserConfirmationDialog();
+            }
+        }, 100);
     }
 
     public toggleBodyClass() {
@@ -3985,6 +3993,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
     public postResponseAction(voucherNo: string) {
         switch (this.actionAfterGenerateORUpdate) {
+
             case ActionTypeAfterVoucherGenerateOrUpdate.generate: {
 
                 this.getAllLastInvoices();
@@ -5899,12 +5908,15 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             if (this.billingState && this.billingState.nativeElement) {
                 this.billingState.nativeElement.classList.remove('error-box');
             }
-            this.invFormData.accountDetails.billingDetails.state.name = stateName;
-            this.invFormData.accountDetails.billingDetails.stateName = stateName;
-            this.invFormData.accountDetails.billingDetails.stateCode = stateCode;
-            this.invFormData.accountDetails.billingDetails.state.code = stateCode;
-            this.invFormData.accountDetails.billingDetails.county.name = stateName;
-            this.invFormData.accountDetails.billingDetails.county.code = stateCode;
+            if (this.customerCountryCode === 'IN') {
+                this.invFormData.accountDetails.billingDetails.state.name = stateName;
+                this.invFormData.accountDetails.billingDetails.stateName = stateName;
+                this.invFormData.accountDetails.billingDetails.stateCode = stateCode;
+                this.invFormData.accountDetails.billingDetails.state.code = stateCode;
+            } else {
+                this.invFormData.accountDetails.billingDetails.county.name = stateName;
+                this.invFormData.accountDetails.billingDetails.county.code = stateCode;
+            }
         } else {
             if (this.shippingState && this.shippingState.nativeElement) {
                 this.shippingState.nativeElement.classList.remove('error-box');
@@ -5912,12 +5924,15 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             // if it's not billing address then only update shipping details
             // check if it's not auto fill shipping address from billing address then and then only update shipping details
             if (!this.autoFillShipping) {
-                this.invFormData.accountDetails.shippingDetails.stateName = stateName;
-                this.invFormData.accountDetails.shippingDetails.stateCode = stateCode;
-                this.invFormData.accountDetails.shippingDetails.state.name = stateName;
-                this.invFormData.accountDetails.shippingDetails.state.code = stateCode;
-                this.invFormData.accountDetails.shippingDetails.county.name = stateName;
-                this.invFormData.accountDetails.shippingDetails.county.code = stateCode
+                if (this.customerCountryCode === 'IN') {
+                    this.invFormData.accountDetails.shippingDetails.stateName = stateName;
+                    this.invFormData.accountDetails.shippingDetails.stateCode = stateCode;
+                    this.invFormData.accountDetails.shippingDetails.state.name = stateName;
+                    this.invFormData.accountDetails.shippingDetails.state.code = stateCode;
+                } else {
+                    this.invFormData.accountDetails.shippingDetails.county.name = stateName;
+                    this.invFormData.accountDetails.shippingDetails.county.code = stateCode;
+                }
             }
         }
     }
@@ -7224,7 +7239,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             isBlankItemPresent = false;
         }
 
-        entries.forEach(entry => {
+        entries?.forEach(entry => {
             let transactionLoop = 0;
 
             if (entry.totalQuantity && entry.usedQuantity && entry.transactions && entry.transactions[0] && entry.transactions[0].stock) {
@@ -7235,7 +7250,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 }
             }
 
-            entry.transactions.forEach(item => {
+            entry.transactions?.forEach(item => {
                 if (item.stock) {
                     let stockUniqueName = item.stock.uniqueName;
                     item.stock.uniqueName = "purchases#" + item.stock.uniqueName;
@@ -7322,7 +7337,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             this.startLoader(true);
             setTimeout(() => {
                 let selectedPoItems = [];
-                this.selectedPoItems.forEach(order => {
+                this.selectedPoItems?.forEach(order => {
                     if (!this.linkedPo.includes(order)) {
                         let entries = (this.linkedPoNumbers[order]) ? this.linkedPoNumbers[order]['items'] : [];
 
@@ -7419,12 +7434,15 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             if (this.billingStateCompany && this.billingStateCompany.nativeElement) {
                 this.billingStateCompany.nativeElement.classList.remove('error-box');
             }
-            this.purchaseBillCompany.billingDetails.state.name = stateName;
-            this.purchaseBillCompany.billingDetails.stateName = stateName;
-            this.purchaseBillCompany.billingDetails.stateCode = stateCode;
-            this.purchaseBillCompany.billingDetails.state.code = stateCode;
-            this.purchaseBillCompany.billingDetails.county.name = stateName;
-            this.purchaseBillCompany.billingDetails.county.code = stateCode;
+            if (this.customerCountryCode === 'IN') {
+                this.purchaseBillCompany.billingDetails.state.name = stateName;
+                this.purchaseBillCompany.billingDetails.stateName = stateName;
+                this.purchaseBillCompany.billingDetails.stateCode = stateCode;
+                this.purchaseBillCompany.billingDetails.state.code = stateCode;
+            } else {
+                this.purchaseBillCompany.billingDetails.county.name = stateName;
+                this.purchaseBillCompany.billingDetails.county.code = stateCode;
+            }
         } else {
             if (this.shippingStateCompany && this.shippingStateCompany.nativeElement) {
                 this.shippingStateCompany.nativeElement.classList.remove('error-box');
@@ -7432,12 +7450,15 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             // if it's not billing address then only update shipping details
             // check if it's not auto fill shipping address from billing address then and then only update shipping details
             if (!this.autoFillCompanyShipping) {
-                this.purchaseBillCompany.shippingDetails.stateName = stateName;
-                this.purchaseBillCompany.shippingDetails.stateCode = stateCode;
-                this.purchaseBillCompany.shippingDetails.state.name = stateName;
-                this.purchaseBillCompany.shippingDetails.state.code = stateCode;
-                this.purchaseBillCompany.shippingDetails.county.name = stateName;
-                this.purchaseBillCompany.shippingDetails.county.code = stateCode;
+                if (this.customerCountryCode === 'IN') {
+                    this.purchaseBillCompany.shippingDetails.stateName = stateName;
+                    this.purchaseBillCompany.shippingDetails.stateCode = stateCode;
+                    this.purchaseBillCompany.shippingDetails.state.name = stateName;
+                    this.purchaseBillCompany.shippingDetails.state.code = stateCode;
+                } else {
+                    this.purchaseBillCompany.shippingDetails.county.name = stateName;
+                    this.purchaseBillCompany.shippingDetails.county.code = stateCode;
+                }
             }
         }
         this.changeDetectorRef.detectChanges();
@@ -7648,7 +7669,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.onSearchQueryChanged('', 1, SEARCH_TYPE.CUSTOMER, (response) => {
             let selectedAccountDetails;
             if (this.isUpdateMode) {
-                this.selectedAccountDetails$.pipe(take(1)).subscribe(accountDetails => {
+                this.selectedAccountDetails$?.pipe(take(1)).subscribe(accountDetails => {
                     selectedAccountDetails = accountDetails;
                 });
                 if (selectedAccountDetails) {
@@ -8414,15 +8435,16 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     * @param {*} data
     * @memberof VoucherComponent
     */
-    private updateAccountDetails(data: any): void {
+    private updateAccountDetails(data: any, forceUpdateAddress: boolean = false): void {
         this.getUpdatedStateCodes(data.country.countryCode).then(() => {
             if (data.addresses && data.addresses.length) {
                 data.addresses = [find(data.addresses, (tax) => tax.isDefault)];
             }
-            // auto fill all the details
-            if (!this.isUpdateMode) {
+            if (forceUpdateAddress) {
+                // auto fill all the details
                 this.invFormData.accountDetails = new AccountDetailsClass(data);
             }
+
             if (this.invFormData.accountDetails) {
                 this.getStateCode('billingDetails');
                 this.autoFillShippingDetails();
@@ -8721,10 +8743,10 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     }
 
     /**
-     * This will use for delete attachment confirmation
-     *
-     * @memberof VoucherComponent
-     */
+    * This will use for delete attachment confirmation
+    *
+    * @memberof VoucherComponent
+    */
     public deleteAttachementConfirmation(): void {
         this.attachmentDeleteConfiguration = this.generalService.getAttachmentDeleteConfiguration(this.localeData, this.commonLocaleData);
         let dialogRef = this.dialog.open(this.attachmentDeleteConfirmationModel, {

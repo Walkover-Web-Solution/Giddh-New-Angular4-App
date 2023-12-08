@@ -7,7 +7,7 @@
 >
     <div validateSectionPermission [hasPermission]="hasInvoiceSettingPermissions" validateSubscription>
         <section id="invoice-setting">
-            <tabset class="tab-integration">
+            <tabset class="tab-integration" #staticTabsSettings>
                 <!-- region general tab-->
                 <tab>
                     <ng-template tabHeading> <span class="icon-chat2"></span> {{ localeData?.general }} </ng-template>
@@ -77,7 +77,7 @@
                                         <div class="row">
                                             <div class="col-md-5 col-sm-12 col-xs-12">
                                                 <div class="mb-0 form-group">
-                                                    <div class="" [ngClass]="{ 'input-group': true }" class="obj-gap">
+                                                    <div [ngClass]="{ 'input-group': true }">
                                                         <input
                                                             type="email"
                                                             class="form-control"
@@ -220,7 +220,6 @@
                                         </div>
                                     </div>
                                 </div>
-
                                 <div class="row">
                                     <div class="col-sm-12 col-md-12 col-lg-3 lh-34">
                                         <label>{{ localeData?.default_expiry_days }}</label>
@@ -247,7 +246,6 @@
                                         </div>
                                     </div>
                                 </div>
-
                                 <div class="row next-step-estimate">
                                     <div class="col-sm-12 col-md-12 col-lg-3 lh-34">
                                         <label
@@ -289,7 +287,6 @@
                                         </div>
                                     </div>
                                 </div>
-
                                 <div class="clearfix pd-t1">
                                     <div class="row">
                                         <div class="col-sm-12 col-md-12 col-lg-3 flex-container">
@@ -302,7 +299,6 @@
                                             </mat-slide-toggle>
                                             <label class="left-gap">{{ localeData?.auto_change_status_expiry }}</label>
                                         </div>
-
                                         <div class="col-sm-12 col-md-12 col-lg-9 form-group">
                                             <mat-slide-toggle
                                                 [(ngModel)]="estimateSetting.autoChangeStatusOnExp"
@@ -342,21 +338,28 @@
                                 <!-- <div class="clearfix pd-t1">
                                     <div class="row">
                                         <div class="col-sm-12 col-md-12 col-md-12 col-lg-3">
-                                            <input type="checkbox" [(ngModel)]="estimateSetting.sendSms" class="pull-left"
+                                            <input
+                                                type="checkbox"
+                                                [(ngModel)]="estimateSetting.sendSms"
+                                                class="pull-left"
                                                 name="invoiceCreatePaymentEntry"
-                                                class="show-on-mobile" /><label>{{localeData?.enable_sms_estimate}}</label>
+                                                class="show-on-mobile"
+                                            /><label>{{ localeData?.enable_sms_estimate }}</label
+                                            >
                                         </div>
                                         <div class="col-sm-12 col-md-12 col-lg-9">
                                             <div class="form-group clearfix">
-                                                <input type="checkbox" [(ngModel)]="estimateSetting.sendSms"
-                                                    class="pull-left" name="invoiceCreatePaymentEntry"
-                                                    class="hide-on-mobile" />
-
+                                                <input
+                                                    type="checkbox"
+                                                    [(ngModel)]="estimateSetting.sendSms"
+                                                    class="pull-left"
+                                                    name="invoiceCreatePaymentEntry"
+                                                    class="hide-on-mobile"
+                                                />
                                             </div>
                                         </div>
                                     </div>
                                 </div> -->
-
                                 <ng-container *ngTemplateOutlet="buttonsSection"></ng-container>
                             </div>
                         </div>
@@ -404,7 +407,7 @@
                                     </div>
                                     <div class="col-sm-12 col-md-12 col-lg-9">
                                         <div class="default-expiry">
-                                            <div>
+                                            <div class="">
                                                 <div class="form-group">
                                                     <div [ngClass]="{ 'input-group': true }">
                                                         <input
@@ -612,22 +615,18 @@
                                         </div>
 
                                         <div class="col-sm-12 col-md-9">
-
                                             <div class="form-group clearfix">
-
                                                 <input type="checkbox" [(ngModel)]="invoiceSetting.sendInvLinkOnSms"
                                                     (ngModelChange)="onChangeSendInvoiceViaSms(invoiceSetting.sendInvLinkOnSms)"
                                                     name="invoiceSetting.sendInvLinkOnSms"
                                                     class="pull-left hide-on-mobile" />
 
                                                 <div class="pull-left sms-textarea" *ngIf="invoiceSetting.sendInvLinkOnSms">
-
                                                     <textarea [(ngModel)]="invoiceSetting.smsContent"
                                                         class="pull-left form-control"
                                                         name="invoiceSetting.sendInvLinkOnSms" rows="3"></textarea>
                                                 </div>
                                             </div>
-
                                         </div>
                                     </div>
                                 </div> -->
@@ -688,7 +687,6 @@
                                         </div>
                                     </div>
                                 </div>
-
                                 <div class="clearfix pd-t1">
                                     <div class="row">
                                         <div class="col-sm-12 col-md-12 col-lg-3 flex-container">
@@ -760,6 +758,54 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="clearfix pd-t1" *ngIf="voucherApiVersion === 2">
+                                    <div class="row">
+                                        <div class="col-sm-12 col-md-12 col-lg-3">
+                                            <mat-slide-toggle
+                                                [(ngModel)]="invoiceSetting.autoPaid"
+                                                (ngModelChange)="invoiceSetting.autoPaid ? null : invoiceSetting.autoGenerateVoucherFromEntry = false"
+                                                name="autoPaid"
+                                                class="show-on-mobile"
+                                                color="primary"
+                                            >
+                                            </mat-slide-toggle>
+                                            <label class="left-gap">{{ localeData?.run_auto_paid_for_all_the_accounts }}</label>
+                                        </div>
+                                        <div class="col-sm-12 col-md-9 form-group">
+                                            <mat-slide-toggle
+                                                [(ngModel)]="invoiceSetting.autoPaid"
+                                                (ngModelChange)="invoiceSetting.autoPaid ? null : invoiceSetting.autoGenerateVoucherFromEntry = false" 
+                                                name="autoPaid"
+                                                class="hide-on-mobile"
+                                                color="primary"
+                                            >
+                                            </mat-slide-toggle>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="clearfix pd-t1" *ngIf="voucherApiVersion === 2 && invoiceSetting.autoPaid">
+                                    <div class="row">
+                                        <div class="col-sm-12 col-md-12 col-lg-3">
+                                            <mat-slide-toggle
+                                                [(ngModel)]="invoiceSetting.autoGenerateVoucherFromEntry"
+                                                name="autoGenerateVoucher"
+                                                class="show-on-mobile"
+                                                color="primary"
+                                            >
+                                            </mat-slide-toggle>
+                                            <label class="left-gap">{{ localeData?.automatically_generate_voucher_for_the_entries_present_in_the_ledger }}</label>
+                                        </div>
+                                        <div class="col-sm-12 col-md-9 form-group">
+                                            <mat-slide-toggle
+                                                [(ngModel)]="invoiceSetting.autoGenerateVoucherFromEntry"
+                                                name="autoGenerateVoucher"
+                                                class="hide-on-mobile"
+                                                color="primary"
+                                            >
+                                            </mat-slide-toggle>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div
                                     *ngIf="(activeCompany$ | async)?.countryV2?.alpha2CountryCode === 'IN'"
                                     class="clearfix pd-t1"
@@ -787,7 +833,7 @@
                                             </mat-slide-toggle>
                                             <div *ngIf="invoiceSetting.gstEInvoiceEnable" class="d-inline-flex">
                                                 <div class="d-inline-flex position-relative mr-l15">
-                                                    <label>Username</label>
+                                                    <label>{{ localeData?.e_invoice_username_label }}</label>
                                                     <input
                                                         [(ngModel)]="invoiceSetting.gstEInvoiceUserName"
                                                         type="text"
@@ -796,7 +842,7 @@
                                                     />
                                                 </div>
                                                 <div class="d-inline-flex position-relative mr-l15">
-                                                    <label>Password</label>
+                                                    <label>{{ localeData?.e_invoice_password_label }}</label>
                                                     <input
                                                         [(ngModel)]="invoiceSetting.gstEInvoiceUserPassword"
                                                         type="password"
@@ -805,7 +851,7 @@
                                                     />
                                                 </div>
                                                 <div class="d-inline-flex position-relative mr-l15">
-                                                    <label>GSTIN</label>
+                                                    <label>{{ localeData?.e_invoice_gstin_label }}</label>
                                                     <input
                                                         [(ngModel)]="invoiceSetting.gstEInvoiceGstin"
                                                         type="text"
@@ -817,7 +863,7 @@
                                         </div>
                                     </div>
                                 </div>
-
+                                <!-- static code end -->
                                 <ng-container *ngTemplateOutlet="buttonsSection"></ng-container>
                             </div>
                         </div>
@@ -828,7 +874,7 @@
         </section>
 
         <ng-template #buttonsSection>
-            <div class="btn-group mr-t2" role="group" aria-label="Basic example">
+            <div class="btn-group mr-t2" role="group">
                 <button type="button" class="btn btn-success mr-r1" (click)="UpdateForm()">
                     {{ commonLocaleData?.app_save }}
                 </button>

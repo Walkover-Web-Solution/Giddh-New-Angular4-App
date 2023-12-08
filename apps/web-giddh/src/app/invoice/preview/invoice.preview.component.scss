@@ -653,9 +653,6 @@ span.icon-export-icon {
         background-color: var(--color-white);
         z-index: -1;
     }
-    .d-block {
-        display: block !important;
-    }
     .click-dropdown ul {
         left: auto;
         right: 0;
@@ -854,7 +851,7 @@ span.icon-export-icon {
 
     .min-wid-check {
         min-width: 40px;
-        .check-image {
+        .check-img {
             width: 20px;
         }
     }
@@ -900,13 +897,6 @@ span.icon-export-icon {
     .custom-datepicker input {
         width: 200px !important;
         max-width: 204px !important;
-    }
-}
-
-@media (min-width: 769px) {
-    .table-responsive {
-        max-height: calc(100vh - 295px);
-        overflow-y: auto;
     }
 }
 

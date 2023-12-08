@@ -101,13 +101,6 @@
     color: var(--color-nero);
 }
 
-.more-dropdown {
-    height: 30px !important;
-    .dropdown-menu {
-        right: -53px !important;
-    }
-}
-
 .search-invoice-filed {
     display: none;
 }
@@ -226,12 +219,5 @@
 @media (min-width: 769px) {
     .search-icon-block {
         display: none;
-    }
-}
-
-@media (min-width: 769px) {
-    .table-responsive {
-        max-height: calc(100vh - 275px);
-        overflow-y: auto;
     }
 }

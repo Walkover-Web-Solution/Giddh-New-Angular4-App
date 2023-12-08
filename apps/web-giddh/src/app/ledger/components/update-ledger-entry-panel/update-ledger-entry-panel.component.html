@@ -7,7 +7,7 @@
 >
     <div id="entryModal">
         <!-- region header -->
-        <div class="modal-header align-items-center flex-row-reverse" *ngIf="!isPettyCash">
+        <div class="modal-header align-items-center flex-row-reverse dialog-fixed-header" *ngIf="!isPettyCash">
             <button
                 aria-hidden="true"
                 class="close hover-orange"
@@ -1797,8 +1797,8 @@
                                             <td
                                                 *ngIf="
                                                     voucherApiVersion === 2 &&
-                                                    (vm.selectedLedger.voucher?.shortCode === 'credit note' ||
-                                                        vm.selectedLedger.voucher?.shortCode === 'debit note')
+                                                    (vm.selectedLedger?.voucher?.shortCode === 'credit note' ||
+                                                        vm.selectedLedger?.voucher?.shortCode === 'debit note')
                                                 "
                                                 class="pd-r1 pb-1"
                                             >

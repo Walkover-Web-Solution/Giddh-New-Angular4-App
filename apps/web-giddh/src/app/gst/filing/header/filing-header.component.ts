@@ -101,7 +101,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
         private activatedRoute: ActivatedRoute,
         private gstReconcileService: GstReconcileService,
         private generalService: GeneralService,
-        private router: Router,
+        private router: Router
     ) {
         this.gstAuthenticated$ = this.store.pipe(select(p => p.gstR.gstAuthenticated), takeUntil(this.destroyed$));
         this.companyGst$ = this.store.pipe(select(p => p.gstR.activeCompanyGst), takeUntil(this.destroyed$));
@@ -266,7 +266,8 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
                 gstin: this.activeCompanyGstNumber,
                 from: this.currentPeriod.from,
                 to: this.currentPeriod.to,
-                gsp: this.isVayanaAuthenticated ? 'VAYANA' : 'TAXPRO'
+                gsp: this.isVayanaAuthenticated ? 'VAYANA' : 'TAXPRO',
+                currentDateTime: this.generalService.getCurrentDateTime()
             }));
         }
         if (this.selectedGst === GstReport.Gstr3b) {

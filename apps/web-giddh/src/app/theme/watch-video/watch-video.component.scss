@@ -1,0 +1,14 @@
+.video-wrapper {
+    overflow: hidden;
+    aspect-ratio: 16 / 9;
+    background-color: black;
+    iframe {
+        width: 100%;
+        height: 100%;
+    }
+}
+.toggle-btn{
+    background: var(--color-transparent-background);
+    border: 0;
+    outline: 0;
+}
