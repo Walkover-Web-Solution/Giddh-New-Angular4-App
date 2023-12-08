@@ -41,7 +41,7 @@ export class PortalWhiteLabelComponent implements OnInit {
     /** Stores the type of the organization (company or profile)  */
     @Input() public organizationType: OrganizationType;
     /* This will hold local JSON data */
-    public localeData: any = {};
+    @Input() public localeData: any = {};
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
     /** Share domain popup template ref */
@@ -316,7 +316,7 @@ export class PortalWhiteLabelComponent implements OnInit {
      * @memberof PortalWhiteLabelComponent
      */
     public removeProtocol(value: string): string {
-        return value.replace(/^(https?|ftp):\/\//, '');
+        return value?.replace(/^(https?|ftp):\/\//, '');
     }
 
     /**
