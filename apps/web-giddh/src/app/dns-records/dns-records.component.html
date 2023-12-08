@@ -15,9 +15,6 @@
                     />
                 </div>
             </div>
-            <div *ngIf="shouldShowLoader">
-                <giddh-page-loader></giddh-page-loader>
-            </div>
             <mat-card class="mat-card mat-focus-indicator domain-setting-card mt-3 mb-3 mat-elevation-z3"
                 ><div class="d-flex align-items-center justify-content-start mb-2">
                     <h6 class="domain-text">
@@ -25,6 +22,9 @@
                     </h6>
                 </div>
                 <mat-card-content class="mat-card-content">
+                    <div *ngIf="shouldShowLoader">
+                        <giddh-page-loader></giddh-page-loader>
+                    </div>
                     <div class="portal-body" *ngIf="dataSource?.length && !shouldShowLoader">
                         <div class="table-responsive">
                             <table mat-table [dataSource]="dataSource" class="w-100">
@@ -99,8 +99,8 @@
                             </section>
                         </div>
                     </div>
-                </mat-card-content></mat-card
-            >
+                </mat-card-content>
+                </mat-card>
         </div>
     </div>
 </ng-container>
