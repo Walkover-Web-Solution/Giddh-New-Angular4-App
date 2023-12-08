@@ -41,7 +41,7 @@ export class PortalWhiteLabelComponent implements OnInit {
     /** Stores the type of the organization (company or profile)  */
     @Input() public organizationType: OrganizationType;
     /* This will hold local JSON data */
-    @Input() public localeData: any = {};
+    public localeData: any = {};
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
     /** Share domain popup template ref */
@@ -121,10 +121,8 @@ export class PortalWhiteLabelComponent implements OnInit {
      *
      * @memberof PortalWhiteLabelComponent
      */
-    public onInputChange(event: any): void {
-        if (event) {
-            this.subscribeToFormChanges();
-        }
+    public onInputChange(): void {
+        this.subscribeToFormChanges();
     }
 
     /**

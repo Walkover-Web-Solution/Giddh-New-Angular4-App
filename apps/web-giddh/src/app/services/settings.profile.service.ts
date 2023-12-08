@@ -332,8 +332,8 @@ export class SettingsProfileService {
      * @return {*}  {Observable<BaseResponse<any, any>>}
      * @memberof SettingsProfileService
      */
-    public getDomainListTableData(domainUniqueName: string): Observable<BaseResponse<any, any>> {
-        const companyUniqueName = this.generalService.companyUniqueName;
+    public getDomainListTableData(domainUniqueName: string, fromDnsCompanyUniqueName?: string): Observable<BaseResponse<any, any>> {
+        const companyUniqueName = this.generalService.companyUniqueName || fromDnsCompanyUniqueName;
         return this.http.get(this.config.apiUrl + SETTINGS_PROFILE_API.GET_DOMAIN_LIST_DATA?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName))?.replace(':domainUniqueName', encodeURIComponent(domainUniqueName))).pipe(map((res) => {
             let data: BaseResponse<any, any> = res;
             data.queryString = {};

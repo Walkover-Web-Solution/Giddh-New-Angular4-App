@@ -709,5 +709,11 @@
     },
     "app_region": "Region",
     "app_select_region": "Select Region",
-    "app_by_product_output" :"By Product (Output)"
+    "app_by_product_output" :"By Product (Output)",
+    "app_unverified": "Unverified",
+    "app_verified": "Verified",
+    "app_verify": "Verify",
+    "app_hostname": "Hostname",
+    "app_copied":"Copied...",
+    "domain_verification":"Domain verification for outbound mail"
 }
