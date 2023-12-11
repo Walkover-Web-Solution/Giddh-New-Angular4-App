@@ -1,96 +1,194 @@
-<div class="row">
-    <div class="col-md-12 mr-t4 border-bottom pd-b15">
-        <div class="row pd-b1">
-            <div class="col-lg-3 col-md-6 col-sm-12 col-lg-3 col-xl-2 d-flex align-items-center">
-                <label *ngIf="organizationType === 'COMPANY'" class="font-15">{{ localeData?.portal_label }}</label>
+<div class="portal mt-5 pd-t15 pd-b15">
+    <div class="portal-header">
+        <div class="d-flex align-items-center">
+            <div class="dropdown-wrapper mr-r2" *ngIf="domainList?.length">
+                <mat-form-field class="w-100 select-domain" appearance="outline">
+                    <mat-label>{{ localeData?.select_domain }}</mat-label>
+                    <mat-select [(value)]="domain.uniqueName" [placeholder]="localeData?.select_domain">
+                        <mat-option *ngFor="let domain of domainList" [value]="domain?.value" class="domain-options">
+                            <span class="w-100 float-left" (click)="selectDomain(domain)">
+                                <i
+                                    (click)="
+                                        setPrimaryAndDeleteDomain('set-primary', domain?.value);
+                                        $event.stopPropagation()
+                                    "
+                                    class="fa fa-star mr-r2 default-status"
+                                    [ngClass]="{ 'fill-status': domain.status }"
+                                ></i>
+                                {{ domain?.label }}</span
+                            >
+                        </mat-option>
+                        <mat-option class="create-update-no-data" [disabled]="true" *ngIf="!domainList?.length"
+                            >{{ commonLocaleData?.app_no_result_found }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
             </div>
-            <div class="col-lg-4 col-md-6 col-sm-12 col-lg-4 col-xl-3">
-                <form [formGroup]="portalWhilteLabelForm">
-                    <div class="form-group mb-0 d-flex">
-                        <br class="input-group" />
-                        <input
-                            *ngIf="organizationType === 'COMPANY'"
-                            formControlName="url"
-                            type="text"
-                            name="companyName"
-                            class="form-control"
-                            (input)="onInputChange()"
-                            autocomplete="off"
-                        />
-                        <button
-                            *ngIf="showDomainButton"
-                            type="button"
-                            class="btn btn-sky-blue mr-l05 w-50"
-                            (click)="submitForm()"
+
+            <button
+                mat-stroked-button
+                color="primary"
+                [ngClass]="{ 'position-center': false }"
+                (click)="openAddDomainDialog()"
+            >
+                {{ localeData?.add_domain }}
+            </button>
+        </div>
+    </div>
+    <div *ngIf="shouldShowLoader">
+        <giddh-page-loader></giddh-page-loader>
+    </div>
+    <div class="portal-body pt-4" *ngIf="dataSource?.length && !shouldShowLoader">
+        <div
+            class="top-menu py-2 d-flex justify-content-space-between column-gap1 align-items-center mb-md-4 mb-sm-4 mb-lg-0"
+        >
+            <p>{{ localeData?.domain_registrar }}</p>
+            <div class="d-flex column-gap1">
+                <button mat-stroked-button (click)="deleteConfirmationDialog()">
+                    {{ commonLocaleData?.app_delete }}
+                </button>
+                <button mat-stroked-button color="primary" (click)="verifyDomain()">
+                    {{ commonLocaleData?.app_verify }}
+                </button>
+                <button mat-stroked-button color="primary" (click)="openShareDomainDialog()">
+                    {{ commonLocaleData?.app_share }}
+                </button>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table mat-table [dataSource]="dataSource" class="w-100">
+                <ng-container matColumnDef="type">
+                    <th mat-header-cell *matHeaderCellDef width="10%">{{ commonLocaleData?.app_type }}</th>
+                    <td mat-cell *matCellDef="let element" class="content-table">{{ element.type }}</td>
+                </ng-container>
+                <ng-container matColumnDef="hostName">
+                    <th mat-header-cell *matHeaderCellDef width="30%">{{ localeData?.hostname }}</th>
+                    <td mat-cell *matCellDef="let element" class="content-table">
+                        <div>
+                            {{ element.hostName }}
+                            <span class="input-group-btn mr-l05">
+                                <i
+                                    class="icon-copy-file cursor-pointer"
+                                    (click)="copyUrl(element.hostName, element, 'host')"
+                                    [tooltip]="commonLocaleData?.app_copy"
+                                ></i>
+                            </span>
+                            <span class="success mr-l05 copied-url" *ngIf="element.isCopiedHostName">{{
+                                localeData?.copied
+                            }}</span>
+                        </div>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="value">
+                    <th mat-header-cell *matHeaderCellDef width="30%">{{ commonLocaleData?.app_value }}</th>
+                    <td mat-cell *matCellDef="let element" class="content-table">
+                        {{ element.value }}
+                        <span class="input-group-btn mr-l05">
+                            <i
+                                class="icon-copy-file cursor-pointer"
+                                (click)="copyUrl(element.value, element, 'value')"
+                                [tooltip]="commonLocaleData?.app_copy"
+                            ></i>
+                        </span>
+                        <span class="success mr-l05 copied-url" *ngIf="element.isCopiedValue">{{
+                            localeData?.copied
+                        }}</span>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="status">
+                    <th mat-header-cell *matHeaderCellDef width="30%" class="text-right">
+                        {{ commonLocaleData?.app_status }}
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="content-table text-right">
+                        <span
+                            [ngClass]="{ 'verified': element?.status, 'unverified': !element?.status }"
+                            class="status font-12"
+                            >{{ element.status ? localeData?.verified : localeData?.unverified }}</span
                         >
-                            {{ localeData?.add_domain }}
-                        </button>
-                    </div>
-                    <span>{{ generatedString }}</span>
-                </form>
-            </div>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+            </table>
+            <section *ngIf="!dataSource?.length && !shouldShowLoader">
+                <div class="no-data">
+                    <h1>{{ commonLocaleData?.app_no_records_found }}</h1>
+                </div>
+            </section>
         </div>
     </div>
 </div>
-<div *ngIf="organizationType === 'COMPANY'" class="w-100">
-    <div class="table-responsive">
-        <table class="table basic table-bordered giddh-table on-mobile-view">
-            <thead>
-                <tr>
-                    <th class="min-wid-check" width="2%">
-                        <div>#</div>
-                    </th>
-                    <th #searchAddressNameInputField width="15%" class="td-search-box">
-                        {{ commonLocaleData?.app_type }}
-                    </th>
-                    <th #searchAddressInputField width="25%">{{ localeData?.hostname }}</th>
-                    <ng-container>
-                        <th #searchTaxInputField width="25%" class="td-search-box">
-                            {{ commonLocaleData?.app_value }}
-                        </th>
-                    </ng-container>
-                    <th #searchStateInputField width="15%" class="td-search-box">{{ commonLocaleData?.app_status }}</th>
-                </tr>
-            </thead>
-            <tbody *ngIf="domainList?.length">
-                <tr class="cursor-pointer" *ngFor="let domain of domainList; index as domainIndex">
-                    <td data-title="#">
-                        <div>{{ domainIndex + 1 }}.</div>
-                    </td>
-                    <td [attr.data-title]="'type'">
-                        <div>{{ domain.type }}</div>
-                    </td>
-                    <td [attr.data-title]="domain?.hostname">
-                        <span class="text-lowercase"> {{ domain?.hostname | lowercase }}</span>
-                        <span class="input-group-btn mr-l05">
-                            <i
-                                class="icon-copy-file"
-                                (click)="copyUrl(domain?.hostname, 'host')"
-                                [tooltip]="commonLocaleData?.app_copy"
-                            ></i>
-                        </span>
-                        <span class="success mr-l05 copied-url" *ngIf="isHostNameCopied">{{ localeData?.copied }}</span>
-                    </td>
-                    <td [attr.data-title]="domain?.value">
-                        <span class="text-lowercase"> {{ domain?.value | lowercase }}</span>
-                        <span class="input-group-btn mr-l05">
-                            <i
-                                class="icon-copy-file"
-                                (click)="copyUrl(domain?.value, 'value')"
-                                [tooltip]="commonLocaleData?.app_copy"
-                            ></i>
-                        </span>
-                        <span class="success mr-l05 copied-url" *ngIf="isValueCopied">{{ localeData?.copied }}</span>
-                    </td>
-                    <td [attr.data-title]="domain?.status">
-                        {{ domain?.status === true ? localeData?.verified : localeData?.unverified }}
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <giddh-page-loader *ngIf="shouldShowLoader"></giddh-page-loader>
-        <div class="no-data" *ngIf="!domainList?.length && !shouldShowLoader">
-            <h1>{{ localeData?.no_domains_found }}</h1>
+
+<ng-template #shareDomain>
+    <div class="dialog">
+        <div class="modal-header">
+            <h3 class="modal-title">{{ localeData?.share_dns_record_to_developer }}</h3>
+            <button class="close" mat-dialog-close (click)="shareEmailForm.reset()">
+                <span class="icon-cross font-16"></span>
+            </button>
+        </div>
+        <div class="modal-body py-4">
+            <form [formGroup]="shareEmailForm">
+                <div>
+                    <input-field
+                        [name]="'name'"
+                        [label]="commonLocaleData?.app_email"
+                        [placeholder]="commonLocaleData?.app_enter_email"
+                        [type]="'text'"
+                        formControlName="recipients"
+                    >
+                    </input-field>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer mt-1 d-flex column-gap1 justify-content-end">
+            <button mat-stroked-button mat-dialog-close (click)="shareEmailForm.reset()">
+                {{ commonLocaleData?.app_cancel }}
+            </button>
+            <button
+                mat-stroked-button
+                color="primary"
+                (click)="sendEmail()"
+                [disabled]="
+                    !this.shareEmailForm.get('recipients')?.value ||
+                    this.shareEmailForm.get('recipients')?.value?.length === 0
+                "
+            >
+                {{ commonLocaleData?.app_send }}
+            </button>
         </div>
     </div>
-</div>
+</ng-template>
+
+<ng-template #addDomain>
+    <div class="dialog">
+        <div class="modal-header">
+            <h3 class="modal-title">{{ localeData?.add_domain }}</h3>
+            <button class="close" mat-dialog-close (click)="portalWhilteLabelForm.reset()">
+                <span class="icon-cross font-16"></span>
+            </button>
+        </div>
+        <div class="modal-body py-4">
+            <form [formGroup]="portalWhilteLabelForm">
+                <div>
+                    <input-field
+                        formControlName="url"
+                       [type]="'text'"
+                        [name]="'companyName'"
+                        (input)="onInputChange()"
+                        [autocomplete]="'off'"
+                        [label]="localeData?.add_domain"
+                        [placeholder]="localeData?.add_subdomain_or_domain"
+                    ></input-field>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer d-flex column-gap1 justify-content-end">
+            <button mat-stroked-button mat-dialog-close (click)="portalWhilteLabelForm.reset()">
+                {{ commonLocaleData?.app_cancel }}
+            </button>
+            <button mat-stroked-button color="primary" (click)="submitForm()">{{ commonLocaleData?.app_add }}</button>
+        </div>
+    </div>
+</ng-template>

@@ -1,76 +1,45 @@
-.custom-file {
-    border: 1px dashed var(--color-iron);
-    border-radius: 2px;
-    background: var(--color-white);
-    width: 100px;
-    height: 100px;
-}
+.portal {
+    position: relative;
+    min-height: calc(100vh - 284px);
 
-.custom-file-input~.custom-file-label::after {
-    content: "";
-}
+    .portal-header {
+        .dropdown-wrapper {
+            width: 300px;
+        }
 
-.has-error {
-    border: 1px solid var(--color-danger);
-}
-
-.custom-file-label {
-    border: none;
-    padding: 30px;
-    background: var(--color-white);
-    height: 100%;
-
-    &::after {
-        height: 0 !important;
-        padding: 0 !important;
+        .position-center {
+            position: absolute;
+            top: 40%;
+            left: 50%;
+        }
     }
 
-    .icon-plus {
-        font-size: 40px;
-        color: var(--color-dark-fog);
-    }
-}
+    .portal-body {
+        table {
+            background: var(--color-transparent-backgrounds);
 
-.unique-name,
-.country-name,
-.parent-name {
-    color: var(--color-abbey);
+            .status {
+                border-radius: 16px;
+                padding: 6px 12px;
+            }
 
-    .country-info {
-        display: inherit;
+            .verified {
+                color: var(--color-success-enable);
+                background: var(--color-success-enable-bg-light);
+            }
 
-        .country-flag {
-            display: inline-block;
-            margin-right: 8px;
-            width: 24px;
+            .unverified {
+                color: var(--color-danger);
+                background: var(--color-danger-bg-light);
+            }
         }
     }
 }
 
-.personal-other-details {
-    label {
-        line-height: 2.3;
-    }
-
-    .form-group {
-        margin-bottom: 0;
-    }
+.default-status {
+    color: var(--color-white);
 }
 
-.img-size {
-    color: var(--color-abbey);
-}
-
-.container-fluid {
-    padding-left: 0;
-}
-
-@media (max-width: 767px) {
-    label {
-        line-height: 2.3;
-    }
-
-    .border-bottom {
-        margin-top: 5px;
-    }
+.fill-status {
+    color: var(--color-blue);
 }

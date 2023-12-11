@@ -8,6 +8,7 @@ import { PageComponent } from './page/page.component';
 import { MobileRestrictedComponent } from './mobile-restricted/mobile-restricted.component';
 
 export const ROUTES: Routes = [
+    { path: 'company/:companyUniqueName/dns', loadChildren: () => import('./dns-records/dns-records.module').then(module => module.DnsRecordsModule) },
     { path: 'download', loadChildren: () => import('./download/download.module').then(module => module.DownloadModule) },
     { path: '', redirectTo: 'login', pathMatch: 'full' },
     { path: 'app-login-success', component: AppLoginSuccessComponent, pathMatch: 'full' },
