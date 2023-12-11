@@ -134,7 +134,7 @@
                     <input-field
                         [name]="'name'"
                         [label]="commonLocaleData?.app_email"
-                        [placeholder]="commonLocaleData?.app_select"
+                        [placeholder]="commonLocaleData?.app_enter_email"
                         [type]="'text'"
                         formControlName="recipients"
                     >
@@ -174,7 +174,7 @@
                 <div>
                     <input-field
                         formControlName="url"
-                        type="text"
+                       [type]="'text'"
                         [name]="'companyName'"
                         (input)="onInputChange()"
                         [autocomplete]="'off'"
