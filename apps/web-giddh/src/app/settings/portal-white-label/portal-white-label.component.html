@@ -9,7 +9,8 @@
                             <span class="w-100 float-left" (click)="selectDomain(domain)">
                                 <i
                                     (click)="
-                                        setPrimaryDeteleDomain('set-primary', domain?.value); $event.stopPropagation()
+                                        setPrimaryAndDeleteDomain('set-primary', domain?.value);
+                                        $event.stopPropagation()
                                     "
                                     class="fa fa-star mr-r2 default-status"
                                     [ngClass]="{ 'fill-status': domain.status }"
@@ -46,7 +47,7 @@
                 <button mat-stroked-button (click)="deleteConfirmationDialog()">
                     {{ commonLocaleData?.app_delete }}
                 </button>
-                <button mat-stroked-button color="primary" (click)="verifyDomain()">Verify</button>
+                <button mat-stroked-button color="primary" (click)="verifyDomain()">{{ commonLocaleData?.app_verify }}</button>
                 <button mat-stroked-button color="primary" (click)="openShareDomainDialog()">
                     {{ commonLocaleData?.app_share }}
                 </button>
@@ -172,7 +173,7 @@
                     <input-field
                         formControlName="url"
                         type="text"
-                        name="companyName"
+                        [name]="'companyName'"
                         (input)="onInputChange()"
                         [autocomplete]="'off'"
                         [label]="localeData?.add_domain"
