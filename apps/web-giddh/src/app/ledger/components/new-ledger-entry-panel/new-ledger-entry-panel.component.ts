@@ -40,6 +40,7 @@ import { SettingsDiscountService } from '../../../services/settings.discount.ser
 import { LedgerUtilityService } from '../../services/ledger-utility.service';
 import { InvoiceSetting } from '../../../models/interfaces/invoice.setting.interface';
 import { CommonService } from '../../../services/common.service';
+import { MatMenuTrigger } from '@angular/material/menu';
 
 /** New ledger entries */
 const NEW_LEDGER_ENTRIES = [
@@ -73,6 +74,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     @ViewChild(MatAccordion) accordion: MatAccordion;
     /** Instance of RCM checkbox */
     @ViewChild("rcmCheckbox") public rcmCheckbox: ElementRef;
+    /** Mat Menu reference used as tooltip */
+    @ViewChild(MatMenuTrigger, { static: false }) trigger: MatMenuTrigger;
     /* This will hold local JSON data */
     @Input() public localeData: any = {};
     /* This will hold common JSON data */
@@ -260,6 +263,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public selectedStockVariant: IOption = { label: '', value: '' };
     /** Holds Aside Menu State For Other Taxes DialogRef */
     public asideMenuStateForOtherTaxesDialogRef: MatDialogRef<any>;
+    /** Holds Tooltip is opend/close status */
+    private openTooltipMenuStatus: boolean = false;
+    /** Holds mouse hovered on tooltip text status */
+    public tooltipHoveredStatus: boolean = false;
 
     constructor(private store: Store<AppState>,
         private cdRef: ChangeDetectorRef,
@@ -412,6 +419,34 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 this.stockVariantSelected.emit(currentSelectedVariant?.value ?? res[0].value);
             }
         });
+    }
+
+    /**
+     * Toggle Tooltip Menu
+     *
+     * @param {boolean} mouseLeave True, if mouseleave from tooltip text or trigger button
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public openCloseTooltipMenu(mouseLeave: boolean = false): void {
+        if (mouseLeave) {
+            setTimeout(() => {
+                if (this.openTooltipMenuStatus && !this.tooltipHoveredStatus) {
+                    this.trigger.closeMenu();
+                    this.openTooltipMenuStatus = false;
+                } else {
+                    this.trigger.openMenu();
+                    this.openTooltipMenuStatus = true;
+                }
+            }, 100)
+        } else {
+            if (this.openTooltipMenuStatus && !this.tooltipHoveredStatus) {
+                this.trigger.closeMenu();
+                this.openTooltipMenuStatus = false;
+            } else {
+                this.trigger.openMenu();
+                this.openTooltipMenuStatus = true;
+            }
+        }
     }
 
     @HostListener('click', ['$event'])
