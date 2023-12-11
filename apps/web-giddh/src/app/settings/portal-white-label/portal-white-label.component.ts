@@ -148,7 +148,7 @@ export class PortalWhiteLabelComponent implements OnInit {
         this.shouldShowLoader = true;
         this.settingsProfileService.verifyPortalWhilteLabel(this.domain.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response && response.status === 'success') {
-                this.toaster.successToast(response.body);
+                this.toaster.showSnackBar("success", response.body);
                 this.shouldShowLoader = false;
                 this.getDomainList(false);
                 let event = {
@@ -159,7 +159,7 @@ export class PortalWhiteLabelComponent implements OnInit {
                 this.selectDomain(event);
             } else {
                 this.shouldShowLoader = false;
-                this.toaster.errorToast(response.message);
+                this.toaster.showSnackBar("error", response.message);
             }
         });
         this.changeDetectorRef.detectChanges();
@@ -191,34 +191,36 @@ export class PortalWhiteLabelComponent implements OnInit {
         if (this.shareEmailForm.get('recipients')?.value) {
             let recipients = this.shareEmailForm.get('recipients')?.value.split(",");
             let validEmails = [];
+            let uniqueArray = [];
             if (recipients && recipients.length > 0) {
                 recipients.forEach(email => {
                     if (validRecipients && email.trim() && !EMAIL_VALIDATION_REGEX.test(email.trim())) {
                         this.toaster.clearAllToaster();
                         let invalidEmail = this.localeData?.invalid_email;
                         invalidEmail = invalidEmail?.replace("[EMAIL]", email);
-                        this.toaster.errorToast(invalidEmail);
+                        this.toaster.showSnackBar("error", invalidEmail);
                         validRecipients = false;
                     }
 
                     if (validRecipients && email.trim() && EMAIL_VALIDATION_REGEX.test(email.trim())) {
                         validEmails.push(email.trim());
+                        uniqueArray = [...new Set(validEmails)];
                     }
                 });
-                this.settingsProfileService.sharedDomainEmail(validEmails, this.domain.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+                if (!validRecipients) {
+                    return;
+                }
+                this.settingsProfileService.sharedDomainEmail(uniqueArray, this.domain.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
                     if (response && response.status === 'success') {
-                        this.toaster.successToast(response.body)
+                        this.toaster.showSnackBar("success", response?.body);
                         this.dialog?.closeAll();
                         this.shareEmailForm.reset();
                     } else {
-                        this.toaster.errorToast(response.message);
+                        this.toaster.showSnackBar("error", response.message);
                     }
                     this.changeDetectorRef.detectChanges();
                 });
             }
-        }
-        if (!validRecipients) {
-            return;
         }
     }
 
@@ -239,7 +241,7 @@ export class PortalWhiteLabelComponent implements OnInit {
                     });
                 }
             } else {
-                this.toaster.errorToast(response.message);
+                this.toaster.showSnackBar("error", response.message);
                 this.shouldShowLoader = false;
             }
         });
@@ -253,13 +255,13 @@ export class PortalWhiteLabelComponent implements OnInit {
      * @param {string} [uniqueName]
      * @memberof PortalWhiteLabelComponent
      */
-    public setPrimaryDeteleDomain(operation: string, uniqueName?: string): void {
+    public setPrimaryAndDeleteDomain(operation: string, uniqueName?: string): void {
         this.settingsProfileService.setPrimaryDeleteDomain(uniqueName, operation).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response && response.status === 'success') {
                 if (operation === 'set-primary') {
-                    this.toaster.successToast(this.localeData?.primary_domain_set);
+                    this.toaster.showSnackBar("success", this.localeData?.primary_domain_set);
                 } else {
-                    this.toaster.successToast(this.localeData?.delete_domain);
+                    this.toaster.showSnackBar("success", this.localeData?.delete_domain);
                 }
                 if (operation === 'delete') {
                     this.getDomainList(true);
@@ -274,7 +276,7 @@ export class PortalWhiteLabelComponent implements OnInit {
                     }
                 }
             } else {
-                this.toaster.errorToast(response.message);
+                this.toaster.showSnackBar("error", response.message);
             }
             this.changeDetectorRef.detectChanges();
         });
@@ -302,7 +304,7 @@ export class PortalWhiteLabelComponent implements OnInit {
                     });
                 }
             } else {
-                this.toaster.errorToast(response.message);
+                this.toaster.showSnackBar("error", response.message);
             }
         });
         this.changeDetectorRef.detectChanges();
@@ -329,7 +331,7 @@ export class PortalWhiteLabelComponent implements OnInit {
         let requestData = [urlWithoutProtocol, this.generatedString];
         this.settingsProfileService.addPortalDomain(requestData).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response && response.status === 'success') {
-                this.toaster.successToast(this.localeData?.add_domain_succesfully);
+                this.toaster.showSnackBar("success", this.localeData?.add_domain_succesfully);
                 this.portalWhilteLabelForm.reset();
                 this.getDomainList(false);
                 let event = {
@@ -340,7 +342,7 @@ export class PortalWhiteLabelComponent implements OnInit {
                 this.selectDomain(event)
                 this.dialog.closeAll();
             } else {
-                this.toaster.errorToast(response.message);
+                this.toaster.showSnackBar("error", response.message);
             }
             this.changeDetectorRef.detectChanges();
         });
@@ -384,7 +386,7 @@ export class PortalWhiteLabelComponent implements OnInit {
 
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response) {
-                this.setPrimaryDeteleDomain('delete', this.domain.uniqueName);
+                this.setPrimaryAndDeleteDomain('delete', this.domain.uniqueName);
             } else {
                 this.dialog.closeAll();
             }

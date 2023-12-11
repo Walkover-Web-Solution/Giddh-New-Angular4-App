@@ -20,8 +20,6 @@ const ELEMENT_DATA: GetDomainList[] = [];
     styleUrls: ['./dns-records.component.scss']
 })
 export class DnsRecordsComponent implements OnInit {
-    /** This holds url to download */
-    public downloadUrl: string = '';
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* it will store image path */
@@ -40,7 +38,7 @@ export class DnsRecordsComponent implements OnInit {
     /** This will use for table heading */
     public displayedColumns: string[] = ['type', 'hostName', 'value', 'status'];
     /* it will store company uniquename */
-    public companyUniqueName: string = '';;
+    public companyUniqueName: string = '';
 
 
     constructor(private route: ActivatedRoute,
@@ -88,7 +86,7 @@ export class DnsRecordsComponent implements OnInit {
                     });
                 }
             } else {
-                this.toaster.errorToast(response.message);
+                this.toaster.showSnackBar("error", response.message);
                 this.shouldShowLoader = false;
             }
         });
