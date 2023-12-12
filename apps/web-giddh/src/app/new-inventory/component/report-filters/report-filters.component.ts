@@ -302,6 +302,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     public setDisplayColumns(columns: string[]): void {
         this.displayedColumns = columns;
         this.selectedColumns.emit(this.displayedColumns);
+        console.log(this.displayedColumns);
         this.changeDetection.detectChanges();
     }
 
