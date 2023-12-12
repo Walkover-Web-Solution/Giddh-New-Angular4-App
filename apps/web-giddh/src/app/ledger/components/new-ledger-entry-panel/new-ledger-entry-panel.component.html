@@ -915,15 +915,14 @@
                             (change)="manualGenerateVoucherChecked = $event?.checked"
                             >{{ commonLocaleData?.app_generate_voucher }}</mat-checkbox
                         >
-                        <span class="pd-l05" *ngIf="autoGenerateVoucherFromEntry" >
-                            <a 
-                                class="icon-info text-dark" 
-                                href="/pages/invoice/preview/settings/sales?tabIndex=4" 
-                                target="_blank"
-                                [matTooltip]="localeData?.uncheck_auto_generate_tooltip_message"
-                                matTooltipPosition="above"
-                            ></a>
-                        </span>                        
+                        <span class="pd-l05" *ngIf="autoGenerateVoucherFromEntry">
+                            <span class="icon-info text-dark p-1" [matMenuTriggerFor]="toolTip" #trigger="matMenuTrigger" (mouseenter)="toggleMenu()" (mouseleave)="toggleMenu(true)"></span>
+                            <mat-menu #toolTip="matMenu" class="custom-tooltip" [disableRipple]="true" hasBackdrop="false" xPosition="after" yPosition="above">
+                            <div (mouseenter)="tooltipHoveredStatus = true" (mouseleave)="tooltipHoveredStatus = false; toggleMenu(true)" (click)="$event.stopPropagation()">
+                                <div class="tooltip-text" [innerHTML]="localeData?.uncheck_auto_generate_tooltip_message"></div>
+                            </div>
+                            </mat-menu>
+                        </span>
                     </label>
                 </div>
                 <div class="pull-right">
