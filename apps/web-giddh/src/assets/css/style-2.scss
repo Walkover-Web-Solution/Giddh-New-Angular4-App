@@ -14669,3 +14669,18 @@ aside-menu-product-service {
     top: 0;
     z-index: 1;
 }
+
+.custom-tooltip{
+    background-color: var(--color-dark-gray) !important;
+    border-radius: 4px;
+    padding: 0 8px;
+
+    .tooltip-text{
+        font-size: var(--font-size-12);
+        color: var(--color-toast-primary-text);
+        a {
+            color: var(--color-toast-primary-text) !important;
+            text-decoration: underline;
+        }
+    }
+}

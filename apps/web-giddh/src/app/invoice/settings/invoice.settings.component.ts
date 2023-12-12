@@ -94,7 +94,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
         this.gmailAuthCodeUrl$ = observableOf(this.gmailAuthCodeStaticUrl);
     }
 
-    public ngOnInit() {
+    public ngOnInit() {                   
         this.voucherApiVersion = this.generalService.voucherApiVersion;
 
         this.store.dispatch(this.settingsIntegrationActions.GetGmailIntegrationStatus());
@@ -309,8 +309,6 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
 
         this.formToSave.companyCashFreeSettings = cloneDeep(this.companyCashFreeSettings);
         this.store.dispatch(this.invoiceActions.updateInvoiceSetting(this.formToSave));
-        // }
-
         if (!isEqual(this.razorpayObj, razorpayObj) && form && form.createPaymentEntry) {
             this.saveRazorPay(this.razorpayObj, form);
         }

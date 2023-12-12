@@ -804,6 +804,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.cdRf.detectChanges();
             }
         });
+        const broadcast = new BroadcastChannel("tabs");
+        broadcast.onmessage = (event) => {
+            if (event?.data?.autoGenerateVoucherFromEntry !== undefined && event?.data?.autoGenerateVoucherFromEntry !== null) {                       
+                this.store.dispatch(this.invoiceAction.getInvoiceSetting());
+            }
+        };
     }
 
     private assignPrefixAndSuffixForCurrency() {
@@ -2566,13 +2572,15 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @memberof LedgerComponent
      */
     public getPurchaseSettings(): void {
-        this.store.pipe(select(state => state.invoice.settings), takeUntil(this.destroyed$)).subscribe(response => {  
-            this.autoGenerateVoucherFromEntryStatus = response?.invoiceSettings?.autoGenerateVoucherFromEntry;             
+        this.store.pipe(select(state => state.invoice.settings), takeUntil(this.destroyed$)).subscribe(response => { 
+            
+            this.autoGenerateVoucherFromEntryStatus = response?.invoiceSettings?.autoGenerateVoucherFromEntry;
             if (response?.purchaseBillSettings && !response?.purchaseBillSettings?.enableVoucherDownload) {
                 this.restrictedVouchersForDownload.push(AdjustedVoucherType.PurchaseInvoice);
             } else {
                 this.restrictedVouchersForDownload = this.restrictedVouchersForDownload?.filter(voucherType => voucherType !== AdjustedVoucherType.PurchaseInvoice);
             }
+            this.cdRf.detectChanges();
         });
     }
 
