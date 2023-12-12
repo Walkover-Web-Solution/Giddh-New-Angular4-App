@@ -9,5 +9,6 @@
     "stock_group_create":"Stock group created successfully.",
     "delete_message":"Deleting this group will delete & un-link all the stocks under it. Are you sure you want to delete the group? ",
     "delete_message1:":"It will be deleted permanently and will no longer be accessible from any other module.",
-    "group_delete":"Group deleted successfully."
+    "group_delete":"Group deleted successfully.",
+    "watch_video_text": "How to create Inventory Groups?"
  }

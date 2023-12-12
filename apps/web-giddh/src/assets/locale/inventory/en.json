@@ -102,5 +102,8 @@
         "opening_bal":"Opening Bal",
         "variant":"Variant",
         "variants":"Variants"
+    },
+    "master": {
+        "watch_video_text": "How to create Inventory Groups from Master?"
     }
 }
