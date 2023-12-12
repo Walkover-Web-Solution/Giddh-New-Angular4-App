@@ -309,9 +309,6 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
 
         this.formToSave.companyCashFreeSettings = cloneDeep(this.companyCashFreeSettings);
         this.store.dispatch(this.invoiceActions.updateInvoiceSetting(this.formToSave));
-        window.postMessage({autoGenerateVoucherFromEntry: this.formToSave.invoiceSettings.autoGenerateVoucherFromEntry})
-        // }
-
         if (!isEqual(this.razorpayObj, razorpayObj) && form && form.createPaymentEntry) {
             this.saveRazorPay(this.razorpayObj, form);
         }

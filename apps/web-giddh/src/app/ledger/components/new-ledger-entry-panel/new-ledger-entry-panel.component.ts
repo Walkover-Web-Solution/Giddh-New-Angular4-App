@@ -478,6 +478,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         if (this.autoGenerateVoucherFromEntry) {
             this.blankLedger.generateInvoice = true;
         }
+        this.cdRef.detectChanges();
     }
 
     /**
