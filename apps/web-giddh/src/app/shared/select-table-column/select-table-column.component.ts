@@ -135,7 +135,6 @@ export class SelectTableColumnComponent implements OnInit, OnChanges {
                 if (response.body.columns) {
                     const displayColumnsSet = new Set(response.body.columns);
                     this.customiseColumns.forEach(column => column.checked = displayColumnsSet.has(column.value));
-                    console.log(displayColumnsSet, this.customiseColumns);
                 }
             }
             this.filteredDisplayColumns();
