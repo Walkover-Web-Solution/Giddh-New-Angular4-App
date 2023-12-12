@@ -290,6 +290,8 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
                 newState.settings.companyEmailSettings = form.companyEmailSettings;
                 newState.settings.estimateSettings = form.estimateSettings;
                 newState.settings.proformaSettings = form.proformaSettings;
+                const broadcast = new BroadcastChannel("tabs");
+                broadcast.postMessage({autoGenerateVoucherFromEntry: form.invoiceSettings.autoGenerateVoucherFromEntry});
                 return Object.assign({}, state, newState);
             }
             return state;
