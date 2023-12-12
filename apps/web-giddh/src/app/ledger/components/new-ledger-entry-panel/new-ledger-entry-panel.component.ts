@@ -427,7 +427,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      * @param {boolean} mouseLeave True, if mouseleave from tooltip text or trigger button
      * @memberof NewLedgerEntryPanelComponent
      */
-    public openCloseTooltipMenu(mouseLeave: boolean = false): void {
+    public toggleMenu(mouseLeave: boolean = false): void {
         if (mouseLeave) {
             setTimeout(() => {
                 if (this.openTooltipMenuStatus && !this.tooltipHoveredStatus) {
@@ -437,7 +437,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                     this.trigger.openMenu();
                     this.openTooltipMenuStatus = true;
                 }
-            }, 100)
+            }, 100);
         } else {
             if (this.openTooltipMenuStatus && !this.tooltipHoveredStatus) {
                 this.trigger.closeMenu();
