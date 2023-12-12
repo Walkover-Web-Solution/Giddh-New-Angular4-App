@@ -903,6 +903,7 @@
                             name="generateInvoice"
                             [disabled]="
                                 (voucherApiVersion === 2 && isAdvanceReceipt) ||
+                                autoGenerateVoucherFromEntry ||
                                 currentTxn?.voucherAdjustments?.adjustments?.length ||
                                 currentTxn?.invoiceLinkingRequest?.linkedInvoices?.length ||
                                 currentTxn?.referenceVoucher?.uniqueName ||
@@ -914,6 +915,14 @@
                             (change)="manualGenerateVoucherChecked = $event?.checked"
                             >{{ commonLocaleData?.app_generate_voucher }}</mat-checkbox
                         >
+                        <span class="pd-l05" *ngIf="autoGenerateVoucherFromEntry">
+                            <span class="icon-info text-dark p-1" [matMenuTriggerFor]="toolTip" #trigger="matMenuTrigger" (mouseenter)="openCloseTooltipMenu()" (mouseleave)="openCloseTooltipMenu(true)"></span>
+                            <mat-menu #toolTip="matMenu" class="custom-tooltip" [disableRipple]="true" hasBackdrop="false" xPosition="after" yPosition="above">
+                            <div (mouseenter)="tooltipHoveredStatus = true" (mouseleave)="tooltipHoveredStatus = false; openCloseTooltipMenu(true)" (click)="$event.stopPropagation()">
+                                <div class="tooltip-text" [innerHTML]="localeData?.uncheck_auto_generate_tooltip_message"></div>
+                            </div>
+                            </mat-menu>
+                        </span>
                     </label>
                 </div>
                 <div class="pull-right">

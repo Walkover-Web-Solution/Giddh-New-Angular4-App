@@ -7,7 +7,7 @@
 >
     <div validateSectionPermission [hasPermission]="hasInvoiceSettingPermissions" validateSubscription>
         <section id="invoice-setting">
-            <tabset class="tab-integration">
+            <tabset class="tab-integration" #staticTabsSettings>
                 <!-- region general tab-->
                 <tab>
                     <ng-template tabHeading> <span class="icon-chat2"></span> {{ localeData?.general }} </ng-template>
