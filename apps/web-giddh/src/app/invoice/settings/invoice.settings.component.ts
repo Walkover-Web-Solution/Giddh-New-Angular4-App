@@ -17,8 +17,7 @@ import { CommonActions } from '../../actions/common.actions';
 import { GeneralService } from '../../services/general.service';
 import { OrganizationType } from '../../models/user-login-state';
 import { cloneDeep, concat, isEmpty, isEqual } from '../../lodash-optimized';
-import { BootstrapToggleSwitch } from '../../app.constant'
-import { MatDialog } from '@angular/material/dialog';
+import { BootstrapToggleSwitch } from '../../app.constant';
 
 @Component({
     selector: 'app-invoice-setting',
@@ -93,7 +92,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
         this.gmailAuthCodeUrl$ = observableOf(this.gmailAuthCodeStaticUrl);
     }
 
-    public ngOnInit() {
+    public ngOnInit() {                   
         this.voucherApiVersion = this.generalService.voucherApiVersion;
 
         this.store.dispatch(this.settingsIntegrationActions.GetGmailIntegrationStatus());
@@ -305,6 +304,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
 
         this.formToSave.companyCashFreeSettings = cloneDeep(this.companyCashFreeSettings);
         this.store.dispatch(this.invoiceActions.updateInvoiceSetting(this.formToSave));
+        window.postMessage({autoGenerateVoucherFromEntry: this.formToSave.invoiceSettings.autoGenerateVoucherFromEntry})
         // }
 
         if (!isEqual(this.razorpayObj, razorpayObj) && form && form.createPaymentEntry) {
