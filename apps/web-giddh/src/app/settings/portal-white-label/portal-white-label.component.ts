@@ -70,6 +70,8 @@ export class PortalWhiteLabelComponent implements OnInit {
         uniqueName: '',
         status: ''
     };
+    /** Hide if all domains are verified  */
+    public allVerifiedDomain: boolean;
 
     constructor(private fb: UntypedFormBuilder,
         private settingsProfileService: SettingsProfileService,
@@ -239,7 +241,10 @@ export class PortalWhiteLabelComponent implements OnInit {
                     this.dataSource = response.body?.map(portal => {
                         return { type: 'CNAME', hostName: portal.domainName, value: 'portal.giddh.com', status: portal.verified, isCopiedHostName: false, isCopiedValue: false };
                     });
+                    let allVerified = this.dataSource.every(item => item.status);
+                    this.allVerifiedDomain = allVerified;
                 }
+
             } else {
                 this.toaster.showSnackBar("error", response.message);
                 this.shouldShowLoader = false;
@@ -302,6 +307,9 @@ export class PortalWhiteLabelComponent implements OnInit {
                     this.domainList = response.body?.map(portal => {
                         return { label: portal.domainName, value: portal.uniqueName, status: portal.primary };
                     });
+                } else {
+                    this.domainList = [];
+                    this.dataSource = [];
                 }
             } else {
                 this.toaster.showSnackBar("error", response.message);
