@@ -98,10 +98,14 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
             }
 
             if ('discountFixedValueModal' in changes && changes.discountFixedValueModal.currentValue !== changes.discountFixedValueModal.previousValue) {
-                this.change();
+                this.discountFixedValueModal = changes.discountFixedValueModal.currentValue;
+                this.defaultDiscount.amount = changes.discountFixedValueModal.currentValue;
+                this.defaultDiscount.discountType = 'FIX_AMOUNT';
             }
             if ('discountPercentageModal' in changes && changes.discountPercentageModal.currentValue !== changes.discountPercentageModal.previousValue) {
-                this.change();
+                this.discountPercentageModal = changes.discountPercentageModal.currentValue;
+                this.defaultDiscount.amount = changes.discountPercentageModal.currentValue;
+                this.defaultDiscount.discountType = 'PERCENTAGE';
             }
         }
     }
@@ -146,7 +150,8 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
         this.defaultDiscount.amount = parseFloat(String(event.target?.value)?.replace(/[,'\s]/g, ''));
         this.defaultDiscount.discountValue = parseFloat(String(event.target?.value)?.replace(/[,'\s]/g, ''));
         this.defaultDiscount.discountType = type;
-        this.change();
+        this.discountTotalUpdated.emit({ discount: (this.defaultDiscount.amount || this.defaultDiscount.discountValue), isActive: event, discountType: this.defaultDiscount.discountType });
+
         if (!event.target?.value) {
             this.discountFromVal = true;
             this.discountFromPer = true;
@@ -165,7 +170,7 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
      * on change of discount amount
      */
     public change(discount?: any, event?: boolean) {
-        this.discountTotalUpdated.emit({ discount: (this.defaultDiscount.amount || this.defaultDiscount.discountValue), isActive: event, discountType: this.defaultDiscount.discountType });
+        this.discountTotalUpdated.emit({ discount: discount, isActive: event });
     }
 
     public trackByFn(index) {
