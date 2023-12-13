@@ -74,6 +74,12 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
 
     public ngOnInit() {
         this.prepareDiscountList();
+
+        if (this.defaultDiscount && this.defaultDiscount.discountType === 'FIX_AMOUNT') {
+            this.discountFixedValueModal = this.defaultDiscount.amount;
+        } else {
+            this.discountPercentageModal = (this.defaultDiscount) ? this.defaultDiscount.amount : 0;
+        }
         this.store.pipe(select(prof => prof.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
             this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
         });
@@ -82,6 +88,11 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
     public ngOnChanges(changes: SimpleChanges): void {
         if ('discountAccountsDetails' in changes && changes.discountAccountsDetails.currentValue !== changes.discountAccountsDetails.previousValue) {
             this.prepareDiscountList();
+            if (this.defaultDiscount && this.defaultDiscount.discountType === 'FIX_AMOUNT') {
+                this.discountFixedValueModal = this.defaultDiscount.amount;
+            } else {
+                this.discountPercentageModal = (this.defaultDiscount) ? this.defaultDiscount.amount : 0;
+            }
             if ('totalAmount' in changes && changes.totalAmount.currentValue !== changes.totalAmount.previousValue) {
                 this.change();
             }

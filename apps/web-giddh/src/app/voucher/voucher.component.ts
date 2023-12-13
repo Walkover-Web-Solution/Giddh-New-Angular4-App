@@ -3163,47 +3163,53 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         entry['discountPercentageModal'] = this.discountFromUnit?.discount ? this.discountFromUnit?.discount : 0;
                         discountSum = this.discountFromUnit?.discount ? this.discountFromUnit?.discount : 0;
                     }
-                } else {
-                    if (trx?.stockDetails?.variant?.variantDiscount?.discountValue) {
-                        let matchedUnit = trx?.stockDetails?.variant?.variantDiscount?.unit?.code === trx?.stockUnitCode;
-                        if (matchedUnit) {
-                            if (trx?.stockDetails?.variant?.variantDiscount?.discountType === 'FIX_AMOUNT') {
-                                entry['discountFixedValueModal'] = this.discountFromUnit?.discount ? this.discountFromUnit?.discount : trx?.stockDetails?.variant?.variantDiscount?.discountValue;
-                                discountSum = this.discountFromUnit?.discount ? this.discountFromUnit?.discount : trx?.stockDetails?.variant?.variantDiscount?.discountValue;
-                            }
-                            if (trx?.stockDetails?.variant?.variantDiscount?.discountType === 'PERCENTAGE') {
-                                entry['discountPercentageModal'] = this.discountFromUnit?.discount ? this.discountFromUnit?.discount : trx?.stockDetails?.variant?.variantDiscount?.discountValue;
-                                discountSum = this.discountFromUnit?.discount ? this.discountFromUnit?.discount : trx?.stockDetails?.variant?.variantDiscount?.discountValue;
-                            }
-                        } else {
-                            if (trx?.stockDetails?.variant?.variantDiscount?.discountType === 'FIX_AMOUNT') {
-                                entry['discountFixedValueModal'] = 0;
-                                discountSum == 0;
-                            }
-                            if (trx?.stockDetails?.variant?.variantDiscount?.discountType === 'PERCENTAGE') {
-                                entry['discountPercentageModal'] = 0;
-                                discountSum == 0;
-                            }
+                } else if (entry['initiallyCall']) {
+                    discountSum = entry.discountSum;
+                    if (trx?.stockDetails?.variant?.variantDiscount?.discountType === 'FIX_AMOUNT') {
+                        entry['discountFixedValueModal'] = entry.discountSum;
+                    }
+                    if (trx?.stockDetails?.variant?.variantDiscount?.discountType === 'PERCENTAGE') {
+                        entry['discountPercentageModal'] = entry.discountSum;
+                    }
+                } else if (trx?.stockDetails?.variant?.variantDiscount?.discountValue) {
+                    let matchedUnit = trx?.stockDetails?.variant?.variantDiscount?.unit?.code === trx?.stockUnitCode;
+                    if (matchedUnit) {
+                        if (trx?.stockDetails?.variant?.variantDiscount?.discountType === 'FIX_AMOUNT') {
+                            entry['discountFixedValueModal'] = this.discountFromUnit?.discount ? this.discountFromUnit?.discount : trx?.stockDetails?.variant?.variantDiscount?.discountValue;
+                            discountSum = this.discountFromUnit?.discount ? this.discountFromUnit?.discount : trx?.stockDetails?.variant?.variantDiscount?.discountValue;
+                        }
+                        if (trx?.stockDetails?.variant?.variantDiscount?.discountType === 'PERCENTAGE') {
+                            entry['discountPercentageModal'] = this.discountFromUnit?.discount ? this.discountFromUnit?.discount : trx?.stockDetails?.variant?.variantDiscount?.discountValue;
+                            discountSum = this.discountFromUnit?.discount ? this.discountFromUnit?.discount : trx?.stockDetails?.variant?.variantDiscount?.discountValue;
                         }
                     } else {
-                        if (event && event.discount && event.isActive) {
-                            this.accountAssignedApplicableDiscounts.forEach(item => {
-                                if (item && event.discount && item.uniqueName === event.discount.discountUniqueName) {
-                                    item.isActive = event.isActive?.target?.checked;
-                                }
-                            });
+                        if (trx?.stockDetails?.variant?.variantDiscount?.discountType === 'FIX_AMOUNT') {
+                            entry['discountFixedValueModal'] = 0;
+                            discountSum == 0;
                         }
-                        if (trx.amount && entry && entry.discounts && entry.discounts.length && this.accountAssignedApplicableDiscounts && this.accountAssignedApplicableDiscounts.length) {
-                            entry.discounts.map(item => {
-                                let discountItem = this.accountAssignedApplicableDiscounts.find(element => element?.uniqueName === item.discountUniqueName);
-                                if (discountItem && discountItem.uniqueName) {
-                                    item.isActive = discountItem.isActive;
-                                }
-                            });
+                        if (trx?.stockDetails?.variant?.variantDiscount?.discountType === 'PERCENTAGE') {
+                            entry['discountPercentageModal'] = 0;
+                            discountSum == 0;
                         }
                     }
+                    entry['initiallyCall'] = true;
+                } else {
+                    if (event && event.discount && event.isActive) {
+                        this.accountAssignedApplicableDiscounts.forEach(item => {
+                            if (item && event.discount && item.uniqueName === event.discount.discountUniqueName) {
+                                item.isActive = event.isActive?.target?.checked;
+                            }
+                        });
+                    }
+                    if (trx.amount && entry && entry.discounts && entry.discounts.length && this.accountAssignedApplicableDiscounts && this.accountAssignedApplicableDiscounts.length) {
+                        entry.discounts.map(item => {
+                            let discountItem = this.accountAssignedApplicableDiscounts.find(element => element?.uniqueName === item.discountUniqueName);
+                            if (discountItem && discountItem.uniqueName) {
+                                item.isActive = discountItem.isActive;
+                            }
+                        });
+                    }
                 }
-                this.changeDetectorRef.detectChanges();
             }
 
             if (trx.amount) {
