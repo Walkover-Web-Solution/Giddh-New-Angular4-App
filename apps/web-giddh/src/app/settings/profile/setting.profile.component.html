@@ -76,7 +76,7 @@
                 </other-settings>
             </tab>
             <tab
-                *ngIf="voucherApiVersion === 2"
+                *ngIf="voucherApiVersion === 2 && currentOrganizationType === 'COMPANY'"
                 [active]="this.currentTab === 'portal'"
                 (selectTab)="handleTabChanged('portal')"
                 [heading]="localeData?.portal_heading"

@@ -820,6 +820,11 @@ textarea {
         width: 100%;
     }
 }
+.select-domain {
+    .mat-mdc-select {
+        padding: 0px !important;
+    }
+}
 @media screen and (max-width: 1366px) and (orientation: portrait) {
     .subscription-form-select {
         float: left !important;
