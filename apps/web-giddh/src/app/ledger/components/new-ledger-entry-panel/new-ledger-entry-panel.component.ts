@@ -422,31 +422,42 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     /**
-     * Toggle Tooltip Menu
+     * Toggle Tooltip Menu on mouseenter event
      *
-     * @param {boolean} mouseLeave True, if mouseleave from tooltip text or trigger button
      * @memberof NewLedgerEntryPanelComponent
      */
-    public toggleMenu(mouseLeave: boolean = false): void {
-        if (mouseLeave) {
-            setTimeout(() => {
-                if (this.openTooltipMenuStatus && !this.tooltipHoveredStatus) {
-                    this.trigger.closeMenu();
-                    this.openTooltipMenuStatus = false;
-                } else {
-                    this.trigger.openMenu();
-                    this.openTooltipMenuStatus = true;
-                }
-            }, 100);
-        } else {
-            if (this.openTooltipMenuStatus && !this.tooltipHoveredStatus) {
-                this.trigger.closeMenu();
-                this.openTooltipMenuStatus = false;
-            } else {
+    public toggleMenuOnMouseEnterButton(): void{
+            this.openTooltipMenuStatus = false;
+            setTimeout(()=>{
                 this.trigger.openMenu();
                 this.openTooltipMenuStatus = true;
+            },200);
+    }
+
+    /**
+     * Toggle Tooltip Menu on mouseenter event
+     *
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public toggleMenuOnMouseLeaveButton(): void{
+            setTimeout(() => { 
+                if(!this.tooltipHoveredStatus){
+                    this.trigger.closeMenu();
+                }
+            },200);
+    }
+    
+    /**
+     * Close tooltip content
+     *
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public closeToolTipMenu():void{
+        setTimeout(() => {
+            if( this.openTooltipMenuStatus){
+                this.trigger.closeMenu();
             }
-        }
+        },200);
     }
 
     @HostListener('click', ['$event'])
