@@ -237,7 +237,6 @@ export class PortalWhiteLabelComponent implements OnInit {
         this.settingsProfileService.getDomainListTableData(uniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response && response.status === 'success') {
                 this.shouldShowLoader = false;
-                response?.body
                 if (response?.body?.length) {
                     this.dataSource = response.body?.map(portal => {
                         return { type: 'CNAME', hostName: portal.domainName, value: 'portal.giddh.com', status: portal.verified, isCopiedHostName: false, isCopiedValue: false };
