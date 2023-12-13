@@ -712,6 +712,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public hasUnsavedChanges: boolean = false;
     /** True if entry datepicker is open */
     public isEntryDatepickerOpen: boolean = false;
+    /** True, if the linking with PO is in progress */
+    private isPoLinkingInProgress: boolean = false;
     /**Hold voucher type */
     public voucherTypes: any[] = [VoucherTypeEnum.cashCreditNote, VoucherTypeEnum.cash, VoucherTypeEnum.cashDebitNote, VoucherTypeEnum.cashBill];
     /** This will hold invoice text */
@@ -720,8 +722,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public regionsSource: IOption[] = [];
     /* This will hold company's country regions */
     public companyRegionsSource: IOption[] = [];
-    /** True, if the linking with PO is in progress */
-    private isPoLinkingInProgress: boolean = false;
     /** This will hold barcode value*/
     public barcodeValue: string = "";
     /** Custom fields request */
@@ -740,7 +740,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public lastScannedKey: string = '';
     /** True if barcode maching is typing */
     public isBarcodeMachineTyping: boolean = false;
-    public discountFromUnit;
+    /** Stores the discount object from discount calculation */
+    public discountObj: any;
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -3023,6 +3024,14 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         return (value === Infinity) ? 0 : value;
     }
 
+    /**
+     * This will be use for calculation of discount
+     *
+     * @param {SalesEntryClass} entry
+     * @param {SalesTransactionItemClass} trx
+     * @param {boolean} [calculateEntryTotal=true]
+     * @memberof VoucherComponent
+     */
     public calculateTotalDiscountOfEntry(entry: SalesEntryClass, trx: SalesTransactionItemClass, calculateEntryTotal: boolean = true) {
         if (!entry['initiallyCall']) {
             let percentageListTotal: number = 0;
@@ -3098,8 +3107,18 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.calculateBalanceDue();
     }
 
+    /**
+     * This will be use for calculating when transaction altered
+     *
+     * @param {SalesEntryClass} entry
+     * @param {SalesTransactionItemClass} trx
+     * @param {boolean} [fromTransactionField=false]
+     * @param {*} [event]
+     * @return {*}
+     * @memberof VoucherComponent
+     */
     public calculateWhenTrxAltered(entry: SalesEntryClass, trx: SalesTransactionItemClass, fromTransactionField: boolean = false, event?: any) {
-        this.discountFromUnit = event;
+        this.discountObj = event;
         if (trx?.accountName || trx?.accountUniqueName) {
             if (fromTransactionField) {
                 trx.highPrecisionAmount = trx.amount;
@@ -3109,31 +3128,31 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 }
             }
             if (!this.isUpdateMode) {
-                if (this.discountFromUnit !== undefined && this.discountFromUnit) {
-                    if (isNaN(this.discountFromUnit?.discount)) {
-                        this.discountFromUnit.discount = 0;
+                if (this.discountObj !== undefined && this.discountObj) {
+                    if (isNaN(this.discountObj?.discount)) {
+                        this.discountObj.discount = 0;
                     }
                 }
-                if (this.discountFromUnit) {
-                    if (this.discountFromUnit?.discountType === 'FIX_AMOUNT') {
-                        entry['discountFixedValueModal'] = this.discountFromUnit?.discount ? this.discountFromUnit?.discount : 0;
-                        entry.discountSum = this.discountFromUnit?.discount ? this.discountFromUnit?.discount : 0;
+                if (this.discountObj) {
+                    if (this.discountObj?.discountType === 'FIX_AMOUNT') {
+                        entry['discountFixedValueModal'] = this.discountObj?.discount ? this.discountObj?.discount : 0;
+                        entry.discountSum = this.discountObj?.discount ? this.discountObj?.discount : 0;
                     }
-                    if (this.discountFromUnit?.discountType === 'PERCENTAGE') {
-                        entry['discountPercentageModal'] = this.discountFromUnit?.discount ? this.discountFromUnit?.discount : 0;
-                        entry.discountSum = this.discountFromUnit?.discount ? this.discountFromUnit?.discount : 0;
+                    if (this.discountObj?.discountType === 'PERCENTAGE') {
+                        entry['discountPercentageModal'] = this.discountObj?.discount ? this.discountObj?.discount : 0;
+                        entry.discountSum = this.discountObj?.discount ? this.discountObj?.discount : 0;
                     }
                 } else if (!entry['initiallyCall']) {
                     if (trx?.stockDetails?.variant?.variantDiscount?.discountValue) {
                         let matchedUnit = trx?.stockDetails?.variant?.variantDiscount?.unit?.code === trx?.stockUnitCode;
                         if (matchedUnit) {
                             if (trx?.stockDetails?.variant?.variantDiscount?.discountType === 'FIX_AMOUNT') {
-                                entry['discountFixedValueModal'] = this.discountFromUnit?.discount ? this.discountFromUnit?.discount : trx?.stockDetails?.variant?.variantDiscount?.discountValue;
-                                entry.discountSum = this.discountFromUnit?.discount ? this.discountFromUnit?.discount : trx?.stockDetails?.variant?.variantDiscount?.discountValue;
+                                entry['discountFixedValueModal'] = this.discountObj?.discount ? this.discountObj?.discount : trx?.stockDetails?.variant?.variantDiscount?.discountValue;
+                                entry.discountSum = this.discountObj?.discount ? this.discountObj?.discount : trx?.stockDetails?.variant?.variantDiscount?.discountValue;
                             }
                             if (trx?.stockDetails?.variant?.variantDiscount?.discountType === 'PERCENTAGE') {
-                                entry['discountPercentageModal'] = this.discountFromUnit?.discount ? this.discountFromUnit?.discount : trx?.stockDetails?.variant?.variantDiscount?.discountValue;
-                                entry.discountSum = this.discountFromUnit?.discount ? this.discountFromUnit?.discount : trx?.stockDetails?.variant?.variantDiscount?.discountValue;
+                                entry['discountPercentageModal'] = this.discountObj?.discount ? this.discountObj?.discount : trx?.stockDetails?.variant?.variantDiscount?.discountValue;
+                                entry.discountSum = this.discountObj?.discount ? this.discountObj?.discount : trx?.stockDetails?.variant?.variantDiscount?.discountValue;
                             }
                             entry['initiallyCall'] = true;
                         } else {
@@ -3505,6 +3524,19 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         return res;
     }
 
+    /**
+     * This will be use for on select any sales account or stock
+     *
+     * @param {*} selectedAcc
+     * @param {SalesTransactionItemClass} txn
+     * @param {SalesEntryClass} entry
+     * @param {boolean} [isBulkItem=false]
+     * @param {boolean} [isLinkedPoItem=false]
+     * @param {number} entryIndex
+     * @param {boolean} [fromBarcode=false]
+     * @return {*}  {*}
+     * @memberof VoucherComponent
+     */
     public onSelectSalesAccount(selectedAcc: any, txn: SalesTransactionItemClass, entry: SalesEntryClass, isBulkItem: boolean = false, isLinkedPoItem: boolean = false, entryIndex: number, fromBarcode: boolean = false): any {
         if (this.isBarcodeMachineTyping) {
             this.removeTransaction(entryIndex);
@@ -3517,7 +3549,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         }
         if ((selectedAcc?.value || isBulkItem) && selectedAcc.additional && selectedAcc.additional?.uniqueName) {
             let params;
-
             if (selectedAcc.additional.stock) {
                 params = {
                     stockUniqueName: selectedAcc.additional.stock?.uniqueName,
@@ -8782,10 +8813,10 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     }
 
     /**
-    * This will use for delete attachment confirmation
-    *
-    * @memberof VoucherComponent
-    */
+     * This will use for delete attachment confirmation
+     *
+     * @memberof VoucherComponent
+     */
     public deleteAttachementConfirmation(): void {
         this.attachmentDeleteConfiguration = this.generalService.getAttachmentDeleteConfiguration(this.localeData, this.commonLocaleData);
         let dialogRef = this.dialog.open(this.attachmentDeleteConfirmationModel, {

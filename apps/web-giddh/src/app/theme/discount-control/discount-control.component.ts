@@ -22,6 +22,7 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
     @Input() public ledgerAmount: number = 0;
     @Input() public totalAmount: number = 0;
     @Input() public showHeaderText: boolean = true;
+    /* This will emit discount total updated */
     @Output() public discountTotalUpdated: EventEmitter<{ discount: any, isActive: boolean, discountType?: any }> = new EventEmitter();
     @Output() public hideOtherPopups: EventEmitter<boolean> = new EventEmitter<boolean>();
     @Input() public discountSum: number;
@@ -30,8 +31,10 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
     @Input() public suffixInput: string;
     public discountFromPer: boolean = true;
     public discountFromVal: boolean = true;
-    @Input() public discountPercentageModal: number = 0;
-    @Input() public discountFixedValueModal: number = 0;
+    /* This will hold discount percentage value */
+    public discountPercentageModal: number = 0;
+    /* This will hold discount fixed value */
+    public discountFixedValueModal: number = 0;
     @ViewChild('disInptEle', { static: true }) public disInptEle: ElementRef;
 
     @Input() public discountMenu: boolean;
@@ -80,6 +83,7 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
         } else {
             this.discountPercentageModal = (this.defaultDiscount) ? this.defaultDiscount.amount : 0;
         }
+
         this.store.pipe(select(prof => prof.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
             this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
         });
@@ -146,6 +150,14 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
         });
     }
 
+    /**
+     * This will be use for discount from input
+     *
+     * @param {('FIX_AMOUNT' | 'PERCENTAGE')} type
+     * @param {*} event
+     * @return {*}
+     * @memberof DiscountControlComponent
+     */
     public discountFromInput(type: 'FIX_AMOUNT' | 'PERCENTAGE', event: any) {
         this.defaultDiscount.amount = parseFloat(String(event.target?.value)?.replace(/[,'\s]/g, ''));
         this.defaultDiscount.discountValue = parseFloat(String(event.target?.value)?.replace(/[,'\s]/g, ''));
