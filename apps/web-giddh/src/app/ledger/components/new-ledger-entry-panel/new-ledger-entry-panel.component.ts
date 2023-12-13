@@ -426,12 +426,12 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      *
      * @memberof NewLedgerEntryPanelComponent
      */
-    public toggleMenuOnMouseEnterButton(): void{
-            this.openTooltipMenuStatus = false;
-            setTimeout(()=>{
-                this.trigger.openMenu();
-                this.openTooltipMenuStatus = true;
-            },200);
+    public showAutoPaidTooltip(): void {
+        this.openTooltipMenuStatus = false;
+        setTimeout(() => {
+            this.trigger.openMenu();
+            this.openTooltipMenuStatus = true;
+        }, 200);
     }
 
     /**
@@ -439,25 +439,25 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      *
      * @memberof NewLedgerEntryPanelComponent
      */
-    public toggleMenuOnMouseLeaveButton(): void{
-            setTimeout(() => { 
-                if(!this.tooltipHoveredStatus){
-                    this.trigger.closeMenu();
-                }
-            },200);
+    public hideAutoPaidTooltip(): void {
+        setTimeout(() => {
+            if (!this.tooltipHoveredStatus) {
+                this.trigger.closeMenu();
+            }
+        }, 200);
     }
-    
+
     /**
      * Close tooltip content
      *
      * @memberof NewLedgerEntryPanelComponent
      */
-    public closeToolTipMenu():void{
+    public hideAutoPaidTooltipOnMouseLeaveFromTooltip(): void {
         setTimeout(() => {
-            if( this.openTooltipMenuStatus){
+            if (this.openTooltipMenuStatus) {
                 this.trigger.closeMenu();
             }
-        },200);
+        }, 200);
     }
 
     @HostListener('click', ['$event'])
