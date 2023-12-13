@@ -6,14 +6,14 @@
     (translationComplete)="translationComplete($event)"
 >
     <giddh-page-loader *ngIf="(showLoader && isUpdateMode) || isShowLoader"></giddh-page-loader>
+    <hamburger-menu
+        [pageHeading]="(isCashInvoice ? localeData?.invoice_types?.cash : getInvoiceType()) | titlecase"
+    >
+    </hamburger-menu>
     <div [ngStyle]="{ 'display': (!isUpdateMode || !showLoader) && !isShowLoader ? 'block' : 'none' }">
         <div class="d-flex border-bottom mobile-view-padding">
-            <hamburger-menu
-                [pageHeading]="(isCashInvoice ? localeData?.invoice_types?.cash : getInvoiceType()) | titlecase"
-            >
-            </hamburger-menu>
-            <div class="form-group mr-b05 clearfix pro-invoice-heading">
-                <div class="clearfix">
+            <div class="form-group mr-b05 mr-t05 clearfix pro-invoice-heading w-100">
+                <div class="d-flex justify-content-between align-items-center pd-l15 pd-r15">
                     <div class="btn-group proforma-sales-time">
                         <button
                             id="giddh-page-heading-link"
@@ -27,6 +27,7 @@
                             <small *ngIf="invoiceType === 'estimates'"> ({{ commonLocaleData?.app_beta }}) </small>
                         </button>
                     </div>
+                    <!-- <watch-video [displayText]="localeData?.watch_video_text" [cssClass]="'text-primary'" [moduleName]="'VOUCHER'"></watch-video> -->
                 </div>
             </div>
         </div>
@@ -317,7 +318,7 @@
                                                         <!-- region billing address -->
                                                         <div class="col-sm-12 col-xl-6 col-md-10 bill-add pd-r1">
                                                             <div class="form-group mb-0">
-                                                                <div class="d-flex align-items-center pd-b2">
+                                                                <div class="d-flex align-items-center billing-height">
                                                                     <span class="pb-0 pd-r15">{{
                                                                         localeData?.billing_address
                                                                     }}</span>
@@ -1143,7 +1144,7 @@
                                                     <!-- region billing address -->
                                                     <div class="col-sm-12 col-xl-6 col-md-10 bill-add pd-r1">
                                                         <div class="form-group">
-                                                            <div class="d-flex align-items-center pd-b1">
+                                                            <div class="d-flex align-items-center billing-height">
                                                                 <span class="pd-r15">{{
                                                                     localeData?.billing_address
                                                                 }}</span>
@@ -2608,6 +2609,7 @@
                                         <div class="product-name">
                                             <div class="ng-select-wrap" (click)="setUserManuallyClicked()">
                                                 <select-field
+                                                    [autofocus]="true"
                                                     #selectAccount
                                                     [isPaginationEnabled]="true"
                                                     (scrollEnd)="handleScrollEnd('item')"
@@ -2993,6 +2995,7 @@
                                         class="item-discount"
                                         *ngIf="!currentVoucherFormDetails || currentVoucherFormDetails?.discountAllowed"
                                     >
+                                    {{entry.discountFixedValueModal}}
                                         <div class="td-wrapper">
                                             <div class="text-right flex-fill">
                                                 <discount-control-component
@@ -3000,6 +3003,8 @@
                                                     [discountMenu]="false"
                                                     [discountsList]="discountsList"
                                                     [discountAccountsDetails]="entry.discounts"
+                                                    [discountPercentageModal]="entry.discountPercentageModal"
+                                                    [discountFixedValueModal]="entry.discountFixedValueModal"
                                                     [discountSum]="entry.discountSum"
                                                     [showHeaderText]="false"
                                                     (hideOtherPopups)="closeTaxControlPopup()"
@@ -4221,7 +4226,7 @@
             (buttonClicked)="handleDateChangeConfirmation($event)"
         ></confirmation-modal>
     </ng-template>
-    <!-- region  delete attachment confirmation popup -->
+    <!-- region delete attachment confirmation popup -->
     <ng-template #attachmentDeleteConfirmationModel>
         <confirmation-modal
             (buttonClicked)="handleAttachmentDelete($event)"

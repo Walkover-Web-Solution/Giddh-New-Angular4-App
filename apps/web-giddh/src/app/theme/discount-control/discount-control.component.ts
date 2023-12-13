@@ -22,7 +22,7 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
     @Input() public ledgerAmount: number = 0;
     @Input() public totalAmount: number = 0;
     @Input() public showHeaderText: boolean = true;
-    @Output() public discountTotalUpdated: EventEmitter<{ discount: any, isActive: boolean }> = new EventEmitter();
+    @Output() public discountTotalUpdated: EventEmitter<{ discount: any, isActive: boolean, discountType?: any }> = new EventEmitter();
     @Output() public hideOtherPopups: EventEmitter<boolean> = new EventEmitter<boolean>();
     @Input() public discountSum: number;
     @Input() public maskInput: string;
@@ -30,8 +30,8 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
     @Input() public suffixInput: string;
     public discountFromPer: boolean = true;
     public discountFromVal: boolean = true;
-    public discountPercentageModal: number = 0;
-    public discountFixedValueModal: number = 0;
+    @Input() public discountPercentageModal: number = 0;
+    @Input() public discountFixedValueModal: number = 0;
     @ViewChild('disInptEle', { static: true }) public disInptEle: ElementRef;
 
     @Input() public discountMenu: boolean;
@@ -39,7 +39,6 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
     @Input() public commonLocaleData: any = {};
     /** Mask format for decimal number and comma separation  */
     public inputMaskFormat: string = '';
-
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** List of discounts */
     @Input() public discountsList: any[] = [];
@@ -75,13 +74,6 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
 
     public ngOnInit() {
         this.prepareDiscountList();
-
-        if (this.defaultDiscount && this.defaultDiscount.discountType === 'FIX_AMOUNT') {
-            this.discountFixedValueModal = this.defaultDiscount.amount;
-        } else {
-            this.discountPercentageModal = (this.defaultDiscount) ? this.defaultDiscount.amount : 0;
-        }
-
         this.store.pipe(select(prof => prof.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
             this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
         });
@@ -90,14 +82,14 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
     public ngOnChanges(changes: SimpleChanges): void {
         if ('discountAccountsDetails' in changes && changes.discountAccountsDetails.currentValue !== changes.discountAccountsDetails.previousValue) {
             this.prepareDiscountList();
-
-            if (this.defaultDiscount && this.defaultDiscount.discountType === 'FIX_AMOUNT') {
-                this.discountFixedValueModal = this.defaultDiscount.amount;
-            } else {
-                this.discountPercentageModal = (this.defaultDiscount) ? this.defaultDiscount.amount : 0;
+            if ('totalAmount' in changes && changes.totalAmount.currentValue !== changes.totalAmount.previousValue) {
+                this.change();
             }
 
-            if ('totalAmount' in changes && changes.totalAmount.currentValue !== changes.totalAmount.previousValue) {
+            if ('discountFixedValueModal' in changes && changes.discountFixedValueModal.currentValue !== changes.discountFixedValueModal.previousValue) {
+                this.change();
+            }
+            if ('discountPercentageModal' in changes && changes.discountPercentageModal.currentValue !== changes.discountPercentageModal.previousValue) {
                 this.change();
             }
         }
@@ -143,9 +135,7 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
         this.defaultDiscount.amount = parseFloat(String(event.target?.value)?.replace(/[,'\s]/g, ''));
         this.defaultDiscount.discountValue = parseFloat(String(event.target?.value)?.replace(/[,'\s]/g, ''));
         this.defaultDiscount.discountType = type;
-
         this.change();
-
         if (!event.target?.value) {
             this.discountFromVal = true;
             this.discountFromPer = true;
@@ -164,7 +154,7 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
      * on change of discount amount
      */
     public change(discount?: any, event?: boolean) {
-        this.discountTotalUpdated.emit({ discount: discount, isActive: event });
+        this.discountTotalUpdated.emit({ discount: (this.defaultDiscount.amount || this.defaultDiscount.discountValue), isActive: event, discountType: this.defaultDiscount.discountType });
     }
 
     public trackByFn(index) {
