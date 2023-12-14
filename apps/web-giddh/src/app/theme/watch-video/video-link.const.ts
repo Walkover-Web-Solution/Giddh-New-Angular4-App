@@ -5,7 +5,6 @@ export const VIDEOLINK = {
     INVENTORY_MASTER: "https://www.youtube.com/embed/SCymMiHtG30?si=7_jYkM8LBwFz_v3r",
     INVENTORY_MASTER_GROUP: "https://www.youtube.com/embed/SCymMiHtG30?si=xPtwoa7nD55bJg2C&amp;start=41",
     INVENTORY_CREATE_STOCK: "https://www.youtube.com/embed/BpQNwfVqvto?si=RMDls_K39f9gKp-7",
-    ICICI_INTEGRATION: "https://www.youtube.com/embed/fmQk32muNSo?si=HcH9ZuATIoLfdWw4",
     ECOMM_INTEGRATION: "https://www.youtube.com/embed/XQaJt4cZPRA?si=ogoyFlJNThTO4MhP",
     GST_FILLING_DASHBOARD: "https://www.youtube.com/embed/7NcUnWRlq6Q?si=yucjgvQ89N-nmuXa",
     GSTR3B: "https://www.youtube.com/embed/DMNqDuIqK0Q?si=a2uzS1Lgg14v4RJ1",

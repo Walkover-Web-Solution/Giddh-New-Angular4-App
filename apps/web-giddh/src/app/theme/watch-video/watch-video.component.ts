@@ -25,7 +25,7 @@ export class WatchVideoComponent implements OnInit {
     /* This will hold local JSON data */
     public localeData: any = {};
     /** Holds Translated text to display on button */
-    public translatedText:string = '';
+    public translatedText: string = '';
 
     constructor(
         public dialog: MatDialog,
