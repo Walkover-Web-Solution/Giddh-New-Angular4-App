@@ -115,6 +115,5 @@
     "account": "Account",
     "select_variant": "Select Variant",
     "variant": "Variant",
-    "account_missing_in_stock": "account is not linked with stock",
-    "watch_video_text":  "How to create an Invoice?"
+    "account_missing_in_stock": "account is not linked with stock"
 }

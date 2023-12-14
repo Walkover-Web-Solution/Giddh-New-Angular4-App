@@ -28,7 +28,7 @@
                         </button>
                     </div>
                     <ng-container *ngIf="invoiceTypeLabel !== '' && (selectedVoucherType === 'cash' || selectedVoucherType === 'sales')">
-                        <watch-video [displayText]="localeData?.watch_video_text" [cssClass]="'text-primary'" [moduleName]="isCashInvoice ? 'VOUCHER_CASH' : 'VOUCHER_SALES'"></watch-video>
+                        <watch-video [cssClass]="'text-primary'" [moduleName]="isCashInvoice ? 'VOUCHER_CASH' : 'VOUCHER_SALES'"></watch-video>
                     </ng-container>
                 </div>
             </div>

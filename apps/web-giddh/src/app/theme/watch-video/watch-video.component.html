@@ -1,13 +1,21 @@
-<span>
-    <button 
-        *ngIf="displayText" 
-        class="toggle-btn" 
-        (click)="openVideoTutorialDialog()" 
-        [ngClass]="cssClass"
-    >
-        {{ displayText }}
-    </button>
-</span>
+<ng-container
+    appTranslate
+    [file]="'watch-video'"
+    (localeData)="localeData = $event"
+    (translationComplete)="translationComplete($event)"
+
+>
+    <span *ngIf="translatedText" >
+        <button 
+            
+            class="toggle-btn" 
+            (click)="openVideoTutorialDialog()" 
+            [ngClass]="cssClass"
+        >
+            {{ translatedText }}
+        </button>
+    </span>
+</ng-container>
 
 <ng-template #videoTutorial>
     <div class="video-wrapper">

@@ -13,8 +13,6 @@ export class WatchVideoComponent implements OnInit {
     /** Holds template reference for video  */
     @ViewChild('videoTutorial') videoTutorial: TemplateRef<any>;
 
-    /** Holds text inside toggle button */
-    @Input() public displayText: string = null;
     /** Holds boolean value as enable/disable video autoplay*/
     @Input() public autoplay: number = 1;
     /** Holds Module Name by which video link will be selected */
@@ -24,6 +22,10 @@ export class WatchVideoComponent implements OnInit {
 
     /** Holds final youtube video link  */
     public videoLink: string = '';
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /** Holds Translated text to display on button */
+    public translatedText = '';
 
     constructor(
         public dialog: MatDialog,
@@ -61,5 +63,17 @@ export class WatchVideoComponent implements OnInit {
     */
     public domSantizer(str: string): any {
         return this.sanitizer.bypassSecurityTrustResourceUrl(str);
+    }
+
+    /**
+    * Callback for translation response complete
+    *
+    * @param {*} event
+    * @memberof WatchVideoComponent
+    */
+    public translationComplete(event: any): void {
+        if (event) {
+            this.translatedText = this.localeData[this.moduleName];
+        }
     }
 }
