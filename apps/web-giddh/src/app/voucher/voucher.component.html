@@ -2891,7 +2891,7 @@
                                                 class="form-control"
                                                 [disabled]="!transaction.isStockTxn || isEinvoiceGenerated"
                                                 (selectionChange)="
-                                                    onChangeUnit(transaction, $event);
+                                                    onChangeUnit(entry, transaction, $event);
                                                     handlePriceCalculationOnUnitChange(entry, transaction)
                                                 "
                                                 [value]="transaction.stockUnit"
@@ -4193,6 +4193,7 @@
     <ng-template #bulkItemsModal>
         <voucher-add-bulk-items-component
             [invoiceType]="invoiceType"
+            [accountUniqueName]="invFormData.accountDetails.uniqueName"
             (saveItemsEvent)="addBulkStockItems($event)"
             (closeEvent)="cancelBulkItemsModal()"
         ></voucher-add-bulk-items-component>
