@@ -32,9 +32,9 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
     public discountFromPer: boolean = true;
     public discountFromVal: boolean = true;
     /* This will hold discount percentage value */
-    public discountPercentageModal: number = 0;
+    @Input() public discountPercentageModal: number = 0;
     /* This will hold discount fixed value */
-    public discountFixedValueModal: number = 0;
+    @Input() public discountFixedValueModal: number = 0;
     @ViewChild('disInptEle', { static: true }) public disInptEle: ElementRef;
 
     @Input() public discountMenu: boolean;
