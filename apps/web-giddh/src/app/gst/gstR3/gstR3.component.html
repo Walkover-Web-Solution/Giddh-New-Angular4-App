@@ -31,7 +31,7 @@
                     flex-sm-row flex-column
                 "
             >
-                <div class="wrap-gst-date w-100">
+                <div class="wrap-gst-date w-100 d-flex align-items-center">
                     <span class="font-xlarge d-inline-block pd-r15">
                         <a
                             href="javascript:void(0);"
@@ -98,6 +98,9 @@
                         </ul>
                     </div>
 
+                    <span class="ml-auto">
+                        <watch-video [displayText]="localeData?.watch_video_text_for_gstr3" [cssClass]="'text-primary pd-r15'" [moduleName]="'GSTR3B'"></watch-video>
+                    </span>
                     <div class="pull-right download-authenticate-btn">
                         <ul class="list-inline list-middle">
                             <li>

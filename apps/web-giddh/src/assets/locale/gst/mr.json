@@ -221,5 +221,9 @@
 	"imps": "आयएमपीएस",
 	"registered": "नोंदणीकृत",
 	"unregistered": "नोंदणी रद्द",
-    "status_unavailable": "स्थिती अनुपलब्ध! कृपया पुन्हा प्रयत्न करा."
+    "status_unavailable": "स्थिती अनुपलब्ध! कृपया पुन्हा प्रयत्न करा.",
+	"watch_video_text_for_dashboard": "पहा कसे GST डॅशबोर्ड संचालित करावंता",
+	"watch_video_text_for_gstr3": "पहा कसे GSTR 3B मध्ये डेटा टाकता येतो",
+	"watch_video_text_for_gstR1": "पहा कसे GSTR 1 मध्ये डेटा टाकता येतो",
+	"watch_video_text_for_gstR2": "पहा कसे GSTR 2 मध्ये डेटा टाकता येतो"
 }

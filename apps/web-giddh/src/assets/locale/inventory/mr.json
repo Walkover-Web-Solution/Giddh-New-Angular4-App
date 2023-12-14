@@ -102,5 +102,8 @@
         "opening_bal":"सलामी बल",
         "variant":"प्रकार",
         "variants":"रूपे"
-    }
+    },
+    "watch_video_text_groupwise": "समूहप्रमाणे खाते अंगद्रुपदेश कसा काम करतो?",
+    "watch_video_text_itemwise": "वस्तूवार खाते अंगद्रुपदेश कसा काम करतो?",
+    "watch_video_text_variantwise": "वेरिएंटवारंटी इन्व्हेंटरी रिपोर्ट्स कसे काम करतात?"
 }

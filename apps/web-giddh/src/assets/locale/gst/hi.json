@@ -221,5 +221,9 @@
 	"imps": "आयएमपीएस",
 	"registered": "दर्ज कराई",
 	"unregistered": "अपंजीकृत",
-    "status_unavailable": "स्थिति अनुपलब्ध! कृपया बाद में पुन: प्रयास करें।"
+    "status_unavailable": "स्थिति अनुपलब्ध! कृपया बाद में पुन: प्रयास करें।",
+	"watch_video_text_for_dashboard": "देखें कैसे GST डैशबोर्ड का ऑपरेट करें।",
+	"watch_video_text_for_gstr3": "देखें कैसे GSTR 3B में डेटा डाला जाता है।",
+	"watch_video_text_for_gstR1": "देखें कैसे GSTR 1 में डेटा डाला जाता है।",
+	"watch_video_text_for_gstR2": "देखें कैसे GSTR 2 में डेटा डाला जाता है।"
 }

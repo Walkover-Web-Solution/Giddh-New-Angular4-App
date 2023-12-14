@@ -27,7 +27,9 @@
                             <small *ngIf="invoiceType === 'estimates'"> ({{ commonLocaleData?.app_beta }}) </small>
                         </button>
                     </div>
-                    <watch-video [displayText]="localeData?.watch_video_text" [cssClass]="'text-primary'" [moduleName]="'VOUCHER'"></watch-video>
+                    <ng-container *ngIf="invoiceTypeLabel !== '' && (selectedVoucherType === 'cash' || selectedVoucherType === 'sales')">
+                        <watch-video [displayText]="localeData?.watch_video_text" [cssClass]="'text-primary'" [moduleName]="isCashInvoice ? 'VOUCHER_CASH' : 'VOUCHER_SALES'"></watch-video>
+                    </ng-container>
                 </div>
             </div>
         </div>

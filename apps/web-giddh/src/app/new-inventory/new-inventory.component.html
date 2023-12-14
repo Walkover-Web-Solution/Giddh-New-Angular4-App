@@ -1,3 +1,8 @@
+<ng-container
+    appTranslate
+    [file]="'inventory'"
+    (localeData)="localeData = $event"
+>
 <div class="help-support-aside setting-sidebar-wrapper" *ngIf="asideInventorySidebarMenuState === 'in'">
     <inventory-sidebar class="inventory-sidebar"></inventory-sidebar>
 </div>
@@ -7,7 +12,7 @@
 <div class="relative new-inventory-page">
     <div class="container-fluid breadcrumbs">
         <div class="inventory-card">
-            <router-outlet></router-outlet>
+            <router-outlet></router-outlet>            
         </div>
     </div>
 </div>

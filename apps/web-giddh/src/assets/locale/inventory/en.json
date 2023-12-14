@@ -103,5 +103,8 @@
         "opening_bal":"Opening Bal",
         "variant":"Variant",
         "variants":"Variants"
-    }
+    },
+    "watch_video_text_groupwise": "How group wise inventory reports works?",
+    "watch_video_text_itemwise": "How item wise inventory reports works?",
+    "watch_video_text_variantwise": "How variants wise inventory reports works?"
 }

@@ -15,6 +15,7 @@ import { InventorySidebarModule } from "../inventory-sidebar/inventory-sidebar.m
 import { CreateUpdateGroupComponent } from "./create-update-group.component";
 import { GroupCreateEditRoutingModule } from "./create-update-group.routing.module";
 import { MainGroupComponent } from "./main-group.component";
+import { WatchVideoModule } from "../../../theme/watch-video/watch-video.module";
 
 @NgModule({
     declarations: [
@@ -36,7 +37,8 @@ import { MainGroupComponent } from "./main-group.component";
         MatButtonModule,
         MatSlideToggleModule,
         GiddhPageLoaderModule,
-        MatAutocompleteModule
+        MatAutocompleteModule,
+        WatchVideoModule
     ],
     exports: [
         CreateUpdateGroupComponent

@@ -95,5 +95,6 @@
     "save_stock_for_recipe": "Save stock and Create recipe",
     "confirm_delete_option": "Deleting the option will also remove all the variants of the option. Do you still want to delete the option?",
     "unit_group": "Unit Group",
-    "select_unit_group": "Select Unit Group"
+    "select_unit_group": "Select Unit Group",
+    "watch_video_text": "How to create stocks?"
 }

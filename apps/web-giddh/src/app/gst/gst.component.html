@@ -39,18 +39,21 @@
             </div>
             <div class="tax-dropdown col-xl-3 col-lg-6 col-md-3 col-sm-9 col-9">
                 <sh-select
-                    [options]="taxes"
-                    [(ngModel)]="activeCompanyGstNumber"
-                    (selected)="selectTax($event)"
-                    [defaultValue]="activeCompanyGstNumber"
+                [options]="taxes"
+                [(ngModel)]="activeCompanyGstNumber"
+                (selected)="selectTax($event)"
+                [defaultValue]="activeCompanyGstNumber"
                     [placeholder]="localeData?.select_gstin"
                     [showClear]="false"
                     [multiple]="false"
                     [ItemHeight]="67"
                     [isRequired]="true"
-                >
+                    >
                 </sh-select>
             </div>
+            <span class="ml-auto">
+                <watch-video [displayText]="localeData?.watch_video_text_for_dashboard" [cssClass]="'text-primary pd-r15'" [moduleName]="'GST_FILLING_DASHBOARD'"></watch-video>
+            </span>
         </div>
         <div
             class="tax-engine"
