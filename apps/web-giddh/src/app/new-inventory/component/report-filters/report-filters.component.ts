@@ -235,6 +235,8 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
             }
         });
         this.searchInventory();
+
+        console.log("module", this.moduleName);
     }
 
     /**

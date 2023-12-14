@@ -103,7 +103,7 @@
         "variant":"Variant",
         "variants":"Variants"
     },
-    "master": {
-        "watch_video_text": "How to create Inventory Groups from Master?"
-    }
+    "watch_video_text_groupwise": "How group wise inventory reports works?",
+    "watch_video_text_itemwise": "How item wise inventory reports works?",
+    "watch_video_text_variantwise": "How variants wise inventory reports works?"
 }

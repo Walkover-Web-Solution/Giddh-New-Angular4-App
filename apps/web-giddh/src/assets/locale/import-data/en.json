@@ -39,5 +39,8 @@
     "is": "is",
     "are": "are",
     "groups": "Groups",
-    "accounts": "Accounts"
+    "accounts": "Accounts",
+    "watch_video_text_entries": "How to import Entries in GIDDH?",
+    "watch_video_text_inventory": "How to import inventories in GIDDH?",
+    "watch_video_text_master": "How to import master in GIDDH?"
 }

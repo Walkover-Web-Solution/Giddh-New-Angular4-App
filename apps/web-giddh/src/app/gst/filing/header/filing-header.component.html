@@ -76,6 +76,9 @@
         <div class="col-lg-6 col-sm-4 col-12">
             <ul class="list-inline list-middle download-drop-down">
                 <li>
+                    <watch-video [displayText]="localeData?.watch_video_text_for_gstR1" [cssClass]="'text-primary pd-r15'" [moduleName]="'GSTR1'"></watch-video>
+                </li>
+                <li>
                     <button
                         type="button"
                         class="btn btn-sky-blue mr-0 error-button"
@@ -166,7 +169,10 @@
         </div>
 
         <div class="pull-right btn-wrapper-filling-header">
-            <div class="btn-group d-inline-block" dropdown #dropdown="bs-dropdown">
+            <div class="btn-group d-inline-flex align-items-center" dropdown #dropdown="bs-dropdown">
+                <span class="pull-left">
+                    <watch-video [displayText]="localeData?.watch_video_text_for_gstR2" [cssClass]="'text-primary pd-r15'" [moduleName]="'GSTR2'"></watch-video>
+                </span>
                 <button dropdownToggle type="button" class="btn dropdown-toggle btn-sky-blue">
                     <i class="icon-download"></i>
                     {{ commonLocaleData?.app_download }}
