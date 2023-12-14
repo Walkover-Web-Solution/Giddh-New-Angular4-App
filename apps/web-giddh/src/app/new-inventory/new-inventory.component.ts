@@ -49,8 +49,6 @@ export class NewInventoryComponent implements OnInit {
     public dateFieldPosition: any = { x: 0, y: 0 };
     @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
-    /* This will hold local JSON data */
-    public localeData: any = {};
 
     constructor(
         private generalService: GeneralService,

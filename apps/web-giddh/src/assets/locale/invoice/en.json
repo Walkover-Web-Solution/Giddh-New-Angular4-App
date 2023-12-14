@@ -177,6 +177,5 @@
     "auto_generated_purchase_bill": "Giddh Auto Generated Bill",
     "amount_adjusted": "Amount adjusted successfully",
     "pincode_required": "Please update pincode in voucher before creating eway bill.",
-    "bill": "Bill",
-    "watch_video_text": "Watch How Invoice Page works"
+    "bill": "Bill"
 }

@@ -31,12 +31,12 @@
                             <hamburger-menu [pageHeading]="localeData?.setting_integration"></hamburger-menu>
                             <ng-container *ngIf="integrationtab === 'e-comm'">
                                 <span class="video-link position-absolute">
-                                    <watch-video [displayText]="localeData?.watch_video_text_ecomm" [cssClass]="'text-primary pd-r15'" [moduleName]="'ECOMM_INTEGRATION'"></watch-video>
+                                    <watch-video [cssClass]="'text-primary pd-r15'" [moduleName]="'ECOMM_INTEGRATION'"></watch-video>
                                 </span>
                             </ng-container>
                             <ng-container *ngIf="integrationtab === 'payment'">
                                 <span class="video-link position-absolute">
-                                    <watch-video [displayText]="localeData?.watch_video_text_icici_integration" [cssClass]="'text-primary pd-r15'" [moduleName]="'ICICI_INTEGRATION'"></watch-video>
+                                    <watch-video [cssClass]="'text-primary pd-r15'" [moduleName]="'ICICI_INTEGRATION'"></watch-video>
                                 </span>  
                             </ng-container>
                             <div class="setting-container m-0">

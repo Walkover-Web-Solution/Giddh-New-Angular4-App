@@ -1,5 +1,4 @@
 {
     "no_inventory_found_primary_message": "दिए गए कीवर्ड के साथ कोई डेटा नहीं मिला.",
-    "no_inventory_found_secondary_message": "किसी दूसरे कीवर्ड से सर्च करें",
-    "watch_video_text_create_group": "मास्टर से इन्वेंटरी ग्रुप्स कैसे बनाएं?"
+    "no_inventory_found_secondary_message": "किसी दूसरे कीवर्ड से सर्च करें"
 }

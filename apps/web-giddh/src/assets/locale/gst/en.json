@@ -221,9 +221,5 @@
     "imps": "IMPS",
     "registered": "Registered",
     "unregistered": "Unregistered",
-    "status_unavailable": "Status unavailable! Please try again later.",
-    "watch_video_text_for_dashboard": "Watch how to operate GST Dashboard",
-    "watch_video_text_for_gstr3": "Watch How to put data in GSTR 3B",
-    "watch_video_text_for_gstR1": "Watch How to put data in GSTR 1",
-    "watch_video_text_for_gstR2": "Watch How to put data in GSTR 2"
+    "status_unavailable": "Status unavailable! Please try again later."
 }
