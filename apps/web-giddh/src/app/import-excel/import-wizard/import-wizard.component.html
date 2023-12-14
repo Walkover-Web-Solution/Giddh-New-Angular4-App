@@ -5,6 +5,21 @@
     (commonLocaleData)="commonLocaleData = $event"
 >
     <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
+    <ng-container *ngIf="entity === 'inventory'">
+        <span class="pull-right mr-t1">
+            <watch-video [cssClass]="'text-primary pd-r15'" [moduleName]="'IMPORT_INVENTORY'"></watch-video>
+        </span>
+    </ng-container>
+    <ng-container *ngIf="entity === 'master'">
+        <span class="pull-right mr-t1">
+            <watch-video [cssClass]="'text-primary pd-r15'" [moduleName]="'IMPORT_MASTER'"></watch-video>
+        </span>
+    </ng-container>
+    <ng-container *ngIf="entity === 'entries'">
+        <span class="pull-right mr-t1">
+            <watch-video [cssClass]="'text-primary pd-r15'" [moduleName]="'IMPORT_ENTRIES'"></watch-video>
+        </span>
+    </ng-container>
     <div class="container-fluid clearfix">
         <div class="top-bar" *ngIf="step <= 3">
             <h2 class="section-title" *ngIf="step === 1"></h2>
@@ -14,7 +29,7 @@
     </div>
 
     <div class="clearfix col-xs-12 col-sm-12" *ngIf="localeData?.page_heading">
-        <div class="col-xs-12 col-sm-12 p-0">
+        <div class="col-xs-12 col-sm-12 p-0">       
             <div class="clearfix">
                 <div [ngSwitch]="step">
                     <ng-container *ngSwitchCase="1">

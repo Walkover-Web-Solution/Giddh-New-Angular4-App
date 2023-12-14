@@ -17,6 +17,7 @@ import { UploadSuccessComponent } from './upload-success/upload-success.componen
 import { ImportReportComponent } from './import-report/import-report.component';
 import { SharedModule } from '../shared/shared.module';
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
 
 @NgModule({
     declarations: [
@@ -45,7 +46,8 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
         BsDropdownModule.forRoot(),
         ScrollingModule,
         PaginationModule.forRoot(),
-        SharedModule
+        SharedModule,
+        WatchVideoModule
     ],
 })
 export class ImportExcelModule {

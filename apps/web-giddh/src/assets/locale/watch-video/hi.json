@@ -1,0 +1,20 @@
+{
+    "GST_FILLING_DASHBOARD": "देखें कैसे GST डैशबोर्ड का ऑपरेट करें।",
+	"GSTR1": "देखें कैसे GSTR 1 में डेटा डाला जाता है।",
+	"GSTR2": "देखें कैसे GSTR 2 में डेटा डाला जाता है।",
+	"GSTR3B": "देखें कैसे GSTR 3B में डेटा डाला जाता है।",
+    "IMPORT_ENTRIES": "GIDDH में प्रविष्टियाँ कैसे आयात करें?",
+    "IMPORT_INVENTORY": "GIDDH में इन्वेंटरी कैसे आयात करें?",
+    "IMPORT_MASTER": "GIDDH में मास्टर कैसे आयात करें?",
+    "INVENTORY_REPORT_GROUPWISE": "समूहवार इन्वेंटरी रिपोर्ट्स कैसे काम करती हैं?",
+    "INVENTORY_REPORT_ITEMWISE": "वस्तुवार इन्वेंटरी रिपोर्ट्स कैसे काम करती हैं?",
+    "INVENTORY_REPORT_VARIANTWISE": "कैसे वेरिएंट वारंटी इन्वेंटरी रिपोर्ट्स काम करती हैं?",
+    "INVENTORY_MASTER": "मास्टर से इन्वेंटरी ग्रुप्स कैसे बनाएं?",
+    "SALES_PREVIEW": "देखें कैसे इनवॉयस पेज काम करता है",
+    "INVENTORY_MASTER_GROUP": "इन्वेंटरी ग्रुप्स कैसे बनाएं?",
+    "INVENTORY_CREATE_STOCK": "स्टॉक्स कैसे बनाएं?",
+    "VOUCHER_CASH": "कैसे एक चालान बनाएं?",
+    "VOUCHER_SALES": "कैसे एक चालान बनाएं?",
+	"ICICI_INTEGRATION": "देखें कैसे ICICI को GIDDH में एकीकृत करें।",
+	"ECOMM_INTEGRATION": "देखें कैसे Shopify को GIDDH में एकीकृत करें"
+}

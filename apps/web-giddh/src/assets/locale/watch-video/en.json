@@ -1,0 +1,20 @@
+{
+    "GST_FILLING_DASHBOARD": "Watch how to operate GST Dashboard",
+    "GSTR1": "Watch How to put data in GSTR 1",
+    "GSTR2": "Watch How to put data in GSTR 2",
+    "GSTR3B": "Watch How to put data in GSTR 3B",
+    "IMPORT_ENTRIES": "How to import Entries in GIDDH?",
+    "IMPORT_INVENTORY": "How to import inventories in GIDDH?",
+    "IMPORT_MASTER": "How to import master in GIDDH?",
+    "INVENTORY_REPORT_GROUPWISE": "How group wise inventory reports works?",
+    "INVENTORY_REPORT_ITEMWISE": "How item wise inventory reports works?",
+    "INVENTORY_REPORT_VARIANTWISE": "How variants wise inventory reports works?",
+    "INVENTORY_MASTER": "How to create Inventory Groups from Master?",
+    "SALES_PREVIEW": "Watch How Invoice Page works",
+    "INVENTORY_MASTER_GROUP": "How to create Inventory Groups?",
+    "INVENTORY_CREATE_STOCK": "How to create stocks?",
+    "VOUCHER_CASH":  "How to create an Invoice?",
+    "VOUCHER_SALES":  "How to create an Invoice?",
+    "ICICI_INTEGRATION": "Watch How to integrate ICICI in GIDDH",
+    "ECOMM_INTEGRATION": "Watch how to integrate Shopify in GIDDH"
+}

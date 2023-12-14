@@ -3,13 +3,15 @@ import { NgModule } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { WatchVideoComponent } from './watch-video.component';
 import { MatDialogModule } from '@angular/material/dialog';
+import { TranslateDirectiveModule } from '../translate/translate.directive.module';
 
 @NgModule({
     declarations: [WatchVideoComponent],
     imports: [
         CommonModule,
         MatButtonModule,
-        MatDialogModule
+        MatDialogModule,
+        TranslateDirectiveModule
     ],
     exports: [
         WatchVideoComponent
