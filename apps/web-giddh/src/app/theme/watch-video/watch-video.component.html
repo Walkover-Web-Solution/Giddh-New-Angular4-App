@@ -1,15 +1,23 @@
 <span>
-    <button *ngIf="displayText" class="toggle-btn" (click)="openVideoTutorialDialog()"
-        [ngClass]="cssClass">{{displayText}}</button>
-    <button *ngIf="displayIcon" class="toggle-btn" (click)="openVideoTutorialDialog()" [ngClass]="cssClass">
-        <img [src]="displayIcon" [height]="displayIconHeight" [width]="displayIconWidth" />
+    <button 
+        *ngIf="displayText" 
+        class="toggle-btn" 
+        (click)="openVideoTutorialDialog()" 
+        [ngClass]="cssClass"
+    >
+        {{ displayText }}
     </button>
 </span>
 
 <ng-template #videoTutorial>
     <div class="video-wrapper">
-        <iframe width="100%" height="100%" [src]="videoLink" frameborder="0"
+        <iframe
+            width="100%"
+            height="100%"
+            [src]="videoLink"
+            frameborder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            allowfullscreen></iframe>
+            allowfullscreen
+        ></iframe>
     </div>
 </ng-template>

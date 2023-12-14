@@ -17,12 +17,6 @@ export class WatchVideoComponent implements OnInit {
     @Input() public displayText: string = null;
     /** Holds boolean value as enable/disable video autoplay*/
     @Input() public autoplay: number = 1;
-    /** Holds Image URL to display inside toggle button */
-    @Input() public displayIcon: string = null;
-    /** Holds Image width */
-    @Input() public displayIconWidth: number = 25;
-    /** Holds Image height */
-    @Input() public displayIconHeight: number = 25;
     /** Holds Module Name by which video link will be selected */
     @Input() public moduleName: string = null;
     /** Holds CSS class for custom code */
