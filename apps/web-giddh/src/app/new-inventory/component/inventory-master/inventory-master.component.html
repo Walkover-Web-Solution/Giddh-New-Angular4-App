@@ -4,7 +4,7 @@
     (commonLocaleData)="commonLocaleData = $event"
     (localeData)="localeData = $event"
 >
-    <div class="mat-grid-wrapper">
+    <div class="mat-grid-wrapper">        
         <div class="d-flex inventory-search" cdkDrag>
             <span class="search-icon">
                 <i class="icon-search"></i>
@@ -18,6 +18,9 @@
             ></text-field>
         </div>
         <div class="mat-list-wrap">
+            <span class="pull-right pd-t05" *ngIf="breadcrumbs?.length === 0 && !createUpdateGroup">
+                <watch-video [cssClass]="'text-primary'" [moduleName]="'INVENTORY_MASTER'"></watch-video>
+            </span>
             <div class="no-data" *ngIf="isSearching && !masterColumnsData?.length">
                 <no-data
                     [secondaryMessageClass]="'p-0'"

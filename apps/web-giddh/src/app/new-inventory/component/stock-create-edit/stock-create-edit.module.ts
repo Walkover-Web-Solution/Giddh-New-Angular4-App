@@ -26,6 +26,7 @@ import { RecipeModule } from "../recipe/recipe.module";
 import { DragDropModule } from "@angular/cdk/drag-drop";
 import { MatSlideToggleModule } from "@angular/material/slide-toggle";
 import { SortByModule } from "../../../shared/helpers/pipes/sort-by/sort-by.module";
+import { WatchVideoModule } from "../../../theme/watch-video/watch-video.module";
 
 @NgModule({
     declarations: [
@@ -58,7 +59,8 @@ import { SortByModule } from "../../../shared/helpers/pipes/sort-by/sort-by.modu
         RecipeModule,
         DragDropModule,
         MatSlideToggleModule,
-        SortByModule
+        SortByModule,
+        WatchVideoModule
     ],
     exports: [
         StockCreateEditComponent
