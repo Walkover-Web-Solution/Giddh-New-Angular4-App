@@ -5,7 +5,7 @@
     (commonLocaleData)="commonLocaleData = $event"
 >
     <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
-    <ng-container *ngIf="entity === 'inventory'">
+    <ng-container *ngIf="entity === 'stock'">
         <span class="pull-right mr-t1">
             <watch-video [cssClass]="'text-primary pd-r15'" [moduleName]="'IMPORT_INVENTORY'"></watch-video>
         </span>
