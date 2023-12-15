@@ -223,7 +223,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
             vatReportRequest.branchUniqueName = this.currentBranch?.uniqueName;
             this.vatReport = [];
             this.isLoading = true;
-            if (this.activeCompany.countryV2.alpha2CountryCode !== 'GB') {
+            if (this.activeCompany?.countryV2?.alpha2CountryCode !== 'GB') {
                 this.vatService.getVatReport(vatReportRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                     if (res) {
                         this.isLoading = false;
