@@ -9,7 +9,7 @@ import { cloneDeep, find, orderBy } from '../lodash-optimized';
 import { OrganizationType } from '../models/user-login-state';
 import { AllItems } from '../shared/helpers/allItems';
 import { Router } from '@angular/router';
-import { AdjustedVoucherType, JOURNAL_VOUCHER_ALLOWED_DOMAINS } from '../app.constant';
+import { AdjustedVoucherType, BROADCAST_CHANNELS, JOURNAL_VOUCHER_ALLOWED_DOMAINS } from '../app.constant';
 import { SalesOtherTaxesCalculationMethodEnum, VoucherTypeEnum } from '../models/api-models/Sales';
 import { ITaxControlData, ITaxDetail, ITaxUtilRequest } from '../models/interfaces/tax.interface';
 import * as dayjs from 'dayjs';

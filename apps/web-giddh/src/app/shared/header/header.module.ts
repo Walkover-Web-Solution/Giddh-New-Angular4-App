@@ -22,12 +22,14 @@ import { AsideSettingComponent } from "./components/aside-setting/aside-setting.
 import { HeaderComponent } from "./header.component";
 import { ScrollingModule } from "@angular/cdk/scrolling";
 import { MatMenuModule } from "@angular/material/menu";
+import { ConnectPlaidComponent } from "../../theme/connect-plaid/connect-plaid.component";
 
 @NgModule({
     declarations: [
         HeaderComponent,
         AsideSettingComponent,
-        AsideHelpSupportComponent
+        AsideHelpSupportComponent,
+        ConnectPlaidComponent
     ],
     imports: [
         CommonModule,
