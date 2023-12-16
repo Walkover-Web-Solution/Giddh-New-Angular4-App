@@ -36,6 +36,8 @@ export class BulkVoucherExportService {
         url = url?.replace(':q', getRequest.q);
         if (this.generalService.voucherApiVersion === 2) {
             url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
+            delete postRequest.from;
+            delete postRequest.to;
         }
         return this.http.post(url, postRequest).pipe(
             map((res) => {

@@ -1,0 +1,31 @@
+<ng-container
+    appTranslate
+    [file]="'watch-video'"
+    (localeData)="localeData = $event"
+    (translationComplete)="translationComplete($event)"
+
+>
+    <span *ngIf="translatedText" >
+        <button 
+            
+            class="toggle-btn" 
+            (click)="openVideoTutorialDialog()" 
+            [ngClass]="cssClass"
+        >
+            {{ translatedText }}
+        </button>
+    </span>
+</ng-container>
+
+<ng-template #videoTutorial>
+    <div class="video-wrapper">
+        <iframe
+            width="100%"
+            height="100%"
+            [src]="videoLink"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen
+        ></iframe>
+    </div>
+</ng-template>

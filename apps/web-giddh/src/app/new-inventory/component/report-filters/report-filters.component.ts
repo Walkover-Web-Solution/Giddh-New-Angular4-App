@@ -234,7 +234,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
                 this.searchInventory();
             }
         });
-        this.searchInventory();
+        this.searchInventory();      
     }
 
     /**
@@ -526,6 +526,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
             this.toDate = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
             this.stockReportRequest.from = this.fromDate;
             this.stockReportRequest.to = this.toDate;
+            this.stockReportRequest.page = 1;
             this.balanceStockReportRequest.from = this.fromDate;
             this.balanceStockReportRequest.to = this.toDate;
         }

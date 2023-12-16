@@ -248,7 +248,7 @@
                         localeData?.ecommerce?.shopify_connected_message
                     }}</span>
                     <a
-                        href="https://shopify.giddh.com/signup.php"
+                        href="https://apps.shopify.com/giddh-accounting"
                         target="_blank"
                         *ngIf="!isEcommerceShopifyUserVerified"
                     >
@@ -257,9 +257,9 @@
                 </div>
             </mat-tab>
 
-            <mat-tab [label]="localeData?.payment?.tab_heading">
+            <mat-tab [label]="localeData?.payment?.tab_heading" *ngIf="!isIciciBankSupportedCountry">
                 <div class="clearfix box">
-                    <ng-container *ngIf="isIciciBankSupportedCountry">
+                    <!-- <ng-container *ngIf="isIciciBankSupportedCountry">
                         <ng-template>
                             <span class="icon-payment"></span> {{ localeData?.payment?.tab_heading }}
                         </ng-template>
@@ -298,7 +298,7 @@
                                 </p>
                             </div>
                         </div>
-                    </ng-container>
+                    </ng-container> -->
                     <ng-container *ngIf="!isIciciBankSupportedCountry">
                         <div class="form-group">
                             <button mat-stroked-button class="mr-r2" color="primary" (click)="getPlaidLinkToken()">
@@ -326,7 +326,7 @@
                                                 ><span *ngIf="!isIciciBankSupportedCountry"
                                                     >{{ commonLocaleData?.app_ac }} #</span
                                                 >
-                                                {{ bankAccount?.iciciDetailsResource?.accountNumber  | accountNumberMask }}</b
+                                                {{ bankAccount?.bankResource?.accountNumber  | accountNumberMask }}</b
                                             ></span
                                         >
                                     </div>
@@ -355,6 +355,16 @@
                                             class="icon-edit-pencil"
                                             (click)="openEditAccountModal(bankAccount)"
                                         ></a>
+                                        <ng-container *ngIf="bankAccount.reLoginRequired">
+                                            <button mat-icon-button [matMenuTriggerFor]="menu" class="company-name bank-menu">
+                                                <span class="icon-dots-three-vertical"></span>
+                                            </button>
+                                            <mat-menu #menu="matMenu">
+                                                <button mat-menu-item (click)="getPlaidLinkToken(bankAccount?.itemId)">
+                                                    <span>{{ commonLocaleData?.app_renew_bank_connection }}</span>
+                                                </button>
+                                            </mat-menu>
+                                        </ng-container>
                                     </span>
                                     <div class="col-md-4" *ngIf="isIciciBankSupportedCountry">
                                         <span class="field-label"
@@ -362,17 +372,17 @@
                                         /></span>
                                         <span
                                             class="payment-updates view-only-field inline"
-                                            *ngIf="bankAccount?.iciciDetailsResource?.paymentAlerts?.length > 0"
+                                            *ngIf="bankAccount?.bankResource?.paymentAlerts?.length > 0"
                                         >
                                             <ng-container
                                                 *ngFor="
-                                                    let alert of bankAccount?.iciciDetailsResource?.paymentAlerts;
+                                                    let alert of bankAccount?.bankResource?.paymentAlerts;
                                                     let i = index;
                                                     trackBy: trackByAlertUniqueName
                                                 "
                                                 >{{ alert?.name
                                                 }}{{
-                                                    i < bankAccount?.iciciDetailsResource?.paymentAlerts?.length - 1
+                                                    i < bankAccount?.bankResource?.paymentAlerts?.length - 1
                                                         ? ", "
                                                         : ""
                                                 }}</ng-container
@@ -388,11 +398,11 @@
                                     </div>
                                 </div>
                                 <div class="font-15">
-                                    <ng-container *ngIf="bankAccount?.iciciDetailsResource?.payor?.length > 0">
+                                    <ng-container *ngIf="bankAccount?.bankResource?.payor?.length > 0">
                                         <div
                                             class="mt-2"
                                             *ngFor="
-                                                let payor of bankAccount?.iciciDetailsResource?.payor;
+                                                let payor of bankAccount?.bankResource?.payor;
                                                 trackBy: trackByPayorUniqueName
                                             "
                                         >
@@ -618,7 +628,7 @@
         <div class="modal-dialog modal-md" *ngIf="confirmationModal?.isShown">
             <div class="modal-content">
                 <confirm-modal
-                    [body]="localeData?.payment?.delete_login | replace: '[LOGIN_ID]':activeBankAccount?.loginId"
+                    [body]="localeData?.payment?.delete_login | replace : '[LOGIN_ID]' : activeBankAccount?.loginId"
                     (cancelCallBack)="confirmationModal?.hide()"
                     (successCallBack)="deleteBankAccountLogin(true)"
                 >

@@ -713,5 +713,6 @@
     "app_verify": "सत्यापित करा",
     "app_copied":"कॉपी केले...",
     "app_hostname": "होस्टनेम",
-    "domain_verification": "बाह्यिक मेलसाठी डोमेन सत्यापन"
+    "domain_verification": "बाह्यिक मेलसाठी डोमेन सत्यापन",
+    "app_renew_bank_connection": "बँक कनेक्शनचे नूतनीकरण करा"
 }

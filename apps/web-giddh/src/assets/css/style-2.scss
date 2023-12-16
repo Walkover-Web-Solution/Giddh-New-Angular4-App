@@ -3685,6 +3685,10 @@ input[type="number"]::-webkit-inner-spin-button {
     cursor: pointer !important;
 }
 
+.cursor-default{
+    cursor: default !important;
+}
+
 footer {
     padding: 10px 20px;
     text-align: center;
@@ -7854,6 +7858,7 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
     text-align: center;
     display: flex;
     justify-content: center;
+    margin-bottom: 3rem;
 }
 
 .pagination > li > a,
@@ -14470,6 +14475,21 @@ aside-menu-product-service {
             &#back {
                 color: var(--color-list) !important;
             }
+        }
+    }
+}
+
+.custom-tooltip{
+    background-color: var(--color-dark-gray) !important;
+    border-radius: 4px;
+    padding: 0 8px;
+
+    .tooltip-text{
+        font-size: var(--font-size-12);
+        color: var(--color-toast-primary-text);
+        a {
+            color: var(--color-toast-primary-text) !important;
+            text-decoration: underline;
         }
     }
 }

@@ -1,0 +1,19 @@
+{
+	"GST_FILLING_DASHBOARD": "पहा कसे GST डॅशबोर्ड संचालित करावंता",
+	"GSTR1": "पहा कसे GSTR 1 मध्ये डेटा टाकता येतो",
+	"GSTR2": "पहा कसे GSTR 2 मध्ये डेटा टाकता येतो",
+	"GSTR3B": "पहा कसे GSTR 3B मध्ये डेटा टाकता येतो",
+    "IMPORT_ENTRIES": "GIDDH मध्ये नोंदी कशा आयात करायच्या?",
+    "IMPORT_INVENTORY": "GIDDH मध्ये इन्व्हेंटरी कसे आयात करावीत?",
+    "IMPORT_MASTER": "GIDDH मध्ये मास्टर कसे आयात करावं?",
+    "INVENTORY_REPORT_GROUPWISE": "समूहप्रमाणे खाते अंगद्रुपदेश कसा काम करतो?",
+    "INVENTORY_REPORT_ITEMWISE": "वस्तूवार खाते अंगद्रुपदेश कसा काम करतो?",
+    "INVENTORY_REPORT_VARIANTWISE": "वेरिएंटवारंटी इन्व्हेंटरी रिपोर्ट्स कसे काम करतात?",
+    "INVENTORY_MASTER": "मास्टरपासून इन्वेंटरी ग्रुप तयार कसा करावा?",
+    "SALES_PREVIEW": "पहा कसा इनव्हॉयस पेज काम करतंय",
+    "INVENTORY_MASTER_GROUP": "इन्वेंटरी ग्रुप्स कसे तयार करावे?",
+    "INVENTORY_CREATE_STOCK": "स्टॉक्स कसे तयार करावे?",
+    "VOUCHER_CASH": "चालान कसा तयार करावा?",
+    "VOUCHER_SALES": "चालान कसा तयार करावा?",
+	"ECOMM_INTEGRATION": "शॉपिफायला GIDDH मध्ये कसे एकीकृत करावं ते पहा"
+}
