@@ -75,7 +75,7 @@
                 >
                 </other-settings>
             </tab>
-            <tab
+            <!-- <tab
                 *ngIf="voucherApiVersion === 2 && currentOrganizationType === 'COMPANY'"
                 [active]="this.currentTab === 'portal'"
                 (selectTab)="handleTabChanged('portal')"
@@ -91,7 +91,7 @@
                     [commonLocaleData]="commonLocaleData"
                 >
                 </portal-white-label>
-            </tab>
+            </tab> -->
         </tabset>
     </div>
     <div class="settings-profile-tabs" *ngIf="addressOnly">
