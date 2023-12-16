@@ -75,10 +75,10 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         if (this.activeBankAccount) {
-            this.paymentAlerts = this.activeBankAccount?.iciciDetailsResource?.paymentAlerts?.map(user => user?.uniqueName);
+            this.paymentAlerts = this.activeBankAccount?.bankResource?.paymentAlerts?.map(user => user?.uniqueName);
 
             this.accountForm = this.formBuilder.group({
-                accountNumber: [this.activeBankAccount?.iciciDetailsResource?.accountNumber, Validators.compose([Validators.required, Validators.minLength(9), Validators.maxLength(18)])],
+                accountNumber: [this.activeBankAccount?.bankResource?.accountNumber, Validators.compose([Validators.required, Validators.minLength(9), Validators.maxLength(18)])],
                 accountUniqueName: [this.activeBankAccount?.account?.uniqueName],
                 paymentAlerts: [this.paymentAlerts]
             });
@@ -291,7 +291,7 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
                 this.accountForm.get('duration')?.patchValue(UNLIMITED_LIMIT);
             }
 
-            let request = { bankAccountUniqueName: this.activeBankAccount?.iciciDetailsResource?.uniqueName };
+            let request = { bankAccountUniqueName: this.activeBankAccount?.bankResource?.uniqueName };
 
             let accountFormObj;
             if (!this.isIciciBankSupportedCountry) {
