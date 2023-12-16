@@ -34,6 +34,7 @@ export class CommonActions {
     public static SET_IMPORT_BANK_TRANSACTIONS_RESPONSE = 'SetImportBankTransactionsResponse';
     public static HAS_UNSAVED_CHANGES = 'HAS_UNSAVED_CHANGES';
     public static BYPASS_UNSAVED_CHANGES = 'BYPASS_UNSAVED_CHANGES';
+    public static REAUTH_PLAID = 'REAUTH_PLAID';
 
     public getCountry$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -292,6 +293,20 @@ export class CommonActions {
     public bypassUnsavedChanges(data: boolean): CustomActions {
         return {
             type: CommonActions.BYPASS_UNSAVED_CHANGES,
+            payload: data
+        }
+    }
+
+    /**
+     * Triggers plaid reauth popup
+     *
+     * @param {boolean} reauth
+     * @returns {CustomActions}
+     * @memberof CommonActions
+     */
+    public reAuthPlaid(data: any): CustomActions {
+        return {
+            type: CommonActions.REAUTH_PLAID,
             payload: data
         }
     }
