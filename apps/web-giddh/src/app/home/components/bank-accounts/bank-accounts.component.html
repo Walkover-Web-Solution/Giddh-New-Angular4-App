@@ -1,37 +1,37 @@
-<div
-    id="live"
-    appTranslate
-    [file]="'home/bank-accounts'"
-    [requireCommonData]="false"
-    (localeData)="localeData = $event"
->
+<div id="live" appTranslate [file]="'home/bank-accounts'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
     <mat-card>
         <div class="panel-heading clearfix">
             <strong>{{ localeData?.chart_title }}</strong>
         </div>
         <mat-card-content class="banks-scrollbar-wrapper" *ngIf="localeData">
             <div class="bank-details-block">
-                <cdk-virtual-scroll-viewport
-                    [itemSize]="61"
-                    *ngIf="!isLoading && bankAccounts?.length > 0"
-                    class="virtual-group-list overflow-x-hidden"
-                >
+                <cdk-virtual-scroll-viewport [itemSize]="61" *ngIf="!isLoading && bankAccounts?.length > 0"
+                    class="virtual-group-list overflow-x-hidden">
                     <div class="wrap-single-bank-detail">
                         <div class="single-bank-detail" *cdkVirtualFor="let bankaccount of bankAccounts">
                             <p class="bank-name">{{ bankaccount.name }}</p>
-                            <p class="bank-balance">
+                            <p class="bank-balance" [ngClass]="{'width-86': reLoginRequired}">
                                 <span>{{ localeData?.in_giddh }}</span>
-                                <span
-                                    >{{ activeCompany.baseCurrencySymbol }}
+                                <span>{{ activeCompany.baseCurrencySymbol }}
                                     {{ bankaccount.closingBalance.amount | giddhCurrency }}
                                     <span *ngIf="bankaccount.closingBalance.type == 'CREDIT'">{{
                                         localeData?.cr_heading
-                                    }}</span>
+                                        }}</span>
                                     <span *ngIf="bankaccount.closingBalance.type == 'DEBIT'">{{
                                         localeData?.dr_heading
-                                    }}</span></span
-                                >
+                                        }}</span>
+                                </span>
                             </p>
+                            <ng-container *ngIf="bankaccount.reLoginRequired">
+                                <button mat-icon-button [matMenuTriggerFor]="menu" class="company-name bank-menu">
+                                    <span class="icon-dots-three-vertical"></span>
+                                </button>
+                                <mat-menu #menu="matMenu">
+                                    <button mat-menu-item (click)="getPlaidLinkToken(bankaccount?.itemId)">
+                                        <span>{{ commonLocaleData?.app_renew_bank_connection }}</span>
+                                    </button>
+                                </mat-menu>
+                            </ng-container>
                         </div>
                     </div>
                 </cdk-virtual-scroll-viewport>
@@ -40,16 +40,12 @@
                     <p>{{ localeData?.no_banks_found }}</p>
                     <a class="connect-bank" [routerLink]="['/pages/settings/integration/payment']">{{
                         localeData?.connect_bank
-                    }}</a>
+                        }}</a>
                 </div>
                 <giddh-page-loader *ngIf="isLoading" [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
             </div>
-            <a
-                class="connect-bank"
-                *ngIf="bankAccounts?.length > 0"
-                [routerLink]="['/pages/settings/integration/payment']"
-                >{{ localeData?.connect_bank }}</a
-            >
+            <a class="connect-bank" *ngIf="bankAccounts?.length > 0"
+                [routerLink]="['/pages/settings/integration/payment']">{{ localeData?.connect_bank }}</a>
         </mat-card-content>
     </mat-card>
 </div>

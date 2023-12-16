@@ -707,5 +707,6 @@
     },
     "app_region": "क्षेत्र",
     "app_select_region": "क्षेत्र निवडा",
-    "app_by_product_output" :"उत्पादनानुसार (आउटपुट)"
+    "app_by_product_output" :"उत्पादनानुसार (आउटपुट)",
+    "app_renew_bank_connection": "बँक कनेक्शनचे नूतनीकरण करा"
 }
