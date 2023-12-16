@@ -58,6 +58,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { AttachmentsModule } from '../theme/attachments/attachments.module';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { StockCreateEditModule } from '../new-inventory/component/stock-create-edit/stock-create-edit.module';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
     declarations: [
@@ -130,7 +131,8 @@ import { StockCreateEditModule } from '../new-inventory/component/stock-create-e
         MatExpansionModule,
         AttachmentsModule,
         FormFieldsModule,
-        StockCreateEditModule
+        StockCreateEditModule,
+        MatIconModule
     ]
 })
 export class LedgerModule {
