@@ -47,26 +47,26 @@
                                 </div>
                             </div>
                             <ng-container *ngIf="currentUserStocks">
-                                <div class="mr-t2">
-                                    <div class="table-inventory">
-                                        <div class="float-right">
-                                            <button mat-stroked-button class="delete-icon mb-2 mr-r1"
-                                                (click)="confirmationPopup('stockUniqueName', 'stock')">
-                                                <i class="icon-trash"></i>
-                                            </button>
-                                        </div>
-                                        <div [formGroup]="discountForm">
-                                            <ng-container
-                                                *ngFor="let discountCollection of discountForm.get('discountInfo')['controls']; let i = index"
-                                                formArrayName="discountInfo">
+                                <div class="mr-t2" [formGroup]="discountForm">
+                                    <ng-container
+                                        *ngFor="let discountCollection of discountForm?.get('discountInfo')['controls']; let i = index"
+                                        formArrayName="discountInfo">
+                                        <div class="table-inventory">
+                                            <div class="float-right">
+                                                <button mat-stroked-button class="delete-icon mb-2 mr-r1"
+                                                    (click)="confirmationPopup( discountCollection?.get('stockUniqueName')?.value, 'stock')">
+                                                    <i class="icon-trash"></i>
+                                                </button>
+                                            </div>
+                                            <div>
                                                 <p class="inventory-head">
-                                                    <strong>{{ discountCollection?.get('stock')?.value }}</strong>
+                                                    <strong>{{ discountCollection?.get('stockName')?.value }}</strong>
                                                 </p>
                                                 <ng-container [formGroupName]="i">
                                                     <div class="table-responsive mr-t05 mr-b15">
                                                         <table class="table">
                                                             <tbody>
-                                                                <tr *ngFor="let variant of discountCollection.get('variants')['controls'];  let j = index"
+                                                                <tr *ngFor="let variant of discountCollection?.get('variants')['controls'];  let j = index"
                                                                     formArrayName="variants">
                                                                     <ng-container [formGroupName]="j">
                                                                         <td>
@@ -84,11 +84,11 @@
                                                                             <div class="toggle-wrap">
                                                                                 <mat-slide-toggle class="example-margin"
                                                                                     color="primary"
-                                                                                    name="inclusiveExclusive"
-                                                                                    formControlName="inclusiveExclusive">
+                                                                                    name="discountExclusive"
+                                                                                    formControlName="discountExclusive">
                                                                                     <span>
                                                                                         {{
-                                                                                        variant?.get('inclusiveExclusive')?.value
+                                                                                        variant?.get('discountExclusive')?.value
                                                                                         ?
                                                                                         localeData?.inclusive :
                                                                                         localeData?.exclusive
@@ -104,11 +104,12 @@
                                                                                     #discountComponent
                                                                                     [discountMenu]="false"
                                                                                     [discountsList]="discountsList"
-                                                                                    [discountAccountsDetails]="[]"
+                                                                                    [discountAccountsDetails]="discountsList"
                                                                                     [discountSum]="variant?.get('discountValue')?.value"
+                                                                                    (discountTotalUpdated)="calculateWhenTrxAltered(entry, transaction)"
                                                                                     [showHeaderText]="false"
-                                                                                    [maskInput]="inputMaskFormat"
-                                                                                    [prefixInput]="'₹'"
+                                                                                    [maskInput]="''"
+                                                                                    [prefixInput]="variant?.get('discountInfo')?.value?.linkAccount?.currencySymbol"
                                                                                     [suffixInput]="''"
                                                                                     [commonLocaleData]="commonLocaleData"
                                                                                     [readonly]="false">
@@ -125,23 +126,103 @@
                                                                         <td class="delete-width">
                                                                             <div class="delete-show">
                                                                                 <button mat-stroked-button
+                                                                                    [disabled]="discountCollection?.get('variants')?.value?.length < 2"
                                                                                     class="delete-icon"
-                                                                                    (click)="confirmationPopup('variantUniqueName', 'variant')">
+                                                                                    (click)="confirmationPopup(variant?.get('variantUniqueName')?.value, 'variant',i,j)">
                                                                                     <i class="icon-trash"></i>
                                                                                 </button>
                                                                             </div>
                                                                         </td>
                                                                     </ng-container>
                                                                 </tr>
+                                                                <tr *ngIf="deletedVariantSelectedObject.isSelected">
+                                                                    <td>
+                                                                        {{ deletedVariantSelectedObject.variantName }}
+                                                                    </td>
+
+                                                                    <td class="price-width">
+                                                                        <input-field 
+                                                                            [placeholder]="'00'"
+                                                                            [label]="localeData?.price"
+                                                                            [type]="'number'"
+                                                                            [cssClass]="'text-right'"
+                                                                            ></input-field>
+                                                                    </td>
+                                                                    <td class="child-td-nam">
+                                                                        <div class="toggle-wrap">
+                                                                            <mat-slide-toggle class="example-margin"
+                                                                                color="primary"
+                                                                                name="discountExclusive">
+                                                                                <span>
+                                                                                    {{
+                                                                                    variant?.get('discountExclusive')?.value
+                                                                                    ?
+                                                                                    localeData?.inclusive :
+                                                                                    localeData?.exclusive
+                                                                                    }}
+                                                                                </span>
+                                                                            </mat-slide-toggle>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td class="overflow-visible">
+                                                                        <div
+                                                                            class="text-right flex-fill discount-input">
+                                                                            <discount-control-component
+                                                                                #discountComponent
+                                                                                [discountMenu]="false"
+                                                                                [discountsList]="discountsList"
+                                                                                [discountAccountsDetails]="[]"
+                                                                                [discountSum]="0"
+                                                                                [showHeaderText]="false"
+                                                                                [maskInput]="inputMaskFormat"
+                                                                                [prefixInput]="'₹'"
+                                                                                [suffixInput]="''"
+                                                                                [commonLocaleData]="commonLocaleData"
+                                                                                [readonly]="false">
+                                                                            </discount-control-component>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td>
+                                                                        <input-field 
+                                                                            [placeholder]="'00'"
+                                                                            [label]="commonLocaleData?.app_defaultquantity"
+                                                                            [type]="'number'" 
+                                                                            [matSuffix]="'kg'"
+                                                                            [cssClass]="'text-right'"
+                                                                        ></input-field>
+                                                                    </td>
+                                                                    <td class="delete-width">
+                                                                        <div class="delete-show">
+                                                                            <button 
+                                                                                mat-stroked-button
+                                                                                class="delete-icon"
+                                                                                (click)="removeTemporaryVariant()"
+                                                                            >
+                                                                                <i class="icon-trash"></i>
+                                                                            </button>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
                                                             </tbody>
                                                             <tfoot>
                                                                 <tr>
-                                                                    <td *ngIf="false" colspan="6">
-                                                                        <a href="javascript:;">
+                                                                    <td></td>
+                                                                    <td *ngIf="currentUserStocks[i].variants?.length !== discountCollection?.get('variants')?.value?.length" class="middle">
+                                                                        <!-- <a href="javascript:;">
                                                                             {{ localeData?.add_variant }}
-                                                                        </a>
+                                                                        </a> -->
+                                                                        <div>
+                                                                            <dropdown-field
+                                                                                [name]="variantsWithNoDiscount"
+                                                                                [label]="localeData?.add_variant"
+                                                                                [placeholder]="localeData?.add_variant"
+                                                                                [options]="deletedVariants[i]"
+                                                                                (selectedOption)="selectVariant($event)"
+                                                                            >
+                                                                            </dropdown-field>
+                                                                        </div>
                                                                     </td>
-                                                                    <td colspan="6" class="text-right px-0 mt-3">
+                                                                    <td colspan="4" class="text-right px-0 mt-3">
                                                                         <button *ngIf="true" mat-stroked-button
                                                                             color="primary" class="my-3">Save</button>
                                                                     </td>
@@ -150,9 +231,9 @@
                                                         </table>
                                                     </div>
                                                 </ng-container>
-                                            </ng-container>
+                                            </div>
                                         </div>
-                                    </div>
+                                    </ng-container>
                                     <!-- <div class="table-inventory">
                                     <p class="inventory-head">
                                         <strong>{{ commonLocaleData?.app_inventory }}</strong>
@@ -183,11 +264,11 @@
                                                         <mat-slide-toggle
                                                             class="example-margin"
                                                             color="primary"
-                                                            name="inclusiveExclusive" [(ngModel)]="inclusiveExclusive"
+                                                            name="discountExclusive" [(ngModel)]="discountExclusive"
                                                         >
                                                         <span>
                                                             {{
-                                                                inclusiveExclusive ? localeData?.inclusive : localeData?.exclusive
+                                                                discountExclusive ? localeData?.inclusive : localeData?.exclusive
                                                             }}
                                                         </span>
                                                         </mat-slide-toggle>
