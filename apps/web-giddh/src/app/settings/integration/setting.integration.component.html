@@ -257,9 +257,9 @@
                 </div>
             </mat-tab>
 
-            <mat-tab [label]="localeData?.payment?.tab_heading">
+            <mat-tab [label]="localeData?.payment?.tab_heading" *ngIf="!isIciciBankSupportedCountry">
                 <div class="clearfix box">
-                    <ng-container *ngIf="isIciciBankSupportedCountry">
+                    <!-- <ng-container *ngIf="isIciciBankSupportedCountry">
                         <ng-template>
                             <span class="icon-payment"></span> {{ localeData?.payment?.tab_heading }}
                         </ng-template>
@@ -298,7 +298,7 @@
                                 </p>
                             </div>
                         </div>
-                    </ng-container>
+                    </ng-container> -->
                     <ng-container *ngIf="!isIciciBankSupportedCountry">
                         <div class="form-group">
                             <button mat-stroked-button class="mr-r2" color="primary" (click)="getPlaidLinkToken()">
@@ -628,7 +628,7 @@
         <div class="modal-dialog modal-md" *ngIf="confirmationModal?.isShown">
             <div class="modal-content">
                 <confirm-modal
-                    [body]="localeData?.payment?.delete_login | replace: '[LOGIN_ID]':activeBankAccount?.loginId"
+                    [body]="localeData?.payment?.delete_login | replace : '[LOGIN_ID]' : activeBankAccount?.loginId"
                     (cancelCallBack)="confirmationModal?.hide()"
                     (successCallBack)="deleteBankAccountLogin(true)"
                 >
