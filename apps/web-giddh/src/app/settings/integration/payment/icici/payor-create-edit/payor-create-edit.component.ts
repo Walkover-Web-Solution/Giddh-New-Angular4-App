@@ -73,9 +73,9 @@ export class PayorCreateEditComponent implements OnInit, OnDestroy {
         } else {
             this.accountUserForm = this.formBuilder.group({
                 accountUniqueName: [this.activeBankAccount?.account?.uniqueName, Validators.required],
-                accountNumber: [this.activeBankAccount?.iciciDetailsResource?.accountNumber, Validators.required],
+                accountNumber: [this.activeBankAccount?.bankResource?.accountNumber, Validators.required],
                 userUniqueName: ['', Validators.required],
-                uniqueName: [this.activeBankAccount?.iciciDetailsResource?.uniqueName, Validators.required],
+                uniqueName: [this.activeBankAccount?.bankResource?.uniqueName, Validators.required],
                 loginId: ['', Validators.required],
                 maxAmount: [''],
                 duration: ['']
@@ -200,7 +200,7 @@ export class PayorCreateEditComponent implements OnInit, OnDestroy {
                 return;
             }
 
-            let request = { bankAccountUniqueName: this.activeBankAccount?.iciciDetailsResource?.uniqueName, urn: this.activePayorAccount?.urn };
+            let request = { bankAccountUniqueName: this.activeBankAccount?.bankResource?.uniqueName, urn: this.activePayorAccount?.urn };
 
             this.settingsIntegrationService.updatePayorAccount(this.accountUserForm.value, request).pipe(take(1)).subscribe(response => {
                 if (response?.status === "success") {

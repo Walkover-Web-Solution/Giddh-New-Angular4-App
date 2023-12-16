@@ -19,6 +19,7 @@ export interface CurrentCommonState {
     importBankTransactions: any;
     hasUnsavedChanges: boolean;
     bypassAllUnsavedChanges: boolean;
+    reAuthPlaid: any;
 }
 
 const initialState: CurrentCommonState = {
@@ -32,7 +33,8 @@ const initialState: CurrentCommonState = {
     isAccountUpdated: false,
     importBankTransactions: null,
     hasUnsavedChanges: false,
-    bypassAllUnsavedChanges: false
+    bypassAllUnsavedChanges: false,
+    reAuthPlaid: null
 };
 
 export function CommonReducer(state: CurrentCommonState = initialState, action: CustomActions): CurrentCommonState {
@@ -109,6 +111,10 @@ export function CommonReducer(state: CurrentCommonState = initialState, action: 
 
         case CommonActions.BYPASS_UNSAVED_CHANGES: {
             return Object.assign({}, state, { bypassAllUnsavedChanges: action.payload });
+        }
+
+        case CommonActions.REAUTH_PLAID: {
+            return Object.assign({}, state, { reAuthPlaid: action.payload });
         }
 
         default:
