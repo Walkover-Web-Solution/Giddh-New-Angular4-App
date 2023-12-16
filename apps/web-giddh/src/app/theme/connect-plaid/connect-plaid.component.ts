@@ -46,12 +46,9 @@ export class ConnectPlaidComponent implements OnInit {
     public ngOnInit(): void {
         this.store.pipe(select(state => state.common.reAuthPlaid), takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.reauth && !this.isPlaidOpen) {
-
-                this.store.dispatch(this.commonAction.reAuthPlaid({itemId: null, reauth: false}));
-
                 this.isPlaidOpen = true;
+                this.store.dispatch(this.commonAction.reAuthPlaid({itemId: null, reauth: false}));
                 this.getPlaidLinkToken(response?.itemId);
-
                 setTimeout(() => {
                     this.isPlaidOpen = false;
                 }, 1000);
