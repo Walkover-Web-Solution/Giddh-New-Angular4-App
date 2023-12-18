@@ -57,6 +57,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { NgxPlaidLinkModule } from "ngx-plaid-link";
 import { AsideMenuAccountModule } from '../shared/aside-menu-account/aside.menu.account.module';
 import { AccountNumberMaskModule } from '../shared/helpers/pipes/accountNumberMaskPipe/accountNumberMask.module';
+import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
 
 @NgModule({
     declarations: [
@@ -120,7 +121,8 @@ import { AccountNumberMaskModule } from '../shared/helpers/pipes/accountNumberMa
         MatSlideToggleModule,
         NgxPlaidLinkModule,
         AsideMenuAccountModule,
-        AccountNumberMaskModule
+        AccountNumberMaskModule,
+        WatchVideoModule
     ]
 })
 
