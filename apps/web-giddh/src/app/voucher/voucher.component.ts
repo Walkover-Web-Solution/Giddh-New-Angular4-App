@@ -3125,7 +3125,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     return;
                 }
             }
-            if (this.discountObj || !this.isUpdateMode) {
+            if (this.discountObj || !this.isUpdateMode || !entry['initiallyCall']) {
                 if (this.discountObj !== undefined && this.discountObj) {
                     if (isNaN(this.discountObj?.discount)) {
                         this.discountObj.discount = 0;
@@ -3162,6 +3162,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                                 entry.discountSum = this.discountObj?.discount ? this.discountObj?.discount : trx?.stockDetails?.variant?.variantDiscount?.discountValue;
                                 trx.quantity = trx?.stockDetails?.variant?.variantDiscount?.quantity;
                             }
+                            this.calculateStockEntryAmount(trx);
                             entry['initiallyCall'] = true;
                         } else {
                             if (trx?.stockDetails?.variant?.variantDiscount?.discountType === 'FIX_AMOUNT') {
@@ -3649,7 +3650,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         const variant = o.stock?.variant;
         const isInclusiveEntry = (variant?.purchaseTaxInclusive && o.category === 'expenses') ||
             (variant?.salesTaxInclusive && o.category === 'income') ||
-            (variant?.fixedAssetTaxInclusive && o.category === 'fixedassets');
+            (variant?.fixedAssetTaxInclusive && o.category === 'fixedassets') || (!variant?.discountExclusive && variant?.variantDiscount?.unit?.code === transaction?.stockUnitCode);
         transaction.taxInclusive = isInclusiveEntry;
         // check if we have quantity in additional object. it's for only bulk add mode
         transaction.quantity = o.quantity ? o.quantity : (o.stock) ? 1 : null;
