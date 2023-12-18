@@ -852,6 +852,12 @@ textarea {
     }
 }
 
+.dropdown-wrapper {
+    .mat-mdc-text-field-wrapper {
+        border: none !important;
+    }
+}
+
 @media screen and (max-width: 1366px) and (orientation: portrait) {
     .subscription-form-select {
         float: left !important;
