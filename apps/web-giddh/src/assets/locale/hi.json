@@ -707,5 +707,11 @@
     "app_region": "क्षेत्र",
     "app_select_region": "क्षेत्र चुनें",
     "app_by_product_output" :"उत्पाद द्वारा (आउटपुट)",
+    "app_unverified": "असत्यापित",
+    "app_verified": "सत्यापित",
+    "app_verify": "सत्यापित करें",
+    "app_hostname": "होस्टनेम",
+    "app_copied":"कॉपी किया गया...",
+    "domain_verification": "बाहरी मेल के लिए डोमेन सत्यापन",
     "app_renew_bank_connection": "बैंक कनेक्शन नवीनीकृत करें"
 }

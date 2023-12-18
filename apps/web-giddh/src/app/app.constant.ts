@@ -518,6 +518,7 @@ export const JOURNAL_VOUCHER_ALLOWED_DOMAINS = [
     'whozzat.com',
 ];
 
+
 /**
  * Enum for switching toggle button On and Off and changing its size
  *

@@ -1,0 +1,106 @@
+<ng-container appTranslate (commonLocaleData)="commonLocaleData = $event">
+    <div class="app-container">
+        <div class="wrapper">
+            <div class="d-flex justify-content-between">
+                <p class="font-24 m-0">
+                    <strong>{{ domain.name }}</strong>
+                </p>
+                <div>
+                    <img
+                        class="giddh-logo"
+                        src="{{ imgPath }}giddh-blue-logo.svg"
+                        width="127"
+                        height="25"
+                        [alt]="commonLocaleData?.giddh_logo"
+                    />
+                </div>
+            </div>
+            <mat-card class="mat-card mat-focus-indicator domain-setting-card mt-3 mb-3 mat-elevation-z3"
+                ><div class="d-flex align-items-center justify-content-start mb-2">
+                    <h6 class="domain-text">
+                        {{ commonLocaleData?.domain_verification }}
+                    </h6>
+                </div>
+                <mat-card-content class="mat-card-content">
+                    <div *ngIf="shouldShowLoader">
+                        <giddh-page-loader></giddh-page-loader>
+                    </div>
+                    <div class="portal-body" *ngIf="dataSource?.length && !shouldShowLoader">
+                        <div class="table-responsive">
+                            <table mat-table [dataSource]="dataSource" class="w-100">
+                                <ng-container matColumnDef="type">
+                                    <th mat-header-cell *matHeaderCellDef width="10%">
+                                        {{ commonLocaleData?.app_type }}
+                                    </th>
+                                    <td mat-cell *matCellDef="let element" class="content-table">{{ element.type }}</td>
+                                </ng-container>
+                                <ng-container matColumnDef="hostName">
+                                    <th mat-header-cell *matHeaderCellDef width="30%">
+                                        {{ commonLocaleData?.app_hostname }}
+                                    </th>
+                                    <td mat-cell *matCellDef="let element" class="content-table">
+                                        <div>
+                                            {{ element.hostName }}
+                                            <span class="input-group-btn mr-l05">
+                                                <i
+                                                    class="icon-copy-file cursor-pointer"
+                                                    (click)="copyUrl(element.hostName, element, 'host')"
+                                                    [tooltip]="commonLocaleData?.app_copy"
+                                                ></i>
+                                            </span>
+                                            <span class="success mr-l05 copied-url" *ngIf="element.isCopiedHostName">{{
+                                                commonLocaleData?.app_copied
+                                            }}</span>
+                                        </div>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="value">
+                                    <th mat-header-cell *matHeaderCellDef width="30%">
+                                        {{ commonLocaleData?.app_value }}
+                                    </th>
+                                    <td mat-cell *matCellDef="let element" class="content-table">
+                                        {{ element.value }}
+                                        <span class="input-group-btn mr-l05">
+                                            <i
+                                                class="icon-copy-file cursor-pointer"
+                                                (click)="copyUrl(element.value, element, 'value')"
+                                                [tooltip]="commonLocaleData?.app_copy"
+                                            ></i>
+                                        </span>
+                                        <span class="success mr-l05 copied-url" *ngIf="element.isCopiedValue">{{
+                                            commonLocaleData?.app_copied
+                                        }}</span>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="status">
+                                    <th mat-header-cell *matHeaderCellDef width="30%" class="text-right">
+                                        {{ commonLocaleData?.app_status }}
+                                    </th>
+                                    <td mat-cell *matCellDef="let element" class="content-table text-right">
+                                        <span
+                                            [ngClass]="{ 'verified': element?.status, 'unverified': !element?.status }"
+                                            class="status font-12"
+                                            >{{
+                                                element.status
+                                                    ? commonLocaleData?.app_verified
+                                                    : commonLocaleData?.app_unverified
+                                            }}</span
+                                        >
+                                    </td>
+                                </ng-container>
+
+                                <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                            </table>
+                            <section *ngIf="!dataSource?.length && !shouldShowLoader">
+                                <div class="no-data">
+                                    <h1>{{ commonLocaleData?.app_no_records_found }}</h1>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                </mat-card-content>
+                </mat-card>
+        </div>
+    </div>
+</ng-container>

@@ -41,6 +41,7 @@ export interface OrganizationProfile {
     taxType: string;
     isMultipleCurrency?: boolean;
     manageInventory?: boolean;
+    portalDomain?: string;
 }
 
 /** Form type in setting aside component */
