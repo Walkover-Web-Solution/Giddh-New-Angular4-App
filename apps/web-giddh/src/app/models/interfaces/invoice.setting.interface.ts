@@ -89,6 +89,7 @@ export class InvoiceSettings {
     autoEntryAndInvoice: boolean;
     showSeal: boolean;
     autoPaid: any;
+    autoGenerateVoucherFromEntry: boolean;
     branchInvoiceNumberPrefix: any;
     createPaymentEntry: boolean;
     email?: any;

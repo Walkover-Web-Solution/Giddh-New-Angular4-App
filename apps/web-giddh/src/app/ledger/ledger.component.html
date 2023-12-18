@@ -489,24 +489,7 @@
                                         <i class="icon-trash lh-0"></i>
                                     </a>
                                     <a
-                                        mat-button
-                                        class="icomoon-ico d-flex align-items-center mr-0"
-                                        id="reload-bank-transaction"
-                                        *ngIf="
-                                            lc.bankTransactionsDebitData?.length ||
-                                            lc.bankTransactionsCreditData?.length
-                                        "
-                                        href="javascript:void(0)"
-                                        [matTooltip]="localeData?.reload_bank_transactions"
-                                        [matTooltipPosition]="'above'"
-                                        matTooltipClass="tooltip-black"
-                                        (click)="getBankTransactions()"
-                                    >
-                                        <i class="icon-refresh lh-0 font-16"></i>
-                                    </a>
-
-                                    <a
-                                        *ngIf="voucherApiVersion === 2 && enableAutopaid"
+                                        *ngIf="voucherApiVersion === 2 && enableAutopaid && (currentOrganizationType !== 'COMPANY' || (currentCompanyBranches?.length <= 2) || isBranchTransactionSelected)"
                                         mat-button
                                         class="icomoon-ico d-flex align-items-center"
                                         id="autopaid"
@@ -518,6 +501,19 @@
                                     >
                                         <img class="autopaid-icon" src="{{ imgPath }}autopaid.svg" />
                                     </a>
+                                    <span class="bank-menu" *ngIf="lc.bankTransactionsDebitData?.length || lc.bankTransactionsCreditData?.length || bankAccount?.reLoginRequired">
+                                        <button mat-icon-button [matMenuTriggerFor]="menu" class="company-name">
+                                            <span class="icon-dots-three-vertical"></span>
+                                        </button>
+                                        <mat-menu #menu="matMenu">
+                                            <button mat-menu-item (click)="getPlaidLinkToken(bankAccount?.itemId)" *ngIf="bankAccount?.reLoginRequired">
+                                                <span>{{ commonLocaleData?.app_renew_bank_connection }}</span>
+                                            </button>
+                                            <button mat-menu-item (click)="getBankTransactions()" *ngIf="lc.bankTransactionsDebitData?.length || lc.bankTransactionsCreditData?.length">
+                                                <span>{{ localeData?.reload_bank_transactions }}</span>
+                                            </button>
+                                        </mat-menu>
+                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -895,6 +891,7 @@
                                                                     "
                                                                     [selectedAccountDetails]="selectedAccountDetails"
                                                                     [(isTotalChanged)]="isTotalChanged"
+                                                                    [autoGenerateVoucherFromEntry]="autoGenerateVoucherFromEntryStatus"
                                                                 >
                                                                 </new-ledger-entry-panel>
                                                             </div>
@@ -1191,6 +1188,7 @@
                                                                     "
                                                                     [selectedAccountDetails]="selectedAccountDetails"
                                                                     [(isTotalChanged)]="isTotalChanged"
+                                                                    [autoGenerateVoucherFromEntry]="autoGenerateVoucherFromEntryStatus"
                                                                 >
                                                                 </new-ledger-entry-panel>
                                                             </div>
@@ -1920,6 +1918,7 @@
                                                 "
                                                 [selectedAccountDetails]="selectedAccountDetails"
                                                 [(isTotalChanged)]="isTotalChanged"
+                                                [autoGenerateVoucherFromEntry]="autoGenerateVoucherFromEntryStatus"
                                             >
                                             </new-ledger-entry-panel>
                                         </div>
@@ -2377,6 +2376,7 @@
                                                 "
                                                 [selectedAccountDetails]="selectedAccountDetails"
                                                 [(isTotalChanged)]="isTotalChanged"
+                                                [autoGenerateVoucherFromEntry]="autoGenerateVoucherFromEntryStatus"
                                             >
                                             </new-ledger-entry-panel>
                                         </div>

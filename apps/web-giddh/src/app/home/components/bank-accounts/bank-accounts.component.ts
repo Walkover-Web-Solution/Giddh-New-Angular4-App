@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { Observable, ReplaySubject } from "rxjs";
 import { Store, select } from "@ngrx/store";
 import { AppState } from "../../../store";
@@ -7,6 +7,8 @@ import { takeUntil } from "rxjs/operators";
 import { createSelector } from "reselect";
 import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
+import { BROADCAST_CHANNELS } from '../../../app.constant';
+import { CommonActions } from '../../../actions/common.actions';
 
 @Component({
     selector: 'bank-accounts',
@@ -24,10 +26,19 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
     public activeCompany: any = {};
     /** This will hold local JSON data */
     public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
     /** True if api call in progress */
     public isLoading: boolean = false;
+    /** True if relogin required in any bank account */
+    public reLoginRequired: boolean = false;
 
-    constructor(private store: Store<AppState>, private contactService: ContactService) {
+    constructor(
+        private store: Store<AppState>,
+        private contactService: ContactService,
+        private commonAction: CommonActions,
+        private changeDetectionRef: ChangeDetectorRef
+    ) {
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
     }
 
@@ -51,6 +62,13 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
                 this.activeCompany = activeCompany;
             }
         });
+
+        const broadcast = new BroadcastChannel(BROADCAST_CHANNELS.REAUTH_PLAID_SUCCESS);
+        broadcast.onmessage = (event) => {
+            if (event?.data) {
+                this.getAccounts(this.fromDate, this.toDate, 'bankaccounts', null, null, 'true', 20, '', 'closingBalance', 'desc');
+            }
+        };
     }
 
     private getAccounts(fromDate: string, toDate: string, groupUniqueName: string, pageNumber?: number, requestedFrom?: string, refresh?: string, count: number = 20, query?: string, sortBy: string = '', order: string = 'asc') {
@@ -61,8 +79,23 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
             if (res?.status === 'success') {
                 this.bankAccounts = res?.body?.results;
             }
+
+            const reLoginRequired = this.bankAccounts?.filter(bankaccount => bankaccount.reLoginRequired);
+            this.reLoginRequired = (reLoginRequired?.length) ? true : false;
+
             this.isLoading = false;
+            
+            this.changeDetectionRef.detectChanges();
         });
+    }
+
+    /**
+     * Initiate request to open plaid popup
+     *
+     * @memberof BankAccountsComponent
+     */
+    public getPlaidLinkToken(itemId: any): void {
+        this.store.dispatch(this.commonAction.reAuthPlaid({ itemId: itemId, reauth: true }));
     }
 
     public ngOnDestroy() {
