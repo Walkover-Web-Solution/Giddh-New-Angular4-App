@@ -1,7 +1,7 @@
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { takeUntil, take } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
-import { Component, Input, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AppState } from '../../store';
@@ -12,7 +12,7 @@ import { IOption } from '../../theme/ng-select/option.interface';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { CompanyActions } from "../../actions/company.actions";
 import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.component';
-import { BootstrapToggleSwitch, Configuration, SELECT_ALL_RECORDS } from "../../app.constant";
+import { BootstrapToggleSwitch, BROADCAST_CHANNELS, Configuration, SELECT_ALL_RECORDS } from "../../app.constant";
 import { AuthenticationService } from "../../services/authentication.service";
 import { IForceClear } from '../../models/api-models/Sales';
 import { EcommerceService } from '../../services/ecommerce.service';
@@ -26,11 +26,7 @@ import { SalesService } from '../../services/sales.service';
 import { cloneDeep, find, isEmpty } from '../../lodash-optimized';
 import { TabDirective } from 'ngx-bootstrap/tabs';
 import { MatTabGroup } from '@angular/material/tabs';
-import {
-    NgxPlaidLinkService,
-    PlaidLinkHandler,
-    LegacyPlaidConfig
-} from "ngx-plaid-link";
+import { CommonActions } from '../../actions/common.actions';
 
 @Component({
     selector: 'setting-integration',
@@ -38,7 +34,6 @@ import {
     styleUrls: ['./setting.integration.component.scss']
 })
 export class SettingIntegrationComponent implements OnInit, AfterViewInit {
-
     public auth2: any;
     public smsFormObj: SmsKeyClass = new SmsKeyClass();
     public emailFormObj: EmailKeyClass = new EmailKeyClass();
@@ -79,7 +74,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     @ViewChild('editAccountUserModal', { static: false }) public editAccountUserModal: ModalDirective;
     /** Instance of delete account user modal */
     @ViewChild('confirmationModal', { static: false }) public confirmationModal: ModalDirective;
-
     //variable holding account Info
     public registeredAccount;
     public isEcommerceShopifyUserVerified: boolean = false;
@@ -143,22 +137,12 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public bootstrapToggleSwitch = BootstrapToggleSwitch;
     /** Stores the voucher API version of current company */
     public voucherApiVersion: 1 | 2;
-    /** This will hold plaid link handler */
-    private plaidLinkHandler: PlaidLinkHandler;
-    /** This will hold plaid configuration */
-    private plaidConfig: LegacyPlaidConfig = {
-        env: "sandbox",
-        token: null,
-        product: ["auth","transactions"],
-        onSuccess: undefined,
-        onExit: undefined
-    };
     /** List of icici bank supported countries */
     public iciciBankSupportedCountryList: any[] = ["IN", "NP", "BT"];
     /** True, if is other country in payment integration */
     public isIciciBankSupportedCountry: boolean = false;
-/** True, if is add or manage group form outside */
-    public isAddAndManageOpenedFromOutside:boolean = false;
+    /** True, if is add or manage group form outside */
+    public isAddAndManageOpenedFromOutside: boolean = false;
 
     constructor(
         private router: Router,
@@ -174,8 +158,9 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         private settingsIntegrationService: SettingsIntegrationService,
         private searchService: SearchService,
         private salesService: SalesService,
-        private plaidLinkService: NgxPlaidLinkService,
-        private activateRoute: ActivatedRoute
+        private activateRoute: ActivatedRoute,
+        private commonAction: CommonActions,
+        private changeDetectionRef: ChangeDetectorRef
 
     ) {
         this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl?.replace(':redirect_url', this.getRedirectUrl(AppUrl))?.replace(':client_id', GOOGLE_CLIENT_ID);
@@ -295,6 +280,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 this.activeCompany = activeCompany;
             }
         });
+
         this.store.pipe(select(select => select.groupwithaccounts.isAddAndManageOpenedFromOutside), takeUntil(this.destroyed$)).subscribe(response => {
             if (!response && this.isAddAndManageOpenedFromOutside) {
                 this.activateRoute.params.pipe(takeUntil(this.destroyed$)).subscribe(resp => {
@@ -305,6 +291,13 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             }
             this.isAddAndManageOpenedFromOutside = response;
         });
+
+        const broadcast = new BroadcastChannel(BROADCAST_CHANNELS.REAUTH_PLAID_SUCCESS);
+        broadcast.onmessage = (event) => {
+            if (event?.data) {
+                this.loadPaymentData();
+            }
+        };
     }
 
     /**
@@ -860,52 +853,12 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     }
 
     /**
-     * This will open create new account modal
+     * Initiate request to open plaid popup
      *
      * @memberof SettingIntegrationComponent
      */
-    public getPlaidLinkToken(): void {
-        this.settingsIntegrationService.getPlaidLinkToken().pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response?.status === "success" && response?.body) {
-                this.plaidConfig.token = response.body?.link_token;
-                this.plaidLinkService
-                    .createPlaid(
-                        Object.assign({}, this.plaidConfig, {
-                            onSuccess: (token, metadata) => this.getPlaidSuccessPublicToken(token, metadata)
-                        })
-                    )
-                    .then((handler: PlaidLinkHandler) => {
-                        this.plaidLinkHandler = handler;
-                        this.plaidLinkHandler.open();
-                    });
-            } else {
-                this.toasty.clearAllToaster();
-                this.toasty.errorToast(response?.message);
-            }
-        });
-    }
-
-    /**
-     *This will use for get plaid success public token
-     *
-     * @param {*} token
-     * @param {*} metadata
-     * @memberof SettingIntegrationComponent
-     */
-    public getPlaidSuccessPublicToken(token: string, metadata: any): void {
-        let data = {
-            public_token: token,
-            institution: metadata?.institution,
-            accounts: metadata?.accounts
-        }
-        this.settingsIntegrationService.savePlaidAccessToken(data).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response?.status === "success" && response?.body) {
-                this.loadPaymentData();
-            } else {
-                this.toasty.clearAllToaster();
-                this.toasty.errorToast(response?.message);
-            }
-        });
+    public getPlaidLinkToken(itemId?: any): void {
+        this.store.dispatch(this.commonAction.reAuthPlaid({itemId: itemId, reauth: true}));
     }
 
     /**
@@ -917,9 +870,9 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      */
     public selectBankAccount(event: any, bank: any): void {
         if (event) {
-            let request = { bankAccountUniqueName: bank?.iciciDetailsResource?.uniqueName };
+            let request = { bankAccountUniqueName: bank?.bankResource?.uniqueName };
             let accountForm = {
-                accountNumber: bank?.iciciDetailsResource?.accountNumber,
+                accountNumber: bank?.bankResource?.accountNumber,
                 accountUniqueName: event?.value,
                 paymentAlerts: [],
                 bankName: 'plaid'
@@ -982,13 +935,15 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 this.connectedBankAccounts = response.body;
 
                 this.connectedBankAccounts.forEach(bankAccount => {
-                    if (bankAccount?.iciciDetailsResource?.payor?.length > 0) {
-                        bankAccount?.iciciDetailsResource?.payor.forEach(payor => {
+                    if (bankAccount?.bankResource?.payor?.length > 0) {
+                        bankAccount?.bankResource?.payor.forEach(payor => {
                             this.getPayorRegistrationStatus(bankAccount, payor);
                         });
                     }
                 });
             }
+
+            this.changeDetectionRef.detectChanges();
         });
     }
 
@@ -1001,7 +956,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @memberof SettingIntegrationComponent
      */
     public trackByAccountUniqueName(index: number, item: any): any {
-        return item?.iciciDetailsResource?.uniqueName;
+        return item?.bankResource?.uniqueName;
     }
 
     /**
@@ -1054,7 +1009,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @memberof SettingIntegrationComponent
      */
     public showDeleteBankAccountLoginConfirmationModal(bankAccount: any, payor: any): void {
-        this.activeBankAccount = { uniqueName: bankAccount?.iciciDetailsResource?.uniqueName, urn: payor?.urn, loginId: payor?.loginId };
+        this.activeBankAccount = { uniqueName: bankAccount?.bankResource?.uniqueName, urn: payor?.urn, loginId: payor?.loginId };
         this.confirmationModal?.show();
     }
 
@@ -1117,7 +1072,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @memberof SettingIntegrationComponent
      */
     public getPayorRegistrationStatus(bankAccount: any, payor: any): void {
-        let request = { bankAccountUniqueName: bankAccount?.iciciDetailsResource?.uniqueName, urn: payor?.urn };
+        let request = { bankAccountUniqueName: bankAccount?.bankResource?.uniqueName, urn: payor?.urn };
 
         this.settingsIntegrationService.getPayorRegistrationStatus(request).pipe(take(1)).subscribe(response => {
             payor.isConnected = (response?.body?.status === ACCOUNT_REGISTERED_STATUS);

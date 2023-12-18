@@ -357,9 +357,12 @@ export class SettingsIntegrationService {
      * @return {*}  {Observable<BaseResponse<any, any>>}
      * @memberof SettingsIntegrationService
      */
-    public getPlaidLinkToken(): Observable<BaseResponse<any, any>> {
+    public getPlaidLinkToken(itemId?: any): Observable<BaseResponse<any, any>> {
+        if (!itemId) {
+            itemId = '';
+        }
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.get(this.config.apiUrl + SETTINGS_INTEGRATION_API.GET_PLAID_LINK_TOKEN?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
+        return this.http.get(this.config.apiUrl + SETTINGS_INTEGRATION_API.GET_PLAID_LINK_TOKEN?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':itemId', itemId)).pipe(map((res) => {
             let data: BaseResponse<any, string> = res;
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
