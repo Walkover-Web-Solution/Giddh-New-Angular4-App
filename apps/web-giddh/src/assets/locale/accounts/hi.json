@@ -67,9 +67,15 @@
         "contact": "संपर्क करें",
         "bank_details": "बैंक विवरण",
         "others": "अन्य",
-        "custom": "कस्टम"
+        "custom": "कस्टम",
+        "portal": "द्वार"
     },
+    "portal_attention_to": "पर ध्यान",
+    "portal_add_user": "उपयोगकर्ता जोड़ें",
+    "portal_updated_successfully": "पोर्टल उपयोगकर्ता सफलतापूर्वक अपडेट किया गया",
+    "portal_deleted_successfully":"पोर्टल उपयोगकर्ता सफलतापूर्वक हटाया गया",
     "export_group_ledger": "निर्यात समूह लेजर",
     "bank_details_error_message": "यदि आप उनमें से किसी के लिए डेटा प्रदान करते हैं तो सभी बैंक फ़ील्ड अनिवार्य हैं",
-    "item_no": "मद #[ITEM_NO]"
+    "item_no": "मद #[ITEM_NO]",
+    "duplicate_email":"डुप्लिकेट ईमेल स्वीकृत नहीं हैं"
 }

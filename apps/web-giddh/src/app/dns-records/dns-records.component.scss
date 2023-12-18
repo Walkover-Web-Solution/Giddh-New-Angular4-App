@@ -1,0 +1,59 @@
+.app-container {
+    background: var(--color-white);
+    padding: 16px;
+    height: calc(100vh - 0px);
+    overflow-y: auto;
+
+    .wrapper {
+        max-width: 1140px;
+        width: 100%;
+        padding-right: 15px;
+        padding-left: 15px;
+        margin-right: auto;
+        margin-left: auto;
+
+        .domain-setting-card {
+            border-radius: 8px !important;
+        }
+
+        .mat-card {
+            transition: box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1);
+            display: block;
+            position: relative;
+            padding: 16px;
+            border-radius: 4px;
+
+            .mat-mdc-card-content {
+                padding: 0px !important;
+            }
+
+            .mat-mdc-card-content {
+                &:last-child {
+                    padding-bottom: 0px !important;
+                }
+            }
+        }
+
+
+        .portal-body {
+            table {
+                background: var(--color-transparent-backgrounds);
+
+                .status {
+                    border-radius: 16px;
+                    padding: 6px 12px;
+                }
+
+                .verified {
+                    color: var(--color-success-enable);
+                    background: var(--color-success-enable-bg-light);
+                }
+    
+                .unverified {
+                    color: var(--color-danger);
+                    background: var(--color-danger-bg-light);
+                }
+            }
+        }
+    }
+}
