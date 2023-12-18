@@ -55,6 +55,7 @@
     "theme": "Theme",
     "select_theme": "Select Theme",
     "portal_domain": "Portal Domain",
+    "portal_url": "Portal URL",
     "domain_error_message":"Special characters other than Hyphen (-) are not allowed",
     "unverified": "Unverified",
     "verified": "Verified",
