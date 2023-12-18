@@ -13,6 +13,7 @@ module.exports = {
             'errlyticsKey': JSON.stringify(''),
             'AppUrl': JSON.stringify('http://localhost:3000/'),
             'ApiUrl': JSON.stringify('https://api.giddh.com/'),
+            'PORTAL_URL': JSON.stringify('https://portal.giddh.com/'),
             'APP_FOLDER': JSON.stringify(''),
             'PRODUCTION_ENV': JSON.stringify(false),
             'STAGING_ENV': JSON.stringify(false),
@@ -37,6 +38,7 @@ module.exports = {
             'process.env.errlyticsKey': JSON.stringify(''),
             'process.env.AppUrl': JSON.stringify('http://localhost:3000/'),
             'process.env.ApiUrl': JSON.stringify('https://api.giddh.com/'),
+            'process.PORTAL_URL': JSON.stringify('https://portal.giddh.com/'),
             'process.env.APP_FOLDER': JSON.stringify('')
         }),
         new CompressionPlugin({
