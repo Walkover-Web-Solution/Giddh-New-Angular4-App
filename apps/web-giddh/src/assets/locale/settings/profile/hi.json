@@ -55,6 +55,7 @@
     "theme": "थीम",
     "select_theme": "थीम का चयन करें",
     "portal_domain": "पोर्टल डोमेन",
+    "portal_url": "पोर्टल यूआरएल",
     "domain_error_message":"हाइफ़न (-) के अलावा अन्य विशेष वर्णों की अनुमति नहीं है",
     "unverified": "असत्यापित",
     "verified": "सत्यापित",

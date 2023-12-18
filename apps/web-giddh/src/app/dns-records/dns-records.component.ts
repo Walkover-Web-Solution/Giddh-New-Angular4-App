@@ -82,7 +82,7 @@ export class DnsRecordsComponent implements OnInit {
                 this.domain.name = response.body[0]?.domainName
                 if (response?.body?.length) {
                     this.dataSource = response.body?.map(portal => {
-                        return { type: 'CNAME', hostName: portal.domainName, value: 'portal.giddh.com', status: portal.verified, isCopiedHostName: false, isCopiedValue: false };
+                        return { type: 'CNAME', hostName: portal.domainName, value: PORTAL_URL, status: portal.verified, isCopiedHostName: false, isCopiedValue: false };
                     });
                 }
             } else {
