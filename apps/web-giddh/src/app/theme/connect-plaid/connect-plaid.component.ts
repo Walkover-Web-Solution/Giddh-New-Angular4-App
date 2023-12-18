@@ -17,7 +17,7 @@ export class ConnectPlaidComponent implements OnInit {
     private plaidLinkHandler: PlaidLinkHandler;
     /** This will hold plaid configuration */
     private plaidConfig: LegacyPlaidConfig = {
-        env: "sandbox",
+        env: "development",
         token: null,
         product: ["auth", "transactions"],
         onSuccess: undefined,
