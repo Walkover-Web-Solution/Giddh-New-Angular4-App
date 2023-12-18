@@ -9,6 +9,7 @@ module.exports = {
             'errlyticsKey': JSON.stringify(''),
             'AppUrl': JSON.stringify('./'),
             'ApiUrl': JSON.stringify('https://api.giddh.com/'),
+            'PORTAL_URL': JSON.stringify('https://portal.giddh.com/'),
             'APP_FOLDER': JSON.stringify(''),
             'PRODUCTION_ENV': JSON.stringify(true),
             'STAGING_ENV': JSON.stringify(false),
@@ -33,6 +34,7 @@ module.exports = {
             'process.env.errlyticsKey': JSON.stringify(''),
             'process.env.AppUrl': JSON.stringify('./'),
             'process.env.ApiUrl': JSON.stringify('https://api.giddh.com/'),
+            'process.PORTAL_URL': JSON.stringify('https://portal.giddh.com/'),
             'process.env.APP_FOLDER': JSON.stringify(''),
         })
     ]

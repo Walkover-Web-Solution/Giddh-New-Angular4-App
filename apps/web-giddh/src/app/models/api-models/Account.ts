@@ -202,6 +202,7 @@ export class AccountRequestV2 {
     public applicableDiscounts?: any[];
     public inheritedDiscounts?: any[];
     public customFields?: CustomFieldsData[];
+    public portalDomain?: any
 }
 
 export class AccountResponseV2 {
@@ -245,6 +246,7 @@ export class AccountResponseV2 {
     public customFields?: CustomFieldsData[];
     public category?: string;
     public otherApplicableTaxes?: any[];
+    public portalDomain?: any
 }
 
 /*
