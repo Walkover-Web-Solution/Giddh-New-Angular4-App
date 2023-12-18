@@ -6,7 +6,6 @@ import { OrganizationProfile } from '../constants/settings.constant';
 import { GeneralService } from '../../services/general.service';
 import { ToasterService } from '../../services/toaster.service';
 import { ClipboardService } from 'ngx-clipboard';
-import { PORTAL_URL } from '../../app.constant';
 
 @Component({
     selector: 'personal-information',
