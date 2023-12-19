@@ -32,7 +32,7 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
         private settingsProfileActions: SettingsProfileActions,
         private generalActions: GeneralActions
     ) {
-        
+
     }
 
     public ngOnInit() {
@@ -41,6 +41,8 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
         this.store.pipe(select(s => s.session.currentCompanyCurrency), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 this.companyCountry = res.country;
+                console.log(this.companyCountry);
+
             }
         });
 
@@ -53,13 +55,9 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
 
     public selectConfigureBank() {
         if (this.companyCountry) {
-            if (this.companyCountry.toLowerCase() === 'india') {
                 this.store.dispatch(this.generalActions.setAppTitle('/pages/settings/integration/payment'));
                 this._router.navigate(['pages/settings/integration/payment'], { replaceUrl: true });
-            } else {
-                this.store.dispatch(this.generalActions.setAppTitle('/pages/settings/integration/email'));
-                this._router.navigate(['pages/settings/integration/email'], { replaceUrl: true });
-            }
+
 
         } else {
             this.store.dispatch(this.generalActions.setAppTitle('/pages/settings/integration'));
