@@ -6012,7 +6012,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             if (this.billingState && this.billingState.nativeElement) {
                 this.billingState.nativeElement.classList.remove('error-box');
             }
-            if (this.customerCountryCode === 'IN') {
+            if (this.invFormData.accountDetails.uniqueName === 'cash' || this.customerCountryCode === 'IN') {
                 this.invFormData.accountDetails.billingDetails.state.name = stateName;
                 this.invFormData.accountDetails.billingDetails.stateName = stateName;
                 this.invFormData.accountDetails.billingDetails.stateCode = stateCode;
@@ -6028,7 +6028,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             // if it's not billing address then only update shipping details
             // check if it's not auto fill shipping address from billing address then and then only update shipping details
             if (!this.autoFillShipping) {
-                if (this.customerCountryCode === 'IN') {
+                if (this.invFormData.accountDetails.uniqueName === 'cash' || this.customerCountryCode === 'IN') {
                     this.invFormData.accountDetails.shippingDetails.stateName = stateName;
                     this.invFormData.accountDetails.shippingDetails.stateCode = stateCode;
                     this.invFormData.accountDetails.shippingDetails.state.name = stateName;
