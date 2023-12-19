@@ -491,3 +491,25 @@ export class IInventoryBalance {
     public amount: number;
     public type: string;
 }
+
+export interface DiscountInfo {
+    type: string;
+    discountValue: number;
+    price: number;
+    quantity: number;
+    discountExclusive: boolean;
+    stockUnitUniqueName: string;
+    variantUniqueName: string;
+    discountUniqueName: string;
+}
+
+export class CreateDiscount {
+    public customerVendorAccountUniqueName: string;
+    public customerVendorGroupUniqueName: string;
+    public discountInfo: DiscountInfo[] = [];
+
+    constructor(customerVendorAccountUniqueName: string, customerVendorGroupUniqueName: string) {
+        this.customerVendorAccountUniqueName = customerVendorAccountUniqueName;
+        this.customerVendorGroupUniqueName = customerVendorGroupUniqueName;
+    }
+}

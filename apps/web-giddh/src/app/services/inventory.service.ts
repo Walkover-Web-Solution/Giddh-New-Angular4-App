@@ -15,7 +15,8 @@ import {
     StockMappedUnitResponse,
     StockTransactionReportRequest,
     InventoryReportRequest,
-    InventoryReportResponse
+    InventoryReportResponse,
+    CreateDiscount
 } from '../models/api-models/Inventory';
 import { Inject, Injectable, Optional } from '@angular/core';
 import { HttpWrapperService } from './http-wrapper.service';
@@ -1559,5 +1560,12 @@ export class InventoryService {
         let apiUrl = this.config.apiUrl + INVENTORY_API.GET_STOCK_ALL_VARIANTS?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':stockUniqueName', encodeURIComponent(stockUniqueName));
 
         return this.http.get(apiUrl);
+    }
+
+    public createDiscount(stockUniqueName: string, model: CreateDiscount): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        let apiUrl = this.config.apiUrl + INVENTORY_API.CREATE_DISCOUNT?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':stockUniqueName', encodeURIComponent(stockUniqueName));
+
+        return this.http.post(apiUrl, model);
     }
 }

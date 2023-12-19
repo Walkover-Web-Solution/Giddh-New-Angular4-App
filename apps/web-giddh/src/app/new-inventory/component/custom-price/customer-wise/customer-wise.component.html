@@ -117,27 +117,40 @@
                                                                             </div>
                                                                         </td>
                                                                         <td>
-                                                                            <input-field [placeholder]="'00'"
+                                                                            <input-field 
+                                                                                [placeholder]="'00'"
                                                                                 formControlName="quantity"
                                                                                 [label]="commonLocaleData?.app_defaultquantity"
-                                                                                [type]="'number'" [matSuffix]="'kg'"
-                                                                                [cssClass]="'text-right'"></input-field>
+                                                                                [type]="'number'" 
+                                                                                [matSuffix]="variant?.get('variantUnitName')?.value"
+                                                                                [cssClass]="'text-right'"
+                                                                            ></input-field>
+                                                                        </td>
+                                                                        <td>
+                                                                            <dropdown-field
+                                                                                [name]="variantUnit"
+                                                                                [placeholder]="commonLocaleData?.app_unit"
+                                                                                [options]="discountCollection?.get('units')?.value"
+                                                                                [defaultValue]="variant?.get('variantUnitName')?.value"
+                                                                                (selectedOption)="selectVariantUnit($event, i, j)"
+                                                                            >
+                                                                            </dropdown-field>
                                                                         </td>
                                                                         <td class="delete-width">
                                                                             <div class="delete-show">
                                                                                 <button mat-stroked-button
                                                                                     [disabled]="discountCollection?.get('variants')?.value?.length < 2"
                                                                                     class="delete-icon"
-                                                                                    (click)="confirmationPopup(variant?.get('variantUniqueName')?.value, 'variant',i,j)">
+                                                                                    (click)="confirmationPopup(variant?.get('variantUniqueName')?.value, 'variant',i,j,variant?.get('variantName')?.value)">
                                                                                     <i class="icon-trash"></i>
                                                                                 </button>
                                                                             </div>
                                                                         </td>
                                                                     </ng-container>
                                                                 </tr>
-                                                                <tr *ngIf="deletedVariantSelectedObject.isSelected">
+                                                                <!-- <tr *ngIf="variantsWithoutDiscount[i]?.isSelected">
                                                                     <td>
-                                                                        {{ deletedVariantSelectedObject.variantName }}
+                                                                        {{ variantsWithoutDiscount[i]?.variantName }}
                                                                     </td>
 
                                                                     <td class="price-width">
@@ -187,44 +200,59 @@
                                                                             [placeholder]="'00'"
                                                                             [label]="commonLocaleData?.app_defaultquantity"
                                                                             [type]="'number'" 
-                                                                            [matSuffix]="'kg'"
+                                                                            [matSuffix]="'-kg-'"
                                                                             [cssClass]="'text-right'"
                                                                         ></input-field>
+                                                                    </td>
+                                                                    <td>
+                                                                        <dropdown-field
+                                                                            [name]="variantsWithoutDiscount"
+                                                                            [placeholder]="commonLocaleData?.app_unit"
+                                                                            [options]="discountCollection?.get('units')?.value"
+                                                                            [defaultValue]="''"
+                                                                            (selectedOption)="selectVariantUnit($event, i)"
+                                                                        >
+                                                                        </dropdown-field>
                                                                     </td>
                                                                     <td class="delete-width">
                                                                         <div class="delete-show">
                                                                             <button 
                                                                                 mat-stroked-button
                                                                                 class="delete-icon"
-                                                                                (click)="removeTemporaryVariant()"
+                                                                                (click)="removeTemporaryVariant(i)"
                                                                             >
                                                                                 <i class="icon-trash"></i>
                                                                             </button>
                                                                         </div>
                                                                     </td>
-                                                                </tr>
+                                                                </tr> -->
                                                             </tbody>
                                                             <tfoot>
                                                                 <tr>
-                                                                    <td></td>
-                                                                    <td *ngIf="currentUserStocks[i].variants?.length !== discountCollection?.get('variants')?.value?.length" class="middle">
+                                                                    <td [attr.colspan]="variantsWithoutDiscount[i]?.length !== discountCollection?.get('variants')?.value?.length ? null : 2"></td>
+                                                                    <td *ngIf="variantsWithoutDiscount[i]?.length" class="middle">
                                                                         <!-- <a href="javascript:;">
                                                                             {{ localeData?.add_variant }}
                                                                         </a> -->
                                                                         <div>
                                                                             <dropdown-field
-                                                                                [name]="variantsWithNoDiscount"
+                                                                                [name]="variantsWithoutDiscount"
                                                                                 [label]="localeData?.add_variant"
                                                                                 [placeholder]="localeData?.add_variant"
-                                                                                [options]="deletedVariants[i]"
-                                                                                (selectedOption)="selectVariant($event)"
+                                                                                [options]="variantsWithoutDiscount[i]"
+                                                                                (selectedOption)="selectVariant($event, i)"
                                                                             >
                                                                             </dropdown-field>
                                                                         </div>
                                                                     </td>
-                                                                    <td colspan="4" class="text-right px-0 mt-3">
-                                                                        <button *ngIf="true" mat-stroked-button
-                                                                            color="primary" class="my-3">Save</button>
+                                                                    <td colspan="5" class="text-right px-0 mt-3">
+                                                                        <button 
+                                                                            *ngIf="true" 
+                                                                            mat-stroked-button
+                                                                            color="primary" 
+                                                                            class="my-3"
+                                                                            (click)="saveDiscount(i)"
+                                                                        >Save</button>
                                                                     </td>
                                                                 </tr>
                                                             </tfoot>
