@@ -41,8 +41,6 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
         this.store.pipe(select(s => s.session.currentCompanyCurrency), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 this.companyCountry = res.country;
-                console.log(this.companyCountry);
-
             }
         });
 
