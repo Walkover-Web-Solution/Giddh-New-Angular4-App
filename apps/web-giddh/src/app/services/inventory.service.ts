@@ -1568,4 +1568,11 @@ export class InventoryService {
 
         return this.http.post(apiUrl, model);
     }
+
+    public updateDiscount(stockUniqueName: string, variantUniqueName: string, model: CreateDiscount): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        let apiUrl = this.config.apiUrl + INVENTORY_API.UPDATE_DISCOUNT?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':stockUniqueName', encodeURIComponent(stockUniqueName))?.replace(':variantUniqueName', encodeURIComponent(variantUniqueName));
+
+        return this.http.patch(apiUrl, model);
+    }
 }

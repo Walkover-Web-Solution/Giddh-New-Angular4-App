@@ -9,27 +9,12 @@ import { SettingsDiscountService } from "apps/web-giddh/src/app/services/setting
 import { ToasterService } from "apps/web-giddh/src/app/services/toaster.service";
 import { ConfirmModalComponent } from "apps/web-giddh/src/app/theme/new-confirm-modal/confirm-modal.component";
 import { ReplaySubject, Subject, debounceTime, take, takeUntil } from "rxjs";
-export interface PeriodicElement {
-    name: string;
-    price: string;
-    radio: string;
-    discount: string;
-    quantity: string;
-    delete: string;
-}
 
 export interface CustomerVendorDiscountBasic {
     group: string;
     page: number;
     count: number;
 }
-
-const ELEMENT_DATA: any[] = [
-    { name: 'Variant', price: '1.0079', radio: 'H', discount: '', quantity: '', delete: '' },
-    { name: 'Variant', price: '1.0079', radio: 'H', discount: '', quantity: '', delete: '' },
-    { name: 'Variant', price: '1.0079', radio: 'H', discount: '', quantity: '', delete: '' },
-    { name: 'Variant', price: '1.0079', radio: 'H', discount: '', quantity: '', delete: '' }
-];
 
 @Component({
     selector: "customer-wise",
@@ -41,7 +26,6 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
     @ViewChild("addSearchModal") public addSearchModal: TemplateRef<any>;
     /* Table Columns */
     displayedColumns: string[] = ['name', 'price', 'radio', 'discount', 'quantity', 'delete'];
-    dataSource = ELEMENT_DATA;
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */
@@ -82,7 +66,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
     public discountsList: any[] = [];
     public isDiscountPopupOpen = false;
 
-    public searchForm = new FormGroup({
+    public searchForm: UntypedFormGroup = new UntypedFormGroup({
         userSearch: new FormControl(),
         stockSearch: new FormControl()
     });
@@ -93,7 +77,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
 
     constructor(
         private dialog: MatDialog,
-        private _inventoryService: InventoryService,
+        private inventoryService: InventoryService,
         private route: ActivatedRoute,
         private toaster: ToasterService,
         private settingsDiscountService: SettingsDiscountService,
@@ -108,12 +92,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
-
-            this.isLoading = true;
             this.groupUniqueName = params.type === 'customer-wise' ? 'sundrydebtors' : 'sundrycreditors';
-            setTimeout(() => {
-                this.isLoading = false;
-            }, 200)
 
             if (this.groupUniqueName) {
                 this.initDiscountMainForm();
@@ -122,9 +101,9 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                     page: 1,
                     count: this.paginationLimit,
                     group: this.groupUniqueName
-                }
+                };
 
-                this._inventoryService.getCustomerVendorDiscountUserList(model).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+                this.inventoryService.getCustomerVendorDiscountUserList(model).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
                     if (response && response?.body?.results?.length) {
                         this.userList = response.body.results;
                         if (this.tempUserList?.length) {
@@ -134,12 +113,15 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                 });
             }
         });
+
         this.searchForm.get("userSearch").valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(selectedValue => {
             console.log(selectedValue);
         });
+
         this.searchForm.get("stockSearch").valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(selectedValue => {
             console.log(selectedValue);
         });
+
         this.getDiscounts();
     }
 
@@ -152,7 +134,6 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
     }
 
     private initDiscountForm(discount: any): UntypedFormGroup {
-        // console.log("initDiscountForm",discount);        
         return this.formBuilder.group({
             stockName: [discount?.stock?.name],
             stockUniqueName: [discount?.stock?.uniqueName],
@@ -162,7 +143,6 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
     }
 
     private initVariantForm(variant: any): UntypedFormGroup {
-        // console.log("initVariantForm",variant);
         return this.formBuilder.group({
             type: [variant?.discountInfo?.discountType ?? variant?.type ?? 'FIX_AMOUNT', Validators.required],
             discountValue: [variant?.discountInfo?.discountValue ?? variant?.discountValue, Validators.required],
@@ -207,19 +187,18 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
     }
 
     public selectUser(userData: any): void {
-        // console.log("selectUser", userData);
         if (this.currentUser?.uniqueName !== userData?.uniqueName) {
-
-            this.currentUser = {};
             this.currentUser = userData;
+
             let model = {
                 page: 1,
                 count: this.paginationLimit,
                 uniqueName: userData?.uniqueName
-            }
+            };
+
             let isTempUser = this.checkTemporaryUser(userData);
             if (isTempUser === -1) {
-                this._inventoryService.getAllDiscount(model).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+                this.inventoryService.getAllDiscount(model).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
                     //response?.body?.length THIS IS TEMPORY CODE IT WILL CHANGE AFTER API CHANGE (PAGINATED DATA WILL COME IN FUTURE)
                     if (response && response?.body?.length) {
                         this.initDiscountMainForm();
@@ -233,24 +212,23 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
 
                         response?.body.forEach((res, index) => {
                             this.variantsWithoutDiscount.push([]);
-                            let variantObject = {};
                             if (res?.hasVariants) {
-                                this._inventoryService.getStockVariants(res?.stock?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+                                this.inventoryService.getStockVariants(res?.stock?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
                                     if (response) {
                                         response?.body?.forEach(variant => {
-                                            variantObject = {
+                                            let variantObject = {
                                                 label: variant?.name,
                                                 value: variant?.uniqueName
-                                            }
+                                            };
                                             this.variantsWithoutDiscount[index].push(variantObject);
                                         });
                                     }
                                 });
                             } else {
-                                variantObject = {
+                                let variantObject = {
                                     label: res?.variants[0]?.variantName,
                                     value: res?.variants[0]?.variantUniqueName
-                                }
+                                };
                                 this.variantsWithoutDiscount[index].push(variantObject);
                             }
 
@@ -261,9 +239,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
 
                             discounts.push(this.initDiscountForm(res));
 
-
                             let variants = (this.discountForm.get('discountInfo') as FormArray).at(index).get('variants') as UntypedFormArray;
-
 
                             res?.variants.forEach((variant) => {
                                 let variantUnitName = null;
@@ -322,8 +298,9 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
     }
 
 
-    public confirmationPopup(uniqueName: string, type: 'user' | 'stock' | 'variant', stockFormArrayIndex?: number, variantFormArrayIndex?: number,variantName?: string): void {
+    public confirmationPopup(uniqueName: string, type: 'user' | 'stock' | 'variant', stockFormArrayIndex?: number, variantFormArrayIndex?: number, variantName?: string): void {
         console.log("Deleted CALL FOR uniqueName", uniqueName, " TYPE- ", type, " stockFormArrayIndex", stockFormArrayIndex, " variantFormArrayIndex", variantFormArrayIndex);
+
         let dialogRef = this.dialog.open(ConfirmModalComponent, {
             data: {
                 title: this.commonLocaleData?.app_delete,
@@ -363,13 +340,12 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
         } else {
             model.variantUniqueName = uniqueName;
             this.variantsWithoutDiscount[stockFormArrayIndex].variantUniqueName = uniqueName;
-            this.variantsWithoutDiscount[stockFormArrayIndex].variantName = '';
-
+            this.variantsWithoutDiscount[stockFormArrayIndex].variantName = variantName;
         }
 
         let index = this.checkTemporaryUser(uniqueName);
         if (index === -1) {
-            // this._inventoryService.deleteDiscountRecord(model).pipe(take(1)).subscribe((response) => {
+            // this.inventoryService.deleteDiscountRecord(model).pipe(take(1)).subscribe((response) => {
             //     if (response && response?.status === "success") {
             // console.log("deleteDiscountRecord",response);
             const discounts = this.discountForm.get('discountInfo') as UntypedFormArray;
@@ -380,7 +356,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
             variant = {
                 label: variant?.variantName,
                 value: variant?.variantUniqueName
-            }
+            };
             /** To add deleted variant info in "variantsWithoutDiscount" array  */
             this.variantsWithoutDiscount.at(stockFormArrayIndex).push(variant);
 
@@ -400,18 +376,9 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
 
     public selectVariant(event: any, stockFormArrayIndex: number): void {
         if (event && event.value && event.label) {
-            console.log("selectVariant event ", event, " at ", stockFormArrayIndex);         
-            let variantIndex = this.variantsWithoutDiscount[stockFormArrayIndex].findIndex((i) => i.value === event.value);
-            this.variantsWithoutDiscount[stockFormArrayIndex].splice(variantIndex,1);
-          
-            console.log(this.variantsWithoutDiscount[stockFormArrayIndex]);
-            // this.variantsWithoutDiscount[stockFormArrayIndex].variantUniqueName = event.value;
-            // this.variantsWithoutDiscount[stockFormArrayIndex].variantName = event.label;
+            console.log("selectVariant event ", event, " at ", stockFormArrayIndex);
 
             let variants = (this.discountForm.get('discountInfo') as FormArray).at(stockFormArrayIndex).get('variants') as UntypedFormArray;
-            // if (variants.value.at(variants.value.length - 1).price === null) {
-            //     variants.removeAt(variants.value.length - 1);
-            // }
             let variantObj = {
                 type: null,
                 discountValue: null,
@@ -427,20 +394,20 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
             }
             variants.push(this.initVariantForm(variantObj));
 
+            this.variantsWithoutDiscount[stockFormArrayIndex] = this.variantsWithoutDiscount[stockFormArrayIndex].filter(variant => variant.value !== event.value);
+
             console.log("discount form", this.discountForm);
-            setTimeout(()=>{
-                this.changeDetectorRef.detectChanges();
-            },100);
+            console.log("variantsWithoutDiscount", this.variantsWithoutDiscount[stockFormArrayIndex]);
+
+            this.changeDetectorRef.detectChanges();
         }
     }
 
     public selectVariantUnit(event: any, stockFormArrayIndex: number, variantFormArrayIndex: number): void {
         if (event && event.value && event.label) {
-            
             const variantFormGroup = ((((this.discountForm.get('discountInfo') as FormArray).at(stockFormArrayIndex) as FormGroup).get('variants') as FormArray).at(variantFormArrayIndex) as FormArray);
             variantFormGroup.controls['stockUnitUniqueName'].setValue(event.value);
-            // console.log("discount",this.discountForm);
-            // console.log("selectVariantUnit event ", event, " at ", stockFormArrayIndex);
+            variantFormGroup.controls['variantUnitName'].setValue(event.label);
         }
     }
 
@@ -466,7 +433,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
         x.forEach(item => {
             discountFormValues.discountInfo.push(item);
         })
-        this._inventoryService.createDiscount(stockUniqueName, discountFormValues).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+        this.inventoryService.createDiscount(stockUniqueName, discountFormValues).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response) {
                 console.log("createDiscount res", response);
             }
@@ -506,32 +473,35 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
 
     public onItemSelected(event: any, type: 'users' | 'stocks'): void {
         console.log("onItemSelected", event, "type ", type);
+
         if (type === 'users') {
             if ((this.checkTemporaryUser(event?.uniqueName) === -1) && (this.checkUserList(event?.uniqueName) === -1)) {
                 this.currentUser = event;
                 this.userList.push(event);
                 this.tempUserList.push(event);
+                this.initDiscountMainForm();
+                this.currentUserStocks = null;
                 this.dialogRef.close();
             } else {
                 let type = event?.type === 'ACCOUNT' ? 'Account' : 'Group';
-                this.toaster.errorToast("This " + type + " Already Added !")
+                this.toaster.errorToast("This " + type + " Already Added !");
             }
-        }
-        else {
+        } else {
+            const discounts = this.discountForm.get('discountInfo') as UntypedFormArray;
+            discounts.push(this.initDiscountForm({ stock: { name: event?.name, uniqueName: event?.uniqueName }, units: event?.units }));
+
+            let variants = (this.discountForm.get('discountInfo') as FormArray).at(discounts.length - 1).get('variants') as UntypedFormArray;
+
+            event?.variants.forEach((variant) => {
+                variants.push(this.initVariantForm({variantName: variant?.name, variantUniqueName: variant?.uniqueName}));
+            });
+
             this.dialogRef.close();
-            if (event.hasVariants) {
-                this._inventoryService.getStockVariants(event.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
-                    if (response) {
-                        console.log("getStockVariants", response);
-                    }
-                })
-            }
         }
     }
 
     public pageChanged(event: any, type: 'user' | 'stock') {
         console.log("pageChanged: ", event, " -- ", type);
-
     }
 
     /**
