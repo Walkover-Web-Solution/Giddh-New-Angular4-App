@@ -379,8 +379,8 @@
                                                         ><i class="fa fa-print"></i
                                                     ></a>
                                                 </span>
-                                                <!-- Hide Thermal Feature -->
-                                                <!-- <span *ngIf="defaultTemplate?.templateType === 'thermal_template'">
+                                                <!-- Thermal Feature -->
+                                                <span *ngIf="defaultTemplate?.templateType === 'thermal_template'">
                                                     <a
                                                         href="javascript:;"
                                                         [tooltip]="commonLocaleData?.app_print"
@@ -388,7 +388,7 @@
                                                         (click)="printThermal()"
                                                         ><i class="fa fa-print"></i
                                                     ></a>
-                                                </span> -->
+                                                </span>
 
                                                 <span
                                                     *ngIf="selectedItem?.voucherType === 'purchase' && pdfPreviewLoaded"
