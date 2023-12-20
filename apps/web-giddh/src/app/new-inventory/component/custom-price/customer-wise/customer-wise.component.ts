@@ -1,8 +1,10 @@
+import { ScrollDispatcher } from "@angular/cdk/scrolling";
 import { ChangeDetectorRef, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
 import { FormArray, FormControl, FormGroup, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { ActivatedRoute } from "@angular/router";
 import { PAGINATION_LIMIT } from "apps/web-giddh/src/app/app.constant";
+import { CreateDiscount } from "apps/web-giddh/src/app/models/api-models/Inventory";
 import { SalesEntryClass, SalesTransactionItemClass } from "apps/web-giddh/src/app/models/api-models/Sales";
 import { InventoryService } from "apps/web-giddh/src/app/services/inventory.service";
 import { SettingsDiscountService } from "apps/web-giddh/src/app/services/settings.discount.service";
@@ -14,6 +16,7 @@ export interface CustomerVendorDiscountBasic {
     group: string;
     page: number;
     count: number;
+    query: string;
 }
 
 @Component({
@@ -82,7 +85,8 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
         private toaster: ToasterService,
         private settingsDiscountService: SettingsDiscountService,
         private formBuilder: UntypedFormBuilder,
-        private changeDetectorRef: ChangeDetectorRef
+        private changeDetectorRef: ChangeDetectorRef,
+        private scrollDispatcher: ScrollDispatcher
     ) { }
 
     /**
@@ -95,34 +99,56 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
             this.groupUniqueName = params.type === 'customer-wise' ? 'sundrydebtors' : 'sundrycreditors';
 
             if (this.groupUniqueName) {
+                this.userList = [];
+                this.tempUserList = [];
                 this.initDiscountMainForm();
-
-                let model: CustomerVendorDiscountBasic = {
-                    page: 1,
-                    count: this.paginationLimit,
-                    group: this.groupUniqueName
-                };
-
-                this.inventoryService.getCustomerVendorDiscountUserList(model).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
-                    if (response && response?.body?.results?.length) {
-                        this.userList = response.body.results;
-                        if (this.tempUserList?.length) {
-                            this.userList = [...this.userList, ...this.tempUserList];
-                        }
-                    }
-                });
+                this.getCustomerVendorDiscountUserList();
             }
         });
 
-        this.searchForm.get("userSearch").valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(selectedValue => {
-            console.log(selectedValue);
+        this.searchForm.get("userSearch").valueChanges.pipe(debounceTime(400), takeUntil(this.destroyed$)).subscribe(queryString => {
+            console.log(queryString);
+            this.getCustomerVendorDiscountUserList(queryString);
         });
 
-        this.searchForm.get("stockSearch").valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(selectedValue => {
-            console.log(selectedValue);
+        this.searchForm.get("stockSearch").valueChanges.pipe(debounceTime(400), takeUntil(this.destroyed$)).subscribe(queryString => {
+            console.log(queryString);
+            this.getAllDiscount(this.currentUser, queryString);
         });
 
         this.getDiscounts();
+        this.scrollDispatcher.scrolled().pipe(takeUntil(this.destroyed$)).subscribe((event: any) => {
+            console.log("scrollDispatcher", event);
+            if (event && (event?.getDataLength() - event?.getRenderedRange().end) < 10 && !this.isLoading && (this.pagination.user.totalPages >= this.pagination.user.page)) {
+                this.pagination.user.page++;
+                this.getCustomerVendorDiscountUserList();
+            }
+        });
+    }
+
+    private getCustomerVendorDiscountUserList(query: string = ''): void {
+        let model: CustomerVendorDiscountBasic = {
+            page: this.pagination.user.page,
+            count: this.paginationLimit,
+            group: this.groupUniqueName,
+            query: query
+        };
+        this.userList = [];
+        this.userList = [...this.userList];
+        this.isLoading = true;
+        this.inventoryService.getCustomerVendorDiscountUserList(model).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            this.isLoading = false;
+            if (response && response?.body?.results?.length) {
+                if (this.tempUserList?.length) {
+                    this.userList = [...this.userList, ...this.tempUserList];
+                } else {
+                    this.userList = [...this.userList, ...response.body.results];
+                }
+            } else {
+                this.userList = [];
+                this.userList = [...this.userList];
+            }
+        });
     }
 
     private initDiscountMainForm(): void {
@@ -187,91 +213,148 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
     }
 
     public selectUser(userData: any): void {
+        console.log("selectUser", userData);
+
         if (this.currentUser?.uniqueName !== userData?.uniqueName) {
             this.currentUser = userData;
-
-            let model = {
-                page: 1,
-                count: this.paginationLimit,
-                uniqueName: userData?.uniqueName
-            };
-
             let isTempUser = this.checkTemporaryUser(userData);
             if (isTempUser === -1) {
-                this.inventoryService.getAllDiscount(model).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
-                    //response?.body?.length THIS IS TEMPORY CODE IT WILL CHANGE AFTER API CHANGE (PAGINATED DATA WILL COME IN FUTURE)
-                    if (response && response?.body?.length) {
-                        this.initDiscountMainForm();
-                        if (userData?.type === 'ACCOUNT') {
-                            this.discountForm.get('customerVendorAccountUniqueName').patchValue(userData?.uniqueName);
-                        } else {
-                            this.discountForm.get('customerVendorGroupUniqueName').patchValue(userData?.uniqueName);
-                        }
+                this.getAllDiscount(userData);
+            }
+        }
+    }
 
-                        const discounts = this.discountForm.get('discountInfo') as UntypedFormArray;
+    private getAllDiscount(userData: any, query: string = ''): void {
+        let model = {
+            page: this.pagination.stock.page,
+            count: this.paginationLimit,
+            uniqueName: userData?.uniqueName,
+            query: query
+        };
+        this.isLoading = true;
+        this.inventoryService.getAllDiscount(model).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
 
-                        response?.body.forEach((res, index) => {
-                            this.variantsWithoutDiscount.push([]);
-                            if (res?.hasVariants) {
-                                this.inventoryService.getStockVariants(res?.stock?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
-                                    if (response) {
-                                        response?.body?.forEach(variant => {
-                                            let variantObject = {
-                                                label: variant?.name,
-                                                value: variant?.uniqueName
-                                            };
-                                            this.variantsWithoutDiscount[index].push(variantObject);
-                                        });
+            //response?.body?.length THIS IS TEMPORY CODE IT WILL CHANGE AFTER API CHANGE (PAGINATED DATA WILL COME IN FUTURE)
+            if (response && response?.body?.length) {
+                this.initDiscountMainForm();
+                if (userData?.type === 'ACCOUNT') {
+                    this.discountForm.get('customerVendorAccountUniqueName').patchValue(userData?.uniqueName);
+                } else {
+                    this.discountForm.get('customerVendorGroupUniqueName').patchValue(userData?.uniqueName);
+                }
+
+                const discounts = this.discountForm.get('discountInfo') as UntypedFormArray;
+
+                response?.body.forEach((res, index) => {
+                    this.variantsWithoutDiscount.push([]);
+                    if (res?.hasVariants) {
+                        this.inventoryService.getStockVariants(res?.stock?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+                            if (response) {
+                                response?.body?.forEach(variant => {
+                                    let variantObject = {
+                                        label: variant?.name,
+                                        value: variant?.uniqueName
+                                    };
+                                    this.variantsWithoutDiscount[index].push(variantObject);
+                                });
+                            }
+                        });
+                    }
+
+                    res?.units.map(unit => {
+                        unit.value = unit?.uniqueName;
+                        unit.label = unit?.name;
+                    });
+
+                    discounts.push(this.initDiscountForm(res));
+
+                    let variants = (this.discountForm.get('discountInfo') as FormArray).at(index).get('variants') as UntypedFormArray;
+
+                    res?.variants.forEach((variant, variantIndex) => {
+                        let variantUnitName = null;
+                        if (variant?.stockUnitUniqueName) {
+                            if (variantUnitName === null) {
+                                res?.units.forEach(element => {
+                                    if (element?.uniqueName === variant?.stockUnitUniqueName) {
+                                        variantUnitName = element?.name;
                                     }
                                 });
                             } else {
-                                let variantObject = {
-                                    label: res?.variants[0]?.variantName,
-                                    value: res?.variants[0]?.variantUniqueName
-                                };
-                                this.variantsWithoutDiscount[index].push(variantObject);
+                                variantUnitName = res?.units[0]?.name;
                             }
+                        }
+                        if (variant?.discountUniqueName) {
+                            const discountData = this.getDiscountDataByUniqueName(variant?.discountUniqueName);
+                            variant.discountInfo = discountData;
+                            variant.variantUnitName = variantUnitName;
+                        }
+                        variants.push(this.initVariantForm(variant));
+                        const variantControl = (((this.discountForm.get('discountInfo') as FormArray).at(index).get('variants') as UntypedFormArray).at(variantIndex) as FormGroup).controls;
 
-                            res?.units.map(unit => {
-                                unit.value = unit?.uniqueName;
-                                unit.label = unit?.name;
-                            });
-
-                            discounts.push(this.initDiscountForm(res));
-
-                            let variants = (this.discountForm.get('discountInfo') as FormArray).at(index).get('variants') as UntypedFormArray;
-
-                            res?.variants.forEach((variant) => {
-                                let variantUnitName = null;
-                                if (variant?.stockUnitUniqueName) {
-                                    if (variantUnitName === null) {
-                                        res?.units.forEach(element => {
-                                            if (element?.uniqueName === variant?.stockUnitUniqueName) {
-                                                variantUnitName = element?.name;
-                                            }
-                                        });
-                                    } else {
-                                        variantUnitName = res?.units[0]?.name;
-                                    }
-                                }
-                                if (variant?.discountUniqueName) {
-                                    const discountData = this.getDiscountDataByUniqueName(variant?.discountUniqueName);
-                                    variant.discountInfo = discountData;
-                                    variant.variantUnitName = variantUnitName;
-                                }
-                                variants.push(this.initVariantForm(variant));
-                            });
+                        variantControl.price.valueChanges.pipe(debounceTime(400), takeUntil(this.destroyed$)).subscribe(priceValue => {
+                            const stockUniqueName = (this.discountForm.get('discountInfo') as FormArray).at(index).get('stockUniqueName').value;
+                            let variant = { price: priceValue };
+                            variant = this.getDiscountValueOrUniqueName(variant, variantControl);
+                            this.updateDiscount(stockUniqueName, variantControl.variantUniqueName.value, variant);
                         });
-
-                        this.currentUserStocks = response?.body;
-                        console.log("discountForm", this.discountForm);
-                        setTimeout(() => {
-                            this.filterDuplicateVariant();
-                        }, 1000);
-                    }
+                        variantControl.quantity.valueChanges.pipe(debounceTime(400), takeUntil(this.destroyed$)).subscribe(quantityValue => {
+                            const stockUniqueName = (this.discountForm.get('discountInfo') as FormArray).at(index).get('stockUniqueName').value;
+                            let variant = { quantity: quantityValue };
+                            variant = this.getDiscountValueOrUniqueName(variant, variantControl);
+                            this.updateDiscount(stockUniqueName, variantControl.variantUniqueName.value, variant);
+                        });
+                        variantControl.discountExclusive.valueChanges.pipe(debounceTime(400), takeUntil(this.destroyed$)).subscribe(discountExclusiveValue => {
+                            const stockUniqueName = (this.discountForm.get('discountInfo') as FormArray).at(index).get('stockUniqueName').value;
+                            let variant = { discountExclusive: discountExclusiveValue };
+                            variant = this.getDiscountValueOrUniqueName(variant, variantControl);
+                            this.updateDiscount(stockUniqueName, variantControl.variantUniqueName.value, variant);
+                        });
+                        variantControl.stockUnitUniqueName.valueChanges.pipe(debounceTime(400), takeUntil(this.destroyed$)).subscribe(stockUnitUniqueNameValue => {
+                            const stockUniqueName = (this.discountForm.get('discountInfo') as FormArray).at(index).get('stockUniqueName').value;
+                            let variant = { stockUnitUniqueName: stockUnitUniqueNameValue };
+                            variant = this.getDiscountValueOrUniqueName(variant, variantControl);
+                            this.updateDiscount(stockUniqueName, variantControl.variantUniqueName.value, variant);
+                        });
+                        variantControl.discountUniqueName.valueChanges.pipe(debounceTime(400), takeUntil(this.destroyed$)).subscribe(discountUniqueNameValue => {
+                            const stockUniqueName = (this.discountForm.get('discountInfo') as FormArray).at(index).get('stockUniqueName').value;
+                            let variant = { discountUniqueName: discountUniqueNameValue };
+                            variant = this.getDiscountValueOrUniqueName(variant, variantControl);
+                            this.updateDiscount(stockUniqueName, variantControl.variantUniqueName.value, variant);
+                        });
+                        variantControl.discountValue.valueChanges.pipe(debounceTime(400), takeUntil(this.destroyed$)).subscribe(newDiscountValue => {
+                            const stockUniqueName = (this.discountForm.get('discountInfo') as FormArray).at(index).get('stockUniqueName').value;
+                            let variant = { discountValue: newDiscountValue };
+                            variant = this.getDiscountValueOrUniqueName(variant, variantControl);
+                            this.updateDiscount(stockUniqueName, variantControl.variantUniqueName.value, variant);
+                        });
+                        variantControl.type.valueChanges.pipe(debounceTime(400), takeUntil(this.destroyed$)).subscribe(newDiscountType => {
+                            const stockUniqueName = (this.discountForm.get('discountInfo') as FormArray).at(index).get('stockUniqueName').value;
+                            let variant = { type: newDiscountType };
+                            variant = this.getDiscountValueOrUniqueName(variant, variantControl);
+                            this.updateDiscount(stockUniqueName, variantControl.variantUniqueName.value, variant);
+                        });
+                    });
                 });
+
+                this.currentUserStocks = response?.body;
+                setTimeout(() => {
+                    this.filterDuplicateVariant();
+                }, 1000);
+            } else {
+                this.currentUserStocks = null;
             }
+            this.isLoading = false;
+        });
+    }
+
+    private getDiscountValueOrUniqueName(variantObject, variantControl): any {
+        if (variantControl.discountUniqueName.value) {
+            variantObject['discountUniqueName'] = variantControl.discountUniqueName.value
+        } else {
+            variantObject['type'] = variantControl.type.value;
+            variantObject['discountValue'] = variantControl.discountValue.value ?? 10;  // WILL REMOVE THIS ?? 10 AFTER IMPLEMENT DISCOUNT 
         }
+        return variantObject;
     }
 
     private filterDuplicateVariant(): void {
@@ -433,10 +516,24 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
         x.forEach(item => {
             discountFormValues.discountInfo.push(item);
         })
+        this.isLoading = true;
         this.inventoryService.createDiscount(stockUniqueName, discountFormValues).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            this.isLoading = false;
             if (response) {
                 console.log("createDiscount res", response);
             }
+        });
+    }
+
+    private updateDiscount(stockUniqueName: string, variantUniqueName: string, variant): void {
+        const model: CreateDiscount = {
+            customerVendorAccountUniqueName: this.discountForm.get('customerVendorAccountUniqueName').value,
+            customerVendorGroupUniqueName: this.discountForm.get('customerVendorGroupUniqueName').value,
+            discountInfo: []
+        }
+        model.discountInfo.push(variant);
+        this.inventoryService.updateDiscount(stockUniqueName, variantUniqueName, model).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            console.log("updateDiscount response", response);
         });
     }
 
@@ -478,24 +575,49 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
             if ((this.checkTemporaryUser(event?.uniqueName) === -1) && (this.checkUserList(event?.uniqueName) === -1)) {
                 this.currentUser = event;
                 this.userList.push(event);
+                this.userList = [...this.userList];
                 this.tempUserList.push(event);
                 this.initDiscountMainForm();
                 this.currentUserStocks = null;
+                this.variantsWithoutDiscount = [];
+                console.log("this.userList", this.userList);
+
                 this.dialogRef.close();
             } else {
                 let type = event?.type === 'ACCOUNT' ? 'Account' : 'Group';
                 this.toaster.errorToast("This " + type + " Already Added !");
             }
         } else {
-            const discounts = this.discountForm.get('discountInfo') as UntypedFormArray;
-            discounts.push(this.initDiscountForm({ stock: { name: event?.name, uniqueName: event?.uniqueName }, units: event?.units }));
+            this.inventoryService.getStockVariants(event?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+                if (response && response?.body?.length) {
+                    let stockIndex = this.variantsWithoutDiscount.length;
+                    this.variantsWithoutDiscount.push([]);
+                    console.log("At first time", response);
 
-            let variants = (this.discountForm.get('discountInfo') as FormArray).at(discounts.length - 1).get('variants') as UntypedFormArray;
-
-            event?.variants.forEach((variant) => {
-                variants.push(this.initVariantForm({variantName: variant?.name, variantUniqueName: variant?.uniqueName}));
+                    if (this.currentUser.type === 'ACCOUNT') {
+                        this.discountForm.get('customerVendorAccountUniqueName').patchValue(this.currentUser.uniqueName);
+                    } else {
+                        this.discountForm.get('customerVendorGroupUniqueName').patchValue(this.currentUser.uniqueName);
+                    }
+                    const discounts = this.discountForm.get('discountInfo') as UntypedFormArray;
+                    discounts.push(this.initDiscountForm({
+                        stock: { name: event?.name, uniqueName: event?.uniqueName },
+                        units: response?.body?.units ?? [] // REMOVE THIS ?? [] AFTER GET UNITS FROM API
+                    }));
+                    let variants = (this.discountForm.get('discountInfo') as FormArray).at(stockIndex).get('variants') as UntypedFormArray;
+                    response.body.forEach(variant => {
+                        let variantObject = {
+                            label: variant?.name,
+                            value: variant?.uniqueName
+                        };
+                        this.variantsWithoutDiscount[stockIndex].push(variantObject);
+                        variants.push(this.initVariantForm({ variantName: variant?.name, variantUniqueName: variant?.uniqueName }));
+                    });
+                    this.currentUserStocks = event;
+                    console.log("variantsWithoutDiscount ", this.variantsWithoutDiscount);
+                    console.log("new discountForm ", this.discountForm.value);
+                }
             });
-
             this.dialogRef.close();
         }
     }

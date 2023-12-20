@@ -19,18 +19,26 @@
                                     </span>
                                 </div>
                                 <div class="mr-b1">
-                                    <button mat-stroked-button color="primary" (click)="openSearchModal('users')">{{
-                                        localeData?.add_customer_group }}</button>
+                                    <button mat-stroked-button color="primary" (click)="openSearchModal('users')">
+                                        {{localeData?.add_customer_group }}
+                                    </button>
                                 </div>
                             </div>
-                            <mat-list-item *ngFor="let user of userList"
-                                [ngClass]="{'active' : user?.uniqueName === currentUser?.uniqueName}">
-                                <a href="javascript:;" (click)="selectUser(user)">
-                                    <span>{{ user?.name }}</span>
-                                    <span (click)="confirmationPopup(user?.uniqueName, 'user'); "
-                                        class="customer-delete"><i class="icon-trash"></i></span>
-                                </a>
-                            </mat-list-item>
+                            <cdk-virtual-scroll-viewport [itemSize]="32" class="list-viewport">
+                                <ng-container *ngIf="this.userList.length">
+                                    <mat-list-item  *cdkVirtualFor="let user of userList"
+                                        [ngClass]="{'active' : user?.uniqueName === currentUser?.uniqueName}">
+                                        <a href="javascript:;" (click)="selectUser(user)">
+                                            <span>{{ user?.name }}</span>
+                                            <span (click)="confirmationPopup(user?.uniqueName, 'user'); "
+                                                class="customer-delete"><i class="icon-trash"></i></span>
+                                        </a>
+                                    </mat-list-item>
+                                </ng-container>          
+                                <ng-container *ngIf="this.userList.length === 0">
+                                    <div class="p-3">{{ commonLocaleData?.app_no_data_found }}</div>
+                                </ng-container>                
+                            </cdk-virtual-scroll-viewport>
                         </mat-list>
                         <div class="customer-right-side">
                             <div class="right-heading" *ngIf="currentUser?.uniqueName">
@@ -151,9 +159,7 @@
                                                             </tbody>
                                                             <tfoot>
                                                                 <tr>
-                                                                    <td
-                                                                        [attr.colspan]="variantsWithoutDiscount[i]?.length ? null : 2">
-                                                                    </td>
+                                                                    <td [attr.colspan]="variantsWithoutDiscount[i]?.length ? null : 2"></td>
                                                                     <td *ngIf="variantsWithoutDiscount[i]?.length"
                                                                         class="middle">
                                                                         <div>

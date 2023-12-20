@@ -17,21 +17,6 @@
                     <ng-container *ngIf="isOpen">
                         <ng-container>
                             <mat-list role="list">
-                                <!-- <commandk-virtual-scroll
-                                    [items]="searchedItems"
-                                    [childHeight]="ItemHeight"
-                                    (highLightedItemEmitter)="handleHighLightedItemEvent($event)"
-                                    [style.max-height.px]="
-                                        searchedItems?.length !== 0
-                                            ? ItemHeight *
-                                              (searchedItems && searchedItems.length < visibleItems
-                                                  ? searchedItems.length
-                                                  : visibleItems)
-                                            : ItemHeight
-                                    "
-                                    (scroll)="onScroll($event)"
-                                    class="scroll-height"
-                                > -->
                                 <cdk-virtual-scroll-viewport [itemSize]="38" class="list-viewport">
                                     <mat-list-item
                                         role="listitem"

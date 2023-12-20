@@ -1501,7 +1501,7 @@ export class InventoryService {
      */
     public getCustomerVendorDiscountUserList(request: any): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        let apiUrl = this.config.apiUrl + INVENTORY_API.GET_CUSTOMER_VENDOR_DISCOUNT_USERS?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':page', encodeURIComponent(request.page))?.replace(':count', encodeURIComponent(request.count))?.replace(':group', encodeURIComponent(request.group));
+        let apiUrl = this.config.apiUrl + INVENTORY_API.GET_CUSTOMER_VENDOR_DISCOUNT_USERS?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':page', encodeURIComponent(request.page))?.replace(':count', encodeURIComponent(request.count))?.replace(':group', encodeURIComponent(request.group))?.replace(':query', encodeURIComponent(request.query || ''));
 
         return this.http.get(apiUrl);
     }
@@ -1543,7 +1543,7 @@ export class InventoryService {
      */
     public getAllDiscount(request: any): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        let apiUrl = this.config.apiUrl + INVENTORY_API.GET_ALL_DISCOUNTS?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':page', encodeURIComponent(request.page))?.replace(':count', encodeURIComponent(request.count))?.replace(':uniqueName', encodeURIComponent(request.uniqueName));
+        let apiUrl = this.config.apiUrl + INVENTORY_API.GET_ALL_DISCOUNTS?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':page', encodeURIComponent(request.page))?.replace(':count', encodeURIComponent(request.count))?.replace(':uniqueName', encodeURIComponent(request.uniqueName))?.replace(':query', encodeURIComponent(request.query || ''));
 
         return this.http.get(apiUrl);
     }

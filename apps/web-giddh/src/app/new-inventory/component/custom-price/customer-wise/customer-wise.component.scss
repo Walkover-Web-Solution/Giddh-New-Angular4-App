@@ -4,6 +4,9 @@
             width: 100%;
             height: 100%;
             display: flex;
+            .list-viewport {
+                min-height: calc(100vh - 204px);
+            }
             .item-list {
                 width: 14%;
                 height: 100%;
@@ -37,6 +40,8 @@
                 width: 86%;
                 padding: 12px 16px;
                 border-left: 1px solid var(--color-iron);
+                overflow: auto;
+                height: calc(100vh - 92px);
                 .right-heading {
                     display: flex;
                     justify-content: space-between;
@@ -97,7 +102,6 @@
         }
     }
 }
-
 /*---- responsive ----*/
 @media screen and (max-width: 1440px) {
     .custom-grid-wrapper {
