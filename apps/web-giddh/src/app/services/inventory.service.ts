@@ -1575,4 +1575,11 @@ export class InventoryService {
 
         return this.http.patch(apiUrl, model);
     }
+
+    public getStockDetails(stockUniqueName: string): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        let apiUrl = this.config.apiUrl + INVENTORY_API.GET_STOCK_DETAILS?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':stockUniqueName', encodeURIComponent(stockUniqueName));
+
+        return this.http.get(apiUrl);
+    }
 }

@@ -194,8 +194,6 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
         this.settingsDiscountService.GetDiscounts().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success" && response?.body?.length > 0) {
                 this.discountsList = response?.body;
-                console.log("discount", response);
-
             }
         });
     }
@@ -213,8 +211,6 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
     }
 
     public selectUser(userData: any): void {
-        console.log("selectUser", userData);
-
         if (this.currentUser?.uniqueName !== userData?.uniqueName) {
             this.currentUser = userData;
             let isTempUser = this.checkTemporaryUser(userData);
@@ -235,7 +231,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
         this.inventoryService.getAllDiscount(model).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
 
             //response?.body?.length THIS IS TEMPORY CODE IT WILL CHANGE AFTER API CHANGE (PAGINATED DATA WILL COME IN FUTURE)
-            if (response && response?.body?.length) {
+            if (response && response?.body?.results?.length) {
                 this.initDiscountMainForm();
                 if (userData?.type === 'ACCOUNT') {
                     this.discountForm.get('customerVendorAccountUniqueName').patchValue(userData?.uniqueName);
@@ -245,18 +241,26 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
 
                 const discounts = this.discountForm.get('discountInfo') as UntypedFormArray;
 
-                response?.body.forEach((res, index) => {
+                response?.body?.results.forEach((res, index) => {
                     this.variantsWithoutDiscount.push([]);
                     if (res?.hasVariants) {
                         this.inventoryService.getStockVariants(res?.stock?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
                             if (response) {
-                                response?.body?.forEach(variant => {
-                                    let variantObject = {
-                                        label: variant?.name,
-                                        value: variant?.uniqueName
-                                    };
-                                    this.variantsWithoutDiscount[index].push(variantObject);
+                                let existingVariants = res.variants?.map(variant => {
+                                    return variant.variantUniqueName;
                                 });
+
+                                let allVariants = [];
+
+                                response?.body?.forEach(variant => {
+                                    if (!existingVariants.includes(variant?.uniqueName)) {
+                                        allVariants.push({
+                                            label: variant?.name,
+                                            value: variant?.uniqueName
+                                        });
+                                    }
+                                });
+                                this.variantsWithoutDiscount[index] = allVariants;
                             }
                         });
                     }
@@ -336,10 +340,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                     });
                 });
 
-                this.currentUserStocks = response?.body;
-                setTimeout(() => {
-                    this.filterDuplicateVariant();
-                }, 1000);
+                this.currentUserStocks = response?.body?.results;
             } else {
                 this.currentUserStocks = null;
             }
@@ -357,36 +358,19 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
         return variantObject;
     }
 
-    private filterDuplicateVariant(): void {
-        this.currentUserStocks.forEach((item, itemIndex) => {
-            if (item?.hasVariants) {
-                item?.variants.forEach((variant, variantIndex) => {
-                    this.variantsWithoutDiscount[itemIndex].forEach((res, i) => {
-                        if (variant?.variantUniqueName === res?.value) {
-                            this.variantsWithoutDiscount[itemIndex].splice(i, 1);
-                        }
-                    })
-                });
-            }
-        });
-        console.log("this.variantsWithoutDiscount", this.variantsWithoutDiscount);
-    }
-
     private getDiscountDataByUniqueName(discountUniqueName: string): any {
         if (this.discountsList.length) {
             const index = this.discountsList.findIndex(item => item['uniqueName'] === discountUniqueName);
-            // this.discountsList[index].isActive = true;
             return this.discountsList[index];
         }
     }
-
 
     public confirmationPopup(uniqueName: string, type: 'user' | 'stock' | 'variant', stockFormArrayIndex?: number, variantFormArrayIndex?: number, variantName?: string): void {
         console.log("Deleted CALL FOR uniqueName", uniqueName, " TYPE- ", type, " stockFormArrayIndex", stockFormArrayIndex, " variantFormArrayIndex", variantFormArrayIndex);
 
         let dialogRef = this.dialog.open(ConfirmModalComponent, {
             data: {
-                title: this.commonLocaleData?.app_delete,
+                title: this.commonLocaleData?.app_confirmation,
                 body: this.localeData?.delete_message,
                 ok: this.commonLocaleData?.app_yes,
                 cancel: this.commonLocaleData?.app_no,
@@ -588,9 +572,11 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                 this.toaster.errorToast("This " + type + " Already Added !");
             }
         } else {
-            this.inventoryService.getStockVariants(event?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
-                if (response && response?.body?.length) {
-                    let stockIndex = this.variantsWithoutDiscount.length;
+            this.inventoryService.getStockDetails(event?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+                if (response && response?.body) {
+                    const discounts = this.discountForm.get('discountInfo') as UntypedFormArray;
+                    let stockIndex = discounts.length;
+
                     this.variantsWithoutDiscount.push([]);
                     console.log("At first time", response);
 
@@ -599,18 +585,27 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                     } else {
                         this.discountForm.get('customerVendorGroupUniqueName').patchValue(this.currentUser.uniqueName);
                     }
-                    const discounts = this.discountForm.get('discountInfo') as UntypedFormArray;
+
+                    const units = response?.body?.stockUnits?.map(unit => {
+                        unit.value = unit?.uniqueName;
+                        unit.label = unit?.name;
+                        return unit;
+                    });
+                    
                     discounts.push(this.initDiscountForm({
                         stock: { name: event?.name, uniqueName: event?.uniqueName },
-                        units: response?.body?.units ?? [] // REMOVE THIS ?? [] AFTER GET UNITS FROM API
+                        units: units ?? []
                     }));
+
                     let variants = (this.discountForm.get('discountInfo') as FormArray).at(stockIndex).get('variants') as UntypedFormArray;
-                    response.body.forEach(variant => {
+                    response.body?.variants.forEach(variant => {
                         let variantObject = {
                             label: variant?.name,
                             value: variant?.uniqueName
                         };
-                        this.variantsWithoutDiscount[stockIndex].push(variantObject);
+                        if (event.hasVariants) {
+                            this.variantsWithoutDiscount[stockIndex].push(variantObject);
+                        }
                         variants.push(this.initVariantForm({ variantName: variant?.name, variantUniqueName: variant?.uniqueName }));
                     });
                     this.currentUserStocks = event;
