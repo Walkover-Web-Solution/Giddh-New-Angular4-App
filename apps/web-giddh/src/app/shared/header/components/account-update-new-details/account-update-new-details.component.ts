@@ -315,7 +315,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
         let mappings = this.addAccountForm.get('portalDomain') as UntypedFormArray;
         mappings.valueChanges.pipe(debounceTime(1000), takeUntil(this.destroyed$), distinctUntilChanged(isEqual)).subscribe((res) => {
-
             if (this.portalIndex === null || this.portalIndex === undefined) {
                 return;
             }
@@ -376,6 +375,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             distinctUntilChanged((prev, curr) => (prev?.attentionTo === curr?.attentionTo) && (prev?.mobileNo === curr?.mobileNo) && (prev?.email === curr?.email)),
             takeUntil(this.destroyed$))
             .subscribe((response) => {
+                console.log('add acc', response);
                 const users = this.addAccountForm.get('portalDomain') as UntypedFormArray;
                 if (response?.attentionTo || response?.mobileNo || response?.email) {
                     let user = users.controls.find(control => control.get('default')?.value === true);
@@ -396,6 +396,11 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                         }
                     } else {
                         let setValue = false;
+                        let matchedEmail = users.value.filter(user => user.email === response.email);
+                        if (matchedEmail?.length) {
+                            setValue = true;
+                            return true;
+                        }
                         users.controls?.find((control) => {
                             if (!control.get('name')?.value && !control.get('email')?.value && !control.get('contactNo')?.value) {
                                 control.patchValue({ name: response?.attentionTo, email: response?.email, contactNo: mobileNo, default: true });
@@ -1970,7 +1975,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                         .getPortalUsers(accountDetails?.uniqueName)
                         .pipe(takeUntil(this.destroyed$))
                         .subscribe((response) => {
-                            if (response?.status === 'success') {
+                            if (response?.body?.length && response?.status === 'success') {
                                 let mappings = this.addAccountForm.get('portalDomain') as UntypedFormArray;
                                 mappings.clear();
                                 response.body?.forEach((item) => {
