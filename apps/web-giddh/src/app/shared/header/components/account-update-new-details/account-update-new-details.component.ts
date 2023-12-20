@@ -315,7 +315,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
         let mappings = this.addAccountForm.get('portalDomain') as UntypedFormArray;
         mappings.valueChanges.pipe(debounceTime(1000), takeUntil(this.destroyed$), distinctUntilChanged(isEqual)).subscribe((res) => {
-
             if (this.portalIndex === null || this.portalIndex === undefined) {
                 return;
             }
@@ -396,11 +395,16 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                         }
                     } else {
                         let setValue = false;
+                        let matchedEmail = users.value.filter(user => user.email === response.email);
+                        if (matchedEmail?.length) {
+                            setValue = true;
+                            return;
+                        }
                         users.controls?.find((control) => {
                             if (!control.get('name')?.value && !control.get('email')?.value && !control.get('contactNo')?.value) {
                                 control.patchValue({ name: response?.attentionTo, email: response?.email, contactNo: mobileNo, default: true });
                                 setValue = true;
-                                return true;
+                                return;
                             }
                         });
                         if (!setValue) {
@@ -1970,14 +1974,13 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                         .getPortalUsers(accountDetails?.uniqueName)
                         .pipe(takeUntil(this.destroyed$))
                         .subscribe((response) => {
-                            if (response?.status === 'success') {
+                            if (response?.body?.length && response?.status === 'success') {
+                                this.isPortalDefault = false;
                                 let mappings = this.addAccountForm.get('portalDomain') as UntypedFormArray;
                                 mappings.clear();
                                 response.body?.forEach((item) => {
-                                    if (item && (item.name || item.email) && item.default === true) {
+                                    if (item && (item.name || item.email) && item.default) {
                                         this.isPortalDefault = true;
-                                    } else {
-                                        this.isPortalDefault = false;
                                     }
                                     this.addNewPortalUser(item);
                                 });
