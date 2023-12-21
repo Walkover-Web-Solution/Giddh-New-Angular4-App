@@ -6,7 +6,7 @@ import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, NgForm } from '
 import { ActivatedRoute, Router } from '@angular/router';
 import { AppState } from '../../store';
 import { SettingsIntegrationActions } from '../../actions/settings/settings.integration.action';
-import { AmazonSellerClass, CashfreeClass, EmailKeyClass, PaymentClass, RazorPayClass, SmsKeyClass } from '../../models/api-models/SettingsIntegraion';
+import { AmazonSellerClass, CashfreeClass, EmailKeyClass, PaymentClass, PayPalClass, RazorPayClass, SmsKeyClass } from '../../models/api-models/SettingsIntegraion';
 import { ToasterService } from '../../services/toaster.service';
 import { IOption } from '../../theme/ng-select/option.interface';
 import { ModalDirective } from 'ngx-bootstrap/modal';
@@ -52,11 +52,13 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public emailFormObj: EmailKeyClass = new EmailKeyClass();
     public paymentFormObj: PaymentClass = new PaymentClass();
     public razorPayObj: RazorPayClass = new RazorPayClass();
+    public paypalObj: PayPalClass = new PayPalClass();
     public payoutObj: CashfreeClass = new CashfreeClass();
     public autoCollectObj: CashfreeClass = new CashfreeClass();
     public amazonSeller: AmazonSellerClass = new AmazonSellerClass();
     public accounts$: Observable<IOption[]>;
     public updateRazor: boolean = false;
+    public updatePaypal: boolean = false;
     public autoCollectAdded: boolean = false;
     public payoutAdded: boolean = false;
     public bankAccounts$: Observable<IOption[]>;
@@ -221,6 +223,21 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 this.setDummyData();
                 this.updateRazor = false;
             }
+
+            // set razor pay form data
+            if (o?.paypalForm) {
+                if (typeof o?.paypalForm !== "string") {
+                    this.paypalObj = cloneDeep(o?.paypalForm);
+                    if (this.paypalObj && this.paypalObj.account === null) {
+                        this.paypalObj.account = { name: null, uniqueName: null };
+                        this.forceClearLinkAccount$ = observableOf({ status: true });
+                    }
+                }
+                this.updatePaypal = true;
+            } else {
+                this.setPaypalDummyData();
+                this.updatePaypal = false;
+            }
             // set cashfree form data
             if (o.payoutForm && o.payoutForm.userName) {
                 this.payoutObj = cloneDeep(o.payoutForm);
@@ -334,6 +351,14 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         this.forceClearLinkAccount$ = observableOf({ status: true });
     }
 
+    public setPaypalDummyData() {
+        if (this.paypalObj) {
+            this.paypalObj.email = null;
+            this.paypalObj.account = { name: null, uniqueName: null };
+        }
+        this.forceClearLinkAccount$ = observableOf({ status: true });
+    }
+
     public onSubmitMsgform(f: NgForm) {
         if (f.valid) {
             this.store.dispatch(this.settingsIntegrationActions.SaveSMSKey(f?.value.smsFormObj));
@@ -345,6 +370,45 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             this.store.dispatch(this.settingsIntegrationActions.SaveEmailKey(f?.value));
         }
     }
+
+    public selectLinkedAccount(event: IOption) {
+        if (event?.value) {
+            this.accounts$.subscribe((arr: IOption[]) => {
+                let res = find(arr, (o) => o?.value === event.value);
+                if (res) {
+                    this.paypalObj.account.name = res.text;
+                }
+            });
+        }
+    }
+
+    public savePaypalDetails() {
+        let data = cloneDeep(this.paypalObj);
+        this.store.dispatch(this.settingsIntegrationActions.savePaypalDetails(data));
+    }
+
+    public updatePaypalDetails() {
+        let data = cloneDeep(this.paypalObj);
+        this.store.dispatch(this.settingsIntegrationActions.updatePaypalDetails(data));
+    }
+
+    public unlinkAccountFromPaypal() {
+        if (this.paypalObj.account && this.paypalObj.account.name && this.paypalObj.account?.uniqueName) {
+            let data = cloneDeep(this.paypalObj);
+            if (data) {
+                data.account.uniqueName = null;
+                data.account.name = null;
+            }
+            this.store.dispatch(this.settingsIntegrationActions.updatePaypalDetails(data));
+        } else {
+            this.toasty.warningToast(this.localeData?.collection?.unlink_paypal_message);
+        }
+    }
+
+    public deletePaypalDetails() {
+        this.store.dispatch(this.settingsIntegrationActions.deletePaypalDetails());
+    }
+
 
     public selectAccount(event: IOption) {
         if (event?.value) {
@@ -655,6 +719,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             this.loadDefaultAccountsSuggestions();
             this.loadDefaultBankAccountsSuggestions();
             this.store.dispatch(this.settingsIntegrationActions.GetRazorPayDetails());
+            this.store.dispatch(this.settingsIntegrationActions.getPaypalDetails());
         }
     }
 
@@ -723,6 +788,10 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         let tab = event?.tab?.textLabel?.toLocaleLowerCase();
         this.router.navigateByUrl('/pages/settings/integration/' + tab);
         this.loadTabData(event?.index);
+    }
+
+    public resetValue(): void {
+        // this.forceClearLinkAccount$ = observableOf({ status: true });
     }
 
     /**

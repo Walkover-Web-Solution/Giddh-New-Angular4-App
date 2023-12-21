@@ -3,7 +3,7 @@ import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { SETTINGS_INTEGRATION_ACTIONS } from '../../actions/settings/settings.integration.const';
 import { SETTINGS_PROFILE_ACTIONS } from '../../actions/settings/profile/settings.profile.const';
 import { CompanyResponse } from '../../models/api-models/Company';
-import { EmailKeyClass, IntegrationPage, IntegrationPageClass, PaymentClass, RazorPayClass, RazorPayDetailsResponse, SmsKeyClass } from '../../models/api-models/SettingsIntegraion';
+import { EmailKeyClass, IntegrationPage, IntegrationPageClass, PayPalClass, PaymentClass, PaypalDetailsResponse, RazorPayClass, RazorPayDetailsResponse, SmsKeyClass } from '../../models/api-models/SettingsIntegraion';
 import { BankAccountsResponse } from '../../models/api-models/Dashboard';
 import { SETTINGS_LINKED_ACCOUNTS_ACTIONS } from '../../actions/settings/linked-accounts/settings.linked.accounts.const';
 import { SETTINGS_FINANCIAL_YEAR_ACTIONS } from '../../actions/settings/financial-year/financial-year.const';
@@ -172,6 +172,29 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
                 return Object.assign({}, state, newState);
             }
             return state;
+        case SETTINGS_INTEGRATION_ACTIONS.GET_PAYPAL_DETAILS_RESPONSE:
+            let getPaypalResponse: BaseResponse<PaypalDetailsResponse, string> = action.payload;
+            if (getPaypalResponse?.status === 'success') {
+                newState.integration.paypalForm = getPaypalResponse.body;
+                return Object.assign({}, state, newState);
+            }
+            return state;
+        case SETTINGS_INTEGRATION_ACTIONS.SAVE_PAYPAL_DETAILS_RESPONSE:
+        case SETTINGS_INTEGRATION_ACTIONS.UPDATE_PAYPAL_DETAILS_RESPONSE:
+            let savePaypalResponse: BaseResponse<PaypalDetailsResponse, PayPalClass> = action.payload;
+            if (savePaypalResponse?.status === 'success') {
+                newState.integration.paypalForm = savePaypalResponse.body;
+                return Object.assign({}, state, newState);
+            }
+            return state;
+        case SETTINGS_INTEGRATION_ACTIONS.DELETE_PAYPAL_DETAILS_RESPONSE:
+            let deletePaypalResponse: BaseResponse<string, string> = action.payload;
+            if (deletePaypalResponse?.status === 'success') {
+                newState.integration.paypalForm = null;
+                return Object.assign({}, state, newState);
+            }
+            return state;
+
         case SETTINGS_INTEGRATION_ACTIONS.GET_RAZOR_PAY_DETAILS_RESPONSE:
             let getRzrPayRes: BaseResponse<RazorPayDetailsResponse, string> = action.payload;
             if (getRzrPayRes?.status === 'success') {
