@@ -1,22 +1,17 @@
 import { ALT, BACKSPACE, CAPS_LOCK, CONTROL, DOWN_ARROW, ENTER, ESCAPE, LEFT_ARROW, MAC_META, MAC_WK_CMD_LEFT, MAC_WK_CMD_RIGHT, RIGHT_ARROW, SHIFT, TAB, UP_ARROW } from "@angular/cdk/keycodes";
 import { ScrollDispatcher } from "@angular/cdk/scrolling";
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, NgZone, OnDestroy, OnInit, Output, Renderer2, ViewChild } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, NgZone, OnDestroy, OnInit, Output, Renderer2, ViewChild } from "@angular/core";
 import { Store, select } from "@ngrx/store";
-import { GeneralActions } from "apps/web-giddh/src/app/actions/general/general.actions";
-import { GroupWithAccountsAction } from "apps/web-giddh/src/app/actions/groupwithaccounts.actions";
 import { PAGINATION_LIMIT } from "apps/web-giddh/src/app/app.constant";
 import { remove } from "apps/web-giddh/src/app/lodash-optimized";
-import { CommandKService } from "apps/web-giddh/src/app/services/commandk.service";
-import { GeneralService } from "apps/web-giddh/src/app/services/general.service";
 import { InventoryService } from "apps/web-giddh/src/app/services/inventory.service";
 import { AppState } from "apps/web-giddh/src/app/store";
 import { ScrollComponent } from "apps/web-giddh/src/app/theme/command-k";
-import { Observable, ReplaySubject, Subject, debounceTime, takeUntil } from "rxjs";
+import { ReplaySubject, Subject, debounceTime, takeUntil } from "rxjs";
 
 const DIRECTIONAL_KEYS = [
     LEFT_ARROW, RIGHT_ARROW, UP_ARROW, DOWN_ARROW
 ];
-
 const SPECIAL_KEYS = [...DIRECTIONAL_KEYS, CAPS_LOCK, TAB, SHIFT, CONTROL, ALT, MAC_WK_CMD_LEFT, MAC_WK_CMD_RIGHT, MAC_META];
 
 @Component({
@@ -34,7 +29,6 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy {
 
     @Input() public preventOutSideClose: boolean = false;
     @Input() public dontShowNoResultMsg: boolean = false;
-
     @Input() public isOpen: boolean = true;
     @Input() public defaultExcludedTags: string = 'input, button, .searchEle, .modal-content, .modal-backdrop';
     @Input() public placement: string;
@@ -44,11 +38,8 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy {
     @Input() public ItemWidth: number = 300;
     @Input() public visibleItems: number = 10;
     @Input() public apiData: any = {};
-
-
     @Output() public selectedItemEmitter: EventEmitter<any | any[]> = new EventEmitter<any | any[]>();
     @Output() public closeDailogEmitter: EventEmitter<any | any[]> = new EventEmitter<any | any[]>();
-    // @Output() public groupEmitter: EventEmitter<any> = new EventEmitter<any>();
     @Output() public noResultFoundEmitter: EventEmitter<any> = new EventEmitter<null>();
     @Output() public newTeamCreationEmitter: EventEmitter<any> = new EventEmitter<null>();
 
@@ -60,7 +51,6 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy {
     public highlightedItem: number = 0;
     public allowLoadMore: boolean = false;
     public isLoading: boolean = false;
-    public activeCompanyUniqueName: any = '';
     public apiRequestParams: any = {
         page: 1,
         query: '',
@@ -78,18 +68,10 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy {
         private store: Store<AppState>,
         private renderer: Renderer2,
         private zone: NgZone,
-        private _generalService: GeneralService,
-        private _commandKService: CommandKService,
         private _inventoryService: InventoryService,
         private _cdref: ChangeDetectorRef,
-        private groupWithAccountsAction: GroupWithAccountsAction,
-        private generalAction: GeneralActions,
         private scrollDispatcher: ScrollDispatcher
-    ) {
-        this.store.pipe(select(p => p.session.companyUniqueName), takeUntil(this.destroyed$)).subscribe(res => {
-            this.activeCompanyUniqueName = res;
-        });
-    }
+    ) { }
 
     /**
      * Lifecycle hook for init component
@@ -106,8 +88,7 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy {
         this.getAPIData();
         // listen on input for search
         this.searchSubject.pipe(debounceTime(300), takeUntil(this.destroyed$)).subscribe(term => {
-            if(term){
-                console.log("Search: ", term);
+            if (term) {
                 this.apiRequestParams.page = 1;
                 this.apiRequestParams.query = term;
                 this.searchCommandK(true);
@@ -116,9 +97,7 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy {
         });
 
         this.scrollDispatcher.scrolled().pipe(takeUntil(this.destroyed$)).subscribe((event: any) => {
-            // console.log("scrollDispatcher", event);
-            
-            if (event && (event?.getDataLength() - event?.getRenderedRange().end) < 10 && !this.isLoading && (this.apiRequestParams.totalPages >= this.apiRequestParams.page )) {
+            if (event && (event?.getDataLength() - event?.getRenderedRange().end) < 10 && !this.isLoading && (this.apiRequestParams.totalPages >= this.apiRequestParams.page)) {
                 this.apiRequestParams.page++;
                 this.getAPIData();
                 // this.getAllInvoices(this.unpaidInvoiceListInput.accountUniqueName, this.unpaidInvoiceListInput.range);
@@ -180,40 +159,11 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy {
      * @memberof AdvanceListItemsPopupComponent
      */
     public itemSelected(item: any, event?: any): void {
-        // if (event && (event.ctrlKey || event.metaKey)) {
-        //     this.closeDailogEmitter.emit();
-        //     return;
-        // } else if (event && event.type === "click") {
-        //     event.preventDefault();
-        // }
-        // emit data in case of direct A/c or Menus
-        // if (!item.type || (item.type && (item.type === 'MENU' || item.type === 'ACCOUNT'))) {
-        //     if (item.type === 'MENU') {
-        //         item.uniqueName = item.route;
-        //     }
-        //     this.selectedItemEmitter.emit(item);
-        // } else {
-        //     // emit value for save data in db
-        //     if (item.type === 'GROUP') {
-        //         this.apiRequestParams.query = "";
-        //         this.groupEmitter.emit(item);
-        //     }
-
-        //     try {
-        //         this.listOfSelectedGroups.push(item);
-        //     } catch (error) {
-        //         this.listOfSelectedGroups = [];
-        //         this.listOfSelectedGroups.push(item);
-        //     }
-
         this.selectedItemEmitter.emit({ item: item, type: this.apiData?.type });
         this.searchEle.nativeElement.value = null;
-
         // set focus on search
         this.focusInSearchBox();
         this.searchCommandK(true);
-        // }
-
     }
 
     /**
@@ -277,22 +227,6 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy {
         this.isOpen = true;
     }
 
-    private prevElem(index: number, d: any) {
-        if (index < []?.length) {
-            return [][index - 1];
-        } else {
-            return [][0];
-        }
-    }
-
-    private nextElem(index: number, d: any) {
-        if (index < []?.length) {
-            return [][index + 1];
-        } else {
-            return [][0];
-        }
-    }
-
     /**
      * This function will get called if we remove search string or group
      *
@@ -314,8 +248,6 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy {
 
         // prevent caret movement and animate selected element
         if (this.isOpen && [UP_ARROW, DOWN_ARROW]?.indexOf(key) !== -1 && this.virtualScrollElem) {
-            console.log("arrow");
-
             e.preventDefault();
             let item = this.virtualScrollElem.directionToll(key);
             if (item) {
@@ -427,17 +359,6 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy {
         }
     }
 
-    // /**
-    //  * This function get initialized on init and show selected item
-    //  *
-    //  * @param {*} item
-    //  * @memberof AdvanceListItemsPopupComponent
-    //  */
-    // public handleHighLightedItemEvent(item: any): void {
-    //     // no need to do anything in the function
-    //     this.highlightedItem = item?.loop;
-    // }
-
     /**
      * This function returns the uniquename of item
      *
@@ -450,38 +371,6 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy {
         return item?.uniqueName; // unique id corresponding to the item
     }
 
-    /**
-     * This function will load more records on scroll
-     *
-     * @param {*} event
-     * @memberof AdvanceListItemsPopupComponent
-     */
-    // @HostListener('scroll', ['$event'])
-    // onScroll(event: any) {
-    //     // visible height + pixel scrolled >= total height - 200 (deducted 200 to load list little earlier before user reaches to end)
-    //     if (event.target.offsetHeight + event.target.scrollTop >= (event.target.scrollHeight - 800)) {
-    //         if (this.allowLoadMore && !this.isLoading) {
-    //             if (this.apiRequestParams.page + 1 <= this.apiRequestParams.totalPages) {
-    //                 this.apiRequestParams.page++;
-    //                 this.searchCommandK(false);
-    //             }
-    //         }
-    //     }
-    // }
-
-    // /**
-    //  * This will return the last route name from the page route string
-    //  *
-    //  * @param {string} route
-    //  * @returns {string}
-    //  * @memberof AdvanceListItemsPopupComponent
-    //  */
-    // public getPageUniqueName(route: string): string {
-    //     let string = route?.replace(/\s+/g, '-');
-    //     string = string?.replace(/\//g, '-');
-    //     string = string?.replace(/^-|-$/g, '');
-    //     return string;
-    // }
 
     /**
      * This function is used to highlight the hovered item
@@ -520,23 +409,15 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy {
         }, 100);
     }
 
-    public consoleData(data: any): void {
-        console.log(data);
-    }
-
-    public getAPIData(search:string = ''): void {
+    public getAPIData(search: string = ''): void {
         this.isLoading = true;
-        console.log("this.apiRequestParams ", this.apiRequestParams);
-
-        if(this.apiRequestParams.page === 1){
+        if (this.apiRequestParams.page === 1) {
             this.searchedItems = [];
         }
-
         if (this.apiRequestParams?.type === 'users') {
             this._inventoryService.getFlattenAccountsList(this.apiRequestParams).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 this.isLoading = false;
-                console.log("getFlattenAccountsList ", res);
-                if (res) {
+                if (res && res?.body?.results) {
                     this.apiRequestParams.totalPages = res?.body?.totalPages;
                     let length = this.searchedItems ? this.searchedItems.length : 0;
                     let finalResult = [];
@@ -546,6 +427,9 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy {
                     });
                     this.searchedItems = this.searchedItems.concat(...finalResult);
                 }
+                else{
+                    this.noResultsFound = true;
+                }
                 this._cdref.detectChanges();
 
             });
@@ -553,7 +437,6 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy {
         if (this.apiRequestParams?.type === 'stocks') {
             this._inventoryService.getStockList(this.apiRequestParams).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 this.isLoading = false;
-                console.log("getStockList ", res);
                 if (res) {
                     this.apiRequestParams.totalPages = res?.body?.totalPages;
                     let length = this.searchedItems ? this.searchedItems.length : 0;

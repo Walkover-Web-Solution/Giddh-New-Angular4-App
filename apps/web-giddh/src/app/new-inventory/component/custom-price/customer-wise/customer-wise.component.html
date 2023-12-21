@@ -36,7 +36,7 @@
                                     </mat-list-item>
                                 </ng-container>          
                                 <ng-container *ngIf="userList.length === 0">
-                                    <div class="p-3">{{ commonLocaleData?.app_no_data_found }}</div>
+                                    <div class="p-3 text-gray">{{ commonLocaleData?.app_no_data_found }}</div>
                                 </ng-container>                
                             </cdk-virtual-scroll-viewport>
                         </mat-list>
@@ -53,7 +53,7 @@
                                     </span>
                                 </div>
                             </div>
-                            <ng-container *ngIf="currentUserStocks">
+                            <ng-container *ngIf="currentUserStocks?.length || currentUserStocks?.uniqueName">
                                 <div class="mr-t2" [formGroup]="discountForm">
                                     <ng-container
                                         *ngFor="let discountCollection of discountForm?.get('discountInfo')['controls']; let i = index"
@@ -61,7 +61,7 @@
                                         <div class="table-inventory">
                                             <div class="float-right">
                                                 <button mat-stroked-button class="delete-icon mb-2 mr-r1"
-                                                    (click)="confirmationPopup( discountCollection?.get('stockUniqueName')?.value, 'stock')">
+                                                    (click)="confirmationPopup( discountCollection?.get('stockUniqueName')?.value, 'stock', i, null, discountCollection?.get('isTempStock')?.value)">
                                                     <i class="icon-trash"></i>
                                                 </button>
                                             </div>
@@ -149,7 +149,7 @@
                                                                                 <button mat-stroked-button
                                                                                     [disabled]="discountCollection?.get('variants')?.value?.length < 2"
                                                                                     class="delete-icon"
-                                                                                    (click)="confirmationPopup(variant?.get('variantUniqueName')?.value,  'variant', i, j, variant?.get('variantName')?.value)">
+                                                                                    (click)="confirmationPopup(variant?.get('variantUniqueName')?.value,  'variant', i, j, variant?.get('variantName')?.value,variant?.get('isTemproraryVariant')?.value)">
                                                                                     <i class="icon-trash"></i>
                                                                                 </button>
                                                                             </div>
@@ -159,9 +159,8 @@
                                                             </tbody>
                                                             <tfoot>
                                                                 <tr>
-                                                                    <td *ngIf="variantsWithoutDiscount[i]?.length"
-                                                                        class="middle">
-                                                                        <div>
+                                                                    <td colspan="2"class="middle">
+                                                                        <div *ngIf="variantsWithoutDiscount[i]?.length">
                                                                             <dropdown-field
                                                                                 [name]="'variantsWithoutDiscount' + i"
                                                                                 [label]="localeData?.add_variant"
@@ -171,7 +170,6 @@
                                                                             </dropdown-field>
                                                                         </div>
                                                                     </td>
-                                                                    <td [attr.colspan]="variantsWithoutDiscount[i]?.length ? null : 2"></td>
                                                                     <td colspan="5" class="text-right px-0 mt-3">
                                                                         <button *ngIf="true" mat-stroked-button
                                                                             color="primary" class="my-3"
@@ -186,16 +184,26 @@
                                         </div>
                                     </ng-container>
                                 </div>
-                                <div class="pagination-wrapper">
-                                    <pagination [totalItems]="pagination.stock.totalPages" [maxSize]="3"
-                                        class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="paginationLimit"
-                                        (pageChanged)="pageChanged($event, 'stock')" [(ngModel)]="pagination.stock.page"
-                                        [rotate]="false" [firstText]="commonLocaleData?.app_first"
+                                <div class="pagination-wrapper" *ngIf="pagination.stock.page > 1">
+                                    <pagination 
+                                        [totalItems]="pagination.stock.totalPages" 
+                                        [maxSize]="3"                                        
+                                        class="pagination-sm" 
+                                        [boundaryLinks]="true" 
+                                        [itemsPerPage]="paginationLimit"
+                                        (pageChanged)="pageChanged($event)" 
+                                        [(ngModel)]="pagination.stock.page"
+                                        [rotate]="false" 
+                                        [firstText]="commonLocaleData?.app_first"
                                         [previousText]="commonLocaleData?.app_previous"
-                                        [nextText]="commonLocaleData?.app_next" [lastText]="commonLocaleData?.app_last">
+                                        [nextText]="commonLocaleData?.app_next" 
+                                        [lastText]="commonLocaleData?.app_last">
                                     </pagination>
                                 </div>
                             </ng-container>
+                            <div class="text-center mt-5 text-gray font-24" *ngIf="!(currentUserStocks?.length || currentUserStocks?.uniqueName) && currentUser?.uniqueName">
+                                <span class="font">{{ commonLocaleData?.app_no_data_found }}</span>
+                            </div>
                         </div>
                     </div>
                 </div>
