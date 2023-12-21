@@ -25,6 +25,9 @@
     "collection": {
         "tab_heading": "Collection",
         "razorpay_form_heading": "Razorpay Details",
+        "paypal_form_heading": "Paypal Details",
+        "email_id_label": "Email Id",
+        "email_id_placeholder": "Email Id",
         "key_id_label": "Key Id",
         "key_id_placeholder": "Key Id",
         "secret_key_label": "Secret",
@@ -39,7 +42,8 @@
         "client_secret_key_placeholder": "Client Secret Key",
         "auto_collect_form_heading": "Auto Collect",
         "payment_gateway_form_heading": "Payment Gateway",
-        "unlink_razorpay_message": "You don't have any account linked with Razorpay."
+        "unlink_razorpay_message": "You don't have any account linked with Razorpay.",
+        "unlink_paypal_message": "You don't have any account linked with Paypal."
     },
     "ecommerce": {
         "tab_heading": "E-Comm",
