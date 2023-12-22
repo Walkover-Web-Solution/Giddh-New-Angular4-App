@@ -26,18 +26,18 @@
                             </div>
                             <cdk-virtual-scroll-viewport [itemSize]="32" class="list-viewport">
                                 <ng-container *ngIf="userList.length">
-                                    <mat-list-item  *cdkVirtualFor="let user of userList"
+                                    <mat-list-item *cdkVirtualFor="let user of userList"
                                         [ngClass]="{'active' : user?.uniqueName === currentUser?.uniqueName}">
                                         <a href="javascript:;" (click)="selectUser(user)">
                                             <span>{{ user?.name }}</span>
-                                            <span (click)="confirmationPopup(user?.uniqueName, 'user'); "
+                                            <span (click)="confirmationPopup(user?.uniqueName, 'user')"
                                                 class="customer-delete"><i class="icon-trash"></i></span>
                                         </a>
                                     </mat-list-item>
-                                </ng-container>          
+                                </ng-container>
                                 <ng-container *ngIf="userList.length === 0">
                                     <div class="p-3 text-gray">{{ commonLocaleData?.app_no_data_found }}</div>
-                                </ng-container>                
+                                </ng-container>
                             </cdk-virtual-scroll-viewport>
                         </mat-list>
                         <div class="customer-right-side">
@@ -61,7 +61,7 @@
                                         <div class="table-inventory">
                                             <div class="float-right">
                                                 <button mat-stroked-button class="delete-icon mb-2 mr-r1"
-                                                    (click)="confirmationPopup( discountCollection?.get('stockUniqueName')?.value, 'stock', i, null , discountCollection?.get('isTempStock')?.value)">
+                                                    (click)="confirmationPopup( discountCollection?.get('stockUniqueName')?.value, 'stock', discountCollection?.get('isTempStock')?.value, i)">
                                                     <i class="icon-trash"></i>
                                                 </button>
                                             </div>
@@ -81,20 +81,17 @@
                                                                         </td>
 
                                                                         <td class="price-width">
-                                                                            <input-field 
-                                                                                [name]="'price' + i + '-' + j"
+                                                                            <input-field [name]="'price' + i + '-' + j"
                                                                                 [placeholder]="'00'"
                                                                                 [label]="localeData?.price"
                                                                                 [type]="'number'"
                                                                                 [cssClass]="'text-right'"
                                                                                 formControlName="price"
-                                                                                (change)="updateDiscountInVariant(variant)"
-                                                                            ></input-field>
+                                                                                (change)="updateDiscountInVariant(variant)"></input-field>
                                                                         </td>
                                                                         <td class="child-td-nam">
                                                                             <div class="toggle-wrap">
-                                                                                <mat-slide-toggle 
-                                                                                    color="primary"
+                                                                                <mat-slide-toggle color="primary"
                                                                                     [name]="'discountExclusive' + i + '-' + j"
                                                                                     formControlName="discountExclusive">
                                                                                     <span>
@@ -130,8 +127,7 @@
                                                                             </div>
                                                                         </td>
                                                                         <td>
-                                                                            <input-field 
-                                                                                [placeholder]="'00'"
+                                                                            <input-field [placeholder]="'00'"
                                                                                 [name]="'quantity' + i + '-' + j"
                                                                                 formControlName="quantity"
                                                                                 [label]="commonLocaleData?.app_defaultquantity"
@@ -140,7 +136,7 @@
                                                                                 [cssClass]="'text-right'"></input-field>
                                                                         </td>
                                                                         <td>
-                                                                            <dropdown-field 
+                                                                            <dropdown-field
                                                                                 [name]="'unit' + i + '-' + j"
                                                                                 [placeholder]="commonLocaleData?.app_unit"
                                                                                 [options]="discountCollection?.get('units')?.value"
@@ -153,7 +149,7 @@
                                                                                 <button mat-stroked-button
                                                                                     [disabled]="discountCollection?.get('variants')?.value?.length < 2"
                                                                                     class="delete-icon"
-                                                                                    (click)="confirmationPopup(variant?.get('variantUniqueName')?.value,  'variant', i, j, variant?.get('isTemproraryVariant')?.value)">
+                                                                                    (click)="confirmationPopup(variant?.get('variantUniqueName')?.value,  'variant', variant?.get('isTemproraryVariant')?.value, i, j)">
                                                                                     <i class="icon-trash"></i>
                                                                                 </button>
                                                                             </div>
@@ -163,7 +159,7 @@
                                                             </tbody>
                                                             <tfoot>
                                                                 <tr>
-                                                                    <td colspan="2"class="middle">
+                                                                    <td colspan="2" class="middle">
                                                                         <div *ngIf="variantsWithoutDiscount[i]?.length">
                                                                             <dropdown-field
                                                                                 [name]="'variantsWithoutDiscount' + i"
@@ -189,23 +185,17 @@
                                     </ng-container>
                                 </div>
                                 <div class="pagination-wrapper" *ngIf="pagination.stock.page > 1">
-                                    <pagination 
-                                        [totalItems]="pagination.stock.totalPages" 
-                                        [maxSize]="3"                                        
-                                        class="pagination-sm" 
-                                        [boundaryLinks]="true" 
-                                        [itemsPerPage]="paginationLimit"
-                                        (pageChanged)="pageChanged($event)" 
-                                        [(ngModel)]="pagination.stock.page"
-                                        [rotate]="false" 
-                                        [firstText]="commonLocaleData?.app_first"
+                                    <pagination [totalItems]="pagination.stock.totalPages" [maxSize]="3"
+                                        class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="paginationLimit"
+                                        (pageChanged)="pageChanged($event)" [(ngModel)]="pagination.stock.page"
+                                        [rotate]="false" [firstText]="commonLocaleData?.app_first"
                                         [previousText]="commonLocaleData?.app_previous"
-                                        [nextText]="commonLocaleData?.app_next" 
-                                        [lastText]="commonLocaleData?.app_last">
+                                        [nextText]="commonLocaleData?.app_next" [lastText]="commonLocaleData?.app_last">
                                     </pagination>
                                 </div>
                             </ng-container>
-                            <div class="text-center mt-5 text-gray font-24" *ngIf="!(currentUserStocks?.length || currentUserStocks?.uniqueName) && currentUser?.uniqueName">
+                            <div class="text-center mt-5 text-gray font-24"
+                                *ngIf="!(currentUserStocks?.length || currentUserStocks?.uniqueName) && currentUser?.uniqueName">
                                 <span class="font">{{ commonLocaleData?.app_no_data_found }}</span>
                             </div>
                         </div>
@@ -218,7 +208,9 @@
 
 <!-- Add Customer/Group and Stock Dialog -->
 <ng-template #addSearchModal>
-    <items-list-popup (selectedItemEmitter)="onItemSelected($event?.item, $event?.type)" (closeDailogEmitter)="dialogRef.close()" [isOpen]="true" [setParentWidth]="true" [apiData]="apiData"></items-list-popup>
+    <items-list-popup (selectedItemEmitter)="onItemSelected($event?.item, $event?.type)"
+        (closeDailogEmitter)="dialogRef.close()" [isOpen]="true" [setParentWidth]="true"
+        [apiData]="apiData"></items-list-popup>
     <div class="shortcuts">
         <strong>↑</strong> <strong>↓</strong>&nbsp; {{ localeData?.to_navigate }}
         <strong class="mr-l1" [attr.aria-label]="commonLocaleData?.app_return">↵</strong>&nbsp;
