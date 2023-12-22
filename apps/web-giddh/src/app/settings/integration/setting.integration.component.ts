@@ -430,6 +430,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             this.toasty.warningToast(this.localeData?.collection?.invalid_email_error, this.commonLocaleData?.app_warning);
             return;
         }
+        data.message = this.localeData?.collection?.paypal_update_successfully;
         this.store.dispatch(this.settingsIntegrationActions.updatePaypalDetails(data));
     }
 
@@ -445,6 +446,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 data.account.uniqueName = null;
                 data.account.name = null;
             }
+
+            data.message = this.localeData?.collection?.unlinked_account_successfully;
             this.store.dispatch(this.settingsIntegrationActions.updatePaypalDetails(data));
         } else {
             this.toasty.warningToast(this.localeData?.collection?.unlink_paypal_message);
