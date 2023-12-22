@@ -130,7 +130,7 @@
 
             <mat-tab [label]="localeData?.collection?.tab_heading">
                 <ng-template> <span class="icon-card"></span> {{ localeData?.collection?.tab_heading }} </ng-template>
-                <div class="clearfix petty-cash">
+                <div class="clearfix petty-cash collection-integration">
                     <mat-tab-group mat-stretch-tabs="false" animationDuration="0ms" [disableRipple]="true">
                         <mat-tab [label]="'Razorpay'">
                             <div class="box clearfix mb-2">
@@ -181,7 +181,7 @@
                                                             "
                                                             name="razorPayObj.account"
                                                             [(ngModel)]="razorPayObj.account.uniqueName"
-                                                            [options]="accounts$ | async"
+                                                            [options]="accounts"
                                                             (selected)="selectAccount($event)"
                                                             [forceClearReactive]="forceClearLinkAccount$ | async"
                                                             [enableDynamicSearch]="true"
@@ -279,36 +279,40 @@
                                         <div class="form-group col-lg-4 col-md-6 col-xs-12">
                                             <div>
                                                 <label>{{ localeData?.collection?.link_account_label }}</label>
-                                                <div class="input-group ">
-                                                    <div class="d-flex">
-                                                    <sh-select
-                                                        class="linked-account"
-                                                        [placeholder]="localeData?.collection?.link_account_placeholder"
-                                                        name="paypalObj.account"
-                                                        [(ngModel)]="paypalObj.account.uniqueName"
-                                                        [options]="accounts$ | async"
-                                                        (selected)="selectLinkedAccount($event)"
-                                                        [forceClearReactive]="forceClearLinkAccount$ | async"
-                                                        [enableDynamicSearch]="true"
-                                                        (onClear)="resetValue()"
-                                                        [isPaginationEnabled]="true"
-                                                        (scrollEnd)="handleScrollEnd()"
-                                                        (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)"
-                                                        [fixedValue]="paypalObj?.account?.name"
-                                                        [defaultValue]="paypalObj?.account?.name"
-                                                    >
-                                                    </sh-select>
-                                                    <div
-                                                        class="input-group-addon cp ml-2"
-                                                        *ngIf="
-                                                            paypalObj?.account?.uniqueName && paypalObj?.account?.name
-                                                        "
-                                                    >
-                                                        <span
-                                                            (click)="unlinkAccountFromPaypal()"
-                                                            class="icon-trash"
-                                                        ></span>
-                                                    </div>
+                                                <div class="input-group">
+                                                    <div class="d-flex w-100">
+                                                        <sh-select
+                                                            class="linked-account"
+                                                            [placeholder]="
+                                                                localeData?.collection?.link_account_placeholder
+                                                            "
+                                                            name="paypalObj.account"
+                                                            [(ngModel)]="paypalObj.account.uniqueName"
+                                                            [options]="paypalAccounts"
+                                                            (selected)="selectLinkedAccount($event)"
+                                                            [forceClearReactive]="paypalForceClearLinkAccount$ | async"
+                                                            [enableDynamicSearch]="true"
+                                                            [isPaginationEnabled]="true"
+                                                            (scrollEnd)="paypalHandleScrollEnd()"
+                                                            (dynamicSearchedQuery)="
+                                                                paypalOnAccountSearchQueryChanged($event)
+                                                            "
+                                                            [fixedValue]="paypalObj?.account?.name"
+                                                            [defaultValue]="paypalObj?.account?.name"
+                                                        >
+                                                        </sh-select>
+                                                        <div
+                                                            class="input-group-addon cp ml-2"
+                                                            *ngIf="
+                                                                paypalObj?.account?.uniqueName &&
+                                                                paypalObj?.account?.name
+                                                            "
+                                                        >
+                                                            <span
+                                                                (click)="unlinkAccountFromPaypal()"
+                                                                class="icon-trash"
+                                                            ></span>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>

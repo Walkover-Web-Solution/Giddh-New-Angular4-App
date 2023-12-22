@@ -12,7 +12,7 @@ import { IOption } from '../../theme/ng-select/option.interface';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { CompanyActions } from "../../actions/company.actions";
 import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.component';
-import { BootstrapToggleSwitch, BROADCAST_CHANNELS, Configuration, SELECT_ALL_RECORDS } from "../../app.constant";
+import { BootstrapToggleSwitch, BROADCAST_CHANNELS, Configuration, EMAIL_VALIDATION_REGEX, SELECT_ALL_RECORDS } from "../../app.constant";
 import { AuthenticationService } from "../../services/authentication.service";
 import { IForceClear } from '../../models/api-models/Sales';
 import { EcommerceService } from '../../services/ecommerce.service';
@@ -44,6 +44,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public autoCollectObj: CashfreeClass = new CashfreeClass();
     public amazonSeller: AmazonSellerClass = new AmazonSellerClass();
     public accounts$: Observable<IOption[]>;
+    public paypalAccounts$: Observable<IOption[]>;
     public updateRazor: boolean = false;
     public updatePaypal: boolean = false;
     public autoCollectAdded: boolean = false;
@@ -83,6 +84,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public selectedCompanyUniqueName: string;
     /* This will clear the selected linked account */
     public forceClearLinkAccount$: Observable<IForceClear> = observableOf({ status: false });
+    /* This will clear the selected linked account */
+    public paypalForceClearLinkAccount$: Observable<IForceClear> = observableOf({ status: false });
     /** Stores the search results pagination details */
     public accountsSearchResultsPaginationData = {
         page: 0,
@@ -99,8 +102,26 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         totalPages: 0,
         query: ''
     };
+    /** Stores the search results pagination details */
+    public paypalAccountsSearchResultsPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
+    /** Default search suggestion list to be shown for search */
+    public paypalDefaultAccountSuggestions: Array<IOption> = [];
+    /** True, if API call should be prevented on default scroll caused by scroll in list */
+    public paypalPreventDefaultScrollApiCall: boolean = false;
+    /** Stores the default search results pagination details */
+    public paypalDefaultAccountPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
     /** Stores the list of accounts */
     public accounts: IOption[];
+    /** Stores the list of accounts */
+    public paypalAccounts: IOption[];
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */
@@ -178,6 +199,19 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         });
     }
 
+    /**
+ * Resets operation
+ *
+ * @memberof AuditLogsSidebarComponent
+ */
+    public resetOperation(): void {
+        this.paypalForceClearLinkAccount$ = observableOf({ status: true });
+        this.paypalObj.account.uniqueName = "";
+        setTimeout(() => {
+            this.paypalForceClearLinkAccount$ = observableOf({ status: false });
+        }, 500);
+    }
+
     public ngOnInit() {
         this.imgPath = (isElectron) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
 
@@ -217,7 +251,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                     this.paypalObj = cloneDeep(o?.paypalForm);
                     if (this.paypalObj && this.paypalObj.account === null) {
                         this.paypalObj.account = { name: null, uniqueName: null };
-                        this.forceClearLinkAccount$ = observableOf({ status: true });
+                        this.paypalForceClearLinkAccount$ = observableOf({ status: true });
                     }
                 }
                 this.updatePaypal = true;
@@ -343,7 +377,11 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             this.paypalObj.email = null;
             this.paypalObj.account = { name: null, uniqueName: null };
         }
-        this.forceClearLinkAccount$ = observableOf({ status: true });
+        this.paypalForceClearLinkAccount$ = observableOf({ status: true });
+    }
+
+    public validateEmail(emailStr: any): boolean {
+        return EMAIL_VALIDATION_REGEX.test(emailStr);
     }
 
     public onSubmitMsgform(f: NgForm) {
@@ -360,7 +398,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
 
     public selectLinkedAccount(event: IOption) {
         if (event?.value) {
-            this.accounts$.subscribe((arr: IOption[]) => {
+            this.paypalAccounts$.subscribe((arr: IOption[]) => {
                 let res = find(arr, (o) => o?.value === event.value);
                 if (res) {
                     this.paypalObj.account.name = res.text;
@@ -371,11 +409,19 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
 
     public savePaypalDetails() {
         let data = cloneDeep(this.paypalObj);
+        if (!(this.validateEmail(data?.email))) {
+            this.toasty.warningToast(this.localeData?.collection?.invalid_email_error, this.commonLocaleData?.app_warning);
+            return;
+        }
         this.store.dispatch(this.settingsIntegrationActions.savePaypalDetails(data));
     }
 
     public updatePaypalDetails() {
         let data = cloneDeep(this.paypalObj);
+        if (!(this.validateEmail(data?.email))) {
+            this.toasty.warningToast(this.localeData?.collection?.invalid_email_error, this.commonLocaleData?.app_warning);
+            return;
+        }
         this.store.dispatch(this.settingsIntegrationActions.updatePaypalDetails(data));
     }
 
@@ -705,9 +751,11 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         if (event && event instanceof MatTabGroup || !event) {
             this.loadDefaultAccountsSuggestions();
             this.loadDefaultBankAccountsSuggestions();
+            this.paypalLoadDefaultAccountsSuggestions();
             this.store.dispatch(this.settingsIntegrationActions.GetRazorPayDetails());
             this.store.dispatch(this.settingsIntegrationActions.getPaypalDetails());
         }
+        this.changeDetectionRef.detectChanges();
     }
 
     /**
@@ -775,10 +823,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         let tab = event?.tab?.textLabel?.toLocaleLowerCase();
         this.router.navigateByUrl('/pages/settings/integration/' + tab);
         this.loadTabData(event?.index);
-    }
-
-    public resetValue(): void {
-        // this.forceClearLinkAccount$ = observableOf({ status: true });
     }
 
     /**
@@ -865,6 +909,91 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     }
 
     /**
+ * Scroll end handler
+ *
+ * @returns null
+ * @memberof SettingIntegrationComponent
+ */
+    public paypalHandleScrollEnd(): void {
+        if (this.paypalAccountsSearchResultsPaginationData.page < this.paypalAccountsSearchResultsPaginationData.totalPages) {
+            this.paypalOnAccountSearchQueryChanged(
+                this.paypalAccountsSearchResultsPaginationData.query,
+                this.paypalAccountsSearchResultsPaginationData.page + 1,
+                (response) => {
+                    if (!this.paypalAccountsSearchResultsPaginationData.query) {
+                        const results = response.map(result => {
+                            return {
+                                value: result?.uniqueName,
+                                label: result.name
+                            }
+                        }) || [];
+                        this.paypalDefaultAccountSuggestions = this.paypalDefaultAccountSuggestions.concat(...results);
+                        this.paypalDefaultAccountPaginationData.page = this.paypalAccountsSearchResultsPaginationData.page;
+                        this.paypalDefaultAccountPaginationData.totalPages = this.paypalAccountsSearchResultsPaginationData.totalPages;
+                    }
+                });
+        }
+        this.changeDetectionRef.detectChanges();
+    }
+
+    /**
+    * Search query change handler
+    *
+    * @param {string} query Search query
+    * @param {number} [page=1] Page to request
+    * @param {boolean} withStocks True, if search should include stocks in results
+    * @param {Function} successCallback Callback to carry out further operation
+    * @memberof SettingIntegrationComponent
+    */
+    public paypalOnAccountSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
+        this.paypalAccountsSearchResultsPaginationData.query = query;
+        if (!this.paypalPreventDefaultScrollApiCall &&
+            (query || (this.paypalDefaultAccountSuggestions && this.paypalDefaultAccountSuggestions.length === 0) || successCallback)) {
+            // Call the API when either query is provided, default suggestions are not present or success callback is provided
+            const requestObject: any = {
+                q: encodeURIComponent(query),
+                page
+            }
+            this.searchService.searchAccountV2(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+                if (data && data.body && data.body.results) {
+                    const searchResults = data.body.results.map(result => {
+                        return {
+                            value: result?.uniqueName,
+                            label: result.name
+                        }
+                    }) || [];
+                    if (page === 1) {
+                        this.paypalAccounts = searchResults;
+                    } else {
+                        this.paypalAccounts = [
+                            ...this.paypalAccounts,
+                            ...searchResults
+                        ];
+                    }
+                    this.paypalAccounts$ = observableOf(this.paypalAccounts);
+                    this.paypalAccountsSearchResultsPaginationData.page = data.body.page;
+                    this.paypalAccountsSearchResultsPaginationData.totalPages = data.body.totalPages;
+                    if (successCallback) {
+                        successCallback(data.body.results);
+                    } else {
+                        this.paypalAccountsSearchResultsPaginationData.page = data.body.page;
+                        this.paypalAccountsSearchResultsPaginationData.totalPages = data.body.totalPages;
+                    }
+                }
+            });
+        } else {
+            this.paypalAccounts = [...this.paypalDefaultAccountSuggestions];
+            this.paypalAccountsSearchResultsPaginationData.page = this.paypalDefaultAccountPaginationData.page;
+            this.paypalAccountsSearchResultsPaginationData.totalPages = this.paypalDefaultAccountPaginationData.totalPages;
+            this.paypalPreventDefaultScrollApiCall = true;
+            setTimeout(() => {
+                this.paypalPreventDefaultScrollApiCall = false;
+            }, 500);
+        }
+        this.changeDetectionRef.detectChanges();
+    }
+
+    /**
      * Loads the default account search suggestion when module is loaded
      *
      * @private
@@ -882,6 +1011,27 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             this.defaultAccountPaginationData.totalPages = this.accountsSearchResultsPaginationData.totalPages;
             this.accounts = [...this.defaultAccountSuggestions];
         });
+    }
+
+    /**
+ * Loads the default account search suggestion when module is loaded
+ *
+ * @private
+ * @memberof SettingIntegrationComponent
+ */
+    private paypalLoadDefaultAccountsSuggestions(): void {
+        this.paypalOnAccountSearchQueryChanged('', 1, (response) => {
+            this.paypalDefaultAccountSuggestions = response.map(result => {
+                return {
+                    value: result?.uniqueName,
+                    label: result?.name
+                }
+            }) || [];
+            this.paypalDefaultAccountPaginationData.page = this.paypalAccountsSearchResultsPaginationData.page;
+            this.paypalDefaultAccountPaginationData.totalPages = this.paypalAccountsSearchResultsPaginationData.totalPages;
+            this.paypalAccounts = [...this.paypalDefaultAccountSuggestions];
+        });
+        this.changeDetectionRef.detectChanges();
     }
 
     /**
