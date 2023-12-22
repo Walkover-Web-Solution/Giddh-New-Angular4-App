@@ -478,7 +478,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
      * @param {string} [variantName]
      * @memberof CustomerWiseComponent
      */
-    public confirmationPopup(uniqueName: string, type: 'user' | 'stock' | 'variant', stockFormArrayIndex?: number, variantFormArrayIndex?: number, variantName?: string, isTemp?: boolean): void {
+    public confirmationPopup(uniqueName: string, type: 'user' | 'stock' | 'variant', stockFormArrayIndex?: number, variantFormArrayIndex?: number, isTemp?: boolean): void {
         let dialogRef = this.dialog.open(ConfirmModalComponent, {
             data: {
                 title: this.commonLocaleData?.app_confirmation,
@@ -492,7 +492,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
 
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response) {
-                this.deleteItem(uniqueName, type, stockFormArrayIndex, variantFormArrayIndex, variantName, isTemp);
+                this.deleteItem(uniqueName, type, stockFormArrayIndex, variantFormArrayIndex, isTemp);
             }
         });
     }
@@ -519,7 +519,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
      * @param {string} [variantName]
      * @memberof CustomerWiseComponent
      */
-    private deleteItem(uniqueName: string, type: string, stockFormArrayIndex?: number, variantFormArrayIndex?: number, variantName?: string, isTemp?: boolean): void {
+    private deleteItem(uniqueName: string, type: string, stockFormArrayIndex?: number, variantFormArrayIndex?: number, isTemp?: boolean): void {
         const discounts = this.discountForm.get('discountInfo') as UntypedFormArray;
         const stock = discounts.at(stockFormArrayIndex).get('variants') as UntypedFormArray;
         let model = {
@@ -547,7 +547,6 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                         };
                         /** To add deleted variant info in "variantsWithoutDiscount" array  */
                         this.variantsWithoutDiscount.at(stockFormArrayIndex).push(variant);
-
                         stock.removeAt(variantFormArrayIndex);
                     }
                 } else {

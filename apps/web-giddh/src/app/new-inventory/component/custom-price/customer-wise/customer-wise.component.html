@@ -61,7 +61,7 @@
                                         <div class="table-inventory">
                                             <div class="float-right">
                                                 <button mat-stroked-button class="delete-icon mb-2 mr-r1"
-                                                    (click)="confirmationPopup( discountCollection?.get('stockUniqueName')?.value, 'stock', i, null, discountCollection?.get('isTempStock')?.value)">
+                                                    (click)="confirmationPopup( discountCollection?.get('stockUniqueName')?.value, 'stock', i, null , discountCollection?.get('isTempStock')?.value)">
                                                     <i class="icon-trash"></i>
                                                 </button>
                                             </div>
@@ -153,7 +153,7 @@
                                                                                 <button mat-stroked-button
                                                                                     [disabled]="discountCollection?.get('variants')?.value?.length < 2"
                                                                                     class="delete-icon"
-                                                                                    (click)="confirmationPopup(variant?.get('variantUniqueName')?.value,  'variant', i, j, variant?.get('variantName')?.value,variant?.get('isTemproraryVariant')?.value)">
+                                                                                    (click)="confirmationPopup(variant?.get('variantUniqueName')?.value,  'variant', i, j, variant?.get('isTemproraryVariant')?.value)">
                                                                                     <i class="icon-trash"></i>
                                                                                 </button>
                                                                             </div>
