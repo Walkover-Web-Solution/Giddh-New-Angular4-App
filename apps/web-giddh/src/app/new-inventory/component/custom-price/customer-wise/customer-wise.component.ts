@@ -80,6 +80,8 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
     public discountForm: UntypedFormGroup;
     /** Holds list of variant of all stock which do not apply discount */
     public variantsWithoutDiscount: any[] = [];
+    /** Variant object keys */
+    private variantDesiredKeys: any[] = ['price', 'quantity', 'discountExclusive', 'stockUnitUniqueName', 'variantUniqueName', 'discounts'];
 
     constructor(
         private dialog: MatDialog,
@@ -674,7 +676,6 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
             this.isLoading = true;
             const discountFormValues = cloneDeep(this.discountForm.value);
             const stockUniqueName = discountFormValues.discountInfo[stockFormArrayIndex].stockUniqueName;
-            const variantDesiredKeys = ['price', 'quantity', 'discountExclusive', 'stockUnitUniqueName', 'variantUniqueName', 'discounts'];
 
             discountFormValues.discountInfo = discountFormValues.discountInfo[stockFormArrayIndex]?.variants?.map(variant => {
                 if (!variant.discountInfo[0]?.discountUniqueName && variant.discountInfo[0]?.discountValue) {
@@ -697,7 +698,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
 
                 variant.discounts = cloneDeep(variant.discountInfo);
 
-                return this.filterKeys(variant, variantDesiredKeys)
+                return this.filterKeys(variant, this.variantDesiredKeys)
             });
 
             this.inventoryService.createDiscount(stockUniqueName, discountFormValues).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
@@ -883,5 +884,31 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
         }
 
         variant.get('discountValue')?.patchValue(discountSum);
+
+        let discountInfo = variant.get('discountInfo')?.value?.variants?.map(variant => {
+            if (!variant.discountInfo[0]?.discountUniqueName && variant.discountInfo[0]?.discountValue) {
+                variant.discountInfo[0].isActive = true;
+            } else {
+                variant.discountInfo[0].isActive = false;
+            }
+
+            variant.discountInfo = variant.discountInfo?.filter(res => res.isActive)?.map(discount => {
+                discount.value = discount.discountValue;
+                discount.uniqueName = discount.discountUniqueName;
+                discount.type = discount.discountType;
+
+                return {
+                    value: discount.value,
+                    uniqueName: discount.uniqueName,
+                    type: discount.type
+                };
+            });
+
+            variant.discounts = cloneDeep(variant.discountInfo);
+
+            return this.filterKeys(variant, this.variantDesiredKeys)
+        });
+
+        
     }
 }
