@@ -116,6 +116,12 @@ export class SettingsIntegrationActions {
                 return { type: 'EmptyAction' };
             })));
 
+    /**
+     * This will be use for get paypal details
+     *
+     * @type {Observable<Action>}
+     * @memberof SettingsIntegrationActions
+     */
     public getPaypalDetails$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_INTEGRATION_ACTIONS.GET_PAYPAL_DETAILS),
@@ -128,6 +134,12 @@ export class SettingsIntegrationActions {
                 payload: res
             }))));
 
+    /**
+     * This will be use for save paypal details
+     *
+     * @type {Observable<Action>}
+     * @memberof SettingsIntegrationActions
+     */
     public savePaypalDetails$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_INTEGRATION_ACTIONS.SAVE_PAYPAL_DETAILS),
@@ -140,6 +152,12 @@ export class SettingsIntegrationActions {
                 payload: res
             }))));
 
+    /**
+     * This will be use for delete paypal details
+     *
+     * @type {Observable<Action>}
+     * @memberof SettingsIntegrationActions
+     */
     public deletePaypalDetails$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_INTEGRATION_ACTIONS.DELETE_PAYPAL_DETAILS),
@@ -152,6 +170,12 @@ export class SettingsIntegrationActions {
                 payload: res
             }))));
 
+    /**
+     * This will be use for update paypal details
+     *
+     * @type {Observable<Action>}
+     * @memberof SettingsIntegrationActions
+     */
     public updatePaypalDetails$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_INTEGRATION_ACTIONS.UPDATE_PAYPAL_DETAILS),
@@ -587,14 +611,25 @@ export class SettingsIntegrationActions {
         };
     }
 
-
-
+    /**
+     * This will be use for get paypal details action
+     *
+     * @return {*}  {CustomActions}
+     * @memberof SettingsIntegrationActions
+     */
     public getPaypalDetails(): CustomActions {
         return {
             type: SETTINGS_INTEGRATION_ACTIONS.GET_PAYPAL_DETAILS,
         };
     }
 
+    /**
+     * This will be use for save paypal details action
+     *
+     * @param {PayPalClass} value
+     * @return {*}  {CustomActions}
+     * @memberof SettingsIntegrationActions
+     */
     public savePaypalDetails(value: PayPalClass): CustomActions {
         return {
             type: SETTINGS_INTEGRATION_ACTIONS.SAVE_PAYPAL_DETAILS,
@@ -602,13 +637,24 @@ export class SettingsIntegrationActions {
         };
     }
 
-
+    /**
+     * This wil be use for delete paypal details action
+     *
+     * @return {*}  {CustomActions}
+     * @memberof SettingsIntegrationActions
+     */
     public deletePaypalDetails(): CustomActions {
         return {
             type: SETTINGS_INTEGRATION_ACTIONS.DELETE_PAYPAL_DETAILS,
         };
     }
-
+    /**
+     * This will be use for update paypal details action
+     *
+     * @param {PayPalClass} value
+     * @return {*}  {CustomActions}
+     * @memberof SettingsIntegrationActions
+     */
     public updatePaypalDetails(value: PayPalClass): CustomActions {
         return {
             type: SETTINGS_INTEGRATION_ACTIONS.UPDATE_PAYPAL_DETAILS,
