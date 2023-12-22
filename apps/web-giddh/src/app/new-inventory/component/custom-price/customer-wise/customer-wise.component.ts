@@ -503,6 +503,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
      */
     private deleteItem(uniqueName: string, type: string, stockFormArrayIndex?: number, variantFormArrayIndex?: number, variantName?: string, isTemp?: boolean): void {
         const discounts = this.discountForm.get('discountInfo') as UntypedFormArray;
+        const stock = discounts.at(stockFormArrayIndex).get('variants') as UntypedFormArray;
         let model = {
             userUniqueName: this.currentUser.uniqueName,
             variantUniqueName: '',
@@ -511,13 +512,13 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
 
         if (type === 'stock') {
             model.stockUniqueName = uniqueName;
-            discounts.removeAt(stockFormArrayIndex);
-            if(discounts.length === 0) this.currentUserStocks = null;
-            this.variantsWithoutDiscount.splice(stockFormArrayIndex, 1);
+            // discounts.removeAt(stockFormArrayIndex);
+            // if(discounts.length === 0) this.currentUserStocks = null;
+            // this.variantsWithoutDiscount.splice(stockFormArrayIndex, 1);
         } else {
             model.variantUniqueName = uniqueName;
-            this.variantsWithoutDiscount[stockFormArrayIndex].variantUniqueName = uniqueName;
-            this.variantsWithoutDiscount[stockFormArrayIndex].variantName = variantName;
+            // this.variantsWithoutDiscount[stockFormArrayIndex].variantUniqueName = uniqueName;
+            // this.variantsWithoutDiscount[stockFormArrayIndex].variantName = variantName;
         }
 
         let index = this.checkTemporaryUser(uniqueName);
@@ -526,8 +527,6 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                 if (response && response?.status === "success") {
                     console.log("deleteDiscountRecord", response);
                     
-                    var stock = discounts.at(stockFormArrayIndex).get('variants') as UntypedFormArray;
-
                     if (type === 'variant') {
                         var variant = stock.at(variantFormArrayIndex)?.value;
 
@@ -546,10 +545,29 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                 }
             });
         } else {
-            this.tempUserList.splice(index, 1);
-            //Delete Temporary User from User List
-            let indexInUserListArray = this.checkUserList(uniqueName);
-            this.userList.splice(indexInUserListArray, 1);
+            if(type === "user"){
+                this.tempUserList.splice(index, 1);
+                //Delete Temporary User from User List
+                let indexInUserListArray = this.checkUserList(uniqueName);
+                this.userList.splice(indexInUserListArray, 1);
+            }
+
+            if(type === 'variant'){
+                var variant = stock.at(variantFormArrayIndex)?.value;
+                variant = {
+                    label: variant?.variantName,
+                    value: variant?.variantUniqueName
+                };
+                /** To add deleted variant info in "variantsWithoutDiscount" array  */
+                this.variantsWithoutDiscount.at(stockFormArrayIndex).push(variant);
+                stock.removeAt(variantFormArrayIndex);
+            }
+
+            if(type === 'stock'){
+                discounts.removeAt(stockFormArrayIndex);
+                if(discounts.length === 0) this.currentUserStocks = null;
+                this.variantsWithoutDiscount.splice(stockFormArrayIndex, 1);
+            }
         }
     }
 
@@ -647,6 +665,13 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                 this.isLoading = false;
                 if (response && response?.status === 'success') {
                     console.log("createDiscount res", response);
+                  const discountForm = (this.discountForm.get('discountInfo') as FormArray).at(stockFormArrayIndex) as UntypedFormArray;
+                  discountForm.get('isTempStock').patchValue(false);
+
+                  discountForm.controls.forEach( item => {
+                        console.log("item ---- ",item);
+                  });
+
                     this.toaster.successToast(response?.body);
                 } else {
                     this.toaster.errorToast(response?.message)
@@ -763,13 +788,13 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                     });
 
                     discounts.push(this.initDiscountForm({
-                        stock: { name: event?.name, uniqueName: event?.uniqueName },
+                        stock: { name: event?.name, uniqueName: event?.uniqueName, isTempStock: true },
                         units: units ?? []
                     }));
 
                     let variants = (this.discountForm.get('discountInfo') as FormArray).at(stockIndex).get('variants') as UntypedFormArray;
                     response.body?.variants.forEach((variant, variantIndex) => {
-                        variants.push(this.initVariantForm({ name: variant?.name, uniqueName: variant?.uniqueName }));
+                        variants.push(this.initVariantForm({ name: variant?.name, uniqueName: variant?.uniqueName, isTemproraryVariant: true }));
                         (variants.at(variantIndex).get('discounts') as UntypedFormArray).push(this.initDiscountValuesForm({ type: null, value: null, uniqueName: null }))
                     });
                     this.currentUserStocks = event;
