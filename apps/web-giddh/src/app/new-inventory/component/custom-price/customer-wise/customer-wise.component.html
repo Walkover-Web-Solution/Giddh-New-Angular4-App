@@ -113,7 +113,7 @@
                                                                                     #discountComponent
                                                                                     [discountMenu]="false"
                                                                                     [discountsList]="discountsList"
-                                                                                    [discountAccountsDetails]="discountsList"
+                                                                                    [discountAccountsDetails]="variant?.get('discounts')?.value"
                                                                                     [discountSum]="variant?.get('discountValue')?.value"
                                                                                     (discountTotalUpdated)="calculateWhenTrxAltered(entry, transaction)"
                                                                                     [showHeaderText]="false"
