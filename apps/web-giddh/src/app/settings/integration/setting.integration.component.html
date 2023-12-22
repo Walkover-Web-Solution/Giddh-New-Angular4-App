@@ -130,7 +130,7 @@
 
             <mat-tab [label]="localeData?.collection?.tab_heading">
                 <ng-template> <span class="icon-card"></span> {{ localeData?.collection?.tab_heading }} </ng-template>
-                <div class="clearfix petty-cash">
+                <div class="clearfix petty-cash collection-integration">
                     <mat-tab-group mat-stretch-tabs="false" animationDuration="0ms" [disableRipple]="true">
                         <mat-tab [label]="'Razorpay'">
                             <div class="box clearfix mb-2">
@@ -181,7 +181,7 @@
                                                             "
                                                             name="razorPayObj.account"
                                                             [(ngModel)]="razorPayObj.account.uniqueName"
-                                                            [options]="accounts$ | async"
+                                                            [options]="accounts"
                                                             (selected)="selectAccount($event)"
                                                             [forceClearReactive]="forceClearLinkAccount$ | async"
                                                             [enableDynamicSearch]="true"
@@ -280,7 +280,7 @@
                                             <div>
                                                 <label>{{ localeData?.collection?.link_account_label }}</label>
                                                 <div class="input-group">
-                                                    <div class="d-flex">
+                                                    <div class="d-flex w-100">
                                                         <sh-select
                                                             class="linked-account"
                                                             [placeholder]="
@@ -288,14 +288,15 @@
                                                             "
                                                             name="paypalObj.account"
                                                             [(ngModel)]="paypalObj.account.uniqueName"
-                                                            [options]="accounts$ | async"
+                                                            [options]="paypalAccounts"
                                                             (selected)="selectLinkedAccount($event)"
-                                                            [forceClearReactive]="forceClearLinkAccount$ | async"
+                                                            [forceClearReactive]="paypalForceClearLinkAccount$ | async"
                                                             [enableDynamicSearch]="true"
-                                                            (onClear)="resetValue()"
                                                             [isPaginationEnabled]="true"
-                                                            (scrollEnd)="handleScrollEnd()"
-                                                            (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)"
+                                                            (scrollEnd)="paypalHandleScrollEnd()"
+                                                            (dynamicSearchedQuery)="
+                                                                paypalOnAccountSearchQueryChanged($event)
+                                                            "
                                                             [fixedValue]="paypalObj?.account?.name"
                                                             [defaultValue]="paypalObj?.account?.name"
                                                         >

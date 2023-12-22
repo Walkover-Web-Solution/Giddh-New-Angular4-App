@@ -858,6 +858,14 @@ textarea {
     }
 }
 
+<<<<<<< HEAD
+=======
+.collection-integration {
+    .mat-mdc-tab-body-wrapper {
+        min-height: 500px;
+    }
+}
+>>>>>>> d71f921f24 (Had done changes)
 @media screen and (max-width: 1366px) and (orientation: portrait) {
     .subscription-form-select {
         float: left !important;

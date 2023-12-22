@@ -132,7 +132,7 @@ export class SettingsIntegrationActions {
         .pipe(
             ofType(SETTINGS_INTEGRATION_ACTIONS.SAVE_PAYPAL_DETAILS),
             switchMap((action: CustomActions) => this.settingsIntegrationService.savePaypalDetails(action.payload)),
-            map(res => this.validatePayIntegrationResponse<PaypalDetailsResponse, PayPalClass>(res, {
+            map(res => this.validatePaypalIntegrationResponse<PaypalDetailsResponse, PayPalClass>(res, {
                 type: SETTINGS_INTEGRATION_ACTIONS.SAVE_PAYPAL_DETAILS_RESPONSE,
                 payload: res
             }, true, {
@@ -156,7 +156,7 @@ export class SettingsIntegrationActions {
         .pipe(
             ofType(SETTINGS_INTEGRATION_ACTIONS.UPDATE_PAYPAL_DETAILS),
             switchMap((action: CustomActions) => this.settingsIntegrationService.updatePaypalDetails(action.payload)),
-            map(res => this.validatePayIntegrationResponse<PaypalDetailsResponse, PayPalClass>(res, {
+            map(res => this.validatePaypalIntegrationResponse<PaypalDetailsResponse, PayPalClass>(res, {
                 type: SETTINGS_INTEGRATION_ACTIONS.UPDATE_PAYPAL_DETAILS_RESPONSE,
                 payload: res
             }, true, {

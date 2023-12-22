@@ -43,7 +43,8 @@
         "auto_collect_form_heading": "Auto Collect",
         "payment_gateway_form_heading": "Payment Gateway",
         "unlink_razorpay_message": "You don't have any account linked with Razorpay.",
-        "unlink_paypal_message": "You don't have any account linked with Paypal."
+        "unlink_paypal_message": "You don't have any account linked with Paypal.",
+        "invalid_email_error": "Enter valid Email ID"
     },
     "ecommerce": {
         "tab_heading": "E-Comm",
