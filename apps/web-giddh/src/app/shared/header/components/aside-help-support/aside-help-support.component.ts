@@ -26,14 +26,14 @@ export class AsideHelpSupportComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** True if Mac OS */
+    public isMac: boolean;
 
     constructor(
         private authService: AuthenticationService,
         private generalActions: GeneralActions,
         private store: Store<AppState>
-    ) {
-
-    }
+    ) {}
 
     /**
      * Initialize the component
@@ -41,9 +41,22 @@ export class AsideHelpSupportComponent implements OnInit, OnDestroy {
      * @memberof AsideHelpSupportComponent
      */
     public ngOnInit() {
+        this.isMacOS();
         this.getElectronAppVersion();
         this.getElectronMacAppVersion();
         this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+    }
+
+    /**
+     * Check current operating system is Mac or not.
+     *
+     * @private
+     * @memberof AsideHelpSupportComponent
+     */
+    private isMacOS(): void {
+        const userAgent = window.navigator.userAgent.toLowerCase(),
+            macosPlatforms = /(macintosh|macintel|macppc|mac68k|macos)/i;
+        this.isMac = macosPlatforms.test(userAgent);
     }
 
     /**
