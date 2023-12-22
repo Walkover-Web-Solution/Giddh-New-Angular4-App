@@ -609,7 +609,7 @@ export class SettingsIntegrationActions {
         };
     }
 
-    public updatePaypalDetails(value: RazorPayClass): CustomActions {
+    public updatePaypalDetails(value: PayPalClass): CustomActions {
         return {
             type: SETTINGS_INTEGRATION_ACTIONS.UPDATE_PAYPAL_DETAILS,
             payload: value
@@ -932,16 +932,29 @@ export class SettingsIntegrationActions {
         }
         return successAction;
     }
-
+    /**
+     * This will be use for validate paypal response
+     *
+     * @template TResponse
+     * @template TRequest
+     * @param {BaseResponse<TResponse, TRequest>} response
+     * @param {CustomActions} successAction
+     * @param {boolean} [showToast=false]
+     * @param {CustomActions} [errorAction={ type: 'EmptyAction' }]
+     * @return {*}  {CustomActions}
+     * @memberof SettingsIntegrationActions
+     */
     public validatePaypalIntegrationResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = { type: 'EmptyAction' }): CustomActions {
+        let message = '';
         if (response?.status === 'error') {
             if (showToast) {
                 this.toasty.errorToast(response.message);
             }
             return errorAction;
         } else {
+            message = (response?.request['message']);
             this.store.dispatch(this.getPaypalDetails());
-            this.toasty.successToast("Paypal Details have been verified successfully.");
+            this.toasty.successToast(message);
         }
         return successAction;
     }

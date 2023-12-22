@@ -44,7 +44,9 @@
         "invalid_email_error": "मान्य ईमेल आयडी प्रविष्ट करा",
         "paypal_form_heading": "Paypal माहिती",
         "email_id_label": "ईमेल आयडी",
-        "email_id_placeholder": "ईमेल आयडी"
+        "email_id_placeholder": "ईमेल आयडी",
+        "paypal_update_successfully": "Paypal माहिती सफलतेचे अद्यतित केले गेले आहे.",
+        "unlinked_account_successfully": "Paypal माहिती सफलतापूर्वक अनलिंक केली गेली आहे."
 	},
 	"ecommerce": {
 		"tab_heading": "ई-कॉम",

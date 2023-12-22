@@ -51,6 +51,7 @@ export class RazorPayClass {
 export class PayPalClass {
     public email: string;
     public account: INameUniqueName;
+    public message?: string;
 }
 
 
