@@ -132,7 +132,7 @@
                 <ng-template> <span class="icon-card"></span> {{ localeData?.collection?.tab_heading }} </ng-template>
                 <div class="clearfix petty-cash collection-integration">
                     <mat-tab-group mat-stretch-tabs="false" animationDuration="0ms" [disableRipple]="true">
-                        <mat-tab [label]="'Razorpay'">
+                        <mat-tab [label]="localeData?.collection?.razorpay_tab_heading">
                             <div class="box clearfix mb-2">
                                 <h3 class="font-16 bold mb-2">{{ localeData?.collection?.razorpay_form_heading }}</h3>
                                 <form #razorPayform="ngForm" novalidate class="">
@@ -256,7 +256,7 @@
                                 </form>
                             </div>
                         </mat-tab>
-                        <mat-tab [label]="'Paypal'">
+                        <mat-tab [label]="localeData?.collection?.paypal_tab_heading">
                             <div class="box clearfix mb-2">
                                 <h3 class="font-16 bold mb-2">{{ localeData?.collection?.paypal_form_heading }}</h3>
                                 <form #paypalForm="ngForm" novalidate class="">

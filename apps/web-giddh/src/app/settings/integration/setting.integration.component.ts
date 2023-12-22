@@ -380,7 +380,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      *
      * @memberof SettingIntegrationComponent
      */
-    public setPaypalDummyData() {
+    public setPaypalDummyData(): void {
         if (this.paypalObj) {
             this.paypalObj.email = null;
             this.paypalObj.account = { name: null, uniqueName: null };
@@ -405,7 +405,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @param {IOption} event
      * @memberof SettingIntegrationComponent
      */
-    public selectLinkedAccount(event: IOption) {
+    public selectLinkedAccount(event: IOption): void {
         if (event?.value) {
             this.paypalAccounts$.subscribe((arr: IOption[]) => {
                 let res = find(arr, (o) => o?.value === event.value);
@@ -422,7 +422,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @return {*}
      * @memberof SettingIntegrationComponent
      */
-    public savePaypalDetails() {
+    public savePaypalDetails(): void {
         let data = cloneDeep(this.paypalObj);
         if (!(this.validateEmail(data?.email))) {
             this.toasty.warningToast(this.localeData?.collection?.invalid_email_error, this.commonLocaleData?.app_warning);
@@ -437,7 +437,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @return {*}
      * @memberof SettingIntegrationComponent
      */
-    public updatePaypalDetails() {
+    public updatePaypalDetails(): void {
         let data = cloneDeep(this.paypalObj);
         if (!(this.validateEmail(data?.email))) {
             this.toasty.warningToast(this.localeData?.collection?.invalid_email_error, this.commonLocaleData?.app_warning);
@@ -452,7 +452,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      *
      * @memberof SettingIntegrationComponent
      */
-    public unlinkAccountFromPaypal() {
+    public unlinkAccountFromPaypal(): void {
         if (this.paypalObj.account && this.paypalObj.account.name && this.paypalObj.account?.uniqueName) {
             let data = cloneDeep(this.paypalObj);
             if (data) {
@@ -472,7 +472,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      *
      * @memberof SettingIntegrationComponent
      */
-    public deletePaypalDetails() {
+    public deletePaypalDetails(): void {
         this.store.dispatch(this.settingsIntegrationActions.deletePaypalDetails());
     }
 
