@@ -39,7 +39,12 @@
 		"client_secret_key_placeholder": "क्लायंट सिक्रेट की",
 		"auto_collect_form_heading": "स्वयंचलित संग्रह",
 		"payment_gateway_form_heading": "प्रदानाची द्वारमार्गिका",
-		"unlink_razorpay_message": "आपल्याकडे रेझरपेयेशी कोणतेही खाते जोडलेले नाही."
+		"unlink_razorpay_message": "आपल्याकडे रेझरपेयेशी कोणतेही खाते जोडलेले नाही.",
+        "unlink_paypal_message": "तुमच्याकडून Paypal सह काही खाते नसतात.",
+        "invalid_email_error": "मान्य ईमेल आयडी प्रविष्ट करा",
+        "paypal_form_heading": "Paypal माहिती",
+        "email_id_label": "ईमेल आयडी",
+        "email_id_placeholder": "ईमेल आयडी"
 	},
 	"ecommerce": {
 		"tab_heading": "ई-कॉम",
