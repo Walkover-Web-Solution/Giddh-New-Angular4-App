@@ -45,6 +45,7 @@
         "paypal_form_heading": "Paypal Details",
         "email_id_label": "Email Id",
         "email_id_placeholder": "Email Id",
+        "paypal_save_successfully":"Paypal account details have been saved successfully.",
         "paypal_update_successfully":"Paypal account details have been updated successfully.",
         "unlinked_account_successfully":"Paypal account details have been unlink successfully.",
         "paypal_tab_heading": "Paypal",
