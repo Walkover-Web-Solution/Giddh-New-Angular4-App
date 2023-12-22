@@ -45,6 +45,7 @@
         "paypal_form_heading": "पेपाल विवरण",
         "email_id_label": "ईमेल आईडी",
         "email_id_placeholder": "ईमेल आईडी",
+        "paypal_save_successfully":"पेपाल खाता विवरण सफलतापूर्वक सहेजा गया है।",
         "paypal_update_successfully": "पेपाल खाता विवरण सफलतापूर्वक अपडेट किए गए हैं।",
         "unlinked_account_successfully": "पेपाल खाता विवरण सफलतापूर्वक अनलिंक किए गए हैं।",
         "paypal_tab_heading": "पेपाल",

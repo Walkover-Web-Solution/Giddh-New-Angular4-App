@@ -415,6 +415,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             this.toasty.warningToast(this.localeData?.collection?.invalid_email_error, this.commonLocaleData?.app_warning);
             return;
         }
+        data.message = this.localeData?.collection?.paypal_save_successfully;
         this.store.dispatch(this.settingsIntegrationActions.savePaypalDetails(data));
     }
 
