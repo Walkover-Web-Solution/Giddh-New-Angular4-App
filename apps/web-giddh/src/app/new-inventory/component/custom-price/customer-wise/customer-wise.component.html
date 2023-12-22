@@ -87,7 +87,9 @@
                                                                                 [label]="localeData?.price"
                                                                                 [type]="'number'"
                                                                                 [cssClass]="'text-right'"
-                                                                                formControlName="price"></input-field>
+                                                                                formControlName="price"
+                                                                                (change)="updateDiscountInVariant(variant)"
+                                                                            ></input-field>
                                                                         </td>
                                                                         <td class="child-td-nam">
                                                                             <div class="toggle-wrap">
@@ -113,9 +115,11 @@
                                                                                     #discountComponent
                                                                                     [discountMenu]="false"
                                                                                     [discountsList]="discountsList"
-                                                                                    [discountAccountsDetails]="variant?.get('discounts')?.value"
+                                                                                    [discountAccountsDetails]="variant?.get('discountInfo')?.value"
                                                                                     [discountSum]="variant?.get('discountValue')?.value"
-                                                                                    (discountTotalUpdated)="calculateWhenTrxAltered(entry, transaction)"
+                                                                                    [discountPercentageModal]="variant.get('discountPercentageModal')?.value"
+                                                                                    [discountFixedValueModal]="variant.get('discountFixedValueModal')?.value"
+                                                                                    (discountTotalUpdated)="updateDiscountInVariant(variant)"
                                                                                     [showHeaderText]="false"
                                                                                     [maskInput]="''"
                                                                                     [prefixInput]="variant?.get('discountInfo')?.value?.linkAccount?.currencySymbol"

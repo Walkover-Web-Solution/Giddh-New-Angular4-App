@@ -101,11 +101,11 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
                 this.change();
             }
         }
-        if ('discountFixedValueModal' in changes && changes.discountFixedValueModal.currentValue !== changes.discountFixedValueModal.previousValue) {
+        if ('discountFixedValueModal' in changes && changes.discountFixedValueModal.currentValue && changes.discountFixedValueModal.currentValue !== changes.discountFixedValueModal.previousValue) {
             this.discountFixedValueModal = changes.discountFixedValueModal.currentValue;
             this.assignDiscount('FIX_AMOUNT', changes.discountFixedValueModal.currentValue, true);
         }
-        if ('discountPercentageModal' in changes && changes.discountPercentageModal.currentValue !== changes.discountPercentageModal.previousValue) {
+        if ('discountPercentageModal' in changes && changes.discountPercentageModal.currentValue && changes.discountPercentageModal.currentValue !== changes.discountPercentageModal.previousValue) {
             this.discountPercentageModal = changes.discountPercentageModal.currentValue;
             this.assignDiscount('PERCENTAGE', changes.discountPercentageModal.currentValue, true);
         }
@@ -156,15 +156,15 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
      * @memberof DiscountControlComponent
      */
     public discountFromInput(type: 'FIX_AMOUNT' | 'PERCENTAGE', event: any) {
-        this.assignDiscount(type, event.target?.value, event);
+        this.assignDiscount(type, event.target?.value, true);
     }
 
-    public assignDiscount(type: any, value: any, event?: any): void {
+    public assignDiscount(type: any, value: any, isActive?: boolean): void {
         this.defaultDiscount.amount = parseFloat(String(value)?.replace(/[,'\s]/g, ''));
         this.defaultDiscount.discountValue = parseFloat(String(value)?.replace(/[,'\s]/g, ''));
         this.defaultDiscount.discountType = type;
 
-        this.discountTotalUpdated.emit({ discount: this.defaultDiscount.amount, isActive: event, discountType: type });
+        this.discountTotalUpdated.emit({ discount: this.defaultDiscount.amount, isActive: isActive, discountType: type });
 
         if (!value) {
             this.discountFromVal = true;
