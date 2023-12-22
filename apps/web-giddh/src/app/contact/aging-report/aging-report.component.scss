@@ -42,7 +42,6 @@
     background: transparent;
 }
 
-
 .wrap-searching-aging {
     display: none !important;
 }
@@ -103,7 +102,7 @@ tr.aging-table-top td {
     border: 1px solid var(--color-common-secondary-border);
     border-radius: 5px;
     margin-left: 10px !important;
-    button{
+    button {
         font-size: var(--font-size-16);
         align-items: center;
         display: flex;
@@ -227,6 +226,50 @@ tr.mat-header-row {
         var(--color-primary-filter-background),
         1px solid var(--color-primary-button-border)
     );
+}
+
+.unpaid-invoice-aside-pane {
+    $header-height: 57.8px;
+    .header {
+        height: $header-height;
+        padding: 20px 15px;
+        background: var(--color-primary-right-side-popup-header-background);
+        color: var(--color-primary-right-side-popup-header-text);
+
+        button {
+            background: var(--color-transparent-background);
+            color: var(--color-primary-right-side-popup-header-text);
+            min-width: 0;
+            border-radius: 0;
+        }
+    }
+    .list-wrapper {
+        .list-viewport {
+            height: calc(100vh - ($header-height + 30px));
+            width: 730px;
+        }
+
+        .list-item {
+            height: 70px;
+            a {
+                & > div {
+                    height: 70px;
+                }
+            }
+            &:not(:last-child) {
+                border-bottom: 1px solid var(--color-common-primary-border);
+            }
+            &:hover {
+                background-color: var(--color-table-row-hover-secondary-background);
+            }
+
+            .customer-name {
+                color: var(--color-nero);
+                white-space: normal;
+                word-break: break-all;
+            }
+        }
+    }
 }
 
 // responsive

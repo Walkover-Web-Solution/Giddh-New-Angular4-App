@@ -8,7 +8,7 @@ import {
     ChangeDetectorRef,
     Input,
     OnDestroy,
-    TemplateRef,
+    TemplateRef
 } from "@angular/core";
 import {
     AgingAdvanceSearchModal,
@@ -33,17 +33,25 @@ import { GeneralService } from "../../services/general.service";
 import { SettingsBranchActions } from "../../actions/settings/branch/settings.branch.action";
 import { OrganizationType } from "../../models/user-login-state";
 import { UntypedFormControl } from "@angular/forms";
-import { MatDialog } from "@angular/material/dialog";
+import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { MatTableDataSource } from "@angular/material/table";
 import { MatMenuTrigger } from "@angular/material/menu";
 import { PAGINATION_LIMIT } from "../../app.constant";
 import { AgingreportingService } from "../../services/agingreporting.service";
 import { ToasterService } from "../../services/toaster.service";
 import { Router } from "@angular/router";
+import { VoucherTypeEnum } from "../../models/api-models/Sales";
+import { ReceiptService } from "../../services/receipt.service";
+import { InvoiceReceiptFilter } from "../../models/api-models/recipt";
+import { GIDDH_DATE_FORMAT } from "../../shared/helpers/defaultDateFormat";
+import { ScrollDispatcher } from "@angular/cdk/scrolling";
+import { SettingsFinancialYearActions } from "../../actions/settings/financial-year/financial-year.action";
+import { DomSanitizer } from "@angular/platform-browser";
+
 @Component({
     selector: "aging-report",
     templateUrl: "aging-report.component.html",
-    styleUrls: ["aging-report.component.scss"],
+    styleUrls: ["aging-report.component.scss"]
 })
 export class AgingReportComponent implements OnInit, OnDestroy {
     /* This will hold local JSON data */
@@ -74,6 +82,8 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     @ViewChild("advanceSearch") advanceSearchTemplate: TemplateRef<any>;
     @ViewChild("paginationChild", { static: false }) public paginationChild: ElementViewContainerRef;
     @ViewChild("filterDropDownList", { static: true }) public filterDropDownList: BsDropdownDirective;
+    /** Holds Template Reference for Unpaid Invoice Asidepane */
+    @ViewChild("unpaidInvoice") public unpaidInvoice: TemplateRef<any>;
     /** Advance search component instance */
     @ViewChild("agingReportAdvanceSearch", { read: ContactAdvanceSearchComponent, static: true }) public agingReportAdvanceSearch: ContactAdvanceSearchComponent;
     @Output() public createNewCustomerEvent: EventEmitter<boolean> = new EventEmitter();
@@ -112,6 +122,22 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     public isLoading: boolean = false;
     /** Stores the voucher API version of company */
     public voucherApiVersion: 1 | 2;
+    /** Holds Unpaid invoice Dailog ref */
+    public unpaidInvoiceDailogRef: MatDialogRef<any>;
+    /** Holds Voucher name constant for Unpaid Invoice Get All API */
+    public selectedVoucher: VoucherTypeEnum = VoucherTypeEnum.sales;
+    /** Holds Unpaid Invoice All Data */
+    public unpaidInvoiceData: any[] = [];
+    /** Holds Unpaid Invoice Paginaton data */
+    public unpaidInvoicePaginationData: any;
+    /** Holds Account unique name and range */
+    private unpaidInvoiceListInput: any;
+    /** Holds Unpaid Invoice API Loading Status */
+    public unpaidInvoiceIsLoading: boolean = false;
+    /** Holds Start Date of Financial Year */
+    public minDate: any;
+    /** Holds End Date of Financial Year */
+    public maxDate: any;
 
     constructor(
         public dialog: MatDialog,
@@ -124,7 +150,11 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         private settingsBranchAction: SettingsBranchActions,
         private generalService: GeneralService,
         private router: Router,
-        private agingReportService: AgingreportingService) {
+        private agingReportService: AgingreportingService,
+        private receiptService: ReceiptService,
+        private scrollDispatcher: ScrollDispatcher,
+        private settingsFinancialYearActions: SettingsFinancialYearActions,
+        private sanitizer: DomSanitizer) {
         this.agingDropDownoptions$ = this.store.pipe(select(s => s.agingreport.agingDropDownoptions), takeUntil(this.destroyed$));
         this.dueAmountReportRequest = new DueAmountReportQueryRequest();
         this.dueAmountReportRequest.count = PAGINATION_LIMIT;
@@ -166,6 +196,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
+        this.store.dispatch(this.settingsFinancialYearActions.getFinancialYearLimits());
         this.getDueReport();
         this.imgPath = isElectron ? "assets/images/" : AppUrl + APP_FOLDER + "assets/images/";
         this.getDueAmountreportData();
@@ -256,6 +287,20 @@ export class AgingReportComponent implements OnInit, OnDestroy {
                     this.isDueRangeRequestInProgress = false;
                     this.getDueReport();
                 }
+            }
+        });
+
+        this.scrollDispatcher.scrolled().pipe(takeUntil(this.destroyed$)).subscribe((event: any) => {
+            if (event && event?.getDataLength() - event?.getRenderedRange().end < 20 && !this.unpaidInvoiceIsLoading && this.unpaidInvoicePaginationData.page < this.unpaidInvoicePaginationData.totalPages) {
+                this.unpaidInvoicePaginationData.page++;
+                this.getAllInvoices(this.unpaidInvoiceListInput.accountUniqueName, this.unpaidInvoiceListInput.range);
+            }
+        });
+
+        this.store.pipe(select(state => state.settings.financialYearLimits), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response && response.startDate && response.endDate) {
+                this.minDate = dayjs(response.startDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                this.maxDate = dayjs(response.endDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
             }
         });
     }
@@ -511,5 +556,172 @@ export class AgingReportComponent implements OnInit, OnDestroy {
                 this.toaster.showSnackBar("error", response?.message);
             }
         });
+    }
+
+    /**
+     * It will open Popup and show Unpaid/ Partial paid invoice list
+     *
+     * @memberof AgingReportComponent
+     */
+    public showUnpaidInvoiceList(accountUniqueName: string, range: string): void {
+        this.unpaidInvoiceDailogRef = this.dialog.open(this.unpaidInvoice, {
+            height: '100vh',
+            width: '760px',
+            maxWidth: '65vw',
+            position: {
+                right: '0'
+            }
+        });
+        this.unpaidInvoiceData = [];
+        this.unpaidInvoicePaginationData = undefined;
+        this.getAllInvoices(accountUniqueName, range);
+    }
+
+    /**
+     * Get All Invoices API Call
+     *
+     * @private
+     * @param {string} accountUniqueName
+     * @param {string} range
+     * @memberof AgingReportComponent
+     */
+    private getAllInvoices(accountUniqueName: string, range: string): void {
+        let dateInterval = this.calculateDateRangeInterval(range);
+
+        this.unpaidInvoiceListInput = {
+            accountUniqueName: accountUniqueName,
+            range: range
+        };
+
+        if (dateInterval) {
+            let model: InvoiceReceiptFilter = {
+                page: this.unpaidInvoicePaginationData ? this.unpaidInvoicePaginationData.page : 1,
+                count: PAGINATION_LIMIT,
+                from: dateInterval?.from,
+                to: dateInterval?.to,
+                balanceStatus: ["UNPAID", "PARTIAL-PAID"],
+                accountUniqueName: accountUniqueName,
+                q: "",
+                sort: "",
+                sortBy: "",
+                totalEqual: false,
+                totalLessThan: false,
+                totalMoreThan: false,
+                dueDateEqual: false,
+                dueDateAfter: false,
+                dueDateBefore: false,
+                invoiceDate: undefined,
+                dueDate: undefined,
+                voucherNumber: undefined,
+                total: "",
+                source: "AGING_REPORT"
+            };
+
+            if (model.page === 1) {
+                this.unpaidInvoiceIsLoading = true;
+            }
+            this.receiptService.GetAllReceipt(model, this.selectedVoucher).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+                if (model.page === 1) {
+                    this.unpaidInvoiceIsLoading = false;
+                }
+                if (res?.body?.items?.length) {
+                    if (this.unpaidInvoiceData?.length) {
+                        this.unpaidInvoiceData = this.unpaidInvoiceData.concat(res?.body?.items);
+                    } else {
+                        this.unpaidInvoiceData = res?.body?.items;
+                    }
+                    this.unpaidInvoicePaginationData = {
+                        page: res?.body?.page,
+                        totalItems: res?.body?.totalItems,
+                        totalPages: res?.body?.totalPages
+                    }
+                }
+                this.changeDetection();
+            });
+        }
+    }
+
+    /**
+     * Call Change Detection after 100ms
+     *
+     * @private
+     * @memberof AgingReportComponent
+     */
+    private changeDetection(): void {
+        setTimeout(() => {
+            this.cdr.detectChanges();
+        }, 100);
+    }
+
+    /**
+     * Calulate Range and returns the to and from Date
+     *
+     * @private
+     * @param {string} range
+     * @memberof AgingReportComponent
+     */
+    private calculateDateRangeInterval(range: string): any {
+        var dateObj;
+
+        switch (range) {
+            case "range0": dateObj = this.getPriorDate(0, this.agingDropDownoptions?.fourth);
+                break;
+            case "range1": dateObj = this.getPriorDate(this.agingDropDownoptions?.fourth + 1, this.agingDropDownoptions?.fifth - (this.agingDropDownoptions?.fourth + 1));
+                break;
+            case "range2": dateObj = this.getPriorDate(this.agingDropDownoptions?.fifth + 1, this.agingDropDownoptions?.sixth - (this.agingDropDownoptions?.fifth + 1));
+                break;
+            case "range3": dateObj = this.getPriorDate(this.agingDropDownoptions?.sixth + 1, null);
+                break;
+            case "upcoming-due": dateObj = { to: this.maxDate, from: dayjs(new Date()).format(GIDDH_DATE_FORMAT) };
+                break;
+            case "total-due": dateObj = { to: this.maxDate, from: this.minDate };
+                break;
+        }
+        return dateObj;
+    }
+
+    /**
+     * This function returns object with to and from date 
+     *
+     * @private
+     * @param {number} intervalCount
+     * @param {number} intervaldays
+     * @return {*} 
+     * @memberof AgingReportComponent
+     */
+    private getPriorDate(intervalCount: number, intervaldays: number): any {
+        let currentDate = new Date();
+        let priorDate;
+        let isLast = false;
+
+        if (intervalCount === 0 && intervaldays) {
+            priorDate = new Date();
+            priorDate.setDate(priorDate.getDate() - intervaldays);
+        } else if (intervaldays !== null) {
+            currentDate.setDate(currentDate.getDate() - intervalCount);
+            priorDate = cloneDeep(currentDate);
+            priorDate.setDate(priorDate.getDate() - intervaldays);
+        } else {
+            priorDate = cloneDeep(currentDate);
+            priorDate.setDate(priorDate.getDate() - intervalCount);
+            isLast = true;
+        }
+
+        if (isLast) {
+            return { to: dayjs(priorDate).format(GIDDH_DATE_FORMAT), from: this.minDate };
+        } else {
+            return { to: dayjs(currentDate).format(GIDDH_DATE_FORMAT), from: dayjs(priorDate).format(GIDDH_DATE_FORMAT) };
+        }
+    }
+
+    /**
+     * Angular's sanitizer service to bypass security and trust the provided string as a resource URL
+     *
+     * @param {string} str
+     * @return {*}  {*}
+     * @memberof AgingReportComponent
+     */
+    public domSantizer(str: string): any {
+        return this.sanitizer.bypassSecurityTrustResourceUrl(str);
     }
 }

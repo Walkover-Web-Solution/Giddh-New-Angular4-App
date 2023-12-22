@@ -40,6 +40,7 @@ import { SettingsDiscountService } from '../../../services/settings.discount.ser
 import { LedgerUtilityService } from '../../services/ledger-utility.service';
 import { InvoiceSetting } from '../../../models/interfaces/invoice.setting.interface';
 import { CommonService } from '../../../services/common.service';
+import { MatMenuTrigger } from '@angular/material/menu';
 
 /** New ledger entries */
 const NEW_LEDGER_ENTRIES = [
@@ -73,6 +74,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     @ViewChild(MatAccordion) accordion: MatAccordion;
     /** Instance of RCM checkbox */
     @ViewChild("rcmCheckbox") public rcmCheckbox: ElementRef;
+    /** Mat Menu reference used as tooltip */
+    @ViewChild(MatMenuTrigger, { static: false }) trigger: MatMenuTrigger;
     /* This will hold local JSON data */
     @Input() public localeData: any = {};
     /* This will hold common JSON data */
@@ -111,6 +114,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     @Input() public selectedAccountDetails: IOption;
     /** Total pages for reference vouchers */
     @Input() private referenceVouchersTotalPages: number = 1;
+    /** Holds Invoice Setting for auto Generate Voucher From Entry */
+    @Input() public autoGenerateVoucherFromEntry: boolean;
     public isAmountFirst: boolean = false;
     public isTotalFirts: boolean = false;
     public selectedInvoices: string[] = [];
@@ -258,6 +263,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public selectedStockVariant: IOption = { label: '', value: '' };
     /** Holds Aside Menu State For Other Taxes DialogRef */
     public asideMenuStateForOtherTaxesDialogRef: MatDialogRef<any>;
+    /** Holds Tooltip is opend/close status */
+    private openTooltipMenuStatus: boolean = false;
+    /** Holds mouse hovered on tooltip text status */
+    public tooltipHoveredStatus: boolean = false;
 
     constructor(private store: Store<AppState>,
         private cdRef: ChangeDetectorRef,
@@ -317,7 +326,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             subVoucher: SubVoucher.AdvanceReceipt
         }]);
 
-        this.currentTxn.taxInclusiveAmount = this.currentTxn.amount;
+        this.currentTxn.taxInclusiveAmount = this.currentTxn?.amount;
         this.activeAccount$.subscribe(acc => {
             if (acc) {
                 this.assignUpdateActiveAccount(acc);
@@ -412,6 +421,45 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         });
     }
 
+    /**
+     * Toggle Tooltip Menu on mouseenter event
+     *
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public showAutoPaidTooltip(): void {
+        this.openTooltipMenuStatus = false;
+        setTimeout(() => {
+            this.trigger.openMenu();
+            this.openTooltipMenuStatus = true;
+        }, 200);
+    }
+
+    /**
+     * Toggle Tooltip Menu on mouseenter event
+     *
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public hideAutoPaidTooltip(): void {
+        setTimeout(() => {
+            if (!this.tooltipHoveredStatus) {
+                this.trigger.closeMenu();
+            }
+        }, 200);
+    }
+
+    /**
+     * Close tooltip content
+     *
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public hideAutoPaidTooltipOnMouseLeaveFromTooltip(): void {
+        setTimeout(() => {
+            if (this.openTooltipMenuStatus) {
+                this.trigger.closeMenu();
+            }
+        }, 200);
+    }
+
     @HostListener('click', ['$event'])
     public clicked(e) {
         if (this.sh && e.path && !this.sh.ele?.nativeElement.contains(e.path[3])) {
@@ -438,6 +486,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.invoiceList$ = observableOf(this.invoiceList);
             this.referenceVouchersCurrentPage = 2;
         }
+        if (this.autoGenerateVoucherFromEntry) {
+            this.blankLedger.generateInvoice = true;
+        }
+        this.cdRef.detectChanges();
     }
 
     /**

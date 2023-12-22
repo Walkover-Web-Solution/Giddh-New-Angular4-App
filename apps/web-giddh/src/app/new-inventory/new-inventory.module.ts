@@ -83,6 +83,7 @@ import { CdkScrollModule } from "../theme/form-fields/cdk-scroll/cdk-scroll.modu
 import { CustomPriceModule } from "./component/custom-price/custom-price.module";
 import { BulkStockEditComponent } from "./component/bulk-stock-edit/bulk-stock-edit.component";
 import { BulkStockAdvanceFilterComponent } from "./component/bulk-stock-advance-filter/bulk-stock-advance-filter.component";
+import { WatchVideoModule } from "../theme/watch-video/watch-video.module";
 
 @NgModule({
     declarations: [
@@ -170,7 +171,8 @@ import { BulkStockAdvanceFilterComponent } from "./component/bulk-stock-advance-
         FormsModule,
         NoDataModule,
         DragDropModule,
-        CustomPriceModule
+        CustomPriceModule,
+        WatchVideoModule
     ],
     exports: [
         NewInventoryComponent,

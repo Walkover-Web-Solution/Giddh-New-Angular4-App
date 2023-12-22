@@ -8,6 +8,7 @@
 >
     <div class="transaction-report-wrapper">
         <report-filters
+            *ngIf="translationLoaded"
             [localeData]="localeData"
             [commonLocaleData]="commonLocaleData"
             [moduleName]="moduleName"

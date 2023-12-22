@@ -740,6 +740,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public lastScannedKey: string = '';
     /** True if barcode maching is typing */
     public isBarcodeMachineTyping: boolean = false;
+    /** Stores the discount object from discount calculation */
+    public discountObj: any;
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -1651,7 +1653,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         ])
             .pipe(takeUntil(this.destroyed$))
             .subscribe(result => {
-
                 let arr: PreviousInvoicesVm[] = [];
                 if (!this.isProformaInvoice && !this.isEstimateInvoice) {
                     if (result[0]) {
@@ -2573,7 +2574,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     // filter active taxes
                     entry.taxes = entry.taxes?.filter(tax => tax.isChecked);
                     entry.voucherType = this.voucherUtilityService.parseVoucherType(invoiceType);
-                    entry.taxList = entry.taxes.map(m => m?.uniqueName);
+                    entry.taxList = entry.taxes?.map(m => m?.uniqueName);
                     entry.tcsCalculationMethod = entry.otherTaxModal.tcsCalculationMethod;
 
                     if (entry.isOtherTaxApplicable) {
@@ -3023,14 +3024,24 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         return (value === Infinity) ? 0 : value;
     }
 
+    /**
+     * This will be use for calculation of discount
+     *
+     * @param {SalesEntryClass} entry
+     * @param {SalesTransactionItemClass} trx
+     * @param {boolean} [calculateEntryTotal=true]
+     * @memberof VoucherComponent
+     */
     public calculateTotalDiscountOfEntry(entry: SalesEntryClass, trx: SalesTransactionItemClass, calculateEntryTotal: boolean = true) {
-        let percentageListTotal = entry.discounts?.filter(f => f.isActive)
+        let percentageListTotal: number = 0;
+        let fixedListTotal: number = 0;
+
+        percentageListTotal = entry.discounts?.filter(f => f.isActive)
             ?.filter(s => s.discountType === 'PERCENTAGE')
             .reduce((pv, cv) => {
                 return Number(cv.discountValue) ? Number(pv) + Number(cv.discountValue) : Number(pv);
             }, 0) || 0;
-
-        let fixedListTotal = entry.discounts?.filter(f => f.isActive)
+        fixedListTotal = entry.discounts?.filter(f => f.isActive)
             ?.filter(s => s.discountType === 'FIX_AMOUNT')
             .reduce((pv, cv) => {
                 return Number(cv.discountValue) ? Number(pv) + Number(cv.discountValue) : Number(pv);
@@ -3094,7 +3105,18 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.calculateBalanceDue();
     }
 
+    /**
+     * This will be use for calculating when transaction altered
+     *
+     * @param {SalesEntryClass} entry
+     * @param {SalesTransactionItemClass} trx
+     * @param {boolean} [fromTransactionField=false]
+     * @param {*} [event]
+     * @return {*}
+     * @memberof VoucherComponent
+     */
     public calculateWhenTrxAltered(entry: SalesEntryClass, trx: SalesTransactionItemClass, fromTransactionField: boolean = false, event?: any) {
+        this.discountObj = event;
         if (trx?.accountName || trx?.accountUniqueName) {
             if (fromTransactionField) {
                 trx.highPrecisionAmount = trx.amount;
@@ -3103,22 +3125,90 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     return;
                 }
             }
-            if (event && event.discount && event.isActive) {
-                this.accountAssignedApplicableDiscounts.forEach(item => {
-                    if (item && event.discount && item.uniqueName === event.discount.discountUniqueName) {
-                        item.isActive = event.isActive?.target?.checked;
+            if (this.discountObj || !this.isUpdateMode || !entry['initiallyCall']) {
+                if (this.discountObj !== undefined && this.discountObj) {
+                    if (isNaN(this.discountObj?.discount)) {
+                        this.discountObj.discount = 0;
                     }
-                });
-            }
+                }
+                if (this.discountObj) {
+                    if (this.discountObj?.discountType === 'FIX_AMOUNT') {
+                        entry['discountFixedValueModal'] = this.discountObj?.discount ? this.discountObj?.discount : 0;
+                        entry.discountSum = this.discountObj?.discount ? this.discountObj?.discount : 0;
+                    }
+                    if (this.discountObj?.discountType === 'PERCENTAGE') {
+                        entry['discountPercentageModal'] = this.discountObj?.discount ? this.discountObj?.discount : 0;
+                        entry.discountSum = this.discountObj?.discount ? this.discountObj?.discount : 0;
+                    }
+                } else if (!entry['initiallyCall']) {
+                    if (trx?.stockDetails?.variant?.variantDiscount?.discountValue) {
+                        let matchedUnit = trx?.stockDetails?.variant?.variantDiscount?.unit?.code === trx?.stockUnitCode;
+                        if (matchedUnit) {
 
-            if (event || !this.isUpdateMode) {
-                if (trx.amount && entry && entry.discounts && entry.discounts.length && this.accountAssignedApplicableDiscounts && this.accountAssignedApplicableDiscounts.length) {
-                    entry.discounts.map(item => {
-                        let discountItem = this.accountAssignedApplicableDiscounts.find(element => element?.uniqueName === item.discountUniqueName);
-                        if (discountItem && discountItem.uniqueName) {
-                            item.isActive = discountItem.isActive;
+                            entry.discounts.map(item => {
+                                if (item.discountUniqueName) {
+                                    item.isActive = false
+                                }
+                                return item;
+                            });
+
+                            if (trx?.stockDetails?.variant?.variantDiscount?.discountType === 'FIX_AMOUNT') {
+                                entry['discountFixedValueModal'] = this.discountObj?.discount ? this.discountObj?.discount : trx?.stockDetails?.variant?.variantDiscount?.discountValue;
+                                entry.discountSum = this.discountObj?.discount ? this.discountObj?.discount : trx?.stockDetails?.variant?.variantDiscount?.discountValue;
+                                trx.quantity = trx?.stockDetails?.variant?.variantDiscount?.quantity;
+                            }
+                            if (trx?.stockDetails?.variant?.variantDiscount?.discountType === 'PERCENTAGE') {
+                                entry['discountPercentageModal'] = this.discountObj?.discount ? this.discountObj?.discount : trx?.stockDetails?.variant?.variantDiscount?.discountValue;
+                                entry.discountSum = this.discountObj?.discount ? this.discountObj?.discount : trx?.stockDetails?.variant?.variantDiscount?.discountValue;
+                                trx.quantity = trx?.stockDetails?.variant?.variantDiscount?.quantity;
+                            }
+                            this.calculateStockEntryAmount(trx);
+                            entry['initiallyCall'] = true;
+                        } else {
+                            if (trx?.stockDetails?.variant?.variantDiscount?.discountType === 'FIX_AMOUNT') {
+                                entry['discountFixedValueModal'] = 0;
+                                entry.discountSum = 0;
+                                trx.quantity = 1;
+                            }
+                            if (trx?.stockDetails?.variant?.variantDiscount?.discountType === 'PERCENTAGE') {
+                                entry['discountPercentageModal'] = 0;
+                                entry.discountSum = 0;
+                                trx.quantity = 1;
+                            }
+
+                            if (event && event.discount && event.isActive) {
+                                this.accountAssignedApplicableDiscounts.forEach(item => {
+                                    if (item && event.discount && item.uniqueName === event.discount.discountUniqueName) {
+                                        item.isActive = event.isActive?.target?.checked;
+                                    }
+                                });
+                            }
+                            if (trx.amount && entry && entry.discounts && entry.discounts.length && this.accountAssignedApplicableDiscounts && this.accountAssignedApplicableDiscounts.length) {
+                                entry.discounts.map(item => {
+                                    let discountItem = this.accountAssignedApplicableDiscounts.find(element => element?.uniqueName === item.discountUniqueName);
+                                    if (discountItem && discountItem.uniqueName) {
+                                        item.isActive = discountItem.isActive;
+                                    }
+                                });
+                            }
                         }
-                    });
+                    } else {
+                        if (event && event.discount && event.isActive) {
+                            this.accountAssignedApplicableDiscounts.forEach(item => {
+                                if (item && event.discount && item.uniqueName === event.discount.discountUniqueName) {
+                                    item.isActive = event.isActive?.target?.checked;
+                                }
+                            });
+                        }
+                        if (trx.amount && entry && entry.discounts && entry.discounts.length && this.accountAssignedApplicableDiscounts && this.accountAssignedApplicableDiscounts.length) {
+                            entry.discounts.map(item => {
+                                let discountItem = this.accountAssignedApplicableDiscounts.find(element => element?.uniqueName === item.discountUniqueName);
+                                if (discountItem && discountItem.uniqueName) {
+                                    item.isActive = discountItem.isActive;
+                                }
+                            });
+                        }
+                    }
                 }
             }
 
@@ -3151,7 +3241,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             if (this.isUpdateMode && (this.isEstimateInvoice || this.isProformaInvoice)) {
                 this.applyRoundOff = true;
             }
-
             this.calculateTotalDiscountOfEntry(entry, trx, false);
             this.calculateEntryTaxSum(entry, trx, false);
             this.calculateEntryTotal(entry, trx);
@@ -3207,7 +3296,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             }
             taxTotal += selectedTax.amount;
         });
-
         // Calculate amount with inclusive tax
         transaction.amount = giddhRoundOff(((Number(transaction.total) + fixedDiscountTotal + 0.01 * fixedDiscountTotal * Number(taxTotal)) /
             (1 - 0.01 * percentageDiscountTotal + 0.01 * Number(taxTotal) - 0.0001 * percentageDiscountTotal * Number(taxTotal))), this.giddhBalanceDecimalPlaces);
@@ -3463,6 +3551,19 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         return res;
     }
 
+    /**
+     * This will be use for on select any sales account or stock
+     *
+     * @param {*} selectedAcc
+     * @param {SalesTransactionItemClass} txn
+     * @param {SalesEntryClass} entry
+     * @param {boolean} [isBulkItem=false]
+     * @param {boolean} [isLinkedPoItem=false]
+     * @param {number} entryIndex
+     * @param {boolean} [fromBarcode=false]
+     * @return {*}  {*}
+     * @memberof VoucherComponent
+     */
     public onSelectSalesAccount(selectedAcc: any, txn: SalesTransactionItemClass, entry: SalesEntryClass, isBulkItem: boolean = false, isLinkedPoItem: boolean = false, entryIndex: number, fromBarcode: boolean = false): any {
         if (this.isBarcodeMachineTyping) {
             this.removeTransaction(entryIndex);
@@ -3477,7 +3578,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             let params;
             if (selectedAcc.additional.stock) {
                 params = {
-                    stockUniqueName: selectedAcc.additional.stock?.uniqueName
+                    stockUniqueName: selectedAcc.additional.stock?.uniqueName,
+                    customerUniqueName: this.invFormData.accountDetails.uniqueName
                 };
             }
             this.currentTxnRequestObject[this.activeIndx] = {
@@ -3548,7 +3650,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         const variant = o.stock?.variant;
         const isInclusiveEntry = (variant?.purchaseTaxInclusive && o.category === 'expenses') ||
             (variant?.salesTaxInclusive && o.category === 'income') ||
-            (variant?.fixedAssetTaxInclusive && o.category === 'fixedassets');
+            (variant?.fixedAssetTaxInclusive && o.category === 'fixedassets') || (!variant?.discountExclusive && variant?.variantDiscount?.unit?.code === transaction?.stockUnitCode);
         transaction.taxInclusive = isInclusiveEntry;
         // check if we have quantity in additional object. it's for only bulk add mode
         transaction.quantity = o.quantity ? o.quantity : (o.stock) ? 1 : null;
@@ -3988,6 +4090,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
     public postResponseAction(voucherNo: string) {
         switch (this.actionAfterGenerateORUpdate) {
+
             case ActionTypeAfterVoucherGenerateOrUpdate.generate: {
 
                 this.getAllLastInvoices();
@@ -4170,7 +4273,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         return unitArray;
     }
 
-    public onChangeUnit(txn, selectedUnit) {
+    public onChangeUnit(entry, txn, selectedUnit) {
+        entry['initiallyCall'] = undefined;
         find(txn.stockList, (o) => {
             if (o.id === selectedUnit?.value) {
                 txn.stockUnitCode = o.text;
@@ -5902,12 +6006,15 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             if (this.billingState && this.billingState.nativeElement) {
                 this.billingState.nativeElement.classList.remove('error-box');
             }
-            this.invFormData.accountDetails.billingDetails.state.name = stateName;
-            this.invFormData.accountDetails.billingDetails.stateName = stateName;
-            this.invFormData.accountDetails.billingDetails.stateCode = stateCode;
-            this.invFormData.accountDetails.billingDetails.state.code = stateCode;
-            this.invFormData.accountDetails.billingDetails.county.name = stateName;
-            this.invFormData.accountDetails.billingDetails.county.code = stateCode;
+            if (this.customerCountryCode === 'IN') {
+                this.invFormData.accountDetails.billingDetails.state.name = stateName;
+                this.invFormData.accountDetails.billingDetails.stateName = stateName;
+                this.invFormData.accountDetails.billingDetails.stateCode = stateCode;
+                this.invFormData.accountDetails.billingDetails.state.code = stateCode;
+            } else {
+                this.invFormData.accountDetails.billingDetails.county.name = stateName;
+                this.invFormData.accountDetails.billingDetails.county.code = stateCode;
+            }
         } else {
             if (this.shippingState && this.shippingState.nativeElement) {
                 this.shippingState.nativeElement.classList.remove('error-box');
@@ -5915,12 +6022,15 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             // if it's not billing address then only update shipping details
             // check if it's not auto fill shipping address from billing address then and then only update shipping details
             if (!this.autoFillShipping) {
-                this.invFormData.accountDetails.shippingDetails.stateName = stateName;
-                this.invFormData.accountDetails.shippingDetails.stateCode = stateCode;
-                this.invFormData.accountDetails.shippingDetails.state.name = stateName;
-                this.invFormData.accountDetails.shippingDetails.state.code = stateCode;
-                this.invFormData.accountDetails.shippingDetails.county.name = stateName;
-                this.invFormData.accountDetails.shippingDetails.county.code = stateCode
+                if (this.customerCountryCode === 'IN') {
+                    this.invFormData.accountDetails.shippingDetails.stateName = stateName;
+                    this.invFormData.accountDetails.shippingDetails.stateCode = stateCode;
+                    this.invFormData.accountDetails.shippingDetails.state.name = stateName;
+                    this.invFormData.accountDetails.shippingDetails.state.code = stateCode;
+                } else {
+                    this.invFormData.accountDetails.shippingDetails.county.name = stateName;
+                    this.invFormData.accountDetails.shippingDetails.county.code = stateCode;
+                }
             }
         }
     }
@@ -7227,7 +7337,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             isBlankItemPresent = false;
         }
 
-        entries.forEach(entry => {
+        entries?.forEach(entry => {
             let transactionLoop = 0;
 
             if (entry.totalQuantity && entry.usedQuantity && entry.transactions && entry.transactions[0] && entry.transactions[0].stock) {
@@ -7238,7 +7348,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 }
             }
 
-            entry.transactions.forEach(item => {
+            entry.transactions?.forEach(item => {
                 if (item.stock) {
                     let stockUniqueName = item.stock.uniqueName;
                     item.stock.uniqueName = "purchases#" + item.stock.uniqueName;
@@ -7325,7 +7435,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             this.startLoader(true);
             setTimeout(() => {
                 let selectedPoItems = [];
-                this.selectedPoItems.forEach(order => {
+                this.selectedPoItems?.forEach(order => {
                     if (!this.linkedPo.includes(order)) {
                         let entries = (this.linkedPoNumbers[order]) ? this.linkedPoNumbers[order]['items'] : [];
 
@@ -7422,12 +7532,15 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             if (this.billingStateCompany && this.billingStateCompany.nativeElement) {
                 this.billingStateCompany.nativeElement.classList.remove('error-box');
             }
-            this.purchaseBillCompany.billingDetails.state.name = stateName;
-            this.purchaseBillCompany.billingDetails.stateName = stateName;
-            this.purchaseBillCompany.billingDetails.stateCode = stateCode;
-            this.purchaseBillCompany.billingDetails.state.code = stateCode;
-            this.purchaseBillCompany.billingDetails.county.name = stateName;
-            this.purchaseBillCompany.billingDetails.county.code = stateCode;
+            if (this.customerCountryCode === 'IN') {
+                this.purchaseBillCompany.billingDetails.state.name = stateName;
+                this.purchaseBillCompany.billingDetails.stateName = stateName;
+                this.purchaseBillCompany.billingDetails.stateCode = stateCode;
+                this.purchaseBillCompany.billingDetails.state.code = stateCode;
+            } else {
+                this.purchaseBillCompany.billingDetails.county.name = stateName;
+                this.purchaseBillCompany.billingDetails.county.code = stateCode;
+            }
         } else {
             if (this.shippingStateCompany && this.shippingStateCompany.nativeElement) {
                 this.shippingStateCompany.nativeElement.classList.remove('error-box');
@@ -7435,12 +7548,15 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             // if it's not billing address then only update shipping details
             // check if it's not auto fill shipping address from billing address then and then only update shipping details
             if (!this.autoFillCompanyShipping) {
-                this.purchaseBillCompany.shippingDetails.stateName = stateName;
-                this.purchaseBillCompany.shippingDetails.stateCode = stateCode;
-                this.purchaseBillCompany.shippingDetails.state.name = stateName;
-                this.purchaseBillCompany.shippingDetails.state.code = stateCode;
-                this.purchaseBillCompany.shippingDetails.county.name = stateName;
-                this.purchaseBillCompany.shippingDetails.county.code = stateCode;
+                if (this.customerCountryCode === 'IN') {
+                    this.purchaseBillCompany.shippingDetails.stateName = stateName;
+                    this.purchaseBillCompany.shippingDetails.stateCode = stateCode;
+                    this.purchaseBillCompany.shippingDetails.state.name = stateName;
+                    this.purchaseBillCompany.shippingDetails.state.code = stateCode;
+                } else {
+                    this.purchaseBillCompany.shippingDetails.county.name = stateName;
+                    this.purchaseBillCompany.shippingDetails.county.code = stateCode;
+                }
             }
         }
         this.changeDetectorRef.detectChanges();
@@ -7651,7 +7767,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.onSearchQueryChanged('', 1, SEARCH_TYPE.CUSTOMER, (response) => {
             let selectedAccountDetails;
             if (this.isUpdateMode) {
-                this.selectedAccountDetails$.pipe(take(1)).subscribe(accountDetails => {
+                this.selectedAccountDetails$?.pipe(take(1)).subscribe(accountDetails => {
                     selectedAccountDetails = accountDetails;
                 });
                 if (selectedAccountDetails) {
@@ -8910,7 +9026,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     this.toaster.showSnackBar("warning", group + " " + this.localeData?.account_missing_in_stock);
                     return;
                 }
-
                 let selectedAcc = {
                     value: group + stockObj.uniqueName,
                     label: stockObj.name,

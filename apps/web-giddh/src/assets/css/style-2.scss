@@ -3659,6 +3659,10 @@ input[type="number"]::-webkit-inner-spin-button {
     cursor: pointer !important;
 }
 
+.cursor-default{
+    cursor: default !important;
+}
+
 footer {
     padding: 10px 20px;
     text-align: center;
@@ -14445,6 +14449,21 @@ aside-menu-product-service {
             &#back {
                 color: var(--color-list) !important;
             }
+        }
+    }
+}
+
+.custom-tooltip{
+    background-color: var(--color-dark-gray) !important;
+    border-radius: 4px;
+    padding: 0 8px;
+
+    .tooltip-text{
+        font-size: var(--font-size-12);
+        color: var(--color-toast-primary-text);
+        a {
+            color: var(--color-toast-primary-text) !important;
+            text-decoration: underline;
         }
     }
 }

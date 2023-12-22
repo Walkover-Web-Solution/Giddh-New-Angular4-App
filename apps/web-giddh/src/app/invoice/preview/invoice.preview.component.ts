@@ -301,6 +301,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public ngOnInit() {
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
         document.querySelector("body")?.classList?.add("invoice-preview-page");
         this._breakPointObservar.observe([
             '(max-width: 1023px)'
@@ -317,46 +318,16 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         });
         this.advanceSearchFilter.page = 1;
         this.advanceSearchFilter.count = PAGINATION_LIMIT;
+
+        this._activatedRoute.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(a => {
+            if (a && a.accountUniqueName && a.voucherUniqueName) {
+                this.getVoucherDetails(VoucherTypeEnum.sales, a.accountUniqueName, a.voucherUniqueName);
+            }
+        });
+
         this._activatedRoute.params.pipe(takeUntil(this.destroyed$)).subscribe(a => {
             if (a && a.accountUniqueName && a.purchaseRecordUniqueName) {
-                const apiCallObservable = this.voucherApiVersion === 2 ?
-                    this._receiptServices.getVoucherDetailsV4(a.accountUniqueName, {
-                        invoiceNumber: '',
-                        voucherType: VoucherTypeEnum.purchase,
-                        uniqueName: a.purchaseRecordUniqueName
-                    }) :
-                    this._receiptServices.GetPurchaseRecordDetails(a.accountUniqueName, a.purchaseRecordUniqueName);
-                apiCallObservable.pipe(takeUntil(this.destroyed$)).subscribe((res: any) => {
-                    if (res && res.body) {
-                        if (res.body.date) {
-                            this.invoiceSearchRequest.from = res.body.date;
-                            this.invoiceSearchRequest.to = res.body.date;
-                            this.getVoucher(false);
-                        }
-
-                        this.purchaseRecord = {
-                            balanceStatus: '',
-                            dueDate: res.body.dueDate,
-                            grandTotal: res.body.grandTotal,
-                            account: {
-                                accountType: (res.body.account) ? res.body.account.type : null,
-                                uniqueName: (res.body.account) ? res.body.account?.uniqueName : null,
-                                name: (res.body.account) ? res.body.account.name : null
-                            },
-                            uniqueName: res.body?.uniqueName,
-                            voucherDate: res.body.date,
-                            voucherNumber: res.body.number,
-                            balanceDue: res.body.balanceTotal,
-                            isSelected: false,
-                            dueDays: null,
-                            cashInvoice: false
-                        };
-                        this.selectedVoucher = VoucherTypeEnum.purchase;
-                        if (this.itemsListForDetails) {
-                            this.onSelectInvoice(this.purchaseRecord);
-                        }
-                    }
-                });
+                this.getVoucherDetails(VoucherTypeEnum.purchase, a.accountUniqueName, a.purchaseRecordUniqueName);
             }
 
             if (!(a && a.voucherType)) {
@@ -590,9 +561,54 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this.store.pipe(select(state => state.receipt.hasVoucherListPermissions), takeUntil(this.destroyed$)).subscribe(response => {
             this.hasVoucherListPermissions = response;
         });
-        this.voucherApiVersion = this.generalService.voucherApiVersion;
 
         this.store.dispatch(this.purchaseOrderActions.setPurchaseOrderFilters({}));
+    }
+
+    private getVoucherDetails(voucherType: VoucherTypeEnum, accountUniqueName: string, voucherUniqueName: string): void {
+        const apiCallObservable = this.voucherApiVersion === 2 ?
+            this._receiptServices.getVoucherDetailsV4(accountUniqueName, {
+                invoiceNumber: '',
+                voucherType: voucherType,
+                uniqueName: voucherUniqueName
+            }) :
+            this._receiptServices.GetPurchaseRecordDetails(accountUniqueName, voucherUniqueName);
+
+        apiCallObservable.pipe(takeUntil(this.destroyed$)).subscribe((res: any) => {
+            if (res && res.body) {
+                if (res.body.date) {
+                    this.invoiceSearchRequest.from = res.body.date;
+                    this.invoiceSearchRequest.to = res.body.date;
+                    this.getVoucher(false);
+                }
+
+                this.purchaseRecord = {
+                    balanceStatus: '',
+                    dueDate: res.body.dueDate,
+                    grandTotal: res.body.grandTotal,
+                    account: {
+                        accountType: (res.body.account) ? res.body.account.type : null,
+                        uniqueName: (res.body.account) ? res.body.account?.uniqueName : null,
+                        name: (res.body.account) ? res.body.account.name : null
+                    },
+                    uniqueName: res.body?.uniqueName,
+                    voucherDate: res.body.date,
+                    voucherNumber: res.body.number,
+                    balanceDue: res.body.balanceTotal,
+                    isSelected: false,
+                    dueDays: null,
+                    cashInvoice: false
+                };
+                this.selectedVoucher = voucherType;
+                if (this.itemsListForDetails) {
+                    this.onSelectInvoice(this.purchaseRecord);
+                }
+
+                if (voucherType === VoucherTypeEnum.sales) {
+                    this.purchaseRecord = null;
+                }
+            }
+        });
     }
 
     public ngOnChanges(changes: SimpleChanges): void {
@@ -776,7 +792,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                     this._invoiceBulkUpdateService.bulkUpdateInvoice(bulkDeleteModel, 'delete').subscribe(response => {
                         if (response) {
                             if (response.status === "success") {
-                                this.getVoucher(this.isUniversalDateApplicable);
                                 this._toaster.successToast(response.body);
                                 this.getVoucher(false);
                                 this.toggleAllItems(false);
@@ -898,8 +913,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public getVoucher(isUniversalDateSelected: boolean) {
         this.lastListingFilters = this.prepareModelForInvoiceReceiptApi(isUniversalDateSelected);
         if (this.lastListingFilters) {
-            this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(this.lastListingFilters, this.selectedVoucher));
-            this._receiptServices.getAllReceiptBalanceDue(this.lastListingFilters, this.selectedVoucher).pipe(takeUntil(this.destroyed$)).subscribe(res => {
+            this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(cloneDeep(this.lastListingFilters), this.selectedVoucher));
+            this._receiptServices.getAllReceiptBalanceDue(cloneDeep(this.lastListingFilters), this.selectedVoucher).pipe(takeUntil(this.destroyed$)).subscribe(res => {
                 this.parseBalRes(res);
             });
         }
@@ -913,7 +928,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
      */
     public getVouchersList(isUniversalDateSelected: boolean): void {
         let request;
-
         if (this.lastListingFilters) {
             request = this.lastListingFilters;
         } else {
@@ -1213,7 +1227,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             request.voucherDate = request.invoiceDate;
             delete request['invoiceDate'];
         }
-
         this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(request, this.selectedVoucher));
         this._receiptServices.getAllReceiptBalanceDue(request, this.selectedVoucher).pipe(takeUntil(this.destroyed$)).subscribe(res => {
             this.parseBalRes(res);
