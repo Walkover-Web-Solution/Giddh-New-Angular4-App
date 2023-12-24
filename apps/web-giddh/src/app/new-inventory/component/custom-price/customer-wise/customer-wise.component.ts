@@ -218,7 +218,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
             discountInfo: [variant?.discountInfo],
             isTemproraryVariant: [variant?.isTemproraryVariant],
             discounts: this.formBuilder.array([]),
-            discountValue: [variant?.discountValue],
+            discountValue: [variant?.discountValue, Validators.required],
             discountFixedValueModal: [variant?.discountFixedValueModal],
             discountPercentageModal: [variant?.discountPercentageModal]
         });
@@ -226,8 +226,8 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
 
     private initDiscountValuesForm(discount: any): UntypedFormGroup {
         return this, this.formBuilder.group({
-            type: [discount?.type ?? 'FIX_AMOUNT'],
-            value: [discount?.value ?? 0],
+            type: [discount?.type],
+            value: [discount?.value],
             uniqueName: [discount?.uniqueName],
             discountUniqueName: [discount?.uniqueName],
             isActive: [discount?.isActive]
@@ -414,7 +414,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                         }
                     });
                 });
-
+                console.log("discount", this.discountForm);
                 this.currentUserStocks = response?.body?.results;
             } else {
                 this.currentUserStocks = null;
@@ -608,9 +608,9 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
             let variants = (this.discountForm.get('discountInfo') as FormArray).at(stockFormArrayIndex).get('variants') as UntypedFormArray;
             let variantObj = {
                 price: null,
-                quantity: 1,
+                quantity: null,
                 discountExclusive: false,
-                stockUnitUniqueName: 'nos', // hard code will remove it
+                stockUnitUniqueName: '',
                 variantUnitName: '',
                 uniqueName: event.value,
                 name: event.label,
@@ -823,11 +823,13 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
 
                     let variants = (this.discountForm.get('discountInfo') as FormArray).at(stockIndex).get('variants') as UntypedFormArray;
                     response.body?.variants.forEach((variant, variantIndex) => {
-                        variants.push(this.initVariantForm({ name: variant?.name, uniqueName: variant?.uniqueName, isTemproraryVariant: true }));
-                        (variants.at(variantIndex).get('discounts') as UntypedFormArray).push(this.initDiscountValuesForm({ type: null, value: null, uniqueName: null }))
+                        variants.push(this.initVariantForm({ name: variant?.name, uniqueName: variant?.uniqueName, isTemproraryVariant: true, discountInfo: [{ type: "FIX_AMOUNT", discountType: "FIX_AMOUNT", value: 0, discountValue: 0, isActive: true, discountUniqueName: null }] }));
+                        (variants.at(variantIndex).get('discounts') as UntypedFormArray).push(this.initDiscountValuesForm({ type: "FIX_AMOUNT", discountType: "FIX_AMOUNT", value: 0, discountValue: 0, isActive: true, discountUniqueName: null }))
                     });
                     this.currentUserStocks = event;
                 }
+                console.log("discount", this.discountForm);
+                
             });
             this.dialogRef.close();
         }
@@ -862,7 +864,9 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
      * @param {UntypedFormGroup} variant
      * @memberof CustomerWiseComponent
      */
-    public updateDiscountInVariant(variant: UntypedFormGroup): void {
+    public updateDiscountInVariant(variant: UntypedFormGroup, discountCollection?: any): void {
+       
+        console.log("discountCollection ==>>", discountCollection);
         let percentageListTotal: number = 0;
         let fixedListTotal: number = 0;
 
@@ -885,30 +889,36 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
 
         variant.get('discountValue')?.patchValue(discountSum);
 
-        let discountInfo = variant.get('discountInfo')?.value?.variants?.map(variant => {
-            if (!variant.discountInfo[0]?.discountUniqueName && variant.discountInfo[0]?.discountValue) {
-                variant.discountInfo[0].isActive = true;
-            } else {
-                variant.discountInfo[0].isActive = false;
-            }
-
-            variant.discountInfo = variant.discountInfo?.filter(res => res.isActive)?.map(discount => {
-                discount.value = discount.discountValue;
-                discount.uniqueName = discount.discountUniqueName;
-                discount.type = discount.discountType;
-
-                return {
-                    value: discount.value,
-                    uniqueName: discount.uniqueName,
-                    type: discount.type
-                };
+        if(discountCollection){
+            let discountInfo = discountCollection?.map(variant => {
+                if (!variant?.discountInfo[0]?.discountUniqueName && variant?.discountInfo[0]?.discountValue) {
+                    variant.discountInfo[0].isActive = true;
+                } else {
+                    if(variant.discountInfo.length){
+                        variant.discountInfo[0].isActive = false;
+                    }
+                }
+    
+                variant.discountInfo = variant.discountInfo?.filter(res => res.isActive)?.map(discount => {
+                    discount.value = discount.discountValue;
+                    discount.uniqueName = discount.discountUniqueName;
+                    discount.type = discount.discountType;
+    
+                    return {
+                        value: discount.value,
+                        uniqueName: discount.uniqueName,
+                        type: discount.type
+                    };
+                });
+    
+                variant.discounts = cloneDeep(variant.discountInfo);
+    
+                return this.filterKeys(variant, this.variantDesiredKeys)
             });
-
-            variant.discounts = cloneDeep(variant.discountInfo);
-
-            return this.filterKeys(variant, this.variantDesiredKeys)
-        });
-
+    
+            console.log("updateDiscountInVariant call back result", discountInfo);
+        }
+        
         
     }
 }

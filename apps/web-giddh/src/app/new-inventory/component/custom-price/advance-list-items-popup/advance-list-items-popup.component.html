@@ -6,12 +6,9 @@
 >
     <section>
         <section #wrapper [class.isVisible]="isOpen" class="universal-data-list-wrapper">
-            <!-- header -->
             <ng-container>
                 <ng-container *ngTemplateOutlet="searchEleTemplate"></ng-container>
             </ng-container>
-            <!-- end header -->
-
             <ng-container *ngIf="searchedItems && searchedItems.length > 0">
                 <div #mainEle tabindex="0" class="universal-list-items">
                     <ng-container *ngIf="isOpen">
@@ -61,14 +58,11 @@
                                         </a>
                                     </mat-list-item>
                                     </cdk-virtual-scroll-viewport>
-                                <!-- </commandk-virtual-scroll> -->
                             </mat-list>
                         </ng-container>
-                        <!-- end -->
                     </ng-container>
                 </div>
             </ng-container>
-            <!--  end main list -->
             <ng-container *ngIf="noResultsFound">
                 <div #mainEle>
                     <div class="p-2">
@@ -81,9 +75,7 @@
                 </div>
             </ng-container>
         </section>
-        <!-- end main section -->
-    </section>
-    <!-- input box template -->
+    </section>    
     <ng-template #searchEleTemplate>
         <div class="d-flex bd-rb">
             <div #searchWrapEle class="search-wrapper" (click)="focusInSearchBox($event)">
