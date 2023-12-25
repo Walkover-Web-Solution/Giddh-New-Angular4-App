@@ -76,8 +76,10 @@
                                                                 <tr *ngFor="let variant of discountCollection?.get('variants')['controls'];  let j = index"
                                                                     formArrayName="variants">
                                                                     <ng-container [formGroupName]="j">
-                                                                        <td class="variant-name">
-                                                                            {{ variant?.get('variantName')?.value }}
+                                                                        <td class="variant-name" [ngStyle]="{ 'min-width': discountCollection?.get('variants')['controls']?.length > 1 ? null : '100px'}">
+                                                                            <ng-container *ngIf="discountCollection?.get('variants')['controls']?.length > 1">
+                                                                                {{ variant?.get('variantName')?.value }}
+                                                                            </ng-container>
                                                                         </td>
 
                                                                         <td class="variant-price">
@@ -130,7 +132,7 @@
                                                                             <input-field [placeholder]="'00'"
                                                                                 [name]="'quantity' + i + '-' + j"
                                                                                 formControlName="quantity"
-                                                                                [label]="commonLocaleData?.app_defaultquantity"
+                                                                                [label]="commonLocaleData?.app_default_quantity"
                                                                                 [type]="'number'"
                                                                                 [matSuffix]="variant?.get('variantUnitName')?.value"
                                                                                 [cssClass]="'text-right'"></input-field>

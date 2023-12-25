@@ -144,7 +144,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
         this.isStockLoading = true;
         let model: CustomerVendorDiscountBasic = {
             page: this.pagination.user.page,
-            count: 5,
+            count: this.paginationLimit,
             group: this.groupUniqueName,
             query: query
         };
@@ -805,7 +805,8 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                 this.dialogRef.close();
             } else {
                 let type = event?.type === 'ACCOUNT' ? 'Account' : 'Group';
-                this.toaster.errorToast("This " + type + " is already added");
+                let msg =  this.localeData?.already_added_msg.replace('[TYPE]', type);
+                this.toaster.warningToast(msg);
             }
         } else {
             this.inventoryService.getStockDetails(event?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response) => {

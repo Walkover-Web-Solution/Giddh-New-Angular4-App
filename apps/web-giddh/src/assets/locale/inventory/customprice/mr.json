@@ -5,5 +5,6 @@
     "add_customer_group": "+ ग्राहक/गट जोडा",
     "exclusive": "अनन्य",
     "inclusive": "समावेशक",
-    "delete_message": "तुम्हाला हटवायचे आहे का?"
+    "delete_message": "तुम्हाला हटवायचे आहे का?",
+    "already_added_msg": "हा [TYPE] आधीच जोडलेला आहे"
 }

@@ -5,5 +5,6 @@
     "add_customer_group": "+ ग्राहक/समूह जोड़ें",
     "exclusive": "अनन्य",
     "inclusive": "सहित",
-    "delete_message": "क्या आप हटाना चाहते हैं?"
+    "delete_message": "क्या आप हटाना चाहते हैं?",
+    "already_added_msg": "यह [प्रकार] पहले ही जोड़ा जा चुका है"
 }
