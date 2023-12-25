@@ -72,7 +72,7 @@
             <div #searchWrapEle class="search-wrapper" (click)="focusInSearchBox($event)">
                 <span class="icon-search-icon"><i class="icon-search"></i></span>
                 <input class="search-element" #searchEle type="text" [placeholder]="commonLocaleData?.app_search"
-                    (focus)="handleFocus()" (keydown)="handleKeydown($event)"
+                    (focus)="handleFocus()"
                     (keyup)="initSearch($event, $event.target?.value)" (paste)="onPasteInSearch()" />
             </div>
             <i mat-dialog-close class="icon-cross close-navigation"></i>

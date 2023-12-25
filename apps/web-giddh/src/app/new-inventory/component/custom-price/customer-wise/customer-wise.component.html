@@ -77,7 +77,7 @@
                                                                     formArrayName="variants">
                                                                     <ng-container [formGroupName]="j">
                                                                         <td class="variant-name" [ngStyle]="{ 'min-width': discountCollection?.get('variants')['controls']?.length > 1 ? null : '100px'}">
-                                                                            <ng-container *ngIf="discountCollection?.get('variants')['controls']?.length > 1">
+                                                                            <ng-container *ngIf="discountCollection?.get('hasVariants')?.value">
                                                                                 {{ variant?.get('variantName')?.value }}
                                                                             </ng-container>
                                                                         </td>
@@ -217,12 +217,9 @@
         (closeDailogEmitter)="dialogRef.close()" [isOpen]="true" [setParentWidth]="true"
         [apiData]="apiData"></items-list-popup>
     <div class="shortcuts">
-        <strong>↑</strong> <strong>↓</strong>&nbsp; {{ localeData?.to_navigate }}
-        <strong class="mr-l1" [attr.aria-label]="commonLocaleData?.app_return">↵</strong>&nbsp;
-        {{ localeData?.to_select }}
         <strong class="mr-l1" [attr.aria-label]="commonLocaleData?.app_escape">{{
             commonLocaleData?.app_esc
             }}</strong>&nbsp;
-        {{ localeData?.to_dismiss }}
+        {{ commonLocaleData?.app_to_dismiss }}
     </div>
 </ng-template>
