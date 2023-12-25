@@ -55,8 +55,8 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
     private groupUniqueName: 'sundrydebtors' | 'sundrycreditors';
     /** Holds show loader status  when user api call*/
     public isLoading: boolean = false;
-     /** Holds show loader status when stock api call*/
-     public isStockLoading: boolean = false;
+    /** Holds show loader status when stock api call*/
+    public isStockLoading: boolean = false;
     /** Holds search data */
     public apiData: any;
     /** Holds User Search Input */
@@ -126,7 +126,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
         this.getDiscounts();
 
         this.scrollDispatcher.scrolled().pipe(takeUntil(this.destroyed$)).subscribe((event: any) => {
-            if (event && (event?.getDataLength() - event?.getRenderedRange().end) < 30 && !this.isLoading && (this.pagination.user.totalPages > this.pagination.user.page)) {
+            if (event && (event?.getDataLength() - event?.getRenderedRange().end) < 30 && !this.isStockLoading && (this.pagination.user.totalPages > this.pagination.user.page)) {
                 this.pagination.user.page++;
                 this.getCustomerVendorDiscountUserList();
             }
@@ -141,26 +141,26 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
      * @memberof CustomerWiseComponent
      */
     private getCustomerVendorDiscountUserList(query: string = ''): void {
+        this.isStockLoading = true;
         let model: CustomerVendorDiscountBasic = {
             page: this.pagination.user.page,
-            count: this.paginationLimit,
+            count: 5,
             group: this.groupUniqueName,
             query: query
         };
-        this.userList = [];
-        this.userList = [...this.userList];
-        this.isStockLoading = true;
+
         this.inventoryService.getCustomerVendorDiscountUserList(model).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             this.isStockLoading = false;
             if (response && response?.body?.results?.length) {
                 this.pagination.user.page = response?.body?.page;
                 this.pagination.user.totalPages = response?.body?.totalPages;
 
-                if (this.tempUserList?.length) {
-                    this.userList = [...this.userList, ...this.tempUserList];
+                if (this.tempUserList?.length && this.pagination.user.page === 1) {
+                    this.userList = [...this.userList, ...this.tempUserList, ...response.body.results];
                 } else {
                     this.userList = [...this.userList, ...response.body.results];
                 }
+                this.changeDetectorRef.detectChanges();
             }
         });
     }
@@ -687,7 +687,9 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                 if (!variant.discountInfo[0]?.discountUniqueName && variant.discountInfo[0]?.discountValue) {
                     variant.discountInfo[0].isActive = true;
                 } else {
-                    variant.discountInfo[0].isActive = false;
+                    if (variant.discountInfo.length) {
+                        variant.discountInfo[0].isActive = false;
+                    }
                 }
 
                 variant.discountInfo = variant.discountInfo?.filter(res => res.isActive)?.map(discount => {
@@ -834,7 +836,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                     });
                     this.currentUserStocks = event;
                 }
-                
+
             });
             this.dialogRef.close();
         }
@@ -869,61 +871,67 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
      * @param {UntypedFormGroup} variant
      * @memberof CustomerWiseComponent
      */
-    public updateDiscountInVariant(variant: UntypedFormGroup, discountCollection?: any): void {
-       
-        console.log("discountCollection ==>>", discountCollection);
-        let percentageListTotal: number = 0;
-        let fixedListTotal: number = 0;
+    public updateDiscountInVariant(variant: UntypedFormGroup, discountCollection?: any, stockIndex?: number, variantIndex?: number): void {
+        if (variant) {
+            let percentageListTotal: number = 0;
+            let fixedListTotal: number = 0;
 
-        percentageListTotal = variant.get('discountInfo')?.value?.filter(f => f.isActive)
-            ?.filter(s => s.discountType === 'PERCENTAGE')
-            .reduce((pv, cv) => {
-                return Number(cv.discountValue) ? Number(pv) + Number(cv.discountValue) : Number(pv);
-            }, 0) || 0;
-        fixedListTotal = variant.get('discountInfo')?.value?.filter(f => f.isActive)
-            ?.filter(s => s.discountType === 'FIX_AMOUNT')
-            .reduce((pv, cv) => {
-                return Number(cv.discountValue) ? Number(pv) + Number(cv.discountValue) : Number(pv);
-            }, 0) || 0;
+            percentageListTotal = variant.get('discountInfo')?.value?.filter(f => f.isActive)
+                ?.filter(s => s.discountType === 'PERCENTAGE')
+                .reduce((pv, cv) => {
+                    return Number(cv.discountValue) ? Number(pv) + Number(cv.discountValue) : Number(pv);
+                }, 0) || 0;
+            fixedListTotal = variant.get('discountInfo')?.value?.filter(f => f.isActive)
+                ?.filter(s => s.discountType === 'FIX_AMOUNT')
+                .reduce((pv, cv) => {
+                    return Number(cv.discountValue) ? Number(pv) + Number(cv.discountValue) : Number(pv);
+                }, 0) || 0;
 
-        let perFromAmount = ((percentageListTotal * variant.get('price')?.value) / 100);
-        let discountSum = perFromAmount + fixedListTotal;
-        if (isNaN(discountSum)) {
-            discountSum = 0;
-        }
+            let perFromAmount = ((percentageListTotal * variant.get('price')?.value) / 100);
+            let discountSum = perFromAmount + fixedListTotal;
+            if (isNaN(discountSum)) {
+                discountSum = 0;
+            }
 
-        variant.get('discountValue')?.patchValue(discountSum);
+            variant.get('discountValue')?.patchValue(discountSum);
 
-        if(discountCollection){
-            let discountInfo = discountCollection?.map(variant => {
-                if (!variant?.discountInfo[0]?.discountUniqueName && variant?.discountInfo[0]?.discountValue) {
-                    variant.discountInfo[0].isActive = true;
-                } else {
-                    if(variant.discountInfo.length){
-                        variant.discountInfo[0].isActive = false;
+            if (stockIndex >= 0 && variantIndex >= 0) {
+                const formStatus = ((this.discountForm.get('discountInfo') as FormArray).at(stockIndex) as UntypedFormArray);
+                if (!formStatus.invalid) {
+                    const stockUniqueName = (this.discountForm.get('discountInfo') as FormArray).at(stockIndex).get('stockUniqueName').value;
+
+                    if (discountCollection) {
+                        let discountInfo = discountCollection?.map(variant => {
+                            if (!variant?.discountInfo[0]?.discountUniqueName && variant?.discountInfo[0]?.discountValue) {
+                                variant.discountInfo[0].isActive = true;
+                            } else {
+                                if (variant.discountInfo.length) {
+                                    variant.discountInfo[0].isActive = false;
+                                }
+                            }
+
+                            variant.discountInfo = variant.discountInfo?.filter(res => res.isActive)?.map(discount => {
+                                discount.value = discount.discountValue;
+                                discount.uniqueName = discount.discountUniqueName;
+                                discount.type = discount.discountType;
+
+                                return {
+                                    value: discount.value,
+                                    uniqueName: discount.uniqueName,
+                                    type: discount.type
+                                };
+                            });
+
+                            variant.discounts = cloneDeep(variant.discountInfo);
+
+                            return this.filterKeys(variant, this.variantDesiredKeys);
+                        });
+
+                        this.updateDiscount(stockUniqueName, discountInfo[0].variantUniqueName, { discounts: discountInfo[0].discounts });
                     }
                 }
-    
-                variant.discountInfo = variant.discountInfo?.filter(res => res.isActive)?.map(discount => {
-                    discount.value = discount.discountValue;
-                    discount.uniqueName = discount.discountUniqueName;
-                    discount.type = discount.discountType;
-    
-                    return {
-                        value: discount.value,
-                        uniqueName: discount.uniqueName,
-                        type: discount.type
-                    };
-                });
-    
-                variant.discounts = cloneDeep(variant.discountInfo);
-    
-                return this.filterKeys(variant, this.variantDesiredKeys)
-            });
-    
-            console.log("updateDiscountInVariant call back result", discountInfo);
+            }
         }
-        
-        
     }
+
 }

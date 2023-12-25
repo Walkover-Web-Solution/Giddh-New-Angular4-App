@@ -116,7 +116,7 @@
                                                                                     [discountSum]="variant?.get('discountValue')?.value"
                                                                                     [discountPercentageModal]="variant.get('discountPercentageModal')?.value"
                                                                                     [discountFixedValueModal]="variant.get('discountFixedValueModal')?.value"
-                                                                                    (discountTotalUpdated)="updateDiscountInVariant(variant, discountCollection?.get('variants')?.value)"
+                                                                                    (discountTotalUpdated)="updateDiscountInVariant(variant, discountCollection?.get('variants')?.value, i, j)"
                                                                                     [showHeaderText]="false"
                                                                                     [maskInput]="''"
                                                                                     [prefixInput]="variant?.get('discountInfo')?.value?.linkAccount?.currencySymbol"
