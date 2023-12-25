@@ -1,11 +1,9 @@
 import { ALT, BACKSPACE, CAPS_LOCK, CONTROL, DOWN_ARROW, ENTER, ESCAPE, LEFT_ARROW, MAC_META, MAC_WK_CMD_LEFT, MAC_WK_CMD_RIGHT, RIGHT_ARROW, SHIFT, TAB, UP_ARROW } from "@angular/cdk/keycodes";
 import { ScrollDispatcher } from "@angular/cdk/scrolling";
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, NgZone, OnDestroy, OnInit, Output, Renderer2, ViewChild } from "@angular/core";
-import { Store } from "@ngrx/store";
 import { PAGINATION_LIMIT } from "apps/web-giddh/src/app/app.constant";
 import { remove } from "apps/web-giddh/src/app/lodash-optimized";
 import { InventoryService } from "apps/web-giddh/src/app/services/inventory.service";
-import { AppState } from "apps/web-giddh/src/app/store";
 import { ScrollComponent } from "apps/web-giddh/src/app/theme/command-k";
 import { ReplaySubject, Subject, debounceTime, takeUntil } from "rxjs";
 
@@ -53,8 +51,6 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy {
     /** This is used to destroy all subscribed observables and subjects */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public searchedItems: any[] = [];
-    /** ????????????????????????????????????????? */
-    public listOfSelectedGroups: any[] = [];
     public noResultsFound: boolean = false;
     /** Holds index of item highlighted on hover */
     public highlightedItem: number = 0;
@@ -174,19 +170,6 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy {
         this.searchCommandK(true);
     }
 
-    /**
-     * This function will get called if we want to create a/c or group
-     *
-     * @param {string} entity
-     * @memberof AdvanceListItemsPopupComponent
-     */
-    public triggerAddManage(entity: string): void {
-        if (this.listOfSelectedGroups?.length > 0) {
-            this.newTeamCreationEmitter.emit([entity, this.listOfSelectedGroups[this.listOfSelectedGroups.length - 1]]);
-        } else {
-            this.newTeamCreationEmitter.emit([entity, ""]);
-        }
-    }
 
     /**
      * This function will call the api to search items
@@ -204,137 +187,12 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This function will get called if pressed enter on any item
-     *
-     * @private
-     * @memberof AdvanceListItemsPopupComponent
-     */
-    private captureValueFromList(): void {
-        if (this.virtualScrollElem) {
-            let item = this.virtualScrollElem.activeItem();
-            if (item) {
-                this.itemSelected(item);
-                if (item.type === 'GROUP') {
-                    this.searchedItems = [];
-                }
-            } else if (this.searchedItems && this.searchedItems.length === 1) {
-                this.itemSelected(this.searchedItems[0]);
-                if (item.type === 'GROUP') {
-                    this.searchedItems = [];
-                }
-            }
-        }
-    }
-
-    /**
      * This function will set the list to open on focus of search box
      *
      * @memberof AdvanceListItemsPopupComponent
      */
     public handleFocus(): void {
         this.isOpen = true;
-    }
-
-    /**
-     * This function will get called if we remove search string or group
-     *
-     * @param {*} e
-     * @memberof AdvanceListItemsPopupComponent
-     */
-    public handleKeydown(e: any): void {
-        let key = e.which || e.keyCode;
-
-        if ((key === MAC_META || key === CONTROL) && (key === 75 || key === 71)) {
-            alert("Close");
-            this.closeDailogEmitter.emit();
-        }
-
-        if (key === TAB) {
-            e.preventDefault();
-            e.stopImmediatePropagation();
-        }
-
-        // prevent caret movement and animate selected element
-        if (this.isOpen && [UP_ARROW, DOWN_ARROW]?.indexOf(key) !== -1 && this.virtualScrollElem) {
-            e.preventDefault();
-            let item = this.virtualScrollElem.directionToll(key);
-            if (item) {
-                this.refreshToll(item, key);
-            }
-        }
-
-        if (this.isOpen && (key === ENTER)) {
-            e.preventDefault();
-            e.stopPropagation();
-            this.captureValueFromList();
-
-        }
-
-        // closing list on esc press
-        if (key === ESCAPE) {
-
-            if (this.listOfSelectedGroups && this.listOfSelectedGroups.length > 0) {
-                e.preventDefault();
-                e.stopPropagation();
-                // first escape
-                if (this.searchEle?.nativeElement?.value) {
-                    this.searchEle.nativeElement.value = null;
-                } else {
-                    // second time pressing escape
-                    this.removeItemFromSelectedGroups();
-                }
-            }
-        }
-
-        if (this.isOpen && key === BACKSPACE) {
-            if (!this.searchEle?.nativeElement?.value && this.listOfSelectedGroups && this.listOfSelectedGroups.length > 0) {
-                this.removeItemFromSelectedGroups();
-            }
-        }
-    }
-
-    /**
-     * This function will remove the selected groups in decending order
-     * if we press backspace in search box
-     * @param {*} [item]
-     * @memberof AdvanceListItemsPopupComponent
-     */
-    public removeItemFromSelectedGroups(item?: any): void {
-        if (item) {
-            this.listOfSelectedGroups = remove(this.listOfSelectedGroups, o => item.uniqueName !== o?.uniqueName);
-        } else {
-            this.listOfSelectedGroups.pop();
-        }
-    }
-
-    /**
-     * This function calls the function to refresh the scroll view
-     *
-     * @param {*} item
-     * @param {number} [key]
-     * @memberof AdvanceListItemsPopupComponent
-     */
-    public refreshToll(item: any, key?: number): void {
-        if (key === UP_ARROW) {
-            this.refreshScrollView(item, 'UP');
-        } else {
-            this.refreshScrollView(item);
-        }
-    }
-
-    /**
-     * This function refreshes the scroll view
-     *
-     * @param {*} item
-     * @param {string} [direction]
-     * @memberof AdvanceListItemsPopupComponent
-     */
-    public refreshScrollView(item: any, direction?: string): void {
-        if (item) {
-            this.virtualScrollElem.scrollInto(item, direction);
-            this.virtualScrollElem.startupLoop = true;
-            this.virtualScrollElem.refresh();
-        }
     }
 
     /**
@@ -430,7 +288,7 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy {
         if (this.apiRequestParams?.type === 'users') {
             this._inventoryService.getFlattenAccountsList(this.apiRequestParams).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 this.isLoading = false;
-                if (res && res?.body?.results) {
+                if (res && res?.body?.results.length) {
                     this.apiRequestParams.totalPages = res?.body?.totalPages;
                     let length = this.searchedItems ? this.searchedItems.length : 0;
                     let finalResult = [];
@@ -440,7 +298,7 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy {
                     });
                     this.searchedItems = this.searchedItems.concat(...finalResult);
                 }
-                else{
+                else {
                     this.noResultsFound = true;
                 }
                 this._cdref.detectChanges();
@@ -450,7 +308,7 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy {
         if (this.apiRequestParams?.type === 'stocks') {
             this._inventoryService.getStockList(this.apiRequestParams).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 this.isLoading = false;
-                if (res) {
+                if (res && res?.body?.results.length) {
                     this.apiRequestParams.totalPages = res?.body?.totalPages;
                     let length = this.searchedItems ? this.searchedItems.length : 0;
                     let finalResult = [];
@@ -459,6 +317,8 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy {
                         finalResult.push(key);
                     });
                     this.searchedItems = this.searchedItems.concat(...finalResult);
+                } else {
+                    this.noResultsFound = true;
                 }
                 this._cdref.detectChanges();
             })

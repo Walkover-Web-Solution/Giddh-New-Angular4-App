@@ -23,59 +23,19 @@
         .inventory-sideabar {
             .inventory-sub-sideabar {
                 table {
-                    .mdc-data-table__row {
-                        &:first-child > .mdc-data-table__cell {
-                            border-top: 1px solid var(--color-drag-right-shadow) !important;
-                        }
-                        &:last-child > .mdc-data-table__cell {
-                            border-bottom: 0 !important;
-                            max-width: 135px;
-                        }
-                        .mdc-data-table__cell {
-                            background-color: var(--color-body-background) !important;
-                            &.no-variant {
-                                min-width: 72px;
-                            }
-                        }
-                        .toggle-wrap {
-                            width: 105px;
-                        }
-                    }
                     tbody {
                         tr {
                             td {
                                 .discount-input {
                                     width: 200px;
-
                                     .multi-select {
                                         input {
                                             height: 48px;
-                                            &:focus{
+                                            &:focus {
                                                 border-color: var(--color-giddh-blue) !important;
                                             }
                                         }
                                     }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
-/*---- responsive ----*/
-@media screen and (max-width: 1440px) {
-    .custom-grid-wrapper {
-        .mat-list-wrap {
-            .inventory-sideabar {
-                .inventory-sub-sideabar {
-                    table {
-                        .mdc-data-table__row {
-                            .mdc-data-table__cell {
-                                &:first-child {
-                                    min-width: 155px;
                                 }
                             }
                         }

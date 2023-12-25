@@ -123,9 +123,9 @@
                 .icon-group {
                     font-size: 16px;
                 }
-                .icon-stock{
+                .icon-stock {
                     filter: var(--color-image-filter-quaternary);
-                    &:hover{
+                    &:hover {
                         filter: invert(99%) sepia(93%) saturate(24%) hue-rotate(68deg) brightness(106%) contrast(100%);
                     }
                 }
@@ -162,11 +162,7 @@
                     display: inline;
                     white-space: initial;
                 }
-                .command-bread-crumb {
-                    max-width: 150px;
-                    overflow: hidden;
-                }
-                p{
+                p {
                     display: inline;
                     white-space: initial;
                 }
@@ -188,6 +184,11 @@
                     color: var(--color-popup-list-input-text-hover);
                 }
             }
+        }
+        .list-viewport {
+            min-height: 520px;
+            height: 520px;
+            width: 580px;
         }
     }
     .jumper-results {
@@ -211,10 +212,4 @@
             color: var(--color-popup-list-input-text);
         }
     }
-}
-
-.list-viewport {
-    min-height: 520px;
-    height: 520px;
-    width: 580px;
 }

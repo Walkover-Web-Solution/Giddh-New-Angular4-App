@@ -500,7 +500,6 @@ export interface DiscountInfo {
     discountExclusive: boolean;
     stockUnitUniqueName: string;
     variantUniqueName: string;
-    discountUniqueName: string;
 }
 
 export class CreateDiscount {
