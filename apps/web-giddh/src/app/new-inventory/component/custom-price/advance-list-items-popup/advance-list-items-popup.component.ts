@@ -106,7 +106,7 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy {
         });
 
         this.scrollDispatcher.scrolled().pipe(takeUntil(this.destroyed$)).subscribe((event: any) => {
-            if (event && (event?.getDataLength() - event?.getRenderedRange().end) < 10 && !this.isLoading && (this.apiRequestParams.totalPages >= this.apiRequestParams.page)) {
+            if (event && (event?.getDataLength() - event?.getRenderedRange().end) < 10 && !this.isLoading && (this.apiRequestParams.totalPages > this.apiRequestParams.page)) {
                 this.apiRequestParams.page++;
                 this.getAPIData();
             }

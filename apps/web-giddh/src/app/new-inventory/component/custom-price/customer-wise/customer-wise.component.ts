@@ -53,8 +53,10 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Holds Group uniques name from Params */
     private groupUniqueName: 'sundrydebtors' | 'sundrycreditors';
-    /** Holds show loader status */
+    /** Holds show loader status  when user api call*/
     public isLoading: boolean = false;
+     /** Holds show loader status when stock api call*/
+     public isStockLoading: boolean = false;
     /** Holds search data */
     public apiData: any;
     /** Holds User Search Input */
@@ -109,6 +111,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                 this.variantsWithoutDiscount = [];
                 this.initDiscountMainForm();
                 this.getCustomerVendorDiscountUserList();
+                this.getAllDiscount(this.currentUser);
             }
         });
 
@@ -123,7 +126,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
         this.getDiscounts();
 
         this.scrollDispatcher.scrolled().pipe(takeUntil(this.destroyed$)).subscribe((event: any) => {
-            if (event && (event?.getDataLength() - event?.getRenderedRange().end) < 10 && !this.isLoading && (this.pagination.user.totalPages >= this.pagination.user.page)) {
+            if (event && (event?.getDataLength() - event?.getRenderedRange().end) < 30 && !this.isLoading && (this.pagination.user.totalPages > this.pagination.user.page)) {
                 this.pagination.user.page++;
                 this.getCustomerVendorDiscountUserList();
             }
@@ -146,10 +149,13 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
         };
         this.userList = [];
         this.userList = [...this.userList];
-        this.isLoading = true;
+        this.isStockLoading = true;
         this.inventoryService.getCustomerVendorDiscountUserList(model).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
-            this.isLoading = false;
+            this.isStockLoading = false;
             if (response && response?.body?.results?.length) {
+                this.pagination.user.page = response?.body?.page;
+                this.pagination.user.totalPages = response?.body?.totalPages;
+
                 if (this.tempUserList?.length) {
                     this.userList = [...this.userList, ...this.tempUserList];
                 } else {
@@ -281,7 +287,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
             uniqueName: userData?.uniqueName,
             query: query
         };
-        this.isLoading = true;
+        this.isStockLoading = true;
         this.inventoryService.getAllDiscount(model).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response && response?.body?.results?.length) {
                 this.initDiscountMainForm();
@@ -414,12 +420,11 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                         }
                     });
                 });
-                console.log("discount", this.discountForm);
                 this.currentUserStocks = response?.body?.results;
             } else {
                 this.currentUserStocks = null;
             }
-            this.isLoading = false;
+            this.isStockLoading = false;
         });
     }
 
@@ -614,10 +619,11 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                 variantUnitName: '',
                 uniqueName: event.value,
                 name: event.label,
-                discountInfo: '',
+                discountInfo: [{ type: "FIX_AMOUNT", discountType: "FIX_AMOUNT", value: 0, discountValue: 0, isActive: true, discountUniqueName: null }],
                 isTemproraryVariant: true
             };
             variants.push(this.initVariantForm(variantObj));
+            (variants.at(variants.value.length - 1).get('discounts') as UntypedFormArray).push(this.initDiscountValuesForm({ type: "FIX_AMOUNT", discountType: "FIX_AMOUNT", value: 0, discountValue: 0, isActive: true, discountUniqueName: null }));
 
             this.variantsWithoutDiscount[stockFormArrayIndex] = this.variantsWithoutDiscount[stockFormArrayIndex].filter(variant => variant.value !== event.value);
             this.changeDetectorRef.detectChanges();
@@ -673,7 +679,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
      */
     public saveDiscount(stockFormArrayIndex: number): void {
         if (!((this.discountForm.get('discountInfo') as FormArray).at(stockFormArrayIndex) as UntypedFormArray).invalid) {
-            this.isLoading = true;
+            this.isStockLoading = true;
             const discountFormValues = cloneDeep(this.discountForm.value);
             const stockUniqueName = discountFormValues.discountInfo[stockFormArrayIndex].stockUniqueName;
 
@@ -702,7 +708,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
             });
 
             this.inventoryService.createDiscount(stockUniqueName, discountFormValues).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
-                this.isLoading = false;
+                this.isStockLoading = false;
                 if (response && response?.status === 'success') {
                     const discountForm = (this.discountForm.get('discountInfo') as FormArray).at(stockFormArrayIndex) as UntypedFormArray;
                     discountForm.get('isTempStock').patchValue(false);
@@ -797,7 +803,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                 this.dialogRef.close();
             } else {
                 let type = event?.type === 'ACCOUNT' ? 'Account' : 'Group';
-                this.toaster.errorToast("This " + type + " Already Added !");
+                this.toaster.errorToast("This " + type + " is already added");
             }
         } else {
             this.inventoryService.getStockDetails(event?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
@@ -828,7 +834,6 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                     });
                     this.currentUserStocks = event;
                 }
-                console.log("discount", this.discountForm);
                 
             });
             this.dialogRef.close();

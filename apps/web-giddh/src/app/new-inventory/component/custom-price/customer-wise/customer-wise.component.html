@@ -40,7 +40,7 @@
                                 </ng-container>
                             </cdk-virtual-scroll-viewport>
                         </mat-list>
-                        <div class="customer-right-side">
+                        <div class="customer-right-side" [ngStyle]="{ 'width' : (!(currentUserStocks?.length || currentUserStocks?.uniqueName) && currentUser?.uniqueName) || isStockLoading ? '100%' : null }">
                             <div class="right-heading" *ngIf="currentUser?.uniqueName">
                                 <button mat-stroked-button color="primary" (click)="openSearchModal('stocks')"> {{
                                     localeData?.add_inventory }} </button>
@@ -53,7 +53,7 @@
                                     </span>
                                 </div>
                             </div>
-                            <ng-container *ngIf="currentUserStocks?.length || currentUserStocks?.uniqueName">
+                            <ng-container *ngIf="(currentUserStocks?.length || currentUserStocks?.uniqueName) && !isStockLoading">
                                 <div class="mr-t2" [formGroup]="discountForm">
                                     <ng-container
                                         *ngFor="let discountCollection of discountForm?.get('discountInfo')['controls']; let i = index"
@@ -70,17 +70,17 @@
                                                     <strong>{{ discountCollection?.get('stockName')?.value }}</strong>
                                                 </p>
                                                 <ng-container [formGroupName]="i">
-                                                    <div class="table-responsive mr-t05 mr-b15">
+                                                    <div class="mr-t05 mr-b15">
                                                         <table class="table">
                                                             <tbody>
                                                                 <tr *ngFor="let variant of discountCollection?.get('variants')['controls'];  let j = index"
                                                                     formArrayName="variants">
                                                                     <ng-container [formGroupName]="j">
-                                                                        <td>
+                                                                        <td class="variant-name">
                                                                             {{ variant?.get('variantName')?.value }}
                                                                         </td>
 
-                                                                        <td class="price-width">
+                                                                        <td class="variant-price">
                                                                             <input-field [name]="'price' + i + '-' + j"
                                                                                 [placeholder]="'00'"
                                                                                 [label]="localeData?.price"
@@ -89,7 +89,7 @@
                                                                                 formControlName="price"
                                                                                 (change)="updateDiscountInVariant(variant)"></input-field>
                                                                         </td>
-                                                                        <td class="child-td-nam">
+                                                                        <td class="child-td-nam variant-tax-toggle">
                                                                             <div class="toggle-wrap">
                                                                                 <mat-slide-toggle color="primary"
                                                                                     [name]="'discountExclusive' + i + '-' + j"
@@ -105,7 +105,7 @@
                                                                                 </mat-slide-toggle>
                                                                             </div>
                                                                         </td>
-                                                                        <td class="overflow-visible">
+                                                                        <td class="overflow-visible variant-discount">
                                                                             <div
                                                                                 class="text-right flex-fill discount-input">
                                                                                 <discount-control-component
@@ -126,7 +126,7 @@
                                                                                 </discount-control-component>
                                                                             </div>
                                                                         </td>
-                                                                        <td>
+                                                                        <td class="variant-quantity">
                                                                             <input-field [placeholder]="'00'"
                                                                                 [name]="'quantity' + i + '-' + j"
                                                                                 formControlName="quantity"
@@ -135,7 +135,7 @@
                                                                                 [matSuffix]="variant?.get('variantUnitName')?.value"
                                                                                 [cssClass]="'text-right'"></input-field>
                                                                         </td>
-                                                                        <td>
+                                                                        <td class="variant-unit">
                                                                             <dropdown-field
                                                                                 [name]="'unit' + i + '-' + j"
                                                                                 [placeholder]="commonLocaleData?.app_unit"
@@ -144,7 +144,7 @@
                                                                                 (selectedOption)="selectVariantUnit($event, i, j)">
                                                                             </dropdown-field>
                                                                         </td>
-                                                                        <td class="delete-width">
+                                                                        <td class="variant-delete">
                                                                             <div class="delete-show">
                                                                                 <button mat-stroked-button
                                                                                     [disabled]="discountCollection?.get('variants')?.value?.length < 2"
@@ -195,8 +195,11 @@
                                 </div>
                             </ng-container>
                             <div class="text-center mt-5 text-gray font-24"
-                                *ngIf="!(currentUserStocks?.length || currentUserStocks?.uniqueName) && currentUser?.uniqueName">
+                                *ngIf="!(currentUserStocks?.length || currentUserStocks?.uniqueName) && currentUser?.uniqueName && !isStockLoading">
                                 <span class="font">{{ commonLocaleData?.app_no_data_found }}</span>
+                            </div>
+                            <div *ngIf="isStockLoading">
+                                <giddh-page-loader></giddh-page-loader>
                             </div>
                         </div>
                     </div>
