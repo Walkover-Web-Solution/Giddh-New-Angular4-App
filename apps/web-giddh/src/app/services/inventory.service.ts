@@ -1548,6 +1548,15 @@ export class InventoryService {
         return this.http.get(apiUrl);
     }
 
+    /**
+     * This is used to delete Customer/Vendor wise discount User, Stock and Variants
+     * 
+     * Key "userUniqueName" is mandatory
+     *
+     * @param {*} request
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof InventoryService
+     */
     public deleteDiscountRecord(request: any): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let apiUrl = this.config.apiUrl + INVENTORY_API.DELETE_DISCOUNT_RECORD?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':stockUniqueName', encodeURIComponent(request.stockUniqueName))?.replace(':variantUniqueName', encodeURIComponent(request.variantUniqueName))?.replace(':userUniqueName', encodeURIComponent(request.userUniqueName));
@@ -1555,13 +1564,14 @@ export class InventoryService {
         return this.http.delete(apiUrl);
     }
 
-    public getStockVariants(stockUniqueName: string): Observable<BaseResponse<any, any>> {
-        this.companyUniqueName = this.generalService.companyUniqueName;
-        let apiUrl = this.config.apiUrl + INVENTORY_API.GET_STOCK_ALL_VARIANTS?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':stockUniqueName', encodeURIComponent(stockUniqueName));
-
-        return this.http.get(apiUrl);
-    }
-
+    /** 
+     * Create New discount and add new variant in existing stock 
+     *
+     * @param {string} stockUniqueName
+     * @param {CreateDiscount} model
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof InventoryService
+     */
     public createDiscount(stockUniqueName: string, model: CreateDiscount): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let apiUrl = this.config.apiUrl + INVENTORY_API.CREATE_DISCOUNT?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':stockUniqueName', encodeURIComponent(stockUniqueName));
@@ -1569,6 +1579,15 @@ export class InventoryService {
         return this.http.post(apiUrl, model);
     }
 
+    /**
+     * Update Discount for variant each key using Patch API
+     *
+     * @param {string} stockUniqueName
+     * @param {string} variantUniqueName
+     * @param {CreateDiscount} model
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof InventoryService
+     */
     public updateDiscount(stockUniqueName: string, variantUniqueName: string, model: CreateDiscount): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let apiUrl = this.config.apiUrl + INVENTORY_API.UPDATE_DISCOUNT?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':stockUniqueName', encodeURIComponent(stockUniqueName))?.replace(':variantUniqueName', encodeURIComponent(variantUniqueName));
@@ -1576,6 +1595,13 @@ export class InventoryService {
         return this.http.patch(apiUrl, model);
     }
 
+    /**
+     * Get Stockwise All Variant and Units List 
+     *
+     * @param {string} stockUniqueName
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof InventoryService
+     */
     public getStockDetails(stockUniqueName: string): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let apiUrl = this.config.apiUrl + INVENTORY_API.GET_STOCK_DETAILS?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':stockUniqueName', encodeURIComponent(stockUniqueName));

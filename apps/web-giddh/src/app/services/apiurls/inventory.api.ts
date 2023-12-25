@@ -101,7 +101,6 @@ export const INVENTORY_API = {
     GET_ALL_STOCKS: 'v2/company/:companyUniqueName/stock?query=:query&page=:page&count=:count', // GET call
     GET_ALL_DISCOUNTS: 'company/:companyUniqueName/customer-vendor-discount/get-all-discounts?uniqueName=:uniqueName&query=:query&page=:page&count=:count', // GET call
     DELETE_DISCOUNT_RECORD: 'company/:companyUniqueName/customer-vendor-discount?stockUniqueName=:stockUniqueName&variantUniqueName=:variantUniqueName&userUniqueName=:userUniqueName', // DELETE Call
-    GET_STOCK_ALL_VARIANTS: 'company/:companyUniqueName/stock/:stockUniqueName/variants', // GET call
     CREATE_DISCOUNT: 'company/:companyUniqueName/customer-vendor-discount/stock/:stockUniqueName/assign-discount', // POST Call
     UPDATE_DISCOUNT: 'company/:companyUniqueName/customer-vendor-discount/stock/:stockUniqueName/variant/:variantUniqueName/update-discount', // Patch Call
     GET_STOCK_DETAILS: 'v2/company/:companyUniqueName/stock/:stockUniqueName/details', // GET call
