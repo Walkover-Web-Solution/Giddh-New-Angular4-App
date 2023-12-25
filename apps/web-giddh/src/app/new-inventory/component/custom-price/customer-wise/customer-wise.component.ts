@@ -200,6 +200,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
             stockUniqueName: [discount?.stock?.uniqueName, Validators.required],
             isTempStock: [discount?.stock?.isTempStock],
             units: [discount?.units],
+            hasVariants: [discount?.hasVariants],
             variants: this.formBuilder.array([])
         });
     }
@@ -328,6 +329,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                     });
 
                     res['isTempStock'] = false;
+                    res['hasVariants'] = res?.hasVariants;
 
                     discounts.push(this.initDiscountForm(res));
 
@@ -834,8 +836,9 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                     });
 
                     discounts.push(this.initDiscountForm({
-                        stock: { name: event?.name, uniqueName: event?.uniqueName, isTempStock: true },
-                        units: units ?? []
+                        stock: { name: event?.name, uniqueName: event?.uniqueName, isTempStock: true }, 
+                        units: units ?? [],
+                        hasVariants: response?.body?.variants.length > 1
                     }));
 
                     let variants = (this.discountForm.get('discountInfo') as FormArray).at(stockIndex).get('variants') as UntypedFormArray;
