@@ -40,7 +40,7 @@
                                 </ng-container>
                             </cdk-virtual-scroll-viewport>
                         </mat-list>
-                        <div class="customer-right-side">
+                        <div class="customer-right-side" [ngStyle]="{ 'width' : (!(currentUserStocks?.length || currentUserStocks?.uniqueName) && currentUser?.uniqueName) || isStockLoading ? '100%' : null }">
                             <div class="right-heading" *ngIf="currentUser?.uniqueName">
                                 <button mat-stroked-button color="primary" (click)="openSearchModal('stocks')"> {{
                                     localeData?.add_inventory }} </button>
@@ -53,7 +53,7 @@
                                     </span>
                                 </div>
                             </div>
-                            <ng-container *ngIf="currentUserStocks?.length || currentUserStocks?.uniqueName">
+                            <ng-container *ngIf="(currentUserStocks?.length || currentUserStocks?.uniqueName) && !isStockLoading">
                                 <div class="mr-t2" [formGroup]="discountForm">
                                     <ng-container
                                         *ngFor="let discountCollection of discountForm?.get('discountInfo')['controls']; let i = index"
@@ -195,8 +195,11 @@
                                 </div>
                             </ng-container>
                             <div class="text-center mt-5 text-gray font-24"
-                                *ngIf="!(currentUserStocks?.length || currentUserStocks?.uniqueName) && currentUser?.uniqueName">
+                                *ngIf="!(currentUserStocks?.length || currentUserStocks?.uniqueName) && currentUser?.uniqueName && !isStockLoading">
                                 <span class="font">{{ commonLocaleData?.app_no_data_found }}</span>
+                            </div>
+                            <div *ngIf="isStockLoading">
+                                <giddh-page-loader></giddh-page-loader>
                             </div>
                         </div>
                     </div>
