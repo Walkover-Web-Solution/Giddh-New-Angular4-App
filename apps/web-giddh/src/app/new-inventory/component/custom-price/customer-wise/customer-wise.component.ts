@@ -414,7 +414,6 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                         }
                     });
                 });
-                console.log("discount", this.discountForm);
                 this.currentUserStocks = response?.body?.results;
             } else {
                 this.currentUserStocks = null;
@@ -614,10 +613,11 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                 variantUnitName: '',
                 uniqueName: event.value,
                 name: event.label,
-                discountInfo: '',
+                discountInfo: [{ type: "FIX_AMOUNT", discountType: "FIX_AMOUNT", value: 0, discountValue: 0, isActive: true, discountUniqueName: null }],
                 isTemproraryVariant: true
             };
             variants.push(this.initVariantForm(variantObj));
+            (variants.at(variants.value.length - 1).get('discounts') as UntypedFormArray).push(this.initDiscountValuesForm({ type: "FIX_AMOUNT", discountType: "FIX_AMOUNT", value: 0, discountValue: 0, isActive: true, discountUniqueName: null }));
 
             this.variantsWithoutDiscount[stockFormArrayIndex] = this.variantsWithoutDiscount[stockFormArrayIndex].filter(variant => variant.value !== event.value);
             this.changeDetectorRef.detectChanges();
@@ -828,7 +828,6 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                     });
                     this.currentUserStocks = event;
                 }
-                console.log("discount", this.discountForm);
                 
             });
             this.dialogRef.close();

@@ -37,10 +37,9 @@
                 }
             }
             .customer-right-side {
-                width: 86%;
+                width: initial;
                 padding: 12px 16px;
                 border-left: 1px solid var(--color-iron);
-                overflow: auto;
                 height: calc(100vh - 92px);
                 .right-heading {
                     display: flex;
@@ -69,6 +68,28 @@
                                     vertical-align: middle;
                                     .toggle-wrap {
                                         min-width: 105px;
+                                    }
+
+                                    &.variant-name{
+                                        min-width: max-content;
+                                    }
+                                    &.variant-price{
+                                        min-width: 150px;
+                                    }
+                                    &.variant-tax-toggle{
+                                        min-width: 130px;
+                                    }
+                                    &.variant-discount{
+                                        min-width: 160px;
+                                    }
+                                    &.variant-quantity{
+                                        min-width: 320px;
+                                    }
+                                    &.variant-unit{
+                                        min-width: 100px;
+                                    }
+                                    &.variant-delete{
+                                        min-width: 50px;
                                     }
                                 }
                             }
@@ -110,9 +131,6 @@
                 .item-list {
                     width: 20%;
                 }
-                .customer-right-side {
-                    width: 80%;
-                }
             }
         }
     }
@@ -124,9 +142,6 @@
             .inventory-sub-sideabar {
                 .item-list {
                     width: 25%;
-                }
-                .customer-right-side {
-                    width: 75%;
                 }
             }
         }

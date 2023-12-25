@@ -70,17 +70,17 @@
                                                     <strong>{{ discountCollection?.get('stockName')?.value }}</strong>
                                                 </p>
                                                 <ng-container [formGroupName]="i">
-                                                    <div class="table-responsive mr-t05 mr-b15">
+                                                    <div class="mr-t05 mr-b15">
                                                         <table class="table">
                                                             <tbody>
                                                                 <tr *ngFor="let variant of discountCollection?.get('variants')['controls'];  let j = index"
                                                                     formArrayName="variants">
                                                                     <ng-container [formGroupName]="j">
-                                                                        <td>
+                                                                        <td class="variant-name">
                                                                             {{ variant?.get('variantName')?.value }}
                                                                         </td>
 
-                                                                        <td class="price-width">
+                                                                        <td class="variant-price">
                                                                             <input-field [name]="'price' + i + '-' + j"
                                                                                 [placeholder]="'00'"
                                                                                 [label]="localeData?.price"
@@ -89,7 +89,7 @@
                                                                                 formControlName="price"
                                                                                 (change)="updateDiscountInVariant(variant)"></input-field>
                                                                         </td>
-                                                                        <td class="child-td-nam">
+                                                                        <td class="child-td-nam variant-tax-toggle">
                                                                             <div class="toggle-wrap">
                                                                                 <mat-slide-toggle color="primary"
                                                                                     [name]="'discountExclusive' + i + '-' + j"
@@ -105,7 +105,7 @@
                                                                                 </mat-slide-toggle>
                                                                             </div>
                                                                         </td>
-                                                                        <td class="overflow-visible">
+                                                                        <td class="overflow-visible variant-discount">
                                                                             <div
                                                                                 class="text-right flex-fill discount-input">
                                                                                 <discount-control-component
@@ -126,7 +126,7 @@
                                                                                 </discount-control-component>
                                                                             </div>
                                                                         </td>
-                                                                        <td>
+                                                                        <td class="variant-quantity">
                                                                             <input-field [placeholder]="'00'"
                                                                                 [name]="'quantity' + i + '-' + j"
                                                                                 formControlName="quantity"
@@ -135,7 +135,7 @@
                                                                                 [matSuffix]="variant?.get('variantUnitName')?.value"
                                                                                 [cssClass]="'text-right'"></input-field>
                                                                         </td>
-                                                                        <td>
+                                                                        <td class="variant-unit">
                                                                             <dropdown-field
                                                                                 [name]="'unit' + i + '-' + j"
                                                                                 [placeholder]="commonLocaleData?.app_unit"
@@ -144,7 +144,7 @@
                                                                                 (selectedOption)="selectVariantUnit($event, i, j)">
                                                                             </dropdown-field>
                                                                         </td>
-                                                                        <td class="delete-width">
+                                                                        <td class="variant-delete">
                                                                             <div class="delete-show">
                                                                                 <button mat-stroked-button
                                                                                     [disabled]="discountCollection?.get('variants')?.value?.length < 2"
