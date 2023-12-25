@@ -73,8 +73,8 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy {
     constructor(
         private renderer: Renderer2,
         private zone: NgZone,
-        private _inventoryService: InventoryService,
-        private _cdref: ChangeDetectorRef,
+        private inventoryService: InventoryService,
+        private cdref: ChangeDetectorRef,
         private scrollDispatcher: ScrollDispatcher
     ) { }
 
@@ -97,7 +97,7 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy {
                 this.apiRequestParams.page = 1;
                 this.apiRequestParams.query = term;
                 this.searchCommandK(true);
-                this._cdref.markForCheck();
+                this.cdref.markForCheck();
             }
         });
 
@@ -109,7 +109,6 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy {
         });
 
         this.searchSubject.next("");
-        document.querySelector("body")?.classList?.add("cmd-k");
     }
 
     /**
@@ -286,7 +285,7 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy {
             this.searchedItems = [];
         }
         if (this.apiRequestParams?.type === 'users') {
-            this._inventoryService.getFlattenAccountsList(this.apiRequestParams).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+            this.inventoryService.getFlattenAccountsList(this.apiRequestParams).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 this.isLoading = false;
                 if (res && res?.body?.results.length) {
                     this.apiRequestParams.totalPages = res?.body?.totalPages;
@@ -301,12 +300,12 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy {
                 else {
                     this.noResultsFound = true;
                 }
-                this._cdref.detectChanges();
+                this.cdref.detectChanges();
 
             });
         }
         if (this.apiRequestParams?.type === 'stocks') {
-            this._inventoryService.getStockList(this.apiRequestParams).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+            this.inventoryService.getStockList(this.apiRequestParams).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 this.isLoading = false;
                 if (res && res?.body?.results.length) {
                     this.apiRequestParams.totalPages = res?.body?.totalPages;
@@ -320,7 +319,7 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy {
                 } else {
                     this.noResultsFound = true;
                 }
-                this._cdref.detectChanges();
+                this.cdref.detectChanges();
             })
         }
     }
@@ -331,7 +330,6 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy {
      * @memberof AdvanceListItemsPopupComponent
      */
     public ngOnDestroy(): void {
-        document.querySelector("body")?.classList?.remove("cmd-k");
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }

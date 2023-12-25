@@ -26,32 +26,6 @@
             color: var(--color-abbey);
         }
     }
-    .vR {
-        margin-right: 2px;
-        vertical-align: baseline;
-        .vN {
-            height: 24px;
-            line-height: 21px;
-            display: inline-flex;
-            box-sizing: border-box;
-            text-transform: capitalize;
-            font-size: var(--font-size-15);
-            .vT {
-                letter-spacing: 0.3px;
-                display: inline-block;
-                max-width: 325px;
-                line-height: 22px;
-                max-height: 22px;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                direction: ltr;
-            }
-            .vM {
-                font-size: var(--font-size-24);
-                margin-left: 6px;
-            }
-        }
-    }
 }
 
 .universal-data-list-wrapper {

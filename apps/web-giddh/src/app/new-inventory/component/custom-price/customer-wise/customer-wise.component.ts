@@ -216,7 +216,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
         return this.formBuilder.group({
             price: [variant?.price, Validators.required],
             quantity: [variant?.defaultQuantity, Validators.required],
-            discountExclusive: [variant?.discountExclusive ?? false, Validators.required], // to ask rishi ji
+            discountExclusive: [variant?.discountExclusive ?? false, Validators.required],
             stockUnitUniqueName: [variant?.stockUnitUniqueName, Validators.required],
             variantUnitName: [variant?.variantUnitName],
             variantUniqueName: [variant?.uniqueName, Validators.required],
@@ -230,6 +230,14 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * This function set Discount > Stock >  Variants > Discounts value
+     *
+     * @private
+     * @param {*} discount
+     * @return {*}  {UntypedFormGroup}
+     * @memberof CustomerWiseComponent
+     */
     private initDiscountValuesForm(discount: any): UntypedFormGroup {
         return this, this.formBuilder.group({
             type: [discount?.type],
@@ -805,7 +813,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                 this.dialogRef.close();
             } else {
                 let type = event?.type === 'ACCOUNT' ? 'Account' : 'Group';
-                let msg =  this.localeData?.already_added_msg.replace('[TYPE]', type);
+                let msg = this.localeData?.already_added_msg.replace('[TYPE]', type);
                 this.toaster.warningToast(msg);
             }
         } else {
@@ -854,16 +862,6 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
             this.pagination.stock.page = event.page;
             this.getAllDiscount(this.currentUser);
         }
-    }
-
-    /**
-     * Lifecycle hook for destroy component
-     *
-     * @memberof CustomerWiseComponent
-     */
-    public ngOnDestroy(): void {
-        this.destroyed$.next(true);
-        this.destroyed$.complete();
     }
 
     /**
@@ -935,4 +933,13 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Lifecycle hook for destroy component
+     *
+     * @memberof CustomerWiseComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
+    }
 }
