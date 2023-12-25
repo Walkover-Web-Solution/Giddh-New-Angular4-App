@@ -17,7 +17,9 @@
         "recipe":"कृती",
         "create_manufacturing":"मॅन्युफॅक्चरिंग तयार करा",
         "report":"अहवाल द्या",
-        "create_branch_transfer":"शाखा हस्तांतरण तयार करा"
+        "create_branch_transfer":"शाखा हस्तांतरण तयार करा",
+        "customer_wise":"ग्राहक शहाणे",
+        "vendor_wise":"विक्रेता शहाणे"
     },
     "reports":{
         "transaction_count":"व्यवहाराची संख्या",
