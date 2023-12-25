@@ -17,7 +17,9 @@
         "recipe":"व्यंजन विधि",
         "create_manufacturing":"मैन्युफैक्चरिंग बनाएं",
         "report":"प्रतिवेदन",
-        "create_branch_transfer":"शाखा स्थानांतरण बनाएँ"
+        "create_branch_transfer":"शाखा स्थानांतरण बनाएँ",
+        "customer_wise":"ग्राहक समझदार",
+        "vendor_wise":"विक्रेता समझदार"
     },
     "reports":{
         "transaction_count":"लेन-देन की संख्या",

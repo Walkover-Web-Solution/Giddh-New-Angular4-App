@@ -1,0 +1,81 @@
+<ng-container appTranslate [file]="'command-k'" (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event">
+
+    <section #wrapper [class.isVisible]="isOpen" class="universal-data-list-wrapper">
+        <ng-container>
+            <ng-container *ngTemplateOutlet="searchEleTemplate"></ng-container>
+        </ng-container>
+        <ng-container *ngIf="searchedItems && searchedItems.length > 0">
+            <div #mainEle tabindex="0" class="universal-list-items">
+                <ng-container *ngIf="isOpen">
+                    <ng-container>
+                        <mat-list role="list">
+                            <cdk-virtual-scroll-viewport [itemSize]="38" class="list-viewport">
+                                <mat-list-item role="listitem" class="item"
+                                    *cdkVirtualFor="let r of searchedItems; let i = index; trackBy: trackByFn"
+                                    (mouseover)="highlightItem(i)" (mouseout)="unhighlightItem()"
+                                    (click)="itemSelected(r,$event)"
+                                    [ngClass]="{ 'selected': r.loop === highlightedItem, 'active': r.isSelected }">
+                                    <a [attr.href]="null" class="d-flex flex-row align-items-center">
+                                        <div class="item-icon">
+                                            <ng-container [ngSwitch]="r.type">
+                                                <ng-container *ngSwitchCase="'GROUP'">
+                                                    <span class="icon-group-folder" id="icon-group-folder"></span>
+                                                </ng-container>
+                                                <ng-container *ngSwitchCase="'ACCOUNT'">
+                                                    <span class="icon-account" id="icon-account"></span>
+                                                </ng-container>
+                                                <ng-container *ngSwitchDefault>
+                                                    <img class="icon-stock" src="/assets/images/item-wise.svg"
+                                                        width="18" height="18">
+                                                </ng-container>
+                                            </ng-container>
+                                        </div>
+                                        <div class="item-details flex-grow-1">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <div class="width-65">
+                                                    <p id="{{
+                                                                r.type?.toLowerCase() +
+                                                                    '-' + r?.uniqueName
+                                                            }}">
+                                                        {{ r.name }}
+                                                    </p>
+                                                </div>
+                                                <ng-container *ngIf="r.type === 'ACCOUNT'">
+                                                    <span class="command-hover-text">{{ r?.uniqueName }}</span>
+                                                </ng-container>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </mat-list-item>
+                            </cdk-virtual-scroll-viewport>
+                        </mat-list>
+                    </ng-container>
+                </ng-container>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="noResultsFound">
+            <div #mainEle>
+                <div class="p-2">
+                    <span>
+                        <div class="jumper-results">
+                            <p class="block text-center mr-b2">{{ localeData?.no_records_found }}</p>
+                        </div>
+                    </span>
+                </div>
+            </div>
+        </ng-container>
+    </section>
+
+    <ng-template #searchEleTemplate>
+        <div class="d-flex bd-rb">
+            <div #searchWrapEle class="search-wrapper" (click)="focusInSearchBox($event)">
+                <span class="icon-search-icon"><i class="icon-search"></i></span>
+                <input class="search-element" #searchEle type="text" [placeholder]="commonLocaleData?.app_search"
+                    (focus)="handleFocus()"
+                    (keyup)="initSearch($event, $event.target?.value)" (paste)="onPasteInSearch()" />
+            </div>
+            <i mat-dialog-close class="icon-cross close-navigation"></i>
+        </div>
+    </ng-template>
+</ng-container>

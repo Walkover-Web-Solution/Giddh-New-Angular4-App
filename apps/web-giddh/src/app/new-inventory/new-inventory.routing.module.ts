@@ -129,6 +129,10 @@ const routes: Routes = [
         loadChildren: () => import('./component/recipe/recipe.module').then(module => module.RecipeModule)
     },
     {
+        path: "price",
+        loadChildren: () => import('./component/custom-price/custom-price.module').then(module => module.CustomPriceModule)
+    },
+    {
         path: "manufacturing",
         loadChildren: () => import('./component/manufacturing/manufacturing.module').then(module => module.ManufacturingModule)
     },
