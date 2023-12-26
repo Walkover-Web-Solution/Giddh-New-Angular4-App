@@ -109,9 +109,9 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                 this.tempUserList = [];
                 this.currentUserStocks = null;
                 this.variantsWithoutDiscount = [];
+                this.currentUser = null;
                 this.initDiscountMainForm();
                 this.getCustomerVendorDiscountUserList();
-                this.getAllDiscount(this.currentUser);
             }
         });
 
@@ -126,7 +126,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
         this.getDiscounts();
 
         this.scrollDispatcher.scrolled().pipe(takeUntil(this.destroyed$)).subscribe((event: any) => {
-            if (event && (event?.getDataLength() - event?.getRenderedRange().end) < 30 && !this.isStockLoading && (this.pagination.user.totalPages > this.pagination.user.page)) {
+            if (event && (event?.getDataLength() - event?.getRenderedRange().end) < 30 && !this.isLoading && (this.pagination.user.totalPages > this.pagination.user.page)) {
                 this.pagination.user.page++;
                 this.getCustomerVendorDiscountUserList();
             }
@@ -141,7 +141,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
      * @memberof CustomerWiseComponent
      */
     private getCustomerVendorDiscountUserList(query: string = ''): void {
-        this.isStockLoading = true;
+        this.isLoading = true;
         let model: CustomerVendorDiscountBasic = {
             page: this.pagination.user.page,
             count: this.paginationLimit,
@@ -150,7 +150,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
         };
 
         this.inventoryService.getCustomerVendorDiscountUserList(model).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
-            this.isStockLoading = false;
+            this.isLoading = false;
             if (response && response?.body?.results?.length) {
                 this.pagination.user.page = response?.body?.page;
                 this.pagination.user.totalPages = response?.body?.totalPages;
