@@ -11,6 +11,9 @@
 
         <ng-container *ngIf="!showLoader">
             <form autocomplete="off" novalidate name="groupForm" [formGroup]="groupForm" class="new-account-form">
+            <span  class="pull-right">
+                <watch-video [cssClass]="'text-primary pd-t05 pd-r15'" [moduleName]="'INVENTORY_MASTER_GROUP'"></watch-video>
+            </span>
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-9">
