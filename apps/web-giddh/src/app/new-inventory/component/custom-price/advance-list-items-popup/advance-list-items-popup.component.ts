@@ -1,5 +1,5 @@
 import { ALT, BACKSPACE, CAPS_LOCK, CONTROL, DOWN_ARROW, ENTER, ESCAPE, LEFT_ARROW, MAC_META, MAC_WK_CMD_LEFT, MAC_WK_CMD_RIGHT, RIGHT_ARROW, SHIFT, TAB, UP_ARROW } from "@angular/cdk/keycodes";
-import { ScrollDispatcher } from "@angular/cdk/scrolling";
+import { CdkVirtualScrollViewport, ScrollDispatcher } from "@angular/cdk/scrolling";
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, NgZone, OnDestroy, OnInit, Output, Renderer2, ViewChild } from "@angular/core";
 import { PAGINATION_LIMIT } from "apps/web-giddh/src/app/app.constant";
 import { InventoryService } from "apps/web-giddh/src/app/services/inventory.service";
@@ -25,6 +25,8 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy {
     @ViewChild('searchWrapEle', { static: true }) public searchWrapEle: ElementRef;
     /** Holds Main dailog Wrapper element Reference */
     @ViewChild('wrapper', { static: true }) public wrapper: ElementRef;
+    /** Holds CdkVirtualScrollViewport Reference */
+    @ViewChild(CdkVirtualScrollViewport) viewPort: CdkVirtualScrollViewport;
 
     @Input() public preventOutSideClose: boolean = false;
     @Input() public dontShowNoResultMsg: boolean = false;
@@ -46,7 +48,9 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy {
     private searchSubject: Subject<string> = new Subject();
     /** This is used to destroy all subscribed observables and subjects */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Holds API results */
     public searchedItems: any[] = [];
+    /** if api result empty */
     public noResultsFound: boolean = false;
     /** Holds index of item highlighted on hover */
     public highlightedItem: number = 0;
@@ -293,7 +297,7 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy {
                     });
                     this.searchedItems = this.searchedItems.concat(...finalResult);
                 }
-                else {
+                else if (this.apiRequestParams.page === 1) {
                     this.noResultsFound = true;
                 }
                 this.cdref.detectChanges();
@@ -328,20 +332,45 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy {
      */
     public handleKeydown(event: any): void {
         let key = event.which || event.keyCode;
-        if (this.isOpen && key === 40) {
-            // event.preventDefault();
-            this.highlightedItem++;
-            if(this.highlightedItem > 4){
-                console.log(this.highlightedItem > 5);                
+        if (this.highlightedItem >= -1 && this.searchedItems.length > this.highlightedItem) {
+            if (this.isOpen && key === 40) {
+                event.preventDefault();
+                if ((this.searchedItems.length - 1) > this.highlightedItem) {
+                    this.highlightedItem++;
+                    if (this.highlightedItem > 5) {
+                        this.searchedItems.forEach(searchItem => searchItem.isHilighted = false);
+                        this.scroll(this.highlightedItem - 5);
+                    }
+                }
+            }
+            if (this.isOpen && key === 38) {
+                event.preventDefault();
+                if (this.highlightedItem > 0) {
+                    this.highlightedItem--;
+                    if (this.highlightedItem > 5 && this.highlightedItem > this.searchedItems.length - 5) {
+                        this.searchedItems.forEach(searchItem => searchItem.isHilighted = false);
+                        this.scroll(this.highlightedItem - 5);
+                    } else {
+                        this.scroll(0);
+                    }
+                }
+            }
+            if (this.isOpen && key === 13) {
+                event.preventDefault();
+                this.itemSelected(this.searchedItems[this.highlightedItem]);
             }
         }
-        if (this.isOpen && key === 38) {
-            event.preventDefault();
-            this.highlightedItem--;
-        }
-        if (this.isOpen && key === 13) {            
-            event.preventDefault();
-            this.itemSelected(this.searchedItems[this.highlightedItem]);
+    }
+
+    /**
+    * This scroll cdk-scoll at given index
+    *
+    * @param {number} scrollIndex
+    * @memberof AdvanceListItemsPopupComponent
+    */
+    private scroll(scrollIndex: number) {
+        if (!this.isLoading) {
+            this.viewPort.scrollToIndex(scrollIndex, 'smooth');
         }
     }
 
