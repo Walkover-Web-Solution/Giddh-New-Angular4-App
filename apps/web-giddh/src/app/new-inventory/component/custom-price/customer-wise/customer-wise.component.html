@@ -1,10 +1,7 @@
 <ng-container appTranslate [file]="'inventory/customprice'" (commonLocaleData)="commonLocaleData = $event"
     (localeData)="localeData = $event">
     <hamburger-menu></hamburger-menu>
-    <div *ngIf="isLoading">
-        <giddh-page-loader></giddh-page-loader>
-    </div>
-    <div class="custom-grid-wrapper" *ngIf="!isLoading">
+    <div class="custom-grid-wrapper">
         <div class="mat-list-wrap">
             <div class="horizontal-scroll" id="horizontal-scroll">
                 <div class="inventory-sideabar border-grid">
@@ -24,8 +21,11 @@
                                     </button>
                                 </div>
                             </div>
-                            <cdk-virtual-scroll-viewport [itemSize]="32" class="list-viewport">
-                                <ng-container *ngIf="userList.length">
+                            <div *ngIf="isLoading">
+                                <giddh-page-loader></giddh-page-loader>
+                            </div>
+                            <ng-container *ngIf="userList.length">
+                                <cdk-virtual-scroll-viewport [itemSize]="32" class="list-viewport">
                                     <mat-list-item *cdkVirtualFor="let user of userList"
                                         [ngClass]="{'active' : user?.uniqueName === currentUser?.uniqueName}">
                                         <a href="javascript:;" (click)="selectUser(user)">
@@ -34,11 +34,11 @@
                                                 class="customer-delete"><i class="icon-trash"></i></span>
                                         </a>
                                     </mat-list-item>
-                                </ng-container>
-                                <ng-container *ngIf="userList.length === 0">
-                                    <div class="p-3 text-gray">{{ commonLocaleData?.app_no_data_found }}</div>
-                                </ng-container>
-                            </cdk-virtual-scroll-viewport>
+                                </cdk-virtual-scroll-viewport>
+                            </ng-container>
+                            <ng-container *ngIf="!userList?.length">
+                                <div class="p-3 text-gray">{{ commonLocaleData?.app_no_data_found }}</div>
+                            </ng-container>
                         </mat-list>
                         <div class="customer-right-side">
                             <div class="right-heading" *ngIf="currentUser?.uniqueName">
@@ -118,7 +118,7 @@
                                                                                     [discountSum]="variant?.get('discountValue')?.value"
                                                                                     [discountPercentageModal]="variant.get('discountPercentageModal')?.value"
                                                                                     [discountFixedValueModal]="variant.get('discountFixedValueModal')?.value"
-                                                                                    (discountTotalUpdated)="updateDiscountInVariant(variant, discountCollection?.get('variants')?.value, i, j)"
+                                                                                    (discountTotalUpdated)="updateDiscountInVariant(variant, discountCollection?.get('variants')?.value, i, $event)"
                                                                                     [showHeaderText]="false"
                                                                                     [maskInput]="''"
                                                                                     [prefixInput]="variant?.get('discountInfo')?.value?.linkAccount?.currencySymbol"
