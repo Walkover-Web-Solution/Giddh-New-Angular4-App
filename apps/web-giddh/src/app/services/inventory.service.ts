@@ -1502,7 +1502,12 @@ export class InventoryService {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let apiUrl = this.config.apiUrl + INVENTORY_API.GET_CUSTOMER_VENDOR_DISCOUNT_USERS?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':page', encodeURIComponent(request.page))?.replace(':count', encodeURIComponent(request.count))?.replace(':group', encodeURIComponent(request.group))?.replace(':query', encodeURIComponent(request.query || ''));
 
-        return this.http.get(apiUrl);
+        return this.http.get(apiUrl).pipe(map((res) => {
+            let data: BaseResponse<any[], string> = res;
+            data.request = '';
+            data.queryString = {};
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<any[], string>(e, '', {})));
     }
 
     /**
@@ -1516,7 +1521,12 @@ export class InventoryService {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let apiUrl = this.config.apiUrl + INVENTORY_API.GET_FLATTEN_ACCOUNTS?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':page', encodeURIComponent(request.page))?.replace(':count', encodeURIComponent(request.count))?.replace(':group', encodeURIComponent(request.group))?.replace(':query', encodeURIComponent(request.query || ''));
 
-        return this.http.get(apiUrl);
+        return this.http.get(apiUrl).pipe(map((res) => {
+            let data: BaseResponse<any[], string> = res;
+            data.request = '';
+            data.queryString = {};
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<any[], string>(e, '', {})));
     }
 
     /**
@@ -1530,7 +1540,12 @@ export class InventoryService {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let apiUrl = this.config.apiUrl + INVENTORY_API.GET_ALL_STOCKS?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':page', encodeURIComponent(request.page))?.replace(':count', encodeURIComponent(request.count))?.replace(':query', encodeURIComponent(request.query || ''));
 
-        return this.http.get(apiUrl);
+        return this.http.get(apiUrl).pipe(map((res) => {
+            let data: BaseResponse<any[], string> = res;
+            data.request = '';
+            data.queryString = {};
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<any[], string>(e, '', {})));
     }
 
     /**
@@ -1544,7 +1559,12 @@ export class InventoryService {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let apiUrl = this.config.apiUrl + INVENTORY_API.GET_ALL_DISCOUNTS?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':page', encodeURIComponent(request.page))?.replace(':count', encodeURIComponent(request.count))?.replace(':uniqueName', encodeURIComponent(request.uniqueName))?.replace(':query', encodeURIComponent(request.query || ''));
 
-        return this.http.get(apiUrl);
+        return this.http.get(apiUrl).pipe(map((res) => {
+            let data: BaseResponse<any[], string> = res;
+            data.request = '';
+            data.queryString = {};
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<any[], string>(e, '', {})));
     }
 
     /**
@@ -1560,7 +1580,12 @@ export class InventoryService {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let apiUrl = this.config.apiUrl + INVENTORY_API.DELETE_DISCOUNT_RECORD?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':stockUniqueName', encodeURIComponent(request.stockUniqueName))?.replace(':variantUniqueName', encodeURIComponent(request.variantUniqueName))?.replace(':userUniqueName', encodeURIComponent(request.userUniqueName));
 
-        return this.http.delete(apiUrl);
+        return this.http.delete(apiUrl).pipe(map((res) => {
+            let data: BaseResponse<any[], string> = res;
+            data.request = '';
+            data.queryString = {};
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<any[], string>(e, '', {})));
     }
 
     /** 
@@ -1575,7 +1600,12 @@ export class InventoryService {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let apiUrl = this.config.apiUrl + INVENTORY_API.CREATE_DISCOUNT?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':stockUniqueName', encodeURIComponent(stockUniqueName));
 
-        return this.http.post(apiUrl, model);
+        return this.http.post(apiUrl, model).pipe(map((res) => {
+            let data: BaseResponse<any[], string> = res;
+            data.request = '';
+            data.queryString = {};
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<any[], string>(e, '', {})));
     }
 
     /**
@@ -1591,7 +1621,12 @@ export class InventoryService {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let apiUrl = this.config.apiUrl + INVENTORY_API.UPDATE_DISCOUNT?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':stockUniqueName', encodeURIComponent(stockUniqueName))?.replace(':variantUniqueName', encodeURIComponent(variantUniqueName));
 
-        return this.http.patch(apiUrl, model);
+        return this.http.patch(apiUrl, model).pipe(map((res) => {
+            let data: BaseResponse<any[], string> = res;
+            data.request = '';
+            data.queryString = {};
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<any[], string>(e, '', {})));
     }
 
     /**
@@ -1605,6 +1640,11 @@ export class InventoryService {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let apiUrl = this.config.apiUrl + INVENTORY_API.GET_STOCK_DETAILS?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':stockUniqueName', encodeURIComponent(stockUniqueName));
 
-        return this.http.get(apiUrl);
+        return this.http.get(apiUrl).pipe(map((res) => {
+            let data: BaseResponse<any[], string> = res;
+            data.request = '';
+            data.queryString = {};
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<any[], string>(e, '', {})));
     }
 }
