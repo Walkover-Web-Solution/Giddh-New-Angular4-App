@@ -92,7 +92,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         headQuarterAlias: '',
         balanceDisplayFormat: '',
         taxType: '',
-        manageInventory: false
+        manageInventory: false,
+        portalDomain: ''
     };
     public stateStream$: Observable<States[]>;
     public statesSource$: Observable<IOption[]> = observableOf([]);
@@ -180,6 +181,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     public taxType: string = '';
     /** True if initial data is fetched */
     public showTaxColumn: boolean;
+    /** Stores the voucher API version of company */
+    public voucherApiVersion: 1 | 2;
 
     constructor(
         private commonService: CommonService,
@@ -199,7 +202,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         private localeService: LocaleService,
         private breakPointObservar: BreakpointObserver
     ) {
-
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.breakPointObservar.observe([
             '(max-width: 767px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
@@ -1134,6 +1137,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 headQuarterAlias: profileObj.headQuarterAlias,
                 nameAlias: profileObj.nameAlias,
                 uniqueName: profileObj?.uniqueName,
+                portalDomain: profileObj?.portalDomain,
                 country: {
                     countryName: profileObj.countryV2 ? profileObj.countryV2.countryName : '',
                     countryCode: profileObj.countryV2 ? profileObj.countryV2.alpha2CountryCode?.toLowerCase() : '',
@@ -1320,6 +1324,9 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                     break;
                 case 'address':
                     pageHeading = this.companyProfileObj?.taxType ? (this.localeData?.address + this.companyProfileObj?.taxType) : this.localeData?.addresses;
+                    break;
+                case 'portal':
+                    pageHeading = this.localeData?.portal_heading;
                     break;
                 case 'other':
                     pageHeading = this.localeData?.other;

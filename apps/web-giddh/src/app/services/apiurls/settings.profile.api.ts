@@ -12,5 +12,11 @@ export const SETTINGS_PROFILE_API = {
     UPDATE_ADDRESS: `${COMMON}/address/:addressUniqueName`,
     DELETE_ADDRESS: `${COMMON}/address/:addressUniqueName`,
     CREATE_NEW_WAREHOUSE: `${COMMON}/warehouse`,
-    EDIT_WAREHOUSE: `${COMMON}/warehouse/:warehouseUniqueName`
+    EDIT_WAREHOUSE: `${COMMON}/warehouse/:warehouseUniqueName`,
+    VERIFY_PORTAL_WHITE_LABEL: `${COMMON}/verify-domain?domainUniqueName=:domainUniqueName`,
+    ADD_PORTAL_DOMAIN: `${COMMON}/add-domain`,
+    GET_DOMAIN_LIST: `${COMMON}/get-domain-list`,
+    GET_DOMAIN_LIST_DATA: `${COMMON}/get-domain-list?domainUniqueName=:domainUniqueName`,
+    PRIMARY_DELETE_DOMAIN_SET: `${COMMON}/domain/:domainUniqueName?operation=:operation`,
+    SHARE_PORTAL_DOMAIN: `${COMMON}/domain/:domainUniqueName/share`
 };
