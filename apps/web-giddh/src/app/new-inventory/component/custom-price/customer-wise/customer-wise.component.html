@@ -40,7 +40,7 @@
                                 </ng-container>
                             </cdk-virtual-scroll-viewport>
                         </mat-list>
-                        <div class="customer-right-side" [ngStyle]="{ 'width' : (!(currentUserStocks?.length || currentUserStocks?.uniqueName) && currentUser?.uniqueName) || isStockLoading ? '100%' : null }">
+                        <div class="customer-right-side">
                             <div class="right-heading" *ngIf="currentUser?.uniqueName">
                                 <button mat-stroked-button color="primary" (click)="openSearchModal('stocks')"> {{
                                     localeData?.add_inventory }} </button>
@@ -54,7 +54,7 @@
                                 </div>
                             </div>
                             <ng-container *ngIf="(currentUserStocks?.length || currentUserStocks?.uniqueName) && !isStockLoading">
-                                <div class="mr-t2" [formGroup]="discountForm">
+                                <div class="stocks-wrapper mr-t2 overflow-auto" [formGroup]="discountForm">
                                     <ng-container
                                         *ngFor="let discountCollection of discountForm?.get('discountInfo')['controls']; let i = index"
                                         formArrayName="discountInfo">
@@ -70,7 +70,7 @@
                                                     <strong>{{ discountCollection?.get('stockName')?.value }}</strong>
                                                 </p>
                                                 <ng-container [formGroupName]="i">
-                                                    <div class="mr-t05 mr-b15">
+                                                    <div class="table-responsive overflow-y-unset mr-t05 mr-b15">
                                                         <table class="table">
                                                             <tbody>
                                                                 <tr *ngFor="let variant of discountCollection?.get('variants')['controls'];  let j = index"
