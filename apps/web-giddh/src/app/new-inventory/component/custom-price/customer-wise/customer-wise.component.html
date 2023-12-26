@@ -10,7 +10,7 @@
                             <div class="list-head-gap">
                                 <div class="search-list position-relative mr-t15 mr-b15" [formGroup]="searchForm">
                                     <text-field type="text" [placeholder]="commonLocaleData?.app_search" formControlName="userSearch"
-                                        [cssClass]="'form-control name-width'"></text-field>
+                                        [cssClass]="'form-control search-bar'"></text-field>
                                     <span>
                                         <i class="icon-search"></i>
                                     </span>
@@ -46,7 +46,7 @@
                                     localeData?.add_inventory }} </button>
                                 <div class="search-list position-relative" [formGroup]="searchForm">
                                     <text-field type="text" [placeholder]="commonLocaleData?.app_search"
-                                        [cssClass]="'form-control name-width'"
+                                        [cssClass]="'form-control search-bar'"
                                         formControlName="stockSearch"></text-field>
                                     <span>
                                         <i class="icon-search"></i>
@@ -70,7 +70,7 @@
                                                     <strong>{{ discountCollection?.get('stockName')?.value }}</strong>
                                                 </p>
                                                 <ng-container [formGroupName]="i">
-                                                    <div class="table-responsive overflow-y-unset mr-t05 mr-b15">
+                                                    <div class="mr-t05 mr-b15">
                                                         <table class="table">
                                                             <tbody>
                                                                 <tr *ngFor="let variant of discountCollection?.get('variants')['controls'];  let j = index"
@@ -216,10 +216,14 @@
     <items-list-popup (selectedItemEmitter)="onItemSelected($event?.item, $event?.type)"
         (closeDailogEmitter)="dialogRef.close()" [isOpen]="true" [setParentWidth]="true"
         [apiData]="apiData"></items-list-popup>
-    <div class="shortcuts">
-        <strong class="mr-l1" [attr.aria-label]="commonLocaleData?.app_escape">{{
-            commonLocaleData?.app_esc
-            }}</strong>&nbsp;
-        {{ commonLocaleData?.app_to_dismiss }}
-    </div>
+        <div class="shortcuts">
+            <strong>↑</strong> <strong>↓</strong>&nbsp; {{ localeData?.to_navigate }}
+            <strong class="mr-l1" [attr.aria-label]="commonLocaleData?.app_return">↵</strong>&nbsp;
+            {{ localeData?.to_select }}
+            <strong class="mr-l1" [attr.aria-label]="commonLocaleData?.app_escape">{{
+                commonLocaleData?.app_esc
+            }}</strong
+            >&nbsp;
+            {{ localeData?.to_dismiss }}
+        </div>
 </ng-template>

@@ -2,9 +2,7 @@ import { ALT, BACKSPACE, CAPS_LOCK, CONTROL, DOWN_ARROW, ENTER, ESCAPE, LEFT_ARR
 import { ScrollDispatcher } from "@angular/cdk/scrolling";
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, NgZone, OnDestroy, OnInit, Output, Renderer2, ViewChild } from "@angular/core";
 import { PAGINATION_LIMIT } from "apps/web-giddh/src/app/app.constant";
-import { remove } from "apps/web-giddh/src/app/lodash-optimized";
 import { InventoryService } from "apps/web-giddh/src/app/services/inventory.service";
-import { ScrollComponent } from "apps/web-giddh/src/app/theme/command-k";
 import { ReplaySubject, Subject, debounceTime, takeUntil } from "rxjs";
 
 const DIRECTIONAL_KEYS = [
@@ -27,8 +25,6 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy {
     @ViewChild('searchWrapEle', { static: true }) public searchWrapEle: ElementRef;
     /** Holds Main dailog Wrapper element Reference */
     @ViewChild('wrapper', { static: true }) public wrapper: ElementRef;
-    /** Holds CDK Virtual Scroll Reference */
-    @ViewChild(ScrollComponent, { static: false }) public virtualScrollElem: ScrollComponent;
 
     @Input() public preventOutSideClose: boolean = false;
     @Input() public dontShowNoResultMsg: boolean = false;
@@ -321,6 +317,31 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy {
                 }
                 this.cdref.detectChanges();
             })
+        }
+    }
+
+    /**
+     * This function will get called if we remove search string or group
+     *
+     * @param {*} event
+     * @memberof AdvanceListItemsPopupComponent
+     */
+    public handleKeydown(event: any): void {
+        let key = event.which || event.keyCode;
+        if (this.isOpen && key === 40) {
+            // event.preventDefault();
+            this.highlightedItem++;
+            if(this.highlightedItem > 4){
+                console.log(this.highlightedItem > 5);                
+            }
+        }
+        if (this.isOpen && key === 38) {
+            event.preventDefault();
+            this.highlightedItem--;
+        }
+        if (this.isOpen && key === 13) {            
+            event.preventDefault();
+            this.itemSelected(this.searchedItems[this.highlightedItem]);
         }
     }
 

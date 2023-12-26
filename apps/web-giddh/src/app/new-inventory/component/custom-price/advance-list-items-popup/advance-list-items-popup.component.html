@@ -5,17 +5,24 @@
         <ng-container>
             <ng-container *ngTemplateOutlet="searchEleTemplate"></ng-container>
         </ng-container>
-        <ng-container *ngIf="searchedItems && searchedItems.length > 0">
+        <ng-container *ngIf="isLoading">
+            <div>
+                <giddh-page-loader></giddh-page-loader>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="searchedItems && searchedItems.length > 0  && !isLoading">
             <div #mainEle tabindex="0" class="universal-list-items">
                 <ng-container *ngIf="isOpen">
                     <ng-container>
                         <mat-list role="list">
                             <cdk-virtual-scroll-viewport [itemSize]="38" class="list-viewport">
                                 <mat-list-item role="listitem" class="item"
-                                    *cdkVirtualFor="let r of searchedItems; let i = index; trackBy: trackByFn"
-                                    (mouseover)="highlightItem(i)" (mouseout)="unhighlightItem()"
+                                   *cdkVirtualFor="let r of searchedItems; let i = index; trackBy: trackByFn"
+                                    (mouseover)="highlightItem(i)" 
+                                    (mouseout)="unhighlightItem()"
                                     (click)="itemSelected(r,$event)"
-                                    [ngClass]="{ 'selected': r.loop === highlightedItem, 'active': r.isSelected }">
+                                    [ngClass]="{ 'selected': r.loop === highlightedItem, 'active': r.isSelected }"
+                                >
                                     <a [attr.href]="null" class="d-flex flex-row align-items-center">
                                         <div class="item-icon">
                                             <ng-container [ngSwitch]="r.type">
@@ -54,7 +61,7 @@
                 </ng-container>
             </div>
         </ng-container>
-        <ng-container *ngIf="noResultsFound">
+        <ng-container *ngIf="noResultsFound && !isLoading">
             <div #mainEle>
                 <div class="p-2">
                     <span>
@@ -73,7 +80,7 @@
                 <span class="icon-search-icon"><i class="icon-search"></i></span>
                 <input class="search-element" #searchEle type="text" [placeholder]="commonLocaleData?.app_search"
                     (focus)="handleFocus()"
-                    (keyup)="initSearch($event, $event.target?.value)" (paste)="onPasteInSearch()" />
+                    (keyup)="initSearch($event, $event.target?.value)" (keydown)="handleKeydown($event)" (paste)="onPasteInSearch()" />
             </div>
             <i mat-dialog-close class="icon-cross close-navigation"></i>
         </div>

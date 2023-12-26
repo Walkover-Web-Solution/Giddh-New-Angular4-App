@@ -1,5 +1,12 @@
 .custom-grid-wrapper {
     .mat-list-wrap {
+        input {
+            &.form-control {
+                &.search-bar {
+                    padding-right: 2rem !important;
+                }
+            }
+        }
         .item-list {
             .mat-mdc-list-item {
                 .mdc-list-item__content {

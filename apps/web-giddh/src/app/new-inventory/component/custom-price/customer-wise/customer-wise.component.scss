@@ -41,6 +41,7 @@
                 padding: 12px 16px;
                 border-left: 1px solid var(--color-iron);
                 height: calc(100vh - 92px);
+                overflow-y: auto;
                 .right-heading {
                     display: flex;
                     justify-content: space-between;
