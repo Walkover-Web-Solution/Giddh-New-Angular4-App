@@ -527,7 +527,7 @@ export class LoginActions {
                 if (action.payload?.status === 'success') {
                     this._toaster.successToast(this.localeService.translate("app_messages.otp_sent_email"));
                 } else {
-                    this._toaster.errorToast(action.payload.message, action.payload.code,6000);
+                    this._toaster.errorToast(action.payload.message, action.payload.code, 6000);
                 }
                 return { type: 'EmptyAction' };
             })));
@@ -996,11 +996,21 @@ export class LoginActions {
         this.store.dispatch(this.companyActions.GetStateDetailsResponse(stateDetail));
         this.store.dispatch(this.companyActions.RefreshCompaniesResponse(companies));
         this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.userLoggedIn));
-        this.finalNavigate(stateDetail.body?.lastState, false, isSocialLogin);
+        this.finalNavigate(stateDetail.body?.lastState, false, isSocialLogin, stateDetail);
         return { type: 'EmptyAction' };
     }
 
-    public finalNavigate(route: any, parameter?: any, isSocialLogin?: boolean): void {
+    /**
+     * This will be use for final navigation from lastUpdate state
+     *
+     * @param {*} route
+     * @param {*} [parameter]
+     * @param {boolean} [isSocialLogin]
+     * @param {*} [stateDetail]
+     * @memberof LoginActions
+     */
+    public finalNavigate(route: any, parameter?: any, isSocialLogin?: boolean, stateDetail?: any): void {
+        route = stateDetail?.body?.lastUpdated > 7 ? '/pages/home' : route;
         this._generalService.finalNavigate(route, parameter, isSocialLogin);
     }
 }
