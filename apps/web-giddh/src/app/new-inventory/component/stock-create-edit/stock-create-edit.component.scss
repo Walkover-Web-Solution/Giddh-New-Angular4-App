@@ -285,6 +285,10 @@
     }
 
     .select-physical-product {
+        .top-right-spacing{
+            top: 5px;
+            right: 95px;
+        }
         .z-index-1{
             z-index: 1;
         }
