@@ -1010,7 +1010,7 @@ export class LoginActions {
      * @memberof LoginActions
      */
     public finalNavigate(route: any, parameter?: any, isSocialLogin?: boolean, stateDetail?: any): void {
-        route = stateDetail?.body?.lastUpdated > 7 ? '/pages/home' : route;
+        route = (stateDetail?.body?.lastUpdated > 7 || !stateDetail?.body?.lastUpdated) ? '/pages/home' : route;
         this._generalService.finalNavigate(route, parameter, isSocialLogin);
     }
 }
