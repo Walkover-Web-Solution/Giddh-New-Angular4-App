@@ -19,6 +19,7 @@ import { AdvanceListItemsPopupComponent } from './advance-list-items-popup/advan
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { NewConfirmModalModule } from '../../../theme/new-confirm-modal';
 import { DiscountControlModule } from '../../../theme/discount-control/discount-control.module';
+import { ScrollComponent } from './advance-list-items-popup/virtual-scroll';
 
 @NgModule({
     imports: [
@@ -45,6 +46,6 @@ import { DiscountControlModule } from '../../../theme/discount-control/discount-
         CustomerWiseComponent,
         AdvanceListItemsPopupComponent
     ],
-    declarations: [MainComponent, CustomerWiseComponent, AdvanceListItemsPopupComponent]
+    declarations: [MainComponent, CustomerWiseComponent, AdvanceListItemsPopupComponent, ScrollComponent]
 })
 export class CustomPriceModule { }
