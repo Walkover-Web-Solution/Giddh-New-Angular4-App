@@ -988,6 +988,16 @@ export class LoginActions {
         return this.finalThingTodo(respState, companies, isSocialLogin);
     }
 
+    /**
+     * This will be use for final things to do
+     *
+     * @private
+     * @param {*} stateDetail
+     * @param {*} companies
+     * @param {boolean} [isSocialLogin]
+     * @return {*}
+     * @memberof LoginActions
+     */
     private finalThingTodo(stateDetail: any, companies: any, isSocialLogin?: boolean) {
         this.store.pipe(select(state => state.session.user), take(1)).subscribe(response => {
             let request = { userUniqueName: response.user?.uniqueName, companyUniqueName: stateDetail?.body.companyUniqueName };
@@ -996,21 +1006,12 @@ export class LoginActions {
         this.store.dispatch(this.companyActions.GetStateDetailsResponse(stateDetail));
         this.store.dispatch(this.companyActions.RefreshCompaniesResponse(companies));
         this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.userLoggedIn));
-        this.finalNavigate(stateDetail.body?.lastState, false, isSocialLogin, stateDetail);
+        let route = (stateDetail?.body?.lastUpdated > 7 || !stateDetail?.body?.lastUpdated) ? '/pages/home' : stateDetail.body?.lastState;
+        this.finalNavigate(route, false, isSocialLogin);
         return { type: 'EmptyAction' };
     }
 
-    /**
-     * This will be use for final navigation from lastUpdate state
-     *
-     * @param {*} route
-     * @param {*} [parameter]
-     * @param {boolean} [isSocialLogin]
-     * @param {*} [stateDetail]
-     * @memberof LoginActions
-     */
-    public finalNavigate(route: any, parameter?: any, isSocialLogin?: boolean, stateDetail?: any): void {
-        route = (stateDetail?.body?.lastUpdated > 7 || !stateDetail?.body?.lastUpdated) ? '/pages/home' : route;
+    public finalNavigate(route: any, parameter?: any, isSocialLogin?: boolean): void {
         this._generalService.finalNavigate(route, parameter, isSocialLogin);
     }
 }
