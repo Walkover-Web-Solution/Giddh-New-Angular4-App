@@ -585,6 +585,17 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                         this.currentUser = null;
                         this.currentUserStocks = null;
                     }
+                    if (type === 'stock') {
+                        discounts.removeAt(stockFormArrayIndex);
+                        if (discounts.length === 0) {
+                            let indexInUserListArray = this.checkUserList(this.currentUser.uniqueName);
+                            this.userList.splice(indexInUserListArray, 1);
+                            this.userList = [...this.userList];
+                            this.currentUserStocks = null;
+                            this.currentUser = null;
+                        }
+                        this.variantsWithoutDiscount.splice(stockFormArrayIndex, 1);
+                    }
                 } else {
                     this.toaster.errorToast(response?.body);
                 }
@@ -856,7 +867,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
 
                     let variants = (this.discountForm.get('discountInfo') as FormArray).at(stockIndex).get('variants') as UntypedFormArray;
                     response.body?.variants.forEach((variant, variantIndex) => {
-                        variants.push(this.initVariantForm({ name: variant?.name, uniqueName: variant?.uniqueName, isTemproraryVariant: true, discountValue: 0,  stockUnitUniqueName: units[0].value, variantUnitName: units[0].label, discountInfo: [{ type: "FIX_AMOUNT", discountType: "FIX_AMOUNT", value: 0, discountValue: 0, isActive: true, discountUniqueName: null }] }));
+                        variants.push(this.initVariantForm({ name: variant?.name, uniqueName: variant?.uniqueName, isTemproraryVariant: true, discountValue: 0, stockUnitUniqueName: units[0].value, variantUnitName: units[0].label, discountInfo: [{ type: "FIX_AMOUNT", discountType: "FIX_AMOUNT", value: 0, discountValue: 0, isActive: true, discountUniqueName: null }] }));
                         (variants.at(variantIndex).get('discounts') as UntypedFormArray).push(this.initDiscountValuesForm({ type: "FIX_AMOUNT", discountType: "FIX_AMOUNT", value: 0, discountValue: 0, isActive: true, discountUniqueName: null }))
                     });
                     this.currentUserStocks = event;
