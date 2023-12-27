@@ -36,7 +36,7 @@
                                     </mat-list-item>
                                 </cdk-virtual-scroll-viewport>
                             </ng-container>
-                            <ng-container *ngIf="!userList?.length">
+                            <ng-container *ngIf="!isLoading && !userList?.length">
                                 <div class="p-3 text-gray">{{ commonLocaleData?.app_no_data_found }}</div>
                             </ng-container>
                         </mat-list>
