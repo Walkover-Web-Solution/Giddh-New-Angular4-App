@@ -109,6 +109,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             this.groupUniqueName = params.type === 'customer-wise' ? 'sundrydebtors' : 'sundrycreditors';
             if (this.groupUniqueName) {
+                this.searchForm.reset();
                 this.userList = [];
                 this.tempUserList = [];
                 this.currentUserStocks = null;
@@ -631,14 +632,16 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
         if (event && event.value && event.label) {
             this.variantsWithoutDiscount.push([]);
             let variants = (this.discountForm.get('discountInfo') as FormArray).at(stockFormArrayIndex).get('variants') as UntypedFormArray;
+            const units = (this.discountForm.get('discountInfo') as FormArray).at(stockFormArrayIndex).get('units').value;
             let variantObj = {
                 price: null,
                 quantity: null,
                 discountExclusive: false,
-                stockUnitUniqueName: '',
-                variantUnitName: '',
+                stockUnitUniqueName: units[0].value,
+                variantUnitName: units[0].label,
                 uniqueName: event.value,
                 name: event.label,
+                discountValue: 0,
                 discountInfo: [{ type: "FIX_AMOUNT", discountType: "FIX_AMOUNT", value: 0, discountValue: 0, isActive: true, discountUniqueName: null }],
                 isTemproraryVariant: true
             };
@@ -846,14 +849,14 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                     });
 
                     discounts.push(this.initDiscountForm({
-                        stock: { name: event?.name, uniqueName: event?.uniqueName, isTempStock: true }, 
+                        stock: { name: event?.name, uniqueName: event?.uniqueName, isTempStock: true },
                         units: units ?? [],
                         hasVariants: response?.body?.variants.length > 1
                     }));
 
                     let variants = (this.discountForm.get('discountInfo') as FormArray).at(stockIndex).get('variants') as UntypedFormArray;
                     response.body?.variants.forEach((variant, variantIndex) => {
-                        variants.push(this.initVariantForm({ name: variant?.name, uniqueName: variant?.uniqueName, isTemproraryVariant: true, discountInfo: [{ type: "FIX_AMOUNT", discountType: "FIX_AMOUNT", value: 0, discountValue: 0, isActive: true, discountUniqueName: null }] }));
+                        variants.push(this.initVariantForm({ name: variant?.name, uniqueName: variant?.uniqueName, isTemproraryVariant: true, discountValue: 0,  stockUnitUniqueName: units[0].value, variantUnitName: units[0].label, discountInfo: [{ type: "FIX_AMOUNT", discountType: "FIX_AMOUNT", value: 0, discountValue: 0, isActive: true, discountUniqueName: null }] }));
                         (variants.at(variantIndex).get('discounts') as UntypedFormArray).push(this.initDiscountValuesForm({ type: "FIX_AMOUNT", discountType: "FIX_AMOUNT", value: 0, discountValue: 0, isActive: true, discountUniqueName: null }))
                     });
                     this.currentUserStocks = event;
