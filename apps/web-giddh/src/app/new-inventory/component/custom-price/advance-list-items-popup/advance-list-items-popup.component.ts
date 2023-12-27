@@ -339,7 +339,7 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy {
                     this.highlightedItem++;
                     if (this.highlightedItem > 5) {
                         this.searchedItems.forEach(searchItem => searchItem.isHilighted = false);
-                        this.scroll(this.highlightedItem - 5);
+                        this.scroll(this.highlightedItem - 4);
                     }
                 }
             }
@@ -347,11 +347,9 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy {
                 event.preventDefault();
                 if (this.highlightedItem > 0) {
                     this.highlightedItem--;
-                    if (this.highlightedItem > 5 && this.highlightedItem > this.searchedItems.length - 5) {
+                    if (this.highlightedItem > 5 && this.highlightedItem < (this.searchedItems.length - 1)) {
                         this.searchedItems.forEach(searchItem => searchItem.isHilighted = false);
-                        this.scroll(this.highlightedItem - 5);
-                    } else {
-                        this.scroll(0);
+                        this.scroll(this.highlightedItem - 4);
                     }
                 }
             }
