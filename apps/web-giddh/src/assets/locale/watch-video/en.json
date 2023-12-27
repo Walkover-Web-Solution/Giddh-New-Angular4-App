@@ -15,5 +15,8 @@
     "INVENTORY_CREATE_STOCK": "How to create stocks?",
     "VOUCHER_CASH":  "How to create an Invoice?",
     "VOUCHER_SALES":  "How to create an Invoice?",
-    "ECOMM_INTEGRATION": "Watch how to integrate Shopify in GIDDH"
+    "ECOMM_INTEGRATION": "Watch how to integrate Shopify in GIDDH",
+    "BARCODE": "How Giddh's Barcode Feature Works.",
+    "DAYBOOK": "How Daybook Report works in Giddh.",
+    "SHOPIFY_INTEGRATION": "How Shopify-Giddh Integration works."
 }

@@ -15,5 +15,10 @@ export const VIDEOLINK = {
     INVENTORY_REPORT_VARIANTWISE: "https://www.youtube.com/embed/grOVnY9eXQE?si=a8_wl_USoWYUMs_F",
     IMPORT_ENTRIES: "https://www.youtube.com/embed/dkbVW_n24ug?si=GIoJ5qWkZZvJ06ml",
     IMPORT_INVENTORY: "https://www.youtube.com/embed/Xkf19YZqLbQ?si=O_VO5akBoekgtSdl",
-    IMPORT_MASTER: "https://www.youtube.com/embed/Ij_kNKOzuqo?si=KLLx0XolqYBYB_U9"
+    IMPORT_MASTER: "https://www.youtube.com/embed/Ij_kNKOzuqo?si=KLLx0XolqYBYB_U9",
+    BARCODE: "https://www.youtube.com/embed/x1OJlwia3OY?si=1LBbTy-hxJI4bfKe",
+    DAYBOOK: "https://www.youtube.com/embed/zYFouv7uaEo?si=34xOTDVT1-fC27H_",
+    SHOPIFY_INTEGRATION: "https://www.youtube.com/embed/VztCB0KeG70?si=5KnjTJbnQjEXFLhD"
+
+
 };
