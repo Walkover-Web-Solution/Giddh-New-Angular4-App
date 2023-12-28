@@ -100,6 +100,7 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
                     this.showGstMenus = false;
                 }
             }
+            this.changeDetectionRef.detectChanges();
         });
 
         this.getCurrentPeriod$.subscribe(period => {
