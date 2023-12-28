@@ -9,7 +9,7 @@ import { GeneralService } from 'apps/web-giddh/src/app/services/general.service'
 import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service';
 import { PurchaseRecordService } from 'apps/web-giddh/src/app/services/purchase-record.service';
 import { SalesService } from 'apps/web-giddh/src/app/services/sales.service';
-//import { ThermalService } from 'apps/web-giddh/src/app/services/thermal.service';
+import { ThermalService } from 'apps/web-giddh/src/app/services/thermal.service';
 import { saveAs } from 'file-saver';
 import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
 import { fromEvent, Observable, ReplaySubject } from 'rxjs';
@@ -161,7 +161,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         private modalService: BsModalService,
         private domSanitizer: DomSanitizer,
         private commonService: CommonService,
-        //private thermalService: ThermalService,
+        private thermalService: ThermalService,
         private invoiceAction: InvoiceActions) {
         this.breakPointObservar.observe([
             '(max-width: 1023px)'
@@ -686,7 +686,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     public printThermal(): void {
         this.voucherDetails$.subscribe((res) => {
             if (res) {
-                //this.thermalService.print(this.defaultTemplate, res);
+                this.thermalService.print(this.defaultTemplate, res);
             } else {
                 this.store.dispatch(this.invoiceReceiptActions.getVoucherDetailsV4(this.selectedItem?.account?.uniqueName, {
                     invoiceNumber: this.selectedItem?.voucherNumber,
