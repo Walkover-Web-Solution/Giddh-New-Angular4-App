@@ -380,7 +380,7 @@
                                                     ></a>
                                                 </span>
                                                 <!-- Thermal Feature -->
-                                                <span>
+                                                <span *ngIf="defaultTemplate?.templateType === 'thermal_template'">
                                                     <a
                                                         href="javascript:;"
                                                         [tooltip]="commonLocaleData?.app_print"
