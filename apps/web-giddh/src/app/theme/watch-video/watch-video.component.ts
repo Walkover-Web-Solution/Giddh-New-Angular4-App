@@ -12,14 +12,12 @@ import { DomSanitizer } from '@angular/platform-browser';
 export class WatchVideoComponent implements OnInit {
     /** Holds template reference for video  */
     @ViewChild('videoTutorial') videoTutorial: TemplateRef<any>;
-
     /** Holds boolean value as enable/disable video autoplay*/
     @Input() public autoplay: number = 1;
     /** Holds Module Name by which video link will be selected */
     @Input() public moduleName: string = null;
     /** Holds CSS class for custom code */
     @Input() public cssClass: string = null;
-
     /** Holds final youtube video link  */
     public videoLink: string = '';
     /* This will hold local JSON data */
@@ -43,7 +41,7 @@ export class WatchVideoComponent implements OnInit {
     }
 
     /**
-     *  Open video Dialog 
+     *  Open video Dialog
      *
      * @memberof WatchVideoComponent
      */
