@@ -53,6 +53,7 @@
                 }
                 .stocks-wrapper{
                     min-height: calc(100vh - 152px);
+                    padding-bottom: 140px;
                 }
                 .table-inventory {
                     background: var(--color-white);
@@ -76,7 +77,7 @@
                                         width: 105px;
                                     }
                                     &.variant-name{
-                                        min-width: max-content;
+                                        width: 200px;
                                     }
                                     &.variant-price{
                                         width: 150px;
