@@ -70,13 +70,13 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
     /** Holds Currently selected Accounts/Groups */
     public currentUser: any = null;
     /** Holds Currently selected Accounts's/Groups's  Stocks*/
-    public currentUserStocks: any = null;
+    public currentUserStocks: any[] = [];
     /** List of discounts */
     public discountsList: any[] = [];
     /** Search Input form group for Search Account/Groups and Stock/Variants */
     public searchForm: UntypedFormGroup = new UntypedFormGroup({
-        userSearch: new FormControl(),
-        stockSearch: new FormControl()
+        userSearch: new FormControl(''),
+        stockSearch: new FormControl('')
     });
     /** Main Form for Discount */
     public discountForm: UntypedFormGroup;
@@ -88,6 +88,8 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
     public userSearchQuery: any = "";
     /** Stock search string */
     public stockSearchQuery: any = "";
+    /** Holds type of user */
+    private userType: 'customer' | 'vendor';
 
     constructor(
         private dialog: MatDialog,
@@ -108,28 +110,32 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             this.groupUniqueName = params.type === 'customer-wise' ? 'sundrydebtors' : 'sundrycreditors';
+            this.userType = params.type === 'customer-wise' ? 'customer' : 'vendor';
             if (this.groupUniqueName) {
                 this.searchForm.reset();
                 this.userList = [];
                 this.tempUserList = [];
-                this.currentUserStocks = null;
+                this.currentUserStocks = [];
                 this.variantsWithoutDiscount = [];
                 this.currentUser = null;
                 this.initDiscountMainForm();
                 this.getCustomerVendorDiscountUserList();
             }
         });
-
         this.searchForm.get("userSearch").valueChanges.pipe(debounceTime(400), takeUntil(this.destroyed$)).subscribe(queryString => {
-            this.userSearchQuery = queryString;
-            this.currentUser = null;
-            this.currentUserStocks = null;
-            this.getCustomerVendorDiscountUserList(queryString);
+            if (this.searchForm.get('userSearch').value !== null) {
+                this.userSearchQuery = queryString;
+                this.currentUser = null;
+                this.currentUserStocks = [];
+                this.getCustomerVendorDiscountUserList(queryString);
+            }
         });
 
         this.searchForm.get("stockSearch").valueChanges.pipe(debounceTime(400), takeUntil(this.destroyed$)).subscribe(queryString => {
-            this.stockSearchQuery = queryString;
-            this.getAllDiscount(this.currentUser, queryString);
+            if (this.searchForm.get('stockSearch').value !== null) {
+                this.stockSearchQuery = queryString;
+                this.getAllDiscount(this.currentUser, queryString);
+            }
         });
 
         this.getDiscounts();
@@ -172,6 +178,9 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                     this.userList = [...this.userList, ...this.tempUserList, ...response.body.results];
                 } else {
                     this.userList = [...this.userList, ...response.body.results];
+                }
+                if (this.userList.length) {
+                    this.selectUser(this.userList[0]);
                 }
                 this.changeDetectorRef.detectChanges();
             }
@@ -253,7 +262,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
      * @memberof CustomerWiseComponent
      */
     private initDiscountValuesForm(discount: any): UntypedFormGroup {
-        return this, this.formBuilder.group({
+        return this.formBuilder.group({
             type: [discount?.type],
             value: [discount?.value],
             uniqueName: [discount?.uniqueName],
@@ -288,7 +297,10 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
             this.currentUser = userData;
             let isTempUser = this.checkTemporaryUser(userData);
             if (isTempUser === -1) {
+                this.currentUser['isTempUser'] = false;
                 this.getAllDiscount(userData, this.stockSearchQuery);
+            } else {
+                this.currentUser['isTempUser'] = true;
             }
         }
     }
@@ -327,7 +339,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                 response?.body?.results.forEach((res, index) => {
                     this.variantsWithoutDiscount.push([]);
                     if (res?.hasVariants) {
-                        this.variantsWithoutDiscount[index] = res.variants?.filter(variant => !variant.discounts)?.map(variant => {
+                        this.variantsWithoutDiscount[index] = res.variants?.filter(variant => !variant?.price)?.map(variant => {
                             return {
                                 label: variant?.name,
                                 value: variant?.uniqueName
@@ -347,103 +359,104 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                     discounts.push(this.initDiscountForm(res));
 
                     let variants = (this.discountForm.get('discountInfo') as FormArray).at(index).get('variants') as UntypedFormArray;
-
                     res?.variants.forEach((variant, variantIndex) => {
-                        let variantUnitName = null;
-                        if (variant?.stockUnitUniqueName) {
-                            if (variantUnitName === null) {
-                                res?.units.forEach(element => {
-                                    if (element?.uniqueName === variant?.stockUnitUniqueName) {
-                                        variantUnitName = element?.name;
-                                    }
-                                });
-                            } else {
-                                variantUnitName = res?.units[0]?.name;
+                        if (variant?.price) {
+                            let variantUnitName = null;
+                            if (variant?.stockUnitUniqueName) {
+                                if (variantUnitName === null) {
+                                    res?.units.forEach(element => {
+                                        if (element?.uniqueName === variant?.stockUnitUniqueName) {
+                                            variantUnitName = element?.name;
+                                        }
+                                    });
+                                } else {
+                                    variantUnitName = res?.units[0]?.name;
+                                }
                             }
+                            variant.variantUnitName = variantUnitName;
+                            variant.isTemproraryVariant = false;
+
+                            let discounts = [];
+
+                            if (!variant.discountInfo) {
+                                variant.discountInfo = [];
+                            }
+
+                            let defaultType = "FIX_AMOUNT";
+                            let discountValue = 0;
+
+                            if (variant?.discounts?.length && !variant?.discounts[0]?.uniqueName && (variant?.discounts[0]?.type === "PERCENTAGE" || variant?.discounts[0]?.type === "FIX_AMOUNT")) {
+                                defaultType = variant?.discounts[0]?.type;
+                                discountValue = variant?.discounts[0]?.value;
+
+                                if (variant?.discounts[0]?.type === "PERCENTAGE") {
+                                    variant.discountPercentageModal = discountValue;
+                                }
+
+                                if (variant?.discounts[0]?.type === "FIX_AMOUNT") {
+                                    variant.discountFixedValueModal = discountValue;
+                                }
+                            }
+
+                            variant.discountInfo.push({ type: defaultType, discountType: defaultType, value: discountValue, discountValue: discountValue, isActive: true, discountUniqueName: null });
+
+                            variant?.discounts?.forEach(item => {
+                                let discountItem = this.getDiscountDataByUniqueName(item.uniqueName);
+                                if (discountItem) {
+                                    variant.discountInfo.push({ ...discountItem, isActive: true, discountUniqueName: discountItem.uniqueName });
+                                }
+                                discounts.push({ type: item.type, value: item.value, uniqueName: item.uniqueName });
+                            });
+
+                            variants.push(this.initVariantForm(variant));
+
+                            discounts.forEach(item => {
+                                (variants.at(variantIndex).get('discounts') as UntypedFormArray)?.push(this.initDiscountValuesForm({ type: item.type, value: item.value, uniqueName: item.uniqueName, isActive: true }));
+                            });
+
+                            this.updateDiscountInVariant(variants.at(variantIndex) as UntypedFormGroup);
+
+                            const variantControl = (((this.discountForm.get('discountInfo') as FormArray).at(index).get('variants') as UntypedFormArray).at(variantIndex) as FormGroup).controls;
+                            const formStatus = ((this.discountForm.get('discountInfo') as FormArray).at(index) as UntypedFormArray);
+
+                            variantControl.price.valueChanges.pipe(debounceTime(400), takeUntil(this.destroyed$)).subscribe(priceValue => {
+                                if (!formStatus.invalid) {
+                                    const stockUniqueName = (this.discountForm.get('discountInfo') as FormArray).at(index).get('stockUniqueName').value;
+                                    let variant = { price: priceValue };
+                                    variant = this.getDiscountValueOrUniqueName(variant, variantControl);
+                                    this.updateDiscount(stockUniqueName, variantControl.variantUniqueName.value, variant);
+                                }
+                            });
+                            variantControl.quantity.valueChanges.pipe(debounceTime(400), takeUntil(this.destroyed$)).subscribe(quantityValue => {
+                                if (!formStatus.invalid) {
+                                    const stockUniqueName = (this.discountForm.get('discountInfo') as FormArray).at(index).get('stockUniqueName').value;
+                                    let variant = { quantity: quantityValue };
+                                    variant = this.getDiscountValueOrUniqueName(variant, variantControl);
+                                    this.updateDiscount(stockUniqueName, variantControl.variantUniqueName.value, variant);
+                                }
+                            });
+                            variantControl.discountExclusive.valueChanges.pipe(debounceTime(400), takeUntil(this.destroyed$)).subscribe(discountExclusiveValue => {
+                                if (!formStatus.invalid) {
+                                    const stockUniqueName = (this.discountForm.get('discountInfo') as FormArray).at(index).get('stockUniqueName').value;
+                                    let variant = { discountExclusive: discountExclusiveValue };
+                                    variant = this.getDiscountValueOrUniqueName(variant, variantControl);
+                                    this.updateDiscount(stockUniqueName, variantControl.variantUniqueName.value, variant);
+                                }
+                            });
+                            variantControl.stockUnitUniqueName.valueChanges.pipe(debounceTime(400), takeUntil(this.destroyed$)).subscribe(stockUnitUniqueNameValue => {
+                                if (!formStatus.invalid) {
+                                    const stockUniqueName = (this.discountForm.get('discountInfo') as FormArray).at(index).get('stockUniqueName').value;
+                                    let variant = { stockUnitUniqueName: stockUnitUniqueNameValue };
+                                    variant = this.getDiscountValueOrUniqueName(variant, variantControl);
+                                    this.updateDiscount(stockUniqueName, variantControl.variantUniqueName.value, variant);
+                                }
+                            });
                         }
-                        variant.variantUnitName = variantUnitName;
-                        variant.isTemproraryVariant = false;
-
-                        let discounts = [];
-
-                        if (!variant.discountInfo) {
-                            variant.discountInfo = [];
-                        }
-
-                        let defaultType = "FIX_AMOUNT";
-                        let discountValue = 0;
-
-                        if (!variant?.discounts[0]?.uniqueName && (variant?.discounts[0]?.type === "PERCENTAGE" || variant?.discounts[0]?.type === "FIX_AMOUNT")) {
-                            defaultType = variant?.discounts[0]?.type;
-                            discountValue = variant?.discounts[0]?.value;
-
-                            if (variant?.discounts[0]?.type === "PERCENTAGE") {
-                                variant.discountPercentageModal = discountValue;
-                            }
-
-                            if (variant?.discounts[0]?.type === "FIX_AMOUNT") {
-                                variant.discountFixedValueModal = discountValue;
-                            }
-                        }
-
-                        variant.discountInfo.push({ type: defaultType, discountType: defaultType, value: discountValue, discountValue: discountValue, isActive: true, discountUniqueName: null });
-
-                        variant?.discounts.forEach(item => {
-                            let discountItem = this.getDiscountDataByUniqueName(item.uniqueName);
-                            if (discountItem) {
-                                variant.discountInfo.push({ ...discountItem, isActive: true, discountUniqueName: discountItem.uniqueName });
-                            }
-                            discounts.push({ type: item.type, value: item.value, uniqueName: item.uniqueName });
-                        });
-
-                        variants.push(this.initVariantForm(variant));
-
-                        discounts.forEach(item => {
-                            (variants.at(variantIndex).get('discounts') as UntypedFormArray)?.push(this.initDiscountValuesForm({ type: item.type, value: item.value, uniqueName: item.uniqueName, isActive: true }));
-                        });
-
-                        this.updateDiscountInVariant(variants.at(variantIndex) as UntypedFormGroup);
-
-                        const variantControl = (((this.discountForm.get('discountInfo') as FormArray).at(index).get('variants') as UntypedFormArray).at(variantIndex) as FormGroup).controls;
-                        const formStatus = ((this.discountForm.get('discountInfo') as FormArray).at(index) as UntypedFormArray);
-
-                        variantControl.price.valueChanges.pipe(debounceTime(400), takeUntil(this.destroyed$)).subscribe(priceValue => {
-                            if (!formStatus.invalid) {
-                                const stockUniqueName = (this.discountForm.get('discountInfo') as FormArray).at(index).get('stockUniqueName').value;
-                                let variant = { price: priceValue };
-                                variant = this.getDiscountValueOrUniqueName(variant, variantControl);
-                                this.updateDiscount(stockUniqueName, variantControl.variantUniqueName.value, variant);
-                            }
-                        });
-                        variantControl.quantity.valueChanges.pipe(debounceTime(400), takeUntil(this.destroyed$)).subscribe(quantityValue => {
-                            if (!formStatus.invalid) {
-                                const stockUniqueName = (this.discountForm.get('discountInfo') as FormArray).at(index).get('stockUniqueName').value;
-                                let variant = { quantity: quantityValue };
-                                variant = this.getDiscountValueOrUniqueName(variant, variantControl);
-                                this.updateDiscount(stockUniqueName, variantControl.variantUniqueName.value, variant);
-                            }
-                        });
-                        variantControl.discountExclusive.valueChanges.pipe(debounceTime(400), takeUntil(this.destroyed$)).subscribe(discountExclusiveValue => {
-                            if (!formStatus.invalid) {
-                                const stockUniqueName = (this.discountForm.get('discountInfo') as FormArray).at(index).get('stockUniqueName').value;
-                                let variant = { discountExclusive: discountExclusiveValue };
-                                variant = this.getDiscountValueOrUniqueName(variant, variantControl);
-                                this.updateDiscount(stockUniqueName, variantControl.variantUniqueName.value, variant);
-                            }
-                        });
-                        variantControl.stockUnitUniqueName.valueChanges.pipe(debounceTime(400), takeUntil(this.destroyed$)).subscribe(stockUnitUniqueNameValue => {
-                            if (!formStatus.invalid) {
-                                const stockUniqueName = (this.discountForm.get('discountInfo') as FormArray).at(index).get('stockUniqueName').value;
-                                let variant = { stockUnitUniqueName: stockUnitUniqueNameValue };
-                                variant = this.getDiscountValueOrUniqueName(variant, variantControl);
-                                this.updateDiscount(stockUniqueName, variantControl.variantUniqueName.value, variant);
-                            }
-                        });
                     });
                 });
                 this.currentUserStocks = response?.body?.results;
             } else {
-                this.currentUserStocks = null;
+                this.currentUserStocks = [];
             }
             this.isStockLoading = false;
         });
@@ -583,7 +596,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                         this.userList.splice(indexInUserListArray, 1);
                         this.userList = [...this.userList];
                         this.currentUser = null;
-                        this.currentUserStocks = null;
+                        this.currentUserStocks = [];
                     }
                     if (type === 'stock') {
                         discounts.removeAt(stockFormArrayIndex);
@@ -591,24 +604,27 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                             let indexInUserListArray = this.checkUserList(this.currentUser.uniqueName);
                             this.userList.splice(indexInUserListArray, 1);
                             this.userList = [...this.userList];
-                            this.currentUserStocks = null;
+                            this.currentUserStocks = [];
                             this.currentUser = null;
                         }
                         this.variantsWithoutDiscount.splice(stockFormArrayIndex, 1);
                     }
+                    this.toaster.successToast(response?.body);
                 } else {
                     this.toaster.errorToast(response?.body);
                 }
             });
         } else {
             if (type === "user") {
+                const deletedMessage = this.localeData?.remove_msg?.replace('[TYPE]', this.currentUser?.type);
                 this.tempUserList.splice(index, 1);
                 //Delete Temporary User from User List
                 let indexInUserListArray = this.checkUserList(uniqueName);
                 this.userList.splice(indexInUserListArray, 1);
                 this.userList = [...this.userList];
                 this.currentUser = null;
-                this.currentUserStocks = null;
+                this.currentUserStocks = [];
+                this.toaster.successToast(deletedMessage);
             }
 
             if (type === 'variant') {
@@ -621,12 +637,16 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                 /** To add deleted variant info in "variantsWithoutDiscount" array  */
                 this.variantsWithoutDiscount.at(stockFormArrayIndex).push(variant);
                 stock.removeAt(variantFormArrayIndex);
+                const deletedMessage = this.localeData?.remove_msg?.replace('[TYPE]', type.toUpperCase());
+                this.toaster.successToast(deletedMessage);
             }
 
             if (type === 'stock') {
                 discounts.removeAt(stockFormArrayIndex);
-                if (discounts.length === 0) this.currentUserStocks = null;
+                if (discounts.length === 0) this.currentUserStocks = [];
                 this.variantsWithoutDiscount.splice(stockFormArrayIndex, 1);
+                const deletedMessage = this.localeData?.remove_msg?.replace('[TYPE]', type.toUpperCase());
+                this.toaster.successToast(deletedMessage);
             }
         }
     }
@@ -730,12 +750,16 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                     discount.value = discount.discountValue;
                     discount.uniqueName = discount.discountUniqueName;
                     discount.type = discount.discountType;
-
-                    return {
-                        value: discount.value,
-                        uniqueName: discount.uniqueName,
-                        type: discount.type
-                    };
+                    if (discount.uniqueName) {
+                        return {
+                            uniqueName: discount.uniqueName,
+                        };
+                    } else {
+                        return {
+                            value: discount.value,
+                            type: discount.type
+                        };
+                    }
                 });
 
                 variant.discounts = cloneDeep(variant.discountInfo);
@@ -748,7 +772,16 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                 if (response && response?.status === 'success') {
                     const discountForm = (this.discountForm.get('discountInfo') as FormArray).at(stockFormArrayIndex) as UntypedFormArray;
                     discountForm.get('isTempStock').patchValue(false);
-
+                    let index = this.checkTemporaryUser(this.currentUser.uniqueName);
+                    if (index > -1) {
+                        this.tempUserList.splice(index, 1);
+                    }
+                    const variantArrayLength = (((this.discountForm.get('discountInfo') as FormArray).at(stockFormArrayIndex) as UntypedFormArray).get('variants') as UntypedFormArray).length;
+                    const variants = (((this.discountForm.get('discountInfo') as FormArray).at(stockFormArrayIndex) as UntypedFormArray).get('variants') as UntypedFormArray);
+                    for (let i = 0; i < variantArrayLength; i++) {
+                        variants.at(i).get('isTemproraryVariant').patchValue(false);
+                    }
+                    this.currentUser.isTempUser = false;
                     this.toaster.successToast(response?.body);
                 } else {
                     this.toaster.errorToast(response?.message)
@@ -830,11 +863,12 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
         if (type === 'users') {
             if ((this.checkTemporaryUser(event?.uniqueName) === -1) && (this.checkUserList(event?.uniqueName) === -1)) {
                 this.currentUser = event;
+                this.currentUser['isTempUser'] = true;
                 this.userList.push(event);
                 this.userList = [...this.userList];
                 this.tempUserList.push(event);
                 this.initDiscountMainForm();
-                this.currentUserStocks = null;
+                this.currentUserStocks = [];
                 this.variantsWithoutDiscount = [];
                 this.dialogRef.close();
             } else {
@@ -843,37 +877,38 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                 this.toaster.warningToast(msg);
             }
         } else {
-            this.inventoryService.getStockDetails(event?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
-                if (response && response?.body) {
-                    const discounts = this.discountForm.get('discountInfo') as UntypedFormArray;
-                    let stockIndex = discounts.length;
-                    this.variantsWithoutDiscount.push([]);
-                    if (this.currentUser.type === 'ACCOUNT') {
-                        this.discountForm.get('customerVendorAccountUniqueName').patchValue(this.currentUser.uniqueName);
-                    } else {
-                        this.discountForm.get('customerVendorGroupUniqueName').patchValue(this.currentUser.uniqueName);
+            let isExistingStock = this.currentUserStocks?.some(item => (item?.stock?.uniqueName === event?.uniqueName) || (item?.uniqueName === event?.uniqueName));
+            if (isExistingStock) {
+                let msg = this.localeData?.already_added_msg.replace('[TYPE]', this.commonLocaleData?.app_stock);
+                this.toaster.warningToast(msg);
+            } else {
+                this.inventoryService.getStockDetails(event?.uniqueName, this.userType).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+                    if (response && response?.body) {
+                        const discounts = this.discountForm.get('discountInfo') as UntypedFormArray;
+                        let stockIndex = discounts.length;
+                        this.variantsWithoutDiscount.push([]);
+                        if (this.currentUser.type === 'ACCOUNT') {
+                            this.discountForm.get('customerVendorAccountUniqueName').patchValue(this.currentUser.uniqueName);
+                        } else {
+                            this.discountForm.get('customerVendorGroupUniqueName').patchValue(this.currentUser.uniqueName);
+                        }
+
+                        discounts.push(this.initDiscountForm({
+                            stock: { name: event?.name, uniqueName: event?.uniqueName, isTempStock: true },
+                            units: [],
+                            hasVariants: response?.body?.variants.length > 1
+                        }));
+
+                        let variants = (this.discountForm.get('discountInfo') as FormArray).at(stockIndex).get('variants') as UntypedFormArray;
+                        response.body?.variants.forEach((variant, variantIndex) => {
+                            variants.push(this.initVariantForm({ name: variant?.name, uniqueName: variant?.uniqueName, isTemproraryVariant: true, discountValue: 0, stockUnitUniqueName: variant?.units[0].uniqueName, variantUnitName: variant?.units[0].name, discountInfo: [{ type: "FIX_AMOUNT", discountType: "FIX_AMOUNT", value: 0, discountValue: 0, isActive: true, discountUniqueName: null }] }));
+                            (variants.at(variantIndex).get('discounts') as UntypedFormArray).push(this.initDiscountValuesForm({ type: "FIX_AMOUNT", discountType: "FIX_AMOUNT", value: 0, discountValue: 0, isActive: true, discountUniqueName: null }))
+                        });
+                        this.currentUserStocks.push(event);
                     }
-                    const units = response?.body?.stockUnits?.map(unit => {
-                        unit.value = unit?.uniqueName;
-                        unit.label = unit?.name;
-                        return unit;
-                    });
 
-                    discounts.push(this.initDiscountForm({
-                        stock: { name: event?.name, uniqueName: event?.uniqueName, isTempStock: true },
-                        units: units ?? [],
-                        hasVariants: response?.body?.variants.length > 1
-                    }));
-
-                    let variants = (this.discountForm.get('discountInfo') as FormArray).at(stockIndex).get('variants') as UntypedFormArray;
-                    response.body?.variants.forEach((variant, variantIndex) => {
-                        variants.push(this.initVariantForm({ name: variant?.name, uniqueName: variant?.uniqueName, isTemproraryVariant: true, discountValue: 0, stockUnitUniqueName: units[0].value, variantUnitName: units[0].label, discountInfo: [{ type: "FIX_AMOUNT", discountType: "FIX_AMOUNT", value: 0, discountValue: 0, isActive: true, discountUniqueName: null }] }));
-                        (variants.at(variantIndex).get('discounts') as UntypedFormArray).push(this.initDiscountValuesForm({ type: "FIX_AMOUNT", discountType: "FIX_AMOUNT", value: 0, discountValue: 0, isActive: true, discountUniqueName: null }))
-                    });
-                    this.currentUserStocks = event;
-                }
-
-            });
+                });
+            }
             this.dialogRef.close();
         }
     }
@@ -940,12 +975,16 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                                 discount.value = discount.discountValue;
                                 discount.uniqueName = discount.discountUniqueName;
                                 discount.type = discount.discountType;
-
-                                return {
-                                    value: discount.value,
-                                    uniqueName: discount.uniqueName,
-                                    type: discount.type
-                                };
+                                if (discount.uniqueName) {
+                                    return {
+                                        uniqueName: discount.uniqueName
+                                    };
+                                } else {
+                                    return {
+                                        value: discount.value,
+                                        type: discount.type
+                                    };
+                                }
                             });
 
                             variant.discounts = cloneDeep(variant.discountInfo);

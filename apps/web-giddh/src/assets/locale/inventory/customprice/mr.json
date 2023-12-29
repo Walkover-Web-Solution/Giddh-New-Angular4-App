@@ -6,5 +6,6 @@
     "exclusive": "अनन्य",
     "inclusive": "समावेशक",
     "delete_message": "तुम्हाला हटवायचे आहे का?",
-    "already_added_msg": "हा [TYPE] आधीच जोडलेला आहे"
+    "already_added_msg": "हा [TYPE] आधीच जोडलेला आहे",
+    "remove_msg": "[TYPE] यशस्वीरित्या काढले"
 }
