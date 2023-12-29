@@ -616,7 +616,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
             });
         } else {
             if (type === "user") {
-                const deletedMessage = this.localeData?.remove_msg?.replace('[TYPE]', this.currentUser?.type);
+                const deletedMessage = this.localeData?.remove_item_msg?.replace('[TYPE]', this.currentUser?.type);
                 this.tempUserList.splice(index, 1);
                 //Delete Temporary User from User List
                 let indexInUserListArray = this.checkUserList(uniqueName);
@@ -637,7 +637,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                 /** To add deleted variant info in "variantsWithoutDiscount" array  */
                 this.variantsWithoutDiscount.at(stockFormArrayIndex).push(variant);
                 stock.removeAt(variantFormArrayIndex);
-                const deletedMessage = this.localeData?.remove_msg?.replace('[TYPE]', type.toUpperCase());
+                const deletedMessage = this.localeData?.remove_item_msg?.replace('[TYPE]', type.toUpperCase());
                 this.toaster.successToast(deletedMessage);
             }
 
@@ -645,7 +645,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                 discounts.removeAt(stockFormArrayIndex);
                 if (discounts.length === 0) this.currentUserStocks = [];
                 this.variantsWithoutDiscount.splice(stockFormArrayIndex, 1);
-                const deletedMessage = this.localeData?.remove_msg?.replace('[TYPE]', type.toUpperCase());
+                const deletedMessage = this.localeData?.remove_item_msg?.replace('[TYPE]', type.toUpperCase());
                 this.toaster.successToast(deletedMessage);
             }
         }
@@ -681,23 +681,6 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
 
             this.variantsWithoutDiscount[stockFormArrayIndex] = this.variantsWithoutDiscount[stockFormArrayIndex].filter(variant => variant.value !== event.value);
             this.changeDetectorRef.detectChanges();
-        }
-    }
-
-    /**
-     * This will trigger when user select Variant unit from dropdown,
-     * and set selected value to respective variant formcontrol
-     *
-     * @param {*} event
-     * @param {number} stockFormArrayIndex
-     * @param {number} variantFormArrayIndex
-     * @memberof CustomerWiseComponent
-     */
-    public selectVariantUnit(event: any, stockFormArrayIndex: number, variantFormArrayIndex: number): void {
-        if (event && event.value && event.label) {
-            const variantFormGroup = ((((this.discountForm.get('discountInfo') as FormArray).at(stockFormArrayIndex) as FormGroup).get('variants') as FormArray).at(variantFormArrayIndex) as FormArray);
-            variantFormGroup.controls['stockUnitUniqueName'].setValue(event.value);
-            variantFormGroup.controls['variantUnitName'].setValue(event.label);
         }
     }
 

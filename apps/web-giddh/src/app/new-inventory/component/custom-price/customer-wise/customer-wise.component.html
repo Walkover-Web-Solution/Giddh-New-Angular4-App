@@ -74,9 +74,9 @@
                                                         <table class="table">
                                                             <tbody>
                                                                 <tr *ngFor="let variant of discountCollection?.get('variants')['controls'];  let j = index"
-                                                                    [formArrayName]="'variants'">
+                                                                    formArrayName="variants">
                                                                     <ng-container [formGroupName]="j">
-                                                                        <td class="variant-name" [ngStyle]="{ 'min-width': discountCollection?.get('variants')['controls']?.length > 1 ? null : '100px'}">
+                                                                        <td class="variant-name" [ngStyle]="{ 'width': discountCollection?.get('variants')['controls']?.length > 1 ? null : '100px'}">
                                                                             <ng-container *ngIf="discountCollection?.get('hasVariants')?.value">
                                                                                 {{ variant?.get('variantName')?.value }}
                                                                             </ng-container>
