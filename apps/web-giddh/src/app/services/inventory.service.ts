@@ -1637,9 +1637,9 @@ export class InventoryService {
      * @return {*}  {Observable<BaseResponse<any, any>>}
      * @memberof InventoryService
      */
-    public getStockDetails(stockUniqueName: string): Observable<BaseResponse<any, any>> {
+    public getStockDetails(stockUniqueName: string, userType: string): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        let apiUrl = this.config.apiUrl + INVENTORY_API.GET_STOCK_DETAILS?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':stockUniqueName', encodeURIComponent(stockUniqueName));
+        let apiUrl = this.config.apiUrl + INVENTORY_API.GET_STOCK_DETAILS?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':stockUniqueName', encodeURIComponent(stockUniqueName))?.replace(':userType', encodeURIComponent(userType));
 
         return this.http.get(apiUrl).pipe(map((res) => {
             let data: BaseResponse<any[], string> = res;

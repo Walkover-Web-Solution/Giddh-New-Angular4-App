@@ -103,5 +103,5 @@ export const INVENTORY_API = {
     DELETE_DISCOUNT_RECORD: 'company/:companyUniqueName/customer-vendor-discount?stockUniqueName=:stockUniqueName&variantUniqueName=:variantUniqueName&userUniqueName=:userUniqueName', // DELETE Call
     CREATE_DISCOUNT: 'company/:companyUniqueName/customer-vendor-discount/stock/:stockUniqueName/assign-discount', // POST Call
     UPDATE_DISCOUNT: 'company/:companyUniqueName/customer-vendor-discount/stock/:stockUniqueName/variant/:variantUniqueName/update-discount', // Patch Call
-    GET_STOCK_DETAILS: 'v2/company/:companyUniqueName/stock/:stockUniqueName/details', // GET call
+    GET_STOCK_DETAILS: 'v2/company/:companyUniqueName/stock/:stockUniqueName/details?userType=:userType', // GET call
 };

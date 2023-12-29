@@ -6,5 +6,6 @@
     "exclusive": "Exclusive",
     "inclusive": "Inclusive",
     "delete_message": "Do you want to delete?",
-    "already_added_msg": "This [TYPE] is already added"
+    "already_added_msg": "This [TYPE] is already added",
+    "remove_msg": "[TYPE] removed successfully."
 }
