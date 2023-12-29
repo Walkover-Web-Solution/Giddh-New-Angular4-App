@@ -7,5 +7,5 @@
     "inclusive": "सहित",
     "delete_message": "क्या आप हटाना चाहते हैं?",
     "already_added_msg": "यह [प्रकार] पहले ही जोड़ा जा चुका है",
-    "remove_msg": "[TYPE] सफलतापूर्वक हटा दिया गया।"
+    "remove_item_msg": "[TYPE] सफलतापूर्वक हटा दिया गया।"
 }

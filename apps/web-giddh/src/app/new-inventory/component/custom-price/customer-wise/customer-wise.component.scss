@@ -57,7 +57,7 @@
                 .table-inventory {
                     background: var(--color-white);
                     padding-top: 20px;
-                    margin-bottom: 15px;
+                    margin-top: 15px;
                     box-shadow: 0 3px 6px var(--color-primary-common-box-shadow);
                     width: max-content;
                     min-width: 100%;
@@ -76,7 +76,7 @@
                                         width: 105px;
                                     }
                                     &.variant-name{
-                                        min-width: 50px;
+                                        min-width: max-content;
                                     }
                                     &.variant-price{
                                         width: 150px;
