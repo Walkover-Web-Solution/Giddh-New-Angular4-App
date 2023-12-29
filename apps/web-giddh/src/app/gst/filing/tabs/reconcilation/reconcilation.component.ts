@@ -9,6 +9,7 @@ import { AppState } from '../../../../store';
 import { publishReplay, refCount, take, takeUntil } from 'rxjs/operators';
 import { GstReconcileActions } from '../../../../actions/gst-reconcile/gst-reconcile.actions';
 import { Observable, ReplaySubject } from 'rxjs';
+import { GstReport } from '../../../constants/gst.constant';
 
 @Component({
 	selector: 'reconcile',
@@ -92,6 +93,7 @@ export class ReconcileComponent implements OnInit, OnDestroy {
         request.refresh = refresh;
         request.action = action;
         request.gstin = this.activeCompanyGstNumber;
+        request.gstReturnType = this.selectedGst === GstReport.Gstr1 ? 'gstr1' : 'gstr2';
         this.store.dispatch(this.reconcileActions.GstReconcileInvoiceRequest(request));
     }
 
