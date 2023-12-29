@@ -439,6 +439,8 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
                     createUpdateGroup = true;
                 }
 
+                const currentGroup = cloneDeep(this.currentGroup);
+
                 if (!createUpdateGroup) {
                     this.getMasters(this.masterColumnsData[this.activeIndex]?.stockGroup, this.activeIndex - 1);
                 } else {
@@ -451,6 +453,7 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
                     this.getTopLevelGroups();
                 }
 
+                this.currentGroup = currentGroup;
                 this.createUpdateGroup = createUpdateGroup;
             }
         }
