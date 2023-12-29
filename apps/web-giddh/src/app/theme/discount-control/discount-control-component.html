@@ -24,6 +24,7 @@
 
     <div
         class="my-dropdown-menu pd-1"
+        (clickOutside)="hideDiscountMenu()"
         (click)="$event.stopPropagation()"
         [ngStyle]="{'display': discountMenu ? 'block': 'none'}"
         #disInptEle

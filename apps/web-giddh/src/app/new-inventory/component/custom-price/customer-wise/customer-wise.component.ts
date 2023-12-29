@@ -37,16 +37,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
     /** Pagination limit */
     public paginationLimit: number = PAGINATION_LIMIT;
     /** Holds Pagination Information of (Account & Group) and Stocks  */
-    public pagination = {
-        user: {
-            page: 1,
-            totalPages: null,
-        },
-        stock: {
-            page: 1,
-            totalPages: null,
-        }
-    }
+    public pagination: any;
     /** Holds Mat Dailog Reference*/
     public dialogRef: MatDialogRef<any>;
     /* Observable to unsubscribe all the store listeners */
@@ -118,6 +109,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                 this.currentUserStocks = [];
                 this.variantsWithoutDiscount = [];
                 this.currentUser = null;
+                this.pagination = this.paginationInit();
                 this.initDiscountMainForm();
                 this.getCustomerVendorDiscountUserList();
             }
@@ -141,11 +133,31 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
         this.getDiscounts();
 
         this.scrollDispatcher.scrolled().pipe(takeUntil(this.destroyed$)).subscribe((event: any) => {
-            if (event && (event?.getDataLength() - event?.getRenderedRange().end) < 30 && !this.isLoading && (this.pagination.user.totalPages > this.pagination.user.page)) {
+            if (event && (event?.getDataLength() - event?.getRenderedRange().end) < 10 && !this.isLoading && (this.pagination.user.totalPages > this.pagination.user.page)) {
                 this.pagination.user.page++;
                 this.getCustomerVendorDiscountUserList(this.userSearchQuery, true);
             }
         });
+    }
+
+    /**
+     * Initailise Pagination and aslo use to reset pagination
+     *
+     * @private
+     * @return {*}  {*}
+     * @memberof CustomerWiseComponent
+     */
+    private paginationInit(): any {
+        return {
+            user: {
+                page: 1,
+                totalPages: null,
+            },
+            stock: {
+                page: 1,
+                totalPages: null,
+            }
+        }
     }
 
     /**
@@ -771,7 +783,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                 }
             });
         } else {
-            this.toaster.errorToast("Invaild Form, Please fill all fields");
+            this.toaster.errorToast(this.localeData?.invaild_form_msg);
         }
     }
 
