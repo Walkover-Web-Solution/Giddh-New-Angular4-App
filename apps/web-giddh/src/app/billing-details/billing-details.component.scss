@@ -177,6 +177,7 @@
                 color: var(--color-primary-card-text);
                 background-color: var(--color-primary-card-background);
                 box-shadow: 1px 0px 4px var(--color-primary-card-box-shadow);
+                padding: 16px;
             }
             .renewal-off {
                 color: var(--color-slate);
@@ -234,8 +235,7 @@
             }
             .pay-now {
                 margin-top: 11px;
-                width: 102px;
-                font-weight: bolder;
+                min-width: 102px;
                 height: 38px;
                 font-size: var(--font-size-16);
             }
@@ -383,6 +383,7 @@
         padding-left: 0px;
     }
 }
+
 @media (max-width: 480px) and (orientation: portrait) {
     #main {
         .main-heading-billing {

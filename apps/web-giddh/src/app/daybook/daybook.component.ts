@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 import { AppState } from 'apps/web-giddh/src/app/store';
@@ -26,6 +26,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { LedgerService } from '../services/ledger.service';
 import { Router } from '@angular/router';
+import { saveAs } from 'file-saver';
+import { PageLeaveUtilityService } from '../services/page-leave-utility.service';
 
 @Component({
     selector: 'daybook',
@@ -63,12 +65,14 @@ export class DaybookComponent implements OnInit, OnDestroy {
     @ViewChild('updateLedgerModal', { static: false }) public updateLedgerModal: any;
     /** Update ledger component reference */
     @ViewChild(UpdateLedgerEntryPanelComponent, { static: false }) public updateLedgerComponent: UpdateLedgerEntryPanelComponent;
+    /** Instance of Aside Menu State For Other Taxes dialog */
+    @ViewChild("asideMenuStateForOtherTaxes") public asideMenuStateForOtherTaxes: TemplateRef<any>;
     /** True, if entry expanded (at least one entry) */
     public isEntryExpanded: boolean = false;
     /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
     /* This will store modal reference */
     public modalRef: BsModalRef;
     /* This will store selected date range to use in api */
@@ -108,8 +112,6 @@ export class DaybookComponent implements OnInit, OnDestroy {
     /** Stores the current organization type */
     public currentOrganizationType: OrganizationType;
     // aside menu properties
-    public asideMenuStateForOtherTaxes: string = 'out';
-    // aside menu properties
     public asideMenuState: string = 'out';
     /** Ledger object */
     public lc: LedgerVM;
@@ -133,6 +135,17 @@ export class DaybookComponent implements OnInit, OnDestroy {
     public isMobile: boolean;
     /** Holds side of entry (dr/cr) */
     public entrySide: string = "";
+    /** Holds Aside Menu State For Other Taxes DialogRef */
+    public asideMenuStateForOtherTaxesDialogRef: any;
+    /** Ledger aside pan modal */
+    private ledgerAsidePaneModal: any;
+    /** Instance of ledger aside pane modal */
+    @ViewChild("ledgerAsidePane") public ledgerAsidePane: TemplateRef<any>;
+    /** Returns true if account is selected else false */
+    public get showPageLeaveConfirmation(): boolean {
+        let hasParticularSelected = this.lc.blankLedger.transactions?.filter(txn => txn?.particular);
+        return (hasParticularSelected?.length) ? true : false;
+    }
 
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
@@ -147,7 +160,8 @@ export class DaybookComponent implements OnInit, OnDestroy {
         private dialog: MatDialog,
         private breakpointObserver: BreakpointObserver,
         private ledgerService: LedgerService,
-        private router: Router
+        private router: Router,
+        private pageLeaveUtilityService: PageLeaveUtilityService
     ) {
 
         this.daybookQueryRequest = new DaybookQueryRequest();
@@ -375,6 +389,8 @@ export class DaybookComponent implements OnInit, OnDestroy {
                     exportBodyRequest.showEntryVoucher = response.showEntryVoucher;
                     exportBodyRequest.sort = response.order?.toUpperCase();
                     exportBodyRequest.fileType = "CSV";
+                    exportBodyRequest.tagNames = this.searchFilterData?.tags;
+                    exportBodyRequest.includeTag = this.searchFilterData?.includeTag;
                     this.ledgerService.exportData(exportBodyRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                         if (response?.status === 'success') {
                             if (typeof response?.body === "string") {
@@ -582,21 +598,15 @@ export class DaybookComponent implements OnInit, OnDestroy {
      * @memberof DaybookComponent
      */
     public toggleOtherTaxesAsidePane(): void {
-        this.asideMenuStateForOtherTaxes = this.asideMenuStateForOtherTaxes === 'out' ? 'in' : 'out';
-        this.toggleBodyClass();
-    }
-
-    /**
-     * Toggle's fixed class in body
-     *
-     * @memberof DaybookComponent
-     */
-    public toggleBodyClass(): void {
-        if (this.asideMenuState === 'in' || this.asideMenuStateForOtherTaxes === 'in') {
-            document.querySelector('body').classList.add('fixed');
-        } else {
-            document.querySelector('body').classList.remove('fixed');
-        }
+        this.asideMenuStateForOtherTaxesDialogRef = this.dialog.open(this.asideMenuStateForOtherTaxes, {
+            position: {
+                right: '0'
+            },
+            maxWidth: '760px',
+            width: '100%',
+            height: '100vh',
+            maxHeight: '100vh'
+        })
     }
 
     /**
@@ -649,5 +659,35 @@ export class DaybookComponent implements OnInit, OnDestroy {
                 this.touchedTransaction = {};
             }, 200);
         }
+    }
+
+    /**
+     * This will be use for toggle aside pan from daybook
+     *
+     * @param {*} [event]
+     * @param {ShSelectComponent} [shSelectElement]
+     * @memberof DaybookComponent
+     */
+    public toggleAsidePane(event?:any): void {
+        if (event) {
+            event.preventDefault();
+        }
+        this.ledgerAsidePaneModal = this.dialog.open(this.ledgerAsidePane, {
+            position: {
+                right: '0',
+                top: '0',
+            },
+            width: '760px',
+            disableClose: true
+        });
+        this.ledgerAsidePaneModal.afterClosed().pipe(take(1)).subscribe(response => {
+            setTimeout(() => {
+                if (this.showPageLeaveConfirmation) {
+                    this.pageLeaveUtilityService.addBrowserConfirmationDialog();
+                }
+            }, 100);
+        });
+
+        this.changeDetectorRef.detectChanges();
     }
 }

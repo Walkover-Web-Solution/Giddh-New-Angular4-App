@@ -565,7 +565,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                 if (this.tdsTypeBox && this.tdsTypeBox.nativeElement)
                     this.tdsTypeBox.nativeElement.classList.add('error-box');
                 isValid = false;
-            } else if (this.adjustVoucherForm.tdsAmount === 0) {
+            } else if (this.adjustVoucherForm.tdsAmount.amountForAccount === 0) {
                 if (this.tdsAmountBox && this.tdsAmountBox.nativeElement) {
                     this.tdsAmountBox.nativeElement.classList.add('error-box');
                     isValid = false;

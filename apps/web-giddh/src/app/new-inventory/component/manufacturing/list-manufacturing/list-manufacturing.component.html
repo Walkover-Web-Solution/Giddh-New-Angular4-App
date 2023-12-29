@@ -103,13 +103,13 @@
             class="list-table-wrapper table-responsive mobile-card-wrapper"
             *ngIf="!isReportLoading && dataSource?.length > 0"
         >
-            <table mat-table [dataSource]="dataSource" class="w-100 table manufacturing-table on-mobile-view">
+            <table mat-table [dataSource]="dataSource" class="w-100 manufacturing-table on-mobile-view">
                 <ng-container matColumnDef="date">
-                    <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_date }}</th>
+                    <th mat-header-cell *matHeaderCellDef width="10%">{{ commonLocaleData?.app_date }}</th>
                     <td mat-cell *matCellDef="let element">{{ element.date }}</td>
                 </ng-container>
                 <ng-container matColumnDef="voucher_no">
-                    <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_voucher_no }}</th>
+                    <th mat-header-cell *matHeaderCellDef width="10%">{{ commonLocaleData?.app_voucher_no }}</th>
                     <td
                         mat-cell
                         *matCellDef="let element"
@@ -120,33 +120,33 @@
                     </td>
                 </ng-container>
                 <ng-container matColumnDef="stock">
-                    <th mat-header-cell *matHeaderCellDef>{{ localeData?.finished_stock }}</th>
+                    <th mat-header-cell *matHeaderCellDef width="10%">{{ localeData?.finished_stock }}</th>
                     <td mat-cell *matCellDef="let element" class="content-table">{{ element.stock }}</td>
                 </ng-container>
                 <ng-container matColumnDef="finished_variant">
-                    <th mat-header-cell *matHeaderCellDef>{{ localeData?.finished_variant }}</th>
+                    <th mat-header-cell *matHeaderCellDef width="10%">{{ localeData?.finished_variant }}</th>
                     <td mat-cell *matCellDef="let element" class="content-table">{{ element.variant }}</td>
                 </ng-container>
                 <ng-container matColumnDef="qty_outwards">
-                    <th mat-header-cell *matHeaderCellDef>{{ localeData?.qty_outwards }}</th>
+                    <th mat-header-cell *matHeaderCellDef width="10%">{{ localeData?.qty_outwards }}</th>
                     <td mat-cell *matCellDef="let element" class="content-table">{{ element.qty_outwards }}</td>
                 </ng-container>
                 <ng-container matColumnDef="qty_outwards_unit">
-                    <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_unit }}</th>
+                    <th mat-header-cell *matHeaderCellDef width="10%">{{ commonLocaleData?.app_unit }}</th>
                     <td mat-cell *matCellDef="let element" class="content-table">{{ element.qty_outwards_unit }}</td>
                 </ng-container>
                 <ng-container matColumnDef="raw_stock">
-                    <th mat-header-cell *matHeaderCellDef>{{ localeData?.raw_stock }}</th>
+                    <th mat-header-cell *matHeaderCellDef width="10%">{{ localeData?.raw_stock }}</th>
                     <td mat-cell *matCellDef="let element" class="content-table">
                         <div class="d-flex flex-md-row flex-column nested-div" *ngFor="let row of element.linkedStocks">
-                            <div class="d-flex flex-column">
+                            <div class="d-flex flex-column py-1">
                                 <span>{{ row.stockName }}</span>
                             </div>
                         </div>
                     </td>
                 </ng-container>
                 <ng-container matColumnDef="raw_variant">
-                    <th mat-header-cell *matHeaderCellDef>{{ localeData?.raw_variant }}</th>
+                    <th mat-header-cell *matHeaderCellDef width="10%">{{ localeData?.raw_variant }}</th>
                     <td mat-cell *matCellDef="let element" class="content-table">
                         <div class="d-flex flex-md-row flex-column nested-div" *ngFor="let row of element.linkedStocks">
                             <div class="d-flex flex-column">
@@ -156,7 +156,7 @@
                     </td>
                 </ng-container>
                 <ng-container matColumnDef="qty_inwards">
-                    <th mat-header-cell *matHeaderCellDef>{{ localeData?.qty_inwards }}</th>
+                    <th mat-header-cell *matHeaderCellDef width="10%">{{ localeData?.qty_inwards }}</th>
                     <td mat-cell *matCellDef="let element">
                         <div class="d-flex flex-md-row flex-column nested-div" *ngFor="let row of element.linkedStocks">
                             <div class="d-flex flex-column">
@@ -166,7 +166,7 @@
                     </td>
                 </ng-container>
                 <ng-container matColumnDef="qty_inwards_unit">
-                    <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_unit }}</th>
+                    <th mat-header-cell *matHeaderCellDef width="10%">{{ commonLocaleData?.app_unit }}</th>
                     <td mat-cell *matCellDef="let element">
                         <div class="d-flex flex-md-row flex-column nested-div" *ngFor="let row of element.linkedStocks">
                             <div class="d-flex flex-column">
@@ -176,21 +176,23 @@
                     </td>
                 </ng-container>
                 <ng-container matColumnDef="warehouse">
-                    <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_warehouse }}</th>
+                    <th mat-header-cell *matHeaderCellDef width="10%">{{ commonLocaleData?.app_warehouse }}</th>
                     <td mat-cell *matCellDef="let element">{{ element.warehouse }}</td>
                 </ng-container>
                 <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
                 <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
             </table>
         </section>
-        <div class="pagination-wrapper mt-1" [hidden]="totalItems <= paginationLimit">
+        <div class="pagination-wrapper mt-4" *ngIf="(totalItems >= paginationLimit) && !isReportLoading">
             <pagination
                 [totalItems]="totalItems"
                 [maxSize]="5"
+                [(ngModel)]="currentPage"
                 class="pagination-sm"
                 [boundaryLinks]="true"
                 [itemsPerPage]="paginationLimit"
                 [rotate]="false"
+                (pageChanged)="pageChanged($event)"
                 [firstText]="commonLocaleData?.app_first"
                 [previousText]="commonLocaleData?.app_previous"
                 [nextText]="commonLocaleData?.app_next"
@@ -201,7 +203,7 @@
 
     <!-- Advance Filter Modal -->
 
-    <ng-template #advance_filter_dialog>
+    <ng-template #advanceFilterDialog>
         <div class="advance-search-dialog">
             <div class="modal-header theme-bg pd-l2 pd-r2">
                 <h3 class="modal-title bg" id="modal-title">{{ commonLocaleData?.app_advanced_filter }}</h3>

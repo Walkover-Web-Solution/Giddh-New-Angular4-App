@@ -28,7 +28,7 @@ import { MatSlideToggleModule } from "@angular/material/slide-toggle";
         TabsModule.forRoot(),
         MatSlideToggleModule,
         RouterModule,
-        ModalModule,
+        ModalModule.forRoot(),
         ConfirmModalModule,
         ConfirmationModalModule,
         LaddaModule.forRoot({

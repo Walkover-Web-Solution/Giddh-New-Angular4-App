@@ -108,6 +108,7 @@ body.default-theme {
     --color-primary-button-border: #cbcfd2;
     --color-secondary-button-border: #1a237e;
     --color-primary-button-border-hover: #cbcfd2;
+    --color-default-button: #000000;
 
     // Dropdown Color Variables
     --color-dropdown-list: #212528;
@@ -604,10 +605,12 @@ body.default-theme {
 
     // Common Color Variables
     --color-danger: #e54556;
+    --color-danger-bg-light: #e545561a;
     --color-warning: #e58a00;
     --color-dot-warning: #e58a00;
     --color-delete: #e54556;
     --color-success-enable: #36b283;
+    --color-success-enable-bg-light: #36b2831a;
     --color-secondary-success: #36b283;
     --color-success-disable: #36b28326;
     --color-main-content-background: #ffffff;
@@ -725,4 +728,12 @@ body.default-theme {
     --color-drag-right-shadow: #0000001f;
 
     --color-apple-search-background: #575150;
+    --color-fields-border: #0000001f;
+    --color-field-hover: #000000de;
+    --color-border-focus: #3f51b5;
+    --color-transparent-background: #00000000;
+    --color-header-icon-background: #11185c;
+    --color-primary-common : #3f51b5;
+    --color-mat-option: #0000000a;
+    --color-list: #ffffff;
 }

@@ -8,19 +8,21 @@
     <giddh-page-loader *ngIf="isLoading"></giddh-page-loader>
     <div class="stock-balance-wrapper" *ngIf="!isLoading">
         <div class="stock-balance-top-bar">
-            <div class="stock-balance-top-bar-left-side">
-                <button mat-stroked-button color="primary" [matMenuTriggerFor]="newStock">
-                    {{ localeData?.warehouse_opening_balance?.new_stock }}
-                    <span class="caret"></span>
-                </button>
-                <mat-menu #newStock="matMenu">
-                    <button mat-menu-item [routerLink]="'/pages/new-inventory/stock/product/create'">
-                        {{ commonLocaleData?.app_product }}
+            <div class="stock-balance-top-bar-left-side column-gap15">
+                <ng-container *ngIf="voucherApiVersion == 2">
+                    <button mat-stroked-button color="primary" [matMenuTriggerFor]="newStock">
+                        {{ localeData?.warehouse_opening_balance?.new_stock }}
+                        <span class="caret"></span>
                     </button>
-                    <button mat-menu-item [routerLink]="'/pages/new-inventory/stock/service/create'">
-                        {{ commonLocaleData?.app_service }}
-                    </button>
-                </mat-menu>
+                    <mat-menu #newStock="matMenu">
+                        <button mat-menu-item [routerLink]="'/pages/inventory/v2/stock/product/create'">
+                            {{ commonLocaleData?.app_product }}
+                        </button>
+                        <button mat-menu-item [routerLink]="'/pages/inventory/v2/stock/service/create'">
+                            {{ commonLocaleData?.app_service }}
+                        </button>
+                    </mat-menu>
+                </ng-container>
                 <div class="col-xl-6 col-lg-10 col-md-10 pl-0">
                     <mat-select
                         name="selectedWarehouse"
@@ -54,9 +56,6 @@
                 </div>
             </div>
             <div class="stock-balance-top-bar-right-side">
-                <!-- <button mat-flat-button class="export-btn">
-                <img src="{{ imgPath }}download-blue.svg" alt="" /> Export
-            </button> -->
                 <select-table-column
                     [moduleType]="moduleType"
                     [customiseColumns]="customiseColumns"
@@ -73,15 +72,13 @@
             <div class="list-head">
                 <div class="custom-material-search-bar stock-searchbar">
                     <img src="{{ imgPath }}search-new.svg" class="search-icon" />
-                    <mat-form-field appearance="outline">
-                        <input
-                            matInput
-                            [placeholder]="commonLocaleData?.app_stock"
-                            autocomplete="off"
-                            #productName
-                            [formControl]="productNameSearching"
-                        />
-                    </mat-form-field>
+                    <text-field
+                        [placeholder]="commonLocaleData?.app_stock"
+                        autocomplete="off"
+                        #productName
+                        [formControl]="productNameSearching"
+                        [cssClass]="'form-control bg-dropdown'"
+                    ></text-field>
                 </div>
                 <div class="unique-name-wrapper" *ngIf="showUniqueName">
                     <h2 class="unique-name font-15">{{ commonLocaleData?.app_unique_name }}</h2>
@@ -89,7 +86,7 @@
                 <div class="group-list-head group-searchbar" *ngIf="showGroupName">
                     <img src="{{ imgPath }}search-new.svg" class="search-icon" />
                     <select-field
-                        [cssClass]="'form-control'"
+                        [cssClass]="'form-control bg-dropdown'"
                         [name]="'stockGroup'"
                         [placeholder]="commonLocaleData?.app_group"
                         [options]="stockGroups"
@@ -319,7 +316,7 @@
             </div>
         </div>
         <div
-            class="pagination-wrapper"
+            class="pagination-wrapper mt-4"
             *ngIf="GroupStockReportRequest?.totalItems > GroupStockReportRequest.count && !isLoading"
         >
             <pagination

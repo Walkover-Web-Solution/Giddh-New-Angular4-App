@@ -3,6 +3,7 @@
 }
 .action-btns {
     display: flex;
+    height: 52px;
 }
 .btn-icon {
     display: inline-block;
@@ -30,10 +31,4 @@
 }
 .icon-pointer {
     cursor: pointer;
-}
-@media (min-width: 769px) {
-    .table-responsive {
-        max-height: calc(100vh - 245px);
-        overflow-y: auto;
-    }
 }

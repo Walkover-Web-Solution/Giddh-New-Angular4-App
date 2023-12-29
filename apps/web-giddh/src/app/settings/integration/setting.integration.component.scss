@@ -147,12 +147,12 @@
         width: 10% !important;
     }
 
-    .mat-table tbody > tr > td:first-child {
+    .mat-mdc-table tbody > tr > td:first-child {
         color: var(--color-table-tertiary-content) !important;
     }
 
     th.mat-header-cell,
-    td.mat-cell {
+    td.mat-mdc-cell {
         white-space: normal !important;
     }
 
@@ -170,16 +170,26 @@
         width: 25%;
     }
 
-    .mat-table tbody .mat-row:hover td {
+    .mat-mdc-table tbody .mat-mdc-row:hover td {
         background-color: #e7ebf6 !important;
     }
 
-    .mat-table tbody .mat-row:hover .mat-cell .visibility {
+    .mat-mdc-table tbody .mat-mdc-row:hover .mat-mdc-cell .visibility {
         display: block !important;
     }
 
-    .mat-table tbody .mat-row:hover .mat-cell .icon-visibility {
-        visibility: visible !important;
+    .mat-mdc-table {
+        tbody {
+            .mat-mdc-row{
+                &:hover{
+                    .mat-mdc-cell{
+                        .icon-visibility {
+                            visibility: visible !important;
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -446,7 +456,13 @@
     vertical-align: top;
     margin-top: -4px;
 }
-
+.bank-menu {
+    top: -12px;
+    padding: 0 !important;
+    width: 18px;
+    height: 18px;
+    right: -32px;
+}
 @media (max-width: 1600px) and (min-width: 1200px) {
     .account-wrapper {
         width: 80% !important;

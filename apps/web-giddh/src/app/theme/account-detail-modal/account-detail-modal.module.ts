@@ -11,7 +11,7 @@ import { ClickOutsideModule } from 'ng-click-outside';
     imports: [
         CommonModule, 
         FormsModule, 
-        ModalModule, 
+        ModalModule.forRoot(), 
         TranslateDirectiveModule, 
         AsideMenuAccountModule,
         ClickOutsideModule

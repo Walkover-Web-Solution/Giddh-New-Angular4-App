@@ -6,7 +6,7 @@
     background-color: var(--color-white);
     width: 240px;
     left: -240px;
-    z-index: 999;
+    z-index: 991;
 
     .aside-pane {
         background-color: var(--color-white) !important;
@@ -26,12 +26,13 @@
                 z-index: 1;
                 font-size: var(--font-size-16);
                 font-family: var(--font-regular);
+                text-transform: uppercase !important;
             }
-            .icon-back-arrow {
+            .icon-pull-top {
                 position: relative;
                 z-index: 2;
-                top: -2px;
-                color: var(--color-giddh-blue);
+                top: -6px;
+                height: 14px;
             }
         }
 
@@ -62,7 +63,6 @@
 
                     mat-tree-node {
                         min-height: 30px;
-                        align-items: baseline;
                         .sidebar-menu-icons {
                             position: relative;
                             right: 7px;
@@ -79,7 +79,7 @@
 
                     .sidebar-list-icon {
                         position: absolute;
-                        bottom: 6px;
+                        bottom: 15px;
                         left: 220px;
                     }
                     .sub-option {
@@ -99,7 +99,6 @@
                         }
                         &.sub-option[aria-level="1"] {
                             position: relative;
-                            // left: 20px;
                             padding-left: 20px !important;
                             height: 27px;
                             width: 100%;

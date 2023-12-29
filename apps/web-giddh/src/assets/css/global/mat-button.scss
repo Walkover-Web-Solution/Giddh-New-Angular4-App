@@ -1,37 +1,41 @@
-.mat-button,
+.mat-mdc-button,
 .mat-icon-button,
-.mat-stroked-button,
+.mat-mdc-outlined-button,
 .mat-raised-button {
-    border-color: var(--color-secondary-input-bar-border) !important;
     &.mat-primary {
         color: var(--color-giddh-blue) !important;
-    }
-    /*Material Button Disabled Cursor*/
-    &.mat-button-disabled {
-        &:hover {
-            cursor: not-allowed !important;
-        }
     }
     .mat-button-focus-overlay {
         background-color: var(--color-primary-header-background) !important;
     }
 }
+.mat-mdc-outlined-button {
+    color: var(--color-default-button) !important;
+    &.mat-primary {
+        color: var(--color-giddh-blue) !important;
+    }
+    &:not(:disabled){
+        border-color: var(--color-fields-border) !important;
+    }
+}
 
 /*==========  Material Button Default Font Size Start Here =============*/
-.mat-button,
+.mat-mdc-button,
 .mat-raised-button,
 .mat-icon-button,
 .mat-stroked-button,
 .mat-flat-button,
 .mat-fab,
-.mat-mini-fab {
-    font-size: var(--font-size-15);
+.mat-mini-fab,
+.mat-mdc-outlined-button .mdc-button__label {
+    // font-size: var(--font-size-15) !important;
+    border-color: var(--color-fields-border) !important;
 }
 /*==========  Material Button Default Font Size End Here ===============*/
 
 /* ======Ladda  Button Color in Material Stroked Button====Start Here=========== */
 button {
-    &.mat-stroked-button {
+    &.mat-mdc-outlined-button {
         &.mat-primary {
             &:disabled {
                 .ladda-label {
@@ -63,7 +67,7 @@ button {
 
 /* This class is used to ladda button text color which is conditionally disabled*/
 .disabled-ladda-btn {
-    &.mat-stroked-button {
+    &.mat-mdc-outlined-button {
         &.mat-primary {
             &:disabled {
                 .ladda-label {
@@ -92,4 +96,35 @@ button {
     .mat-icon {
         color: var(--color-primary-icon);
     }
+}
+
+/*==========  Material Icon Button Default hover =============*/
+.mat-mdc-icon-button {
+    &:hover{
+        .mat-mdc-button-persistent-ripple{
+            &::before{
+                opacity: 0;
+            }
+        }
+    }
+    &:active{
+        .mat-mdc-button-persistent-ripple{
+            &::before{
+                opacity: 0;
+            }
+        }       
+    }
+    &.cdk-keyboard-focused {
+        .mat-mdc-button-persistent-ripple{
+            &::before{
+                opacity: 0;
+            }
+        }
+    }
+}
+ /*Material Button Disabled Cursor*/
+.mat-mdc-button[disabled],
+.mat-mdc-outlined-button[disabled]{        
+            cursor: not-allowed !important;
+            pointer-events: all !important;
 }

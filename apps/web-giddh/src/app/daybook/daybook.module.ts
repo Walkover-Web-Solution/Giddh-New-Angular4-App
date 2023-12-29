@@ -1,4 +1,4 @@
-import { BsDatepickerModule, DatepickerModule } from 'ngx-bootstrap/datepicker';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
@@ -9,7 +9,7 @@ import { DaybookAdvanceSearchModelComponent } from 'apps/web-giddh/src/app/daybo
 import { ShSelectModule } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-select.module';
 import { DecimalDigitsModule } from 'apps/web-giddh/src/app/shared/helpers/directives/decimalDigits/decimalDigits.module';
 import { ModalModule } from 'ngx-bootstrap/modal';
-import { PaginationComponent, PaginationModule } from 'ngx-bootstrap/pagination';
+import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { ExportDaybookComponent } from './export-daybook/export-daybook.component';
@@ -29,16 +29,20 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { LedgerModule } from '../ledger/ledger.module';
+import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
 
 @NgModule({
     declarations: [DaybookComponent, ExportDaybookComponent, DaybookAdvanceSearchModelComponent],
     providers: [],
-    imports: [CommonModule,
-        ReactiveFormsModule, DecimalDigitsModule,
-        FormsModule, ModalModule,
-        BsDatepickerModule,
+    imports: [
+        CommonModule,
+        ReactiveFormsModule, 
+        DecimalDigitsModule,
+        FormsModule,
+        ModalModule.forRoot(),
+        BsDatepickerModule.forRoot(),
         PaginationModule.forRoot(),
-        DatepickerModule,
         Daterangepicker,
         DaybookRoutingModule,
         ShSelectModule,
@@ -59,7 +63,9 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
         MatCheckboxModule,
         MatRadioModule,
         MatExpansionModule,
-        MatSlideToggleModule
+        MatSlideToggleModule,
+        LedgerModule,
+        WatchVideoModule
     ]
 })
 export class DaybookModule {

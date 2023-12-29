@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ImportExcelRequestData, ImportExcelResponseData } from '../../models/api-models/import-excel';
 import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
-import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 import { cloneDeep } from '../../lodash-optimized';
 
 @Component({
@@ -56,7 +55,6 @@ export class ImportProcessComponent {
     /** This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
     @Input() public localeData: any = {};
-    public config: PerfectScrollbarConfigInterface = { suppressScrollX: false, suppressScrollY: false };
     public options: IOption[];
     public sheetHeaders: string[] = [];
     /** List of giddh columns */

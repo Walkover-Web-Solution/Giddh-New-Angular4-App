@@ -47,15 +47,14 @@
                         <ul *dropdownMenu class="dropdown-menu month-picker" role="menu" id="monthPicker">
                             <li role="menuitem">
                                 <a class="dropdown-item" href="javascript:void(0)">
-                                    <datepicker
-                                        [datepickerMode]="'month'"
+                                    <bs-datepicker-inline
                                         name="fromDate"
                                         (click)="$event.stopPropagation()"
-                                        [showWeeks]="false"
-                                        [minMode]="'month'"
-                                        (selectionDone)="periodChanged($event); monthWise?.hide()"
-                                        [(ngModel)]="selectedMonth"
-                                    ></datepicker>
+                                        (bsValueChange)="periodChanged($event); monthWise.hide()"
+                                        [bsConfig]="{ startView: 'month', dateInputFormat: 'MM/YYYY', adaptivePosition: true, minMode:'month' }"
+                                        [ngModelOptions]="{standalone: true}"
+                                    >
+                                    </bs-datepicker-inline>
                                 </a>
                             </li>
                         </ul>
@@ -76,6 +75,9 @@
 
         <div class="col-lg-6 col-sm-4 col-12">
             <ul class="list-inline list-middle download-drop-down">
+                <li>
+                    <watch-video [cssClass]="'text-primary pd-r15'" [moduleName]="'GSTR1'"></watch-video>
+                </li>
                 <li>
                     <button
                         type="button"
@@ -138,21 +140,20 @@
                         </ng-container>
                         <span class="caret"></span>
                     </button>
-                    <ul *dropdownMenu class="dropdown-menu month-picker" role="menu" id="monthPicker">
-                        <li role="menuitem">
-                            <a class="dropdown-item" href="javascript:void(0)">
-                                <datepicker
-                                    [datepickerMode]="'month'"
-                                    name="fromDate"
-                                    (click)="$event.stopPropagation()"
-                                    [showWeeks]="false"
-                                    [minMode]="'month'"
-                                    (selectionDone)="periodChanged($event); monthWise?.hide()"
-                                    [(ngModel)]="selectedMonth"
-                                ></datepicker>
-                            </a>
-                        </li>
-                    </ul>
+                            <ul *dropdownMenu class="dropdown-menu month-picker" role="menu" id="monthPicker">
+                            <li role="menuitem">
+                                <a class="dropdown-item" href="javascript:void(0)">
+                                    <bs-datepicker-inline
+                                        name="fromDate"
+                                        (click)="$event.stopPropagation()"
+                                        (bsValueChange)="periodChanged($event); monthWise.hide()"
+                                        [bsConfig]="{ startView: 'month', dateInputFormat: 'MM/YYYY', adaptivePosition: true, minMode:'month' }"
+                                        [ngModelOptions]="{standalone: true}"
+                                    >
+                                    </bs-datepicker-inline>
+                                </a>
+                            </li>
+                        </ul>
                 </div>
                 <div class="datepicker-header" *ngIf="!showDate">
                     <ng-container *ngIf="isMonthSelected">
@@ -168,7 +169,10 @@
         </div>
 
         <div class="pull-right btn-wrapper-filling-header">
-            <div class="btn-group d-inline-block" dropdown #dropdown="bs-dropdown">
+            <div class="btn-group d-inline-flex align-items-center" dropdown #dropdown="bs-dropdown">
+                <span class="pull-left">
+                    <watch-video [cssClass]="'text-primary pd-r15'" [moduleName]="'GSTR2'"></watch-video>
+                </span>
                 <button dropdownToggle type="button" class="btn dropdown-toggle btn-sky-blue">
                     <i class="icon-download"></i>
                     {{ commonLocaleData?.app_download }}
@@ -255,7 +259,7 @@
     role="dialog"
     [config]="{ ignoreBackdropClick: true }"
 >
-    <div class="modal-dialog modal-md second">
+    <div class="modal-dialog modal-md second push-to-portal-modal">
         <div class="modal-content">
             <push-to-portal
                 [localeData]="localeData"

@@ -11,5 +11,8 @@
     "vat_report": "Vat Report",
     "unit_mapping": "Unit Mapping",
     "add_gst": "Add GST",
-    "add_trn": "Add TRN"
+    "add_trn": "Add TRN",
+    "add_vrn": "Add VRN",
+    "add_address": "Add Address",
+    "filing_status": "Filing Status"
 }

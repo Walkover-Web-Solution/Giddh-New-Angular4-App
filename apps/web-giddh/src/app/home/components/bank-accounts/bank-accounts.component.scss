@@ -22,9 +22,10 @@ a.connect-bank {
     padding-top: 5px;
     display: block;
 }
-.wrap-single-bank-detail {
-    height: 265px;
-    overflow-y: auto;
+.bank-details-block {
+    cdk-virtual-scroll-viewport {
+        height: 270px;
+    }
 }
 .add-bank-details {
     display: flex;
@@ -35,4 +36,14 @@ a.connect-bank {
 }
 p {
     color: var(--color-abbey);
+}
+.banks-scrollbar-wrapper{
+    row-gap: 0;
+}
+.bank-menu {
+    top: -39px;
+    float: right;
+}
+.width-86 {
+    width: 86% !important;
 }

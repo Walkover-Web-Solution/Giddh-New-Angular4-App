@@ -98,18 +98,12 @@ td {
 }
 
 .inventory-report-table {
-    overflow-x: visible !important;
-
     .mat-table-sticky {
         top: 60px !important;
     }
 }
 
 ::ng-deep {
-    .mat-pseudo-checkbox-checked {
-        background: var(--color-giddh-blue) !important;
-    }
-
     .inventory-transaction-list {
         tbody {
             .mat-no-data-row:last-child {
@@ -124,15 +118,9 @@ td {
 
     .columns-wrapper {
         .menu-buttons {
-            padding-right: 0;
             margin-right: 10px;
-            padding-left: 0 !important;
         }
     }
-}
-
-.transaction-report-wrapper {
-    margin-bottom: 40px;
 }
 
 .select-multiple-chiplist-inventory {

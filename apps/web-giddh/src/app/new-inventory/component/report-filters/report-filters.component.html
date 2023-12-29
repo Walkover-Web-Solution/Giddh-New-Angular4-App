@@ -85,6 +85,21 @@
             <i class="icon-edit-pencil text-blue font-16 cursor-pointer"></i>
         </span>
     </div>
+    <ng-container *ngIf="moduleName === 'GROUP_WISE_REPORT'">
+            <span class="ml-auto">
+                <watch-video [cssClass]="'text-primary pd-r15'" [moduleName]="'INVENTORY_REPORT_GROUPWISE'"></watch-video>
+            </span>
+        </ng-container>
+        <ng-container *ngIf="moduleName === 'ITEM_WISE_REPORT'">
+            <span class="ml-auto">
+                <watch-video [cssClass]="'text-primary pd-r15'" [moduleName]="'INVENTORY_REPORT_ITEMWISE'"></watch-video>
+            </span>
+        </ng-container>
+        <ng-container *ngIf="moduleName === 'VARIANT_WISE_REPORT'">
+            <span class="ml-auto">
+                <watch-video [cssClass]="'text-primary pd-r15'" [moduleName]="'INVENTORY_REPORT_VARIANTWISE'"></watch-video>
+            </span>
+        </ng-container>
 </div>
 <div class="inventory-filter-bar">
     <div class="search-control">
@@ -95,16 +110,19 @@
                 class="select-multiple-chiplist-inventory"
                 [ngClass]="{ 'searching-bar-chiplist': filtersChipList?.length }"
             >
-                <mat-chip-list #matChipList>
-                    <mat-chip
+                <mat-chip-grid #matChipList>
+                    <mat-chip-row
                         *ngFor="let chip of filtersChipList; let indx = index"
                         [selectable]="true"
                         [removable]="true"
                         (removed)="removeOption(chip, indx)"
+                        class="mr-r1"
                     >
                         {{ chip?.name }}
-                        <i class="icon-cross" matChipRemove></i>
-                    </mat-chip>
+                        <span matChipRemove>
+                            <i class="icon-cross font-12"></i>
+                        </span>
+                    </mat-chip-row>
                     <input
                         type="text"
                         matInput
@@ -119,7 +137,7 @@
                         matAutocompletePosition="auto"
                         [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
                     />
-                </mat-chip-list>
+                </mat-chip-grid>
                 <mat-autocomplete
                     class="inventory-autocomplete"
                     #auto="matAutocomplete"

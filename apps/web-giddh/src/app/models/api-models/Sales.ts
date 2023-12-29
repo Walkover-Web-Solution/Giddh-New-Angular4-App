@@ -21,7 +21,10 @@ export enum VoucherTypeEnum {
     'generateEstimate' = 'estimates',
     'cash' = 'cash',
     'receipt' = 'receipt',
-    'payment' = 'payment'
+    'payment' = 'payment',
+    'cashDebitNote' = 'cash debit note',
+    'cashCreditNote' = 'cash credit note',
+    'cashBill' = 'cash bill'
 }
 
 export enum ActionTypeAfterVoucherGenerateOrUpdate {
@@ -81,6 +84,27 @@ export const VOUCHER_TYPE_LIST: any[] = [
         additional: {
             label: 'Estimate (Beta)'
         }
+    },
+    {
+        value: VoucherTypeEnum.cashCreditNote,
+        label: 'Cash Credit Note',
+        additional: {
+            label: 'Cash Credit Note'
+        }
+    },
+    {
+        value: VoucherTypeEnum.cashDebitNote,
+        label: 'Cash Debit Note',
+        additional: {
+            label: 'Cash Debit Note'
+        }
+    },
+    {
+        value: VoucherTypeEnum.cashBill,
+        label: 'Cash Bill',
+        additional: {
+            label: 'Cash Bill'
+        }
     }
 ];
 
@@ -109,6 +133,7 @@ export class GstDetailsClass {
     public gstNumber?: any;
     public address: string[];
     public state?: StateCode;
+    public county?: CountyCode;
     public panNumber?: any;
     public countryName?: string;
     /*Keeping both as API team is too confused to Map one variable type
@@ -118,13 +143,16 @@ export class GstDetailsClass {
     public stateName?: string;
     public pincode?: string;
     public taxNumber?: string;
-
     constructor() {
         this.address = [];
         this.state = new StateCode();
+        this.county = new CountyCode();
     }
 }
-
+export class CountyCode {
+    name: string;
+    code: string;
+}
 class CurrencyClass {
     public code: string;
 
@@ -182,7 +210,10 @@ export class AccountDetailsClass {
                 this.billingDetails.state.code = (attrs.addresses[0].state) ?
                     (attrs.addresses[0].state.code) ? attrs.addresses[0].state.code : attrs.addresses[0].state.stateGstCode
                     : attrs.addresses[0].stateCode;
+                this.billingDetails.county.code = attrs.addresses[0]?.county?.code;
+                this.billingDetails.county.name = attrs.addresses[0].county?.name;
                 this.billingDetails.state.name = attrs.addresses[0].stateName;
+
                 this.billingDetails.gstNumber = attrs.addresses[0].gstNumber;
                 this.billingDetails.taxNumber = attrs.addresses[0].gstNumber;
                 this.billingDetails.pincode = attrs.addresses[0].pincode;
@@ -193,6 +224,8 @@ export class AccountDetailsClass {
                 this.shippingDetails.state.code = (attrs.addresses[0].state) ?
                     (attrs.addresses[0].state.code) ? attrs.addresses[0].state.code : attrs.addresses[0].state.stateGstCode
                     : attrs.addresses[0].stateCode;
+                this.shippingDetails.county.code = attrs.addresses[0].county?.code;
+                this.shippingDetails.county.name = attrs.addresses[0]?.county?.name;
                 this.shippingDetails.state.name = attrs.addresses[0].stateName;
                 this.shippingDetails.gstNumber = attrs.addresses[0].gstNumber;
                 this.shippingDetails.taxNumber = attrs.addresses[0].gstNumber;

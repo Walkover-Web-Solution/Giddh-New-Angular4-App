@@ -41,12 +41,6 @@
     font-size: var(--font-size-15) !important;
 }
 
-.table-content {
-    max-height: calc(100vh - 410px);
-    overflow-y: auto;
-    height: calc(100vh - 410px);
-}
-
 .msg91-container {
     position: relative;
     border: 1px solid var(--color-lavender);
@@ -234,7 +228,6 @@
 
         .unit-value {
             font-size: var(--font-size-15);
-            margin-bottom: -18px;
         }
 
         .variables-bottom-border {
@@ -287,4 +280,16 @@
             padding-right: 20px;
         }
     }
+}
+
+.verify-page{
+    .msg-btn{
+        border: 0;
+        background-color: transparent;
+    }
+}
+.chip-gap {
+    display: flex;
+    flex-direction: column;
+    row-gap: 30px;
 }

@@ -80,7 +80,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         }
 
         if (!(this._generalService.user && this._generalService.sessionId)) {
-            if (!window.location.href.includes('login') && !window.location.href.includes('token-verify') && !window.location.href.includes('download')) {
+            if (!window.location.href.includes('login') && !window.location.href.includes('token-verify') && !window.location.href.includes('download') && !window.location.href.includes('dns')) {
                 if (PRODUCTION_ENV && !isElectron) {
                     window.location.href = 'https://stage.giddh.com/login/';
                 } else {
@@ -98,12 +98,12 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             const { ipcRenderer } = (window as any).require("electron");
             // google
             const t = ipcRenderer.send("take-server-environment", {
-                STAGING_ENV,
-                LOCAL_ENV,
-                TEST_ENV,
-                PRODUCTION_ENV,
-                AppUrl,
-                APP_FOLDER
+                'STAGING_ENV': STAGING_ENV,
+                'LOCAL_ENV': LOCAL_ENV,
+                'TEST_ENV': TEST_ENV,
+                'PRODUCTION_ENV': PRODUCTION_ENV,
+                'AppUrl': AppUrl,
+                'APP_FOLDER': APP_FOLDER
             });
         }
 
@@ -186,7 +186,6 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             this._generalService.addLinkTag("./assets/css/font-awesome.css");
             this._generalService.addLinkTag("./assets/fonts/icomoon/icomoon.css");
             this._generalService.addLinkTag("./assets/css/toastr.css");
-            this._generalService.addLinkTag("./assets/css/perfect-scrollbar.component.scss");
             this._generalService.addLinkTag("./assets/css/ngx-bootstrap/bs-datepicker.css");
             this._generalService.addLinkTag("./assets/css/ladda-themeless.min.css");
             this._generalService.addLinkTag("./assets/css/lightbox.scss");

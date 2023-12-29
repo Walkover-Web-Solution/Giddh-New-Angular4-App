@@ -44,6 +44,8 @@ import { LedgerActions } from '../../actions/ledger/ledger.actions';
 import { LocaleService } from '../../services/locale.service';
 import { SettingsFinancialYearActions } from '../../actions/settings/financial-year/financial-year.action';
 import { DomSanitizer } from '@angular/platform-browser';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatMenuTrigger } from '@angular/material/menu';
 
 @Component({
     selector: 'app-header',
@@ -60,8 +62,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public imgPath: string = '';
     public subscribedPlan: SubscriptionsUser;
     public isLedgerAccSelected: boolean = false;
-    /* This will hold the value out/in to open/close help popup */
-    public asideHelpSupportMenuState: string = 'out';
+    /* This will hold the help popup dialog ref */
+    public asideHelpSupportDialogRef: MatDialogRef<any>;
     /* This will hold the value out/in to open/close setting sidebar popup */
     public asideSettingMenuState: string = 'out';
     /*This will check if page has not tabs*/
@@ -87,6 +89,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     @ViewChild('companyDetailsDropDownWeb', { static: true }) public companyDetailsDropDownWeb: BsDropdownDirective;
     /** All modules popover instance */
     @ViewChild('allModulesPopover', { static: true }) public allModulesPopover: PopoverDirective;
+    /** Instance of mat dialog */
+    @ViewChild('asideHelpSupportMenuStateRef', { static: true }) public asideHelpSupportMenuStateRef: TemplateRef<any>;
+    /** Instance of menu trigger */
+    @ViewChild(MatMenuTrigger) public trigger: MatMenuTrigger;
 
     public hideAsDesignChanges: boolean = false;
     public title: Observable<string>;
@@ -151,7 +157,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public isGstSideMenuOpened: boolean = false;
     /** VAT supported countries to show the Vat Report section in all modules */
     public vatSupportedCountries = VAT_SUPPORTED_COUNTRIES;
-    @ViewChild('datepickerTemplate', { static: true }) public datepickerTemplate: ElementRef;
+    @ViewChild('datepickerTemplate', { static: true }) public datepickerTemplate: TemplateRef<any>;
 
     /* This will store modal reference */
     public modalRef: BsModalRef;
@@ -173,8 +179,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public isAllowedForBetaTesting: boolean = false;
     /* This will hold value if settings sidebar is open through mobile hamburger icon */
     public isMobileSidebar: boolean = false;
-    /* This will hold if resolution is less than 768 to consider as mobile screen */
-    public isMobileScreen: boolean = false;
     /* This will hold current page url */
     public currentPageUrl: string = '';
     /** Stores the details of the current branch */
@@ -227,6 +231,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public isCalendlyModelActivate: boolean = false;
     /** Calendly url */
     public calendlyUrl: any = '';
+    /* True if it is redirect to go to branch mode */
+    public isGoToBranch: boolean = false;
+    /** Stores the voucher API version of current company */
+    public voucherApiVersion: 1 | 2;
 
     /**
      * Returns whether the back button in header should be displayed or not
@@ -265,7 +273,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         public location: Location,
         private localeService: LocaleService,
         private settingsFinancialYearActions: SettingsFinancialYearActions,
-        private sanitizer: DomSanitizer
+        private sanitizer: DomSanitizer,
+        public dialog: MatDialog
     ) {
         this.calendlyUrl = this.sanitizer.bypassSecurityTrustResourceUrl(CALENDLY_URL);
         // Reset old stored application date
@@ -419,6 +428,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.selectedCompany = observableOf(selectedCmp);
                 this.selectedCompanyDetails = selectedCmp;
                 this.generalService.voucherApiVersion = selectedCmp.voucherVersion;
+                this.voucherApiVersion = this.generalService.voucherApiVersion;
                 this.activeCompanyForDb = new CompAidataModel();
                 if (this.generalService.currentOrganizationType === OrganizationType.Branch) {
                     this.activeCompanyForDb.name = this.currentBranch ? this.currentBranch.name : '';
@@ -479,7 +489,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     public ngOnInit() {
         this.store.dispatch(this.settingsFinancialYearActions.GetAllFinancialYears());
-
         this.store.pipe(select(appStore => appStore.general.menuItems), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 let branches = [];
@@ -494,10 +503,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
         this.getCurrentCompanyData();
         this._breakpointObserver.observe([
-            '(max-width: 767px)',
             '(max-width: 768px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            this.isMobileScreen = result?.breakpoints['(max-width: 767px)'];
             this.isIpadScreen = result?.breakpoints['(max-width: 768px)'];
         });
 
@@ -730,16 +737,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         }
         /* TO SHOW NOTIFICATIONS */
 
-        /* intlTelInputGlobals */
-        if (window['intlTelInputGlobals'] === undefined) {
-            let scriptTag = document.createElement('script');
-            scriptTag.src = './assets/js/intl-tel-input.js';
-            scriptTag.type = 'text/javascript';
-            scriptTag.defer = true;
-            document.body.appendChild(scriptTag);
-        }
-        /* intlTelInputGlobals */
-
         if (this.selectedPlanStatus === 'expired') {// active expired
             if (!this.isMobileSite) {
                 this.openExpiredPlanModel(this.expiredPlanModel);
@@ -834,35 +831,30 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     /**
-     * This will toggle the fixed class on body
-     *
-     * @memberof HeaderComponent
-     */
-    public toggleBodyClass(): void {
-        if (this.asideHelpSupportMenuState === 'in') {
-            document.querySelector('body')?.classList?.add('fixed');
-        } else {
-            document.querySelector('body')?.classList?.remove('fixed');
-        }
-    }
-
-    /**
      * This will toggle the help popup
      *
      * @param {boolean} show
      * @memberof HeaderComponent
      */
-    public toggleHelpSupportPane(show: boolean): void {
-        setTimeout(() => {
-            if (show) {
-                this.asideSettingMenuState = 'out';
-                document.querySelector('body')?.classList?.remove('aside-setting');
+    public toggleHelpSupportPane(event: boolean): void {
+        if (event) {
+            if (this.asideHelpSupportDialogRef?.id && this.dialog.getDialogById(this.asideHelpSupportDialogRef?.id)) {
+                this.asideHelpSupportDialogRef?.close();
+            } else {
+                this.asideHelpSupportDialogRef = this.dialog.open(this.asideHelpSupportMenuStateRef, {
+                    width: '1000px',
+                    hasBackdrop: false,
+                    position: {
+                        right: '0',
+                        top: '0'
+                    }
+                });
             }
-            document.querySelector('body').classList.remove('mobile-setting-sidebar');
-            this.asideHelpSupportMenuState = (show && this.asideHelpSupportMenuState === 'out') ? 'in' : 'out';
-            this.toggleBodyClass();
-        }, (this.asideHelpSupportMenuState === 'out') ? 100 : 0);
+        } else {
+            this.asideHelpSupportDialogRef?.close();
+        }
     }
+
 
     /**
      * This will toggle the settings popup
@@ -875,10 +867,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         setTimeout(() => {
             this.isMobileSidebar = isMobileSidebar;
             if (show) {
-                this.asideHelpSupportMenuState = 'out';
+                this.asideHelpSupportDialogRef?.close();
             }
             this.asideSettingMenuState = (show) ? 'in' : 'out';
-            this.toggleBodyClass();
 
             if (this.asideSettingMenuState === "in") {
                 document.querySelector('body')?.classList?.add('aside-setting');
@@ -892,20 +883,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 document.querySelector('body').classList.remove('mobile-setting-sidebar');
             }
         }, ((this.asideSettingMenuState === 'out') ? 100 : 0));
-    }
-
-    /**
-     * This will close the help popup if click outside of popup
-     *
-     * @memberof HeaderComponent
-     */
-    public closeHelpPaneOnOutsideClick(): void {
-        setTimeout(() => {
-            if (this.asideHelpSupportMenuState === "in") {
-                this.asideHelpSupportMenuState = 'out';
-                document.querySelector('body')?.classList?.remove('fixed');
-            }
-        }, 50);
     }
 
     /**
@@ -1004,7 +981,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     public showManageGroupsModal() {
-        this.closeHelpPaneOnOutsideClick();
+        this.toggleHelpSupportPane(false);
         this.store.dispatch(this.groupWithAccountsAction.OpenAddAndManageFromOutside(''));
     }
 
@@ -1047,6 +1024,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     public sideBarStateChange(event: boolean) {
+        this.isGoToBranch = false;
         if (this.sideMenu) {
             this.sideMenu.isopen = event;
         }
@@ -1101,6 +1079,33 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     public openDateRangePicker() {
         this.isTodaysDateSelected = false;
+    }
+
+    /**
+     * This will use for navigae to subitem link
+     *
+     * @param {*} event
+     * @memberof HeaderComponent
+     */
+    public navigateToSubItemLink(event: any): void {
+        if (event) {
+            this.trigger?.closeMenu();
+            if (this.voucherApiVersion === 2) {
+                if (event === 'receiptnote') {
+                    this.router.navigate(['/pages/inventory/v2/branch-transfer/receipt-note/create']);
+                } else if (event === 'deliverychallan') {
+                    this.router.navigate(['/pages/inventory/v2/branch-transfer/delivery-challan/create']);
+                } else {
+                    this.router.navigate(['/pages' + event]);
+                }
+            } else {
+                if (event === 'deliverychallan' || event === 'receiptnote') {
+                    this.router.navigate(['/pages/inventory/report/' + event]);
+                } else {
+                    this.router.navigate(['/pages' + event]);
+                }
+            }
+        }
     }
 
     public ngOnDestroy() {
@@ -1183,6 +1188,17 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 showPlans: true
             }
         });
+    }
+
+    /**
+     * This will use for go to branch mode
+     *
+     * @memberof HeaderComponent
+     */
+    public gotToBranchTab(): void {
+        this.trigger?.closeMenu();
+        this.expandSidebar(false);
+        this.isGoToBranch = true;
     }
 
     public onRight(nodes) {
@@ -1459,6 +1475,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     * @memberof HeaderComponent
     */
     public collapseSidebar(forceCollapse: boolean = false, closeOnHover: boolean = false): void {
+        this.isGoToBranch = false;
         if (closeOnHover && this.sidebarForcelyExpanded && (this.router.url.includes("/pages/settings") || this.router.url.includes("/pages/user-details"))) {
             return;
         }
@@ -1555,15 +1572,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             };
             this.store.dispatch(this.companyActions.SetApplicationDate(dates));
         }
-    }
-
-    /**
-     * This will navigate user to mobile home page
-     *
-     * @memberof HeaderComponent
-     */
-    public redirectToMobileHome(): void {
-        this.router.navigate(['/pages/mobile/home']);
     }
 
     /**

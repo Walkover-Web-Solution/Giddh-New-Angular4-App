@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, Input, OnDestroy, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, EventEmitter, Output, Input, OnDestroy, OnInit, ChangeDetectorRef, Inject } from '@angular/core';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
@@ -10,6 +10,7 @@ import { AppState } from '../../store';
 import { PageLeaveUtilityService } from '../../services/page-leave-utility.service';
 import { AccountsAction } from '../../actions/accounts.actions';
 import { GeneralService } from '../../services/general.service';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
     selector: 'aside-menu-product-service',
@@ -31,6 +32,8 @@ import { GeneralService } from '../../services/general.service';
 export class AsideMenuProductServiceComponent implements OnInit, OnDestroy {
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
     @Input() public selectedVoucherType: string;
+    /* This will hold branch transfer mode input  */
+    @Input() public inputData: string = '';
     public autoFocusInChild: boolean = true;
     public isAddStockOpen: boolean = false;
     public isAddServiceOpen: boolean = false;
@@ -47,6 +50,7 @@ export class AsideMenuProductServiceComponent implements OnInit, OnDestroy {
     public voucherApiVersion: 1 | 2;
     /** This will hold stock type */
     public stockType: string = '';
+
 
     constructor(
         private accountService: AccountService,

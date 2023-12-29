@@ -1,23 +1,31 @@
 import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
-import { empty, Observable, of, throwError } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 import { LoaderService } from '../loader/loader.service';
 import { GeneralService } from './general.service';
 import { OrganizationType } from '../models/user-login-state';
 import { LocaleService } from './locale.service';
 import { catchError, retryWhen, tap } from 'rxjs/operators';
+import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
+import * as dayjs from 'dayjs';
+import { AppState } from '../store';
+import { Store } from '@ngrx/store';
+import { LoginActions } from '../actions/login.action';
 
 @Injectable()
 export class GiddhHttpInterceptor implements HttpInterceptor {
 
     private isOnline: boolean = navigator.onLine;
+    public dayjs = dayjs;
 
     constructor(
         private toasterService: ToasterService,
         private loadingService: LoaderService,
         private generalService: GeneralService,
-        private localeService: LocaleService
+        private localeService: LocaleService,
+        private store: Store<AppState>,
+        private loginAction: LoginActions
     ) {
         window.addEventListener('online', () => {
             this.isOnline = true;
@@ -28,6 +36,15 @@ export class GiddhHttpInterceptor implements HttpInterceptor {
     }
 
     public intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+        var session = JSON.parse(localStorage.getItem("session"));
+        if (session?.user?.session?.expiresAt && this.generalService.user) {
+            let sessionExpiresAt: any = dayjs((session.user.session.expiresAt), GIDDH_DATE_FORMAT + " h:m:s");
+            if (sessionExpiresAt && sessionExpiresAt.diff(dayjs(), 'hours') < 0) {
+                this.store.dispatch(this.loginAction.LogOut());
+                return;
+            }
+        }
+
         if (this.generalService.currentOrganizationType === OrganizationType.Branch && request && request.urlWithParams) {
             request = this.addBranchUniqueName(request);
         }
@@ -58,7 +75,7 @@ export class GiddhHttpInterceptor implements HttpInterceptor {
             );
         } else {
             setTimeout(() => {
-                this.toasterService.warningToast(this.localeService.translate("app_messages.internet_error"), this.localeService.translate("app_messages.internet_disconnected"));
+                this.toasterService.warningToast("Please check your internet connection.", "Internet disconnected");
             }, 100);
             this.loadingService.hide();
             if (request.body && request.body.handleNetworkDisconnection) {

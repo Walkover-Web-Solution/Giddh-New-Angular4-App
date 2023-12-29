@@ -92,7 +92,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         headQuarterAlias: '',
         balanceDisplayFormat: '',
         taxType: '',
-        manageInventory: false
+        manageInventory: false,
+        portalDomain: ''
     };
     public stateStream$: Observable<States[]>;
     public statesSource$: Observable<IOption[]> = observableOf([]);
@@ -178,6 +179,10 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     public vatSupportedCountries = VAT_SUPPORTED_COUNTRIES;
     /** Tax type (gst/trn) */
     public taxType: string = '';
+    /** True if initial data is fetched */
+    public showTaxColumn: boolean;
+    /** Stores the voucher API version of company */
+    public voucherApiVersion: 1 | 2;
 
     constructor(
         private commonService: CommonService,
@@ -197,7 +202,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         private localeService: LocaleService,
         private breakPointObservar: BreakpointObserver
     ) {
-
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.breakPointObservar.observe([
             '(max-width: 767px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
@@ -1132,6 +1137,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 headQuarterAlias: profileObj.headQuarterAlias,
                 nameAlias: profileObj.nameAlias,
                 uniqueName: profileObj?.uniqueName,
+                portalDomain: profileObj?.portalDomain,
                 country: {
                     countryName: profileObj.countryV2 ? profileObj.countryV2.countryName : '',
                     countryCode: profileObj.countryV2 ? profileObj.countryV2.alpha2CountryCode?.toLowerCase() : '',
@@ -1245,6 +1251,11 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                         } else {
                             this.taxType = this.commonLocaleData?.app_gstin;
                         }
+                        if (this.vatSupportedCountries.includes(activeCompany.countryV2?.alpha2CountryCode) || activeCompany.countryV2?.alpha2CountryCode === 'IN') {
+                            this.showTaxColumn = true;
+                        } else {
+                            this.showTaxColumn = false;
+                        }
                     }
                 });
 
@@ -1274,13 +1285,19 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                                 this.localeData.address_list = this.localeData.trn_list;
                                 this.localeData.create_address = this.localeData.create_trn;
                                 this.localeData.update_address = this.localeData.update_trn;
-                            } else {
+                            } else if (activeCompany.countryV2?.alpha2CountryCode === 'IN') {
                                 this.taxType = this.commonLocaleData?.app_gstin;
                                 this.localeData.company_address_list = this.localeData.company_gst_list;
                                 this.localeData.add_address = this.localeData.add_gst;
                                 this.localeData.address_list = this.localeData.gst_list;
                                 this.localeData.create_address = this.localeData.create_gst;
                                 this.localeData.update_address = this.localeData.update_gst;
+                            } else {
+                                this.taxType = '';
+                                this.localeData.company_address_list = this.localeData.company_address_list;
+                                this.localeData.add_address = this.localeData.create_address;
+                                this.localeData.create_address = this.localeData.create_address;
+                                this.localeData.update_address = this.localeData.update_address;
                             }
                         }
                     });
@@ -1307,6 +1324,9 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                     break;
                 case 'address':
                     pageHeading = this.companyProfileObj?.taxType ? (this.localeData?.address + this.companyProfileObj?.taxType) : this.localeData?.addresses;
+                    break;
+                case 'portal':
+                    pageHeading = this.localeData?.portal_heading;
                     break;
                 case 'other':
                     pageHeading = this.localeData?.other;

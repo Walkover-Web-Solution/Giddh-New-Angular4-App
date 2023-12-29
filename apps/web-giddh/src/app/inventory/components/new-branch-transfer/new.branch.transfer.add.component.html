@@ -907,7 +907,7 @@
                                                 {{ product.stockDetails.amount | giddhCurrency }}
                                             </div>
                                         </div>
-                                        <div class="trash-icon-delete">
+                                        <div class="trash-icon-delete cp">
                                             <a (click)="removeProduct(i)" *ngIf="branchTransfer.products?.length > 1"
                                                 ><i class="fa fa-trash"></i
                                             ></a>
@@ -1058,7 +1058,7 @@
                                                 {{ destination.warehouse.stockDetails.amount | giddhCurrency }}
                                             </div>
                                         </div>
-                                        <div class="trash-icon-delete">
+                                        <div class="trash-icon-delete cp">
                                             <a
                                                 (click)="removeReceiver(i)"
                                                 *ngIf="branchTransfer.destinations?.length > 1"
@@ -1090,7 +1090,7 @@
                                 >
                                     <td>{{ i + 1 }}.</td>
                                     <td>
-                                        <div *ngIf="activeRow === i">
+                                        <div *ngIf="activeRow === i" class="fields-gap">
                                             <sh-select
                                                 name="sourceName{{ i }}"
                                                 #selectDropdown
@@ -1216,7 +1216,7 @@
                                                 {{ source.warehouse.stockDetails.amount | giddhCurrency }}
                                             </div>
                                         </div>
-                                        <div class="trash-icon-delete">
+                                        <div class="trash-icon-delete cp">
                                             <a (click)="removeSender(i)" *ngIf="branchTransfer.sources?.length > 1">
                                                 <i class="fa fa-trash"></i
                                             ></a>
@@ -1373,7 +1373,7 @@
                 </div>
                 <section id="actionPane" class="text-center clearfix">
                     <div class="col-xs-12">
-                        <div class="pull-right position-relative">
+                        <div class="pull-right position-relative d-flex column-gap15">
                             <button
                                 type="button"
                                 class="btn btn-danger d-inline-block v-align-middle"
@@ -1566,7 +1566,7 @@
                 </tr>
             </table>
         </div>
-        <div class="text-center mt-4 mb-4" *ngIf="transporterListDetails?.totalPages > 1">
+        <div class="text-center mt-4 mb-5" *ngIf="transporterListDetails?.totalPages > 1">
             <pagination
                 [totalItems]="transporterListDetails.totalPages"
                 [(ngModel)]="transporterListDetails.page"

@@ -8,6 +8,7 @@
 >
     <div class="transaction-report-wrapper">
         <report-filters
+            *ngIf="translationLoaded"
             [localeData]="localeData"
             [commonLocaleData]="commonLocaleData"
             [moduleName]="moduleName"
@@ -568,7 +569,7 @@
                             <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                         </table>
                     </div>
-                    <div class="pagination-wrapper">
+                    <div class="pagination-wrapper mt-4">
                         <pagination
                             *ngIf="
                                 stockReportRequest?.totalItems > stockReportRequest?.count &&
@@ -595,9 +596,6 @@
         <div class="no-data-inventory" *ngIf="!isLoading && !dataSource?.length">
             <h1>{{ localeData?.reports?.no_entries_found_1 }}</h1>
             <h1>{{ localeData?.reports?.no_entries_found_2 }}</h1>
-        </div>
-        <div class="no-data-inventory" *ngIf="!isLoading && dataSource?.length && !displayedColumns?.length">
-            <h1>{{ localeData?.reports?.no_columns_found }}</h1>
         </div>
         <div class="no-data" *ngIf="isLoading">
             <giddh-page-loader></giddh-page-loader>

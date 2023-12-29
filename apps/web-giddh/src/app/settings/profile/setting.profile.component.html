@@ -57,6 +57,7 @@
                     [localeData]="localeData"
                     [commonLocaleData]="commonLocaleData"
                     [taxType]="taxType"
+                    [showTaxColumn]="showTaxColumn"
                 ></address-settings>
             </tab>
             <tab
@@ -74,6 +75,23 @@
                 >
                 </other-settings>
             </tab>
+            <!-- <tab
+                *ngIf="voucherApiVersion === 2 && currentOrganizationType === 'COMPANY'"
+                [active]="this.currentTab === 'portal'"
+                (selectTab)="handleTabChanged('portal')"
+                [heading]="localeData?.portal_heading"
+                [id]="currentTab === 'portal' ? 'giddh-page-heading' : ''"
+            >
+                <portal-white-label
+                    *ngIf="!(getCompanyProfileInProgress$ | async) && currentTab === 'portal'"
+                    (saveProfile)="handleSaveProfile($event)"
+                    [profileData]="companyProfileObj"
+                    [organizationType]="currentOrganizationType"
+                    [localeData]="localeData"
+                    [commonLocaleData]="commonLocaleData"
+                >
+                </portal-white-label>
+            </tab> -->
         </tabset>
     </div>
     <div class="settings-profile-tabs" *ngIf="addressOnly">

@@ -173,6 +173,12 @@
     min-width: auto !important;
 }
 
+span {
+    &.icon-info {
+        line-height: 40px;        
+    }
+}
+
 /* Rotate animation for spinner in uploading file */
 
 .rotate {

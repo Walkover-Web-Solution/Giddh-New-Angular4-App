@@ -1,0 +1,54 @@
+.mat-mdc-table {
+    .mat-mdc-header-row {
+        .mat-mdc-header-cell {
+            background-color: var(--color-body-background) !important;
+        }
+    }
+    .mdc-data-table__content {
+        .mat-mdc-row {
+            .mat-mdc-cell {
+                background-color: var(--color-transparent-background) !important;
+            }
+        }
+    }
+}
+
+/*--- menu-button-color ---*/
+.cdk-overlay-container {
+    .mat-mdc-menu-panel {
+        background-color: var(--color-body-background);
+    }
+}
+
+/*--- mat-option ---*/
+.mat-mdc-option .mdc-list-item__primary-text {
+    color: var(--color-common-primary-text) !important;
+}
+
+/*--- mat-card ---*/
+.mat-mdc-card {
+    background-color: var(--color-body-background) !important;
+}
+/*--- trial-balance-expand ---*/
+trial-balance-grid,
+invoice-preview-details-component {
+    cdk-virtual-scroll-viewport {
+        .cdk-virtual-scroll-content-wrapper {
+            height: auto;
+        }
+    }
+}
+
+aging-report {
+    table {
+        .mat-column-name {
+            width: 20%;
+        }
+        .mat-column-group {
+            width: 10%;
+        }
+        .mat-column-upcoming {
+            width: 12%;
+        }
+    }
+}

@@ -8,6 +8,7 @@ import { PageComponent } from './page/page.component';
 import { MobileRestrictedComponent } from './mobile-restricted/mobile-restricted.component';
 
 export const ROUTES: Routes = [
+    { path: 'company/:companyUniqueName/dns', loadChildren: () => import('./dns-records/dns-records.module').then(module => module.DnsRecordsModule) },
     { path: 'download', loadChildren: () => import('./download/download.module').then(module => module.DownloadModule) },
     { path: '', redirectTo: 'login', pathMatch: 'full' },
     { path: 'app-login-success', component: AppLoginSuccessComponent, pathMatch: 'full' },
@@ -80,9 +81,7 @@ export const ROUTES: Routes = [
             { path: 'proforma-invoice', loadChildren: () => import('./voucher/voucher.module').then(module => module.VoucherModule), canActivate: [NeedsAuthorization] },
             { path: 'onboarding', loadChildren: () => import('./onboarding/onboarding.module').then(module => module.OnboardingModule), canActivate: [NeedsAuthorization] },
             { path: 'billing-detail', loadChildren: () => import('./billing-details/billing-details.module').then(module => module.BillingDetailModule) },
-            { path: 'mobile', loadChildren: () => import('./mobile-home/mobile-home.module').then(module => module.MobileHomeModule), canActivate: [NeedsAuthorization] },
             { path: 'giddh-all-items', loadChildren: () => import('./all-items/all-item.module').then(module => module.AllItemModule), canActivate: [NeedsAuthorization] },
-            // { path: 'tallysync', loadChildren: () => import('./tallysync/tallysync.module').then(module => module.TallysyncModule), canActivate: [NeedsAuthorization] },
             { path: 'expenses-manager', loadChildren: () => import('./expenses/expenses.module').then(module => module.ExpensesModule), canActivate: [NeedsAuthorization] },
             { path: 'vat-report', loadChildren: () => import('./vat-report/vat-report.module').then(module => module.VatReportModule), canActivate: [NeedsAuthorization] },
             { path: 'purchase-management', loadChildren: () => import('./purchase/purchase.module').then(module => module.PurchaseModule), canActivate: [NeedsAuthorization] },

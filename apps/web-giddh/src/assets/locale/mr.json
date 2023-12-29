@@ -10,6 +10,7 @@
     "app_email_id": "ई - मेल आयडी",
     "app_state": "राज्य",
     "app_tax_number": "कर क्रमांक",
+    "app_tax_number_short": "कर क्रमांक",
     "app_customer": "ग्राहक",
     "app_purchase": "खरेदी",
     "app_sales": "विक्री",
@@ -292,6 +293,7 @@
     "app_street": "पत्ता",
     "app_enter_gstin": "जीएसटीआयएन प्रविष्ट करा",
     "app_enter_trn": "टीआरएन प्रविष्ट करा",
+    "app_enter_vat": "व्हॅट नोंदणी क्रमांक प्रविष्ट करा",
     "app_remove": "काढा",
     "app_show_all": "सगळं दाखवा",
     "app_show_less": "कमी दाखवा",
@@ -648,8 +650,6 @@
 		"group_updated": "गट यशस्वीरित्या अद्यतनित केला.",
 		"receive_otp": "आपल्याला लवकरच आपल्या मोबाइलवर एक सत्यापन कोड प्राप्त होईल.",
 		"otp_sent_email": "आपल्या ईमेल खात्यावर एक सत्यापन कोड पाठविला गेला आहे.",
-		"internet_error": "कृपया आपले इंटरनेट कनेक्शन तपासा.",
-		"internet_disconnected": "इंटरनेट डिस्कनेक्ट झाले",
         "voucher_saved": "व्हाउचर यशस्वीरित्या व्युत्पन्न केले",
         "file_uploaded": "फाईल यशस्वीरित्या अपलोड केली"
 	},
@@ -706,5 +706,13 @@
         "yes": "पृष्ठ सोडा"
     },
     "app_region": "क्षेत्र",
-    "app_select_region": "क्षेत्र निवडा"
+    "app_select_region": "क्षेत्र निवडा",
+    "app_by_product_output" :"उत्पादनानुसार (आउटपुट)",
+    "app_unverified": "असत्यापित",
+    "app_verified": "सत्यापित",
+    "app_verify": "सत्यापित करा",
+    "app_copied":"कॉपी केले...",
+    "app_hostname": "होस्टनेम",
+    "domain_verification": "बाह्यिक मेलसाठी डोमेन सत्यापन",
+    "app_renew_bank_connection": "बँक कनेक्शनचे नूतनीकरण करा"
 }

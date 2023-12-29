@@ -117,7 +117,7 @@ export const initialState: CustomTemplateState = {
                     },
                     taxBifurcation: { // this is for template a
                         label: 'Tax Bifurcation',
-                        display: true,
+                        display: false,
                         width: null
                     },
                 }
@@ -346,6 +346,11 @@ export const initialState: CustomTemplateState = {
                     showDescriptionInRows: {
                         label: '',
                         display: false,
+                        width: null
+                    },
+                    amountBeforeDiscount: {
+                        label:"Total Before Dis.",
+                        display: true,
                         width: null
                     },
                     hsnSac: {

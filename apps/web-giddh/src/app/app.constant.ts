@@ -3,10 +3,10 @@ import * as quarterOfYear from 'dayjs/plugin/quarterOfYear' // load on demand
 dayjs.extend(quarterOfYear) // use plugin
 
 export const Configuration = {
-    AppUrl,
-    ApiUrl,
-    isElectron,
-    APP_FOLDER
+    'AppUrl': AppUrl,
+    'ApiUrl': ApiUrl,
+    'isElectron': isElectron,
+    'APP_FOLDER': APP_FOLDER
 };
 
 /** Add Company business type*/
@@ -230,7 +230,7 @@ export const INVALID_STOCK_ERROR_MESSAGE = 'Both Unit and Rate fields are mandat
 
 /** Vat supported country codes */
 export const VAT_SUPPORTED_COUNTRIES = [
-    'QA', 'BH', 'AE', 'SA', 'OM', 'KW'
+    'QA', 'BH', 'AE', 'SA', 'OM', 'KW', 'GB'
 ];
 
 export const API_POSTMAN_DOC_URL = 'https://apidoc.giddh.com/';
@@ -356,6 +356,62 @@ export const GIDDH_VOUCHER_FORM = [
         attachmentAllowed: false
     },
     {
+        type: "cash bill",
+        advanceReceiptAllowed: false,
+        rcmAllowed: false,
+        depositAllowed: true,
+        taxesAllowed: true,
+        quantityAllowed: true,
+        rateAllowed: true,
+        discountAllowed: true,
+        addressAllowed: true,
+        otherDetails: true,
+        dueDate: true,
+        attachmentAllowed: false
+    },
+    {
+        type: "cash debit note",
+        advanceReceiptAllowed: false,
+        rcmAllowed: false,
+        depositAllowed: true,
+        taxesAllowed: true,
+        quantityAllowed: true,
+        rateAllowed: true,
+        discountAllowed: true,
+        addressAllowed: true,
+        otherDetails: true,
+        dueDate: true,
+        attachmentAllowed: false
+    },
+    {
+        type: "cash credit note",
+        advanceReceiptAllowed: false,
+        rcmAllowed: false,
+        depositAllowed: true,
+        taxesAllowed: true,
+        quantityAllowed: true,
+        rateAllowed: true,
+        discountAllowed: true,
+        addressAllowed: true,
+        otherDetails: true,
+        dueDate: true,
+        attachmentAllowed: false
+    },
+    {
+        type: "cash sales",
+        advanceReceiptAllowed: false,
+        rcmAllowed: false,
+        depositAllowed: true,
+        taxesAllowed: true,
+        quantityAllowed: true,
+        rateAllowed: true,
+        discountAllowed: true,
+        addressAllowed: true,
+        otherDetails: true,
+        dueDate: true,
+        attachmentAllowed: false
+    },
+    {
         type: "estimate",
         advanceReceiptAllowed: false,
         rcmAllowed: false,
@@ -454,13 +510,14 @@ export const GIDDH_VOUCHER_FORM = [
         attachmentAllowed: false
     }
 ];
-export const CALENDLY_URL = "https://calendly.com/falcon-3/15min";
+export const CALENDLY_URL = "https://calendly.com/sales-accounting-software/talk-to-sale";
 export const JOURNAL_VOUCHER_ALLOWED_DOMAINS = [
     'giddh.com',
     'walkover.in',
     'muneem.co',
     'whozzat.com',
 ];
+
 
 /**
  * Enum for switching toggle button On and Off and changing its size
@@ -478,7 +535,13 @@ export const MOBILE_NUMBER_UTIL_URL = 'https://cdnjs.cloudflare.com/ajax/libs/in
 export const MOBILE_NUMBER_SELF_URL = 'https://api.db-ip.com/v2/free/self';
 export const MOBILE_NUMBER_IP_ADDRESS_URL = 'http://ip-api.com/json/';
 export const MOBILE_NUMBER_ADDRESS_JSON_URL = 'https://ipinfo.io/';
-export const OTP_PROVIDER_URL = 'https://control.msg91.com/app/assets/otp-provider/otp-provider.js';
+export const OTP_PROVIDER_URL = `https://control.msg91.com/app/assets/otp-provider/otp-provider.js?time=${new Date().getTime()}`;
 
 export const RESTRICTED_VOUCHERS_FOR_DOWNLOAD = ['journal'];
 export const SAMPLE_FILES_URL = 'https://giddh-import-sample-files.s3.ap-south-1.amazonaws.com/sample-file-';
+
+export const OTP_WIDGET_ID_NEW = '33686b716134333831313239';
+export const OTP_WIDGET_TOKEN_NEW = '205968TmXguUAwoD633af103P1';
+export enum BROADCAST_CHANNELS {
+    REAUTH_PLAID_SUCCESS = 'REAUTH_PLAID_SUCCESS'
+}

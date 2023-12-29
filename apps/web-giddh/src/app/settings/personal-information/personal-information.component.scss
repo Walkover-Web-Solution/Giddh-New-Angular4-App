@@ -6,8 +6,15 @@
     height: 100px;
 }
 
-.custom-file-input ~ .custom-file-label::after {
+.portal-url {
+    font-size: 14px;
+}
+.custom-file-input~.custom-file-label::after {
     content: "";
+}
+
+.has-error {
+    border: 1px solid var(--color-danger);
 }
 
 .custom-file-label {
@@ -15,10 +22,12 @@
     padding: 30px;
     background: var(--color-white);
     height: 100%;
+
     &::after {
         height: 0 !important;
         padding: 0 !important;
     }
+
     .icon-plus {
         font-size: 40px;
         color: var(--color-dark-fog);
@@ -29,8 +38,10 @@
 .country-name,
 .parent-name {
     color: var(--color-abbey);
+
     .country-info {
         display: inherit;
+
         .country-flag {
             display: inline-block;
             margin-right: 8px;
@@ -38,24 +49,36 @@
         }
     }
 }
+
 .personal-other-details {
     label {
         line-height: 2.3;
     }
+
     .form-group {
         margin-bottom: 0;
     }
 }
+
 .img-size {
     color: var(--color-abbey);
 }
+
 .container-fluid {
     padding-left: 0;
+}
+.input-group-btn {
+    font-size: var(--font-size-24);
+    color: var(--color-rectangular-tab-active-primary-text) !important;
+    cursor: pointer;
+    margin-right: 5px;
+    padding-top: 5px;
 }
 @media (max-width: 767px) {
     label {
         line-height: 2.3;
     }
+
     .border-bottom {
         margin-top: 5px;
     }

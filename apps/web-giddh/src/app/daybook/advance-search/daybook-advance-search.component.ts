@@ -1,8 +1,8 @@
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
-import { Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import * as dayjs from 'dayjs';
 import { IOption } from 'apps/web-giddh/src/app/theme/ng-select/option.interface';
 import { AppState } from 'apps/web-giddh/src/app/store';
@@ -15,6 +15,7 @@ import { GeneralService } from '../../services/general.service';
 import { SearchService } from '../../services/search.service';
 import { InventoryService } from '../../services/inventory.service';
 import { MatAccordion } from '@angular/material/expansion';
+import { SettingsTagService } from '../../services/settings.tag.service';
 
 @Component({
     selector: 'daybook-advance-search-model',
@@ -36,7 +37,7 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
     @Output() public closeModelEvent: EventEmitter<any> = new EventEmitter();
     @ViewChild('dateRangePickerDir', { read: DaterangePickerComponent, static: true }) public dateRangePickerDir: DaterangePickerComponent;
     public advanceSearchObject: DayBookRequestModel = null;
-    public advanceSearchForm: FormGroup;
+    public advanceSearchForm: UntypedFormGroup;
     public showChequeDatePicker: boolean = false;
     public accounts$: Observable<IOption[]>;
     public groups$: Observable<IOption[]>;
@@ -49,7 +50,7 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
     /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
     /* This will store modal reference */
     public modalRef: BsModalRef;
     /* This will store selected date range to use in api */
@@ -103,14 +104,17 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
     public stocks: IOption[];
     /** True if other details should be expanded by default */
     public isExpanded: boolean = false;
+    /** List of tags */
+    public tags$: Observable<IOption[]>;
 
     constructor(
         private inventoryService: InventoryService,
         private store: Store<AppState>,
-        private fb: FormBuilder,
+        private fb: UntypedFormBuilder,
         private generalService: GeneralService,
         private modalService: BsModalService,
-        private searchService: SearchService
+        private searchService: SearchService,
+        private settingsTagService: SettingsTagService
     ) {
 
     }
@@ -119,6 +123,15 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
         this.setVoucherTypes();
         this.loadDefaultAccountsSuggestions();
         this.loadDefaultStocksSuggestions();
+
+        this.settingsTagService.GetAllTags().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success" && response?.body?.length > 0) {
+                let tags = response?.body?.map(tag => {
+                    return { label: tag?.name, value: tag?.name };
+                });
+                this.tags$ = observableOf(tags);
+            }
+        });
 
         this.initializeDaybookAdvanceSearchForm();
         this.store.pipe(select(prof => prof.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
@@ -136,7 +149,7 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
     }
 
     public ngOnChanges(changes: SimpleChanges) {
-        if(!this.advanceSearchForm) {
+        if (!this.advanceSearchForm) {
             this.initializeDaybookAdvanceSearchForm();
         }
 
@@ -147,7 +160,7 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
             this.selectedDateRangeUi = dayjs(dateRange.fromDate, GIDDH_DATE_FORMAT_MM_DD_YYYY).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateRange.toDate, GIDDH_DATE_FORMAT_MM_DD_YYYY).format(GIDDH_NEW_DATE_FORMAT_UI);
         }
 
-        if('searchFilterData' in changes && changes.searchFilterData.currentValue) {
+        if ('searchFilterData' in changes && changes.searchFilterData.currentValue) {
             let dataToSend = changes.searchFilterData.currentValue;
 
             setTimeout(() => {
@@ -163,12 +176,16 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
                     this.advanceSearchForm.get('vouchers')?.patchValue(dataToSend?.vouchers);
                 }
 
-                if(dataToSend?.particulars) {
+                if (dataToSend?.particulars) {
                     this.advanceSearchForm.get('particulars')?.patchValue(dataToSend?.particulars);
                 }
 
-                if(dataToSend?.inventory) {
+                if (dataToSend?.inventory) {
                     this.advanceSearchForm.get('inventory')?.patchValue(dataToSend?.inventory);
+                }
+
+                if (dataToSend?.tags) {
+                    this.advanceSearchForm.get('tags')?.patchValue(dataToSend?.tags);
                 }
             }, 500);
         }
@@ -221,7 +238,7 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
     public emitAdvanceSearchParams(): void {
         let dataToSend = _.cloneDeep(this.advanceSearchForm?.value) as DayBookRequestModel;
         if (dataToSend.dateOnCheque) {
-            if(typeof dataToSend.dateOnCheque === "object") {
+            if (typeof dataToSend.dateOnCheque === "object") {
                 dataToSend.dateOnCheque = dayjs(dataToSend.dateOnCheque).format(GIDDH_DATE_FORMAT);
             } else {
                 dataToSend.dateOnCheque = dayjs(dataToSend.dateOnCheque, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
@@ -262,6 +279,9 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
                 break;
             case 'groupUniqueNames':
                 this.advanceSearchForm.get('groupUniqueNames')?.patchValue(values);
+                break;
+            case 'tags':
+                this.advanceSearchForm.get('tags')?.patchValue(values);
                 break;
         }
     }
@@ -446,7 +466,7 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
             includeVouchers: [false, Validators.required],
             chequeNumber: ['', Validators.required],
             dateOnCheque: ['', Validators.required],
-            tags: this.fb.array([]),
+            tags: [[]],
             particulars: [[]],
             vouchers: [[]],
             inventory: this.fb.group({
@@ -470,7 +490,7 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
         if (this.searchFilterData) {
             this.advanceSearchForm?.patchValue(this.searchFilterData);
 
-            if(this.advanceSearchForm.get("includeDescription")?.value) {
+            if (this.advanceSearchForm.get("includeDescription")?.value) {
                 this.isExpanded = true;
             } else {
                 this.isExpanded = false;

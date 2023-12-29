@@ -6,93 +6,107 @@
 >
     <div class="aside-pane">
         <div class="aside-help-header">
-            <h2>{{ localeData?.page_heading }}</h2>
-            <div id="close" class="cursor-pointer" (click)="closeAsidePane($event)"><i class="icon-cross"></i></div>
-        </div>
-        <div class="help-aside-body">
-            <div class="faq-block">
-                <a href="https://giddh.com/help" target="_blank">
-                    <p>{{ localeData?.faq }}</p>
-                    <small>{{ localeData?.have_questions }}</small>
-                </a>
-            </div>
-            <div class="feature-block">
-                <ul>
-                    <li>
-                        <a href="https://trello.com/b/1cPr6Mkc/giddh-roadmap" target="_blank">{{
-                            localeData?.upcoming
-                        }}</a>
-                    </li>
-                    <li>
-                        <a href="https://giddh.canny.io/feature-requests" target="_blank">{{
-                            localeData?.feature_request
-                        }}</a>
-                    </li>
-                    <li>
-                        <a href="https://changelog.giddh.com" target="_blank">{{ localeData?.changelog }}</a>
-                    </li>
-                </ul>
-            </div>
-            <div class="download-block">
-                <h4>{{ commonLocaleData?.app_download }}</h4>
-                <ul class="clearfix">
-                    <li>
-                        <a
-                            href="https://play.google.com/store/apps/details?id=com.app.Giddh&hl=en"
-                            target="_blank"
-                            [title]="localeData?.android_app"
-                        >
-                            <i class="icon-android"></i> {{ localeData?.android }}</a
-                        >
-                    </li>
-                    <li hidden>
-                        <a
-                            href="https://itunes.apple.com/in/app/giddh-tb/id999743672?mt=8"
-                            target="_blank"
-                            [title]="localeData?.ios_app"
-                        >
-                            <i class="icon-mac"></i> {{ localeData?.ios }}</a
-                        >
-                    </li>
-                    <li>
-                        <a
-                            href="https://s3-ap-south-1.amazonaws.com/giddh-app-builds/giddh-{{ macAppVersion }}.dmg"
-                            target="_blank"
-                            [title]="localeData?.macos_app"
-                        >
-                            <i class="icon-mac"></i> {{ localeData?.macos }}</a
-                        >
-                    </li>
-                    <li>
-                        <a
-                            href="https://s3-ap-south-1.amazonaws.com/giddh-app-builds/giddh%20Setup%20{{
-                                apkVersion
-                            }}.exe"
-                            target="_blank"
-                            [title]="localeData?.windows_app"
-                        >
-                            <i class="icon-windows"></i> {{ localeData?.windows }}</a
-                        >
-                    </li>
-                </ul>
-            </div>
-            <div class="request-demo">
-                <div class="file-image">
-                    <img src="{{ imgPath }}request-demo.svg" />
-                    <p class="text-gray">{{ localeData?.request_demo }}:</p>
-                    <a class="btn btn-sky-blue mb-3 mr-0" href="javascript:void(0)" (click)="scheduleNow($event)">{{
-                        commonLocaleData?.app_schedule_now
-                    }}</a>
-                    <br />
-                    <p class="text-gray">{{ localeData?.contact }}:</p>
-                </div>
-                <div class="contact-block">
-                    <p>
-                        <a href="mailto:support@giddh.com">{{ localeData?.contact1 }}</a>
-                    </p>
-                    <br />
-                </div>
+            <h2 mat-dialog-title>{{ localeData?.page_heading }}</h2>
+            <div mat-dialog-close id="close" class="cursor-pointer">
+                <i class="icon-cross"></i>
             </div>
         </div>
+        <mat-dialog-content>
+            <div class="help-aside-body">
+                <div class="faq-block">
+                    <a href="https://giddh.com/help" target="_blank">
+                        <p>{{ localeData?.faq }}</p>
+                        <small>{{ localeData?.have_questions }}</small>
+                    </a>
+                </div>
+                <div class="feature-block">
+                    <mat-list role="list">
+                        <mat-list-item role="listitem">
+                            <a href="https://trello.com/b/1cPr6Mkc/giddh-roadmap" target="_blank">{{
+                                localeData?.upcoming
+                            }}</a>
+                        </mat-list-item>
+                        <mat-list-item role="listitem">
+                            <a href="https://giddh.canny.io/feature-requests" target="_blank">{{
+                                localeData?.feature_request
+                            }}</a>
+                        </mat-list-item>
+                        <mat-list-item role="listitem">
+                            <a href="https://changelog.giddh.com" target="_blank">{{ localeData?.changelog }}</a>
+                        </mat-list-item>
+                    </mat-list>
+                </div>
+                <div class="download-block">
+                    <h4>{{ commonLocaleData?.app_download }}</h4>
+                    <mat-list role="list">
+                        <div class="d-flex">
+                            <mat-list-item role="listitem">
+                                <a
+                                    href="https://play.google.com/store/apps/details?id=com.app.Giddh&hl=en"
+                                    target="_blank"
+                                    [title]="localeData?.android_app"
+                                >
+                                    <i class="icon-android"></i> {{ localeData?.android }}</a
+                                >
+                            </mat-list-item>
+                            <mat-list-item role="listitem">
+                                <a
+                                    href="https://s3-ap-south-1.amazonaws.com/giddh-app-builds/giddh-{{
+                                        macAppVersion
+                                    }}.dmg"
+                                    target="_blank"
+                                    [title]="localeData?.macos_app"
+                                >
+                                    <i class="icon-mac"></i> {{ localeData?.macos }}</a
+                                >
+                            </mat-list-item>
+                        </div>
+                        <div class="d-flex">
+                            <mat-list-item role="listitem">
+                                <a
+                                    href="https://apps.apple.com/in/app/giddh-books-that-make-sense/id1491003438"
+                                    target="_blank"
+                                    [title]="localeData?.ios_app"
+                                >
+                                    <i class="icon-mac"></i> {{ localeData?.ios }}</a
+                                >
+                            </mat-list-item>
+                            <mat-list-item role="listitem">
+                                <a
+                                    href="https://s3-ap-south-1.amazonaws.com/giddh-app-builds/giddh%20Setup%20{{
+                                        apkVersion
+                                    }}.exe"
+                                    target="_blank"
+                                    [title]="localeData?.windows_app"
+                                >
+                                    <i class="icon-windows"></i> {{ localeData?.windows }}</a
+                                >
+                            </mat-list-item>
+                        </div>
+                    </mat-list>
+                </div>
+                <div class="request-demo">
+                    <div class="file-image">
+                        <img src="{{ imgPath }}request-demo.svg" />
+                        <p class="text-gray">{{ localeData?.request_demo }}:</p>
+                        <button mat-stroked-button color="primary" (click)="scheduleNow($event)">
+                            {{ commonLocaleData?.app_schedule_now }}
+                        </button>
+                        <br />
+                        <p class="text-gray">{{ localeData?.contact }}:</p>
+                    </div>
+                    <div class="contact-block">
+                        <p class="d-flex  align-items-center mb-1  support-mail-tel">
+                            <i class="icon-mail mr-2"></i
+                            ><a href="mailto:support@giddh.com">{{ localeData?.contact1 }}</a>
+                        </p>
+                        <p class="d-flex  align-items-center support-mail-tel">
+                            <i class="icon-mobile mr-2"></i><a href="tel:9188188 88768">+91-88188 88768</a>
+                        </p>
+                        <br />
+                    </div>
+                </div>
+            </div>
+        </mat-dialog-content>
     </div>
 </ng-container>

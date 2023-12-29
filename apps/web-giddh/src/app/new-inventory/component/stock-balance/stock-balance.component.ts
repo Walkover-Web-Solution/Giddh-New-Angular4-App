@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from "@angular/core";
-import { FormControl } from "@angular/forms";
+import { UntypedFormControl } from "@angular/forms";
 import { select, Store } from "@ngrx/store";
 import { combineLatest, ReplaySubject } from "rxjs";
 import { debounceTime, distinctUntilChanged, takeUntil } from "rxjs/operators";
@@ -55,7 +55,7 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
     /** Hold stocks variants  */
     public stocksVariants: any[] = [];
     /** Thsi will use for searching for stock */
-    public productNameSearching: FormControl = new FormControl();
+    public productNameSearching: UntypedFormControl = new UntypedFormControl();
     /** Hold warehouse checked  */
     public selectedWarehouse: any[] = [];
     /** Holded all selected warehouse checked  */
@@ -65,7 +65,7 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
     /** True if click on particular unit dropdown */
     public isOpen: boolean = false;
     /** This will use for instance of lwarehouses Dropdown */
-    public warehousesDropdown: FormControl = new FormControl();
+    public warehousesDropdown: UntypedFormControl = new UntypedFormControl();
     /** Hold all warehouses */
     public allWarehouses: any[] = [];
     /** Hold module type */
@@ -80,6 +80,8 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /** True if translations loaded */
     public translationLoaded: boolean = false;
+    /** Stores the voucher API version of company */
+    public voucherApiVersion: 1 | 2;
 
     constructor(
 
@@ -162,6 +164,7 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
                 "checked": true
             }
         ];
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
     }
 
     /**

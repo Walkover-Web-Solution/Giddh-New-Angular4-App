@@ -90,27 +90,29 @@
                                     </ng-container>
                                 </div>
                             </th>
-                            <th
-                                #searchTaxInputField
-                                width="25%"
-                                class="td-search-box"
-                                (clickOutside)="clickedOutside($event, searchTaxInputField, 'searchTaxInput')"
-                            >
-                                <div>
-                                    <ng-container
-                                        *ngTemplateOutlet="
-                                            searchTemplate;
-                                            context: {
-                                                $implicit: showSearchTax,
-                                                title: taxType,
-                                                fieldName: 'searchTaxInput',
-                                                formControl: searchTaxInput
-                                            }
-                                        "
-                                    >
-                                    </ng-container>
-                                </div>
-                            </th>
+                            <ng-container *ngIf="showTaxColumn">
+                                <th
+                                    #searchTaxInputField
+                                    width="25%"
+                                    class="td-search-box"
+                                    (clickOutside)="clickedOutside($event, searchTaxInputField, 'searchTaxInput')"
+                                >
+                                    <div>
+                                        <ng-container
+                                            *ngTemplateOutlet="
+                                                searchTemplate;
+                                                context: {
+                                                    $implicit: showSearchTax,
+                                                    title: taxType,
+                                                    fieldName: 'searchTaxInput',
+                                                    formControl: searchTaxInput
+                                                }
+                                            "
+                                        >
+                                        </ng-container>
+                                    </div>
+                                </th>
+                            </ng-container>
                             <th
                                 #searchStateInputField
                                 width="15%"
@@ -158,7 +160,7 @@
                                     </ng-container>
                                 </div>
                             </td>
-                            <td [attr.data-title]="taxType">
+                            <td [attr.data-title]="taxType" *ngIf="showTaxColumn">
                                 <div>
                                     <ng-container *ngIf="address.taxType && address.taxNumber">
                                         {{ address.taxNumber }}
@@ -248,7 +250,7 @@
                                 <label>{{ commonLocaleData?.app_address }}:</label>
                                 <p>
                                     {{ address.address }}
-                                    <ng-container *ngIf="address.taxType && address.taxNumber">
+                                    <ng-container *ngIf="showTaxColumn && address.taxType && address.taxNumber">
                                         <br *ngIf="address.address" />
                                         {{ address.taxType }} : {{ address.taxNumber }}
                                     </ng-container>
@@ -293,7 +295,7 @@
             </div>
         </div>
         <!-- branch profile element end -->
-        <div *ngIf="organizationType === 'COMPANY'" class="w-100 text-center">
+        <div *ngIf="organizationType === 'COMPANY'" class="w-100 text-center mt-4 mb-5">
             <pagination
                 [(ngModel)]="paginationConfig.page"
                 *ngIf="!shouldShowLoader && paginationConfig?.totalItems > paginationLimit"

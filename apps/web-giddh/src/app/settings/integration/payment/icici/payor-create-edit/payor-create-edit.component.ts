@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from "@angular/core";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 import { select, Store } from "@ngrx/store";
 import { SettingsIntegrationService } from "apps/web-giddh/src/app/services/settings.integraion.service";
 import { ToasterService } from "apps/web-giddh/src/app/services/toaster.service";
@@ -31,7 +31,7 @@ export class PayorCreateEditComponent implements OnInit, OnDestroy {
     /* This will hold local JSON data */
     public localeData: any = {};
     /** Form Group for account user form */
-    public accountUserForm: FormGroup;
+    public accountUserForm: UntypedFormGroup;
     /** Holds the amount limit duration options */
     public amountLimitDurations: IOption[] = [];
     /** This will hold users list */
@@ -41,7 +41,7 @@ export class PayorCreateEditComponent implements OnInit, OnDestroy {
 
     constructor(
         private store: Store<AppState>,
-        private formBuilder: FormBuilder,
+        private formBuilder: UntypedFormBuilder,
         private toaster: ToasterService,
         private settingsIntegrationService: SettingsIntegrationService,
         private pageLeaveUtilityService: PageLeaveUtilityService
@@ -73,9 +73,9 @@ export class PayorCreateEditComponent implements OnInit, OnDestroy {
         } else {
             this.accountUserForm = this.formBuilder.group({
                 accountUniqueName: [this.activeBankAccount?.account?.uniqueName, Validators.required],
-                accountNumber: [this.activeBankAccount?.iciciDetailsResource?.accountNumber, Validators.required],
+                accountNumber: [this.activeBankAccount?.bankResource?.accountNumber, Validators.required],
                 userUniqueName: ['', Validators.required],
-                uniqueName: [this.activeBankAccount?.iciciDetailsResource?.uniqueName, Validators.required],
+                uniqueName: [this.activeBankAccount?.bankResource?.uniqueName, Validators.required],
                 loginId: ['', Validators.required],
                 maxAmount: [''],
                 duration: ['']
@@ -200,7 +200,7 @@ export class PayorCreateEditComponent implements OnInit, OnDestroy {
                 return;
             }
 
-            let request = { bankAccountUniqueName: this.activeBankAccount?.iciciDetailsResource?.uniqueName, urn: this.activePayorAccount?.urn };
+            let request = { bankAccountUniqueName: this.activeBankAccount?.bankResource?.uniqueName, urn: this.activePayorAccount?.urn };
 
             this.settingsIntegrationService.updatePayorAccount(this.accountUserForm.value, request).pipe(take(1)).subscribe(response => {
                 if (response?.status === "success") {

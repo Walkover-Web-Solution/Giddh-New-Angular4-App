@@ -9,7 +9,7 @@ import { cloneDeep, find, orderBy } from '../lodash-optimized';
 import { OrganizationType } from '../models/user-login-state';
 import { AllItems } from '../shared/helpers/allItems';
 import { Router } from '@angular/router';
-import { AdjustedVoucherType, JOURNAL_VOUCHER_ALLOWED_DOMAINS } from '../app.constant';
+import { AdjustedVoucherType, BROADCAST_CHANNELS, JOURNAL_VOUCHER_ALLOWED_DOMAINS } from '../app.constant';
 import { SalesOtherTaxesCalculationMethodEnum, VoucherTypeEnum } from '../models/api-models/Sales';
 import { ITaxControlData, ITaxDetail, ITaxUtilRequest } from '../models/interfaces/tax.interface';
 import * as dayjs from 'dayjs';
@@ -254,9 +254,9 @@ export class GeneralService {
         if (currentLedgerAccountDetails && selectedAccountDetails) {
             if (![currentLedgerAccountDetails?.uniqueName, selectedAccountDetails?.uniqueName].includes('roundoff')) {
                 // List of allowed first level parent groups
-                const allowedFirstLevelUniqueNames = (this.voucherApiVersion === 2 && activeCompany?.country === "India") ? ['operatingcost', 'indirectexpenses', 'fixedassets', 'revenuefromoperations', 'otherincome'] : ['operatingcost', 'indirectexpenses', 'fixedassets'];
+                const allowedFirstLevelUniqueNames = (this.voucherApiVersion === 2 && (activeCompany?.country === "India" || activeCompany?.country === 'United Kingdom')) ? ['operatingcost', 'indirectexpenses', 'fixedassets', 'revenuefromoperations', 'otherincome'] : ['operatingcost', 'indirectexpenses', 'fixedassets'];
                 // List of not allowed second level parent groups
-                const disallowedSecondLevelUniqueNames = (this.voucherApiVersion === 2 && activeCompany?.country === "India") ? ['discount', 'exchangeloss', 'roundoff', 'exchangegain', 'dividendincome', 'interestincome', 'dividendexpense', 'interestexpense'] : ['discount', 'exchangeloss'];
+                const disallowedSecondLevelUniqueNames = (this.voucherApiVersion === 2 && (activeCompany?.country === "India" || activeCompany?.country === 'United Kingdom')) ? ['discount', 'exchangeloss', 'roundoff', 'exchangegain', 'dividendincome', 'interestincome', 'dividendexpense', 'interestexpense'] : ['discount', 'exchangeloss'];
                 const currentLedgerFirstParent = (currentLedgerAccountDetails.parentGroups && currentLedgerAccountDetails.parentGroups[0]) ? currentLedgerAccountDetails.parentGroups[0]?.uniqueName : '';
                 const currentLedgerSecondParent = (currentLedgerAccountDetails.parentGroups && currentLedgerAccountDetails.parentGroups[1]) ? currentLedgerAccountDetails.parentGroups[1]?.uniqueName : '';
                 const selectedAccountFirstParent = (selectedAccountDetails.parentGroups && selectedAccountDetails.parentGroups[0]) ? selectedAccountDetails.parentGroups[0]?.uniqueName : '';
@@ -662,6 +662,30 @@ export class GeneralService {
         };
     }
 
+    public getDeleteBranchTransferConfiguration(localeData: any, commonLocaleData: any, selectedBranchTransferType: string): ConfirmationModalConfiguration {
+
+        const buttons: Array<ConfirmationModalButton> = [{
+            text: 'Yes',
+            color: 'primary'
+        },
+        {
+            text: 'No'
+        }];
+        const headerText: string = 'Delete' + selectedBranchTransferType;
+        const headerCssClass: string = 'd-inline-block mr-1';
+        const messageCssClass: string = 'mr-b1 text-light';
+        const footerCssClass: string = 'mr-b1';
+        return {
+            headerText,
+            headerCssClass,
+            messageText: 'Are you sure you want to delete this' + selectedBranchTransferType + '?',
+            messageCssClass,
+            footerText: 'It will be deleted permanently and will no longer be accessible from any other module.',
+            footerCssClass,
+            buttons
+        };
+    }
+
     /**
      * This will use for confirmation delete attachment in vocher
      *
@@ -801,8 +825,17 @@ export class GeneralService {
      */
     public getVisibleMenuItems(module: string, apiItems: Array<any>, itemList: Array<AllItems>, countryCode: string = ""): Array<AllItems> {
         const visibleMenuItems = cloneDeep(itemList);
+        let index = 0;
         itemList?.forEach((menuItem, menuIndex) => {
             visibleMenuItems[menuIndex].items = [];
+
+            if (visibleMenuItems[menuIndex]?.additional?.voucherVersion && visibleMenuItems[menuIndex]?.additional?.voucherVersion !== this.voucherApiVersion) {
+                visibleMenuItems[menuIndex].hide = true;
+            } else {
+                visibleMenuItems[menuIndex].itemIndex = index;
+                index++;
+            }
+
             menuItem.items?.forEach(item => {
                 const isValidItem = apiItems.find(apiItem => apiItem?.uniqueName === item.link);
                 if (((isValidItem && item.hide !== module) || (item.alwaysPresent && item.hide !== module)) && (!item.additional?.countrySpecific?.length || item.additional?.countrySpecific?.indexOf(countryCode) > -1) && (!item.additional?.voucherVersion || item.additional?.voucherVersion === this.voucherApiVersion)) {
@@ -848,31 +881,27 @@ export class GeneralService {
      */
     public finalNavigate(route: any, parameter?: any, isSocialLogin?: boolean): void {
         let isQueryParams: boolean;
-        if (screen.width <= 767) {
-            this.router.navigate(["/pages/mobile/home"]);
+        if (route.includes('?')) {
+            parameter = parameter || {};
+            isQueryParams = true;
+            const splittedRoute = route.split('?');
+            route = splittedRoute[0];
+            const paramString = splittedRoute[1];
+            const params = paramString?.split('&');
+            params?.forEach(param => {
+                const [key, value] = param.split('=');
+                parameter[key] = value;
+            });
+        }
+        if (isQueryParams) {
+            this.router.navigate([route], { queryParams: parameter });
         } else {
-            if (route.includes('?')) {
-                parameter = parameter || {};
-                isQueryParams = true;
-                const splittedRoute = route.split('?');
-                route = splittedRoute[0];
-                const paramString = splittedRoute[1];
-                const params = paramString?.split('&');
-                params?.forEach(param => {
-                    const [key, value] = param.split('=');
-                    parameter[key] = value;
-                });
-            }
-            if (isQueryParams) {
-                this.router.navigate([route], { queryParams: parameter });
-            } else {
-                this.router.navigate([route], parameter);
-            }
-            if (isElectron && isSocialLogin) {
-                setTimeout(() => {
-                    window.location.reload();
-                }, 200);
-            }
+            this.router.navigate([route], parameter);
+        }
+        if (isElectron && isSocialLogin) {
+            setTimeout(() => {
+                window.location.reload();
+            }, 200);
         }
     }
 
@@ -1487,5 +1516,96 @@ export class GeneralService {
         }
 
         return result;
+    }
+
+    /**
+     * Reads the selected file and returns blob
+     *
+     * @param {*} file
+     * @param {Function} callback
+     * @memberof GeneralService
+     */
+    public getSelectedFile(file: any, callback: Function): void {
+        const reader = new FileReader();
+        reader.readAsArrayBuffer(file);
+        reader.onload = () => {
+            const blob = new Blob([reader.result], { type: file.type });
+            callback(blob, file);
+        };
+    }
+
+    /**
+     * Reads the selected file and returns base64
+     *
+     * @param {*} file
+     * @param {Function} callback
+     * @memberof GeneralService
+     */
+    public getSelectedFileBase64(file: any, callback: Function): void {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => {
+            callback(reader.result);
+        };
+    }
+
+    /**
+     * Check if is cidr range
+     *
+     * @param {string} cidr
+     * @return {*}  {boolean}
+     * @memberof GeneralService
+     */
+    public isCidr(cidr: string): boolean {
+        return (/^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/([0-9]|[1-2][0-9]|3[0-2]))?$/g).test(cidr);
+    };
+
+    /**
+     * Check pattern for matching with dash (-) , characters and numbers
+     *
+     * @param {string} checkDashCharacterNumberPattern
+     * @return {*}  {boolean}
+     * @memberof GeneralService
+     */
+    public checkDashCharacterNumberPattern(value: string): boolean {
+        let checkPattern = new RegExp("^[A-Za-z0-9-]+$");
+        return checkPattern.test(value);
+    };
+
+    /**
+     * This will be use for generating random URLs
+     *
+     * @param {string} value
+     * @return {*}  {string}
+     * @memberof GeneralService
+     */
+    public generateRandomString(value: string): string {
+        const randomLength = 8; // Adjust the length of the random string as needed
+        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        let result = '';
+        for (let i = 0; i < randomLength; i++) {
+            const randomIndex = Math.floor(Math.random() * characters.length);
+            result += characters.charAt(randomIndex);
+        }
+        return result + '.' + value;
+    }
+
+    /**
+     * Get current date/time in this format - 06-11-2023 02:08:45
+     *
+     * @returns {string}
+     * @memberof GeneralService
+     */
+    public getCurrentDateTime(): string {
+        const now = new Date();
+
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const seconds = String(now.getSeconds()).padStart(2, '0');
+
+        return `${day}-${month}-${year} ${hours}:${minutes}:${seconds}`;
     }
 }

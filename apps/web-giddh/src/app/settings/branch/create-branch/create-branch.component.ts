@@ -1,6 +1,6 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 import { combineLatest, ReplaySubject } from 'rxjs';
@@ -62,7 +62,7 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
         linkedEntities: []
     };
     /** Branch form */
-    public branchForm: FormGroup;
+    public branchForm: UntypedFormGroup;
     /** Stores all the addresses within a company */
     public addresses: Array<any>;
     /** True, if new address is in progress in the side menu */
@@ -89,7 +89,7 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
     constructor(
         private commonService: CommonService,
         private companyService: CompanyService,
-        private formBuilder: FormBuilder,
+        private formBuilder: UntypedFormBuilder,
         private generalActions: GeneralActions,
         private generalService: GeneralService,
         private router: Router,
@@ -123,8 +123,8 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
                     country: {
                         countryName: response.countryV2 ? response.countryV2.countryName : '',
                         countryCode: response.countryV2 ? response.countryV2.alpha2CountryCode?.toLowerCase() : '',
-                        currencyCode: response.countryV2 && response.countryV2.currency ? response.countryV2.currency.code : '',
-                        currencyName: response.countryV2 && response.countryV2.currency ? response.countryV2.currency.symbol : ''
+                        currencyCode: response.countryV2 && response.countryV2?.currency ? response.countryV2.currency.code : '',
+                        currencyName: response.countryV2 && response.countryV2?.currency ? response.countryV2.currency.symbol : ''
                     }
                 }
                 this.branchForm.get('name')?.patchValue(this.companyDetails.name);
@@ -309,14 +309,16 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
             if (response && response.body && response.status === 'success') {
                 const result = response.body;
                 this.addressConfiguration.stateList = [];
-                Object.keys(result.stateList).forEach(key => {
-                    this.addressConfiguration.stateList.push({
-                        label: result.stateList[key].code + ' - ' + result.stateList[key].name,
-                        value: result.stateList[key].code,
-                        code: result.stateList[key].stateGstCode,
-                        stateName: result.stateList[key].name
+                if (result.stateList?.length) {
+                    Object.keys(result.stateList).forEach(key => {
+                        this.addressConfiguration.stateList.push({
+                            label: result.stateList[key].code + ' - ' + result.stateList[key].name,
+                            value: result.stateList[key].code,
+                            code: result.stateList[key].stateGstCode,
+                            stateName: result.stateList[key].name
+                        });
                     });
-                });
+                }
             }
         });
     }

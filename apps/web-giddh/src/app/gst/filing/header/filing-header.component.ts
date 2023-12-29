@@ -17,6 +17,7 @@ import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import { GstReport } from '../../constants/gst.constant';
 import { GstReconcileService } from '../../../services/gst-reconcile.service';
 import { GeneralService } from '../../../services/general.service';
+import { saveAs } from 'file-saver';
 
 @Component({
     // tslint:disable-next-line:component-selector
@@ -100,7 +101,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
         private activatedRoute: ActivatedRoute,
         private gstReconcileService: GstReconcileService,
         private generalService: GeneralService,
-        private router: Router,
+        private router: Router
     ) {
         this.gstAuthenticated$ = this.store.pipe(select(p => p.gstR.gstAuthenticated), takeUntil(this.destroyed$));
         this.companyGst$ = this.store.pipe(select(p => p.gstR.activeCompanyGst), takeUntil(this.destroyed$));
@@ -265,7 +266,8 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
                 gstin: this.activeCompanyGstNumber,
                 from: this.currentPeriod.from,
                 to: this.currentPeriod.to,
-                gsp: this.isVayanaAuthenticated ? 'VAYANA' : 'TAXPRO'
+                gsp: this.isVayanaAuthenticated ? 'VAYANA' : 'TAXPRO',
+                currentDateTime: this.generalService.getCurrentDateTime()
             }));
         }
         if (this.selectedGst === GstReport.Gstr3b) {
@@ -291,6 +293,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
      */
     public periodChanged(event?: any): void {
         if (event) {
+            this.selectedMonth = event;
             this.currentPeriod = {
                 from: dayjs(event).startOf('month').format(GIDDH_DATE_FORMAT),
                 to: dayjs(event).endOf('month').format(GIDDH_DATE_FORMAT)

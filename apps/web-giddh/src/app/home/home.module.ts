@@ -25,6 +25,7 @@ import { MatTableModule } from '@angular/material/table';
 import { GiddhDateRangepickerModule } from '../theme/giddh-daterangepicker/giddh-daterangepicker.module';
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
 
 
 @NgModule({
@@ -46,7 +47,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
         CommonModule,
         FormsModule,
         HomeRoutingModule,
-        ModalModule,
+        ModalModule.forRoot(),
         LaddaModule.forRoot({
             style: 'slide-left',
             spinnerSize: 30
@@ -63,7 +64,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
         MatTableModule,
         GiddhDateRangepickerModule,
         MatDatepickerModule,
-        MatFormFieldModule
+        MatFormFieldModule,
+        MatIconModule
     ],
 })
 export class HomeModule {

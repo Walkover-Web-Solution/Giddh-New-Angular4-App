@@ -1,5 +1,6 @@
 import { Routes } from "@angular/router";
 export const ROUTES: Routes = [
+    { path: 'company/:companyUniqueName/dns', loadChildren: () => import('./dns-records/dns-records.module').then(module => module.DnsRecordsModule) },
     { path: 'download', loadChildren: () => import('./download/download.module').then(module => module.DownloadModule) },
     { path: '', redirectTo: 'login', pathMatch: 'full' },
     { path: '404' },
@@ -34,7 +35,6 @@ export const ROUTES: Routes = [
     { path: 'contact', redirectTo: 'pages/contact' },
     { path: 'aging-report', redirectTo: 'pages/aging-report', pathMatch: 'full' },
     { path: 'import', redirectTo: 'pages/import', pathMatch: 'full' },
-    // { path: 'tallysync', redirectTo: 'pages/tallysync', pathMatch: 'full' },
     { path: 'gstfiling', redirectTo: 'pages/gstfiling', pathMatch: 'full' },
     { path: 'company-import-export', redirectTo: 'pages/company-import-export', pathMatch: 'full' },
     { path: 'purchase/create', redirectTo: 'pages/purchase/create' },
@@ -89,7 +89,6 @@ export const ROUTES: Routes = [
                 loadChildren: () => import('./new-vs-old-Invoices/new-vs-old-Invoices.module').then(module => module.NewVsOldInvoicesModule)
             },
             { path: 'import', loadChildren: () => import('./import-excel/import-excel.module').then(module => module.ImportExcelModule) },
-            // { path: 'tallysync', loadChildren: () => import('./tallysync/tallysync.module').then(module => module.TallysyncModule) },
             { path: 'gstfiling', loadChildren: () => import('./gst/gst.module').then(module => module.GstModule) },
             {
                 path: 'company-import-export',
@@ -100,7 +99,6 @@ export const ROUTES: Routes = [
             { path: 'verify-email', loadChildren: () => import('./verify-email/verify-email.module').then(module => module.VerifyEmailModule) },
             { path: 'billing-detail' },
             { path: 'billing-detail/buy-plan' },
-            { path: 'mobile', loadChildren: () => import('./mobile-home/mobile-home.module').then(module => module.MobileHomeModule) },
             { path: 'voucher', loadChildren: () => import('./payment-receipt/payment-receipt.module').then(module => module.PaymentReceiptModule) },
             { path: 'downloads', loadChildren: () => import('./downloads/downloads.module').then(module => module.DownloadsModule) },
             { path: 'custom-fields', loadChildren: () => import('./custom-fields/custom-fields.module').then(module => module.CustomFieldsModule) },

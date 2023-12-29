@@ -104,10 +104,17 @@
                     [id]="activeTabIndex === 3 ? 'giddh-page-heading' : ''"
                 >
                     <ng-container *ngIf="activeTabIndex === 3">
-                        <new-branch-transfer-list></new-branch-transfer-list>
+                        <new-branch-transfer-list> </new-branch-transfer-list>
                     </ng-container>
                 </tab>
             </tabset>
         </div>
     </div>
 </div>
+
+<!-- branch transfer modal -->
+<ng-template #branchtransfertemplate>
+    <div class="modal-body radius-none pr-0 pl-0 pt-0 p-0">
+        <new-branch-transfer (hideModal)="hideModal()" [branchTransferMode]="branchTransferMode"> </new-branch-transfer>
+    </div>
+</ng-template>

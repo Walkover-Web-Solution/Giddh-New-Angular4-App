@@ -5,7 +5,6 @@
 .all-payment-side {
     margin: 0 !important;
     padding: 1rem !important;
-    height: 325px;
 }
 :host .aside-pane {
     max-width: 760px;
@@ -78,10 +77,6 @@ form label {
 /*new css of new payemtndesign*/
 .modal-title {
     color: var(--color-popup-list-head-text);
-}
-
-.payment-top-form .d-flex {
-    flex-wrap: wrap;
 }
 .payment-top-form .d-flex .form-group {
     min-width: 190px;
@@ -185,6 +180,15 @@ form label {
 }
 .modal-header {
     height: 63px !important;
+}
+.confirm-btn {
+    height: auto !important;
+    .pay-btn{
+        margin-top: 34px;
+    }
+}
+.pay-btn{
+    margin-top: 8px;
 }
 @media (max-width: 1100px) {
     .payment-top-form {

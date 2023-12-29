@@ -109,6 +109,12 @@ a {
     padding: 0;
     font-size: 100%;
 }
+a{
+    color: var(--color-giddh-blue);
+    &:hover{
+        color: var(--color-giddh-blue);
+    }
+}
 /*end typo*/
 
 div > input.date-picker {
@@ -368,7 +374,6 @@ aside-menu-account .container-fluid {
 }
 .mr-t1 {
     margin-top: 10px !important;
-    color: var(--color-common-primary-text) !important;
 }
 .mr-t15 {
     margin-top: 15px !important;
@@ -443,6 +448,19 @@ aside-menu-account .container-fluid {
 .mr-r15 {
     margin-right: 15px !important;
 }
+.column-gap5 {
+    column-gap: 5px;
+}
+.column-gap1 {
+    column-gap: 10px;
+}
+.column-gap15 {
+    column-gap: 15px;
+}
+.column-gap2 {
+    column-gap: 20px;
+}
+
 .border-bottom {
     border-bottom-color: var(--color-ledger-grid-border-color);
 }
@@ -770,6 +788,9 @@ aside-menu-account .container-fluid {
         i {
             font-size: 24px;
             line-height: 34px;
+        }
+        .icon-trash{
+            vertical-align: middle;
         }
     }
 }
@@ -1277,7 +1298,7 @@ table:focus {
     border-right: 0;
 }
 .all-table {
-    .mat-header-cell {
+    .mat-mdc-header-cell {
         padding: 0px 6px !important;
         height: 51.5px;
         &:last-child {
@@ -1606,7 +1627,8 @@ ul.pills li {
     color: var(--color-abbey);
 }
 .pos-abs {
-    position: absolute;
+    position: absolute !important;
+    z-index: 9;
 }
 .verified {
     right: 10px;
@@ -1667,7 +1689,7 @@ ul.pills li {
     height: auto;
 }
 .modal {
-    z-index: 1200;
+    z-index: 992;
 }
 .popover {
     z-index: 100;
@@ -1679,9 +1701,11 @@ ul.pills li {
     width: 100%;
     left: 0;
     top: 0;
+    bottom: 0;
     z-index: 1;
     text-align: center;
     transform-style: preserve-3d;
+    min-height: 357px;
 }
 .long-code-details {
     margin-top: 10px;
@@ -1925,7 +1949,6 @@ ul.pills li {
 /*box styles  on settings integration page*/
 .box {
     padding: 15px;
-    // background-color: var(--color-common-primary-background-for-all-components);
 }
 #setting-tab .nav > li > a {
     color: var(--color-tab-secondary-text);
@@ -2019,6 +2042,16 @@ strong {
 bs-daterangepicker-container,
 bs-datepicker-container {
     z-index: 99999;
+    bs-days-calendar-view {
+        display: inline-block;
+        & + bs-days-calendar-view {
+            margin-left: 10px;
+        }
+    }
+    // .bs-media-container {
+    //     display: flex;
+    //     column-gap: 15px;
+    // }
 }
 
 .setting-sidebar-open.voucher-preview-edit {
@@ -2078,18 +2111,6 @@ bs-datepicker-container {
 .modal-dialog.universal_modal .modal-body {
     padding: 0;
 }
-.modal-dialog.universal_modal .shortcuts {
-    background: var(--color-popup-footer-background);
-    border-top: none;
-    margin: 0;
-    padding: 12px 16px 12px 20px;
-    color: var(--color-abbey);
-    font-size: var(--font-size-12);
-    border-bottom-left-radius: 8px;
-    border-bottom-right-radius: 8px;
-    text-align: right;
-}
-
 perfect-scrollbar.ps-show-active > .ps.ps--active-y > .ps-overlay:not(.ps-at-top) .ps-indicator-top,
 perfect-scrollbar.ps-show-active > .ps.ps--active-y > .ps-overlay:not(.ps-at-bottom) .ps-indicator-bottom {
     opacity: 0;
@@ -2172,8 +2193,16 @@ perfect-scrollbar.ps-show-active > .ps.ps--active-y > .ps-overlay:not(.ps-at-bot
 
     text-transform: capitalize;
 }
-.basic tbody tr:hover td {
-    background: var(--color-table-row-hover-primary-background);
+.basic {
+    tbody {
+        tr {
+            &:hover {
+                td {
+                    background: var(--color-table-row-hover-primary-background) !important;
+                }
+            }
+        }
+    }
 }
 
 body.fixed {
@@ -2433,6 +2462,15 @@ form#groupDetailForm {
     color: var(--color-right-sidebar-settings);
     background-color: var(--color-primary-right-side-popup-body-background) !important;
 }
+.help-support-aside {
+    &.setting-sidebar-wrapper{
+        aside-setting {
+            .aside-pane {
+                height: calc(100vh - 60px) !important;
+            } 
+        }
+    }
+}
 .aside-pane {
     max-width: 760px;
     width: 100%;
@@ -2443,7 +2481,7 @@ form#groupDetailForm {
     right: 0;
     bottom: 0;
     left: 0;
-    z-index: 9999;
+    z-index: 991;
     background: var(--color-primary-aside-pane-unactive-background);
     opacity: 0.5;
     -webkit-transition: opacity 0.15s linear;
@@ -2527,7 +2565,7 @@ form#groupDetailForm {
 }
 
 giddh-datepicker {
-    .mat-form-field {
+    .mat-mdc-form-field {
         width: 100% !important;
     }
 }
@@ -2536,7 +2574,7 @@ giddh-datepicker {
 .left-col-new,
 .right-col-new {
     giddh-datepicker {
-        .mat-form-field {
+        .mat-mdc-form-field {
             min-width: 100% !important;
         }
     }
@@ -2567,8 +2605,8 @@ giddh-datepicker {
                     &:nth-child(3) {
                         .mat-grid-tile-content {
                             justify-content: center !important;
-                            align-items: flex-end;
                             flex-direction: column;
+                            align-items: flex-end;
                         }
                     }
                 }
@@ -2685,21 +2723,31 @@ update-ledger-entry-panel .ledger-main .mat-form-field {
         }
     }
 }
-.mat-snack-bar-container {
-    color: var(--color-toast-primary-text) !important;
-    font-size: var(--font-size-15);
+.mat-mdc-snack-bar-container {
+    .mdc-snackbar__surface{
+        color: var(--color-toast-primary-text) !important;
+        font-size: var(--font-size-15);
+    }
 }
-.mat-snack-bar-container.error {
-    background-color: var(--color-red-toast) !important;
+.mat-mdc-snack-bar-container.error {
+    .mdc-snackbar__surface{
+        background-color: var(--color-red-toast) !important;
+    }
 }
-.mat-snack-bar-container.success {
-    background-color: var(--color-green-toast) !important;
+.mat-mdc-snack-bar-container.success {
+    .mdc-snackbar__surface{
+        background-color: var(--color-green-toast) !important;
+    }
 }
-.mat-snack-bar-container.warning {
-    background-color: var(--color-warning-toast) !important;
+.mat-mdc-snack-bar-container.warning {
+    .mdc-snackbar__surface{
+        background-color: var(--color-warning-toast) !important;
+    }
 }
-.mat-snack-bar-container.info {
-    background-color: var(--color-info-toast) !important;
+.mat-mdc-snack-bar-container.info {
+    .mdc-snackbar__surface{
+        background-color: var(--color-info-toast) !important;
+    }
 }
 .mat-form-field-appearance-fill .mat-form-field-flex,
 .mat-form-field-ripple,
@@ -2714,12 +2762,24 @@ update-ledger-entry-panel .ledger-main .mat-form-field {
         overflow: initial !important;
     }
 }
-.mat-header-cell {
+.mat-mdc-header-cell {
     color: var(--color-giddh-blue) !important;
     font-family: var(--font-semibold);
     font-size: var(--font-size-15) !important;
+    .mat-mdc-button{
+        color: var(--color-giddh-blue) !important;
+    }
+    .mat-mdc-icon-button{
+        &:hover{
+            .mat-mdc-button-persistent-ripple{
+                &::before {
+                    opacity: 0;
+                }
+            }
+        }
+    }
 }
-.mat-header-cell.text-right {
+.mat-mdc-header-cell.text-right {
     .mat-sort-header-container {
         justify-content: flex-end !important;
     }
@@ -2729,18 +2789,19 @@ tr.mat-row,
 tr.mat-footer-row {
     border-bottom: 1px solid var(--color-table-primary-content-bar-border);
 }
-.mat-header-cell,
-.mat-cell {
+.mat-mdc-header-cell,
+.mat-mdc-cell {
     font-weight: 400;
     padding: 5px 10px !important;
     text-transform: capitalize;
     display: table-cell !important;
 }
-.mat-table {
+.mat-mdc-table {
     tbody {
         > tr {
             > td {
                 color: var(--color-mat-tbody-tr-td) !important;
+                font-size: var(--font-size-15);
                 &:first-child {
                     color: var(--color-mat-table-tbody-td-first-child) !important;
                 }
@@ -2763,7 +2824,7 @@ tr.mat-footer-row {
     tr.mat-footer-row {
         border-top: 1px solid var(--color-table-primary-content-bar-border);
     }
-    td.mat-cell {
+    td.mat-mdc-cell {
         border-bottom-width: 0px !important;
         border-top: 1px solid var(--color-table-primary-content-bar-border);
     }
@@ -2789,23 +2850,30 @@ table.mat-table {
     font-family: var(--font-regular);
 }
 
-th.mat-header-cell:first-of-type,
-td.mat-cell:first-of-type,
+th.mat-mdc-header-cell:first-of-type,
+td.mat-mdc-cell:first-of-type,
 td.mat-footer-cell:first-of-type {
     border-left: none;
     white-space: normal !important;
     word-break: inherit;
 }
+td{
+    &.mat-mdc-cell{
+        &:first-of-type {
+            word-wrap: anywhere;
+        }
+    }
+}
 .manufacturing-table {
-    th.mat-header-cell:first-of-type,
-    td.mat-cell:first-of-type,
-    td.mat-footer-cell:first-of-type {
+    th.mat-mdc-header-cell:first-of-type,
+    td.mat-mdc-cell:first-of-type,
+    td.mat-mdc-footer-cell:first-of-type {
         white-space: nowrap !important;
     }
 }
 
-th.mat-header-cell,
-td.mat-cell,
+th.mat-mdc-header-cell,
+td.mat-mdc-cell,
 td.mat-footer-cell {
     vertical-align: middle !important;
     word-break: break-word;
@@ -2837,7 +2905,10 @@ td.mat-footer-cell {
 .mat-dialog-container {
     height: auto !important;
 }
-.mat-snack-bar-container {
+.mat-mdc-snack-bar-container {
+    .mat-mdc-snack-bar-label{
+        padding: 0px !important;
+    }
     padding: 0px !important;
     &.error {
         .snack-container {
@@ -2872,8 +2943,8 @@ td.mat-footer-cell {
 }
 
 .other-tax {
-    .mat-checkbox-layout {
-        .mat-checkbox-label {
+    .mat-mdc-checkbox {
+        .mdc-label {
             font-size: var(--font-size-15) !important;
             color: var(--color-common-primary-text) !important;
         }
@@ -2885,37 +2956,16 @@ td.mat-footer-cell {
     }
 }
 .petty-cash {
-    .mat-tab-group {
-        .mat-tab-header {
-            background: var(--color-wild-sand) !important;
-            border-color: var(--color-tab-primary-border-bottom);
-            .mat-tab-label-container {
+    .mat-mdc-tab-group {
+        .mat-mdc-tab-header {
+            border-bottom: 1px solid var(--color-tab-primary-border-bottom);
+            .mat-mdc-tab-header {
                 padding-left: 15px !important;
                 background-color: var(--color-tab-primary-background);
-                .mat-tab-list {
-                    .mat-tab-label {
-                        padding: 0 35px 0 0 !important;
-                        opacity: 1 !important;
-                        min-width: auto !important;
-                        height: 44px !important;
-                        color: var(--color-tab-primary-inactive) !important;
-                        .mat-tab-label-content {
-                            margin-bottom: 5px !important;
-                        }
-                        &:focus {
-                            font-weight: 800 !important;
-                            color: var(--color-tab-primary-active) !important;
-                        }
-                        &.active {
-                            font-weight: 800 !important;
-                            color: var(--color-tab-primary-active) !important;
-                        }
-                    }
-                    .mat-ink-bar {
-                        background-color: var(--color-master-page-sidebar-active-list) !important;
-                        height: 4px !important;
-                        width: 60px !important;
-                    }
+            }
+            .mat-mdc-tab {
+                .mdc-tab__text-label {
+                    font-size: var(--font-size-16);
                 }
             }
         }
@@ -3243,135 +3293,6 @@ td.mat-footer-cell {
     }
 }
 
-/*-- input-new-form-field --*/
-voucher-component,
-create-update-group,
-giddh-datepicker,
-add-company,
-stock-create-edit,
-dropdown-field,
-input-field {
-    .mat-form-field {
-        width: 100%;
-    }
-    .mat-form-field .mat-form-field-wrapper .mat-form-field-underline {
-        display: block !important;
-    }
-    .mat-form-field-appearance-outline {
-        .mat-form-field-outline {
-            top: 0;
-        }
-        .mat-form-field-outline-start {
-            border-top-left-radius: 0.5rem;
-            border-bottom-left-radius: 0.5rem;
-        }
-        .mat-form-field-outline-end {
-            border-top-right-radius: 0.5rem;
-            border-bottom-right-radius: 0.5rem;
-        }
-        .mat-form-field-outline-thick {
-            .mat-form-field-outline-start,
-            .mat-form-field-outline-end,
-            .mat-form-field-outline-gap {
-                border-width: 1px;
-            }
-        }
-        .mat-form-field-outline-start,
-        .mat-form-field-outline-end {
-            min-width: 0.5rem;
-        }
-        .mat-form-field-flex {
-            margin-top: 0;
-            min-height: 3rem;
-            align-items: center;
-            border-radius: 0.5rem;
-            padding-left: 0;
-            padding-right: 0;
-        }
-        .mat-form-field-infix {
-            display: flex;
-            min-height: 3rem;
-            width: auto;
-            align-items: center;
-            border-width: 0px;
-            padding: 0 !important;
-            .mat-input-element {
-                margin: 0;
-                line-height: 1.25rem;
-                padding: 14px !important;
-            }
-            textarea {
-                &.mat-input-element {
-                    margin-top: 0.5rem;
-                    margin-bottom: 0.5rem;
-                }
-            }
-        }
-        .mat-form-field-label-wrapper {
-            top: -0.75rem;
-            padding-top: 0.75rem;
-        }
-        .mat-form-field-label {
-            margin-top: 1px;
-            font-size: var(--font-size-15);
-            padding-left: 14px;
-        }
-        .mat-form-field-wrapper {
-            margin: 0;
-            padding-top: 0;
-            padding-bottom: 0;
-        }
-        .mat-form-field-hint-spacer {
-            display: none;
-        }
-        .mat-form-field-prefix,
-        .mat-form-field-suffix {
-            top: 0;
-        }
-        .mat-form-field-subscript-wrapper {
-            margin-top: 0;
-            padding: 0;
-            top: calc(100% - 0.875rem);
-        }
-        .mat-select-arrow-wrapper {
-            transform: none;
-        }
-        &.mat-form-field-can-float {
-            &.mat-form-field-should-float {
-                .mat-form-field-label {
-                    transform: translateY(-1.5em) scale(0.75) !important;
-                    padding-left: 21px;
-                }
-            }
-        }
-        &.mat-form-field-can-float {
-            .mat-input-server {
-                &:focus + .mat-form-field-label-wrapper {
-                    .mat-form-field-label {
-                        transform: translateY(-1.5em) scale(0.75) !important;
-                        padding-left: 21px;
-                    }
-                }
-            }
-        }
-        .mat-form-field-suffix {
-            margin-left: 0;
-            margin-right: 10px;
-        }
-    }
-    mat-select {
-        padding: 0 14px;
-    }
-}
-
-.stock-option-fields {
-    .mat-form-field-appearance-outline {
-        .mat-form-field-wrapper {
-            padding-bottom: 0;
-        }
-    }
-}
-
 /*--- recipe ---*/
 .create-recipe {
     .add-receipt {
@@ -3424,42 +3345,7 @@ input-field {
         }
     }
 }
-.other-details-section {
-    .mat-form-field-appearance-outline {
-        .mat-form-field-flex {
-            background-color: var(--color-white);
-        }
-    }
-}
-add-company,
-voucher-component {
-    .mobile-number {
-        .mat-form-field-appearance-outline {
-            .mat-form-field-label {
-                padding-left: 48px;
-            }
-            .mat-form-field-infix {
-                .mat-input-element {
-                    padding-left: 48px !important;
-                }
-            }
-            &.mat-form-field-can-float {
-                &.mat-form-field-should-float {
-                    .mat-form-field-label {
-                        padding-left: 64px;
-                    }
-                }
-            }
-        }
-    }
-    giddh-datepicker {
-        .mat-focused {
-            .mat-form-field-flex {
-                border: 0 !important;
-            }
-        }
-    }
-}
+
 add-company {
     .fill-form {
         input {

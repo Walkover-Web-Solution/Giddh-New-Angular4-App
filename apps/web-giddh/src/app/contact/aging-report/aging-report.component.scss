@@ -42,13 +42,6 @@
     background: transparent;
 }
 
-.pagination-wrapper {
-    width: 80%;
-    padding: 20px 0;
-    position: fixed;
-    bottom: 20px;
-}
-
 .wrap-searching-aging {
     display: none !important;
 }
@@ -109,6 +102,12 @@ tr.aging-table-top td {
     border: 1px solid var(--color-common-secondary-border);
     border-radius: 5px;
     margin-left: 10px !important;
+    button {
+        font-size: var(--font-size-16);
+        align-items: center;
+        display: flex;
+        justify-content: center;
+    }
     .icon-refresh {
         color: var(--color-abbey);
     }
@@ -195,13 +194,14 @@ tr.mat-header-row {
         padding: 0px 11px;
     }
     .search-table {
-        margin-left: 21px;
+        margin-left: 7px;
+        min-width: 115px;
     }
     .ng-untouched {
         .pull-right {
             display: flex;
             button {
-                min-width: 88px;
+                min-width: 50px;
                 padding-right: 10px;
                 padding-left: 10px !important;
             }
@@ -226,6 +226,50 @@ tr.mat-header-row {
         var(--color-primary-filter-background),
         1px solid var(--color-primary-button-border)
     );
+}
+
+.unpaid-invoice-aside-pane {
+    $header-height: 57.8px;
+    .header {
+        height: $header-height;
+        padding: 20px 15px;
+        background: var(--color-primary-right-side-popup-header-background);
+        color: var(--color-primary-right-side-popup-header-text);
+
+        button {
+            background: var(--color-transparent-background);
+            color: var(--color-primary-right-side-popup-header-text);
+            min-width: 0;
+            border-radius: 0;
+        }
+    }
+    .list-wrapper {
+        .list-viewport {
+            height: calc(100vh - ($header-height + 30px));
+            width: 730px;
+        }
+
+        .list-item {
+            height: 70px;
+            a {
+                & > div {
+                    height: 70px;
+                }
+            }
+            &:not(:last-child) {
+                border-bottom: 1px solid var(--color-common-primary-border);
+            }
+            &:hover {
+                background-color: var(--color-table-row-hover-secondary-background);
+            }
+
+            .customer-name {
+                color: var(--color-nero);
+                white-space: normal;
+                word-break: break-all;
+            }
+        }
+    }
 }
 
 // responsive
@@ -277,11 +321,6 @@ tr.mat-header-row {
     .main-table {
         margin-top: 0;
         float: left;
-    }
-    .pagination-wrapper {
-        margin-bottom: 0px;
-        position: relative;
-        margin-top: 20px;
     }
     .wrap-searching-aging .max-width-250.default-width {
         max-width: calc(100% - 90px);
@@ -395,16 +434,6 @@ tr.mat-header-row {
     }
 }
 
-@media (min-width: 769px) {
-    .mobile-card-wrapper {
-        .table-responsive {
-            max-height: calc(100vh - 295px);
-            overflow-y: auto;
-            min-height: auto !important;
-        }
-    }
-}
-
 .icon-calender {
     position: absolute;
     z-index: 9;
@@ -425,6 +454,7 @@ tr.mat-header-row {
 ::ng-deep.aging-dropdown-table {
     max-width: 100%;
     width: 534px;
+    max-width: 534px !important;
     height: 93px;
     padding-top: 10px;
     margin-top: 17px;

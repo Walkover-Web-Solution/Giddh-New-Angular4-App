@@ -39,6 +39,10 @@
     background-color: var(--color-white);
     padding: 0;
     height: calc(100vh - 120px);
+
+    cdk-virtual-scroll-viewport {
+        height: 100%;
+    }
 }
 
 .d-flex {
@@ -358,10 +362,10 @@ span.close-modal.cp.pull-right {
     flex: 1;
     border: 1px solid var(--color-secondary-input-bar-border);
     border-radius: 5px;
-    height: 37px;
+    width: 100%;
     padding: 0 30px;
     background-image: url("../../../../../assets/images/searchIcon.svg");
-    background-position: 10px 13px;
+    background-position: 8px 6px;
     background-repeat: no-repeat;
     background-color: var(--color-primary-input-bar-background);
 }
@@ -1256,4 +1260,12 @@ strong {
             }
         }
     }
+}
+
+@media screen and (max-width: 1280px) {
+    .invoice-search-box {
+        button {
+            padding: 7px 7px !important;
+        }
+    } 
 }

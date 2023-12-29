@@ -45,7 +45,10 @@ import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/
         Daterangepicker,
         ReactiveFormsModule,
         FormsModule,
-        BsDatepickerModule.forRoot(), CommonModule, SelectModule, LaddaModule.forRoot({
+        BsDatepickerModule.forRoot(), 
+        CommonModule, 
+        SelectModule, 
+        LaddaModule.forRoot({
             style: 'slide-left',
             spinnerSize: 30
         }),

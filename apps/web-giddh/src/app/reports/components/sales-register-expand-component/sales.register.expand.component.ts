@@ -1,20 +1,22 @@
-import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, OnDestroy, TemplateRef } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { InvoiceReceiptActions } from '../../../actions/invoice/receipt/receipt.actions';
 import { ReportsDetailedRequestFilter, SalesRegisteDetailedResponse } from '../../../models/api-models/Reports';
 import { ActivatedRoute, Router } from '@angular/router';
-import { take, takeUntil, debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { take, takeUntil, debounceTime, distinctUntilChanged, skip } from 'rxjs/operators';
 import { ReplaySubject, Observable } from 'rxjs';
 import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
-import { FormControl } from '@angular/forms';
-import { PAGINATION_LIMIT } from '../../../app.constant';
+import { UntypedFormControl } from '@angular/forms';
+import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from '../../../app.constant';
 import { CurrentCompanyState } from '../../../store/company/company.reducer';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { GeneralService } from '../../../services/general.service';
-import { ExportBodyRequest } from '../../../models/api-models/DaybookRequest';
-import { LedgerService } from '../../../services/ledger.service';
-import { ToasterService } from '../../../services/toaster.service';
+import { MatDialog } from '@angular/material/dialog';
+import { SalesPurchaseRegisterExportComponent } from '../../sales-purchase-register-export/sales-purchase-register-export.component';
+import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_MM_DD_YYYY, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
+import * as dayjs from 'dayjs';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 
 @Component({
     selector: 'sales-register-expand',
@@ -42,8 +44,27 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
     // searching
     @ViewChild('invoiceSearch', { static: true }) public invoiceSearch: ElementRef;
     @ViewChild('filterDropDownList', { static: true }) public filterDropDownList: BsDropdownDirective;
+    /** Directive to get reference of element */
+    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
 
-    public voucherNumberInput: FormControl = new FormControl();
+    /** Universal date observer */
+    public universalDate$: Observable<any>;
+    /* This will store selected date range to use in api */
+    public selectedDateRange: any;
+    /* This will store selected date range to show on UI */
+    public selectedDateRangeUi: any;
+    /* This will store available date ranges */
+    public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
+    /* Selected range label */
+    public selectedRangeLabel: any = "";
+    /** Date format type */
+    public giddhDateFormat: string = GIDDH_DATE_FORMAT;
+    /* This will store the x/y position of the field to show datepicker under it */
+    public dateFieldPosition: any = { x: 0, y: 0 };
+    /** Modal reference */
+    public modalRef: BsModalRef;
+
+    public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
     public monthNames = [];
     public monthYear: string[] = [];
     public modalUniqueName: string;
@@ -79,11 +100,21 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
         value: false,
         discount: false,
         tax: false,
-        net_sales: false
+        net_sales: false,
+        parent_group: false,
+        sales_account: false,
+        tax_no: false,
+        address: false,
+        pincode: false,
+        email: false,
+        mobile_no: false
     };
     /** True if api call in progress */
     public isLoading: boolean = false;
-    constructor(private store: Store<AppState>, private invoiceReceiptActions: InvoiceReceiptActions, private activeRoute: ActivatedRoute, private router: Router, private _cd: ChangeDetectorRef, private breakPointObservar: BreakpointObserver, private generalService: GeneralService, private ledgerService: LedgerService, private toaster: ToasterService) {
+    /** Hold initial params data */
+    private params: any = { from: '', to: '' };
+
+    constructor(private store: Store<AppState>, private invoiceReceiptActions: InvoiceReceiptActions, private activeRoute: ActivatedRoute, private router: Router, private _cd: ChangeDetectorRef, private breakPointObservar: BreakpointObserver, private generalService: GeneralService, private modalService: BsModalService, private dialog: MatDialog) {
         this.salesRegisteDetailedResponse$ = this.store.pipe(select(appState => appState.receipt.SalesRegisteDetailedResponse), takeUntil(this.destroyed$));
         this.isGetSalesDetailsInProcess$ = this.store.pipe(select(p => p.receipt.isGetSalesDetailsInProcess), takeUntil(this.destroyed$));
         this.isGetSalesDetailsSuccess$ = this.store.pipe(select(p => p.receipt.isGetSalesDetailsSuccess), takeUntil(this.destroyed$));
@@ -92,6 +123,7 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.isMobileScreen = result.matches;
         });
+        this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), skip(1), takeUntil(this.destroyed$));
     }
 
     public ngOnInit(): void {
@@ -114,8 +146,19 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
                 this.getDetailedsalesRequestFilter.from = this.from;
                 this.getDetailedsalesRequestFilter.to = this.to;
                 this.getDetailedsalesRequestFilter.branchUniqueName = params.branchUniqueName;
+                this.params = params;
+                this.setDataPickerDateRange();
             }
         });
+
+        /** Universal date observer */
+        this.universalDate$.subscribe(dateObj => {
+            if (dateObj) {
+                this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
+                this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+            }
+        });
+
         this.getDetailedSalesReport(this.getDetailedsalesRequestFilter);
         this.salesRegisteDetailedResponse$.pipe(takeUntil(this.destroyed$)).subscribe((res: SalesRegisteDetailedResponse) => {
             if (res) {
@@ -159,6 +202,41 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
                 "value": "account",
                 "label": "Account",
                 "checked": true
+            },
+            {
+                "value": "parent_group",
+                "label": "Parent Group",
+                "checked": false
+            },
+            {
+                "value": "tax_no",
+                "label": "Tax no.",
+                "checked": false
+            },
+            {
+                "value": "address",
+                "label": "Address",
+                "checked": false
+            },
+            {
+                "value": "pincode",
+                "label": "Pincode",
+                "checked": false
+            },
+            {
+                "value": "email",
+                "label": "Email",
+                "checked": false
+            },
+            {
+                "value": "mobile_no",
+                "label": "Mobile No.",
+                "checked": false
+            },
+            {
+                "value": "sales_account",
+                "label": "Sales Account",
+                "checked": false
             },
             {
                 "value": "voucher_type",
@@ -373,6 +451,9 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
         this.getDetailedsalesRequestFilter.q = '';
         this.getDetailedsalesRequestFilter.sort = null;
         this.getDetailedsalesRequestFilter.sortBy = null;
+        this.getDetailedsalesRequestFilter.from = this.params?.from;
+        this.getDetailedsalesRequestFilter.to = this.params?.to;
+        this.setDataPickerDateRange();
         this.getDetailedSalesReport(this.getDetailedsalesRequestFilter);
     }
 
@@ -392,38 +473,21 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
      * @memberof SalesRegisterExpandComponent
      */
     public export(): void {
-        let exportBodyRequest: ExportBodyRequest = new ExportBodyRequest();
-        exportBodyRequest.from = this.from;
-        exportBodyRequest.to = this.to;
-        exportBodyRequest.exportType = "SALES_REGISTER_DETAILED_EXPORT";
-        exportBodyRequest.fileType = "CSV";
-        exportBodyRequest.isExpanded = this.expand;
-        exportBodyRequest.q = this.voucherNumberInput?.value;
-        exportBodyRequest.branchUniqueName = this.getDetailedsalesRequestFilter?.branchUniqueName;
-        exportBodyRequest.columnsToExport = [];
-        if (this.showFieldFilter.voucher_type) {
-            exportBodyRequest.columnsToExport.push("Voucher Type");
+        let exportData = {
+            from: this.from,
+            to: this.to,
+            exportType: "SALES_REGISTER_DETAILED_EXPORT",
+            fileType: "CSV",
+            isExpanded: this.expand,
+            q: this.voucherNumberInput?.value,
+            branchUniqueName: this.getDetailedsalesRequestFilter?.branchUniqueName,
+            commonLocaleData: this.commonLocaleData,
+            localeData: this.localeData
         }
-        if (this.showFieldFilter.voucher_no) {
-            exportBodyRequest.columnsToExport.push("Voucher No");
-        }
-        if (this.showFieldFilter.qty_rate) {
-            exportBodyRequest.columnsToExport.push("Qty/Unit");
-        }
-        if (this.showFieldFilter.discount) {
-            exportBodyRequest.columnsToExport.push("Discount");
-        }
-        if (this.showFieldFilter.tax) {
-            exportBodyRequest.columnsToExport.push("Tax");
-        }
-
-        this.ledgerService.exportData(exportBodyRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response?.status === 'success') {
-                this.toaster.successToast(response?.body);
-                this.router.navigate(["/pages/downloads"]);
-            } else {
-                this.toaster.errorToast(response?.message);
-            }
+        this.dialog.open(SalesPurchaseRegisterExportComponent, {
+            width: '630px',
+            panelClass: 'export-container',
+            data: exportData
         });
     }
 
@@ -439,4 +503,69 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
         Object.keys(this.showFieldFilter).forEach(key => this.showFieldFilter[key] = displayColumnsSet.has(key));
     }
 
+    /**
+    *To show the datepicker
+    *
+    * @param {*} element
+    * @memberof SalesRegisterExpandComponent
+    */
+    public showGiddhDatepicker(element: any): void {
+        if (element) {
+            this.dateFieldPosition = this.generalService.getPosition(element.target);
+        }
+        this.modalRef = this.modalService.show(
+            this.datepickerTemplate,
+            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
+        );
+    }
+
+    /**
+     * This will hide the datepicker
+     *
+     * @memberof SalesRegisterExpandComponent
+     */
+    public hideGiddhDatepicker(): void {
+        this.modalRef.hide();
+    }
+
+    /**
+     * Call back function for date/range selection in datepicker
+     *
+     * @param {*} value
+     * @memberof SalesRegisterExpandComponent
+     */
+    public dateSelectedCallback(value?: any): void {
+        if (value && value.event === "cancel") {
+            this.hideGiddhDatepicker();
+            return;
+        }
+        this.selectedRangeLabel = "";
+
+        if (value && value.name) {
+            this.selectedRangeLabel = value.name;
+        }
+        this.hideGiddhDatepicker();
+        if (value && value.startDate && value.endDate) {
+            this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
+            this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.from = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.to = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
+            this.showClearFilter = true;
+            this.getDetailedsalesRequestFilter.from = this.from;
+            this.getDetailedsalesRequestFilter.to = this.to;
+            this.getDetailedSalesReport(this.getDetailedsalesRequestFilter);
+        }
+    }
+    /**
+     * Set the initial date range from query params
+     *
+     * @private
+     * @memberof SalesRegisterExpandComponent
+     */
+    private setDataPickerDateRange(): void {
+        let dateRange = { fromDate: '', toDate: '' };
+        dateRange = this.generalService.dateConversionToSetComponentDatePicker(this.params?.from, this.params?.to);
+        this.selectedDateRange = { startDate: dayjs(dateRange.fromDate, GIDDH_DATE_FORMAT_MM_DD_YYYY), endDate: dayjs(dateRange.toDate, GIDDH_DATE_FORMAT_MM_DD_YYYY) };
+        this.selectedDateRangeUi = dayjs(dateRange.fromDate, GIDDH_DATE_FORMAT_MM_DD_YYYY).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateRange.toDate, GIDDH_DATE_FORMAT_MM_DD_YYYY).format(GIDDH_NEW_DATE_FORMAT_UI);
+    }
 }

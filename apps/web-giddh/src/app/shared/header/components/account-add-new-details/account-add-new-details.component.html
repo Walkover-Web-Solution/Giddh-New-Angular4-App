@@ -73,14 +73,14 @@
                         </div>
                     </div>
 
-                    <div class="form-group col-xs-12 col-sm-4 cr-dr-account">
+                    <div class="form-group col-xs-12 col-sm-4">
                         <label>{{ localeData?.opening_balance }}</label>
                         <div [ngClass]="{ 'input-group': addAccountForm.get('openingBalance')?.value > 0 }">
                             <input
-                                type="tel"
+                                type="number"
                                 min="0"
-                                class="form-control text-right"
-                                decimalDigitsDirective
+                                class="form-control text-right mr-1"
+                                digitsOnlyDirective
                                 formControlName="openingBalance"
                                 [placeholder]="
                                     commonLocaleData?.app_numbers?.zero +
@@ -130,7 +130,7 @@
                                 <input
                                     type="tel"
                                     min="0"
-                                    class="form-control text-right"
+                                    class="form-control text-right mr-1"
                                     formControlName="foreignOpeningBalance"
                                     [placeholder]="
                                         commonLocaleData?.app_numbers?.zero +
@@ -241,7 +241,8 @@
                         <div class="gstin-form" formArrayName="addresses">
                             <ng-container
                                 *ngFor="
-                                    let gst of addAccountForm.get('addresses')['controls'] | slice: 0:gstDetailsLength;
+                                    let gst of addAccountForm.get('addresses')['controls']
+                                        | slice : 0 : gstDetailsLength;
                                     let i = index;
                                     let f = first;
                                     let l = last
@@ -468,6 +469,7 @@
                                         name="accountDetails.mobileNumber"
                                         type="tel"
                                         #initContactAdd
+                                        class="flag-input"
                                         id="init-contact-add"
                                         formControlName="mobileNo"
                                         [placeholder]="localeData?.mobile_no_placeholder"
@@ -493,7 +495,95 @@
                     </div>
                 </div>
             </tab>
-
+            <tab
+                [heading]="localeData?.tabs?.portal"
+                class="contact-form-wrap"
+                *ngIf="voucherApiVersion === 2 && isDebtorCreditor"
+            >
+                <div formArrayName="portalDomain">
+                    <div
+                        class="row align-items-center"
+                        *ngFor="let domain of addAccountForm?.get('portalDomain')['controls']; let i = index"
+                        [formGroupName]="i"
+                    >
+                        <div class="col-xl-3 col-lg-5 col-md-5 col-sm-6 unit-equal">
+                            <div class="form-group portal-height">
+                                <label>{{ localeData?.portal_attention_to }} </label>
+                                <input
+                                    type="text"
+                                    (input)="portalIndex = i"
+                                    class="form-control"
+                                    formControlName="name"
+                                    name="name_{{ i }}"
+                                />
+                            </div>
+                        </div>
+                        <div class="col-xl-4 col-lg-3 col-md-3 col-sm-2 pr-0">
+                            <div class="form-group portal-height">
+                                <label>{{ commonLocaleData?.app_email_id }} <span class="red-text">*</span></label>
+                                <input
+                                    type="email"
+                                    class="form-control"
+                                    (input)="portalIndex = i"
+                                    formControlName="email"
+                                    name="email_{{ i }}"
+                                />
+                                <span
+                                    class="error-msg"
+                                    *ngIf="
+                                        domain.get('email').dirty &&
+                                        (domain.get('email').hasError('required') || domain.get('email').invalid) &&
+                                        !domain.get('email').hasError('duplicate')
+                                    "
+                                    id="emailError_{{ i }}"
+                                    >{{ localeData?.email_id_error }}
+                                </span>
+                                <span
+                                    class="error-msg"
+                                    *ngIf="domain.get('email').hasError('duplicate') && i === lastDuplicateEmailIndex"
+                                    id="emailValidationError_{{ i }}"
+                                    >{{ localeData?.duplicate_email }}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-xl-4 col-lg-3 col-md-3 col-sm-3 pr-0 mobile-number-portal-wrapper">
+                            <div class="form-group portal-height">
+                                <label>{{ commonLocaleData?.app_mobile_number }} </label>
+                                <div class="d-flex">
+                                    <input
+                                        name="contactNo_{{ i }}"
+                                        (input)="portalIndex = i"
+                                        type="tel"
+                                        #initContactAdd2
+                                        class="flag-input"
+                                        id="init-contact-portal_{{ i }}"
+                                        formControlName="contactNo"
+                                        [placeholder]="localeData?.mobile_no_placeholder"
+                                    />
+                                </div>
+                                <span id="init-contact-portal_{{ i }}-valid-msg" class="d-none"> </span>
+                                <span id="init-contact-portal_{{ i }}-error-msg" class="d-none"> </span>
+                            </div>
+                        </div>
+                        <div class="col-xl-1 col-lg-1 col-md-2 col-sm-12 pl-0 remove-user">
+                            <div class="inc-dec">
+                                <div class="plus-minus w-100">
+                                    <button class="btn mr-0" (click)="removePortalUser(i)">
+                                        <i class="icon-trash delete"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <a class="mr-0 add-new" href="javascript:void(0);" (click)="addNewPortalUser()">
+                                <i class="icon-plus"></i> {{ localeData?.portal_add_user }}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </tab>
             <!-- bank details visible when sundry credtiors selected , right now is hide -->
             <tab [heading]="localeData?.tabs?.bank_details" class="bank-details-form" *ngIf="showBankDetail">
                 <div *ngIf="showBankDetail">

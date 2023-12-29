@@ -6,7 +6,10 @@
         "purchase": "खरीद",
         "cash": "नकद",
         "proforma": "प्रोफार्मा",
-        "estimate": "अनुमान"
+        "estimate": "अनुमान",
+        "cash_bill": "नकद बिल",
+        "cash_credit_note": "कैश क्रेडिट नोट",
+        "cash_debit_note": "नकद डेबिट नोट"
     },
     "customer_name": "ग्राहक का नाम",
     "balance_due": "शेष राशि",
@@ -111,5 +114,6 @@
     "invalid_contact_number": "अमान्य संपर्क नंबर",
     "account": "अकाउंट",
     "select_variant": "वेरिएंट चुनें",
-    "variant": "वेरिएंट"
+    "variant": "वेरिएंट",
+    "account_missing_in_stock": "खाता स्टॉक से लिंक नहीं है।"
 }

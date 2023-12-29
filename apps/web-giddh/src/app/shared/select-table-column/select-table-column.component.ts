@@ -3,6 +3,7 @@ import { ReplaySubject, Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { CommonService } from "../../services/common.service";
 import { ToasterService } from "../../services/toaster.service";
+import { InventoryModuleName } from "../../new-inventory/inventory.enum";
 
 @Component({
     selector: "select-table-column",
@@ -19,6 +20,8 @@ export class SelectTableColumnComponent implements OnInit, OnChanges {
     @Input() public customiseColumns: any[] = [];
     /** Holds inventory type module  */
     @Input() public moduleType: string = "";
+    /** Holds module name for customised columns */
+    @Input() public moduleName: string = "";
     /** Holds mat tooltip position  */
     @Input() public matTooltipPosition: string = "";
     /** Holds mat tooltip name  */
@@ -31,6 +34,8 @@ export class SelectTableColumnComponent implements OnInit, OnChanges {
     @Input() public buttonText: string = "";
     /** Observable to subscribe refresh columns */
     @Input() public refreshColumnsSubject: Subject<void>;
+    /** CSS Class for Mat Menu */
+    @Input() public additionalMenuCssClass: string = "";
     /** Emits the selected filters */
     @Output() public selectedColumns: EventEmitter<any> = new EventEmitter();
     /** Emits the refresh column change filters */
@@ -66,7 +71,7 @@ export class SelectTableColumnComponent implements OnInit, OnChanges {
      * @memberof SelectTableColumnComponent
      */
     public ngOnChanges(changes: SimpleChanges): void {
-        if (changes?.moduleType?.currentValue !== changes?.moduleType?.previousValue) {
+        if (changes?.moduleType?.currentValue !== changes?.moduleType?.previousValue || changes?.moduleName?.currentValue !== changes?.moduleName?.previousValue) {
             this.getSelectedColumns();
         }
     }
@@ -91,7 +96,7 @@ export class SelectTableColumnComponent implements OnInit, OnChanges {
                     this.isLoading.emit(false);
                 }
             });
-        });
+        }, 200);
     }
 
     /**
@@ -135,6 +140,4 @@ export class SelectTableColumnComponent implements OnInit, OnChanges {
             this.filteredDisplayColumns();
         });
     }
-
-
 }

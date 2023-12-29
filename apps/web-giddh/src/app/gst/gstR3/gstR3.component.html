@@ -31,7 +31,7 @@
                     flex-sm-row flex-column
                 "
             >
-                <div class="wrap-gst-date w-100">
+                <div class="wrap-gst-date w-100 d-flex align-items-center">
                     <span class="font-xlarge d-inline-block pd-r15">
                         <a
                             href="javascript:void(0);"
@@ -85,20 +85,22 @@
                         <ul *dropdownMenu class="dropdown-menu month-picker" role="menu" id="monthPicker">
                             <li role="menuitem">
                                 <a class="dropdown-item" href="javascript:void(0)">
-                                    <datepicker
-                                        [datepickerMode]="'month'"
+                                    <bs-datepicker-inline
                                         name="fromDate"
                                         (click)="$event.stopPropagation()"
-                                        [showWeeks]="false"
-                                        [minMode]="'month'"
-                                        (selectionDone)="periodChanged($event); monthWise.hide()"
-                                        [(ngModel)]="selectedMonth"
-                                    ></datepicker>
+                                        (bsValueChange)="periodChanged($event); monthWise.hide()"
+                                        [bsConfig]="{ startView: 'month', dateInputFormat: 'MM/YYYY', adaptivePosition: true, minMode:'month' }"
+                                        [ngModelOptions]="{standalone: true}"
+                                    >
+                                    </bs-datepicker-inline>
                                 </a>
                             </li>
                         </ul>
                     </div>
 
+                    <span class="ml-auto">
+                        <watch-video [cssClass]="'text-primary pd-r15'" [moduleName]="'GSTR3B'"></watch-video>
+                    </span>
                     <div class="pull-right download-authenticate-btn">
                         <ul class="list-inline list-middle">
                             <li>

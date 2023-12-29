@@ -49,7 +49,6 @@
         "variant_name":"वेरिएंट का नाम",
         "no_entries_found_1":"दिए गए मानदंडों के भीतर कोई प्रविष्टि नहीं मिली।",
         "no_entries_found_2":"कुछ अन्य तिथियों के साथ खोजें",
-        "no_columns_found":"कस्टम फ़िल्टर से कोई कॉलम नहीं चुना गया है।",
         "voucher_type":"वाउचर प्रकार",
         "rate":"दर",
         "date":"तारीख",
@@ -89,7 +88,10 @@
         "category":"श्रेणी",
         "type":"प्रकार",
         "select_value":"कीमत चुनें",
-        "enter_amount":"राशि डालें"
+        "enter_amount":"राशि डालें",
+        "sort_by": "इसके अनुसार क्रमबद्ध करें",
+        "expression": "अभिव्यक्ति",
+        "filter_by": "छनित करे"
     },
      "warehouse_opening_balance":{
         "unique_name":"अनूठा नाम",

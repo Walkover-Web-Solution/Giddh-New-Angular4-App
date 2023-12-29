@@ -10,6 +10,7 @@
     "app_email_id": "Email Id",
     "app_state": "State",
     "app_tax_number": "Tax Number",
+    "app_tax_number_short": "Tax No.",
     "app_customer": "Customer",
     "app_purchase": "Purchase",
     "app_sales": "Sales",
@@ -75,7 +76,7 @@
     "app_pages": "Pages",
     "app_go": "Go",
     "app_from": "From",
-    "app_to": "To",
+    "app_to": "to",
     "app_custom_range": "Custom Range",
     "app_select_range": "Select Range",
     "app_quantity": "Quantity",
@@ -292,6 +293,7 @@
     "app_street": "Street",
     "app_enter_gstin": "Enter GSTIN",
     "app_enter_trn": "Enter TRN",
+    "app_enter_vat": "Enter VAT Reg No",
     "app_remove": "Remove",
     "app_show_all": "Show all",
     "app_show_less": "Show Less",
@@ -648,8 +650,6 @@
         "group_updated": "Group updated successfully.",
         "receive_otp": "You will receive a verification code on your mobile shortly.",
         "otp_sent_email": "A verification code has been sent to your email account.",
-        "internet_error": "Please check your internet connection.",
-        "internet_disconnected": "Internet disconnected",
         "warehouse_created": "New warehouse created successfully.",
         "warehouse_updated": "Warehouse updated successfully.",
         "voucher_saved": "Voucher generated successfully",
@@ -708,5 +708,13 @@
         "yes": "Leave page"
     },
     "app_region": "Region",
-    "app_select_region": "Select Region"
+    "app_select_region": "Select Region",
+    "app_by_product_output" :"By Product (Output)",
+    "app_unverified": "Unverified",
+    "app_verified": "Verified",
+    "app_verify": "Verify",
+    "app_hostname": "Hostname",
+    "app_copied":"Copied...",
+    "domain_verification":"Domain verification for outbound mail",
+    "app_renew_bank_connection": "Renew Bank Connection"
 }

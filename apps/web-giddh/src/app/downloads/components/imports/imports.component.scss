@@ -1,9 +1,4 @@
 .import-table-container {
-    .table-content {
-        max-height: calc(100vh - 200px);
-        overflow-y: auto;
-        height: calc(100vh - 200px);
-    }
     .import-table {
         width: 100%;
         .import-table-btn {
@@ -55,5 +50,15 @@
         justify-content: space-between;
         align-items: center;
         padding: 4px 10px;
+    }
+}
+
+@media screen and (max-width: 1280px) {
+    .import-table-container {
+        .table-content {
+            .mdc-data-table__cell {
+                padding: 0 8px 0 8px;
+            }
+        }
     }
 }

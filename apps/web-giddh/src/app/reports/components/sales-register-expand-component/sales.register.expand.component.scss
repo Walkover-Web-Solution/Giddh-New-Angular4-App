@@ -264,7 +264,7 @@ table th {
                 top: 1px;
                 right: 10px;
                 background-color: var(--color-secondary-button-background);
-
+                color: var(--color-white) !important;
                 &:hover {
                     background-color: var(--color-secondary-button-background-hover);
                 }
@@ -358,12 +358,5 @@ table th {
                 font-size: var(--font-size-15);
             }
         }
-    }
-}
-
-@media (min-width: 769px) {
-    .table-responsive {
-        max-height: calc(100vh - 275px);
-        overflow-y: auto;
     }
 }

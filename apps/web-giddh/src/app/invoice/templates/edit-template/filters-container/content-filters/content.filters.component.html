@@ -20,6 +20,7 @@
                     >
                         <input
                             type="checkbox"
+                            color="primary"
                             name="companyNameCheckbox"
                             [(ngModel)]="customTemplate.sections['header'].data['companyName'].display"
                             (ngModelChange)="onChangeFieldVisibility(null, null, null)"
@@ -1295,6 +1296,28 @@
                         </tr>
                         <tr
                             *ngIf="
+                                customTemplate.sections['table'].data['amountBeforeDiscount'] &&
+                                        voucherApiVersion === 2 &&
+                                customTemplate.templateType !== 'thermal_template'
+                            "
+                        >
+                            <td class="pb-3">
+                                <label>
+                                    <input
+                                        type="checkbox"
+                                        name="amountBeforeDiscount"
+                                        checked
+                                        [(ngModel)]="
+                                            customTemplate.sections['table'].data['amountBeforeDiscount'].display
+                                        "
+                                        (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                                    />
+                                    Total Before Dis.</label
+                                >
+                            </td>
+                        </tr>
+                        <tr
+                            *ngIf="
                                 fieldsAndVisibility.table.discount && customTemplate.templateType !== 'thermal_template'
                             "
                         >
@@ -2236,7 +2259,7 @@
                                         [maxlength]="
                                             customTemplate.sections['footer'].data['showNotesAtLastPage']?.display
                                                 ? null
-                                                : 200
+                                                : 500
                                         "
                                         hasFocus
                                         #message1="hasFocus"
@@ -2255,7 +2278,7 @@
                                     >
                                         <span class="max-character-label">Characters left:&nbsp;</span
                                         ><span class="max-character-value">{{
-                                            200 - customTemplate.sections["footer"].data["message1"].label?.length
+                                            500 - customTemplate.sections["footer"].data["message1"].label?.length
                                         }}</span>
                                     </ng-container>
                                 </div>
@@ -2416,10 +2439,7 @@
                                             [disabled]="customTemplate.sections.footer.data.slogan.display"
                                             accept="image/png, image/jpeg"
                                             id="signatureImg-edit"
-                                            ngFileSelect
-                                            (uploadOutput)="onUploadFileOutput($event)"
-                                            [options]="fileUploadOptions"
-                                            [uploadInput]="uploadInput"
+                                            (change)="uploadImage()"
                                         />
                                         <small>Upload Signature</small>
                                     </label>

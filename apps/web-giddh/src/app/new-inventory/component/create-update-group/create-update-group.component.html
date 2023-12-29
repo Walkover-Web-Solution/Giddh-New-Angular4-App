@@ -10,7 +10,7 @@
         <hamburger-menu *ngIf="!addGroup"></hamburger-menu>
 
         <ng-container *ngIf="!showLoader">
-            <form autocomplete="off" novalidate name="groupForm" [formGroup]="groupForm" class="new-account-form">
+            <form autocomplete="off" novalidate name="groupForm" [formGroup]="groupForm" class="new-account-form">          
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-9">
@@ -52,9 +52,10 @@
                                             <div>
                                                 <mat-radio-group
                                                     color="primary"
-                                                    name="groupForm.showCodeType"
+                                                    name="showCodeType"
                                                     formControlName="showCodeType"
                                                     (change)="onChangeHsnSacType()"
+                                                    class="d-flex column-gap15"
                                                 >
                                                     <mat-radio-button id="hsn" [value]="'hsn'">{{
                                                         commonLocaleData?.app_hsn_code
@@ -174,7 +175,7 @@
                                                 }}
                                             </button>
                                         </div>
-                                        <div class="ml-auto right-aligned-buttons">
+                                        <div class="ml-auto right-aligned-buttons d-flex column-gap15">
                                             <button
                                                 *ngIf="!groupUniqueName"
                                                 mat-stroked-button
@@ -206,8 +207,8 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-3" *ngIf="!addGroup">
-                            <span *ngIf="!showLoader" class="float-right mt-3">
+                        <div class="col-3">
+                            <span *ngIf="!showLoader && !addGroup" class="float-right mt-3">
                                 <button
                                     *ngIf="groupUniqueName"
                                     (click)="backClicked()"
@@ -218,6 +219,9 @@
                                     <i class="icon-left back-left"></i>
                                     {{ commonLocaleData?.app_back }}
                                 </button>
+                            </span>
+                            <span  class="float-right mt-3">
+                                <watch-video [cssClass]="'text-primary pd-t05 pd-r15'" [moduleName]="'INVENTORY_MASTER_GROUP'"></watch-video>
                             </span>
                         </div>
                     </div>

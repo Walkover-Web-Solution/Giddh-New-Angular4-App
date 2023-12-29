@@ -163,4 +163,84 @@ export class CommonService {
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '', {})));
     }
+
+    /**
+     * Uploads file
+     *
+     * @param {*} postRequest
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof CommonService
+     */
+    public uploadFile(postRequest: any, addVoucherVersion: boolean = false): Observable<BaseResponse<any, any>> {
+        let url = this.config.apiUrl + COMMON_API.UPLOAD_FILE?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName));
+
+        const formData: FormData = new FormData();
+        formData.append('file', postRequest.file, postRequest.fileName);
+
+        if (postRequest.entries) {
+            formData.append('entries', postRequest.entries);
+        }
+
+        if (addVoucherVersion && this.generalService.voucherApiVersion === 2) {
+            url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
+        }
+
+        return this.http.post(url, formData, { headers: { 'Content-Type': 'multipart/form-data' } }).pipe(map((res) => {
+            let data: BaseResponse<any, string> = res;
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
+    }
+
+    /**
+     * Uploads image
+     *
+     * @param {*} postRequest
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof CommonService
+     */
+    public uploadImage(postRequest: any): Observable<BaseResponse<any, any>> {
+        let url = this.config.apiUrl + COMMON_API.UPLOAD_IMAGE?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName));
+
+        const formData: FormData = new FormData();
+        formData.append('file', postRequest.file, postRequest.fileName);
+
+        return this.http.post(url, formData, { headers: { 'Content-Type': 'multipart/form-data' } }).pipe(map((res) => {
+            let data: BaseResponse<any, string> = res;
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
+    }
+
+    /**
+     * Uploads base64 image
+     *
+     * @param {*} postRequest
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof CommonService
+     */
+    public uploadImageBase64(postRequest: any): Observable<BaseResponse<any, any>> {
+        let url = this.config.apiUrl + COMMON_API.UPLOAD_IMAGE?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName));
+        return this.http.post(url, postRequest).pipe(map((res) => {
+            let data: BaseResponse<any, string> = res;
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
+    }
+
+    /**
+     * This will be use for get Barcode Scan Data
+     *
+     * @param {string} uniqueName
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof CommonService
+     */
+    public getBarcodeScanData(uniqueName: string): Observable<BaseResponse<any, any>> {
+        let url = this.config.apiUrl + COMMON_API.BARCODE_SCAN;
+        url = url?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName));
+        url = url?.replace(':barcodeUniqueName', uniqueName);
+        return this.http.get(url).pipe(
+            map((res) => {
+                let data: BaseResponse<CountryResponse, any> = res;
+                return data;
+            }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
+    }
+
 }

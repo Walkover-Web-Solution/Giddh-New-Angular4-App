@@ -80,7 +80,7 @@
         <div *ngIf="isLoading">
             <giddh-page-loader></giddh-page-loader>
         </div>
-        <div class="table-content" *ngIf="!isLoading && dataSource?.length">
+        <div class="table-responsive table-content" *ngIf="!isLoading && dataSource?.length">
             <table mat-table [dataSource]="dataSource" class="import-table">
                 <!-- Requested importDate Column -->
                 <ng-container matColumnDef="importDate">
@@ -187,7 +187,7 @@
         <h1>{{ commonLocaleData?.app_no_record_found }}</h1>
     </div>
 </section>
-<div class="pagination-wrapper" *ngIf="importRequest?.totalItems > importRequest.count && !isLoading">
+<div class="pagination-wrapper mt-4" *ngIf="importRequest?.totalItems > importRequest.count && !isLoading">
     <pagination
         [totalItems]="importRequest?.totalItems"
         [(ngModel)]="importRequest.page"

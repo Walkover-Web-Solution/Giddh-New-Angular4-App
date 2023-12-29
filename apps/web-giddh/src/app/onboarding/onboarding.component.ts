@@ -25,8 +25,6 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
-    /* This will hold Radio Button Selected Value */
-    public inventoryTypeStatus:boolean = false;
 
     constructor(
         private _router: Router, private _generalService: GeneralService,
@@ -34,7 +32,7 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
         private settingsProfileActions: SettingsProfileActions,
         private generalActions: GeneralActions
     ) {
-        
+
     }
 
     public ngOnInit() {
@@ -55,13 +53,9 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
 
     public selectConfigureBank() {
         if (this.companyCountry) {
-            if (this.companyCountry.toLowerCase() === 'india') {
                 this.store.dispatch(this.generalActions.setAppTitle('/pages/settings/integration/payment'));
                 this._router.navigate(['pages/settings/integration/payment'], { replaceUrl: true });
-            } else {
-                this.store.dispatch(this.generalActions.setAppTitle('/pages/settings/integration/email'));
-                this._router.navigate(['pages/settings/integration/email'], { replaceUrl: true });
-            }
+
 
         } else {
             this.store.dispatch(this.generalActions.setAppTitle('/pages/settings/integration'));
@@ -85,19 +79,8 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
             if (o.profileRequest || 1 === 1) {
                 let inventorySetting = _.cloneDeep(o);
                 this.CompanySettingsObj = inventorySetting;
-                if(this.CompanySettingsObj.companyInventorySettings?.manageInventory){
-                    this.inventoryTypeStatus = true;
-                } else {
-                    this.inventoryTypeStatus = false;
-                }
             }
         });
-    }
-
-    public updateInventorySetting() {
-        let dataToSaveNew = _.cloneDeep(this.CompanySettingsObj);
-        dataToSaveNew.companyInventorySettings = { manageInventory: this.inventoryTypeStatus };
-        this.store.dispatch(this.settingsProfileActions.UpdateInventory(dataToSaveNew));
     }
 
     /**

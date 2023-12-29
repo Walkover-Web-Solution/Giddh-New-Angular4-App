@@ -94,12 +94,6 @@
         width: 15%;
     }
 
-    .table-content {
-        max-height: calc(100vh - 200px);
-        overflow-y: auto;
-        height: calc(100vh - 200px);
-    }
-
     .activity-table {
         .activity-td {
             width: 18%;
@@ -107,7 +101,8 @@
         }
 
         .history-icon {
-            display: none;
+            visibility: hidden;
+            transition: 0ms;
         }
 
         .mat-column-history {
@@ -118,7 +113,7 @@
         tr {
             &:hover {
                 .history-icon {
-                    display: inline-block !important;
+                    visibility: visible;
                     z-index: 9999;
                 }
             }

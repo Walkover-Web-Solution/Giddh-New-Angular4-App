@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from "@angular/core";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 import { select, Store } from "@ngrx/store";
 import { SELECT_ALL_RECORDS } from "apps/web-giddh/src/app/app.constant";
 import { IForceClear } from "apps/web-giddh/src/app/models/api-models/Sales";
@@ -34,7 +34,7 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
     /* This will hold local JSON data */
     public localeData: any = {};
     /** Form Group for account form */
-    public accountForm: FormGroup;
+    public accountForm: UntypedFormGroup;
     /** This will hold list of accounts */
     public bankAccounts$: Observable<IOption[]>;
     /** This will hold users list */
@@ -61,7 +61,7 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
         private settingsIntegrationService: SettingsIntegrationService,
         private salesService: SalesService,
         private store: Store<AppState>,
-        private formBuilder: FormBuilder,
+        private formBuilder: UntypedFormBuilder,
         private changeDetection: ChangeDetectorRef,
         private pageLeaveUtilityService: PageLeaveUtilityService
     ) {
@@ -75,10 +75,10 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         if (this.activeBankAccount) {
-            this.paymentAlerts = this.activeBankAccount?.iciciDetailsResource?.paymentAlerts?.map(user => user?.uniqueName);
+            this.paymentAlerts = this.activeBankAccount?.bankResource?.paymentAlerts?.map(user => user?.uniqueName);
 
             this.accountForm = this.formBuilder.group({
-                accountNumber: [this.activeBankAccount?.iciciDetailsResource?.accountNumber, Validators.compose([Validators.required, Validators.minLength(9), Validators.maxLength(18)])],
+                accountNumber: [this.activeBankAccount?.bankResource?.accountNumber, Validators.compose([Validators.required, Validators.minLength(9), Validators.maxLength(18)])],
                 accountUniqueName: [this.activeBankAccount?.account?.uniqueName],
                 paymentAlerts: [this.paymentAlerts]
             });
@@ -294,7 +294,7 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
                 this.accountForm.get('duration')?.patchValue(UNLIMITED_LIMIT);
             }
 
-            let request = { bankAccountUniqueName: this.activeBankAccount?.iciciDetailsResource?.uniqueName };
+            let request = { bankAccountUniqueName: this.activeBankAccount?.bankResource?.uniqueName };
 
             let accountFormObj;
             if (!this.isIciciBankSupportedCountry) {
