@@ -44,7 +44,7 @@
                             <div class="right-heading" *ngIf="currentUser?.uniqueName">
                                 <button mat-stroked-button color="primary" (click)="openSearchModal('stocks')"> {{
                                     localeData?.add_inventory }} </button>
-                                <div class="search-list position-relative" [formGroup]="searchForm">
+                                <div class="search-list position-relative" [formGroup]="searchForm" *ngIf="!currentUser?.isTempUser && !isStockLoading">
                                     <text-field type="text" [placeholder]="commonLocaleData?.app_search"
                                         [cssClass]="'form-control search-bar'"
                                         formControlName="stockSearch"></text-field>
@@ -53,14 +53,14 @@
                                     </span>
                                 </div>
                             </div>
-                            <ng-container *ngIf="(currentUserStocks?.length || currentUserStocks?.uniqueName) && !isStockLoading">
+                            <ng-container *ngIf="currentUserStocks?.length && !isStockLoading">
                                 <div class="stocks-wrapper mr-t2 overflow-auto" [formGroup]="discountForm">
                                     <ng-container
                                         *ngFor="let discountCollection of discountForm?.get('discountInfo')['controls']; let i = index"
                                         formArrayName="discountInfo">
                                         <div class="table-inventory">
                                             <div class="float-right">
-                                                <button mat-stroked-button class="delete-icon mb-2 mr-r1"
+                                                <button mat-stroked-button class="delete-icon mb-2"
                                                     (click)="confirmationPopup( discountCollection?.get('stockUniqueName')?.value, 'stock', discountCollection?.get('isTempStock')?.value, i)">
                                                     <i class="icon-trash"></i>
                                                 </button>
@@ -69,14 +69,14 @@
                                                 <p class="inventory-head">
                                                     <strong>{{ discountCollection?.get('stockName')?.value }}</strong>
                                                 </p>
-                                                <ng-container [formGroupName]="i">
+                                                <ng-container [formGroupName]="i" *ngIf="discountCollection?.get('variants')?.value?.length">
                                                     <div class="mr-t05 mr-b15">
                                                         <table class="table">
                                                             <tbody>
                                                                 <tr *ngFor="let variant of discountCollection?.get('variants')['controls'];  let j = index"
                                                                     formArrayName="variants">
                                                                     <ng-container [formGroupName]="j">
-                                                                        <td class="variant-name" [ngStyle]="{ 'min-width': discountCollection?.get('variants')['controls']?.length > 1 ? null : '100px'}">
+                                                                        <td class="variant-name" [ngStyle]="{ 'width': discountCollection?.get('variants')['controls']?.length > 1 ? null : '100px'}">
                                                                             <ng-container *ngIf="discountCollection?.get('hasVariants')?.value">
                                                                                 {{ variant?.get('variantName')?.value }}
                                                                             </ng-container>
@@ -137,16 +137,7 @@
                                                                                 [matSuffix]="variant?.get('variantUnitName')?.value"
                                                                                 [cssClass]="'text-right'"></input-field>
                                                                         </td>
-                                                                        <td class="variant-unit">
-                                                                            <dropdown-field
-                                                                                [name]="'unit' + i + '-' + j"
-                                                                                [placeholder]="commonLocaleData?.app_unit"
-                                                                                [options]="discountCollection?.get('units')?.value"
-                                                                                [defaultValue]="variant?.get('variantUnitName')?.value"
-                                                                                (selectedOption)="selectVariantUnit($event, i, j)">
-                                                                            </dropdown-field>
-                                                                        </td>
-                                                                        <td class="variant-delete">
+                                                                        <td class="variant-delete pr-0">
                                                                             <div class="delete-show">
                                                                                 <button mat-stroked-button
                                                                                     [disabled]="discountCollection?.get('variants')?.value?.length < 2"
@@ -172,7 +163,7 @@
                                                                             </dropdown-field>
                                                                         </div>
                                                                     </td>
-                                                                    <td colspan="5" class="text-right px-0 mt-3">
+                                                                    <td colspan="4" class="text-right px-0 mt-3">
                                                                         <button *ngIf="true" mat-stroked-button
                                                                             color="primary" class="my-3"
                                                                             (click)="saveDiscount(i)">Save</button>
@@ -197,7 +188,7 @@
                                 </div>
                             </ng-container>
                             <div class="text-center mt-5 text-gray font-24"
-                                *ngIf="!(currentUserStocks?.length || currentUserStocks?.uniqueName) && currentUser?.uniqueName && !isStockLoading">
+                                *ngIf="!currentUserStocks?.length && currentUser?.uniqueName && !isStockLoading">
                                 <span class="font">{{ commonLocaleData?.app_no_data_found }}</span>
                             </div>
                             <div *ngIf="isStockLoading">
