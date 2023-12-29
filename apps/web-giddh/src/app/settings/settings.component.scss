@@ -2,8 +2,11 @@
     padding: 0 15px 15px !important;
     margin-top: 15px;
     min-height: calc(100vh - 84px);
+    .mat-tab-body-wrapper {
+        overflow: auto !important;
+    }
 }
-.video-link{
+.video-link {
     right: 0;
     top: 15px;
     z-index: 2;
