@@ -40,7 +40,7 @@
                     <h4>{{ commonLocaleData?.app_download }}</h4>
                     <mat-list role="list">
                         <div class="d-flex">
-                            <mat-list-item role="listitem" *ngIf="!isMac">
+                            <mat-list-item role="listitem" *ngIf="!isMacElectronApp">
                                 <a
                                     href="https://play.google.com/store/apps/details?id=com.app.Giddh&hl=en"
                                     target="_blank"
@@ -71,7 +71,7 @@
                                     <i class="icon-mac"></i> {{ localeData?.ios }}</a
                                 >
                             </mat-list-item>
-                            <mat-list-item role="listitem"  *ngIf="!isMac">
+                            <mat-list-item role="listitem"  *ngIf="!isMacElectronApp">
                                 <a
                                     href="https://s3-ap-south-1.amazonaws.com/giddh-app-builds/giddh%20Setup%20{{
                                         apkVersion
