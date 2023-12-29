@@ -65,7 +65,6 @@
                         </tab>
 
                         <tab
-                            *ngIf="selectedGst === GstReport.Gstr2"
                             (selectTab)="selectTab($event, true, localeData?.filing?.tabs?.reconcilation)"
                         >
                             <ng-template tabHeading>

@@ -257,11 +257,23 @@
         <th id="4" class="text-left width-vendor">
             <div class="position-relative">
                 <div
-                    [attr.data-test-title]="localeData?.filing?.vendor_details"
-                    [attr.title]="localeData?.filing?.vendor_details"
+                    [attr.data-test-title]="commonLocaleData?.app_gstin"
+                    [attr.title]="commonLocaleData?.app_gstin"
                     class="pull-left over-flow"
                 >
-                    {{ localeData?.filing?.vendor_details }}
+                    {{ commonLocaleData?.app_gstin }}
+                </div>
+            </div>
+        </th>
+
+        <th id="4" class="text-left width-vendor">
+            <div class="position-relative">
+                <div
+                    [attr.data-test-title]="commonLocaleData?.app_voucher_no"
+                    [attr.title]="commonLocaleData?.app_voucher_no"
+                    class="pull-left over-flow"
+                >
+                    {{ commonLocaleData?.app_voucher_no }}
                 </div>
             </div>
         </th>
@@ -370,7 +382,13 @@
     <tr class="cursor-pointer">
         <td class="primary-details">
             <div>
-                {{ item.ctin }}<span class="text-muted font-xxs"> ({{ item.invoice_number }})</span>
+                {{ item.ctin ? item.ctin : "-" }}
+            </div>
+        </td>
+
+        <td class="primary-details">
+            <div>
+                {{ item.invoice_number }}
             </div>
         </td>
 
@@ -534,7 +552,13 @@
     <tr class="cursor-pointer">
         <td class="primary-details">
             <div>
-                {{ item.ctin }}<span class="text-muted font-xxs"> ({{ item.invoice_number }})</span>
+                {{ item.ctin ? item.ctin : "-" }}
+            </div>
+        </td>
+
+        <td class="primary-details">
+            <div>
+                {{ item.invoice_number }}
             </div>
         </td>
 
@@ -695,7 +719,13 @@
     <tr class="cursor-pointer">
         <td class="primary-details">
             <div>
-                {{ item.ctin }}<span class="text-muted font-xxs"> ({{ item.invoice_number }})</span>
+                {{ item.ctin ? item.ctin : "-" }}
+            </div>
+        </td>
+
+        <td class="primary-details">
+            <div>
+                {{ item.invoice_number }}
             </div>
         </td>
 
