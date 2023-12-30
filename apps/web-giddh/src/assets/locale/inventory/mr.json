@@ -17,6 +17,7 @@
         "create_manufacturing":"मॅन्युफॅक्चरिंग तयार करा",
         "report":"अहवाल द्या",
         "master":"मास्टर",
+        "custom_price": "सानुकूल किंमत",
         "customer_wise":"ग्राहक शहाणे",
         "vendor_wise":"विक्रेता शहाणे"
     },

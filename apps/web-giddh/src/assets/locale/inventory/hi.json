@@ -17,6 +17,7 @@
         "create_manufacturing":"मैन्युफैक्चरिंग बनाएं",
         "report":"प्रतिवेदन",
         "master":"मास्टर",
+        "custom_price": "कस्टम कीमत",
         "customer_wise":"ग्राहक समझदार",
         "vendor_wise":"विक्रेता समझदार"
     },

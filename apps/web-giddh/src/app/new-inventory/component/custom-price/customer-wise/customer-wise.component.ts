@@ -1,4 +1,4 @@
-import { ScrollDispatcher } from "@angular/cdk/scrolling";
+import { CdkScrollable, ScrollDispatcher } from "@angular/cdk/scrolling";
 import { ChangeDetectorRef, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
 import { FormArray, FormControl, FormGroup, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
@@ -28,6 +28,8 @@ export interface CustomerVendorDiscountBasic {
 export class CustomerWiseComponent implements OnInit, OnDestroy {
     /** Instance of Mat Dialog for Add Inventory */
     @ViewChild("addSearchModal") public addSearchModal: TemplateRef<any>;
+    /** CDK Scrollable Reference */
+    @ViewChild(CdkScrollable) cdkScrollable: CdkScrollable;
     /* Table Columns */
     displayedColumns: string[] = ['name', 'price', 'radio', 'discount', 'quantity', 'delete'];
     /* This will hold local JSON data */
@@ -192,7 +194,11 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                     this.userList = [...this.userList, ...response.body.results];
                 }
                 if (this.userList.length) {
-                    this.selectUser(this.userList[0]);
+                    if (isLoadMore) {
+                        this.selectUser(this.currentUser);
+                    } else {
+                        this.selectUser(this.userList[0]);
+                    }
                 }
                 this.changeDetectorRef.detectChanges();
             }
@@ -859,13 +865,14 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
             if ((this.checkTemporaryUser(event?.uniqueName) === -1) && (this.checkUserList(event?.uniqueName) === -1)) {
                 this.currentUser = event;
                 this.currentUser['isTempUser'] = true;
-                this.userList.push(event);
+                this.userList.unshift(event);
                 this.userList = [...this.userList];
-                this.tempUserList.push(event);
+                this.tempUserList.unshift(event);
                 this.initDiscountMainForm();
                 this.currentUserStocks = [];
                 this.variantsWithoutDiscount = [];
                 this.dialogRef.close();
+                this.cdkScrollable.scrollTo({ top: 0 });
             } else {
                 let type = event?.type === 'ACCOUNT' ? 'Account' : 'Group';
                 let msg = this.localeData?.already_added_msg.replace('[TYPE]', type);
