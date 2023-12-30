@@ -212,6 +212,14 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
      * @memberof DiscountControlComponent
      */
     public showDiscountMenu(): void {
+        let element = document.getElementsByClassName("my-dropdown-menu");
+        if (element && element.length) {
+            for (let i = 0; i < element.length; i++) {
+                if (element[i].attributes[3].value === "display: block;") {
+                    element[i].attributes[3].value = "display: none;";
+                }
+            }
+        }       
         this.discountMenu = true;
         this.hideOtherPopups.emit(true);
     }

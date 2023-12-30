@@ -100,8 +100,8 @@
                                                                                         {{
                                                                                         variant?.get('discountExclusive')?.value
                                                                                         ?
-                                                                                        localeData?.inclusive :
-                                                                                        localeData?.exclusive
+                                                                                        localeData?.exclusive :
+                                                                                        localeData?.inclusive
                                                                                         }}
                                                                                     </span>
                                                                                 </mat-slide-toggle>
@@ -156,10 +156,10 @@
                                                                         <div *ngIf="variantsWithoutDiscount[i]?.length">
                                                                             <dropdown-field
                                                                                 [name]="'variantsWithoutDiscount' + i"
-                                                                                [label]="localeData?.add_variant"
                                                                                 [placeholder]="localeData?.add_variant"
                                                                                 [options]="variantsWithoutDiscount[i]"
-                                                                                (selectedOption)="selectVariant($event, i)">
+                                                                                (selectedOption)="selectVariant($event, i)"
+                                                                                [defaultValue]="variantsWithoutDiscount[i][0].label">
                                                                             </dropdown-field>
                                                                         </div>
                                                                     </td>
