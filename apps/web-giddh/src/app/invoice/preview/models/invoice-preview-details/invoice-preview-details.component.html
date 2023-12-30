@@ -680,6 +680,7 @@
                                 #attachedDocumentPreview
                                 class="pdf-preview"
                                 *ngIf="
+                                    defaultTemplate?.templateType !== 'thermal_template' &&
                                     sanitizedPdfFileUrl &&
                                     !(isVoucherDownloading || isVoucherDownloadError || isFileUploading)
                                 "

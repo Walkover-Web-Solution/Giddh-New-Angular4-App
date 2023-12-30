@@ -29,6 +29,7 @@ import { AppState } from '../../../../store';
 import { ProformaListComponent } from '../../../proforma/proforma-list.component';
 import { InvoiceActions } from 'apps/web-giddh/src/app/actions/invoice/invoice.actions';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
+import { InvoiceTemplatesService } from 'apps/web-giddh/src/app/services/invoice.templates.service';
 
 @Component({
     selector: 'invoice-preview-details-component',
@@ -162,6 +163,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         private domSanitizer: DomSanitizer,
         private commonService: CommonService,
         private thermalService: ThermalService,
+        private invoiceTemplatesService: InvoiceTemplatesService,
         private invoiceAction: InvoiceActions) {
         this.breakPointObservar.observe([
             '(max-width: 1023px)'
@@ -194,14 +196,14 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     public ngOnInit(): void {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         // Hide Thermal Feature
-        // this.invoiceTemplatesService.getAllCreatedTemplates("sales").pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-        //     if (res) {
-        //         const defaultTemplate = res.body?.filter(res => res.isDefault);
-        //         if (defaultTemplate?.length > 0) {
-        //             this.defaultTemplate = defaultTemplate[0];
-        //         }
-        //     }
-        // });
+        this.invoiceTemplatesService.getAllCreatedTemplates("sales").pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+            if (res) {
+                const defaultTemplate = res.body?.filter(res => res.isDefault);
+                if (defaultTemplate?.length > 0) {
+                    this.defaultTemplate = defaultTemplate[0];
+                }
+            }
+        });
         if (document.getElementsByClassName("sidebar-collapse")?.length > 0) {
             this.isSidebarExpanded = false;
         } else {
