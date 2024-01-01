@@ -470,7 +470,13 @@
     <tr class="cursor-pointer">
         <td class="primary-details">
             <div>
-                {{ item.ctin }}<span class="text-muted font-xxs"> ({{ item.invoice_number }})</span>
+                {{ item.ctin ? item.ctin : "-" }}
+            </div>
+        </td>
+
+        <td class="primary-details">
+            <div>
+                {{ item.invoice_number }}
             </div>
         </td>
 
