@@ -15,5 +15,7 @@
     "INVENTORY_CREATE_STOCK": "स्टॉक्स कैसे बनाएं?",
     "VOUCHER_CASH": "कैसे एक चालान बनाएं?",
     "VOUCHER_SALES": "कैसे एक चालान बनाएं?",
-	"ECOMM_INTEGRATION": "देखें कैसे Shopify को GIDDH में एकीकृत करें"
+    "ECOMM_INTEGRATION": "Shopify को GIDDH से कैसे जोड़ें",
+    "BARCODE": "Giddh में बारकोड का उपयोग कैसे करें",
+    "DAYBOOK": "Giddh में डे-बुक रिपोर्ट कैसे काम करती है"
 }
