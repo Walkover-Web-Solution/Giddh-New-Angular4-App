@@ -3859,7 +3859,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             if (isInclusiveEntry) {
                 setTimeout(() => {
                     // Set timeout is used as tax component is not rendered at the time control is reached here
-                    transaction.rate = Number((transaction.stockList[0].rate / this.exchangeRate).toFixed(this.highPrecisionRate));
+                    transaction.rate = Number((transaction.stockList[0]?.rate / this.exchangeRate).toFixed(this.highPrecisionRate));
                     transaction.total = transaction.quantity * transaction.rate;
                     this.calculateTransactionValueInclusively(entry, transaction);
                 });
