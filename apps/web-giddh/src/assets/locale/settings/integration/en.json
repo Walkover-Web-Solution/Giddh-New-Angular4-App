@@ -39,7 +39,17 @@
         "client_secret_key_placeholder": "Client Secret Key",
         "auto_collect_form_heading": "Auto Collect",
         "payment_gateway_form_heading": "Payment Gateway",
-        "unlink_razorpay_message": "You don't have any account linked with Razorpay."
+        "unlink_razorpay_message": "You don't have any account linked with Razorpay.",
+        "unlink_paypal_message": "You don't have any account linked with Paypal.",
+        "invalid_email_error": "Enter valid Email ID",
+        "paypal_form_heading": "Paypal Details",
+        "email_id_label": "Email Id",
+        "email_id_placeholder": "Email Id",
+        "paypal_save_successfully":"Paypal account details have been saved successfully.",
+        "paypal_update_successfully":"Paypal account details have been updated successfully.",
+        "unlinked_account_successfully":"Paypal account details have been unlink successfully.",
+        "paypal_tab_heading": "Paypal",
+        "razorpay_tab_heading": "Razorpay"
     },
     "ecommerce": {
         "tab_heading": "E-Comm",

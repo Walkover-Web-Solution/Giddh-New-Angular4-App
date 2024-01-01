@@ -1,10 +1,10 @@
-<div id="" class="">
+<div id="" >
     <div class="modal-header d-flex justify-content-between">
         <h3>Confirmation</h3>
         <button aria-hidden="true" class="close" data-dismiss="modal" (click)="onCancel()">×</button>
     </div>
     <div class="modal-body clearfix" id="export-body">
-        <form name="newRole" novalidate class="" autocomplete="off">
+        <form name="newRole" novalidate autocomplete="off">
             <h3 *ngIf="!isMessageTextOrHeading" [innerHTML]="message"></h3>
             <ng-container *ngIf="isMessageTextOrHeading">
                 <div class="modal-wrap mr-b2">

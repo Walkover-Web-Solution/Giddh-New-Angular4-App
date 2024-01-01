@@ -33,7 +33,7 @@
                                                     Transaction Count
                                                 </div>
                                                 <div
-                                                    class=""
+                                                    
                                                     *ngIf="GroupStockReportRequest.branchDetails !== 'allEntity'"
                                                 >
                                                     Product Count
@@ -49,7 +49,7 @@
                                                     >
                                                 </div>
                                                 <div
-                                                    class=""
+                                                    
                                                     *ngIf="GroupStockReportRequest.branchDetails !== 'allEntity'"
                                                 >
                                                     <span class="text-purple" *ngIf="groupStockReport.totalItems"
@@ -832,7 +832,7 @@
                                         <div *ngIf="GroupStockReportRequest.branchDetails === 'allEntity'">
                                             Transaction Count
                                         </div>
-                                        <div class="" *ngIf="GroupStockReportRequest.branchDetails !== 'allEntity'">
+                                        <div *ngIf="GroupStockReportRequest.branchDetails !== 'allEntity'">
                                             Product Count
                                         </div>
                                         <div class="mt-1">Profit/Loss</div>
@@ -845,7 +845,7 @@
                                                 >&nbsp;{{ groupStockReport.totalItems | giddhCurrency }}</span
                                             >
                                         </div>
-                                        <div class="" *ngIf="GroupStockReportRequest.branchDetails !== 'allEntity'">
+                                        <div *ngIf="GroupStockReportRequest.branchDetails !== 'allEntity'">
                                             <span class="text-purple" *ngIf="groupStockReport.totalItems"
                                                 >&nbsp;{{ groupStockReport.totalItems | giddhCurrency }}</span
                                             >

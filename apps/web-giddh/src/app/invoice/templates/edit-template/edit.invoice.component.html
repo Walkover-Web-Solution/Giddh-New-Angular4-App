@@ -73,7 +73,7 @@
                         </button>
 
                         <div class="template-meta">
-                            <small class="text-ellipsis">Created by: {{ template.createdBy.name }}</small>
+                            <small class="text-ellipsis" [tooltip]="template.createdBy.name.length > 13 ? template.createdBy.name : null">Created by: {{ template.createdBy.name }}</small>
                         </div>
                     </div>
                 </div>
@@ -112,7 +112,7 @@
                             </button>
 
                             <div class="template-meta">
-                                <small class="text-ellipsis">Created by: {{ template.createdBy.name }}</small>
+                                <small class="text-ellipsis" [tooltip]="template.createdBy.name.length > 13 ? template.createdBy.name : null">Created by: {{ template.createdBy.name }}</small>
                             </div>
                         </div>
                     </div>
