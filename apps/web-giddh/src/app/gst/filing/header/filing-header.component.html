@@ -5,7 +5,7 @@
 
     <!-- region gstr1 -->
     <div class="list-style row" *ngIf="selectedGst === GstReport.Gstr1">
-        <div class="wrap-GSTR-1-title col-lg-8 col-sm-8 col-12 xs-mb-1">
+        <div class="wrap-GSTR-1-title col-lg-4 col-sm-8 col-12 xs-mb-1">
             <a href="javascript:void(0);" [routerLink]="['/gstfiling']" class="ember-view">
                 <img src="{{ imgPath }}back.svg" class="icon icon-sm text-middle" />
             </a>
@@ -69,7 +69,7 @@
             </div>
         </div>
 
-        <div class="col-lg-4 col-sm-4 col-12">
+        <div class="col-lg-8 col-sm-4 col-12">
             <ul class="list-inline list-middle download-drop-down">
                 <li>
                     <watch-video [cssClass]="'text-primary pd-r15'" [moduleName]="'GSTR1'"></watch-video>
