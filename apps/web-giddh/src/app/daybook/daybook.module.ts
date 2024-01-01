@@ -30,6 +30,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { LedgerModule } from '../ledger/ledger.module';
+import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
 
 @NgModule({
     declarations: [DaybookComponent, ExportDaybookComponent, DaybookAdvanceSearchModelComponent],
@@ -63,7 +64,8 @@ import { LedgerModule } from '../ledger/ledger.module';
         MatRadioModule,
         MatExpansionModule,
         MatSlideToggleModule,
-        LedgerModule
+        LedgerModule,
+        WatchVideoModule
     ]
 })
 export class DaybookModule {
