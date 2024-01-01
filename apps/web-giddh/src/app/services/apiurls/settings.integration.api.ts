@@ -5,6 +5,7 @@ export const SETTINGS_INTEGRATION_API = {
     EMAIL: COMMON + 'email-key', // GET or POST call
     PAYMENT: COMMON + 'bank/registration',// POST call to save payment info
     RAZORPAY: COMMON + 'razorpay', // ALL METHODS
+    PAYPAL: COMMON + 'paypal', // ALL METHODS
     CASHFREE: COMMON + 'cashfree', // GET, POST
     AUTOCOLLECT_USER: COMMON + 'cashfree/autocollect/users', // GET, POST, PUT, DELETE
     PAYMENT_GATEWAY: COMMON + 'cashfree/payment-gateway', // GET, POST, PUT, DELETE
