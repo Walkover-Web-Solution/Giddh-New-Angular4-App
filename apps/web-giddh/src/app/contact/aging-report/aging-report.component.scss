@@ -251,13 +251,18 @@ tr.mat-header-row {
 
         .list-item {
             height: 70px;
-            &:not(:last-child){
+            a {
+                & > div {
+                    height: 70px;
+                }
+            }
+            &:not(:last-child) {
                 border-bottom: 1px solid var(--color-common-primary-border);
             }
-            &:hover{
+            &:hover {
                 background-color: var(--color-table-row-hover-secondary-background);
             }
-            
+
             .customer-name {
                 color: var(--color-nero);
                 white-space: normal;

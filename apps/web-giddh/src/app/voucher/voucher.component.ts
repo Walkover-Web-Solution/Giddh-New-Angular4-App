@@ -2481,7 +2481,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     }
 
     public onSubmitInvoiceForm(form?: NgForm) {
-
         this.isShowLoader = true;
         this.changeDetectorRef.detectChanges();
         let invoiceType = this.getVoucherType(this.invoiceType);
@@ -2528,10 +2527,10 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         }
 
         if (this.isSalesInvoice || this.isPurchaseInvoice || this.isProformaInvoice || this.isEstimateInvoice) {
+            data.voucherDetails.dueDate = this.convertDateForAPI(data.voucherDetails.dueDate);
             if (dayjs(data.voucherDetails.dueDate, GIDDH_DATE_FORMAT).isBefore(dayjs(data.voucherDetails.voucherDate, GIDDH_DATE_FORMAT), 'd')) {
                 this.isShowLoader = false;
                 this.startLoader(false);
-
                 let dateText = this.commonLocaleData?.app_invoice;
 
                 if (this.isProformaInvoice) {
@@ -2574,7 +2573,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     entry.voucherType = this.voucherUtilityService.parseVoucherType(invoiceType);
                     entry.taxList = entry.taxes?.map(m => m?.uniqueName);
                     entry.tcsCalculationMethod = entry.otherTaxModal.tcsCalculationMethod;
-
                     if (entry.isOtherTaxApplicable) {
                         entry.taxList.push(entry.otherTaxModal.appliedOtherTax?.uniqueName);
                     }
@@ -3060,6 +3058,17 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 taxPercentage += tax.amount;
             }
         });
+        if (trx?.applicableTaxes?.length > 0) {
+            let data: VoucherClass = cloneDeep(this.invFormData);
+            data.entries.forEach((entry: any, index: number) => {
+                const transaction = this.invFormData.entries[index].transactions[0];
+                if (transaction['applicableTaxes']?.length > 0) {
+                    transaction['requiredTax'] = false;
+                } else {
+                    transaction['requiredTax'] = true;
+                }
+            });
+        }
 
         entry.taxSum = giddhRoundOff(((taxPercentage * (trx.amount - entry.discountSum)) / 100), this.giddhBalanceDecimalPlaces);
         entry.cessSum = giddhRoundOff(((cessPercentage * (trx.amount - entry.discountSum)) / 100), this.giddhBalanceDecimalPlaces);
@@ -4711,9 +4720,10 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         }
 
         if (this.isSalesInvoice || this.isPurchaseInvoice || this.isProformaInvoice || this.isEstimateInvoice) {
+            data.voucherDetails.dueDate = this.convertDateForAPI(data.voucherDetails.dueDate);
             if (dayjs(data.voucherDetails.dueDate, GIDDH_DATE_FORMAT).isBefore(dayjs(data.voucherDetails.voucherDate, GIDDH_DATE_FORMAT), 'd')) {
                 this.startLoader(false);
-
+                this.showLoader = false;
                 let dateText = this.commonLocaleData?.app_invoice;
 
                 if (this.isProformaInvoice) {
@@ -5902,7 +5912,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             if (this.billingState && this.billingState.nativeElement) {
                 this.billingState.nativeElement.classList.remove('error-box');
             }
-            if (this.customerCountryCode === 'IN') {
+            if (this.isCashInvoice || this.customerCountryCode === 'IN') {
                 this.invFormData.accountDetails.billingDetails.state.name = stateName;
                 this.invFormData.accountDetails.billingDetails.stateName = stateName;
                 this.invFormData.accountDetails.billingDetails.stateCode = stateCode;
@@ -5918,7 +5928,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             // if it's not billing address then only update shipping details
             // check if it's not auto fill shipping address from billing address then and then only update shipping details
             if (!this.autoFillShipping) {
-                if (this.customerCountryCode === 'IN') {
+                if (this.isCashInvoice || this.customerCountryCode === 'IN') {
                     this.invFormData.accountDetails.shippingDetails.stateName = stateName;
                     this.invFormData.accountDetails.shippingDetails.stateCode = stateCode;
                     this.invFormData.accountDetails.shippingDetails.state.name = stateName;
@@ -6101,6 +6111,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             const transaction = (this.invFormData && this.invFormData.entries && this.invFormData.entries[index].transactions) ?
                 this.invFormData.entries[index].transactions[0] : '';
             if (transaction) {
+                entry.taxes = entry.taxes?.filter(tax => tax.isChecked);
                 transaction['requiredTax'] = (entry.taxes && entry.taxes.length === 0);
                 validEntries = !(!entry.taxes || entry.taxes?.length === 0); // Entry is invalid if tax length is zero
             }
@@ -7428,7 +7439,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             if (this.billingStateCompany && this.billingStateCompany.nativeElement) {
                 this.billingStateCompany.nativeElement.classList.remove('error-box');
             }
-            if (this.customerCountryCode === 'IN') {
+            if (this.isCashInvoice || this.customerCountryCode === 'IN') {
                 this.purchaseBillCompany.billingDetails.state.name = stateName;
                 this.purchaseBillCompany.billingDetails.stateName = stateName;
                 this.purchaseBillCompany.billingDetails.stateCode = stateCode;
@@ -7444,7 +7455,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             // if it's not billing address then only update shipping details
             // check if it's not auto fill shipping address from billing address then and then only update shipping details
             if (!this.autoFillCompanyShipping) {
-                if (this.customerCountryCode === 'IN') {
+                if (this.isCashInvoice || this.customerCountryCode === 'IN') {
                     this.purchaseBillCompany.shippingDetails.stateName = stateName;
                     this.purchaseBillCompany.shippingDetails.stateCode = stateCode;
                     this.purchaseBillCompany.shippingDetails.state.name = stateName;

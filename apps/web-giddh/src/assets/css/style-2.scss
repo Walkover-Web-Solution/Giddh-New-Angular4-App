@@ -180,6 +180,23 @@ textarea {
     }
 }
 
+   .mobile-number-portal-wrapper {
+       input.error {
+           border: 1px solid var(--color-danger);
+       }
+
+       @for $index from 0 through 100 {
+           #init-contact-portal_#{$index}-valid-msg {
+               color: var(--color-success-enable) !important;
+               font-size: var(--font-size-15);
+           }
+
+           #init-contact-portal_#{$index}-error-msg {
+               color: var(--color-danger);
+               font-size: var(--font-size-15);
+           }
+       }
+   }
 .voucher-preview-edit,
 .update-ledger-entry-panel-popup,
 .page-has-tabs,
@@ -802,6 +819,27 @@ textarea {
     float: right !important;
 }
 
+.domain-options {
+    .mdc-list-item__primary-text {
+        width: 100%;
+    }
+}
+.select-domain {
+    .mat-mdc-select {
+        padding: 0px !important;
+    }
+}
+.dropdown-wrapper {
+    .mat-mdc-text-field-wrapper {
+        border: none !important;
+    }
+}
+
+.collection-integration {
+    .mat-mdc-tab-body-wrapper {
+        min-height: 500px;
+    }
+}
 @media screen and (max-width: 1366px) and (orientation: portrait) {
     .subscription-form-select {
         float: left !important;
@@ -3660,6 +3698,10 @@ input[type="number"]::-webkit-inner-spin-button {
 
 .cursor-pointer {
     cursor: pointer !important;
+}
+
+.cursor-default{
+    cursor: default !important;
 }
 
 footer {
@@ -14456,4 +14498,18 @@ aside-menu-product-service {
     position: sticky !important;
     top: 0;
     z-index: 1;
+}
+.custom-tooltip{
+    background-color: var(--color-dark-gray) !important;
+    border-radius: 4px;
+    padding: 0 8px;
+
+    .tooltip-text{
+        font-size: var(--font-size-12);
+        color: var(--color-toast-primary-text);
+        a {
+            color: var(--color-toast-primary-text) !important;
+            text-decoration: underline;
+        }
+    }
 }

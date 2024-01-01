@@ -38,6 +38,7 @@ import { VoucherRendererComponent } from "./voucher-renderer.component";
 import { VoucherComponent } from "./voucher.component";
 import { VoucherRoutingModule } from "./voucher.routing.module";
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+import { WatchVideoModule } from "../theme/watch-video/watch-video.module";
 
 @NgModule({
     imports: [
@@ -81,7 +82,8 @@ import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
         MatInputModule,
         MatRadioModule,
         FormFieldsModule,
-        NgxMatSelectSearchModule
+        NgxMatSelectSearchModule,
+        WatchVideoModule
     ],
     exports: [VoucherComponent],
     declarations: [

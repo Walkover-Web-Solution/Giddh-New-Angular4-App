@@ -1,4 +1,4 @@
-import { RazorPayDetailsResponse } from '../api-models/SettingsIntegraion';
+import { PaypalDetailsResponse, RazorPayDetailsResponse } from '../api-models/SettingsIntegraion';
 
 export interface InvoiceWebhooks {
     entity: string;
@@ -15,6 +15,7 @@ export interface InvoiceSetting {
     estimateSettings: EstimateSettings;
     webhooks: any[];
     razorPayform?: RazorPayDetailsResponse;
+    paypalForm?: PaypalDetailsResponse;
     companyEmailSettings: CompanyEmailSettings;
     companyCashFreeSettings: CompanyCashFreeSettings;
     companyInventorySettings: CompanyInventorySettings;
@@ -89,6 +90,7 @@ export class InvoiceSettings {
     autoEntryAndInvoice: boolean;
     showSeal: boolean;
     autoPaid: any;
+    autoGenerateVoucherFromEntry: boolean;
     branchInvoiceNumberPrefix: any;
     createPaymentEntry: boolean;
     email?: any;

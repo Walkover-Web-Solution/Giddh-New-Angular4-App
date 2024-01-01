@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, NgZone, OnDestro
 import { ActivatedRoute } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { LoginActions } from 'apps/web-giddh/src/app/actions/login.action';
-import { SearchResultText, GIDDH_DATE_RANGE_PICKER_RANGES, RATE_FIELD_PRECISION, PAGINATION_LIMIT, RESTRICTED_VOUCHERS_FOR_DOWNLOAD, AdjustedVoucherType } from 'apps/web-giddh/src/app/app.constant';
+import { SearchResultText, GIDDH_DATE_RANGE_PICKER_RANGES, RATE_FIELD_PRECISION, PAGINATION_LIMIT, RESTRICTED_VOUCHERS_FOR_DOWNLOAD, AdjustedVoucherType, BROADCAST_CHANNELS } from 'apps/web-giddh/src/app/app.constant';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI, GIDDH_DATE_FORMAT_MM_DD_YYYY } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { ShSelectComponent } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-select.component';
 import * as dayjs from 'dayjs';
@@ -280,6 +280,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
     /** Holds Aside Menu State For Other Taxes DialogRef */
     public asideMenuStateForOtherTaxesDialogRef: any;
+    /** Holds true if branch is select in company mode */
+    public isBranchTransactionSelected: boolean = false;
+    /** Holds Invoice Setting for auto Generate Voucher From Entry */
+    public autoGenerateVoucherFromEntryStatus: boolean;
+    public bankAccount: any = {
+        reLoginRequired: false,
+        itemId: ''
+    };
 
     constructor(
         private store: Store<AppState>,
@@ -801,6 +809,20 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.cdRf.detectChanges();
             }
         });
+
+        const broadcast = new BroadcastChannel("tabs");
+        broadcast.onmessage = (event) => {
+            if (event?.data?.autoGenerateVoucherFromEntry !== undefined && event?.data?.autoGenerateVoucherFromEntry !== null) {
+                this.store.dispatch(this.invoiceAction.getInvoiceSetting());
+            }
+        };
+
+        const plaidBroadcast = new BroadcastChannel(BROADCAST_CHANNELS.REAUTH_PLAID_SUCCESS);
+        plaidBroadcast.onmessage = (event) => {
+            if (event?.data) {
+                this.getBankTransactions();
+            }
+        };
     }
 
     private assignPrefixAndSuffixForCurrency() {
@@ -836,6 +858,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
                         this.bankTransactionsResponse.totalItems = res.body.totalItems;
                         this.bankTransactionsResponse.totalPages = res.body.totalPages;
                         this.bankTransactionsResponse.page = res.body.page;
+                        this.bankAccount.reLoginRequired = res.body.reLoginRequired;
+                        this.bankAccount.itemId = res.body.itemId;
                         this.zone.runOutsideAngular(() => {
                             this.lc.getReadyBankTransactionsForUI(res.body.transactionsList, (this.currentOrganizationType === OrganizationType.Company && (this.currentCompanyBranches && this.currentCompanyBranches.length > 2)));
                             this.getAccountSearchPrediction(this.lc.bankTransactionsCreditData);
@@ -1968,6 +1992,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @memberof LedgerComponent
      */
     public handleBranchChange(selectedEntity: any): void {
+        this.isBranchTransactionSelected = !(selectedEntity?.isCompany);
         this.currentBranch.name = selectedEntity.label;
         this.trxRequest.branchUniqueName = selectedEntity?.value;
         this.advanceSearchRequest.branchUniqueName = selectedEntity?.value;
@@ -2563,11 +2588,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
      */
     public getPurchaseSettings(): void {
         this.store.pipe(select(state => state.invoice.settings), takeUntil(this.destroyed$)).subscribe(response => {
+
+            this.autoGenerateVoucherFromEntryStatus = response?.invoiceSettings?.autoGenerateVoucherFromEntry;
             if (response?.purchaseBillSettings && !response?.purchaseBillSettings?.enableVoucherDownload) {
                 this.restrictedVouchersForDownload.push(AdjustedVoucherType.PurchaseInvoice);
             } else {
                 this.restrictedVouchersForDownload = this.restrictedVouchersForDownload?.filter(voucherType => voucherType !== AdjustedVoucherType.PurchaseInvoice);
             }
+            this.cdRf.detectChanges();
         });
     }
 
@@ -2732,5 +2760,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
      */
     public addBrowserConfirmation(): void {
         this.pageLeaveUtilityService.addBrowserConfirmationDialog();
+    }
+
+    /**
+     * Initiate request to open plaid popup
+     *
+     * @memberof SettingIntegrationComponent
+     */
+    public getPlaidLinkToken(itemId?: any): void {
+        this.store.dispatch(this.commonAction.reAuthPlaid({itemId: itemId, reauth: true}));
     }
 }
