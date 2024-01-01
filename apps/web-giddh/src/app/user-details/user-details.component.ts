@@ -85,7 +85,8 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
         private sessionAction: SessionActions,
         private route: ActivatedRoute,
         private breakPointObservar: BreakpointObserver,
-        private generalActions: GeneralActions) {
+        private generalActions: GeneralActions
+    ) {
         this.contactNo$ = this.store.pipe(select(s => {
             if (s.session.user) {
                 return s.session.user.user.contactNo;
@@ -203,6 +204,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
                 });
             }
         });
+
         this.isUpdateCompanyInProgress$.pipe(takeUntil(this.destroyed$)).subscribe(inProcess => {
             this.isCreateAndSwitchCompanyInProcess = inProcess;
         });

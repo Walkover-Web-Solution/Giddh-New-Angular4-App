@@ -1622,4 +1622,15 @@ export class GeneralService {
 
         return `https://appleid.apple.com/auth/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_API_URL)}&response_type=code id_token&scope=name email&response_mode=form_post`;
     }
+
+    /**
+     * Check current operating system is Mac and electron app.
+     *
+     * @memberof GeneralService
+     */
+    public isMacOSElectronApp(): boolean {
+        const userAgent = window.navigator.userAgent.toLowerCase(),
+            macosPlatforms = /(macintosh|macintel|macppc|mac68k|macos)/i;
+        return isElectron && macosPlatforms.test(userAgent);
+    }
 }

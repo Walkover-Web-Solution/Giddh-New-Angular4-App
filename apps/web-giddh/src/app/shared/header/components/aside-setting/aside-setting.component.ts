@@ -37,8 +37,6 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
     public showSettingHeading: boolean = false;
     /** This contains router url */
     public routerUrl: string = "";
-    /** True if Mac OS and electron app */
-    public isMacElectronApp: boolean = false;
 
     constructor(private breakPointObservar: BreakpointObserver, private generalService: GeneralService, private router: Router, private store: Store<AppState>, private localeService: LocaleService) {
 
@@ -57,8 +55,6 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
         });
 
         this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
-
-        this.isMacOSElectronApp();
 
         this.store.pipe(select(state => state.session.currentLocale), takeUntil(this.destroyed$)).subscribe(response => {
             if (this.activeLocale && this.activeLocale !== response?.value) {
@@ -149,10 +145,6 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
                         }
                     }
                     Object.keys(settingsPageTabs[organizationIndex]).forEach(key => {
-                        if (this.isMacElectronApp) {
-                            settingsPageTabs[organizationIndex][key] = settingsPageTabs[organizationIndex][key]?.filter(menu => menu?.link.indexOf("subscription") === -1);
-                        }
-
                         this.settingsPageTabs[loop] = [];
                         this.settingsPageTabs[loop] = [...settingsPageTabs[organizationIndex][key]];
                         loop++;
@@ -175,17 +167,5 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
         } else {
             this.showSettingHeading = false;
         }
-    }
-
-    /**
-     * Check current operating system is Mac and electron app.
-     *
-     * @private
-     * @memberof AsideHelpSupportComponent
-     */
-    private isMacOSElectronApp(): void {
-        const userAgent = window.navigator.userAgent.toLowerCase(),
-            macosPlatforms = /(macintosh|macintel|macppc|mac68k|macos)/i;
-        this.isMacElectronApp = isElectron && macosPlatforms.test(userAgent);
     }
 }
