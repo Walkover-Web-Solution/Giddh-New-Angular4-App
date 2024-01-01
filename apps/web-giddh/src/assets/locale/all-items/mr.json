@@ -19,11 +19,7 @@
           "label": "ग्राहक",
           "link": "/pages/contact/customer",
           "icon": "icon-customer",
-          "description": "ग्राहक व्यवस्थापित करा, एसएमएस / ईमेलद्वारे स्मरणपत्रे पाठवा",
-          "additional": {
-            "tab": "customer",
-            "tabIndex": 0
-          }
+          "description": "ग्राहक व्यवस्थापित करा, एसएमएस / ईमेलद्वारे स्मरणपत्रे पाठवा"
         },
         {
           "label": "नवीन चालान",

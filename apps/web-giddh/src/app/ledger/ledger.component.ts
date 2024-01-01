@@ -1751,7 +1751,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 ok: this.commonLocaleData?.app_yes,
                 cancel: this.commonLocaleData?.app_no,
                 permanentlyDeleteMessage: this.localeData?.delete_entries_content
-            }
+            },
+            width: '650px'
         });
 
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {

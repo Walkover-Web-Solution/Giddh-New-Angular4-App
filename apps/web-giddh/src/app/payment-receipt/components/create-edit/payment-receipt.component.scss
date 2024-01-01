@@ -271,6 +271,7 @@ input.form-control.edit-currency {
 
 .advance-toggle {
     display: flex;
+    align-items: center;
     column-gap: 20px;
     padding: 10px 0;
     .mat-slide-toggle {
