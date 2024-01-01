@@ -24,8 +24,8 @@
 
     <div
         class="my-dropdown-menu pd-1"
+        [ngClass]="{'display-block': discountMenu, 'display-none' : !discountMenu}"
         (click)="$event.stopPropagation()"
-        [ngStyle]="{'display': discountMenu ? 'block': 'none'}"
         #disInptEle
     >
         <div>

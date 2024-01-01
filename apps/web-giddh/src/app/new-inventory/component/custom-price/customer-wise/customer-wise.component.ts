@@ -193,12 +193,8 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                 } else {
                     this.userList = [...this.userList, ...response.body.results];
                 }
-                if (this.userList.length) {
-                    if (isLoadMore) {
-                        this.selectUser(this.currentUser);
-                    } else {
-                        this.selectUser(this.userList[0]);
-                    }
+                if (this.userList?.length && !isLoadMore) {
+                    this.selectUser(this.userList[0]);
                 }
                 this.changeDetectorRef.detectChanges();
             }
