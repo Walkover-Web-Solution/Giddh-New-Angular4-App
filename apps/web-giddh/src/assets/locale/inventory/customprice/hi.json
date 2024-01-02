@@ -8,5 +8,6 @@
     "already_added_msg": "यह [प्रकार] पहले ही जोड़ा जा चुका है",
     "remove_item_msg": "[TYPE] सफलतापूर्वक हटा दिया गया।",
     "invaild_form_msg": "अमान्य फ़ॉर्म, कृपया सभी फ़ील्ड भरें",
-    "inclusiveExclusiveTooltipMessage": "कीमत कर सहित/अनन्य है।"
+    "inclusiveExclusiveTooltipMessage": "कीमत कर सहित/अनन्य है।",
+    "quantity":"मात्रा"
 }

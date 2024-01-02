@@ -8,5 +8,6 @@
     "already_added_msg": "हा [TYPE] आधीच जोडलेला आहे",
     "remove_item_msg": "[TYPE] यशस्वीरित्या काढले",
     "invaild_form_msg": "अवैध फॉर्म, कृपया सर्व फील्ड भरा",
-    "inclusiveExclusiveTooltipMessage": "किंमत करांसहित/अतिरिक्त आहे"
+    "inclusiveExclusiveTooltipMessage": "किंमत करांसहित/अतिरिक्त आहे",
+    "quantity":"प्रमाण"
 }

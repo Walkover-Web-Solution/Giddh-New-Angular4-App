@@ -70,7 +70,6 @@
                     min-width: 100%;
                     .inventory-head {
                         strong {
-                            color: var(--color-giddh-blue);
                             font-size: var(--font-size-16);
                             margin-left: 12px;
                         }
@@ -79,39 +78,62 @@
                         column-gap: 42px;
                     }
                     table {
-                        tbody {
+                        thead{
+                            tr{
+                                td{
+                                    border: unset !important;
+                                }
+                            }
+                        }
+                        tbody,thead {
                             tr {
                                 td {
                                     vertical-align: middle;
+                                    &.variant-name{
+                                        @include setWidth(25%);
+                                        @media (max-width: 1600px) {
+                                            @include setWidth(140px);
+                                        }
+                                    }
                                     &.variant-price {
-                                        @include setWidth(150px);
+                                        @include setWidth(100px);
+                                        @media (max-width: 1556px) {
+                                            @include setWidth(130px);
+                                        }
                                     }
                                     &.variant-tax-toggle {
-                                        @include setWidth(114px);
+                                        @include setWidth(70px);
                                         .position-center {
                                             left: 50%;
                                             transform: translateX(-50%);
                                         }
+                                        @media (max-width: 1556px) {
+                                            @include setWidth(120px);
+                                        }
                                     }
                                     &.variant-discount {
-                                        @include setWidth(160px);
+                                        @include setWidth(80px);
                                         @media (max-width: 1799px) {
-                                            @include setWidth(130px);
+                                            @include setWidth(175px);
+                                        }
+                                        @media (max-width: 1600px) {
+                                            @include setWidth(150px);
                                         }
                                     }
                                     &.variant-quantity {
-                                       max-width: 220px
+                                        @include setWidth(100px);
+                                        @media (max-width: 1556px) {
+                                            @include setWidth(160px);
+                                        }
                                     }
                                     &.variant-delete {
-                                        @include setWidth(46px);
+                                        @include setWidth(40px);
                                         @media (max-width: 1799px) {
                                             @include setWidth(60px);
                                         }
-                                    }
-                                }
-                                &:last-child {
-                                    td {
-                                        border-top: unset !important;
+                                        @media (max-width: 1556px) {
+                                            @include setWidth(80px);
+                                        }
                                     }
                                 }
                             }

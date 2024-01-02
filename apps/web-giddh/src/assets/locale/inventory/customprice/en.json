@@ -8,5 +8,6 @@
     "already_added_msg": "This [TYPE] is already added",
     "remove_item_msg": "[TYPE] removed successfully.",
     "invaild_form_msg": "Invaild Form, Please fill all fields",
-    "inclusiveExclusiveTooltipMessage": "The price is inclusive/exclusive of tax."
+    "inclusiveExclusiveTooltipMessage": "The price is inclusive/exclusive of tax.",
+    "quantity":"Qty"
 }
