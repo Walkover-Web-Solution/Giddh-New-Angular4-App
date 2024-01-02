@@ -20,6 +20,7 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 import { NewConfirmModalModule } from '../../../theme/new-confirm-modal';
 import { DiscountControlModule } from '../../../theme/discount-control/discount-control.module';
 import { ScrollComponent } from './advance-list-items-popup/virtual-scroll';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
     imports: [
@@ -40,7 +41,8 @@ import { ScrollComponent } from './advance-list-items-popup/virtual-scroll';
         ScrollingModule,
         ReactiveFormsModule,
         NewConfirmModalModule,
-        DiscountControlModule
+        DiscountControlModule,
+        MatTooltipModule
     ],
     exports: [
         CustomerWiseComponent,

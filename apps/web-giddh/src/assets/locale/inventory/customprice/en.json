@@ -1,5 +1,4 @@
 {
-    "add_variant": "+ Add Variant",
     "add_inventory": "+ Add Inventory",
     "price": "Price",
     "add_customer_group": "+ Add Customer/Group",
@@ -8,5 +7,6 @@
     "delete_message": "Do you want to delete?",
     "already_added_msg": "This [TYPE] is already added",
     "remove_item_msg": "[TYPE] removed successfully.",
-    "invaild_form_msg": "Invaild Form, Please fill all fields"
+    "invaild_form_msg": "Invaild Form, Please fill all fields",
+    "inclusiveExclusiveTooltipMessage": "The price is inclusive/exclusive of tax."
 }
