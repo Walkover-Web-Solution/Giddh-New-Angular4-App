@@ -3151,6 +3151,10 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         entry['discountPercentageModal'] = 0;
                     }
                 } else if (!entry['initiallyCall']) {
+                    entry.discounts.map(item => {
+                        item.isActive = false;
+                    });
+
                     trx?.stockDetails?.variant?.unitRates?.forEach(unitRate => {
                         let matchedUnit = unitRate?.stockUnitUniqueName === trx?.stockUnit;
                         if (matchedUnit) {
@@ -3165,12 +3169,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                             if (discount) {
                                 let matchedUnit = trx?.stockDetails?.variant?.variantDiscount?.unit?.uniqueName === trx?.stockUnit;
                                 if (matchedUnit) {
-                                    console.log(entry.discounts, discount);
                                     entry.discounts = entry.discounts.map(item => {
                                         if (item.discountUniqueName === discount?.uniqueName) {
                                             item.isActive = true;
-                                        } else {
-                                            item.isActive = false;
                                         }
                                         return item;
                                     });
@@ -3240,6 +3241,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     }
                 }
             }
+
+            console.log(cloneDeep(entry.discounts));
 
             if (trx.amount) {
                 let transactionAmount = trx.amount?.toString();
