@@ -684,9 +684,9 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
      */
     public selectVariant(event: any, stockFormArrayIndex: number): void {
         if (event && event.value && event.label) {
-            this.variantsDropdownDefaultValue = event;
+            this.variantsDropdownDefaultValue = event.label;
             setTimeout(() => {
-                this.variantsDropdownDefaultValue = null
+                this.variantsDropdownDefaultValue = null;
             }, 100);
             this.variantsWithoutDiscount.push([]);
             let variants = (this.discountForm.get('discountInfo') as FormArray).at(stockFormArrayIndex).get('variants') as UntypedFormArray;
