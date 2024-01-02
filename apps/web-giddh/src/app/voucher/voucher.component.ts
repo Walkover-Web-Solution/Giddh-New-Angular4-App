@@ -3033,7 +3033,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public calculateTotalDiscountOfEntry(entry: SalesEntryClass, trx: SalesTransactionItemClass, calculateEntryTotal: boolean = true) {
         let percentageListTotal: number = 0;
         let fixedListTotal: number = 0;
-
+        // console.log(cloneDeep(entry, entry.discountSum, trx));
         percentageListTotal = entry.discounts?.filter(f => f.isActive)
             ?.filter(s => s.discountType === 'PERCENTAGE')
             .reduce((pv, cv) => {
@@ -3144,10 +3144,16 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     if (this.discountObj?.discountType === 'FIX_AMOUNT') {
                         entry['discountFixedValueModal'] = this.discountObj?.discount ? this.discountObj?.discount : 0;
                         entry.discountSum = this.discountObj?.discount ? this.discountObj?.discount : 0;
+                        entry['discountPercentageModal'] = 0;
+                    } else {
+                        entry['discountFixedValueModal'] = 0;
                     }
                     if (this.discountObj?.discountType === 'PERCENTAGE') {
                         entry['discountPercentageModal'] = this.discountObj?.discount ? this.discountObj?.discount : 0;
                         entry.discountSum = this.discountObj?.discount ? this.discountObj?.discount : 0;
+                        entry['discountFixedValueModal'] = 0;
+                    } else {
+                        entry['discountPercentageModal'] = 0;
                     }
                 } else if (!entry['initiallyCall']) {
                     trx?.stockDetails?.variant?.unitRates?.forEach(unitRate => {
@@ -3164,20 +3170,29 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                             if (discount) {
                                 let matchedUnit = trx?.stockDetails?.variant?.variantDiscount?.unit?.uniqueName === trx?.stockUnit;
                                 if (matchedUnit) {
-                                    entry.discounts.map(item => {
+                                    console.log(entry.discounts, discount);
+                                    entry.discounts = entry.discounts.map(item => {
                                         if (item.discountUniqueName === discount?.uniqueName) {
                                             item.isActive = true;
+                                        } else {
+                                            item.isActive = false;
                                         }
                                         return item;
                                     });
-
                                     if (discount?.type === 'FIX_AMOUNT') {
                                         entry['discountFixedValueModal'] = this.discountObj?.discount ? this.discountObj?.discount : discount.value;
                                         entry.discountSum = this.discountObj?.discount ? this.discountObj?.discount : discount.value;
+                                        entry['discountPercentageModal'] = 0;
+                                    } else {
+                                        entry['discountFixedValueModal'] = 0;
+
                                     }
                                     if (discount?.type === 'PERCENTAGE') {
-                                        entry['discountPercentageModal'] = this.discountObj?.discount ? this.discountObj?.discount : discount.value;
-                                        entry.discountSum = this.discountObj?.discount ? this.discountObj?.discount : discount.value;
+                                        entry['discountPercentageModal'] = discount.value ? discount.value : this.discountObj?.discount;
+                                        entry.discountSum = discount.value ? discount.value : this.discountObj?.discount;
+                                        entry['discountFixedValueModal'] = 0;
+                                    } else {
+                                        entry['discountPercentageModal'] = 0;
                                     }
                                     this.calculateStockEntryAmount(trx);
                                     entry['initiallyCall'] = true;
@@ -9233,6 +9248,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @memberof VoucherComponent
      */
     public variantChanged(event: IOption, transaction: SalesTransactionItemClass, entry: SalesEntryClass): void {
+        entry['initiallyCall'] = undefined;
         transaction.variant.name = event.label;
         this.currentTxnRequestObject[this.activeIndx].txn = transaction;
         this.currentTxnRequestObject[this.activeIndx].entry = entry;
