@@ -3660,7 +3660,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         const variant = o.stock?.variant;
         const isInclusiveEntry = (variant?.purchaseTaxInclusive && o.category === 'expenses') ||
             (variant?.salesTaxInclusive && o.category === 'income') ||
-            (variant?.fixedAssetTaxInclusive && o.category === 'fixedassets') || (!variant?.discountExclusive && variant?.variantDiscount?.unit?.code === transaction?.stockUnitCode);
+            (variant?.fixedAssetTaxInclusive && o.category === 'fixedassets') || (!variant?.discountExclusive && variant?.unitRates?.filter(ur => ur.stockUnitUniqueName === transaction.stockUnit)?.length);
         transaction.taxInclusive = isInclusiveEntry;
         // check if we have quantity in additional object. it's for only bulk add mode
         transaction.quantity = o.quantity ? o.quantity : (o.stock) ? 1 : null;
