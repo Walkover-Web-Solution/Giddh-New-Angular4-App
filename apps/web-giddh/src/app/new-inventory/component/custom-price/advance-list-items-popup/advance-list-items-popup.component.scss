@@ -98,10 +98,7 @@
                     font-size: 16px;
                 }
                 .icon-stock {
-                    filter: var(--color-image-filter-quaternary);
-                    &:hover {
-                        filter: invert(99%) sepia(93%) saturate(24%) hue-rotate(68deg) brightness(106%) contrast(100%);
-                    }
+                    filter: var(--color-image-filter-quaternary);                  
                 }
             }
             .item-details {
@@ -156,6 +153,9 @@
                 }
                 .item-icon {
                     color: var(--color-popup-list-input-text-hover);
+                }
+                .icon-stock {
+                    filter: invert(99%) sepia(93%) saturate(24%) hue-rotate(68deg) brightness(106%) contrast(100%) !important;
                 }
             }
         }
