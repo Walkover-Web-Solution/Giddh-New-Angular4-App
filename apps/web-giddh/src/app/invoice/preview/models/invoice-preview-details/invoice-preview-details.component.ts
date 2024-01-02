@@ -173,10 +173,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         this.sessionKey$ = this.store.pipe(select(p => p.session.user.session.id), takeUntil(this.destroyed$));
         this.companyName$ = this.store.pipe(select(p => p.session.companyUniqueName), takeUntil(this.destroyed$));
         this.isUpdateVoucherActionSuccess$ = this.store.pipe(select(s => s.proforma.isUpdateProformaActionSuccess), takeUntil(this.destroyed$));
-        this.voucherDetails$ = this.store.pipe(
-            select((res) => res.receipt.voucher),
-            takeUntil(this.destroyed$)
-        );
+        this.voucherDetails$ = this.store.pipe(select((res) => res.receipt.voucher), takeUntil(this.destroyed$));
     }
 
     /**
@@ -687,7 +684,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
      */
     public printThermal(): void {
         this.voucherDetails$.subscribe((res) => {
-            if (res) {
+            if (res && this.selectedItem?.uniqueName === res.uniqueName) {
                 this.thermalService.print(this.defaultTemplate, res);
             } else {
                 this.store.dispatch(this.invoiceReceiptActions.getVoucherDetailsV4(this.selectedItem?.account?.uniqueName, {
