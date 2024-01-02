@@ -354,7 +354,7 @@ textarea:focus {
                 }
 
                 &.error-box.item-tax {
-                    border: 2px solid var(--color-danger) !important;
+                    border: 3px solid var(--color-danger) !important;
                 }
             }
         }
@@ -731,7 +731,7 @@ section.static-invoice-table {
     &.clearfix {
         margin-top: 15px;
         margin-bottom: 5px;
-    
+
         .bottom-border-only {
             padding-left: 0 !important;
         }

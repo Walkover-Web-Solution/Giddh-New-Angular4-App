@@ -19,11 +19,7 @@
           "label": "Customer",
           "link": "/pages/contact/customer",
           "icon": "icon-customer",
-          "description": "Manage customers, send reminders via SMS/Email",
-          "additional": {
-            "tab": "customer",
-            "tabIndex": 0
-          }
+          "description": "Manage customers, send reminders via SMS/Email"
         },
         {
           "label": "New Invoice",

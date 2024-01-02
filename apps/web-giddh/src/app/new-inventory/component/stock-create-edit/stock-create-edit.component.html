@@ -10,7 +10,7 @@
         <div class="relative create-new-inventory-page static-tabs-on-page">
             <hamburger-menu *ngIf="!addStock"></hamburger-menu>
             <div class="select-physical-product input-border-wrapper">
-                <span class="pull-right position-relative z-index-1">
+                <span class="pull-right position-relative z-index-1" [ngClass]="{ 'top-right-spacing': queryParams?.stockUniqueName && !addStock }">
                     <watch-video [cssClass]="'text-primary pd-r15'" [moduleName]="'INVENTORY_CREATE_STOCK'"></watch-video>
                 </span>
                 <form class="form-body" #stockCreateEditForm="ngForm" novalidate autocomplete="off">

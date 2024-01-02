@@ -32,7 +32,7 @@
                                 }}</a
                             >
                         </mat-list-item>
-                        <mat-list-item role="listitem" class="mr-b1 px-0">
+                        <mat-list-item role="listitem" class="mr-b1 px-0" *ngIf="companyCountry !=='India'">
                             <a href="javascript:;" (click)="selectConfigureBank()">
                                 <img src="{{ imgPath }}configure-bank-account.svg" alt="" class="mr-r1" />{{
                                     localeData?.configure_bank_account
@@ -40,7 +40,7 @@
                             >
                         </mat-list-item>
                     </mat-list>
-                    <h1 class="border-btm mr-t5">{{ localeData?.have_data_tally }}</h1>
+                    <h1 class="border-btm mr-t4">{{ localeData?.have_data_tally }}</h1>
                     <p [innerHTML]="localeData?.giddh_usage"></p>
                     <div class="d-flex column-gap15">
                         <a
@@ -62,8 +62,8 @@
                         </a>
                     </div>
 
-                    <div class="mt-2 right-section">
-                        <h1 class="border-btm">{{ localeData?.ask_question }}</h1>
+                    <div class="right-section">
+                        <h1 class="border-btm mr-t4">{{ localeData?.ask_question }}</h1>
                         <span>{{ localeData?.request_demo }}</span>
                         <button mat-stroked-button color="primary" class="mr-t1" (click)="scheduleNow()">
                             {{ commonLocaleData?.app_schedule_now }}
@@ -71,7 +71,7 @@
                         <br />
                         <div class="row">
                             <div class="col-xs-12 col-sm-6">
-                                <span class="mr-t3 mr-b1">{{ localeData?.visit }}</span>
+                                <span class="mr-t4 mr-b1">{{ localeData?.visit }}</span>
                                 <a href="https://giddh.com/help" target="_blank" class="text-dark">giddh.com/help</a>
                             </div>
                             <div class="col-sm-6 schedule-img">
@@ -80,7 +80,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-xl-7 col-lg-12 order-0 order-xl-1 mb-5">
+                <div class="col-xl-7 col-lg-12 order-0 order-xl-1">
                     <h1 class="border-btm">{{ localeData?.watch_onboarding }}</h1>
                     <div class="onboarding-video">
                         <iframe
