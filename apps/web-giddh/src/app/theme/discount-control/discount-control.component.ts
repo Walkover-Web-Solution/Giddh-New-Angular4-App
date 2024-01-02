@@ -23,7 +23,7 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
     @Input() public totalAmount: number = 0;
     @Input() public showHeaderText: boolean = true;
     /* This will emit discount total updated */
-    @Output() public discountTotalUpdated: EventEmitter<{ discount: any, isActive: boolean, discountType?: any }> = new EventEmitter();
+    @Output() public discountTotalUpdated: EventEmitter<{ discount: any, isActive: boolean, discountType?: any, isFirstChange?: boolean }> = new EventEmitter();
     @Output() public hideOtherPopups: EventEmitter<boolean> = new EventEmitter<boolean>();
     @Input() public discountSum: number;
     @Input() public maskInput: string;
@@ -101,13 +101,13 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
                 this.change();
             }
         }
-        if ('discountFixedValueModal' in changes && changes.discountFixedValueModal.currentValue !== changes.discountFixedValueModal.previousValue) {
+        if ('discountFixedValueModal' in changes && changes.discountFixedValueModal.currentValue && changes.discountFixedValueModal.currentValue !== changes.discountFixedValueModal.previousValue) {
             this.discountFixedValueModal = changes.discountFixedValueModal.currentValue;
-            this.assignDiscount('FIX_AMOUNT', changes.discountFixedValueModal.currentValue, true);
+            this.assignDiscount('FIX_AMOUNT', changes.discountFixedValueModal.currentValue, changes.discountFixedValueModal.firstChange, true);
         }
-        if ('discountPercentageModal' in changes && changes.discountPercentageModal.currentValue !== changes.discountPercentageModal.previousValue) {
+        if ('discountPercentageModal' in changes && changes.discountPercentageModal.currentValue && changes.discountPercentageModal.currentValue !== changes.discountPercentageModal.previousValue) {
             this.discountPercentageModal = changes.discountPercentageModal.currentValue;
-            this.assignDiscount('PERCENTAGE', changes.discountPercentageModal.currentValue, true);
+            this.assignDiscount('PERCENTAGE', changes.discountPercentageModal.currentValue, changes.discountPercentageModal.firstChange, true);
         }
     }
 
@@ -156,15 +156,15 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
      * @memberof DiscountControlComponent
      */
     public discountFromInput(type: 'FIX_AMOUNT' | 'PERCENTAGE', event: any) {
-        this.assignDiscount(type, event.target?.value, event);
+        this.assignDiscount(type, event.target?.value, false, true);
     }
 
-    public assignDiscount(type: any, value: any, event?: any): void {
+    public assignDiscount(type: any, value: any, isFirstChange: boolean = false, isActive?: boolean): void {
         this.defaultDiscount.amount = parseFloat(String(value)?.replace(/[,'\s]/g, ''));
         this.defaultDiscount.discountValue = parseFloat(String(value)?.replace(/[,'\s]/g, ''));
         this.defaultDiscount.discountType = type;
 
-        this.discountTotalUpdated.emit({ discount: this.defaultDiscount.amount, isActive: event, discountType: type });
+        this.discountTotalUpdated.emit({ discount: this.defaultDiscount.amount, isActive: isActive, discountType: type, isFirstChange: isFirstChange });
 
         if (!value) {
             this.discountFromVal = true;
@@ -212,6 +212,15 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
      * @memberof DiscountControlComponent
      */
     public showDiscountMenu(): void {
+        let element = document.getElementsByClassName("my-dropdown-menu");
+        if (element?.length) {
+            for (let i = 0; i < element.length; i++) {
+                if (element[i].classList.contains("display-block")) {
+                    element[i].classList.remove("display-block");
+                    element[i].classList.add("display-none");
+                }
+            }
+        }
         this.discountMenu = true;
         this.hideOtherPopups.emit(true);
     }

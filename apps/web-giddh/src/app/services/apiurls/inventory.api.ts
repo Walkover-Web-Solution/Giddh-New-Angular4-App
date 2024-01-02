@@ -96,4 +96,12 @@ export const INVENTORY_API = {
         SEARCH: 'company/:companyUniqueName/stock-groups-with-stocks?inventoryType=:inventoryType&q=:q'
     },
     GET_BULK_STOCK_WITH_INVENTROY_TYPE: 'v2/company/:companyUniqueName/stock?page=:page&count=:count&inventoryType=:inventoryType', // POST call
+    GET_CUSTOMER_VENDOR_DISCOUNT_USERS: 'company/:companyUniqueName/customer-vendor-discount/get-all-users?groupUniqueName=:group&page=:page&count=:count&query=:query', // GET call
+    GET_FLATTEN_ACCOUNTS: 'v2/company/:companyUniqueName/groups/:group/flatten-accounts?query=:query&page=:page&count=:count', // GET call
+    GET_ALL_STOCKS: 'v2/company/:companyUniqueName/stock?query=:query&page=:page&count=:count', // GET call
+    GET_ALL_DISCOUNTS: 'company/:companyUniqueName/customer-vendor-discount/get-all-discounts?uniqueName=:uniqueName&query=:query&page=:page&count=:count', // GET call
+    DELETE_DISCOUNT_RECORD: 'company/:companyUniqueName/customer-vendor-discount?stockUniqueName=:stockUniqueName&variantUniqueName=:variantUniqueName&userUniqueName=:userUniqueName', // DELETE Call
+    CREATE_DISCOUNT: 'company/:companyUniqueName/customer-vendor-discount/stock/:stockUniqueName/assign-discount', // POST Call
+    UPDATE_DISCOUNT: 'company/:companyUniqueName/customer-vendor-discount/stock/:stockUniqueName/variant/:variantUniqueName/update-discount', // Patch Call
+    GET_STOCK_DETAILS: 'v2/company/:companyUniqueName/stock/:stockUniqueName/details?userType=:userType', // GET call
 };
