@@ -44,7 +44,7 @@
 
 .collapse-pane {
     .mat-mdc-form-field-flex {
-        min-height: 56px;
+        min-height: 48px;
     }
 }
 .create-purchase-order-form {
@@ -92,5 +92,11 @@
             align-items: center;
             column-gap: 2px;
         }
+    }
+}
+
+.mat-datepicker-input{
+    &.mdc-text-field__input{
+        border-radius: 5px !important;
     }
 }

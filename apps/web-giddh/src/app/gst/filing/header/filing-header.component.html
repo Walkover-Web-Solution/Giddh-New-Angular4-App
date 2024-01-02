@@ -5,7 +5,7 @@
 
     <!-- region gstr1 -->
     <div class="list-style row" *ngIf="selectedGst === GstReport.Gstr1">
-        <div class="wrap-GSTR-1-title col-lg-6 col-sm-8 col-12 xs-mb-1">
+        <div class="wrap-GSTR-1-title col-lg-8 col-sm-8 col-12 xs-mb-1">
             <a href="javascript:void(0);" [routerLink]="['/gstfiling']" class="ember-view">
                 <img src="{{ imgPath }}back.svg" class="icon icon-sm text-middle" />
             </a>
@@ -73,7 +73,7 @@
             </div>
         </div>
 
-        <div class="col-lg-6 col-sm-4 col-12">
+        <div class="col-lg-4 col-sm-4 col-12">
             <ul class="list-inline list-middle download-drop-down">
                 <li>
                     <watch-video [cssClass]="'text-primary pd-r15'" [moduleName]="'GSTR1'"></watch-video>
@@ -81,12 +81,12 @@
                 <li>
                     <button
                         type="button"
-                        class="btn btn-sky-blue mr-0 error-button"
+                        class="btn btn-sky-blue mr-0 mb-2"
                         (click)="onDownloadSheetGSTR('error')"
                     >
                         {{ localeData?.filing?.errors }}
                     </button>
-                    <button type="button" class="btn btn-sky-blue mr-0" (click)="pushToPortalModal?.show()">
+                    <button type="button" class="btn btn-sky-blue mr-0 mb-2 mr-l2" (click)="pushToPortalModal?.show()">
                         {{ localeData?.filing?.push_to_portal }}
                     </button>
                 </li>
@@ -94,7 +94,7 @@
                 <li>
                     <div *ngIf="showTaxPro && isCompany && showGstFiling">
                         <button
-                            class="btn btn-primary authenticate-btn pull-right"
+                            class="btn btn-primary authenticate-btn mr-l2 pull-right mr-0 mb-2"
                             [ngClass]="{ 'btn-success': gstAuthenticated }"
                             (click)="toggleSettingAsidePane($event, 'TAXPRO')"
                         >

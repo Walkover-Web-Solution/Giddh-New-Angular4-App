@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { SETTINGS_INTEGRATION_ACTIONS } from './settings.integration.const';
 import { SettingsIntegrationService } from '../../services/settings.integraion.service';
-import { AmazonSellerClass, CashfreeClass, EmailKeyClass, RazorPayClass, RazorPayDetailsResponse, SmsKeyClass, PaymentClass } from '../../models/api-models/SettingsIntegraion';
+import { AmazonSellerClass, CashfreeClass, EmailKeyClass, RazorPayClass, RazorPayDetailsResponse, SmsKeyClass, PaymentClass, PayPalClass, PaypalDetailsResponse } from '../../models/api-models/SettingsIntegraion';
 import { CustomActions } from '../../store/custom-actions';
 import { CompanyActions } from "../company.actions";
 import { LocaleService } from '../../services/locale.service';
@@ -115,6 +115,78 @@ export class SettingsIntegrationActions {
                 }
                 return { type: 'EmptyAction' };
             })));
+
+    /**
+     * This will be use for get paypal details
+     *
+     * @type {Observable<Action>}
+     * @memberof SettingsIntegrationActions
+     */
+    public getPaypalDetails$: Observable<Action> = createEffect(() => this.action$
+        .pipe(
+            ofType(SETTINGS_INTEGRATION_ACTIONS.GET_PAYPAL_DETAILS),
+            switchMap((action: CustomActions) => this.settingsIntegrationService.getPaypalDetails()),
+            map(res => this.validateResponse<PaypalDetailsResponse, string>(res, {
+                type: SETTINGS_INTEGRATION_ACTIONS.GET_PAYPAL_DETAILS_RESPONSE,
+                payload: res
+            }, false, {
+                type: SETTINGS_INTEGRATION_ACTIONS.GET_PAYPAL_DETAILS_RESPONSE,
+                payload: res
+            }))));
+
+    /**
+     * This will be use for save paypal details
+     *
+     * @type {Observable<Action>}
+     * @memberof SettingsIntegrationActions
+     */
+    public savePaypalDetails$: Observable<Action> = createEffect(() => this.action$
+        .pipe(
+            ofType(SETTINGS_INTEGRATION_ACTIONS.SAVE_PAYPAL_DETAILS),
+            switchMap((action: CustomActions) => this.settingsIntegrationService.savePaypalDetails(action.payload)),
+            map(res => this.validatePaypalIntegrationResponse<PaypalDetailsResponse, PayPalClass>(res, {
+                type: SETTINGS_INTEGRATION_ACTIONS.SAVE_PAYPAL_DETAILS_RESPONSE,
+                payload: res
+            }, true, {
+                type: SETTINGS_INTEGRATION_ACTIONS.SAVE_PAYPAL_DETAILS_RESPONSE,
+                payload: res
+            }))));
+
+    /**
+     * This will be use for delete paypal details
+     *
+     * @type {Observable<Action>}
+     * @memberof SettingsIntegrationActions
+     */
+    public deletePaypalDetails$: Observable<Action> = createEffect(() => this.action$
+        .pipe(
+            ofType(SETTINGS_INTEGRATION_ACTIONS.DELETE_PAYPAL_DETAILS),
+            switchMap((action: CustomActions) => this.settingsIntegrationService.deletePaypalDetails()),
+            map(res => this.validateResponse<string, string>(res, {
+                type: SETTINGS_INTEGRATION_ACTIONS.DELETE_PAYPAL_DETAILS_RESPONSE,
+                payload: res
+            }, true, {
+                type: SETTINGS_INTEGRATION_ACTIONS.DELETE_PAYPAL_DETAILS_RESPONSE,
+                payload: res
+            }))));
+
+    /**
+     * This will be use for update paypal details
+     *
+     * @type {Observable<Action>}
+     * @memberof SettingsIntegrationActions
+     */
+    public updatePaypalDetails$: Observable<Action> = createEffect(() => this.action$
+        .pipe(
+            ofType(SETTINGS_INTEGRATION_ACTIONS.UPDATE_PAYPAL_DETAILS),
+            switchMap((action: CustomActions) => this.settingsIntegrationService.updatePaypalDetails(action.payload)),
+            map(res => this.validatePaypalIntegrationResponse<PaypalDetailsResponse, PayPalClass>(res, {
+                type: SETTINGS_INTEGRATION_ACTIONS.UPDATE_PAYPAL_DETAILS_RESPONSE,
+                payload: res
+            }, true, {
+                type: SETTINGS_INTEGRATION_ACTIONS.UPDATE_PAYPAL_DETAILS_RESPONSE,
+                payload: res
+            }))));
 
     public GetRazorPayDetails$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -539,6 +611,57 @@ export class SettingsIntegrationActions {
         };
     }
 
+    /**
+     * This will be use for get paypal details action
+     *
+     * @return {*}  {CustomActions}
+     * @memberof SettingsIntegrationActions
+     */
+    public getPaypalDetails(): CustomActions {
+        return {
+            type: SETTINGS_INTEGRATION_ACTIONS.GET_PAYPAL_DETAILS,
+        };
+    }
+
+    /**
+     * This will be use for save paypal details action
+     *
+     * @param {PayPalClass} value
+     * @return {*}  {CustomActions}
+     * @memberof SettingsIntegrationActions
+     */
+    public savePaypalDetails(value: PayPalClass): CustomActions {
+        return {
+            type: SETTINGS_INTEGRATION_ACTIONS.SAVE_PAYPAL_DETAILS,
+            payload: value
+        };
+    }
+
+    /**
+     * This wil be use for delete paypal details action
+     *
+     * @return {*}  {CustomActions}
+     * @memberof SettingsIntegrationActions
+     */
+    public deletePaypalDetails(): CustomActions {
+        return {
+            type: SETTINGS_INTEGRATION_ACTIONS.DELETE_PAYPAL_DETAILS,
+        };
+    }
+    /**
+     * This will be use for update paypal details action
+     *
+     * @param {PayPalClass} value
+     * @return {*}  {CustomActions}
+     * @memberof SettingsIntegrationActions
+     */
+    public updatePaypalDetails(value: PayPalClass): CustomActions {
+        return {
+            type: SETTINGS_INTEGRATION_ACTIONS.UPDATE_PAYPAL_DETAILS,
+            payload: value
+        };
+    }
+
     public GetRazorPayDetails(): CustomActions {
         return {
             type: SETTINGS_INTEGRATION_ACTIONS.GET_RAZOR_PAY_DETAILS,
@@ -551,6 +674,7 @@ export class SettingsIntegrationActions {
             payload: value
         };
     }
+
 
     public DeleteRazorPayDetails(): CustomActions {
         return {
@@ -851,6 +975,32 @@ export class SettingsIntegrationActions {
         } else {
             this.store.dispatch(this.GetRazorPayDetails());
             this.toasty.successToast("Razorpay Details have been verified successfully.");
+        }
+        return successAction;
+    }
+    /**
+     * This will be use for validate paypal response
+     *
+     * @template TResponse
+     * @template TRequest
+     * @param {BaseResponse<TResponse, TRequest>} response
+     * @param {CustomActions} successAction
+     * @param {boolean} [showToast=false]
+     * @param {CustomActions} [errorAction={ type: 'EmptyAction' }]
+     * @return {*}  {CustomActions}
+     * @memberof SettingsIntegrationActions
+     */
+    public validatePaypalIntegrationResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = { type: 'EmptyAction' }): CustomActions {
+        let message = '';
+        if (response?.status === 'error') {
+            if (showToast) {
+                this.toasty.errorToast(response.message);
+            }
+            return errorAction;
+        } else {
+            message = (response?.request['message']);
+            this.store.dispatch(this.getPaypalDetails());
+            this.toasty.successToast(message);
         }
         return successAction;
     }
