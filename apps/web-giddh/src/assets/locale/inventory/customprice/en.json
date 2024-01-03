@@ -7,6 +7,9 @@
     "delete_message": "Do you want to delete?",
     "already_added_msg": "This [TYPE] is already added",
     "remove_item_msg": "[TYPE] removed successfully.",
-    "invaild_form_msg": "Invaild Form, Please fill all fields",
-    "inclusiveExclusiveTooltipMessage": "The price is inclusive/exclusive of tax."
+    "invaild_form_msg": "Please fill any of the fields from price, quantity or discount.",
+    "inclusiveExclusiveTooltipMessage": "The price is inclusive/exclusive of tax.",
+    "quantity":"Qty",
+    "select_discount": "Select Discount",
+    "quantity_one_warning": "Quantity should be greater than 1. If no quantity is present we consider it as 1."
 }
