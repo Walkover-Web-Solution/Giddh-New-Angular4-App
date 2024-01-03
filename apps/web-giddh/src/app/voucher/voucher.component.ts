@@ -3216,6 +3216,15 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         }
     }
 
+    /**
+     * This will be use for apply mrp discount
+     *
+     * @private
+     * @param {*} trx
+     * @param {*} entry
+     * @param {*} event
+     * @memberof VoucherComponent
+     */
     private applyMrpDiscount(trx: any, entry: any, event: any): void {
         if (trx?.stockDetails?.variant?.variantDiscount?.discounts?.length) {
             trx?.stockDetails?.variant?.variantDiscount?.discounts.forEach(discount => {
