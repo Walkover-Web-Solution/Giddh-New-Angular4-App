@@ -3826,8 +3826,10 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
         const isMrpDiscountInclusive = !variant?.discountExclusive && variant?.unitRates?.filter(ur => ur.stockUnitUniqueName === transaction.stockUnit);
         if (isMrpDiscountInclusive?.length) {
-            transaction.rate = isMrpDiscountInclusive[0].rate;
-            transaction.quantity = variant?.variantDiscount?.quantity || transaction.quantity;
+            transaction.rate = Number((isMrpDiscountInclusive[0].rate / this.exchangeRate).toFixed(this.highPrecisionRate));
+            if (!isBulkItem) {
+                transaction.quantity = variant?.variantDiscount?.quantity || transaction.quantity;
+            }
             transaction.taxInclusive = true;
             isInclusiveEntry = true;
             entry.discounts = entry.discounts.map(item => {
