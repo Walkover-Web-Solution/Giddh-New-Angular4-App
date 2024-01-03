@@ -3075,6 +3075,17 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 taxPercentage += tax.amount;
             }
         });
+        if (trx?.applicableTaxes?.length > 0) {
+            let data: VoucherClass = cloneDeep(this.invFormData);
+            data.entries.forEach((entry: any, index: number) => {
+                const transaction = this.invFormData.entries[index].transactions[0];
+                if (transaction['applicableTaxes']?.length > 0) {
+                    transaction['requiredTax'] = false;
+                } else {
+                    transaction['requiredTax'] = true;
+                }
+            });
+        }
 
         if (trx?.applicableTaxes?.length > 0) {
             let data: VoucherClass = cloneDeep(this.invFormData);

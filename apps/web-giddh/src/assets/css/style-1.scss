@@ -1864,7 +1864,9 @@ ul.pills li {
 .my-dropdown-menu {
     position: absolute;
     z-index: 99;
-    min-width: 160px;
+    width: 100%;
+    max-width: 190px;
+    min-width: 190px;
     padding: 5px 0;
     margin: 2px 0 0;
     font-size: var(--font-size-15);

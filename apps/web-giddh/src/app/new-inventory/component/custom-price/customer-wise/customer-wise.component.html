@@ -9,7 +9,8 @@
                         <mat-list class="item-list border-grid pt-0">
                             <div class="list-head-gap">
                                 <div class="search-list position-relative mr-t15 mr-b15" [formGroup]="searchForm">
-                                    <text-field type="text" [placeholder]="commonLocaleData?.app_search" formControlName="userSearch"
+                                    <text-field type="text" [placeholder]="commonLocaleData?.app_search"
+                                        formControlName="userSearch"
                                         [cssClass]="'form-control search-bar'"></text-field>
                                     <span>
                                         <i class="icon-search"></i>
@@ -53,7 +54,8 @@
                             <div class="right-heading" *ngIf="currentUser?.uniqueName">
                                 <button mat-stroked-button color="primary" (click)="openSearchModal('stocks')"> {{
                                     localeData?.add_inventory }} </button>
-                                <div class="search-list position-relative" [formGroup]="searchForm" *ngIf="!currentUser?.isTempUser">
+                                <div class="search-list position-relative" [formGroup]="searchForm"
+                                    *ngIf="!currentUser?.isTempUser">
                                     <text-field type="text" [placeholder]="commonLocaleData?.app_search"
                                         [cssClass]="'form-control search-bar'"
                                         formControlName="stockSearch"></text-field>
@@ -69,25 +71,40 @@
                                         formArrayName="discountInfo">
                                         <ng-container *ngIf="discountCollection?.get('hasVariants')?.value">
                                             <div class="table-inventory pd-t15">
-                                                <div class="d-flex align-items-center mb-4">
-                                                    <p class="inventory-head">
-                                                        <strong>
-                                                            {{ discountCollection?.get('stockName')?.value }}
-                                                        </strong>
-                                                    </p>
-                                                    <div class="d-flex align-items-center column-gap42 ml-auto">
-                                                        <button mat-stroked-button color="primary"
-                                                            class="ml-auto" (click)="saveDiscount(i)">Save</button>
-
-                                                        <button mat-stroked-button class="delete-icon"
-                                                            (click)="confirmationPopup( discountCollection?.get('stockUniqueName')?.value, 'stock', discountCollection?.get('isTempStock')?.value, i)">
-                                                            <i class="icon-trash"></i>
-                                                        </button>
-                                                    </div>
-                                                </div>
                                                 <ng-container [formGroupName]="i">
                                                     <div class="mr-t05 mr-b15">
                                                         <table class="table">
+                                                            <thead>
+                                                                <tr>
+                                                                    <td colspan="5" class="pl-0">
+                                                                        <p class="inventory-head">
+                                                                            <strong>
+                                                                                {{
+                                                                                discountCollection?.get('stockName')?.value
+                                                                                }}
+                                                                            </strong>
+                                                                        </p>
+                                                                    </td>
+                                                                    <td class="pr-0 variant-delete text-right">
+                                                                        <button 
+                                                                            mat-stroked-button 
+                                                                            color="primary" 
+                                                                            (click)="saveDiscount(i)"
+                                                                        >Save
+                                                                        </button>
+                                                                    </td>
+                                                                    <td class="pr-0 variant-delete text-right">
+                                                                        <span>
+                                                                            <button 
+                                                                                mat-stroked-button 
+                                                                                class="delete-icon"
+                                                                                (click)="confirmationPopup( discountCollection?.get('stockUniqueName')?.value, 'stock', discountCollection?.get('isTempStock')?.value, i)"
+                                                                            ><i class="icon-trash"></i>
+                                                                            </button>
+                                                                        </span>
+                                                                    </td>
+                                                                </tr>
+                                                            </thead>
                                                             <tbody>
                                                                 <tr *ngFor="let variant of discountCollection?.get('variants')['controls'];  let j = index"
                                                                     formArrayName="variants">
@@ -113,47 +130,39 @@
                                                                                 class="position-relative position-center"
                                                                                 [name]="'discountExclusive' + i + '-' + j"
                                                                                 formControlName="discountExclusive">
-                                                                                <span class="d-flex align-items-center column-gap5">
+                                                                                <span
+                                                                                    class="d-flex align-items-center column-gap5">
                                                                                     <span>
                                                                                         {{
                                                                                         variant?.get('discountExclusive')?.value
                                                                                         ?
-                                                                                        localeData?.inclusive :
-                                                                                        localeData?.exclusive
+                                                                                        localeData?.exclusive :
+                                                                                        localeData?.inclusive
                                                                                         }}
                                                                                     </span>
-                                                                                    <span class="icon-info" [matTooltip]="localeData?.inclusiveExclusiveTooltipMessage" matTooltipPosition="above"></span>
+                                                                                    <span class="icon-info"
+                                                                                        [matTooltip]="localeData?.inclusiveExclusiveTooltipMessage"
+                                                                                        matTooltipPosition="above"></span>
                                                                                 </span>
                                                                             </mat-slide-toggle>
                                                                         </td>
                                                                         <td class="overflow-visible variant-discount">
-                                                                            <div
-                                                                                class="text-right flex-fill discount-input w-100">
-                                                                                <discount-control-component
-                                                                                    #discountComponent
-                                                                                    [discountMenu]="false"
-                                                                                    [discountsList]="discountsList"
-                                                                                    [discountAccountsDetails]="variant?.get('discountInfo')?.value"
-                                                                                    [discountSum]="variant?.get('discountValue')?.value"
-                                                                                    [discountPercentageModal]="variant.get('discountPercentageModal')?.value"
-                                                                                    [discountFixedValueModal]="variant.get('discountFixedValueModal')?.value"
-                                                                                    (discountTotalUpdated)="updateDiscountInVariant(variant, discountCollection?.get('variants')?.value, i, j, $event)"
-                                                                                    [showHeaderText]="false"
-                                                                                    [maskInput]="''"
-                                                                                    [prefixInput]="variant?.get('discountInfo')?.value?.linkAccount?.currencySymbol"
-                                                                                    [suffixInput]="''"
-                                                                                    [commonLocaleData]="commonLocaleData"
-                                                                                    [readonly]="false">
-                                                                                </discount-control-component>
-                                                                            </div>
+                                                                            <dropdown-field
+                                                                                [name]="'discount' + i + '-' + j"
+                                                                                [label]="commonLocaleData?.app_discount"
+                                                                                [placeholder]="localeData?.select_discount"
+                                                                                [options]="discountsList"
+                                                                                (selectedOption)="updateDiscountInVariant(variant, $event)"
+                                                                                [defaultValue]="variant?.get('discountName')?.value">
+                                                                            </dropdown-field>
                                                                         </td>
-                                                                        <td width="15%" class="variant-quantity">
+                                                                        <td class="variant-quantity">
                                                                             <input-field [placeholder]="'00'"
                                                                                 [name]="'quantity' + i + '-' + j"
                                                                                 formControlName="quantity"
-                                                                                [label]="commonLocaleData?.app_default_quantity"
+                                                                                [label]="localeData?.quantity"
                                                                                 [type]="'number'"
-                                                                                [matSuffix]="variant?.get('variantUnitName')?.value"
+                                                                                [matSuffix]="variant?.get('variantUnitCode')?.value"
                                                                                 [cssClass]="'text-right'"></input-field>
                                                                         </td>
                                                                         <td class="variant-delete">
@@ -173,8 +182,9 @@
                                                             </tbody>
                                                             <tfoot>
                                                                 <tr>
-                                                                    <td colspan="100%" class="px-0">
-                                                                        <div *ngIf="variantsWithoutDiscount[i]?.length" class="add-variant">
+                                                                    <td colspan="100%">
+                                                                        <div *ngIf="variantsWithoutDiscount[i]?.length"
+                                                                            class="add-variant">
                                                                             <dropdown-field
                                                                                 [name]="'variantsWithoutDiscount' + i"
                                                                                 [label]="commonLocaleData?.app_variant"
@@ -211,6 +221,7 @@
                                                                         <td class="variant-price">
                                                                             <input-field [name]="'price' + i + '-' + j"
                                                                                 [placeholder]="'00'"
+                                                                                [min]="0"
                                                                                 [label]="localeData?.price"
                                                                                 [type]="'number'"
                                                                                 [cssClass]="'text-right'"
@@ -222,52 +233,45 @@
                                                                                 class="position-relative position-center"
                                                                                 [name]="'discountExclusive' + i + '-' + j"
                                                                                 formControlName="discountExclusive">
-                                                                                <span class="d-flex align-items-center column-gap5">
+                                                                                <span
+                                                                                    class="d-flex align-items-center column-gap5">
                                                                                     <span>
                                                                                         {{
                                                                                         variant?.get('discountExclusive')?.value
                                                                                         ?
-                                                                                        localeData?.inclusive :
-                                                                                        localeData?.exclusive
+                                                                                        localeData?.exclusive :
+                                                                                        localeData?.inclusive
                                                                                         }}
                                                                                     </span>
-                                                                                    <span class="icon-info" [matTooltip]="localeData?.inclusiveExclusiveTooltipMessage" matTooltipPosition="above"></span>
+                                                                                    <span class="icon-info"
+                                                                                        [matTooltip]="localeData?.inclusiveExclusiveTooltipMessage"
+                                                                                        matTooltipPosition="above"></span>
                                                                                 </span>
                                                                             </mat-slide-toggle>
                                                                         </td>
                                                                         <td class="overflow-visible variant-discount">
-                                                                            <div
-                                                                                class="text-right flex-fill discount-input w-100">
-                                                                                <discount-control-component
-                                                                                    #discountComponent
-                                                                                    [discountMenu]="false"
-                                                                                    [discountsList]="discountsList"
-                                                                                    [discountAccountsDetails]="variant?.get('discountInfo')?.value"
-                                                                                    [discountSum]="variant?.get('discountValue')?.value"
-                                                                                    [discountPercentageModal]="variant.get('discountPercentageModal')?.value"
-                                                                                    [discountFixedValueModal]="variant.get('discountFixedValueModal')?.value"
-                                                                                    (discountTotalUpdated)="updateDiscountInVariant(variant, discountCollection?.get('variants')?.value, i, j, $event)"
-                                                                                    [showHeaderText]="false"
-                                                                                    [maskInput]="''"
-                                                                                    [prefixInput]="variant?.get('discountInfo')?.value?.linkAccount?.currencySymbol"
-                                                                                    [suffixInput]="''"
-                                                                                    [commonLocaleData]="commonLocaleData"
-                                                                                    [readonly]="false">
-                                                                                </discount-control-component>
-                                                                            </div>
+                                                                            <dropdown-field
+                                                                                [name]="'discount' + i + '-' + j"
+                                                                                [label]="commonLocaleData?.app_discount"
+                                                                                [placeholder]="localeData?.select_discount"
+                                                                                [options]="discountsList"
+                                                                                (selectedOption)="updateDiscountInVariant(variant, $event)"
+                                                                                [defaultValue]="variant?.get('discountName')?.value">
+                                                                            </dropdown-field>
                                                                         </td>
-                                                                        <td width="15%" class="variant-quantity">
+                                                                        <td class="variant-quantity">
                                                                             <input-field [placeholder]="'00'"
                                                                                 [name]="'quantity' + i + '-' + j"
                                                                                 formControlName="quantity"
-                                                                                [label]="commonLocaleData?.app_default_quantity"
+                                                                                [label]="localeData?.quantity"
                                                                                 [type]="'number'"
-                                                                                [matSuffix]="variant?.get('variantUnitName')?.value"
+                                                                                [min]="0"
+                                                                                [matSuffix]="variant?.get('variantUnitCode')?.value"
                                                                                 [cssClass]="'text-right'"></input-field>
                                                                         </td>
                                                                         <td class="variant-delete text-right px-0">
-                                                                            <button mat-stroked-button
-                                                                                color="primary" class="ml-auto"
+                                                                            <button mat-stroked-button color="primary"
+                                                                                class="ml-auto"
                                                                                 (click)="saveDiscount(i)">Save</button>
                                                                         </td>
                                                                         <td class="variant-delete px-0">
