@@ -221,5 +221,6 @@
     "imps": "IMPS",
     "registered": "Registered",
     "unregistered": "Unregistered",
-    "status_unavailable": "Status unavailable! Please try again later."
+    "status_unavailable": "Status unavailable! Please try again later.",
+    "section": "Section"
 }
