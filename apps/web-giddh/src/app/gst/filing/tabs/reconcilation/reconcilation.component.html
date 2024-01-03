@@ -254,6 +254,17 @@
 <!-- region common header template for reconciliation table -->
 <ng-template #commonHeaderTemplateForReconciliationTable>
     <tr>
+        <th class="text-left width-vendor" *ngIf="selectedGst === 'gstr1'">
+            <div class="position-relative">
+                <div
+                    [attr.data-test-title]="localeData?.section"
+                    [attr.title]="localeData?.section"
+                    class="pull-left over-flow"
+                >
+                    {{ localeData?.section }}
+                </div>
+            </div>
+        </th>
         <th id="4" class="text-left width-vendor">
             <div class="position-relative">
                 <div
@@ -380,6 +391,11 @@
 <!-- region missing in gstin template -->
 <ng-template let-item #missingInGstinTemplate>
     <tr class="cursor-pointer">
+        <td class="primary-details" *ngIf="selectedGst === 'gstr1'">
+            <div>
+                {{ item.section ? item.section : "-" }}
+            </div>
+        </td>
         <td class="primary-details">
             <div>
                 {{ item.ctin ? item.ctin : "-" }}
@@ -388,7 +404,7 @@
 
         <td class="primary-details">
             <div>
-                {{ item.invoice_number }}
+                {{ item.invoice_number ? item.invoice_number : "-" }}
             </div>
         </td>
 
@@ -468,6 +484,12 @@
 <!-- region missing in giddh template -->
 <ng-template let-item #missingInGiddhTemplate>
     <tr class="cursor-pointer">
+        <td class="primary-details" *ngIf="selectedGst === 'gstr1'">
+            <div>
+                {{ item.section ? item.section : "-" }}
+            </div>
+        </td>
+
         <td class="primary-details">
             <div>
                 {{ item.ctin ? item.ctin : "-" }}
@@ -476,7 +498,7 @@
 
         <td class="primary-details">
             <div>
-                {{ item.invoice_number }}
+                {{ item.invoice_number ? item.invoice_number : "-" }}
             </div>
         </td>
 
@@ -556,6 +578,11 @@
 <!-- region partially matched template -->
 <ng-template let-item #partiallyMatchedTemplate>
     <tr class="cursor-pointer">
+        <td class="primary-details" *ngIf="selectedGst === 'gstr1'">
+            <div>
+                {{ item.section ? item.section : "-" }}
+            </div>
+        </td>
         <td class="primary-details">
             <div>
                 {{ item.ctin ? item.ctin : "-" }}
@@ -564,7 +591,7 @@
 
         <td class="primary-details">
             <div>
-                {{ item.invoice_number }}
+                {{ item.invoice_number ? item.invoice_number : "-" }}
             </div>
         </td>
 
@@ -723,6 +750,11 @@
 <!-- region matched template -->
 <ng-template let-item #matchedTemplate>
     <tr class="cursor-pointer">
+        <td class="primary-details" *ngIf="selectedGst === 'gstr1'">
+            <div>
+                {{ item.section ? item.section : "-" }}
+            </div>
+        </td>
         <td class="primary-details">
             <div>
                 {{ item.ctin ? item.ctin : "-" }}
@@ -731,7 +763,7 @@
 
         <td class="primary-details">
             <div>
-                {{ item.invoice_number }}
+                {{ item.invoice_number ? item.invoice_number : "-" }}
             </div>
         </td>
 
