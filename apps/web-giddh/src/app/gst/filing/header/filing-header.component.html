@@ -75,10 +75,14 @@
                     <watch-video [cssClass]="'text-primary pd-r15'" [moduleName]="'GSTR1'"></watch-video>
                 </li>
                 <li>
-                    <button type="button" class="btn btn-sky-blue mr-0 mb-2" (click)="onDownloadSheetGSTR('error')">
+                    <button
+                        type="button"
+                        class="btn btn-sky-blue mr-0 error-button gstr-button"
+                        (click)="onDownloadSheetGSTR('error')"
+                    >
                         {{ localeData?.filing?.errors }}
                     </button>
-                    <button type="button" class="btn btn-sky-blue mr-0 mb-2 mr-l2" (click)="pushToPortalModal?.show()">
+                    <button type="button" class="btn btn-sky-blue mr-0 gstr-button" (click)="pushToPortalModal?.show()">
                         {{ localeData?.filing?.push_to_portal }}
                     </button>
                 </li>
