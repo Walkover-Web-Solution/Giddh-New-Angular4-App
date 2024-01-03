@@ -712,6 +712,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public hasUnsavedChanges: boolean = false;
     /** True if entry datepicker is open */
     public isEntryDatepickerOpen: boolean = false;
+    /** True, if the linking with PO is in progress */
+    private isPoLinkingInProgress: boolean = false;
     /**Hold voucher type */
     public voucherTypes: any[] = [VoucherTypeEnum.cashCreditNote, VoucherTypeEnum.cash, VoucherTypeEnum.cashDebitNote, VoucherTypeEnum.cashBill];
     /** This will hold invoice text */
@@ -720,8 +722,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public regionsSource: IOption[] = [];
     /* This will hold company's country regions */
     public companyRegionsSource: IOption[] = [];
-    /** True, if the linking with PO is in progress */
-    private isPoLinkingInProgress: boolean = false;
     /** This will hold barcode value*/
     public barcodeValue: string = "";
     /** Custom fields request */
@@ -3039,7 +3039,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public calculateTotalDiscountOfEntry(entry: SalesEntryClass, trx: SalesTransactionItemClass, calculateEntryTotal: boolean = true) {
         let percentageListTotal: number = 0;
         let fixedListTotal: number = 0;
-        // console.log(cloneDeep(entry, entry.discountSum, trx));
         percentageListTotal = entry.discounts?.filter(f => f.isActive)
             ?.filter(s => s.discountType === 'PERCENTAGE')
             .reduce((pv, cv) => {
@@ -3076,6 +3075,18 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 taxPercentage += tax.amount;
             }
         });
+
+        if (trx?.applicableTaxes?.length > 0) {
+            let data: VoucherClass = cloneDeep(this.invFormData);
+            data.entries.forEach((entry: any, index: number) => {
+                const transaction = this.invFormData.entries[index].transactions[0];
+                if (transaction['applicableTaxes']?.length > 0) {
+                    transaction['requiredTax'] = false;
+                } else {
+                    transaction['requiredTax'] = true;
+                }
+            });
+        }
 
         entry.taxSum = giddhRoundOff(((taxPercentage * (trx.amount - entry.discountSum)) / 100), this.giddhBalanceDecimalPlaces);
         entry.cessSum = giddhRoundOff(((cessPercentage * (trx.amount - entry.discountSum)) / 100), this.giddhBalanceDecimalPlaces);
@@ -3151,9 +3162,14 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         entry['discountPercentageModal'] = 0;
                     }
                 } else if (!entry['initiallyCall']) {
-                    entry.discounts.map(item => {
+                    entry.discounts = entry.discounts.map(item => {
                         item.isActive = false;
+                        return item;
                     });
+
+                    entry['discountFixedValueModal'] = 0;
+                    entry['discountPercentageModal'] = 0;
+                    entry.discountSum = 0;
 
                     trx?.stockDetails?.variant?.unitRates?.forEach(unitRate => {
                         let matchedUnit = unitRate?.stockUnitUniqueName === trx?.stockUnit;
@@ -3166,8 +3182,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     this.applyMrpDiscount(trx, entry, event);
                 }
             }
-
-            console.log(cloneDeep(entry.discounts));
 
             if (trx.amount) {
                 let transactionAmount = trx.amount?.toString();
@@ -8898,10 +8912,10 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     }
 
     /**
-    * This will use for delete attachment confirmation
-    *
-    * @memberof VoucherComponent
-    */
+     * This will use for delete attachment confirmation
+     *
+     * @memberof VoucherComponent
+     */
     public deleteAttachementConfirmation(): void {
         this.attachmentDeleteConfiguration = this.generalService.getAttachmentDeleteConfiguration(this.localeData, this.commonLocaleData);
         let dialogRef = this.dialog.open(this.attachmentDeleteConfirmationModel, {
