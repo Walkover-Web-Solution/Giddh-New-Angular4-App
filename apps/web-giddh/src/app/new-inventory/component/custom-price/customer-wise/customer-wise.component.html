@@ -148,7 +148,7 @@
                                                                         </td>
                                                                         <td class="overflow-visible variant-discount">
                                                                             <dropdown-field
-                                                                                [name]="'variantsWithoutDiscount' + i"
+                                                                                [name]="'discount' + i + '-' + j"
                                                                                 [label]="commonLocaleData?.app_discount"
                                                                                 [placeholder]="localeData?.select_discount"
                                                                                 [options]="discountsList"
@@ -251,7 +251,7 @@
                                                                         </td>
                                                                         <td class="overflow-visible variant-discount">
                                                                             <dropdown-field
-                                                                                [name]="'variantsWithoutDiscount' + i"
+                                                                                [name]="'discount' + i + '-' + j"
                                                                                 [label]="commonLocaleData?.app_discount"
                                                                                 [placeholder]="localeData?.select_discount"
                                                                                 [options]="discountsList"

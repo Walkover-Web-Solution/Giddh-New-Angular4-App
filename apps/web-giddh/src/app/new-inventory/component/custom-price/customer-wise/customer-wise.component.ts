@@ -348,7 +348,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                 apiResponse?.body?.results.forEach((res, index) => {
                     this.variantsWithoutDiscount.push([]);
                     if (res?.hasVariants) {
-                        this.variantsWithoutDiscount[index] = res.variants?.filter(variant => !variant?.price)?.map(variant => { //******** Check Condition here !price     /
+                        this.variantsWithoutDiscount[index] = res.dropDownVariants?.map(variant => {
                             return {
                                 label: variant?.name,
                                 value: variant?.uniqueName
@@ -389,10 +389,9 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                             if (response?.body?.results[index]?.variants[variantIndex]?.discounts[0]?.discount?.uniqueName) {
                                 variant.discounts = [{ uniqueName: response?.body?.results[index].variants[variantIndex]?.discounts[0]?.discount?.uniqueName }];
                                 variant.discountName = response?.body?.results[index].variants[variantIndex]?.discounts[0]?.discount?.name;
-                            }else{
-                                variant.discounts = null;   
+                            } else {
+                                variant.discounts = null;
                             }
-                            
                             variants.push(this.initVariantForm(variant));
                             const variantControl = (((this.discountForm.get('discountInfo') as FormArray).at(index).get('variants') as UntypedFormArray).at(variantIndex) as FormGroup).controls;
 
@@ -595,7 +594,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
             let variantObj = {
                 price: null,
                 quantity: null,
-                discountExclusive: false,
+                discountExclusive: true,
                 stockUnitUniqueName: units[0].value,
                 variantUnitCode: units[0].label,
                 uniqueName: event.value,
@@ -642,29 +641,20 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
         this.isStockLoading = true;
         const discountFormValues = cloneDeep(this.discountForm.value);
         const stockUniqueName = discountFormValues.discountInfo[stockFormArrayIndex].stockUniqueName;
-
-        let quantityIsEqualToOne = false;
-        let checkMandatory = discountFormValues.discountInfo[stockFormArrayIndex].variants.some(item => (item.discounts?.length || item.price !== null || item.quantity !== null));
-        let hasQuantity = discountFormValues.discountInfo[stockFormArrayIndex].variants.some(item => (item.quantity !== null));
-
-        if (!checkMandatory) {
-            this.isStockLoading = false;
-            this.toaster.warningToast(this.localeData?.invaild_form_msg);
-            return;
-        }
+        const checkMandatory = discountFormValues.discountInfo[stockFormArrayIndex].variants.some(item => (item.discounts !== null || item.price !== null || item.quantity !== null));
 
         discountFormValues.discountInfo = discountFormValues.discountInfo[stockFormArrayIndex]?.variants?.map(variant => {
-            if (hasQuantity && variant.quantity == 1) {
-                quantityIsEqualToOne = true;
-                return;
-            }
-            if(variant.discounts === null){
+            if (variant.discounts === null) {
                 variant.discounts = [];
             }
             return this.filterKeys(variant, this.variantDesiredKeys)
         });
 
-        if (!quantityIsEqualToOne) {
+        if (!checkMandatory) {
+            this.isStockLoading = false;
+            this.toaster.warningToast(this.localeData?.invaild_form_msg);
+            return;
+        } else {
             this.inventoryService.createDiscount(stockUniqueName, discountFormValues).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
                 this.isStockLoading = false;
                 if (response && response?.status === 'success') {
@@ -686,9 +676,6 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                     this.toaster.errorToast(response?.message)
                 }
             });
-        } else {
-            this.isStockLoading = false;
-            this.toaster.warningToast(this.localeData?.quantity_one_warning);
         }
     }
 
