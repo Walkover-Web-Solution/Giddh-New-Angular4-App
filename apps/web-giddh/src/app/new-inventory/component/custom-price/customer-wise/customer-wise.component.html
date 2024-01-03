@@ -147,25 +147,14 @@
                                                                             </mat-slide-toggle>
                                                                         </td>
                                                                         <td class="overflow-visible variant-discount">
-                                                                            <div
-                                                                                class="text-right flex-fill discount-input">
-                                                                                <discount-control-component
-                                                                                    #discountComponent
-                                                                                    [discountMenu]="false"
-                                                                                    [discountsList]="discountsList"
-                                                                                    [discountAccountsDetails]="variant?.get('discountInfo')?.value"
-                                                                                    [discountSum]="variant?.get('discountValue')?.value"
-                                                                                    [discountPercentageModal]="variant.get('discountPercentageModal')?.value"
-                                                                                    [discountFixedValueModal]="variant.get('discountFixedValueModal')?.value"
-                                                                                    (discountTotalUpdated)="updateDiscountInVariant(variant, discountCollection?.get('variants')?.value, i, j, $event)"
-                                                                                    [showHeaderText]="false"
-                                                                                    [maskInput]="''"
-                                                                                    [prefixInput]="variant?.get('discountInfo')?.value?.linkAccount?.currencySymbol"
-                                                                                    [suffixInput]="''"
-                                                                                    [commonLocaleData]="commonLocaleData"
-                                                                                    [readonly]="false">
-                                                                                </discount-control-component>
-                                                                            </div>
+                                                                            <dropdown-field
+                                                                                [name]="'variantsWithoutDiscount' + i"
+                                                                                [label]="commonLocaleData?.app_discount"
+                                                                                [placeholder]="localeData?.select_discount"
+                                                                                [options]="discountsList"
+                                                                                (selectedOption)="updateDiscountInVariant(variant, $event)"
+                                                                                [defaultValue]="variant?.get('discountName')?.value">
+                                                                            </dropdown-field>
                                                                         </td>
                                                                         <td class="variant-quantity">
                                                                             <input-field [placeholder]="'00'"
@@ -232,6 +221,7 @@
                                                                         <td class="variant-price">
                                                                             <input-field [name]="'price' + i + '-' + j"
                                                                                 [placeholder]="'00'"
+                                                                                [min]="0"
                                                                                 [label]="localeData?.price"
                                                                                 [type]="'number'"
                                                                                 [cssClass]="'text-right'"
@@ -260,25 +250,14 @@
                                                                             </mat-slide-toggle>
                                                                         </td>
                                                                         <td class="overflow-visible variant-discount">
-                                                                            <div
-                                                                                class="text-right flex-fill discount-input">
-                                                                                <discount-control-component
-                                                                                    #discountComponent
-                                                                                    [discountMenu]="false"
-                                                                                    [discountsList]="discountsList"
-                                                                                    [discountAccountsDetails]="variant?.get('discountInfo')?.value"
-                                                                                    [discountSum]="variant?.get('discountValue')?.value"
-                                                                                    [discountPercentageModal]="variant.get('discountPercentageModal')?.value"
-                                                                                    [discountFixedValueModal]="variant.get('discountFixedValueModal')?.value"
-                                                                                    (discountTotalUpdated)="updateDiscountInVariant(variant, discountCollection?.get('variants')?.value, i, j, $event)"
-                                                                                    [showHeaderText]="false"
-                                                                                    [maskInput]="''"
-                                                                                    [prefixInput]="variant?.get('discountInfo')?.value?.linkAccount?.currencySymbol"
-                                                                                    [suffixInput]="''"
-                                                                                    [commonLocaleData]="commonLocaleData"
-                                                                                    [readonly]="false">
-                                                                                </discount-control-component>
-                                                                            </div>
+                                                                            <dropdown-field
+                                                                                [name]="'variantsWithoutDiscount' + i"
+                                                                                [label]="commonLocaleData?.app_discount"
+                                                                                [placeholder]="localeData?.select_discount"
+                                                                                [options]="discountsList"
+                                                                                (selectedOption)="updateDiscountInVariant(variant, $event)"
+                                                                                [defaultValue]="variant?.get('discountName')?.value">
+                                                                            </dropdown-field>
                                                                         </td>
                                                                         <td class="variant-quantity">
                                                                             <input-field [placeholder]="'00'"
@@ -286,6 +265,7 @@
                                                                                 formControlName="quantity"
                                                                                 [label]="localeData?.quantity"
                                                                                 [type]="'number'"
+                                                                                [min]="0"
                                                                                 [matSuffix]="variant?.get('variantUnitCode')?.value"
                                                                                 [cssClass]="'text-right'"></input-field>
                                                                         </td>
