@@ -3172,26 +3172,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         }
                         this.calculateStockEntryAmount(trx);
                     });
-
-                    if (trx?.stockDetails?.variant?.variantDiscount?.discounts?.length) {
-                        this.applyMrpDiscount(trx, entry, event);
-                    } else {
-                        if (event && event.discount && event.isActive) {
-                            this.accountAssignedApplicableDiscounts.forEach(item => {
-                                if (item && event.discount && item.uniqueName === event.discount.discountUniqueName) {
-                                    item.isActive = event.isActive?.target?.checked;
-                                }
-                            });
-                        }
-                        if (entry && entry.discounts && entry.discounts.length && this.accountAssignedApplicableDiscounts && this.accountAssignedApplicableDiscounts.length) {
-                            entry.discounts.map(item => {
-                                let discountItem = this.accountAssignedApplicableDiscounts.find(element => element?.uniqueName === item.discountUniqueName);
-                                if (discountItem && discountItem.uniqueName) {
-                                    item.isActive = discountItem.isActive;
-                                }
-                            });
-                        }
-                    }
+                    this.applyMrpDiscount(trx, entry, event);
                 }
             }
 
@@ -3236,60 +3217,78 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     }
 
     private applyMrpDiscount(trx: any, entry: any, event: any): void {
-        trx?.stockDetails?.variant?.variantDiscount?.discounts.forEach(discount => {
-            if (discount) {
-                let matchedUnit = trx?.stockDetails?.variant?.variantDiscount?.unit?.uniqueName === trx?.stockUnit;
-                if (matchedUnit) {
-                    entry.discounts = entry.discounts.map(item => {
-                        if (item.discountUniqueName === discount?.discount?.uniqueName) {
-                            item.isActive = true;
+        if (trx?.stockDetails?.variant?.variantDiscount?.discounts?.length) {
+            trx?.stockDetails?.variant?.variantDiscount?.discounts.forEach(discount => {
+                if (discount) {
+                    let matchedUnit = trx?.stockDetails?.variant?.variantDiscount?.unit?.uniqueName === trx?.stockUnit;
+                    if (matchedUnit) {
+                        entry.discounts = entry.discounts.map(item => {
+                            if (item.discountUniqueName === discount?.discount?.uniqueName) {
+                                item.isActive = true;
+                            }
+                            return item;
+                        });
+
+                        if (discount?.type === 'FIX_AMOUNT') {
+                            entry['discountFixedValueModal'] = discount.value ? discount.value : this.discountObj?.discount;
+                            entry.discountSum = discount.value ? discount.value : this.discountObj?.discount;
+                            entry['discountPercentageModal'] = 0;
                         }
-                        return item;
-                    });
+                        if (discount?.type === 'PERCENTAGE') {
+                            entry['discountPercentageModal'] = discount.value ? discount.value : this.discountObj?.discount;
+                            entry.discountSum = discount.value ? discount.value : this.discountObj?.discount;
+                            entry['discountFixedValueModal'] = 0;
+                        }
+                        this.calculateStockEntryAmount(trx);
+                        entry['initiallyCall'] = true;
+                    } else {
+                        if (discount?.type === 'FIX_AMOUNT') {
+                            entry['discountFixedValueModal'] = 0;
+                            entry.discountSum = 0;
+                            trx.quantity = 1;
+                        }
+                        if (discount?.type === 'PERCENTAGE') {
+                            entry['discountPercentageModal'] = 0;
+                            entry.discountSum = 0;
+                            trx.quantity = 1;
+                        }
 
-                    if (discount?.type === 'FIX_AMOUNT') {
-                        entry['discountFixedValueModal'] = this.discountObj?.discount ? this.discountObj?.discount : discount.value;
-                        entry.discountSum = this.discountObj?.discount ? this.discountObj?.discount : discount.value;
-                        entry['discountPercentageModal'] = 0;
-                    }
-                    if (discount?.type === 'PERCENTAGE') {
-                        entry['discountPercentageModal'] = discount.value ? discount.value : this.discountObj?.discount;
-                        entry.discountSum = discount.value ? discount.value : this.discountObj?.discount;
-                        entry['discountFixedValueModal'] = 0;
-                    }
-                    this.calculateStockEntryAmount(trx);
-                    entry['initiallyCall'] = true;
-                } else {
-                    if (discount?.type === 'FIX_AMOUNT') {
-                        entry['discountFixedValueModal'] = 0;
-                        entry.discountSum = 0;
-                        trx.quantity = 1;
-                    }
-                    if (discount?.type === 'PERCENTAGE') {
-                        entry['discountPercentageModal'] = 0;
-                        entry.discountSum = 0;
-                        trx.quantity = 1;
-                    }
+                        if (event && event.discount && event.isActive) {
+                            this.accountAssignedApplicableDiscounts.forEach(item => {
+                                if (item && event.discount && item.uniqueName === event.discount.discountUniqueName) {
+                                    item.isActive = event.isActive?.target?.checked;
+                                }
+                            });
+                        }
 
-                    if (event && event.discount && event.isActive) {
-                        this.accountAssignedApplicableDiscounts.forEach(item => {
-                            if (item && event.discount && item.uniqueName === event.discount.discountUniqueName) {
-                                item.isActive = event.isActive?.target?.checked;
-                            }
-                        });
-                    }
-
-                    if (entry && entry.discounts && entry.discounts.length && this.accountAssignedApplicableDiscounts && this.accountAssignedApplicableDiscounts.length) {
-                        entry.discounts.map(item => {
-                            let discountItem = this.accountAssignedApplicableDiscounts.find(element => element?.uniqueName === item.discountUniqueName);
-                            if (discountItem && discountItem.uniqueName) {
-                                item.isActive = discountItem.isActive;
-                            }
-                        });
+                        if (entry && entry.discounts && entry.discounts.length && this.accountAssignedApplicableDiscounts && this.accountAssignedApplicableDiscounts.length) {
+                            entry.discounts.map(item => {
+                                let discountItem = this.accountAssignedApplicableDiscounts.find(element => element?.uniqueName === item.discountUniqueName);
+                                if (discountItem && discountItem.uniqueName) {
+                                    item.isActive = discountItem.isActive;
+                                }
+                            });
+                        }
                     }
                 }
+            });
+        } else {
+            if (event && event.discount && event.isActive) {
+                this.accountAssignedApplicableDiscounts.forEach(item => {
+                    if (item && event.discount && item.uniqueName === event.discount.discountUniqueName) {
+                        item.isActive = event.isActive?.target?.checked;
+                    }
+                });
             }
-        });
+            if (entry && entry.discounts && entry.discounts.length && this.accountAssignedApplicableDiscounts && this.accountAssignedApplicableDiscounts.length) {
+                entry.discounts.map(item => {
+                    let discountItem = this.accountAssignedApplicableDiscounts.find(element => element?.uniqueName === item.discountUniqueName);
+                    if (discountItem && discountItem.uniqueName) {
+                        item.isActive = discountItem.isActive;
+                    }
+                });
+            }
+        }
     }
 
     /**
@@ -3822,6 +3821,14 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             transaction.quantity = variant?.variantDiscount?.quantity || transaction.quantity;
             transaction.taxInclusive = true;
             isInclusiveEntry = true;
+            entry.discounts = entry.discounts.map(item => {
+                item.isActive = false;
+                return item;
+            });
+
+            entry['discountFixedValueModal'] = 0;
+            entry['discountPercentageModal'] = 0;
+            entry.discountSum = 0;
             this.applyMrpDiscount(transaction, entry, false);
         }
 
@@ -3894,6 +3901,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         }
         this.focusOnDescription();
         if (calculateTransaction) {
+
             if (isInclusiveEntry) {
                 setTimeout(() => {
                     if (!isMrpDiscountInclusive?.length || !isMrpDiscountInclusive[0].rate) {
