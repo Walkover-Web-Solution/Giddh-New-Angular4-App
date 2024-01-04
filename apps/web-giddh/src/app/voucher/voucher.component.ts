@@ -3185,7 +3185,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     trx?.stockDetails?.variant?.unitRates?.forEach(unitRate => {
                         let matchedUnit = unitRate?.stockUnitUniqueName === trx?.stockUnit;
                         if (matchedUnit) {
-                            trx.rate = unitRate.rate;
+                            trx.rate = Number((unitRate.rate / this.exchangeRate).toFixed(this.highPrecisionRate));
                             trx.quantity = trx?.stockDetails?.variant?.variantDiscount?.quantity || trx.quantity;
                         }
                         this.calculateStockEntryAmount(trx);
@@ -3844,8 +3844,10 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
         const isMrpDiscountInclusive = !variant?.discountExclusive && variant?.unitRates?.filter(ur => ur.stockUnitUniqueName === transaction.stockUnit);
         if (isMrpDiscountInclusive?.length) {
-            transaction.rate = isMrpDiscountInclusive[0].rate;
-            transaction.quantity = variant?.variantDiscount?.quantity || transaction.quantity;
+            transaction.rate = Number((isMrpDiscountInclusive[0].rate / this.exchangeRate).toFixed(this.highPrecisionRate));
+            if (!isBulkItem) {
+                transaction.quantity = variant?.variantDiscount?.quantity || transaction.quantity;
+            }
             transaction.taxInclusive = true;
             isInclusiveEntry = true;
             entry.discounts = entry.discounts.map(item => {
@@ -9098,7 +9100,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             return;
         }
 
-        this.commonService.getBarcodeScanData(this.barcodeValue).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+
+        this.commonService.getBarcodeScanData(this.barcodeValue, this.invFormData.accountDetails.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.body && response.status === 'success') {
                 this.barcodeValue = '';
                 let stockObj = response.body?.stocks[0];
@@ -9142,7 +9145,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                                 uniqueName: variantObj.uniqueName,
                                 salesTaxInclusive: variantObj.salesTaxInclusive,
                                 purchaseTaxInclusive: variantObj.purchaseTaxInclusive,
-                                unitRates: []
+                                unitRates: [],
+                                variantDiscount: variantObj?.discount
                             }
                         },
                         parentGroups: [],
@@ -9246,7 +9250,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                             uniqueName: variantObj.uniqueName,
                             salesTaxInclusive: variantObj.salesTaxInclusive,
                             purchaseTaxInclusive: variantObj.purchaseTaxInclusive,
-                            unitRates: unitRates
+                            unitRates: unitRates,
+                            variantDiscount: variantObj.discount
                         }
                     };
                     this.invFormData.entries[activeEntryIndex].transactions[0].variant = {
@@ -9262,6 +9267,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         });
                     } else {
                         this.invFormData.entries[activeEntryIndex].transactions[0].setAmount(this.invFormData.entries[activeEntryIndex]);
+                        this.invFormData.entries[activeEntryIndex]['initiallyCall'] = undefined;
                         this.calculateWhenTrxAltered(this.invFormData.entries[activeEntryIndex], this.invFormData.entries[activeEntryIndex].transactions[0]);
                         this.calculateStockEntryAmount(this.invFormData.entries[activeEntryIndex].transactions[0]);
                     }

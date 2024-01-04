@@ -232,13 +232,15 @@ export class CommonService {
      * @return {*}  {Observable<BaseResponse<any, any>>}
      * @memberof CommonService
      */
-    public getBarcodeScanData(uniqueName: string): Observable<BaseResponse<any, any>> {
+    public getBarcodeScanData(barcodeValue: string, customerUniqueName: string): Observable<BaseResponse<any, any>> {
         let url = this.config.apiUrl + COMMON_API.BARCODE_SCAN;
         url = url?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName));
-        url = url?.replace(':barcodeUniqueName', uniqueName);
+        url = url?.replace(':barcodeUniqueName', barcodeValue);
+        url = url?.replace(':customerUniqueName', customerUniqueName);
         return this.http.get(url).pipe(
             map((res) => {
                 let data: BaseResponse<CountryResponse, any> = res;
+                data.queryString = { customerUniqueName };
                 return data;
             }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
     }
