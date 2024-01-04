@@ -1,5 +1,5 @@
 import { CdkScrollable, ScrollDispatcher } from "@angular/cdk/scrolling";
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
+import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
 import { FormArray, FormControl, FormGroup, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { ActivatedRoute } from "@angular/router";
@@ -27,6 +27,8 @@ export interface CustomerVendorDiscountBasic {
 export class CustomerWiseComponent implements OnInit, OnDestroy {
     /** Instance of Mat Dialog for Add Inventory */
     @ViewChild("addSearchModal") public addSearchModal: TemplateRef<any>;
+    /** Holds HTML Element Reference */
+    @ViewChild('stocksContainer', { static: true }) stocksContainer: ElementRef;
     /** CDK Scrollable Reference */
     @ViewChild(CdkScrollable) cdkScrollable: CdkScrollable;
     /* This will hold local JSON data */
@@ -298,10 +300,11 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
      * @param {*} userData
      * @memberof CustomerWiseComponent
      */
-    public selectUser(userData: any, reload: boolean = false): void {
-        if ((this.currentUser?.uniqueName !== userData?.uniqueName) || reload) {
+    public selectUser(userData: any): void {
+        if (this.currentUser?.uniqueName !== userData?.uniqueName) {
             this.variantsWithoutDiscount = [];
             this.currentUser = userData;
+            this.pagination = this.paginationInit();
             let isTempUser = this.checkTemporaryUser(userData);
             if (isTempUser === -1) {
                 this.currentUser['isTempUser'] = false;
@@ -356,12 +359,6 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                         });
                     }
 
-                    res.units = res.units.map(unit => {
-                        unit.value = unit?.uniqueName;
-                        unit.label = unit?.name;
-                        return unit;
-                    });
-
                     res['isTempStock'] = false;
                     res['hasVariants'] = res?.hasVariants;
 
@@ -396,26 +393,22 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                             const variantControl = (((this.discountForm.get('discountInfo') as FormArray).at(index).get('variants') as UntypedFormArray).at(variantIndex) as FormGroup).controls;
 
                             variantControl.discounts.valueChanges.pipe(debounceTime(400), takeUntil(this.destroyed$)).subscribe(discountsValue => {
-                                const stockIndex = (this.discountForm.get('discountInfo') as FormArray).at(0).get('isTempStock').value ? index + 1 : index;
-                                const stockUniqueName = (this.discountForm.get('discountInfo') as FormArray).at(stockIndex).get('stockUniqueName').value;
+                                const stockUniqueName = (this.discountForm.get('discountInfo') as FormArray).at(index).get('stockUniqueName').value;
                                 let variant = { discounts: discountsValue };
                                 this.updateDiscount(stockUniqueName, variantControl.variantUniqueName.value, variant);
                             });
                             variantControl.quantity.valueChanges.pipe(debounceTime(400), takeUntil(this.destroyed$)).subscribe(quantityValue => {
-                                const stockIndex = (this.discountForm.get('discountInfo') as FormArray).at(0).get('isTempStock').value ? index + 1 : index;
-                                const stockUniqueName = (this.discountForm.get('discountInfo') as FormArray).at(stockIndex).get('stockUniqueName').value;
+                                const stockUniqueName = (this.discountForm.get('discountInfo') as FormArray).at(index).get('stockUniqueName').value;
                                 let variant = { quantity: quantityValue };
                                 this.updateDiscount(stockUniqueName, variantControl.variantUniqueName.value, variant);
                             });
                             variantControl.discountExclusive.valueChanges.pipe(debounceTime(400), takeUntil(this.destroyed$)).subscribe(discountExclusiveValue => {
-                                const stockIndex = (this.discountForm.get('discountInfo') as FormArray).at(0).get('isTempStock').value ? index + 1 : index;
-                                const stockUniqueName = (this.discountForm.get('discountInfo') as FormArray).at(stockIndex).get('stockUniqueName').value;
+                                const stockUniqueName = (this.discountForm.get('discountInfo') as FormArray).at(index).get('stockUniqueName').value;
                                 let variant = { discountExclusive: discountExclusiveValue };
                                 this.updateDiscount(stockUniqueName, variantControl.variantUniqueName.value, variant);
                             });
                             variantControl.price.valueChanges.pipe(debounceTime(400), takeUntil(this.destroyed$)).subscribe(priceValue => {
-                                const stockIndex = (this.discountForm.get('discountInfo') as FormArray).at(0).get('isTempStock').value ? index + 1 : index;
-                                const stockUniqueName = (this.discountForm.get('discountInfo') as FormArray).at(stockIndex).get('stockUniqueName').value;
+                                const stockUniqueName = (this.discountForm.get('discountInfo') as FormArray).at(index).get('stockUniqueName').value;
                                 let variant = { price: priceValue };
                                 this.updateDiscount(stockUniqueName, variantControl.variantUniqueName.value, variant);
                             });
@@ -559,6 +552,12 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                 };
                 /** To add deleted variant info in "variantsWithoutDiscount" array  */
                 this.variantsWithoutDiscount.at(stockFormArrayIndex).push(variant);
+
+                /** This code is to update value ngOnChanges in  Dropdown component */
+                let stockData = cloneDeep(this.variantsWithoutDiscount);
+                this.variantsWithoutDiscount = [];
+                this.variantsWithoutDiscount = stockData;
+                
                 stock.removeAt(variantFormArrayIndex);
                 const deletedMessage = this.localeData?.remove_item_msg?.replace('[TYPE]', type.toUpperCase());
                 this.toaster.successToast(deletedMessage);
@@ -595,8 +594,8 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                 price: null,
                 quantity: null,
                 discountExclusive: true,
-                stockUnitUniqueName: units[0].value,
-                variantUnitCode: units[0].label,
+                stockUnitUniqueName: units[0]?.uniqueName,
+                variantUnitCode: units[0]?.code,
                 uniqueName: event.value,
                 name: event.label,
                 isTemproraryVariant: true
@@ -664,13 +663,35 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                     if (index > -1) {
                         this.tempUserList.splice(index, 1);
                     }
-                    const variantArrayLength = (((this.discountForm.get('discountInfo') as FormArray).at(stockFormArrayIndex) as UntypedFormArray).get('variants') as UntypedFormArray).length;
                     const variants = (((this.discountForm.get('discountInfo') as FormArray).at(stockFormArrayIndex) as UntypedFormArray).get('variants') as UntypedFormArray);
-                    for (let i = 0; i < variantArrayLength; i++) {
+
+                    for (let i = 0; i < variants.length; i++) {
                         variants.at(i).get('isTemproraryVariant').patchValue(false);
+
+                        const variantControl = (variants.at(i) as FormGroup).controls;
+
+                        variantControl.discounts.valueChanges.pipe(debounceTime(400), takeUntil(this.destroyed$)).subscribe(discountsValue => {
+                            const stockUniqueName = (this.discountForm.get('discountInfo') as FormArray).at(stockFormArrayIndex).get('stockUniqueName').value;
+                            let variant = { discounts: discountsValue };
+                            this.updateDiscount(stockUniqueName, variantControl.variantUniqueName.value, variant);
+                        });
+                        variantControl.quantity.valueChanges.pipe(debounceTime(400), takeUntil(this.destroyed$)).subscribe(quantityValue => {
+                            const stockUniqueName = (this.discountForm.get('discountInfo') as FormArray).at(stockFormArrayIndex).get('stockUniqueName').value;
+                            let variant = { quantity: quantityValue };
+                            this.updateDiscount(stockUniqueName, variantControl.variantUniqueName.value, variant);
+                        });
+                        variantControl.discountExclusive.valueChanges.pipe(debounceTime(400), takeUntil(this.destroyed$)).subscribe(discountExclusiveValue => {
+                            const stockUniqueName = (this.discountForm.get('discountInfo') as FormArray).at(stockFormArrayIndex).get('stockUniqueName').value;
+                            let variant = { discountExclusive: discountExclusiveValue };
+                            this.updateDiscount(stockUniqueName, variantControl.variantUniqueName.value, variant);
+                        });
+                        variantControl.price.valueChanges.pipe(debounceTime(400), takeUntil(this.destroyed$)).subscribe(priceValue => {
+                            const stockUniqueName = (this.discountForm.get('discountInfo') as FormArray).at(stockFormArrayIndex).get('stockUniqueName').value;
+                            let variant = { price: priceValue };
+                            this.updateDiscount(stockUniqueName, variantControl.variantUniqueName.value, variant);
+                        });
                     }
                     this.currentUser.isTempUser = false;
-                    this.selectUser(this.currentUser, true);
                     this.toaster.successToast(response?.body);
                 } else {
                     this.toaster.errorToast(response?.message)
@@ -773,24 +794,30 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                 this.inventoryService.getStockDetails(event?.uniqueName, this.userType).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
                     if (response && response?.body) {
                         const discounts = this.discountForm.get('discountInfo') as UntypedFormArray;
+                        let stockIndex = discounts.length;
                         this.variantsWithoutDiscount.push([]);
                         if (this.currentUser.type === 'ACCOUNT') {
                             this.discountForm.get('customerVendorAccountUniqueName').patchValue(this.currentUser.uniqueName);
                         } else {
                             this.discountForm.get('customerVendorGroupUniqueName').patchValue(this.currentUser.uniqueName);
                         }
-                        discounts.insert(0, this.initDiscountForm({
+                        discounts.push(this.initDiscountForm({
                             stock: { name: event?.name, uniqueName: event?.uniqueName },
                             isTempStock: true,
                             units: [],
                             hasVariants: response?.body?.variants.length > 1
                         }));
 
-                        let variants = (this.discountForm.get('discountInfo') as FormArray).at(0).get('variants') as UntypedFormArray;
+                        let variants = (this.discountForm.get('discountInfo') as FormArray).at(stockIndex).get('variants') as UntypedFormArray;
                         response.body?.variants.forEach(variant => {
                             variants.push(this.initVariantForm({ name: variant?.name, uniqueName: variant?.uniqueName, isTemproraryVariant: true, stockUnitUniqueName: variant?.units[0].uniqueName, variantUnitCode: variant?.units[0].code }));
                         });
                         this.currentUserStocks.push(event);
+
+                        this.stocksContainer.nativeElement.scrollTo({
+                            top: this.stocksContainer.nativeElement.scrollHeight,
+                            behavior: 'smooth'
+                        });
                     }
                 });
             }
