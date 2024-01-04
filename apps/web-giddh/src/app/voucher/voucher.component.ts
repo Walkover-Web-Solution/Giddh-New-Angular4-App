@@ -3184,7 +3184,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
                     trx?.stockDetails?.variant?.unitRates?.forEach(unitRate => {
                         let matchedUnit = unitRate?.stockUnitUniqueName === trx?.stockUnit;
-                        if (matchedUnit) {
+                        if (matchedUnit && this.isBulkEntryInProgress) {
                             trx.rate = Number((unitRate.rate / this.exchangeRate).toFixed(this.highPrecisionRate));
                             trx.quantity = trx?.stockDetails?.variant?.variantDiscount?.quantity || trx.quantity;
                         }
@@ -3844,8 +3844,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
         const isMrpDiscountInclusive = !variant?.discountExclusive && variant?.unitRates?.filter(ur => ur.stockUnitUniqueName === transaction.stockUnit);
         if (isMrpDiscountInclusive?.length) {
-            transaction.rate = Number((isMrpDiscountInclusive[0].rate / this.exchangeRate).toFixed(this.highPrecisionRate));
             if (!isBulkItem) {
+                transaction.rate = Number((isMrpDiscountInclusive[0].rate / this.exchangeRate).toFixed(this.highPrecisionRate));
                 transaction.quantity = variant?.variantDiscount?.quantity || transaction.quantity;
             }
             transaction.taxInclusive = true;
