@@ -12,5 +12,5 @@ export const COMMON_API = {
     MODULE_WISE_COLUMNS: 'company/:companyUniqueName/report-filters?module=:module',
     UPLOAD_FILE: 'company/:companyUniqueName/ledger/upload',
     UPLOAD_IMAGE: 'company/:companyUniqueName/images',
-    BARCODE_SCAN: 'company/:companyUniqueName/customfield/barcode/:barcodeUniqueName'
+    BARCODE_SCAN: 'company/:companyUniqueName/customfield/barcode/:barcodeUniqueName?customerUniqueName=:customerUniqueName'
 };

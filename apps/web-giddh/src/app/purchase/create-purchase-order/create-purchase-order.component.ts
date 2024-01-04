@@ -4177,7 +4177,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             return;
         }
 
-        this.commonService.getBarcodeScanData(this.barcodeValue).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.commonService.getBarcodeScanData(this.barcodeValue, this.purchaseOrder.accountDetails.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.body && response.status === 'success') {
                 this.barcodeValue = '';
                 let stockObj = response.body?.stocks[0];
