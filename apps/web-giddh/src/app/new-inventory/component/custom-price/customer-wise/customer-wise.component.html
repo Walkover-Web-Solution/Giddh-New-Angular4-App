@@ -50,7 +50,7 @@
                                 <div class="p-3 text-gray">{{ commonLocaleData?.app_no_data_found }}</div>
                             </ng-container>
                         </mat-list>
-                        <div class="customer-right-side">
+                        <div class="customer-right-side" #stocksContainer>
                             <div class="right-heading" *ngIf="currentUser?.uniqueName">
                                 <button mat-stroked-button color="primary" (click)="openSearchModal('stocks')"> {{
                                     localeData?.add_inventory }} </button>
@@ -90,7 +90,7 @@
                                                                             mat-stroked-button 
                                                                             color="primary" 
                                                                             (click)="saveDiscount(i)"
-                                                                        >Save
+                                                                        >{{ commonLocaleData?.app_save }}
                                                                         </button>
                                                                     </td>
                                                                     <td class="pr-0 variant-delete text-right">
@@ -272,7 +272,7 @@
                                                                         <td class="variant-delete text-right px-0">
                                                                             <button mat-stroked-button color="primary"
                                                                                 class="ml-auto"
-                                                                                (click)="saveDiscount(i)">Save</button>
+                                                                                (click)="saveDiscount(i)">{{ commonLocaleData?.app_save }}</button>
                                                                         </td>
                                                                         <td class="variant-delete px-0">
                                                                             <div class="delete-show">
