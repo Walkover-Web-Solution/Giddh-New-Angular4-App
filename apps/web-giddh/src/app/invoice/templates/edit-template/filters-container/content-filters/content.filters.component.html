@@ -550,7 +550,7 @@
                         Mobile Number
                     </div>
                 </div>
-                <div class="clearfix" *ngIf="customTemplate?.templateType !== 'gst_template_d'">
+                <div class="clearfix" *ngIf="customTemplate?.templateType !== 'gst_template_d' && customTemplate?.templateType !== 'thermal_template'">
                     <h3>Billing Details</h3>
                     <div *ngIf="fieldsAndVisibility.header.billingAddress" class="form-group">
                         <input

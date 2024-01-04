@@ -147,25 +147,25 @@ export class ThermalService {
         /**
          * This will use for hide/show for customer billing address
          */
-        let accountAddress;
-        let accountGstNumberField;
-        let billingGstinNumber;
-        if (defaultTemplate?.sections?.header?.data?.billingGstin?.display && defaultTemplate?.sections?.header?.data?.billingAddress?.display) {
-            accountGstNumberField = defaultTemplate?.sections?.header?.data?.billingGstin?.label;
-            accountAddress = request?.account?.billingDetails?.address.join(" ");
-            billingGstinNumber = request?.account?.billingDetails?.taxNumber;
-            if (request?.account?.billingDetails?.taxNumber) {
-                billingGstinNumber = request?.account?.billingDetails?.taxNumber;
-                accountGstNumberField = defaultTemplate?.sections?.header?.data?.billingGstin?.label;
-            } else {
-                billingGstinNumber = '';
-                accountGstNumberField = '';
-            }
-        } else {
-            accountGstNumberField = "";
-            accountAddress = "";
-            billingGstinNumber = "";
-        }
+        let accountAddress = "";
+        let accountGstNumberField = "";
+        let billingGstinNumber = "";
+        // if (defaultTemplate?.sections?.header?.data?.billingGstin?.display && defaultTemplate?.sections?.header?.data?.billingAddress?.display) {
+        //     accountGstNumberField = defaultTemplate?.sections?.header?.data?.billingGstin?.label;
+        //     accountAddress = request?.account?.billingDetails?.address.join(" ");
+        //     billingGstinNumber = request?.account?.billingDetails?.taxNumber;
+        //     if (request?.account?.billingDetails?.taxNumber) {
+        //         billingGstinNumber = request?.account?.billingDetails?.taxNumber;
+        //         accountGstNumberField = defaultTemplate?.sections?.header?.data?.billingGstin?.label;
+        //     } else {
+        //         billingGstinNumber = '';
+        //         accountGstNumberField = '';
+        //     }
+        // } else {
+        //     accountGstNumberField = "";
+        //     accountAddress = "";
+        //     billingGstinNumber = "";
+        // }
 
         /**
          * This will use for hide/show for company GST number
@@ -186,8 +186,8 @@ export class ThermalService {
          */
         let accountName;
         if (defaultTemplate?.sections?.header?.data?.customerName?.display) {
-            if (request?.account?.name) {
-                accountName = request?.account?.name;
+            if (request?.account?.customerName) {
+                accountName = request?.account?.customerName;
             } else {
                 accountName = '';
             }
@@ -480,27 +480,9 @@ export class ThermalService {
 
             let itemLength = this.maxLength - itemDetails?.length;
             let itemName = productName?.substr(0, itemLength);
-            let remainingName = "";
 
-            if (entry?.transactions[0]?.stock) {
-                if (entry?.transactions[0]?.stock?.quantity) {
-                    totalQty = totalQty + Number(quantity);
-                }
-            }
-
-            if (!entry?.transactions[0]?.stock?.quantity) {
-                totalQty = '-';
-            }
-
-            if (itemName?.length < productName?.length) {
-                let lastIndex = itemName?.lastIndexOf(" ");
-                itemName = itemName.substr(0, lastIndex);
-                remainingName = "" + productName?.substr(lastIndex);
-            }
-            if (remainingName?.length > 0) {
-                remainingName = this.printerFormat.formatCenter(
-                    this.justifyText(this.printerFormat.leftAlign + remainingName)
-                );
+            if (entry?.transactions[0]?.stock?.quantity) {
+                totalQty = totalQty + Number(quantity);
             }
 
             if (itemName?.length === 0) {
@@ -525,14 +507,20 @@ export class ThermalService {
                     itemNameShow = '';
                 }
                 const itemNameShowHide = itemNameShow?.length ? this.justifyText(itemNameShow, itemDetails) : this.justifyText(itemDetails);
-                items +=
-                    this.printerFormat.formatCenter(
-                        this.printerFormat.formatBold(
-                            itemNameShowHide
-                        )
-                    ) +
-                    this.printerFormat.leftAlign +
-                    remainingName;
+
+                items += this.printerFormat.formatCenter(
+                    this.printerFormat.formatBold(
+                        itemNameShowHide
+                    )
+                );
+
+                if (itemName?.length < productName?.length) {
+                    let lastIndex = productName.length - itemName.length;
+    
+                    for (var itemNameIndex = itemName?.length; itemNameIndex < lastIndex; itemNameIndex = itemNameIndex + 11) {
+                        items += this.printerFormat.formatCenter(this.printerFormat.leftAlign + productName?.substr(itemNameIndex, 11));
+                    }
+                }
             }
 
             if (entry?.taxes && entry?.taxes.length > 0) {
@@ -548,6 +536,10 @@ export class ThermalService {
                     }
                 }
             }
+        }
+
+        if (!totalQty) {
+            totalQty = '-';
         }
 
         Object.keys(entryTaxes)?.forEach(key => {
