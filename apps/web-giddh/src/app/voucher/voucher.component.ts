@@ -9146,7 +9146,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                                 salesTaxInclusive: variantObj.salesTaxInclusive,
                                 purchaseTaxInclusive: variantObj.purchaseTaxInclusive,
                                 unitRates: [],
-                                variantDiscount: variantObj?.discount
+                                variantDiscount: variantObj?.variantDiscount
                             }
                         },
                         parentGroups: [],
@@ -9251,7 +9251,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                             salesTaxInclusive: variantObj.salesTaxInclusive,
                             purchaseTaxInclusive: variantObj.purchaseTaxInclusive,
                             unitRates: unitRates,
-                            variantDiscount: variantObj.discount
+                            variantDiscount: variantObj.variantDiscount
                         }
                     };
                     this.invFormData.entries[activeEntryIndex].transactions[0].variant = {
