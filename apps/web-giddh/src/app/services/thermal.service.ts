@@ -272,6 +272,7 @@ export class ThermalService {
             totalAmountField = "";
             subTotal = "";
             totalWords = "";
+            companyCurrencyCode = "";
         }
 
         /**
@@ -531,7 +532,7 @@ export class ThermalService {
                         entryTaxes[taxApp.accountUniqueName + "_" + taxApp?.taxPercent]['percent'] = taxApp?.taxPercent;
                         entryTaxes[taxApp.accountUniqueName + "_" + taxApp?.taxPercent]['amount'] = taxApp?.amount?.amountForAccount;
                     } else {
-                        entryTaxes[taxApp?.accountUniqueName + "_" + taxApp?.taxPercent]['percent'] = entryTaxes[taxApp?.accountUniqueName + "_" + taxApp?.taxPercent]['percent'] + taxApp?.taxPercent;
+                        entryTaxes[taxApp?.accountUniqueName + "_" + taxApp?.taxPercent]['percent'] = taxApp?.taxPercent;
                         entryTaxes[taxApp?.accountUniqueName + "_" + taxApp?.taxPercent]['amount'] = entryTaxes[taxApp?.accountUniqueName + "_" + taxApp?.taxPercent]['amount'] + taxApp?.amount?.amountForAccount;
                     }
                 }
@@ -609,10 +610,10 @@ export class ThermalService {
                 this.justifyText('', (taxAmountField + " ") + '' + taxableAmount?.toFixed(2).padStart(11)) +
                 this.printerFormat.lineBreak +
                 tax +
-                this.justifyText(
+                (totalAmountField ? (this.justifyText(
                     "",
-                    (totalAmountField + "(" + companyCurrencyCode + ")" + " ") + subTotal?.padStart(11)
-                ) +
+                    (totalAmountField + "(" + companyCurrencyCode + ")" + " ") + subTotal?.padStart(11))
+                ) : "") +
                 this.printerFormat.lineBreak +
                 this.printerFormat.lineBreak +
                 this.printerFormat.formatCenter(totalWords) +
