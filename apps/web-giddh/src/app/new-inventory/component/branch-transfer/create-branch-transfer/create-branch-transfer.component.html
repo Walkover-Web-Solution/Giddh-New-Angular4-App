@@ -94,6 +94,7 @@
                                                 [label]="localeData?.product_name"
                                                 [placeholder]="localeData?.select_product_name"
                                                 [options]="stockList"
+                                                [reset]="resetDropdown"
                                                 (selectedOption)="
                                                     branchTransferCreateEditForm.get('products.0').reset();
                                                     selectProduct(
@@ -139,6 +140,7 @@
                                                                 "
                                                                 [options]="stockVariants[0]"
                                                                 [name]="'variantName'"
+                                                                [reset]="resetDropdown"
                                                                 [defaultValue]="
                                                                     branchTransferCreateEditForm?.get(
                                                                         'products.0.variant.name'
@@ -244,8 +246,9 @@
                                                         (selectedOption)="selectSenderName($event, 0)"
                                                         [readonly]="isUpdateMode"
                                                         [required]="true"
+                                                        [reset]="resetDropdown"
                                                         [defaultValue]="
-                                                            isUpdateMode
+                                                        isUpdateMode 
                                                                 ? branchTransferCreateEditForm.get('sources.0.name')
                                                                       ?.value
                                                                 : ''
@@ -290,14 +293,16 @@
                                                                 ]
                                                             "
                                                             [required]="true"
+                                                            
                                                             [showError]="
                                                                 !isValidForm &&
                                                                 !branchTransferCreateEditForm?.get(
                                                                     'sources.0.warehouse.uniqueName'
                                                                 )?.value
                                                             "
+                                                            [reset]="resetDropdown"
                                                             [defaultValue]="
-                                                                senderWarehouses[
+                                                            senderWarehouses[
                                                                     branchTransferCreateEditForm.get(
                                                                         'sources.0.uniqueName'
                                                                     )?.value
@@ -426,6 +431,7 @@
                                                                 'destinations.0.warehouse.uniqueName'
                                                             )?.value
                                                         "
+                                                        [reset]="resetDropdown"
                                                         [defaultValue]="
                                                             isUpdateMode
                                                                 ? branchTransferCreateEditForm.get(
@@ -478,6 +484,7 @@
                                                                 'destinations.0.warehouse.uniqueName'
                                                             )?.value
                                                         "
+                                                        [reset]="resetDropdown"
                                                         [defaultValue]="
                                                             destinationWarehouses[
                                                                 branchTransferCreateEditForm.get(
@@ -628,6 +635,7 @@
                                                         0
                                                     )
                                                 "
+                                                [reset]="resetDropdown"
                                                 [defaultValue]="
                                                     isUpdateMode
                                                         ? branchTransferCreateEditForm.get('products.0.name').value
@@ -664,6 +672,7 @@
                                                                 "
                                                                 [options]="stockVariants[0]"
                                                                 [name]="'variantName'"
+                                                                [reset]="resetDropdown"
                                                                 [defaultValue]="
                                                                     branchTransferCreateEditForm?.get(
                                                                         'products.0.variant.name'
@@ -802,6 +811,7 @@
                                                         (selectedOption)="selectSenderName($event, 0)"
                                                         [readonly]="isUpdateMode"
                                                         [required]="true"
+                                                        [reset]="resetDropdown"
                                                         [defaultValue]="
                                                             branchTransferCreateEditForm.get('sources.0.name')?.value
                                                         "
@@ -844,6 +854,7 @@
                                                                     ?.value
                                                             ]
                                                         "
+                                                        [reset]="resetDropdown"
                                                         [defaultValue]="
                                                             senderWarehouses[
                                                                 branchTransferCreateEditForm.get('sources.0.uniqueName')
@@ -946,6 +957,7 @@
                                                                     'destinations.0.uniqueName'
                                                                 )?.value
                                                             "
+                                                            [reset]="resetDropdown"
                                                             [defaultValue]="
                                                                 branchTransferCreateEditForm?.get('destinations.0.name')
                                                                     ?.value
@@ -997,6 +1009,7 @@
                                                                 'destinations.0.uniqueName'
                                                             )?.value
                                                         "
+                                                        [reset]="resetDropdown"
                                                         [defaultValue]="
                                                             destinationWarehouses[
                                                                 branchTransferCreateEditForm.get(
@@ -1122,6 +1135,7 @@
                                                                     'sources.0.uniqueName'
                                                                 )?.value
                                                             "
+                                                            [reset]="resetDropdown"
                                                             [defaultValue]="
                                                                 branchTransferCreateEditForm.get(
                                                                     'sources.0.warehouse.name'
@@ -1141,6 +1155,7 @@
                                                                     )?.value
                                                                 ]
                                                             "
+                                                            [reset]="resetDropdown"
                                                             [defaultValue]="
                                                                 senderWarehouses[
                                                                     branchTransferCreateEditForm.get(
@@ -2288,6 +2303,7 @@
                                             [placeholder]="localeData?.transport_company"
                                             [options]="transporterDropdown"
                                             (selectedOption)="onSelectTransportCompany($event)"
+                                            [reset]="resetDropdown"
                                             [defaultValue]="
                                                 branchTransferCreateEditForm.get('transporterDetails.transporterName')
                                                     ?.value
@@ -2301,6 +2317,7 @@
                                             [placeholder]="commonLocaleData?.app_transport_mode"
                                             [options]="transporterMode"
                                             (selectedOption)="onSelectTransportMode($event)"
+                                            [reset]="resetDropdown"
                                             [defaultValue]="
                                                 branchTransferCreateEditForm.get('transporterDetails.transportMode')
                                                     ?.value

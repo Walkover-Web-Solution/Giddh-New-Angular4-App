@@ -176,6 +176,8 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
     public universalFrom: any;
     /** This will hold universal date  */
     public universalTo: any;
+    /** Used to reset dropdown field*/
+    public resetDropdown:boolean = false;
 
     constructor(
         private route: ActivatedRoute,
@@ -886,6 +888,10 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
      */
     public resetForm(): void {
         this.branchTransferCreateEditForm.reset();
+        this.resetDropdown = true;
+        setTimeout(()=>{
+            this.resetDropdown = false;
+        },100)
         this.isValidForm = true;
         let dateOfSupply = dayjs(this.tempDateParams.dateOfSupply).format(GIDDH_DATE_FORMAT)
         this.branchTransferCreateEditForm.get('dateOfSupply').setValue(dateOfSupply);

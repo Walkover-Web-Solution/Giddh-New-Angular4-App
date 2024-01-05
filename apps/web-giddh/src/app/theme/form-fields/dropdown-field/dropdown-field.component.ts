@@ -69,6 +69,8 @@ export class DropdownFieldComponent implements OnInit, OnChanges, OnDestroy, Aft
     @Input() public label: string;
     /** Adds red border around field if true */
     @Input() public showError: boolean = false;
+    /** True If need to reset dropdown  */
+    @Input() public reset: boolean = false;
     /** Emits the scroll to bottom event when pagination is required  */
     @Output() public scrollEnd: EventEmitter<void> = new EventEmitter();
     /** Emits dynamic searched query */
@@ -157,6 +159,10 @@ export class DropdownFieldComponent implements OnInit, OnChanges, OnDestroy, Aft
         }
         if (changes?.options) {
             this.fieldFilteredOptions = changes.options.currentValue;
+        }
+
+        if(changes.reset){
+            this.searchFormControl.setValue('');
         }
     }
 
