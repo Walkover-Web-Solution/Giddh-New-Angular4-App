@@ -1,13 +1,22 @@
 import { Injectable } from '@angular/core';
 import { PrinterFormatService } from './printer.format.service';
+import { KJUR, KEYUTIL, stob64, hextorstr } from 'jsrsasign';
 import * as qz from "qz-tray";
+import { QZ_CERTIFICATE, QZ_PEM } from '../app.constant';
+import { ToasterService } from './toaster.service';
+
 @Injectable()
 export class ThermalService {
 
     /** This will use for max length for character according to paper */
     private maxLength: number = 46;
 
-    constructor(private printerFormat: PrinterFormatService) { }
+    constructor(
+        private printerFormat: PrinterFormatService,
+        private toaster: ToasterService
+    ) { 
+
+    }
     /**
     * This will use for pos commands formatted
     *
@@ -147,25 +156,25 @@ export class ThermalService {
         /**
          * This will use for hide/show for customer billing address
          */
-        let accountAddress;
-        let accountGstNumberField;
-        let billingGstinNumber;
-        if (defaultTemplate?.sections?.header?.data?.billingGstin?.display && defaultTemplate?.sections?.header?.data?.billingAddress?.display) {
-            accountGstNumberField = defaultTemplate?.sections?.header?.data?.billingGstin?.label;
-            accountAddress = request?.account?.billingDetails?.address.join(" ");
-            billingGstinNumber = request?.account?.billingDetails?.taxNumber;
-            if (request?.account?.billingDetails?.taxNumber) {
-                billingGstinNumber = request?.account?.billingDetails?.taxNumber;
-                accountGstNumberField = defaultTemplate?.sections?.header?.data?.billingGstin?.label;
-            } else {
-                billingGstinNumber = '';
-                accountGstNumberField = '';
-            }
-        } else {
-            accountGstNumberField = "";
-            accountAddress = "";
-            billingGstinNumber = "";
-        }
+        let accountAddress = "";
+        let accountGstNumberField = "";
+        let billingGstinNumber = "";
+        // if (defaultTemplate?.sections?.header?.data?.billingGstin?.display && defaultTemplate?.sections?.header?.data?.billingAddress?.display) {
+        //     accountGstNumberField = defaultTemplate?.sections?.header?.data?.billingGstin?.label;
+        //     accountAddress = request?.account?.billingDetails?.address.join(" ");
+        //     billingGstinNumber = request?.account?.billingDetails?.taxNumber;
+        //     if (request?.account?.billingDetails?.taxNumber) {
+        //         billingGstinNumber = request?.account?.billingDetails?.taxNumber;
+        //         accountGstNumberField = defaultTemplate?.sections?.header?.data?.billingGstin?.label;
+        //     } else {
+        //         billingGstinNumber = '';
+        //         accountGstNumberField = '';
+        //     }
+        // } else {
+        //     accountGstNumberField = "";
+        //     accountAddress = "";
+        //     billingGstinNumber = "";
+        // }
 
         /**
          * This will use for hide/show for company GST number
@@ -186,8 +195,8 @@ export class ThermalService {
          */
         let accountName;
         if (defaultTemplate?.sections?.header?.data?.customerName?.display) {
-            if (request?.account?.name) {
-                accountName = request?.account?.name;
+            if (request?.account?.customerName) {
+                accountName = request?.account?.customerName;
             } else {
                 accountName = '';
             }
@@ -272,6 +281,7 @@ export class ThermalService {
             totalAmountField = "";
             subTotal = "";
             totalWords = "";
+            companyCurrencyCode = "";
         }
 
         /**
@@ -480,27 +490,9 @@ export class ThermalService {
 
             let itemLength = this.maxLength - itemDetails?.length;
             let itemName = productName?.substr(0, itemLength);
-            let remainingName = "";
 
-            if (entry?.transactions[0]?.stock) {
-                if (entry?.transactions[0]?.stock?.quantity) {
-                    totalQty = totalQty + Number(quantity);
-                }
-            }
-
-            if (!entry?.transactions[0]?.stock?.quantity) {
-                totalQty = '-';
-            }
-
-            if (itemName?.length < productName?.length) {
-                let lastIndex = itemName?.lastIndexOf(" ");
-                itemName = itemName.substr(0, lastIndex);
-                remainingName = "" + productName?.substr(lastIndex);
-            }
-            if (remainingName?.length > 0) {
-                remainingName = this.printerFormat.formatCenter(
-                    this.justifyText(this.printerFormat.leftAlign + remainingName)
-                );
+            if (entry?.transactions[0]?.stock?.quantity) {
+                totalQty = totalQty + Number(quantity);
             }
 
             if (itemName?.length === 0) {
@@ -525,14 +517,20 @@ export class ThermalService {
                     itemNameShow = '';
                 }
                 const itemNameShowHide = itemNameShow?.length ? this.justifyText(itemNameShow, itemDetails) : this.justifyText(itemDetails);
-                items +=
-                    this.printerFormat.formatCenter(
-                        this.printerFormat.formatBold(
-                            itemNameShowHide
-                        )
-                    ) +
-                    this.printerFormat.leftAlign +
-                    remainingName;
+
+                items += this.printerFormat.formatCenter(
+                    this.printerFormat.formatBold(
+                        itemNameShowHide
+                    )
+                );
+
+                if (itemName?.length < productName?.length) {
+                    let lastIndex = productName.length - itemName.length;
+
+                    for (var itemNameIndex = itemName?.length; itemNameIndex < lastIndex; itemNameIndex = itemNameIndex + 11) {
+                        items += this.printerFormat.formatCenter(this.printerFormat.leftAlign + productName?.substr(itemNameIndex, 11));
+                    }
+                }
             }
 
             if (entry?.taxes && entry?.taxes.length > 0) {
@@ -543,11 +541,15 @@ export class ThermalService {
                         entryTaxes[taxApp.accountUniqueName + "_" + taxApp?.taxPercent]['percent'] = taxApp?.taxPercent;
                         entryTaxes[taxApp.accountUniqueName + "_" + taxApp?.taxPercent]['amount'] = taxApp?.amount?.amountForAccount;
                     } else {
-                        entryTaxes[taxApp?.accountUniqueName + "_" + taxApp?.taxPercent]['percent'] = entryTaxes[taxApp?.accountUniqueName + "_" + taxApp?.taxPercent]['percent'] + taxApp?.taxPercent;
+                        entryTaxes[taxApp?.accountUniqueName + "_" + taxApp?.taxPercent]['percent'] = taxApp?.taxPercent;
                         entryTaxes[taxApp?.accountUniqueName + "_" + taxApp?.taxPercent]['amount'] = entryTaxes[taxApp?.accountUniqueName + "_" + taxApp?.taxPercent]['amount'] + taxApp?.amount?.amountForAccount;
                     }
                 }
             }
+        }
+
+        if (!totalQty) {
+            totalQty = '-';
         }
 
         Object.keys(entryTaxes)?.forEach(key => {
@@ -617,10 +619,10 @@ export class ThermalService {
                 this.justifyText('', (taxAmountField + " ") + '' + taxableAmount?.toFixed(2).padStart(11)) +
                 this.printerFormat.lineBreak +
                 tax +
-                this.justifyText(
+                (totalAmountField ? (this.justifyText(
                     "",
-                    (totalAmountField + "(" + companyCurrencyCode + ")" + " ") + subTotal?.padStart(11)
-                ) +
+                    (totalAmountField + "(" + companyCurrencyCode + ")" + " ") + subTotal?.padStart(11))
+                ) : "") +
                 this.printerFormat.lineBreak +
                 this.printerFormat.lineBreak +
                 this.printerFormat.formatCenter(totalWords) +
@@ -684,27 +686,67 @@ export class ThermalService {
                 this.justifyText(thankYouMsgField, footerCompanyName) +
                 this.printerFormat.lineBreak + this.printerFormat.lineBreak +
                 this.printerFormat.leftAlign + this.justifyText(firmNameField, "");
-            qz.websocket
-                .connect()
-                .then(function () {
-                    return qz.printers.find("Rugtek"); // Pass the printer name into the next Promise
-                })
-                .then((printer: any) => {
-                    var config = qz.configs.create(printer, { encoding: 'ISO-8859-1', altPrinting: true }); // Create a default config for the found printer
-                    let txt = [
-                        this.printerFormat.initPrinter +
-                        header +
-                        table +
-                        footer +
-                        this.printerFormat.endPrinter +
-                        this.printerFormat.fullCut,
-                    ];
-                    return qz.print(config, txt);
-                })
-                .catch(function (e: any) {
-                    console.error(e);
-                });
+
+            qz.security.setCertificatePromise((resolve, reject) => {
+                fetch(QZ_CERTIFICATE, { cache: 'no-store', headers: { 'Content-Type': 'text/plain' } })
+                    .then(data => resolve(data.text()));
+            });
+
+            /*
+             * Client-side using jsrsasign
+             */
+            qz.security.setSignatureAlgorithm("SHA512"); // Since 2.1
+            qz.security.setSignaturePromise(hash => {
+                return (resolve, reject) => {
+                    fetch(QZ_PEM, { cache: 'no-store', headers: { 'Content-Type': 'text/plain' } })
+                        .then(wrapped => wrapped.text())
+                        .then(data => {
+                            let pk = KEYUTIL.getKey(data);
+                            let sig = new KJUR.crypto.Signature({ "alg": "SHA512withRSA" }); // Use "SHA1withRSA" for QZ Tray 2.0 and older
+                            sig.init(pk);
+                            sig.updateString(hash);
+                            let hex = sig.sign();
+                            resolve(stob64(hextorstr(hex)));
+                        })
+                        .catch(err => console.error(err));
+                };
+            });
+
+            if (!qz.websocket.isActive()) {
+                qz.websocket
+                    .connect()
+                    .then(function () {
+                        qz.printers.getDefault().then(function (data) {
+                            return qz.printers.find(data); // Pass the printer name into the next Promise
+                        });
+                    })
+                    .then((printer: any) => {
+                        if (printer) {
+                            this.printNow(printer, header, table, footer);
+                        } else {
+                            this.toaster.warningToast("No default printer available. Please set your receipt printer as default.");
+                        }
+                    })
+                    .catch(function (e: any) {
+                        console.error(e);
+                    });
+            } else {
+                this.printNow("USB Receipt Printer", header, table, footer);
+            }
         }
+    }
+
+    private printNow(printer: any, header: any, table: any, footer: any): void {
+        var config = qz.configs.create(printer, { encoding: 'ISO-8859-1', altPrinting: true }); // Create a default config for the found printer
+        let txt = [
+            this.printerFormat.initPrinter +
+            header +
+            table +
+            footer +
+            this.printerFormat.endPrinter +
+            this.printerFormat.fullCut,
+        ];
+        return qz.print(config, txt);
     }
 
     /**
