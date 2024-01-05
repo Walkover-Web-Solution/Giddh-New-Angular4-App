@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { PrinterFormatService } from './printer.format.service';
 import { KJUR, KEYUTIL, stob64, hextorstr } from 'jsrsasign';
 import * as qz from "qz-tray";
+import { QZ_CERTIFICATE, QZ_PEM } from '../app.constant';
 
 @Injectable()
 export class ThermalService {
@@ -680,7 +681,30 @@ export class ThermalService {
                 this.printerFormat.lineBreak + this.printerFormat.lineBreak +
                 this.printerFormat.leftAlign + this.justifyText(firmNameField, "");
 
-            
+            qz.security.setCertificatePromise((resolve, reject) => {
+                fetch(QZ_CERTIFICATE, { cache: 'no-store', headers: { 'Content-Type': 'text/plain' } })
+                    .then(data => resolve(data.text()));
+            });
+
+            /*
+             * Client-side using jsrsasign
+             */
+            qz.security.setSignatureAlgorithm("SHA512"); // Since 2.1
+            qz.security.setSignaturePromise(hash => {
+                return (resolve, reject) => {
+                    fetch(QZ_PEM, { cache: 'no-store', headers: { 'Content-Type': 'text/plain' } })
+                        .then(wrapped => wrapped.text())
+                        .then(data => {
+                            let pk = KEYUTIL.getKey(data);
+                            let sig = new KJUR.crypto.Signature({ "alg": "SHA512withRSA" }); // Use "SHA1withRSA" for QZ Tray 2.0 and older
+                            sig.init(pk);
+                            sig.updateString(hash);
+                            let hex = sig.sign();
+                            resolve(stob64(hextorstr(hex)));
+                        })
+                        .catch(err => console.error(err));
+                };
+            });
 
             if (!qz.websocket.isActive()) {
                 qz.websocket
