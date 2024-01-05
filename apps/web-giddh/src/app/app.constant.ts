@@ -544,3 +544,5 @@ export const OTP_WIDGET_TOKEN_NEW = '205968TmXguUAwoD633af103P1';
 export enum BROADCAST_CHANNELS {
     REAUTH_PLAID_SUCCESS = 'REAUTH_PLAID_SUCCESS'
 }
+export const QZ_CERTIFICATE = "https://giddh-plugin-resources.s3.ap-south-1.amazonaws.com/digital-certificate.txt";
+export const QZ_PEM = "https://giddh-plugin-resources.s3.ap-south-1.amazonaws.com/private-key.pem";
