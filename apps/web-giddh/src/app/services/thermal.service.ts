@@ -680,72 +680,7 @@ export class ThermalService {
                 this.printerFormat.lineBreak + this.printerFormat.lineBreak +
                 this.printerFormat.leftAlign + this.justifyText(firmNameField, "");
 
-            qz.security.setCertificatePromise((resolve, reject) => {
-                resolve("-----BEGIN CERTIFICATE-----\n" +
-                    "MIIECzCCAvOgAwIBAgIGAYzI7gY2MA0GCSqGSIb3DQEBCwUAMIGiMQswCQYDVQQG\n" +
-                    "EwJVUzELMAkGA1UECAwCTlkxEjAQBgNVBAcMCUNhbmFzdG90YTEbMBkGA1UECgwS\n" +
-                    "UVogSW5kdXN0cmllcywgTExDMRswGQYDVQQLDBJRWiBJbmR1c3RyaWVzLCBMTEMx\n" +
-                    "HDAaBgkqhkiG9w0BCQEWDXN1cHBvcnRAcXouaW8xGjAYBgNVBAMMEVFaIFRyYXkg\n" +
-                    "RGVtbyBDZXJ0MB4XDTI0MDEwMTA2NDgxMVoXDTQ0MDEwMTA2NDgxMVowgaIxCzAJ\n" +
-                    "BgNVBAYTAlVTMQswCQYDVQQIDAJOWTESMBAGA1UEBwwJQ2FuYXN0b3RhMRswGQYD\n" +
-                    "VQQKDBJRWiBJbmR1c3RyaWVzLCBMTEMxGzAZBgNVBAsMElFaIEluZHVzdHJpZXMs\n" +
-                    "IExMQzEcMBoGCSqGSIb3DQEJARYNc3VwcG9ydEBxei5pbzEaMBgGA1UEAwwRUVog\n" +
-                    "VHJheSBEZW1vIENlcnQwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDg\n" +
-                    "1hu1xltGCrJ9rXTVtyaFWM7ml80M3bZGaaEu6mNjcuEZpE30/nbErigpZxJ7zbvO\n" +
-                    "ZyBXbVyNZs7RIJDLfW1J9YY22IjBHqh1gum8sZzzE8JtL/4jiFnp20GwMn8QYouO\n" +
-                    "AE+4zwzbIUFzZ8ZVRpMozfEI1l5YrevryU/Q+aEPn237vSpvRfPzhYqg5UpDGq+W\n" +
-                    "LXDJ9ng/HShcT71Lez/SgWfSzF6Pp2xSOvUWmGrdOYEEBNwVWKs5LgbgBB8zjcgB\n" +
-                    "2VvxeSACxYvaW6oRc/cpX2bAxUWYtxi9TwQkYtaSST5V4lXzCuZ0o4Hm8IXdbtXf\n" +
-                    "Smi1HQ8Q7pxNNRNNfq/LAgMBAAGjRTBDMBIGA1UdEwEB/wQIMAYBAf8CAQEwDgYD\n" +
-                    "VR0PAQH/BAQDAgEGMB0GA1UdDgQWBBRZejvu15Y6iPGscwNUxCAE2a3NozANBgkq\n" +
-                    "hkiG9w0BAQsFAAOCAQEAAv55d6BsMS/wbxcdj7Pmz4bsUvqmGyBaGTIuwoTmPcpI\n" +
-                    "8he4XnT7Pywn1LgiFtX3UXeCD9VnxbMJoC6qTKscxkvprIq1LxfsmQSrHN/YkpKf\n" +
-                    "+VVZc+0rx6x95NF06XqS0UOLX1LLSQvtN6ZSC3kHJ7TLb8TtR4/5rqtpM4LDtvJn\n" +
-                    "H2A6+VPi7OlHLPt8umwhKB4j70qnpDXYXrSVskOlBgV/pyCY76J4g12/P4V8Le7X\n" +
-                    "DjTQdepEARmE2xkpfJ2dHH3eBR7a/J79ofr3nj67qL5bxPmQ6fPKMwuSpR99rRst\n" +
-                    "T4cbjWzfzAVX6WDT0Nmii1BeksCJCwEoydtwI/BZQQ==\n" +
-                    "-----END CERTIFICATE-----\n");
-            });
-
-            qz.security.setSignatureAlgorithm("SHA512");
-            qz.security.setSignaturePromise(hash => {
-                return (resolve, reject) => {
-                    var pk = KEYUTIL.getKey("-----BEGIN PRIVATE KEY-----\n" +
-                        "MIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQDg1hu1xltGCrJ9\n" +
-                        "rXTVtyaFWM7ml80M3bZGaaEu6mNjcuEZpE30/nbErigpZxJ7zbvOZyBXbVyNZs7R\n" +
-                        "IJDLfW1J9YY22IjBHqh1gum8sZzzE8JtL/4jiFnp20GwMn8QYouOAE+4zwzbIUFz\n" +
-                        "Z8ZVRpMozfEI1l5YrevryU/Q+aEPn237vSpvRfPzhYqg5UpDGq+WLXDJ9ng/HShc\n" +
-                        "T71Lez/SgWfSzF6Pp2xSOvUWmGrdOYEEBNwVWKs5LgbgBB8zjcgB2VvxeSACxYva\n" +
-                        "W6oRc/cpX2bAxUWYtxi9TwQkYtaSST5V4lXzCuZ0o4Hm8IXdbtXfSmi1HQ8Q7pxN\n" +
-                        "NRNNfq/LAgMBAAECggEAHqJdpS9RKWJ0vnX/WM07JOkcS8P8LtgYqVBkI1HRV/AD\n" +
-                        "pqxB6PMw+IxoMXf3R0IZaD6Z4/+lICkVXd4rjGZbGTwoXNm1DGciedxr/4dNxLr4\n" +
-                        "/0qOPIYsBhaXRSwkLvXWYPM+6YXgkQzfb5uApQbYLzOcN2GJ+lg8MGS+CNGydb+4\n" +
-                        "aIG9XBZ36gshGJ11d8os9Xfx0uZI/tqYLyUJUQCeAE0+ojThvLy7d1uB+T1lICIQ\n" +
-                        "35EqbLaFctX93mqS0Ew32RWfwux+ZG5etSH7yOel9vqasBiWYNRGu5e7Gs5tYGVN\n" +
-                        "2jCNaxyWMfBtZANhHDkT9L9RrSQ9jN5p+2I7WdDajQKBgQDzhRyF85rqlEDHv+s5\n" +
-                        "r6Ozp11U5Nsd0ztz764d3n1EQFCZxjy27bCosV8l4Nk3LeA/gJzkqpwLvihiiw5d\n" +
-                        "HunJC1oYnVcAAKUFn69Tn1JpRevIPZQPC2D3ihBkjpcgKWg89urLZV1v/kPrCUgF\n" +
-                        "Fem/ELLlxkdRc0F1bOfvghXNdwKBgQDsW+AE6pCW4c/NTq1fbEx9T9/pWx6nNRez\n" +
-                        "qGK1r6ZFDVTUUIyeFR0pFd850qunSr5bZco3JtJKyDNkTWDx6yfXMLXabWXRXxCC\n" +
-                        "OtNNHgShheq/npPdKhvJVVjzQS2gVvD3hflQy4Q6V7yuuF3NaKJl5T8vNMoq0CYy\n" +
-                        "XSnBalv1TQKBgQDaIVH7aspJdaLRSkgZ1Ap+0lv3v0fG339Ryk/c0X7DtBh+peOc\n" +
-                        "uCyV7sub0ly/4IgOWdYvveMpYZwrKQQkxZwESfbaNZXImss2zmLuNLhNNCSPqRkG\n" +
-                        "oNqq4TDt4gvc8zo74bFPn+yidM/BqP6qD4bhbsPQrlsTynnIBVV8ZLnC4QKBgQDr\n" +
-                        "NG5UVhv2mdXRiAbNW5cuaIr4zF1PpWzlsp4wERBTzPVqppGYSoiPNx3Bi9yXiLCv\n" +
-                        "gTbe9Tn1gw5pNPtRImKuKOH+8DiPRpvGDMXzCvkux3YYo7SfNOUb0FvJDkZaNcpr\n" +
-                        "dx3oAe6epGq2L+/glcxtu9jJoC3CtwobukvwFmhWTQKBgQDgwyDYPLPw6w5NcK21\n" +
-                        "IKBHo46zgtFNgmpetbZH8kpn+xrZPtXf988/aqhaxolZZeSBoKecG2Cb9FMhzABA\n" +
-                        "cJDmEvqSvPC7rbO+8CqDVFtX3dAcQ0qtp5ODIAefmBypIeuscqqZIJavLetaYeQq\n" +
-                        "gcqzoBWrZ4cyzdjG2SKrYSgb+w==\n" +
-                        "-----END PRIVATE KEY-----\n"
-                    );
-                    let sig = new KJUR.crypto.Signature({ "alg": "SHA512withRSA" }); // Use "SHA1withRSA" for QZ Tray 2.0 and older
-                    sig.init(pk);
-                    sig.updateString(hash);
-                    let hex = sig.sign();
-                    resolve(stob64(hextorstr(hex)));
-                };
-            });
+            
 
             if (!qz.websocket.isActive()) {
                 qz.websocket
