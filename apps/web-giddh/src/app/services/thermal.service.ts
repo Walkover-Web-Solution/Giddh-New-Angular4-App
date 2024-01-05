@@ -3,6 +3,7 @@ import { PrinterFormatService } from './printer.format.service';
 import { KJUR, KEYUTIL, stob64, hextorstr } from 'jsrsasign';
 import * as qz from "qz-tray";
 import { QZ_CERTIFICATE, QZ_PEM } from '../app.constant';
+import { ToasterService } from './toaster.service';
 
 @Injectable()
 export class ThermalService {
@@ -10,7 +11,12 @@ export class ThermalService {
     /** This will use for max length for character according to paper */
     private maxLength: number = 46;
 
-    constructor(private printerFormat: PrinterFormatService) { }
+    constructor(
+        private printerFormat: PrinterFormatService,
+        private toaster: ToasterService
+    ) { 
+
+    }
     /**
     * This will use for pos commands formatted
     *
@@ -718,7 +724,7 @@ export class ThermalService {
                         if (printer) {
                             this.printNow(printer, header, table, footer);
                         } else {
-                            console.warn("No default printer available.");
+                            this.toaster.warningToast("No default printer available. Please set your receipt printer as default.");
                         }
                     })
                     .catch(function (e: any) {
