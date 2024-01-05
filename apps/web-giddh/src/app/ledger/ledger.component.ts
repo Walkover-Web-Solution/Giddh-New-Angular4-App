@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, NgZone, OnDestro
 import { ActivatedRoute } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { LoginActions } from 'apps/web-giddh/src/app/actions/login.action';
-import { SearchResultText, GIDDH_DATE_RANGE_PICKER_RANGES, RATE_FIELD_PRECISION, PAGINATION_LIMIT, RESTRICTED_VOUCHERS_FOR_DOWNLOAD, AdjustedVoucherType } from 'apps/web-giddh/src/app/app.constant';
+import { SearchResultText, GIDDH_DATE_RANGE_PICKER_RANGES, RATE_FIELD_PRECISION, PAGINATION_LIMIT, RESTRICTED_VOUCHERS_FOR_DOWNLOAD, AdjustedVoucherType, BROADCAST_CHANNELS } from 'apps/web-giddh/src/app/app.constant';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI, GIDDH_DATE_FORMAT_MM_DD_YYYY } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { ShSelectComponent } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-select.component';
 import * as dayjs from 'dayjs';
@@ -280,6 +280,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
     /** Holds Aside Menu State For Other Taxes DialogRef */
     public asideMenuStateForOtherTaxesDialogRef: any;
+    /** Holds true if branch is select in company mode */
+    public isBranchTransactionSelected: boolean = false;
+    /** Holds Invoice Setting for auto Generate Voucher From Entry */
+    public autoGenerateVoucherFromEntryStatus: boolean;
+    public bankAccount: any = {
+        reLoginRequired: false,
+        itemId: ''
+    };
 
     constructor(
         private store: Store<AppState>,
@@ -397,7 +405,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             return;
         }
         txn.isStock = Boolean(e.additional?.stock);
-        txn.stockUniqueName = e.additional.stock?.uniqueName;
+        txn.stockUniqueName = e.additional?.stock?.uniqueName;
         txn.oppositeAccountUniqueName = e.additional?.uniqueName;
         if (!txn.isStock) {
             this.loadDetails(e, txn, '', allowChangeDetection);
@@ -801,6 +809,20 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.cdRf.detectChanges();
             }
         });
+
+        const broadcast = new BroadcastChannel("tabs");
+        broadcast.onmessage = (event) => {
+            if (event?.data?.autoGenerateVoucherFromEntry !== undefined && event?.data?.autoGenerateVoucherFromEntry !== null) {
+                this.store.dispatch(this.invoiceAction.getInvoiceSetting());
+            }
+        };
+
+        const plaidBroadcast = new BroadcastChannel(BROADCAST_CHANNELS.REAUTH_PLAID_SUCCESS);
+        plaidBroadcast.onmessage = (event) => {
+            if (event?.data) {
+                this.getBankTransactions();
+            }
+        };
     }
 
     private assignPrefixAndSuffixForCurrency() {
@@ -836,6 +858,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
                         this.bankTransactionsResponse.totalItems = res.body.totalItems;
                         this.bankTransactionsResponse.totalPages = res.body.totalPages;
                         this.bankTransactionsResponse.page = res.body.page;
+                        this.bankAccount.reLoginRequired = res.body.reLoginRequired;
+                        this.bankAccount.itemId = res.body.itemId;
                         this.zone.runOutsideAngular(() => {
                             this.lc.getReadyBankTransactionsForUI(res.body.transactionsList, (this.currentOrganizationType === OrganizationType.Company && (this.currentCompanyBranches && this.currentCompanyBranches.length > 2)));
                             this.getAccountSearchPrediction(this.lc.bankTransactionsCreditData);
@@ -1727,7 +1751,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 ok: this.commonLocaleData?.app_yes,
                 cancel: this.commonLocaleData?.app_no,
                 permanentlyDeleteMessage: this.localeData?.delete_entries_content
-            }
+            },
+            width: '650px'
         });
 
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
@@ -1967,6 +1992,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @memberof LedgerComponent
      */
     public handleBranchChange(selectedEntity: any): void {
+        this.isBranchTransactionSelected = !(selectedEntity?.isCompany);
         this.currentBranch.name = selectedEntity.label;
         this.trxRequest.branchUniqueName = selectedEntity?.value;
         this.advanceSearchRequest.branchUniqueName = selectedEntity?.value;
@@ -2331,14 +2357,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     this.accountUniquename = accountDetails?.uniqueName;
 
                     this.isBankOrCashAccount = accountDetails?.parentGroups?.some((grp) => grp?.uniqueName === 'bankaccounts' || grp?.uniqueName === 'loanandoverdraft');
-                    if (accountDetails.currency && profile?.baseCurrency) {
+                    if (accountDetails?.currency && profile?.baseCurrency) {
                         this.isLedgerAccountAllowsMultiCurrency = accountDetails.currency && accountDetails.currency !== profile?.baseCurrency;
                     } else {
                         this.isLedgerAccountAllowsMultiCurrency = false;
                     }
                     this.foreignCurrencyDetails = { code: profile?.baseCurrency, symbol: profile.baseCurrencySymbol };
                     if (this.isLedgerAccountAllowsMultiCurrency) {
-                        this.baseCurrencyDetails = { code: accountDetails.currency, symbol: accountDetails.currencySymbol };
+                        this.baseCurrencyDetails = { code: accountDetails?.currency, symbol: accountDetails?.currencySymbol };
                         this.getCurrencyRate();
                     } else {
                         this.baseCurrencyDetails = this.foreignCurrencyDetails;
@@ -2562,11 +2588,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
      */
     public getPurchaseSettings(): void {
         this.store.pipe(select(state => state.invoice.settings), takeUntil(this.destroyed$)).subscribe(response => {
+
+            this.autoGenerateVoucherFromEntryStatus = response?.invoiceSettings?.autoGenerateVoucherFromEntry;
             if (response?.purchaseBillSettings && !response?.purchaseBillSettings?.enableVoucherDownload) {
                 this.restrictedVouchersForDownload.push(AdjustedVoucherType.PurchaseInvoice);
             } else {
                 this.restrictedVouchersForDownload = this.restrictedVouchersForDownload?.filter(voucherType => voucherType !== AdjustedVoucherType.PurchaseInvoice);
             }
+            this.cdRf.detectChanges();
         });
     }
 
@@ -2610,7 +2639,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
      */
     private loadDetails(event: IOption, txn: TransactionVM, variantUniqueName?: string, allowChangeDetection?: boolean): void {
         let requestObject;
-        if (event.additional.stock) {
+        if (event.additional?.stock) {
             requestObject = {
                 stockUniqueName: event.additional.stock?.uniqueName,
                 oppositeAccountUniqueName: event.additional?.uniqueName,
@@ -2622,7 +2651,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             to fetch the correct stock details as the first preference is always the current ledger account and then particular account
             This logic is only required in ledger.
         */
-        const accountUniqueName = event.additional.stock && (currentLedgerCategory === 'income' || currentLedgerCategory === 'expenses' || currentLedgerCategory === 'fixedassets') ?
+        const accountUniqueName = event.additional?.stock && (currentLedgerCategory === 'income' || currentLedgerCategory === 'expenses' || currentLedgerCategory === 'fixedassets') ?
             this.lc.activeAccount ? this.lc.activeAccount?.uniqueName : '' :
             event.additional?.uniqueName;
         this.searchService.loadDetails(accountUniqueName, requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
@@ -2654,13 +2683,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     isFixed: data.body.isFixed,
                     mergedAccounts: data.body.mergedAccounts,
                     mobileNo: data.body.mobileNo,
-                    nameStr: event.additional.stock ? data.body.oppositeAccount.parentGroups.join(', ') : data.body.parentGroups.map(parent => parent?.name).join(', '),
+                    nameStr: event.additional?.stock ? data.body.oppositeAccount.parentGroups.join(', ') : data.body.parentGroups.map(parent => parent?.name).join(', '),
                     stock: data.body.stock,
-                    uNameStr: event.additional.stock ? data.body.oppositeAccount.parentGroups.join(', ') : data.body.parentGroups.map(parent => parent?.uniqueName ?? parent).join(', '),
+                    uNameStr: event.additional?.stock ? data.body.oppositeAccount.parentGroups.join(', ') : data.body.parentGroups.map(parent => parent?.uniqueName ?? parent).join(', '),
                     accountApplicableDiscounts: data.body.applicableDiscounts,
-                    parentGroups: event.additional.stock ? data.body.oppositeAccount.parentGroups : data.body.parentGroups, // added due to parentGroups is getting null in search API
+                    parentGroups: event.additional?.stock ? data.body.oppositeAccount.parentGroups : data.body.parentGroups, // added due to parentGroups is getting null in search API
                 };
-                if (txn.selectedAccount && txn.selectedAccount.stock) {
+                if (txn?.selectedAccount && txn.selectedAccount.stock) {
                     txn.selectedAccount.stock.rate = Number((txn.selectedAccount.stock.rate / this.lc.blankLedger?.exchangeRate).toFixed(RATE_FIELD_PRECISION));
                 }
                 if (!this.isHideBankLedgerPopup) {
@@ -2673,7 +2702,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 let stockUnitUniqueName = '';
 
                 //#region unit rates logic
-                if (txn.selectedAccount?.stock) {
+                if (txn?.selectedAccount?.stock) {
                     const defaultUnitRates = this.generalService.voucherApiVersion === 1 ? txn.selectedAccount?.stock?.unitRates : txn.selectedAccount?.stock?.variant?.unitRates;
                     const defaultUnit = {
                         stockUnitCode: defaultUnitRates[0].stockUnitCode,
@@ -2731,5 +2760,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
      */
     public addBrowserConfirmation(): void {
         this.pageLeaveUtilityService.addBrowserConfirmationDialog();
+    }
+
+    /**
+     * Initiate request to open plaid popup
+     *
+     * @memberof SettingIntegrationComponent
+     */
+    public getPlaidLinkToken(itemId?: any): void {
+        this.store.dispatch(this.commonAction.reAuthPlaid({itemId: itemId, reauth: true}));
     }
 }

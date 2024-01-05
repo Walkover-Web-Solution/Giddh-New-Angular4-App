@@ -116,6 +116,10 @@ export class ListManufacturingComponent implements OnInit {
     private currentUrl: string = "";
     /** True if initial load of store filters */
     private initialLoad: boolean = false;
+    /** Holds Total Pages Count*/
+    public totalPages:number = 1;
+    /** Holds Current Page Number */
+    public currentPage:number = 1;
 
     constructor(
         private dialog: MatDialog,
@@ -143,6 +147,9 @@ export class ListManufacturingComponent implements OnInit {
         this.currentUrl = this.router.url;
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.getWarehouses();
+
+        this.manufacturingSearchRequest.count = this.paginationLimit;
+        this.manufacturingSearchRequest.page = this.currentPage;
 
         if (this.currentOrganizationType === OrganizationType.Company) {
             this.getAllWarehouses();
@@ -360,7 +367,8 @@ export class ListManufacturingComponent implements OnInit {
                 let reportData = [];
 
                 this.totalItems = response.body.totalItems;
-
+                this.totalPages = response.body.totalPages;          
+                
                 response.body.results.forEach(item => {
                     reportData.push({
                         date: dayjs(item.date, GIDDH_DATE_FORMAT).format("DD MMM YY"),
@@ -548,5 +556,19 @@ export class ListManufacturingComponent implements OnInit {
 
         this.storeFilters[this.currentUrl] = { manufacturingSearchRequest: this.manufacturingSearchRequest, selectedStockName: this.selectedStockName, selectedVariantName: this.selectedVariantName, selectedBranchName: this.selectedBranchName, selectedWarehouseName: this.selectedWarehouseName, selectedOperationName: this.selectedOperationName, selectedFilterByName: this.selectedFilterByName, selectedInventoryTypeName: this.selectedInventoryTypeName };
         this.store.dispatch(this.commonAction.setFilters(this.storeFilters));
+    }
+
+    /**
+     *  Handle Pagination Event to change the page number and call api
+     *
+     * @param {*} event
+     * @memberof ListManufacturingComponent
+     */
+    public pageChanged(event: any): void {
+        if (this.currentPage !== event.page) {
+            this.currentPage = event.page
+            this.manufacturingSearchRequest.page = event.page;
+            this.getReport();
+        }
     }
 }

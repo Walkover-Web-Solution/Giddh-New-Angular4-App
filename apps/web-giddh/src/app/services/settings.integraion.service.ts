@@ -4,7 +4,7 @@ import { HttpWrapperService } from './http-wrapper.service';
 import { Inject, Injectable, Optional } from '@angular/core';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { GiddhErrorHandler } from './catchManager/catchmanger';
-import { AmazonSellerClass, CashfreeClass, EmailKeyClass, RazorPayClass, RazorPayDetailsResponse, SmsKeyClass, PaymentClass } from '../models/api-models/SettingsIntegraion';
+import { AmazonSellerClass, CashfreeClass, EmailKeyClass, RazorPayClass, RazorPayDetailsResponse, SmsKeyClass, PaymentClass, PaypalDetailsResponse, PayPalClass } from '../models/api-models/SettingsIntegraion';
 import { SETTINGS_INTEGRATION_API } from './apiurls/settings.integration.api';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
@@ -86,6 +86,7 @@ export class SettingsIntegrationService {
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<string, any>(e, model)));
     }
+
     /*
     * Get Razor pay details
     */
@@ -357,9 +358,12 @@ export class SettingsIntegrationService {
      * @return {*}  {Observable<BaseResponse<any, any>>}
      * @memberof SettingsIntegrationService
      */
-    public getPlaidLinkToken(): Observable<BaseResponse<any, any>> {
+    public getPlaidLinkToken(itemId?: any): Observable<BaseResponse<any, any>> {
+        if (!itemId) {
+            itemId = '';
+        }
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.get(this.config.apiUrl + SETTINGS_INTEGRATION_API.GET_PLAID_LINK_TOKEN?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
+        return this.http.get(this.config.apiUrl + SETTINGS_INTEGRATION_API.GET_PLAID_LINK_TOKEN?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':itemId', itemId)).pipe(map((res) => {
             let data: BaseResponse<any, string> = res;
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
@@ -484,5 +488,65 @@ export class SettingsIntegrationService {
             let data: BaseResponse<any, any> = res;
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<string, SmsKeyClass>(e)));
+    }
+
+    /**
+     * This will be use for get payapal details
+     *
+     * @return {*}  {Observable<BaseResponse<PaypalDetailsResponse, string>>}
+     * @memberof SettingsIntegrationService
+     */
+    public getPaypalDetails(): Observable<BaseResponse<PaypalDetailsResponse, string>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.get(this.config.apiUrl + SETTINGS_INTEGRATION_API.PAYPAL?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
+            let data: BaseResponse<PaypalDetailsResponse, string> = res;
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<PaypalDetailsResponse, string>(e)));
+    }
+
+    /**
+     * This will be use for save paypal details
+     *
+     * @param {PayPalClass} model
+     * @return {*}  {Observable<BaseResponse<PaypalDetailsResponse, PayPalClass>>}
+     * @memberof SettingsIntegrationService
+     */
+    public savePaypalDetails(model: PayPalClass): Observable<BaseResponse<PaypalDetailsResponse, PayPalClass>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.post(this.config.apiUrl + SETTINGS_INTEGRATION_API.PAYPAL?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(map((res) => {
+            let data: BaseResponse<PaypalDetailsResponse, PayPalClass> = res;
+            data.request = model;
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<PaypalDetailsResponse, PayPalClass>(e, model)));
+    }
+
+    /**
+     * This will be use for update paypal details
+     *
+     * @param {PayPalClass} model
+     * @return {*}  {Observable<BaseResponse<PaypalDetailsResponse, PayPalClass>>}
+     * @memberof SettingsIntegrationService
+     */
+    public updatePaypalDetails(model: PayPalClass): Observable<BaseResponse<PaypalDetailsResponse, PayPalClass>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.put(this.config.apiUrl + SETTINGS_INTEGRATION_API.PAYPAL?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(map((res) => {
+            let data: BaseResponse<PaypalDetailsResponse, PayPalClass> = res;
+            data.request = model;
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<PaypalDetailsResponse, PayPalClass>(e, model)));
+    }
+
+    /**
+     * This wil be use for delete paypal details
+     *
+     * @return {*}  {Observable<BaseResponse<string, string>>}
+     * @memberof SettingsIntegrationService
+     */
+    public deletePaypalDetails(): Observable<BaseResponse<string, string>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.delete(this.config.apiUrl + SETTINGS_INTEGRATION_API.PAYPAL?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
+            let data: BaseResponse<string, string> = res;
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e)));
     }
 }

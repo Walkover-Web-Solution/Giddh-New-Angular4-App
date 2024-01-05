@@ -5,6 +5,7 @@
     (localeData)="localeData = $event"
     (translationComplete)="translationComplete($event)"
 >
+    <hamburger-menu class="hamburger-menu"></hamburger-menu>
     <giddh-page-loader *ngIf="isLoading"></giddh-page-loader>
     <div class="stock-balance-wrapper" *ngIf="!isLoading">
         <div class="stock-balance-top-bar">
@@ -316,7 +317,7 @@
             </div>
         </div>
         <div
-            class="pagination-wrapper"
+            class="pagination-wrapper mt-4"
             *ngIf="GroupStockReportRequest?.totalItems > GroupStockReportRequest.count && !isLoading"
         >
             <pagination

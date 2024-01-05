@@ -691,7 +691,7 @@
                                                     (click)="focusSkuNumber()"
                                                     *ngIf="activeRow == i && product?.uniqueName"
                                                 >
-                                                    <label class="">SKU Code: </label>
+                                                    <label >SKU Code: </label>
                                                     <span
                                                         >{{ product.skuCode }}
                                                         <span class="edit-icon cp">
@@ -1566,7 +1566,7 @@
                 </tr>
             </table>
         </div>
-        <div class="text-center mt-4 mb-4" *ngIf="transporterListDetails?.totalPages > 1">
+        <div class="text-center mt-4 mb-5" *ngIf="transporterListDetails?.totalPages > 1">
             <pagination
                 [totalItems]="transporterListDetails.totalPages"
                 [(ngModel)]="transporterListDetails.page"

@@ -535,7 +535,7 @@
     </div>
 
     <ng-template #mainTable>
-        <div class="mobile-card-wrapper table-responsive vendor-page all-table">
+        <div class="table-responsive vendor-page all-table">
             <ng-container *ngIf="activeTab === 'customer'">
                 <table
                     *ngIf="searchStr || sundryDebtorsAccounts?.length"
@@ -590,7 +590,7 @@
                             class="position-relative word-wrap"
                             [attr.data-title]="localeData?.customer"
                         >
-                            <div class="customer-name-filed cursor-pointer" (dblclick)="trigger?.openMenu()">
+                            <div class="customer-name-filed cursor-pointer pd-r2" (dblclick)="trigger?.openMenu()">
                                 <div class="select-single-checkbox-wrapper ">
                                     <mat-checkbox
                                         color="primary"
@@ -930,7 +930,7 @@
                             class="position-relative word-wrap"
                             [attr.data-title]="commonLocaleData?.app_vendor_name"
                         >
-                            <div class="vendor-name-field cursor-pointer" (dblclick)="trigger?.openMenu()">
+                            <div class="vendor-name-field cursor-pointer pd-r2" (dblclick)="trigger?.openMenu()">
                                 <div class="select-single-checkbox-wrapper ">
                                     <mat-checkbox
                                         [ngClass]="{ 'visible-check-box': selectedCheckedContacts.length }"
@@ -1365,7 +1365,7 @@
             </ng-container>
         </div>
 
-        <div colspan="100%" class="xs-pl-0 pagination-wrapper">
+        <div colspan="100%" class="xs-pl-0 pagination-wrapper mt-4">
             <div
                 *ngIf="
                     activeTab === 'customer' &&

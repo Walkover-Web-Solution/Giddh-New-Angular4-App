@@ -46,6 +46,10 @@
             }
         }
 
+        .field-max-width {
+            max-width: 241px;
+        }
+
         .consumption-details-wrapper {
             .mat-accordion {
                 .mat-expansion-panel {
@@ -71,36 +75,6 @@
                         th {
                             color: var(--color-primary-button-text);
                             font-weight: 500;
-                        }
-                        .table-name{
-                            width: 25%;
-                        }
-                        .table-variant{
-                            width: 20%;
-                        }
-                        .table-quantity{
-                            width: 10%;
-                        }
-                        .table-unit{
-                            width: 20%;
-                        }
-                        .table-rate{
-                            width: 10%;
-                        }
-                        .table-amount{
-                            width: 15%;
-                        }
-                        .table-name2{
-                            width: 30%;
-                        }
-                        .table-variant2{
-                            width: 30%;
-                        }
-                        .table-amount2{
-                            width: 30%;
-                        }
-                        .table-delete{
-                            width: 10%;
                         }
                     }
                 }
@@ -128,7 +102,7 @@
                                 line-height: unset !important;
                                 font-size: var(--font-size-12) !important;
                             }
-                            .table-column-width{
+                            .table-column-width {
                                 max-width: 250px;
                                 column-gap: 20px;
                             }
@@ -156,6 +130,36 @@
                             }
                         }
                     }
+                }
+                .table-name {
+                    width: 25%;
+                }
+                .table-variant {
+                    width: 20%;
+                }
+                .table-quantity {
+                    width: 10%;
+                }
+                .table-unit {
+                    width: 20%;
+                }
+                .table-rate {
+                    width: 10%;
+                }
+                .table-amount {
+                    width: 15%;
+                }
+                .table-name2 {
+                    width: 30%;
+                }
+                .table-variant2 {
+                    width: 30%;
+                }
+                .table-amount2 {
+                    width: 30%;
+                }
+                .table-delete {
+                    width: 10%;
                 }
             }
             .icon-cross {
@@ -234,9 +238,9 @@
                                 .table-column-width {
                                     column-gap: 8px;
                                 }
-                            } 
+                            }
                         }
-                    } 
+                    }
                 }
             }
         }
@@ -257,22 +261,22 @@
 }
 
 @media screen and (max-width: 1280px) {
-    #create-manufacturing{
+    #create-manufacturing {
         .manufacturing-wrapper {
             .custom-card {
                 min-width: 160px;
             }
-        } 
-    } 
+        }
+    }
 }
 
 @media screen and (max-width: 1080px) {
-    #create-manufacturing{
+    #create-manufacturing {
         .manufacturing-wrapper {
             .custom-card {
                 min-width: 120px;
                 padding: 12px;
             }
-        } 
-    } 
+        }
+    }
 }

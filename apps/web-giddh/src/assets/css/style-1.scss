@@ -573,6 +573,7 @@ aside-menu-account .container-fluid {
     border-radius: 5px;
     padding: 15px;
     width: 100%;
+    min-width: 200px;
     h5 {
         font-size: var(--font-size-12);
         color: var(--color-total-details-heading);
@@ -2190,8 +2191,16 @@ perfect-scrollbar.ps-show-active > .ps.ps--active-y > .ps-overlay:not(.ps-at-bot
 
     text-transform: capitalize;
 }
-.basic tbody tr:hover td {
-    background: var(--color-table-row-hover-primary-background);
+.basic {
+    tbody {
+        tr {
+            &:hover {
+                td {
+                    background: var(--color-table-row-hover-primary-background) !important;
+                }
+            }
+        }
+    }
 }
 
 body.fixed {
@@ -2846,6 +2855,13 @@ td.mat-footer-cell:first-of-type {
     white-space: normal !important;
     word-break: inherit;
 }
+td{
+    &.mat-mdc-cell{
+        &:first-of-type {
+            word-wrap: anywhere;
+        }
+    }
+}
 .manufacturing-table {
     th.mat-mdc-header-cell:first-of-type,
     td.mat-mdc-cell:first-of-type,
@@ -2988,6 +3004,12 @@ td.mat-footer-cell {
             border-bottom: 1px solid var(--color-iron);
         }
     }
+    giddh-datepicker{
+        .mdc-text-field{
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+        }
+    }
 }
 
 .right-currency {
@@ -3116,10 +3138,7 @@ td.mat-footer-cell {
         margin-top: -3px !important;
     }
 }
-.border-left-right-none {
-    border-left: none !important;
-    border-right: none !important;
-}
+
 .text-field {
     .text-field-container {
         .input-custom {

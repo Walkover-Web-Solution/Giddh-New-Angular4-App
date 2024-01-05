@@ -5,13 +5,14 @@ export const SETTINGS_INTEGRATION_API = {
     EMAIL: COMMON + 'email-key', // GET or POST call
     PAYMENT: COMMON + 'bank/registration',// POST call to save payment info
     RAZORPAY: COMMON + 'razorpay', // ALL METHODS
+    PAYPAL: COMMON + 'paypal', // ALL METHODS
     CASHFREE: COMMON + 'cashfree', // GET, POST
     AUTOCOLLECT_USER: COMMON + 'cashfree/autocollect/users', // GET, POST, PUT, DELETE
     PAYMENT_GATEWAY: COMMON + 'cashfree/payment-gateway', // GET, POST, PUT, DELETE
     AMAZON_SELLER: COMMON + 'amazon/seller', // GET, POST
     AMAZON_SELLER_OPERATION: COMMON + 'amazon/seller/:sellerId', // DELETE, PUT
     GET_GMAIL_INTEGRATION_STATUS: COMMON + 'gmail-token', // GET
-    GET_PLAID_LINK_TOKEN: COMMON + 'plaid/create/link-token', // GET
+    GET_PLAID_LINK_TOKEN: COMMON + 'plaid/create/link-token?itemId=:itemId', // GET
     SAVE_PLAID_ACCESS_TOKEN: COMMON + 'plaid/create/access-token',
     REMOVE_GMAIL_INTEGRATION: COMMON + 'gmail-token', //DELETE
     REMOVE_ICICI_REQUEST: COMMON + 'bank/deregistration?urn=:urn',

@@ -41,12 +41,6 @@
     font-size: var(--font-size-15) !important;
 }
 
-.table-content {
-    max-height: calc(100vh - 410px);
-    overflow-y: auto;
-    height: calc(100vh - 410px);
-}
-
 .msg91-container {
     position: relative;
     border: 1px solid var(--color-lavender);

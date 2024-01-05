@@ -60,6 +60,9 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 
 import { NgxPlaidLinkModule } from "ngx-plaid-link";
 import { AsideMenuAccountModule } from '../shared/aside-menu-account/aside.menu.account.module';
+import { AccountNumberMaskModule } from '../shared/helpers/pipes/accountNumberMaskPipe/accountNumberMask.module';
+import { PortalWhiteLabelComponent } from './portal-white-label/portal-white-label.component';
+import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
 
 @NgModule({
     declarations: [
@@ -82,6 +85,7 @@ import { AsideMenuAccountModule } from '../shared/aside-menu-account/aside.menu.
         CreateWarehouseComponent,
         CreateAddressComponent,
         PersonalInformationComponent,
+        PortalWhiteLabelComponent,
         AddressSettingsComponent,
         OtherSettingsComponent,
         CreateBranchComponent,
@@ -126,9 +130,10 @@ import { AsideMenuAccountModule } from '../shared/aside-menu-account/aside.menu.
         MatMenuModule,
         MatDatepickerModule,
         NgxPlaidLinkModule,
-        AsideMenuAccountModule
-
-    ],
+        AsideMenuAccountModule,
+        AccountNumberMaskModule,
+        WatchVideoModule
+    ]
 })
 
 export class SettingsModule {

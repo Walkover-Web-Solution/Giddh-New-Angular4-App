@@ -107,6 +107,8 @@ export class SettingsComponent implements OnInit, OnDestroy {
         });
 
         this._route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
+            console.log("activeTab", this.activeTab);
+            
             if (params['type'] && this.activeTab !== params['type'] && params['referrer']) {
                 if (params['type'] === 'integration' && params['referrer']) {
                     this.selectedChildTab = this.assignChildtabForIntegration(params['referrer']);

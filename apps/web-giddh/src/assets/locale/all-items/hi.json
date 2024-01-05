@@ -19,11 +19,7 @@
           "label": "ग्राहक",
           "link": "/pages/contact/customer",
           "icon": "icon-customer",
-          "description": "ग्राहकों को प्रबंधित करें, एसएमएस/ईमेल के माध्यम से अनुस्मारक भेजें",
-          "additional": {
-            "tab": "customer",
-            "tabIndex": 0
-          }
+          "description": "ग्राहकों को प्रबंधित करें, एसएमएस/ईमेल के माध्यम से अनुस्मारक भेजें"
         },
         {
           "label": "नया चालान",

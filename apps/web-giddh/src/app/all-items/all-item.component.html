@@ -52,6 +52,7 @@
                                     (click)="redirectSubItemLink(subItem)"
                                     [queryParams]="subItem?.additional"
                                     [class.active]="menuIndex === filteredMenuIndex && itemIndex === subItemIndex"
+                                    [tabindex]="subItemIndex"
                                 >
                                     <mat-card-title>
                                         <h4><i class="{{ subItem?.icon }} mr-r1"></i> {{ subItem?.label }}</h4>

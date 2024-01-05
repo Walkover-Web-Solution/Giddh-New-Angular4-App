@@ -7,7 +7,7 @@
 >
     <div validateSectionPermission [hasPermission]="hasInvoiceSettingPermissions" validateSubscription>
         <section id="invoice-setting">
-            <tabset class="tab-integration">
+            <tabset class="tab-integration" #staticTabsSettings>
                 <!-- region general tab-->
                 <tab>
                     <ng-template tabHeading> <span class="icon-chat2"></span> {{ localeData?.general }} </ng-template>
@@ -77,7 +77,7 @@
                                         <div class="row">
                                             <div class="col-md-5 col-sm-12 col-xs-12">
                                                 <div class="mb-0 form-group">
-                                                    <div class="" [ngClass]="{ 'input-group': true }" class="obj-gap">
+                                                    <div [ngClass]="{ 'input-group': true }">
                                                         <input
                                                             type="email"
                                                             class="form-control"
@@ -753,6 +753,54 @@
                                             <mat-slide-toggle
                                                 [(ngModel)]="invoiceSetting.creditNoteRoundOff"
                                                 name="creditNoteRoundOff"
+                                                class="hide-on-mobile"
+                                                color="primary"
+                                            >
+                                            </mat-slide-toggle>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="clearfix pd-t1" *ngIf="voucherApiVersion === 2">
+                                    <div class="row">
+                                        <div class="col-sm-12 col-md-12 col-lg-3">
+                                            <mat-slide-toggle
+                                                [(ngModel)]="invoiceSetting.autoPaid"
+                                                (ngModelChange)="invoiceSetting.autoPaid ? null : invoiceSetting.autoGenerateVoucherFromEntry = false"
+                                                name="autoPaid"
+                                                class="show-on-mobile"
+                                                color="primary"
+                                            >
+                                            </mat-slide-toggle>
+                                            <label class="left-gap">{{ localeData?.run_auto_paid_for_all_the_accounts }}</label>
+                                        </div>
+                                        <div class="col-sm-12 col-md-9 form-group">
+                                            <mat-slide-toggle
+                                                [(ngModel)]="invoiceSetting.autoPaid"
+                                                (ngModelChange)="invoiceSetting.autoPaid ? null : invoiceSetting.autoGenerateVoucherFromEntry = false" 
+                                                name="autoPaid"
+                                                class="hide-on-mobile"
+                                                color="primary"
+                                            >
+                                            </mat-slide-toggle>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="clearfix pd-t1" *ngIf="voucherApiVersion === 2 && invoiceSetting.autoPaid">
+                                    <div class="row">
+                                        <div class="col-sm-12 col-md-12 col-lg-3">
+                                            <mat-slide-toggle
+                                                [(ngModel)]="invoiceSetting.autoGenerateVoucherFromEntry"
+                                                name="autoGenerateVoucher"
+                                                class="show-on-mobile"
+                                                color="primary"
+                                            >
+                                            </mat-slide-toggle>
+                                            <label class="left-gap">{{ localeData?.automatically_generate_voucher_for_the_entries_present_in_the_ledger }}</label>
+                                        </div>
+                                        <div class="col-sm-12 col-md-9 form-group">
+                                            <mat-slide-toggle
+                                                [(ngModel)]="invoiceSetting.autoGenerateVoucherFromEntry"
+                                                name="autoGenerateVoucher"
                                                 class="hide-on-mobile"
                                                 color="primary"
                                             >

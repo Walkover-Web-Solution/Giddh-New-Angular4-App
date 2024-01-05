@@ -80,6 +80,9 @@ import { FormsModule } from "@angular/forms";
 import { NoDataModule } from "../shared/no-data/no-data.module";
 import { DragDropModule } from "@angular/cdk/drag-drop";
 import { CdkScrollModule } from "../theme/form-fields/cdk-scroll/cdk-scroll.module";
+import { BulkStockEditComponent } from "./component/bulk-stock-edit/bulk-stock-edit.component";
+import { BulkStockAdvanceFilterComponent } from "./component/bulk-stock-advance-filter/bulk-stock-advance-filter.component";
+import { WatchVideoModule } from "../theme/watch-video/watch-video.module";
 
 @NgModule({
     declarations: [
@@ -124,7 +127,9 @@ import { CdkScrollModule } from "../theme/form-fields/cdk-scroll/cdk-scroll.modu
         CreateUnitGroupComponent,
         AsideCreateUnitGroupComponent,
         CustomUnitsComponent,
-        InventoryMasterComponent
+        InventoryMasterComponent,
+        BulkStockEditComponent,
+        BulkStockAdvanceFilterComponent
     ],
     imports: [
         NewInventoryRoutingModule,
@@ -164,7 +169,8 @@ import { CdkScrollModule } from "../theme/form-fields/cdk-scroll/cdk-scroll.modu
         CdkScrollModule,
         FormsModule,
         NoDataModule,
-        DragDropModule
+        DragDropModule,
+        WatchVideoModule
     ],
     exports: [
         NewInventoryComponent,
@@ -199,7 +205,8 @@ import { CdkScrollModule } from "../theme/form-fields/cdk-scroll/cdk-scroll.modu
         DashboardSalesReport,
         DashboardSellingReport,
         ReportFiltersComponent,
-        MatDivider
+        MatDivider,
+        BulkStockAdvanceFilterComponent
     ]
 })
 export class NewInventoryModule { }

@@ -12,6 +12,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { TranslateDirectiveModule } from '../../../theme/translate/translate.directive.module';
 import { FormsModule } from '@angular/forms';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 @NgModule({
     imports: [
@@ -24,7 +25,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
         RecipeRoutingModule,
         TranslateDirectiveModule,
         FormsModule,
-        MatTooltipModule
+        MatTooltipModule,
+        MatExpansionModule
     ],
     exports: [
         CreateRecipeComponent,

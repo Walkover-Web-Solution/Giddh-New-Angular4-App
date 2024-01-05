@@ -92,8 +92,8 @@
 }
 .bs-datepicker-head button.current {
     border-radius: 15px;
-    /* max-width: 155px; */
-    width: 100px;
+    max-width: 120px;
+    width: auto;
     padding: 0 13px;
 }
 .bs-datepicker-head button:hover {

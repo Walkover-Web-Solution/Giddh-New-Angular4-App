@@ -76,6 +76,7 @@ import { VoucherModule } from '../voucher/voucher.module';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
 
 @NgModule({
     declarations: [
@@ -162,7 +163,8 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
         GiddhPageLoaderModule,
         DatepickerWrapperModule,
         DeleteTemplateConfirmationModalModule,
-        MatDialogModule
+        MatDialogModule,
+        WatchVideoModule
     ],
     exports: [
         InvoiceRoutingModule,

@@ -116,7 +116,9 @@
         text-decoration: underline;
     }
 }
-
+.mat-tab-bottom-spacing{
+    padding-bottom: 140px;
+}
 ::ng-deep {
     .mat-tab-label {
         height: 36px;
@@ -455,7 +457,13 @@
     vertical-align: top;
     margin-top: -4px;
 }
-
+.bank-menu {
+    top: -12px;
+    padding: 0 !important;
+    width: 18px;
+    height: 18px;
+    right: -32px;
+}
 @media (max-width: 1600px) and (min-width: 1200px) {
     .account-wrapper {
         width: 80% !important;

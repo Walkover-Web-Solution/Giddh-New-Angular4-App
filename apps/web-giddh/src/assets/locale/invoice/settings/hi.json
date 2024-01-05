@@ -46,5 +46,7 @@
     "e_invoice_fields_required_error_message": "ई-चालान प्रमाणीकरण के लिए सभी क्षेत्रों की आवश्यकता है",
     "e_invoice_invalid_gstin_error_message": "कृपया एक मान्य जीएसटीआईएन प्रदान करें",
     "apply_sales_round_off": "बिक्री/नकद वाउचर पर राउंड ऑफ लागू करें",
-    "apply_credit_note_round_off": "क्रेडिट नोट वाउचर पर राउंड ऑफ अप्लाई करें"
+    "apply_credit_note_round_off": "क्रेडिट नोट वाउचर पर राउंड ऑफ अप्लाई करें",
+    "run_auto_paid_for_all_the_accounts": "सभी खातों के लिए ऑटो-भुगतान चलाएं",
+    "automatically_generate_voucher_for_the_entries_present_in_the_ledger": "लेजर में मौजूद प्रविष्टियों के लिए स्वच्छंद रूप से वाउचर उत्पन्न करें"
 }

@@ -527,7 +527,7 @@ export class LoginActions {
                 if (action.payload?.status === 'success') {
                     this._toaster.successToast(this.localeService.translate("app_messages.otp_sent_email"));
                 } else {
-                    this._toaster.errorToast(action.payload.message, action.payload.code,6000);
+                    this._toaster.errorToast(action.payload.message, action.payload.code, 6000);
                 }
                 return { type: 'EmptyAction' };
             })));
@@ -988,6 +988,16 @@ export class LoginActions {
         return this.finalThingTodo(respState, companies, isSocialLogin);
     }
 
+    /**
+     * This will be use for final things to do
+     *
+     * @private
+     * @param {*} stateDetail
+     * @param {*} companies
+     * @param {boolean} [isSocialLogin]
+     * @return {*}
+     * @memberof LoginActions
+     */
     private finalThingTodo(stateDetail: any, companies: any, isSocialLogin?: boolean) {
         this.store.pipe(select(state => state.session.user), take(1)).subscribe(response => {
             let request = { userUniqueName: response.user?.uniqueName, companyUniqueName: stateDetail?.body.companyUniqueName };
@@ -996,7 +1006,8 @@ export class LoginActions {
         this.store.dispatch(this.companyActions.GetStateDetailsResponse(stateDetail));
         this.store.dispatch(this.companyActions.RefreshCompaniesResponse(companies));
         this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.userLoggedIn));
-        this.finalNavigate(stateDetail.body?.lastState, false, isSocialLogin);
+        let route = (stateDetail?.body?.lastUpdated > 7 || !stateDetail?.body?.lastUpdated) ? '/pages/home' : stateDetail.body?.lastState;
+        this.finalNavigate(route, false, isSocialLogin);
         return { type: 'EmptyAction' };
     }
 
