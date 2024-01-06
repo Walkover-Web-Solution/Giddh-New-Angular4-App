@@ -182,6 +182,8 @@
                                 id="ledger-discount"
                                 [discountAccountsDetails]="currentTxn?.discounts"
                                 [maskInput]="inputMaskFormat"
+                                [discountPercentageModal]="currentTxn.discountPercentageModal"
+                                [discountFixedValueModal]="currentTxn.discountFixedValueModal"
                                 [prefixInput]="selectedPrefixForCurrency"
                                 [suffixInput]="selectedSuffixForCurrency"
                                 [ledgerAmount]="currentTxn.amount"
@@ -189,7 +191,7 @@
                                 [commonLocaleData]="commonLocaleData"
                                 [giddhBalanceDecimalPlaces]="giddhBalanceDecimalPlaces"
                                 (hideOtherPopups)="hideTax()"
-                                (discountTotalUpdated)="calculateDiscount($event)"
+                                (discountTotalUpdated)="calculateDiscount(currentTxn, $event)"
                             >
                             </ledger-discount>
                             <p class="mb-0 amount-total" *ngIf="isLedgerAccountAllowsMultiCurrency">

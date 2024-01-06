@@ -267,6 +267,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     private openTooltipMenuStatus: boolean = false;
     /** Holds mouse hovered on tooltip text status */
     public tooltipHoveredStatus: boolean = false;
+    /** Stores the discount object from discount calculation */
+    public discountObj: any;
 
     constructor(private store: Store<AppState>,
         private cdRef: ChangeDetectorRef,
@@ -589,30 +591,147 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     /**
+   * To prepare pre applied discount for current transactions
+   *
+   * @memberof NewLedgerEntryPanelComponent
+   */
+    public preparePreAppliedDiscounts(): void {
+        // console.log('preparePreAppliedDiscounts', this.currentTxn);
+        // if (this.currentTxn?.selectedAccount?.accountApplicableDiscounts?.length) {
+        //     this.currentTxn?.selectedAccount?.accountApplicableDiscounts?.map(item => item.isActive = true);
+        //     this.currentTxn?.discounts?.map(item => { item.isActive = false; return item; });
+        //     if (this.currentTxn?.discounts && this.currentTxn?.discounts?.length === 1) {
+        //         setTimeout(() => {
+        //             this.currentTxn?.selectedAccount.accountApplicableDiscounts.forEach(element => {
+        //                 this.currentTxn?.discounts?.map(item => {
+        //                     if (element?.uniqueName === item?.discountUniqueName) {
+        //                         item.isActive = true;
+        //                     }
+        //                     return item;
+        //                 });
+        //             });
+        //         }, 300);
+        //     } else {
+        //         this.currentTxn.selectedAccount.accountApplicableDiscounts.forEach(element => {
+        //             this.currentTxn?.discounts?.map(item => {
+        //                 if (element?.uniqueName === item?.discountUniqueName) {
+        //                     item.isActive = true;
+        //                 }
+        //                 return item;
+        //             });
+        //         });
+        //     }
+        // } else if (this.accountOtherApplicableDiscount && this.accountOtherApplicableDiscount.length) {
+        //     this.currentTxn?.discounts?.map(item => { item.isActive = false });
+        //     this.accountOtherApplicableDiscount.forEach(element => {
+        //         this.currentTxn?.discounts?.map(item => {
+        //             if (element?.uniqueName === item?.discountUniqueName) {
+        //                 item.isActive = true;
+        //             }
+        //             return item;
+        //         });
+        //     });
+        // } else {
+        //     this.currentTxn?.discounts?.map(item => {
+        //         item.isActive = false;
+        //         return item;
+        //     });
+        //     if (this.currentTxn) {
+        //         this.currentTxn.discount = 0;
+        //     }
+        // }
+        /** if percent or value type discount applied */
+        // if (this.currentTxn?.discounts && this.currentTxn?.discounts[0]) {
+        //     if (this.currentTxn?.discounts[0].amount) {
+        //         this.currentTxn.discounts[0].isActive = true;
+        //     } else {
+        //         this.currentTxn.discounts[0].isActive = false;
+        //     }
+        // }
+        // if (this.discountControl) {
+        //     if (this.discountControl.discountAccountsDetails) {
+        //         this.discountControl.discountAccountsDetails = this.currentTxn?.discounts;
+        //         if (this.currentTxn) {
+        //             this.currentTxn.discount = giddhRoundOff(this.discountControl.generateTotal());
+        //         }
+        //         this.discountControl.discountTotal = this.currentTxn?.discount;
+        //     }
+        // }
+    }
+
+
+    /**
      * To calculate discount
      *
      * @param {*} event
      * @memberof NewLedgerEntryPanelComponent
      */
-    public calculateDiscount(event: any): void {
-        if (this.currentTxn) {
-            this.currentTxn.discount = event.discountTotal;
-        }
-        if (this.accountOtherApplicableDiscount && this.accountOtherApplicableDiscount.length > 0) {
-            this.accountOtherApplicableDiscount.forEach(item => {
-                if (item && event.discount && item?.uniqueName === event.discount.discountUniqueName) {
-                    item.isActive = event.isActive.target?.checked;
+    public calculateDiscount(currentTxn: any, event: any): void {
+        console.log(event, currentTxn);
+        if (currentTxn?.selectedAccount?.stock?.variant?.variantDiscount?.discounts?.length) {
+            currentTxn?.selectedAccount?.stock?.variant?.variantDiscount?.discounts.forEach(discount => {
+                if (discount) {
+                    let matchedUnit = currentTxn?.selectedAccount?.stock?.variant?.variantDiscount?.unit?.uniqueName === currentTxn?.inventory?.unit?.stockUnitUniqueName;
+                    if (matchedUnit) {
+                        currentTxn.discounts = currentTxn.discounts.map(item => {
+                            if (item.discountUniqueName === discount?.discount?.uniqueName) {
+                                item.isActive = true;
+                            }
+                            return item;
+                        });
+                    } else {
+                        if (event && event.discount && event.isActive) {
+                            this.accountOtherApplicableDiscount.forEach(item => {
+                                if (item && event.discount && item.uniqueName === event.discount.discountUniqueName) {
+                                    item.isActive = event.isActive?.target?.checked;
+                                }
+                            });
+                        }
+
+                        if (currentTxn && currentTxn.discounts && currentTxn.discounts.length && this.accountOtherApplicableDiscount && this.accountOtherApplicableDiscount.length) {
+                            currentTxn.discounts.map(item => {
+                                let discountItem = this.accountOtherApplicableDiscount.find(element => element?.uniqueName === item.discountUniqueName);
+                                if (discountItem && discountItem.uniqueName) {
+                                    item.isActive = discountItem.isActive;
+                                }
+                            });
+                        }
+                    }
+                    currentTxn?.selectedAccount?.stock?.variant?.unitRates?.forEach(unitRate => {
+                        let matchedUnit = unitRate?.stockUnitUniqueName === currentTxn?.inventory?.unit?.stockUnitUniqueName;
+                        if (matchedUnit) {
+                            const qtyRate = Number(unitRate.rate) * Number(currentTxn?.selectedAccount?.stock?.variant?.variantDiscount?.quantity);
+                            currentTxn.amount = giddhRoundOff(qtyRate, this.giddhBalanceDecimalPlaces);
+                            currentTxn.inventory.unit.rate = giddhRoundOff(Number(unitRate.rate), this.giddhBalanceDecimalPlaces);
+                            currentTxn.inventory.quantity = currentTxn?.selectedAccount?.stock?.variant?.variantDiscount?.quantity || currentTxn?.inventory?.quantity;
+                            let appliedDiscount = currentTxn?.discounts?.filter(res => res.discountUniqueName === discount?.uniqueName);
+                            console.log(appliedDiscount, discount,);
+                            currentTxn.discount = appliedDiscount[0]?.discountValue;
+                        }
+                    });
                 }
             });
+            this.calculateTax();
+        } else {
+            if (currentTxn) {
+                currentTxn.discount = event.discount;
+            }
+            if (this.accountOtherApplicableDiscount && this.accountOtherApplicableDiscount.length > 0) {
+                this.accountOtherApplicableDiscount.forEach(item => {
+                    if (item && event.discount && item?.uniqueName === event.discount.discountUniqueName) {
+                        item.isActive = event.isActive.target?.checked;
+                    }
+                });
+            }
+            if (currentTxn?.selectedAccount?.accountApplicableDiscounts) {
+                currentTxn.selectedAccount.accountApplicableDiscounts.forEach(item => {
+                    if (item && event.discount && item?.uniqueName === event.discount.discountUniqueName) {
+                        item.isActive = event.isActive.target?.checked;
+                    }
+                });
+            }
         }
-        if (this.currentTxn?.selectedAccount?.accountApplicableDiscounts) {
-            this.currentTxn.selectedAccount.accountApplicableDiscounts.forEach(item => {
-                if (item && event.discount && item?.uniqueName === event.discount.discountUniqueName) {
-                    item.isActive = event.isActive.target?.checked;
-                }
-            });
-        }
-        this.currentTxn.convertedDiscount = this.calculateConversionRate(this.currentTxn.discount);
+        currentTxn.convertedDiscount = this.calculateConversionRate(currentTxn.discount);
         this.calculateTax();
     }
 
@@ -1719,74 +1838,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             accountDetails.applicableTaxes.unshift(accountDetails.otherApplicableTaxes[0]);
         }
         this.accountOtherApplicableDiscount?.map(item => item.isActive = true);
-    }
-
-    /**
-     * To prepare pre applied discount for current transactions
-     *
-     * @memberof NewLedgerEntryPanelComponent
-     */
-    public preparePreAppliedDiscounts(): void {
-        if (this.currentTxn?.selectedAccount?.accountApplicableDiscounts?.length) {
-            this.currentTxn?.selectedAccount?.accountApplicableDiscounts?.map(item => item.isActive = true);
-            this.currentTxn?.discounts?.map(item => { item.isActive = false; return item; });
-            if (this.currentTxn?.discounts && this.currentTxn?.discounts?.length === 1) {
-                setTimeout(() => {
-                    this.currentTxn?.selectedAccount.accountApplicableDiscounts.forEach(element => {
-                        this.currentTxn?.discounts?.map(item => {
-                            if (element?.uniqueName === item?.discountUniqueName) {
-                                item.isActive = true;
-                            }
-                            return item;
-                        });
-                    });
-                }, 300);
-            } else {
-                this.currentTxn.selectedAccount.accountApplicableDiscounts.forEach(element => {
-                    this.currentTxn?.discounts?.map(item => {
-                        if (element?.uniqueName === item?.discountUniqueName) {
-                            item.isActive = true;
-                        }
-                        return item;
-                    });
-                });
-            }
-        } else if (this.accountOtherApplicableDiscount && this.accountOtherApplicableDiscount.length) {
-            this.currentTxn?.discounts?.map(item => { item.isActive = false });
-            this.accountOtherApplicableDiscount.forEach(element => {
-                this.currentTxn?.discounts?.map(item => {
-                    if (element?.uniqueName === item?.discountUniqueName) {
-                        item.isActive = true;
-                    }
-                    return item;
-                });
-            });
-        } else {
-            this.currentTxn?.discounts?.map(item => {
-                item.isActive = false;
-                return item;
-            });
-            if (this.currentTxn) {
-                this.currentTxn.discount = 0;
-            }
-        }
-        /** if percent or value type discount applied */
-        if (this.currentTxn?.discounts && this.currentTxn?.discounts[0]) {
-            if (this.currentTxn?.discounts[0].amount) {
-                this.currentTxn.discounts[0].isActive = true;
-            } else {
-                this.currentTxn.discounts[0].isActive = false;
-            }
-        }
-        if (this.discountControl) {
-            if (this.discountControl.discountAccountsDetails) {
-                this.discountControl.discountAccountsDetails = this.currentTxn?.discounts;
-                if (this.currentTxn) {
-                    this.currentTxn.discount = giddhRoundOff(this.discountControl.generateTotal());
-                }
-                this.discountControl.discountTotal = this.currentTxn?.discount;
-            }
-        }
     }
 
     /**

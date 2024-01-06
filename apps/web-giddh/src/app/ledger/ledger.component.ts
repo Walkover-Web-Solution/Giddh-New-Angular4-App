@@ -2642,6 +2642,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         if (event.additional?.stock) {
             requestObject = {
                 stockUniqueName: event.additional.stock?.uniqueName,
+                customerUniqueName: this.lc.activeAccount?.uniqueName,
                 oppositeAccountUniqueName: event.additional?.uniqueName,
                 variantUniqueName
             };

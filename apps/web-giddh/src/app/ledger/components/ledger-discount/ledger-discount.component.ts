@@ -20,13 +20,12 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
     @Input() public commonLocaleData: any = {};
     @Input() public discountAccountsDetails: LedgerDiscountClass[];
     @Input() public ledgerAmount: number = 0;
-    @Output() public discountTotalUpdated: EventEmitter<{ discountTotal: number, isActive: any, discount: any }> = new EventEmitter();
+    /* This will emit discount total updated */
+    @Output() public discountTotalUpdated: EventEmitter<{ discount: any, isActive: boolean, discountType?: any, isFirstChange?: boolean }> = new EventEmitter();
     @Output() public hideOtherPopups: EventEmitter<boolean> = new EventEmitter<boolean>();
     public discountTotal: number;
     public discountFromPer: boolean = true;
     public discountFromVal: boolean = true;
-    public discountPercentageModal: number = 0;
-    public discountFixedValueModal: number = 0;
     @ViewChild('disInptEle', { static: true }) public disInptEle: ElementRef;
 
     @Input() public discountMenu: boolean;
@@ -40,6 +39,10 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
     @Input() public giddhBalanceDecimalPlaces: number = 2;
     /* Amount should have precision up to 16 digits for better calculation */
     public highPrecisionRate = HIGH_RATE_FIELD_PRECISION;
+    /* This will hold discount percentage value */
+    @Input() public discountPercentageModal: number = 0;
+    /* This will hold discount fixed value */
+    @Input() public discountFixedValueModal: number = 0;
 
     public onFocusLastDiv(el) {
         el.stopPropagation();
@@ -74,19 +77,49 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
         }
         this.change();
     }
-
     public ngOnChanges(changes: SimpleChanges): void {
-        if ('discountAccountsDetails' in changes && changes.discountAccountsDetails.currentValue !== changes.discountAccountsDetails.previousValue || changes.ledgerAmount) {
+        if ('discountAccountsDetails' in changes && changes.discountAccountsDetails.currentValue !== changes.discountAccountsDetails.previousValue) {
             this.prepareDiscountList();
-
-            if (this.defaultDiscount.discountType === 'FIX_AMOUNT') {
+            if (this.defaultDiscount && this.defaultDiscount.discountType === 'FIX_AMOUNT') {
                 this.discountFixedValueModal = this.defaultDiscount.amount;
             } else {
-                this.discountPercentageModal = this.defaultDiscount.amount;
+                this.discountPercentageModal = (this.defaultDiscount) ? this.defaultDiscount.amount : 0;
             }
-            this.change();
+            if ('totalAmount' in changes && changes.totalAmount.currentValue !== changes.totalAmount.previousValue) {
+                this.change();
+            }
+        }
+        if ('discountFixedValueModal' in changes && changes.discountFixedValueModal.currentValue && changes.discountFixedValueModal.currentValue !== changes.discountFixedValueModal.previousValue) {
+            this.discountFixedValueModal = changes.discountFixedValueModal.currentValue;
+            this.assignDiscount('FIX_AMOUNT', changes.discountFixedValueModal.currentValue, changes.discountFixedValueModal.firstChange, true);
+        }
+        if ('discountPercentageModal' in changes && changes.discountPercentageModal.currentValue && changes.discountPercentageModal.currentValue !== changes.discountPercentageModal.previousValue) {
+            this.discountPercentageModal = changes.discountPercentageModal.currentValue;
+            this.assignDiscount('PERCENTAGE', changes.discountPercentageModal.currentValue, changes.discountPercentageModal.firstChange, true);
         }
     }
+
+    public assignDiscount(type: any, value: any, isFirstChange: boolean = false, isActive?: boolean): void {
+        this.defaultDiscount.amount = parseFloat(String(value)?.replace(/[,'\s]/g, ''));
+        this.defaultDiscount.discountValue = parseFloat(String(value)?.replace(/[,'\s]/g, ''));
+        this.defaultDiscount.discountType = type;
+
+        this.discountTotalUpdated.emit({ discount: this.defaultDiscount.amount, isActive: isActive, discountType: type, isFirstChange: isFirstChange });
+
+        if (!value) {
+            this.discountFromVal = true;
+            this.discountFromPer = true;
+            return;
+        }
+        if (type === 'PERCENTAGE') {
+            this.discountFromPer = true;
+            this.discountFromVal = false;
+        } else {
+            this.discountFromPer = false;
+            this.discountFromVal = true;
+        }
+    }
+
 
     /**
      * prepare discount obj
@@ -124,25 +157,8 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
         });
     }
 
-    public discountFromInput(type: 'FIX_AMOUNT' | 'PERCENTAGE', val: string) {
-        this.defaultDiscount.amount = parseFloat(String(val)?.replace(/,/g, ''));
-        this.defaultDiscount.discountValue = parseFloat(String(val)?.replace(/,/g, ''));
-        this.defaultDiscount.discountType = type;
-
-        this.change();
-
-        if (!val) {
-            this.discountFromVal = true;
-            this.discountFromPer = true;
-            return;
-        }
-        if (type === 'PERCENTAGE') {
-            this.discountFromPer = true;
-            this.discountFromVal = false;
-        } else {
-            this.discountFromPer = false;
-            this.discountFromVal = true;
-        }
+    public discountFromInput(type: 'FIX_AMOUNT' | 'PERCENTAGE', event: any) {
+        this.assignDiscount(type, event.target?.value, false, true);
     }
 
     /**
@@ -153,13 +169,14 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
      * @param {boolean} [preventEmit] Prevent the total amount update event to avoid recursive calculation
      * @memberof LedgerDiscountComponent
      */
-    public change(event?: any, discount?: any, preventEmit?: boolean) {
+    public change(discount?: any, event?: boolean, preventEmit?: boolean) {
+
         this.discountTotal = giddhRoundOff(this.generateTotal(), this.giddhBalanceDecimalPlaces);
         if (!preventEmit) {
             /** Should emit only conditionally, done to avoid
              * recursive call to change method in case of inclusive tax calculation for stock
             */
-            this.discountTotalUpdated.emit({ discountTotal: this.discountTotal, isActive: event, discount: discount });
+            this.discountTotalUpdated.emit({ discount: discount, isActive: event });
         }
     }
 
