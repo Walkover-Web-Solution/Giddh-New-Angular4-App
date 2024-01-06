@@ -158,6 +158,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
         request.refresh = true;
         request.action = GstReconcileActionsEnum.notfoundonportal;
         request.gstin = this.activeCompanyGstNumber;
+        request.gstReturnType = this.selectedGst === GstReport.Gstr1 ? 'gstr1' : 'gstr2';
         this.store.dispatch(this.reconcileAction.GstReconcileInvoiceRequest(request));
     }
 

@@ -834,7 +834,10 @@ textarea {
         border: none !important;
     }
 }
-
+.gstr-button {
+    margin-bottom: 0 !important;
+    margin-right: 15px !important;
+}
 .collection-integration {
     .mat-mdc-tab-body-wrapper {
         min-height: 500px;
