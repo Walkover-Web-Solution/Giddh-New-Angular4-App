@@ -2694,13 +2694,22 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                 let lastIndex = -1;
                 let blankItemIndex = this.purchaseOrder.entries?.findIndex(sItem => !sItem.transactions[0].accountUniqueName);
                 let isBlankItemInBetween;
+
+                let entry = new SalesEntryClass();
+                let entryDiscounts = this.generalService.getDiscountValues({
+                    discountAccountsDetails: entry.discounts ?? [],
+                    discountsList: this.discountsList
+                });
+
+                entry.discounts = entryDiscounts;
+
                 if (blankItemIndex > -1) {
                     lastIndex = blankItemIndex;
-                    this.purchaseOrder.entries[lastIndex] = new SalesEntryClass();
+                    this.purchaseOrder.entries[lastIndex] = entry;
                     isBlankItemInBetween = true;
                     isBlankItemPresent = true;
                 } else {
-                    this.purchaseOrder.entries.push(new SalesEntryClass());
+                    this.purchaseOrder.entries.push(entry);
                     lastIndex = this.purchaseOrder.entries?.length - 1;
                     isBlankItemInBetween = false;
                 }
@@ -3860,7 +3869,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             }
         }
 
-        const isMrpDiscountInclusive = !additional.stock?.variant?.variantDiscount?.discountExclusive && additional.stock?.variant?.unitRates?.filter(ur => ur.stockUnitUniqueName === transaction.stockUnit);
+        const isMrpDiscountInclusive = !variant?.variantDiscount?.discountExclusive && variant?.unitRates?.filter(ur => ur.stockUnitUniqueName === transaction.stockUnit);
         if (isMrpDiscountInclusive?.length) {
             if (!isBulkItem) {
                 transaction.rate = Number((isMrpDiscountInclusive[0].rate / this.exchangeRate).toFixed(this.highPrecisionRate));
