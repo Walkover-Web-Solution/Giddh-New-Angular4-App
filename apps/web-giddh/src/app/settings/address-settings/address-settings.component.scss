@@ -35,6 +35,10 @@
                 white-space: normal;
                 word-break: break-word;
             }
+
+            &.min-width-50{
+                min-width: 50px;
+            }
         }
     }
     &:hover {

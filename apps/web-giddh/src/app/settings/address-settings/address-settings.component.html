@@ -242,7 +242,7 @@
                 <table mat-table [dataSource]="addresses" class="w-100 table basic giddh-table on-mobile-view">
                     <ng-container matColumnDef="no">
                         <th class="min-wid-check" width="2%" mat-header-cell *matHeaderCellDef>#</th>
-                        <td mat-cell *matCellDef="let element; let i = index">{{ i + 1 }}.</td>
+                        <td class="min-width-50" mat-cell *matCellDef="let element; let i = index">{{ i + 1 }}.</td>
                     </ng-container>
                     <ng-container matColumnDef="name">
                         <th
@@ -400,10 +400,10 @@
     
                                 <div class="ml-auto">
                                     <div class="action-icon">
-                                        <a href="javascript:void(0);" (click)="handleUpdateAddress(address)">
+                                        <a href="javascript:void(0);" (click)="handleUpdateAddress(element)">
                                             <span class="icon-edit"></span
                                         ></a>
-                                        <a href="javascript:void(0);" (click)="showConfirmationModal(address)">
+                                        <a href="javascript:void(0);" (click)="showConfirmationModal(element)">
                                             <span class="icon-trash"></span
                                         ></a>
                                     </div>
@@ -416,10 +416,10 @@
                             <div class="d-flex wrap-linked-company">
                                 <div class="ml-auto">
                                     <div class="action-icon">
-                                        <a href="javascript:;" (click)="handleUpdateAddress(address)">
+                                        <a href="javascript:;" (click)="handleUpdateAddress(element)">
                                             <span class="icon-edit"></span
                                         ></a>
-                                        <a href="javascript:;" (click)="showConfirmationModal(address)">
+                                        <a href="javascript:;" (click)="showConfirmationModal(element)">
                                             <span class="icon-trash"></span
                                         ></a>
                                     </div>
@@ -514,18 +514,17 @@
 </div>
 
 <!-- Create address part of Address Tab -->
-<div [keyboardShortcut]="'esc'" (onShortcutPress)="toggleAccountAsidePane()">
-    <ng-template #asideAccountAsidePane>
+<ng-template #asideAccountAsidePane>
+<div [keyboardShortcut]="'esc'" (onShortcutPress)="closeAccountAsidePane()">
         <create-address
             class="account-aside-menu-state transform-inherit"
-            [@slideInOut]="accountAsideMenuState"
             [companyName]="organizationType === 'BRANCH' ? profileData?.companyName : ''"
             [currentOrganizationUniqueName]="currentOrganizationUniqueName"
             [showLoader]="isAddressChangeInProgress"
             (saveAddress)="saveAddress($event)"
             (updateAddress)="updateAddress($event)"
             [addressToUpdate]="addressToUpdate"
-            (closeAsideEvent)="toggleAccountAsidePane()"
+            (closeAsideEvent)="closeAccountAsidePane()"
             [addressConfiguration]="addressConfiguration"
             [localeData]="localeData"
             [commonLocaleData]="commonLocaleData"
@@ -534,8 +533,8 @@
             "
         >
         </create-address>
-    </ng-template>
-</div>
+    </div>
+</ng-template>
 
 <ng-template #searchTemplate let-show let-title="title" let-fieldName="fieldName" let-formControl="formControl">
     <div [hidden]="show">

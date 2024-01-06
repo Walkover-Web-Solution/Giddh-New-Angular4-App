@@ -40,7 +40,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
     /** Address configuration */
     @Input() public addressConfiguration: SettingsAsideConfiguration;
     /** Stores the address to be updated */
-    @Input() public addressToUpdate: any;
+    @Input() public addressToUpdate: any = null;
     /** Stores the branch to be updated */
     @Input() public branchToUpdate: any;
     /** Stores the address to be updated */
@@ -60,6 +60,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
     @Input() public hideLinkEntity: boolean = true;
     /** List of entities which can be archived */
     public entityArchived: string[] = ["BRANCH", "WAREHOUSE"];
+    public selectedEntity: any[] = [];
 
     constructor(
         private formBuilder: UntypedFormBuilder,
@@ -175,7 +176,11 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
             if (this.addressForm?.dirty) {
                 this.pageLeaveUtilityService.addBrowserConfirmationDialog();
             }
-        });
+            console.log("result addressForm",result);            
+        });       
+        
+        console.log("addressConfiguration", this.addressConfiguration);
+        
     }
 
     /**
@@ -200,11 +205,21 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Update form control value on state select
+     *
+     * @param {*} event
+     * @memberof CreateAddressComponent
+     */
+    public selectState(event: any): void {
+        this.addressForm.get('state')?.patchValue(event.value);
+    }
+
+    /**
      * Unsubscribe from all listeners
      *
      * @memberof CreateAddressComponent
      */
-    public ngOnDestroy(): void {
+    public ngOnDestroy(): void {        
         this.destroyed$.next(true);
         this.destroyed$.complete();
         this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
@@ -312,10 +327,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
         }
         option.isDefault = !option.isDefault;
         if (option.isDefault) {
-            this.addressForm.get('linkedEntity')?.patchValue([
-                ...this.addressForm.get('linkedEntity')?.value,
-                option?.value
-            ]);
+            this.addressForm.get('linkedEntity')?.patchValue([...this.addressForm.get('linkedEntity')?.value,option?.value]);
         }
     }
 
@@ -326,9 +338,30 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
      * @memberof CreateAddressComponent
      */
     public selectEntity(option: any): void {
-        if (option.isDefault) {
+       if(option.value[0]?.alias){
+        console.log("option", option);
+        if(!this.selectedEntity.includes(option.value[option.value.length - 1]?.alias)){
+            this.selectedEntity.push(option.value[option.value.length - 1]?.alias);
+        }
+       }
+       if(option){
+            console.log("option - ",option);        
+            this.addressForm.get('linkedEntity')?.patchValue([...this.addressForm.get('linkedEntity')?.value,option.value[0]?.uniqueName]);
+            // console.log("this.addressForm",this.addressForm);
+            // console.log("addressConfiguration",this.addressConfiguration);            
+       }
+        
+        if (option?.isDefault) {
             option.isDefault = false;
         }
+    }
+
+    public removeItem(element:any): void{
+        console.log(element);
+        
+        this.selectedEntity =  this.selectedEntity.filter( item => item === element);
+        console.log("this.selectedEntity",this.selectedEntity);
+        
     }
 
     /**

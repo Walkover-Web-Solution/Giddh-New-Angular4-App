@@ -2,8 +2,7 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, TemplateRef, SimpleChanges, ViewChild } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
 import { select, Store } from '@ngrx/store';
-import { MatDialog } from '@angular/material/dialog';
-import { ModalDirective } from 'ngx-bootstrap/modal';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { combineLatest, ReplaySubject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
@@ -137,6 +136,9 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /*-- mat-table --*/
     displayedColumns: string[] = ['no', 'name', 'address', 'gstin', 'state', 'linked'];
+    private deleteAddressConfirmationModalRef: MatDialogRef<any>;
+    private asideAccountAsidePaneRef: MatDialogRef<any>;
+
 
     /** @ignore */
     constructor(
@@ -269,14 +271,8 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
     //     this.toggleAccountAsidePane();
     // }
     public openAddAndManage() {
-        this.dialog.open(this.asideAccountAsidePane, {
-            width: '1000px',
-            height: '100vh !important',
-            position: {
-                right: '0',
-                top: '0'
-            }
-        });
+        this.toggleAccountAsidePane();
+        
      }
 
     /**
@@ -285,16 +281,24 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof AddressSettingsComponent
      */
     public toggleAccountAsidePane(): void {
-        this.accountAsideMenuState = this.accountAsideMenuState === 'out' ? 'in' : 'out';
-        this.closeSidePane = false;
         this.isAddressChangeInProgress = false;
         this.isAddressChangeInProgressChange.emit(this.isAddressChangeInProgress);
-        this.closeSidePaneChange.emit(this.closeSidePane);
-        if (this.accountAsideMenuState === 'out') {
-            this.addressConfiguration.type = SettingsAsideFormType.CreateAddress;
-            this.addressToUpdate = null;
-        }
-        this.toggleBodyClass();
+        // this.closeSidePaneChange.emit(this.closeSidePane);
+        this.asideAccountAsidePaneRef =  this.dialog.open(this.asideAccountAsidePane, {
+            width: '1000px',
+            height: '100vh !important',
+            position: {
+                right: '0',
+                top: '0'
+            }
+        });
+        // this.toggleBodyClass();
+    }
+
+    public closeAccountAsidePane(): void{
+        this.asideAccountAsidePaneRef.close();
+        this.addressConfiguration.type = SettingsAsideFormType.CreateAddress;
+        this.addressToUpdate = null;
     }
 
     /**
@@ -305,6 +309,7 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
      */
     public saveAddress(form: any): void {
         this.saveNewAddress.emit(form);
+        this.asideAccountAsidePaneRef.close();
     }
 
     /**
@@ -316,6 +321,7 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
     public updateAddress(form: any): void {
         form.formValue['uniqueName'] = this.addressToUpdate?.uniqueName;
         this.updatedAddress.emit(form);
+        this.asideAccountAsidePaneRef.close();
     }
 
     /**
@@ -350,8 +356,11 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof AddressSettingsComponent
      */
     public handleUpdateAddress(address: any): void {
+        console.log("handleUpdateAddress", address);
+        
         this.addressConfiguration.type = SettingsAsideFormType.EditAddress;
         this.addressToUpdate = address;
+        this.toggleAccountAsidePane();
     }
 
     /**
@@ -485,8 +494,9 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
     //     this.deleteAddressConfirmationModal?.show();
     // }
 
-    public showConfirmationModal() {
-        this.dialog.open(this.deleteAddressConfirmationModal, {
+    public showConfirmationModal(address: any) {
+        this.selectedAddress = address;
+       this.deleteAddressConfirmationModalRef =  this.dialog.open(this.deleteAddressConfirmationModal, {
             panelClass: 'modal-dialog',
             width: '1000px',
         });
@@ -503,7 +513,7 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
         } else {
             this.handleDeleteAddress(this.selectedAddress);
         }
-        // this.deleteAddressConfirmationModal.hide();
+        this.deleteAddressConfirmationModalRef.close();
     }
 
     /**

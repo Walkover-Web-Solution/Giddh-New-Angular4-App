@@ -31,7 +31,7 @@
                                         [label]="localeData?.digits_after_decimal"
                                         [options]="decimalDigitSource"
                                         [placeholder]="commonLocaleData?.app_select_type"
-                                        (selected)="
+                                        (selectedOption)="
                                             profileData.balanceDecimalPlaces = $event.value;
                                             profileUpdated('balanceDecimalPlaces')
                                         "
@@ -46,7 +46,7 @@
                                         [label]="localeData?.number_system_label"
                                         [options]="numberSystemSource"
                                         [placeholder]="commonLocaleData?.app_select_type"
-                                        (selected)="
+                                        (selectedOption)="
                                             profileData.balanceDisplayFormat = $event.value;
                                             profileUpdated('balanceDisplayFormat')
                                         "
@@ -98,7 +98,7 @@
                                         [cssClass]="'language-selection'"
                                         [options]="translationLocales"
                                         [placeholder]="localeData?.select_language"
-                                        (selected)="activeLocale = $event.value; selectLocale($event)"
+                                        (selectedOption)="activeLocale = $event.value; selectLocale($event)"
                                         [isFilterEnabled]="true"
                                         [name]="'activeLocale'"
                                     ></dropdown-field>
@@ -116,17 +116,6 @@
                                         [name]="'activeTheme'"
                                         (selectedOption)="setActiveTheme($event)"
                                     ></dropdown-field>
-                                </div>
-                            </div>
-                            <div class="col-12 col-sm-6 pd-r05">
-                                <div class="form-group">
-                                    <dropdown-field
-                                        [label]="localeData?.inventory_type"
-                                        [name]="radio - group"
-                                        [placeholder]="localeData?.select_inventory"
-                                        [options]="inventoryType"
-                                    >
-                                    </dropdown-field>
                                 </div>
                             </div>
                         </div>

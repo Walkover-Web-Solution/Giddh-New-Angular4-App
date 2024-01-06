@@ -62,8 +62,8 @@
                     </div>
                 </div>
             </div>
-            <div class="row pd-b1" *ngIf="organizationType === 'COMPANY' && voucherApiVersion === 2">
-                <div class="col-lg-3 col-md-6 col-sm-12 col-lg-3 col-xl-2 d-flex align-items-center">
+            <div class="row pd-b1 mt-2  " *ngIf="organizationType === 'COMPANY' && voucherApiVersion === 2">
+                <!-- <div class="col-lg-3 col-md-6 col-sm-12 col-lg-3 col-xl-2 d-flex align-items-center">
                     <label class="font-15">{{ localeData?.portal_domain }}</label>
                 </div>
                 <div class="col-lg-4 col-md-6 col-sm-12 col-lg-4 col-xl-3">
@@ -84,15 +84,31 @@
                             />
                         </div>
                     </div>
+                </div> -->
+                <div class="col-md-12 col-sm-12 col-lg-5 col-xl-4">
+                    <input-field
+                        [name]="'portalDomain'"
+                        [cssClass]="{
+                            'has-error': !isValidDomain,
+                            'has-success': isValidDomain
+                        }"
+                        [max]="50"
+                        [(ngModel)]="profileData.portalDomain"
+                        (ngModelChange)="checkPortalDomain(profileData.portalDomain)"
+                        [type]="'text'"
+                        [label]="localeData?.portal_domain"
+                        #domain
+                >
+                </input-field>
                 </div>
             </div>
             <div class="row" *ngIf="organizationType === 'COMPANY' && voucherApiVersion === 2">
                 <div class="col-lg-3 col-md-6 col-sm-12 col-lg-3 col-xl-2 d-flex align-items-center">
                     <label class="font-15">{{localeData?.portal_url}}</label>
                 </div>
-                <div class="col-lg-4 col-md-6 col-sm-12 col-lg-4 col-xl-3">
+                <div class="col-md-6 col-sm-12 col-lg-3 col-xl-2">
                     <div class="form-group mb-0">
-                        <div class="input-group align-items-center">
+                        <div class="d-flex align-items-start">
                             <a class="portal-url" [href]="portalUrl + profileData.portalDomain" target="_blank"
                                 >{{ portalUrl }}{{ profileData.portalDomain }}</a
                             >

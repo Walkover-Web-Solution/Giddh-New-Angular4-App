@@ -39,3 +39,16 @@ body {
         }
     }
 }
+
+body {
+    &.on-setting-page{
+        .mat-mdc-option{
+            &.mdc-list-item{
+                align-items: flex-start;
+            }
+        }
+        .mdc-list-item__primary-text{
+            width: 100%;
+        }
+    }
+}
