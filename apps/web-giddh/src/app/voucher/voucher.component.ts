@@ -3159,18 +3159,18 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 }
                 if (this.discountObj) {
                     if (this.discountObj?.discountType === 'FIX_AMOUNT') {
-                        entry['discountFixedValueModal'] = this.discountObj?.discount ? this.discountObj?.discount : 0;
+                        entry.discountFixedValueModal = this.discountObj?.discount ? this.discountObj?.discount : 0;
                         entry.discountSum = this.discountObj?.discount ? this.discountObj?.discount : 0;
-                        entry['discountPercentageModal'] = 0;
+                        entry.discountPercentageModal = 0;
                     } else {
-                        entry['discountFixedValueModal'] = 0;
+                        entry.discountFixedValueModal = 0;
                     }
                     if (this.discountObj?.discountType === 'PERCENTAGE') {
-                        entry['discountPercentageModal'] = this.discountObj?.discount ? this.discountObj?.discount : 0;
+                        entry.discountPercentageModal = this.discountObj?.discount ? this.discountObj?.discount : 0;
                         entry.discountSum = this.discountObj?.discount ? this.discountObj?.discount : 0;
-                        entry['discountFixedValueModal'] = 0;
+                        entry.discountFixedValueModal = 0;
                     } else {
-                        entry['discountPercentageModal'] = 0;
+                        entry.discountPercentageModal = 0;
                     }
                 } else if (!entry['initiallyCall']) {
                     entry.discounts = entry.discounts.map(item => {
@@ -3178,13 +3178,13 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         return item;
                     });
 
-                    entry['discountFixedValueModal'] = 0;
-                    entry['discountPercentageModal'] = 0;
+                    entry.discountFixedValueModal = 0;
+                    entry.discountPercentageModal = 0;
                     entry.discountSum = 0;
 
                     trx?.stockDetails?.variant?.unitRates?.forEach(unitRate => {
                         let matchedUnit = unitRate?.stockUnitUniqueName === trx?.stockUnit;
-                        if (matchedUnit && this.isBulkEntryInProgress) {
+                        if (matchedUnit && !this.isBulkEntryInProgress) {
                             trx.rate = Number((unitRate.rate / this.exchangeRate).toFixed(this.highPrecisionRate));
                             trx.quantity = trx?.stockDetails?.variant?.variantDiscount?.quantity || trx.quantity;
                         }
@@ -3255,31 +3255,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                             }
                             return item;
                         });
-
-                        if (discount?.type === 'FIX_AMOUNT') {
-                            entry['discountFixedValueModal'] = discount.value ? discount.value : this.discountObj?.discount;
-                            entry.discountSum = discount.value ? discount.value : this.discountObj?.discount;
-                            entry['discountPercentageModal'] = 0;
-                        }
-                        if (discount?.type === 'PERCENTAGE') {
-                            entry['discountPercentageModal'] = discount.value ? discount.value : this.discountObj?.discount;
-                            entry.discountSum = discount.value ? discount.value : this.discountObj?.discount;
-                            entry['discountFixedValueModal'] = 0;
-                        }
                         this.calculateStockEntryAmount(trx);
                         entry['initiallyCall'] = true;
                     } else {
-                        if (discount?.type === 'FIX_AMOUNT') {
-                            entry['discountFixedValueModal'] = 0;
-                            entry.discountSum = 0;
-                            trx.quantity = 1;
-                        }
-                        if (discount?.type === 'PERCENTAGE') {
-                            entry['discountPercentageModal'] = 0;
-                            entry.discountSum = 0;
-                            trx.quantity = 1;
-                        }
-
                         if (event && event.discount && event.isActive) {
                             this.accountAssignedApplicableDiscounts.forEach(item => {
                                 if (item && event.discount && item.uniqueName === event.discount.discountUniqueName) {
@@ -3842,7 +3820,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         transaction.sacNumberExists = false;
         transaction.hsnNumber = null;
 
-        const isMrpDiscountInclusive = !variant?.discountExclusive && variant?.unitRates?.filter(ur => ur.stockUnitUniqueName === transaction.stockUnit);
+        const isMrpDiscountInclusive = !variant?.variantDiscount?.discountExclusive && variant?.unitRates?.filter(ur => ur.stockUnitUniqueName === transaction.stockUnit);
         if (isMrpDiscountInclusive?.length) {
             if (!isBulkItem) {
                 transaction.rate = Number((isMrpDiscountInclusive[0].rate / this.exchangeRate).toFixed(this.highPrecisionRate));
@@ -3854,9 +3832,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 item.isActive = false;
                 return item;
             });
-
-            entry['discountFixedValueModal'] = 0;
-            entry['discountPercentageModal'] = 0;
+            entry.discountFixedValueModal = 0;
+            entry.discountPercentageModal = 0;
             entry.discountSum = 0;
             this.applyMrpDiscount(transaction, entry, false);
         }
