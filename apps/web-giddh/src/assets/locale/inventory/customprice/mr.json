@@ -10,5 +10,6 @@
     "invaild_form_msg": "कृपया किंमत, प्रमाण किंवा सूट यापैकी कोणतेही फील्ड भरा.",
     "inclusiveExclusiveTooltipMessage": "किंमत करांसहित/अतिरिक्त आहे",
     "quantity":"प्रमाण",
-    "select_discount": "सवलत निवडा"
+    "select_discount": "सवलत निवडा",
+    "invaild_quantity": "प्रमाण 0 पेक्षा जास्त असावे"
 }

@@ -10,5 +10,6 @@
     "invaild_form_msg": "Please fill any of the fields from price, quantity or discount.",
     "inclusiveExclusiveTooltipMessage": "The price is inclusive/exclusive of tax.",
     "quantity":"Qty",
-    "select_discount": "Select Discount"
+    "select_discount": "Select Discount",
+    "invaild_quantity": "Quantity should be more than 0"
 }
