@@ -398,7 +398,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                                 this.updateDiscount(stockUniqueName, variantControl.variantUniqueName.value, variant);
                             });
                             variantControl.quantity.valueChanges.pipe(debounceTime(400), takeUntil(this.destroyed$)).subscribe(quantityValue => {
-                                if (quantityValue == 0 && quantityValue !== "") {
+                                if (quantityValue <= 0 && quantityValue !== "") {
                                     this.toaster.warningToast(this.localeData?.invaild_quantity);
                                 } else {
                                     const stockUniqueName = (this.discountForm.get('discountInfo') as FormArray).at(index).get('stockUniqueName').value;
@@ -645,21 +645,21 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
         const discountFormValues = cloneDeep(this.discountForm.value);
         const stockUniqueName = discountFormValues.discountInfo[stockFormArrayIndex].stockUniqueName;
         let checkMandatory = discountFormValues.discountInfo[stockFormArrayIndex].variants.some(item => (item.discounts !== null || item.price !== null || item.quantity !== null));
-        let quantityIsNotEqualToZero: boolean = false;
+        let IsQuantityInvaild: boolean = false;
         discountFormValues.discountInfo = discountFormValues.discountInfo[stockFormArrayIndex]?.variants?.map(variant => {
             if (variant.discounts === null) {
                 variant.discounts = [];
             }
-            if (variant.quantity == 0) {
-                quantityIsNotEqualToZero = true;
+            if (variant.quantity <= 0) {
+                IsQuantityInvaild = true;
                 checkMandatory = false;
             }
-            return this.filterKeys(variant, this.variantDesiredKeys)
+            return this.filterKeys(variant, this.variantDesiredKeys);
         });
 
-        if (!checkMandatory && quantityIsNotEqualToZero) {
+        if (!checkMandatory && IsQuantityInvaild) {
             this.isStockLoading = false;
-            this.toaster.warningToast(quantityIsNotEqualToZero ? this.localeData?.invaild_quantity : this.localeData?.invaild_form_msg);
+            this.toaster.warningToast(IsQuantityInvaild ? this.localeData?.invaild_quantity : this.localeData?.invaild_form_msg);
             return;
         } else {
             this.inventoryService.createDiscount(stockUniqueName, discountFormValues).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
@@ -684,7 +684,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                             this.updateDiscount(stockUniqueName, variantControl.variantUniqueName.value, variant);
                         });
                         variantControl.quantity.valueChanges.pipe(debounceTime(400), takeUntil(this.destroyed$)).subscribe(quantityValue => {
-                            if (quantityValue == 0 && quantityValue !== "") {
+                            if (quantityValue <= 0 && quantityValue !== "") {
                                 this.toaster.warningToast(this.localeData?.invaild_quantity);
                             } else {
                                 const stockUniqueName = (this.discountForm.get('discountInfo') as FormArray).at(stockFormArrayIndex).get('stockUniqueName').value;
