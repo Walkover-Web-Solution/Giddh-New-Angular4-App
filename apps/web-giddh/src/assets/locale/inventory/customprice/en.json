@@ -7,8 +7,9 @@
     "delete_message": "Do you want to delete?",
     "already_added_msg": "This [TYPE] is already added",
     "remove_item_msg": "[TYPE] removed successfully.",
-    "invaild_form_msg": "Please fill any of the fields from price, quantity or discount.",
+    "invalid_form_msg": "Please fill any of the fields from price, quantity or discount.",
     "inclusiveExclusiveTooltipMessage": "The price is inclusive/exclusive of tax.",
     "quantity":"Qty",
-    "select_discount": "Select Discount"
+    "select_discount": "Select Discount",
+    "invalid_quantity": "Quantity should be more than 0"
 }

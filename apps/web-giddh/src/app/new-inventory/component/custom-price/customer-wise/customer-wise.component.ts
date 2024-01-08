@@ -398,9 +398,13 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                                 this.updateDiscount(stockUniqueName, variantControl.variantUniqueName.value, variant);
                             });
                             variantControl.quantity.valueChanges.pipe(debounceTime(400), takeUntil(this.destroyed$)).subscribe(quantityValue => {
-                                const stockUniqueName = (this.discountForm.get('discountInfo') as FormArray).at(index).get('stockUniqueName').value;
-                                let variant = { quantity: quantityValue };
-                                this.updateDiscount(stockUniqueName, variantControl.variantUniqueName.value, variant);
+                                if (quantityValue && +quantityValue <= 0) {
+                                    this.toaster.warningToast(this.localeData?.invalid_quantity);
+                                } else {
+                                    const stockUniqueName = (this.discountForm.get('discountInfo') as FormArray).at(index).get('stockUniqueName').value;
+                                    let variant = { quantity: quantityValue };
+                                    this.updateDiscount(stockUniqueName, variantControl.variantUniqueName.value, variant);
+                                }
                             });
                             variantControl.discountExclusive.valueChanges.pipe(debounceTime(400), takeUntil(this.destroyed$)).subscribe(discountExclusiveValue => {
                                 const stockUniqueName = (this.discountForm.get('discountInfo') as FormArray).at(index).get('stockUniqueName').value;
@@ -557,7 +561,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                 let stockData = cloneDeep(this.variantsWithoutDiscount);
                 this.variantsWithoutDiscount = [];
                 this.variantsWithoutDiscount = stockData;
-                
+
                 stock.removeAt(variantFormArrayIndex);
                 const deletedMessage = this.localeData?.remove_item_msg?.replace('[TYPE]', type.toUpperCase());
                 this.toaster.successToast(deletedMessage);
@@ -640,18 +644,22 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
         this.isStockLoading = true;
         const discountFormValues = cloneDeep(this.discountForm.value);
         const stockUniqueName = discountFormValues.discountInfo[stockFormArrayIndex].stockUniqueName;
-        const checkMandatory = discountFormValues.discountInfo[stockFormArrayIndex].variants.some(item => (item.discounts !== null || item.price !== null || item.quantity !== null));
-
+        let checkMandatory = discountFormValues.discountInfo[stockFormArrayIndex].variants.some(item => (item.discounts !== null || item.price !== null || item.quantity !== null));
+        let isQuantityInvalid: boolean = false;
         discountFormValues.discountInfo = discountFormValues.discountInfo[stockFormArrayIndex]?.variants?.map(variant => {
             if (variant.discounts === null) {
                 variant.discounts = [];
             }
-            return this.filterKeys(variant, this.variantDesiredKeys)
+            if (variant.quantity <= 0) {
+                isQuantityInvalid = true;
+                checkMandatory = false;
+            }
+            return this.filterKeys(variant, this.variantDesiredKeys);
         });
 
-        if (!checkMandatory) {
+        if (!checkMandatory && isQuantityInvalid) {
             this.isStockLoading = false;
-            this.toaster.warningToast(this.localeData?.invaild_form_msg);
+            this.toaster.warningToast(isQuantityInvalid ? this.localeData?.invalid_quantity : this.localeData?.invalid_form_msg);
             return;
         } else {
             this.inventoryService.createDiscount(stockUniqueName, discountFormValues).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
@@ -676,9 +684,13 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                             this.updateDiscount(stockUniqueName, variantControl.variantUniqueName.value, variant);
                         });
                         variantControl.quantity.valueChanges.pipe(debounceTime(400), takeUntil(this.destroyed$)).subscribe(quantityValue => {
-                            const stockUniqueName = (this.discountForm.get('discountInfo') as FormArray).at(stockFormArrayIndex).get('stockUniqueName').value;
-                            let variant = { quantity: quantityValue };
-                            this.updateDiscount(stockUniqueName, variantControl.variantUniqueName.value, variant);
+                            if (quantityValue && +quantityValue <= 0) {
+                                this.toaster.warningToast(this.localeData?.invalid_quantity);
+                            } else {
+                                const stockUniqueName = (this.discountForm.get('discountInfo') as FormArray).at(stockFormArrayIndex).get('stockUniqueName').value;
+                                let variant = { quantity: quantityValue };
+                                this.updateDiscount(stockUniqueName, variantControl.variantUniqueName.value, variant);
+                            }
                         });
                         variantControl.discountExclusive.valueChanges.pipe(debounceTime(400), takeUntil(this.destroyed$)).subscribe(discountExclusiveValue => {
                             const stockUniqueName = (this.discountForm.get('discountInfo') as FormArray).at(stockFormArrayIndex).get('stockUniqueName').value;
