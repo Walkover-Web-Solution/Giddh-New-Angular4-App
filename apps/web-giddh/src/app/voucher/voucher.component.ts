@@ -3184,7 +3184,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
                     trx?.stockDetails?.variant?.unitRates?.forEach(unitRate => {
                         let matchedUnit = unitRate?.stockUnitUniqueName === trx?.stockUnit;
-                        if (matchedUnit && this.isBulkEntryInProgress) {
+                        if (matchedUnit && !this.isBulkEntryInProgress) {
                             trx.rate = Number((unitRate.rate / this.exchangeRate).toFixed(this.highPrecisionRate));
                             trx.quantity = trx?.stockDetails?.variant?.variantDiscount?.quantity || trx.quantity;
                         }
@@ -3255,31 +3255,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                             }
                             return item;
                         });
-
-                        if (discount?.type === 'FIX_AMOUNT') {
-                            entry['discountFixedValueModal'] = discount.value ? discount.value : this.discountObj?.discount;
-                            entry.discountSum = discount.value ? discount.value : this.discountObj?.discount;
-                            entry['discountPercentageModal'] = 0;
-                        }
-                        if (discount?.type === 'PERCENTAGE') {
-                            entry['discountPercentageModal'] = discount.value ? discount.value : this.discountObj?.discount;
-                            entry.discountSum = discount.value ? discount.value : this.discountObj?.discount;
-                            entry['discountFixedValueModal'] = 0;
-                        }
                         this.calculateStockEntryAmount(trx);
                         entry['initiallyCall'] = true;
                     } else {
-                        if (discount?.type === 'FIX_AMOUNT') {
-                            entry['discountFixedValueModal'] = 0;
-                            entry.discountSum = 0;
-                            trx.quantity = 1;
-                        }
-                        if (discount?.type === 'PERCENTAGE') {
-                            entry['discountPercentageModal'] = 0;
-                            entry.discountSum = 0;
-                            trx.quantity = 1;
-                        }
-
                         if (event && event.discount && event.isActive) {
                             this.accountAssignedApplicableDiscounts.forEach(item => {
                                 if (item && event.discount && item.uniqueName === event.discount.discountUniqueName) {
