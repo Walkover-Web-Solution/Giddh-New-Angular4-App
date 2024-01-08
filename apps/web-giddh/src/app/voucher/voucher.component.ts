@@ -3159,18 +3159,18 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 }
                 if (this.discountObj) {
                     if (this.discountObj?.discountType === 'FIX_AMOUNT') {
-                        entry['discountFixedValueModal'] = this.discountObj?.discount ? this.discountObj?.discount : 0;
+                        entry.discountFixedValueModal = this.discountObj?.discount ? this.discountObj?.discount : 0;
                         entry.discountSum = this.discountObj?.discount ? this.discountObj?.discount : 0;
-                        entry['discountPercentageModal'] = 0;
+                        entry.discountPercentageModal = 0;
                     } else {
-                        entry['discountFixedValueModal'] = 0;
+                        entry.discountFixedValueModal = 0;
                     }
                     if (this.discountObj?.discountType === 'PERCENTAGE') {
-                        entry['discountPercentageModal'] = this.discountObj?.discount ? this.discountObj?.discount : 0;
+                        entry.discountPercentageModal = this.discountObj?.discount ? this.discountObj?.discount : 0;
                         entry.discountSum = this.discountObj?.discount ? this.discountObj?.discount : 0;
-                        entry['discountFixedValueModal'] = 0;
+                        entry.discountFixedValueModal = 0;
                     } else {
-                        entry['discountPercentageModal'] = 0;
+                        entry.discountPercentageModal = 0;
                     }
                 } else if (!entry['initiallyCall']) {
                     entry.discounts = entry.discounts.map(item => {
@@ -3178,8 +3178,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         return item;
                     });
 
-                    entry['discountFixedValueModal'] = 0;
-                    entry['discountPercentageModal'] = 0;
+                    entry.discountFixedValueModal = 0;
+                    entry.discountPercentageModal = 0;
                     entry.discountSum = 0;
 
                     trx?.stockDetails?.variant?.unitRates?.forEach(unitRate => {
@@ -3832,9 +3832,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 item.isActive = false;
                 return item;
             });
-
-            entry['discountFixedValueModal'] = 0;
-            entry['discountPercentageModal'] = 0;
+            entry.discountFixedValueModal = 0;
+            entry.discountPercentageModal = 0;
             entry.discountSum = 0;
             this.applyMrpDiscount(transaction, entry, false);
         }

@@ -1663,18 +1663,18 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                 }
                 if (this.discountObj) {
                     if (this.discountObj?.discountType === 'FIX_AMOUNT') {
-                        entry['discountFixedValueModal'] = this.discountObj?.discount ? this.discountObj?.discount : 0;
+                        entry.discountFixedValueModal = this.discountObj?.discount ? this.discountObj?.discount : 0;
                         entry.discountSum = this.discountObj?.discount ? this.discountObj?.discount : 0;
-                        entry['discountPercentageModal'] = 0;
+                        entry.discountPercentageModal = 0;
                     } else {
-                        entry['discountFixedValueModal'] = 0;
+                        entry.discountFixedValueModal = 0;
                     }
                     if (this.discountObj?.discountType === 'PERCENTAGE') {
-                        entry['discountPercentageModal'] = this.discountObj?.discount ? this.discountObj?.discount : 0;
+                        entry.discountPercentageModal = this.discountObj?.discount ? this.discountObj?.discount : 0;
                         entry.discountSum = this.discountObj?.discount ? this.discountObj?.discount : 0;
-                        entry['discountFixedValueModal'] = 0;
+                        entry.discountFixedValueModal = 0;
                     } else {
-                        entry['discountPercentageModal'] = 0;
+                        entry.discountPercentageModal = 0;
                     }
                 } else if (!entry['initiallyCall']) {
                     entry.discounts = entry.discounts.map(item => {
@@ -1682,8 +1682,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                         return item;
                     });
 
-                    entry['discountFixedValueModal'] = 0;
-                    entry['discountPercentageModal'] = 0;
+                    entry.discountFixedValueModal = 0;
+                    entry.discountPercentageModal = 0;
                     entry.discountSum = 0;
 
                     trx?.stockDetails?.variant?.unitRates?.forEach(unitRate => {
@@ -1737,25 +1737,25 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                         });
 
                         if (discount?.type === 'FIX_AMOUNT') {
-                            entry['discountFixedValueModal'] = discount.value ? discount.value : this.discountObj?.discount;
+                            entry.discountFixedValueModal = discount.value ? discount.value : this.discountObj?.discount;
                             entry.discountSum = discount.value ? discount.value : this.discountObj?.discount;
-                            entry['discountPercentageModal'] = 0;
+                            entry.discountPercentageModal = 0;
                         }
                         if (discount?.type === 'PERCENTAGE') {
-                            entry['discountPercentageModal'] = discount.value ? discount.value : this.discountObj?.discount;
+                            entry.discountPercentageModal = discount.value ? discount.value : this.discountObj?.discount;
                             entry.discountSum = discount.value ? discount.value : this.discountObj?.discount;
-                            entry['discountFixedValueModal'] = 0;
+                            entry.discountFixedValueModal = 0;
                         }
                         this.calculateStockEntryAmount(trx);
                         entry['initiallyCall'] = true;
                     } else {
                         if (discount?.type === 'FIX_AMOUNT') {
-                            entry['discountFixedValueModal'] = 0;
+                            entry.discountFixedValueModal = 0;
                             entry.discountSum = 0;
                             trx.quantity = 1;
                         }
                         if (discount?.type === 'PERCENTAGE') {
-                            entry['discountPercentageModal'] = 0;
+                            entry.discountPercentageModal = 0;
                             entry.discountSum = 0;
                             trx.quantity = 1;
                         }
@@ -3882,8 +3882,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                 return item;
             });
 
-            entry['discountFixedValueModal'] = 0;
-            entry['discountPercentageModal'] = 0;
+            entry.discountFixedValueModal = 0;
+            entry.discountPercentageModal = 0;
             entry.discountSum = 0;
             this.applyMrpDiscount(transaction, entry, false);
         }
