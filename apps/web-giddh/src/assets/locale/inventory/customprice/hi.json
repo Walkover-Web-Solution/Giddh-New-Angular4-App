@@ -10,5 +10,6 @@
     "invaild_form_msg": "कृपया मूल्य, मात्रा या छूट में से कोई भी फ़ील्ड भरें।",
     "inclusiveExclusiveTooltipMessage": "कीमत कर सहित/अनन्य है।",
     "quantity":"मात्रा",
-    "select_discount": "छूट का चयन करें"
+    "select_discount": "छूट का चयन करें",
+    "invaild_quantity": "मात्रा 0 से अधिक होनी चाहिए"
 }
