@@ -60,7 +60,8 @@ export class GstReconcileService {
             ?.replace(':action', encodeURIComponent(model.action))
             ?.replace(':page', encodeURIComponent(model.page?.toString()))
             ?.replace(':count', encodeURIComponent(model.count?.toString()))
-            ?.replace(':refresh', model.refresh?.toString());
+            ?.replace(':refresh', model.refresh?.toString())
+            ?.replace(':gstReturnType', model.gstReturnType?.toString());
 
         if (model.monthYear) {
             url = `${url}&monthYear=${model.monthYear}`;
@@ -291,7 +292,7 @@ export class GstReconcileService {
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<any, FilingStatusListRequest>(e)));
     }
-    
+
     /**
      * Get GST Return Filling Reference Id Status
      *
