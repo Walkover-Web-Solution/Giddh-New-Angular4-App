@@ -404,9 +404,9 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                     variant.variantUnitCode = variantUnitCode;
                     variant.isTemproraryVariant = false;
 
-                    if (responseData?.body?.results[index]?.variants[variantIndex]?.discounts[0]?.discount?.uniqueName) {
-                        variant.discounts = [{ uniqueName: responseData?.body?.results[index].variants[variantIndex]?.discounts[0]?.discount?.uniqueName }];
-                        variant.discountName = responseData?.body?.results[index].variants[variantIndex]?.discounts[0]?.discount?.name;
+                    if (this.getAllDiscountApiResponse?.body?.results[index]?.variants[variantIndex]?.discounts[0]?.discount?.uniqueName) {
+                        variant.discounts = [{ uniqueName: this.getAllDiscountApiResponse?.body?.results[index].variants[variantIndex]?.discounts[0]?.discount?.uniqueName }];
+                        variant.discountName = this.getAllDiscountApiResponse?.body?.results[index].variants[variantIndex]?.discounts[0]?.discount?.name;
                     } else {
                         variant.discounts = null;
                     }
