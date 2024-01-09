@@ -66,17 +66,32 @@
                             </div>
                             <ng-container *ngIf="currentUserStocks?.length && !isStockLoading">
                                 <div class="stocks-wrapper mr-t2 overflow-auto" [formGroup]="discountForm">
+                                    <ng-container *ngIf="true">
+                                        <div class="save-discount-header position-fixed px-4">
+                                            <div class="d-flex justify-content-space-between align-items-center h-100">
+                                                <div>
+                                                    Some Message Here
+                                                </div>
+                                                <div>
+                                                    <button mat-raised-button (click)="saveDiscount(i)"class="mr-3">
+                                                        {{ commonLocaleData?.app_save }}
+                                                    </button>
+                                                    <button mat-raised-button (click)="discardChanges()">Discard</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </ng-container>
                                     <ng-container
                                         *ngFor="let discountCollection of discountForm?.get('discountInfo')['controls']; let i = index"
                                         formArrayName="discountInfo">
                                         <ng-container *ngIf="discountCollection?.get('hasVariants')?.value">
-                                            <div class="table-inventory pd-t15">
+                                            <div class="table-inventory">
                                                 <ng-container [formGroupName]="i">
-                                                    <div class="mr-t05 mr-b15">
-                                                        <table class="table">
+                                                    <div>
+                                                        <table class="table mb-0">
                                                             <thead>
                                                                 <tr>
-                                                                    <td colspan="5" class="pl-0">
+                                                                    <td colspan="4" class="pl-0">
                                                                         <p class="inventory-head">
                                                                             <strong>
                                                                                 {{
@@ -85,21 +100,12 @@
                                                                             </strong>
                                                                         </p>
                                                                     </td>
-                                                                    <td class="pr-0 variant-delete text-right">
-                                                                        <button 
-                                                                            mat-stroked-button 
-                                                                            color="primary" 
-                                                                            (click)="saveDiscount(i)"
-                                                                        >{{ commonLocaleData?.app_save }}
-                                                                        </button>
-                                                                    </td>
-                                                                    <td class="pr-0 variant-delete text-right">
+                                                                    <td class="variant-delete text-right">
                                                                         <span>
-                                                                            <button 
-                                                                                mat-stroked-button 
+                                                                            <button mat-stroked-button
                                                                                 class="delete-icon"
-                                                                                (click)="confirmationPopup( discountCollection?.get('stockUniqueName')?.value, 'stock', discountCollection?.get('isTempStock')?.value, i)"
-                                                                            ><i class="icon-trash"></i>
+                                                                                (click)="confirmationPopup( discountCollection?.get('stockUniqueName')?.value, 'stock', discountCollection?.get('isTempStock')?.value, i)"><i
+                                                                                    class="icon-trash"></i>
                                                                             </button>
                                                                         </span>
                                                                     </td>
@@ -126,27 +132,23 @@
                                                                                 (change)="updateDiscountInVariant(variant)"></input-field>
                                                                         </td>
                                                                         <td class="variant-tax-toggle">
-                                                                            <mat-slide-toggle color="primary"
-                                                                                class="position-relative position-center"
-                                                                                [name]="'discountExclusive' + i + '-' + j"
-                                                                                formControlName="discountExclusive">
-                                                                                <span
-                                                                                    class="d-flex align-items-center column-gap5">
-                                                                                    <span>
-                                                                                        {{
-                                                                                        variant?.get('discountExclusive')?.value
-                                                                                        ?
-                                                                                        localeData?.exclusive :
-                                                                                        localeData?.inclusive
-                                                                                        }}
-                                                                                    </span>
-                                                                                    <span class="icon-info"
-                                                                                        [matTooltip]="localeData?.inclusiveExclusiveTooltipMessage"
-                                                                                        matTooltipPosition="above"></span>
-                                                                                </span>
-                                                                            </mat-slide-toggle>
+                                                                            <div class="d-flex align-items-center column-gap1">
+                                                                                <mat-radio-group color="primary"
+                                                                                    [name]="'taxInclusive' + i + '-' + j"
+                                                                                    formControlName="taxInclusive">
+                                                                                    <mat-radio-button [value]="true">
+                                                                                        {{ localeData?.mrp }}
+                                                                                    </mat-radio-button>
+                                                                                    <mat-radio-button [value]="false">
+                                                                                        {{ commonLocaleData?.app_rate }}
+                                                                                    </mat-radio-button>
+                                                                                </mat-radio-group>
+                                                                                <span class="icon-info"
+                                                                                    [matTooltip]="localeData?.inclusiveExclusiveTooltipMessage"
+                                                                                    matTooltipPosition="above"></span>
+                                                                            </div>
                                                                         </td>
-                                                                        <td class="overflow-visible variant-discount">
+                                                                        <td class="overflow-visible variant-discount position-relative">
                                                                             <dropdown-field
                                                                                 [name]="'discount' + i + '-' + j"
                                                                                 [label]="commonLocaleData?.app_discount"
@@ -156,18 +158,7 @@
                                                                                 [defaultValue]="variant?.get('discountName')?.value">
                                                                             </dropdown-field>
                                                                         </td>
-                                                                        <td class="variant-quantity">
-                                                                            <input-field [placeholder]="'00'"
-                                                                                [name]="'quantity' + i + '-' + j"
-                                                                                formControlName="quantity"
-                                                                                [label]="localeData?.quantity"
-                                                                                [type]="'number'"
-                                                                                [matSuffix]="variant?.get('variantUnitCode')?.value"
-                                                                                [cssClass]="'text-right'"></input-field>
-                                                                        </td>
                                                                         <td class="variant-delete">
-                                                                        </td>
-                                                                        <td class="variant-delete pr-0">
                                                                             <div class="delete-show">
                                                                                 <button mat-stroked-button
                                                                                     [disabled]="discountCollection?.get('variants')?.value?.length < 2"
@@ -203,10 +194,10 @@
                                             </div>
                                         </ng-container>
                                         <ng-container *ngIf="!discountCollection?.get('hasVariants')?.value">
-                                            <div class="table-inventory pd-b1 pd-t1">
+                                            <div class="table-inventory">
 
                                                 <ng-container [formGroupName]="i">
-                                                    <div class="mr-t05 mr-b05">
+                                                    <div>
                                                         <table class="table mb-0 no-border">
                                                             <tbody>
                                                                 <tr *ngFor="let variant of discountCollection?.get('variants')['controls'];  let j = index"
@@ -220,8 +211,7 @@
 
                                                                         <td class="variant-price">
                                                                             <input-field [name]="'price' + i + '-' + j"
-                                                                                [placeholder]="'00'"
-                                                                                [min]="0"
+                                                                                [placeholder]="'00'" [min]="0"
                                                                                 [label]="localeData?.price"
                                                                                 [type]="'number'"
                                                                                 [cssClass]="'text-right'"
@@ -229,27 +219,23 @@
                                                                                 (change)="updateDiscountInVariant(variant)"></input-field>
                                                                         </td>
                                                                         <td class="variant-tax-toggle">
-                                                                            <mat-slide-toggle color="primary"
-                                                                                class="position-relative position-center"
-                                                                                [name]="'discountExclusive' + i + '-' + j"
-                                                                                formControlName="discountExclusive">
-                                                                                <span
-                                                                                    class="d-flex align-items-center column-gap5">
-                                                                                    <span>
-                                                                                        {{
-                                                                                        variant?.get('discountExclusive')?.value
-                                                                                        ?
-                                                                                        localeData?.exclusive :
-                                                                                        localeData?.inclusive
-                                                                                        }}
-                                                                                    </span>
-                                                                                    <span class="icon-info"
-                                                                                        [matTooltip]="localeData?.inclusiveExclusiveTooltipMessage"
-                                                                                        matTooltipPosition="above"></span>
-                                                                                </span>
-                                                                            </mat-slide-toggle>
+                                                                            <div class="d-flex align-items-center column-gap1">
+                                                                                <mat-radio-group color="primary"
+                                                                                    [name]="'taxInclusive' + i + '-' + j"
+                                                                                    formControlName="taxInclusive">
+                                                                                    <mat-radio-button [value]="true">
+                                                                                        {{ localeData?.mrp }}
+                                                                                    </mat-radio-button>
+                                                                                    <mat-radio-button [value]="false">
+                                                                                        {{ commonLocaleData?.app_rate }}
+                                                                                    </mat-radio-button>
+                                                                                </mat-radio-group>
+                                                                                <span class="icon-info"
+                                                                                    [matTooltip]="localeData?.inclusiveExclusiveTooltipMessage"
+                                                                                    matTooltipPosition="above"></span>
+                                                                            </div>                                                                           
                                                                         </td>
-                                                                        <td class="overflow-visible variant-discount">
+                                                                        <td class="overflow-visible variant-discount position-relative">
                                                                             <dropdown-field
                                                                                 [name]="'discount' + i + '-' + j"
                                                                                 [label]="commonLocaleData?.app_discount"
@@ -258,23 +244,8 @@
                                                                                 (selectedOption)="updateDiscountInVariant(variant, $event)"
                                                                                 [defaultValue]="variant?.get('discountName')?.value">
                                                                             </dropdown-field>
-                                                                        </td>
-                                                                        <td class="variant-quantity">
-                                                                            <input-field [placeholder]="'00'"
-                                                                                [name]="'quantity' + i + '-' + j"
-                                                                                formControlName="quantity"
-                                                                                [label]="localeData?.quantity"
-                                                                                [type]="'number'"
-                                                                                [min]="0"
-                                                                                [matSuffix]="variant?.get('variantUnitCode')?.value"
-                                                                                [cssClass]="'text-right'"></input-field>
-                                                                        </td>
-                                                                        <td class="variant-delete text-right px-0">
-                                                                            <button mat-stroked-button color="primary"
-                                                                                class="ml-auto"
-                                                                                (click)="saveDiscount(i)">{{ commonLocaleData?.app_save }}</button>
-                                                                        </td>
-                                                                        <td class="variant-delete px-0">
+                                                                        </td>                                                                        
+                                                                        <td class="variant-delete">
                                                                             <div class="delete-show">
                                                                                 <button mat-stroked-button
                                                                                     class="delete-icon"

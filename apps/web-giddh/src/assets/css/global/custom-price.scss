@@ -48,6 +48,13 @@
                     }
                 }
             }
+            .save-discount-header{
+                button{
+                    &.mdc-button{
+                        color: var(--color-giddh-blue) !important;
+                    }
+                }
+            }
         }
     }
 }
