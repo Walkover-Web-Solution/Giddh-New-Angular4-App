@@ -10,5 +10,7 @@
     "quantity":"Qty",
     "select_discount": "Select Discount",
     "invalid_quantity": "Quantity should be more than 0",
-    "mrp": "MRP"
+    "mrp": "MRP",
+    "discard": "Discard",
+    "unsaved_changes": "Unsaved changes"
 }

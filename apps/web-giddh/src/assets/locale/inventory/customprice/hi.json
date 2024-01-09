@@ -10,6 +10,7 @@
     "quantity":"मात्रा",
     "select_discount": "छूट का चयन करें",
     "invalid_quantity": "मात्रा 0 से अधिक होनी चाहिए",
-    "mrp": "एम आर पी"
-    
+    "mrp": "एम आर पी",
+    "discard": "छोड़ें",
+    "unsaved_changes": "असहेजणारे बदल"
 }

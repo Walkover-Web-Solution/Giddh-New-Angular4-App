@@ -52,6 +52,10 @@
                 button{
                     &.mdc-button{
                         color: var(--color-giddh-blue) !important;
+                        &.mat-mdc-outlined-button{
+                            color: var(--color-white) !important;
+                            border-color: var(--color-white) !important;
+                        }
                     }
                 }
             }

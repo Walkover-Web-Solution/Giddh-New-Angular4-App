@@ -67,16 +67,16 @@
                             <ng-container *ngIf="currentUserStocks?.length && !isStockLoading">
                                 <div class="stocks-wrapper mr-t2 overflow-auto" [formGroup]="discountForm">
                                     <ng-container *ngIf="true">
-                                        <div class="save-discount-header position-fixed px-4">
-                                            <div class="d-flex justify-content-space-between align-items-center h-100">
+                                        <div class="save-discount-header position-fixed pr-4">
+                                            <div class="d-flex justify-content-end align-items-center h-100">
+                                                <span class="position-center">
+                                                    {{ localeData?.unsaved_changes }}
+                                                </span>
                                                 <div>
-                                                    Some Message Here
-                                                </div>
-                                                <div>
-                                                    <button mat-raised-button (click)="saveDiscount(i)"class="mr-3">
+                                                    <button mat-stroked-button (click)="discardChanges()" class="mr-3">{{ localeData?.discard }}</button>
+                                                    <button mat-raised-button (click)="saveDiscount(i)">
                                                         {{ commonLocaleData?.app_save }}
                                                     </button>
-                                                    <button mat-raised-button (click)="discardChanges()">Discard</button>
                                                 </div>
                                             </div>
                                         </div>

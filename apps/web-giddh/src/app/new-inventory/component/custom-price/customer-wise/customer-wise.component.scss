@@ -62,19 +62,25 @@
                     min-height: calc(100vh - 152px);
                     padding-bottom: 140px;
 
+                    $header-giddh-logo-width: 200px;
                     .save-discount-header {
                         top: 0;
                         right: 0;
                         background-color: var(--color-primary-header-background);
                         color: var(--color-white);
-                        width: 70vw;
+                        width: calc(100vw - #{$header-giddh-logo-width});
                         height: 59px;
                         z-index: 990;
+
+                        .position-center{
+                            margin-right: calc(50% - #{$header-giddh-logo-width});
+                            transform: translateX(-50%);
+                        }
                     }
                 }
                 .table-inventory {
                     background: var(--color-white);
-                    border: 1px solid #dee2e6;
+                    border: 1px solid var(--color-grey-bootstrap-border);
                     margin: 6px 0;
                     border-radius: 4px;
                     width: max-content;
@@ -132,18 +138,17 @@
                                         @media (max-width: 1600px) {
                                             @include setWidth(150px);
                                         }
-                                        border-left: 1px solid var(--color-gray);
-                                        // &::before{
-                                        //     content: '';
-                                        //     height: 32px;
-                                        //     width: 1px;
-                                        //     display: inline-block;
-                                        //     background: var(--color-gray);
-                                        //     position: absolute;
-                                        //     top: 50%;
-                                        //     left: -2px;
-                                        //     transform: translateY(-50%);
-                                        // }
+                                        &::before{
+                                            content: '';
+                                            height: 50px;
+                                            width: 1px;
+                                            display: inline-block;
+                                            background: var(--color-grey-bootstrap-border);
+                                            position: absolute;
+                                            top: 50%;
+                                            left: -2px;
+                                            transform: translateY(-50%);
+                                        }
                                     }
                                     &.variant-quantity {
                                         @include setWidth(100px);

@@ -10,5 +10,7 @@
     "quantity":"प्रमाण",
     "select_discount": "सवलत निवडा",
     "invalid_quantity": "प्रमाण 0 पेक्षा जास्त असावे",
-    "mrp": "एमआरपी"
+    "mrp": "एमआरपी",
+    "discard": "टाका",
+    "unsaved_changes": "असहेजलेले बदल"
 }
