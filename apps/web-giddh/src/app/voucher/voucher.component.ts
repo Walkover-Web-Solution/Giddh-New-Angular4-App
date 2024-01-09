@@ -3075,17 +3075,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 taxPercentage += tax.amount;
             }
         });
-        if (trx?.applicableTaxes?.length > 0) {
-            let data: VoucherClass = cloneDeep(this.invFormData);
-            data.entries.forEach((entry: any, index: number) => {
-                const transaction = this.invFormData.entries[index].transactions[0];
-                if (transaction['applicableTaxes']?.length > 0) {
-                    transaction['requiredTax'] = false;
-                } else {
-                    transaction['requiredTax'] = true;
-                }
-            });
-        }
 
         if (trx?.applicableTaxes?.length > 0) {
             let data: VoucherClass = cloneDeep(this.invFormData);
@@ -3162,6 +3151,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         entry.discountFixedValueModal = this.discountObj?.discount ? this.discountObj?.discount : 0;
                         entry.discountSum = this.discountObj?.discount ? this.discountObj?.discount : 0;
                         entry.discountPercentageModal = 0;
+                        entry.discounts[0].isActive = true;
                     } else {
                         entry.discountFixedValueModal = 0;
                     }
@@ -3169,6 +3159,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         entry.discountPercentageModal = this.discountObj?.discount ? this.discountObj?.discount : 0;
                         entry.discountSum = this.discountObj?.discount ? this.discountObj?.discount : 0;
                         entry.discountFixedValueModal = 0;
+                        entry.discounts[0].isActive = true;
                     } else {
                         entry.discountPercentageModal = 0;
                     }
@@ -3186,7 +3177,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         let matchedUnit = unitRate?.stockUnitUniqueName === trx?.stockUnit;
                         if (matchedUnit && !this.isBulkEntryInProgress) {
                             trx.rate = Number((unitRate.rate / this.exchangeRate).toFixed(this.highPrecisionRate));
-                            trx.quantity = trx?.stockDetails?.variant?.variantDiscount?.quantity || trx.quantity;
                         }
                         this.calculateStockEntryAmount(trx);
                     });
@@ -3820,20 +3810,15 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         transaction.sacNumberExists = false;
         transaction.hsnNumber = null;
 
-        const isMrpDiscountInclusive = !variant?.variantDiscount?.discountExclusive && variant?.unitRates?.filter(ur => ur.stockUnitUniqueName === transaction.stockUnit);
-        if (isMrpDiscountInclusive?.length) {
+        const matchedUnit = variant?.unitRates?.filter(ur => ur.stockUnitUniqueName === transaction.stockUnit);
+        if (matchedUnit?.length) {
             if (!isBulkItem) {
-                transaction.rate = Number((isMrpDiscountInclusive[0].rate / this.exchangeRate).toFixed(this.highPrecisionRate));
-                transaction.quantity = variant?.variantDiscount?.quantity || transaction.quantity;
+                transaction.rate = Number((matchedUnit[0].rate / this.exchangeRate).toFixed(this.highPrecisionRate));
             }
-            transaction.taxInclusive = true;
-            isInclusiveEntry = true;
             entry.discounts = entry.discounts.map(item => {
                 item.isActive = false;
                 return item;
             });
-            entry.discountFixedValueModal = 0;
-            entry.discountPercentageModal = 0;
             entry.discountSum = 0;
             this.applyMrpDiscount(transaction, entry, false);
         }
@@ -3910,14 +3895,14 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
             if (isInclusiveEntry) {
                 setTimeout(() => {
-                    if (!isMrpDiscountInclusive?.length || !isMrpDiscountInclusive[0].rate) {
+                    if (!matchedUnit?.length || !matchedUnit[0].rate) {
                         // Set timeout is used as tax component is not rendered at the time control is reached here
                         transaction.rate = Number((transaction.stockList[0]?.rate / this.exchangeRate).toFixed(this.highPrecisionRate));
                     }
                     transaction.total = transaction.quantity * transaction.rate;
                     this.calculateTransactionValueInclusively(entry, transaction, false);
 
-                    if (isMrpDiscountInclusive?.length) {
+                    if (matchedUnit?.length) {
                         this.calculateStockEntryAmount(transaction);
                     }
                 });
@@ -4421,13 +4406,22 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 let lastIndex = -1;
                 let blankItemIndex = this.invFormData.entries?.findIndex(f => !f.transactions[0].accountUniqueName);
                 let isBlankItemInBetween;
+
+                let entry = new SalesEntryClass();
+                let entryDiscounts = this.generalService.getDiscountValues({
+                    discountAccountsDetails: entry.discounts ?? [],
+                    discountsList: this.discountsList
+                });
+
+                entry.discounts = entryDiscounts;
+
                 if (blankItemIndex > -1) {
                     lastIndex = blankItemIndex;
-                    this.invFormData.entries[lastIndex] = new SalesEntryClass();
+                    this.invFormData.entries[lastIndex] = entry;
                     isBlankItemInBetween = true;
                     isBlankItemPresent = true;
                 } else {
-                    this.invFormData.entries.push(new SalesEntryClass());
+                    this.invFormData.entries.push(entry);
                     lastIndex = this.invFormData.entries?.length - 1;
                     isBlankItemInBetween = false;
                 }

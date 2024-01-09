@@ -1666,6 +1666,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                         entry.discountFixedValueModal = this.discountObj?.discount ? this.discountObj?.discount : 0;
                         entry.discountSum = this.discountObj?.discount ? this.discountObj?.discount : 0;
                         entry.discountPercentageModal = 0;
+                        entry.discounts[0].isActive = true;
                     } else {
                         entry.discountFixedValueModal = 0;
                     }
@@ -1673,6 +1674,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                         entry.discountPercentageModal = this.discountObj?.discount ? this.discountObj?.discount : 0;
                         entry.discountSum = this.discountObj?.discount ? this.discountObj?.discount : 0;
                         entry.discountFixedValueModal = 0;
+                        entry.discounts[0].isActive = true;
                     } else {
                         entry.discountPercentageModal = 0;
                     }
@@ -1690,7 +1692,6 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                         let matchedUnit = unitRate?.stockUnitUniqueName === trx?.stockUnit;
                         if (matchedUnit && !this.isBulkEntryInProgress) {
                             trx.rate = Number((unitRate.rate / this.exchangeRate).toFixed(this.highPrecisionRate));
-                            trx.quantity = trx?.stockDetails?.variant?.variantDiscount?.quantity || trx.quantity;
                         }
                         this.calculateStockEntryAmount(trx);
                     });
@@ -1715,14 +1716,14 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     }
 
     /**
-  * This will be use for apply mrp discount
-  *
-  * @private
-  * @param {*} trx
-  * @param {*} entry
-  * @param {*} event
-  * @memberof CreatePurchaseOrderComponent
-  */
+     * This will be use for apply mrp discount
+     *
+     * @private
+     * @param {*} trx
+     * @param {*} entry
+     * @param {*} event
+     * @memberof CreatePurchaseOrderComponent
+     */
     private applyMrpDiscount(trx: any, entry: any, event: any): void {
         if (trx?.stockDetails?.variant?.variantDiscount?.discounts?.length) {
             trx?.stockDetails?.variant?.variantDiscount?.discounts.forEach(discount => {
@@ -1735,31 +1736,9 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                             }
                             return item;
                         });
-
-                        if (discount?.type === 'FIX_AMOUNT') {
-                            entry.discountFixedValueModal = discount.value ? discount.value : this.discountObj?.discount;
-                            entry.discountSum = discount.value ? discount.value : this.discountObj?.discount;
-                            entry.discountPercentageModal = 0;
-                        }
-                        if (discount?.type === 'PERCENTAGE') {
-                            entry.discountPercentageModal = discount.value ? discount.value : this.discountObj?.discount;
-                            entry.discountSum = discount.value ? discount.value : this.discountObj?.discount;
-                            entry.discountFixedValueModal = 0;
-                        }
                         this.calculateStockEntryAmount(trx);
                         entry['initiallyCall'] = true;
                     } else {
-                        if (discount?.type === 'FIX_AMOUNT') {
-                            entry.discountFixedValueModal = 0;
-                            entry.discountSum = 0;
-                            trx.quantity = 1;
-                        }
-                        if (discount?.type === 'PERCENTAGE') {
-                            entry.discountPercentageModal = 0;
-                            entry.discountSum = 0;
-                            trx.quantity = 1;
-                        }
-
                         if (event && event.discount && event.isActive) {
                             this.accountAssignedApplicableDiscounts.forEach(item => {
                                 if (item && event.discount && item.uniqueName === event.discount.discountUniqueName) {
@@ -3869,34 +3848,29 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             }
         }
 
-        const isMrpDiscountInclusive = !variant?.variantDiscount?.discountExclusive && variant?.unitRates?.filter(ur => ur.stockUnitUniqueName === transaction.stockUnit);
-        if (isMrpDiscountInclusive?.length) {
+        const matchedUnit = variant?.unitRates?.filter(ur => ur.stockUnitUniqueName === transaction.stockUnit);
+        if (matchedUnit?.length) {
             if (!isBulkItem) {
-                transaction.rate = Number((isMrpDiscountInclusive[0].rate / this.exchangeRate).toFixed(this.highPrecisionRate));
-                transaction.quantity = variant?.variantDiscount?.quantity || transaction.quantity;
+                transaction.rate = Number((matchedUnit[0].rate / this.exchangeRate).toFixed(this.highPrecisionRate));
             }
-            transaction.taxInclusive = true;
-            isInclusiveEntry = true;
             entry.discounts = entry.discounts.map(item => {
                 item.isActive = false;
                 return item;
             });
 
-            entry.discountFixedValueModal = 0;
-            entry.discountPercentageModal = 0;
             entry.discountSum = 0;
             this.applyMrpDiscount(transaction, entry, false);
         }
         this.focusOnDescription();
         if (isInclusiveEntry) {
             setTimeout(() => {
-                if (!isMrpDiscountInclusive?.length || !isMrpDiscountInclusive[0].rate) {
+                if (!matchedUnit?.length || !matchedUnit[0].rate) {
                     // Set timeout is used as tax component is not rendered at the time control is reached here
                     transaction.rate = Number((transaction.stockList[0]?.rate / this.exchangeRate).toFixed(this.highPrecisionRate));
                 }
                 transaction.total = transaction.quantity * transaction.rate;
                 this.calculateTransactionValueInclusively(entry, transaction, false);
-                if (isMrpDiscountInclusive?.length) {
+                if (matchedUnit?.length) {
                     this.calculateStockEntryAmount(transaction);
                 }
             });
