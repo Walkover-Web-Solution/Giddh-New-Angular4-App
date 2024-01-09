@@ -16,12 +16,12 @@ export interface PeriodicElement {
 }
 
 const ELEMENT_DATA: PeriodicElement[] = [
-    {number: 1, name: '12/07/2023', description: 'LTS', action: ''},
-    {number: 2, name: '12/07/2023', description: 'LTS', action: ''},
-    {number: 3, name: '12/07/2023', description: 'LTS', action: ''},
-    {number: 4, name: '12/07/2023', description: 'LTS', action: ''},
-    {number: 5, name: '12/07/2023', description: 'LTS', action: ''},
-    {number: 6, name: '12/07/2023', description: 'LTS', action: ''},
+    { number: 1, name: '12/07/2023', description: 'LTS', action: '' },
+    { number: 2, name: '12/07/2023', description: 'LTS', action: '' },
+    { number: 3, name: '12/07/2023', description: 'LTS', action: '' },
+    { number: 4, name: '12/07/2023', description: 'LTS', action: '' },
+    { number: 5, name: '12/07/2023', description: 'LTS', action: '' },
+    { number: 6, name: '12/07/2023', description: 'LTS', action: '' },
 ]
 
 @Component({
@@ -158,7 +158,7 @@ export class SettingsTagsComponent implements OnInit, OnDestroy {
         });
     }
 
-    
+
     public deleteTag(tag: TagRequest) {
         this.newTag = tag;
         let message = this.localeData?.remove_tag;
@@ -167,6 +167,6 @@ export class SettingsTagsComponent implements OnInit, OnDestroy {
         this.dialog.open(this.confirmationModal, {
             panelClass: 'modal-dialog',
             width: '1000px',
-        });   
+        });
     }
 }

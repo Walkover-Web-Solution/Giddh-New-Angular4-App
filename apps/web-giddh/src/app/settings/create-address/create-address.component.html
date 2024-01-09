@@ -297,7 +297,7 @@
                                                     <mat-label>{{localeData?.link_entity}}</mat-label>
                                                     <mat-chip-list #chipList>
                                                       <mat-chip *ngFor="let selected of selectedEntity" (removed)="removeItem(selected)">
-                                                        {{ selected }} 
+                                                        {{ selected?.name }} 
                                                         <span matChipRemove><i class="icon-cross"></i></span>
                                                       </mat-chip>
                                                     </mat-chip-list>

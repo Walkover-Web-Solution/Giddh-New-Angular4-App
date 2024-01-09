@@ -8,6 +8,7 @@ import { ToasterService } from '../../services/toaster.service';
 import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.component';
 import { SettingsAsideConfiguration } from '../constants/settings.constant';
 import { PageLeaveUtilityService } from '../../services/page-leave-utility.service';
+import { cloneDeep } from '../../lodash-optimized';
 
 function validateFieldWithPatterns(patterns: Array<string>) {
     return (field: UntypedFormControl): { [key: string]: any } => {
@@ -176,11 +177,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
             if (this.addressForm?.dirty) {
                 this.pageLeaveUtilityService.addBrowserConfirmationDialog();
             }
-            console.log("result addressForm",result);            
-        });       
-        
-        console.log("addressConfiguration", this.addressConfiguration);
-        
+        });
     }
 
     /**
@@ -219,7 +216,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
      *
      * @memberof CreateAddressComponent
      */
-    public ngOnDestroy(): void {        
+    public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
         this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
@@ -232,6 +229,12 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
      * @memberof CreateAddressComponent
      */
     public handleFormSubmit(): void {
+
+        let value = this.addressForm.get('linkedEntity')?.value.map(item => {
+            return item = item.uniqueName;
+        });
+        this.addressForm.get('linkedEntity').patchValue(value);
+
         if (this.addressConfiguration.type === SettingsAsideFormType.EditAddress || this.addressConfiguration.type === SettingsAsideFormType.CreateAddress) {
             const taxField = this.addressForm.get('taxNumber');
             if (taxField?.value && taxField.valid && this.addressConfiguration.tax && this.addressConfiguration.tax.name === 'GSTIN') {
@@ -327,7 +330,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
         }
         option.isDefault = !option.isDefault;
         if (option.isDefault) {
-            this.addressForm.get('linkedEntity')?.patchValue([...this.addressForm.get('linkedEntity')?.value,option?.value]);
+            this.addressForm.get('linkedEntity')?.patchValue([...this.addressForm.get('linkedEntity')?.value, option?.value]);
         }
     }
 
@@ -338,30 +341,34 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
      * @memberof CreateAddressComponent
      */
     public selectEntity(option: any): void {
-       if(option.value[0]?.alias){
-        console.log("option", option);
-        if(!this.selectedEntity.includes(option.value[option.value.length - 1]?.alias)){
-            this.selectedEntity.push(option.value[option.value.length - 1]?.alias);
-        }
-       }
-       if(option){
-            console.log("option - ",option);        
-            this.addressForm.get('linkedEntity')?.patchValue([...this.addressForm.get('linkedEntity')?.value,option.value[0]?.uniqueName]);
-            // console.log("this.addressForm",this.addressForm);
-            // console.log("addressConfiguration",this.addressConfiguration);            
-       }
+
+        console.log("option", option.value);
+        console.log("this.selectedEntity", this.selectedEntity);
         
+
+        if (option.value[0]?.alias) {
+            if (!this.selectedEntity.some(item => item.uniqueName === (option.value[option.value.length - 1]?.uniqueName))) {
+                this.selectedEntity.push({ name: option.value[option.value.length - 1]?.alias, uniqueName: option.value[option.value.length - 1]?.uniqueName });
+            }else{
+                const index = this.selectedEntity.findIndex( item =>  item?.uniqueName == option.value[option.value.length - 1]?.uniqueName);
+                this.selectedEntity.splice(index, 1);
+            }
+        }
+
         if (option?.isDefault) {
             option.isDefault = false;
         }
     }
 
-    public removeItem(element:any): void{
-        console.log(element);
-        
-        this.selectedEntity =  this.selectedEntity.filter( item => item === element);
-        console.log("this.selectedEntity",this.selectedEntity);
-        
+    public removeItem(element: any): void {
+        const index = this.selectedEntity.findIndex(item => item == element);
+        this.addressForm.get('linkedEntity')?.value
+        console.log("address form", this.addressForm.get('linkedEntity')?.value);
+
+        // this.addressForm.get('linkedEntity')?.patchValue([...this.addressForm.get('linkedEntity')?.value,option.value[0]?.uniqueName]);
+        this.selectedEntity.splice(index, 1);
+        console.log("selectedEntity", this.selectedEntity);
+
     }
 
     /**
