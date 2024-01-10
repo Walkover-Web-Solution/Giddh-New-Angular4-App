@@ -78,7 +78,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
     /** Holds list of variant of all stock which do not apply discount */
     public variantsWithoutDiscount: any[] = [];
     /** Variant object keys */
-    private variantDesiredKeys: any[] = ['price', 'quantity', 'taxInclusive', 'stockUnitUniqueName', 'variantUniqueName', 'discounts', 'index'];
+    private variantDesiredKeys: any[] = ['price', 'quantity', 'taxInclusive', 'stockUnitUniqueName', 'variantUniqueName', 'discounts'];
     /** User search string */
     public userSearchQuery: string = "";
     /** Stock search string */

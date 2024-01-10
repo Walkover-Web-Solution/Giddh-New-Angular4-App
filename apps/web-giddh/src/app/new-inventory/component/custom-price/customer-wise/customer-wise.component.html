@@ -76,8 +76,8 @@
                             </div>
                             <ng-container *ngIf="currentUserStocks?.length && !isStockLoading">
                                 <div class="stocks-wrapper mr-t2 overflow-auto" [formGroup]="discountForm">
-                                    <ng-container *ngIf="true">
-                                        <div class="save-discount-header position-fixed pr-4" *ngIf="showSaveDiscardButton">
+                                    <ng-container *ngIf="showSaveDiscardButton">
+                                        <div class="save-discount-header position-fixed pr-4" >
                                             <div class="d-flex justify-content-end align-items-center h-100">
                                                 <span class="position-center">
                                                     {{ localeData?.unsaved_changes }}
