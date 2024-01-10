@@ -404,6 +404,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             txn.particular = undefined;
             return;
         }
+
         txn.isStock = Boolean(e.additional?.stock);
         txn.stockUniqueName = e.additional?.stock?.uniqueName;
         txn.oppositeAccountUniqueName = e.additional?.uniqueName;
@@ -2642,7 +2643,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
         if (event.additional?.stock) {
             requestObject = {
                 stockUniqueName: event.additional.stock?.uniqueName,
-                oppositeAccountUniqueName: event.additional?.uniqueName,
+                oppositeAccountUniqueName: event.additional.uniqueName,
+                customerUniqueName: event.additional.uniqueName,
                 variantUniqueName
             };
         }
@@ -2717,6 +2719,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     stockUniqueName = txn.selectedAccount.stock?.uniqueName;
                     unitCode = defaultUnit.code;
                     stockUnitUniqueName = defaultUnitRates[0].stockUnitUniqueName;
+
+                    const hasMrpDiscount = txn.selectedAccount.stock.variant?.unitRates?.filter(variantDiscount => variantDiscount?.stockUnitUniqueName === stockUnitUniqueName);
+                    if (hasMrpDiscount?.length) {
+                        rate = Number((hasMrpDiscount[0].rate / this.lc.blankLedger?.exchangeRate).toFixed(RATE_FIELD_PRECISION));
+                    }
                 }
                 if (stockName && stockUniqueName) {
                     txn.inventory = {
@@ -2724,7 +2731,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                             name: stockName,
                             uniqueName: stockUniqueName,
                         },
-                        variant: { uniqueName: txn.selectedAccount.stock.variant?.uniqueName },
+                        variant: { uniqueName: txn.selectedAccount.stock.variant?.uniqueName, variantDiscount: txn.selectedAccount.stock.variant?.variantDiscount },
                         quantity: 1,
                         unit: {
                             stockUnitCode: unitCode,

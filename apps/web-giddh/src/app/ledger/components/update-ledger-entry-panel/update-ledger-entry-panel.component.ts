@@ -14,7 +14,7 @@ import {
     ViewChild
 } from '@angular/core';
 import { select, Store } from '@ngrx/store';
-import { Configuration, SubVoucher, RATE_FIELD_PRECISION, SearchResultText, RESTRICTED_VOUCHERS_FOR_DOWNLOAD, AdjustedVoucherType } from 'apps/web-giddh/src/app/app.constant';
+import { SubVoucher, RATE_FIELD_PRECISION, SearchResultText, RESTRICTED_VOUCHERS_FOR_DOWNLOAD, AdjustedVoucherType } from 'apps/web-giddh/src/app/app.constant';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { saveAs } from 'file-saver';
 import * as dayjs from 'dayjs';
@@ -34,7 +34,6 @@ import { IForceClear, SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal
 import { TagRequest } from '../../../models/api-models/settingsTags';
 import { ILedgerTransactionItem } from '../../../models/interfaces/ledger.interface';
 import { AccountService } from '../../../services/account.service';
-import { LEDGER_API } from '../../../services/apiurls/ledger.api';
 import { GeneralService } from '../../../services/general.service';
 import { LedgerService } from '../../../services/ledger.service';
 import { ToasterService } from '../../../services/toaster.service';
@@ -594,7 +593,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 let incomeExpenseEntryLength = this.vm.isThereIncomeOrExpenseEntry();
                 this.vm.showNewEntryPanel = incomeExpenseEntryLength === 1;
             }
-
             return;
         } else {
             if (!txn.isUpdated) {
@@ -630,6 +628,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     if (e.additional.stock) {
                         requestObject = {
                             stockUniqueName: e.additional.stock?.uniqueName,
+                            customerUniqueName: txn.particular.uniqueName,
                             ...(isVariantChanged ? { variantUniqueName: this.selectedStockVariant?.uniqueName } : {})
                         };
                     }
@@ -2571,6 +2570,22 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     rate = Number((rate / this.vm.selectedLedger?.exchangeRate).toFixed(RATE_FIELD_PRECISION));
                     stockName = defaultUnit.name;
                     stockUniqueName = stockDetails?.uniqueName;
+
+                    const hasMrpDiscount = txn.selectedAccount.stock.variant?.unitRates?.filter(variantDiscount => variantDiscount?.stockUnitUniqueName === stockUnitUniqueName);
+                    if (hasMrpDiscount?.length) {
+                        rate = Number((hasMrpDiscount[0].rate / this.vm.selectedLedger?.exchangeRate).toFixed(RATE_FIELD_PRECISION));
+
+                        this.vm.discountArray?.map((item, index) => { if (index > 0) { item.isActive = false; } return item; });
+
+                        txn.selectedAccount.stock.variant?.variantDiscount?.discounts?.forEach(variantDiscount => {
+                            this.vm.discountArray?.map(item => {
+                                if (variantDiscount?.discount?.uniqueName === item?.discountUniqueName) {
+                                    item.isActive = true;
+                                }
+                                return item;
+                            });
+                        });
+                    }
                 }
 
                 if (stockName && stockUniqueName) {
@@ -2579,6 +2594,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                             name: stockName,
                             uniqueName: stockUniqueName,
                         },
+                        variant: { name: txn.selectedAccount.stock.variant?.name, uniqueName: txn.selectedAccount.stock.variant?.uniqueName, variantDiscount: txn.selectedAccount.stock.variant?.variantDiscount },
                         quantity: 1,
                         unit: {
                             stockUnitCode: unitCode,

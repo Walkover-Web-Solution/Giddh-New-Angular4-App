@@ -2970,6 +2970,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             salesEntryClass.tcsTaxList = [];
             salesEntryClass.tdsTaxList = [];
             salesEntryClass.transactions = [];
+            salesEntryClass['initiallyCall'] = true;
 
             entry.transactions.forEach(transaction => {
                 salesTransactionItemClass = new SalesTransactionItemClass();
@@ -3850,9 +3851,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
 
         const matchedUnit = variant?.unitRates?.filter(ur => ur.stockUnitUniqueName === transaction.stockUnit);
         if (matchedUnit?.length) {
-            if (!isBulkItem) {
-                transaction.rate = Number((matchedUnit[0].rate / this.exchangeRate).toFixed(this.highPrecisionRate));
-            }
+            transaction.rate = Number((matchedUnit[0].rate / this.exchangeRate).toFixed(this.highPrecisionRate));
             entry.discounts = entry.discounts.map(item => {
                 item.isActive = false;
                 return item;

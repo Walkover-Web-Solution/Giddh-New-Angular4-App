@@ -3794,9 +3794,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
         const matchedUnit = variant?.unitRates?.filter(ur => ur.stockUnitUniqueName === transaction.stockUnit);
         if (matchedUnit?.length) {
-            if (!isBulkItem) {
-                transaction.rate = Number((matchedUnit[0].rate / this.exchangeRate).toFixed(this.highPrecisionRate));
-            }
+            transaction.rate = Number((matchedUnit[0].rate / this.exchangeRate).toFixed(this.highPrecisionRate));
             entry.discounts = entry.discounts.map(item => {
                 item.isActive = false;
                 return item;
@@ -3872,13 +3870,13 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 }
             }
         }
+        
         this.focusOnDescription();
-        if (calculateTransaction) {
 
+        if (calculateTransaction) {
             if (isInclusiveEntry) {
                 setTimeout(() => {
                     if (!matchedUnit?.length || !matchedUnit[0].rate) {
-                        // Set timeout is used as tax component is not rendered at the time control is reached here
                         transaction.rate = Number((transaction.stockList[0]?.rate / this.exchangeRate).toFixed(this.highPrecisionRate));
                     }
                     transaction.total = transaction.quantity * transaction.rate;
@@ -5543,6 +5541,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             salesEntryClass.tcsTaxList = [];
             salesEntryClass.tdsTaxList = [];
             salesEntryClass.transactions = [];
+            salesEntryClass['initiallyCall'] = true;
 
             if (entry.purchaseOrderItemMapping) {
                 if (this.copyPurchaseBill) {
