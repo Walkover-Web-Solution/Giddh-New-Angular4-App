@@ -73,14 +73,6 @@
                                         <p *ngIf="fieldsAndVisibility.header.billingAddress?.display">
                                             <strong>Walkover Web Solutions Pvt</strong>
                                         </p>
-                                        <p class="gst-cust" *ngIf="fieldsAndVisibility.header.billingGstin?.display">
-                                            {{
-                                                fieldsAndVisibility.header.billingGstin?.label?.length > 0
-                                                    ? fieldsAndVisibility.header.billingGstin?.label
-                                                    : "GSTIN"
-                                            }}
-                                            2344ACM9769L1Z0
-                                        </p>
                                     </td>
                                     <td class="invdate">
                                         <ng-container *ngIf="voucherType === 'sales'">

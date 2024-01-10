@@ -14,7 +14,7 @@ export class ThermalService {
     constructor(
         private printerFormat: PrinterFormatService,
         private toaster: ToasterService
-    ) { 
+    ) {
 
     }
     /**
@@ -197,6 +197,11 @@ export class ThermalService {
         if (defaultTemplate?.sections?.header?.data?.customerName?.display) {
             if (request?.account?.customerName) {
                 accountName = request?.account?.customerName;
+                if (accountName.length > 15) {
+                    const firstPart: string = accountName.substring(0, 15);
+                    const dots: string = '.'.repeat(Math.min(5, accountName.length - 15)); // Limit dots to 5
+                    accountName = `${firstPart}${dots}`;
+                }
             } else {
                 accountName = '';
             }
@@ -425,17 +430,14 @@ export class ThermalService {
         }
         if (itemFieldName?.length === 0) {
             itemsField =
-                this.printerFormat.formatCenter(
-                    this.printerFormat.formatBold(productsField)
+                this.printerFormat.formatCenter(productsField
                 ) +
-                this.printerFormat.formatCenter(
-                    this.printerFormat.formatBold(this.justifyText("", itemDetailsField))
+            this.printerFormat.formatCenter(this.justifyText("", itemDetailsField)
                 );
         } else {
             itemsField =
                 this.printerFormat.formatCenter(
-                    this.printerFormat.formatBold(
-                        this.justifyText(itemFieldName, itemDetailsField)
+                    this.justifyText(itemFieldName, itemDetailsField
                     )
                 ) + this.printerFormat.lineBreak;
         }
@@ -495,19 +497,18 @@ export class ThermalService {
                 totalQty = totalQty + Number(quantity);
             }
 
+
             if (itemName?.length === 0) {
                 let productNameShow;
                 if (defaultTemplate?.sections?.table?.data?.item?.display) {
-                    productNameShow = this.printerFormat.formatCenter(
-                        this.printerFormat.formatBold(this.justifyText(productName))
+                    productNameShow = this.printerFormat.formatCenter(this.justifyText(productName)
                     )
                 } else {
                     productNameShow = "";
                 }
                 items +=
                     productNameShow +
-                    this.printerFormat.formatCenter(
-                        this.printerFormat.formatBold(this.justifyText("", itemDetails))
+                this.printerFormat.formatCenter(this.justifyText("", itemDetails)
                     );
             } else {
                 let itemNameShow;
@@ -516,40 +517,36 @@ export class ThermalService {
                 } else {
                     itemNameShow = '';
                 }
+
                 const itemNameShowHide = itemNameShow?.length ? this.justifyText(itemNameShow, itemDetails) : this.justifyText(itemDetails);
 
                 items += this.printerFormat.formatCenter(
-                    this.printerFormat.formatBold(
-                        itemNameShowHide
-                    )
+                    itemNameShowHide
                 );
-
                 if (itemName?.length < productName?.length) {
                     let lastIndex = productName.length - itemName.length;
-
-                    for (var itemNameIndex = itemName?.length; itemNameIndex < lastIndex; itemNameIndex = itemNameIndex + 11) {
-                        items += this.printerFormat.formatCenter(this.printerFormat.leftAlign + productName?.substr(itemNameIndex, 11));
+                    for (let itemNameIndex = itemName?.length; itemNameIndex < lastIndex; itemNameIndex = itemNameIndex + 10) {
+                        items += this.printerFormat.formatCenter(this.printerFormat.leftAlign + productName?.substr(itemNameIndex, 10));
                     }
                 }
             }
-
-            if (entry?.taxes && entry?.taxes.length > 0) {
-                for (let taxApp of entry?.taxes) {
-                    if (entryTaxes[taxApp.accountUniqueName + "_" + taxApp?.taxPercent] === undefined) {
-                        entryTaxes[taxApp.accountUniqueName + "_" + taxApp?.taxPercent] = [];
-                        entryTaxes[taxApp.accountUniqueName + "_" + taxApp?.taxPercent]['name'] = taxApp?.accountName;
-                        entryTaxes[taxApp.accountUniqueName + "_" + taxApp?.taxPercent]['percent'] = taxApp?.taxPercent;
-                        entryTaxes[taxApp.accountUniqueName + "_" + taxApp?.taxPercent]['amount'] = taxApp?.amount?.amountForAccount;
-                    } else {
-                        entryTaxes[taxApp?.accountUniqueName + "_" + taxApp?.taxPercent]['percent'] = taxApp?.taxPercent;
-                        entryTaxes[taxApp?.accountUniqueName + "_" + taxApp?.taxPercent]['amount'] = entryTaxes[taxApp?.accountUniqueName + "_" + taxApp?.taxPercent]['amount'] + taxApp?.amount?.amountForAccount;
+            for (let transaction of entry?.transactions) {
+                if (entry?.taxes && entry?.taxes.length > 0) {
+                    for (let taxApp of entry?.taxes) {
+                        if (entryTaxes[taxApp.accountUniqueName + "_" + taxApp?.taxPercent] === undefined) {
+                            entryTaxes[taxApp.accountUniqueName + "_" + taxApp?.taxPercent] = [];
+                            entryTaxes[taxApp.accountUniqueName + "_" + taxApp?.taxPercent]['name'] = taxApp?.accountName;
+                            entryTaxes[taxApp.accountUniqueName + "_" + taxApp?.taxPercent]['percent'] = taxApp?.taxPercent;
+                            entryTaxes[taxApp.accountUniqueName + "_" + taxApp?.taxPercent]['amount'] = taxApp?.amount?.amountForAccount;
+                            entryTaxes[taxApp.accountUniqueName + "_" + taxApp?.taxPercent]['taxableValue'] = transaction?.taxableValue?.amountForAccount;
+                        } else {
+                            entryTaxes[taxApp?.accountUniqueName + "_" + taxApp?.taxPercent]['percent'] = taxApp?.taxPercent;
+                            entryTaxes[taxApp?.accountUniqueName + "_" + taxApp?.taxPercent]['amount'] = entryTaxes[taxApp?.accountUniqueName + "_" + taxApp?.taxPercent]['amount'] + taxApp?.amount?.amountForAccount;
+                            entryTaxes[taxApp.accountUniqueName + "_" + taxApp?.taxPercent]['taxableValue'] = entryTaxes[taxApp?.accountUniqueName + "_" + taxApp?.taxPercent]['taxableValue'] + transaction?.taxableValue?.amountForAccount;
+                        }
                     }
                 }
             }
-        }
-
-        if (!totalQty) {
-            totalQty = '-';
         }
 
         Object.keys(entryTaxes)?.forEach(key => {
@@ -557,6 +554,9 @@ export class ThermalService {
             if (entryTax?.amount > 0) {
                 let taxAmount = parseFloat(
                     entryTax?.amount
+                ).toFixed(2);
+                let taxableValue = parseFloat(
+                    entryTax?.taxableValue
                 ).toFixed(2);
                 if (defaultTemplate?.sections?.footer?.data?.taxBifurcation?.display) {
                     tax += this.printerFormat.formatCenter(
@@ -566,7 +566,9 @@ export class ThermalService {
                             "%" +
                             ": " +
                             "" +
-                            taxAmount
+                            taxAmount +
+                            "  " +
+                            taxableValue
                         )
                     );
                 }
@@ -575,6 +577,10 @@ export class ThermalService {
                 }
             }
         });
+
+        if (!totalQty) {
+            totalQty = '-';
+        }
 
         if (request) {
             let header =
@@ -605,9 +611,8 @@ export class ThermalService {
 
             let table =
                 this.blankDash() + this.printerFormat.lineBreak +
-                this.printerFormat.formatBold(
-                    productsFieldShowHide
-                ) + this.printerFormat.lineBreak +
+                productsFieldShowHide
+                + this.printerFormat.lineBreak +
                 this.printerFormat.formatCenter(this.blankDash()) +
                 items +
 
@@ -616,12 +621,12 @@ export class ThermalService {
                     (noOfItemsField + " ") + totalQty,
                     (discountAmountField + " ") + discount?.padStart(11)
                 ) +
-                this.justifyText('', (taxAmountField + " ") + '' + taxableAmount?.toFixed(2).padStart(11)) +
+                this.justifyText('', (taxAmountField) + '' + taxableAmount?.toFixed(2).padStart(11)) +
                 this.printerFormat.lineBreak +
                 tax +
                 (totalAmountField ? (this.justifyText(
                     "",
-                    (totalAmountField + "(" + companyCurrencyCode + ")" + " ") + subTotal?.padStart(11))
+                    (totalAmountField + "(" + companyCurrencyCode + ")") + subTotal?.padStart(11))
                 ) : "") +
                 this.printerFormat.lineBreak +
                 this.printerFormat.lineBreak +
