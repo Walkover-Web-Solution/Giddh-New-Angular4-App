@@ -143,7 +143,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     /** True if pdf is available */
     public isPdfAvailable: boolean = true;
     /** False if template type is thermal */
-    public showDownloadButton: boolean = true;
+    public showDownoadButton: boolean = true;
 
     constructor(
         private cdr: ChangeDetectorRef,
@@ -201,7 +201,11 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                 if (defaultTemplate?.length > 0) {
                     this.defaultTemplate = defaultTemplate[0];
                     if (this.defaultTemplate.templateType === 'thermal_template') {
+<<<<<<< HEAD
                         this.showDownloadButton = false;
+=======
+                        this.showDownoadButton = false;
+>>>>>>> 102177cf25 (bug fixes)
                     }
                 }
             }

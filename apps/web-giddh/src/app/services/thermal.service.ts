@@ -201,6 +201,8 @@ export class ThermalService {
                     const firstPart: string = accountName.substring(0, 15);
                     const dots: string = '.'.repeat(Math.min(5, accountName.length - 15)); // Limit dots to 5
                     accountName = `${firstPart}${dots}`;
+                } else {
+                    accountName = accountName;
                 }
             } else {
                 accountName = '';
@@ -432,7 +434,7 @@ export class ThermalService {
             itemsField =
                 this.printerFormat.formatCenter(productsField
                 ) +
-            this.printerFormat.formatCenter(this.justifyText("", itemDetailsField)
+                this.printerFormat.formatCenter(this.justifyText("", itemDetailsField)
                 );
         } else {
             itemsField =
@@ -508,7 +510,7 @@ export class ThermalService {
                 }
                 items +=
                     productNameShow +
-                this.printerFormat.formatCenter(this.justifyText("", itemDetails)
+                    this.printerFormat.formatCenter(this.justifyText("", itemDetails)
                     );
             } else {
                 let itemNameShow;
@@ -568,7 +570,9 @@ export class ThermalService {
                             "%" +
                             ": " +
                             "" +
-                            taxAmount
+                            taxAmount +
+                            "  " +
+                            taxableValue
                         )
                     );
                 }
