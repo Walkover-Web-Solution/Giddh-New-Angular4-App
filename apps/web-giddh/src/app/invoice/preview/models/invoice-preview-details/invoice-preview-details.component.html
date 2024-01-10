@@ -394,7 +394,7 @@
                                                     *ngIf="
                                                         selectedItem?.voucherType === 'purchase' &&
                                                         pdfPreviewLoaded &&
-                                                        showDownoadButton
+                                                        showDownloadButton
                                                     "
                                                 >
                                                     <a
@@ -408,7 +408,7 @@
 
                                                 <span
                                                     *ngIf="
-                                                        selectedItem?.voucherType !== 'purchase' && showDownoadButton
+                                                        selectedItem?.voucherType !== 'purchase' && showDownloadButton
                                                     "
                                                     [ngClass]="{
                                                         'disabled':
@@ -588,10 +588,10 @@
                             </h5>
                         </div>
                     </div>
-                    <div *ngIf="!showDownoadButton" class="h-100 d-flex justify-content-center align-items-center">
+                    <div *ngIf="!showDownloadButton" class="h-100 d-flex justify-content-center align-items-center">
                         <span class="font-15">{{ localeData?.thermal_message }}</span>
                     </div>
-                    <div class="invoice-image-section" *ngIf="showDownoadButton">
+                    <div class="invoice-image-section" *ngIf="showDownloadButton">
                         <div class="relative">
                             <div class="position-relative" *ngIf="isVoucherDownloading || isFileUploading">
                                 <giddh-page-loader [cssClass]="'mb-0 mt-0'"></giddh-page-loader>
