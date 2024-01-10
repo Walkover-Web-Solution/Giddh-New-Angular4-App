@@ -596,7 +596,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         if (this.currentTxn) {
             this.currentTxn.discount = event.discountTotal;
         }
-        const hasMrpDiscount = this.currentTxn.selectedAccount.stock.variant?.unitRates?.filter(variantDiscount => variantDiscount?.stockUnitUniqueName === this.currentTxn?.inventory?.unit?.stockUnitUniqueName);
+        const hasMrpDiscount = this.currentTxn.selectedAccount?.stock?.variant?.unitRates?.filter(variantDiscount => variantDiscount?.stockUnitUniqueName === this.currentTxn?.inventory?.unit?.stockUnitUniqueName);
         if (hasMrpDiscount?.length) {
             this.currentTxn?.discounts?.map(item => { item.isActive = false; return item; });
 
@@ -1739,7 +1739,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      * @memberof NewLedgerEntryPanelComponent
      */
     public preparePreAppliedDiscounts(): void {
-        const hasMrpDiscount = this.currentTxn.selectedAccount.stock.variant?.unitRates?.filter(variantDiscount => variantDiscount?.stockUnitUniqueName === this.currentTxn?.inventory?.unit?.stockUnitUniqueName);
+        const hasMrpDiscount = this.currentTxn.selectedAccount?.stock?.variant?.unitRates?.filter(variantDiscount => variantDiscount?.stockUnitUniqueName === this.currentTxn?.inventory?.unit?.stockUnitUniqueName);
         if (hasMrpDiscount?.length) {
             this.currentTxn?.discounts?.map(item => { item.isActive = false; return item; });
 
