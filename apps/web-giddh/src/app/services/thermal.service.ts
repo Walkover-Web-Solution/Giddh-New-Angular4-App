@@ -201,8 +201,6 @@ export class ThermalService {
                     const firstPart: string = accountName.substring(0, 15);
                     const dots: string = '.'.repeat(Math.min(5, accountName.length - 15)); // Limit dots to 5
                     accountName = `${firstPart}${dots}`;
-                } else {
-                    accountName = accountName;
                 }
             } else {
                 accountName = '';
