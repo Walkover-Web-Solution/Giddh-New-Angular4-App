@@ -394,7 +394,7 @@
                                                     *ngIf="
                                                         selectedItem?.voucherType === 'purchase' &&
                                                         pdfPreviewLoaded &&
-                                                        showDownoadButton
+                                                        showDownloadButton
                                                     "
                                                 >
                                                     <a
@@ -408,7 +408,7 @@
 
                                                 <span
                                                     *ngIf="
-                                                        selectedItem?.voucherType !== 'purchase' && showDownoadButton
+                                                        selectedItem?.voucherType !== 'purchase' && showDownloadButton
                                                     "
                                                     [ngClass]="{
                                                         'disabled':
@@ -588,21 +588,18 @@
                             </h5>
                         </div>
                     </div>
+<<<<<<< HEAD
                     <<<<<<< HEAD
+=======
+>>>>>>> fbc2f902af (PR changes)
                     <div *ngIf="!showDownloadButton" class="h-100 d-flex justify-content-center align-items-center">
                         <span class="font-15">{{ localeData?.thermal_message }}</span>
                     </div>
                     <div class="invoice-image-section" *ngIf="showDownloadButton">
-                        =======
-                        <div *ngIf="!showDownoadButton" class="h-100 d-flex justify-content-center align-items-center">
-                            <span class="font-15">{{ localeData?.thermal_message }}</span>
-                        </div>
-                        <div class="invoice-image-section" *ngIf="showDownoadButton">
-                            >>>>>>> 102177cf25 (bug fixes)
-                            <div class="relative">
-                                <div class="position-relative" *ngIf="isVoucherDownloading || isFileUploading">
-                                    <giddh-page-loader [cssClass]="'mb-0 mt-0'"></giddh-page-loader>
-                                </div>
+                        <div class="relative">
+                            <div class="position-relative" *ngIf="isVoucherDownloading || isFileUploading">
+                                <giddh-page-loader [cssClass]="'mb-0 mt-0'"></giddh-page-loader>
+                            </div>
 
                                 <div
                                     *ngIf="isVoucherDownloadError && (!isVoucherDownloading || !isFileUploading)"
