@@ -568,9 +568,7 @@ export class ThermalService {
                             "%" +
                             ": " +
                             "" +
-                            taxAmount +
-                            "  " +
-                            taxableValue
+                            taxAmount
                         )
                     );
                 }
