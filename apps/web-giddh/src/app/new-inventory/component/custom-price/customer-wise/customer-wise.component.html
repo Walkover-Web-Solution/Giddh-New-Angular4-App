@@ -8,7 +8,7 @@
                     <div class="inventory-sub-sideabar">
                         <mat-list class="item-list border-grid pt-0">
                             <div class="list-head-gap">
-                                <div class="search-list position-relative mr-t15 mr-b15" [formGroup]="searchForm">
+                                <div class="search-list position-relative mr-t15 mr-b1" [formGroup]="searchForm">
                                     <text-field type="text" [placeholder]="commonLocaleData?.app_search"
                                         formControlName="userSearch"
                                         [cssClass]="'form-control search-bar'"></text-field>
@@ -17,9 +17,19 @@
                                     </span>
                                 </div>
                                 <div class="mr-b1">
-                                    <button mat-stroked-button color="primary" (click)="openSearchModal('users')">
+                                    <button mat-stroked-button color="primary" class="w-100" (click)="openSearchModal('users')">
                                         {{localeData?.add_customer_group }}
                                     </button>
+                                </div>
+                                <div class="mr-b1">
+                                    <div class="custom-tab w-100 d-flex">
+                                        <button mat-button (click)="getUsersByType('account')" [ngClass]="{'active': userFilterType === 'account'}">
+                                            {{ commonLocaleData?.app_account }}
+                                        </button>
+                                        <button mat-button (click)="getUsersByType('group')" [ngClass]="{'active': userFilterType === 'group'}">
+                                            {{ commonLocaleData?.app_group }}
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                             <div *ngIf="isLoading">

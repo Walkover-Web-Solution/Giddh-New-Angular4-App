@@ -86,6 +86,8 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
     public variantsDropdownDefaultValue: any;
     /** Holds Get All discount API Response */
     private getAllDiscountApiResponse: any = null;
+    /** Hold Filter Type Value */
+    public userFilterType: 'account' | 'group' = null;
 
     constructor(
         private dialog: MatDialog,
@@ -355,7 +357,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
      * @memberof CustomerWiseComponent
      */
     private initialiseAllDiscounts(userData: any, responseData: any): void {
-        
+
         this.initDiscountMainForm();
         if (userData?.type === 'ACCOUNT') {
             this.discountForm.get('customerVendorAccountUniqueName').patchValue(userData?.uniqueName);
@@ -886,6 +888,20 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
             } else {
                 variant.get('discounts').patchValue([{ uniqueName: event?.value }]);
             }
+        }
+    }
+
+    /**
+     * Get Customer/Vendor list by Group or Account 
+     *
+     * @param {string} type
+     * @memberof CustomerWiseComponent
+     */
+    public getUsersByType(type: 'account' | 'group'): void {
+        if (type === this.userFilterType) {
+            this.userFilterType = null;
+        } else {
+            this.userFilterType = type;
         }
     }
 
