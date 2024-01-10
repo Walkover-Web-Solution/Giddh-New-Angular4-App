@@ -561,14 +561,14 @@ export class ThermalService {
                 if (defaultTemplate?.sections?.footer?.data?.taxBifurcation?.display) {
                     tax += this.printerFormat.formatCenter(
                         this.justifyText(
+                            taxableValue +
+                            "   " +
                             entryTax?.name +
                             entryTax?.percent +
                             "%" +
                             ": " +
                             "" +
-                            taxAmount +
-                            "  " +
-                            taxableValue
+                            taxAmount
                         )
                     );
                 }
