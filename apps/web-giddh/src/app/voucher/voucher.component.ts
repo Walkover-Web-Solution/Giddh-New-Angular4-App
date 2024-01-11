@@ -3228,7 +3228,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                             return item;
                         });
                         this.calculateStockEntryAmount(trx);
-                        entry['initiallyCall'] = true;
                     } else {
                         if (event && event.discount && event.isActive) {
                             this.accountAssignedApplicableDiscounts.forEach(item => {
@@ -3266,6 +3265,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 });
             }
         }
+        entry['initiallyCall'] = true;
     }
 
     /**

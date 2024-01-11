@@ -597,11 +597,11 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.currentTxn.discount = event.discountTotal;
         }
         const hasMrpDiscount = this.currentTxn.selectedAccount?.stock?.variant?.unitRates?.filter(variantDiscount => variantDiscount?.stockUnitUniqueName === this.currentTxn?.inventory?.unit?.stockUnitUniqueName);
-        if (hasMrpDiscount?.length) {
+        if (hasMrpDiscount?.length && this.currentTxn.selectedAccount.stock.variant?.variantDiscount?.discounts?.length) {
             this.currentTxn?.discounts?.map(item => { item.isActive = false; return item; });
 
             this.currentTxn.selectedAccount.stock.variant?.variantDiscount?.discounts?.forEach(variantDiscount => {
-                this.currentTxn?.discounts?.map(item => {
+                this.currentTxn.discounts = this.currentTxn?.discounts?.map(item => {
                     if (variantDiscount?.discount?.uniqueName === item?.discountUniqueName) {
                         item.isActive = true;
                     }

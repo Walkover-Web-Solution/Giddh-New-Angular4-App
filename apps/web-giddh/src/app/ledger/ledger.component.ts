@@ -288,6 +288,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
         reLoginRequired: false,
         itemId: ''
     };
+    /** True if ledger account belongs to sundry debtor/creditor */
+    private isSundryDebtorCreditor: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -440,8 +442,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.lc.activeAccount$.pipe(takeUntil(this.destroyed$)).subscribe(ledgerAccount => {
                 if (ledgerAccount?.parentGroups?.length && ["sundrycreditors", "sundrydebtors"].includes(ledgerAccount?.parentGroups[1]?.uniqueName)) {
                     this.enableAutopaid = true;
+                    this.isSundryDebtorCreditor = true;
                 } else {
                     this.enableAutopaid = false;
+                    this.isSundryDebtorCreditor = false;
                 }
             });
         } else {
@@ -2644,7 +2648,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             requestObject = {
                 stockUniqueName: event.additional.stock?.uniqueName,
                 oppositeAccountUniqueName: event.additional.uniqueName,
-                customerUniqueName: event.additional.uniqueName,
+                customerUniqueName: this.isSundryDebtorCreditor ? this.lc.activeAccount?.uniqueName : event.additional.uniqueName,
                 variantUniqueName
             };
         }
