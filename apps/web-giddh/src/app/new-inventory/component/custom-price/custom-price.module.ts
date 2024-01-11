@@ -21,6 +21,7 @@ import { NewConfirmModalModule } from '../../../theme/new-confirm-modal';
 import { DiscountControlModule } from '../../../theme/discount-control/discount-control.module';
 import { ScrollComponent } from './advance-list-items-popup/virtual-scroll';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatRadioModule } from '@angular/material/radio';
 
 @NgModule({
     imports: [
@@ -42,7 +43,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
         ReactiveFormsModule,
         NewConfirmModalModule,
         DiscountControlModule,
-        MatTooltipModule
+        MatTooltipModule,
+        MatRadioModule
     ],
     exports: [
         CustomerWiseComponent,

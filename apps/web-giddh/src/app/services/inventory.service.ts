@@ -1500,7 +1500,7 @@ export class InventoryService {
      */
     public getCustomerVendorDiscountUserList(request: any): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        let apiUrl = this.config.apiUrl + INVENTORY_API.GET_CUSTOMER_VENDOR_DISCOUNT_USERS?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':page', encodeURIComponent(request.page))?.replace(':count', encodeURIComponent(request.count))?.replace(':group', encodeURIComponent(request.group))?.replace(':query', encodeURIComponent(request.query || ''));
+        let apiUrl = this.config.apiUrl + INVENTORY_API.GET_CUSTOMER_VENDOR_DISCOUNT_USERS?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':page', encodeURIComponent(request.page))?.replace(':count', encodeURIComponent(request.count))?.replace(':group', encodeURIComponent(request.group))?.replace(':userType', encodeURIComponent(request.userType))?.replace(':query', encodeURIComponent(request.query || ''));
 
         return this.http.get(apiUrl).pipe(map((res) => {
             let data: BaseResponse<any[], string> = res;
@@ -1569,7 +1569,7 @@ export class InventoryService {
 
     /**
      * This is used to delete Customer/Vendor wise discount User, Stock and Variants
-     * 
+     *
      * Key "userUniqueName" is mandatory
      *
      * @param {*} request
@@ -1588,8 +1588,8 @@ export class InventoryService {
         }), catchError((e) => this.errorHandler.HandleCatch<any[], string>(e, '', {})));
     }
 
-    /** 
-     * Create New discount and add new variant in existing stock 
+    /**
+     * Create New discount and add new variant in existing stock
      *
      * @param {string} stockUniqueName
      * @param {CreateDiscount} model
@@ -1630,7 +1630,7 @@ export class InventoryService {
     }
 
     /**
-     * Get Stockwise All Variant and Units List 
+     * Get Stockwise All Variant and Units List
      *
      * @param {string} stockUniqueName
      * @return {*}  {Observable<BaseResponse<any, any>>}
