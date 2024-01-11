@@ -56,11 +56,11 @@
                                     </mat-list-item>
                                 </cdk-virtual-scroll-viewport>
                             </ng-container>
-                            <ng-container *ngIf="!isLoading && !userList?.length">
+                            <ng-container *ngIf="!isLoading && !userList?.length ">
                                 <div class="p-3 text-gray">{{ commonLocaleData?.app_no_data_found }}</div>
                             </ng-container>
                         </mat-list>
-                        <div class="customer-right-side" #stocksContainer (scroll)="onScrollEvent($event)">
+                        <div class="customer-right-side scroll-container" #stocksContainer (scroll)="onScrollEvent($event)">
                             <div class="right-heading" *ngIf="currentUser?.uniqueName">
                                 <button mat-stroked-button color="primary" (click)="openSearchModal('stocks')"> {{
                                     localeData?.add_inventory }} </button>
@@ -285,7 +285,7 @@
                                 </div>
                             </ng-container>
                             <div class="text-center mt-5 text-gray font-24"
-                                *ngIf="!currentUserStocks?.length && currentUser?.uniqueName && !isStockLoading">
+                                *ngIf="!currentUserStocks?.length && !currentUser?.uniqueName && !isStockLoading ">
                                 <span class="font">{{ commonLocaleData?.app_no_data_found }}</span>
                             </div>
                             <div *ngIf="isStockLoading">

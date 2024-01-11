@@ -90,7 +90,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
     /** True if any stock or variant will be added */
     public showSaveDiscardButton: boolean = false;
     /** Hold Variable to store the scroll position */
-    private scrollPosition: number;
+    private scrollPosition: any;
 
     constructor(
         private dialog: MatDialog,
@@ -158,11 +158,14 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
      * @param {number} position
      * @memberof CustomerWiseComponent
      */
-    public scrollToPosition(position: number): void {
-        this.stocksContainer.nativeElement?.scrollTo({
-            top: position,
-            behavior: 'smooth'
-        });
+    public scrollToPosition(): void {
+        let position = Number(localStorage.getItem('verticalScrollPosition'));
+        setTimeout(() => {
+            this.stocksContainer.nativeElement?.scrollTo({
+                top: position,
+                behavior: 'smooth'
+            });
+        }, 1000);
         this.changeDetectorRef.detectChanges();
     }
 
@@ -175,7 +178,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
     public onScrollEvent(event: Event) {
         const scrollContainer = this.stocksContainer.nativeElement;
         const verticalScrollPosition = scrollContainer.scrollTop;
-        this.scrollPosition = verticalScrollPosition;
+        this.scrollPosition = localStorage.setItem('verticalScrollPosition', verticalScrollPosition);
     }
 
     /**
@@ -223,6 +226,8 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
 
         this.inventoryService.getCustomerVendorDiscountUserList(model).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             this.isLoading = false;
+            this.currentUserStocks = [];
+            this.currentUser = null;
             if (response && response?.body?.results?.length) {
                 this.pagination.user.page = response?.body?.page;
                 this.pagination.user.totalPages = response?.body?.totalPages;
@@ -339,6 +344,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
         if (this.currentUser?.uniqueName !== userData?.uniqueName || fromDiscard) {
             this.showSaveDiscardButton = false;
             this.variantsWithoutDiscount = [];
+            this.currentUser = null;
             this.currentUser = userData;
             this.pagination = this.paginationInit();
             let isTempUser = this.checkTemporaryUser(userData);
@@ -370,7 +376,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
         this.isStockLoading = true;
         this.inventoryService.getAllDiscount(model).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (fromDiscard) {
-                this.scrollToPosition(this.scrollPosition);
+                this.scrollToPosition();
             }
             if (response && response?.body?.results?.length) {
                 this.initialiseAllDiscounts(userData, cloneDeep(response));
@@ -891,7 +897,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                             behavior: 'smooth'
                         });
                         const verticalScrollPosition = this.stocksContainer.nativeElement.scrollHeight;
-                        this.scrollPosition = cloneDeep(verticalScrollPosition);
+                        this.scrollPosition = localStorage.setItem('verticalScrollPosition', verticalScrollPosition);
                     }
 
                 });
@@ -955,5 +961,6 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+        localStorage.removeItem('verticalScrollPosition');
     }
 }
