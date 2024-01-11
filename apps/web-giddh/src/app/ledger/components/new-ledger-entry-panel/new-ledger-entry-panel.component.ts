@@ -597,7 +597,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.currentTxn.discount = event.discountTotal;
         }
         const hasMrpDiscount = this.currentTxn.selectedAccount?.stock?.variant?.unitRates?.filter(variantDiscount => variantDiscount?.stockUnitUniqueName === this.currentTxn?.inventory?.unit?.stockUnitUniqueName);
-        if (hasMrpDiscount?.length && this.currentTxn.selectedAccount.stock.variant?.variantDiscount?.discounts?.length) {
+        if (!this.currentTxn.isMrpDiscountApplied && hasMrpDiscount?.length && this.currentTxn.selectedAccount.stock.variant?.variantDiscount?.discounts?.length) {
             this.currentTxn?.discounts?.map(item => { item.isActive = false; return item; });
 
             this.currentTxn.selectedAccount.stock.variant?.variantDiscount?.discounts?.forEach(variantDiscount => {
@@ -624,6 +624,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 });
             }
         }
+        this.currentTxn.isMrpDiscountApplied = true;
         this.currentTxn.convertedDiscount = this.calculateConversionRate(this.currentTxn.discount);
         this.calculateTax();
     }
