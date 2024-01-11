@@ -1,4 +1,7 @@
 .custom-grid-wrapper {
+    * {
+        color: var(--color-common-primary-text);
+    }
     .mat-list-wrap {
         input {
             &.form-control {
@@ -13,15 +16,16 @@
                     a {
                         display: flex;
                         justify-content: space-between;
-                        color: var(--color-common-primary-text);
                     }
                 }
                 &:hover,
                 &.active {
-                    background-color: var(--color-giddh-blue);
+                    background-color: var(--color-giddh-blue) !important;
                     .mdc-list-item__content {
                         a {
-                            color: var(--color-white);
+                            span{
+                                color: var(--color-white) !important;
+                            }
                         }
                     }
                 }
@@ -51,10 +55,14 @@
             .save-discount-header{
                 button{
                     &.mdc-button{
-                        color: var(--color-giddh-blue) !important;
+                        .mdc-button__label {
+                            color: var(--color-primary-login-box-header-background) !important;
+                        }
                         &.mat-mdc-outlined-button{
-                            color: var(--color-white) !important;
-                            border-color: var(--color-white) !important;
+                            .mdc-button__label {
+                                color: var(--color-tertiary-login-box-body-text) !important;
+                            }
+                            border-color: var(--color-tertiary-login-box-body-text) !important;
                         }
                     }
                 }
