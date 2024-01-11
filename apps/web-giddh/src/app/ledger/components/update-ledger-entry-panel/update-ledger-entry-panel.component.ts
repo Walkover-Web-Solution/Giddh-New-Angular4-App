@@ -284,6 +284,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public selectedStockVariant: IVariant = { name: '', uniqueName: '' };
     /** Stores the stock uniquename */
     private selectedStockUniquenName: string;
+    /** True if ledger account belongs to sundry debtor/creditor */
+    private isSundryDebtorCreditor: boolean = false;
 
     constructor(
         private accountService: AccountService,
@@ -628,7 +630,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     if (e.additional.stock) {
                         requestObject = {
                             stockUniqueName: e.additional.stock?.uniqueName,
-                            customerUniqueName: txn.particular.uniqueName,
+                            customerUniqueName: this.isSundryDebtorCreditor ? this.activeAccount?.uniqueName : txn.particular.uniqueName,
                             ...(isVariantChanged ? { variantUniqueName: this.selectedStockVariant?.uniqueName } : {})
                         };
                     }
@@ -2062,6 +2064,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             return;
         }
 
+        if (resp[1]?.body?.parentGroups?.length && ["sundrycreditors", "sundrydebtors"].includes(resp[1]?.body?.parentGroups[1]?.uniqueName)) {
+            this.isSundryDebtorCreditor = true;
+        } else {
+            this.isSundryDebtorCreditor = false;
+        }
+
         if (this.voucherApiVersion === 2) {
             resp[0] = this.adjustmentUtilityService.getVoucherAdjustmentObject(resp[0], this.vm.selectedLedger.voucherGeneratedType);
         }
@@ -2573,7 +2581,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     stockUniqueName = stockDetails?.uniqueName;
 
                     const hasMrpDiscount = txn.selectedAccount.stock.variant?.unitRates?.filter(variantDiscount => variantDiscount?.stockUnitUniqueName === stockUnitUniqueName);
-                    if (hasMrpDiscount?.length) {
+                    if (hasMrpDiscount?.length && txn.selectedAccount.stock.variant?.variantDiscount?.discounts?.length) {
                         rate = Number((hasMrpDiscount[0].rate / this.vm.selectedLedger?.exchangeRate).toFixed(RATE_FIELD_PRECISION));
 
                         this.vm.discountArray?.map((item, index) => { if (index > 0) { item.isActive = false; } return item; });
