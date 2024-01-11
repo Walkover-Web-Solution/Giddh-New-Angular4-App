@@ -3033,7 +3033,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public calculateTotalDiscountOfEntry(entry: SalesEntryClass, trx: SalesTransactionItemClass, calculateEntryTotal: boolean = true) {
         let percentageListTotal: number = 0;
         let fixedListTotal: number = 0;
-
         percentageListTotal = entry.discounts?.filter(f => f.isActive)
             ?.filter(s => s.discountType === 'PERCENTAGE')
             .reduce((pv, cv) => {
@@ -3131,82 +3130,39 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 }
                 if (this.discountObj) {
                     if (this.discountObj?.discountType === 'FIX_AMOUNT') {
-                        entry['discountFixedValueModal'] = this.discountObj?.discount ? this.discountObj?.discount : 0;
+                        entry.discountFixedValueModal = this.discountObj?.discount ? this.discountObj?.discount : 0;
                         entry.discountSum = this.discountObj?.discount ? this.discountObj?.discount : 0;
+                        entry.discountPercentageModal = 0;
+                        entry.discounts[0].isActive = true;
+                    } else {
+                        entry.discountFixedValueModal = 0;
                     }
                     if (this.discountObj?.discountType === 'PERCENTAGE') {
-                        entry['discountPercentageModal'] = this.discountObj?.discount ? this.discountObj?.discount : 0;
+                        entry.discountPercentageModal = this.discountObj?.discount ? this.discountObj?.discount : 0;
                         entry.discountSum = this.discountObj?.discount ? this.discountObj?.discount : 0;
+                        entry.discountFixedValueModal = 0;
+                        entry.discounts[0].isActive = true;
+                    } else {
+                        entry.discountPercentageModal = 0;
                     }
                 } else if (!entry['initiallyCall']) {
-                    if (trx?.stockDetails?.variant?.variantDiscount?.discountValue) {
-                        let matchedUnit = trx?.stockDetails?.variant?.variantDiscount?.unit?.code === trx?.stockUnitCode;
-                        if (matchedUnit) {
+                    entry.discounts = entry.discounts.map(item => {
+                        item.isActive = false;
+                        return item;
+                    });
 
-                            entry.discounts.map(item => {
-                                if (item.discountUniqueName) {
-                                    item.isActive = false
-                                }
-                                return item;
-                            });
+                    entry.discountFixedValueModal = 0;
+                    entry.discountPercentageModal = 0;
+                    entry.discountSum = 0;
 
-                            if (trx?.stockDetails?.variant?.variantDiscount?.discountType === 'FIX_AMOUNT') {
-                                entry['discountFixedValueModal'] = this.discountObj?.discount ? this.discountObj?.discount : trx?.stockDetails?.variant?.variantDiscount?.discountValue;
-                                entry.discountSum = this.discountObj?.discount ? this.discountObj?.discount : trx?.stockDetails?.variant?.variantDiscount?.discountValue;
-                                trx.quantity = trx?.stockDetails?.variant?.variantDiscount?.quantity;
-                            }
-                            if (trx?.stockDetails?.variant?.variantDiscount?.discountType === 'PERCENTAGE') {
-                                entry['discountPercentageModal'] = this.discountObj?.discount ? this.discountObj?.discount : trx?.stockDetails?.variant?.variantDiscount?.discountValue;
-                                entry.discountSum = this.discountObj?.discount ? this.discountObj?.discount : trx?.stockDetails?.variant?.variantDiscount?.discountValue;
-                                trx.quantity = trx?.stockDetails?.variant?.variantDiscount?.quantity;
-                            }
-                            this.calculateStockEntryAmount(trx);
-                            entry['initiallyCall'] = true;
-                        } else {
-                            if (trx?.stockDetails?.variant?.variantDiscount?.discountType === 'FIX_AMOUNT') {
-                                entry['discountFixedValueModal'] = 0;
-                                entry.discountSum = 0;
-                                trx.quantity = 1;
-                            }
-                            if (trx?.stockDetails?.variant?.variantDiscount?.discountType === 'PERCENTAGE') {
-                                entry['discountPercentageModal'] = 0;
-                                entry.discountSum = 0;
-                                trx.quantity = 1;
-                            }
-
-                            if (event && event.discount && event.isActive) {
-                                this.accountAssignedApplicableDiscounts.forEach(item => {
-                                    if (item && event.discount && item.uniqueName === event.discount.discountUniqueName) {
-                                        item.isActive = event.isActive?.target?.checked;
-                                    }
-                                });
-                            }
-                            if (trx.amount && entry && entry.discounts && entry.discounts.length && this.accountAssignedApplicableDiscounts && this.accountAssignedApplicableDiscounts.length) {
-                                entry.discounts.map(item => {
-                                    let discountItem = this.accountAssignedApplicableDiscounts.find(element => element?.uniqueName === item.discountUniqueName);
-                                    if (discountItem && discountItem.uniqueName) {
-                                        item.isActive = discountItem.isActive;
-                                    }
-                                });
-                            }
+                    trx?.stockDetails?.variant?.unitRates?.forEach(unitRate => {
+                        let matchedUnit = unitRate?.stockUnitUniqueName === trx?.stockUnit;
+                        if (matchedUnit && !this.isBulkEntryInProgress) {
+                            trx.rate = Number((unitRate.rate / this.exchangeRate).toFixed(this.highPrecisionRate));
                         }
-                    } else {
-                        if (event && event.discount && event.isActive) {
-                            this.accountAssignedApplicableDiscounts.forEach(item => {
-                                if (item && event.discount && item.uniqueName === event.discount.discountUniqueName) {
-                                    item.isActive = event.isActive?.target?.checked;
-                                }
-                            });
-                        }
-                        if (trx.amount && entry && entry.discounts && entry.discounts.length && this.accountAssignedApplicableDiscounts && this.accountAssignedApplicableDiscounts.length) {
-                            entry.discounts.map(item => {
-                                let discountItem = this.accountAssignedApplicableDiscounts.find(element => element?.uniqueName === item.discountUniqueName);
-                                if (discountItem && discountItem.uniqueName) {
-                                    item.isActive = discountItem.isActive;
-                                }
-                            });
-                        }
-                    }
+                        this.calculateStockEntryAmount(trx);
+                    });
+                    this.applyMrpDiscount(trx, entry, event);
                 }
             }
 
@@ -3251,13 +3207,75 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     }
 
     /**
+     * This will be use for apply mrp discount
+     *
+     * @private
+     * @param {*} trx
+     * @param {*} entry
+     * @param {*} event
+     * @memberof VoucherComponent
+     */
+    private applyMrpDiscount(trx: any, entry: any, event: any): void {
+        if (trx?.stockDetails?.variant?.variantDiscount?.discounts?.length) {
+            trx?.stockDetails?.variant?.variantDiscount?.discounts.forEach(discount => {
+                if (discount) {
+                    let matchedUnit = trx?.stockDetails?.variant?.variantDiscount?.unit?.uniqueName === trx?.stockUnit;
+                    if (matchedUnit) {
+                        entry.discounts = entry.discounts.map(item => {
+                            if (item.discountUniqueName === discount?.discount?.uniqueName) {
+                                item.isActive = true;
+                            }
+                            return item;
+                        });
+                        this.calculateStockEntryAmount(trx);
+                    } else {
+                        if (event && event.discount && event.isActive) {
+                            this.accountAssignedApplicableDiscounts.forEach(item => {
+                                if (item && event.discount && item.uniqueName === event.discount.discountUniqueName) {
+                                    item.isActive = event.isActive?.target?.checked;
+                                }
+                            });
+                        }
+
+                        if (entry && entry.discounts && entry.discounts.length && this.accountAssignedApplicableDiscounts && this.accountAssignedApplicableDiscounts.length) {
+                            entry.discounts.map(item => {
+                                let discountItem = this.accountAssignedApplicableDiscounts.find(element => element?.uniqueName === item.discountUniqueName);
+                                if (discountItem && discountItem.uniqueName) {
+                                    item.isActive = discountItem.isActive;
+                                }
+                            });
+                        }
+                    }
+                }
+            });
+        } else {
+            if (event && event.discount && event.isActive) {
+                this.accountAssignedApplicableDiscounts.forEach(item => {
+                    if (item && event.discount && item.uniqueName === event.discount.discountUniqueName) {
+                        item.isActive = event.isActive?.target?.checked;
+                    }
+                });
+            }
+            if (entry && entry.discounts && entry.discounts.length && this.accountAssignedApplicableDiscounts && this.accountAssignedApplicableDiscounts.length) {
+                entry.discounts.map(item => {
+                    let discountItem = this.accountAssignedApplicableDiscounts.find(element => element?.uniqueName === item.discountUniqueName);
+                    if (discountItem && discountItem.uniqueName) {
+                        item.isActive = discountItem.isActive;
+                    }
+                });
+            }
+        }
+        entry['initiallyCall'] = true;
+    }
+
+    /**
      * Calculate the complete transaction values inclusively
      *
      * @param {SalesEntryClass} entry Entry value
      * @param {SalesTransactionItemClass} transaction Current transaction
      * @memberof VoucherComponent
      */
-    public calculateTransactionValueInclusively(entry: SalesEntryClass, transaction: SalesTransactionItemClass): void {
+    public calculateTransactionValueInclusively(entry: SalesEntryClass, transaction: SalesTransactionItemClass, updateTransactionRate: boolean = true): void {
         // Calculate discount
         entry.discounts = entry.discounts?.length ? entry.discounts : this.generalService.getDiscountValues({
             discountAccountsDetails: entry.discounts ?? [],
@@ -3319,7 +3337,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             entry.cessSum = 0;
         }
         // Calculate stock unit rate with amount
-        if (transaction.isStockTxn) {
+        if (updateTransactionRate && transaction.isStockTxn) {
             transaction.rate = Number((transaction.amount / transaction.quantity).toFixed(this.highPrecisionRate));
         }
         transaction.convertedTotal = giddhRoundOff(transaction.total * this.exchangeRate, this.giddhBalanceDecimalPlaces);
@@ -3646,9 +3664,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     ): SalesTransactionItemClass {
         let o = cloneDeep(selectedAcc.additional);
         const variant = o.stock?.variant;
-        const isInclusiveEntry = (variant?.purchaseTaxInclusive && o.category === 'expenses') ||
-            (variant?.salesTaxInclusive && o.category === 'income') ||
-            (variant?.fixedAssetTaxInclusive && o.category === 'fixedassets') || (!variant?.discountExclusive && variant?.variantDiscount?.unit?.code === transaction?.stockUnitCode);
+        let isInclusiveEntry = (variant?.purchaseTaxInclusive && o.category === 'expenses') || (variant?.salesTaxInclusive && o.category === 'income') || (variant?.fixedAssetTaxInclusive && o.category === 'fixedassets');
+
         transaction.taxInclusive = isInclusiveEntry;
         // check if we have quantity in additional object. it's for only bulk add mode
         transaction.quantity = o.quantity ? o.quantity : (o.stock) ? 1 : null;
@@ -3775,6 +3792,17 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         transaction.sacNumberExists = false;
         transaction.hsnNumber = null;
 
+        const matchedUnit = variant?.unitRates?.filter(ur => ur.stockUnitUniqueName === transaction.stockUnit);
+        if (matchedUnit?.length) {
+            transaction.rate = Number((matchedUnit[0].rate / this.exchangeRate).toFixed(this.highPrecisionRate));
+            entry.discounts = entry.discounts.map(item => {
+                item.isActive = false;
+                return item;
+            });
+            entry.discountSum = 0;
+            this.applyMrpDiscount(transaction, entry, false);
+        }
+
         if (transaction.stockDetails?.hsnNumber && transaction.stockDetails?.sacNumber) {
             if (this.inventorySettings?.manageInventory) {
                 transaction.hsnNumber = transaction.stockDetails.hsnNumber;
@@ -3842,14 +3870,17 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 }
             }
         }
+        
         this.focusOnDescription();
+
         if (calculateTransaction) {
             if (isInclusiveEntry) {
                 setTimeout(() => {
-                    // Set timeout is used as tax component is not rendered at the time control is reached here
-                    transaction.rate = Number((transaction.stockList[0].rate / this.exchangeRate).toFixed(this.highPrecisionRate));
+                    if (!matchedUnit?.length || !matchedUnit[0].rate) {
+                        transaction.rate = Number((transaction.stockList[0]?.rate / this.exchangeRate).toFixed(this.highPrecisionRate));
+                    }
                     transaction.total = transaction.quantity * transaction.rate;
-                    this.calculateTransactionValueInclusively(entry, transaction);
+                    this.calculateTransactionValueInclusively(entry, transaction, false);
                 });
             } else {
                 this.calculateStockEntryAmount(transaction);
@@ -4351,13 +4382,22 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 let lastIndex = -1;
                 let blankItemIndex = this.invFormData.entries?.findIndex(f => !f.transactions[0].accountUniqueName);
                 let isBlankItemInBetween;
+
+                let entry = new SalesEntryClass();
+                let entryDiscounts = this.generalService.getDiscountValues({
+                    discountAccountsDetails: entry.discounts ?? [],
+                    discountsList: this.discountsList
+                });
+
+                entry.discounts = entryDiscounts;
+
                 if (blankItemIndex > -1) {
                     lastIndex = blankItemIndex;
-                    this.invFormData.entries[lastIndex] = new SalesEntryClass();
+                    this.invFormData.entries[lastIndex] = entry;
                     isBlankItemInBetween = true;
                     isBlankItemPresent = true;
                 } else {
-                    this.invFormData.entries.push(new SalesEntryClass());
+                    this.invFormData.entries.push(entry);
                     lastIndex = this.invFormData.entries?.length - 1;
                     isBlankItemInBetween = false;
                 }
@@ -5497,6 +5537,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             salesEntryClass.tcsTaxList = [];
             salesEntryClass.tdsTaxList = [];
             salesEntryClass.transactions = [];
+            salesEntryClass['initiallyCall'] = true;
 
             if (entry.purchaseOrderItemMapping) {
                 if (this.copyPurchaseBill) {
@@ -9007,7 +9048,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             return;
         }
 
-        this.commonService.getBarcodeScanData(this.barcodeValue).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+
+        this.commonService.getBarcodeScanData(this.barcodeValue, this.invFormData.accountDetails.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.body && response.status === 'success') {
                 this.barcodeValue = '';
                 let stockObj = response.body?.stocks[0];
@@ -9051,7 +9093,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                                 uniqueName: variantObj.uniqueName,
                                 salesTaxInclusive: variantObj.salesTaxInclusive,
                                 purchaseTaxInclusive: variantObj.purchaseTaxInclusive,
-                                unitRates: []
+                                unitRates: [],
+                                variantDiscount: variantObj?.variantDiscount
                             }
                         },
                         parentGroups: [],
@@ -9155,7 +9198,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                             uniqueName: variantObj.uniqueName,
                             salesTaxInclusive: variantObj.salesTaxInclusive,
                             purchaseTaxInclusive: variantObj.purchaseTaxInclusive,
-                            unitRates: unitRates
+                            unitRates: unitRates,
+                            variantDiscount: variantObj.variantDiscount
                         }
                     };
                     this.invFormData.entries[activeEntryIndex].transactions[0].variant = {
@@ -9171,6 +9215,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         });
                     } else {
                         this.invFormData.entries[activeEntryIndex].transactions[0].setAmount(this.invFormData.entries[activeEntryIndex]);
+                        this.invFormData.entries[activeEntryIndex]['initiallyCall'] = undefined;
                         this.calculateWhenTrxAltered(this.invFormData.entries[activeEntryIndex], this.invFormData.entries[activeEntryIndex].transactions[0]);
                         this.calculateStockEntryAmount(this.invFormData.entries[activeEntryIndex].transactions[0]);
                     }
@@ -9212,6 +9257,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @memberof VoucherComponent
      */
     public variantChanged(event: IOption, transaction: SalesTransactionItemClass, entry: SalesEntryClass): void {
+        entry['initiallyCall'] = undefined;
         transaction.variant.name = event.label;
         this.currentTxnRequestObject[this.activeIndx].txn = transaction;
         this.currentTxnRequestObject[this.activeIndx].entry = entry;

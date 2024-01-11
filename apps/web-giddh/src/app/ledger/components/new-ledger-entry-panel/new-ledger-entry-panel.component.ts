@@ -561,14 +561,12 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                         this.isInclusiveEntry = false;
                     } else {
                         this.amountChanged();
-                        // this.calculateTotal();
                         this.calculateTax();
                     }
                     this.cdRef.markForCheck();
                 }, 10);
             }
         });
-        // this.cdRef.markForCheck();
     }
 
     public addToDrOrCr(type: string, e: Event) {
@@ -598,20 +596,35 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         if (this.currentTxn) {
             this.currentTxn.discount = event.discountTotal;
         }
-        if (this.accountOtherApplicableDiscount && this.accountOtherApplicableDiscount.length > 0) {
-            this.accountOtherApplicableDiscount.forEach(item => {
-                if (item && event.discount && item?.uniqueName === event.discount.discountUniqueName) {
-                    item.isActive = event.isActive.target?.checked;
-                }
+        const hasMrpDiscount = this.currentTxn.selectedAccount?.stock?.variant?.unitRates?.filter(variantDiscount => variantDiscount?.stockUnitUniqueName === this.currentTxn?.inventory?.unit?.stockUnitUniqueName);
+        if (!this.currentTxn.isMrpDiscountApplied && hasMrpDiscount?.length && this.currentTxn.selectedAccount.stock.variant?.variantDiscount?.discounts?.length) {
+            this.currentTxn?.discounts?.map(item => { item.isActive = false; return item; });
+
+            this.currentTxn.selectedAccount.stock.variant?.variantDiscount?.discounts?.forEach(variantDiscount => {
+                this.currentTxn.discounts = this.currentTxn?.discounts?.map(item => {
+                    if (variantDiscount?.discount?.uniqueName === item?.discountUniqueName) {
+                        item.isActive = true;
+                    }
+                    return item;
+                });
             });
+        } else {
+            if (this.accountOtherApplicableDiscount && this.accountOtherApplicableDiscount.length > 0) {
+                this.accountOtherApplicableDiscount.forEach(item => {
+                    if (item && event.discount && item?.uniqueName === event.discount.discountUniqueName) {
+                        item.isActive = event.isActive.target?.checked;
+                    }
+                });
+            }
+            if (this.currentTxn?.selectedAccount?.accountApplicableDiscounts) {
+                this.currentTxn.selectedAccount.accountApplicableDiscounts.forEach(item => {
+                    if (item && event.discount && item?.uniqueName === event.discount.discountUniqueName) {
+                        item.isActive = event.isActive.target?.checked;
+                    }
+                });
+            }
         }
-        if (this.currentTxn?.selectedAccount?.accountApplicableDiscounts) {
-            this.currentTxn.selectedAccount.accountApplicableDiscounts.forEach(item => {
-                if (item && event.discount && item?.uniqueName === event.discount.discountUniqueName) {
-                    item.isActive = event.isActive.target?.checked;
-                }
-            });
-        }
+        this.currentTxn.isMrpDiscountApplied = true;
         this.currentTxn.convertedDiscount = this.calculateConversionRate(this.currentTxn.discount);
         this.calculateTax();
     }
@@ -1727,12 +1740,35 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      * @memberof NewLedgerEntryPanelComponent
      */
     public preparePreAppliedDiscounts(): void {
-        if (this.currentTxn?.selectedAccount?.accountApplicableDiscounts?.length) {
-            this.currentTxn?.selectedAccount?.accountApplicableDiscounts?.map(item => item.isActive = true);
+        const hasMrpDiscount = this.currentTxn.selectedAccount?.stock?.variant?.unitRates?.filter(variantDiscount => variantDiscount?.stockUnitUniqueName === this.currentTxn?.inventory?.unit?.stockUnitUniqueName);
+        if (hasMrpDiscount?.length) {
             this.currentTxn?.discounts?.map(item => { item.isActive = false; return item; });
-            if (this.currentTxn?.discounts && this.currentTxn?.discounts?.length === 1) {
-                setTimeout(() => {
-                    this.currentTxn?.selectedAccount.accountApplicableDiscounts.forEach(element => {
+
+            this.currentTxn.selectedAccount.stock.variant?.variantDiscount?.discounts?.forEach(variantDiscount => {
+                this.currentTxn?.discounts?.map(item => {
+                    if (variantDiscount?.discount?.uniqueName === item?.discountUniqueName) {
+                        item.isActive = true;
+                    }
+                    return item;
+                });
+            });
+        } else {
+            if (this.currentTxn?.selectedAccount?.accountApplicableDiscounts?.length) {
+                this.currentTxn?.selectedAccount?.accountApplicableDiscounts?.map(item => item.isActive = true);
+                this.currentTxn?.discounts?.map(item => { item.isActive = false; return item; });
+                if (this.currentTxn?.discounts && this.currentTxn?.discounts?.length === 1) {
+                    setTimeout(() => {
+                        this.currentTxn?.selectedAccount.accountApplicableDiscounts.forEach(element => {
+                            this.currentTxn?.discounts?.map(item => {
+                                if (element?.uniqueName === item?.discountUniqueName) {
+                                    item.isActive = true;
+                                }
+                                return item;
+                            });
+                        });
+                    }, 300);
+                } else {
+                    this.currentTxn.selectedAccount.accountApplicableDiscounts.forEach(element => {
                         this.currentTxn?.discounts?.map(item => {
                             if (element?.uniqueName === item?.discountUniqueName) {
                                 item.isActive = true;
@@ -1740,9 +1776,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                             return item;
                         });
                     });
-                }, 300);
-            } else {
-                this.currentTxn.selectedAccount.accountApplicableDiscounts.forEach(element => {
+                }
+            } else if (this.accountOtherApplicableDiscount && this.accountOtherApplicableDiscount.length) {
+                this.currentTxn?.discounts?.map(item => { item.isActive = false });
+                this.accountOtherApplicableDiscount.forEach(element => {
                     this.currentTxn?.discounts?.map(item => {
                         if (element?.uniqueName === item?.discountUniqueName) {
                             item.isActive = true;
@@ -1750,24 +1787,14 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                         return item;
                     });
                 });
-            }
-        } else if (this.accountOtherApplicableDiscount && this.accountOtherApplicableDiscount.length) {
-            this.currentTxn?.discounts?.map(item => { item.isActive = false });
-            this.accountOtherApplicableDiscount.forEach(element => {
+            } else {
                 this.currentTxn?.discounts?.map(item => {
-                    if (element?.uniqueName === item?.discountUniqueName) {
-                        item.isActive = true;
-                    }
+                    item.isActive = false;
                     return item;
                 });
-            });
-        } else {
-            this.currentTxn?.discounts?.map(item => {
-                item.isActive = false;
-                return item;
-            });
-            if (this.currentTxn) {
-                this.currentTxn.discount = 0;
+                if (this.currentTxn) {
+                    this.currentTxn.discount = 0;
+                }
             }
         }
         /** if percent or value type discount applied */
