@@ -27,39 +27,6 @@
 }
 .my-dropdown-menu {
     padding: 10px;
-    label{
-        font-size: var(--font-size-15) !important;
-    }
-}
-.percent-label,
-.value-label {
-    width: 50px;
-}
-.percent-wrapper {
-    .form-control {
-        width: 120px;
-        padding-right: 20px !important;
-    }
-    .fa-percent {
-        top: 11px;
-        right: 6px;
-        color: var(--color-abbey);
-        font-size: 13px;
-    }
-}
-.value-box {
-    .form-control {
-        width: 120px;
-        padding-right: 10px !important;
-    }
-}
-.discount-list {
-    list-style: none;
-    overflow: auto;
-    max-height: 100px;
-    .discount-item {
-        height: 40px;
-    }
 }
 .adjust {
     .mat-input-element {
