@@ -3899,10 +3899,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     }
                     transaction.total = transaction.quantity * transaction.rate;
                     this.calculateTransactionValueInclusively(entry, transaction, false);
-
-                    if (matchedUnit?.length) {
-                        this.calculateStockEntryAmount(transaction);
-                    }
                 });
             } else {
                 this.calculateStockEntryAmount(transaction);
