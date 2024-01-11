@@ -159,7 +159,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
      * @memberof CustomerWiseComponent
      */
     public scrollToPosition(position: number): void {
-        this.stocksContainer.nativeElement.scrollTo({
+        this.stocksContainer.nativeElement?.scrollTo({
             top: position,
             behavior: 'smooth'
         });
@@ -851,7 +851,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                 this.currentUserStocks = [];
                 this.variantsWithoutDiscount = [];
                 this.dialogRef.close();
-                this.cdkScrollable.scrollTo({ top: 0 });
+                this.cdkScrollable?.scrollTo({ top: 0 });
             } else {
                 let type = event?.type === 'ACCOUNT' ? 'Account' : 'Group';
                 let msg = this.localeData?.already_added_msg.replace('[TYPE]', type);
@@ -886,7 +886,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                             variants.push(this.initVariantForm({ name: variant?.name, uniqueName: variant?.uniqueName, isTemproraryVariant: true, stockUnitUniqueName: variant?.units[0].uniqueName, variantUnitCode: variant?.units[0].code }));
                         });
                         this.currentUserStocks.push(event);
-                        this.stocksContainer.nativeElement.scrollTo({
+                        this.stocksContainer.nativeElement?.scrollTo({
                             top: this.stocksContainer.nativeElement.scrollHeight,
                             behavior: 'smooth'
                         });
