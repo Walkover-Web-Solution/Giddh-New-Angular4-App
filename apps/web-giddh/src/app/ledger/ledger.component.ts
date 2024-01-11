@@ -2707,6 +2707,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 let stockUniqueName = '';
                 let stockUnitUniqueName = '';
 
+                txn.isMrpDiscountApplied = false;
+
                 //#region unit rates logic
                 if (txn?.selectedAccount?.stock) {
                     const defaultUnitRates = this.generalService.voucherApiVersion === 1 ? txn.selectedAccount?.stock?.unitRates : txn.selectedAccount?.stock?.variant?.unitRates;

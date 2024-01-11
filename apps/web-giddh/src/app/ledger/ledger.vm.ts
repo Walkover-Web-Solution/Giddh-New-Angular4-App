@@ -472,6 +472,7 @@ export class TransactionVM {
     public showOtherTax: boolean = false;
     public stockUniqueName?: string;
     public oppositeAccountUniqueName?: string;
+    public isMrpDiscountApplied?: boolean;
 }
 
 export interface IInventory {
