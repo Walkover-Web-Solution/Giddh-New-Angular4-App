@@ -182,14 +182,29 @@
                                         }
                                     }
                                     &.variant-delete {
-                                        visibility: hidden;
                                         @include setWidth(60px);
+                                        .delete-show {
+                                            button {
+                                                visibility: hidden;
+                                            }
+                                        }
+                                        &:hover {
+                                            .delete-show {
+                                                button {
+                                                    visibility: visible;
+                                                }
+                                            }
+                                        }
                                     }
                                 }
 
                                 &:hover {
                                     .variant-delete {
-                                        visibility: visible;
+                                        .delete-show {
+                                            button {
+                                                visibility: visible;
+                                            }
+                                        }
                                     }
                                 }
                             }
