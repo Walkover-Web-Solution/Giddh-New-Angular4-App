@@ -1,5 +1,5 @@
 import { CdkScrollable, ScrollDispatcher } from "@angular/cdk/scrolling";
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
+import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
 import { FormArray, FormControl, FormGroup, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { ActivatedRoute } from "@angular/router";
@@ -17,6 +17,7 @@ export interface CustomerVendorDiscountBasic {
     page: number;
     count: number;
     query: string;
+    userType: string;
 }
 
 @Component({
@@ -27,15 +28,15 @@ export interface CustomerVendorDiscountBasic {
 export class CustomerWiseComponent implements OnInit, OnDestroy {
     /** Instance of Mat Dialog for Add Inventory */
     @ViewChild("addSearchModal") public addSearchModal: TemplateRef<any>;
+    /** Holds HTML Element Reference */
+    @ViewChild('stocksContainer', { static: true }) stocksContainer: ElementRef;
     /** CDK Scrollable Reference */
     @ViewChild(CdkScrollable) cdkScrollable: CdkScrollable;
-    /* Table Columns */
-    displayedColumns: string[] = ['name', 'price', 'radio', 'discount', 'quantity', 'delete'];
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
-    /** Pagination limit */
+    /** Pagination limit, items per page */
     public paginationLimit: number = 100;
     /** Holds Pagination Information of (Account & Group) and Stocks  */
     public pagination: any;
@@ -45,6 +46,8 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Holds Group uniques name from Params */
     private groupUniqueName: 'sundrydebtors' | 'sundrycreditors';
+    /** Holds type of user */
+    private userType: 'customer' | 'vendor';
     /** Holds show loader status  when user api call*/
     public isLoading: boolean = false;
     /** Holds show loader status when stock api call*/
@@ -75,17 +78,17 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
     /** Holds list of variant of all stock which do not apply discount */
     public variantsWithoutDiscount: any[] = [];
     /** Variant object keys */
-    private variantDesiredKeys: any[] = ['price', 'quantity', 'discountExclusive', 'stockUnitUniqueName', 'variantUniqueName', 'discounts'];
+    private variantDesiredKeys: any[] = ['price', 'quantity', 'taxInclusive', 'stockUnitUniqueName', 'variantUniqueName', 'discounts'];
     /** User search string */
-    public userSearchQuery: any = "";
+    public userSearchQuery: string = "";
     /** Stock search string */
     public stockSearchQuery: any = "";
-    /** Holds type of user */
-    private userType: 'customer' | 'vendor';
     /** Holds Variants Dropdown default value */
     public variantsDropdownDefaultValue: any;
-    /** Holds Update Discount Timeout Status */
-    private updateDiscountTimeout: any;
+    /** Hold Filter Type Value */
+    public userFilterType: 'account' | 'group' | 'all' = 'all';
+    /** True if any stock or variant will be added */
+    public showSaveDiscardButton: boolean = false;
 
     constructor(
         private dialog: MatDialog,
@@ -124,7 +127,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                 this.userSearchQuery = queryString;
                 this.currentUser = null;
                 this.currentUserStocks = [];
-                this.getCustomerVendorDiscountUserList(queryString);
+                this.getCustomerVendorDiscountUserList();
             }
         });
 
@@ -141,9 +144,10 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
         this.scrollDispatcher.scrolled().pipe(takeUntil(this.destroyed$)).subscribe((event: any) => {
             if (event && (event?.getDataLength() - event?.getRenderedRange().end) < 10 && !this.isLoading && (this.pagination.user.totalPages > this.pagination.user.page)) {
                 this.pagination.user.page++;
-                this.getCustomerVendorDiscountUserList(this.userSearchQuery, true);
+                this.getCustomerVendorDiscountUserList(true);
             }
         });
+
     }
 
     /**
@@ -175,13 +179,14 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
      * @param {string} [query='']
      * @memberof CustomerWiseComponent
      */
-    private getCustomerVendorDiscountUserList(query: string = '', isLoadMore: boolean = false): void {
+    private getCustomerVendorDiscountUserList(isLoadMore: boolean = false): void {
         this.isLoading = true;
         let model: CustomerVendorDiscountBasic = {
             page: this.pagination.user.page,
             count: this.paginationLimit,
             group: this.groupUniqueName,
-            query: query
+            userType: this.userFilterType,
+            query: this.userSearchQuery
         };
 
         if (!isLoadMore) {
@@ -190,6 +195,8 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
 
         this.inventoryService.getCustomerVendorDiscountUserList(model).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             this.isLoading = false;
+            this.currentUserStocks = [];
+            this.currentUser = null;
             if (response && response?.body?.results?.length) {
                 this.pagination.user.page = response?.body?.page;
                 this.pagination.user.totalPages = response?.body?.totalPages;
@@ -209,9 +216,9 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Initiate Discount main form, which have fields 
-     * customerVendorAccountUniqueName, 
-     * customerVendorGroupUniqueName, 
+     * Initiate Discount main form, which have fields
+     * customerVendorAccountUniqueName,
+     * customerVendorGroupUniqueName,
      * discountInfo
      *
      * @private
@@ -241,7 +248,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
         return this.formBuilder.group({
             stockName: [discount?.stock?.name],
             stockUniqueName: [discount?.stock?.uniqueName, Validators.required],
-            isTempStock: [discount?.stock?.isTempStock],
+            isTempStock: [discount?.isTempStock],
             units: [discount?.units],
             hasVariants: [discount?.hasVariants],
             variants: this.formBuilder.array([])
@@ -258,38 +265,17 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
      */
     private initVariantForm(variant: any): UntypedFormGroup {
         return this.formBuilder.group({
-            price: [variant?.price, Validators.required],
-            quantity: [variant?.defaultQuantity, Validators.required],
-            discountExclusive: [variant?.discountExclusive ?? true, Validators.required],
-            stockUnitUniqueName: [variant?.stockUnitUniqueName, Validators.required],
-            variantUnitName: [variant?.variantUnitName],
-            variantUniqueName: [variant?.uniqueName, Validators.required],
+            price: [variant?.price],
+            quantity: [variant?.defaultQuantity],
+            taxInclusive: [variant?.taxInclusive ?? true],
+            stockUnitUniqueName: [variant?.stockUnitUniqueName],
+            variantUnitCode: [variant?.variantUnitCode],
+            variantUniqueName: [variant?.uniqueName],
             variantName: [variant?.name],
-            discountInfo: [variant?.discountInfo],
             isTemproraryVariant: [variant?.isTemproraryVariant],
-            discounts: this.formBuilder.array([]),
-            discountValue: [variant?.discountValue, Validators.required],
-            discountFixedValueModal: [variant?.discountFixedValueModal],
-            discountPercentageModal: [variant?.discountPercentageModal]
+            discounts: [variant?.discounts],
+            discountName: [variant?.discountName]
         });
-    }
-
-    /**
-     * This function set Discount > Stock >  Variants > Discounts value
-     *
-     * @private
-     * @param {*} discount
-     * @return {*}  {UntypedFormGroup}
-     * @memberof CustomerWiseComponent
-     */
-    private initDiscountValuesForm(discount: any): UntypedFormGroup {
-        return this.formBuilder.group({
-            type: [discount?.type],
-            value: [discount?.value],
-            uniqueName: [discount?.uniqueName],
-            discountUniqueName: [discount?.uniqueName],
-            isActive: [discount?.isActive]
-        })
     }
 
     /**
@@ -301,9 +287,20 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
     private getDiscounts(): void {
         this.settingsDiscountService.GetDiscounts().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success" && response?.body?.length > 0) {
-                this.discountsList = response?.body;
+                this.discountsList = response?.body.map(item => {
+                    return {
+                        label: item?.name,
+                        value: item?.uniqueName,
+                        additional: item
+                    }
+                });
+                this.discountsList.unshift({
+                    label: this.localeData?.select_discount,
+                    value: null
+                });
             }
         });
+
     }
 
     /**
@@ -312,10 +309,12 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
      * @param {*} userData
      * @memberof CustomerWiseComponent
      */
-    public selectUser(userData: any): void {
-        if (this.currentUser?.uniqueName !== userData?.uniqueName) {
+    public selectUser(userData: any, fromDiscard: boolean = false): void {
+        if (this.currentUser?.uniqueName !== userData?.uniqueName || fromDiscard) {
+            this.showSaveDiscardButton = false;
             this.variantsWithoutDiscount = [];
             this.currentUser = userData;
+            this.pagination = this.paginationInit();
             let isTempUser = this.checkTemporaryUser(userData);
             if (isTempUser === -1) {
                 this.currentUser['isTempUser'] = false;
@@ -345,138 +344,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
         this.isStockLoading = true;
         this.inventoryService.getAllDiscount(model).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response && response?.body?.results?.length) {
-                this.initDiscountMainForm();
-                if (userData?.type === 'ACCOUNT') {
-                    this.discountForm.get('customerVendorAccountUniqueName').patchValue(userData?.uniqueName);
-                } else {
-                    this.discountForm.get('customerVendorGroupUniqueName').patchValue(userData?.uniqueName);
-                }
-
-                this.pagination.stock.page = response?.body?.page;
-                this.pagination.stock.totalPages = response?.body?.totalPages;
-                this.pagination.stock.totalItems = response?.body?.totalItems;                
-
-                const discounts = this.discountForm.get('discountInfo') as UntypedFormArray;
-
-                response?.body?.results.forEach((res, index) => {
-                    this.variantsWithoutDiscount.push([]);
-                    if (res?.hasVariants) {
-                        this.variantsWithoutDiscount[index] = res.variants?.filter(variant => !variant?.price)?.map(variant => {
-                            return {
-                                label: variant?.name,
-                                value: variant?.uniqueName
-                            };
-                        });
-                    }
-
-                    res.units = res.units.map(unit => {
-                        unit.value = unit?.uniqueName;
-                        unit.label = unit?.name;
-                        return unit;
-                    });
-
-                    res['isTempStock'] = false;
-                    res['hasVariants'] = res?.hasVariants;
-
-                    discounts.push(this.initDiscountForm(res));
-
-                    let variants = (this.discountForm.get('discountInfo') as FormArray).at(index).get('variants') as UntypedFormArray;
-                    res?.variants.forEach((variant, variantIndex) => {
-                        if (variant?.price) {
-                            let variantUnitName = null;
-                            if (variant?.stockUnitUniqueName) {
-                                if (variantUnitName === null) {
-                                    res?.units.forEach(element => {
-                                        if (element?.uniqueName === variant?.stockUnitUniqueName) {
-                                            variantUnitName = element?.name;
-                                        }
-                                    });
-                                } else {
-                                    variantUnitName = res?.units[0]?.name;
-                                }
-                            }
-                            variant.variantUnitName = variantUnitName;
-                            variant.isTemproraryVariant = false;
-
-                            let discounts = [];
-
-                            if (!variant.discountInfo) {
-                                variant.discountInfo = [];
-                            }
-
-                            let defaultType = "FIX_AMOUNT";
-                            let discountValue = 0;
-
-                            if (variant?.discounts?.length && !variant?.discounts[0]?.uniqueName && (variant?.discounts[0]?.type === "PERCENTAGE" || variant?.discounts[0]?.type === "FIX_AMOUNT")) {
-                                defaultType = variant?.discounts[0]?.type;
-                                discountValue = variant?.discounts[0]?.value;
-
-                                if (variant?.discounts[0]?.type === "PERCENTAGE") {
-                                    variant.discountPercentageModal = discountValue;
-                                }
-
-                                if (variant?.discounts[0]?.type === "FIX_AMOUNT") {
-                                    variant.discountFixedValueModal = discountValue;
-                                }
-                            }
-
-                            variant.discountInfo.push({ type: defaultType, discountType: defaultType, value: discountValue, discountValue: discountValue, isActive: true, discountUniqueName: null });
-
-                            variant?.discounts?.forEach(item => {
-                                let discountItem = this.getDiscountDataByUniqueName(item.uniqueName);
-                                if (discountItem) {
-                                    variant.discountInfo.push({ ...discountItem, isActive: true, discountUniqueName: discountItem.uniqueName });
-                                }
-                                discounts.push({ type: item.type, value: item.value, uniqueName: item.uniqueName });
-                            });
-
-                            variants.push(this.initVariantForm(variant));
-
-                            discounts.forEach(item => {                                
-                                (variants.at(variantIndex).get('discounts') as UntypedFormArray)?.push(this.initDiscountValuesForm({ type: item.type, value: item.value, uniqueName: item.uniqueName, isActive: true }));
-                            });
-
-                            this.updateDiscountInVariant(variants.at(variantIndex) as UntypedFormGroup);
-
-                            const variantControl = (((this.discountForm.get('discountInfo') as FormArray).at(index).get('variants') as UntypedFormArray).at(variantIndex) as FormGroup).controls;
-                            const formStatus = ((this.discountForm.get('discountInfo') as FormArray).at(index) as UntypedFormArray);
-
-                            variantControl.price.valueChanges.pipe(debounceTime(400), takeUntil(this.destroyed$)).subscribe(priceValue => {
-                                if (!formStatus.invalid) {
-                                    const stockUniqueName = (this.discountForm.get('discountInfo') as FormArray).at(index).get('stockUniqueName').value;
-                                    let variant = { price: priceValue };
-                                    variant = this.getDiscountValueOrUniqueName(variant, variantControl);
-                                    this.updateDiscount(stockUniqueName, variantControl.variantUniqueName.value, variant);
-                                }
-                            });
-                            variantControl.quantity.valueChanges.pipe(debounceTime(400), takeUntil(this.destroyed$)).subscribe(quantityValue => {
-                                if (!formStatus.invalid) {
-                                    const stockUniqueName = (this.discountForm.get('discountInfo') as FormArray).at(index).get('stockUniqueName').value;
-                                    let variant = { quantity: quantityValue };
-                                    variant = this.getDiscountValueOrUniqueName(variant, variantControl);
-                                    this.updateDiscount(stockUniqueName, variantControl.variantUniqueName.value, variant);
-                                }
-                            });
-                            variantControl.discountExclusive.valueChanges.pipe(debounceTime(400), takeUntil(this.destroyed$)).subscribe(discountExclusiveValue => {
-                                if (!formStatus.invalid) {
-                                    const stockUniqueName = (this.discountForm.get('discountInfo') as FormArray).at(index).get('stockUniqueName').value;
-                                    let variant = { discountExclusive: discountExclusiveValue };
-                                    variant = this.getDiscountValueOrUniqueName(variant, variantControl);
-                                    this.updateDiscount(stockUniqueName, variantControl.variantUniqueName.value, variant);
-                                }
-                            });
-                            variantControl.stockUnitUniqueName.valueChanges.pipe(debounceTime(400), takeUntil(this.destroyed$)).subscribe(stockUnitUniqueNameValue => {
-                                if (!formStatus.invalid) {
-                                    const stockUniqueName = (this.discountForm.get('discountInfo') as FormArray).at(index).get('stockUniqueName').value;
-                                    let variant = { stockUnitUniqueName: stockUnitUniqueNameValue };
-                                    variant = this.getDiscountValueOrUniqueName(variant, variantControl);
-                                    this.updateDiscount(stockUniqueName, variantControl.variantUniqueName.value, variant);
-                                }
-                            });
-                        }
-                    });
-                });
-                this.currentUserStocks = response?.body?.results;
+                this.initialiseAllDiscounts(userData, cloneDeep(response));
             } else {
                 this.currentUserStocks = [];
             }
@@ -485,49 +353,92 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This function take variant object,
-     * and add discount unique name or discount value and type to that object
+     * To assign values of all discounts to form
      *
      * @private
-     * @param {*} variantObject
-     * @param {*} variantControl
-     * @return {*}  {*}
+     * @param {*} userData
+     * @param {*} responseData
      * @memberof CustomerWiseComponent
      */
-    private getDiscountValueOrUniqueName(variantObject: any, variantControl: any): any {
-        let discounts = variantControl.discounts.value;
-
-        variantObject['discounts'] = [];
-        discounts.forEach(item => {
-            let discountObject = {};
-            if (item.uniqueName) {
-                discountObject['uniqueName'] = item.uniqueName;
-                discountObject['value'] = null;
-                discountObject['type'] = null;
-            } else {
-                discountObject['uniqueName'] = null;
-                discountObject['value'] = item.value;
-                discountObject['type'] = item.type;
-            }
-            variantObject['discounts'].push(discountObject)
-        });
-        return variantObject;
-    }
-
-    /**
-     * This function take discount unique name,
-     * and match with all discount value and return matched object which have all details related to that discount  
-     *
-     * @private
-     * @param {string} discountUniqueName
-     * @return {*}  {*}
-     * @memberof CustomerWiseComponent
-     */
-    private getDiscountDataByUniqueName(discountUniqueName: string): any {
-        if (this.discountsList.length) {
-            const index = this.discountsList.findIndex(item => item['uniqueName'] === discountUniqueName);
-            return this.discountsList[index];
+    private initialiseAllDiscounts(userData: any, responseData: any): void {
+        this.initDiscountMainForm();
+        let getAllDiscountApiResponse = cloneDeep(responseData);
+        if (userData?.type === 'ACCOUNT') {
+            this.discountForm.get('customerVendorAccountUniqueName').patchValue(userData?.uniqueName);
+        } else {
+            this.discountForm.get('customerVendorGroupUniqueName').patchValue(userData?.uniqueName);
         }
+
+        this.pagination.stock.page = responseData?.body?.page;
+        this.pagination.stock.totalPages = responseData?.body?.totalPages;
+        this.pagination.stock.totalItems = responseData?.body?.totalItems;
+
+        const discounts = this.discountForm.get('discountInfo') as UntypedFormArray;
+
+        responseData?.body?.results.forEach((res, index) => {
+            this.variantsWithoutDiscount.push([]);
+            if (res?.hasVariants) {
+                this.variantsWithoutDiscount[index] = res.dropDownVariants?.map(variant => {
+                    return {
+                        label: variant?.name,
+                        value: variant?.uniqueName
+                    };
+                });
+            }
+
+            res['isTempStock'] = false;
+            res['hasVariants'] = res?.hasVariants;
+
+            discounts.push(this.initDiscountForm(res));
+
+            let variants = (this.discountForm.get('discountInfo') as FormArray).at(index).get('variants') as UntypedFormArray;
+
+            res?.variants.forEach((variant, variantIndex) => {
+                if (Object.keys(variant).length > 2) {
+                    let variantUnitCode = null;
+                    if (variant?.stockUnitUniqueName) {
+                        if (variantUnitCode === null) {
+                            res?.units.forEach(element => {
+                                if (element?.uniqueName === variant?.stockUnitUniqueName) {
+                                    variantUnitCode = element?.code;
+                                }
+                            });
+                        } else {
+                            variantUnitCode = res?.units[0]?.code;
+                        }
+                    }
+                    variant.variantUnitCode = variantUnitCode;
+                    variant.isTemproraryVariant = false;
+
+                    if (getAllDiscountApiResponse?.body?.results[index]?.variants[variantIndex]?.discounts[0]?.discount?.uniqueName) {
+                        variant.discounts = [{ uniqueName: getAllDiscountApiResponse?.body?.results[index].variants[variantIndex]?.discounts[0]?.discount?.uniqueName }];
+                        variant.discountName = getAllDiscountApiResponse?.body?.results[index].variants[variantIndex]?.discounts[0]?.discount?.name;
+                    } else {
+                        variant.discounts = null;
+                    }
+                    variants.push(this.initVariantForm(variant));
+                    const variantControl = (((this.discountForm.get('discountInfo') as FormArray).at(index).get('variants') as UntypedFormArray).at(variantIndex) as FormGroup).controls;
+
+                    variantControl.discounts.valueChanges.pipe(debounceTime(400), takeUntil(this.destroyed$)).subscribe(discountsValue => {
+                        const stockUniqueName = (this.discountForm.get('discountInfo') as FormArray).at(index).get('stockUniqueName').value;
+                        let variant = { discounts: discountsValue };
+                        this.updateDiscount(stockUniqueName, variantControl.variantUniqueName.value, variant);
+                    });
+
+                    variantControl.taxInclusive.valueChanges.pipe(debounceTime(400), takeUntil(this.destroyed$)).subscribe(taxInclusiveValue => {
+                        const stockUniqueName = (this.discountForm.get('discountInfo') as FormArray).at(index).get('stockUniqueName').value;
+                        let variant = { taxInclusive: taxInclusiveValue };
+                        this.updateDiscount(stockUniqueName, variantControl.variantUniqueName.value, variant);
+                    });
+                    variantControl.price.valueChanges.pipe(debounceTime(400), takeUntil(this.destroyed$)).subscribe(priceValue => {
+                        const stockUniqueName = (this.discountForm.get('discountInfo') as FormArray).at(index).get('stockUniqueName').value;
+                        let variant = { price: priceValue };
+                        this.updateDiscount(stockUniqueName, variantControl.variantUniqueName.value, variant);
+                    });
+                }
+            });
+        });
+        this.currentUserStocks = responseData?.body?.results;
     }
 
     /**
@@ -629,7 +540,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                             this.currentUserStocks = [];
                             this.currentUser = null;
                         }
-                        this.currentUserStocks.splice(stockFormArrayIndex,1);
+                        this.currentUserStocks.splice(stockFormArrayIndex, 1);
                         this.variantsWithoutDiscount.splice(stockFormArrayIndex, 1);
                     }
                     this.toaster.successToast(response?.body);
@@ -659,6 +570,12 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                 };
                 /** To add deleted variant info in "variantsWithoutDiscount" array  */
                 this.variantsWithoutDiscount.at(stockFormArrayIndex).push(variant);
+
+                /** This code is to update value ngOnChanges in  Dropdown component */
+                let stockData = cloneDeep(this.variantsWithoutDiscount);
+                this.variantsWithoutDiscount = [];
+                this.variantsWithoutDiscount = stockData;
+
                 stock.removeAt(variantFormArrayIndex);
                 const deletedMessage = this.localeData?.remove_item_msg?.replace('[TYPE]', type.toUpperCase());
                 this.toaster.successToast(deletedMessage);
@@ -676,7 +593,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
 
     /**
      * This will trigger when user select variant from dropdown,
-     * and add variant with blank values in discountForm 
+     * and add variant with blank values in discountForm
      *
      * @param {*} event
      * @param {number} stockFormArrayIndex
@@ -694,18 +611,14 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
             let variantObj = {
                 price: null,
                 quantity: null,
-                discountExclusive: false,
-                stockUnitUniqueName: units[0].value,
-                variantUnitName: units[0].label,
+                taxInclusive: true,
+                stockUnitUniqueName: units[0]?.uniqueName,
+                variantUnitCode: units[0]?.code,
                 uniqueName: event.value,
                 name: event.label,
-                discountValue: 0,
-                discountInfo: [{ type: "FIX_AMOUNT", discountType: "FIX_AMOUNT", value: 0, discountValue: 0, isActive: true, discountUniqueName: null }],
                 isTemproraryVariant: true
             };
             variants.push(this.initVariantForm(variantObj));
-            (variants.at(variants.value.length - 1).get('discounts') as UntypedFormArray).push(this.initDiscountValuesForm({ type: "FIX_AMOUNT", discountType: "FIX_AMOUNT", value: 0, discountValue: 0, isActive: true, discountUniqueName: null }));
-
             this.variantsWithoutDiscount[stockFormArrayIndex] = this.variantsWithoutDiscount[stockFormArrayIndex].filter(variant => variant.value !== event.value);
             this.changeDetectorRef.detectChanges();
         }
@@ -736,69 +649,97 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Save Discount 
+     * If user enter details in temprorary variants and want to discard
+     *
+     * @memberof CustomerWiseComponent
+     */
+    public discardChanges(): void {
+        if (this.userList?.length && !this.isLoading) {
+            this.selectUser(this.currentUser, true);
+        }
+        this.changeDetectorRef.detectChanges();
+    }
+
+    /**
+     * Save Discount
      *
      * @param {number} stockFormArrayIndex
      * @memberof CustomerWiseComponent
      */
-    public saveDiscount(stockFormArrayIndex: number): void {
-        if (!((this.discountForm.get('discountInfo') as FormArray).at(stockFormArrayIndex) as UntypedFormArray).invalid) {
-            this.isStockLoading = true;
-            const discountFormValues = cloneDeep(this.discountForm.value);
-            const stockUniqueName = discountFormValues.discountInfo[stockFormArrayIndex].stockUniqueName;
-
-            discountFormValues.discountInfo = discountFormValues.discountInfo[stockFormArrayIndex]?.variants?.map(variant => {
-                if (!variant.discountInfo[0]?.discountUniqueName && variant.discountInfo[0]?.discountValue) {
-                    variant.discountInfo[0].isActive = true;
-                } else {
-                    if (variant.discountInfo.length) {
-                        variant.discountInfo[0].isActive = false;
-                    }
+    public saveDiscount(): void {
+        const discountFormArray = this.discountForm.value;
+        let formData = cloneDeep(discountFormArray);
+        let filteredArray = [];
+        filteredArray = formData.discountInfo.filter((item, index) => {
+            item['index'] = index;
+            if (item?.isTempStock) {
+                return true;
+            }
+            if (item?.variants) {
+                return item?.variants.some(variant => variant.isTemproraryVariant);
+            }
+            return false;
+        });
+        let checkMandatory: boolean = false;
+        filteredArray.forEach((stock) => {
+            checkMandatory = stock.variants.some(item => (item.discounts !== null || item.price !== null));
+            stock.variants = stock.variants?.map(variant => {
+                if (variant.discounts === null) {
+                    variant.discounts = [];
                 }
+                return this.filterKeys(variant, this.variantDesiredKeys);
+            });
+        });
+        if (!checkMandatory) {
+            this.toaster.warningToast(this.localeData?.invalid_form_msg);
+            return;
+        } else {
+            filteredArray.forEach((stock) => {
+                let reqObj = {
+                    customerVendorAccountUniqueName: this.discountForm.value.customerVendorAccountUniqueName,
+                    customerVendorGroupUniqueName: this.discountForm.value.customerVendorGroupUniqueName,
+                    discountInfo: stock.variants
+                }
+                this.inventoryService.createDiscount(stock.stockUniqueName, reqObj).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+                    if (response && response?.status === 'success') {
+                        this.showSaveDiscardButton = false;
+                        const discountForm = (this.discountForm.get('discountInfo') as FormArray).at(stock.index) as UntypedFormArray;
+                        discountForm.get('isTempStock').patchValue(false);
 
-                variant.discountInfo = variant.discountInfo?.filter(res => res.isActive)?.map(discount => {
-                    discount.value = discount.discountValue;
-                    discount.uniqueName = discount.discountUniqueName;
-                    discount.type = discount.discountType;
-                    if (discount.uniqueName) {
-                        return {
-                            uniqueName: discount.uniqueName,
-                        };
+                        let index = this.checkTemporaryUser(this.currentUser.uniqueName);
+                        if (index > -1) {
+                            this.tempUserList.splice(index, 1);
+                        }
+                        const variants = (((this.discountForm.get('discountInfo') as FormArray).at(stock.index) as UntypedFormArray).get('variants') as UntypedFormArray);
+
+                        for (let i = 0; i < variants.length; i++) {
+                            variants.at(i).get('isTemproraryVariant').patchValue(false);
+
+                            const variantControl = (variants.at(i) as FormGroup).controls;
+
+                            variantControl.discounts.valueChanges.pipe(debounceTime(400), takeUntil(this.destroyed$)).subscribe(discountsValue => {
+                                const stockUniqueName = (this.discountForm.get('discountInfo') as FormArray).at(stock.index).get('stockUniqueName').value;
+                                let variant = { discounts: discountsValue };
+                                this.updateDiscount(stockUniqueName, variantControl.variantUniqueName.value, variant);
+                            });
+                            variantControl.taxInclusive.valueChanges.pipe(debounceTime(400), takeUntil(this.destroyed$)).subscribe(taxInclusiveValue => {
+                                const stockUniqueName = (this.discountForm.get('discountInfo') as FormArray).at(stock.index).get('stockUniqueName').value;
+                                let variant = { taxInclusive: taxInclusiveValue };
+                                this.updateDiscount(stockUniqueName, variantControl.variantUniqueName.value, variant);
+                            });
+                            variantControl.price.valueChanges.pipe(debounceTime(400), takeUntil(this.destroyed$)).subscribe(priceValue => {
+                                const stockUniqueName = (this.discountForm.get('discountInfo') as FormArray).at(stock.index).get('stockUniqueName').value;
+                                let variant = { price: priceValue };
+                                this.updateDiscount(stockUniqueName, variantControl.variantUniqueName.value, variant);
+                            });
+                        }
+                        this.currentUser.isTempUser = false;
+                        this.toaster.successToast(response?.body);
                     } else {
-                        return {
-                            value: discount.value,
-                            type: discount.type
-                        };
+                        this.toaster.errorToast(response?.message)
                     }
                 });
-
-                variant.discounts = cloneDeep(variant.discountInfo);
-
-                return this.filterKeys(variant, this.variantDesiredKeys)
             });
-
-            this.inventoryService.createDiscount(stockUniqueName, discountFormValues).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
-                this.isStockLoading = false;
-                if (response && response?.status === 'success') {
-                    const discountForm = (this.discountForm.get('discountInfo') as FormArray).at(stockFormArrayIndex) as UntypedFormArray;
-                    discountForm.get('isTempStock').patchValue(false);
-                    let index = this.checkTemporaryUser(this.currentUser.uniqueName);
-                    if (index > -1) {
-                        this.tempUserList.splice(index, 1);
-                    }
-                    const variantArrayLength = (((this.discountForm.get('discountInfo') as FormArray).at(stockFormArrayIndex) as UntypedFormArray).get('variants') as UntypedFormArray).length;
-                    const variants = (((this.discountForm.get('discountInfo') as FormArray).at(stockFormArrayIndex) as UntypedFormArray).get('variants') as UntypedFormArray);
-                    for (let i = 0; i < variantArrayLength; i++) {
-                        variants.at(i).get('isTemproraryVariant').patchValue(false);
-                    }
-                    this.currentUser.isTempUser = false;
-                    this.toaster.successToast(response?.body);
-                } else {
-                    this.toaster.errorToast(response?.message)
-                }
-            });
-        } else {
-            this.toaster.errorToast(this.localeData?.invaild_form_msg);
         }
     }
 
@@ -863,7 +804,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * It trigger when user select (Account or  Group) or  Stock 
+     * It trigger when user select (Account or  Group) or  Stock
      *
      * @param {*} event
      * @param {('users' | 'stocks')} type
@@ -881,7 +822,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                 this.currentUserStocks = [];
                 this.variantsWithoutDiscount = [];
                 this.dialogRef.close();
-                this.cdkScrollable.scrollTo({ top: 0 });
+                this.cdkScrollable?.scrollTo({ top: 0 });
             } else {
                 let type = event?.type === 'ACCOUNT' ? 'Account' : 'Group';
                 let msg = this.localeData?.already_added_msg.replace('[TYPE]', type);
@@ -893,6 +834,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                 let msg = this.localeData?.already_added_msg.replace('[TYPE]', this.commonLocaleData?.app_stock);
                 this.toaster.warningToast(msg);
             } else {
+                this.showSaveDiscardButton = true;
                 this.inventoryService.getStockDetails(event?.uniqueName, this.userType).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
                     if (response && response?.body) {
                         const discounts = this.discountForm.get('discountInfo') as UntypedFormArray;
@@ -903,19 +845,22 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                         } else {
                             this.discountForm.get('customerVendorGroupUniqueName').patchValue(this.currentUser.uniqueName);
                         }
-
-                        discounts.insert(0,this.initDiscountForm({
-                            stock: { name: event?.name, uniqueName: event?.uniqueName, isTempStock: true },
+                        discounts.push(this.initDiscountForm({
+                            stock: { name: event?.name, uniqueName: event?.uniqueName },
+                            isTempStock: true,
                             units: [],
                             hasVariants: response?.body?.variants.length > 1
                         }));
 
-                        let variants = (this.discountForm.get('discountInfo') as FormArray).at(0).get('variants') as UntypedFormArray;
-                        response.body?.variants.forEach((variant, variantIndex) => {
-                            variants.push(this.initVariantForm({ name: variant?.name, uniqueName: variant?.uniqueName, isTemproraryVariant: true, discountValue: 0, stockUnitUniqueName: variant?.units[0].uniqueName, variantUnitName: variant?.units[0].name, discountInfo: [{ type: "FIX_AMOUNT", discountType: "FIX_AMOUNT", value: 0, discountValue: 0, isActive: true, discountUniqueName: null }] }));
-                            (variants.at(variantIndex).get('discounts') as UntypedFormArray).push(this.initDiscountValuesForm({ type: "FIX_AMOUNT", discountType: "FIX_AMOUNT", value: 0, discountValue: 0, isActive: true, discountUniqueName: null }))
+                        let variants = (this.discountForm.get('discountInfo') as FormArray).at(stockIndex).get('variants') as UntypedFormArray;
+                        response.body?.variants.forEach(variant => {
+                            variants.push(this.initVariantForm({ name: variant?.name, uniqueName: variant?.uniqueName, isTemproraryVariant: true, stockUnitUniqueName: variant?.units[0].uniqueName, variantUnitCode: variant?.units[0].code }));
                         });
                         this.currentUserStocks.push(event);
+                        this.stocksContainer.nativeElement?.scrollTo({
+                            top: this.stocksContainer.nativeElement.scrollHeight,
+                            behavior: 'smooth'
+                        });
                     }
 
                 });
@@ -925,7 +870,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Handle page change event for list of Default Stock and Variants 
+     * Handle page change event for list of Default Stock and Variants
      *
      * @param {*} event
      * @memberof CustomerWiseComponent
@@ -943,75 +888,32 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
      * @param {UntypedFormGroup} variant
      * @memberof CustomerWiseComponent
      */
-    public updateDiscountInVariant(variant: UntypedFormGroup, discountCollection?: any, stockIndex?: number, variantIndex?: number, event?: any): void {
-        if (variant) {
-            if (this.updateDiscountTimeout) {
-                clearTimeout(this.updateDiscountTimeout);
-            }
-            let percentageListTotal: number = 0;
-            let fixedListTotal: number = 0;
-
-            percentageListTotal = variant.get('discountInfo')?.value?.filter(f => f.isActive)
-                ?.filter(s => s.discountType === 'PERCENTAGE')
-                .reduce((pv, cv) => {
-                    return Number(cv.discountValue) ? Number(pv) + Number(cv.discountValue) : Number(pv);
-                }, 0) || 0;
-            fixedListTotal = variant.get('discountInfo')?.value?.filter(f => f.isActive)
-                ?.filter(s => s.discountType === 'FIX_AMOUNT')
-                .reduce((pv, cv) => {
-                    return Number(cv.discountValue) ? Number(pv) + Number(cv.discountValue) : Number(pv);
-                }, 0) || 0;
-
-            let perFromAmount = ((percentageListTotal * variant.get('price')?.value) / 100);
-            let discountSum = perFromAmount + fixedListTotal;
-            if (isNaN(discountSum)) {
-                discountSum = 0;
-            }
-
-            variant.get('discountValue')?.patchValue(discountSum);
-
-            if (stockIndex >= 0 && !event?.isFirstChange) {
-                this.updateDiscountTimeout = setTimeout(() => {
-                    const formStatus = ((this.discountForm.get('discountInfo') as FormArray).at(stockIndex) as UntypedFormArray);
-                    if (!formStatus.invalid) {
-                        const stockUniqueName = (this.discountForm.get('discountInfo') as FormArray).at(stockIndex).get('stockUniqueName').value;
-
-                        if (discountCollection) {
-                            let discountInfo = discountCollection?.map(variant => {
-                                if (!variant?.discountInfo[0]?.discountUniqueName && variant?.discountInfo[0]?.discountValue) {
-                                    variant.discountInfo[0].isActive = true;
-                                } else {
-                                    if (variant.discountInfo.length) {
-                                        variant.discountInfo[0].isActive = false;
-                                    }
-                                }
-
-                                variant.discountInfo = variant.discountInfo?.filter(res => res.isActive)?.map(discount => {
-                                    discount.value = discount.discountValue;
-                                    discount.uniqueName = discount.discountUniqueName;
-                                    discount.type = discount.discountType;
-                                    if (discount.uniqueName) {
-                                        return {
-                                            uniqueName: discount.uniqueName
-                                        };
-                                    } else {
-                                        return {
-                                            value: discount.value,
-                                            type: discount.type
-                                        };
-                                    }
-                                });
-
-                                variant.discounts = cloneDeep(variant.discountInfo);
-
-                                return this.filterKeys(variant, this.variantDesiredKeys);
-                            });                            
-                            this.updateDiscount(stockUniqueName, variant?.value?.variantUniqueName, { discounts: discountInfo[variantIndex].discounts });
-                        }
-                    }
-                }, 500);
+    public updateDiscountInVariant(variant: UntypedFormGroup, event?: any): void {
+        if (event?.label && (event?.value || event?.value === null)) {
+            variant.get('discountName').patchValue(event?.label);
+            if (event?.value == null) {
+                variant.get('discounts').patchValue(null);
+            } else {
+                variant.get('discounts').patchValue([{ uniqueName: event?.value }]);
             }
         }
+    }
+
+    /**
+     * Get Customer/Vendor list by Group or Account
+     *
+     * @param {string} type
+     * @memberof CustomerWiseComponent
+     */
+    public getUsersByType(type: 'account' | 'group'): void {
+        if (type === this.userFilterType) {
+            this.userFilterType = 'all';
+
+        } else {
+            this.userFilterType = type;
+        }
+        this.getCustomerVendorDiscountUserList();
+
     }
 
     /**
