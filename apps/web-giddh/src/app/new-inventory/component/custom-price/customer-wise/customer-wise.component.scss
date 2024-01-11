@@ -63,7 +63,7 @@
 
                         &.active {
                             background-color: var(--color-giddh-blue);
-                            color: var(--color-white);
+                            color: var(--color-white) !important;
                         }
                     }
                 }
@@ -79,20 +79,20 @@
                     justify-content: space-between;
                     align-items: center;
                     h2 {
-                        color: var(--color-giddh-blue);
+                        color: var(--color-giddh-blue) !important;
                         font-weight: 600;
                     }
                 }
                 .stocks-wrapper {
                     min-height: calc(100vh - 152px);
-                    padding-bottom: 140px;
+                    padding-bottom: 40px;
 
                     $header-giddh-logo-width: 200px;
                     .save-discount-header {
                         top: 0;
                         right: 0;
                         background-color: var(--color-primary-header-background);
-                        color: var(--color-white);
+                        color: var(--color-white) !important;
                         width: calc(100vw - #{$header-giddh-logo-width});
                         height: 59px;
                         z-index: 990;
@@ -114,6 +114,7 @@
                         strong {
                             font-size: var(--font-size-16);
                             margin-left: 12px;
+                            color: var(--color-giddh-blue) !important;
                         }
                     }
                     .column-gap42 {
@@ -123,7 +124,18 @@
                         &:hover {
                             thead {
                                 .variant-delete {
-                                    visibility: visible !important;
+                                    .delete-show {
+                                        button {
+                                            visibility: hidden;
+                                        }
+                                    }
+                                    &:hover {
+                                        .delete-show {
+                                            button {
+                                                visibility: visible;
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -234,7 +246,7 @@
                     height: 32px;
                     min-width: 42px;
                     border-radius: 5px;
-                    color: var(--color-tertiary-button-text);
+                    color: var(--color-tertiary-button-text) !important;
                     border: 1px solid var(--color-common-secondary-border);
                     background-color: var(--color-tertiary-button-background);
                     i {
