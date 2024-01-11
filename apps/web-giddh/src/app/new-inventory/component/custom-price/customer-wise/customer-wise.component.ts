@@ -1,5 +1,5 @@
 import { CdkScrollable, ScrollDispatcher } from "@angular/cdk/scrolling";
-import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
+import { ChangeDetectorRef, Component, ElementRef, HostListener, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
 import { FormArray, FormControl, FormGroup, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { ActivatedRoute } from "@angular/router";
@@ -89,6 +89,8 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
     public userFilterType: 'account' | 'group' | 'all' = 'all';
     /** True if any stock or variant will be added */
     public showSaveDiscardButton: boolean = false;
+    /** Hold Variable to store the scroll position */
+    private scrollPosition: number;
 
     constructor(
         private dialog: MatDialog,
@@ -147,6 +149,33 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                 this.getCustomerVendorDiscountUserList(true);
             }
         });
+
+    }
+
+    /**
+     * Scroll to a specific position
+     *
+     * @param {number} position
+     * @memberof CustomerWiseComponent
+     */
+    public scrollToPosition(position: number): void {
+        this.stocksContainer.nativeElement.scrollTo({
+            top: position,
+            behavior: 'smooth'
+        });
+        this.changeDetectorRef.detectChanges();
+    }
+
+    /**
+     * This will be use for getting the position of scroll
+     *
+     * @param {Event} event
+     * @memberof CustomerWiseComponent
+     */
+    public onScrollEvent(event: Event) {
+        const scrollContainer = this.stocksContainer.nativeElement;
+        const verticalScrollPosition = scrollContainer.scrollTop;
+        this.scrollPosition = verticalScrollPosition;
     }
 
     /**
@@ -315,7 +344,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
             let isTempUser = this.checkTemporaryUser(userData);
             if (isTempUser === -1) {
                 this.currentUser['isTempUser'] = false;
-                this.getAllDiscount(userData, this.stockSearchQuery);
+                this.getAllDiscount(userData, this.stockSearchQuery, fromDiscard);
             } else {
                 this.currentUser['isTempUser'] = true;
             }
@@ -331,7 +360,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
      * @param {string} [query='']
      * @memberof CustomerWiseComponent
      */
-    private getAllDiscount(userData: any, query: string = ''): void {
+    private getAllDiscount(userData: any, query: string = '', fromDiscard?: any): void {
         let model = {
             page: this.pagination.stock.page,
             count: this.paginationLimit,
@@ -340,6 +369,9 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
         };
         this.isStockLoading = true;
         this.inventoryService.getAllDiscount(model).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            if (fromDiscard) {
+                this.scrollToPosition(this.scrollPosition);
+            }
             if (response && response?.body?.results?.length) {
                 this.initialiseAllDiscounts(userData, cloneDeep(response));
             } else {
@@ -421,15 +453,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                         let variant = { discounts: discountsValue };
                         this.updateDiscount(stockUniqueName, variantControl.variantUniqueName.value, variant);
                     });
-                    variantControl.quantity.valueChanges.pipe(debounceTime(400), takeUntil(this.destroyed$)).subscribe(quantityValue => {
-                        if (quantityValue <= 0 && quantityValue !== "") {
-                            this.toaster.warningToast(this.localeData?.invalid_quantity);
-                        } else {
-                            const stockUniqueName = (this.discountForm.get('discountInfo') as FormArray).at(index).get('stockUniqueName').value;
-                            let variant = { quantity: quantityValue };
-                            this.updateDiscount(stockUniqueName, variantControl.variantUniqueName.value, variant);
-                        }
-                    });
+
                     variantControl.taxInclusive.valueChanges.pipe(debounceTime(400), takeUntil(this.destroyed$)).subscribe(taxInclusiveValue => {
                         const stockUniqueName = (this.discountForm.get('discountInfo') as FormArray).at(index).get('stockUniqueName').value;
                         let variant = { taxInclusive: taxInclusiveValue };
@@ -663,7 +687,6 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
             this.selectUser(this.currentUser, true);
         }
         this.changeDetectorRef.detectChanges();
-
     }
 
     /**
@@ -688,7 +711,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
         });
         let checkMandatory: boolean = false;
         filteredArray.forEach((stock) => {
-            checkMandatory = stock.variants.some(item => (item.discounts !== null || item.price !== null || item.quantity !== null));
+            checkMandatory = stock.variants.some(item => (item.discounts !== null || item.price !== null));
             stock.variants = stock.variants?.map(variant => {
                 if (variant.discounts === null) {
                     variant.discounts = [];
@@ -708,6 +731,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                 }
                 this.inventoryService.createDiscount(stock.stockUniqueName, reqObj).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
                     if (response && response?.status === 'success') {
+                        this.showSaveDiscardButton = false;
                         const discountForm = (this.discountForm.get('discountInfo') as FormArray).at(stock.index) as UntypedFormArray;
                         discountForm.get('isTempStock').patchValue(false);
 
@@ -726,15 +750,6 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                                 const stockUniqueName = (this.discountForm.get('discountInfo') as FormArray).at(stock.index).get('stockUniqueName').value;
                                 let variant = { discounts: discountsValue };
                                 this.updateDiscount(stockUniqueName, variantControl.variantUniqueName.value, variant);
-                            });
-                            variantControl.quantity.valueChanges.pipe(debounceTime(400), takeUntil(this.destroyed$)).subscribe(quantityValue => {
-                                if (quantityValue <= 0 && quantityValue !== "") {
-                                    this.toaster.warningToast(this.localeData?.invalid_quantity);
-                                } else {
-                                    const stockUniqueName = (this.discountForm.get('discountInfo') as FormArray).at(stock.index).get('stockUniqueName').value;
-                                    let variant = { quantity: quantityValue };
-                                    this.updateDiscount(stockUniqueName, variantControl.variantUniqueName.value, variant);
-                                }
                             });
                             variantControl.taxInclusive.valueChanges.pipe(debounceTime(400), takeUntil(this.destroyed$)).subscribe(taxInclusiveValue => {
                                 const stockUniqueName = (this.discountForm.get('discountInfo') as FormArray).at(stock.index).get('stockUniqueName').value;
@@ -843,12 +858,12 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                 this.toaster.warningToast(msg);
             }
         } else {
-            this.showSaveDiscardButton = true;
             let isExistingStock = this.currentUserStocks?.some(item => (item?.stock?.uniqueName === event?.uniqueName) || (item?.uniqueName === event?.uniqueName));
             if (isExistingStock) {
                 let msg = this.localeData?.already_added_msg.replace('[TYPE]', this.commonLocaleData?.app_stock);
                 this.toaster.warningToast(msg);
             } else {
+                this.showSaveDiscardButton = true;
                 this.inventoryService.getStockDetails(event?.uniqueName, this.userType).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
                     if (response && response?.body) {
                         const discounts = this.discountForm.get('discountInfo') as UntypedFormArray;
@@ -871,12 +886,14 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                             variants.push(this.initVariantForm({ name: variant?.name, uniqueName: variant?.uniqueName, isTemproraryVariant: true, stockUnitUniqueName: variant?.units[0].uniqueName, variantUnitCode: variant?.units[0].code }));
                         });
                         this.currentUserStocks.push(event);
-
                         this.stocksContainer.nativeElement.scrollTo({
                             top: this.stocksContainer.nativeElement.scrollHeight,
                             behavior: 'smooth'
                         });
+                        const verticalScrollPosition = this.stocksContainer.nativeElement.scrollHeight;
+                        this.scrollPosition = cloneDeep(verticalScrollPosition);
                     }
+
                 });
             }
             this.dialogRef.close();
