@@ -60,7 +60,7 @@
                                 <div class="p-3 text-gray">{{ commonLocaleData?.app_no_data_found }}</div>
                             </ng-container>
                         </mat-list>
-                        <div class="customer-right-side scroll-container" #stocksContainer (scroll)="onScrollEvent($event)">
+                        <div class="customer-right-side" #stocksContainer>
                             <div class="right-heading" *ngIf="currentUser?.uniqueName">
                                 <button mat-stroked-button color="primary" (click)="openSearchModal('stocks')"> {{
                                     localeData?.add_inventory }} </button>
