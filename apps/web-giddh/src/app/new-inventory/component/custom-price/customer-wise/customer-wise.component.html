@@ -60,7 +60,7 @@
                                 <div class="p-3 text-gray">{{ commonLocaleData?.app_no_data_found }}</div>
                             </ng-container>
                         </mat-list>
-                        <div class="customer-right-side" #stocksContainer>
+                        <div class="customer-right-side" #stocksContainer (scroll)="onScrollEvent($event)">
                             <div class="right-heading" *ngIf="currentUser?.uniqueName">
                                 <button mat-stroked-button color="primary" (click)="openSearchModal('stocks')"> {{
                                     localeData?.add_inventory }} </button>
@@ -84,7 +84,7 @@
                                                 </span>
                                                 <div>
                                                     <button mat-stroked-button (click)="discardChanges()" class="mr-3">{{ localeData?.discard }}</button>
-                                                    <button mat-raised-button (click)="saveDiscount(i)">
+                                                    <button mat-raised-button (click)="saveDiscount()">
                                                         {{ commonLocaleData?.app_save }}
                                                     </button>
                                                 </div>
