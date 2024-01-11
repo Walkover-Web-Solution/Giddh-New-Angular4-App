@@ -2,8 +2,6 @@
     "add_inventory": "+ इन्वेंटरी जोड़ें",
     "price": "कीमत",
     "add_customer_group": "+ ग्राहक/समूह जोड़ें",
-    "exclusive": "अनन्य",
-    "inclusive": "सहित",
     "delete_message": "क्या आप हटाना चाहते हैं?",
     "already_added_msg": "यह [प्रकार] पहले ही जोड़ा जा चुका है",
     "remove_item_msg": "[TYPE] सफलतापूर्वक हटा दिया गया।",
@@ -11,5 +9,8 @@
     "inclusiveExclusiveTooltipMessage": "कीमत कर सहित/अनन्य है।",
     "quantity":"मात्रा",
     "select_discount": "छूट का चयन करें",
-    "invalid_quantity": "मात्रा 0 से अधिक होनी चाहिए"
+    "invalid_quantity": "मात्रा 0 से अधिक होनी चाहिए",
+    "mrp": "एम आर पी",
+    "discard": "छोड़ें",
+    "unsaved_changes": "असहेजणारे बदल"
 }

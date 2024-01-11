@@ -2,8 +2,6 @@
     "add_inventory": "+ Add Inventory",
     "price": "Price",
     "add_customer_group": "+ Add Customer/Group",
-    "exclusive": "Exclusive",
-    "inclusive": "Inclusive",
     "delete_message": "Do you want to delete?",
     "already_added_msg": "This [TYPE] is already added",
     "remove_item_msg": "[TYPE] removed successfully.",
@@ -11,5 +9,8 @@
     "inclusiveExclusiveTooltipMessage": "The price is inclusive/exclusive of tax.",
     "quantity":"Qty",
     "select_discount": "Select Discount",
-    "invalid_quantity": "Quantity should be more than 0"
+    "invalid_quantity": "Quantity should be more than 0",
+    "mrp": "MRP",
+    "discard": "Discard",
+    "unsaved_changes": "Unsaved changes"
 }
