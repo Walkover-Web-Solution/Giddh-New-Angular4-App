@@ -1,5 +1,5 @@
 import { CdkScrollable, ScrollDispatcher } from "@angular/cdk/scrolling";
-import { ChangeDetectorRef, Component, ElementRef, HostListener, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
+import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
 import { FormArray, FormControl, FormGroup, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { ActivatedRoute } from "@angular/router";
@@ -89,8 +89,6 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
     public userFilterType: 'account' | 'group' | 'all' = 'all';
     /** True if any stock or variant will be added */
     public showSaveDiscardButton: boolean = false;
-    /** Hold Variable to store the scroll position */
-    private scrollPosition: any;
 
     constructor(
         private dialog: MatDialog,
@@ -150,35 +148,6 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
             }
         });
 
-    }
-
-    /**
-     * Scroll to a specific position
-     *
-     * @param {number} position
-     * @memberof CustomerWiseComponent
-     */
-    public scrollToPosition(): void {
-        let position = Number(localStorage.getItem('verticalScrollPosition'));
-        setTimeout(() => {
-            this.stocksContainer.nativeElement?.scrollTo({
-                top: position,
-                behavior: 'smooth'
-            });
-        }, 1000);
-        this.changeDetectorRef.detectChanges();
-    }
-
-    /**
-     * This will be use for getting the position of scroll
-     *
-     * @param {Event} event
-     * @memberof CustomerWiseComponent
-     */
-    public onScrollEvent(event: Event) {
-        const scrollContainer = this.stocksContainer.nativeElement;
-        const verticalScrollPosition = scrollContainer.scrollTop;
-        this.scrollPosition = localStorage.setItem('verticalScrollPosition', verticalScrollPosition);
     }
 
     /**
@@ -344,13 +313,12 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
         if (this.currentUser?.uniqueName !== userData?.uniqueName || fromDiscard) {
             this.showSaveDiscardButton = false;
             this.variantsWithoutDiscount = [];
-            this.currentUser = null;
             this.currentUser = userData;
             this.pagination = this.paginationInit();
             let isTempUser = this.checkTemporaryUser(userData);
             if (isTempUser === -1) {
                 this.currentUser['isTempUser'] = false;
-                this.getAllDiscount(userData, this.stockSearchQuery, fromDiscard);
+                this.getAllDiscount(userData, this.stockSearchQuery);
             } else {
                 this.currentUser['isTempUser'] = true;
             }
@@ -366,7 +334,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
      * @param {string} [query='']
      * @memberof CustomerWiseComponent
      */
-    private getAllDiscount(userData: any, query: string = '', fromDiscard?: any): void {
+    private getAllDiscount(userData: any, query: string = ''): void {
         let model = {
             page: this.pagination.stock.page,
             count: this.paginationLimit,
@@ -375,9 +343,6 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
         };
         this.isStockLoading = true;
         this.inventoryService.getAllDiscount(model).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
-            if (fromDiscard) {
-                this.scrollToPosition();
-            }
             if (response && response?.body?.results?.length) {
                 this.initialiseAllDiscounts(userData, cloneDeep(response));
             } else {
@@ -896,8 +861,6 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                             top: this.stocksContainer.nativeElement.scrollHeight,
                             behavior: 'smooth'
                         });
-                        const verticalScrollPosition = this.stocksContainer.nativeElement.scrollHeight;
-                        this.scrollPosition = localStorage.setItem('verticalScrollPosition', verticalScrollPosition);
                     }
 
                 });
@@ -961,6 +924,5 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
-        localStorage.removeItem('verticalScrollPosition');
     }
 }
