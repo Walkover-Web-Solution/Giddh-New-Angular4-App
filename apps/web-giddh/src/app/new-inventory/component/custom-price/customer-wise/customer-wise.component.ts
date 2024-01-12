@@ -325,6 +325,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                 this.getAllDiscount(userData, this.stockSearchQuery);
             } else {
                 this.currentUser['isTempUser'] = true;
+                this.initDiscountMainForm();
             }
         }
     }
