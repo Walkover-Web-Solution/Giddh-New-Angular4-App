@@ -316,9 +316,10 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
         if (this.currentUser?.uniqueName !== userData?.uniqueName || fromDiscard) {
             this.showSaveDiscardButton = false;
             this.variantsWithoutDiscount = [];
+            this.currentUserStocks = [];
             this.currentUser = userData;
             this.pagination = this.paginationInit();
-            let isTempUser = this.checkTemporaryUser(userData);
+            let isTempUser = this.checkTemporaryUser(userData?.uniqueName);
             if (isTempUser === -1) {
                 this.currentUser['isTempUser'] = false;
                 this.getAllDiscount(userData, this.stockSearchQuery);
@@ -617,9 +618,9 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
             let variantObj = {
                 price: null,
                 quantity: null,
-                taxInclusive: true,
-                stockUnitUniqueName: matchingObject?.units[0].uniqueName,
-                variantUnitCode: matchingObject?.units[0].code,
+                taxInclusive: false,
+                stockUnitUniqueName: matchingObject?.units[0].uniqueName || units[0].uniqueName,
+                variantUnitCode: matchingObject?.units[0].code || units[0].code,
                 uniqueName: event.value,
                 name: event.label,
                 isTemproraryVariant: true
