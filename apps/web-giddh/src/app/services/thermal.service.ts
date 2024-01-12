@@ -552,27 +552,20 @@ export class ThermalService {
         Object.keys(entryTaxes)?.forEach(key => {
             let entryTax = entryTaxes[key];
             if (entryTax?.amount > 0) {
-                let taxAmount = parseFloat(
-                    entryTax?.amount
-                ).toFixed(2);
-                let taxableValue = parseFloat(
-                    entryTax?.taxableValue
-                ).toFixed(2);
+                let taxAmount = parseFloat(entryTax?.amount).toFixed(2);
+                let taxableValue = parseFloat(entryTax?.taxableValue).toFixed(2);
                 if (defaultTemplate?.sections?.footer?.data?.taxBifurcation?.display) {
-                    tax += this.printerFormat.formatCenter(
-                        this.justifyText(
-                            entryTax?.name +
-                            entryTax?.percent +
-                            "%" +
-                            ": " +
-                            taxableValue +
-                            " " +
-                            taxAmount
-                        )
-                    );
-                }
-                else {
-                    tax = ""
+                    let taxLine =
+                        entryTax?.name +
+                        entryTax?.percent +
+                        "%" +
+                        ": " +
+                        taxableValue +
+                        " " +
+                        taxAmount
+                    const paddingSpaces = this.maxLength - taxLine.length;
+                    let alignedTaxLine = ' '.repeat(paddingSpaces) + taxLine;
+                    tax += alignedTaxLine + this.printerFormat.lineBreak;
                 }
             }
         });
@@ -690,7 +683,6 @@ export class ThermalService {
                 this.justifyText(thankYouMsgField, footerCompanyName) +
                 this.printerFormat.lineBreak + this.printerFormat.lineBreak +
                 this.printerFormat.leftAlign + this.justifyText(firmNameField, "");
-
             qz.security.setCertificatePromise((resolve, reject) => {
                 fetch(QZ_CERTIFICATE, { cache: 'no-store', headers: { 'Content-Type': 'text/plain' } })
                     .then(data => resolve(data.text()));
@@ -715,7 +707,6 @@ export class ThermalService {
                         .catch(err => console.error(err));
                 };
             });
-
             if (!qz.websocket.isActive()) {
                 qz.websocket
                     .connect()
