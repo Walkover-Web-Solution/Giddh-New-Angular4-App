@@ -418,8 +418,6 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     public lastScannedKey: string = '';
     /** True if barcode maching is typing */
     public isBarcodeMachineTyping: boolean = false;
-    /** Stores the discount object from discount calculation */
-    public discountObj: any;
     /** account's applied discounts list */
     public accountAssignedApplicableDiscounts: any[] = [];
 
@@ -1647,7 +1645,6 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
      * @memberof CreatePurchaseOrderComponent
      */
     public calculateWhenTrxAltered(entry: SalesEntryClass, trx: SalesTransactionItemClass, fromTransactionField: boolean = false, event?: any): void {
-        this.discountObj = event;
         if (trx?.accountName || trx?.accountUniqueName) {
             if (fromTransactionField) {
                 trx.highPrecisionAmount = trx.amount;
@@ -1656,7 +1653,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                     return;
                 }
             }
-            if (this.discountObj || !this.isUpdateMode || !entry['initiallyCall']) {
+            if (event || !this.isUpdateMode || !entry['initiallyCall']) {
                 if (!entry['initiallyCall']) {
                     entry.discounts = entry.discounts.map(item => {
                         item.isActive = false;
