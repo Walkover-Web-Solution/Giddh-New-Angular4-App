@@ -3,6 +3,17 @@
         color: var(--color-common-primary-text);
     }
     .mat-list-wrap {
+        .custom-tab {
+            button{
+                &.active {
+                    &.mdc-button {
+                        .mdc-button__label {
+                            color: var(--color-white) !important;
+                        }
+                    }
+                }
+            }
+        }
         input {
             &.form-control {
                 &.search-bar {
@@ -23,7 +34,7 @@
                     background-color: var(--color-giddh-blue) !important;
                     .mdc-list-item__content {
                         a {
-                            span{
+                            span {
                                 color: var(--color-white) !important;
                             }
                         }
@@ -52,13 +63,13 @@
                     }
                 }
             }
-            .save-discount-header{
-                button{
-                    &.mdc-button{
+            .save-discount-header {
+                button {
+                    &.mdc-button {
                         .mdc-button__label {
                             color: var(--color-primary-login-box-header-background) !important;
                         }
-                        &.mat-mdc-outlined-button{
+                        &.mat-mdc-outlined-button {
                             .mdc-button__label {
                                 color: var(--color-tertiary-login-box-body-text) !important;
                             }
