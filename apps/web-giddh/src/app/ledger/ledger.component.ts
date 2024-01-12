@@ -799,6 +799,24 @@ export class LedgerComponent implements OnInit, OnDestroy {
                         this.cancelMergeEntry();
                     }
                 });
+            } else if (response?.status === "einvoice-confirm") {
+                let dialogRef = this.dialog.open(ConfirmModalComponent, {
+                    data: {
+                        title: this.commonLocaleData?.app_confirm,
+                        body: response?.message,
+                        ok: this.commonLocaleData?.app_yes,
+                        cancel: this.commonLocaleData?.app_no,
+                        permanentlyDeleteMessage: ' '
+                    }
+                });
+
+                dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+                    if (response) {
+                        this.confirmEInvoiceEntry(true);
+                    } else {
+                        this.confirmEInvoiceEntry(false);
+                    }
+                });
             }
         });
         this.voucherApiVersion = this.generalService.voucherApiVersion;
@@ -2528,6 +2546,16 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * This will confirm E-Invoice voucher generation
+     *
+     * @memberof LedgerComponent
+     */
+    public confirmEInvoiceEntry(generateEInvoice: boolean): void {
+        this.lc.blankLedger.generateEInvoice = generateEInvoice;
+        this.saveBlankTransaction();
+    }
+
+    /**
      * Download files (voucher/attachment)
      *
      * @param {*} transaction
@@ -2768,6 +2796,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @memberof SettingIntegrationComponent
      */
     public getPlaidLinkToken(itemId?: any): void {
-        this.store.dispatch(this.commonAction.reAuthPlaid({itemId: itemId, reauth: true}));
+        this.store.dispatch(this.commonAction.reAuthPlaid({ itemId: itemId, reauth: true }));
     }
 }
