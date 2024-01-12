@@ -3804,6 +3804,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 item.isActive = false;
                 return item;
             });
+            entry.discounts[0].isActive = true;
+            entry.discountFixedValueModal = 0;
+            entry.discountPercentageModal = 0;
             entry.discountSum = 0;
             this.applyMrpDiscount(true, transaction, entry, false);
         }

@@ -2622,6 +2622,7 @@
                                                     [options]="salesAccounts$ | async"
                                                     (selectedOption)="
                                                         transaction.fakeAccForSelect2 = $event?.value;
+                                                        entry['initiallyCall'] = undefined;
                                                         onSelectSalesAccount(
                                                             $event,
                                                             transaction,
