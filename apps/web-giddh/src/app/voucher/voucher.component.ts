@@ -3879,7 +3879,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
                     if (matchedUnit?.length) {
                         this.calculateStockEntryAmount(transaction);
-                    }    
+                        this.calculateWhenTrxAltered(entry, transaction);
+                    }
                 });
             } else {
                 this.calculateStockEntryAmount(transaction);

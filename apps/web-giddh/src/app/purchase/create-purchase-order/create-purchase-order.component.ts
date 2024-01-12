@@ -3855,6 +3855,11 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                 }
                 transaction.total = transaction.quantity * transaction.rate;
                 this.calculateTransactionValueInclusively(entry, transaction, false);
+
+                if (matchedUnit?.length) {
+                    this.calculateStockEntryAmount(transaction);
+                    this.calculateWhenTrxAltered(entry, transaction);
+                }
             });
         } else {
             this.calculateStockEntryAmount(transaction);
