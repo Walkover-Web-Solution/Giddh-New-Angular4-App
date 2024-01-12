@@ -624,6 +624,7 @@ export class VoucherClass {
     public deposit?: any;
     public exchangeRate?: number;
     public einvoiceGenerated?: boolean;
+    public generateEInvoice?: boolean = undefined;
 
     constructor() {
         this.accountDetails = new AccountDetailsClass();
