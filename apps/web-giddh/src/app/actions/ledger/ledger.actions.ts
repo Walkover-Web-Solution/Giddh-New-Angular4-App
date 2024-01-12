@@ -161,7 +161,7 @@ export class LedgerActions {
                 } else if (response?.status === 'no-network') {
                     this.ResetUpdateLedger();
                     return { type: 'EmptyAction' };
-                } else if (response?.status === 'confirm') {
+                } else if (response?.status === 'confirm' ||  response?.status === 'einvoice-confirm') {
                     return {
                         type: LEDGER.SHOW_DUPLICATE_VOUCHER_CONFIRMATION,
                         payload: response
@@ -652,7 +652,7 @@ export class LedgerActions {
                 this.toaster.showSnackBar("error", response.message);
             }
             return errorAction;
-        } else if (response?.status === "confirm") {
+        } else if (response?.status === "confirm" ||  response?.status === 'einvoice-confirm') {
             if (isCreateLedger) {
                 return {
                     type: LEDGER.SHOW_DUPLICATE_VOUCHER_CONFIRMATION,
