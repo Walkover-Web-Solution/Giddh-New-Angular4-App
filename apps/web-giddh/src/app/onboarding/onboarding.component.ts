@@ -83,6 +83,10 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
         });
     }
 
+    public openCreateAccountAsidepan(): void{
+       
+    }
+
     /**
      * Releases memory
      *

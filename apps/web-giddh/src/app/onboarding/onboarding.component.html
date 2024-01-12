@@ -32,6 +32,12 @@
                                 }}</a
                             >
                         </mat-list-item>
+                        <mat-list-item role="listitem" class="mr-b1 px-0">
+                            <a (click)="openCreateAccountAsidepan()" class="cursor-pointer">
+                                <img src="{{ imgPath }}create-new.svg" alt="" class="mr-r1" />
+                                {{ localeData?.create_bank_account }}
+                            </a>
+                        </mat-list-item>
                         <mat-list-item role="listitem" class="mr-b1 px-0" *ngIf="companyCountry !=='India'">
                             <a href="javascript:;" (click)="selectConfigureBank()">
                                 <img src="{{ imgPath }}configure-bank-account.svg" alt="" class="mr-r1" />{{
