@@ -1449,6 +1449,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         this.currentTxnRequestObject[this.activeIndex].entry = entry;
         if (this.currentTxnRequestObject[this.activeIndex]?.params) {
             this.currentTxnRequestObject[this.activeIndex].params.variantUniqueName = event.value;
+            this.currentTxnRequestObject[this.activeIndex].params.customerUniqueName = this.purchaseOrder.accountDetails.uniqueName;
             this.loadDetails(this.currentTxnRequestObject[this.activeIndex]);
         }
     }
@@ -1656,29 +1657,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                 }
             }
             if (this.discountObj || !this.isUpdateMode || !entry['initiallyCall']) {
-                if (this.discountObj !== undefined && this.discountObj) {
-                    if (isNaN(this.discountObj?.discount)) {
-                        this.discountObj.discount = 0;
-                    }
-                }
-                if (this.discountObj) {
-                    if (this.discountObj?.discountType === 'FIX_AMOUNT') {
-                        entry.discountFixedValueModal = this.discountObj?.discount ? this.discountObj?.discount : 0;
-                        entry.discountSum = this.discountObj?.discount ? this.discountObj?.discount : 0;
-                        entry.discountPercentageModal = 0;
-                        entry.discounts[0].isActive = true;
-                    } else {
-                        entry.discountFixedValueModal = 0;
-                    }
-                    if (this.discountObj?.discountType === 'PERCENTAGE') {
-                        entry.discountPercentageModal = this.discountObj?.discount ? this.discountObj?.discount : 0;
-                        entry.discountSum = this.discountObj?.discount ? this.discountObj?.discount : 0;
-                        entry.discountFixedValueModal = 0;
-                        entry.discounts[0].isActive = true;
-                    } else {
-                        entry.discountPercentageModal = 0;
-                    }
-                } else if (!entry['initiallyCall']) {
+                if (!entry['initiallyCall']) {
                     entry.discounts = entry.discounts.map(item => {
                         item.isActive = false;
                         return item;
@@ -1696,6 +1675,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                         this.calculateStockEntryAmount(trx);
                     });
                     this.applyMrpDiscount(trx, entry, event);
+                } else if (event && entry.discounts[0]) {
+                    entry.discounts[0].isActive = true;
                 }
             }
         }
@@ -1737,7 +1718,6 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                             return item;
                         });
                         this.calculateStockEntryAmount(trx);
-                        entry['initiallyCall'] = true;
                     } else {
                         if (event && event.discount && event.isActive) {
                             this.accountAssignedApplicableDiscounts.forEach(item => {
@@ -1775,6 +1755,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                 });
             }
         }
+        entry['initiallyCall'] = true;
     }
 
     /**
@@ -3190,6 +3171,14 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                     isActive: true,
                     discountValue: 0
                 });
+            } else {
+                let activeDiscountIndex = -1;
+                entry.tradeDiscounts.forEach((res, loop) => {
+                    if (!res.discount?.uniqueName) {
+                        activeDiscountIndex = loop;
+                    }
+                });
+                entry.tradeDiscounts = this.generalService.changeElementPositionInArray(entry.tradeDiscounts, activeDiscountIndex, 0);
             }
 
             entry.tradeDiscounts.forEach((tradeDiscount) => {

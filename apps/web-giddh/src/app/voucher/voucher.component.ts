@@ -740,8 +740,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public lastScannedKey: string = '';
     /** True if barcode maching is typing */
     public isBarcodeMachineTyping: boolean = false;
-    /** Stores the discount object from discount calculation */
-    public discountObj: any;
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -3131,7 +3129,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @memberof VoucherComponent
      */
     public calculateWhenTrxAltered(entry: SalesEntryClass, trx: SalesTransactionItemClass, fromTransactionField: boolean = false, event?: any) {
-        this.discountObj = event;
         if (trx?.accountName || trx?.accountUniqueName) {
             if (fromTransactionField) {
                 trx.highPrecisionAmount = trx.amount;
@@ -3140,30 +3137,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     return;
                 }
             }
-            if (this.discountObj || !this.isUpdateMode || !entry['initiallyCall']) {
-                if (this.discountObj !== undefined && this.discountObj) {
-                    if (isNaN(this.discountObj?.discount)) {
-                        this.discountObj.discount = 0;
-                    }
-                }
-                if (this.discountObj) {
-                    if (this.discountObj?.discountType === 'FIX_AMOUNT') {
-                        entry.discountFixedValueModal = this.discountObj?.discount ? this.discountObj?.discount : 0;
-                        entry.discountSum = this.discountObj?.discount ? this.discountObj?.discount : 0;
-                        entry.discountPercentageModal = 0;
-                        entry.discounts[0].isActive = true;
-                    } else {
-                        entry.discountFixedValueModal = 0;
-                    }
-                    if (this.discountObj?.discountType === 'PERCENTAGE') {
-                        entry.discountPercentageModal = this.discountObj?.discount ? this.discountObj?.discount : 0;
-                        entry.discountSum = this.discountObj?.discount ? this.discountObj?.discount : 0;
-                        entry.discountFixedValueModal = 0;
-                        entry.discounts[0].isActive = true;
-                    } else {
-                        entry.discountPercentageModal = 0;
-                    }
-                } else if (!entry['initiallyCall']) {
+            if (event || !this.isUpdateMode || !entry['initiallyCall']) {
+                if (!entry['initiallyCall']) {
                     entry.discounts = entry.discounts.map(item => {
                         item.isActive = false;
                         return item;
@@ -3181,6 +3156,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         this.calculateStockEntryAmount(trx);
                     });
                     this.applyMrpDiscount(trx, entry, event);
+                } else if (event && entry.discounts[0]) {
+                    entry.discounts[0].isActive = true;
                 }
             }
 
@@ -3888,7 +3865,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 }
             }
         }
-        
+
         this.focusOnDescription();
 
         if (calculateTransaction) {
@@ -3899,6 +3876,10 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     }
                     transaction.total = transaction.quantity * transaction.rate;
                     this.calculateTransactionValueInclusively(entry, transaction, false);
+
+                    if (matchedUnit?.length) {
+                        this.calculateStockEntryAmount(transaction);
+                    }    
                 });
             } else {
                 this.calculateStockEntryAmount(transaction);
@@ -5407,6 +5388,14 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     isActive: true,
                     discountValue: 0
                 });
+            } else {
+                let activeDiscountIndex = -1;
+                entry.tradeDiscounts.forEach((res, loop) => {
+                    if (!res.discount?.uniqueName) {
+                        activeDiscountIndex = loop;
+                    }
+                });
+                entry.tradeDiscounts = this.generalService.changeElementPositionInArray(entry.tradeDiscounts, activeDiscountIndex, 0);
             }
 
             entry.tradeDiscounts.forEach((f) => {
@@ -5419,7 +5408,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     discountValue: f?.discount.discountValue,
                     discountUniqueName: f?.discount?.uniqueName
                 });
-
             });
         }
 
@@ -9281,6 +9269,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.currentTxnRequestObject[this.activeIndx].entry = entry;
         if (this.currentTxnRequestObject[this.activeIndx]?.params) {
             this.currentTxnRequestObject[this.activeIndx].params.variantUniqueName = event.value;
+            this.currentTxnRequestObject[this.activeIndx].params.customerUniqueName = this.invFormData.accountDetails.uniqueName;
             this.loadDetails(this.currentTxnRequestObject[this.activeIndx]);
         }
     }
