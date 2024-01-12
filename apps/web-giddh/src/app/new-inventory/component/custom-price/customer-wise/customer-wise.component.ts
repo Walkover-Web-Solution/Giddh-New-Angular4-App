@@ -662,6 +662,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
      */
     public discardChanges(): void {
         if (this.userList?.length && !this.isLoading) {
+            this.initDiscountMainForm();
             this.selectUser(this.currentUser, true);
         }
         this.changeDetectorRef.detectChanges();
