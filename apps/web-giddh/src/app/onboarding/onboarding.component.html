@@ -38,7 +38,7 @@
                                 {{ localeData?.create_bank_account }}
                             </a>
                         </mat-list-item>
-                        <mat-list-item role="listitem" class="mr-b1 px-0" *ngIf="companyCountry !=='India'">
+                        <mat-list-item role="listitem" class="mr-b1 px-0" *ngIf="companyCountry !== 'India'">
                             <a href="javascript:;" (click)="selectConfigureBank()">
                                 <img src="{{ imgPath }}configure-bank-account.svg" alt="" class="mr-r1" />{{
                                     localeData?.configure_bank_account
@@ -101,5 +101,18 @@
                 </div>
             </div>
         </div>
+    </div>
+    <div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'"></div>
+    <div *ngIf="accountAsideMenuState === 'in'">
+        <aside-menu-account
+            [activeGroupUniqueName]="selectedGroupForCreateAcc"
+            [activeAccountDetails]="activeAccountDetails"
+            [isUpdateAccount]="false"
+            class="account-aside-menu-state transform-inherit"
+            [@slideInOut]="accountAsideMenuState"
+            [commonLocaleData]="commonLocaleData"
+            (closeAsideEvent)="toggleAccountAsidePane($event)"
+        >
+        </aside-menu-account>
     </div>
 </ng-container>
