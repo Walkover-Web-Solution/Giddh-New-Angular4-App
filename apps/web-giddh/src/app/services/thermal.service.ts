@@ -432,7 +432,7 @@ export class ThermalService {
             itemsField =
                 this.printerFormat.formatCenter(productsField
                 ) +
-            this.printerFormat.formatCenter(this.justifyText("", itemDetailsField)
+                this.printerFormat.formatCenter(this.justifyText("", itemDetailsField)
                 );
         } else {
             itemsField =
@@ -508,7 +508,7 @@ export class ThermalService {
                 }
                 items +=
                     productNameShow +
-                this.printerFormat.formatCenter(this.justifyText("", itemDetails)
+                    this.printerFormat.formatCenter(this.justifyText("", itemDetails)
                     );
             } else {
                 let itemNameShow;
@@ -561,13 +561,12 @@ export class ThermalService {
                 if (defaultTemplate?.sections?.footer?.data?.taxBifurcation?.display) {
                     tax += this.printerFormat.formatCenter(
                         this.justifyText(
-                            taxableValue +
-                            "   " +
                             entryTax?.name +
                             entryTax?.percent +
                             "%" +
                             ": " +
-                            "" +
+                            taxableValue +
+                            " " +
                             taxAmount
                         )
                     );
