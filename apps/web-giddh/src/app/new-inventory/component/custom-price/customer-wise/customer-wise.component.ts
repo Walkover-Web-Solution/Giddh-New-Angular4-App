@@ -554,8 +554,6 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                 }
             });
         } else {
-            // this.showSaveDiscardButton = false;
-
             if (type === "user") {
                 const deletedMessage = this.localeData?.remove_item_msg?.replace('[TYPE]', this.currentUser?.type);
                 this.tempUserList.splice(index, 1);
@@ -858,7 +856,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                         discounts.push(this.initDiscountForm({
                             stock: { name: event?.name, uniqueName: event?.uniqueName },
                             isTempStock: true,
-                            units: response.body.variants,
+                            units: [],
                             hasVariants: response?.body?.variants.length > 1
                         }));
                         let variants = (this.discountForm.get('discountInfo') as UntypedFormArray).at(stockIndex).get('variants') as UntypedFormArray;
