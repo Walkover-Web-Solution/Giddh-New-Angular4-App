@@ -181,11 +181,10 @@
                                                                     </ng-container>
                                                                 </tr>
                                                             </tbody>
-                                                            <tfoot>
+                                                            <tfoot *ngIf="variantsWithoutDiscount[i]?.length">
                                                                 <tr>
                                                                     <td colspan="100%">
-                                                                        <div *ngIf="variantsWithoutDiscount[i]?.length"
-                                                                            class="add-variant">
+                                                                        <div class="add-variant">
                                                                             <dropdown-field
                                                                                 [name]="'variantsWithoutDiscount' + i"
                                                                                 [label]="commonLocaleData?.app_variant"
