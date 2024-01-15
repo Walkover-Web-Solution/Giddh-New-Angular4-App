@@ -702,7 +702,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                 }
                 const currentEntryStockVariantUniqueName = currentlyLoadedVariantRequest.params?.variantUniqueName;
                 let stockAllVariants;
-                res[this.currentlyLoadedStockVariantIndex ?? this.activeIndex].pipe(take(1)).subscribe(variants => stockAllVariants = variants);
+                res[this.currentlyLoadedStockVariantIndex ?? this.activeIndex]?.pipe(take(1)).subscribe(variants => stockAllVariants = variants);
                 if (stockAllVariants.findIndex(variant => variant.value === currentEntryStockVariantUniqueName) === -1) {
                     // Only reset the stock variant when the stock is changed
                     if (currentlyLoadedVariantRequest.txn) {
@@ -2160,6 +2160,11 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     public addBlankRow(txn: SalesTransactionItemClass): void {
         if (!txn) {
             let entry: SalesEntryClass = new SalesEntryClass();
+            let entryDiscounts = this.generalService.getDiscountValues({
+                discountAccountsDetails: entry.discounts ?? [],
+                discountsList: this.discountsList
+            });
+            entry.discounts = entryDiscounts;
             if (this.isUpdateMode) {
                 entry.isNewEntryInUpdateMode = true;
             }
@@ -2174,6 +2179,11 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                 return;
             }
             let entry: SalesEntryClass = new SalesEntryClass();
+            let entryDiscounts = this.generalService.getDiscountValues({
+                discountAccountsDetails: entry.discounts ?? [],
+                discountsList: this.discountsList
+            });
+            entry.discounts = entryDiscounts;
             this.purchaseOrder.entries.push(entry);
             setTimeout(() => {
                 this.activeIndex = this.purchaseOrder.entries?.length ? this.purchaseOrder.entries?.length - 1 : 0;
@@ -2951,6 +2961,11 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
 
         entries.forEach(entry => {
             let salesEntryClass = new SalesEntryClass();
+            let entryDiscounts = this.generalService.getDiscountValues({
+                discountAccountsDetails: entry.discounts ?? [],
+                discountsList: this.discountsList
+            });
+            salesEntryClass.discounts = entryDiscounts;
             let salesTransactionItemClass = new SalesTransactionItemClass();
             salesEntryClass.tcsTaxList = [];
             salesEntryClass.tdsTaxList = [];
@@ -4516,6 +4531,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                         this.calculateWhenTrxAltered(this.purchaseOrder.entries[activeEntryIndex], this.purchaseOrder.entries[activeEntryIndex].transactions[0]);
                         this.calculateStockEntryAmount(this.purchaseOrder.entries[activeEntryIndex].transactions[0]);
                     }
+                    this.purchaseOrder.entries[activeEntryIndex]['initiallyCall'] = undefined;
                     this.onSelectSalesAccount(selectedAcc, this.purchaseOrder.entries[activeEntryIndex].transactions[0], this.purchaseOrder.entries[activeEntryIndex], false, 0, true);
                 } else {
                     this.activeIndex = isExistingEntry;
