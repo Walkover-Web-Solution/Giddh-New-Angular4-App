@@ -4364,7 +4364,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                 }
 
                 let selectedAcc = {
-                    value: group + stockObj.uniqueName,
+                    value: 'purchase' + stockObj.uniqueName,
                     label: stockObj.name,
                     additional: {
                         type: "ACCOUNT",
