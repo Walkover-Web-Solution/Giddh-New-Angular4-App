@@ -4,7 +4,7 @@
     }
     .mat-list-wrap {
         .custom-tab {
-            button{
+            button {
                 &.active {
                     &.mdc-button {
                         .mdc-button__label {
@@ -34,7 +34,8 @@
                     background-color: var(--color-giddh-blue) !important;
                     .mdc-list-item__content {
                         a {
-                            span {
+                            span,
+                            .icon-trash {
                                 color: var(--color-white) !important;
                             }
                         }

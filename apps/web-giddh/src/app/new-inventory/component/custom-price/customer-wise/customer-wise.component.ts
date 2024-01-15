@@ -128,6 +128,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
         this.searchForm.get("userSearch").valueChanges.pipe(debounceTime(400), takeUntil(this.destroyed$)).subscribe(queryString => {
             if (this.searchForm.get('userSearch').value !== null) {
                 this.userSearchQuery = queryString;
+                this.pagination.user.page = 1;
                 this.currentUser = null;
                 this.currentUserStocks = [];
                 this.getCustomerVendorDiscountUserList();
@@ -143,7 +144,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
         });
 
         this.getDiscounts();
-
+        
         this.scrollDispatcher.scrolled().pipe(takeUntil(this.destroyed$)).subscribe((event: any) => {
             if (event && (event?.getDataLength() - event?.getRenderedRange().end) < 10 && !this.isLoading && (this.pagination.user.totalPages > this.pagination.user.page)) {
                 this.pagination.user.page++;
@@ -318,7 +319,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
             this.variantsWithoutDiscount = [];
             this.currentUserStocks = [];
             this.currentUser = userData;
-            this.pagination = this.paginationInit();
+            this.pagination.stock.page = 1;
             let isTempUser = this.checkTemporaryUser(userData?.uniqueName);
             if (isTempUser === -1) {
                 this.currentUser['isTempUser'] = false;
