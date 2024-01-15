@@ -4014,6 +4014,11 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public addBlankRow(txn: SalesTransactionItemClass) {
         if (!txn) {
             let entry: SalesEntryClass = new SalesEntryClass();
+            let entryDiscounts = this.generalService.getDiscountValues({
+                discountAccountsDetails: entry.discounts ?? [],
+                discountsList: this.discountsList
+            });
+            entry.discounts = entryDiscounts;
             if (this.isUpdateMode) {
                 entry.entryDate = this.invFormData.entries[0] ? this.invFormData.entries[0]?.entryDate : this.universalDate || new Date();
                 if (typeof (entry.entryDate) === "object") {
@@ -4037,6 +4042,11 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 return;
             }
             let entry: SalesEntryClass = new SalesEntryClass();
+            let entryDiscounts = this.generalService.getDiscountValues({
+                discountAccountsDetails: entry.discounts ?? [],
+                discountsList: this.discountsList
+            });
+            entry.discounts = entryDiscounts;
             this.invFormData.entries.push(entry);
         }
         this.createEmbeddedViewAtIndex(this.invFormData.entries?.length - 1);
@@ -5548,6 +5558,12 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         voucherClassConversion.entries = [];
         result.entries.forEach(entry => {
             let salesEntryClass = new SalesEntryClass();
+            let entryDiscounts = this.generalService.getDiscountValues({
+                discountAccountsDetails: entry.discounts ?? [],
+                discountsList: this.discountsList
+            });
+
+            salesEntryClass.discounts = entryDiscounts;
             let salesTransactionItemClass = new SalesTransactionItemClass();
             salesEntryClass.tcsTaxList = [];
             salesEntryClass.tdsTaxList = [];
@@ -9259,6 +9275,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         this.calculateWhenTrxAltered(this.invFormData.entries[activeEntryIndex], this.invFormData.entries[activeEntryIndex].transactions[0]);
                         this.calculateStockEntryAmount(this.invFormData.entries[activeEntryIndex].transactions[0]);
                     }
+                    this.invFormData.entries[activeEntryIndex]['initiallyCall'] = undefined;
                     this.onSelectSalesAccount(selectedAcc, this.invFormData.entries[activeEntryIndex].transactions[0], this.invFormData.entries[activeEntryIndex], false, false, 0, true);
                 } else {
                     this.activeIndx = isExistingEntry;
