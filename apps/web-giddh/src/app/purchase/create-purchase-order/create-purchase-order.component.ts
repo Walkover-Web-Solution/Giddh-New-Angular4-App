@@ -1671,7 +1671,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                         }
                         this.calculateStockEntryAmount(trx);
                     });
-                    this.applyMrpDiscount(trx, entry, event);
+                    this.applyMrpDiscount(false, trx, entry, event);
                 } else if (event && entry.discounts[0]) {
                     entry.discounts[0].isActive = true;
                 }
@@ -1702,8 +1702,9 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
      * @param {*} event
      * @memberof CreatePurchaseOrderComponent
      */
-    private applyMrpDiscount(trx: any, entry: any, event: any): void {
+    private applyMrpDiscount(isTaxInclusive: boolean, trx: any, entry: any, event: any): void {
         if (trx?.stockDetails?.variant?.variantDiscount?.discounts?.length) {
+            let discountApplied = false;
             trx?.stockDetails?.variant?.variantDiscount?.discounts.forEach(discount => {
                 if (discount) {
                     let matchedUnit = trx?.stockDetails?.variant?.variantDiscount?.unit?.uniqueName === trx?.stockUnit;
@@ -1714,27 +1715,33 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                             }
                             return item;
                         });
-                        this.calculateStockEntryAmount(trx);
-                    } else {
-                        if (event && event.discount && event.isActive) {
-                            this.accountAssignedApplicableDiscounts.forEach(item => {
-                                if (item && event.discount && item.uniqueName === event.discount.discountUniqueName) {
-                                    item.isActive = event.isActive?.target?.checked;
-                                }
-                            });
+                        if (!isTaxInclusive) {
+                            this.calculateStockEntryAmount(trx);
                         }
 
-                        if (entry && entry.discounts && entry.discounts.length && this.accountAssignedApplicableDiscounts && this.accountAssignedApplicableDiscounts.length) {
-                            entry.discounts.map(item => {
-                                let discountItem = this.accountAssignedApplicableDiscounts.find(element => element?.uniqueName === item.discountUniqueName);
-                                if (discountItem && discountItem.uniqueName) {
-                                    item.isActive = discountItem.isActive;
-                                }
-                            });
-                        }
+                        discountApplied = true;
                     }
                 }
             });
+
+            if (!discountApplied) {
+                if (event && event.discount && event.isActive) {
+                    this.accountAssignedApplicableDiscounts.forEach(item => {
+                        if (item && event.discount && item.uniqueName === event.discount.discountUniqueName) {
+                            item.isActive = event.isActive?.target?.checked;
+                        }
+                    });
+                }
+
+                if (entry && entry.discounts && entry.discounts.length && this.accountAssignedApplicableDiscounts && this.accountAssignedApplicableDiscounts.length) {
+                    entry.discounts.map(item => {
+                        let discountItem = this.accountAssignedApplicableDiscounts.find(element => element?.uniqueName === item.discountUniqueName);
+                        if (discountItem && discountItem.uniqueName) {
+                            item.isActive = discountItem.isActive;
+                        }
+                    });
+                }
+            }
         } else {
             if (event && event.discount && event.isActive) {
                 this.accountAssignedApplicableDiscounts.forEach(item => {
@@ -3836,16 +3843,19 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         }
 
         const matchedUnit = variant?.unitRates?.filter(ur => ur.stockUnitUniqueName === transaction.stockUnit);
-        if (matchedUnit?.length) {
+        if (matchedUnit?.length && !entry['initiallyCall']) {
             transaction.rate = Number((matchedUnit[0].rate / this.exchangeRate).toFixed(this.highPrecisionRate));
             entry.discounts = entry.discounts.map(item => {
                 item.isActive = false;
                 return item;
             });
-
+            entry.discounts[0].isActive = true;
+            entry.discountFixedValueModal = 0;
+            entry.discountPercentageModal = 0;
             entry.discountSum = 0;
-            this.applyMrpDiscount(transaction, entry, false);
+            this.applyMrpDiscount(true, transaction, entry, false);
         }
+
         this.focusOnDescription();
         if (isInclusiveEntry) {
             setTimeout(() => {
@@ -3854,12 +3864,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                     transaction.rate = Number((transaction.stockList[0]?.rate / this.exchangeRate).toFixed(this.highPrecisionRate));
                 }
                 transaction.total = transaction.quantity * transaction.rate;
-                this.calculateTransactionValueInclusively(entry, transaction, false);
-
-                if (matchedUnit?.length) {
-                    this.calculateStockEntryAmount(transaction);
-                    this.calculateWhenTrxAltered(entry, transaction);
-                }
+                this.calculateTransactionValueInclusively(entry, transaction);
             });
         } else {
             this.calculateStockEntryAmount(transaction);

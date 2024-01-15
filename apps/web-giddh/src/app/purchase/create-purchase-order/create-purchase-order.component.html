@@ -1667,7 +1667,7 @@
                                         #selectAccount
                                         [(ngModel)]="transaction.fakeAccForSelect2"
                                         name="transaction.fakeAccForSelect2_{{ entryIdx }}"
-                                        (selected)="onSelectSalesAccount($event, transaction, entry, false, entryIdx)"
+                                        (selected)="entry['initiallyCall'] = undefined; onSelectSalesAccount($event, transaction, entry, false, entryIdx)"
                                         [placeholder]="localeData?.select_acc"
                                         [notFoundLink]="true"
                                         [isPaginationEnabled]="true"
@@ -2761,6 +2761,7 @@
                                                     #selectAccount
                                                     name="transaction.fakeAccForSelect2_{{ entryIdx }}"
                                                     (selected)="
+                                                        entry['initiallyCall'] = undefined;
                                                         onSelectSalesAccount(
                                                             $event,
                                                             transaction,
