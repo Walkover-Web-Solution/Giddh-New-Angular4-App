@@ -23,9 +23,9 @@
         [ngStyle]="{ 'display': discountMenu ? 'block' : 'none' }"
         #disInptEle
     >
-        <div>
-            <div class="d-flex mr-b1">
-                <label class="mr-r1 ml-1 align-items-center d-flex percent-label">{{
+        <div class="value-wrapper">
+            <div class="d-flex align-items-center mr-b1">
+                <label>{{
                     commonLocaleData?.app_percent
                 }}</label>
                 <div class="position-relative percent-wrapper">
@@ -43,8 +43,8 @@
                     <i class="fa fa-percent position-absolute"></i>
                 </div>
             </div>
-            <div class="d-flex mr-b1 value-box">
-                <label class="mr-1 ml-1 align-items-center d-flex value-label">{{ commonLocaleData?.app_value }}</label>
+            <div class="d-flex align-items-center mr-b1">
+                <label>{{ commonLocaleData?.app_value }}</label>
                 <div class="position-relative">
                     <input
                         matInput
@@ -66,7 +66,7 @@
         <div *ngIf="discountAccountsDetails?.length > 1">
             <ul class="discount-list">
                 <ng-container *ngFor="let discount of discountAccountsDetails; trackBy: trackByFn; let idx = index">
-                    <li *ngIf="idx > 0" class="custom-item">
+                    <li *ngIf="idx > 0" class="discount-item cursor-pointer">
                         <label class="checkbox overflow-hidden width-100 p-0 m-0" (click)="$event.stopPropagation()">
                             <mat-checkbox
                                 color="primary"
@@ -76,8 +76,9 @@
                                 [(ngModel)]="discount.isActive"
                                 (change)="change($event, discount)"
                                 (click)="$event.stopPropagation()"
-                            ></mat-checkbox>
-                            <span class="pull-left mr-l1 text-ellipsis">{{ discount.name }}</span>
+                            >                        
+                            {{ discount.name }}
+                        </mat-checkbox>
                         </label>
                     </li>
                 </ng-container>

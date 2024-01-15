@@ -3020,14 +3020,23 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         return (value === Infinity) ? 0 : value;
     }
 
+    /**
+     * This will be use for calculation of discount
+     *
+     * @param {SalesEntryClass} entry
+     * @param {SalesTransactionItemClass} trx
+     * @param {boolean} [calculateEntryTotal=true]
+     * @memberof VoucherComponent
+     */
     public calculateTotalDiscountOfEntry(entry: SalesEntryClass, trx: SalesTransactionItemClass, calculateEntryTotal: boolean = true) {
-        let percentageListTotal = entry.discounts?.filter(f => f.isActive)
+        let percentageListTotal: number = 0;
+        let fixedListTotal: number = 0;
+        percentageListTotal = entry.discounts?.filter(f => f.isActive)
             ?.filter(s => s.discountType === 'PERCENTAGE')
             .reduce((pv, cv) => {
                 return Number(cv.discountValue) ? Number(pv) + Number(cv.discountValue) : Number(pv);
             }, 0) || 0;
-
-        let fixedListTotal = entry.discounts?.filter(f => f.isActive)
+        fixedListTotal = entry.discounts?.filter(f => f.isActive)
             ?.filter(s => s.discountType === 'FIX_AMOUNT')
             .reduce((pv, cv) => {
                 return Number(cv.discountValue) ? Number(pv) + Number(cv.discountValue) : Number(pv);
@@ -3091,6 +3100,16 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.calculateBalanceDue();
     }
 
+    /**
+     * This will be use for calculating when transaction altered
+     *
+     * @param {SalesEntryClass} entry
+     * @param {SalesTransactionItemClass} trx
+     * @param {boolean} [fromTransactionField=false]
+     * @param {*} [event]
+     * @return {*}
+     * @memberof VoucherComponent
+     */
     public calculateWhenTrxAltered(entry: SalesEntryClass, trx: SalesTransactionItemClass, fromTransactionField: boolean = false, event?: any) {
         if (trx?.accountName || trx?.accountUniqueName) {
             if (fromTransactionField) {
@@ -3100,22 +3119,27 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     return;
                 }
             }
-            if (event && event.discount && event.isActive) {
-                this.accountAssignedApplicableDiscounts.forEach(item => {
-                    if (item && event.discount && item.uniqueName === event.discount.discountUniqueName) {
-                        item.isActive = event.isActive?.target?.checked;
-                    }
-                });
-            }
-
-            if (event || !this.isUpdateMode) {
-                if (trx.amount && entry && entry.discounts && entry.discounts.length && this.accountAssignedApplicableDiscounts && this.accountAssignedApplicableDiscounts.length) {
-                    entry.discounts.map(item => {
-                        let discountItem = this.accountAssignedApplicableDiscounts.find(element => element?.uniqueName === item.discountUniqueName);
-                        if (discountItem && discountItem.uniqueName) {
-                            item.isActive = discountItem.isActive;
-                        }
+            if (event || !this.isUpdateMode || !entry['initiallyCall']) {
+                if (!entry['initiallyCall']) {
+                    entry.discounts = entry.discounts.map(item => {
+                        item.isActive = false;
+                        return item;
                     });
+
+                    entry.discountFixedValueModal = 0;
+                    entry.discountPercentageModal = 0;
+                    entry.discountSum = 0;
+
+                    trx?.stockDetails?.variant?.unitRates?.forEach(unitRate => {
+                        let matchedUnit = unitRate?.stockUnitUniqueName === trx?.stockUnit;
+                        if (matchedUnit && !this.isBulkEntryInProgress) {
+                            trx.rate = Number((unitRate.rate / this.exchangeRate).toFixed(this.highPrecisionRate));
+                        }
+                        this.calculateStockEntryAmount(trx);
+                    });
+                    this.applyMrpDiscount(false, trx, entry, event);
+                } else if (event && entry.discounts[0]) {
+                    entry.discounts[0].isActive = true;
                 }
             }
 
@@ -3148,7 +3172,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             if (this.isUpdateMode && (this.isEstimateInvoice || this.isProformaInvoice)) {
                 this.applyRoundOff = true;
             }
-
             this.calculateTotalDiscountOfEntry(entry, trx, false);
             this.calculateEntryTaxSum(entry, trx, false);
             this.calculateEntryTotal(entry, trx);
@@ -3161,13 +3184,82 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     }
 
     /**
+     * This will be use for apply mrp discount
+     *
+     * @private
+     * @param {*} trx
+     * @param {*} entry
+     * @param {*} event
+     * @memberof VoucherComponent
+     */
+    private applyMrpDiscount(isTaxInclusive: boolean, trx: any, entry: any, event: any): void {
+        if (trx?.stockDetails?.variant?.variantDiscount?.discounts?.length) {
+            let discountApplied = false;
+            trx?.stockDetails?.variant?.variantDiscount?.discounts.forEach(discount => {
+                if (discount) {
+                    let matchedUnit = trx?.stockDetails?.variant?.variantDiscount?.unit?.uniqueName === trx?.stockUnit;
+                    if (matchedUnit) {
+                        entry.discounts = entry.discounts.map(item => {
+                            if (item.discountUniqueName === discount?.discount?.uniqueName) {
+                                item.isActive = true;
+                            }
+                            return item;
+                        });
+                        if (!isTaxInclusive) {
+                            this.calculateStockEntryAmount(trx);
+                        }
+
+                        discountApplied = true;
+                    }
+                }
+            });
+
+            if (!discountApplied) {
+                if (event && event.discount && event.isActive) {
+                    this.accountAssignedApplicableDiscounts.forEach(item => {
+                        if (item && event.discount && item.uniqueName === event.discount.discountUniqueName) {
+                            item.isActive = event.isActive?.target?.checked;
+                        }
+                    });
+                }
+
+                if (entry && entry.discounts && entry.discounts.length && this.accountAssignedApplicableDiscounts && this.accountAssignedApplicableDiscounts.length) {
+                    entry.discounts.map(item => {
+                        let discountItem = this.accountAssignedApplicableDiscounts.find(element => element?.uniqueName === item.discountUniqueName);
+                        if (discountItem && discountItem.uniqueName) {
+                            item.isActive = discountItem.isActive;
+                        }
+                    });
+                }
+            }
+        } else {
+            if (event && event.discount && event.isActive) {
+                this.accountAssignedApplicableDiscounts.forEach(item => {
+                    if (item && event.discount && item.uniqueName === event.discount.discountUniqueName) {
+                        item.isActive = event.isActive?.target?.checked;
+                    }
+                });
+            }
+            if (entry && entry.discounts && entry.discounts.length && this.accountAssignedApplicableDiscounts && this.accountAssignedApplicableDiscounts.length) {
+                entry.discounts.map(item => {
+                    let discountItem = this.accountAssignedApplicableDiscounts.find(element => element?.uniqueName === item.discountUniqueName);
+                    if (discountItem && discountItem.uniqueName) {
+                        item.isActive = discountItem.isActive;
+                    }
+                });
+            }
+        }
+        entry['initiallyCall'] = true;
+    }
+
+    /**
      * Calculate the complete transaction values inclusively
      *
      * @param {SalesEntryClass} entry Entry value
      * @param {SalesTransactionItemClass} transaction Current transaction
      * @memberof VoucherComponent
      */
-    public calculateTransactionValueInclusively(entry: SalesEntryClass, transaction: SalesTransactionItemClass): void {
+    public calculateTransactionValueInclusively(entry: SalesEntryClass, transaction: SalesTransactionItemClass, updateTransactionRate: boolean = true): void {
         // Calculate discount
         entry.discounts = entry.discounts?.length ? entry.discounts : this.generalService.getDiscountValues({
             discountAccountsDetails: entry.discounts ?? [],
@@ -3204,7 +3296,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             }
             taxTotal += selectedTax.amount;
         });
-
         // Calculate amount with inclusive tax
         transaction.amount = giddhRoundOff(((Number(transaction.total) + fixedDiscountTotal + 0.01 * fixedDiscountTotal * Number(taxTotal)) /
             (1 - 0.01 * percentageDiscountTotal + 0.01 * Number(taxTotal) - 0.0001 * percentageDiscountTotal * Number(taxTotal))), this.giddhBalanceDecimalPlaces);
@@ -3230,7 +3321,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             entry.cessSum = 0;
         }
         // Calculate stock unit rate with amount
-        if (transaction.isStockTxn) {
+        if (updateTransactionRate && transaction.isStockTxn) {
             transaction.rate = Number((transaction.amount / transaction.quantity).toFixed(this.highPrecisionRate));
         }
         transaction.convertedTotal = giddhRoundOff(transaction.total * this.exchangeRate, this.giddhBalanceDecimalPlaces);
@@ -3460,6 +3551,19 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         return res;
     }
 
+    /**
+     * This will be use for on select any sales account or stock
+     *
+     * @param {*} selectedAcc
+     * @param {SalesTransactionItemClass} txn
+     * @param {SalesEntryClass} entry
+     * @param {boolean} [isBulkItem=false]
+     * @param {boolean} [isLinkedPoItem=false]
+     * @param {number} entryIndex
+     * @param {boolean} [fromBarcode=false]
+     * @return {*}  {*}
+     * @memberof VoucherComponent
+     */
     public onSelectSalesAccount(selectedAcc: any, txn: SalesTransactionItemClass, entry: SalesEntryClass, isBulkItem: boolean = false, isLinkedPoItem: boolean = false, entryIndex: number, fromBarcode: boolean = false): any {
         if (this.isBarcodeMachineTyping) {
             this.removeTransaction(entryIndex);
@@ -3474,7 +3578,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             let params;
             if (selectedAcc.additional.stock) {
                 params = {
-                    stockUniqueName: selectedAcc.additional.stock?.uniqueName
+                    stockUniqueName: selectedAcc.additional.stock?.uniqueName,
+                    customerUniqueName: this.invFormData.accountDetails.uniqueName
                 };
             }
             this.currentTxnRequestObject[this.activeIndx] = {
@@ -3543,9 +3648,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     ): SalesTransactionItemClass {
         let o = cloneDeep(selectedAcc.additional);
         const variant = o.stock?.variant;
-        const isInclusiveEntry = (variant?.purchaseTaxInclusive && o.category === 'expenses') ||
-            (variant?.salesTaxInclusive && o.category === 'income') ||
-            (variant?.fixedAssetTaxInclusive && o.category === 'fixedassets');
+        let isInclusiveEntry = (variant?.purchaseTaxInclusive && o.category === 'expenses') || (variant?.salesTaxInclusive && o.category === 'income') || (variant?.fixedAssetTaxInclusive && o.category === 'fixedassets');
+
         transaction.taxInclusive = isInclusiveEntry;
         // check if we have quantity in additional object. it's for only bulk add mode
         transaction.quantity = o.quantity ? o.quantity : (o.stock) ? 1 : null;
@@ -3672,6 +3776,20 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         transaction.sacNumberExists = false;
         transaction.hsnNumber = null;
 
+        const matchedUnit = variant?.unitRates?.filter(ur => ur.stockUnitUniqueName === transaction.stockUnit);
+        if (matchedUnit?.length && !entry['initiallyCall']) {
+            transaction.rate = Number((matchedUnit[0].rate / this.exchangeRate).toFixed(this.highPrecisionRate));
+            entry.discounts = entry.discounts.map(item => {
+                item.isActive = false;
+                return item;
+            });
+            entry.discounts[0].isActive = true;
+            entry.discountFixedValueModal = 0;
+            entry.discountPercentageModal = 0;
+            entry.discountSum = 0;
+            this.applyMrpDiscount(true, transaction, entry, false);
+        }
+
         if (transaction.stockDetails?.hsnNumber && transaction.stockDetails?.sacNumber) {
             if (this.inventorySettings?.manageInventory) {
                 transaction.hsnNumber = transaction.stockDetails.hsnNumber;
@@ -3739,12 +3857,15 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 }
             }
         }
+
         this.focusOnDescription();
+
         if (calculateTransaction) {
             if (isInclusiveEntry) {
                 setTimeout(() => {
-                    // Set timeout is used as tax component is not rendered at the time control is reached here
-                    transaction.rate = Number((transaction.stockList[0].rate / this.exchangeRate).toFixed(this.highPrecisionRate));
+                    if (!matchedUnit?.length || !matchedUnit[0].rate) {
+                        transaction.rate = Number((transaction.stockList[0]?.rate / this.exchangeRate).toFixed(this.highPrecisionRate));
+                    }
                     transaction.total = transaction.quantity * transaction.rate;
                     this.calculateTransactionValueInclusively(entry, transaction);
                 });
@@ -3872,6 +3993,11 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public addBlankRow(txn: SalesTransactionItemClass) {
         if (!txn) {
             let entry: SalesEntryClass = new SalesEntryClass();
+            let entryDiscounts = this.generalService.getDiscountValues({
+                discountAccountsDetails: entry.discounts ?? [],
+                discountsList: this.discountsList
+            });
+            entry.discounts = entryDiscounts;
             if (this.isUpdateMode) {
                 entry.entryDate = this.invFormData.entries[0] ? this.invFormData.entries[0]?.entryDate : this.universalDate || new Date();
                 if (typeof (entry.entryDate) === "object") {
@@ -3895,6 +4021,11 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 return;
             }
             let entry: SalesEntryClass = new SalesEntryClass();
+            let entryDiscounts = this.generalService.getDiscountValues({
+                discountAccountsDetails: entry.discounts ?? [],
+                discountsList: this.discountsList
+            });
+            entry.discounts = entryDiscounts;
             this.invFormData.entries.push(entry);
         }
         this.createEmbeddedViewAtIndex(this.invFormData.entries?.length - 1);
@@ -4168,7 +4299,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         return unitArray;
     }
 
-    public onChangeUnit(txn, selectedUnit) {
+    public onChangeUnit(entry, txn, selectedUnit) {
+        entry['initiallyCall'] = undefined;
         find(txn.stockList, (o) => {
             if (o.id === selectedUnit?.value) {
                 txn.stockUnitCode = o.text;
@@ -4247,13 +4379,22 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 let lastIndex = -1;
                 let blankItemIndex = this.invFormData.entries?.findIndex(f => !f.transactions[0].accountUniqueName);
                 let isBlankItemInBetween;
+
+                let entry = new SalesEntryClass();
+                let entryDiscounts = this.generalService.getDiscountValues({
+                    discountAccountsDetails: entry.discounts ?? [],
+                    discountsList: this.discountsList
+                });
+
+                entry.discounts = entryDiscounts;
+
                 if (blankItemIndex > -1) {
                     lastIndex = blankItemIndex;
-                    this.invFormData.entries[lastIndex] = new SalesEntryClass();
+                    this.invFormData.entries[lastIndex] = entry;
                     isBlankItemInBetween = true;
                     isBlankItemPresent = true;
                 } else {
-                    this.invFormData.entries.push(new SalesEntryClass());
+                    this.invFormData.entries.push(entry);
                     lastIndex = this.invFormData.entries?.length - 1;
                     isBlankItemInBetween = false;
                 }
@@ -5245,6 +5386,14 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     isActive: true,
                     discountValue: 0
                 });
+            } else {
+                let activeDiscountIndex = -1;
+                entry.tradeDiscounts.forEach((res, loop) => {
+                    if (!res.discount?.uniqueName) {
+                        activeDiscountIndex = loop;
+                    }
+                });
+                entry.tradeDiscounts = this.generalService.changeElementPositionInArray(entry.tradeDiscounts, activeDiscountIndex, 0);
             }
 
             entry.tradeDiscounts.forEach((f) => {
@@ -5257,7 +5406,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     discountValue: f?.discount.discountValue,
                     discountUniqueName: f?.discount?.uniqueName
                 });
-
             });
         }
 
@@ -5389,10 +5537,17 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         voucherClassConversion.entries = [];
         result.entries.forEach(entry => {
             let salesEntryClass = new SalesEntryClass();
+            let entryDiscounts = this.generalService.getDiscountValues({
+                discountAccountsDetails: entry.discounts ?? [],
+                discountsList: this.discountsList
+            });
+
+            salesEntryClass.discounts = entryDiscounts;
             let salesTransactionItemClass = new SalesTransactionItemClass();
             salesEntryClass.tcsTaxList = [];
             salesEntryClass.tdsTaxList = [];
             salesEntryClass.transactions = [];
+            salesEntryClass['initiallyCall'] = true;
 
             if (entry.purchaseOrderItemMapping) {
                 if (this.copyPurchaseBill) {
@@ -8902,19 +9057,22 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         if (!this.barcodeValue) {
             return;
         }
-
-        this.commonService.getBarcodeScanData(this.barcodeValue).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        let params = {
+            barcode: this.barcodeValue,
+            customerUniqueName: this.invFormData.accountDetails.uniqueName ?? "",
+            invoiceType: this.invoiceType,
+        }
+        this.commonService.getBarcodeScanData(this.barcodeValue, params).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.body && response.status === 'success') {
                 this.barcodeValue = '';
-                let stockObj = response.body?.stocks[0];
-                let variantObj = stockObj?.variants[0];
+                let stockObj = response.body?.stock;
+                let variantObj = stockObj?.variant;
 
-                let group = (this.invoiceType === VoucherTypeEnum.debitNote || this.invoiceType === VoucherTypeEnum.purchase || this.invoiceType === VoucherTypeEnum.cashBill || this.invoiceType === VoucherTypeEnum.cashDebitNote) ?
-                    'purchase' : 'sales';
-                let unitRates = group === 'purchase' ? variantObj?.purchaseAccountDetails?.unitRates ?? variantObj?.fixedAssetAccountDetails?.unitRates : variantObj?.salesAccountDetails?.unitRates ?? variantObj?.fixedAssetAccountDetails?.unitRates;
+                let group = response.body?.parentGroups[1];
+                let unitRates = response.body?.stock?.variant?.unitRates;
 
-                let accountUniqueName = group === 'purchase' ? variantObj?.purchaseAccountDetails?.accountUniqueName ?? variantObj?.fixedAssetAccountDetails?.accountUniqueName : variantObj?.salesAccountDetails?.accountUniqueName ?? variantObj?.fixedAssetAccountDetails?.accountUniqueName
-                let accountName = group === 'purchase' ? variantObj?.purchaseAccountDetails?.accountName ?? variantObj?.fixedAssetAccountDetails?.accountName : variantObj?.salesAccountDetails?.accountName ?? variantObj?.fixedAssetAccountDetails?.accountName;
+                let accountUniqueName = response.body?.uniqueName;
+                let accountName = response.body?.name;
 
                 let isInclusiveTax = group === 'purchase' ? variantObj?.purchaseTaxInclusive ?? variantObj?.fixedAssetTaxInclusive : variantObj?.salesTaxInclusive ?? variantObj?.fixedAssetTaxInclusive;
 
@@ -8922,47 +9080,47 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     this.toaster.showSnackBar("warning", group + " " + this.localeData?.account_missing_in_stock);
                     return;
                 }
-
                 let selectedAcc = {
-                    value: group + stockObj.uniqueName,
-                    label: stockObj.name,
+                    value: group + stockObj?.uniqueName,
+                    label: stockObj?.name,
                     additional: {
                         type: "ACCOUNT",
                         name: accountName,
                         uniqueName: accountUniqueName,
                         stock: {
-                            name: stockObj.name,
-                            uniqueName: stockObj.uniqueName,
-                            stockUnitCode: stockObj.stockUnit.code,
+                            name: stockObj?.name,
+                            uniqueName: stockObj?.uniqueName,
+                            stockUnitCode: stockObj?.stockUnitCode,
                             rate: 1,
-                            stockUnitName: stockObj.stockUnit.name,
-                            stockUnitUniqueName: stockObj.stockUnit.uniqueName,
-                            taxes: stockObj.taxes,
+                            stockUnitName: stockObj?.stockUnitName,
+                            stockUnitUniqueName: stockObj?.stockUnitUniqueName,
+                            taxes: stockObj?.taxes,
                             groupTaxes: [],
-                            skuCodeHeading: stockObj.skuCodeHeading,
-                            customField1Heading: stockObj.customField1Heading,
-                            customField1Value: stockObj.customField1Value,
-                            customField2Heading: stockObj.customField2Heading,
-                            customField2Value: stockObj.customField2Value,
+                            skuCodeHeading: stockObj?.skuCodeHeading,
+                            customField1Heading: stockObj?.customField1Heading,
+                            customField1Value: stockObj?.customField1Value,
+                            customField2Heading: stockObj?.customField2Heading,
+                            customField2Value: stockObj?.customField2Value,
                             variant: {
-                                uniqueName: variantObj.uniqueName,
-                                salesTaxInclusive: variantObj.salesTaxInclusive,
-                                purchaseTaxInclusive: variantObj.purchaseTaxInclusive,
-                                unitRates: []
+                                uniqueName: variantObj?.uniqueName,
+                                salesTaxInclusive: variantObj?.salesTaxInclusive,
+                                purchaseTaxInclusive: variantObj?.purchaseTaxInclusive,
+                                unitRates: [],
+                                variantDiscount: variantObj?.variantDiscount
                             }
                         },
                         parentGroups: [],
                         route: '',
-                        label: stockObj.name,
-                        value: group + stockObj.uniqueName,
+                        label: stockObj?.name,
+                        value: group + stockObj?.uniqueName,
                         applicableTaxes: [],
                         currency: {
                             code: "",
                             symbol: ""
                         },
                         nameStr: "",
-                        hsnNumber: stockObj.hsnNumber,
-                        sacNumber: stockObj.sacNumber,
+                        hsnNumber: stockObj?.hsnNumber,
+                        sacNumber: stockObj?.sacNumber,
                         uNameStr: "",
                         category: ""
                     }
@@ -8977,7 +9135,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
                 let isExistingEntry = -1;
                 this.invFormData.entries?.forEach((entry, index) => {
-                    if (isExistingEntry === -1 && entry.transactions[0]?.stockDetails?.variant?.uniqueName === variantObj.uniqueName) {
+                    if (isExistingEntry === -1 && entry.transactions[0]?.stockDetails?.variant?.uniqueName === variantObj?.uniqueName) {
                         entry.transactions[0].quantity = entry.transactions[0].quantity + 1;
                         isExistingEntry = index;
                     }
@@ -8990,25 +9148,25 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     let activeEntryIndex = this.invFormData.entries.length - 1;
                     this.invFormData.entries[activeEntryIndex].transactions[0].sku_and_customfields = null;
                     let description = [];
-                    let skuCodeHeading = stockObj.skuCodeHeading ? stockObj.skuCodeHeading : this.commonLocaleData?.app_sku_code;
-                    if (stockObj.skuCode) {
-                        description.push(skuCodeHeading + ':' + stockObj.skuCode);
+                    let skuCodeHeading = stockObj?.skuCodeHeading ? stockObj?.skuCodeHeading : this.commonLocaleData?.app_sku_code;
+                    if (stockObj?.skuCode) {
+                        description.push(skuCodeHeading + ':' + stockObj?.skuCode);
                     }
 
-                    let customField1Heading = stockObj.customField1Heading ? stockObj.customField1Heading : this.localeData?.custom_field1;
-                    if (stockObj.customField1Value) {
-                        description.push(customField1Heading + ':' + stockObj.customField1Value);
+                    let customField1Heading = stockObj?.customField1Heading ? stockObj?.customField1Heading : this.localeData?.custom_field1;
+                    if (stockObj?.customField1Value) {
+                        description.push(customField1Heading + ':' + stockObj?.customField1Value);
                     }
 
-                    let customField2Heading = stockObj.customField2Heading ? stockObj.customField2Heading : this.localeData?.custom_field2;
-                    if (stockObj.customField2Value) {
-                        description.push(customField2Heading + ':' + stockObj.customField2Value);
+                    let customField2Heading = stockObj?.customField2Heading ? stockObj?.customField2Heading : this.localeData?.custom_field2;
+                    if (stockObj?.customField2Value) {
+                        description.push(customField2Heading + ':' + stockObj?.customField2Value);
                     }
 
                     if (stockObj) {
                         let obj: IStockUnit = {
-                            id: stockObj.stockUnit.uniqueName,
-                            text: stockObj.stockUnit.code
+                            id: stockObj.stockUnitUniqueName,
+                            text: stockObj.stockUnitCode
                         };
                         this.invFormData.entries[activeEntryIndex].transactions[0].stockList = [];
                         if (unitRates.length) {
@@ -9017,8 +9175,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                             this.invFormData.entries[activeEntryIndex].transactions[0].stockUnitCode = this.invFormData.entries[activeEntryIndex].transactions[0].stockList[0].text;
                         } else {
                             this.invFormData.entries[activeEntryIndex].transactions[0].stockList.push(obj);
-                            this.invFormData.entries[activeEntryIndex].transactions[0].stockUnit = stockObj.stockUnit.uniqueName;
-                            this.invFormData.entries[activeEntryIndex].transactions[0].stockUnitCode = stockObj.stockUnit.code;
+                            this.invFormData.entries[activeEntryIndex].transactions[0].stockUnit = stockObj.stockUnitUniqueName;
+                            this.invFormData.entries[activeEntryIndex].transactions[0].stockUnitCode = stockObj.stockUnitCode;
                         }
                     }
                     this.invFormData.entries[activeEntryIndex].transactions[0].sku_and_customfields = description.join(', ');
@@ -9036,11 +9194,11 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     {
                         name: stockObj.name,
                         uniqueName: stockObj.uniqueName,
-                        stockUnitCode: stockObj.stockUnit.code,
+                        stockUnitCode: stockObj.stockUnitCode,
                         rate: unitRates?.length ? unitRates[0].rate : [],
                         quantity: 1,
-                        stockUnitName: stockObj.stockUnit.name,
-                        stockUnitUniqueName: stockObj.stockUnit.uniqueName,
+                        stockUnitName: stockObj.stockUnitName,
+                        stockUnitUniqueName: stockObj.stockUnitUniqueName,
                         taxes: stockObj.taxes,
                         groupTaxes: [],
                         skuCodeHeading: stockObj.skuCodeHeading,
@@ -9049,15 +9207,16 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         customField2Heading: stockObj.customField2Heading,
                         customField2Value: stockObj.customField2Value,
                         variant: {
-                            uniqueName: variantObj.uniqueName,
-                            salesTaxInclusive: variantObj.salesTaxInclusive,
-                            purchaseTaxInclusive: variantObj.purchaseTaxInclusive,
-                            unitRates: unitRates
+                            uniqueName: variantObj?.uniqueName,
+                            salesTaxInclusive: variantObj?.salesTaxInclusive,
+                            purchaseTaxInclusive: variantObj?.purchaseTaxInclusive,
+                            unitRates: unitRates,
+                            variantDiscount: variantObj?.variantDiscount
                         }
                     };
                     this.invFormData.entries[activeEntryIndex].transactions[0].variant = {
-                        name: variantObj.name,
-                        uniqueName: variantObj.uniqueName
+                        name: variantObj?.name,
+                        uniqueName: variantObj?.uniqueName
                     };
 
                     this.activeIndx = activeEntryIndex;
@@ -9068,9 +9227,11 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         });
                     } else {
                         this.invFormData.entries[activeEntryIndex].transactions[0].setAmount(this.invFormData.entries[activeEntryIndex]);
+                        this.invFormData.entries[activeEntryIndex]['initiallyCall'] = undefined;
                         this.calculateWhenTrxAltered(this.invFormData.entries[activeEntryIndex], this.invFormData.entries[activeEntryIndex].transactions[0]);
                         this.calculateStockEntryAmount(this.invFormData.entries[activeEntryIndex].transactions[0]);
                     }
+                    this.invFormData.entries[activeEntryIndex]['initiallyCall'] = undefined;
                     this.onSelectSalesAccount(selectedAcc, this.invFormData.entries[activeEntryIndex].transactions[0], this.invFormData.entries[activeEntryIndex], false, false, 0, true);
                 } else {
                     this.activeIndx = isExistingEntry;
@@ -9109,11 +9270,13 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @memberof VoucherComponent
      */
     public variantChanged(event: IOption, transaction: SalesTransactionItemClass, entry: SalesEntryClass): void {
+        entry['initiallyCall'] = undefined;
         transaction.variant.name = event.label;
         this.currentTxnRequestObject[this.activeIndx].txn = transaction;
         this.currentTxnRequestObject[this.activeIndx].entry = entry;
         if (this.currentTxnRequestObject[this.activeIndx]?.params) {
             this.currentTxnRequestObject[this.activeIndx].params.variantUniqueName = event.value;
+            this.currentTxnRequestObject[this.activeIndx].params.customerUniqueName = this.invFormData.accountDetails.uniqueName;
             this.loadDetails(this.currentTxnRequestObject[this.activeIndx]);
         }
     }

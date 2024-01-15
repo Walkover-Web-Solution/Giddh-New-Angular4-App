@@ -1872,10 +1872,12 @@ ul.pills li {
 .my-dropdown-menu {
     position: absolute;
     z-index: 99;
-    min-width: 160px;
+    width: 100%;
+    max-width: 190px;
+    min-width: 190px;
     padding: 5px 0;
     margin: 2px 0 0;
-    font-size: var(--font-size-15);
+    font-size: var(--font-size-15) !important;
     text-align: left;
     list-style: none;
     background-color: var(--color-white);
@@ -1884,6 +1886,40 @@ ul.pills li {
     border-radius: 4px;
     -webkit-box-shadow: 0 6px 12px var(--color-primary-common-box-shadow);
     box-shadow: 0 6px 12px var(--color-primary-common-box-shadow);
+    label{
+        font-size: var(--font-size-15) !important;
+    }
+    .value-wrapper{
+        label{
+            min-width: 60px !important;
+        }
+        .percent-wrapper{
+            input {
+                padding-right: 20px !important;
+            }
+        }
+    }
+    .fa-percent {
+        top: 12px;
+        right: 6px;
+        color: var(--color-gray);
+        font-size: 13px;
+    }
+
+    ul{
+        &.discount-list {
+            list-style: none;
+            overflow: auto;
+            max-height: 100px;
+            min-height: 88px;
+
+            li{
+                &.discount-item{
+                    height: 40px;
+                }
+            }
+        }
+    }
 }
 .dropdown-menu {
     position: absolute;
@@ -2133,7 +2169,6 @@ perfect-scrollbar.ps-show-active > .ps.ps--active-y > .ps-overlay:not(.ps-at-bot
         position: relative !important;
     }
 }
-.custom-item:hover,
 .discount-item:hover {
     background-color: var(--color-dark-fog) !important;
     color: var(--color-blue) !important;

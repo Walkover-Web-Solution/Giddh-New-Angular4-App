@@ -27,6 +27,7 @@ $custom-typography: mat-typography-config(
 @import "../css/global/voucher.scss";
 @import "../css/global/tabs.scss";
 @import "../css/global/table.scss";
+@import "../css/global/custom-price.scss";
 
 /* table css need to removed at last  (start)Don't touch this table css (If any body work on that contact shalinee..)
 */
@@ -1360,7 +1361,7 @@ body {
 }
 
 .middle {
-    vertical-align: middle;
+    vertical-align: middle !important;
 }
 
 .modal-footer {
@@ -12611,7 +12612,7 @@ inventory-master {
 
 @media only screen and (min-width: 1280px) {
     .multi-select input.form-control {
-        padding-right: 18px !important;
+        padding-right: 20px !important;
     }
 }
 

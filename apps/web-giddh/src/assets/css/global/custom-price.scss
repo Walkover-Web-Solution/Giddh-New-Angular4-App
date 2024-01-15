@@ -1,0 +1,84 @@
+.custom-grid-wrapper {
+    * {
+        color: var(--color-common-primary-text);
+    }
+    .mat-list-wrap {
+        .custom-tab {
+            button {
+                &.active {
+                    &.mdc-button {
+                        .mdc-button__label {
+                            color: var(--color-white) !important;
+                        }
+                    }
+                }
+            }
+        }
+        input {
+            &.form-control {
+                &.search-bar {
+                    padding-right: 2rem !important;
+                }
+            }
+        }
+        .item-list {
+            .mat-mdc-list-item {
+                .mdc-list-item__content {
+                    a {
+                        display: flex;
+                        justify-content: space-between;
+                    }
+                }
+                &:hover,
+                &.active {
+                    background-color: var(--color-giddh-blue) !important;
+                    .mdc-list-item__content {
+                        a {
+                            span,
+                            .icon-trash {
+                                color: var(--color-white) !important;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        .inventory-sideabar {
+            .inventory-sub-sideabar {
+                table {
+                    tbody {
+                        tr {
+                            td {
+                                .discount-input {
+                                    .multi-select {
+                                        input {
+                                            height: 48px;
+                                            &:focus {
+                                                border-color: var(--color-giddh-blue) !important;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            .save-discount-header {
+                button {
+                    &.mdc-button {
+                        .mdc-button__label {
+                            color: var(--color-primary-login-box-header-background) !important;
+                        }
+                        &.mat-mdc-outlined-button {
+                            .mdc-button__label {
+                                color: var(--color-tertiary-login-box-body-text) !important;
+                            }
+                            border-color: var(--color-tertiary-login-box-body-text) !important;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

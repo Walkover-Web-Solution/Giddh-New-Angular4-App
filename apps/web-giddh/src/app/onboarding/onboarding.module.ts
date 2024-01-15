@@ -9,6 +9,7 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatRadioModule } from "@angular/material/radio";
 import { FormsModule } from "@angular/forms";
 import { MatListModule } from "@angular/material/list";
+import { AsideMenuAccountModule } from "../shared/aside-menu-account/aside.menu.account.module";
 
 @NgModule({
     declarations: [
@@ -23,7 +24,8 @@ import { MatListModule } from "@angular/material/list";
         MatButtonModule,
         MatRadioModule,
         FormsModule,
-        MatListModule
+        MatListModule,
+        AsideMenuAccountModule
     ]
 })
 
