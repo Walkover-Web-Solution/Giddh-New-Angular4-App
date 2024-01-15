@@ -3864,7 +3864,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                     transaction.rate = Number((transaction.stockList[0]?.rate / this.exchangeRate).toFixed(this.highPrecisionRate));
                 }
                 transaction.total = transaction.quantity * transaction.rate;
-                this.calculateTransactionValueInclusively(entry, transaction, false);
+                this.calculateTransactionValueInclusively(entry, transaction);
             });
         } else {
             this.calculateStockEntryAmount(transaction);
