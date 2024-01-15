@@ -9036,20 +9036,22 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         if (!this.barcodeValue) {
             return;
         }
-
-
-        this.commonService.getBarcodeScanData(this.barcodeValue, this.invFormData.accountDetails.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        let params = {
+            barcode: this.barcodeValue,
+            customerUniqueName: this.invFormData.accountDetails.uniqueName ?? "",
+            invoiceType: this.invoiceType,
+        }
+        this.commonService.getBarcodeScanData(this.barcodeValue, params).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.body && response.status === 'success') {
                 this.barcodeValue = '';
-                let stockObj = response.body?.stocks[0];
-                let variantObj = stockObj?.variants[0];
+                let stockObj = response.body?.stock;
+                let variantObj = stockObj?.variant;
 
-                let group = (this.invoiceType === VoucherTypeEnum.debitNote || this.invoiceType === VoucherTypeEnum.purchase || this.invoiceType === VoucherTypeEnum.cashBill || this.invoiceType === VoucherTypeEnum.cashDebitNote) ?
-                    'purchase' : 'sales';
-                let unitRates = group === 'purchase' ? variantObj?.purchaseAccountDetails?.unitRates ?? variantObj?.fixedAssetAccountDetails?.unitRates : variantObj?.salesAccountDetails?.unitRates ?? variantObj?.fixedAssetAccountDetails?.unitRates;
+                let group = response.body?.parentGroups[1];
+                let unitRates = response.body?.stock?.variant?.unitRates;
 
-                let accountUniqueName = group === 'purchase' ? variantObj?.purchaseAccountDetails?.accountUniqueName ?? variantObj?.fixedAssetAccountDetails?.accountUniqueName : variantObj?.salesAccountDetails?.accountUniqueName ?? variantObj?.fixedAssetAccountDetails?.accountUniqueName
-                let accountName = group === 'purchase' ? variantObj?.purchaseAccountDetails?.accountName ?? variantObj?.fixedAssetAccountDetails?.accountName : variantObj?.salesAccountDetails?.accountName ?? variantObj?.fixedAssetAccountDetails?.accountName;
+                let accountUniqueName = response.body?.uniqueName;
+                let accountName = response.body?.name;
 
                 let isInclusiveTax = group === 'purchase' ? variantObj?.purchaseTaxInclusive ?? variantObj?.fixedAssetTaxInclusive : variantObj?.salesTaxInclusive ?? variantObj?.fixedAssetTaxInclusive;
 
@@ -9058,46 +9060,46 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     return;
                 }
                 let selectedAcc = {
-                    value: group + stockObj.uniqueName,
-                    label: stockObj.name,
+                    value: group + stockObj?.uniqueName,
+                    label: stockObj?.name,
                     additional: {
                         type: "ACCOUNT",
                         name: accountName,
                         uniqueName: accountUniqueName,
                         stock: {
-                            name: stockObj.name,
-                            uniqueName: stockObj.uniqueName,
-                            stockUnitCode: stockObj.stockUnit.code,
+                            name: stockObj?.name,
+                            uniqueName: stockObj?.uniqueName,
+                            stockUnitCode: stockObj?.stockUnitCode,
                             rate: 1,
-                            stockUnitName: stockObj.stockUnit.name,
-                            stockUnitUniqueName: stockObj.stockUnit.uniqueName,
-                            taxes: stockObj.taxes,
+                            stockUnitName: stockObj?.stockUnitName,
+                            stockUnitUniqueName: stockObj?.stockUnitUniqueName,
+                            taxes: stockObj?.taxes,
                             groupTaxes: [],
-                            skuCodeHeading: stockObj.skuCodeHeading,
-                            customField1Heading: stockObj.customField1Heading,
-                            customField1Value: stockObj.customField1Value,
-                            customField2Heading: stockObj.customField2Heading,
-                            customField2Value: stockObj.customField2Value,
+                            skuCodeHeading: stockObj?.skuCodeHeading,
+                            customField1Heading: stockObj?.customField1Heading,
+                            customField1Value: stockObj?.customField1Value,
+                            customField2Heading: stockObj?.customField2Heading,
+                            customField2Value: stockObj?.customField2Value,
                             variant: {
-                                uniqueName: variantObj.uniqueName,
-                                salesTaxInclusive: variantObj.salesTaxInclusive,
-                                purchaseTaxInclusive: variantObj.purchaseTaxInclusive,
+                                uniqueName: variantObj?.uniqueName,
+                                salesTaxInclusive: variantObj?.salesTaxInclusive,
+                                purchaseTaxInclusive: variantObj?.purchaseTaxInclusive,
                                 unitRates: [],
                                 variantDiscount: variantObj?.variantDiscount
                             }
                         },
                         parentGroups: [],
                         route: '',
-                        label: stockObj.name,
-                        value: group + stockObj.uniqueName,
+                        label: stockObj?.name,
+                        value: group + stockObj?.uniqueName,
                         applicableTaxes: [],
                         currency: {
                             code: "",
                             symbol: ""
                         },
                         nameStr: "",
-                        hsnNumber: stockObj.hsnNumber,
-                        sacNumber: stockObj.sacNumber,
+                        hsnNumber: stockObj?.hsnNumber,
+                        sacNumber: stockObj?.sacNumber,
                         uNameStr: "",
                         category: ""
                     }
@@ -9112,7 +9114,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
                 let isExistingEntry = -1;
                 this.invFormData.entries?.forEach((entry, index) => {
-                    if (isExistingEntry === -1 && entry.transactions[0]?.stockDetails?.variant?.uniqueName === variantObj.uniqueName) {
+                    if (isExistingEntry === -1 && entry.transactions[0]?.stockDetails?.variant?.uniqueName === variantObj?.uniqueName) {
                         entry.transactions[0].quantity = entry.transactions[0].quantity + 1;
                         isExistingEntry = index;
                     }
@@ -9125,25 +9127,25 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     let activeEntryIndex = this.invFormData.entries.length - 1;
                     this.invFormData.entries[activeEntryIndex].transactions[0].sku_and_customfields = null;
                     let description = [];
-                    let skuCodeHeading = stockObj.skuCodeHeading ? stockObj.skuCodeHeading : this.commonLocaleData?.app_sku_code;
-                    if (stockObj.skuCode) {
-                        description.push(skuCodeHeading + ':' + stockObj.skuCode);
+                    let skuCodeHeading = stockObj?.skuCodeHeading ? stockObj?.skuCodeHeading : this.commonLocaleData?.app_sku_code;
+                    if (stockObj?.skuCode) {
+                        description.push(skuCodeHeading + ':' + stockObj?.skuCode);
                     }
 
-                    let customField1Heading = stockObj.customField1Heading ? stockObj.customField1Heading : this.localeData?.custom_field1;
-                    if (stockObj.customField1Value) {
-                        description.push(customField1Heading + ':' + stockObj.customField1Value);
+                    let customField1Heading = stockObj?.customField1Heading ? stockObj?.customField1Heading : this.localeData?.custom_field1;
+                    if (stockObj?.customField1Value) {
+                        description.push(customField1Heading + ':' + stockObj?.customField1Value);
                     }
 
-                    let customField2Heading = stockObj.customField2Heading ? stockObj.customField2Heading : this.localeData?.custom_field2;
-                    if (stockObj.customField2Value) {
-                        description.push(customField2Heading + ':' + stockObj.customField2Value);
+                    let customField2Heading = stockObj?.customField2Heading ? stockObj?.customField2Heading : this.localeData?.custom_field2;
+                    if (stockObj?.customField2Value) {
+                        description.push(customField2Heading + ':' + stockObj?.customField2Value);
                     }
 
                     if (stockObj) {
                         let obj: IStockUnit = {
-                            id: stockObj.stockUnit.uniqueName,
-                            text: stockObj.stockUnit.code
+                            id: stockObj.stockUnitUniqueName,
+                            text: stockObj.stockUnitCode
                         };
                         this.invFormData.entries[activeEntryIndex].transactions[0].stockList = [];
                         if (unitRates.length) {
@@ -9152,8 +9154,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                             this.invFormData.entries[activeEntryIndex].transactions[0].stockUnitCode = this.invFormData.entries[activeEntryIndex].transactions[0].stockList[0].text;
                         } else {
                             this.invFormData.entries[activeEntryIndex].transactions[0].stockList.push(obj);
-                            this.invFormData.entries[activeEntryIndex].transactions[0].stockUnit = stockObj.stockUnit.uniqueName;
-                            this.invFormData.entries[activeEntryIndex].transactions[0].stockUnitCode = stockObj.stockUnit.code;
+                            this.invFormData.entries[activeEntryIndex].transactions[0].stockUnit = stockObj.stockUnitUniqueName;
+                            this.invFormData.entries[activeEntryIndex].transactions[0].stockUnitCode = stockObj.stockUnitCode;
                         }
                     }
                     this.invFormData.entries[activeEntryIndex].transactions[0].sku_and_customfields = description.join(', ');
@@ -9171,11 +9173,11 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     {
                         name: stockObj.name,
                         uniqueName: stockObj.uniqueName,
-                        stockUnitCode: stockObj.stockUnit.code,
+                        stockUnitCode: stockObj.stockUnitCode,
                         rate: unitRates?.length ? unitRates[0].rate : [],
                         quantity: 1,
-                        stockUnitName: stockObj.stockUnit.name,
-                        stockUnitUniqueName: stockObj.stockUnit.uniqueName,
+                        stockUnitName: stockObj.stockUnitName,
+                        stockUnitUniqueName: stockObj.stockUnitUniqueName,
                         taxes: stockObj.taxes,
                         groupTaxes: [],
                         skuCodeHeading: stockObj.skuCodeHeading,
@@ -9184,16 +9186,16 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         customField2Heading: stockObj.customField2Heading,
                         customField2Value: stockObj.customField2Value,
                         variant: {
-                            uniqueName: variantObj.uniqueName,
-                            salesTaxInclusive: variantObj.salesTaxInclusive,
-                            purchaseTaxInclusive: variantObj.purchaseTaxInclusive,
+                            uniqueName: variantObj?.uniqueName,
+                            salesTaxInclusive: variantObj?.salesTaxInclusive,
+                            purchaseTaxInclusive: variantObj?.purchaseTaxInclusive,
                             unitRates: unitRates,
-                            variantDiscount: variantObj.variantDiscount
+                            variantDiscount: variantObj?.variantDiscount
                         }
                     };
                     this.invFormData.entries[activeEntryIndex].transactions[0].variant = {
-                        name: variantObj.name,
-                        uniqueName: variantObj.uniqueName
+                        name: variantObj?.name,
+                        uniqueName: variantObj?.uniqueName
                     };
 
                     this.activeIndx = activeEntryIndex;

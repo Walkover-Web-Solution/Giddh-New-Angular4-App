@@ -4335,17 +4335,22 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         if (!this.barcodeValue) {
             return;
         }
-
-        this.commonService.getBarcodeScanData(this.barcodeValue, this.purchaseOrder.accountDetails.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        let params = {
+            barcode: this.barcodeValue,
+            customerUniqueName: this.purchaseOrder.accountDetails.uniqueName ?? "",
+            invoiceType: this.invoiceType,
+        }
+        this.commonService.getBarcodeScanData(this.barcodeValue, params).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.body && response.status === 'success') {
                 this.barcodeValue = '';
-                let stockObj = response.body?.stocks[0];
-                let variantObj = stockObj?.variants[0];
+                let stockObj = response.body?.stock;
+                let variantObj = stockObj?.variant;
 
+                let group = response.body?.parentGroups[1];
+                let unitRates = response.body?.stock?.variant?.unitRates;
 
-                let unitRates = variantObj?.purchaseAccountDetails?.unitRates ?? variantObj?.fixedAssetAccountDetails?.unitRates;
-                let accountUniqueName = variantObj?.purchaseAccountDetails?.accountUniqueName ?? variantObj?.fixedAssetAccountDetails?.accountUniqueName;
-                let accountName = variantObj?.purchaseAccountDetails?.accountName ?? variantObj?.fixedAssetAccountDetails?.accountName;
+                let accountUniqueName = response.body?.uniqueName;
+                let accountName = response.body?.name;
 
                 let isInclusiveTax = variantObj?.purchaseTaxInclusive ?? variantObj?.fixedAssetTaxInclusive;
                 if (!accountUniqueName) {
@@ -4354,7 +4359,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                 }
 
                 let selectedAcc = {
-                    value: 'purchase' + stockObj.uniqueName,
+                    value: group + stockObj.uniqueName,
                     label: stockObj.name,
                     additional: {
                         type: "ACCOUNT",
@@ -4363,10 +4368,10 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                         stock: {
                             name: stockObj.name,
                             uniqueName: stockObj.uniqueName,
-                            stockUnitCode: stockObj.stockUnit.code,
+                            stockUnitCode: stockObj.stockUnitCode,
                             rate: 1,
-                            stockUnitName: stockObj.stockUnit.name,
-                            stockUnitUniqueName: stockObj.stockUnit.uniqueName,
+                            stockUnitName: stockObj.stockUnitName,
+                            stockUnitUniqueName: stockObj.stockUnitUniqueName,
                             taxes: stockObj.taxes,
                             groupTaxes: [],
                             skuCodeHeading: stockObj.skuCodeHeading,
@@ -4439,8 +4444,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
 
                     if (stockObj) {
                         let obj: IStockUnit = {
-                            id: stockObj.stockUnit.uniqueName,
-                            text: stockObj.stockUnit.code
+                            id: stockObj.stockUnitUniqueName,
+                            text: stockObj.stockUnitCode
                         };
                         this.purchaseOrder.entries[activeEntryIndex].transactions[0].stockList = [];
                         if (unitRates.length) {
@@ -4450,8 +4455,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                             this.purchaseOrder.entries[activeEntryIndex].transactions[0].stockUnitCode = this.purchaseOrder.entries[activeEntryIndex].transactions[0].stockList[0].text;
                         } else {
                             this.purchaseOrder.entries[activeEntryIndex].transactions[0].stockList.push(obj);
-                            this.purchaseOrder.entries[activeEntryIndex].transactions[0].stockUnit = stockObj.stockUnit.uniqueName;
-                            this.purchaseOrder.entries[activeEntryIndex].transactions[0].stockUnitCode = stockObj.stockUnit.code;
+                            this.purchaseOrder.entries[activeEntryIndex].transactions[0].stockUnit = stockObj.stockUnitUniqueName;
+                            this.purchaseOrder.entries[activeEntryIndex].transactions[0].stockUnitCode = stockObj.stockUnitCode;
                         }
                     }
                     this.purchaseOrder.entries[activeEntryIndex].transactions[0].sku_and_customfields = description.join(', ');
@@ -4469,11 +4474,11 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                     {
                         name: stockObj.name,
                         uniqueName: stockObj.uniqueName,
-                        stockUnitCode: stockObj.stockUnit.code,
+                        stockUnitCode: stockObj.stockUnitCode,
                         rate: unitRates?.length ? unitRates[0].rate : [],
                         quantity: 1,
-                        stockUnitName: stockObj.stockUnit.name,
-                        stockUnitUniqueName: stockObj.stockUnit.uniqueName,
+                        stockUnitName: stockObj.stockUnitName,
+                        stockUnitUniqueName: stockObj.stockUnitUniqueName,
                         taxes: stockObj.taxes,
                         groupTaxes: [],
                         skuCodeHeading: stockObj.skuCodeHeading,
