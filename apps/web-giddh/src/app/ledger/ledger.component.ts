@@ -288,6 +288,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
         reLoginRequired: false,
         itemId: ''
     };
+    /** True if ledger account belongs to sundry debtor/creditor */
+    private isSundryDebtorCreditor: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -404,6 +406,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             txn.particular = undefined;
             return;
         }
+
         txn.isStock = Boolean(e.additional?.stock);
         txn.stockUniqueName = e.additional?.stock?.uniqueName;
         txn.oppositeAccountUniqueName = e.additional?.uniqueName;
@@ -439,8 +442,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.lc.activeAccount$.pipe(takeUntil(this.destroyed$)).subscribe(ledgerAccount => {
                 if (ledgerAccount?.parentGroups?.length && ["sundrycreditors", "sundrydebtors"].includes(ledgerAccount?.parentGroups[1]?.uniqueName)) {
                     this.enableAutopaid = true;
+                    this.isSundryDebtorCreditor = true;
                 } else {
                     this.enableAutopaid = false;
+                    this.isSundryDebtorCreditor = false;
                 }
             });
         } else {
@@ -2642,7 +2647,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
         if (event.additional?.stock) {
             requestObject = {
                 stockUniqueName: event.additional.stock?.uniqueName,
-                oppositeAccountUniqueName: event.additional?.uniqueName,
+                oppositeAccountUniqueName: event.additional.uniqueName,
+                customerUniqueName: this.isSundryDebtorCreditor ? this.lc.activeAccount?.uniqueName : event.additional.uniqueName,
                 variantUniqueName
             };
         }
@@ -2701,6 +2707,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 let stockUniqueName = '';
                 let stockUnitUniqueName = '';
 
+                txn.isMrpDiscountApplied = false;
+
                 //#region unit rates logic
                 if (txn?.selectedAccount?.stock) {
                     const defaultUnitRates = this.generalService.voucherApiVersion === 1 ? txn.selectedAccount?.stock?.unitRates : txn.selectedAccount?.stock?.variant?.unitRates;
@@ -2717,6 +2725,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     stockUniqueName = txn.selectedAccount.stock?.uniqueName;
                     unitCode = defaultUnit.code;
                     stockUnitUniqueName = defaultUnitRates[0].stockUnitUniqueName;
+
+                    const hasMrpDiscount = txn.selectedAccount.stock.variant?.unitRates?.filter(variantDiscount => variantDiscount?.stockUnitUniqueName === stockUnitUniqueName);
+                    if (hasMrpDiscount?.length) {
+                        rate = Number((hasMrpDiscount[0].rate / this.lc.blankLedger?.exchangeRate).toFixed(RATE_FIELD_PRECISION));
+                    }
                 }
                 if (stockName && stockUniqueName) {
                     txn.inventory = {
@@ -2724,7 +2737,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                             name: stockName,
                             uniqueName: stockUniqueName,
                         },
-                        variant: { uniqueName: txn.selectedAccount.stock.variant?.uniqueName },
+                        variant: { uniqueName: txn.selectedAccount.stock.variant?.uniqueName, variantDiscount: txn.selectedAccount.stock.variant?.variantDiscount },
                         quantity: 1,
                         unit: {
                             stockUnitCode: unitCode,

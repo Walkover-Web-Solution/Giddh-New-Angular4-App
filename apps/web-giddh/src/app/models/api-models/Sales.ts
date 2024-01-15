@@ -384,6 +384,8 @@ export class SalesEntryClass {
     public tcsTaxList?: string[];
     public tdsTaxList?: string[];
     public purchaseOrderItemMapping?: { uniqueName: string; entryUniqueName: any; };
+    public discountFixedValueModal?: number;
+    public discountPercentageModal?: number;
 
     constructor() {
         this.transactions = [new SalesTransactionItemClass()];
