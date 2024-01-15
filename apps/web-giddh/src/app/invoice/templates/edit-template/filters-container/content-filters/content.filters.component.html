@@ -2356,10 +2356,7 @@
                     </div>
                     <div
                         *ngIf="
-                            customTemplate?.type === 'invoice' &&
-                            (customTemplate?.templateType === 'gst_template_a' ||
-                                customTemplate?.templateType === 'gst_template_e') &&
-                            customTemplate.sections['footer'].data['textUnderSlogan']
+                            customTemplate?.templateType !== 'thermal_template' && customTemplate.sections['footer'].data['textUnderSlogan']
                         "
                         class="clearfix mr-t1 form-group"
                     >

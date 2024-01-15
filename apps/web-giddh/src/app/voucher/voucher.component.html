@@ -2621,6 +2621,7 @@
                                                     [options]="salesAccounts$ | async"
                                                     (selectedOption)="
                                                         transaction.fakeAccForSelect2 = $event?.value;
+                                                        entry['initiallyCall'] = undefined;
                                                         onSelectSalesAccount(
                                                             $event,
                                                             transaction,
@@ -2894,7 +2895,7 @@
                                                 class="form-control"
                                                 [disabled]="!transaction.isStockTxn || isEinvoiceGenerated"
                                                 (selectionChange)="
-                                                    onChangeUnit(transaction, $event);
+                                                    onChangeUnit(entry, transaction, $event);
                                                     handlePriceCalculationOnUnitChange(entry, transaction)
                                                 "
                                                 [value]="transaction.stockUnit"
@@ -3002,6 +3003,8 @@
                                                     #discountComponent
                                                     [discountMenu]="false"
                                                     [discountsList]="discountsList"
+                                                    [discountPercentageModal]="entry.discountPercentageModal"
+                                                    [discountFixedValueModal]="entry.discountFixedValueModal"
                                                     [discountAccountsDetails]="entry.discounts"
                                                     [discountSum]="entry.discountSum"
                                                     [showHeaderText]="false"
@@ -4194,6 +4197,7 @@
     <ng-template #bulkItemsModal>
         <voucher-add-bulk-items-component
             [invoiceType]="invoiceType"
+            [accountUniqueName]="invFormData.accountDetails.uniqueName"
             (saveItemsEvent)="addBulkStockItems($event)"
             (closeEvent)="cancelBulkItemsModal()"
         ></voucher-add-bulk-items-component>

@@ -432,4 +432,6 @@ export interface IUnpaidInvoiceListResponse {
     size: number;
 }
 
-export interface IVariant extends IParticular {}
+export interface IVariant extends IParticular {
+    variantDiscount?: any;
+}

@@ -19,7 +19,7 @@ import { cloneDeep } from '../../lodash-optimized';
 
 export class VoucherAddBulkItemsComponent implements OnDestroy {
     @Input() public invoiceType: string;
-
+    @Input() public accountUniqueName?: string;
     @ViewChild('searchElement', { static: false }) public searchElement: ElementRef;
     @Output() public closeEvent: EventEmitter<boolean> = new EventEmitter();
     @Output() public saveItemsEvent: EventEmitter<SalesAddBulkStockItems[]> = new EventEmitter();
@@ -145,7 +145,8 @@ export class VoucherAddBulkItemsComponent implements OnDestroy {
             return;
         }
         let requestObject = {
-            stockUniqueName: item.additional?.stock?.uniqueName ?? ''
+            stockUniqueName: item.additional?.stock?.uniqueName ?? '',
+            customerUniqueName: this.accountUniqueName
         };
         if (item.additional.stock) {
             this.loadStockVariants(item);
@@ -277,7 +278,8 @@ export class VoucherAddBulkItemsComponent implements OnDestroy {
                     item.variant = defaultVariant;
                     const requestObj = {
                         stockUniqueName: item.additional?.stock?.uniqueName ?? '',
-                        variantUniqueName: defaultVariant.uniqueName
+                        variantUniqueName: defaultVariant.uniqueName,
+                        customerUniqueName: this.accountUniqueName
                     };
                     if (item.variants?.length === 1) {
                         const variant = item.variants[0];
@@ -310,7 +312,8 @@ export class VoucherAddBulkItemsComponent implements OnDestroy {
         }
         const requestObj = {
             stockUniqueName: selectedItem.additional?.stock?.uniqueName ?? '',
-            variantUniqueName: event.value
+            variantUniqueName: event.value,
+            customerUniqueName: this.accountUniqueName
         };
         this.loadDetails(selectedItem, requestObj);
     }
