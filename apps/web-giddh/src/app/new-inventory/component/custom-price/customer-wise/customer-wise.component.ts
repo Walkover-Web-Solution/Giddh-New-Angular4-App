@@ -128,6 +128,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
         this.searchForm.get("userSearch").valueChanges.pipe(debounceTime(400), takeUntil(this.destroyed$)).subscribe(queryString => {
             if (this.searchForm.get('userSearch').value !== null) {
                 this.userSearchQuery = queryString;
+                this.pagination.user.page = 1;
                 this.currentUser = null;
                 this.currentUserStocks = [];
                 this.getCustomerVendorDiscountUserList();
