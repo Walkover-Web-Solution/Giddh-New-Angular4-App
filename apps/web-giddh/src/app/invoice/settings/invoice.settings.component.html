@@ -900,7 +900,7 @@
                                                 </mat-slide-toggle>
                                                 <div *ngIf="invoiceSetting.gstEInvoiceEnable" class="d-inline-flex">
                                                     <div class="d-inline-flex position-relative mr-l15">
-                                                        <label>Username</label>
+                                                        <label>{{ localeData?.e_invoice_username_label }}</label>
                                                         <input
                                                             [(ngModel)]="invoiceSetting.gstEInvoiceUserName"
                                                             type="text"
@@ -909,7 +909,7 @@
                                                         />
                                                     </div>
                                                     <div class="d-inline-flex position-relative mr-l15">
-                                                        <label>Password</label>
+                                                        <label>{{ localeData?.e_invoice_password_label }}</label>
                                                         <input
                                                             [(ngModel)]="invoiceSetting.gstEInvoiceUserPassword"
                                                             type="password"
@@ -918,7 +918,7 @@
                                                         />
                                                     </div>
                                                     <div class="d-inline-flex position-relative mr-l15">
-                                                        <label>GSTIN</label>
+                                                        <label>{{ localeData?.e_invoice_gstin_label }}</label>
                                                         <input
                                                             [(ngModel)]="invoiceSetting.gstEInvoiceGstin"
                                                             type="text"
