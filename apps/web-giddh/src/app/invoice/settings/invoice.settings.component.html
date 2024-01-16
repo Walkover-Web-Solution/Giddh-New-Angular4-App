@@ -816,6 +816,7 @@
                                         <div class="col-sm-12 col-md-12 col-lg-3 flex-container">
                                             <mat-slide-toggle
                                                 [(ngModel)]="invoiceSetting.gstEInvoiceEnable"
+                                                (ngModelChange)="invoiceSetting.gstEInvoiceEnable ? null : invoiceSetting.generateEinvoiceShowPopUp = false" 
                                                 class="show-on-mobile"
                                                 color="primary"
                                                 (change)="handleEInvoiceChange($event)"
@@ -828,6 +829,7 @@
                                         <div class="col-sm-12 col-md-9 form-group user-authenticate d-flex">
                                             <mat-slide-toggle
                                                 [(ngModel)]="invoiceSetting.gstEInvoiceEnable"
+                                                (ngModelChange)="invoiceSetting.gstEInvoiceEnable ? null : invoiceSetting.generateEinvoiceShowPopUp = false"
                                                 class="hide-on-mobile"
                                                 color="primary"
                                                 (change)="handleEInvoiceChange($event)"
@@ -865,7 +867,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="clearfix pd-t1" *ngIf="voucherApiVersion === 2">
+                                <div class="clearfix pd-t1" *ngIf="voucherApiVersion === 2 && invoiceSetting.gstEInvoiceEnable">
                                     <div class="row">
                                         <div class="col-sm-12 col-md-12 col-lg-3">
                                             <mat-slide-toggle
