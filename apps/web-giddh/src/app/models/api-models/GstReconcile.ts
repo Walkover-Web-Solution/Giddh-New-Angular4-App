@@ -24,6 +24,7 @@ export class GstReconcileInvoiceRequest {
     public refresh: boolean;
     public category: string;
     public gstin?: string;
+    public gstReturnType?: string;
 }
 
 export interface GstReconcileInvoiceResult {

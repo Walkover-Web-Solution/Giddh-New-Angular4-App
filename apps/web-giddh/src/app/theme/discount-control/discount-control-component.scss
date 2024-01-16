@@ -1,31 +1,12 @@
-.multi-select .caret {
-    display: block !important;
+.checkbox{
+    .checkbox-label{
+        white-space: normal;
+        line-height: normal;
+    }
 }
-.fa-percent {
-    top: 12px;
-    right: 6px;
-    color: var(--color-gray);
-    font-size: 13px;
+.display-block {
+    display: block;
 }
-.discount-name-ul {
-    list-style: none;
-    overflow: auto;
-    max-height: 100px;    
-    min-height: 88px;
-}
-.width-50 {
-    width: 50px;
-}
-.value-width {
-    width: 110px;
-}
-.percentage-width {
-    padding-right: 22px !important;
-}
-.label-line {
-    line-height: 1.4 !important;
-}
-.custom-item{
-    height: 40px;
-    padding-left: 5px;
+.display-none {
+    display: none;
 }

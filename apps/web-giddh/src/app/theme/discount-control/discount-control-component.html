@@ -24,20 +24,20 @@
 
     <div
         class="my-dropdown-menu pd-1"
+        [ngClass]="{'display-block': discountMenu, 'display-none' : !discountMenu}"
         (click)="$event.stopPropagation()"
-        [ngStyle]="{'display': discountMenu ? 'block': 'none'}"
         #disInptEle
     >
-        <div>
-            <div class="d-flex mr-b1">
-                <label class="mr-r1 align-items-center d-flex width-50">{{commonLocaleData?.app_percent}}</label>
+        <div class="value-wrapper">
+            <div class="d-flex align-items-center mr-b1">
+                <label>{{commonLocaleData?.app_percent}}</label>
 
-                <div class="position-relative">
+                <div class="position-relative percent-wrapper">
                     <input
                         (keydown.enter)="$event.preventDefault()"
                         matInput
                         type="text"
-                        class="form-control text-right cursor-pointer w-100 percentage-width"
+                        class="form-control text-right cursor-pointer w-100"
                         [disabled]="!discountFromPer"
                         decimalDigitsDirective
                         [(ngModel)]="discountPercentageModal"
@@ -49,8 +49,8 @@
                 </div>
             </div>
 
-            <div class="d-flex justify-content-space-between mr-b1">
-                <label class="mr-1 align-items-center d-flex width-50">{{commonLocaleData?.app_value}}</label>
+            <div class="d-flex align-items-center mr-b1">
+                <label>{{commonLocaleData?.app_value}}</label>
                 <input
                     (keydown.enter)="$event.preventDefault()"
                     matInput
@@ -70,11 +70,11 @@
         </div>
 
         <div *ngIf="discountAccountsDetails?.length > 1">
-            <ul class="discount-name-ul">
+            <ul class="discount-list">
                 <ng-container *ngFor="let discount of discountAccountsDetails;trackBy: trackByFn; let idx = index">
-                    <li *ngIf="discount && discount.discountUniqueName && discount.name" class="custom-item">
+                    <li *ngIf="discount && discount.discountUniqueName && discount.name" class="discount-item cursor-pointer">
                         <label
-                            class="checkbox overflow-hidden width-100 p-0 m-0 label-line"
+                            class="checkbox overflow-hidden width-100 p-0 m-0"
                             (click)="$event.stopPropagation()"
                         >
                             <mat-checkbox
@@ -86,7 +86,9 @@
                                 (change)="change(discount, $event)"
                                 (click)="$event.stopPropagation()"
                             >
+                            <div class="checkbox-label">
                                 {{discount.name}}
+                            </div>
                             </mat-checkbox>
                         </label>
                     </li>
