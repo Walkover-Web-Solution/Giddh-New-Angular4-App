@@ -34,6 +34,8 @@
                             [label]="isLblShow ? localeData?.role_name_label : ''"
                             [placeholder]="localeData?.role_name_placeholder"
                             [options]="allRoles"
+                            (selectedOption)="permissionForm.get('roleUniqueName')?.patchValue($event.value)"
+                            [defaultValue]="resetForm"
                             [required]="true"
                         ></dropdown-field>
                     </div>
@@ -139,13 +141,16 @@
                                 type="button"
                                 class="mat-select-btn text-left w-100"
                             >
-                                <span class="d-flex w-100" >
+                                <span class="d-flex w-100">
                                     {{ selectedTimeSpan }}
                                     <span class="ml-auto"><span class="fa fa-caret-down"></span></span>
                                 </span>
                             </button>
                             <mat-menu #menu="matMenu">
-                                <section class="mr-b1 time-span-dropdown custom-date-range-menu" (click)="$event.stopPropagation()">
+                                <section
+                                    class="mr-b1 time-span-dropdown custom-date-range-menu"
+                                    (click)="$event.stopPropagation()"
+                                >
                                     <div class="pd-1">
                                         <!-- <span
                                             class="p-0 mr-r3"
@@ -221,17 +226,29 @@
                                                     container="body"
                                                     autocomplete="off"
                                                 /> -->
-                                                <mat-form-field
-                                                    appearance="outline"
-                                                    (click)="picker.open()"
-                                                >
-                                                    <mat-label>{{ localeData?.from_to_label }}</mat-label>
-                                                    <mat-date-range-input [rangePicker]="picker">
-                                                      <input matStartDate placeholder="Start date">
-                                                      <input matEndDate placeholder="End date">
-                                                    </mat-date-range-input>
-                                                    <mat-date-range-picker #picker></mat-date-range-picker>
-                                                  </mat-form-field>
+                                                <div class="date-range-wrapper">
+                                                    <mat-form-field
+                                                        [matDatepickerToggleIcon]="false"
+                                                        appearance="outline"
+                                                        (click)="picker.open()"
+                                                        class="w-100"                                                     
+                                                    >
+                                                        <mat-label>{{ localeData?.from_to_label }}</mat-label>
+                                                        <mat-date-range-input [rangePicker]="picker">
+                                                            <input
+                                                                matStartDate
+                                                                placeholder="Start date"
+                                                                formControlName="from"
+                                                            />
+                                                            <input
+                                                                matEndDate
+                                                                placeholder="End date"
+                                                                formControlName="to"
+                                                            />
+                                                        </mat-date-range-input>
+                                                        <mat-date-range-picker #picker></mat-date-range-picker>
+                                                    </mat-form-field>
+                                                </div>
                                             </div>
                                         </div>
                                     </section>
@@ -242,14 +259,17 @@
                                     >
                                         <div class="row">
                                             <div class="col-sm-12">
-                                                <input-field
-                                                    [label]="localeData?.select_past_period_label"
-                                                    [name]="'duration'"
-                                                    [allowDigitsOnly]="true"
-                                                    formControlName="duration"
-                                                    [type]="'number'"
-                                                    [placeholder]="localeData?.select_past_period_placeholder"
-                                                ></input-field>
+                                                <div class="date-range-wrapper">
+                                                    <input-field
+                                                        class=""
+                                                        [label]="localeData?.select_past_period_label"
+                                                        [name]="'duration'"
+                                                        [allowDigitsOnly]="true"
+                                                        formControlName="duration"
+                                                        [type]="'number'"
+                                                        [placeholder]="localeData?.select_past_period_placeholder"
+                                                    ></input-field>
+                                                </div>
                                             </div>
                                         </div>
                                     </section>

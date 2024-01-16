@@ -20,24 +20,8 @@ import { BsModalRef } from 'ngx-bootstrap/modal';
 import { GeneralActions } from '../actions/general/general.actions';
 import { API_POSTMAN_DOC_URL, BootstrapToggleSwitch } from '../app.constant';
 import { BreakpointObserver } from '@angular/cdk/layout';
+import { ClipboardService } from 'ngx-clipboard';
 
-export interface PeriodicElement {
-    ipaddress: string;
-    signindate: string;
-    signintime: string;
-    duration: string;
-    agent: string;
-    action: string;
-}
-
-const ELEMENT_DATA: PeriodicElement[] = [
-    {ipaddress: '111.118.250.234', signindate: '12/07/2023', signintime: 'LTS', duration: '12/07/2023', agent: 'Safari', action: ''},
-    {ipaddress: '111.118.250.234', signindate: '12/07/2023', signintime: 'LTS', duration: '12/07/2023', agent: 'Safari', action: ''},
-    {ipaddress: '111.118.250.234', signindate: '12/07/2023', signintime: 'LTS', duration: '12/07/2023', agent: 'Safari', action: ''},
-    {ipaddress: '111.118.250.234', signindate: '12/07/2023', signintime: 'LTS', duration: '12/07/2023', agent: 'Safari', action: ''},
-    {ipaddress: '111.118.250.234', signindate: '12/07/2023', signintime: 'LTS', duration: '12/07/2023', agent: 'Safari', action: ''},
-    {ipaddress: '111.118.250.234', signindate: '12/07/2023', signintime: 'LTS', duration: '12/07/2023', agent: 'Safari', action: ''},
-]
 
 @Component({
     selector: 'user-details',
@@ -45,7 +29,6 @@ const ELEMENT_DATA: PeriodicElement[] = [
     styleUrls: [`./user-details.component.scss`],
 })
 export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
-    @ViewChild('staticTabs', { static: true }) public staticTabs: TabsetComponent;
     public isCopied: boolean = false;
     public userAuthKey: string = '';
     public expandLongCode: boolean = false;
@@ -83,7 +66,6 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
     public giddhDateFormatUI: string = GIDDH_DATE_FORMAT_UI;
     public userSessionId: any = null;
     public modalRef: BsModalRef;
-    public activeTab: string = '';
     public isUpdateCompanyInProgress$: Observable<boolean>;
     public isCreateAndSwitchCompanyInProcess: boolean;
     public isMobileScreen: boolean = true;
@@ -95,9 +77,11 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
     public commonLocaleData: any = {};
     /** This will hold toggle buttons value and size */
     public bootstrapToggleSwitch = BootstrapToggleSwitch;
-    /*-- mat-table --*/
-    displayedColumns: string[] = ['ipaddress', 'signindate', 'signintime', 'duration', 'agent', 'action'];
-    dataSource = ELEMENT_DATA;
+    /* Holds Mat Table Columns*/
+    public displayedColumns: string[] = ['ipaddress', 'signindate', 'signintime', 'duration', 'agent', 'action'];
+    /** Holds Active Tab Index */
+    public activeTabIndex: number = 0;
+    private tabName = ['auth-key','mobile-number', 'session', 'subscription'];
 
     constructor(private store: Store<AppState>,
         private toasty: ToasterService,
@@ -107,7 +91,8 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
         private sessionAction: SessionActions,
         private route: ActivatedRoute,
         private breakPointObservar: BreakpointObserver,
-        private generalActions: GeneralActions) {
+        private generalActions: GeneralActions,
+        private clipboardService: ClipboardService) {
         this.contactNo$ = this.store.pipe(select(s => {
             if (s.session.user) {
                 return s.session.user.user.contactNo;
@@ -135,6 +120,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
 
     public toggleIsCopied() {
         this.isCopied = true;
+        this.clipboardService.copyFromContent(this.userAuthKey);
         setTimeout(() => {
             this.isCopied = false;
         }, 3000);
@@ -156,25 +142,27 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
         }
 
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
-            if (params['type'] && this.activeTab !== params['type']) {
-                this.activeTab = params['type'];
-            } else if (!params['type'] && !this.activeTab) {
-                this.activeTab = "auth-key";
+            console.log("params",params);
+            
+            if (params['type'] && this.tabName[this.activeTabIndex] !== params['type']) {
+                this.activeTabIndex = this.tabName.indexOf(params['type']);
+            } else if (!params['type'] && !this.activeTabIndex) {
+                this.activeTabIndex = 0;
             }
         });
 
         this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             if (params && params.tabIndex) {
                 if (params && params.tabIndex == "0") {
-                    this.activeTab = "auth-key";
+                    this.activeTabIndex = 0;
                 } else if (params && params.tabIndex == "1") {
-                    this.activeTab = "mobile-number";
+                    this.activeTabIndex = 1;
                 } else if (params && params.tabIndex == "2") {
-                    this.activeTab = "session";
+                    this.activeTabIndex = 2;
                 } else if (params && params.tabIndex == "3") {
-                    this.activeTab = "subscription";
+                    this.activeTabIndex = 3;
                 }
-                this.router.navigate(['pages/user-details/', this.activeTab], { replaceUrl: true });
+                this.router.navigate(['pages/user-details/', this.tabName[this.activeTabIndex]], { replaceUrl: true });
             }
         });
 
@@ -235,6 +223,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
         this.isUpdateCompanyInProgress$.pipe(takeUntil(this.destroyed$)).subscribe(inProcess => {
             this.isCreateAndSwitchCompanyInProcess = inProcess;
         });
+        
     }
 
     /**
@@ -245,15 +234,17 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
     public ngAfterViewInit(): void {
         this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((val) => {
             if (val && val.tab && val.tabIndex) {
-                this.selectTab(val.tabIndex);
+                console.log("val.tabIndex",val.tabIndex);
+                
+                this.selectTab({ index : val.tabIndex});
             }
         });
 
-        if (document.getElementsByClassName('nav-item') && document.getElementsByClassName('nav-item')[3]) {
-            document.getElementsByClassName('nav-item')[3].addEventListener('click', (event) => {
-                this.onTabChanged("subscription");
-            });
-        }
+        // if (document.getElementsByClassName('nav-item') && document.getElementsByClassName('nav-item')[3]) {
+        //     document.getElementsByClassName('nav-item')[3].addEventListener('click', (event) => {
+        //         this.onTabChanged();
+        //     });
+        // }
     }
 
     public addNumber(no: string) {
@@ -297,10 +288,9 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
         });
     }
 
-    public selectTab(id: number) {
-        if (this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[id]) {
-            this.staticTabs.tabs[id].active = true;
-        }
+    public selectTab(event: any): void {
+        this.activeTabIndex = event?.index;
+        this.onTabChanged();
     }
 
     public ngOnDestroy() {
@@ -333,12 +323,11 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
      * which is used by header component, update menu panel and
      * change the route URL as per selected tab
      *
-     * @param {string} tabName Current selected tab
      * @memberof UserDetailsComponent
      */
-    public onTabChanged(tabName: string): void {
-        this.store.dispatch(this.generalActions.setAppTitle(`pages/user-details/${tabName}`));
-        this.router.navigate(['pages/user-details/', tabName], { replaceUrl: true });
+    public onTabChanged(): void {
+        this.store.dispatch(this.generalActions.setAppTitle(`pages/user-details/${this.tabName[this.activeTabIndex]}`));
+        this.router.navigate(['pages/user-details/', this.tabName[this.activeTabIndex]], { replaceUrl: true });
     }
 
     /**
@@ -351,17 +340,17 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
         let pageHeading = "";
 
         if (this.isMobileScreen) {
-            switch (this.activeTab) {
-                case 'auth-key':
+            switch (this.activeTabIndex) {
+                case 0:
                     pageHeading = this.localeData?.auth_key?.tab_heading;
                     break;
-                case 'mobile-number':
+                case 1:
                     pageHeading = this.localeData?.mobile_number?.tab_heading;
                     break;
-                case 'session':
+                case 2:
                     pageHeading = this.localeData?.session?.tab_heading;
                     break;
-                case 'subscription':
+                case 3:
                     pageHeading = this.localeData?.subscription?.tab_heading;
                     break;
             }

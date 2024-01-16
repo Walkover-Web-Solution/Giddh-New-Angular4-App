@@ -8,25 +8,16 @@
 <mat-dialog-content class="move-content w-100">
     <div *ngIf="!isLoading">
         <div id="my-frame" class="modal-body move-company-modal-body clearfix">
-            <p class="mb-2" [innerHTML]="getMovePlanText()"></p>
-            <div class="row mb-2">
+            <p class="mb-3" [innerHTML]="getMovePlanText()"></p>
+            <div class="row mb-3">
                 <div class="col-md-12 move-wrapper">
-                    <div class="select-caret position-relative move-select">
-                        <!-- <sh-select
-                            [placeholder]="localeData?.subscription?.select_plan"
-                            name="availablePlans"
-                            [options]="availablePlansOption"
-                            [isFilterEnabled]="true"
-                            [(ngModel)]="selectedPlan"
-                            [isRequired]="true"
-                        ></sh-select> -->
+                    <div>
                         <dropdown-field
                             [label]="localeData?.subscription?.select_plan"
                             [placeholder]="localeData?.subscription?.select_plan"
                             [name]="'availablePlans'"
                             [options]="availablePlansOption"
-                            [isFilterEnabled]="true"
-                            (selectedOption)="(selectedPlan)"
+                            (selectedOption)="selectedPlan = $event.value"
                             [required]="true"
                         ></dropdown-field>
                     </div>

@@ -25,29 +25,11 @@
                 <div class="head-dropdown">                    
                     <div class="menu-two-list" [ngClass]="{ 'skeleton-common-class': showLoader }">
                         <div class="menu-two-list-items" *ngIf="!showLoader">
-                            <!-- <span class="mat-body-1 plan">{{ localeData?.subscription?.plan }}</span>
-                            <mat-form-field
-                                appearance="none"
-                                floatLabel="never"
-                                class="select-subscription subscription-form-select"
-                            >
-                                <mat-select
-                                    [placeholder]="commonLocaleData?.app_select"
-                                    (selectionChange)="filterSubscriptions()"
-                                    [(ngModel)]="filters.plan"
-                                >
-                                    <mat-option value="">{{ commonLocaleData?.app_select }}</mat-option>
-                                    <mat-option *ngFor="let plan of plansList" [value]="plan?.uniqueName">
-                                        {{ plan?.name }}
-                                    </mat-option>
-                                </mat-select>
-                            </mat-form-field> -->
-                        </div>
-                        <div class="menu-two-list-items" *ngIf="!showLoader">
                             <dropdown-field
                                 [placeholder]="commonLocaleData?.app_select"
                                 [label]="localeData?.subscription?.plan"
-                                (selectedOption)="filterSubscriptions()"
+                                (selectedOption)="filters.plan = $event.value; filterSubscriptions()"
+                                [defaultValue]="resetSubscription"
                                 [options]="plansList"
                             ></dropdown-field>
                         </div>
@@ -55,7 +37,8 @@
                             <dropdown-field
                                 [placeholder]="commonLocaleData?.app_select"
                                 [label]="localeData?.subscription?.expiring_within"
-                                (selectedOption)="(filters.expiration)"
+                                (selectedOption)="filters.expiration = $event.value; filterSubscriptions()"
+                                [defaultValue]="resetSubscription"
                                 [options]="expiringList"
                             ></dropdown-field>
                         </div>
@@ -63,7 +46,8 @@
                             <dropdown-field
                                 [placeholder]="commonLocaleData?.app_select"
                                 [label]="localeData?.subscription?.transaction_balance"
-                                (selectedOption)="(filters.transactionBalance)"
+                                (selectedOption)="filters.transactionBalance = $event.value; filterSubscriptions()"
+                                [defaultValue]="resetSubscription"
                                 [options]="transactionBalanceList"
                             >
                             </dropdown-field>

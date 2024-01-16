@@ -78,7 +78,7 @@
         </tabset> -->
 
         <div class="row">
-            <div class="col-lg-12">
+            <div class="col-lg-12 px-3">
                 <mat-tab-group 
                     mat-stretch-tabs="false" 
                     mat-align-tabs="start" 
@@ -87,7 +87,6 @@
                     (selectedTabChange)="onTabChange($event)"
                 >
                     <mat-tab
-                        [id]="currentTab === 'personal' ? 'giddh-page-heading' : ''"
                         [label]="personalInformationTabHeading"
                     >
                         <personal-information
@@ -105,7 +104,6 @@
                                 ? localeData?.address + companyProfileObj?.taxType
                                 : localeData?.addresses
                         "
-                        [id]="currentTab === 'address' ? 'giddh-page-heading' : ''"
                     >
                         <address-settings
                             [addresses]="addresses"
@@ -130,7 +128,7 @@
                             [taxType]="taxType"
                         ></address-settings>
                     </mat-tab>
-                    <mat-tab [label]="localeData?.other" [id]="currentTab === 'other' ? 'giddh-page-heading' : ''">
+                    <mat-tab [label]="localeData?.other">
                         <other-settings
                             [organizationType]="currentOrganizationType"
                             (saveProfile)="handleSaveProfile($event)"
