@@ -61,18 +61,16 @@
                                         <edit-invoice></edit-invoice>
                                     </div>
                                 </tab>
-
                                 <tab
-                                    *ngIf="
-                                        selectedVoucherType !== 'debit note' && selectedVoucherType !== 'credit note'
-                                    "
                                     [heading]="localeData?.tabs?.settings"
                                     (selectTab)="tabChanged('settings', $event, 'debit note')"
                                     [active]="activeTab === 'settings'"
                                     [id]="activeTab === 'settings' ? 'giddh-page-heading' : ''"
                                 >
                                     <div *ngIf="activeTab === 'settings'">
-                                        <app-invoice-setting></app-invoice-setting>
+                                        <app-invoice-setting
+                                            [selectedVoucher]="selectedVoucherType"
+                                        ></app-invoice-setting>
                                     </div>
                                 </tab>
                             </tabset>

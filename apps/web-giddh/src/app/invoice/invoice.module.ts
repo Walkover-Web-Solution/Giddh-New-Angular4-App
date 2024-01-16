@@ -77,6 +77,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
+import { MatTabsModule } from '@angular/material/tabs';
 
 @NgModule({
     declarations: [
@@ -164,7 +165,8 @@ import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
         DatepickerWrapperModule,
         DeleteTemplateConfirmationModalModule,
         MatDialogModule,
-        WatchVideoModule
+        WatchVideoModule,
+        MatTabsModule
     ],
     exports: [
         InvoiceRoutingModule,
