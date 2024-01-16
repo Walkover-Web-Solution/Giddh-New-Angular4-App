@@ -8,7 +8,8 @@
     <div validateSectionPermission [hasPermission]="hasInvoiceSettingPermissions" validateSubscription>
         <section id="invoice-setting">
             <tabset class="tab-integration" #staticTabsSettings>
-                <ng-template [ngIf]="selectedVoucher !== 'debit note' && selectedVoucher !== 'credit note'">
+                <ng-container *ngIf="selectedVoucher !== 'debit note' && selectedVoucher !== 'credit note'">
+                    <!-- region general tab-->
                     <tab>
                         <ng-template tabHeading>
                             <span class="icon-chat2"></span> {{ localeData?.general }}
@@ -922,7 +923,7 @@
                             </div>
                         </div>
                     </tab>
-                </ng-template>
+                </ng-container>
                 <ng-container
                     *ngIf="
                         voucherApiVersion === 2 &&
@@ -931,145 +932,147 @@
                 >
                     <tab>
                         <ng-template tabHeading>
-                            <span class="icon-invoice-icon"></span>{{ commonLocaleData?.app_invoice }}
+                            <span class="icon-invoice-icon"></span>
+                            {{ commonLocaleData?.app_voucher_types?.debit_note }}
                         </ng-template>
-                        <div class="clearfix petty-cash">
-                            <mat-tab-group
-                                mat-stretch-tabs="false"
-                                animationDuration="0ms"
-                                [selectedIndex]="selectedTabIndex"
-                                (selectedTabChange)="tabChanged($event)"
-                                [disableRipple]="true"
-                            >
-                                <mat-tab [label]="commonLocaleData?.app_voucher_types?.credit_note">
-                                    <ng-container *ngIf="selectedTabIndex === 0">
-                                        <div class="clearfix pt-5">
-                                            <div class="row ml-0 mr-0">
-                                                <div class="col-sm-12 col-md-12 col-lg-2 flex-container">
-                                                    <mat-slide-toggle
-                                                        [(ngModel)]="invoiceSetting.useCustomCreditNoteNumber"
-                                                        name="customInvoice"
-                                                        class="pull-left estimation-check show-on-mobile"
-                                                        color="primary"
-                                                    >
-                                                    </mat-slide-toggle>
-                                                    <label class="left-gap">{{ localeData?.custom_invoice_no }}</label>
-                                                </div>
-                                                <div class="col-sm-12 col-md-9">
-                                                    <div class="form-group clearfix d-flex">
-                                                        <mat-slide-toggle
-                                                            [(ngModel)]="invoiceSetting.useCustomCreditNoteNumber"
-                                                            name="customInvoice"
-                                                            class="pull-left estimation-check hide-on-mobile"
-                                                            color="primary"
-                                                        >
-                                                        </mat-slide-toggle>
-                                                        <div
-                                                            class="d-inline-flex custom-estimation"
-                                                            *ngIf="invoiceSetting.useCustomCreditNoteNumber"
-                                                        >
-                                                            <div class="d-inline-flex position-relative">
-                                                                <label>{{ localeData?.branch_prefix }}</label>
-                                                                <input
-                                                                    type="text"
-                                                                    class="form-control"
-                                                                    name="branchPrefix"
-                                                                    [(ngModel)]="
-                                                                        invoiceSetting.branchCreditNoteNumberPrefix
-                                                                    "
-                                                                />
-                                                            </div>
-                                                            <div class="d-inline-flex position-relative">
-                                                                <label>{{ localeData?.sub_prefix }}</label>
-                                                                <input
-                                                                    type="text"
-                                                                    class="form-control"
-                                                                    name="prefixNumber"
-                                                                    [(ngModel)]="invoiceSetting.creditNoteNumberPrefix"
-                                                                />
-                                                            </div>
-                                                            <div class="d-inline-flex position-relative">
-                                                                <label>{{ localeData?.initial_no }}</label>
-                                                                <input
-                                                                    type="text"
-                                                                    class="form-control"
-                                                                    name="initialNumber"
-                                                                    [(ngModel)]="invoiceSetting.initialCreditNoteNumber"
-                                                                />
-                                                            </div>
-                                                        </div>
+                        <div class="general-tab single-tab-block">
+                            <div class="box clearfix">
+                                <h4 class="clearfix bd-rb font-16">
+                                    {{ commonLocaleData?.app_voucher_types?.debit_note }}
+                                </h4>
+                                <div class="clearfix pt-3">
+                                    <div class="row ml-0 mr-0">
+                                        <div class="col-sm-12 col-md-12 col-lg-2 flex-container pl-0 pr-0">
+                                            <mat-slide-toggle
+                                                [(ngModel)]="invoiceSetting.useCustomDebitNoteNumber"
+                                                name="customInvoice"
+                                                class="pull-left estimation-check show-on-mobile"
+                                                color="primary"
+                                            >
+                                            </mat-slide-toggle>
+                                            <label class="left-gap">{{ localeData?.custom_invoice_no }}</label>
+                                        </div>
+                                        <div class="col-sm-12 col-md-9">
+                                            <div class="form-group clearfix d-flex">
+                                                <mat-slide-toggle
+                                                    [(ngModel)]="invoiceSetting.useCustomDebitNoteNumber"
+                                                    name="customInvoice"
+                                                    class="pull-left estimation-check hide-on-mobile"
+                                                    color="primary"
+                                                >
+                                                </mat-slide-toggle>
+                                                <div
+                                                    class="d-inline-flex custom-estimation"
+                                                    *ngIf="invoiceSetting.useCustomDebitNoteNumber"
+                                                >
+                                                    <div class="d-inline-flex position-relative">
+                                                        <label>{{ localeData?.branch_prefix }}</label>
+                                                        <input
+                                                            type="text"
+                                                            class="form-control"
+                                                            name="branchPrefix"
+                                                            [(ngModel)]="invoiceSetting.branchDebitNoteNumberPrefix"
+                                                        />
+                                                    </div>
+                                                    <div class="d-inline-flex position-relative">
+                                                        <label>{{ localeData?.sub_prefix }}</label>
+                                                        <input
+                                                            type="text"
+                                                            class="form-control"
+                                                            name="prefixNumber"
+                                                            [(ngModel)]="invoiceSetting.debitNoteNumberPrefix"
+                                                        />
+                                                    </div>
+                                                    <div class="d-inline-flex position-relative">
+                                                        <label>{{ localeData?.initial_no }}</label>
+                                                        <input
+                                                            type="text"
+                                                            class="form-control"
+                                                            name="initialNumber"
+                                                            [(ngModel)]="invoiceSetting.initialDebitNoteNumber"
+                                                        />
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </ng-container>
-                                </mat-tab>
-                                <mat-tab [label]="commonLocaleData?.app_voucher_types?.debit_note">
-                                    <ng-container *ngIf="selectedTabIndex === 1">
-                                        <div class="clearfix pt-5">
-                                            <div class="row ml-0 mr-0">
-                                                <div class="col-sm-12 col-md-12 col-lg-2 flex-container">
-                                                    <mat-slide-toggle
-                                                        [(ngModel)]="invoiceSetting.useCustomDebitNoteNumber"
-                                                        name="customInvoice"
-                                                        class="pull-left estimation-check show-on-mobile"
-                                                        color="primary"
-                                                    >
-                                                    </mat-slide-toggle>
-                                                    <label class="left-gap">{{ localeData?.custom_invoice_no }}</label>
-                                                </div>
-                                                <div class="col-sm-12 col-md-9">
-                                                    <div class="form-group clearfix d-flex">
-                                                        <mat-slide-toggle
-                                                            [(ngModel)]="invoiceSetting.useCustomDebitNoteNumber"
-                                                            name="customInvoice"
-                                                            class="pull-left estimation-check hide-on-mobile"
-                                                            color="primary"
-                                                        >
-                                                        </mat-slide-toggle>
-                                                        <div
-                                                            class="d-inline-flex custom-estimation"
-                                                            *ngIf="invoiceSetting.useCustomDebitNoteNumber"
-                                                        >
-                                                            <div class="d-inline-flex position-relative">
-                                                                <label>{{ localeData?.branch_prefix }}</label>
-                                                                <input
-                                                                    type="text"
-                                                                    class="form-control"
-                                                                    name="branchPrefix"
-                                                                    [(ngModel)]="
-                                                                        invoiceSetting.branchDebitNoteNumberPrefix
-                                                                    "
-                                                                />
-                                                            </div>
-                                                            <div class="d-inline-flex position-relative">
-                                                                <label>{{ localeData?.sub_prefix }}</label>
-                                                                <input
-                                                                    type="text"
-                                                                    class="form-control"
-                                                                    name="prefixNumber"
-                                                                    [(ngModel)]="invoiceSetting.debitNoteNumberPrefix"
-                                                                />
-                                                            </div>
-                                                            <div class="d-inline-flex position-relative">
-                                                                <label>{{ localeData?.initial_no }}</label>
-                                                                <input
-                                                                    type="text"
-                                                                    class="form-control"
-                                                                    name="initialNumber"
-                                                                    [(ngModel)]="invoiceSetting.initialDebitNoteNumber"
-                                                                />
-                                                            </div>
-                                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 col-md-12 col-lg-2 pl-0 pr-0">
+                                    <ng-container *ngTemplateOutlet="buttonsSection"></ng-container>
+                                </div>
+                            </div>
+                        </div>
+                    </tab>
+                    <tab>
+                        <ng-template tabHeading>
+                            <span class="icon-invoice-icon"></span
+                            >{{ commonLocaleData?.app_voucher_types?.credit_note }}
+                        </ng-template>
+                        <div class="general-tab single-tab-block">
+                            <div class="box clearfix">
+                                <h4 class="clearfix bd-rb font-16">
+                                    {{ commonLocaleData?.app_voucher_types?.credit_note }}
+                                </h4>
+                                <div class="clearfix pt-3">
+                                    <div class="row ml-0 mr-0">
+                                        <div class="col-sm-12 col-md-12 col-lg-2 flex-container pl-0 pr-0">
+                                            <mat-slide-toggle
+                                                [(ngModel)]="invoiceSetting.useCustomCreditNoteNumber"
+                                                name="customInvoice"
+                                                class="pull-left estimation-check show-on-mobile"
+                                                color="primary"
+                                            >
+                                            </mat-slide-toggle>
+                                            <label class="left-gap">{{ localeData?.custom_invoice_no }}</label>
+                                        </div>
+                                        <div class="col-sm-12 col-md-9">
+                                            <div class="form-group clearfix d-flex">
+                                                <mat-slide-toggle
+                                                    [(ngModel)]="invoiceSetting.useCustomCreditNoteNumber"
+                                                    name="customInvoice"
+                                                    class="pull-left estimation-check hide-on-mobile"
+                                                    color="primary"
+                                                >
+                                                </mat-slide-toggle>
+                                                <div
+                                                    class="d-inline-flex custom-estimation"
+                                                    *ngIf="invoiceSetting.useCustomCreditNoteNumber"
+                                                >
+                                                    <div class="d-inline-flex position-relative">
+                                                        <label>{{ localeData?.branch_prefix }}</label>
+                                                        <input
+                                                            type="text"
+                                                            class="form-control"
+                                                            name="branchPrefix"
+                                                            [(ngModel)]="invoiceSetting.branchCreditNoteNumberPrefix"
+                                                        />
+                                                    </div>
+                                                    <div class="d-inline-flex position-relative">
+                                                        <label>{{ localeData?.sub_prefix }}</label>
+                                                        <input
+                                                            type="text"
+                                                            class="form-control"
+                                                            name="prefixNumber"
+                                                            [(ngModel)]="invoiceSetting.creditNoteNumberPrefix"
+                                                        />
+                                                    </div>
+                                                    <div class="d-inline-flex position-relative">
+                                                        <label>{{ localeData?.initial_no }}</label>
+                                                        <input
+                                                            type="text"
+                                                            class="form-control"
+                                                            name="initialNumber"
+                                                            [(ngModel)]="invoiceSetting.initialCreditNoteNumber"
+                                                        />
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </ng-container>
-                                </mat-tab>
-                            </mat-tab-group>
-                            <div class="col-sm-12 col-md-12 col-lg-2">
-                                <ng-container *ngTemplateOutlet="buttonsSection"></ng-container>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 col-md-12 col-lg-2 pl-0 pr-0">
+                                    <ng-container *ngTemplateOutlet="buttonsSection"></ng-container>
+                                </div>
                             </div>
                         </div>
                     </tab>
