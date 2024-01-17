@@ -9064,6 +9064,11 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         if (!this.isBarcodeMachineTyping) {
             this.barcodeValue = "";
         }
+
+        setTimeout(() => {
+            this.isBarcodeMachineTyping = false;
+            this.barcodeValue = "";
+        }, 1000);
     }
 
     /**
