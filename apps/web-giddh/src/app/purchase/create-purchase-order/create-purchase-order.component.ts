@@ -4319,6 +4319,11 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         if (!this.isBarcodeMachineTyping) {
             this.barcodeValue = "";
         }
+
+        setTimeout(() => {
+            this.isBarcodeMachineTyping = false;
+            this.barcodeValue = "";
+        }, 1000);
     }
     /**
    * Returns the string when barcode machine finishes typing the word
