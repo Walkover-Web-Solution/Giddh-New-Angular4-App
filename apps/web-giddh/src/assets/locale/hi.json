@@ -714,5 +714,6 @@
     "app_hostname": "होस्टनेम",
     "app_copied":"कॉपी किया गया...",
     "domain_verification": "बाहरी मेल के लिए डोमेन सत्यापन",
-    "app_renew_bank_connection": "बैंक कनेक्शन नवीनीकृत करें"
+    "app_renew_bank_connection": "बैंक कनेक्शन नवीनीकृत करें",
+    "app_select_printer": "प्रिंटर चुनें"
 }
