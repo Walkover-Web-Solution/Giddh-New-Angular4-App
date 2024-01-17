@@ -1608,4 +1608,37 @@ export class GeneralService {
         }
         return result + '.' + value;
     }
+
+    /**
+     * Returns configuration for printer selection
+     *
+     * @param {any[]} printers
+     * @param {*} commonLocaleData
+     * @returns {ConfirmationModalConfiguration}
+     * @memberof GeneralService
+     */
+    public getPrinterSelectionConfiguration(printers: any[], commonLocaleData: any): ConfirmationModalConfiguration {
+        const buttons: Array<ConfirmationModalButton> = [];
+
+        printers?.forEach(printer => {
+            buttons.push({
+                text: printer,
+                color: 'primary'
+            });
+        });
+
+        const headerText: string = commonLocaleData?.app_select_printer;
+        const headerCssClass: string = 'd-inline-block mr-1';
+        const messageCssClass: string = 'mr-b1 text-light';
+        const footerCssClass: string = 'mr-b1';
+        return {
+            headerText,
+            headerCssClass,
+            messageText: '',
+            messageCssClass,
+            footerText: '',
+            footerCssClass,
+            buttons
+        };
+    }
 }

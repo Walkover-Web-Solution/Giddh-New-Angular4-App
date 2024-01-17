@@ -4,6 +4,9 @@ import { KJUR, KEYUTIL, stob64, hextorstr } from 'jsrsasign';
 import * as qz from "qz-tray";
 import { QZ_CERTIFICATE, QZ_PEM } from '../app.constant';
 import { ToasterService } from './toaster.service';
+import { AppState } from '../store';
+import { Store } from '@ngrx/store';
+import { CommonActions } from '../actions/common.actions';
 
 @Injectable()
 export class ThermalService {
@@ -13,7 +16,9 @@ export class ThermalService {
 
     constructor(
         private printerFormat: PrinterFormatService,
-        private toaster: ToasterService
+        private toaster: ToasterService,
+        private store: Store<AppState>,
+        private commonAction: CommonActions
     ) {
 
     }
@@ -710,25 +715,34 @@ export class ThermalService {
             if (!qz.websocket.isActive()) {
                 qz.websocket
                     .connect()
-                    .then(function () {
-                        qz.printers.getDefault().then(function (data) {
-                            return qz.printers.find(data); // Pass the printer name into the next Promise
-                        });
+                    .then(() => {
+                        this.findAndPrint(header, table, footer);
                     })
-                    .then((printer: any) => {
-                        if (printer) {
-                            this.printNow(printer, header, table, footer);
-                        } else {
-                            this.toaster.warningToast("No default printer available. Please set your receipt printer as default.");
-                        }
-                    })
-                    .catch(function (e: any) {
+                    .catch((e: any) => {
                         console.error(e);
                     });
             } else {
-                this.printNow("USB Receipt Printer", header, table, footer);
+                this.findAndPrint(header, table, footer);
             }
         }
+    }
+
+    private findAndPrint(header: any, table: any, footer: any): void {
+        qz.printers.find().then((data) => {
+            if (data?.length) {
+                if (localStorage.getItem("defaultPrinter") && data.includes(localStorage.getItem("defaultPrinter"))) {
+                    this.printNow(localStorage.getItem("defaultPrinter"), header, table, footer);
+                } else {
+                    if (data?.length > 1) {
+                        this.store.dispatch(this.commonAction.selectPrinter(data));
+                    } else {
+                        this.printNow(data[0], header, table, footer);
+                    }
+                }
+            } else {
+                this.toaster.warningToast("No printer available. Please connect your printer.");
+            }
+        }).catch((e) => { console.error(e); });
     }
 
     private printNow(printer: any, header: any, table: any, footer: any): void {

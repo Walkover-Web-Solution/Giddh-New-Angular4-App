@@ -30,6 +30,9 @@ import { ProformaListComponent } from '../../../proforma/proforma-list.component
 import { InvoiceActions } from 'apps/web-giddh/src/app/actions/invoice/invoice.actions';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { InvoiceTemplatesService } from 'apps/web-giddh/src/app/services/invoice.templates.service';
+import { CommonActions } from 'apps/web-giddh/src/app/actions/common.actions';
+import { NewConfirmationModalComponent } from 'apps/web-giddh/src/app/theme/new-confirmation-modal/confirmation-modal.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
     selector: 'invoice-preview-details-component',
@@ -166,7 +169,9 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         private commonService: CommonService,
         private thermalService: ThermalService,
         private invoiceTemplatesService: InvoiceTemplatesService,
-        private invoiceAction: InvoiceActions) {
+        private invoiceAction: InvoiceActions,
+        private commonAction: CommonActions,
+        private dialog: MatDialog) {
         this.breakPointObservar.observe([
             '(max-width: 1023px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
@@ -243,6 +248,28 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         });
 
         this.companyName$.pipe(take(1)).subscribe(companyUniqueName => this.companyUniqueName = companyUniqueName);
+
+        this.store.pipe(select(s => s.common?.selectPrinter), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.store.dispatch(this.commonAction.selectPrinter(null));
+                const configuration = this.generalService.getPrinterSelectionConfiguration(response, this.commonLocaleData);
+
+                let dialogRef = this.dialog.open(NewConfirmationModalComponent, {
+                    width: '630px',
+                    data: {
+                        configuration: configuration
+                    }
+                });
+
+                dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+                    document.querySelector('body').classList.remove('fixed');
+                    if (response !== "Close") {
+                        this.generalService.setParameterInLocalStorage("defaultPrinter", response);
+                        this.printThermal();
+                    }
+                });
+            }
+        });
     }
 
     public ngOnChanges(changes: SimpleChanges): void {
