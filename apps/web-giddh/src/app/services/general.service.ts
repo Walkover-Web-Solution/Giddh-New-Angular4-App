@@ -1619,11 +1619,11 @@ export class GeneralService {
      */
     public getPrinterSelectionConfiguration(printers: any[], commonLocaleData: any): ConfirmationModalConfiguration {
         const buttons: Array<ConfirmationModalButton> = [];
-
         printers?.forEach(printer => {
             buttons.push({
                 text: printer,
-                color: 'primary'
+                color: 'primary',
+                cssClass: 'button-no-background'
             });
         });
 
@@ -1631,6 +1631,7 @@ export class GeneralService {
         const headerCssClass: string = 'd-inline-block mr-1';
         const messageCssClass: string = 'mr-b1 text-light';
         const footerCssClass: string = 'mr-b1';
+        const disableRipple: boolean = true;
         return {
             headerText,
             headerCssClass,
@@ -1638,6 +1639,7 @@ export class GeneralService {
             messageCssClass,
             footerText: '',
             footerCssClass,
+            disableRipple,
             buttons
         };
     }

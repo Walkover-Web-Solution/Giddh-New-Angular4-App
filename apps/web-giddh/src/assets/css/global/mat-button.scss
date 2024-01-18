@@ -123,3 +123,6 @@ button {
             cursor: not-allowed !important;
             pointer-events: all !important;
 }
+button.button-no-background .mdc-button__ripple {
+    display: none;
+}

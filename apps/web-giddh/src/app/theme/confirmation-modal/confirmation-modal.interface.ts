@@ -22,8 +22,9 @@ export interface ConfirmationModalConfiguration {
     messageText: string; // Message to be displayed in modal
     messageCssClass?: string; // Message CSS class
     footerText?: string; // Footer text to be displayed in modal (close to button)
-    footerCssClass?: string // Footer CSS class
-    buttons?: Array<ConfirmationModalButton> // Buttons array depending on the type of modal
+    footerCssClass?: string; // Footer CSS class
+    disableRipple?: boolean;
+    buttons?: Array<ConfirmationModalButton>; // Buttons array depending on the type of modal
 }
 
 /** Confirmation actions performed by user */
