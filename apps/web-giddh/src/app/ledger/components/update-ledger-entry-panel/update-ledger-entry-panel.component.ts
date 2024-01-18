@@ -286,6 +286,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     private selectedStockUniquenName: string;
     /** True if ledger account belongs to sundry debtor/creditor */
     private isSundryDebtorCreditor: boolean = false;
+    /** account other applicable discount list which contains account's discount else immediate group's discount(inherited) */
+    public accountOtherApplicableDiscount: any[] = [];
 
     constructor(
         private accountService: AccountService,
@@ -2131,6 +2133,14 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             if (this.activeAccount.currency && this.vm.isMultiCurrencyAvailable) {
                 this.baseCurrency = this.activeAccount.currency;
             }
+
+            this.accountOtherApplicableDiscount = [];
+
+            if (this.activeAccount.applicableDiscounts && this.activeAccount.applicableDiscounts.length) {
+                this.accountOtherApplicableDiscount = this.activeAccount.applicableDiscounts;
+            } else if (this.activeAccount.inheritedDiscounts && this.activeAccount.inheritedDiscounts.length && (!this.accountOtherApplicableDiscount || !this.accountOtherApplicableDiscount?.length)) {
+                this.accountOtherApplicableDiscount.push(...this.activeAccount.inheritedDiscounts[0].applicableDiscounts);
+            }
         }
 
         this.vm.getUnderstandingText(resp[0].particularType, resp[0].particular.name, this.localeData);
@@ -2579,20 +2589,33 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     stockName = defaultUnit.name;
                     stockUniqueName = stockDetails?.uniqueName;
 
-                    const hasMrpDiscount = txn.selectedAccount.stock.variant?.unitRates?.filter(variantDiscount => variantDiscount?.stockUnitUniqueName === stockUnitUniqueName);
-                    if (hasMrpDiscount?.length && txn.selectedAccount.stock.variant?.variantDiscount?.discounts?.length) {
-                        rate = Number((hasMrpDiscount[0].rate / this.vm.selectedLedger?.exchangeRate).toFixed(RATE_FIELD_PRECISION));
+                    const matchedUnit = txn.selectedAccount.stock.variant?.unitRates?.filter(variantDiscount => variantDiscount?.stockUnitUniqueName === stockUnitUniqueName);
+                    if (matchedUnit?.length && txn.selectedAccount.stock.variant?.variantDiscount?.discounts?.length) {
+                        rate = Number((matchedUnit[0].rate / this.vm.selectedLedger?.exchangeRate).toFixed(RATE_FIELD_PRECISION));
 
-                        this.vm.discountArray?.map((item, index) => { if (index > 0) { item.isActive = false; } return item; });
+                        this.vm.discountArray = this.vm.discountArray?.map((item, index) => { if (index > 0) { item.isActive = false; } return item; });
 
                         txn.selectedAccount.stock.variant?.variantDiscount?.discounts?.forEach(variantDiscount => {
-                            this.vm.discountArray?.map(item => {
+                            this.vm.discountArray = this.vm.discountArray?.map(item => {
                                 if (variantDiscount?.discount?.uniqueName === item?.discountUniqueName) {
                                     item.isActive = true;
                                 }
                                 return item;
                             });
                         });
+                    } else {
+                        this.vm.discountArray = this.vm.discountArray?.map((item, index) => { if (index > 0) { item.isActive = false; } return item; });
+
+                        if (this.accountOtherApplicableDiscount && this.accountOtherApplicableDiscount.length) {
+                            this.accountOtherApplicableDiscount.forEach(element => {
+                                this.vm.discountArray = this.vm.discountArray?.map(item => {
+                                    if (element?.uniqueName === item?.discountUniqueName) {
+                                        item.isActive = true;
+                                    }
+                                    return item;
+                                });
+                            });
+                        }
                     }
                 }
 

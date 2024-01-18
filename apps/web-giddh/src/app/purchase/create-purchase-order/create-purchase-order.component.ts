@@ -2961,11 +2961,6 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
 
         entries.forEach(entry => {
             let salesEntryClass = new SalesEntryClass();
-            let entryDiscounts = this.generalService.getDiscountValues({
-                discountAccountsDetails: entry.discounts ?? [],
-                discountsList: this.discountsList
-            });
-            salesEntryClass.discounts = entryDiscounts;
             let salesTransactionItemClass = new SalesTransactionItemClass();
             salesEntryClass.tcsTaxList = [];
             salesEntryClass.tdsTaxList = [];
@@ -3123,7 +3118,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                     discountLedger.discountType = discount.calculationMethod;
                     discountLedger.discountValue = discount.discountValue;
                     discountLedger.isActive = true;
-                    discountLedger.discountUniqueName = discount?.uniqueName;
+                    discountLedger.discountUniqueName = discount?.uniqueName || discount?.discountUniqueName;
                     discountLedger.name = discount.name;
                     discountLedger.particular = discount.particular;
                     discountLedger.uniqueName = discountLedger.discountUniqueName;
