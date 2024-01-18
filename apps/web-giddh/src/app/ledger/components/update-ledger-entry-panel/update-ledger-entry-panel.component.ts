@@ -632,7 +632,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     if (e.additional.stock) {
                         requestObject = {
                             stockUniqueName: e.additional.stock?.uniqueName,
-                            customerUniqueName: this.isSundryDebtorCreditor ? this.activeAccount?.uniqueName : txn.particular.uniqueName,
+                            customerUniqueName: this.isSundryDebtorCreditor ? this.activeAccount?.uniqueName : this.baseAccountDetails.particular.uniqueName,
                             ...(isVariantChanged ? { variantUniqueName: this.selectedStockVariant?.uniqueName } : {})
                         };
                     }
