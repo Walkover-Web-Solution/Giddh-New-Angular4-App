@@ -71,6 +71,7 @@ import { SelectFieldComponent } from '../theme/form-fields/select-field/select-f
 import { DropdownFieldComponent } from '../theme/form-fields/dropdown-field/dropdown-field.component';
 import { PageLeaveUtilityService } from '../services/page-leave-utility.service';
 import { CommonService } from '../services/common.service';
+import { ConfirmModalComponent } from '../theme/new-confirm-modal/confirm-modal.component';
 
 /** Type of search: customer and item (product/service) search */
 const SEARCH_TYPE = {
@@ -2694,6 +2695,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 deposit: (!this.currentVoucherFormDetails || this.currentVoucherFormDetails?.depositAllowed) ? deposit : undefined,
                 subVoucher: (this.isRcmEntry) ? SubVoucher.ReverseCharge : undefined,
                 attachedFiles: (this.invFormData.entries[0] && this.invFormData.entries[0].attachedFile) ? [this.invFormData.entries[0].attachedFile] : [],
+                generateEInvoice: this.invFormData.generateEInvoice
             } as GenericRequestForGenerateSCD;
             // set voucher type
             requestObject.voucher.voucherDetails.voucherType = this.voucherUtilityService.parseVoucherType(invoiceType);
@@ -2761,7 +2763,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 deposit: (this.currentVoucherFormDetails?.depositAllowed) ? deposit : undefined,
                 subVoucher: (this.isRcmEntry) ? SubVoucher.ReverseCharge : undefined,
                 purchaseOrders: purchaseOrders,
-                company: this.purchaseBillCompany
+                company: this.purchaseBillCompany,
+                generateEInvoice: this.invFormData.generateEInvoice
             } as PurchaseRecordRequest;
             /** Advance receipts adjustment */
             if (this.advanceReceiptAdjustmentData && this.advanceReceiptAdjustmentData.adjustments) {
@@ -6562,7 +6565,30 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 this.cancelUpdate();
             }
             this.postResponseAction(this.invoiceNo);
-        } else {
+        } else if (response?.status === "einvoice-confirm") {
+            this.isShowLoader = false;
+            this.startLoader(false);
+            
+            let dialogRef = this.dialog.open(ConfirmModalComponent, {
+                data: {
+                    title: this.commonLocaleData?.app_confirm,
+                    body: response?.message,
+                    ok: this.commonLocaleData?.app_yes,
+                    cancel: this.commonLocaleData?.app_no,
+                    permanentlyDeleteMessage: ' '
+                }
+            });
+
+            dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+                if (response) {
+                    this.invFormData.generateEInvoice = true;
+                } else {
+                    this.invFormData.generateEInvoice = false;
+                }
+                this.onSubmitInvoiceForm(form);
+            });
+        }
+        else {
             this.isShowLoader = false;
             this.startLoader(false);
             this.toaster.showSnackBar("error", response?.message, response?.code);
@@ -9020,6 +9046,11 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         if (!this.isBarcodeMachineTyping) {
             this.barcodeValue = "";
         }
+
+        setTimeout(() => {
+            this.isBarcodeMachineTyping = false;
+            this.barcodeValue = "";
+        }, 1000);
     }
 
     /**

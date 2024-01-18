@@ -49,5 +49,6 @@
     "apply_credit_note_round_off": "क्रेडिट नोट वाउचर पर राउंड ऑफ अप्लाई करें",
     "apply_debit_note_round_off": "डेबिट नोट वाउचर पर राउंड ऑफ लागू करें",
     "run_auto_paid_for_all_the_accounts": "सभी खातों के लिए ऑटो-भुगतान चलाएं",
-    "automatically_generate_voucher_for_the_entries_present_in_the_ledger": "लेजर में मौजूद प्रविष्टियों के लिए स्वच्छंद रूप से वाउचर उत्पन्न करें"
+    "automatically_generate_voucher_for_the_entries_present_in_the_ledger": "लेजर में मौजूद प्रविष्टियों के लिए स्वच्छंद रूप से वाउचर उत्पन्न करें",
+    "enable_confirmation_pop_up_to_create_e_invoice": "ई-चालान बनाने के लिए पुष्टिकरण पॉप-अप सक्षम करें"
 }
