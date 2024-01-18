@@ -47,6 +47,8 @@
     "e_invoice_invalid_gstin_error_message": "Please provide a valid GSTIN",
     "apply_sales_round_off": "Apply round off on sales/cash voucher",
     "apply_credit_note_round_off": "Apply round off on credit note voucher",
+    "apply_debit_note_round_off": "Apply round off on debit note voucher",
     "run_auto_paid_for_all_the_accounts": "Run Auto-paid for all the accounts",
-    "automatically_generate_voucher_for_the_entries_present_in_the_ledger": "Automatically generate voucher for the entries present in the ledger"
+    "automatically_generate_voucher_for_the_entries_present_in_the_ledger": "Automatically generate voucher for the entries present in the ledger",
+    "enable_confirmation_pop_up_to_create_e_invoice": "Enable confirmation pop-up to create E-Invoice"
 }

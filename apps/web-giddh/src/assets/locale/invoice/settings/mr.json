@@ -47,6 +47,8 @@
     "e_invoice_invalid_gstin_error_message": "कृपया एक वैध जीएसटीआयएन प्रदान करा",
     "apply_sales_round_off": "विक्री/नगदी व्हाउचरवर राउंड ऑफ लागू करा",
     "apply_credit_note_round_off": "क्रेडिट नोट व्हाउचरवर राउंड ऑफ लागू करा",
+    "apply_debit_note_round_off": "डेबिट नोट व्हाउचरवर राउंड ऑफ लागू करा",
     "run_auto_paid_for_all_the_accounts": "सर्व खात्यांसाठी ऑटो-पेड सुरू करा",
-    "automatically_generate_voucher_for_the_entries_present_in_the_ledger": "लेजरमध्ये उपस्थित प्रविष्ट्यांसाठी स्वयंमुद्रित वाउचर उत्पन्न करा"
+    "automatically_generate_voucher_for_the_entries_present_in_the_ledger": "लेजरमध्ये उपस्थित प्रविष्ट्यांसाठी स्वयंमुद्रित वाउचर उत्पन्न करा",
+    "enable_confirmation_pop_up_to_create_e_invoice": "ई-इनव्हॉइस तयार करण्यासाठी पुष्टीकरण पॉप-अप सक्षम करा"
 }
