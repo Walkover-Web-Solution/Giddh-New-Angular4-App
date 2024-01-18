@@ -10,7 +10,7 @@ import { Observable, ReplaySubject } from 'rxjs';
 import { NewRoleClass } from '../../permission.utility';
 import { ToasterService } from '../../../services/toaster.service';
 import { GeneralService } from '../../../services/general.service';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
     templateUrl: './permission-list.html',
@@ -35,6 +35,8 @@ export class PermissionListComponent implements OnInit, AfterViewInit, OnDestroy
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    private permissionModelRef: MatDialogRef<any>; 
+    public permissionConfirmationModelRef: MatDialogRef<any>;
 
     constructor(
         private store: Store<AppState>,
@@ -107,7 +109,7 @@ export class PermissionListComponent implements OnInit, AfterViewInit, OnDestroy
 
     public closePopupEvent(userAction) {
         this.showPopup = false;
-        // this.permissionModel.hide();
+        this.permissionModelRef.close();
         if (userAction === 'save') {
             this.router.navigate(['/pages', 'permissions', 'details']);
         }
@@ -124,17 +126,18 @@ export class PermissionListComponent implements OnInit, AfterViewInit, OnDestroy
     //     this.permissionConfirmationModel?.show();
     // }
 
-    public deleteRole(): void {
-        this.dialog.open(this.permissionConfirmationModel, {
+    public deleteRole(role: IRoleCommonResponseAndRequest): void {
+        this.selectedRoleForDelete = role;
+       this.permissionConfirmationModelRef =  this.dialog.open(this.permissionConfirmationModel, {
             panelClass: 'modal-dialog',
-            width: '650px'
+            width: '600px'
         });
     }
 
-    // public deleteConfirmedRole() {
-    //     this.permissionConfirmationModel.hide();
-    //     this.store.dispatch(this.permissionActions.DeleteRole(this.selectedRoleForDelete?.uniqueName));
-    // }
+    public deleteConfirmedRole() {
+        this.permissionConfirmationModelRef.close();
+        this.store.dispatch(this.permissionActions.DeleteRole(this.selectedRoleForDelete?.uniqueName));
+    }
 
     // public closeConfirmationPopup() {
     //     this.permissionConfirmationModel.hide();
@@ -144,8 +147,8 @@ export class PermissionListComponent implements OnInit, AfterViewInit, OnDestroy
     //     this.permissionModel?.show();
     // }
     public openPermissionModal(): void {
-        this.dialog.open(this.permissionModel, {
-            panelClass: '"modal-dialog',
+        this.permissionModelRef = this.dialog.open(this.permissionModel, {
+            panelClass: 'modal-dialog',
             width: '650px'
         });
     }

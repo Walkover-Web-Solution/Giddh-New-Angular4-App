@@ -1,5 +1,5 @@
 import { takeUntil } from 'rxjs/operators';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
@@ -11,25 +11,12 @@ import { IPage, IPageStr, NewPermissionObj, NewRoleClass } from '../../permissio
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
 import { cloneDeep, concat, filter, find, findIndex, forEach, isEmpty, map, remove } from '../../../lodash-optimized';
 
-
-export interface PeriodicElement {
-    admin: string;
-    adminicon: string;
-    view: string;
-}
-
-const ELEMENT_DATA: PeriodicElement[] = [
-    {admin: '12/07/2023', adminicon: '', view: ''},
-    {admin: '12/07/2023', adminicon: '', view: ''},
-    {admin: '12/07/2023', adminicon: '', view: ''}
-]
-
 @Component({
     templateUrl: './permission.details.html',
     styleUrls: [`./permission.details.scss`]
 })
 
-export class PermissionDetailsComponent implements OnInit, OnDestroy {
+export class PermissionDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
     public pageList: IPageStr[];
     public newRole: any = {};
     public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -46,9 +33,8 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
-    /*-- mat-table --*/
-    displayedColumns: string[] = ['admin', 'adminicon', 'view'];
-    dataSource = ELEMENT_DATA;
+    /* Holds Table column */
+    public displayedColumns: string[] = ['admin', 'adminicon', 'view'];
 
     constructor(private router: Router,
         private store: Store<AppState>,
@@ -102,6 +88,20 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
         }
     }
 
+    public ngAfterViewInit(): void {
+        this.pageList = this.pageList.map(item => {
+            return { label: item, value: item, additional: { isDisabled: this.checkForAlreadyExistInPageArray(String(item)) } }
+        });
+
+        if (this.roleObj.scopes) {
+            this.roleObj.scopes = this.roleObj?.scopes.map(item => {
+                item.permissions.unshift({ code: 'SELECT-ALL', isSelected: false });
+                return item;
+            });
+        }
+
+    }
+
     public handleShareSituation(roleObj: NewRoleClass) {
         let shareScopes = ['SHRALL', 'SHRLWR', 'SHRSM'];
         roleObj?.scopes.forEach((role) => {
@@ -127,8 +127,9 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
             let pageObj = find(this.singlePageForFreshStart?.scopes, (o: Scope) => o.name === page);
             pageObj.permissions = pageObj.permissions.map((o: Permission) => {
                 return o = new NewPermissionObj(o.code, false);
-            });
-            this.roleObj.scopes.push(pageObj);
+            });            
+            pageObj.permissions.unshift({ code: 'SELECT-ALL', isSelected: false });
+            this.roleObj?.scopes?.push(pageObj);
         }
     }
 
@@ -154,6 +155,7 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
     public getScopeDataReadyForAPI(data): Scope[] {
         let arr: Scope[];
         arr = forEach(data?.scopes, (page: Scope) => {
+            remove(page.permissions, (o: Permission) => o.code === 'SELECT-ALL');
             remove(page.permissions, (o: Permission) => !o.isSelected);
         });
         return filter(arr, (o: Scope) => o.permissions?.length > 0);
@@ -162,6 +164,7 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
     public addNewRole(): any {
         let data = cloneDeep(this.roleObj);
         data.scopes = this.getScopeDataReadyForAPI(data);
+
         if (data.scopes?.length < 1) {
             return this._toaster.errorToast(this.localeData?.add_role_error);
         }
@@ -181,13 +184,32 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
     }
 
     public setScopeForCurrentRole(): Scope[] {
+        let response;
         if (this.newRole.isFresh) {
             // fresh role logic here
-            return this.generateFreshUI();
+            response = this.generateFreshUI();
+
         } else {
             // copy role scenario
-            return this.generateUIFromExistedRole();
+            response = this.generateUIFromExistedRole();;
         }
+        setTimeout(() => {
+            if (response) {
+                response.forEach(item => {
+                    let count = 0;
+                    item.permissions.forEach(item => {
+                        if (item.code !== 'SELECT-ALL' && item.isSelected) {
+                            count++;
+                        }
+                    });
+                    if ((item.permissions.length - 1) === count) {
+                        item.permissions[0].isSelected = true;
+                    }
+                });
+            }
+        }, 500);
+
+        return response;
     }
 
     public generateUIFromExistedRole() {
@@ -210,7 +232,7 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
                     }
                 });
                 if (count === obj.permissions?.length) {
-                    obj.selectAll = true;
+                    obj.permissions[0].isSelected = true;
                 }
             });
             return res.scopes;
@@ -307,23 +329,27 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
     }
 
     public toggleItems(pageName: string, event: any) {
+
         let res = find(this.roleObj?.scopes, (o: Scope) => o.name === pageName);
         if (res) {
-            map(res.permissions, (o: Permission) => o.isSelected = event.target?.checked ? true : false);
+            map(res.permissions, (o: Permission) => o.isSelected = event.checked ? true : false);
         }
     }
 
     public toggleItem(pageName: string, item: Permission, event: any) {
         let res = find(this.roleObj?.scopes, (o: Scope) => o.name === pageName);
-        if (event.target?.checked) {
-            let idx = findIndex(res.permissions, (o: Permission) => o.isSelected === false);
+        if (event.checked) {
+            let idx = findIndex(res.permissions, (o: Permission) => {
+                return o.isSelected === false && o.code !== 'SELECT-ALL';
+            });
+
             if (idx !== -1) {
-                return res.selectAll = false;
+                return res.permissions[0].isSelected = false;
             } else {
-                return res.selectAll = true;
+                return res.permissions[0].isSelected = true;
             }
         } else {
-            return res.selectAll = false;
+            return res.permissions[0].isSelected = false;
         }
     }
 

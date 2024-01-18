@@ -204,7 +204,6 @@ export class SettingCampaignComponent implements OnInit {
      */
     public deleteCommunicationPlatform(platformUniqueName: string): void {
         let dialogRef = this.dialog?.open(ConfirmModalComponent, {
-            width: '40%',
             data: {
                 title: this.commonLocaleData?.app_delete,
                 body: this.localeData?.communication?.delete_platform,

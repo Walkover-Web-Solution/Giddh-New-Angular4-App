@@ -6,7 +6,7 @@
 >
     <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
     <div class="container-fluid clearfix" *ngIf="allRoles?.length > 0">
-        <div class="col-sm-12 mr-t2 mr-b2 d-flex justify-content-end">
+        <div class="col-sm-12 mr-t2 mr-b2 d-flex justify-content-end column-gap5">
             <button mat-stroked-button color="primary" (click)="openPermissionModal()">
                 {{localeData?.add_new_role}}
             </button>
@@ -59,30 +59,28 @@
 
     <!--add and manage role model -->
     <ng-template #permissionModel>
-        <div class="modal-dialog modal-md">
-            <div class="modal-content">
-                <permission-model
-                    [localeData]="localeData"
-                    [commonLocaleData]="commonLocaleData"
-                    (closeEvent)="closePopupEvent($event)"
-                ></permission-model>
-            </div>
+        <!-- <div class="modal-dialog modal-md"> -->
+        <div class="modal-content">
+            <permission-model
+                [localeData]="localeData"
+                [commonLocaleData]="commonLocaleData"
+                (closeEvent)="closePopupEvent($event)"
+            ></permission-model>
         </div>
+        <!-- </div> -->
     </ng-template>
 
     <!--delete role confirmation model -->
     <ng-template #permissionConfirmationModel>
-        <div class="modal-dialog modal-md">
-            <div class="modal-content">
-                <delete-role-confirmation-model
-                    [selectedRoleForDelete]="selectedRoleForDelete"
-                    [localeData]="localeData"
-                    [commonLocaleData]="commonLocaleData"
-                    (confirmDeleteEvent)="deleteConfirmedRole()"
-                    (closeModelEvent)="closeConfirmationPopup()"
-                >
-                </delete-role-confirmation-model>
-            </div>
+        <div class="modal-content">
+            <delete-role-confirmation-model
+                [selectedRoleForDelete]="selectedRoleForDelete"
+                [localeData]="localeData"
+                [commonLocaleData]="commonLocaleData"
+                (confirmDeleteEvent)="deleteConfirmedRole()"
+                (closeModelEvent)="closeConfirmationPopup()"
+            >
+            </delete-role-confirmation-model>
         </div>
     </ng-template>
 </ng-container>

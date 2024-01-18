@@ -109,9 +109,9 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
     }
 
     public submitPermissionForm(e: { action: string, data: ShareRequestForm }) {
-        // if (e.action === 'update') {
-        //     this.closeEditUserModal();
-        // }
+        if (e.action === 'update') {
+            this.closeEditUserModal();
+        }
         this.waitAndReloadCompany();
     }
 
@@ -128,11 +128,11 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
     //     setTimeout(() => this.editUserModal?.show(), 700);
     // }
 
-    public showModalForEdit(): void {
-        this.editDialogRef = this.dialog.open(this.editUserModal, {
-            width: '1000px',
-            panelClass: 'modal-content'
-        });
+    public showModalForEdit(user?: any): void {
+        this.selectedUser = user ? user : '';
+        this.editDialogRef = this.dialog.open(this.editUserModal, { width: '800px', position: {
+            top: '75px'
+        }});
     }
 
     // public closeEditUserModal() {
@@ -140,6 +140,8 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
     //     setTimeout(() => this.showEditUserModal = false, 700);
     // }
     public closeEditUserModal(event?: any): void {
+        console.log("closeEditUserModal", this.hasUnsavedChanges);
+        
         if (event && this.hasUnsavedChanges) {
             this.pageLeaveUtilityService.confirmPageLeave((action) => {
                 if (action) {
@@ -203,6 +205,8 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
      */
     public updateUnsavedChanges(event: any): void {
         this.hasUnsavedChanges = event;
+        console.log("updateUnsavedChanges");
+        
         if (event) {
             this.pageLeaveUtilityService.addBrowserConfirmationDialog();
         } else {

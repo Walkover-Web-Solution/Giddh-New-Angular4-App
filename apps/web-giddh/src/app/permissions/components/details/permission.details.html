@@ -51,19 +51,17 @@
                         </select> -->
                         <dropdown-field
                             [placeholder]="localeData?.option_select_pages"
-                            [disabled]="newRole.isFixed"
+                            [readonly]="newRole.isFixed"
                             [required]="true"
                             [name]="'pageName'"
                             [options]="pageList"
-                            [disabled]="checkForAlreadyExistInPageArray(page)"
-                            (selectedOption)="pageName"
+                            (selectedOption)="pageName = $event.value"
                         ></dropdown-field>
                     </div>
                     <div class="form-group">
                         <button
                             mat-stroked-button
-                            color="primary"
-                            class=""
+                            color="primary"                            
                             (click)="addNewPage(pageName)"
                             [disabled]="!pageName"
                         >
@@ -159,21 +157,37 @@
                             >×</a
                         >
                     </div>
-                    <table mat-table [dataSource]="dataSource" class="w-100 permission-table">
+                    <table mat-table [dataSource]="page.permissions" class="w-100 permission-table">
                         <ng-container matColumnDef="admin">
                             <th mat-header-cell *matHeaderCellDef>{{ newRole.name }}</th>
-                            <td mat-cell *matCellDef="let element">
-                                <mat-checkbox
-                                    color="primary"
-                                    [checked]="true"
-                                    id="{{page.name}}+_{{idx}}"
-                                    [disabled]="newRole.isFixed"
-                                    (change)="toggleItems(page.name, $event)"
-                                    [(ngModel)]="page.selectAll"
-                                    class="mr-2"
-                                >
-                                </mat-checkbox>
-                                <label for="{{page.name}}+_{{idx}}"> {{commonLocaleData?.app_select_all}}</label>
+                            <td mat-cell *matCellDef="let element, let i = index">
+                                <ng-container *ngIf="element.code === 'SELECT-ALL'">
+                                    <mat-checkbox
+                                        color="primary"
+                                        [checked]="true"
+                                        id="{{page.name}}+_{{idx}}"
+                                        [disabled]="newRole.isFixed"
+                                        (change)="toggleItems(page.name, $event)"
+                                        [(ngModel)]="element.isSelected"
+                                        class="mr-2"
+                                    >
+                                    </mat-checkbox>
+                                    <label for="{{page.name}}+_{{idx}}"> {{commonLocaleData?.app_select_all}}</label>
+                                </ng-container>
+                                <ng-container *ngIf="element.code !== 'SELECT-ALL'">
+                                    <mat-checkbox
+                                        color="primary"
+                                        [checked]="true"
+                                        id="{{page.name}}+_{{idx}}"
+                                        [disabled]="newRole.isFixed"
+                                        (change)="toggleItem(page.name,element ,$event)"
+                                        name="{{element.code}}_{{i}}"
+                                        [(ngModel)]="element.isSelected"
+                                        class="mr-2"
+                                    >
+                                    </mat-checkbox>
+                                    <label for="{{element.code}}+_{{idx}}"> {{getNameByCode(element.code)}} </label>
+                                </ng-container>
                             </td>
                         </ng-container>
                         <ng-container matColumnDef="adminicon">

@@ -127,9 +127,9 @@
         <div class="modal-content">
             <div class="modal-header d-flex justify-content-between">
                 <h3 mat-dialog-title>{{ localeData?.create_user_permission }}</h3>
-                <button mat-dialog-close class="close">×</button>
+                <button class="close" (click)="closeEditUserModal(true)">×</button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body pt-4">
                 <setting-permission-form
                     [isOpenedInModal]="true"
                     [userdata]="selectedUser"
@@ -138,6 +138,7 @@
                     [isHorizntl]="false"
                     [localeData]="localeData"
                     [commonLocaleData]="commonLocaleData"
+                    (hasUnsavedChanges)="updateUnsavedChanges($event)"
                     (onSubmitForm)="submitPermissionForm($event)"
                 ></setting-permission-form>
             </div>

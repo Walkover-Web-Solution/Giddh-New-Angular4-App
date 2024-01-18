@@ -6,7 +6,7 @@
     autocomplete="off"
 >
     <div class="row align-items-center">
-        <div class="col-xl-10 col-md-12">
+        <div class="col-md-12" [ngClass]="{ 'col-xl-12': isUpdtCase, 'col-xl-10': !isUpdtCase }">
             <div class="row mr-0 ml-0 align-items-center">
                 <div class="col-xl-3 col-md-6 col-sm-4 pl-0">
                     <div class="form-group ml-0">
@@ -560,9 +560,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-xl-2 col-md-6 col-sm-4 pl-0">
+                <div class="col-xl-2 col-md-6 col-sm-4 px-0" [ngClass]="{ 'text-right' : isUpdtCase}">
                     <div class="form-group add-btn">
-                        <label class="d-block" *ngIf="isUpdtCase">&nbsp;</label>
                         <button
                             mat-stroked-button
                             color="primary"
