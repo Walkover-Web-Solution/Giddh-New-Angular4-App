@@ -12,16 +12,29 @@
         ></p>
         <p [ngClass]="inputData?.configuration?.footerCssClass">{{ inputData?.configuration?.footerText }}</p>
         <div class="d-flex column-gap15">
-            <button
-                mat-stroked-button
-                class="confirmation-buttons"
-                *ngFor="let button of inputData?.configuration?.buttons"
-                (click)="sendResponse(button?.text)"
-                [ngClass]="button?.cssClass"
-                [color]="button?.color"
-            >
-                {{ button?.text }}
-            </button>
+            <ng-container *ngFor="let button of inputData?.configuration?.buttons">
+                <button
+                    *ngIf="!inputData?.configuration?.disableRipple"
+                    mat-stroked-button
+                    class="confirmation-buttons"
+                    (click)="sendResponse(button?.text)"
+                    [ngClass]="button?.cssClass"
+                    [color]="button?.color"
+                >
+                    {{ button?.text }}
+                </button>
+                <button
+                    *ngIf="inputData?.configuration?.disableRipple"
+                    [disableRipple]="true"
+                    mat-button
+                    class="confirmation-buttons"
+                    (click)="sendResponse(button?.text)"
+                    [ngClass]="button?.cssClass"
+                    [color]="button?.color"
+                >
+                    {{ button?.text }}
+                </button>
+            </ng-container>
         </div>
     </div>
 </div>
