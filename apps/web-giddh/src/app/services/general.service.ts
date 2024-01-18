@@ -1461,7 +1461,7 @@ export class GeneralService {
         } = requestObj;
         discountsList.forEach(acc => {
             if (discountAccountsDetails) {
-                let hasItem = discountAccountsDetails.some(s => s.discountUniqueName === acc?.uniqueName);
+                let hasItem = discountAccountsDetails.some(s => s.discountUniqueName === acc?.uniqueName || s.uniqueName === acc?.uniqueName);
                 if (!hasItem) {
                     let obj: LedgerDiscountClass = new LedgerDiscountClass();
                     obj.amount = acc.discountValue;
