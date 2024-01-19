@@ -361,8 +361,7 @@
 
                                                 <span
                                                     *ngIf="
-                                                        shouldShowPrintDocument &&
-                                                        defaultTemplate?.templateType !== 'thermal_template'
+                                                        shouldShowPrintDocument
                                                     "
                                                     [ngClass]="{
                                                         'disabled':
@@ -380,10 +379,10 @@
                                                     ></a>
                                                 </span>
                                                 <!-- Thermal Feature -->
-                                                <span *ngIf="defaultTemplate?.templateType === 'thermal_template'">
+                                                <span *ngIf="thermalTemplate?.templateType === 'thermal_template'">
                                                     <a
                                                         href="javascript:;"
-                                                        [tooltip]="commonLocaleData?.app_print"
+                                                        [tooltip]="commonLocaleData?.app_print_thermal"
                                                         placement="top"
                                                         (click)="printThermal()"
                                                         ><i class="fa fa-print"></i
@@ -689,7 +688,6 @@
                                 #attachedDocumentPreview
                                 class="pdf-preview"
                                 *ngIf="
-                                    defaultTemplate?.templateType !== 'thermal_template' &&
                                     sanitizedPdfFileUrl &&
                                     !(isVoucherDownloading || isVoucherDownloadError || isFileUploading)
                                 "

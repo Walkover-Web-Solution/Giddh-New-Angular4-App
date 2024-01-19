@@ -9,7 +9,7 @@ import { cloneDeep, find, orderBy } from '../lodash-optimized';
 import { OrganizationType } from '../models/user-login-state';
 import { AllItems } from '../shared/helpers/allItems';
 import { Router } from '@angular/router';
-import { AdjustedVoucherType, BROADCAST_CHANNELS, JOURNAL_VOUCHER_ALLOWED_DOMAINS } from '../app.constant';
+import { AdjustedVoucherType, BROADCAST_CHANNELS, JOURNAL_VOUCHER_ALLOWED_DOMAINS, SUPPORTED_OPERATING_SYSTEMS } from '../app.constant';
 import { SalesOtherTaxesCalculationMethodEnum, VoucherTypeEnum } from '../models/api-models/Sales';
 import { ITaxControlData, ITaxDetail, ITaxUtilRequest } from '../models/interfaces/tax.interface';
 import * as dayjs from 'dayjs';
@@ -1642,5 +1642,26 @@ export class GeneralService {
             disableRipple,
             buttons
         };
+    }
+
+    /**
+     * Returns Operating system
+     *
+     * @returns {SUPPORTED_OPERATING_SYSTEMS}
+     * @memberof GeneralService
+     */
+    public getOperatingSystem(): SUPPORTED_OPERATING_SYSTEMS {
+        const platform = window.navigator.userAgent.toLowerCase(),
+            macosPlatforms = /(macintosh|macintel|macppc|mac68k|macos)/i,
+            windowsPlatforms = /(win32|win64|windows|wince)/i;
+        let operatingSystem = null;
+
+        if (macosPlatforms.test(platform)) {
+            operatingSystem = SUPPORTED_OPERATING_SYSTEMS.MacOS;
+        } else if (windowsPlatforms.test(platform)) {
+            operatingSystem = SUPPORTED_OPERATING_SYSTEMS.Windows;
+        }
+
+        return operatingSystem;
     }
 }
