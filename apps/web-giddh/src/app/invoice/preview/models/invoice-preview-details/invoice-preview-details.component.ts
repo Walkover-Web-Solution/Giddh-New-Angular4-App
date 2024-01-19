@@ -138,7 +138,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     /** Observable to get observable store data of voucher */
     public voucherDetails$: Observable<any>;
     /** This will use for default template */
-    public defaultTemplate: any;
+    public thermalTemplate: any;
     /** Stores the voucher API version of company */
     public voucherApiVersion: 1 | 2;
     /** Holds selected item voucher */
@@ -199,15 +199,11 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
 
     public ngOnInit(): void {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
-        // Hide Thermal Feature
         this.invoiceTemplatesService.getAllCreatedTemplates("sales").pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res) {
-                const defaultTemplate = res.body?.filter(res => res.isDefault);
-                if (defaultTemplate?.length > 0) {
-                    this.defaultTemplate = defaultTemplate[0];
-                    if (this.defaultTemplate.templateType === 'thermal_template') {
-                        this.showDownloadButton = false;
-                    }
+                const thermalTemplate = res.body?.filter(res => res.templateType === 'thermal_template');
+                if (thermalTemplate?.length > 0) {
+                    this.thermalTemplate = thermalTemplate[0];
                 }
             }
         });
@@ -715,9 +711,11 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
      * @memberof InvoicePreviewDetailsComponent
      */
     public printThermal(): void {
+        let hasPrinted = false;
         this.voucherDetails$.subscribe((res) => {
-            if (res && this.selectedItem?.uniqueName === res.uniqueName) {
-                this.thermalService.print(this.defaultTemplate, res);
+            if (res && !hasPrinted && this.selectedItem?.uniqueName === res.uniqueName) {
+                hasPrinted = true;
+                this.thermalService.print(this.thermalTemplate, res);
             } else {
                 this.store.dispatch(this.invoiceReceiptActions.getVoucherDetailsV4(this.selectedItem?.account?.uniqueName, {
                     invoiceNumber: this.selectedItem?.voucherNumber,

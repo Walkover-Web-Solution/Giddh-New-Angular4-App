@@ -48,7 +48,7 @@
                             ><i class="icon-favorite-selected"></i> Default Template</span
                         >
                         <span
-                            *ngIf="!template.isDefault"
+                            *ngIf="!template.isDefault && template.templateType !== 'thermal_template'"
                             class="badge btn-success mr-t2 cp font-12"
                             (click)="onSetTemplateAsDefault(template, 'invoice')"
                             ><i class="icon-favorite-selected"></i> Set as Default</span
@@ -87,7 +87,7 @@
                                 ><i class="icon-favorite-selected"></i> Default Template</span
                             >
                             <span
-                                *ngIf="!template.isDefaultForVoucher"
+                                *ngIf="!template.isDefaultForVoucher && template.templateType !== 'thermal_template'"
                                 class="badge btn-success mr-t2 cp font-12"
                                 (click)="onSetTemplateAsDefault(template, 'voucher')"
                                 ><i class="icon-favorite-selected"></i> Set as Default</span

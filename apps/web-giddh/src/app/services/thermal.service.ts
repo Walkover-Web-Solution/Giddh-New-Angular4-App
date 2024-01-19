@@ -2,11 +2,12 @@ import { Injectable } from '@angular/core';
 import { PrinterFormatService } from './printer.format.service';
 import { KJUR, KEYUTIL, stob64, hextorstr } from 'jsrsasign';
 import * as qz from "qz-tray";
-import { QZ_CERTIFICATE, QZ_PEM } from '../app.constant';
+import { QZ_CERTIFICATE, QZ_FILES, QZ_PEM, SUPPORTED_OPERATING_SYSTEMS } from '../app.constant';
 import { ToasterService } from './toaster.service';
 import { AppState } from '../store';
 import { Store } from '@ngrx/store';
 import { CommonActions } from '../actions/common.actions';
+import { GeneralService } from './general.service';
 
 @Injectable()
 export class ThermalService {
@@ -18,7 +19,8 @@ export class ThermalService {
         private printerFormat: PrinterFormatService,
         private toaster: ToasterService,
         private store: Store<AppState>,
-        private commonAction: CommonActions
+        private commonAction: CommonActions,
+        private generalService: GeneralService
     ) {
 
     }
@@ -719,7 +721,20 @@ export class ThermalService {
                         this.findAndPrint(header, table, footer);
                     })
                     .catch((e: any) => {
-                        console.error(e);
+                        const operatingSystem = this.generalService.getOperatingSystem();
+                        let qzFile = "";
+
+                        if (operatingSystem === SUPPORTED_OPERATING_SYSTEMS.MacOS) {
+                            qzFile = QZ_FILES.MacOS;
+                        } else if (operatingSystem === SUPPORTED_OPERATING_SYSTEMS.Windows) {
+                            qzFile = QZ_FILES.Windows;
+                        }
+
+                        if (qzFile) {
+                            qzFile = " Click here to <a href='" + qzFile + "' class='underline'>download</a>";
+                        }
+
+                        this.toaster.warningToastWithTime(10000, "Please start QZ Tray application." + qzFile);
                     });
             } else {
                 this.findAndPrint(header, table, footer);
@@ -755,7 +770,7 @@ export class ThermalService {
             this.printerFormat.endPrinter +
             this.printerFormat.fullCut,
         ];
-        return qz.print(config, txt);
+        qz.print(config, txt);
     }
 
     /**
