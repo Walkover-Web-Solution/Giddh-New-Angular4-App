@@ -1,5 +1,6 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { AfterViewInit, Component, ComponentFactoryResolver, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ComponentFactoryResolver, ElementRef, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import * as dayjs from 'dayjs';
@@ -45,10 +46,12 @@ import { SettingsUtilityService } from '../services/settings-utility.service';
 })
 export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     /** Change status modal instance */
-    @ViewChild('statusModal', { static: true }) public statusModal: ModalDirective;
     @ViewChild('branchModal', { static: false }) public branchModal: ModalDirective;
     @ViewChild('companyadd', { static: false }) public companyadd: ElementViewContainerRef;
     @ViewChild('confirmationModal', { static: false }) public confirmationModal: ModalDirective;
+    @ViewChild('statusModal', { static: true }) public statusModal: any;
+    @ViewChild('addCompanyModal', { static: true }) public addCompanyModal: any;
+    @ViewChild('closeAddressSidePane', { static: true }) public closeAddressSidePane: any;
     public bsConfig: Partial<BsDatepickerConfig> = {
         showWeekNumbers: false,
         dateInputFormat: GIDDH_DATE_FORMAT,
@@ -72,8 +75,6 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     public formFields: any[] = [];
     public universalDate$: Observable<any>;
     public dateRangePickerValue: Date[] = [];
-    /** Holds the state of aside menu */
-    public closeAddressSidePane: string = 'out';
     /** True if branch update is in progress, used to show ladda loader in aside menu */
     public isBranchChangeInProgress: boolean = false;
     /** Stores all the branches */
@@ -102,6 +103,9 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     public commonLocaleData: any = {};
     /** Holds branch to archive/unarchive */
     public branchStatusToUpdate: any;
+    /** Holds MatDailog Reference */
+    public statusModalRef: any;
+    public closeAddressSidePaneRef: any;
 
     constructor(
         private router: Router,
@@ -115,7 +119,8 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         private _generalService: GeneralService,
         private settingsUtilityService: SettingsUtilityService,
         private toasterService: ToasterService,
-        private settingsBranchService: SettingsBranchService
+        private settingsBranchService: SettingsBranchService,
+        public dialog: MatDialog,
     ) {
 
     }
@@ -213,8 +218,24 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     public ngAfterViewInit() {
+        if (this.isBranch) {
+            this.openCreateCompanyModal()
+        }
     }
 
+    // public openCreateCompanyModal(isUpdateMode?: boolean): void {
+    //     this.loadAddCompanyComponent(isUpdateMode);
+    //     this.hideAddBranchModal();
+    //     this.addCompanyModal?.show();
+    // }
+
+
+    public openCreateCompanyModal() {
+        this.dialog.open(this.addCompanyModal, {
+            panelClass: 'modal-dialog',
+            width: '1000px',
+        });
+    }
     /**
      * Handles update branch operation
      *
@@ -372,22 +393,18 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         if (event) {
             event.preventDefault();
         }
-        this.closeAddressSidePane = this.closeAddressSidePane === 'out' ? 'in' : 'out';
         this.isBranchChangeInProgress = false;
-        this.toggleBodyClass();
-    }
 
-    /**
-     * Toggles fixed body class when aside menu is udpated
-     *
-     * @memberof BranchComponent
-     */
-    public toggleBodyClass(): void {
-        if (this.closeAddressSidePane === 'in') {
-            document.querySelector('body').classList.add('fixed');
-        } else {
-            document.querySelector('body').classList.remove('fixed');
-        }
+        this.closeAddressSidePaneRef = this.dialog.open(this.closeAddressSidePane,
+            {
+                position: {
+                    right: '0'
+                },
+                width: '760px',
+                height: '100vh',
+                maxHeight: '100vh'
+            });
+
     }
 
     /**
@@ -411,7 +428,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         };
         this.settingsProfileService.updateBranchInfo(requestObj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === 'success') {
-                this.closeAddressSidePane = 'out';
+                this.closeAddressSidePaneRef.close();
                 this.store.dispatch(this.settingsBranchActions.GetALLBranches({ from: '', to: '' }));
                 this.toasterService.successToast(this.localeData?.branch_updated);
             } else {
@@ -532,15 +549,23 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
      * @param {*} branch
      * @memberof BranchComponent
      */
-    public confirmStatusUpdate(branch: any): void {
-        const unarchivedBranches = this.unFilteredBranchList?.filter(currentBranch => !currentBranch?.isArchived);
-        if (unarchivedBranches?.length > 1 || branch?.isArchived) {
-            this.branchStatusToUpdate = branch;
-            this.statusModal?.show();
-        } else {
-            this.toasterService.warningToast(this.localeData?.archive_notallowed);
-        }
+    // public confirmStatusUpdate(branch: any): void {
+    //     const unarchivedBranches = this.unFilteredBranchList?.filter(currentBranch => !currentBranch?.isArchived);
+    //     if (unarchivedBranches?.length > 1 || branch?.isArchived) {
+    //         this.branchStatusToUpdate = branch;
+    //         this.statusModal?.show();
+    //     } else {
+    //         this.toasterService.warningToast(this.localeData?.archive_notallowed);
+    //     }
 
+    // }
+
+    public confirmStatusUpdate() {
+
+        this.statusModalRef = this.dialog.open(this.statusModal, {
+            panelClass: 'modal-dialog',
+            width: '1000px',
+        });
     }
 
     /**
@@ -560,7 +585,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
             } else {
                 this.toasterService.errorToast(response?.message);
             }
-            this.statusModal?.hide();
+            this.statusModalRef.close();
         });
     }
 }

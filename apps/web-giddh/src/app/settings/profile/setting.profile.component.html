@@ -8,7 +8,7 @@
     <giddh-page-loader *ngIf="getCompanyProfileInProgress$ | async"></giddh-page-loader>
     <!--Tabs of Company Profile-->
     <div class="settings-profile-tabs" *ngIf="!addressOnly">
-        <tabset #staticTabs class="profile-tab-container">
+        <!-- <tabset #staticTabs class="profile-tab-container">
             <tab
                 [active]="this.currentTab === 'personal'"
                 (selectTab)="handleTabChanged('personal')"
@@ -75,6 +75,71 @@
                 >
                 </other-settings>
             </tab>
+        </tabset> -->
+
+        <div class="row">
+            <div class="col-lg-12 px-3">
+                <mat-tab-group 
+                    mat-stretch-tabs="false" 
+                    mat-align-tabs="start" 
+                    animationDuration="0ms"
+                    [selectedIndex]="activeTabIndex"
+                    (selectedTabChange)="onTabChange($event)"
+                >
+                    <mat-tab
+                        [label]="personalInformationTabHeading"
+                    >
+                        <personal-information
+                            (saveProfile)="handleSaveProfile($event)"
+                            [profileData]="companyProfileObj"
+                            [organizationType]="currentOrganizationType"
+                            [localeData]="localeData"
+                            [commonLocaleData]="commonLocaleData"
+                        >
+                        </personal-information>
+                    </mat-tab>
+                    <mat-tab
+                        [label]="
+                            companyProfileObj?.taxType
+                                ? localeData?.address + companyProfileObj?.taxType
+                                : localeData?.addresses
+                        "
+                    >
+                        <address-settings
+                            [addresses]="addresses"
+                            [(isAddressChangeInProgress)]="isAddressChangeInProgress"
+                            [(closeSidePane)]="closeAddressSidePane"
+                            [currentOrganizationUniqueName]="currentOrganizationUniqueName"
+                            (searchAddress)="handleSearchInAddress($event)"
+                            (pageChanged)="handlePageChanged($event)"
+                            [addressConfiguration]="addressConfiguration"
+                            (saveNewAddress)="createNewAddress($event)"
+                            (updatedAddress)="updateAddress($event)"
+                            (deleteAddress)="handleDeleteAddress($event)"
+                            (unLinkAddress)="handleAddressUnlinking($event)"
+                            (setDefaultAddress)="handleDefaultAddress($event)"
+                            [profileData]="companyProfileObj"
+                            [shouldShowLoader]="shouldShowAddressLoader"
+                            [paginationConfig]="addressTabPaginationData"
+                            [paginationLimit]="20"
+                            [organizationType]="currentOrganizationType"
+                            [localeData]="localeData"
+                            [commonLocaleData]="commonLocaleData"
+                            [taxType]="taxType"
+                        ></address-settings>
+                    </mat-tab>
+                    <mat-tab [label]="localeData?.other">
+                        <other-settings
+                            [organizationType]="currentOrganizationType"
+                            (saveProfile)="handleSaveProfile($event)"
+                            [profileData]="companyProfileObj"
+                            [localeData]="localeData"
+                        >
+                        </other-settings>
+                    </mat-tab>
+                </mat-tab-group>
+            </div>
+        </div>
             <!-- <tab
                 *ngIf="voucherApiVersion === 2 && currentOrganizationType === 'COMPANY'"
                 [active]="this.currentTab === 'portal'"
@@ -92,7 +157,6 @@
                 >
                 </portal-white-label>
             </tab> -->
-        </tabset>
     </div>
     <div class="settings-profile-tabs" *ngIf="addressOnly">
         <div

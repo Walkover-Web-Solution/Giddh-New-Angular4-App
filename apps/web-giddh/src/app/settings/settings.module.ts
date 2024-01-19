@@ -54,6 +54,10 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { SettingCampaignComponent } from './integration/campaign/setting-campaign/setting-campaign.component';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+
 import { NgxPlaidLinkModule } from "ngx-plaid-link";
 import { AsideMenuAccountModule } from '../shared/aside-menu-account/aside.menu.account.module';
 import { AccountNumberMaskModule } from '../shared/helpers/pipes/accountNumberMaskPipe/accountNumberMask.module';
@@ -121,6 +125,10 @@ import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
         MatChipsModule,
         MatAutocompleteModule,
         MatSlideToggleModule,
+        MatRadioModule,
+        MatTooltipModule,
+        MatMenuModule,
+        MatDatepickerModule,
         NgxPlaidLinkModule,
         AsideMenuAccountModule,
         AccountNumberMaskModule,

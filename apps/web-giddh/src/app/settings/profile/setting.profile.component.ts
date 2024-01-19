@@ -120,6 +120,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     public selectedState: any = '';
     public stateGstCode: any[] = [];
     public formFields: any[] = [];
+    public snackOpen : boolean = true;
 
     /** Observer to track get company profile API call in process */
     public getCompanyProfileInProgress$: Observable<boolean>;
@@ -183,6 +184,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     public showTaxColumn: boolean;
     /** Stores the voucher API version of company */
     public voucherApiVersion: 1 | 2;
+    /** Holds Active Tab Index */
+    public activeTabIndex: number = 0;
 
     constructor(
         private commonService: CommonService,
@@ -275,6 +278,9 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
 
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             this.currentTab = (params['referrer']) ? params['referrer'] : "personal";
+            if((params['referrer']) === 'personal') { this.activeTabIndex = 0; }
+            if((params['referrer']) === 'address') { this.activeTabIndex = 1; }
+            if((params['referrer']) === 'other') { this.activeTabIndex = 2; }
         });
 
         this.imgPath = isElectron ? 'assets/images/warehouse-vector.svg' : AppUrl + APP_FOLDER + 'assets/images/warehouse-vector.svg';
@@ -371,6 +377,26 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             }
         });
 
+    }
+
+    /**
+     * This will use for on tab changes
+     *
+     * @param {*} event
+     * @memberof SettingProfileComponent
+     */
+    public onTabChange(event: any): void {
+        this.activeTabIndex = event?.index;
+        if(event.index === 0){
+            // this.router.navigateByUrl('pages/settings/profile/personal')
+            this.handleTabChanged("personal");
+        }else if(event.index === 1){
+            // this.router.navigateByUrl('pages/settings/profile/address')
+            this.handleTabChanged("address");
+        }else{
+            // this.router.navigateByUrl('pages/settings/profile/other')
+            this.handleTabChanged("other");
+        }
     }
 
     public addGst() {
@@ -816,8 +842,14 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             .pipe(takeUntil(this.destroyed$))
             .subscribe(response => {
                 if (response) {
+                    console.log("response update",response);
+                    
                     if (response.status === 'success') {
                         this._toasty.successToast('Profile Updated Successfully.');
+                        this.snackOpen = false; 
+                        // setTimeout(() => { 
+                        //     this.snackOpen = false;                            
+                        // },9000)
                     } else {
                         this._toasty.errorToast(response.message);
                     }

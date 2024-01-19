@@ -8,6 +8,7 @@ import { ToasterService } from '../../services/toaster.service';
 import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.component';
 import { SettingsAsideConfiguration } from '../constants/settings.constant';
 import { PageLeaveUtilityService } from '../../services/page-leave-utility.service';
+import { cloneDeep } from '../../lodash-optimized';
 
 function validateFieldWithPatterns(patterns: Array<string>) {
     return (field: UntypedFormControl): { [key: string]: any } => {
@@ -40,7 +41,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
     /** Address configuration */
     @Input() public addressConfiguration: SettingsAsideConfiguration;
     /** Stores the address to be updated */
-    @Input() public addressToUpdate: any;
+    @Input() public addressToUpdate: any = null;
     /** Stores the branch to be updated */
     @Input() public branchToUpdate: any;
     /** Stores the address to be updated */
@@ -60,6 +61,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
     @Input() public hideLinkEntity: boolean = true;
     /** List of entities which can be archived */
     public entityArchived: string[] = ["BRANCH", "WAREHOUSE"];
+    public selectedEntity: any[] = [];
 
     constructor(
         private formBuilder: UntypedFormBuilder,
@@ -200,6 +202,16 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Update form control value on state select
+     *
+     * @param {*} event
+     * @memberof CreateAddressComponent
+     */
+    public selectState(event: any): void {
+        this.addressForm.get('state')?.patchValue(event.value);
+    }
+
+    /**
      * Unsubscribe from all listeners
      *
      * @memberof CreateAddressComponent
@@ -217,6 +229,12 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
      * @memberof CreateAddressComponent
      */
     public handleFormSubmit(): void {
+
+        let value = this.addressForm.get('linkedEntity')?.value.map(item => {
+            return item = item.uniqueName;
+        });
+        this.addressForm.get('linkedEntity').patchValue(value);
+
         if (this.addressConfiguration.type === SettingsAsideFormType.EditAddress || this.addressConfiguration.type === SettingsAsideFormType.CreateAddress) {
             const taxField = this.addressForm.get('taxNumber');
             if (taxField?.value && taxField.valid && this.addressConfiguration.tax && this.addressConfiguration.tax.name === 'GSTIN') {
@@ -312,10 +330,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
         }
         option.isDefault = !option.isDefault;
         if (option.isDefault) {
-            this.addressForm.get('linkedEntity')?.patchValue([
-                ...this.addressForm.get('linkedEntity')?.value,
-                option?.value
-            ]);
+            this.addressForm.get('linkedEntity')?.patchValue([...this.addressForm.get('linkedEntity')?.value, option?.value]);
         }
     }
 
@@ -326,9 +341,34 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
      * @memberof CreateAddressComponent
      */
     public selectEntity(option: any): void {
-        if (option.isDefault) {
+
+        console.log("option", option.value);
+        console.log("this.selectedEntity", this.selectedEntity);
+        
+
+        if (option.value[0]?.alias) {
+            if (!this.selectedEntity.some(item => item.uniqueName === (option.value[option.value.length - 1]?.uniqueName))) {
+                this.selectedEntity.push({ name: option.value[option.value.length - 1]?.alias, uniqueName: option.value[option.value.length - 1]?.uniqueName });
+            }else{
+                const index = this.selectedEntity.findIndex( item =>  item?.uniqueName == option.value[option.value.length - 1]?.uniqueName);
+                this.selectedEntity.splice(index, 1);
+            }
+        }
+
+        if (option?.isDefault) {
             option.isDefault = false;
         }
+    }
+
+    public removeItem(element: any): void {
+        const index = this.selectedEntity.findIndex(item => item == element);
+        this.addressForm.get('linkedEntity')?.value
+        console.log("address form", this.addressForm.get('linkedEntity')?.value);
+
+        // this.addressForm.get('linkedEntity')?.patchValue([...this.addressForm.get('linkedEntity')?.value,option.value[0]?.uniqueName]);
+        this.selectedEntity.splice(index, 1);
+        console.log("selectedEntity", this.selectedEntity);
+
     }
 
     /**
