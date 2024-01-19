@@ -167,7 +167,7 @@
                             (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                             checked
                         />
-                        GSTIN
+                        {{ customTemplate.sections["header"].data["gstin"].label }}
                     </div>
                     <div
                         class="form-group clearfix custom-field"
@@ -550,7 +550,13 @@
                         Mobile Number
                     </div>
                 </div>
-                <div class="clearfix" *ngIf="customTemplate?.templateType !== 'gst_template_d'">
+                <div
+                    class="clearfix"
+                    *ngIf="
+                        customTemplate?.templateType !== 'gst_template_d' &&
+                        customTemplate?.templateType !== 'thermal_template'
+                    "
+                >
                     <h3>Billing Details</h3>
                     <div *ngIf="fieldsAndVisibility.header.billingAddress" class="form-group">
                         <input
@@ -1087,7 +1093,7 @@
                                     type="text"
                                     hasFocus
                                     #item="hasFocus"
-                                    [maxlength]="customTemplate.templateType === 'thermal_template' ? 8 : 12"
+                                    [maxlength]="12"
                                     [class.error-box]="contentForm?.controls['it1']?.errors?.maxlength"
                                     class="form-control"
                                     name="it1"
@@ -1100,9 +1106,7 @@
                                 >
                                     <span class="max-character-label">Characters left:&nbsp;</span
                                     ><span class="max-character-value">{{
-                                        customTemplate.templateType === "thermal_template"
-                                            ? 8 - customTemplate.sections["table"].data["item"].label?.length
-                                            : 12 - customTemplate.sections["table"].data["item"].label?.length
+                                        12 - customTemplate.sections["table"].data["item"].label?.length
                                     }}</span>
                                 </ng-container>
                             </td>
@@ -1274,7 +1278,7 @@
                                     type="text"
                                     hasFocus
                                     #rate="hasFocus"
-                                    [maxlength]="customTemplate.templateType === 'thermal_template' ? 9 : 10"
+                                    [maxlength]="10"
                                     [class.error-box]="contentForm?.controls['rt1']?.errors?.maxlength"
                                     class="form-control"
                                     name="rt1"
@@ -1287,9 +1291,7 @@
                                 >
                                     <span class="max-character-label">Characters left:&nbsp;</span
                                     ><span class="max-character-value">{{
-                                        customTemplate.templateType === "thermal_template"
-                                            ? 9 - customTemplate.sections["table"].data["rate"].label?.length
-                                            : 10 - customTemplate.sections["table"].data["rate"].label?.length
+                                        10 - customTemplate.sections["table"].data["rate"].label?.length
                                     }}</span>
                                 </ng-container>
                             </td>
@@ -1297,7 +1299,7 @@
                         <tr
                             *ngIf="
                                 customTemplate.sections['table'].data['amountBeforeDiscount'] &&
-                                        voucherApiVersion === 2 &&
+                                voucherApiVersion === 2 &&
                                 customTemplate.templateType !== 'thermal_template'
                             "
                         >
