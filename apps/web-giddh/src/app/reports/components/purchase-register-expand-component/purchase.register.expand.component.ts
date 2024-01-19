@@ -109,7 +109,7 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
     /** Hold initial params data */
     private params: any = { from: '', to: '' };
     /**True if API called on single time */
-    public isDefaultLoader: boolean = false;
+    public isDefaultLoaded: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -162,7 +162,7 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
 
         this.isGetPurchaseDetailsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(success => {
             if (success) {
-                this.isDefaultLoader = true;
+                this.isDefaultLoaded = true;
             }
         });
 
@@ -181,7 +181,7 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
 
         /** Universal date observer */
         this.universalDate$.subscribe(dateObj => {
-            if (dateObj && this.isDefaultLoader) {
+            if (dateObj && this.isDefaultLoaded) {
                 this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
                 this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                 this.getDetailedPurchaseReport(this.getDetailedPurchaseRequestFilter);
