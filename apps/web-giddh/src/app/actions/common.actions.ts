@@ -2,7 +2,7 @@ import { map, switchMap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { CommonService } from '../services/common.service';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { CountryRequest, CountryResponse, CurrencyResponse, CallingCodesResponse, OnboardingFormRequest, OnboardingFormResponse } from '../models/api-models/Common';
+import { CountryRequest, CountryResponse, CallingCodesResponse, OnboardingFormRequest, OnboardingFormResponse } from '../models/api-models/Common';
 import { Injectable } from '@angular/core';
 import { Action } from '@ngrx/store';
 import { BaseResponse } from '../models/api-models/BaseResponse';
@@ -35,6 +35,7 @@ export class CommonActions {
     public static HAS_UNSAVED_CHANGES = 'HAS_UNSAVED_CHANGES';
     public static BYPASS_UNSAVED_CHANGES = 'BYPASS_UNSAVED_CHANGES';
     public static REAUTH_PLAID = 'REAUTH_PLAID';
+    public static SELECT_PRINTER = 'SELECT_PRINTER';
 
     public getCountry$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -307,6 +308,20 @@ export class CommonActions {
     public reAuthPlaid(data: any): CustomActions {
         return {
             type: CommonActions.REAUTH_PLAID,
+            payload: data
+        }
+    }
+
+    /**
+     * This will open the select printer dialog
+     *
+     * @param {boolean} data
+     * @returns {CustomActions}
+     * @memberof CommonActions
+     */
+    public selectPrinter(data?: any): CustomActions {
+        return {
+            type: CommonActions.SELECT_PRINTER,
             payload: data
         }
     }

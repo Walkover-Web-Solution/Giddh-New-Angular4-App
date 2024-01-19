@@ -73,14 +73,6 @@
                                         <p *ngIf="fieldsAndVisibility.header.billingAddress?.display">
                                             <strong>Walkover Web Solutions Pvt</strong>
                                         </p>
-                                        <p class="gst-cust" *ngIf="fieldsAndVisibility.header.billingGstin?.display">
-                                            {{
-                                                fieldsAndVisibility.header.billingGstin?.label?.length > 0
-                                                    ? fieldsAndVisibility.header.billingGstin?.label
-                                                    : "GSTIN"
-                                            }}
-                                            2344ACM9769L1Z0
-                                        </p>
                                     </td>
                                     <td class="invdate">
                                         <ng-container *ngIf="voucherType === 'sales'">
@@ -256,16 +248,17 @@
                                 <td>90,000.00</td>
                             </tr>
                             <tr *ngIf="fieldsAndVisibility.footer.taxBifurcation?.display">
-                                <td class="text-left tax-gst">
-                                    GST9% <span class="right-tax-amount"> 45,000.00 </span>
-                                </td>
                                 <td></td>
+                                <td></td>
+                                <td>GST9%</td>
+                                <td>45,000.00</td>
                             </tr>
                             <tr *ngIf="fieldsAndVisibility.footer.taxBifurcation?.display">
-                                <td class="text-left tax-gst">
+                                <td></td>
+                                <td></td>
+                                <td class="text-right tax-gst">
                                     GST12% <span class="right-tax-amount">45,000.00</span>
                                 </td>
-                                <td></td>
                             </tr>
                             <tr
                                 *ngIf="

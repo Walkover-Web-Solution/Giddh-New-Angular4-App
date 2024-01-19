@@ -20,6 +20,7 @@ export interface CurrentCommonState {
     hasUnsavedChanges: boolean;
     bypassAllUnsavedChanges: boolean;
     reAuthPlaid: any;
+    selectPrinter: any;
 }
 
 const initialState: CurrentCommonState = {
@@ -34,7 +35,8 @@ const initialState: CurrentCommonState = {
     importBankTransactions: null,
     hasUnsavedChanges: false,
     bypassAllUnsavedChanges: false,
-    reAuthPlaid: null
+    reAuthPlaid: null,
+    selectPrinter: null
 };
 
 export function CommonReducer(state: CurrentCommonState = initialState, action: CustomActions): CurrentCommonState {
@@ -115,6 +117,10 @@ export function CommonReducer(state: CurrentCommonState = initialState, action: 
 
         case CommonActions.REAUTH_PLAID: {
             return Object.assign({}, state, { reAuthPlaid: action.payload });
+        }
+
+        case CommonActions.SELECT_PRINTER: {
+            return Object.assign({}, state, { selectPrinter: action.payload });
         }
 
         default:

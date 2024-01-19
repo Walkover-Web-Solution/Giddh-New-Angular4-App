@@ -9,7 +9,7 @@ import { GeneralService } from 'apps/web-giddh/src/app/services/general.service'
 import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service';
 import { PurchaseRecordService } from 'apps/web-giddh/src/app/services/purchase-record.service';
 import { SalesService } from 'apps/web-giddh/src/app/services/sales.service';
-//import { ThermalService } from 'apps/web-giddh/src/app/services/thermal.service';
+import { ThermalService } from 'apps/web-giddh/src/app/services/thermal.service';
 import { saveAs } from 'file-saver';
 import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
 import { fromEvent, Observable, ReplaySubject } from 'rxjs';
@@ -29,6 +29,10 @@ import { AppState } from '../../../../store';
 import { ProformaListComponent } from '../../../proforma/proforma-list.component';
 import { InvoiceActions } from 'apps/web-giddh/src/app/actions/invoice/invoice.actions';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
+import { InvoiceTemplatesService } from 'apps/web-giddh/src/app/services/invoice.templates.service';
+import { CommonActions } from 'apps/web-giddh/src/app/actions/common.actions';
+import { NewConfirmationModalComponent } from 'apps/web-giddh/src/app/theme/new-confirmation-modal/confirmation-modal.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
     selector: 'invoice-preview-details-component',
@@ -134,13 +138,15 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     /** Observable to get observable store data of voucher */
     public voucherDetails$: Observable<any>;
     /** This will use for default template */
-    public defaultTemplate: any;
+    public thermalTemplate: any;
     /** Stores the voucher API version of company */
     public voucherApiVersion: 1 | 2;
     /** Holds selected item voucher */
     private selectedItemVoucher: any;
     /** True if pdf is available */
     public isPdfAvailable: boolean = true;
+    /** False if template type is thermal */
+    public showDownloadButton: boolean = true;
 
     constructor(
         private cdr: ChangeDetectorRef,
@@ -161,8 +167,11 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         private modalService: BsModalService,
         private domSanitizer: DomSanitizer,
         private commonService: CommonService,
-        //private thermalService: ThermalService,
-        private invoiceAction: InvoiceActions) {
+        private thermalService: ThermalService,
+        private invoiceTemplatesService: InvoiceTemplatesService,
+        private invoiceAction: InvoiceActions,
+        private commonAction: CommonActions,
+        private dialog: MatDialog) {
         this.breakPointObservar.observe([
             '(max-width: 1023px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
@@ -171,10 +180,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         this.sessionKey$ = this.store.pipe(select(p => p.session.user.session.id), takeUntil(this.destroyed$));
         this.companyName$ = this.store.pipe(select(p => p.session.companyUniqueName), takeUntil(this.destroyed$));
         this.isUpdateVoucherActionSuccess$ = this.store.pipe(select(s => s.proforma.isUpdateProformaActionSuccess), takeUntil(this.destroyed$));
-        this.voucherDetails$ = this.store.pipe(
-            select((res) => res.receipt.voucher),
-            takeUntil(this.destroyed$)
-        );
+        this.voucherDetails$ = this.store.pipe(select((res) => res.receipt.voucher), takeUntil(this.destroyed$));
     }
 
     /**
@@ -193,15 +199,14 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
 
     public ngOnInit(): void {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
-        // Hide Thermal Feature
-        // this.invoiceTemplatesService.getAllCreatedTemplates("sales").pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-        //     if (res) {
-        //         const defaultTemplate = res.body?.filter(res => res.isDefault);
-        //         if (defaultTemplate?.length > 0) {
-        //             this.defaultTemplate = defaultTemplate[0];
-        //         }
-        //     }
-        // });
+        this.invoiceTemplatesService.getAllCreatedTemplates("sales").pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+            if (res) {
+                const thermalTemplate = res.body?.filter(res => res.templateType === 'thermal_template');
+                if (thermalTemplate?.length > 0) {
+                    this.thermalTemplate = thermalTemplate[0];
+                }
+            }
+        });
         if (document.getElementsByClassName("sidebar-collapse")?.length > 0) {
             this.isSidebarExpanded = false;
         } else {
@@ -239,6 +244,28 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         });
 
         this.companyName$.pipe(take(1)).subscribe(companyUniqueName => this.companyUniqueName = companyUniqueName);
+
+        this.store.pipe(select(s => s.common?.selectPrinter), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.store.dispatch(this.commonAction.selectPrinter(null));
+                const configuration = this.generalService.getPrinterSelectionConfiguration(response, this.commonLocaleData);
+
+                let dialogRef = this.dialog.open(NewConfirmationModalComponent, {
+                    width: '630px',
+                    data: {
+                        configuration: configuration
+                    }
+                });
+
+                dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+                    document.querySelector('body').classList.remove('fixed');
+                    if (response !== "Close") {
+                        this.generalService.setParameterInLocalStorage("defaultPrinter", response);
+                        this.printThermal();
+                    }
+                });
+            }
+        });
     }
 
     public ngOnChanges(changes: SimpleChanges): void {
@@ -684,9 +711,13 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
      * @memberof InvoicePreviewDetailsComponent
      */
     public printThermal(): void {
+        let hasPrinted = false;
         this.voucherDetails$.subscribe((res) => {
-            if (res) {
-                //this.thermalService.print(this.defaultTemplate, res);
+            if (res && this.selectedItem?.uniqueName === res.uniqueName) {
+                if (!hasPrinted) {
+                    hasPrinted = true;
+                    this.thermalService.print(this.thermalTemplate, res);
+                }
             } else {
                 this.store.dispatch(this.invoiceReceiptActions.getVoucherDetailsV4(this.selectedItem?.account?.uniqueName, {
                     invoiceNumber: this.selectedItem?.voucherNumber,
