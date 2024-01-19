@@ -102,7 +102,7 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
     public selectedRangeLabel: any = "";
     /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
-    /* This will store the x/y position of the field to show datepicker undenr it */
+    /* This will store the x/y position of the field to show datepicker under it */
     public dateFieldPosition: any = { x: 0, y: 0 };
     /** Modal reference */
     public modalRef: BsModalRef;
