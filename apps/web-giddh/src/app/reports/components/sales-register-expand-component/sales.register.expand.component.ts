@@ -17,8 +17,6 @@ import { SalesPurchaseRegisterExportComponent } from '../../sales-purchase-regis
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_MM_DD_YYYY, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 import * as dayjs from 'dayjs';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { param } from 'jquery';
-
 @Component({
     selector: 'sales-register-expand',
     templateUrl: './sales.register.expand.component.html',
