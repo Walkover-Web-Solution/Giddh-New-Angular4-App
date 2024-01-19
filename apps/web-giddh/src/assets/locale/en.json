@@ -330,6 +330,7 @@
     "app_vehicle_no": "Vehicle No",
     "app_mode": "Mode",
     "app_print": "Print",
+    "app_print_thermal": "Print Receipt",
     "app_export_pdf": "Export Pdf",
     "app_create_credit_note": "Create Credit Note",
     "app_receipt_no": "Receipt No.",
@@ -717,5 +718,6 @@
     "app_hostname": "Hostname",
     "app_copied":"Copied...",
     "domain_verification":"Domain verification for outbound mail",
-    "app_renew_bank_connection": "Renew Bank Connection"
+    "app_renew_bank_connection": "Renew Bank Connection",
+    "app_select_printer": "Select Printer"
 }

@@ -9,7 +9,7 @@ import { cloneDeep, find, orderBy } from '../lodash-optimized';
 import { OrganizationType } from '../models/user-login-state';
 import { AllItems } from '../shared/helpers/allItems';
 import { Router } from '@angular/router';
-import { AdjustedVoucherType, BROADCAST_CHANNELS, JOURNAL_VOUCHER_ALLOWED_DOMAINS } from '../app.constant';
+import { AdjustedVoucherType, BROADCAST_CHANNELS, JOURNAL_VOUCHER_ALLOWED_DOMAINS, SUPPORTED_OPERATING_SYSTEMS } from '../app.constant';
 import { SalesOtherTaxesCalculationMethodEnum, VoucherTypeEnum } from '../models/api-models/Sales';
 import { ITaxControlData, ITaxDetail, ITaxUtilRequest } from '../models/interfaces/tax.interface';
 import * as dayjs from 'dayjs';
@@ -1607,5 +1607,61 @@ export class GeneralService {
         const seconds = String(now.getSeconds()).padStart(2, '0');
 
         return `${day}-${month}-${year} ${hours}:${minutes}:${seconds}`;
+    }
+
+    /**
+     * Returns configuration for printer selection
+     *
+     * @param {any[]} printers
+     * @param {*} commonLocaleData
+     * @returns {ConfirmationModalConfiguration}
+     * @memberof GeneralService
+     */
+    public getPrinterSelectionConfiguration(printers: any[], commonLocaleData: any): ConfirmationModalConfiguration {
+        const buttons: Array<ConfirmationModalButton> = [];
+        printers?.forEach(printer => {
+            buttons.push({
+                text: printer,
+                color: 'primary',
+                cssClass: 'button-no-background'
+            });
+        });
+
+        const headerText: string = commonLocaleData?.app_select_printer;
+        const headerCssClass: string = 'd-inline-block mr-1';
+        const messageCssClass: string = 'mr-b1 text-light';
+        const footerCssClass: string = 'mr-b1';
+        const disableRipple: boolean = true;
+        return {
+            headerText,
+            headerCssClass,
+            messageText: '',
+            messageCssClass,
+            footerText: '',
+            footerCssClass,
+            disableRipple,
+            buttons
+        };
+    }
+
+    /**
+     * Returns Operating system
+     *
+     * @returns {SUPPORTED_OPERATING_SYSTEMS}
+     * @memberof GeneralService
+     */
+    public getOperatingSystem(): SUPPORTED_OPERATING_SYSTEMS {
+        const platform = window.navigator.userAgent.toLowerCase(),
+            macosPlatforms = /(macintosh|macintel|macppc|mac68k|macos)/i,
+            windowsPlatforms = /(win32|win64|windows|wince)/i;
+        let operatingSystem = null;
+
+        if (macosPlatforms.test(platform)) {
+            operatingSystem = SUPPORTED_OPERATING_SYSTEMS.MacOS;
+        } else if (windowsPlatforms.test(platform)) {
+            operatingSystem = SUPPORTED_OPERATING_SYSTEMS.Windows;
+        }
+
+        return operatingSystem;
     }
 }

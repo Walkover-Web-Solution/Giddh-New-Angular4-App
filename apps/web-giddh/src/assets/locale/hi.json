@@ -330,6 +330,7 @@
     "app_vehicle_no": "गाडी नंबर",
     "app_mode": "मोड",
     "app_print": "छाप",
+    "app_print_thermal": "प्रिंट रसीद",
     "app_export_pdf": "पीडीएफ निर्यात करें",
     "app_create_credit_note": "क्रडिट नोट बनाएँ",
     "app_receipt_no": "रसीद संख्या।",
@@ -714,5 +715,6 @@
     "app_hostname": "होस्टनेम",
     "app_copied":"कॉपी किया गया...",
     "domain_verification": "बाहरी मेल के लिए डोमेन सत्यापन",
-    "app_renew_bank_connection": "बैंक कनेक्शन नवीनीकृत करें"
+    "app_renew_bank_connection": "बैंक कनेक्शन नवीनीकृत करें",
+    "app_select_printer": "प्रिंटर चुनें"
 }

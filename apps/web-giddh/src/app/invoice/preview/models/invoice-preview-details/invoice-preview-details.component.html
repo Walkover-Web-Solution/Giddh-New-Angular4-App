@@ -361,8 +361,7 @@
 
                                                 <span
                                                     *ngIf="
-                                                        shouldShowPrintDocument &&
-                                                        defaultTemplate?.templateType !== 'thermal_template'
+                                                        shouldShowPrintDocument
                                                     "
                                                     [ngClass]="{
                                                         'disabled':
@@ -379,31 +378,37 @@
                                                         ><i class="fa fa-print"></i
                                                     ></a>
                                                 </span>
-                                                <!-- Hide Thermal Feature -->
-                                                <!-- <span *ngIf="defaultTemplate?.templateType === 'thermal_template'">
+                                                <!-- Thermal Feature -->
+                                                <span *ngIf="thermalTemplate?.templateType === 'thermal_template'">
                                                     <a
                                                         href="javascript:;"
-                                                        [tooltip]="commonLocaleData?.app_print"
+                                                        [tooltip]="commonLocaleData?.app_print_thermal"
                                                         placement="top"
                                                         (click)="printThermal()"
                                                         ><i class="fa fa-print"></i
                                                     ></a>
-                                                </span> -->
+                                                </span>
 
                                                 <span
-                                                    *ngIf="selectedItem?.voucherType === 'purchase' && pdfPreviewLoaded"
+                                                    *ngIf="
+                                                        selectedItem?.voucherType === 'purchase' &&
+                                                        pdfPreviewLoaded &&
+                                                        showDownloadButton
+                                                    "
                                                 >
                                                     <a
                                                         href="javascript:;"
                                                         [tooltip]="commonLocaleData?.app_download_pdf"
                                                         placement="top"
                                                         (click)="downloadPurchaseBillPDF()"
-                                                        ><i class="icon-file"></i
+                                                        ><i class="icon-download-circle"></i
                                                     ></a>
                                                 </span>
 
                                                 <span
-                                                    *ngIf="selectedItem?.voucherType !== 'purchase'"
+                                                    *ngIf="
+                                                        selectedItem?.voucherType !== 'purchase' && showDownloadButton
+                                                    "
                                                     [ngClass]="{
                                                         'disabled':
                                                             isVoucherDownloading ||
@@ -417,11 +422,12 @@
                                                         [tooltip]="commonLocaleData?.app_download_pdf"
                                                         placement="top"
                                                         (click)="downloadPdf()"
-                                                        ><i class="icon-file"></i
+                                                        ><i class="icon-download-circle"></i
                                                     ></a>
                                                 </span>
 
                                                 <span
+                                                    class="download-file-text"
                                                     *ngIf="
                                                         selectedItem?.voucherType === 'purchase' &&
                                                         attachedDocumentType?.type &&
@@ -581,8 +587,10 @@
                             </h5>
                         </div>
                     </div>
-
-                    <div class="invoice-image-section">
+                    <div *ngIf="!showDownloadButton" class="h-100 d-flex justify-content-center align-items-center">
+                        <span class="font-15">{{ localeData?.thermal_message }}</span>
+                    </div>
+                    <div class="invoice-image-section" *ngIf="showDownloadButton">
                         <div class="relative">
                             <div class="position-relative" *ngIf="isVoucherDownloading || isFileUploading">
                                 <giddh-page-loader [cssClass]="'mb-0 mt-0'"></giddh-page-loader>

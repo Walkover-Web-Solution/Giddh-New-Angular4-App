@@ -39,6 +39,12 @@ export class ToasterService {
         this.toaster.warning(msg, title, Object.assign({}, DEFAULT_TOASTER_OPTIONS));
     }
 
+    public warningToastWithTime(timeout: number, msg: string, title: string = APP_DEFAULT_TITLE): void {
+        let defaultToasterOptions = DEFAULT_TOASTER_OPTIONS_WITH_HTML;
+        defaultToasterOptions.timeOut = timeout;
+        this.toaster.warning(msg, title, Object.assign({}, defaultToasterOptions));
+    }
+
     public infoToast(msg: string, title: string = APP_DEFAULT_TITLE): void {
         this.toaster.info(msg, title, Object.assign({}, DEFAULT_TOASTER_OPTIONS));
     }
