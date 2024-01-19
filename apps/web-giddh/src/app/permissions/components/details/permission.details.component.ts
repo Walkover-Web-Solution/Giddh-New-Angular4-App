@@ -207,7 +207,7 @@ export class PermissionDetailsComponent implements OnInit, AfterViewInit, OnDest
                     }
                 });
             }
-        }, 500);
+        }, 100);
 
         return response;
     }
