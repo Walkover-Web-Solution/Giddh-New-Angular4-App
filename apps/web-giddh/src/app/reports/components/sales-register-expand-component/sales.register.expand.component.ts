@@ -113,7 +113,7 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
     /** Hold initial params data */
     private params: any = { from: '', to: '' };
     /** True if API called on single time*/
-    public isDefaultLoader: boolean = false;
+    public isDefaultLoaded: boolean = false;
 
     constructor(private store: Store<AppState>, private invoiceReceiptActions: InvoiceReceiptActions, private activeRoute: ActivatedRoute, private router: Router, private _cd: ChangeDetectorRef, private breakPointObservar: BreakpointObserver, private generalService: GeneralService, private modalService: BsModalService, private dialog: MatDialog) {
         this.salesRegisteDetailedResponse$ = this.store.pipe(select(appState => appState.receipt.SalesRegisteDetailedResponse), takeUntil(this.destroyed$));
@@ -142,7 +142,7 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
 
         this.isGetSalesDetailsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(success => {
             if (success) {
-                this.isDefaultLoader = true;
+                this.isDefaultLoaded = true;
             }
         });
 
@@ -161,7 +161,7 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
 
         /** Universal date observer */
         this.universalDate$.subscribe(dateObj => {
-            if (dateObj && this.isDefaultLoader) {
+            if (dateObj && this.isDefaultLoaded) {
                 this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
                 this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                 this.getDetailedSalesReport(this.getDetailedsalesRequestFilter);
