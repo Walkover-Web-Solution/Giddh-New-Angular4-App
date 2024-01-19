@@ -1,212 +1,254 @@
-<div class="relative adjust-group-page">
-    <hamburger-menu [pageHeading]="'Adjust Product/Service - Dummy Product Name Furniture'"></hamburger-menu>
-    <!-- <i class="icon-cross pull-right pd cursor-pointer" [routerLink]="['/pages/inventory/v2/adjust-inventory']"></i> -->
-    <span class="pull-right pd cursor-pointer back-to-page" [routerLink]="['/pages/inventory/v2/adjust-inventory']"
-        >Back</span
-    >
-    <div class="adjust-field-wrapper mt-2 relative">
-        <div>
-            <form>
-                <div class="col-md-8 col-lg-8 col-xl-6 col-12">
-                    <div class="row mr-b15">
-                        <div class="col-sm-4 col-lg-4">
-                            <label>Mode of Adjustment <span class="red-text">*</span></label>
+<ng-container
+    appTranslate
+    [file]="'inventory/adjustment'"
+    (commonLocaleData)="commonLocaleData = $event"
+    (localeData)="localeData = $event"
+>
+    <div class="relative adjust-group-page">
+        <hamburger-menu [pageHeading]="'Adjust Product/Service - Dummy Product Name Furniture'"></hamburger-menu>
+        <button
+            mat-stroked-button
+            class="pull-right pd cursor-pointer back-to-page mr-t15 mr-r15"
+            [routerLink]="['/pages/inventory/v2/adjust-inventory']"
+        >
+            Back
+        </button>
+        <div class="adjust-field-wrapper pd-l15 pd-r15 pd-t1 relative">
+            <div class="form-wrapper">
+                <form>
+                    <div>
+                        <div class="mr-b15">
+                            <!-- <div class="">
+                                <label>Mode of Adjustment <span class="red-text">*</span></label>
+                            </div> -->
+                            <div class="">
+                                <mat-radio-group color="primary" name="adjustment-mode" required="true">
+                                    <mat-radio-button [value]="'qty'">Quantity </mat-radio-button>
+                                    <mat-radio-button [value]="'value'">Value </mat-radio-button>
+                                </mat-radio-group>
+                                <!-- <span class="p-0 mr-3">
+                                    <input
+                                        id="mode-of-quantity"
+                                        class="radio-custom cp ml-0"
+                                        type="radio"
+                                        name="modeOfadjustment"
+                                        [value]=""
+                                    />
+                                    <label for="mode-of-quantity" class="radio-custom-label">Quantity</label>
+                                </span> -->
+                                <!-- <span class="p-0 mr-3">
+                                    <input
+                                        id="mode-of-value"
+                                        class="radio-custom cp ml-0"
+                                        type="radio"
+                                        name="modeOfadjustment"
+                                        [value]=""
+                                    />
+                                    <label for="mode-of-value" class="radio-custom-label">Value</label>
+                                </span> -->
+                            </div>
                         </div>
-                        <div class="col-sm-8 col-lg-6">
-                            <span class="p-0 mr-3">
-                                <input
-                                    id="mode-of-quantity"
-                                    class="radio-custom cp ml-0"
-                                    type="radio"
-                                    name="modeOfadjustment"
-                                    [value]=""
-                                />
-                                <label for="mode-of-quantity" class="radio-custom-label">Quantity</label>
-                            </span>
-                            <span class="p-0 mr-3">
-                                <input
-                                    id="mode-of-value"
-                                    class="radio-custom cp ml-0"
-                                    type="radio"
-                                    name="modeOfadjustment"
-                                    [value]=""
-                                />
-                                <label for="mode-of-value" class="radio-custom-label">Value</label>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="row mr-b15">
-                        <div class="col-sm-4 col-lg-4">
-                            <label>Reference No. <span class="red-text">*</span></label>
-                        </div>
-                        <div class="col-sm-8 col-lg-6">
-                            <input
-                                type="text"
-                                id="reference-no"
-                                class="form-control"
-                                placeholder="Enter Reference Number"
-                            />
-                        </div>
-                    </div>
-                    <div class="row mr-b15">
-                        <div class="col-sm-4 col-lg-4">
-                            <label>Date <span class="red-text">*</span></label>
-                        </div>
-                        <div class="col-sm-8 col-lg-6">
-                            <giddh-datepicker name="adjustGroupDate"></giddh-datepicker>
-                        </div>
-                    </div>
-                    <div class="row mr-b15">
-                        <div class="col-sm-4 col-lg-4">
-                            <label>Account <span class="red-text">*</span></label>
-                        </div>
-                        <div class="col-sm-8 col-lg-6">
-                            <sh-select id="account-no" placeholder="Select Account"></sh-select>
-                        </div>
-                    </div>
-                    <div class="row mr-b15">
-                        <div class="col-sm-4 col-lg-4">
-                            <label>Reason <span class="red-text">*</span></label>
-                        </div>
-                        <div class="col-sm-8 col-lg-6">
-                            <sh-select id="reason" placeholder="Select Reason"></sh-select>
-                        </div>
-                    </div>
-                </div>
-            </form>
-        </div>
-        <div class="bg-white px-3 py-3 mt-4 mb-4">
-            <div class="table-responsive">
-                <!-- table if quantity option selected -->
-                <table class="table giddh-table">
-                    <thead>
-                        <tr>
-                            <th width="20px">#</th>
-                            <th width="220px">Product/Service/Group</th>
-                            <th width="120px">Method</th>
-                            <th width="120px">Qty in Hand</th>
-                            <th width="120px">Change Qty</th>
-                            <th width="120px">New Qty</th>
-                            <th width="100px">New Value</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>
-                                <div class="d-flex mb-2">
-                                    <span>
-                                        <img src="{{ imgPath }}Login-Page-Image.png" width="36" height="36" />
-                                    </span>
-                                    <sh-select
-                                        id="select-group-product-service"
-                                        placeholder="Select Name"
-                                        class="mr-l15 w-100"
-                                    ></sh-select>
-                                </div>
-                                <textarea placeholder="Add Description" class="form-control"></textarea>
-                            </td>
-                            <td>
+                        <div class="mr-b15">
+                            <!-- <div class="">
+                                <label>Reference No. <span class="red-text">*</span></label>
+                            </div>
+                            <div class="">
                                 <input
                                     type="text"
-                                    id="percentage"
-                                    class="form-control mb-2"
-                                    value="Percentage"
-                                    disabled
+                                    id="reference-no"
+                                    class="form-control"
+                                    placeholder="Enter Reference Number"
                                 />
-                                <input type="text" id="percent-value" value="0%" class="form-control" />
-                            </td>
-                            <td>
-                                <input type="text" id="qty-in-hand" value="12,020" class="form-control" />
-                            </td>
-                            <td>
-                                <input type="text" id="change-qty" placeholder="Ex: +10, -10" class="form-control" />
-                            </td>
-                            <td>
-                                <input type="text" id="new-qty" value="12,020" class="form-control" />
-                            </td>
-                            <td>2000</td>
-                        </tr>
-                    </tbody>
-                </table>
+                            </div> -->
+                            <input-field
+                                [name]="'reference-no'"
+                                [label]="'Reference Number'"
+                                [placeholder]="'Enter Reference Number'"
+                                [type]="'text'"
+                                [required]="true"
+                            >
+                            </input-field>
+                        </div>
+                        <div class="mr-b15">
+                            <!-- <div class="">
+                                <label>Date <span class="red-text">*</span></label>
+                            </div>
+                            <div class="">
+                                <giddh-datepicker name="adjustGroupDate"></giddh-datepicker>
+                            </div> -->
+                            <div class="direct-mat-datepicker">
+                                <giddh-datepicker
+                                    (dateSelected)="selectDate($event)"
+                                    [minDate]="''"
+                                    name="date"
+                                    [cssClass]="'w-100'"
+                                    [showToggleIcon]="false"
+                                    [appearance]="'outline'"
+                                    [placeholder]="'Date'"
+                                >
+                                </giddh-datepicker>
+                            </div>
+                        </div>
+                        <div class="mr-b15">
+                            <!-- <div class="">
+                                <label>Account <span class="red-text">*</span></label>
+                            </div>
+                            <div class="">
+                                <sh-select id="account-no" placeholder="Select Account"></sh-select>
+                            </div> -->
+                            <dropdown-field
+                                [name]="'account'"
+                                [label]="'Account'"
+                                [placeholder]="'Select Account'"
+                                [options]="dummyOptions"
+                                (selectedOption)="selectAccount($event)"
+                                [defaultValue]="''"
+                            >
+                            </dropdown-field>
+                        </div>
+                        <div class="mr-b15">
+                            <!-- <div class="">
+                                <label>Reason <span class="red-text">*</span></label>
+                            </div>
+                            <div class="">
+                                <sh-select id="reason" placeholder="Select Reason"></sh-select>
+                            </div> -->
+                            <dropdown-field
+                                [name]="'reason'"
+                                [label]="'Reason'"
+                                [placeholder]="'Select Reason'"
+                                [options]="dummyOptions"
+                                (selectedOption)="selectAccount($event)"
+                                [defaultValue]="''"
+                            >
+                            </dropdown-field>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="bg-white py-3 mt-4 mb-4">
+                <div class="table-responsive">
+                    <!-- table if quantity option selected -->
+                    <table class="table giddh-table">
+                        <thead>
+                            <tr>
+                                <th width="20px">#</th>
+                                <th width="220px">Product/Service/Group</th>
+                                <th width="120px">Method</th>
+                                <th width="120px">Qty in Hand</th>
+                                <th width="120px">Change Qty</th>
+                                <th width="120px">New Qty</th>
+                                <th width="100px">New Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>
+                                    <div class="d-flex mb-2">
+                                        <sh-select
+                                            id="select-group-product-service"
+                                            placeholder="Select Name"
+                                            class="w-100"
+                                        ></sh-select>
+                                    </div>
+                                    <textarea placeholder="Add Description" class="form-control"></textarea>
+                                </td>
+                                <td>
+                                    <input
+                                        type="text"
+                                        id="percentage"
+                                        class="form-control mb-2"
+                                        value="Percentage"
+                                        disabled
+                                    />
+                                    <input type="text" id="percent-value" value="0%" class="form-control" />
+                                </td>
+                                <td>
+                                    <input type="text" id="qty-in-hand" value="12,020" class="form-control" />
+                                </td>
+                                <td>
+                                    <input
+                                        type="text"
+                                        id="change-qty"
+                                        placeholder="Ex: +10, -10"
+                                        class="form-control"
+                                    />
+                                </td>
+                                <td>
+                                    <input type="text" id="new-qty" value="12,020" class="form-control" />
+                                </td>
+                                <td>2000</td>
+                            </tr>
+                        </tbody>
+                    </table>
 
-                <!-- table if value option selected -->
-                <table class="table giddh-table" hidden>
-                    <thead>
-                        <tr>
-                            <th width="20px">#</th>
-                            <th width="220px">Product/Service/Group</th>
-                            <th width="120px">Method</th>
-                            <th width="120px">Current Value</th>
-                            <th width="120px">Changed Value</th>
-                            <th width="120px">New Qty</th>
-                            <th width="100px">New Value</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>
-                                <div class="d-flex mb-2">
-                                    <span>
-                                        <img src="{{ imgPath }}Login-Page-Image.png" width="36" height="36" />
-                                    </span>
-                                    <sh-select
-                                        id="select-group-product-service"
-                                        placeholder="Select Name"
-                                        class="mr-l15 w-100"
-                                    >
-                                    </sh-select>
-                                </div>
-                                <textarea placeholder="Add Description" class="form-control"></textarea>
-                            </td>
-                            <td>
-                                <input
-                                    type="text"
-                                    id="percentage"
-                                    class="form-control mb-2"
-                                    value="Percentage"
-                                    disabled
-                                />
-                                <input type="text" id="percent-value" value="0%" class="form-control" />
-                            </td>
-                            <td>
-                                <input type="text" id="qty-in-hand" value="12,020" class="form-control" />
-                            </td>
-                            <td>
-                                <input type="text" id="change-qty" placeholder="Ex: +10, -10" class="form-control" />
-                            </td>
-                            <td>
-                                <input type="text" id="new-qty" value="12,020" class="form-control" />
-                            </td>
-                            <td>2000</td>
-                        </tr>
-                    </tbody>
-                </table>
+                    <!-- table if value option selected -->
+                    <table class="table giddh-table">
+                        <thead>
+                            <tr>
+                                <th width="20px">#</th>
+                                <th width="220px">Product/Service/Group</th>
+                                <th width="120px">Method</th>
+                                <th width="120px">Current Value</th>
+                                <th width="120px">Changed Value</th>
+                                <th width="120px">New Qty</th>
+                                <th width="100px">New Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>
+                                    <div class="d-flex mb-2">
+                                        <sh-select
+                                            id="select-group-product-service"
+                                            placeholder="Select Name"
+                                            class="w-100"
+                                        >
+                                        </sh-select>
+                                    </div>
+                                    <textarea placeholder="Add Description" class="form-control"></textarea>
+                                </td>
+                                <td>
+                                    <input
+                                        type="text"
+                                        id="percentage"
+                                        class="form-control mb-2"
+                                        value="Percentage"
+                                        disabled
+                                    />
+                                    <input type="text" id="percent-value" value="0%" class="form-control" />
+                                </td>
+                                <td>
+                                    <input type="text" id="qty-in-hand" value="12,020" class="form-control" />
+                                </td>
+                                <td>
+                                    <input
+                                        type="text"
+                                        id="change-qty"
+                                        placeholder="Ex: +10, -10"
+                                        class="form-control"
+                                    />
+                                </td>
+                                <td>
+                                    <input type="text" id="new-qty" value="12,020" class="form-control" />
+                                </td>
+                                <td>2000</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
-            <div class="add-line-bulk-item font-15">
-                <a href="javascript:void(0)">+ Add New Line</a> |
-                <a href="javascript:void(0)" (click)="openModal(template)">+ Add Bulk Entries</a>
+        </div>
+        <div class="action-button-wrapper pd-l15 pd-r15">
+            <div class="d-flex justify-content-end column-gap1">
+                <button mat-stroked-button class="min-width-100">Clear</button>
+                <button mat-stroked-button color="primary" class="min-width-100" disabled>Convert to Adjust</button>
             </div>
         </div>
     </div>
-</div>
-<div class="inventory-footer sticky-footer">
-    <div class="inner-content-footer">
-        <div class="d-flex">
-            <div class="button-group">
-                <button id="adjust-clear-btn" class="btn btn-primary min-width-100 bdr-radius-50">Clear</button>
-                <button id="convert-btn" class="btn btn-success min-width-100 bdr-radius-50" disabled>
-                    Convert to Adjust
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- adjust bulk entry modal -->
-<ng-template #template>
-    <inventory-adjust-bulk-entry></inventory-adjust-bulk-entry>
-</ng-template>
+</ng-container>
 
 <!-- Datepicker template -->
 <ng-template #datepickerTemplate>

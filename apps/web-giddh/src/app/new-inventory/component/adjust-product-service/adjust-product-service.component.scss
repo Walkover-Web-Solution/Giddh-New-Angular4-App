@@ -54,12 +54,12 @@
             border: 1px solid var(--color-iron);
             vertical-align: top !important;
         }
-        .add-line-bulk-item {
-            color: var(--color-gray);
-            a {
-                color: var(--color-blue);
-            }
-        }
+    }
+    .form-wrapper{
+        max-width: 1000px;
+    }
+    .action-button-wrapper{
+        max-width: 1030px;
     }
 }
 .inventory-footer {

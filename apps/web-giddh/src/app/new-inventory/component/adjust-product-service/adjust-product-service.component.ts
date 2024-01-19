@@ -12,23 +12,43 @@ import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.co
 export class AdjustProductServiceComponent implements OnInit {
     /* this will store image path*/
     public imgPath: string = '';
-
     public modalRef: BsModalRef;
-    /* for sh-select dropdown */
-    @ViewChildren('selectAccount') public selectAccount: ShSelectComponent;
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
+    public dummyOptions:any = [
+        { label: 'Option 1' , value: 1 },
+        { label: 'Option 2' , value: 2 },
+        { label: 'Option 3' , value: 3 }
+    ]
 
     constructor(
         private modalService: BsModalService
     ) { }
 
-    openModal(template: TemplateRef<any>) {
-        this.modalRef = this.modalService.show(template,
-            Object.assign({}, { class: 'gray modal-xl' })
-        );
+    /**
+     *
+     *
+     * @param {*} event
+     * @memberof AdjustProductServiceComponent
+     */
+    public selectDate(event: any): void {
+        console.log('selectDate: ', event);
     }
 
     public ngOnInit() {
         /* added image path */
         this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+    }
+
+    /**
+     *
+     *
+     * @param {*} event
+     * @memberof AdjustProductServiceComponent
+     */
+    public selectAccount(event: any): void {
+
     }
 }
