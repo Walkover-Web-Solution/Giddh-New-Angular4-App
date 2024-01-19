@@ -162,7 +162,7 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
      * @memberof AsideSettingComponent
      */
     public showHideSettingsHeading(url: string): void {
-        if(!url.includes("/pages/settings") && !url.includes("/pages/user-details")) {
+        if (!url.includes("/pages/settings") && !url.includes("/pages/user-details")) {
             this.showSettingHeading = true;
         } else {
             this.showSettingHeading = false;

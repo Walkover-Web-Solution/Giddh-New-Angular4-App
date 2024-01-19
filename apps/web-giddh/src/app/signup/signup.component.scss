@@ -326,6 +326,13 @@ small {
     height: 18px;
 }
 
+.msg91-ico {
+    a {
+        width: 211px !important;
+        padding-left: 34px !important;
+    }
+}
+
 .login-option,
 .login-option a {
     color: var(--color-blue);
@@ -510,7 +517,6 @@ small {
 }
 .msg91-ico {
     a {
-        width: 199px;
         span {
             padding-left: 0;
         }

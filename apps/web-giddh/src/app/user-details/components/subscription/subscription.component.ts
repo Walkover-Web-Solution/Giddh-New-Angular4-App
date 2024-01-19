@@ -108,6 +108,8 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
     public isExpand: boolean = false;
     /** This will use for active company */
     public activeCompany: any = {};
+    /** True if Mac OS and electron app */
+    public isMacElectronApp: boolean = false;
 
     constructor(
         public dialog: MatDialog,
@@ -133,6 +135,8 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
     public ngOnInit(): void {
         /** This will use for by default plan div hide */
         this.isPlanShow = false;
+
+        this.isMacElectronApp =  this.generalService.isMacOSElectronApp();
 
         /** This condition will use for general service for logged in user */
         if (this.generalService.user) {

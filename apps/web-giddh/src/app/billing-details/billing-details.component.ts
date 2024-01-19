@@ -278,6 +278,15 @@ export class BillingDetailComponent implements OnInit, OnDestroy {
         this.initializePayment();
     }
 
+    // public payWithApple(billingDetail: NgForm): void {
+    //     const { ipcRenderer } = (window as any).require("electron");
+    //     ipcRenderer.send("apple-pay", 'ravinder_birch_testing');
+
+    //     ipcRenderer.once('apple-pay-init', (sender, arg) => {
+    //         console.log(sender, arg);
+    //     });
+    // }
+
     /**
      * This function will use for on select state change
      *

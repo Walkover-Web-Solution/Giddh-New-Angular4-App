@@ -9,7 +9,7 @@ import { cloneDeep, find, orderBy } from '../lodash-optimized';
 import { OrganizationType } from '../models/user-login-state';
 import { AllItems } from '../shared/helpers/allItems';
 import { Router } from '@angular/router';
-import { AdjustedVoucherType, BROADCAST_CHANNELS, JOURNAL_VOUCHER_ALLOWED_DOMAINS } from '../app.constant';
+import { APPLE_LOGIN_CLIENT_ID, AdjustedVoucherType, JOURNAL_VOUCHER_ALLOWED_DOMAINS } from '../app.constant';
 import { SalesOtherTaxesCalculationMethodEnum, VoucherTypeEnum } from '../models/api-models/Sales';
 import { ITaxControlData, ITaxDetail, ITaxUtilRequest } from '../models/interfaces/tax.interface';
 import * as dayjs from 'dayjs';
@@ -1607,5 +1607,30 @@ export class GeneralService {
         const seconds = String(now.getSeconds()).padStart(2, '0');
 
         return `${day}-${month}-${year} ${hours}:${minutes}:${seconds}`;
+    }
+
+    /**
+     * Returns apple login url
+     *
+     * @returns {string}
+     * @memberof GeneralService
+     */
+    public getAppleLoginUrl(): string {
+        const CLIENT_ID = APPLE_LOGIN_CLIENT_ID;
+        const url = PRODUCTION_ENV || isElectron ? 'https://api.giddh.com' : 'https://apitest.giddh.com';
+        const REDIRECT_API_URL = url + "/v2/apple-login-callback";
+
+        return `https://appleid.apple.com/auth/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_API_URL)}&response_type=code id_token&scope=name email&response_mode=form_post`;
+    }
+
+    /**
+     * Check current operating system is Mac and electron app.
+     *
+     * @memberof GeneralService
+     */
+    public isMacOSElectronApp(): boolean {
+        const userAgent = window.navigator.userAgent.toLowerCase(),
+            macosPlatforms = /(macintosh|macintel|macppc|mac68k|macos)/i;
+        return isElectron && macosPlatforms.test(userAgent);
     }
 }

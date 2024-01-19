@@ -26,6 +26,7 @@ import { contriesWithCodes } from "../shared/helpers/countryWithCodes";
 import { LoaderService } from "../loader/loader.service";
 import { ToasterService } from "../services/toaster.service";
 import { AuthenticationService } from "../services/authentication.service";
+import { GeneralService } from "../services/general.service";
 
 declare var initSendOTP: any;
 
@@ -78,7 +79,8 @@ export class SignupComponent implements OnInit, OnDestroy {
         private loaderService: LoaderService,
         private toaster: ToasterService,
         private authenticationService: AuthenticationService,
-        private ngZone: NgZone
+        private ngZone: NgZone,
+        private generalService: GeneralService
     ) {
         this.urlPath = isElectron ? "" : AppUrl + APP_FOLDER;
         this.isLoginWithEmailInProcess$ = this.store.pipe(select(state => {
@@ -355,8 +357,8 @@ export class SignupComponent implements OnInit, OnDestroy {
         this.loaderService.show();
 
         let configuration = {
-            widgetId: OTP_WIDGET_ID,
-            tokenAuth: OTP_TOKEN_AUTH,
+            widgetId: "326a63733354393830313330",
+            tokenAuth: "205968TmXguUAwoD633af103P1",
             success: (data: any) => {
                 this.ngZone.run(() => {
                     this.initiateSignup(data);
