@@ -1,7 +1,6 @@
-import { Component, OnInit, ViewChild, ElementRef, ViewChildren, TemplateRef } from '@angular/core';
-import { GeneralService } from '../../../services/general.service';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
+import { Component, OnInit } from '@angular/core';
+import { InventoryAdjustmentReasonAside } from '../inventory-adjustment-aside/inventory-adjustment-aside.component';
+import { MatDialog } from '@angular/material/dialog';
 @Component({
     selector: 'adjust-product-service',
     templateUrl: './adjust-product-service.component.html',
@@ -12,7 +11,6 @@ import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.co
 export class AdjustProductServiceComponent implements OnInit {
     /* this will store image path*/
     public imgPath: string = '';
-    public modalRef: BsModalRef;
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */
@@ -24,9 +22,7 @@ export class AdjustProductServiceComponent implements OnInit {
     ]
     public mode: boolean = true;
 
-    constructor(
-        private modalService: BsModalService
-    ) { }
+    constructor(private dialog: MatDialog) { }
 
     /**
      *
@@ -50,6 +46,18 @@ export class AdjustProductServiceComponent implements OnInit {
      * @memberof AdjustProductServiceComponent
      */
     public selectAccount(event: any): void {
+        if(event?.value === 1){
+            this.openCreateReasonAsidepan();
+        }
+    }
 
+    public openCreateReasonAsidepan(): void{
+        this.dialog.open(InventoryAdjustmentReasonAside, {
+            position: {
+                top: '0',
+                right: '0'
+            },
+            width: 'auto'
+        })
     }
 }

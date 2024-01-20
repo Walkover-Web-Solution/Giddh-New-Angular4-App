@@ -10,27 +10,38 @@
             <form>
                 <div class="row">
                     <div class="col-sm-12">
-                        <label>Reason <span class="red-text">*</span></label>
-                        <input type="text" id="reason-field" class="form-control" placeholder="Enter" />
+                        <input-field id="reason-field" [name]="'reason'" [label]="'Reason'"
+                            [placeholder]="'Enter reason'" [type]="'text'" [required]="true">
+                        </input-field>
                     </div>
                 </div>
-                <div class="row button-group mt-5">
-                    <div class="col-sm-12">
-                        <button id="cancel-btn" class="btn btn-default">Cancel</button>
-                        <button id="save-btn" class="btn btn-success">Save</button>
+                <div class="row button-group mt-4">
+                    <div class="col-sm-12 d-flex justify-content-end column-gap1">
+                        <button id="cancel-btn" mat-stroked-button>Cancel</button>
+                        <button id="save-btn" mat-stroked-button color="primary">Save</button>
                     </div>
                 </div>
             </form>
             <div class="existing-reason mt-4">
-                <h4 class="font-15">Existing Reasons</h4>
-                <ul>
-                    <li>Loss by Fire</li>
-                    <li>Loss by Theaft</li>
-                    <li>Damaged Goods</li>
-                    <li>Stock Written off</li>
-                    <li>Stocktaking results</li>
-                    <li>Inventory revaluation</li>
-                </ul>
+                <table matSort mat-table [dataSource]="dataSource" class="giddh-table w-100">
+                    <!-- Reasons Column -->
+                    <ng-container matColumnDef="reason">
+                        <th width="90%" mat-header-cell *matHeaderCellDef>Existing Reasons</th>
+                        <td mat-cell *matCellDef="let element">{{ element.reason }}</td>
+                    </ng-container>
+                    <!-- Action Edit/Delete Column -->
+                    <ng-container matColumnDef="unique-name">
+                        <th width="100%" mat-header-cell *matHeaderCellDef>Action</th>
+                        <td mat-cell *matCellDef="let element">
+                            <div class="d-flex justify-content-between">
+                                <span class="icon-edit cursor-pointer"></span>
+                                <span class="icon-trash cursor-pointer"></span>
+                            </div>
+                        </td>
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="['reason', 'unique-name']"></tr>
+                    <tr mat-row *matRowDef="let row; columns: ['reason', 'unique-name']"></tr>
+                </table>
             </div>
         </div>
     </div>
