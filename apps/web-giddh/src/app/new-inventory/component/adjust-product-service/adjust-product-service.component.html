@@ -16,50 +16,16 @@
         <div class="adjust-field-wrapper pd-l15 pd-r15 pd-t1 relative">
             <div class="form-wrapper">
                 <form>
-                    <div>
-                        <div class="mr-b15">
-                            <!-- <div class="">
-                                <label>Mode of Adjustment <span class="red-text">*</span></label>
-                            </div> -->
-                            <div class="">
-                                <mat-radio-group color="primary" name="adjustment-mode" required="true">
-                                    <mat-radio-button [value]="'qty'">Quantity </mat-radio-button>
-                                    <mat-radio-button [value]="'value'">Value </mat-radio-button>
+                    <div class="row">
+                        <div class="col-lg-6 col-12 mr-b15">
+                            <div class="d-flex align-items-center h-100">
+                                <mat-radio-group color="primary" name="adjustment-mode" [(ngModel)]="mode" required="true">
+                                    <mat-radio-button [value]="true">Quantity </mat-radio-button>
+                                    <mat-radio-button [value]="false">Value </mat-radio-button>
                                 </mat-radio-group>
-                                <!-- <span class="p-0 mr-3">
-                                    <input
-                                        id="mode-of-quantity"
-                                        class="radio-custom cp ml-0"
-                                        type="radio"
-                                        name="modeOfadjustment"
-                                        [value]=""
-                                    />
-                                    <label for="mode-of-quantity" class="radio-custom-label">Quantity</label>
-                                </span> -->
-                                <!-- <span class="p-0 mr-3">
-                                    <input
-                                        id="mode-of-value"
-                                        class="radio-custom cp ml-0"
-                                        type="radio"
-                                        name="modeOfadjustment"
-                                        [value]=""
-                                    />
-                                    <label for="mode-of-value" class="radio-custom-label">Value</label>
-                                </span> -->
                             </div>
                         </div>
-                        <div class="mr-b15">
-                            <!-- <div class="">
-                                <label>Reference No. <span class="red-text">*</span></label>
-                            </div>
-                            <div class="">
-                                <input
-                                    type="text"
-                                    id="reference-no"
-                                    class="form-control"
-                                    placeholder="Enter Reference Number"
-                                />
-                            </div> -->
+                        <div class="col-lg-6 col-12 mr-b15">
                             <input-field
                                 [name]="'reference-no'"
                                 [label]="'Reference Number'"
@@ -69,13 +35,7 @@
                             >
                             </input-field>
                         </div>
-                        <div class="mr-b15">
-                            <!-- <div class="">
-                                <label>Date <span class="red-text">*</span></label>
-                            </div>
-                            <div class="">
-                                <giddh-datepicker name="adjustGroupDate"></giddh-datepicker>
-                            </div> -->
+                        <div class="col-lg-6 col-12 mr-b15">
                             <div class="direct-mat-datepicker">
                                 <giddh-datepicker
                                     (dateSelected)="selectDate($event)"
@@ -89,13 +49,7 @@
                                 </giddh-datepicker>
                             </div>
                         </div>
-                        <div class="mr-b15">
-                            <!-- <div class="">
-                                <label>Account <span class="red-text">*</span></label>
-                            </div>
-                            <div class="">
-                                <sh-select id="account-no" placeholder="Select Account"></sh-select>
-                            </div> -->
+                        <div class="col-lg-6 col-12 mr-b15">
                             <dropdown-field
                                 [name]="'account'"
                                 [label]="'Account'"
@@ -106,17 +60,22 @@
                             >
                             </dropdown-field>
                         </div>
-                        <div class="mr-b15">
-                            <!-- <div class="">
-                                <label>Reason <span class="red-text">*</span></label>
-                            </div>
-                            <div class="">
-                                <sh-select id="reason" placeholder="Select Reason"></sh-select>
-                            </div> -->
+                        <div class="col-lg-6 col-12 mr-b15">
                             <dropdown-field
                                 [name]="'reason'"
                                 [label]="'Reason'"
                                 [placeholder]="'Select Reason'"
+                                [options]="dummyOptions"
+                                (selectedOption)="selectAccount($event)"
+                                [defaultValue]="''"
+                            >
+                            </dropdown-field>
+                        </div>
+                        <div class="col-lg-6 col-12 mr-b15">
+                            <dropdown-field
+                                [name]="'warehouse'"
+                                [label]="'Warehouse'"
+                                [placeholder]="'Select Warehouse'"
                                 [options]="dummyOptions"
                                 (selectedOption)="selectAccount($event)"
                                 [defaultValue]="''"
@@ -128,113 +87,196 @@
             </div>
             <div class="bg-white py-3 mt-4 mb-4">
                 <div class="table-responsive">
-                    <!-- table if quantity option selected -->
+                    <!-- Table For Stock -->
                     <table class="table giddh-table">
                         <thead>
                             <tr>
-                                <th width="20px">#</th>
-                                <th width="220px">Product/Service/Group</th>
-                                <th width="120px">Method</th>
-                                <th width="120px">Qty in Hand</th>
-                                <th width="120px">Change Qty</th>
-                                <th width="120px">New Qty</th>
-                                <th width="100px">New Value</th>
+                                <th width="auto">Stock</th>
+                                <th width="18%">Method</th>
+                                <th width="18%" *ngIf="mode">Total Qty</th>
+                                <th width="18%"*ngIf="!mode">Total Value</th>
+                                <th width="18%" *ngIf="mode">Change in Qty</th>
+                                <th width="18%"*ngIf="!mode">Change in Value</th>
+                                <th width="18%" *ngIf="mode">New Qty</th>
+                                <th width="18%"*ngIf="!mode">New Value</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td>1</td>
                                 <td>
                                     <div class="d-flex mb-2">
-                                        <sh-select
-                                            id="select-group-product-service"
-                                            placeholder="Select Name"
-                                            class="w-100"
-                                        ></sh-select>
+                                        <select-field
+                                            [cssClass]="'form-control mat-field-border'"
+                                            [name]="'fields'"
+                                            [placeholder]="'Select Method'"
+                                            [options]="dummyOptions"
+                                            (selectedOption)="selectAccount($event)"
+                                            [defaultValue]="''"
+                                        >
+                                        </select-field>
                                     </div>
                                     <textarea placeholder="Add Description" class="form-control"></textarea>
                                 </td>
                                 <td>
-                                    <input
-                                        type="text"
-                                        id="percentage"
-                                        class="form-control mb-2"
-                                        value="Percentage"
-                                        disabled
-                                    />
-                                    <input type="text" id="percent-value" value="0%" class="form-control" />
+                                    <text-field
+                                        [type]="'text'"
+                                        [cssClass]="'form-control'"
+                                        [placeholder]="'Method'"
+                                        [autoFocus]="true"
+                                    >
+                                    </text-field>
                                 </td>
-                                <td>
-                                    <input type="text" id="qty-in-hand" value="12,020" class="form-control" />
+                                <td *ngIf="mode">
+                                    <text-field
+                                        [type]="'text'"
+                                        [cssClass]="'form-control'"
+                                        [placeholder]="'Total Qty'"
+                                        [autoFocus]="true"
+                                    >
+                                    </text-field>
                                 </td>
-                                <td>
-                                    <input
-                                        type="text"
-                                        id="change-qty"
-                                        placeholder="Ex: +10, -10"
-                                        class="form-control"
-                                    />
+                                <td *ngIf="!mode">
+                                    <text-field
+                                        [type]="'text'"
+                                        [cssClass]="'form-control'"
+                                        [placeholder]="'Total Value'"
+                                        [autoFocus]="true"
+                                    >
+                                    </text-field>
                                 </td>
-                                <td>
-                                    <input type="text" id="new-qty" value="12,020" class="form-control" />
+                                <td *ngIf="mode">
+                                    <text-field
+                                        [type]="'text'"
+                                        [cssClass]="'form-control'"
+                                        [placeholder]="'Change in Qty'"
+                                        [autoFocus]="true"
+                                    >
+                                    </text-field>
                                 </td>
-                                <td>2000</td>
+                                <td *ngIf="!mode">
+                                    <text-field
+                                        [type]="'text'"
+                                        [cssClass]="'form-control'"
+                                        [placeholder]="'Change in Value'"
+                                        [autoFocus]="true"
+                                    >
+                                    </text-field>
+                                </td>
+                                <td *ngIf="mode">
+                                    <text-field
+                                        [type]="'text'"
+                                        [cssClass]="'form-control'"
+                                        [placeholder]="'New Qty'"
+                                        [autoFocus]="true"
+                                    >
+                                    </text-field>
+                                </td>
+                                <td *ngIf="!mode">
+                                    <text-field
+                                        [type]="'text'"
+                                        [cssClass]="'form-control'"
+                                        [placeholder]="'New Value'"
+                                        [autoFocus]="true"
+                                    >
+                                    </text-field>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
 
-                    <!-- table if value option selected -->
+                    <!-- Table For Group -->
                     <table class="table giddh-table">
                         <thead>
                             <tr>
-                                <th width="20px">#</th>
-                                <th width="220px">Product/Service/Group</th>
-                                <th width="120px">Method</th>
-                                <th width="120px">Current Value</th>
-                                <th width="120px">Changed Value</th>
-                                <th width="120px">New Qty</th>
-                                <th width="100px">New Value</th>
+                                <th width="auto">Group</th>
+                                <th width="18%">Method</th>
+                                <th width="18%" *ngIf="mode">Total Qty</th>
+                                <th width="18%"*ngIf="!mode">Total Value</th>
+                                <th width="18%" *ngIf="mode">Change in Qty</th>
+                                <th width="18%"*ngIf="!mode">Change in Value</th>
+                                <th width="18%" *ngIf="mode">New Qty</th>
+                                <th width="18%"*ngIf="!mode">New Value</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td>1</td>
                                 <td>
                                     <div class="d-flex mb-2">
-                                        <sh-select
-                                            id="select-group-product-service"
-                                            placeholder="Select Name"
-                                            class="w-100"
+                                        <select-field
+                                            [cssClass]="'form-control mat-field-border'"
+                                            [name]="'fields'"
+                                            [placeholder]="'Select Method'"
+                                            [options]="dummyOptions"
+                                            (selectedOption)="selectAccount($event)"
+                                            [defaultValue]="''"
                                         >
-                                        </sh-select>
+                                        </select-field>
                                     </div>
                                     <textarea placeholder="Add Description" class="form-control"></textarea>
                                 </td>
                                 <td>
-                                    <input
-                                        type="text"
-                                        id="percentage"
-                                        class="form-control mb-2"
-                                        value="Percentage"
-                                        disabled
-                                    />
-                                    <input type="text" id="percent-value" value="0%" class="form-control" />
+                                    <text-field
+                                        [type]="'text'"
+                                        [cssClass]="'form-control'"
+                                        [placeholder]="'Method'"
+                                        [autoFocus]="true"
+                                    >
+                                    </text-field>
                                 </td>
-                                <td>
-                                    <input type="text" id="qty-in-hand" value="12,020" class="form-control" />
+                                <td *ngIf="mode">
+                                    <text-field
+                                        [type]="'text'"
+                                        [cssClass]="'form-control'"
+                                        [placeholder]="'Total Qty'"
+                                        [autoFocus]="true"
+                                    >
+                                    </text-field>
                                 </td>
-                                <td>
-                                    <input
-                                        type="text"
-                                        id="change-qty"
-                                        placeholder="Ex: +10, -10"
-                                        class="form-control"
-                                    />
+                                <td *ngIf="!mode">
+                                    <text-field
+                                        [type]="'text'"
+                                        [cssClass]="'form-control'"
+                                        [placeholder]="'Total Value'"
+                                        [autoFocus]="true"
+                                    >
+                                    </text-field>
                                 </td>
-                                <td>
-                                    <input type="text" id="new-qty" value="12,020" class="form-control" />
+                                <td *ngIf="mode">
+                                    <text-field
+                                        [type]="'text'"
+                                        [cssClass]="'form-control'"
+                                        [placeholder]="'Change in Qty'"
+                                        [autoFocus]="true"
+                                    >
+                                    </text-field>
                                 </td>
-                                <td>2000</td>
+                                <td *ngIf="!mode">
+                                    <text-field
+                                        [type]="'text'"
+                                        [cssClass]="'form-control'"
+                                        [placeholder]="'Change in Value'"
+                                        [autoFocus]="true"
+                                    >
+                                    </text-field>
+                                </td>
+                                <td *ngIf="mode">
+                                    <text-field
+                                        [type]="'text'"
+                                        [cssClass]="'form-control'"
+                                        [placeholder]="'New Qty'"
+                                        [autoFocus]="true"
+                                    >
+                                    </text-field>
+                                </td>
+                                <td *ngIf="!mode">
+                                    <text-field
+                                        [type]="'text'"
+                                        [cssClass]="'form-control'"
+                                        [placeholder]="'New Value'"
+                                        [autoFocus]="true"
+                                    >
+                                    </text-field>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
