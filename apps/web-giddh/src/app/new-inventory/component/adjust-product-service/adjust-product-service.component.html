@@ -1,12 +1,17 @@
 <ng-container appTranslate [file]="'inventory/adjustment'" (commonLocaleData)="commonLocaleData = $event"
     (localeData)="localeData = $event">
-    <div class="relative adjust-group-page">
+    <div class="relative adjust-group-page pd-l15 pd-r15 pd-t1 mt-1">
         <hamburger-menu [pageHeading]="'Adjust Product/Service - Dummy Product Name Furniture'"></hamburger-menu>
-        <button mat-stroked-button class="pull-right pd cursor-pointer back-to-page mr-t15 mr-r1"
+
+        <div class="page-heading mb-4">
+            <h2>Group</h2>
+        </div>
+
+        <button mat-stroked-button class="pull-right pd cursor-pointer back-to-page mr-t05 mr-r1"
             [routerLink]="['/pages/inventory/v2/adjust-inventory']">
             Back
         </button>
-        <div class="adjust-field-wrapper pd-l15 pd-r15 pd-t1 mt-5 mt-xl-1">
+        <div class="adjust-field-wrapper">
             <div class="form-wrapper">
                 <form>
                     <div class="row">
@@ -31,12 +36,15 @@
                         </div>
                         <div class="col-md-6 col-12 mr-b15">
                             <dropdown-field [name]="'account'" [label]="'Account'" [placeholder]="'Select Account'"
-                                [options]="dummyOptions" (selectedOption)="selectAccount($event)" [defaultValue]="''" [required]="true">
+                                [options]="dummyOptions" (selectedOption)="selectAccount($event)" [defaultValue]="''"
+                                [required]="true">
                             </dropdown-field>
                         </div>
                         <div class="col-md-6 col-12 mr-b15">
-                            <dropdown-field [name]="'reason'" [label]="'Reason'" [placeholder]="'Select Reason'" (createOption)="openCreateReasonAsidepan()"
-                                [options]="dummyOptions" (selectedOption)="selectAccount($event)" [defaultValue]="''" [required]="true" [showCreateNew]="true">
+                            <dropdown-field [name]="'reason'" [label]="'Reason'" [placeholder]="'Select Reason'"
+                                (createOption)="openCreateReasonAsidepan()" [options]="dummyOptions"
+                                (selectedOption)="selectAccount($event)" [defaultValue]="''" [required]="true"
+                                [showCreateNew]="true">
                             </dropdown-field>
                         </div>
                         <div class="col-md-6 col-12 mr-b15">
@@ -76,38 +84,34 @@
                                     <textarea placeholder="Add Description" matInput class="form-control"></textarea>
                                 </td>
                                 <td>
-                                    <text-field [type]="'text'" [cssClass]="'form-control'" [placeholder]="'Method'"
-                                        [autoFocus]="true">
+                                    <text-field [type]="'text'" [cssClass]="'form-control'" [placeholder]="'Method'">
                                     </text-field>
                                 </td>
                                 <td *ngIf="mode">
-                                    <text-field [type]="'text'" [cssClass]="'form-control'" [placeholder]="'Total Qty'"
-                                        [autoFocus]="true">
+                                    <text-field [type]="'text'" [cssClass]="'form-control'" [placeholder]="'Total Qty'">
                                     </text-field>
                                 </td>
                                 <td *ngIf="!mode">
                                     <text-field [type]="'text'" [cssClass]="'form-control'"
-                                        [placeholder]="'Total Value'" [autoFocus]="true">
+                                        [placeholder]="'Total Value'">
                                     </text-field>
                                 </td>
                                 <td *ngIf="mode">
                                     <text-field [type]="'text'" [cssClass]="'form-control'"
-                                        [placeholder]="'Change in Qty'" [autoFocus]="true">
+                                        [placeholder]="'Change in Qty'">
                                     </text-field>
                                 </td>
                                 <td *ngIf="!mode">
                                     <text-field [type]="'text'" [cssClass]="'form-control'"
-                                        [placeholder]="'Change in Value'" [autoFocus]="true">
+                                        [placeholder]="'Change in Value'">
                                     </text-field>
                                 </td>
                                 <td *ngIf="mode">
-                                    <text-field [type]="'text'" [cssClass]="'form-control'" [placeholder]="'New Qty'"
-                                        [autoFocus]="true">
+                                    <text-field [type]="'text'" [cssClass]="'form-control'" [placeholder]="'New Qty'">
                                     </text-field>
                                 </td>
                                 <td *ngIf="!mode">
-                                    <text-field [type]="'text'" [cssClass]="'form-control'" [placeholder]="'New Value'"
-                                        [autoFocus]="true">
+                                    <text-field [type]="'text'" [cssClass]="'form-control'" [placeholder]="'New Value'">
                                     </text-field>
                                 </td>
                             </tr>
@@ -140,38 +144,34 @@
                                     <textarea placeholder="Add Description" matInput class="form-control"></textarea>
                                 </td>
                                 <td>
-                                    <text-field [type]="'text'" [cssClass]="'form-control'" [placeholder]="'Method'"
-                                        [autoFocus]="true">
+                                    <text-field [type]="'text'" [cssClass]="'form-control'" [placeholder]="'Method'">
                                     </text-field>
                                 </td>
                                 <td *ngIf="mode">
-                                    <text-field [type]="'text'" [cssClass]="'form-control'" [placeholder]="'Total Qty'"
-                                        [autoFocus]="true">
+                                    <text-field [type]="'text'" [cssClass]="'form-control'" [placeholder]="'Total Qty'">
                                     </text-field>
                                 </td>
                                 <td *ngIf="!mode">
                                     <text-field [type]="'text'" [cssClass]="'form-control'"
-                                        [placeholder]="'Total Value'" [autoFocus]="true">
+                                        [placeholder]="'Total Value'">
                                     </text-field>
                                 </td>
                                 <td *ngIf="mode">
                                     <text-field [type]="'text'" [cssClass]="'form-control'"
-                                        [placeholder]="'Change in Qty'" [autoFocus]="true">
+                                        [placeholder]="'Change in Qty'">
                                     </text-field>
                                 </td>
                                 <td *ngIf="!mode">
                                     <text-field [type]="'text'" [cssClass]="'form-control'"
-                                        [placeholder]="'Change in Value'" [autoFocus]="true">
+                                        [placeholder]="'Change in Value'">
                                     </text-field>
                                 </td>
                                 <td *ngIf="mode">
-                                    <text-field [type]="'text'" [cssClass]="'form-control'" [placeholder]="'New Qty'"
-                                        [autoFocus]="true">
+                                    <text-field [type]="'text'" [cssClass]="'form-control'" [placeholder]="'New Qty'">
                                     </text-field>
                                 </td>
                                 <td *ngIf="!mode">
-                                    <text-field [type]="'text'" [cssClass]="'form-control'" [placeholder]="'New Value'"
-                                        [autoFocus]="true">
+                                    <text-field [type]="'text'" [cssClass]="'form-control'" [placeholder]="'New Value'">
                                     </text-field>
                                 </td>
                             </tr>

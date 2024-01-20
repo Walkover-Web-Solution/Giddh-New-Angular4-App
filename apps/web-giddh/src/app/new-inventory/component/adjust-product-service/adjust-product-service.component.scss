@@ -1,4 +1,14 @@
 .adjust-group-page {
+    .page-heading {
+        height: 34px;
+        border-bottom: 1px solid var(--color-common-secondary-border);
+
+        h2 {
+            color: var(--color-giddh-blue);
+            font-weight: 600;
+        }
+    }
+
     .back-to-page {
         position: absolute;
         right: 5px;
@@ -54,11 +64,12 @@
                 vertical-align: top !important;
                 min-width: 160px;
             }
+
             textarea {
                 min-height: 65px;
             }
         }
-        
+
         .form-wrapper {
             max-width: 820px;
         }

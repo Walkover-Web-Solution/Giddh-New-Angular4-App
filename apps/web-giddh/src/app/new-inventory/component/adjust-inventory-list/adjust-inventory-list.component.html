@@ -65,31 +65,7 @@
                         </td>
                     </ng-container>
 
-                    <!-- Reason Column -->
-                    <ng-container matColumnDef="reason">
-                        <th
-                            width="20%"
-                            mat-header-cell
-                            *matHeaderCellDef
-                            #searchReasonContainer
-                            class="td-search-box"
-                            (clickOutside)="handleClickOutside($event, searchReasonContainer, 'reason')"
-                        >
-                            <ng-container
-                                *ngTemplateOutlet="
-                                    searchTemplate;
-                                    context: {
-                                        $implicit: reason,
-                                        fieldName: 'reason',
-                                        title: 'Reason'
-                                    }
-                                "
-                            ></ng-container>
-                        </th>
-                        <td mat-cell *matCellDef="let element">{{ element.reason }}</td>
-                    </ng-container>
-
-                    <!-- Type Column -->
+                   <!-- Type Column -->
                     <ng-container matColumnDef="type">
                         <th width="10%" mat-header-cell *matHeaderCellDef [matMenuTriggerFor]="inventoryTypeMenu">
                             Type
@@ -128,6 +104,30 @@
                             ></ng-container>
                         </th>
                         <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+                    </ng-container> 
+                    
+                    <!-- Reason Column -->
+                    <ng-container matColumnDef="reason">
+                        <th
+                            width="20%"
+                            mat-header-cell
+                            *matHeaderCellDef
+                            #searchReasonContainer
+                            class="td-search-box"
+                            (clickOutside)="handleClickOutside($event, searchReasonContainer, 'reason')"
+                        >
+                            <ng-container
+                                *ngTemplateOutlet="
+                                    searchTemplate;
+                                    context: {
+                                        $implicit: reason,
+                                        fieldName: 'reason',
+                                        title: 'Reason'
+                                    }
+                                "
+                            ></ng-container>
+                        </th>
+                        <td mat-cell *matCellDef="let element">{{ element.reason }}</td>
                     </ng-container>
 
                     <!-- Adjusted By Column -->
@@ -179,8 +179,6 @@
     </div>
 </ng-container>
 
-<!-- <div class="aside-overlay" *ngIf="asideMenuState === 'in'"></div>
-<aside-adjust-inventory *ngIf="asideMenuState === 'in'" (closeAsideEvent)="adjustInventory()"></aside-adjust-inventory> -->
 
 <ng-template #addAdjustmentAsidepan>
     <aside-create-new-inventory (closeAsideEvent)="closeAsideMenu()" [class]="asideMenuState" [moduleType]="moduleType">

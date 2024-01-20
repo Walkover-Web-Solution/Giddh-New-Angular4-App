@@ -39,11 +39,11 @@ export class AdjustInventoryComponent implements OnInit {
     public selectedRangeLabel: any = "";
     /* Aside pane state*/
     public asideMenuState: string = 'out';
-    public displayedColumns: string[] = ['date', 'reference-no', 'reason', 'type', 'name', 'adjusted-by'];
+    public displayedColumns: string[] = ['date', 'reference-no', 'type', 'name', 'reason', 'adjusted-by'];
     public dataSource: any[] = [
-        { date: "15/10/2020", referenceNo: 234423, reason: "Stock on fire", type: "Group", name: 'Name of Group', adjustedBy: "Shubhendra Agarawal" },
-        { date: "16/10/2020", referenceNo: 255552, reason: "Stock on earthquake", type: "Stock", name: 'Name of  Stock', adjustedBy: "Raju Pandiya" },
-        { date: "18/10/2020", referenceNo: 625222, reason: "Stock on tornado", type: "Group", name: 'Name of Group', adjustedBy: "Mukesh Rajaj" }
+        { date: "15-10-2024", referenceNo: 234423, reason: "Stock on fire", type: "Group", name: 'Name of Group', adjustedBy: "Shubhendra Agarawal" },
+        { date: "16-10-2024", referenceNo: 255552, reason: "Stock on earthquake", type: "Stock", name: 'Name of  Stock', adjustedBy: "Raju Pandiya" },
+        { date: "18-10-2024", referenceNo: 625222, reason: "Stock on tornado", type: "Group", name: 'Name of Group', adjustedBy: "Mukesh Rajaj" }
     ];
     public moduleType: string = 'inventory-adjustment';
     private addAdjustmentAsidepanRef: MatDialogRef<any>;
@@ -129,7 +129,7 @@ export class AdjustInventoryComponent implements OnInit {
     }
 
     /* Close Add Adjustment Asidepane */
-    public closeAsideMenu(): void {        
+    public closeAsideMenu(): void {
         this.addAdjustmentAsidepanRef.close()
     }
 
@@ -217,14 +217,14 @@ export class AdjustInventoryComponent implements OnInit {
         console.log(this.inventoryType);
     }
 
-     /**
-     * Handle Pagination
-     *
-     * @param {*} event
-     * @memberof AdjustInventoryComponent
-     */
-    public pageChanged(event:any): void{
-        console.log("pageChanged",event);        
+    /**
+    * Handle Pagination
+    *
+    * @param {*} event
+    * @memberof AdjustInventoryComponent
+    */
+    public pageChanged(event: any): void {
+        console.log("pageChanged", event);
     }
 
 }
