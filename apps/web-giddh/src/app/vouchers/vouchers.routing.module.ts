@@ -26,6 +26,10 @@ const routes: Routes = [
             {
                 path: ":type/create",
                 component: VouchersCreateComponent
+            },
+            {
+                path: ":type/edit/:uniqueName",
+                component: VouchersCreateComponent
             }
         ]
     }
