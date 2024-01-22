@@ -83,6 +83,7 @@
                                         [hidden]="selectedLedgerItems?.length === 0"
                                         class="btn btn-primary"
                                         (click)="generateBulkInvoice(false)"
+                                        type="button"
                                     >
                                         {{ localeData?.generate_multiple }}
                                     </button>
@@ -91,6 +92,7 @@
                                         [hidden]="selectedLedgerItems?.length === 0"
                                         class="btn btn-primary"
                                         (click)="generateBulkInvoice(true)"
+                                        type="button"
                                     >
                                         {{ localeData?.generate_compound }}
                                     </button>

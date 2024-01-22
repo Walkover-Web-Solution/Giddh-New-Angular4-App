@@ -2896,7 +2896,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         apiCallObservable = this.salesService.generatePendingVoucherGenericItem(updatedData);
                     }
 
-                    apiCallObservable.pipe(takeUntil(this.destroyed$)).subscribe((response: BaseResponse<any, GenericRequestForGenerateSCD>) => {
+                    apiCallObservable.pipe(take(1)).subscribe((response: BaseResponse<any, GenericRequestForGenerateSCD>) => {
                         this.handleGenerateResponse(response, form);
                     }, () => {
                         this.isShowLoader = false;
@@ -2917,7 +2917,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         this.toaster.showSnackBar("error", this.commonLocaleData?.app_something_went_wrong);
                     });
                 }
-
             }
         }
     }
@@ -6556,8 +6555,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             /** For pending type need to navigate to get all module of voucher type   */
             if (this.isPendingVoucherType && this.actionAfterGenerateORUpdate === 0) {
                 this.cancelUpdate();
+            } else {
+                this.postResponseAction(this.invoiceNo);
             }
-            this.postResponseAction(this.invoiceNo);
         } else if (response?.status === "einvoice-confirm") {
             this.isShowLoader = false;
             this.startLoader(false);
@@ -6580,8 +6580,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 }
                 this.onSubmitInvoiceForm(form);
             });
-        }
-        else {
+        } else {
             this.isShowLoader = false;
             this.startLoader(false);
             this.toaster.showSnackBar("error", response?.message, response?.code);
@@ -6589,7 +6588,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         }
         this.updateAccount = false;
 
-        if (!this.isPendingVoucherType || (this.isPendingVoucherType && this.actionAfterGenerateORUpdate === 0)) {
+        if (!this.isPendingVoucherType) {
             this.store.dispatch(this.invoiceReceiptActions.ResetVoucherDetails());
         }
     }
