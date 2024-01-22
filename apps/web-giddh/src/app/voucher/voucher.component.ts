@@ -2888,8 +2888,12 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     if (this.voucherApiVersion === 2) {
                         updatedData = this.voucherUtilityService.getVoucherRequestObjectForInvoice(updatedData);
                         if (this.isDebitNote || this.isCreditNote || this.isSalesInvoice) {
-                            updatedData.account.billingDetails.taxNumber = requestObject.account.billingDetails.taxNumber;
-                            updatedData.account.shippingDetails.taxNumber = requestObject.account.shippingDetails.taxNumber;
+                            if (updatedData.account.billingDetails) {
+                                updatedData.account.billingDetails.taxNumber = requestObject.account.billingDetails.taxNumber;
+                            }
+                            if (updatedData.account.shippingDetails) {
+                                updatedData.account.shippingDetails.taxNumber = requestObject.account.shippingDetails.taxNumber;
+                            }
                         }
                         apiCallObservable = this.salesService.generateGenericItem(updatedData, isVoucherV4);
                     } else {
