@@ -104,6 +104,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     @Input() public activeCompany: any;
     @Input() public searchResultsPaginationPage: any;
     @Input() public searchResultsPaginationTotalPages: any;
+    @Input() public generateEInvoice: boolean = null;
     /** Holds side of entry (dr/cr) */
     @Input() public entrySide: string;
     /** fileinput element ref for clear value after remove attachment **/
@@ -527,6 +528,11 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     this.pettyCashAccountChanged();
                 }
             }
+        }
+
+        if (changes['generateEInvoice'] && this.vm?.selectedLedger) {
+            this.vm.selectedLedger.generateEInvoice = changes['generateEInvoice']?.currentValue;
+            this.saveLedgerTransaction();
         }
     }
 

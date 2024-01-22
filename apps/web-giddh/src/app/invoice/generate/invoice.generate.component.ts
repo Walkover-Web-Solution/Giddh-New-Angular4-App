@@ -19,6 +19,8 @@ import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
 import { OrganizationType } from '../../models/user-login-state';
 import { CommonActions } from '../../actions/common.actions';
 import { cloneDeep, find, forEach, groupBy, indexOf, map, orderBy, uniq } from '../../lodash-optimized';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-modal.component';
 
 const COUNTS = [
     { label: '12', value: '12' },
@@ -140,6 +142,12 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     public generateVoucherInProcess: boolean = false;
     /** Decimal places from company settings */
     public giddhBalanceDecimalPlaces: number = 2;
+    /** Holds response of bulk generate popup */
+    private isCombined: boolean = null;
+    /** Duplicate copy of entry unique names for bulk action variable */
+    public entryUniqueNamesForBulkActionDuplicateCopy: GenerateBulkInvoiceObject[] = [];
+    /** Instance of modal */
+    public modalDialogRef: any;
 
     constructor(
         private store: Store<AppState>,
@@ -148,8 +156,9 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         private generalService: GeneralService,
         private generalActions: GeneralActions,
         private _breakPointObservar: BreakpointObserver,
+        private commonActions: CommonActions,
         private modalService: BsModalService,
-        private commonActions: CommonActions
+        public dialog: MatDialog
     ) {
         // set initial values
         this.ledgerSearchRequest.page = 1;
@@ -198,7 +207,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
                     }
                     this.ledgersData = response;
                     this.isGetAllRequestInProcess$ = of(false);
-                    if(this.todaySelected) {
+                    if (this.todaySelected) {
                         this.ledgerSearchRequest.dateRange = [response.fromDate, response.toDate];
                         this.ledgerSearchRequest.from = response.fromDate;
                         this.ledgerSearchRequest.to = response.toDate;
@@ -328,6 +337,35 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         });
 
         this.voucherApiVersion = this.generalService.voucherApiVersion;
+
+        this.store.pipe(select(state => state.invoice.showBulkGenerateVoucherConfirmation), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.message) {
+                if (this.modalDialogRef && this.dialog.getDialogById(this.modalDialogRef.id)) {
+                    return;
+                }
+                this.store.dispatch(this.invoiceActions.setBulkGenerateConfirm(null));
+                
+                this.modalDialogRef = this.dialog.open(ConfirmModalComponent, {
+                    data: {
+                        title: this.commonLocaleData?.app_confirm,
+                        body: response?.message,
+                        ok: this.commonLocaleData?.app_yes,
+                        cancel: this.commonLocaleData?.app_no,
+                        permanentlyDeleteMessage: ' '
+                    }
+                });
+
+                this.modalDialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+                    if (typeof response === "boolean") {
+                        if (response) {
+                            this.generateBulkInvoice(this.isCombined, true);
+                        } else {
+                            this.generateBulkInvoice(this.isCombined, false);
+                        }
+                    }
+                });
+            }
+        });
     }
 
     public ngOnChanges(changes: SimpleChanges): void {
@@ -444,8 +482,8 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         this.isUniversalDateApplicable = false;
     }
 
-    public generateBulkInvoice(action: boolean) {
-        if (this.selectedLedgerItems?.length <= 0) {
+    public generateBulkInvoice(action: boolean, generateEInvoice?: boolean) {
+        if (this.selectedLedgerItems?.length <= 0 && typeof generateEInvoice !== "boolean") {
             return false;
         }
         let arr: GenBulkInvoiceGroupByObj[] = [];
@@ -457,12 +495,18 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         let res = groupBy(arr, 'accUniqueName');
         if (this.voucherApiVersion === 2) {
             let model: GenerateBulkInvoiceObject[] = [];
-            forEach(res, (item: any): void => {
-                forEach(item, (obj: GenBulkInvoiceGroupByObj): void => {
-                    model.push(obj?.uniqueName);
+            if (typeof generateEInvoice === "boolean") {
+                model = this.entryUniqueNamesForBulkActionDuplicateCopy;
+            } else {
+                forEach(res, (item: any): void => {
+                    forEach(item, (obj: GenBulkInvoiceGroupByObj): void => {
+                        model.push(obj?.uniqueName);
+                    });
                 });
-            });
-            this.store.dispatch(this.invoiceActions.GenerateBulkInvoice({ combined: action }, { entryUniqueNames: model }));
+            }
+            this.entryUniqueNamesForBulkActionDuplicateCopy = cloneDeep(model);
+            this.isCombined = action;
+            this.store.dispatch(this.invoiceActions.GenerateBulkInvoice({ combined: action }, { entryUniqueNames: model, generateEInvoice: generateEInvoice }));
         } else {
             let model: GenerateBulkInvoiceRequest[] = [];
             forEach(res, (item: any): void => {
