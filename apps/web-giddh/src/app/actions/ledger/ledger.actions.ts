@@ -325,6 +325,8 @@ export class LedgerActions {
                 let data: BaseResponse<any, GenerateBulkInvoiceRequest[]> = response?.payload;
                 if (data?.status === 'error') {
                     this.toaster.showSnackBar("error", data.message, data.code);
+                } else if (data?.status === 'einvoice-confirm') {
+                    return this.setBulkGenerateConfirm(data);
                 } else {
                     if (typeof data.body === 'string') {
                         this.toaster.showSnackBar("success", data.body);
@@ -678,6 +680,13 @@ export class LedgerActions {
         return {
             type: LEDGER.REFRESH_LEDGER,
             payload: request
+        };
+    }
+
+    public setBulkGenerateConfirm(body: any): CustomActions {
+        return {
+            type: LEDGER.SHOW_BULK_GENERATE_VOUCHER_CONFIRMATION,
+            payload: body
         };
     }
 }
