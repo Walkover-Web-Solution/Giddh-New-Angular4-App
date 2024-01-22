@@ -4,18 +4,22 @@ import { CommonModule } from "@angular/common";
 import { RouterModule } from "@angular/router";
 import { FormsModule } from "@angular/forms";
 import { VouchersRoutingModule } from "./vouchers.routing.module";
-import { VouchersListComponent } from "./list/list.component";
+import { VoucherListComponent } from "./list/list.component";
+import { MatTabsModule } from "@angular/material/tabs";
+import { MatTableModule } from "@angular/material/table";
 
 @NgModule({
     declarations: [
         MainComponent,
-        VouchersListComponent
+        VoucherListComponent
     ],
     imports: [
         CommonModule,
         RouterModule,
         FormsModule,
-        VouchersRoutingModule
+        VouchersRoutingModule,
+        MatTabsModule,
+        MatTableModule
     ],
     exports: [
         

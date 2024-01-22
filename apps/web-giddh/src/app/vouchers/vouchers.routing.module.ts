@@ -1,9 +1,9 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 import { MainComponent } from "./main.component";
-import { VouchersListComponent } from "./list/list.component";
+import { VoucherListComponent } from "./list/list.component";
 import { VouchersPreviewComponent } from "./preview/preview.component";
-import { VouchersCreateComponent } from "./create/create.component";
+import { VoucherCreateComponent } from "./create/create.component";
 
 const routes: Routes = [
     {
@@ -16,20 +16,20 @@ const routes: Routes = [
                 pathMatch: "full"
             },
             {
-                path: ":type/list",
-                component: VouchersListComponent
+                path: ":moduleType/list",
+                component: VoucherListComponent
             },
             {
-                path: ":type/preview/:uniqueName",
+                path: ":moduleType/preview/:uniqueName",
                 component: VouchersPreviewComponent
             },
             {
-                path: ":type/create",
-                component: VouchersCreateComponent
+                path: ":moduleType/create",
+                component: VoucherCreateComponent
             },
             {
-                path: ":type/edit/:uniqueName",
-                component: VouchersCreateComponent
+                path: ":moduleType/edit/:uniqueName",
+                component: VoucherCreateComponent
             }
         ]
     }
