@@ -290,6 +290,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
     };
     /** True if ledger account belongs to sundry debtor/creditor */
     private isSundryDebtorCreditor: boolean = false;
+    /** True if need to generate einvoice in case of update ledger entry */
+    public generateEInvoice: boolean = null;
+    /** Holds response of bulk generate popup */
+    private isCombined: boolean = null;
+    /** Duplicate copy of entry unique names for bulk action variable */
+    public entryUniqueNamesForBulkActionDuplicateCopy: string[] = [];
 
     constructor(
         private store: Store<AppState>,
@@ -731,6 +737,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
         this.isLedgerCreateSuccess$.subscribe(s => {
             if (s) {
+                this.generateEInvoice = null;
                 this.toaster.showSnackBar("success", this.localeData?.entry_created, this.commonLocaleData?.app_success);
                 this.lc.showNewLedgerPanel = false;
                 this.lc.showBankLedgerPanel = false;
@@ -776,6 +783,33 @@ export class LedgerComponent implements OnInit, OnDestroy {
             }
         });
 
+        this.store.pipe(select(state => state.ledger.showBulkGenerateVoucherConfirmation), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.message) {
+                this.store.dispatch(this.ledgerActions.setBulkGenerateConfirm(null));
+                
+                let dialogRef = this.dialog.open(ConfirmModalComponent, {
+                    data: {
+                        title: this.commonLocaleData?.app_confirm,
+                        body: response?.message,
+                        ok: this.commonLocaleData?.app_yes,
+                        cancel: this.commonLocaleData?.app_no,
+                        permanentlyDeleteMessage: ' '
+                    }
+                });
+
+                dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+                    if (typeof response === "boolean") {
+                        this.entryUniqueNamesForBulkAction = cloneDeep(this.entryUniqueNamesForBulkActionDuplicateCopy);
+                        if (response) {
+                            this.onSelectInvoiceGenerateOption(this.isCombined, true);
+                        } else {
+                            this.onSelectInvoiceGenerateOption(this.isCombined, false);
+                        }
+                    }
+                });
+            }
+        });
+
         this.store.pipe(select(s => s.company && s.company.taxes), takeUntil(this.destroyed$)).subscribe(res => {
             this.companyTaxesList = res || [];
         });
@@ -817,9 +851,17 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
                 dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
                     if (response) {
-                        this.confirmEInvoiceEntry(true);
+                        if (this.updateLedgerModalDialogRef && this.dialog.getDialogById(this.updateLedgerModalDialogRef.id)) {
+                            this.generateEInvoice = true;
+                        } else {
+                            this.confirmEInvoiceEntry(true);
+                        }
                     } else {
-                        this.confirmEInvoiceEntry(false);
+                        if (this.updateLedgerModalDialogRef && this.dialog.getDialogById(this.updateLedgerModalDialogRef.id)) {
+                            this.generateEInvoice = false;
+                        } else {
+                            this.confirmEInvoiceEntry(false);
+                        }
                     }
                 });
             }
@@ -1091,6 +1133,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     public getTransactionData() {
         this.closingBalanceBeforeReconcile = null;
+        this.generateEInvoice = null;
         if (this.trxRequest?.accountUniqueName) {
             this.store.dispatch(this.ledgerActions.GetLedgerBalance(this.trxRequest));
             this.store.dispatch(this.ledgerActions.GetTransactions(this.trxRequest));
@@ -1839,12 +1882,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
     }
 
-    public onSelectInvoiceGenerateOption(isCombined: boolean) {
+    public onSelectInvoiceGenerateOption(isCombined: boolean, generateEInvoice?: boolean) {
+        this.isCombined = isCombined;
         this.entryUniqueNamesForBulkAction = _.uniq(this.entryUniqueNamesForBulkAction);
+        this.entryUniqueNamesForBulkActionDuplicateCopy = cloneDeep(this.entryUniqueNamesForBulkAction);
         if (this.voucherApiVersion === 2) {
-            this.store.dispatch(this.ledgerActions.GenerateBulkLedgerInvoice({ combined: isCombined }, { entryUniqueNames: _.cloneDeep(this.entryUniqueNamesForBulkAction) }, 'ledger'));
+            this.store.dispatch(this.ledgerActions.GenerateBulkLedgerInvoice({ combined: isCombined }, { entryUniqueNames: _.cloneDeep(this.entryUniqueNamesForBulkAction), generateEInvoice: generateEInvoice }, 'ledger'));
         } else {
-            this.store.dispatch(this.ledgerActions.GenerateBulkLedgerInvoice({ combined: isCombined }, [{ accountUniqueName: this.lc.accountUnq, entries: _.cloneDeep(this.entryUniqueNamesForBulkAction) }], 'ledger'));
+            this.store.dispatch(this.ledgerActions.GenerateBulkLedgerInvoice({ combined: isCombined }, [{ accountUniqueName: this.lc.accountUnq, entries: _.cloneDeep(this.entryUniqueNamesForBulkAction), generateEInvoice: generateEInvoice }], 'ledger'));
         }
     }
 

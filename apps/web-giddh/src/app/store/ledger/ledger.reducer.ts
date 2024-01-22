@@ -33,6 +33,7 @@ export interface LedgerState {
     refreshLedger: boolean;
     hasLedgerPermission: boolean;
     showDuplicateVoucherConfirmation: any;
+    showBulkGenerateVoucherConfirmation: any;
 }
 
 export const initialState: LedgerState = {
@@ -53,7 +54,8 @@ export const initialState: LedgerState = {
     ledgerTransactionsBalance: null,
     refreshLedger: false,
     hasLedgerPermission: true,
-    showDuplicateVoucherConfirmation: {}
+    showDuplicateVoucherConfirmation: {},
+    showBulkGenerateVoucherConfirmation: {}
 };
 
 export function ledgerReducer(state = initialState, action: CustomActions): LedgerState {
@@ -279,6 +281,9 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
         }
         case LEDGER.GENERATE_BULK_LEDGER_INVOICE_RESPONSE: {
             return Object.assign({}, state, { ledgerBulkActionSuccess: true });
+        }
+        case LEDGER.SHOW_BULK_GENERATE_VOUCHER_CONFIRMATION: {
+            return Object.assign({}, state, { ledgerBulkActionSuccess: false, showBulkGenerateVoucherConfirmation: action.payload });
         }
         case LEDGER.GET_CURRENCY_RATE_RESPONSE: {
             return state;
