@@ -131,6 +131,7 @@ export class LedgerResponse {
     public voucherUniqueName?: string;
     public referenceVoucher?: ReferenceVoucher;
     public gainLoss?: number;
+    public generateEInvoice?: boolean = null;
 }
 
 /** Model adjusted amounts for invoices */

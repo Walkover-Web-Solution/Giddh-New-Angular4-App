@@ -36,7 +36,8 @@ export interface InvoiceState {
     isGenerateBulkInvoiceCompleted: boolean,
     hasRecurringVoucherListPermissions: boolean,
     hasPendingVouchersListPermissions: boolean,
-    hasInvoiceSettingPermissions: boolean
+    hasInvoiceSettingPermissions: boolean,
+    showBulkGenerateVoucherConfirmation: any
 }
 
 export const initialState: InvoiceState = {
@@ -60,7 +61,8 @@ export const initialState: InvoiceState = {
     isGenerateBulkInvoiceCompleted: false,
     hasRecurringVoucherListPermissions: true,
     hasPendingVouchersListPermissions: true,
-    hasInvoiceSettingPermissions: true
+    hasInvoiceSettingPermissions: true,
+    showBulkGenerateVoucherConfirmation: {}
 };
 
 export function InvoiceReducer(state = initialState, action: CustomActions): InvoiceState {
@@ -169,7 +171,7 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
         case INVOICE_ACTIONS.GENERATE_BULK_INVOICE_RESPONSE: {
             let newState = _.cloneDeep(state);
             let res: BaseResponse<any, GenerateBulkInvoiceRequest[]> = action.payload;
-            let reqObj: GenerateBulkInvoiceRequest[] = action.payload.request;
+            let reqObj: GenerateBulkInvoiceRequest[] = action.payload.request?.entryUniqueNames;
             // Check if requested form ledger
             if (res?.status === 'success' && action.payload.queryString && action.payload.queryString.requestedFrom === 'ledger') {
                 return state;
@@ -241,7 +243,7 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
                 newState.settings = res.body;
                 newState.hasInvoiceSettingPermissions = true;
                 return Object.assign({}, state, newState);
-            } else if(res?.status === 'error' && res.statusCode === UNAUTHORISED) {
+            } else if (res?.status === 'error' && res.statusCode === UNAUTHORISED) {
                 newState.hasInvoiceSettingPermissions = false;
                 return Object.assign({}, state, newState);
             }
@@ -291,7 +293,7 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
                 newState.settings.estimateSettings = form.estimateSettings;
                 newState.settings.proformaSettings = form.proformaSettings;
                 const broadcast = new BroadcastChannel("tabs");
-                broadcast.postMessage({autoGenerateVoucherFromEntry: form.invoiceSettings.autoGenerateVoucherFromEntry});
+                broadcast.postMessage({ autoGenerateVoucherFromEntry: form.invoiceSettings.autoGenerateVoucherFromEntry });
                 return Object.assign({}, state, newState);
             }
             return state;
@@ -502,6 +504,9 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
                 recurringInvoiceData: { ...state.recurringInvoiceData, recurringInvoices: null },
                 hasRecurringVoucherListPermissions: false
             };
+        case INVOICE_ACTIONS.SHOW_BULK_GENERATE_VOUCHER_CONFIRMATION: {
+            return Object.assign({}, state, { isBulkInvoiceGenerated: false, showBulkGenerateVoucherConfirmation: action.payload });
+        }
         default: {
             return state;
         }

@@ -123,6 +123,8 @@ export class InvoiceActions {
                 let data: BaseResponse<any, any> = response.payload;
                 if (data?.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
+                } else if (data?.status === 'einvoice-confirm') {
+                    return this.setBulkGenerateConfirm(data);
                 } else {
                     if (typeof data?.body === 'string') {
                         this._toasty.successToast(data?.body);
@@ -1423,6 +1425,13 @@ export class InvoiceActions {
     public noPermissionsRecurringInvoice(): CustomActions {
         return {
             type: INVOICE.RECURRING.NO_PERMISSIONS_RECURRING_INVOICE
+        };
+    }
+
+    public setBulkGenerateConfirm(body: any): CustomActions {
+        return {
+            type: INVOICE_ACTIONS.SHOW_BULK_GENERATE_VOUCHER_CONFIRMATION,
+            payload: body
         };
     }
 }
