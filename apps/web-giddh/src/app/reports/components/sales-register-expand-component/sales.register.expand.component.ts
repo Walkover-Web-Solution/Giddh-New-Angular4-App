@@ -17,7 +17,6 @@ import { SalesPurchaseRegisterExportComponent } from '../../sales-purchase-regis
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_MM_DD_YYYY, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 import * as dayjs from 'dayjs';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-
 @Component({
     selector: 'sales-register-expand',
     templateUrl: './sales.register.expand.component.html',
@@ -113,6 +112,8 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
     public isLoading: boolean = false;
     /** Hold initial params data */
     private params: any = { from: '', to: '' };
+    /** True if API called on single time*/
+    public isDefaultLoaded: boolean = false;
 
     constructor(private store: Store<AppState>, private invoiceReceiptActions: InvoiceReceiptActions, private activeRoute: ActivatedRoute, private router: Router, private _cd: ChangeDetectorRef, private breakPointObservar: BreakpointObserver, private generalService: GeneralService, private modalService: BsModalService, private dialog: MatDialog) {
         this.salesRegisteDetailedResponse$ = this.store.pipe(select(appState => appState.receipt.SalesRegisteDetailedResponse), takeUntil(this.destroyed$));
@@ -139,6 +140,12 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
             }
         });
 
+        this.isGetSalesDetailsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(success => {
+            if (success) {
+                this.isDefaultLoaded = true;
+            }
+        });
+
         this.activeRoute.queryParams.pipe(take(1)).subscribe(params => {
             if (params.from && params.to) {
                 this.from = params.from;
@@ -148,18 +155,19 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
                 this.getDetailedsalesRequestFilter.branchUniqueName = params.branchUniqueName;
                 this.params = params;
                 this.setDataPickerDateRange();
+                this.getDetailedSalesReport(this.getDetailedsalesRequestFilter);
             }
         });
 
         /** Universal date observer */
         this.universalDate$.subscribe(dateObj => {
-            if (dateObj) {
+            if (dateObj && this.isDefaultLoaded) {
                 this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
                 this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                this.getDetailedSalesReport(this.getDetailedsalesRequestFilter);
             }
         });
 
-        this.getDetailedSalesReport(this.getDetailedsalesRequestFilter);
         this.salesRegisteDetailedResponse$.pipe(takeUntil(this.destroyed$)).subscribe((res: SalesRegisteDetailedResponse) => {
             if (res) {
                 this.SalesRegisteDetailedItems = res;
