@@ -5,7 +5,8 @@ import { VoucherComponentStore } from "../vouchers.component.store";
 @Component({
     selector: "create",
     templateUrl: "./create.component.html",
-    styleUrls: ["./create.component.scss"]
+    styleUrls: ["./create.component.scss"],
+    providers: [VoucherComponentStore]
 })
 export class VoucherCreateComponent implements OnInit, OnDestroy {
     public moduleType: string = "";
