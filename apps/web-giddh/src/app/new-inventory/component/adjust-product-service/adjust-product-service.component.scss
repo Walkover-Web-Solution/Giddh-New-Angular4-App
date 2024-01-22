@@ -50,10 +50,6 @@
             }
         }
 
-        textarea {
-            min-height: 90px;
-        }
-
         .giddh-table {
             max-width: 1000px;
             width: 100%;
@@ -62,11 +58,9 @@
             th {
                 border: 1px solid var(--color-iron);
                 vertical-align: top !important;
-                min-width: 160px;
-            }
-
-            textarea {
-                min-height: 65px;
+                &:not(&.small-width){
+                    min-width: 160px;
+                }
             }
         }
 
@@ -76,7 +70,7 @@
     }
 
     .action-button-wrapper {
-        max-width: 1030px;
+        max-width: 1000px;
     }
 }
 

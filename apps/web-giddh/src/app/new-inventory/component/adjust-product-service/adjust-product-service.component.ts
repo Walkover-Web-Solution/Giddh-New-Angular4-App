@@ -21,6 +21,7 @@ export class AdjustProductServiceComponent implements OnInit {
         { label: 'Option 3', value: 3 }
     ]
     public mode: boolean = true;
+    public closingQty: Number = 23;
 
     constructor(private dialog: MatDialog) { }
 
@@ -46,12 +47,12 @@ export class AdjustProductServiceComponent implements OnInit {
      * @memberof AdjustProductServiceComponent
      */
     public selectAccount(event: any): void {
-        if(event?.value === 1){
+        if (event?.value === 1) {
             this.openCreateReasonAsidepan();
         }
     }
 
-    public openCreateReasonAsidepan(): void{
+    public openCreateReasonAsidepan(): void {
         this.dialog.open(InventoryAdjustmentReasonAside, {
             position: {
                 top: '0',
