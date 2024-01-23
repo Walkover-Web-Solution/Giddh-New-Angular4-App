@@ -17,6 +17,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
     /** Holds images folder path */
     public imgPath: string = "";
     public invoiceSettings$: Observable<any> = this.componentStore.invoiceSettings$;
+    public dummyOptions: any[] = [
+        { label: "Option 1", value: 1 },
+        { label: "Option 2", value: 2 },
+        { label: "Option 3", value: 3 },
+        { label: "Option 4", value: 4 }
+    ];
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -38,8 +44,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
         });
     }
 
-    public ngOnDestroy(): void {
-        
+    public selectDropdown(event:any): void{
+
     }
-    
+
+    public ngOnDestroy(): void {
+
+    }
+
 }

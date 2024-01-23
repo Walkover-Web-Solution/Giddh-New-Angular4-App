@@ -7,19 +7,27 @@ import { VouchersRoutingModule } from "./vouchers.routing.module";
 import { VoucherListComponent } from "./list/list.component";
 import { MatTabsModule } from "@angular/material/tabs";
 import { MatTableModule } from "@angular/material/table";
+import { FormFieldsModule } from "../theme/form-fields/form-fields.module";
+import { VoucherCreateComponent } from "./create/create.component";
+import { MatCheckboxModule } from "@angular/material/checkbox";
+import { GiddhDatepickerModule } from "../theme/giddh-datepicker/giddh-datepicker.module";
 
 @NgModule({
     declarations: [
         MainComponent,
-        VoucherListComponent
+        VoucherListComponent,
+        VoucherCreateComponent
     ],
     imports: [
         CommonModule,
         RouterModule,
         FormsModule,
+        FormFieldsModule,
         VouchersRoutingModule,
         MatTabsModule,
-        MatTableModule
+        MatTableModule,
+        MatCheckboxModule,
+        GiddhDatepickerModule
     ],
     exports: [
         
