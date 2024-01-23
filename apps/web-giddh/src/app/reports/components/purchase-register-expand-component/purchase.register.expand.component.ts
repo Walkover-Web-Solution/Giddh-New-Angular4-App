@@ -184,6 +184,10 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
             if (dateObj && this.isDefaultLoaded) {
                 this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
                 this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                this.from = dayjs(dateObj[0]).format(GIDDH_DATE_FORMAT);
+                this.to = dayjs(dateObj[1]).format(GIDDH_DATE_FORMAT);
+                this.getDetailedPurchaseRequestFilter.from = this.from;
+                this.getDetailedPurchaseRequestFilter.to = this.to;
                 this.getDetailedPurchaseReport(this.getDetailedPurchaseRequestFilter);
             }
         });
