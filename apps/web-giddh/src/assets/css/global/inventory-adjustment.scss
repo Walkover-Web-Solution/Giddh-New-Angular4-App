@@ -1,0 +1,11 @@
+.adjust-inventory-list-page {
+    .custom-field-list {
+        table {
+            th, td{ 
+                &.date-column-width{
+                    min-width: 120px;
+                }
+            }
+        }
+    }
+}
