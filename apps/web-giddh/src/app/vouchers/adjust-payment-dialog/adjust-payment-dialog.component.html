@@ -1,0 +1,23 @@
+<div class="modal-header">
+  <h4 mat-dialog-title class="font-16">Adjust Payment</h4>
+  <button mat-icon-button mat-dialog-close type="button" class="close d-flex justify-content-center align-items-center">
+    <i class="icon-cross icon-font-16"></i>
+  </button>
+</div>
+<mat-dialog-content>
+  <div class="modal-body">
+    <input-field
+      [type]="'text'"
+      [label]="'Customer Name'"
+      class="w-50"
+    >
+    </input-field>
+    <div>
+      
+    </div>
+    <div class="d-flex column-gap1">
+      <button mat-stroked-button color="primary">Search</button>
+      <button mat-stroked-button mat-dialog-close>Reset</button>
+    </div>
+  </div>
+</mat-dialog-content>

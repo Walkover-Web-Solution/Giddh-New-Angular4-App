@@ -1,8 +1,235 @@
-<mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
-    <mat-tab label="Estimates (Beta)">Estimates (Beta)</mat-tab>
-    <mat-tab label="Proformas">Proformas</mat-tab>
-    <mat-tab label="Invoices">Invoices</mat-tab>
-    <mat-tab label="Pending">Pending</mat-tab>
-    <mat-tab label="Settings">Settings</mat-tab>
-    <mat-tab label="Templates">Templates</mat-tab>
-</mat-tab-group>
+<ng-container>
+    <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
+        <mat-tab label="Estimates (Beta)">Estimates (Beta)</mat-tab>
+        <mat-tab label="Proformas">Proformas</mat-tab>
+        <!-- invoice-content-start -->
+        <mat-tab label="Invoices">
+            <div class="invoice-wrapper pd-15">
+                <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
+                    <div class="d-flex align-items-center column-gap1">
+                        <button mat-stroked-button color="primary" [matMenuTriggerFor]="downloadCsvEmail">
+                            <span>New Invoice</span>
+                            <i class="icon-arrow-down icon-font-11 ml-2"></i>
+                        </button>
+                        <mat-menu #downloadCsvEmail="matMenu">
+                            <button mat-menu-item>Cash Invoice</button>
+                            <button mat-menu-item>Sales Invoice</button>
+                        </mat-menu>
+                        <div class="custom-datepicker-wrapper">
+                            <div class="custom-datepicker">
+                                <input type="text" name="selectedDateRange"
+                                    class="giddh-datepicker date-range-picker" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center column-gap1">
+                        <button mat-stroked-button colo="primary" (click)="advanceSearchDialog()">Filter
+                            <i class="icon-advance-filter"></i>
+                        </button>
+                        <button mat-stroked-button colo="primary" (click)="exportDialog()">Export</button>
+                    </div>
+                </div>
+                <div class="total-wrapper d-flex column-gap5 w-100">
+                    <div class="total-sale opening-box w-50">
+                        <p class="font-12">Total Sale:</p>
+                        <span class="font-16">₹4,17,193.26/-</span>
+                    </div>
+                    <div class="total-sale due-box w-50">
+                        <p class="font-12">Total Due:</p>
+                        <span class="font-16">₹4,16,988.00/-</span>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table mat-table [dataSource]="dataSource" matSort class="w-100">
+                        <ng-container matColumnDef="position">
+                            <th mat-header-cell *matHeaderCellDef> # </th>
+                            <td mat-cell *matCellDef="let element">
+                                <div class="checkbox-hide">
+                                    <mat-checkbox
+                                        color="primary"
+                                    ></mat-checkbox>
+                                </div>
+                                <div class="invoice-number">
+                                    {{element.position}}
+                                </div>
+                                </td>
+                        </ng-container>
+                        <ng-container matColumnDef="invoice">
+                            <th mat-header-cell *matHeaderCellDef>
+                                <div class="d-flex align-items-center column-gap5">
+                                    <span class="cp">
+                                        <i class="icon-search"></i>
+                                    </span>
+                                    <!-- <div class="d-flex align-items-center">
+                                        <text-field
+                                            [type]="'text'"
+                                            placeholder="Search"
+                                            [cssClass]="'form-control search-table'"
+                                            [autoFocus]="show"
+                                        ></text-field>
+                                    </div> -->
+                                    Invoice No.
+                                </div>
+                                <!-- <button mat-icon-button class="invoice-search-icon p-0">
+                                    <span class="icon-search"></span>
+                                </button> -->
+                                </th>
+                            <td mat-cell *matCellDef="let element">
+                                <a href="javascript:;" class="btn-link-2">240122-1</a>
+                                <small class="text-danger d-block">Overdue By 4 Days</small>
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="customer">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header > 
+                                <div class="d-flex align-items-center column-gap5">
+                                    <span class="cp">
+                                        <i class="icon-search"></i>
+                                    </span>
+                                    <!-- <div class="d-flex align-items-center">
+                                        <text-field
+                                            [type]="'text'"
+                                            placeholder="Search"
+                                            [cssClass]="'form-control search-table'"
+                                            [autoFocus]="show"
+                                        ></text-field>
+                                    </div> -->
+                                    Customer
+                                </div>    
+                            </th>
+                            <td mat-cell *matCellDef="let element" class="no-dbl-click-select cp">
+                                <div> 00000000 </div>
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="invoicedate">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                Invoice Date
+                            </th>
+                            <td mat-cell *matCellDef="let element"> 
+                                22-01-2024
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="amount">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-right">
+                                Amount
+                            </th>
+                            <td mat-cell *matCellDef="let element" class="text-right" matTooltip="In INR: 1.239 (Conversion Rate: 0.005)"
+                            matTooltipPosition="above"> 
+                                Rp233.00
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="balance">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-right">
+                                Balance Due
+                            </th>
+                            <td mat-cell *matCellDef="let element" class="text-right" matTooltip="In INR: 1.239 (Conversion Rate: 0.005)"
+                            matTooltipPosition="above"> 
+                                Rp233.00
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="duedate">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                Due Date
+                            </th>
+                            <td mat-cell *matCellDef="let element"> 
+                                06-02-2024
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="invoicestatus">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                E-invoice Status
+                            </th>
+                            <td mat-cell *matCellDef="let element"> 
+                                Failed
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="status">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                Status
+                            </th>
+                            <td mat-cell *matCellDef="let element"> 
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <p>Cancel</p>
+                                    <span [matMenuTriggerFor]="menu" class="cp">
+                                        <i class="icon-dots-three-vertical"></i>
+                                    </span>
+                                    <mat-menu #menu="matMenu">
+                                        <button mat-menu-item (click)="onPerformAction()">
+                                            <span>Paid</span>
+                                        </button>
+                                        <button mat-menu-item (click)="adjustPayment()">
+                                            <span>Adjust Amount</span>
+                                        </button>
+                                        <button mat-menu-item>
+                                            <span>Unpaid</span>
+                                        </button>
+                                        <button mat-menu-item>
+                                            <span>Hold</span>
+                                        </button>
+                                        <button mat-menu-item>
+                                            <span>Cancel</span>
+                                        </button>
+                                    </mat-menu>
+                                </div>
+                            </td>
+                        </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="checkbox-show"></tr>
+                    </table>
+                </div>
+            </div>
+        </mat-tab>
+        <!-- invoice-content-end -->
+        <mat-tab label="Pending">Pending</mat-tab>
+        <mat-tab label="Settings">Settings</mat-tab>
+        <mat-tab label="Templates">Templates</mat-tab>
+    </mat-tab-group>
+
+    <!-- datepicker field -->
+    <ng-template #datepickerTemplate>
+        <div class="datepicker-modal">
+            <div class="modal-body">
+                <app-datepicker-wrapper 
+                    [inputStartDate]="selectedDateRange?.startDate"
+                    [inputEndDate]="selectedDateRange?.endDate" 
+                    [alwaysShowCalendars]="true" 
+                    [ranges]="datePickerOption"
+                    [selectedRangeLabel]="selectedRangeLabel" 
+                    [showCustomRangeLabel]="true" 
+                    [showClearButton]="false"
+                    [showCancel]="true" 
+                    [linkedCalendars]="true" 
+                    [showDropdowns]="true"
+                    (rangeClicked)="dateSelectedCallback($event)" 
+                    (datesUpdated)="dateSelectedCallback($event)"
+                    [keepCalendarOpeningWithRange]="false" 
+                    [showRangeLabelOnInput]="false"
+                    [dateFieldPosition]="dateFieldPosition">
+                </app-datepicker-wrapper>
+            </div>
+        </div>
+    </ng-template>
+    
+    <!-- advance-search-dialog -->
+    <ng-template #advancesearch>
+        <app-advance-search
+            [localeData]="localeData"
+            [commonLocaleData]="commonLocaleData"
+        ></app-advance-search>
+    </ng-template>
+        
+    <!-- export-dialog -->
+    <ng-template #export>
+        <app-bulk-export></app-bulk-export>
+    </ng-template>
+
+    <!-- paid-dialog -->
+    <ng-template #paidDialog>
+        <app-payment-dialog></app-payment-dialog>
+    </ng-template>
+    
+    <ng-template #adjustPaymentDialog>
+        <app-adjust-payment-dialog></app-adjust-payment-dialog>
+    </ng-template>
+    
+    
+</ng-container>
