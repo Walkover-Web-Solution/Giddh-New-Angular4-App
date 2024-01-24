@@ -1,0 +1,92 @@
+<div class="modal-header">
+  <h4 mat-dialog-title class="font-16">Advance Search</h4>
+  <button mat-icon-button mat-dialog-close type="button" class="close d-flex justify-content-center align-items-center">
+    <i class="icon-cross icon-font-16"></i>
+  </button>
+</div>
+<mat-dialog-content>
+  <div class="modal-body">
+    <div class="d-flex d-flex column-gap1 mr-b15 w-100">
+      <dropdown-field
+        [name]="'invoice'"
+        [label]="'Invoice Date Range'"
+        [placeholder]="'Select Action'"
+        [options]="dateOptions"
+        class="w-50"
+      >
+      </dropdown-field>
+      <giddh-datepicker type="text" (keydown.enter)="$event.preventDefault()" [label]="'Select Date'"
+        [placeholder]="'DDMMYYYY'" name="voucherDate" [showToggleIcon]="false"
+        [appearance]="'outline'" class="w-50">
+      </giddh-datepicker>
+    </div>
+    <div class="d-flex column-gap1 border-bottom pd-b15 mr-b15 w-100">
+      <dropdown-field
+          [name]="'invoice'"
+          [label]="'Invoice Total Amt'"
+          [placeholder]="'Select'"
+          [options]="filtersForEntryTotal"
+          class="w-50"
+      >
+      </dropdown-field>
+      <input-field
+        [type]="'tel'"
+        [placeholder]="'00'"
+        class="w-50"
+      >
+      </input-field>
+    </div>
+    <div class="d-flex column-gap1 mr-b15 w-100">
+      <dropdown-field
+        [name]="'invoice'"
+        [label]="'Due Date Range'"
+        [placeholder]="'Select Action'"
+        [options]="dateOptions"
+        class="w-50"
+      >
+      </dropdown-field>
+      <giddh-datepicker type="text" (keydown.enter)="$event.preventDefault()" [label]="'Select Date'"
+        [placeholder]="'DDMMYYYY'" name="voucherDate" [showToggleIcon]="false"
+        [appearance]="'outline'" class="w-50">
+      </giddh-datepicker>
+    </div>
+    <div class="d-flex column-gap1 mr-b15 w-100">
+      <dropdown-field
+        [name]="'invoice'"
+        [label]="'Due Amount'"
+        [placeholder]="'Select'"
+        [options]="filtersForEntryTotal"
+        class="w-50"
+      >
+      </dropdown-field>
+      <input-field
+        [type]="'tel'"
+        [placeholder]="'00'"
+        class="w-50"
+      >
+      </input-field>
+    </div>
+    <div class="mr-b15">
+      <dropdown-field
+        [name]="'invoice'"
+        [label]="'Due Amount'"
+        [placeholder]="'Status'"
+        [options]="filtersForEntryTotal"
+      >
+      </dropdown-field>
+    </div>
+    <div class="mr-b15">
+      <dropdown-field
+        [name]="'invoice'"
+        [label]="'E-invoice Status'"
+        [placeholder]="'Status'"
+        [options]="filtersForEntryTotal"
+      >
+      </dropdown-field>
+    </div>
+    <div class="d-flex justify-content-end column-gap1">
+      <button mat-stroked-button color="primary">Search</button>
+      <button mat-stroked-button mat-dialog-close>Cancel</button>
+    </div>
+  </div>
+</mat-dialog-content>
