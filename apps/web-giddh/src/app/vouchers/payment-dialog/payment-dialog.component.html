@@ -1,0 +1,50 @@
+<div class="modal-header">
+  <h4 mat-dialog-title class="font-16">Perform Payment action</h4>
+  <button mat-icon-button mat-dialog-close type="button" class="close d-flex justify-content-center align-items-center">
+    <i class="icon-cross icon-font-16"></i>
+  </button>
+</div>
+<mat-dialog-content>
+  <div class="modal-body">
+    <div class="d-flex column-gap1 mr-b15">
+      <giddh-datepicker type="text" (keydown.enter)="$event.preventDefault()" [label]="'Payment Date'"
+        [placeholder]="'DDMMYYYY'" name="voucherDate" [showToggleIcon]="false" [appearance]="'outline'" class="w-50">
+      </giddh-datepicker>
+      <input-field
+        [type]="'tel'"
+        [label]="'Amount'"
+        class="w-50"
+        [prefix]=""
+      >
+      </input-field>
+    </div>
+    <div class="d-flex column-gap1 mr-b15">
+      <dropdown-field
+        [name]="'account'"
+        [label]="'Payment Mode'"
+        [placeholder]="'Select Account'"
+        class="w-50"
+      >
+      </dropdown-field>
+      <dropdown-field
+        [name]="'tag'"
+        [label]="'Tag'"
+        [placeholder]="'Select Tag'"
+        class="w-50"
+      >
+      </dropdown-field>
+    </div>
+    <mat-form-field appearance="outline" class="w-100 mr-b15">
+      <mat-label>Description</mat-label>
+      <textarea
+        matInput
+        rows="3"
+        [placeholder]="'Description'"
+      ></textarea>
+    </mat-form-field>
+    <div class="d-flex column-gap1 justify-content-end">
+      <button mat-stroked-button color="primary">Save</button>
+      <button mat-stroked-button>Cancel</button>
+    </div>
+  </div>
+</mat-dialog-content>

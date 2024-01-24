@@ -3425,6 +3425,10 @@ input[type="checkbox"]:checked:after {
     font-size: 11px !important;
 }
 
+.icon-font-16 {
+    font-size: 16px !important;
+}
+
 .font-12 {
     font-size: var(--font-size-12) !important;
 }
@@ -14517,4 +14521,9 @@ aside-menu-product-service {
             text-decoration: underline;
         }
     }
+}
+
+// common-dialog md width 
+.mat-dialog-md {
+    width: 700px;
 }

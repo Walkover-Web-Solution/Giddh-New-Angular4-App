@@ -1,0 +1,40 @@
+.invoice-wrapper {
+    padding: 15px;
+    .total-wrapper {
+        .total-sale {
+            padding: 10px;
+            border-radius: 5px;
+
+            p {
+                color: var(--color-total-details-heading);
+            }
+
+            &.opening-box {
+                span {
+                    color: var(--color-success-enable);
+                }
+            }
+
+            &.due-box {
+                span {
+                    color: var(--color-danger);
+                }
+            }
+        }
+    }
+}
+table {
+    .checkbox-show {
+        .checkbox-hide {
+            display: none;
+        }
+        &:hover {
+            .checkbox-hide {
+                display: block;
+            }
+            .invoice-number {
+                display: none;
+            }
+        }
+    }
+}

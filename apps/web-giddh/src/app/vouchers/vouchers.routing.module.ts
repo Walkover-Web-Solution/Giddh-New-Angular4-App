@@ -16,19 +16,19 @@ const routes: Routes = [
                 pathMatch: "full"
             },
             {
-                path: ":moduleType/list",
+                path: ":voucherType/list",
                 component: VoucherListComponent
             },
             {
-                path: ":moduleType/preview/:uniqueName",
+                path: ":voucherType/preview/:uniqueName",
                 component: VouchersPreviewComponent
             },
             {
-                path: ":moduleType/create",
+                path: ":voucherType/create",
                 component: VoucherCreateComponent
             },
             {
-                path: ":moduleType/edit/:uniqueName",
+                path: ":voucherType/edit/:uniqueName",
                 component: VoucherCreateComponent
             }
         ]
