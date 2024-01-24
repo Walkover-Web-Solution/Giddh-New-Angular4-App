@@ -11,6 +11,13 @@ import { FormFieldsModule } from "../theme/form-fields/form-fields.module";
 import { VoucherCreateComponent } from "./create/create.component";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { GiddhDatepickerModule } from "../theme/giddh-datepicker/giddh-datepicker.module";
+import { MatSelectModule } from "@angular/material/select";
+import { MatMenuModule } from "@angular/material/menu";
+import { MatRadioModule } from "@angular/material/radio";
+import { MatButtonModule } from "@angular/material/button";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatInputModule } from "@angular/material/input";
+import { NgxMatSelectSearchModule } from "ngx-mat-select-search";
 
 @NgModule({
     declarations: [
@@ -27,7 +34,14 @@ import { GiddhDatepickerModule } from "../theme/giddh-datepicker/giddh-datepicke
         MatTabsModule,
         MatTableModule,
         MatCheckboxModule,
-        GiddhDatepickerModule
+        GiddhDatepickerModule,
+        MatSelectModule,
+        MatMenuModule,
+        MatRadioModule,
+        MatButtonModule,
+        MatFormFieldModule,
+        MatInputModule,
+        NgxMatSelectSearchModule
     ],
     exports: [
         

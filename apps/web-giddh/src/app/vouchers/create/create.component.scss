@@ -1,12 +1,17 @@
 .vouchers {
     padding: 5px 15px;
 
+    .row-gap {
+        row-gap: 15px;
+    }
+
     .vouchers-title {
         height: 50px;
         border-bottom: 1px solid var(--color-grey-bootstrap-border);
 
         h1 {
             font-size: var(--font-size-24);
+            color: var(--color-giddh-blue);
         }
     }
 
@@ -24,7 +29,7 @@
         }
 
         .vouchers-form-fields {
-            max-width: 600px;
+            max-width: 415px;
             min-width: 230px;
 
         }
@@ -33,66 +38,198 @@
             color: var(--color-blue);
             font-size: var(--font-size-12);
         }
-        .vouchers-copy-sales{
+
+        .vouchers-copy-sales {
             color: var(--color-blue);
             font-size: var(--font-size-14);
         }
     }
 
     .vouchers-secondary-form {
-        max-width: 860px;
-        margin: 0;
-        .row-gap{
-            row-gap: 15px;
-        }
+        // margin: 0;
 
-        .billing-label {
-            height: 40px;
-            padding: 11px 0;
-        }
+        .vouchers-small-container {
+            max-width: 860px;
 
-        .vouchers-address-form {
-            display: grid;
-            grid-template-areas:
-                'address address'
-                'country state'
-                'gstin pincode';
-            gap: 15px;
-            padding: 15px;
-            border: 1px solid var(--color-common-secondary-border);
+            .billing-label {
+                height: 40px;
+                padding: 11px 0;
+            }
 
-            .address-field {
-                grid-area: address;
+            .vouchers-address-form {
+                display: grid;
+                grid-template-areas:
+                    'address address'
+                    'country state'
+                    'gstin pincode';
+                gap: 15px;
+                padding: 15px;
+                border: 1px solid var(--color-common-secondary-border);
 
-                textarea {
-                    border: none;
+                .address-field {
+                    grid-area: address;
+
+                    textarea {
+                        border: none;
+                    }
+                }
+
+                .country-field {
+                    grid-area: country;
+                    border-bottom: 1px solid var(--color-common-secondary-border);
+                }
+
+                .state-field {
+                    grid-area: state;
+                    border-bottom: 1px solid var(--color-common-secondary-border);
+                }
+
+                .gstin-field {
+                    grid-area: gstin;
+                    border-bottom: 1px solid var(--color-common-secondary-border);
+                }
+
+                .pin-code-field {
+                    grid-area: pincode;
+                    border-bottom: 1px solid var(--color-common-secondary-border);
+                }
+
+                &.form-disabled {
+                    background: var(--color-dark-fog);
+                    opacity: 0.7;
+                    pointer-events: none;
                 }
             }
 
-            .country-field {
-                grid-area: country;
-                border-bottom: 1px solid var(--color-common-secondary-border);
+        }
+
+        .vouchers-large-container {
+            border-top: 1px solid var(--color-common-secondary-border);
+
+            .vouchers-entry-grid {
+                display: grid;
+                grid-template-columns: 40px minmax(230px, auto) repeat(5, 1fr) 140px auto;
+                @media screen and (max-width: 1359px) {
+                    grid-template-columns: 40px 180px repeat(5, 1fr) 140px auto;
+                }
+                grid-template-rows: minmax(40px, auto);
+                // max-width: 1075px;
+
+                &>div {
+                    padding: 15px 12px;
+                    border-bottom: 1px solid var(--color-common-secondary-border);
+                    border-left: 1px solid var(--color-common-secondary-border);
+                }
+
+                div {
+                    &.head-item {
+                        border-top: 1px solid var(--color-common-secondary-border);
+                        color: var(--color-giddh-blue);
+                        display: inline-flex;
+                        align-items: center;
+                        justify-content: flex-end;
+                        &:first-child, &:nth-child(2){
+                            justify-content: flex-start;
+                        }
+                    }
+                    &.body-item{
+                        text-align: right;
+                        &:nth-child(1n),  &:nth-child(2n){
+                            text-align: left;
+                        }
+                        &.active-item{
+                                background-color: var(--color-table-row-hover-primary-background);
+                        }
+
+                        &.delete-btn{
+                            padding: 0 0 0 10px;
+                            border-top: none;
+                            border-right: none;
+                            border-bottom: none;
+                            display: inline-flex;
+                            align-items: center;
+                            justify-content: center;
+                            .icon-trash{
+                                border: 1px solid var(--color-grey-bootstrap-border);
+                                border-radius: 50%;
+                                padding: 4px;
+                            }
+                        }
+                    }
+
+                    // &:nth-child(9n) {
+                    //     border-right: 1px solid var(--color-common-secondary-border);
+                    // }
+                }
+
+                .select-account-label {
+                    color: var(--color-gray);
+                }
+
             }
 
-            .state-field {
-                grid-area: state;
-                border-bottom: 1px solid var(--color-common-secondary-border);
-            }
+            .vouchers-other-detail{
+                margin: 0;
+                max-width: 1026px;
 
-            .gstin-field {
-                grid-area: gstin;
-                border-bottom: 1px solid var(--color-common-secondary-border);
-            }
+                .left-spacing{
+                    padding-left: 44px;
+                }
 
-            .pin-code-field {
-                grid-area: pincode;
-                border-bottom: 1px solid var(--color-common-secondary-border);
-            }
+                .icon-box{
+                    width: 26px;
+                    height: 26px;
+                    border: 1px solid var(--color-common-secondary-border);
+                    padding: 5px;
+                }
 
-            &.form-disabled{
-                background: var(--color-dark-fog);
-                opacity: 0.7;
-                pointer-events: none;
+                .vouchers-summary{
+                    margin-top: 36px;
+                    row-gap: 16px;
+                }
+
+                .vouchers-desposit-wrapper{
+                    width: 300px;
+                    border-radius: 3px;
+                    border: 1px solid var(--color-grey-bootstrap-border);
+                }
+
+                .vouchers-attachment{
+                    border: 1px solid var(--color-common-secondary-border);
+                    border-radius: 5px;
+                    padding: 10px 14px;
+
+                    .attachment-add-icon{
+                        width: 36px;
+                        height: 36px;
+                        text-align: center;
+                        line-height: 36px;
+                        border-radius: 50%;
+                        border: 1px solid var(--color-grey-bootstrap-border);
+                    }
+                    .attachment-placeholder{
+                        color: var(--color-giddh-blue);
+                    }
+                    .no-file-msg{
+                        right: 10%;
+                        bottom: -50%;
+                        transform: translateY(-35%);
+                        background-color: var(--color-gray);
+                        color: var(--color-common-primary-background-for-all-components);
+                        padding: 4px 10px;
+                    }
+                    input{
+                        width: 100%;
+                        height: 100%;
+                        left: 0;
+                        border-radius: 5px;
+                        z-index: 1;
+                        opacity: 0;
+                    }
+                }
+            }
+            .vouchers-actions{
+                border-top: 1px solid var(--color-common-secondary-border);
             }
         }
     }
