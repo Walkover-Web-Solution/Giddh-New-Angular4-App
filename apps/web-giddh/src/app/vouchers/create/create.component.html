@@ -1,1 +1,177 @@
-Vouchers Create
+<div class="vouchers">
+
+    <!-- Voucher Page Heading -->
+    <div class="vouchers-title d-flex align-items-center">
+        <h1>Sales</h1>
+        <span class="ml-auto">How to create an Invoice?</span>
+    </div>
+
+    <div class="vouchers-content-wrapper">
+
+        <!-- Voucher Form Top Section -->
+        <div class="vouchers-primary-form container-fluid">
+            <div class="row">
+                <div class="col-8">
+                    <div class="d-flex align-items-center">
+                        <div class="vouchers-form-fields w-100">
+                            <dropdown-field [label]="'Customer'" [placeholder]="'Select Customer'"
+                                [options]="dummyOptions" (selectedOption)="selectDropdown($event)" [defaultValue]="''">
+                            </dropdown-field>
+                        </div>
+                        <div class="vouchers-copy-sales ml-3">
+                            <i class="icon-copy-file"></i>
+                            Copy Previous Sales Invoices
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4 text-right">
+                    <span class="balance-due-label">Balance Due</span>
+                    <h2>0.00</h2>
+                </div>
+                <div class="col-12">
+                    <span class="vouchers-form-fields-detail">Customer Details</span>
+                    <img src="/assets/images/new/search_customer.svg" height="70" *ngIf="false" />
+                </div>
+            </div>
+        </div>
+
+        <!-- Voucher Form Main Section -->
+        <div class="vouchers-secondary-form container-fluid">
+
+            <!-- Row 1 -->
+            <div class="row row-gap">
+
+                <!-- Billing Address -->
+                <div class="col-6">
+                    <label for="address" class="billing-label">Billing Address</label>
+
+                    <div class="vouchers-address-form">
+                        <div class="address-field">
+                            <textarea rows="2" matInput class="w-100"></textarea>
+                        </div>
+                        <div class="country-field">
+                            <span>India</span>
+                        </div>
+                        <div class="state-field">
+                            <select-field [cssClass]="'border-0'" [name]="'fields'" [placeholder]="'Punjab'"
+                                [options]="dummyOptions" (selectedOption)="selectDropdown($event)" [defaultValue]="''">
+                            </select-field>
+                        </div>
+                        <div class="gstin-field">
+
+                            <text-field type="text" name="gstin" [placeholder]="'GSTIN'"
+                                [cssClass]="'border-0'"></text-field>
+                        </div>
+                        <div class="pin-code-field">
+                            <text-field type="text" name="gstin" [placeholder]="'PIN Code'"
+                                [cssClass]="'border-0'"></text-field>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Shipping Address -->
+                <div class="col-6">
+                    <mat-checkbox type="checkbox" color="primary">
+                        Shipping Address Same as Billing Address
+                    </mat-checkbox>
+
+                    <div class="vouchers-address-form form-disabled">
+                        <div class="address-field">
+                            <textarea rows="2" matInput class="w-100"></textarea>
+                        </div>
+                        <div class="country-field">
+                            <span>India</span>
+                        </div>
+                        <div class="state-field">
+                            <select-field [cssClass]="'border-0'" [name]="'fields'" [placeholder]="'Punjab'"
+                                [options]="dummyOptions" (selectedOption)="selectDropdown($event)" [defaultValue]="''">
+                            </select-field>
+                        </div>
+                        <div class="gstin-field">
+
+                            <text-field type="text" name="gstin" [placeholder]="'GSTIN'"
+                                [cssClass]="'border-0'"></text-field>
+                        </div>
+                        <div class="pin-code-field">
+                            <text-field type="text" name="gstin" [placeholder]="'PIN Code'"
+                                [cssClass]="'border-0'"></text-field>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Attention to -->
+                <div class="col-6">
+                    <input-field [name]="'attention-to'" [label]="'Attention to'" [placeholder]="'Enter name'"
+                        [type]="'text'">
+                    </input-field>
+                </div>
+
+                <!-- Email Id -->
+                <div class="col-6">
+                    <input-field [name]="'email'" [label]="'Email Id'" [placeholder]="'Enter email'" [type]="'text'">
+                    </input-field>
+                </div>
+
+                <!-- Mobile Number -->
+                <div class="col-6">
+                    <input-field [name]="'mobile-number'" [type]="'tel'" #initContactProforma class="flag-input"
+                        [id]="'init-contact-proforma'" (keydown.enter)="$event.preventDefault()"
+                        [label]="'Mobile Number'" [placeholder]="'98XXXXXXXX'" [floatLabel]="'always'">
+                    </input-field>
+                    <span id="init-contact-proforma-valid-msg" class="d-none"></span>
+                    <span id="init-contact-proforma-error-msg" class="d-none"></span>
+                </div>
+            </div>
+
+            <!-- Row 2 -->
+            <div class="row row-gap mr-t15">
+
+                <!-- Voucher Number -->
+                <div class="col-6">
+                    <input-field [name]="'vouchers-number'" [label]="'Voucher Number'"
+                        [placeholder]="'Enter voucher number'" [type]="'text'">
+                    </input-field>
+                </div>
+                
+                <!-- Invoice Date -->
+                <div class="col-3">
+                    <giddh-datepicker
+                    type="text"
+                    (keydown.enter)="$event.preventDefault()"
+                    [label]="'Invoie Date'"
+                    [placeholder]="'DDMMYYYY'"
+                    name="voucherDate"
+                    [showToggleIcon]="false"
+                    [appearance]="'outline'"
+                >
+                </giddh-datepicker>
+                </div>
+
+                <!-- Due Date -->
+                <div class="col-3">
+                    <giddh-datepicker
+                    type="text"
+                    (keydown.enter)="$event.preventDefault()"
+                    [label]="'Due Date'"
+                    [placeholder]="'DDMMYYYY'"
+                    name="voucherDueDate"
+                    [showToggleIcon]="false"
+                    [appearance]="'outline'"
+                >
+                </giddh-datepicker>
+                </div>
+
+                 <!-- Reverse Charge Checkbox -->
+                 <div class="col-6">
+                    <mat-checkbox type="checkbox" color="primary">
+                        Shipping Address Same as Billing Address
+                    </mat-checkbox>
+                </div>
+            </div>
+
+            <!-- Voucher Table for Multiple Entries-->
+            <div class="vouchers-entry-table">
+
+            </div>
+        </div>
+    </div>

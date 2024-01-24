@@ -1,0 +1,99 @@
+.vouchers {
+    padding: 5px 15px;
+
+    .vouchers-title {
+        height: 50px;
+        border-bottom: 1px solid var(--color-grey-bootstrap-border);
+
+        h1 {
+            font-size: var(--font-size-24);
+        }
+    }
+
+    .vouchers-content-wrapper {
+        padding: 15px 0;
+
+        .vouchers-primary-form {
+            .balance-due-label {
+                font-size: var(--font-size-15);
+            }
+
+            h2 {
+                font-size: var(--font-size-24);
+            }
+        }
+
+        .vouchers-form-fields {
+            max-width: 600px;
+            min-width: 230px;
+
+        }
+
+        .vouchers-form-fields-detail {
+            color: var(--color-blue);
+            font-size: var(--font-size-12);
+        }
+        .vouchers-copy-sales{
+            color: var(--color-blue);
+            font-size: var(--font-size-14);
+        }
+    }
+
+    .vouchers-secondary-form {
+        max-width: 860px;
+        margin: 0;
+        .row-gap{
+            row-gap: 15px;
+        }
+
+        .billing-label {
+            height: 40px;
+            padding: 11px 0;
+        }
+
+        .vouchers-address-form {
+            display: grid;
+            grid-template-areas:
+                'address address'
+                'country state'
+                'gstin pincode';
+            gap: 15px;
+            padding: 15px;
+            border: 1px solid var(--color-common-secondary-border);
+
+            .address-field {
+                grid-area: address;
+
+                textarea {
+                    border: none;
+                }
+            }
+
+            .country-field {
+                grid-area: country;
+                border-bottom: 1px solid var(--color-common-secondary-border);
+            }
+
+            .state-field {
+                grid-area: state;
+                border-bottom: 1px solid var(--color-common-secondary-border);
+            }
+
+            .gstin-field {
+                grid-area: gstin;
+                border-bottom: 1px solid var(--color-common-secondary-border);
+            }
+
+            .pin-code-field {
+                grid-area: pincode;
+                border-bottom: 1px solid var(--color-common-secondary-border);
+            }
+
+            &.form-disabled{
+                background: var(--color-dark-fog);
+                opacity: 0.7;
+                pointer-events: none;
+            }
+        }
+    }
+}

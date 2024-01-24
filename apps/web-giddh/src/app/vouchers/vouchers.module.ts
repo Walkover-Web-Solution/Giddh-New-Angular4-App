@@ -20,11 +20,13 @@ import { BulkExportComponent } from "./bulk-export/bulk-export.component";
 import { MatSelectModule } from "@angular/material/select";
 import { PaymentDialogComponent } from "./payment-dialog/payment-dialog.component";
 import { AdjustPaymentDialogComponent } from "./adjust-payment-dialog/adjust-payment-dialog.component";
+import { VoucherCreateComponent } from "./create/create.component";
 
 @NgModule({
     declarations: [
         MainComponent,
         VoucherListComponent,
+        VoucherCreateComponent,
         AdvanceSearchComponent,
         BulkExportComponent,
         PaymentDialogComponent,
@@ -34,13 +36,13 @@ import { AdjustPaymentDialogComponent } from "./adjust-payment-dialog/adjust-pay
         CommonModule,
         RouterModule,
         FormsModule,
+        FormFieldsModule,
         VouchersRoutingModule,
         MatTabsModule,
         MatTableModule,
         MatButtonModule,
         MatMenuModule,
         MatInputModule,
-        FormFieldsModule,
         MatTooltipModule,
         MatCheckboxModule,
         MatDialogModule,
