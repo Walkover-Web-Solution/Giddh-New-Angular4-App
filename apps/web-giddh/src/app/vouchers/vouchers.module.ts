@@ -16,8 +16,11 @@ import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatDialogModule } from "@angular/material/dialog";
 import { AdvanceSearchComponent } from "./advance-search/advance-search.component";
 import { GiddhDatepickerModule } from "../theme/giddh-datepicker/giddh-datepicker.module";
-import { BulkExportComponent } from "./bulk-export/bulk-export.component";
 import { MatSelectModule } from "@angular/material/select";
+import { MatRadioModule } from "@angular/material/radio";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { NgxMatSelectSearchModule } from "ngx-mat-select-search";
+import { BulkExportComponent } from "./bulk-export/bulk-export.component";
 import { PaymentDialogComponent } from "./payment-dialog/payment-dialog.component";
 import { AdjustPaymentDialogComponent } from "./adjust-payment-dialog/adjust-payment-dialog.component";
 import { VoucherCreateComponent } from "./create/create.component";
@@ -27,6 +30,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from "@angular/material/sort";
 import { MatListModule } from "@angular/material/list";
 import { MatCardModule } from "@angular/material/card";
+import { MatExpansionModule } from "@angular/material/expansion";
 
 @NgModule({
     declarations: [
@@ -53,13 +57,17 @@ import { MatCardModule } from "@angular/material/card";
         MatInputModule,
         MatTooltipModule,
         MatCheckboxModule,
-        MatDialogModule,
         GiddhDatepickerModule,
         MatSelectModule,
         MatPaginatorModule,
         MatSortModule,
         MatListModule,
-        MatCardModule
+        MatCardModule,
+        MatRadioModule,
+        MatFormFieldModule,
+        NgxMatSelectSearchModule,
+        MatDialogModule,
+        MatExpansionModule
     ],
     exports: [
 

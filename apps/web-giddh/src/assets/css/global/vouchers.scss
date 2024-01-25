@@ -4,4 +4,81 @@
             background: var(--color-transparent-background);
         }
     }
+
+    .po-mat-select {
+        border: 1px solid var(--color-secondary-input-bar-border);
+        border-radius: 5px !important;
+        padding: 10px 0;
+        // font-size: var(--font-size-12);
+        height: 48px;
+        .mat-mdc-select-trigger{
+            padding: 0 10px;
+        }
+    }
+    .po-options-line {
+        height: auto !important;
+        padding-bottom: 5px !important;
+
+        .mat-select-search-input {
+            padding: 16px 36px 16px 16px !important;
+            box-sizing: border-box !important;
+        }
+
+        .mat-select-search-inner {
+            position: absolute !important;
+            top: 0 !important;
+            border-bottom-width: 1px !important;
+            border-bottom-style: solid !important;
+            z-index: 100 !important;
+            font-size: inherit !important;
+            box-shadow: none !important;
+            border-radius: 0 !important;
+        }
+
+        .mat-select-search-clear {
+            margin-right: 0 !important;
+        }
+
+        .mat-pseudo-checkbox-checked {
+            background: var(--color-giddh-blue) !important;
+        }
+
+        .po-option-value {
+            float: left !important;
+            width: 100% !important;
+            line-height: 1.2 !important;
+            color: var(--color-primary-virtual-scroll-scrollable-content-item-a-item-stock);
+            // font-size: var(--font-size-12);
+        }
+
+        .mat-option-text {
+            line-height: 1.8 !important;
+        }
+
+    }
+
+    input, textarea, mat-select{
+
+        &.form-control{
+                &:hover, &:focus{
+                    border-color: var(--color-common-tertiary-text) !important;
+                }
+            }
+    }
+        
+    
+}
+.mat-menu-width-large{
+    min-width: 400px;
+    max-height: 50vh;
+}
+.vouchers-address-menu{
+    position: relative;
+    .vouchers-add-new{
+        position: sticky;
+        bottom: 0;
+        color:var(--color-blue);
+        z-index: 1;
+        background: var(--color-toast-primary-text) !important;
+    }
 }
