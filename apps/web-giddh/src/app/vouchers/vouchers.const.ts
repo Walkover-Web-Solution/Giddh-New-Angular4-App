@@ -9,3 +9,21 @@ export enum TaxType {
     'TRN' = 'TRN',
     'VAT' = 'VAT'
 }
+
+export enum VoucherTypeEnum {
+    'sales' = 'sales',
+    'purchase' = 'purchase',
+    'debitNote' = 'debit-note',
+    'creditNote' = 'credit-note',
+    'proforma' = 'proforma',
+    'generateProforma' = 'proformas',
+    'estimate' = 'estimate',
+    'generateEstimate' = 'estimates',
+    'cash' = 'cash',
+    'receipt' = 'receipt',
+    'payment' = 'payment',
+    'cashDebitNote' = 'cash debit note',
+    'cashCreditNote' = 'cash credit note',
+    'cashBill' = 'cash bill',
+    'purchaseOrder' = 'purchase-order'
+}

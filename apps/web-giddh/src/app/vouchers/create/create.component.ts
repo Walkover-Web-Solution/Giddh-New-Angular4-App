@@ -24,7 +24,7 @@ import { OrganizationType } from "../../models/user-login-state";
 })
 export class VoucherCreateComponent implements OnInit, OnDestroy {
     /** Holds current voucher type */
-    public voucherType: string = "";
+    public voucherType: VoucherTypeEnum = VoucherTypeEnum.sales;
     /** Holds images folder path */
     public imgPath: string = isElectron ? "assets/images/" : AppUrl + APP_FOLDER + "assets/images/";
     /** Loading Observable */
@@ -94,6 +94,17 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
     public branches: Array<any>;
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Holds invoice type */
+    public invoiceType: any = {
+        isSalesInvoice: true,
+        isCashInvoice: false,
+        isCreditNote: false,
+        isDebitNote: false,
+        isPurchaseInvoice: false,
+        isProformaInvoice: false,
+        isEstimateInvoice: false,
+        isPurchaseOrder: false
+    };
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -108,30 +119,31 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
         private settingsUtilityService: SettingsUtilityService,
         private settingsBranchAction: SettingsBranchActions
     ) {
-        
+
     }
 
     public ngOnInit(): void {
-        this.getVoucherType();
-        this.getVoucherVersion();
-        this.getIsTcsTdsApplicable();
-        this.getActiveCompany();
-        this.getInvoiceSettings();
-        this.getDiscountsList();
-        this.getCompanyProfile();
-        this.getOnboardingFormData();
-        this.getCompanyTaxes();
-        this.getWarehouses();
-        this.getCompanyBranches();
-    }
-
-    private getVoucherType(): void {
         this.activatedRoute.params.pipe(delay(0), takeUntil(this.destroyed$)).subscribe(params => {
             if (params) {
                 this.voucherType = params.voucherType;
-                console.log(params);
+
+                this.getVoucherType();
+                this.getVoucherVersion();
+                this.getIsTcsTdsApplicable();
+                this.getActiveCompany();
+                this.getInvoiceSettings();
+                this.getDiscountsList();
+                this.getCompanyProfile();
+                this.getOnboardingFormData();
+                this.getCompanyTaxes();
+                this.getWarehouses();
+                this.getCompanyBranches();
             }
         });
+    }
+
+    private getVoucherType(): void {
+        this.invoiceType = this.vouchersUtilityService.getVoucherType(this.voucherType);
     }
 
     private getVoucherVersion(): void {
@@ -271,7 +283,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
     }
 
     public getPreviousVouchers(): void {
-        
+
     }
 
     public selectDropdown(event: any): void {
