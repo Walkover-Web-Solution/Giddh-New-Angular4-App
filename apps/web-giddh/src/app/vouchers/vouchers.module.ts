@@ -24,6 +24,7 @@ import { BulkExportComponent } from "./bulk-export/bulk-export.component";
 import { PaymentDialogComponent } from "./payment-dialog/payment-dialog.component";
 import { AdjustPaymentDialogComponent } from "./adjust-payment-dialog/adjust-payment-dialog.component";
 import { VoucherCreateComponent } from "./create/create.component";
+import { MatExpansionModule } from "@angular/material/expansion";
 
 @NgModule({
     declarations: [
@@ -54,7 +55,8 @@ import { VoucherCreateComponent } from "./create/create.component";
         MatFormFieldModule,
         NgxMatSelectSearchModule,
         MatDialogModule,
-        MatSelectModule
+        MatSelectModule,
+        MatExpansionModule
     ],
     exports: [
         

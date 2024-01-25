@@ -56,6 +56,17 @@
         }
 
     }
+
+    input, textarea, mat-select{
+
+        &.form-control{
+                &:hover, &:focus{
+                    border-color: var(--color-common-tertiary-text) !important;
+                }
+            }
+    }
+        
+    
 }
 .mat-menu-width-large{
     min-width: 400px;
