@@ -21,6 +21,12 @@ import { MatSelectModule } from "@angular/material/select";
 import { PaymentDialogComponent } from "./payment-dialog/payment-dialog.component";
 import { AdjustPaymentDialogComponent } from "./adjust-payment-dialog/adjust-payment-dialog.component";
 import { VoucherCreateComponent } from "./create/create.component";
+import { BulkUpdateComponent } from "./bulk-update/bulk-update.component";
+import { DeleteVoucherConfirmationDialogComponent } from "./delete-voucher-confirmation-dialog/delete-voucher-confirmation-dialog.component";
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSortModule } from "@angular/material/sort";
+import { MatListModule } from "@angular/material/list";
+import { MatCardModule } from "@angular/material/card";
 
 @NgModule({
     declarations: [
@@ -30,7 +36,9 @@ import { VoucherCreateComponent } from "./create/create.component";
         AdvanceSearchComponent,
         BulkExportComponent,
         PaymentDialogComponent,
-        AdjustPaymentDialogComponent
+        AdjustPaymentDialogComponent,
+        BulkUpdateComponent,
+        DeleteVoucherConfirmationDialogComponent
     ],
     imports: [
         CommonModule,
@@ -47,10 +55,14 @@ import { VoucherCreateComponent } from "./create/create.component";
         MatCheckboxModule,
         MatDialogModule,
         GiddhDatepickerModule,
-        MatSelectModule
+        MatSelectModule,
+        MatPaginatorModule,
+        MatSortModule,
+        MatListModule,
+        MatCardModule
     ],
     exports: [
-        
+
     ]
 })
 export class VouchersModule {

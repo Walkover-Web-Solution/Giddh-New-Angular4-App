@@ -460,6 +460,12 @@ aside-menu-account .container-fluid {
 .column-gap2 {
     column-gap: 20px;
 }
+.row-gap1 {
+    row-gap: 10px;
+}
+.row-gap15 {
+    row-gap: 15px;
+}
 
 .border-bottom {
     border-bottom-color: var(--color-ledger-grid-border-color);
@@ -2144,6 +2150,11 @@ bs-datepicker-container {
     -ms-flex-pack: justify;
     justify-content: space-between;
 }
+.flex-column {
+    flex-direction: column;
+    -ms-flex-direction: column;
+}
+
 /* cmdk modal styles */
 .modal-dialog.universal_modal .modal-body {
     padding: 0;

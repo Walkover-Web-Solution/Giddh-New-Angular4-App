@@ -66,24 +66,42 @@
       >
       </input-field>
     </div>
-    <div class="mr-b15">
-      <dropdown-field
-        [name]="'invoice'"
-        [label]="'Due Amount'"
-        [placeholder]="'Status'"
-        [options]="filtersForEntryTotal"
-      >
-      </dropdown-field>
-    </div>
-    <div class="mr-b15">
-      <dropdown-field
-        [name]="'invoice'"
-        [label]="'E-invoice Status'"
-        [placeholder]="'Status'"
-        [options]="filtersForEntryTotal"
-      >
-      </dropdown-field>
-    </div>
+      <mat-form-field appearance="outline" class="w-100 mr-b15">
+        <mat-label>Status</mat-label>
+        <mat-select
+         multiple
+         [placeholder]="'Select Action'"
+        >
+          <mat-option value="option1">Paid</mat-option>
+          <mat-option value="option2">Partially Paid</mat-option>
+          <mat-option value="option3">Unpaid</mat-option>
+          <mat-option value="option3">Hold</mat-option>
+          <mat-option value="option3">Cancel</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="w-100 mr-b15">
+        <mat-label>E-invoice Status</mat-label>
+        <mat-select
+         multiple
+         [placeholder]="'Select Action'"
+        >
+          <mat-option value="option1">Yet-to-be Pushed</mat-option>
+          <mat-option value="option2">Pushed</mat-option>
+          <mat-option value="option3">Push Initiated</mat-option>
+          <mat-option value="option3">Cancelled</mat-option>
+          <mat-option value="option3">Marked as Cancelled</mat-option>
+          <mat-option value="option3">Failed</mat-option>
+          <mat-option value="option3">NA</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="w-100 mr-b15">
+        <mat-label>Description</mat-label>
+        <textarea
+          matInput
+          rows="2"
+          [placeholder]="'Description'"
+        ></textarea>
+      </mat-form-field>
     <div class="d-flex justify-content-end column-gap1">
       <button mat-stroked-button color="primary">Search</button>
       <button mat-stroked-button mat-dialog-close>Cancel</button>

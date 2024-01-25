@@ -6,17 +6,46 @@
 </div>
 <mat-dialog-content>
   <div class="modal-body">
-    <input-field
-      [type]="'text'"
-      [label]="'Customer Name'"
-      class="w-50"
-    >
-    </input-field>
-    <div>
-      
+    <div class="d-flex justify-content-between">
+      <div class="mr-b15">
+          <input-field
+            [type]="'text'"
+            [label]="'Customer Name'"
+            class="customer-field d-block"
+          >
+          </input-field>
+        <div>
+          <div class="d-flex column-gap1 align-items-center mr-t15">
+            <dropdown-field
+              [name]="'invoice'"
+              [label]="'Adjustment Voucher'"
+              [placeholder]="'Select Voucher'"
+              class="w-50"
+            >
+            </dropdown-field>
+            <input-field
+              [type]="'tel'"
+              [placeholder]="'0'"
+              [label]="'Amount'"
+              class="w-50 text-right"
+            >
+            </input-field>
+            <a href="javascript:;">
+              <i class="icon-trash text-danger icon-font-16"></i>
+            </a>
+          </div>
+          <div class="mr-t1">
+            <a href="javascript:;" class="text-blue">+ Add New Line</a>
+          </div>
+        </div>
+      </div>
+      <div>
+        <p>Sales Total: ₹35.00</p>
+        <p>Due <span class="text-light">(Post Adj)</span>: ₹33.00</p>
+      </div>
     </div>
     <div class="d-flex column-gap1">
-      <button mat-stroked-button color="primary">Search</button>
+      <button mat-stroked-button color="primary">Save</button>
       <button mat-stroked-button mat-dialog-close>Reset</button>
     </div>
   </div>

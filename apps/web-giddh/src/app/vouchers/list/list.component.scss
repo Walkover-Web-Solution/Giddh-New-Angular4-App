@@ -1,8 +1,6 @@
 .invoice-wrapper {
-    padding: 15px;
     .total-wrapper {
         .total-sale {
-            padding: 10px;
             border-radius: 5px;
 
             p {
@@ -28,6 +26,9 @@ table {
         .checkbox-hide {
             display: none;
         }
+        .invoice-number {
+            width: 25px;
+        }
         &:hover {
             .checkbox-hide {
                 display: block;
@@ -36,5 +37,11 @@ table {
                 display: none;
             }
         }
+    }
+}
+// account-detail
+.account-detail-wrapper {
+    .account-header {
+        background-color: var(--color-dark-fog);
     }
 }
