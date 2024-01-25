@@ -13,6 +13,7 @@ import { InvoiceReceiptFilter, ReciptResponse } from "../models/api-models/recip
 import { VoucherTypeEnum } from "../models/api-models/Sales";
 import { RECEIPT_API } from "./apiurls/receipt.api";
 import { PURCHASE_RECORD_DATE_OPERATION, PURCHASE_RECORD_DUE_DATE_OPERATION, PURCHASE_RECORD_GRAND_TOTAL_OPERATION, PurchaseRecordAdvanceSearch } from "../purchase/purchase-record/constants/purchase-record.interface";
+import { CustomTemplateResponse } from "../models/api-models/Invoice";
 
 @Injectable()
 export class VoucherService {
@@ -156,5 +157,13 @@ export class VoucherService {
         }
 
         return advanceSearchRequest;
+    }
+
+    public getAllCreatedTemplates(voucherType: any): Observable<BaseResponse<CustomTemplateResponse[], string>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.get(this.config.apiUrl + INVOICE_API.GET_CREATED_TEMPLATES?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':voucherType', encodeURIComponent(voucherType))).pipe(map((res) => {
+            let data: BaseResponse<CustomTemplateResponse[], string> = res;
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<CustomTemplateResponse[], string>(e, '')));
     }
 }

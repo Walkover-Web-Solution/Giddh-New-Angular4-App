@@ -15,6 +15,8 @@ import { WarehouseActions } from "../../settings/warehouse/action/warehouse.acti
 import { SettingsUtilityService } from "../../settings/services/settings-utility.service";
 import { SettingsBranchActions } from "../../actions/settings/branch/settings.branch.action";
 import { OrganizationType } from "../../models/user-login-state";
+import { ProformaFilter } from "../../models/api-models/proforma";
+import { InvoiceReceiptFilter } from "../../models/api-models/recipt";
 
 @Component({
     selector: "create",
@@ -24,7 +26,7 @@ import { OrganizationType } from "../../models/user-login-state";
 })
 export class VoucherCreateComponent implements OnInit, OnDestroy {
     /** Holds current voucher type */
-    public voucherType: VoucherTypeEnum = VoucherTypeEnum.sales;
+    public voucherType: string = VoucherTypeEnum.sales.toString();
     /** Holds images folder path */
     public imgPath: string = isElectron ? "assets/images/" : AppUrl + APP_FOLDER + "assets/images/";
     /** Loading Observable */
@@ -45,6 +47,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
     public warehouseList$: Observable<any> = this.componentStore.warehouseList$;
     /** Branches Observable */
     public branchList$: Observable<any> = this.componentStore.branchList$;
+    /** Created templates Observable */
+    public createdTemplates$: Observable<any> = this.componentStore.createdTemplates$;
+    /** Created templates Observable */
+    public lastVouchers$: Observable<any> = this.componentStore.lastVouchers$;
     /** Holds boolean of TCS/TDS Applicable Observable */
     public isTcsTdsApplicable$: Observable<any> = this.componentStore.isTcsTdsApplicable$;
     public dummyOptions: any[] = [
@@ -105,6 +111,16 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
         isEstimateInvoice: false,
         isPurchaseOrder: false
     };
+    /** Holds template data */
+    public templateData: any = {
+        customField1Label: '',
+        customField2Label: '',
+        customField3Label: '',
+        shippedViaLabel: '',
+        shippedDateLabel: '',
+        trackingNumber: '',
+        showNotesAtLastPage: false
+    };
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -125,7 +141,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         this.activatedRoute.params.pipe(delay(0), takeUntil(this.destroyed$)).subscribe(params => {
             if (params) {
-                this.voucherType = params.voucherType;
+                this.voucherType = this.vouchersUtilityService.parseVoucherType(params.voucherType);
 
                 this.getVoucherType();
                 this.getVoucherVersion();
@@ -138,6 +154,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
                 this.getCompanyTaxes();
                 this.getWarehouses();
                 this.getCompanyBranches();
+                this.getCreatedTemplates();
             }
         });
     }
@@ -283,7 +300,60 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
     }
 
     public getPreviousVouchers(): void {
+        if (this.invoiceType.isProformaInvoice || this.invoiceType.isEstimateInvoice) {
+            let filterRequest: ProformaFilter = new ProformaFilter();
+            filterRequest.sortBy = this.invoiceType.isProformaInvoice ? 'proformaDate' : 'estimateDate';
+            filterRequest.sort = 'desc';
+            filterRequest.count = 5;
+            filterRequest.isLastInvoicesRequest = true;
+            this.componentStore.getPreviousProformaEstimates({ model: filterRequest, type: this.invoiceType.isProformaInvoice ? 'proformas' : 'estimates' });
+        } else if (!this.invoiceType.isPurchaseInvoice) {
+            let request: InvoiceReceiptFilter = new InvoiceReceiptFilter();
+            request.sortBy = 'voucherDate';
+            request.sort = 'desc';
+            request.count = 5;
+            request.isLastInvoicesRequest = true;
+            this.componentStore.getPreviousVouchers({ model: request, type: this.voucherType});
+        }
 
+        this.lastVouchers$.subscribe(response => {
+            if (response) {
+                console.log(response);
+            }
+        });
+    }
+
+    private getCreatedTemplates(): void {
+        this.createdTemplates$.subscribe(response => {
+            if (!response) {
+                this.componentStore.getCreatedTemplates(this.invoiceType.isDebitNote || this.invoiceType.isCreditNote ? 'voucher' : 'invoice');
+            } else {
+                const defaultTemplate = response.find(template => (template.isDefault || template.isDefaultForVoucher));
+                if (defaultTemplate && defaultTemplate.sections) {
+                    const sections = defaultTemplate.sections;
+                    if (sections.header && sections.header.data) {
+                        const {
+                            customField1: { label: customField1Label },
+                            customField2: { label: customField2Label },
+                            customField3: { label: customField3Label },
+                            shippedVia: { label: shippedViaLabel },
+                            shippingDate: { label: shippedDateLabel },
+                            trackingNumber: { label: trackingNumber }
+                        } = sections.header.data;
+
+                        this.templateData = {
+                            customField1Label,
+                            customField2Label,
+                            customField3Label,
+                            shippedViaLabel,
+                            shippedDateLabel,
+                            trackingNumber,
+                            showNotesAtLastPage: (sections?.footer?.data) ? sections.footer.data.showNotesAtLastPage?.display : false
+                        };
+                    }
+                }
+            }
+        });
     }
 
     public selectDropdown(event: any): void {

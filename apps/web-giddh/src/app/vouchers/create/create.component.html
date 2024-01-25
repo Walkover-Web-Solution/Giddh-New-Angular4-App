@@ -18,7 +18,7 @@
                                 [options]="dummyOptions" (selectedOption)="selectDropdown($event)" [defaultValue]="''">
                             </dropdown-field>
                         </div>
-                        <div class="vouchers-copy-sales ml-3 cursor-pointer" [matMenuTriggerFor]="copySales">
+                        <div class="vouchers-copy-sales ml-3 cursor-pointer" (click)="getPreviousVouchers()" [matMenuTriggerFor]="copySales">
                             <i class="icon-copy-file"></i>
                             Copy Previous Sales Invoices
                         </div>

@@ -13,8 +13,8 @@ export enum TaxType {
 export enum VoucherTypeEnum {
     'sales' = 'sales',
     'purchase' = 'purchase',
-    'debitNote' = 'debit-note',
-    'creditNote' = 'credit-note',
+    'debitNote' = 'debit note',
+    'creditNote' = 'credit note',
     'proforma' = 'proforma',
     'generateProforma' = 'proformas',
     'estimate' = 'estimate',

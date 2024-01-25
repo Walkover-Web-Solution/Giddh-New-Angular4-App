@@ -23,7 +23,7 @@ export class VouchersUtilityService {
         }
     }
 
-    public getVoucherType(voucherType: VoucherTypeEnum, selectedAccountUniqueName: string = '', isLastInvoiceCopied: boolean = false): any {
+    public getVoucherType(voucherType: string, selectedAccountUniqueName: string = '', isLastInvoiceCopied: boolean = false): any {
         let isSalesInvoice = voucherType === VoucherTypeEnum.sales;
         let isCashInvoice = this.voucherTypes.includes(voucherType);
         let isCreditNote = voucherType === VoucherTypeEnum.creditNote;
@@ -42,5 +42,9 @@ export class VouchersUtilityService {
         }
 
         return { isSalesInvoice, isCashInvoice, isCreditNote, isDebitNote, isPurchaseInvoice, isProformaInvoice, isEstimateInvoice, isPurchaseOrder };
+    }
+
+    public parseVoucherType(voucherType: string): string {
+        return voucherType.toString().replace("-", " ");
     }
 }
