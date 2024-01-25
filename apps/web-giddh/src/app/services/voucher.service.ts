@@ -14,6 +14,8 @@ import { VoucherTypeEnum } from "../models/api-models/Sales";
 import { RECEIPT_API } from "./apiurls/receipt.api";
 import { PURCHASE_RECORD_DATE_OPERATION, PURCHASE_RECORD_DUE_DATE_OPERATION, PURCHASE_RECORD_GRAND_TOTAL_OPERATION, PurchaseRecordAdvanceSearch } from "../purchase/purchase-record/constants/purchase-record.interface";
 import { CustomTemplateResponse } from "../models/api-models/Invoice";
+import { VouchersUtilityService } from "../vouchers/utility/vouchers.utility.service";
+
 
 @Injectable()
 export class VoucherService {
@@ -22,38 +24,11 @@ export class VoucherService {
     constructor(
         private errorHandler: GiddhErrorHandler, 
         private http: HttpWrapperService, 
-        private generalService: GeneralService, 
+        private generalService: GeneralService,
+        private vouchersUtilityService: VouchersUtilityService,
         @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs
     ) {
 
-    }
-
-    private createQueryString(url: string, model: any): string {
-        if ((model.from)) {
-            url = url + 'from=' + model.from + '&';
-        }
-        if ((model.to)) {
-            url = url + 'to=' + model.to + '&';
-        }
-        if ((model.page)) {
-            url = url + 'page=' + model.page + '&';
-        }
-        if ((model.count)) {
-            url = url + 'count=' + model.count;
-        }
-        if ((model.type)) {
-            url = url + '&type=' + model.type;
-        }
-        if ((model.sort)) {
-            url = url + '&sort=' + model.sort;
-        }
-        if ((model.sortBy)) {
-            url = url + '&sortBy=' + model.sortBy;
-        }
-        if ((model.q)) {
-            url = url + '&q=' + model.q;
-        }
-        return url;
     }
 
     public getInvoiceSettings(): Observable<BaseResponse<InvoiceSetting, string>> {
@@ -98,7 +73,7 @@ export class VoucherService {
             delete body.to;
         }
 
-        let url = this.createQueryString(this.config.apiUrl + contextPath, (type === VoucherTypeEnum.purchase && this.generalService.voucherApiVersion !== 2) ? requestParameter : { ...requestParameter, type });
+        let url = this.vouchersUtilityService.createQueryString(this.config.apiUrl + contextPath, (type === VoucherTypeEnum.purchase && this.generalService.voucherApiVersion !== 2) ? requestParameter : { ...requestParameter, type });
         if (this.generalService.voucherApiVersion === 2) {
             url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
         }

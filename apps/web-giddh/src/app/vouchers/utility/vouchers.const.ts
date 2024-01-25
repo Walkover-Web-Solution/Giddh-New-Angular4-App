@@ -27,3 +27,9 @@ export enum VoucherTypeEnum {
     'cashBill' = 'cash bill',
     'purchaseOrder' = 'purchase-order'
 }
+
+export const SEARCH_TYPE = {
+    CUSTOMER: 'customer',
+    ITEM: 'item',
+    BANK: 'bank'
+}
