@@ -2,7 +2,7 @@ import { NgModule } from "@angular/core";
 import { MainComponent } from "./main.component";
 import { CommonModule } from "@angular/common";
 import { RouterModule } from "@angular/router";
-import { FormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { VouchersRoutingModule } from "./vouchers.routing.module";
 import { VoucherListComponent } from "./list/list.component";
 import { MatTabsModule } from "@angular/material/tabs";
@@ -34,6 +34,7 @@ import { WatchVideoModule } from "../theme/watch-video/watch-video.module";
 import { HamburgerMenuModule } from "../shared/header/components/hamburger-menu/hamburger-menu.module";
 import { OtherTaxModule } from "../theme/other-tax/other-tax.module";
 import { AddBulkItemsModule } from "../theme/add-bulk-items/add-bulk-items.module";
+import { OptionsScrollDirective } from "../theme/form-fields/reactive-dropdown-field/reactive-dropdown-options-scroll.directive";
 
 @NgModule({
     declarations: [
@@ -44,10 +45,12 @@ import { AddBulkItemsModule } from "../theme/add-bulk-items/add-bulk-items.modul
         BulkExportComponent,
         PaymentDialogComponent,
         AdjustPaymentDialogComponent,
-        BulkUpdateComponent
+        BulkUpdateComponent,
+        OptionsScrollDirective
     ],
     imports: [
         CommonModule,
+        ReactiveFormsModule,
         RouterModule,
         FormsModule,
         FormFieldsModule,

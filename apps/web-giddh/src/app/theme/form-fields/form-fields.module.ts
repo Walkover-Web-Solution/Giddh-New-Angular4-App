@@ -24,6 +24,8 @@ import { MatMenuModule } from "@angular/material/menu";
 import { MatButtonModule } from "@angular/material/button";
 import { InputFieldComponent } from "./input-field/input-field.component";
 import { DropdownFieldComponent } from "./dropdown-field/dropdown-field.component";
+import { ReactiveDropdownFieldComponent } from "./reactive-dropdown-field/reactive-dropdown-field.component";
+
 
 @NgModule({
     declarations: [
@@ -31,7 +33,8 @@ import { DropdownFieldComponent } from "./dropdown-field/dropdown-field.componen
         SelectFieldComponent,
         SelectMultipleFieldsComponent,
         InputFieldComponent,
-        DropdownFieldComponent
+        DropdownFieldComponent,
+        ReactiveDropdownFieldComponent
     ],
     imports: [
         CommonModule,
@@ -62,7 +65,8 @@ import { DropdownFieldComponent } from "./dropdown-field/dropdown-field.componen
         SelectMultipleFieldsComponent,
         MatFormFieldModule,
         InputFieldComponent,
-        DropdownFieldComponent
+        DropdownFieldComponent,
+        ReactiveDropdownFieldComponent
     ]
 })
 

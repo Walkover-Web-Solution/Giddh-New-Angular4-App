@@ -1,0 +1,19 @@
+<mat-form-field style="width: 70px" [appearance]="appearance">
+    <input 
+        type="text"
+        [ngClass]="cssClass"
+        class="select-field-input"
+        [placeholder]="placeholder"
+        matInput 
+        [readonly]="readonly"
+        [matAutocomplete]="auto" 
+        (input)="searchFormControl.next($event)"
+        [name]="name"
+        [value]="value"
+    />
+    <mat-autocomplete (optionSelected)="optionSelected($event)" (optionsScroll)="onScroll($event)" autoActiveFirstOption [displayWith]="displayLabel" #auto="matAutocomplete">
+        <mat-option *ngFor="let option of fieldFilteredOptions$ | async" [value]="option">
+            {{option?.label}}
+        </mat-option>
+    </mat-autocomplete>
+</mat-form-field>
