@@ -8,7 +8,6 @@ import { IDiscountList } from "../../models/api-models/SettingsDiscount";
 import { ProformaFilter } from "../../models/api-models/proforma";
 import { ReciptResponse, InvoiceReceiptFilter } from "../../models/api-models/recipt";
 import { InvoiceSetting } from "../../models/interfaces/invoice.setting.interface";
-import { SearchService } from "../../services/search.service";
 import { SettingsDiscountService } from "../../services/settings.discount.service";
 import { ToasterService } from "../../services/toaster.service";
 import { VoucherService } from "../../services/voucher.service";
@@ -24,9 +23,10 @@ export interface VoucherState {
     invoiceSettings: InvoiceSetting;
     lastVouchers: ReciptResponse;
     createdTemplates: CustomTemplateResponse[];
-    searchResults: any;
     stockVariants: any[];
     barcodeData: any;
+    exchangeRate: number;
+    briefAccounts: any[];
 }
 
 const DEFAULT_STATE: VoucherState = {
@@ -36,9 +36,10 @@ const DEFAULT_STATE: VoucherState = {
     invoiceSettings: null,
     lastVouchers: null,
     createdTemplates: null,
-    searchResults: null,
     stockVariants: null,
-    barcodeData: null
+    barcodeData: null,
+    exchangeRate: null,
+    briefAccounts: null
 };
 
 @Injectable()
@@ -49,7 +50,6 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
         private toast: ToasterService,
         private settingsDiscountService: SettingsDiscountService,
         private voucherService: VoucherService,
-        private searchService: SearchService,
         private ledgerService: LedgerService,
         private commonService: CommonService
     ) {
@@ -62,8 +62,9 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
     public invoiceSettings$ = this.select((state) => state.invoiceSettings);
     public createdTemplates$ = this.select((state) => state.createdTemplates);
     public lastVouchers$ = this.select((state) => state.lastVouchers);
-    public searchResults$ = this.select((state) => state.searchResults);
     public stockVariants$ = this.select((state) => state.stockVariants);
+    public exchangeRate$ = this.select((state) => state.exchangeRate);
+    public briefAccounts$ = this.select((state) => state.briefAccounts);
     public companyProfile$: Observable<any> = this.select(this.store.select(state => state.settings.profile), (response) => response);
     public activeCompany$: Observable<any> = this.select(this.store.select(state => state.session.activeCompany), (response) => response);
     public onboardingForm$: Observable<any> = this.select(this.store.select(state => state.common.onboardingform), (response) => response);
@@ -190,29 +191,6 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
         );
     });
 
-    readonly getSearchAccount = this.effect((data: Observable<any>) => {
-        return data.pipe(
-            switchMap((req) => {
-                return this.searchService.searchAccountV3(req).pipe(
-                    tapResponse(
-                        (res: BaseResponse<any, any>) => {
-                            return this.patchState({
-                                searchResults: { searchRequest: req, results: res?.body?.results ?? null }
-                            });
-                        },
-                        (error: any) => {
-                            this.showErrorToast(error);
-                            return this.patchState({
-                                searchResults: { searchRequest: req, results: null }
-                            });
-                        }
-                    ),
-                    catchError((err) => EMPTY)
-                );
-            })
-        );
-    });
-
     readonly getStockVariants = this.effect((data: Observable<string>) => {
         return data.pipe(
             switchMap((req) => {
@@ -273,6 +251,52 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             this.showErrorToast(error);
                             return this.patchState({
                                 barcodeData: null // need to remove the variable
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    readonly getExchangeRate = this.effect((data: Observable<{ fromCurrency: string, toCurrency: string, date: string }>) => {
+        return data.pipe(
+            switchMap((req) => {
+                return this.ledgerService.GetCurrencyRateNewApi(req.fromCurrency, req.toCurrency, req.date).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            return this.patchState({
+                                exchangeRate: res?.body ?? null
+                            });
+                        },
+                        (error: any) => {
+                            this.showErrorToast(error);
+                            return this.patchState({
+                                exchangeRate: null
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    readonly getBriefAccounts = this.effect((data: Observable<any>) => {
+        return data.pipe(
+            switchMap((req) => {
+                return this.voucherService.getBriefAccounts(req).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            return this.patchState({
+                                briefAccounts: res?.body?.results?.map(res => { return { label: res.name, value: res.uniqueName, additional: { currency: res?.currency } } }) ?? null
+                            });
+                        },
+                        (error: any) => {
+                            this.showErrorToast(error);
+                            return this.patchState({
+                                briefAccounts: null
                             });
                         }
                     ),

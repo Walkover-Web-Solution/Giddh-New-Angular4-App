@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { SEARCH_TYPE, TaxSupportedCountries, TaxType, VoucherTypeEnum } from "./vouchers.const";
+import { SearchType, TaxSupportedCountries, TaxType, VoucherTypeEnum } from "./vouchers.const";
 import { GeneralService } from "../../services/general.service";
 
 @Injectable({
@@ -77,9 +77,9 @@ export class VouchersUtilityService {
         let withStocks: boolean;
         let group: string;
         
-        if (searchType === SEARCH_TYPE.CUSTOMER) {
+        if (searchType === SearchType.CUSTOMER) {
             group = (voucherType === VoucherTypeEnum.debitNote) ? 'sundrycreditors' : (voucherType === VoucherTypeEnum.purchase) ? (this.generalService.voucherApiVersion === 2) ? 'sundrycreditors' : 'sundrycreditors, bankaccounts, cash' : 'sundrydebtors';
-        } else if (searchType === SEARCH_TYPE.ITEM) {
+        } else if (searchType === SearchType.ITEM) {
             group = (voucherType === VoucherTypeEnum.debitNote || voucherType === VoucherTypeEnum.purchase || voucherType === VoucherTypeEnum.cashBill || voucherType === VoucherTypeEnum.cashDebitNote) ?
                 'operatingcost, indirectexpenses' : 'otherincome, revenuefromoperations';
             withStocks = !!query;
@@ -87,7 +87,7 @@ export class VouchersUtilityService {
             if (this.generalService.voucherApiVersion === 2) {
                 group += ", fixedassets";
             }
-        } else if (searchType === SEARCH_TYPE.BANK) {
+        } else if (searchType === SearchType.BANK) {
             group = 'bankaccounts, cash';
             if (this.generalService.voucherApiVersion === 2) {
                 group += ", loanandoverdraft";

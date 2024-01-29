@@ -18,7 +18,7 @@
                         <div class="vouchers-form-fields w-100">
                             <dropdown-field [label]="'Customer'" [placeholder]="'Select Customer'"
                                 [options]="dummyOptions" (selectedOption)="selectDropdown($event)" [defaultValue]="''" [enableDynamicSearch]="true"
-                                (dynamicSearchedQuery)="searchAccount($event, 1, 'customer')">
+                                (dynamicSearchedQuery)="searchAccount($event, 1)">
                             </dropdown-field>
                         </div>
                         <ng-container *ngIf="invoiceType.isSalesInvoice">
@@ -510,7 +510,7 @@
                     <div class="body-item active-item">
                         <select-field [cssClass]="'form-control'" [name]="'account'" [placeholder]="'Select account'"
                             [options]="dummyOptions" (selectedOption)="selectDropdown($event)" [defaultValue]="''" [enableDynamicSearch]="true"
-                            (dynamicSearchedQuery)="searchAccount($event, 1, 'item')">
+                            (dynamicSearchedQuery)="searchStock($event, 1)">
                         </select-field>
 
                         <textarea rows="2" matInput class="form-control mt-2" placeholder="Add Description"></textarea>

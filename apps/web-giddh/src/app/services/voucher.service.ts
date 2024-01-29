@@ -15,6 +15,7 @@ import { RECEIPT_API } from "./apiurls/receipt.api";
 import { PURCHASE_RECORD_DATE_OPERATION, PURCHASE_RECORD_DUE_DATE_OPERATION, PURCHASE_RECORD_GRAND_TOTAL_OPERATION, PurchaseRecordAdvanceSearch } from "../purchase/purchase-record/constants/purchase-record.interface";
 import { CustomTemplateResponse } from "../models/api-models/Invoice";
 import { VouchersUtilityService } from "../vouchers/utility/vouchers.utility.service";
+import { SALES_API_V2 } from "./apiurls/sales.api";
 
 
 @Injectable()
@@ -22,8 +23,8 @@ export class VoucherService {
     private companyUniqueName: string;
 
     constructor(
-        private errorHandler: GiddhErrorHandler, 
-        private http: HttpWrapperService, 
+        private errorHandler: GiddhErrorHandler,
+        private http: HttpWrapperService,
         private generalService: GeneralService,
         private vouchersUtilityService: VouchersUtilityService,
         @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs
@@ -140,5 +141,19 @@ export class VoucherService {
             let data: BaseResponse<CustomTemplateResponse[], string> = res;
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<CustomTemplateResponse[], string>(e, '')));
+    }
+
+    /**
+     * Returns accounts of a particular group and with particular currency
+     *
+     * @param {*} requestObject Comma delimited string of group names or request object with param keys for the API in dynamic search
+     * @returns {Observable<any>} Observable to carry out further operations
+     * @memberof SalesService
+     */
+    public getBriefAccounts(params: any): Observable<any> {
+        const companyUniqueName = this.generalService.companyUniqueName;
+        let url = `${this.config.apiUrl}${SALES_API_V2.GET_ACCOUNTS_OF_GROUP_WITH_CURRENCY?.replace(':companyUniqueName', companyUniqueName)}`;
+        url = this.generalService.createQueryString(url, params);
+        return this.http.get(url);
     }
 }

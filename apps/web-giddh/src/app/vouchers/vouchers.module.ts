@@ -31,6 +31,7 @@ import { MatSortModule } from "@angular/material/sort";
 import { MatListModule } from "@angular/material/list";
 import { MatCardModule } from "@angular/material/card";
 import { MatExpansionModule } from "@angular/material/expansion";
+import { VouchersAddBulkItemsComponent } from "./add-bulk-items/add-bulk-items.component";
 
 @NgModule({
     declarations: [
@@ -42,7 +43,8 @@ import { MatExpansionModule } from "@angular/material/expansion";
         PaymentDialogComponent,
         AdjustPaymentDialogComponent,
         BulkUpdateComponent,
-        DeleteVoucherConfirmationDialogComponent
+        DeleteVoucherConfirmationDialogComponent,
+        VouchersAddBulkItemsComponent
     ],
     imports: [
         CommonModule,

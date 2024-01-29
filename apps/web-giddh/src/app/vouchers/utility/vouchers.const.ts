@@ -8,7 +8,7 @@ export enum TaxType {
     'GST' = 'GST',
     'TRN' = 'TRN',
     'VAT' = 'VAT'
-}
+};
 
 export enum VoucherTypeEnum {
     'sales' = 'sales',
@@ -26,10 +26,22 @@ export enum VoucherTypeEnum {
     'cashCreditNote' = 'cash credit note',
     'cashBill' = 'cash bill',
     'purchaseOrder' = 'purchase-order'
-}
+};
 
-export const SEARCH_TYPE = {
+export const SearchType = {
     CUSTOMER: 'customer',
     ITEM: 'item',
     BANK: 'bank'
+};
+
+export enum BriedAccountsGroup {
+    'V1' = 'cash, bankaccounts',
+    'V2' = 'cash, bankaccounts, loanandoverdraft'
+};
+
+export interface OptionInterface {
+    value: string;
+    label: string;
+    disabled?: boolean;
+    additional?: any;
 }

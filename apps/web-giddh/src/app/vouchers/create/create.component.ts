@@ -3,9 +3,8 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { VoucherComponentStore } from "../utility/vouchers.store";
 import { AppState } from "../../store";
 import { Store } from "@ngrx/store";
-import { Observable, ReplaySubject, delay, takeUntil } from "rxjs";
+import { Observable, ReplaySubject, delay, of, takeUntil } from "rxjs";
 import { GeneralService } from "../../services/general.service";
-import { VoucherTypeEnum } from "../../models/api-models/Sales";
 import { OnboardingFormRequest } from "../../models/api-models/Common";
 import { CommonActions } from "../../actions/common.actions";
 import { CompanyActions } from "../../actions/company.actions";
@@ -17,6 +16,11 @@ import { OrganizationType } from "../../models/user-login-state";
 import { PreviousInvoicesVm, ProformaFilter, ProformaResponse } from "../../models/api-models/proforma";
 import { InvoiceReceiptFilter, ReciptResponse } from "../../models/api-models/recipt";
 import { VouchersUtilityService } from "../utility/vouchers.utility.service";
+import { FormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
+import { GIDDH_DATE_FORMAT } from "../../shared/helpers/defaultDateFormat";
+import * as dayjs from "dayjs";
+import { BriedAccountsGroup, SearchType, VoucherTypeEnum, OptionInterface } from "../utility/vouchers.const";
+import { SearchService } from "../../services/search.service";
 
 @Component({
     selector: "create",
@@ -25,6 +29,8 @@ import { VouchersUtilityService } from "../utility/vouchers.utility.service";
     providers: [VoucherComponentStore]
 })
 export class VoucherCreateComponent implements OnInit, OnDestroy {
+    /**  This will use for dayjs */
+    public dayjs = dayjs;
     /** Holds current voucher type */
     public voucherType: string = VoucherTypeEnum.sales.toString();
     /** Holds images folder path */
@@ -51,10 +57,14 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
     public createdTemplates$: Observable<any> = this.componentStore.createdTemplates$;
     /** Created templates Observable */
     public lastVouchers$: Observable<any> = this.componentStore.lastVouchers$;
-    /** Search results Observable */
-    public searchResults$: Observable<any> = this.componentStore.searchResults$;
+    /** Voucher account results Observable */
+    public voucherAccountResults$: Observable<OptionInterface[]> = of(null);
     /** Stock variants Observable */
     public stockVariants$: Observable<any> = this.componentStore.stockVariants$;
+    /** Exchange rate Observable */
+    public exchangeRate$: Observable<any> = this.componentStore.exchangeRate$;
+    /** Brief accounts Observable */
+    public briefAccounts$: Observable<any> = this.componentStore.briefAccounts$;
     /** Holds boolean of TCS/TDS Applicable Observable */
     public isTcsTdsApplicable$: Observable<any> = this.componentStore.isTcsTdsApplicable$;
     public dummyOptions: any[] = [
@@ -127,6 +137,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
     };
     /** Holds list of last vouchers */
     public lastVouchers: PreviousInvoicesVm[] = [];
+    /** Form Group for invoice form */
+    public invoiceForm: UntypedFormGroup;
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -139,7 +151,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
         private companyActions: CompanyActions,
         private warehouseActions: WarehouseActions,
         private settingsUtilityService: SettingsUtilityService,
-        private settingsBranchAction: SettingsBranchActions
+        private settingsBranchAction: SettingsBranchActions,
+        private formBuilder: FormBuilder,
+        private searchService: SearchService
     ) {
 
     }
@@ -150,6 +164,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
                 this.voucherType = this.vouchersUtilityService.parseVoucherType(params.voucherType);
 
                 this.getVoucherType();
+                this.searchAccount();
                 this.getVoucherVersion();
                 this.getIsTcsTdsApplicable();
                 this.getActiveCompany();
@@ -161,6 +176,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
                 this.getWarehouses();
                 this.getCompanyBranches();
                 this.getCreatedTemplates();
+                this.getBriefAccounts();
             }
         });
     }
@@ -390,19 +406,65 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
         });
     }
 
-    public searchAccount(query: string, page: number = 1, searchType: string): void {
-        const requestObject = this.vouchersUtilityService.getSearchRequestObject(this.voucherType, query, page, searchType);
-        this.componentStore.getSearchAccount(requestObject);
+    public searchAccount(query: string = '', page: number = 1): void {
+        if (this.voucherType === VoucherTypeEnum.cash) {
+            return;
+        }
+        const requestObject = this.vouchersUtilityService.getSearchRequestObject(this.voucherType, query, page, SearchType.CUSTOMER);
 
-        this.searchResults$.subscribe(response => {
+        this.searchService.searchAccountV3(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.voucherAccountResults$ = of(response?.body?.results?.map(res => { return { label: res.name, value: res.uniqueName, additional: res } }));
+            }
+        });
+    }
+
+    public searchStock(query: string = '', page: number = 1): void {
+        if (this.voucherType === VoucherTypeEnum.cash) {
+            return;
+        }
+        const requestObject = this.vouchersUtilityService.getSearchRequestObject(this.voucherType, query, page, SearchType.ITEM);
+
+        this.searchService.searchAccountV3(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 console.log(response);
             }
         });
     }
 
+    public getExchangeRate(fromCurrency: string, toCurrency: string, voucherDate: any): void {
+        if (fromCurrency && toCurrency) {
+            let date;
+            if (typeof voucherDate === 'string') {
+                date = voucherDate;
+            } else {
+                date = dayjs(voucherDate).format(GIDDH_DATE_FORMAT);
+            }
+            this.componentStore.getExchangeRate({ fromCurrency, toCurrency, date });
+        }
+
+        this.exchangeRate$.subscribe(response => {
+            console.log(response);
+        });
+    }
+
+    private getBriefAccounts(): void {
+        this.briefAccounts$.subscribe(response => {
+            if (!response) {
+                let params = { group: (this.voucherApiVersion === 2) ? BriedAccountsGroup.V2 : BriedAccountsGroup.V1 };
+                this.componentStore.getBriefAccounts(params);
+            }
+        });
+    }
+
     public selectDropdown(event: any): void {
 
+    }
+
+    public initVoucherForm(): void {
+        this.invoiceForm = this.formBuilder.group({
+            name: ['', Validators.required]
+        });
     }
 
     public ngOnDestroy(): void {
