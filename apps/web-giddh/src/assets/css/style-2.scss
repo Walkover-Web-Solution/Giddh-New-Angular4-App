@@ -130,7 +130,7 @@ textarea {
         z-index: 9 !important;
         position: relative !important;
     }
-    tbody{
+    tbody {
         z-index: 1;
         position: relative;
     }
@@ -181,23 +181,23 @@ textarea {
     }
 }
 
-   .mobile-number-portal-wrapper {
-       input.error {
-           border: 1px solid var(--color-danger);
-       }
+.mobile-number-portal-wrapper {
+    input.error {
+        border: 1px solid var(--color-danger);
+    }
 
-       @for $index from 0 through 100 {
-           #init-contact-portal_#{$index}-valid-msg {
-               color: var(--color-success-enable) !important;
-               font-size: var(--font-size-15);
-           }
+    @for $index from 0 through 100 {
+        #init-contact-portal_#{$index}-valid-msg {
+            color: var(--color-success-enable) !important;
+            font-size: var(--font-size-15);
+        }
 
-           #init-contact-portal_#{$index}-error-msg {
-               color: var(--color-danger);
-               font-size: var(--font-size-15);
-           }
-       }
-   }
+        #init-contact-portal_#{$index}-error-msg {
+            color: var(--color-danger);
+            font-size: var(--font-size-15);
+        }
+    }
+}
 .voucher-preview-edit,
 .update-ledger-entry-panel-popup,
 .page-has-tabs,
@@ -3704,7 +3704,7 @@ input[type="number"]::-webkit-inner-spin-button {
     cursor: pointer !important;
 }
 
-.cursor-default{
+.cursor-default {
     cursor: default !important;
 }
 
@@ -8725,7 +8725,7 @@ button.ladda-button .ladda-label {
         padding: 10px 0;
         font-size: var(--font-size-12);
         height: 48px;
-        .mat-mdc-select-trigger{
+        .mat-mdc-select-trigger {
             padding: 0 10px;
         }
     }
@@ -13666,6 +13666,47 @@ input[type="checkbox"].cdk-visually-hidden::after {
     }
 }
 
+.subscription-page {
+    .position-relative.word-wrap {
+        .table-menu-first-td {
+            font-size: var(--font-size-15);
+            vertical-align: middle;
+            display: none;
+            color: var(--color-primary-contact-icon-dots-three-vertical);
+            position: absolute;
+            right: 0;
+        }
+
+        &:hover {
+            .table-menu-first-td {
+                display: block;
+                line-height: 1;
+            }
+        }
+    }
+    .cdk-overlay-container {
+        z-index: 99999;
+    }
+    .subscription-sidebar {
+        min-height: 100% !important;
+        height: 100% !important;
+        width: 760px !important;
+
+        .mat-dialog-content {
+            margin: 0 !important;
+            padding: 0 !important;
+            max-height: 90%;
+            float: left;
+            width: 100%;
+        }
+
+        .mat-dialog-container {
+            overflow: hidden;
+            background-color: var(--color-secondary-right-side-popup-body-background);
+        }
+    }
+}
+
 .json-sidebar {
     min-height: 100% !important;
     height: 100% !important;
@@ -14480,7 +14521,7 @@ activity-compare-json {
         }
     }
 }
-.manufacturing-table{
+.manufacturing-table {
     .mdc-data-table__header-cell {
         word-break: break-word;
         white-space: nowrap;
@@ -14490,7 +14531,7 @@ activity-compare-json {
 /*---- aside-button ----*/
 aside-menu-product-service {
     .mat-mdc-outlined-button {
-        &.mat-unthemed{
+        &.mat-unthemed {
             &#back {
                 color: var(--color-list) !important;
             }
@@ -14498,17 +14539,17 @@ aside-menu-product-service {
     }
 }
 
-.dialog-fixed-header{
+.dialog-fixed-header {
     position: sticky !important;
     top: 0;
     z-index: 1;
 }
-.custom-tooltip{
+.custom-tooltip {
     background-color: var(--color-dark-gray) !important;
     border-radius: 4px;
     padding: 0 8px;
 
-    .tooltip-text{
+    .tooltip-text {
         font-size: var(--font-size-12);
         color: var(--color-toast-primary-text);
         a {
