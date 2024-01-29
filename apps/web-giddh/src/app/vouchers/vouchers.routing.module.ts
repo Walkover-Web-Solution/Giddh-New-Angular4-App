@@ -20,7 +20,7 @@ const routes: Routes = [
                 component: VoucherListComponent
             },
             {
-                path: ":voucherType/preview/:uniqueName",
+                path: ":voucherType/preview",
                 component: VouchersPreviewComponent
             },
             {
