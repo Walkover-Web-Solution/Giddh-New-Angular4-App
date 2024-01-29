@@ -32,6 +32,10 @@ import { MatCardModule } from "@angular/material/card";
 import { MatExpansionModule } from "@angular/material/expansion";
 import { WatchVideoModule } from "../theme/watch-video/watch-video.module";
 import { HamburgerMenuModule } from "../shared/header/components/hamburger-menu/hamburger-menu.module";
+import { VouchersPreviewComponent } from "./preview/preview.component";
+import { ScrollingModule } from "@angular/cdk/scrolling";
+import { NoDataModule } from "../shared/no-data/no-data.module";
+import { HistoryDialogComponent } from "./history-dialog/history-dialog.component";
 import { OtherTaxModule } from "../theme/other-tax/other-tax.module";
 import { AddBulkItemsModule } from "../theme/add-bulk-items/add-bulk-items.module";
 import { OptionsScrollDirective } from "../theme/form-fields/reactive-dropdown-field/reactive-dropdown-options-scroll.directive";
@@ -40,13 +44,15 @@ import { OptionsScrollDirective } from "../theme/form-fields/reactive-dropdown-f
     declarations: [
         MainComponent,
         VoucherListComponent,
+        VouchersPreviewComponent,
         VoucherCreateComponent,
         AdvanceSearchComponent,
         BulkExportComponent,
         PaymentDialogComponent,
         AdjustPaymentDialogComponent,
         BulkUpdateComponent,
-        OptionsScrollDirective
+        OptionsScrollDirective,
+        HistoryDialogComponent,
     ],
     imports: [
         CommonModule,
@@ -75,6 +81,8 @@ import { OptionsScrollDirective } from "../theme/form-fields/reactive-dropdown-f
         MatExpansionModule,
         WatchVideoModule,
         HamburgerMenuModule,
+        ScrollingModule,
+        NoDataModule,
         OtherTaxModule,
         AddBulkItemsModule
     ],
