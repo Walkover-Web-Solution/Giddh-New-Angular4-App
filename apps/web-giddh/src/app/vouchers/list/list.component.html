@@ -1,213 +1,218 @@
 <ng-container>
-    <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
-        <mat-tab label="Estimates (Beta)">Estimates (Beta)</mat-tab>
-        <mat-tab label="Proformas">Proformas</mat-tab>
-        <!-- invoice-content-start -->
-        <mat-tab label="Invoices">
-            <div class="invoice-wrapper pd-15">
-                <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
-                    <div class="d-flex align-items-center column-gap1">
-                        <button mat-stroked-button color="primary" [matMenuTriggerFor]="downloadCsvEmail">
-                            <span>+ New Invoice</span>
-                            <i class="icon-arrow-down icon-font-11 ml-2"></i>
-                        </button>
-                        <mat-menu #downloadCsvEmail="matMenu">
-                            <button mat-menu-item>Cash Invoice</button>
-                            <button mat-menu-item>Sales Invoice</button>
-                        </mat-menu>
-                        <div class="custom-datepicker-wrapper">
-                            <div class="custom-datepicker">
-                                <input type="text" name="selectedDateRange"
-                                    class="giddh-datepicker date-range-picker" />
+    <hamburger-menu class="hamburger-menu"></hamburger-menu>
+    <div class="position-relative invoice-list">
+        <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
+            <mat-tab label="Estimates (Beta)">Estimates (Beta)</mat-tab>
+            <mat-tab label="Proformas">Proformas</mat-tab>
+            <!-- invoice-content-start -->
+            <mat-tab label="Invoices">
+                <div class="invoice-wrapper pd-15">
+                    <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
+                        <div class="d-flex align-items-center column-gap1">
+                            <button mat-stroked-button color="primary" [matMenuTriggerFor]="downloadCsvEmail">
+                                <span>+ New Invoice</span>
+                                <i class="icon-arrow-down icon-font-11 ml-2"></i>
+                            </button>
+                            <mat-menu #downloadCsvEmail="matMenu">
+                                <button mat-menu-item>Cash Invoice</button>
+                                <button mat-menu-item>Sales Invoice</button>
+                            </mat-menu>
+                            <div class="custom-datepicker-wrapper">
+                                <div class="custom-datepicker">
+                                    <input type="text" name="selectedDateRange"
+                                        class="giddh-datepicker date-range-picker" />
+                                </div>
                             </div>
                         </div>
+                        <div class="d-flex align-items-center column-gap1">
+                            <button mat-stroked-button colo="primary" [matTooltip]="'Export'"
+                            [matTooltipPosition]="'above'">
+                                <i class="icon-export-icon"></i>
+                            </button>
+                            <button mat-stroked-button color="primary" [matMenuTriggerFor]="moreInvoice">
+                                <span>More</span>
+                                <i class="icon-arrow-down icon-font-11 ml-2"></i>
+                            </button>
+                            <mat-menu #moreInvoice="matMenu">
+                                <button mat-menu-item (click)="bulkUpdateDialog()">Bulk Update</button>
+                                <button mat-menu-item>Create E-invoice</button>
+                                <button mat-menu-item (click)="deleteVoucherDialog()">Delete</button>
+                            </mat-menu>
+                            <button mat-stroked-button colo="primary" (click)="advanceSearchDialog()">Filter
+                                <i class="icon-advance-filter"></i>
+                            </button>
+                            <button mat-stroked-button colo="primary" (click)="exportDialog()">Export</button>
+                        </div>
                     </div>
-                    <div class="d-flex align-items-center column-gap1">
-                        <button mat-stroked-button colo="primary" [matTooltip]="'Export'"
-                        [matTooltipPosition]="'above'">
-                            <i class="icon-export-icon"></i>
-                        </button>
-                        <button mat-stroked-button color="primary" [matMenuTriggerFor]="moreInvoice">
-                            <span>More</span>
-                            <i class="icon-arrow-down icon-font-11 ml-2"></i>
-                        </button>
-                        <mat-menu #moreInvoice="matMenu">
-                            <button mat-menu-item (click)="bulkUpdateDialog()">Bulk Update</button>
-                            <button mat-menu-item>Create E-invoice</button>
-                            <button mat-menu-item (click)="deleteVoucherDialog()">Delete</button>
-                        </mat-menu>
-                        <button mat-stroked-button colo="primary" (click)="advanceSearchDialog()">Filter
-                            <i class="icon-advance-filter"></i>
-                        </button>
-                        <button mat-stroked-button colo="primary" (click)="exportDialog()">Export</button>
+                    <div class="total-wrapper d-flex column-gap5 w-100">
+                        <div class="total-sale opening-box pd-1 w-50">
+                            <p class="font-12">Total Sale:</p>
+                            <span class="font-16">₹4,17,193.26/-</span>
+                        </div>
+                        <div class="total-sale due-box pd-1 w-50">
+                            <p class="font-12">Total Due:</p>
+                            <span class="font-16">₹4,16,988.00/-</span>
+                        </div>
                     </div>
-                </div>
-                <div class="total-wrapper d-flex column-gap5 w-100">
-                    <div class="total-sale opening-box pd-1 w-50">
-                        <p class="font-12">Total Sale:</p>
-                        <span class="font-16">₹4,17,193.26/-</span>
-                    </div>
-                    <div class="total-sale due-box pd-1 w-50">
-                        <p class="font-12">Total Due:</p>
-                        <span class="font-16">₹4,16,988.00/-</span>
-                    </div>
-                </div>
-                <div class="table-responsive">
-                    <table mat-table [dataSource]="dataSource" matSort class="w-100">
-                        <ng-container matColumnDef="position">
-                            <th mat-header-cell *matHeaderCellDef> # </th>
-                            <td mat-cell *matCellDef="let element">
-                                <div class="d-flex align-items-center">
-                                    <div class="invoice-number">
-                                        {{element.position}}
+                    <div class="table-responsive">
+                        <table mat-table [dataSource]="dataSource" matSort class="w-100">
+                            <ng-container matColumnDef="position">
+                                <th mat-header-cell *matHeaderCellDef> # </th>
+                                <td mat-cell *matCellDef="let element">
+                                    <div class="d-flex align-items-center">
+                                        <div class="invoice-number">
+                                            {{element.position}}
+                                        </div>
+                                        <div class="checkbox-hide">
+                                            <mat-checkbox
+                                                color="primary"
+                                            ></mat-checkbox>
+                                        </div>
                                     </div>
-                                    <div class="checkbox-hide">
-                                        <mat-checkbox
-                                            color="primary"
-                                        ></mat-checkbox>
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="invoice">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    <div class="d-flex align-items-center column-gap5">
+                                        <ng-container
+                                            *ngTemplateOutlet="
+                                                searchTemplate;
+                                                context: {
+                                                    $implicit: showNameSearch,
+                                                    fieldName: 'name',
+                                                    formControl: searchedName,
+                                                    title: name
+                                                }
+                                            "
+                                        ></ng-container>
+                                        Invoice No.
                                     </div>
-                                </div>
-                            </td>
-                        </ng-container>
-                        <ng-container matColumnDef="invoice">
-                            <th mat-header-cell *matHeaderCellDef>
-                                <div class="d-flex align-items-center column-gap5">
-                                    <ng-container
-                                        *ngTemplateOutlet="
-                                            searchTemplate;
-                                            context: {
-                                                $implicit: showNameSearch,
-                                                fieldName: 'name',
-                                                formControl: searchedName,
-                                                title: name
-                                            }
-                                        "
-                                    ></ng-container>
-                                    Invoice No.
-                                </div>
+                                    </th>
+                                <td mat-cell *matCellDef="let element">
+                                    <a href="javascript:;" class="btn-link-2">240122-1</a>
+                                    <small class="text-danger d-block">Overdue By 4 Days</small>
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="customer">
+                                <th mat-header-cell *matHeaderCellDef> 
+                                    <div class="d-flex align-items-center column-gap5">
+                                        <ng-container
+                                            *ngTemplateOutlet="
+                                                searchTemplate;
+                                                context: {
+                                                    $implicit: showNameSearch,
+                                                    fieldName: 'name',
+                                                    formControl: searchedName,
+                                                    title: name
+                                                }
+                                            "
+                                        ></ng-container>
+                                        Customer
+                                    </div>    
                                 </th>
-                            <td mat-cell *matCellDef="let element">
-                                <a href="javascript:;" class="btn-link-2">240122-1</a>
-                                <small class="text-danger d-block">Overdue By 4 Days</small>
-                            </td>
-                        </ng-container>
-                        <ng-container matColumnDef="customer">
-                            <th mat-header-cell *matHeaderCellDef> 
-                                <div class="d-flex align-items-center column-gap5">
-                                    <ng-container
-                                        *ngTemplateOutlet="
-                                            searchTemplate;
-                                            context: {
-                                                $implicit: showNameSearch,
-                                                fieldName: 'name',
-                                                formControl: searchedName,
-                                                title: name
-                                            }
-                                        "
-                                    ></ng-container>
-                                    Customer
-                                </div>    
-                            </th>
-                            <td mat-cell *matCellDef="let element" class="no-dbl-click-select">
-                                <div class="cp">00000000</div>
-                                <!-- account-detail-double-click -->
-                                <mat-card class="outline-card account-detail-wrapper">
-                                    <div class="d-flex align-items-center justify-content-between column-gap15 p-3 border-bottom account-header">
-                                        <h3>00000000</h3>
-                                        <span class="cp">
-                                            <img src="./assets/images/path.svg" />
-                                        </span>
+                                <td mat-cell *matCellDef="let element" class="no-dbl-click-select">
+                                    <div class="cp">00000000</div>
+                                    <!-- account-detail-double-click -->
+                                    <mat-card class="outline-card account-detail-wrapper">
+                                        <div class="d-flex align-items-center justify-content-between column-gap15 p-3 border-bottom account-header">
+                                            <h3>00000000</h3>
+                                            <span class="cp">
+                                                <img src="./assets/images/path.svg" />
+                                            </span>
+                                        </div>
+                                        <mat-card-content class="pt-3">
+                                            <ul class="list-unstyled">
+                                                <li class="text-left"><a href="javascript:;" class="default-color">Go to Ledger</a></li>
+                                                <li class="text-left mr-t05"><a href="javascript:;" class="default-color">Generate Invoice</a></li>
+                                            </ul>
+                                        </mat-card-content>
+                                    </mat-card>
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="invoicedate">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                    Invoice Date
+                                </th>
+                                <td mat-cell *matCellDef="let element"> 
+                                    22-01-2024
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="amount">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-right">
+                                    Amount
+                                </th>
+                                <td mat-cell *matCellDef="let element" class="text-right" matTooltip="In INR: 1.239 (Conversion Rate: 0.005)"
+                                matTooltipPosition="above"> 
+                                    Rp233.00
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="balance">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-right">
+                                    Balance Due
+                                </th>
+                                <td mat-cell *matCellDef="let element" class="text-right" matTooltip="In INR: 1.239 (Conversion Rate: 0.005)"
+                                matTooltipPosition="above"> 
+                                    Rp233.00
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="duedate">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                    Due Date
+                                </th>
+                                <td mat-cell *matCellDef="let element"> 
+                                    06-02-2024
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="invoicestatus">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    E-invoice Status
+                                </th>
+                                <td mat-cell *matCellDef="let element">
+                                    <div [matTooltip]="'Credential are Invalid, please add valid credentials.'" [matTooltipPosition]="'above'">
+                                        Failed
                                     </div>
-                                    <mat-card-content class="pt-3">
-                                        <ul class="list-unstyled">
-                                            <li class="text-left"><a href="javascript:;" class="default-color">Go to Ledger</a></li>
-                                            <li class="text-left mr-t05"><a href="javascript:;" class="default-color">Generate Invoice</a></li>
-                                        </ul>
-                                    </mat-card-content>
-                                </mat-card>
-                            </td>
-                        </ng-container>
-                        <ng-container matColumnDef="invoicedate">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header>
-                                Invoice Date
-                            </th>
-                            <td mat-cell *matCellDef="let element"> 
-                                22-01-2024
-                            </td>
-                        </ng-container>
-                        <ng-container matColumnDef="amount">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-right">
-                                Amount
-                            </th>
-                            <td mat-cell *matCellDef="let element" class="text-right" matTooltip="In INR: 1.239 (Conversion Rate: 0.005)"
-                            matTooltipPosition="above"> 
-                                Rp233.00
-                            </td>
-                        </ng-container>
-                        <ng-container matColumnDef="balance">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-right">
-                                Balance Due
-                            </th>
-                            <td mat-cell *matCellDef="let element" class="text-right" matTooltip="In INR: 1.239 (Conversion Rate: 0.005)"
-                            matTooltipPosition="above"> 
-                                Rp233.00
-                            </td>
-                        </ng-container>
-                        <ng-container matColumnDef="duedate">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header>
-                                Due Date
-                            </th>
-                            <td mat-cell *matCellDef="let element"> 
-                                06-02-2024
-                            </td>
-                        </ng-container>
-                        <ng-container matColumnDef="invoicestatus">
-                            <th mat-header-cell *matHeaderCellDef>
-                                E-invoice Status
-                            </th>
-                            <td mat-cell *matCellDef="let element">
-                                <div [matTooltip]="'Credential are Invalid, please add valid credentials.'" [matTooltipPosition]="'above'">
-                                    Failed
-                                </div>
-                            </td>
-                        </ng-container>
-                        <ng-container matColumnDef="status">
-                            <th mat-header-cell *matHeaderCellDef>
-                                Status
-                            </th>
-                            <td mat-cell *matCellDef="let element"> 
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <p>Cancel</p>
-                                    <span [matMenuTriggerFor]="menu" class="cp">
-                                        <i class="icon-dots-three-vertical"></i>
-                                    </span>
-                                    <mat-menu #menu="matMenu">
-                                        <button mat-menu-item (click)="onPerformAction()">Paid</button>
-                                        <button mat-menu-item (click)="adjustPayment()">Adjust Amount</button>
-                                        <button mat-menu-item>Unpaid</button>
-                                        <button mat-menu-item>Hold</button>
-                                        <button mat-menu-item>Cancel</button>
-                                        <button mat-menu-item (click)="eWayBillDialog()">Generate E-way Bill</button>
-                                    </mat-menu>
-                                </div>
-                            </td>
-                        </ng-container>
-                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                        <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="checkbox-show"></tr>
-                    </table>
-                    <mat-paginator [pageSizeOptions]="[5, 10, 20]"
-                        showFirstLastButtons
-                        aria-label="Select page of periodic elements">
-                    </mat-paginator>
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="status">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    Status
+                                </th>
+                                <td mat-cell *matCellDef="let element"> 
+                                    <div class="d-flex justify-content-between align-items-center column-gap5">
+                                        <p>Cancel</p>
+                                        <span [matMenuTriggerFor]="menu" class="cp">
+                                            <i class="icon-dots-three-vertical"></i>
+                                        </span>
+                                        <mat-menu #menu="matMenu">
+                                            <button mat-menu-item (click)="onPerformAction()">Paid</button>
+                                            <button mat-menu-item (click)="adjustPayment()">Adjust Amount</button>
+                                            <button mat-menu-item>Unpaid</button>
+                                            <button mat-menu-item>Hold</button>
+                                            <button mat-menu-item>Cancel</button>
+                                            <button mat-menu-item (click)="eWayBillDialog()">Generate E-way Bill</button>
+                                        </mat-menu>
+                                    </div>
+                                </td>
+                            </ng-container>
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="checkbox-show"></tr>
+                        </table>
+                        <mat-paginator [pageSizeOptions]="[5, 10, 20]"
+                            showFirstLastButtons
+                            aria-label="Select page of periodic elements">
+                        </mat-paginator>
+                    </div>
                 </div>
-            </div>
-        </mat-tab>
-        <!-- invoice-content-end -->
-        <mat-tab label="Pending">Pending</mat-tab>
-        <mat-tab label="Settings">Settings</mat-tab>
-        <mat-tab label="Templates">Templates</mat-tab>
-    </mat-tab-group>
-
+            </mat-tab>
+            <!-- invoice-content-end -->
+            <mat-tab label="Pending">Pending</mat-tab>
+            <mat-tab label="Settings">Settings</mat-tab>
+            <mat-tab label="Templates">Templates</mat-tab>
+        </mat-tab-group>
+        <div class="video-link position-absolute">
+            <watch-video [cssClass]="'text-blue'" [moduleName]="'SALES_PREVIEW'"></watch-video>
+        </div>
+    </div>
     <!-- table-search -->
     <ng-template
         #searchTemplate
@@ -288,11 +293,6 @@
     <!-- e-way-bill-dialog -->
     <ng-template #eWayBill>
         <app-e-waybill-dialog></app-e-waybill-dialog>
-    </ng-template>
-    
-    <!-- delete-voucher-dialog -->
-    <ng-template #confirmationDialog>
-        <app-delete-voucher-confirmation-dialog></app-delete-voucher-confirmation-dialog>
     </ng-template>
     
 </ng-container>

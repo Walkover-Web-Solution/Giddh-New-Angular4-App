@@ -4,6 +4,9 @@ import { MatDialog } from "@angular/material/dialog";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatTableDataSource } from "@angular/material/table";
 import { MatSort } from "@angular/material/sort";
+import { NewConfirmationModalComponent } from "../../theme/new-confirmation-modal/confirmation-modal.component";
+import { ConfirmationModalConfiguration } from "../../theme/confirmation-modal/confirmation-modal.interface";
+import { GeneralService } from "../../services/general.service";
 
 export interface PeriodicElement {
     invoice: string;
@@ -53,8 +56,6 @@ export class VoucherListComponent implements OnInit, OnDestroy, AfterViewInit {
     @ViewChild('adjustPaymentDialog', { static: true }) public adjustPaymentDialog: TemplateRef<any>;
     // bulk update dialog
     @ViewChild('bulkUpdate', { static: true }) public bulkUpdate: TemplateRef<any>;
-    // confirmation delete dialog
-    @ViewChild('confirmationDialog', { static: true }) public confirmationDialog: TemplateRef<any>;
     // table paginator
     @ViewChild(MatPaginator) paginator: MatPaginator;
     // table sorting
@@ -63,10 +64,19 @@ export class VoucherListComponent implements OnInit, OnDestroy, AfterViewInit {
         this.dataSource.paginator = this.paginator;
       }
     public showNameSearch: boolean;
+    /** Invoice confirmation popup configuration */
+    public InvoiceConfirmationConfiguration: ConfirmationModalConfiguration;
+    /** This will hold local JSON data */
+    public localeData: any = {};
+    /** This will hold common JSON data */
+    public commonLocaleData: any = {};
+    /* Hold invoice  type*/
+    public selectedInvoiceType: any = '';
 
     constructor(
         private activatedRoute: ActivatedRoute,
-        public dialog: MatDialog
+        public dialog: MatDialog,
+        private generalService: GeneralService
     ) {
 
     }
@@ -110,10 +120,15 @@ export class VoucherListComponent implements OnInit, OnDestroy, AfterViewInit {
     }
     // delete confirmation dialog
     public deleteVoucherDialog():void {
-        this.dialog.open(this.confirmationDialog, {
-            panelClass: ['mat-dialog-md']
+        this.InvoiceConfirmationConfiguration = this.generalService.getDeleteBranchTransferConfiguration(this.localeData, this.commonLocaleData, this.selectedInvoiceType,);
+        this.dialog.open(NewConfirmationModalComponent, {
+            panelClass: ['mat-dialog-md'],
+            data: {
+                configuration: this.InvoiceConfirmationConfiguration
+            }
         });
     }
+
     public toggleSearch(fieldName: string): void {
         if (fieldName === "name") {
             this.showNameSearch = true;
