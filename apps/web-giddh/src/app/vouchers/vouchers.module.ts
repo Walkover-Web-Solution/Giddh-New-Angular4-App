@@ -30,9 +30,10 @@ import { MatSortModule } from "@angular/material/sort";
 import { MatListModule } from "@angular/material/list";
 import { MatCardModule } from "@angular/material/card";
 import { MatExpansionModule } from "@angular/material/expansion";
-import { VouchersAddBulkItemsComponent } from "./add-bulk-items/add-bulk-items.component";
 import { WatchVideoModule } from "../theme/watch-video/watch-video.module";
 import { HamburgerMenuModule } from "../shared/header/components/hamburger-menu/hamburger-menu.module";
+import { OtherTaxModule } from "../theme/other-tax/other-tax.module";
+import { AddBulkItemsModule } from "../theme/add-bulk-items/add-bulk-items.module";
 
 @NgModule({
     declarations: [
@@ -43,8 +44,7 @@ import { HamburgerMenuModule } from "../shared/header/components/hamburger-menu/
         BulkExportComponent,
         PaymentDialogComponent,
         AdjustPaymentDialogComponent,
-        BulkUpdateComponent,
-        VouchersAddBulkItemsComponent
+        BulkUpdateComponent
     ],
     imports: [
         CommonModule,
@@ -71,7 +71,9 @@ import { HamburgerMenuModule } from "../shared/header/components/hamburger-menu/
         MatDialogModule,
         MatExpansionModule,
         WatchVideoModule,
-        HamburgerMenuModule
+        HamburgerMenuModule,
+        OtherTaxModule,
+        AddBulkItemsModule
     ],
     exports: [
 
