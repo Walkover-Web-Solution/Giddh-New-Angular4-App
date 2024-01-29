@@ -1,12 +1,11 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { VoucherComponentStore } from "../vouchers.store";
+import { VoucherComponentStore } from "../utility/vouchers.store";
 import { AppState } from "../../store";
 import { Store } from "@ngrx/store";
 import { Observable, ReplaySubject, delay, takeUntil } from "rxjs";
 import { GeneralService } from "../../services/general.service";
 import { VoucherTypeEnum } from "../../models/api-models/Sales";
-import { VouchersUtilityService } from "../vouchers.utility.service";
 import { OnboardingFormRequest } from "../../models/api-models/Common";
 import { CommonActions } from "../../actions/common.actions";
 import { CompanyActions } from "../../actions/company.actions";
@@ -15,8 +14,9 @@ import { WarehouseActions } from "../../settings/warehouse/action/warehouse.acti
 import { SettingsUtilityService } from "../../settings/services/settings-utility.service";
 import { SettingsBranchActions } from "../../actions/settings/branch/settings.branch.action";
 import { OrganizationType } from "../../models/user-login-state";
-import { ProformaFilter } from "../../models/api-models/proforma";
-import { InvoiceReceiptFilter } from "../../models/api-models/recipt";
+import { PreviousInvoicesVm, ProformaFilter, ProformaResponse } from "../../models/api-models/proforma";
+import { InvoiceReceiptFilter, ReciptResponse } from "../../models/api-models/recipt";
+import { VouchersUtilityService } from "../utility/vouchers.utility.service";
 
 @Component({
     selector: "create",
@@ -51,6 +51,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
     public createdTemplates$: Observable<any> = this.componentStore.createdTemplates$;
     /** Created templates Observable */
     public lastVouchers$: Observable<any> = this.componentStore.lastVouchers$;
+    /** Search results Observable */
+    public searchResults$: Observable<any> = this.componentStore.searchResults$;
+    /** Stock variants Observable */
+    public stockVariants$: Observable<any> = this.componentStore.stockVariants$;
     /** Holds boolean of TCS/TDS Applicable Observable */
     public isTcsTdsApplicable$: Observable<any> = this.componentStore.isTcsTdsApplicable$;
     public dummyOptions: any[] = [
@@ -121,6 +125,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
         trackingNumber: '',
         showNotesAtLastPage: false
     };
+    /** Holds list of last vouchers */
+    public lastVouchers: PreviousInvoicesVm[] = [];
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -300,25 +306,53 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
     }
 
     public getPreviousVouchers(): void {
-        if (this.invoiceType.isProformaInvoice || this.invoiceType.isEstimateInvoice) {
-            let filterRequest: ProformaFilter = new ProformaFilter();
-            filterRequest.sortBy = this.invoiceType.isProformaInvoice ? 'proformaDate' : 'estimateDate';
-            filterRequest.sort = 'desc';
-            filterRequest.count = 5;
-            filterRequest.isLastInvoicesRequest = true;
-            this.componentStore.getPreviousProformaEstimates({ model: filterRequest, type: this.invoiceType.isProformaInvoice ? 'proformas' : 'estimates' });
-        } else if (!this.invoiceType.isPurchaseInvoice) {
-            let request: InvoiceReceiptFilter = new InvoiceReceiptFilter();
-            request.sortBy = 'voucherDate';
-            request.sort = 'desc';
-            request.count = 5;
-            request.isLastInvoicesRequest = true;
-            this.componentStore.getPreviousVouchers({ model: request, type: this.voucherType});
-        }
-
         this.lastVouchers$.subscribe(response => {
             if (response) {
-                console.log(response);
+                const lastVouchers: PreviousInvoicesVm[] = [];
+                if (!this.invoiceType.isProformaInvoice && !this.invoiceType.isEstimateInvoice) {
+                    if (response) {
+                        response = response as ReciptResponse;
+                        response?.items.forEach(item => {
+                            lastVouchers.push({
+                                versionNumber: item.voucherNumber, date: item.voucherDate, grandTotal: item.grandTotal,
+                                account: { name: item.account?.name, uniqueName: item.account?.uniqueName },
+                                uniqueName: item?.uniqueName
+                            });
+                        });
+                    }
+                } else {
+                    if (response) {
+                        response = response as ProformaResponse;
+                        if (response && response.items) {
+                            response.items.forEach(item => {
+                                lastVouchers.push({
+                                    versionNumber: this.invoiceType.isProformaInvoice ? item.proformaNumber : item.estimateNumber,
+                                    date: item.voucherDate,
+                                    grandTotal: item.grandTotal,
+                                    account: { name: item.customerName, uniqueName: item.customerUniqueName },
+                                    uniqueName: item?.uniqueName
+                                });
+                            });
+                        }
+                    }
+                }
+                this.lastVouchers = [...lastVouchers];
+            } else {
+                if (this.invoiceType.isProformaInvoice || this.invoiceType.isEstimateInvoice) {
+                    let filterRequest: ProformaFilter = new ProformaFilter();
+                    filterRequest.sortBy = this.invoiceType.isProformaInvoice ? 'proformaDate' : 'estimateDate';
+                    filterRequest.sort = 'desc';
+                    filterRequest.count = 5;
+                    filterRequest.isLastInvoicesRequest = true;
+                    this.componentStore.getPreviousProformaEstimates({ model: filterRequest, type: this.invoiceType.isProformaInvoice ? 'proformas' : 'estimates' });
+                } else if (!this.invoiceType.isPurchaseInvoice) {
+                    let request: InvoiceReceiptFilter = new InvoiceReceiptFilter();
+                    request.sortBy = 'voucherDate';
+                    request.sort = 'desc';
+                    request.count = 5;
+                    request.isLastInvoicesRequest = true;
+                    this.componentStore.getPreviousVouchers({ model: request, type: this.voucherType });
+                }
             }
         });
     }
@@ -352,6 +386,17 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
                         };
                     }
                 }
+            }
+        });
+    }
+
+    public searchAccount(query: string, page: number = 1, searchType: string): void {
+        const requestObject = this.vouchersUtilityService.getSearchRequestObject(this.voucherType, query, page, searchType);
+        this.componentStore.getSearchAccount(requestObject);
+
+        this.searchResults$.subscribe(response => {
+            if (response) {
+                console.log(response);
             }
         });
     }
