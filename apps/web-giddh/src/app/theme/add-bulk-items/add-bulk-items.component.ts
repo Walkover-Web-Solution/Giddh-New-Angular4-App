@@ -5,6 +5,6 @@ import { Component } from "@angular/core";
     templateUrl: "./add-bulk-items.component.html",
     styleUrls: ["./add-bulk-items.component.scss"]
 })
-export class VouchersAddBulkItemsComponent {
+export class AddBulkItemsComponent {
     
 }

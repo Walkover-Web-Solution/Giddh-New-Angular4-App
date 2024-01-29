@@ -30,13 +30,14 @@ import { MatSortModule } from "@angular/material/sort";
 import { MatListModule } from "@angular/material/list";
 import { MatCardModule } from "@angular/material/card";
 import { MatExpansionModule } from "@angular/material/expansion";
-import { VouchersAddBulkItemsComponent } from "./add-bulk-items/add-bulk-items.component";
 import { WatchVideoModule } from "../theme/watch-video/watch-video.module";
 import { HamburgerMenuModule } from "../shared/header/components/hamburger-menu/hamburger-menu.module";
 import { VouchersPreviewComponent } from "./preview/preview.component";
 import { ScrollingModule } from "@angular/cdk/scrolling";
 import { NoDataModule } from "../shared/no-data/no-data.module";
 import { HistoryDialogComponent } from "./history-dialog/history-dialog.component";
+import { OtherTaxModule } from "../theme/other-tax/other-tax.module";
+import { AddBulkItemsModule } from "../theme/add-bulk-items/add-bulk-items.module";
 
 @NgModule({
     declarations: [
@@ -49,8 +50,7 @@ import { HistoryDialogComponent } from "./history-dialog/history-dialog.componen
         PaymentDialogComponent,
         AdjustPaymentDialogComponent,
         BulkUpdateComponent,
-        VouchersAddBulkItemsComponent,
-        HistoryDialogComponent
+        HistoryDialogComponent,
     ],
     imports: [
         CommonModule,
@@ -79,7 +79,9 @@ import { HistoryDialogComponent } from "./history-dialog/history-dialog.componen
         WatchVideoModule,
         HamburgerMenuModule,
         ScrollingModule,
-        NoDataModule
+        NoDataModule,
+        OtherTaxModule,
+        AddBulkItemsModule
     ],
     exports: [
 

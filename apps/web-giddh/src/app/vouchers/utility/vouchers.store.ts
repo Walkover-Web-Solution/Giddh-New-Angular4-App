@@ -19,6 +19,8 @@ import { CommonService } from "../../services/common.service";
 export interface VoucherState {
     isLoading: boolean;
     createUpdateInProgress: boolean;
+    deleteAttachmentInProgress: boolean;
+    deleteAttachmentIsSuccess: boolean;
     discountsList: IDiscountList[];
     invoiceSettings: InvoiceSetting;
     lastVouchers: ReciptResponse;
@@ -32,6 +34,8 @@ export interface VoucherState {
 const DEFAULT_STATE: VoucherState = {
     isLoading: false,
     createUpdateInProgress: null,
+    deleteAttachmentInProgress: null,
+    deleteAttachmentIsSuccess: null,
     discountsList: null,
     invoiceSettings: null,
     lastVouchers: null,
@@ -240,17 +244,20 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
     readonly deleteAttachment = this.effect((data: Observable<string>) => {
         return data.pipe(
             switchMap((req) => {
+                this.patchState({ deleteAttachmentInProgress: true, deleteAttachmentIsSuccess: false });
                 return this.ledgerService.removeAttachment(req).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             return this.patchState({
-                                barcodeData: res?.body ?? null // need to remove the variable
+                                deleteAttachmentInProgress: false,
+                                deleteAttachmentIsSuccess: true
                             });
                         },
                         (error: any) => {
                             this.showErrorToast(error);
                             return this.patchState({
-                                barcodeData: null // need to remove the variable
+                                deleteAttachmentInProgress: false,
+                                deleteAttachmentIsSuccess: false
                             });
                         }
                     ),
