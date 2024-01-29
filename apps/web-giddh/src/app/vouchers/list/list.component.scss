@@ -1,3 +1,7 @@
+.invoice-list {
+    height: 100vh;
+    overflow-y: auto;
+}
 .invoice-wrapper {
     .total-wrapper {
         .total-sale {
@@ -43,5 +47,18 @@ table {
 .account-detail-wrapper {
     .account-header {
         background-color: var(--color-dark-fog);
+    }
+}
+
+// video link
+.video-link {
+    top: 15px;
+    right: 15px;
+    z-index: 10;
+}
+
+@media screen and (max-width: 1024px) {
+    .video-link {
+        display: none;
     }
 }

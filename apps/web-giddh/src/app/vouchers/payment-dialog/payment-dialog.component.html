@@ -34,6 +34,78 @@
       >
       </dropdown-field>
     </div>
+    <div class="d-flex column-gap1 mr-b15">
+      <input-field
+        [type]="'tel'"
+        [label]="'Cheque No.(if payment by Cheque)'"
+        [placeholder]="'XXXX1231'"
+        class="w-50"
+      >
+      </input-field>
+      <giddh-datepicker type="text" (keydown.enter)="$event.preventDefault()" [label]="'Cheque Clearance Date'"
+        [placeholder]="'DDMMYYYY'" name="voucherDate" [showToggleIcon]="false" [appearance]="'outline'" class="w-50">
+      </giddh-datepicker>
+    </div>
+    <div class="currency-change mr-b15">
+      <span class="text-light d-inline-block">Base Currency</span>
+      <span class="mx-1">1</span>
+      <span>
+        <img
+          class="switch-icon middle mr-1 ml-1"
+          src="assets/images/switch-icon.svg"
+          alt="switch-icon"
+        />
+      </span>
+      <span class="mx-1">
+        <img
+          src="assets/images/edit-pencilicon.svg"
+          class="cp mr-1"
+        />
+        <img
+            src=" assets/images/autosave.svg"
+            class="cp mr-1"
+        />
+      </span>
+      <span class="mr-1">65465</span>
+      <span>INR</span>
+      <div class="mr-t15">
+        <input-field
+          [type]="'tel'"
+          [name]="'rate'"
+        >
+        </input-field>
+      </div>
+    </div>
+    <div class="currency-change mr-b15">
+      <span class="text-light d-inline-block">Base Currency</span>
+      <span class="mx-1">1</span>
+      <span>
+        <img
+          class="switch-icon middle mr-1 ml-1"
+          src="assets/images/switch-icon.svg"
+          alt="switch-icon"
+        />
+      </span>
+      <span class="mx-1">
+        <img
+          src="assets/images/edit-pencilicon.svg"
+          class="cp mr-1"
+        />
+        <img
+            src=" assets/images/autosave.svg"
+            class="cp mr-1"
+        />
+      </span>
+      <span class="mr-1">65465</span>
+      <span>INR</span>
+      <div class="mr-t15">
+        <input-field
+          [type]="'tel'"
+          [name]="'rate'"
+        >
+        </input-field>
+      </div>
+    </div>
     <mat-form-field appearance="outline" class="w-100 mr-b15">
       <mat-label>Description</mat-label>
       <textarea

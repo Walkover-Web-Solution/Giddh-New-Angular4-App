@@ -25,13 +25,14 @@ import { PaymentDialogComponent } from "./payment-dialog/payment-dialog.componen
 import { AdjustPaymentDialogComponent } from "./adjust-payment-dialog/adjust-payment-dialog.component";
 import { VoucherCreateComponent } from "./create/create.component";
 import { BulkUpdateComponent } from "./bulk-update/bulk-update.component";
-import { DeleteVoucherConfirmationDialogComponent } from "./delete-voucher-confirmation-dialog/delete-voucher-confirmation-dialog.component";
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from "@angular/material/sort";
 import { MatListModule } from "@angular/material/list";
 import { MatCardModule } from "@angular/material/card";
 import { MatExpansionModule } from "@angular/material/expansion";
 import { VouchersAddBulkItemsComponent } from "./add-bulk-items/add-bulk-items.component";
+import { WatchVideoModule } from "../theme/watch-video/watch-video.module";
+import { HamburgerMenuModule } from "../shared/header/components/hamburger-menu/hamburger-menu.module";
 
 @NgModule({
     declarations: [
@@ -43,7 +44,6 @@ import { VouchersAddBulkItemsComponent } from "./add-bulk-items/add-bulk-items.c
         PaymentDialogComponent,
         AdjustPaymentDialogComponent,
         BulkUpdateComponent,
-        DeleteVoucherConfirmationDialogComponent,
         VouchersAddBulkItemsComponent
     ],
     imports: [
@@ -69,7 +69,9 @@ import { VouchersAddBulkItemsComponent } from "./add-bulk-items/add-bulk-items.c
         MatFormFieldModule,
         NgxMatSelectSearchModule,
         MatDialogModule,
-        MatExpansionModule
+        MatExpansionModule,
+        WatchVideoModule,
+        HamburgerMenuModule
     ],
     exports: [
 
