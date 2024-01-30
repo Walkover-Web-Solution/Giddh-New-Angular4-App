@@ -38,13 +38,10 @@ import { NoDataModule } from "../shared/no-data/no-data.module";
 import { HistoryDialogComponent } from "./history-dialog/history-dialog.component";
 import { OtherTaxModule } from "../theme/other-tax/other-tax.module";
 import { AddBulkItemsModule } from "../theme/add-bulk-items/add-bulk-items.module";
-<<<<<<< HEAD
 import { OptionsScrollDirective } from "../theme/form-fields/reactive-dropdown-field/reactive-dropdown-options-scroll.directive";
 import { EmailSendDialogComponent } from "./email-send-dialog/email-send-dialog.component";
 import { MatSlideToggleModule } from "@angular/material/slide-toggle";
-=======
 import { TranslateDirectiveModule } from "../theme/translate/translate.directive.module";
->>>>>>> b814bad9706a272f5acea38822af540700a7a3dd
 
 @NgModule({
     declarations: [
@@ -91,11 +88,8 @@ import { TranslateDirectiveModule } from "../theme/translate/translate.directive
         NoDataModule,
         OtherTaxModule,
         AddBulkItemsModule,
-<<<<<<< HEAD
-        MatSlideToggleModule
-=======
+        MatSlideToggleModule,
         TranslateDirectiveModule
->>>>>>> b814bad9706a272f5acea38822af540700a7a3dd
     ],
     exports: [
 
