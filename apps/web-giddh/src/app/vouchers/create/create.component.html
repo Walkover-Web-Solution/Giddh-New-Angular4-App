@@ -1,5 +1,4 @@
 <div class="vouchers">
-
     <!-- Voucher Page Heading -->
     <div class="vouchers-title d-flex align-items-center container-lg">
         <h1 *ngIf="invoiceType.isSalesInvoice">Sales</h1>
@@ -60,7 +59,7 @@
                         *ngIf="invoiceType.isPurchaseInvoice" />
                     <img src="/assets/images/new/search-customer-cash-invoice.svg" height="70" class="mb-3"
                         *ngIf="invoiceType.isCashInvoice" />
-                    
+
                     <ng-container *ngIf="invoiceType.isPurchaseOrder">
                         <div class="mt-2">Pending Purchase order of selected vendor</div>
                         <div class="text-blue cursor-pointer">PO-20230414-8</div>
@@ -97,8 +96,6 @@
                                         </div>
                                         <i class="icon-tick"></i>
                                     </div>
-
-
                                 </button>
                                 <button mat-menu-item>Item 2</button>
                                 <button mat-menu-item>Item 3</button>
@@ -142,7 +139,6 @@
                                 </select-field>
                             </div>
                             <div class="gstin-field">
-
                                 <text-field type="text" name="gstin" [placeholder]="'GSTIN'"
                                     [cssClass]="'border-0'"></text-field>
                             </div>
@@ -172,8 +168,6 @@
                                             </div>
                                             <i class="icon-tick"></i>
                                         </div>
-
-
                                     </button>
                                     <button mat-menu-item>Item 2</button>
                                     <button mat-menu-item>Item 3</button>
@@ -249,14 +243,15 @@
                     <div class="col-6">
                         <input-field [name]="'mobile-number'" [type]="'tel'" #initContactProforma class="flag-input"
                             [id]="'init-contact-proforma'" (keydown.enter)="$event.preventDefault()"
-                            [label]="'Mobile Number'" [placeholder]="'98XXXXXXXX'" [floatLabel]="'always'">
+                            [label]="'Mobile Number'" [placeholder]="'98XXXXXXXX'" [floatLabel]="'auto'">
                         </input-field>
                         <span id="init-contact-proforma-valid-msg" class="d-none"></span>
                         <span id="init-contact-proforma-error-msg" class="d-none"></span>
                     </div>
 
                     <!-- Warehouse -->
-                    <div class="col-6" *ngIf="invoiceType.isSalesInvoice || invoiceType.isCashInvoice || invoiceType.isPurchaseOrder">
+                    <div class="col-6"
+                        *ngIf="invoiceType.isSalesInvoice || invoiceType.isCashInvoice || invoiceType.isPurchaseOrder">
                         <dropdown-field [label]="'Warehouse'" [placeholder]="'Select warehouse'"
                             [options]="dummyOptions" (selectedOption)="selectDropdown($event)" [defaultValue]="''">
                         </dropdown-field>
@@ -289,7 +284,6 @@
                                 </select-field>
                             </div>
                             <div class="gstin-field">
-
                                 <text-field type="text" name="gstin" [placeholder]="'GSTIN'"
                                     [cssClass]="'border-0'"></text-field>
                             </div>
@@ -319,8 +313,6 @@
                                             </div>
                                             <i class="icon-tick"></i>
                                         </div>
-
-
                                     </button>
                                     <button mat-menu-item>Item 2</button>
                                     <button mat-menu-item>Item 3</button>
@@ -351,7 +343,6 @@
                             </mat-menu>
                         </ng-container>
 
-
                         <div *ngIf="!invoiceType.isCashInvoice" class="mt-2">Address 2 </div>
                         <div class="vouchers-address-form form-disabled" *ngIf="invoiceType.isCashInvoice">
                             <div class="address-field">
@@ -367,7 +358,6 @@
                                 </select-field>
                             </div>
                             <div class="gstin-field">
-
                                 <text-field type="text" name="gstin" [placeholder]="'GSTIN'"
                                     [cssClass]="'border-0'"></text-field>
                             </div>
@@ -417,10 +407,10 @@
                         </input-field>
                     </div>
 
-                     <!-- Order # -->
-                     <div class="col-6" *ngIf="invoiceType.isPurchaseOrder">
-                        <input-field [name]="'vouchers-number'" [label]="'Order #'"
-                            [placeholder]="'Enter order #'" [type]="'text'">
+                    <!-- Order # -->
+                    <div class="col-6" *ngIf="invoiceType.isPurchaseOrder">
+                        <input-field [name]="'vouchers-number'" [label]="'Order #'" [placeholder]="'Enter order #'"
+                            [type]="'text'">
                         </input-field>
                     </div>
 
@@ -440,8 +430,8 @@
                         </giddh-datepicker>
                     </div>
 
-                     <!-- Order Date -->
-                     <div class="col-3" *ngIf="invoiceType.isPurchaseOrder">
+                    <!-- Order Date -->
+                    <div class="col-3" *ngIf="invoiceType.isPurchaseOrder">
                         <giddh-datepicker type="text" (keydown.enter)="$event.preventDefault()" [label]="'Order Date'"
                             [placeholder]="'DDMMYYYY'" name="voucherDate" [showToggleIcon]="false"
                             [appearance]="'outline'">
@@ -450,9 +440,9 @@
 
                     <!-- Expected Delivery Date -->
                     <div class="col-3" *ngIf="invoiceType.isPurchaseOrder">
-                        <giddh-datepicker type="text" (keydown.enter)="$event.preventDefault()" [label]="'Expected Delivery'"
-                            [placeholder]="'DDMMYYYY'" name="voucherBillDate" [showToggleIcon]="false"
-                            [appearance]="'outline'">
+                        <giddh-datepicker type="text" (keydown.enter)="$event.preventDefault()"
+                            [label]="'Expected Delivery'" [placeholder]="'DDMMYYYY'" name="voucherBillDate"
+                            [showToggleIcon]="false" [appearance]="'outline'">
                         </giddh-datepicker>
                     </div>
 
@@ -493,7 +483,7 @@
                 <div
                     class="change-currency  d-flex justify-content-end align-items-center column-gap1 text-uppercase pb-2">
                     <span>1 AUD </span>
-                    <img alt="switch-icon" height="15px" src="/assets/images/switch-icon.svg">
+                    <img alt="switch-icon" height="15px" src="/assets/images/switch-icon.svg" />
                     <span>33.00 INR</span>
                     <div class="currency-input-wrapper">
                         <text-field [cssClass]="'form-control'" [type]="'number'"></text-field>
@@ -516,7 +506,7 @@
                     <div class="head-item">Tax</div>
                     <div class="head-item">Total</div>
                     <div class="border-end-0 border-bottom-0 p-0">
-                        <!-- Don't Delete this element it is working as column for delete icon -->
+                        <!-- Don't Delete this element it is working as column(<th> tag like) for delete icon -->
                     </div>
 
                     <!-- Grid Body | Row 2-->
@@ -526,7 +516,6 @@
 
                     <!-- Product/Service Description -->
                     <div class="body-item text-left">
-
                         <span class="select-account-label">111 </span>
 
                         <div class="mt-2 font-12">
@@ -569,8 +558,6 @@
                     <div class="body-item delete-btn">
                         <i class="icon-trash"></i>
                     </div>
-
-
 
                     <!-- Grid Body | Row 3-->
 
@@ -794,10 +781,8 @@
                                     </div>
                                 </div>
                             </div>
-
-
-
                         </div>
+
                         <div class="col-4 px-0">
                             <div class="row text-right row-gap">
                                 <div class="col-9">
@@ -849,6 +834,7 @@
 
                 <div class="vouchers-actions d-flex justify-content-end column-gap1 pd-t2 pd-b2 mt-4">
                     <button mat-stroked-button> Clear </button>
+
                     <button mat-stroked-button color="primary"> Generate Sales & Update A/c </button>
                     <button mat-stroked-button color="primary"> Generate Sales </button>
 
@@ -857,11 +843,9 @@
 
                     <button mat-stroked-button color="primary"> Save </button>
                     <button mat-stroked-button> <i class="caret"></i> </button>
-
                 </div>
             </div>
-
-
+            
         </div>
     </div>
 </div>
