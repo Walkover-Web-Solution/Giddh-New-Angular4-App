@@ -38,6 +38,10 @@ import { NoDataModule } from "../shared/no-data/no-data.module";
 import { HistoryDialogComponent } from "./history-dialog/history-dialog.component";
 import { OtherTaxModule } from "../theme/other-tax/other-tax.module";
 import { AddBulkItemsModule } from "../theme/add-bulk-items/add-bulk-items.module";
+import { OptionsScrollDirective } from "../theme/form-fields/reactive-dropdown-field/reactive-dropdown-options-scroll.directive";
+import { EmailSendDialogComponent } from "./email-send-dialog/email-send-dialog.component";
+import { MatSlideToggleModule } from "@angular/material/slide-toggle";
+import { TranslateDirectiveModule } from "../theme/translate/translate.directive.module";
 
 @NgModule({
     declarations: [
@@ -51,6 +55,7 @@ import { AddBulkItemsModule } from "../theme/add-bulk-items/add-bulk-items.modul
         AdjustPaymentDialogComponent,
         BulkUpdateComponent,
         HistoryDialogComponent,
+        EmailSendDialogComponent
     ],
     imports: [
         CommonModule,
@@ -82,7 +87,9 @@ import { AddBulkItemsModule } from "../theme/add-bulk-items/add-bulk-items.modul
         ScrollingModule,
         NoDataModule,
         OtherTaxModule,
-        AddBulkItemsModule
+        AddBulkItemsModule,
+        MatSlideToggleModule,
+        TranslateDirectiveModule
     ],
     exports: [
 

@@ -1,20 +1,31 @@
-<mat-form-field [appearance]="appearance">
-    <mat-label>{{ label ? label : placeholder }}</mat-label>
-    <input 
-        type="text"
-        [ngClass]="cssClass"
-        class="select-field-input"
-        [placeholder]="placeholder"
-        matInput 
-        [readonly]="readonly"
-        [matAutocomplete]="auto" 
-        (input)="searchFormControl.next($event.target.value)"
-        [name]="name"
-        [value]="value"
-    />
-    <mat-autocomplete (optionSelected)="optionSelected($event)" (optionsScroll)="onScroll($event)" autoActiveFirstOption [displayWith]="displayLabel" #auto="matAutocomplete">
-        <mat-option *ngFor="let option of fieldFilteredOptions$ | async" [value]="option" [matTooltip]="option?.label" matTooltipPosition="right">
-            {{option?.label}}
-        </mat-option>
-    </mat-autocomplete>
-</mat-form-field>
+<ng-container appTranslate (commonLocaleData)="commonLocaleData = $event">
+    <mat-form-field [appearance]="appearance">
+        <mat-label>{{ label ? label : placeholder }}</mat-label>
+        <input type="text" [ngClass]="cssClass" class="select-field-input" [placeholder]="placeholder" matInput
+            [readonly]="readonly" [matAutocomplete]="auto" [name]="name" [autocomplete]="autocomplete"
+            [required]="required" [attr.aria-expanded]="readonly ? false : true"
+            (input)="searchFormControl.next($event.target.value)"
+            (click)="!readonly ? trigger?.openPanel() : trigger?.closePanel()" #trigger="matAutocompleteTrigger"
+            #selectField matAutocompletePosition="auto" (focusout)="
+                closeOnFocusOut &&
+                $event?.relatedTarget?.nodeName !== 'MAT-OPTION' &&
+                $event?.relatedTarget?.nodeName !== 'A'
+                    ? trigger.closePanel()
+                    : null
+            " />
+        <mat-autocomplete (optionSelected)="optionSelected($event)" optionsScroll
+            [enableDynamicSearch]="enableDynamicSearch" (optionsScroll)="onScroll()" autoActiveFirstOption
+            [displayWith]="displayLabel" #auto="matAutocomplete">
+            <a href="javascript:;" *ngIf="createNewText" (click)="createNewRecord()" class="custom-class-create">
+                <div class="item create-new">{{ createNewText }}</div>
+                <div class="item create-new-command">
+                    {{ commonLocaleData?.app_alt_c }}
+                </div>
+            </a>
+            <mat-option *ngFor="let option of fieldFilteredOptions$ | async" [value]="option"
+                [matTooltip]="option?.label" matTooltipPosition="right">
+                {{option?.label}}
+            </mat-option>
+        </mat-autocomplete>
+    </mat-form-field>
+</ng-container>

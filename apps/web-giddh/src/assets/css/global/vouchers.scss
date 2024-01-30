@@ -82,3 +82,20 @@
         background: var(--color-toast-primary-text) !important;
     }
 }
+
+// disable slide toggle
+.slide-toggle {
+    .mdc-form-field {
+        column-gap: 10px;
+    }
+}
+.disable-toggle {
+    .mdc-switch {
+        .mdc-switch__ripple {
+            display: none;
+        }
+    }
+}
+.text-success {
+    color: var(--color-teal);
+}

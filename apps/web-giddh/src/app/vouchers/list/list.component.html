@@ -205,8 +205,323 @@
                 </div>
             </mat-tab>
             <!-- invoice-content-end -->
+            <mat-tab label="Credit Note">Credit Note</mat-tab>
             <mat-tab label="Pending">Pending</mat-tab>
-            <mat-tab label="Settings">Settings</mat-tab>
+            <mat-tab label="Settings">
+                <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" class="tabs-box-wrap pt-3 pl-4 pr-3">
+                    <mat-tab>
+                      <ng-template mat-tab-label>
+                        <i class="icon-chat2"></i>
+                        General
+                      </ng-template>
+                      <div class="tabs-box-content py-3">
+                        <h4 class="font-16 border-bottom pb-2 mb-3">General <span class="text-gray font-12">(These settings will be applicable on Estimates, Proforma and Invoices)</span> </h4>
+                        <mat-slide-toggle
+                            name="enableNarrationOnInvAndVoucher"
+                            class="show-on-mobile disable-toggle slide-toggle"
+                            color="primary"
+                        >
+                            Show Narration on Ledger
+                        </mat-slide-toggle>
+                        <ng-container *ngTemplateOutlet="actionButtons"></ng-container>
+                      </div>
+                    </mat-tab>
+                    <mat-tab>
+                      <ng-template mat-tab-label>
+                        <i class="icon-mail"></i>
+                        Email
+                      </ng-template>
+                      <div class="tabs-box-content py-3">
+                        <h4 class="font-16 border-bottom pb-2 mb-3">Email/SMS <span class="text-gray font-12">(These settings will be applicable on Estimates, Proforma and Invoices)</span> </h4>
+                        <div class="d-flex column-gap1 align-items-center mb-3">
+                            <input-field
+                                [name]="'name'"
+                                [label]="'From Email'"
+                                [placeholder]="'ravinder@walkover.in'"
+                                [type]="'text'"
+                                class="settings-field"
+                            ></input-field>
+                            <span class="text-success">Verified</span>
+                            <button mat-stroked-button class="mat-icon-md-btn">
+                                <i class="icon-trash"></i>
+                            </button>
+                        </div>
+                        <mat-slide-toggle
+                            name=""
+                            class="show-on-mobile disable-toggle slide-toggle"
+                            color="primary"
+                        >
+                            Send email through Gmail
+                        </mat-slide-toggle>
+                        <ng-container *ngTemplateOutlet="actionButtons"></ng-container>
+                      </div>
+                    </mat-tab>
+                    <mat-tab>
+                        <ng-template mat-tab-label>
+                            <i class="icon-estimate1"></i>
+                            Estimate
+                        </ng-template>
+                        <div class="tabs-box-content py-3">
+                            <h4 class="font-16 border-bottom pb-2 mb-3">Estimate/Quotation</h4>
+                            <div class="d-flex column-gap1 mb-3">
+                                <input-field
+                                    [name]="'name'"
+                                    [label]="'Heading Name'"
+                                    [placeholder]="'ESTIMATE'"
+                                    [type]="'text'"
+                                    class="settings-field d-block"
+                                ></input-field>
+                                <input-field
+                                    [name]="'name'"
+                                    [label]="'Default expiry days'"
+                                    [placeholder]="'00'"
+                                    [type]="'text'"
+                                    class="settings-field d-block"
+                                ></input-field>
+                            </div>
+                            <label for="">Next step to Estimate</label>
+                            <mat-radio-group aria-label="Select an option" class="mt-2 mb-3">
+                                <mat-radio-button value="1" color="primary">Proforma</mat-radio-button>
+                                <mat-radio-button value="2" color="primary">Invoice</mat-radio-button>
+                            </mat-radio-group>
+                            <mat-slide-toggle
+                                name=""
+                                class="show-on-mobile disable-toggle slide-toggle d-block mb-3"
+                                color="primary"
+                            >
+                                Auto change status (on expiry)
+                            </mat-slide-toggle>
+                            <mat-slide-toggle
+                                name=""
+                                class="show-on-mobile disable-toggle slide-toggle d-block"
+                                color="primary"
+                            >
+                                Auto mail when generated
+                            </mat-slide-toggle>
+                            <ng-container *ngTemplateOutlet="actionButtons"></ng-container>
+                        </div>
+                    </mat-tab>
+                    <mat-tab>
+                        <ng-template mat-tab-label>
+                            <i class="icon-sales-order"></i>
+                            Proforma
+                        </ng-template>
+                        <div class="tabs-box-content py-3">
+                            <h4 class="font-16 border-bottom pb-2 mb-3">Proforma Invoice</h4>
+                            <div class="d-flex column-gap1 mb-3">
+                                <input-field
+                                    [name]="'name'"
+                                    [label]="'Heading Name'"
+                                    [placeholder]="'PROFORMA'"
+                                    [type]="'text'"
+                                    class="settings-field d-block"
+                                ></input-field>
+                                <input-field
+                                    [name]="'name'"
+                                    [label]="'Default expiry days'"
+                                    [placeholder]="'00'"
+                                    [type]="'text'"
+                                    class="settings-field d-block"
+                                ></input-field>
+                            </div>
+                            <mat-slide-toggle
+                                name=""
+                                class="show-on-mobile disable-toggle slide-toggle d-block mb-3"
+                                color="primary"
+                            >
+                                Auto change status (on expiry)
+                            </mat-slide-toggle>
+                            <mat-slide-toggle
+                                name=""
+                                class="show-on-mobile disable-toggle slide-toggle d-block"
+                                color="primary"
+                            >
+                                Auto mail when generated
+                            </mat-slide-toggle>
+                            <ng-container *ngTemplateOutlet="actionButtons"></ng-container>
+                        </div>
+                    </mat-tab>
+                    <mat-tab>
+                        <ng-template mat-tab-label>
+                            <i class="icon-invoice-icon"></i>
+                            Invoice
+                        </ng-template>
+                        <div class="tabs-box-content py-3">
+                            <h4 class="font-16 border-bottom pb-2 mb-3">Invoice</h4>
+                            <div class="d-flex column-gap1 mb-3">
+                                <input-field
+                                    [name]="'name'"
+                                    [label]="'Default expiry days'"
+                                    [placeholder]="'00'"
+                                    [type]="'text'"
+                                    class="settings-field d-block mb-3"
+                                ></input-field>
+                                <giddh-datepicker type="text" (keydown.enter)="$event.preventDefault()" [label]="'Invoice Lock Date'"
+                                    [placeholder]="'Select Date'" name="voucherDate" [showToggleIcon]="false" [appearance]="'outline'" class="settings-field d-block">
+                                </giddh-datepicker>
+                            </div>
+                            <mat-slide-toggle
+                                name=""
+                                class="show-on-mobile disable-toggle slide-toggle d-block my-3"
+                                color="primary"
+                                checked
+                            >
+                                Show seal according to status of payment
+                            </mat-slide-toggle>
+                            <mat-slide-toggle
+                                name=""
+                                class="show-on-mobile disable-toggle slide-toggle d-block mb-3"
+                                color="primary"
+                            >
+                                Auto mail when updated
+                            </mat-slide-toggle>
+                            <div class="mb-3 d-flex align-items-center column-gap15">
+                                <mat-slide-toggle
+                                    name=""
+                                    class="show-on-mobile disable-toggle slide-toggle d-block"
+                                    color="primary"
+                                >
+                                    Custom Invoice#
+                                </mat-slide-toggle>
+                                <input-field
+                                    [name]="'branch'"
+                                    [label]="'Branch Prefix'"
+                                    [placeholder]="'Branch Prefix'"
+                                    [type]="'text'"
+                                    class=""
+                                ></input-field>
+                                <input-field
+                                    [name]="'sub'"
+                                    [label]="'Sub Prefix'"
+                                    [placeholder]="'Sub Prefix'"
+                                    [type]="'text'"
+                                    class=""
+                                ></input-field>
+                                <input-field
+                                    [name]="'no'"
+                                    [label]="'Initial No.'"
+                                    [placeholder]="'00'"
+                                    [type]="'tel'"
+                                    class=""
+                                ></input-field>
+                            </div>
+                            <mat-slide-toggle
+                                name=""
+                                class="show-on-mobile disable-toggle slide-toggle d-block mb-3"
+                                color="primary"
+                            >
+                                Auto Delete entries when deleting their invoice
+                            </mat-slide-toggle>
+                            <mat-slide-toggle
+                                name=""
+                                class="show-on-mobile disable-toggle slide-toggle d-block mb-3"
+                                color="primary"
+                            >
+                                Apply round off on sales/cash voucher
+                            </mat-slide-toggle>
+                            <mat-slide-toggle
+                                name=""
+                                class="show-on-mobile disable-toggle slide-toggle d-block mb-3"
+                                color="primary"
+                            >
+                                Run Auto-paid for all the accounts
+                            </mat-slide-toggle>
+                            <mat-slide-toggle
+                                name=""
+                                class="show-on-mobile disable-toggle slide-toggle d-block mb-3"
+                                color="primary"
+                            >
+                                Automatically generate voucher for the entries present in the ledger
+                            </mat-slide-toggle>
+                            <div class="mb-3 d-flex align-items-center column-gap15">
+                                <mat-slide-toggle
+                                    name=""
+                                    class="show-on-mobile disable-toggle slide-toggle d-block"
+                                    color="primary"
+                                >
+                                    E-invoicing Authentication
+                                </mat-slide-toggle>
+                                <input-field
+                                    [name]="'name'"
+                                    [label]="'Username'"
+                                    [placeholder]="'Username'"
+                                    [type]="'text'"
+                                    class=""
+                                ></input-field>
+                                <input-field
+                                    [name]="'password'"
+                                    [label]="'Password'"
+                                    [placeholder]="'Password'"
+                                    [type]="'password'"
+                                    class=""
+                                ></input-field>
+                                <input-field
+                                    [name]="'password'"
+                                    [label]="'GSTIN'"
+                                    [placeholder]="'GSTIN'"
+                                    [type]="'text'"
+                                    class=""
+                                ></input-field>
+                            </div>
+                            <mat-slide-toggle
+                                name=""
+                                class="show-on-mobile disable-toggle slide-toggle d-block"
+                                color="primary"
+                            >
+                                Enable confirmation pop-up to create E-Invoice
+                            </mat-slide-toggle>
+                            <ng-container *ngTemplateOutlet="actionButtons"></ng-container>
+                        </div>
+                    </mat-tab>
+                    <mat-tab>
+                        <ng-template mat-tab-label>
+                            <i class="icon-invoice-icon"></i>
+                            Credit Note
+                        </ng-template>
+                        <div class="tabs-box-content py-3">
+                          <h4 class="font-16 border-bottom pb-2 mb-3">Credit Note</h4>
+                          <div class="mb-3 d-flex align-items-center column-gap15">
+                                <mat-slide-toggle
+                                    name=""
+                                    class="show-on-mobile disable-toggle slide-toggle d-block"
+                                    color="primary"
+                                >
+                                    Custom Invoice#
+                                </mat-slide-toggle>
+                                <input-field
+                                    [name]="'branch'"
+                                    [label]="'Branch Prefix'"
+                                    [placeholder]="'Branch Prefix'"
+                                    [type]="'text'"
+                                    class=""
+                                ></input-field>
+                                <input-field
+                                    [name]="'sub'"
+                                    [label]="'Sub Prefix'"
+                                    [placeholder]="'Sub Prefix'"
+                                    [type]="'text'"
+                                    class=""
+                                ></input-field>
+                                <input-field
+                                    [name]="'no'"
+                                    [label]="'Initial No.'"
+                                    [placeholder]="'00'"
+                                    [type]="'tel'"
+                                    class=""
+                                ></input-field>
+                            </div>
+                            <mat-slide-toggle
+                                name="voucher"
+                                class="show-on-mobile disable-toggle slide-toggle d-block"
+                                color="primary"
+                            >
+                                Apply round off on credit note voucher
+                            </mat-slide-toggle>
+                          <ng-container *ngTemplateOutlet="actionButtons"></ng-container>
+                        </div>
+                    </mat-tab>
+                </mat-tab-group>
+            </mat-tab>
             <mat-tab label="Templates">Templates</mat-tab>
         </mat-tab-group>
         <div class="video-link position-absolute">
@@ -294,5 +609,13 @@
     <ng-template #eWayBill>
         <app-e-waybill-dialog></app-e-waybill-dialog>
     </ng-template>
+
+    <ng-template #actionButtons>
+        <div class="d-flex column-gap1 mt-4">
+            <button mat-stroked-button color="primary">Save</button>
+            <button mat-stroked-button>Cancel</button>
+        </div>
+    </ng-template>
+    
     
 </ng-container>
