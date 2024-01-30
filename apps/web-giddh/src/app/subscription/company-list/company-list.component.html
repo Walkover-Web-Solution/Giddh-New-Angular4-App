@@ -3,7 +3,7 @@
         <h3>Company List</h3>
         <button aria-hidden="true" class="close" mat-dialog-close>×</button>
     </div>
-    <mat-dialog-content class="all-activity-content w-100">
+    <mat-dialog-content class="w-100">
         <div #companyList class="logs-content">
             <table
                 mat-table
@@ -15,32 +15,32 @@
                 class="mat-elevation-z8 subscription-report-table"
             >
                 <ng-container matColumnDef="name">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="th-width">Name</th>
-                    <td mat-cell *matCellDef="let element" >{{ element.name }}</td>
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header width="20%">Name</th>
+                    <td mat-cell *matCellDef="let element" width="20%">{{ element.name }}</td>
                 </ng-container>
 
                 <ng-container matColumnDef="count">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="th-width">Count</th>
-                    <td mat-cell *matCellDef="let element"  class="position-relative word-wrap">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header width="20%">Count</th>
+                    <td mat-cell *matCellDef="let element" width="20%" class="position-relative word-wrap">
                         <div class="d-flex align-items-center">
-                             <div class="d-flex align-items-center">
+                            <div class="d-flex align-items-center">
                                 {{ element.count }}
-                            <button
-                                mat-icon-button
-                                id="edit-model-basic"
-                                class="table-menu-first-td"
-                                [matMenuTriggerFor]="editModelBasic"
-                                #trigger="matMenuTrigger"
-                            >
-                                <span class="icon-dots-three-vertical"></span>
-                            </button>
-                        </div>
-                        <mat-menu #editModelBasic="matMenu">
-                            <div class="account-detail-custom-header">
-                                <button mat-menu-item>Archive</button>
-                                <button mat-menu-item>Transfer</button>
+                                <button
+                                    mat-icon-button
+                                    id="edit-model-basic"
+                                    class="table-menu-first-td"
+                                    [matMenuTriggerFor]="editModelBasic"
+                                    #trigger="matMenuTrigger"
+                                >
+                                    <span class="icon-dots-three-vertical"></span>
+                                </button>
                             </div>
-                        </mat-menu>
+                            <mat-menu #editModelBasic="matMenu">
+                                <div class="account-detail-custom-header">
+                                    <button mat-menu-item>Archive</button>
+                                    <button mat-menu-item>Transfer</button>
+                                </div>
+                            </mat-menu>
                         </div>
                     </td>
                 </ng-container>
