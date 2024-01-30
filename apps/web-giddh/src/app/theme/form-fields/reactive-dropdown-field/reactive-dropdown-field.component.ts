@@ -1,7 +1,8 @@
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, forwardRef } from "@angular/core";
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, ViewChild, forwardRef } from "@angular/core";
 import { IOption } from "../../ng-virtual-select/sh-options.interface";
-import { BehaviorSubject, Observable, ReplaySubject, Subject, debounceTime, exhaustMap, of, scan, startWith, switchMap, tap } from "rxjs";
+import { BehaviorSubject, Observable, ReplaySubject, Subject, debounceTime, exhaustMap, of, scan, skip, startWith, switchMap, takeUntil, tap } from "rxjs";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
+import { MatAutocompleteTrigger } from "@angular/material/autocomplete";
 
 @Component({
     selector: "reactive-dropdown-field",
@@ -15,7 +16,11 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
         }
     ]
 })
-export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnInit, OnChanges, OnDestroy {
+export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnInit, AfterViewInit, OnChanges, OnDestroy {
+    /** Trigger instance for auto complete */
+    @ViewChild('trigger', { static: false, read: MatAutocompleteTrigger }) trigger: MatAutocompleteTrigger;
+    /** Select Field instance for auto focus */
+    @ViewChild('selectField', { static: true }) public selectField: ElementRef;
     /** CSS class name to add on the field */
     @Input() public cssClass: string = "";
     /** CSS class name to add on the mat autocomplete panel class */
@@ -64,6 +69,12 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     @Output() public scrollEnd: EventEmitter<void> = new EventEmitter();
     /** Emits dynamic searched query */
     @Output() public dynamicSearchedQuery: EventEmitter<string> = new EventEmitter();
+    /** Callback for create new option selected */
+    @Output() public createOption: EventEmitter<boolean> = new EventEmitter<boolean>();
+    /** Callback for clear selected value */
+    @Output() public onClear: EventEmitter<any> = new EventEmitter<any>();
+    /** Callback for option selected */
+    @Output() public selectedOption: EventEmitter<any> = new EventEmitter<any>();
     /** Holds global translations */
     public commonLocaleData: any = {};
     /** Search field form control */
@@ -86,28 +97,44 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
 
     public ngOnInit(): void {
         if (this.enableDynamicSearch) {
-
+            this.searchFormControl.pipe(debounceTime(700), skip(1), takeUntil(this.destroyed$)).subscribe(search => {
+                this.dynamicSearchedQuery.emit(search);
+                if (!search) {
+                    this.onClear.emit({ label: "", value: "" });
+                }
+            });
         } else {
             this.fieldFilteredOptions$ = this.searchFormControl.pipe(
                 startWith(''),
-                debounceTime(200),
+                debounceTime(700),
                 switchMap(search => {
                     let currentPage = 1;
+
+                    if (!search) {
+                        this.onClear.emit({ label: "", value: "" });
+                    }
+
                     return this.next$.pipe(
                         startWith(currentPage),
-                        //Note: Until the backend responds, ignore NextPage requests.
                         exhaustMap(_ => this.filterOptions(String(search))),
                         tap(() => currentPage++),
-                        //Note: This is a custom operator because we also need the last emitted value.
                         scan(
                             (allOptions: any, newOptions: any) =>
-                            allOptions.concat(newOptions),
+                                allOptions.concat(newOptions),
                             []
                         )
                     );
                 })
             );
         }
+    }
+
+    public ngAfterViewInit(): void {
+        setTimeout(() => {
+            if (this.openDropdown) {
+                this.openDropdownPanel();
+            }
+        }, 500);
     }
 
     private filterOptions(search: string): any {
@@ -120,7 +147,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
         return of(filteredOptions);
     }
 
-    public ngOnChanges(changes: SimpleChanges): void {
+    public ngOnChanges(): void {
         this.fieldFilteredOptions$ = of(this.options);
     }
 
@@ -129,9 +156,9 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
         this.destroyed$.complete();
     }
 
-    public onScroll(event: any): void {
-        console.log("on scroll", event);
+    public onScroll(): void {
         this.next$.next();
+        this.scrollEnd.emit();
     }
 
     public displayLabel(option: any): string {
@@ -146,6 +173,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     public optionSelected(event: any): void {
         this.writeValue(event?.option?.value?.value);
         this.onTouched();
+        this.selectedOption.emit(event?.option?.value);
     }
 
     public registerOnChange(fn: any): void {
@@ -155,8 +183,24 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     public registerOnTouched(fn: any): void {
         this.onTouched = fn;
     }
-}
 
-function takeWhileInclusive(arg0: (p: any) => boolean): any {
-    throw new Error("Function not implemented.");
+    /**
+     * Emits true if create new option is selected
+     *
+     * @memberof ReactiveDropdownFieldComponent
+     */
+    public createNewRecord(): void {
+        this.trigger?.closePanel();
+        this.createOption.emit(true);
+    }
+
+    /**
+     * This will use for open dropdown panel
+     *
+     * @memberof ReactiveDropdownFieldComponent
+     */
+    public openDropdownPanel(): void {
+        this.trigger?.openPanel();
+        this.selectField?.nativeElement?.focus();
+    }
 }

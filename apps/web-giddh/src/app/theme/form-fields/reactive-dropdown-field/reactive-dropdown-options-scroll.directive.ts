@@ -1,6 +1,6 @@
 import { Directive, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
 import { MatAutocomplete } from '@angular/material/autocomplete';
-import { Subject } from 'rxjs';
+import { ReplaySubject } from 'rxjs';
 import { takeUntil, tap } from 'rxjs/operators';
 
 export interface IAutoCompleteScrollEvent {
@@ -14,9 +14,12 @@ export interface IAutoCompleteScrollEvent {
 })
 
 export class OptionsScrollDirective implements OnDestroy {
-    @Input() thresholdPercent = 0.8;
-    @Output('optionsScroll') scroll = new EventEmitter<IAutoCompleteScrollEvent>();
-    private destroyed$: Subject<void> = new Subject();
+    /** Will emit only if dynamic search is enabled */
+    @Input() public enableDynamicSearch: boolean = false;
+    /** Will emit scroll event if reached end of list */
+    @Output('optionsScroll') scroll: EventEmitter<IAutoCompleteScrollEvent> = new EventEmitter<IAutoCompleteScrollEvent>();
+    /** Observable to unsubscribe all the store listeners to avoid memory leaks */
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(public autoComplete: MatAutocomplete) {
         this.autoComplete.opened
@@ -24,10 +27,12 @@ export class OptionsScrollDirective implements OnDestroy {
                 tap(() => {
                     setTimeout(() => {
                         this.removeScrollEventListener();
-                        this.autoComplete.panel.nativeElement.addEventListener(
-                            'scroll',
-                            this.onScroll.bind(this)
-                        );
+                        if (this.enableDynamicSearch) {
+                            this.autoComplete.panel.nativeElement.addEventListener(
+                                'scroll',
+                                this.onScroll.bind(this)
+                            );
+                        }
                     }, 0);
                 }),
                 takeUntil(this.destroyed$)
@@ -42,6 +47,12 @@ export class OptionsScrollDirective implements OnDestroy {
             .subscribe();
     }
 
+    /**
+     * Removes scroll event listener
+     *
+     * @private
+     * @memberof OptionsScrollDirective
+     */
     private removeScrollEventListener(): void {
         if (this.autoComplete?.panel) {
             this.autoComplete.panel.nativeElement.removeEventListener(
@@ -51,20 +62,29 @@ export class OptionsScrollDirective implements OnDestroy {
         }
     }
 
+    /**
+     * Lifecycle hook for destroy method
+     *
+     * @memberof OptionsScrollDirective
+     */
     public ngOnDestroy(): void {
-        this.destroyed$.next();
+        this.destroyed$.next(true);
         this.destroyed$.complete();
         this.removeScrollEventListener();
     }
 
+    /**
+     * Handles on scroll event
+     *
+     * @param {Event} event
+     * @memberof OptionsScrollDirective
+     */
     public onScroll(event: Event): void {
-        if (this.thresholdPercent === undefined) {
-            this.scroll.next({ autoComplete: this.autoComplete, scrollEvent: event });
-        } else {
+        if (this.enableDynamicSearch) {
             const scrollTop = (event.target as HTMLElement).scrollTop;
             const scrollHeight = (event.target as HTMLElement).scrollHeight;
             const elementHeight = (event.target as HTMLElement).clientHeight;
-            const atBottom = scrollHeight - (scrollTop + elementHeight) <= 50;
+            const atBottom = scrollHeight - (scrollTop + elementHeight) <= 150;
             if (atBottom) {
                 this.scroll.next({ autoComplete: this.autoComplete, scrollEvent: event });
             }

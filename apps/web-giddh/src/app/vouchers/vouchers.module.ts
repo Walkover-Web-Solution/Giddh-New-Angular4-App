@@ -38,6 +38,7 @@ import { NoDataModule } from "../shared/no-data/no-data.module";
 import { HistoryDialogComponent } from "./history-dialog/history-dialog.component";
 import { OtherTaxModule } from "../theme/other-tax/other-tax.module";
 import { AddBulkItemsModule } from "../theme/add-bulk-items/add-bulk-items.module";
+import { TranslateDirectiveModule } from "../theme/translate/translate.directive.module";
 
 @NgModule({
     declarations: [
@@ -82,7 +83,8 @@ import { AddBulkItemsModule } from "../theme/add-bulk-items/add-bulk-items.modul
         ScrollingModule,
         NoDataModule,
         OtherTaxModule,
-        AddBulkItemsModule
+        AddBulkItemsModule,
+        TranslateDirectiveModule
     ],
     exports: [
 
