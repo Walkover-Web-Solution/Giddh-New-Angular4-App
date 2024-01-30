@@ -2,7 +2,7 @@ import { NgModule } from "@angular/core";
 import { MainComponent } from "./main.component";
 import { CommonModule } from "@angular/common";
 import { RouterModule } from "@angular/router";
-import { FormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { VouchersRoutingModule } from "./vouchers.routing.module";
 import { VoucherListComponent } from "./list/list.component";
 import { MatTabsModule } from "@angular/material/tabs";
@@ -38,6 +38,7 @@ import { NoDataModule } from "../shared/no-data/no-data.module";
 import { HistoryDialogComponent } from "./history-dialog/history-dialog.component";
 import { OtherTaxModule } from "../theme/other-tax/other-tax.module";
 import { AddBulkItemsModule } from "../theme/add-bulk-items/add-bulk-items.module";
+import { OptionsScrollDirective } from "../theme/form-fields/reactive-dropdown-field/reactive-dropdown-options-scroll.directive";
 
 @NgModule({
     declarations: [
@@ -50,10 +51,12 @@ import { AddBulkItemsModule } from "../theme/add-bulk-items/add-bulk-items.modul
         PaymentDialogComponent,
         AdjustPaymentDialogComponent,
         BulkUpdateComponent,
+        OptionsScrollDirective,
         HistoryDialogComponent,
     ],
     imports: [
         CommonModule,
+        ReactiveFormsModule,
         RouterModule,
         FormsModule,
         FormFieldsModule,
