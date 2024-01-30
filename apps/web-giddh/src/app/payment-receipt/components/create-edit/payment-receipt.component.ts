@@ -13,7 +13,7 @@ import { CompanyActions } from "../../../actions/company.actions";
 import { InvoiceActions } from "../../../actions/invoice/invoice.actions";
 import { InvoiceReceiptActions } from "../../../actions/invoice/receipt/receipt.actions";
 import { SalesActions } from "../../../actions/sales/sales.action";
-import { SearchResultText, SubVoucher } from "../../../app.constant";
+import { PAGINATION_LIMIT, SearchResultText, SubVoucher } from "../../../app.constant";
 import { cloneDeep, find, isEqual, orderBy, uniqBy } from "../../../lodash-optimized";
 import { AccountResponseV2, AddAccountRequest, UpdateAccountRequest } from "../../../models/api-models/Account";
 import { OnboardingFormRequest } from "../../../models/api-models/Common";
@@ -68,13 +68,13 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
     /** Stores the search results pagination details for customer */
     public searchCustomerResultsPaginationData = {
         page: 0,
-        totalPages: 0,
+        count: PAGINATION_LIMIT,
         query: ''
     };
     /** Stores the default search results pagination details for customer */
     public defaultCustomerResultsPaginationData = {
         page: 0,
-        totalPages: 0,
+        count: PAGINATION_LIMIT,
         query: ''
     };
     /** True, if API call should be prevented on default scroll caused by scroll in list */
@@ -207,6 +207,8 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
     public imgPath: string = '';
     /** Holds true if form is valid */
     public isValidForm: boolean = true;
+    /** False if there is no data in account search */
+    public isAccountSearchData: boolean = true;
     /** Holds selected taxes */
     public selectedTaxes: any[] = [];
     /** Holds receipt voucher type */
@@ -536,7 +538,6 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
     public handleScrollEnd(searchType: string): void {
         const query = this.searchCustomerResultsPaginationData.query;
         const page = this.searchCustomerResultsPaginationData.page;
-        if (this.searchCustomerResultsPaginationData.page < this.searchCustomerResultsPaginationData.totalPages) {
             this.onSearchQueryChanged(
                 query,
                 page + 1,
@@ -553,13 +554,11 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
 
                         this.defaultCustomerSuggestions = this.defaultCustomerSuggestions.concat(...results);
                         this.defaultCustomerResultsPaginationData.page = this.searchCustomerResultsPaginationData.page;
-                        this.defaultCustomerResultsPaginationData.totalPages = this.searchCustomerResultsPaginationData.totalPages;
                         this.searchResults = [...this.defaultCustomerSuggestions];
                         this.assignSearchResultToList(searchType);
                         this.makeCustomerList();
                     }
                 });
-        }
     }
 
     /**
@@ -577,26 +576,28 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
             this.searchCustomerResultsPaginationData.query = query;
 
             const requestObject = this.getSearchRequestObject(query, page);
-            this.searchAccount(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
-                if (data && data.body && data.body.results) {
-                    this.prepareSearchLists(data.body.results, page, searchType);
-                    this.makeCustomerList();
-                    this.noResultsFoundLabel = SearchResultText.NotFound;
-                    this.changeDetectionRef.detectChanges();
-                    this.searchCustomerResultsPaginationData.page = data.body.page;
-                    this.searchCustomerResultsPaginationData.totalPages = data.body.totalPages;
-                    if (successCallback) {
-                        successCallback(data.body.results);
-                    } else {
-                        this.defaultCustomerResultsPaginationData.page = data.body.page;
-                        this.defaultCustomerResultsPaginationData.totalPages = data.body.totalPages;
+            if (this.isAccountSearchData) {
+                this.searchAccount(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+                    if (!data?.body?.results?.length || (data?.body?.results?.length && PAGINATION_LIMIT !== data?.body?.count)) {
+                        this.isAccountSearchData = false;
                     }
-                }
-            });
+                    if (data && data.body && data.body.results) {
+                        this.prepareSearchLists(data.body.results, page, searchType);
+                        this.makeCustomerList();
+                        this.noResultsFoundLabel = SearchResultText.NotFound;
+                        this.changeDetectionRef.detectChanges();
+                        this.searchCustomerResultsPaginationData.page = data.body.page;
+                        if (successCallback) {
+                            successCallback(data.body.results);
+                        } else {
+                            this.defaultCustomerResultsPaginationData.page = data.body.page;
+                        }
+                    }
+                });
+            }
         } else {
             this.searchResults = [...this.defaultCustomerSuggestions];
             this.searchCustomerResultsPaginationData.page = this.defaultCustomerResultsPaginationData.page;
-            this.searchCustomerResultsPaginationData.totalPages = this.defaultCustomerResultsPaginationData.totalPages;
             this.assignSearchResultToList(searchType);
             this.makeCustomerList();
             this.preventDefaultScrollApiCall = true;
@@ -706,7 +707,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
             this.searchResults = [...this.defaultCustomerSuggestions];
             this.searchCustomerResultsPaginationData = {
                 page: 0,
-                totalPages: 0,
+                count: PAGINATION_LIMIT,
                 query: ''
             };
             this.noResultsFoundLabel = SearchResultText.NotFound;
@@ -715,12 +716,12 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
             this.defaultCustomerSuggestions = [];
             this.searchCustomerResultsPaginationData = {
                 page: 0,
-                totalPages: 0,
+                count: PAGINATION_LIMIT,
                 query: ''
             };
             this.defaultCustomerResultsPaginationData = {
                 page: 0,
-                totalPages: 0,
+                count: PAGINATION_LIMIT,
                 query: ''
             };
             this.noResultsFoundLabel = SearchResultText.NewSearch;
