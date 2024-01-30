@@ -14,6 +14,7 @@ import { HamburgerMenuModule } from '../shared/header/components/hamburger-menu/
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatMenuModule } from '@angular/material/menu';
 import { CompanyListComponent } from './company-list/company-list.component';
+import { MatSortModule } from '@angular/material/sort';
 
 @NgModule({
     imports: [
@@ -29,7 +30,8 @@ import { CompanyListComponent } from './company-list/company-list.component';
         NoDataModule,
         GiddhPageLoaderModule,
         HamburgerMenuModule,
-        MatMenuModule
+        MatMenuModule,
+        MatSortModule
     ],
     declarations: [SubscriptionComponent, CompanyListComponent]
 })

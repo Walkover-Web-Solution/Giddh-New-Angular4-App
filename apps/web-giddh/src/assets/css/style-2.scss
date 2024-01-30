@@ -13666,7 +13666,22 @@ input[type="checkbox"].cdk-visually-hidden::after {
     }
 }
 
+.subscription-report-table {
+    th {
+        width: 30% !important;
+        min-width: 30%;
+    }
+        tbody {
+            tr {
+                 td{
+                width: 30% !important;
+                min-width: 30%;
+            }
+        }
+    }
+}
 .subscription-page {
+
     .position-relative.word-wrap {
         .table-menu-first-td {
             font-size: var(--font-size-15);

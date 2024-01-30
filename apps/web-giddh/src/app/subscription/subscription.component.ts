@@ -18,24 +18,24 @@ export interface GetSubscriptions {
 /** Hold information of activity logs */
 const ELEMENT_DATA: GetSubscriptions[] = [
     {
-        name: 'Ravinder', billingAccount: 'HDFC', subscriber: 'Youtube', country: 'India', subscriptionId
-            : 1234, planSubName: 'Vine', status: 'Active', monthYearly: 'Active', renewalDate: '10-01-2023'
+        name: 'Walkover', billingAccount: 'HDFC', subscriber: 'Dilpreet', country: 'US', subscriptionId
+            : 1234, planSubName: 'Sequa', status: 'Active', monthYearly: 'Monthly', renewalDate: '10-01-2023'
     },
     {
-        name: 'Dilpreet', billingAccount: 'HDFC', subscriber: 'Youtube', country: 'India', subscriptionId
-            : 1234, planSubName: 'Vine', status: 'Active', monthYearly: 'Active', renewalDate: '10-01-2023'
+        name: 'MSG91', billingAccount: 'HDFC', subscriber: 'Ravinder', country: 'India', subscriptionId
+            : 1234, planSubName: 'Vine', status: 'In trial', monthYearly: 'Yearly', renewalDate: '10-01-2023'
     },
     {
-        name: 'Divyanshu', billingAccount: 'HDFC', subscriber: 'Youtube', country: 'India', subscriptionId
-            : 1234, planSubName: 'Vine', status: 'Active', monthYearly: 'Active', renewalDate: '10-01-2023'
+        name: 'Hello', billingAccount: 'HDFC', subscriber: 'Nisha', country: 'Nepal', subscriptionId
+            : 1234, planSubName: 'Birch', status: 'Active', monthYearly: 'Yearly', renewalDate: '10-01-2023'
     },
     {
-        name: 'Nisha', billingAccount: 'HDFC', subscriber: 'Youtube', country: 'India', subscriptionId
-            : 1234, planSubName: 'Vine', status: 'Active', monthYearly: 'Active', renewalDate: '10-01-2023'
+        name: 'Segmento', billingAccount: 'HDFC', subscriber: 'Divyanshu', country: 'Europe', subscriptionId
+            : 1234, planSubName: 'Vine', status: 'Inactive', monthYearly: 'Monthly', renewalDate: '10-01-2023'
     },
     {
-        name: 'Prince', billingAccount: 'HDFC', subscriber: 'Youtube', country: 'India', subscriptionId
-            : 1234, planSubName: 'Vine', status: 'Active', monthYearly: 'Active', renewalDate: '10-01-2023'
+        name: 'Whatsapp', billingAccount: 'HDFC', subscriber: 'Ashish', country: 'UK', subscriptionId
+            : 1234, planSubName: 'Vine', status: 'In trial', monthYearly: 'Monthly', renewalDate: '10-01-2023'
     },
 ];
 @Component({
@@ -111,36 +111,36 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
     public translationComplete(event: any): void {
         if (event) {
             this.translationLoaded = true;
-            this.menuList = [
-                {
-                    label: this.localeData?.log_date,
-                    value: "LOG_DATE",
-                },
-                {
-                    label: this.localeData?.entity,
-                    value: "ENTITY"
-                },
-                {
-                    label: this.localeData?.operation,
-                    value: "OPERATION"
-                },
-                {
-                    label: this.localeData?.users,
-                    value: "USERS"
-                },
-                {
-                    label: this.localeData?.entry_date,
-                    value: "ENTRY_DATE"
-                },
-                {
-                    label: this.localeData?.voucher_date,
-                    value: "VOUCHER_DATE"
-                },
-                {
-                    label: this.commonLocaleData?.app_import_type?.base_accounts,
-                    value: "ACCOUNTS"
-                },
-            ];
+            // this.menuList = [
+            //     {
+            //         label: this.localeData?.log_date,
+            //         value: "LOG_DATE",
+            //     },
+            //     {
+            //         label: this.localeData?.entity,
+            //         value: "ENTITY"
+            //     },
+            //     {
+            //         label: this.localeData?.operation,
+            //         value: "OPERATION"
+            //     },
+            //     {
+            //         label: this.localeData?.users,
+            //         value: "USERS"
+            //     },
+            //     {
+            //         label: this.localeData?.entry_date,
+            //         value: "ENTRY_DATE"
+            //     },
+            //     {
+            //         label: this.localeData?.voucher_date,
+            //         value: "VOUCHER_DATE"
+            //     },
+            //     {
+            //         label: this.commonLocaleData?.app_import_type?.base_accounts,
+            //         value: "ACCOUNTS"
+            //     },
+            // ];
             this.changeDetection.detectChanges();
         }
     }

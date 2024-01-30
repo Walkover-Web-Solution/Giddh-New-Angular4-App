@@ -1,5 +1,6 @@
 import { ChangeDetectorRef, Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { SubscriptionReportRequest } from '../../models/api-models/Subscriptions';
 export interface PeriodicElement {
     name: string;
     count: number;
@@ -20,6 +21,8 @@ export class CompanyListComponent implements OnInit {
     @ViewChild('companyList', { static: false }) public companyList: ElementRef;
     /** This will hold local JSON data */
     public localeData: any = {};
+    /** Stock Transactional Object */
+    public subscriptionReportRequest: SubscriptionReportRequest = new SubscriptionReportRequest();
     displayedColumns: string[] = ['name', 'count'];
     dataSource = ELEMENT_DATA;
 
@@ -32,6 +35,18 @@ export class CompanyListComponent implements OnInit {
         console.log(this.inputData);
         this.dialogRef.updatePosition({ top: '0px', right: '0px' });
         this.changeDetection.detectChanges();
+    }
+
+
+    /**
+     * Callback for sorting change
+     *
+     * @param {*} event
+     * @memberof CompanyListComponent
+     */
+    public sortChange(event: any): void {
+        this.subscriptionReportRequest.sortBy = event?.active;
+        this.subscriptionReportRequest.sort = event?.direction;
     }
 
 }
