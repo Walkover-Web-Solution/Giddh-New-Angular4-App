@@ -192,6 +192,17 @@
                         border-radius: 50%;
                         border: 1px solid var(--color-grey-bootstrap-border);
                     }
+
+                    &.text-success{
+                        .attachment-add-icon{
+                            border-color: var(--color-success-enable);
+                            font-size: var(--font-size-12);
+                        }
+                        .attachment-placeholder{
+                            color: var(--color-success-enable);
+                        }
+                    }
+
                     .attachment-placeholder{
                         color: var(--color-giddh-blue);
                     }
@@ -207,6 +218,12 @@
                         &::-webkit-file-upload-button {
                             display: none;
                          }
+                    }
+                    .remove-attachment{
+                        height: 25px;
+                        width: 25px;
+                        padding: 1px;
+                        color: black;
                     }
                 }
             }
