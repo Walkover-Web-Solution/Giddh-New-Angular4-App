@@ -1,4 +1,5 @@
-<mat-form-field style="width: 70px" [appearance]="appearance">
+<mat-form-field [appearance]="appearance">
+    <mat-label>{{ label ? label : placeholder }}</mat-label>
     <input 
         type="text"
         [ngClass]="cssClass"
@@ -12,7 +13,7 @@
         [value]="value"
     />
     <mat-autocomplete (optionSelected)="optionSelected($event)" (optionsScroll)="onScroll($event)" autoActiveFirstOption [displayWith]="displayLabel" #auto="matAutocomplete">
-        <mat-option *ngFor="let option of fieldFilteredOptions$ | async" [value]="option">
+        <mat-option *ngFor="let option of fieldFilteredOptions$ | async" [value]="option" [matTooltip]="option?.label" matTooltipPosition="right">
             {{option?.label}}
         </mat-option>
     </mat-autocomplete>
