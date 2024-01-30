@@ -1,6 +1,6 @@
 import { Directive, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
 import { MatAutocomplete } from '@angular/material/autocomplete';
-import { ReplaySubject, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 import { takeUntil, tap } from 'rxjs/operators';
 
 export interface IAutoCompleteScrollEvent {
@@ -13,20 +13,16 @@ export interface IAutoCompleteScrollEvent {
     exportAs: 'mat-autocomplete[optionsScroll]'
 })
 
-export class OptionsScrollDirective {
+export class OptionsScrollDirective implements OnDestroy {
     @Input() thresholdPercent = 0.8;
     @Output('optionsScroll') scroll = new EventEmitter<IAutoCompleteScrollEvent>();
-    _onDestroy: Subject<void> = new Subject();
+    private destroyed$: Subject<void> = new Subject();
+
     constructor(public autoComplete: MatAutocomplete) {
-        console.log('fire');
         this.autoComplete.opened
             .pipe(
                 tap(() => {
-                    // Note: When autocomplete raises opened, panel is not yet created (by Overlay)
-                    // Note: The panel will be available on next tick
-                    // Note: The panel wil NOT open if there are no options to display
                     setTimeout(() => {
-                        // Note: remove listner just for safety, in case the close event is skipped.
                         this.removeScrollEventListener();
                         this.autoComplete.panel.nativeElement.addEventListener(
                             'scroll',
@@ -34,20 +30,19 @@ export class OptionsScrollDirective {
                         );
                     }, 0);
                 }),
-                takeUntil(this._onDestroy)
+                takeUntil(this.destroyed$)
             )
             .subscribe();
 
         this.autoComplete.closed
             .pipe(
                 tap(() => this.removeScrollEventListener()),
-                takeUntil(this._onDestroy)
+                takeUntil(this.destroyed$)
             )
             .subscribe();
     }
 
-    private removeScrollEventListener() {
-        console.log("remove");
+    private removeScrollEventListener(): void {
         if (this.autoComplete?.panel) {
             this.autoComplete.panel.nativeElement.removeEventListener(
                 'scroll',
@@ -56,23 +51,20 @@ export class OptionsScrollDirective {
         }
     }
 
-    ngOnDestroy() {
-        this._onDestroy.next();
-        this._onDestroy.complete();
-
+    public ngOnDestroy(): void {
+        this.destroyed$.next();
+        this.destroyed$.complete();
         this.removeScrollEventListener();
     }
 
-    onScroll(event: Event) {
-        console.log("on scrolllllll");
+    public onScroll(event: Event): void {
         if (this.thresholdPercent === undefined) {
-            console.log('undefined');
             this.scroll.next({ autoComplete: this.autoComplete, scrollEvent: event });
         } else {
             const scrollTop = (event.target as HTMLElement).scrollTop;
             const scrollHeight = (event.target as HTMLElement).scrollHeight;
             const elementHeight = (event.target as HTMLElement).clientHeight;
-            const atBottom = scrollHeight === scrollTop + elementHeight;
+            const atBottom = scrollHeight - (scrollTop + elementHeight) <= 50;
             if (atBottom) {
                 this.scroll.next({ autoComplete: this.autoComplete, scrollEvent: event });
             }
