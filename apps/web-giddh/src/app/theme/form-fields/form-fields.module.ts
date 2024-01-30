@@ -25,7 +25,7 @@ import { MatButtonModule } from "@angular/material/button";
 import { InputFieldComponent } from "./input-field/input-field.component";
 import { DropdownFieldComponent } from "./dropdown-field/dropdown-field.component";
 import { ReactiveDropdownFieldComponent } from "./reactive-dropdown-field/reactive-dropdown-field.component";
-
+import { OptionsScrollDirective } from "./reactive-dropdown-field/reactive-dropdown-options-scroll.directive";
 
 @NgModule({
     declarations: [
@@ -34,7 +34,8 @@ import { ReactiveDropdownFieldComponent } from "./reactive-dropdown-field/reacti
         SelectMultipleFieldsComponent,
         InputFieldComponent,
         DropdownFieldComponent,
-        ReactiveDropdownFieldComponent
+        ReactiveDropdownFieldComponent,
+        OptionsScrollDirective
     ],
     imports: [
         CommonModule,

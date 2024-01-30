@@ -7,7 +7,7 @@
         matInput 
         [readonly]="readonly"
         [matAutocomplete]="auto" 
-        (input)="searchFormControl.next($event)"
+        (input)="searchFormControl.next($event.target.value)"
         [name]="name"
         [value]="value"
     />

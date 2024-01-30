@@ -38,7 +38,6 @@ import { NoDataModule } from "../shared/no-data/no-data.module";
 import { HistoryDialogComponent } from "./history-dialog/history-dialog.component";
 import { OtherTaxModule } from "../theme/other-tax/other-tax.module";
 import { AddBulkItemsModule } from "../theme/add-bulk-items/add-bulk-items.module";
-import { OptionsScrollDirective } from "../theme/form-fields/reactive-dropdown-field/reactive-dropdown-options-scroll.directive";
 
 @NgModule({
     declarations: [
@@ -51,7 +50,6 @@ import { OptionsScrollDirective } from "../theme/form-fields/reactive-dropdown-f
         PaymentDialogComponent,
         AdjustPaymentDialogComponent,
         BulkUpdateComponent,
-        OptionsScrollDirective,
         HistoryDialogComponent,
     ],
     imports: [

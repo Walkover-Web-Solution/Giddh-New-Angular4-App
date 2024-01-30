@@ -17,8 +17,8 @@
                         <div class="d-flex align-items-center">
                             <div class="vouchers-form-fields w-100">
                                 {{ invoiceForm.get('account')?.value }}
-                                <reactive-dropdown-field [label]="'Customer'" [placeholder]="'Select Customer'" formControlName="account" ngDefaultControl [name]="'account'"
-                                    [options]="dummyOptions" (selectedOption)="selectDropdown($event)" [enableDynamicSearch]="true"
+                                <reactive-dropdown-field [label]="'Customer'" [placeholder]="'Select Customer'" formControlName="account" [name]="'account'"
+                                    [options]="dummyOptions" (selectedOption)="selectDropdown($event)" [enableDynamicSearch]="false"
                                     (dynamicSearchedQuery)="searchAccount($event, 1)">
                                 </reactive-dropdown-field>
                             </div>

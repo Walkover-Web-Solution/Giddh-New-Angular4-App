@@ -505,7 +505,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
 
     private initVoucherForm(): void {
         this.invoiceForm = this.formBuilder.group({
-            account: ['default', Validators.required]
+            account: ['', Validators.required]
         });
     }
 

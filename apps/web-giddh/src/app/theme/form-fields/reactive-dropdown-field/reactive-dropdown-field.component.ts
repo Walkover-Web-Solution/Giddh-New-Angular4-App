@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, forwardRef } from "@angular/core";
 import { IOption } from "../../ng-virtual-select/sh-options.interface";
-import { BehaviorSubject, Observable, ReplaySubject, of } from "rxjs";
+import { BehaviorSubject, Observable, ReplaySubject, Subject, debounceTime, exhaustMap, of, scan, startWith, switchMap, tap } from "rxjs";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 
 @Component({
@@ -76,15 +76,48 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     private onChange: (value: any) => void = () => { };
     /** Function to be called when the control is touched */
     private onTouched: () => void = () => { };
+    public next$: Subject<void> = new Subject();
 
     constructor(
-        
+
     ) {
 
     }
 
     public ngOnInit(): void {
-        
+        if (this.enableDynamicSearch) {
+
+        } else {
+            this.fieldFilteredOptions$ = this.searchFormControl.pipe(
+                startWith(''),
+                debounceTime(200),
+                switchMap(search => {
+                    let currentPage = 1;
+                    return this.next$.pipe(
+                        startWith(currentPage),
+                        //Note: Until the backend responds, ignore NextPage requests.
+                        exhaustMap(_ => this.filterOptions(String(search))),
+                        tap(() => currentPage++),
+                        //Note: This is a custom operator because we also need the last emitted value.
+                        scan(
+                            (allOptions: any, newOptions: any) =>
+                            allOptions.concat(newOptions),
+                            []
+                        )
+                    );
+                })
+            );
+        }
+    }
+
+    private filterOptions(search: string): any {
+        let filteredOptions = [];
+        this.options?.forEach(option => {
+            if (typeof search !== "string" || option?.label?.toLowerCase()?.indexOf(search?.toLowerCase()) > -1) {
+                filteredOptions.push({ label: option.label, value: option.value, additional: option.additional ?? option });
+            }
+        });
+        return of(filteredOptions);
     }
 
     public ngOnChanges(changes: SimpleChanges): void {
@@ -98,7 +131,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
 
     public onScroll(event: any): void {
         console.log("on scroll", event);
-        this.scrollEnd.emit();
+        this.next$.next();
     }
 
     public displayLabel(option: any): string {
@@ -122,4 +155,8 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     public registerOnTouched(fn: any): void {
         this.onTouched = fn;
     }
+}
+
+function takeWhileInclusive(arg0: (p: any) => boolean): any {
+    throw new Error("Function not implemented.");
 }
