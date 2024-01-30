@@ -71,7 +71,47 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
         { label: "Option 1", value: 1 },
         { label: "Option 2", value: 2 },
         { label: "Option 3", value: 3 },
-        { label: "Option 4", value: 4 }
+        { label: "Option 4", value: 4 },
+        { label: "Option 4", value: 4 },
+        { label: "Option 4", value: 4 },
+        { label: "Option 4", value: 4 },
+        { label: "Option 4", value: 4 },
+        { label: "Option 4", value: 4 },
+        { label: "Option 4", value: 4 },
+        { label: "Option 4", value: 4 },
+        { label: "Option 1", value: 1 },
+        { label: "Option 2", value: 2 },
+        { label: "Option 3", value: 3 },
+        { label: "Option 4", value: 4 },
+        { label: "Option 4", value: 4 },
+        { label: "Option 4", value: 4 },
+        { label: "Option 4", value: 4 },
+        { label: "Option 4", value: 4 },
+        { label: "Option 4", value: 4 },
+        { label: "Option 4", value: 4 },
+        { label: "Option 4", value: 4 },
+        { label: "Option 1", value: 1 },
+        { label: "Option 2", value: 2 },
+        { label: "Option 3", value: 3 },
+        { label: "Option 4", value: 4 },
+        { label: "Option 4", value: 4 },
+        { label: "Option 4", value: 4 },
+        { label: "Option 4", value: 4 },
+        { label: "Option 4", value: 4 },
+        { label: "Option 4", value: 4 },
+        { label: "Option 4", value: 4 },
+        { label: "Option 4", value: 4 },
+        { label: "Option 1", value: 1 },
+        { label: "Option 2", value: 2 },
+        { label: "Option 3", value: 3 },
+        { label: "Option 4", value: 4 },
+        { label: "Option 4", value: 4 },
+        { label: "Option 4", value: 4 },
+        { label: "Option 4", value: 4 },
+        { label: "Option 4", value: 4 },
+        { label: "Option 4", value: 4 },
+        { label: "Option 4", value: 4 },
+        { label: "Option 4", value: 4 },
     ];
     /** Stores the voucher API version of current company */
     public voucherApiVersion: 1 | 2;
@@ -159,6 +199,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit(): void {
+        this.initVoucherForm();
+
         this.activatedRoute.params.pipe(delay(0), takeUntil(this.destroyed$)).subscribe(params => {
             if (params) {
                 this.voucherType = this.vouchersUtilityService.parseVoucherType(params.voucherType);
@@ -461,9 +503,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
 
     }
 
-    public initVoucherForm(): void {
+    private initVoucherForm(): void {
         this.invoiceForm = this.formBuilder.group({
-            name: ['', Validators.required]
+            account: ['default', Validators.required]
         });
     }
 

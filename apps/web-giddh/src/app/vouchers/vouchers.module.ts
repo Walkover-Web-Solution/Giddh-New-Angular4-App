@@ -2,7 +2,7 @@ import { NgModule } from "@angular/core";
 import { MainComponent } from "./main.component";
 import { CommonModule } from "@angular/common";
 import { RouterModule } from "@angular/router";
-import { FormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { VouchersRoutingModule } from "./vouchers.routing.module";
 import { VoucherListComponent } from "./list/list.component";
 import { MatTabsModule } from "@angular/material/tabs";
@@ -30,24 +30,33 @@ import { MatSortModule } from "@angular/material/sort";
 import { MatListModule } from "@angular/material/list";
 import { MatCardModule } from "@angular/material/card";
 import { MatExpansionModule } from "@angular/material/expansion";
-import { VouchersAddBulkItemsComponent } from "./add-bulk-items/add-bulk-items.component";
 import { WatchVideoModule } from "../theme/watch-video/watch-video.module";
 import { HamburgerMenuModule } from "../shared/header/components/hamburger-menu/hamburger-menu.module";
+import { VouchersPreviewComponent } from "./preview/preview.component";
+import { ScrollingModule } from "@angular/cdk/scrolling";
+import { NoDataModule } from "../shared/no-data/no-data.module";
+import { HistoryDialogComponent } from "./history-dialog/history-dialog.component";
+import { OtherTaxModule } from "../theme/other-tax/other-tax.module";
+import { AddBulkItemsModule } from "../theme/add-bulk-items/add-bulk-items.module";
+import { OptionsScrollDirective } from "../theme/form-fields/reactive-dropdown-field/reactive-dropdown-options-scroll.directive";
 
 @NgModule({
     declarations: [
         MainComponent,
         VoucherListComponent,
+        VouchersPreviewComponent,
         VoucherCreateComponent,
         AdvanceSearchComponent,
         BulkExportComponent,
         PaymentDialogComponent,
         AdjustPaymentDialogComponent,
         BulkUpdateComponent,
-        VouchersAddBulkItemsComponent
+        OptionsScrollDirective,
+        HistoryDialogComponent,
     ],
     imports: [
         CommonModule,
+        ReactiveFormsModule,
         RouterModule,
         FormsModule,
         FormFieldsModule,
@@ -71,7 +80,11 @@ import { HamburgerMenuModule } from "../shared/header/components/hamburger-menu/
         MatDialogModule,
         MatExpansionModule,
         WatchVideoModule,
-        HamburgerMenuModule
+        HamburgerMenuModule,
+        ScrollingModule,
+        NoDataModule,
+        OtherTaxModule,
+        AddBulkItemsModule
     ],
     exports: [
 

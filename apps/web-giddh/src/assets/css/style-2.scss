@@ -14545,3 +14545,29 @@ aside-menu-product-service {
         box-shadow: none;
     }
 } 
+// invoice preview list
+.invoice-preview-wrapper {
+    .mat-grid-wrapper {
+        .mat-list-wrap {
+            .mat-mdc-list {
+                .mat-mdc-list-item {
+                    height: 60px;
+                }
+            }
+        }
+    }
+}
+// common-icon-button
+.mat-icon-btn {
+    &.mdc-button {
+        min-width: 40px;
+    }
+}
+.fw-bold {
+    font-weight: 600;
+}
+.preview-list {
+    .form-control {
+        padding-left: 30px !important;
+    }
+}

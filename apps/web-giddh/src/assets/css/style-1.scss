@@ -543,7 +543,7 @@ aside-menu-account .container-fluid {
     white-space: nowrap;
 }
 .cp {
-    cursor: pointer;
+    cursor: pointer !important;
 }
 .thead {
     font-size: var(--font-size-15);
@@ -2153,6 +2153,12 @@ bs-datepicker-container {
 .flex-column {
     flex-direction: column;
     -ms-flex-direction: column;
+}
+.flex-wrap {
+    flex-wrap: wrap;
+}
+.row-gap1 {
+    row-gap: 10px;
 }
 
 /* cmdk modal styles */
