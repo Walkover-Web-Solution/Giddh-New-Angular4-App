@@ -67,51 +67,13 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
     public briefAccounts$: Observable<any> = this.componentStore.briefAccounts$;
     /** Holds boolean of TCS/TDS Applicable Observable */
     public isTcsTdsApplicable$: Observable<any> = this.componentStore.isTcsTdsApplicable$;
+    /** Account search request */
+    public accountSearchRequest: any;
     public dummyOptions: any[] = [
         { label: "Option 1", value: 1 },
         { label: "Option 2", value: 2 },
         { label: "Option 3", value: 3 },
-        { label: "Option 4", value: 4 },
-        { label: "Option 4", value: 4 },
-        { label: "Option 4", value: 4 },
-        { label: "Option 4", value: 4 },
-        { label: "Option 4", value: 4 },
-        { label: "Option 4", value: 4 },
-        { label: "Option 4", value: 4 },
-        { label: "Option 4", value: 4 },
-        { label: "Option 1", value: 1 },
-        { label: "Option 2", value: 2 },
-        { label: "Option 3", value: 3 },
-        { label: "Option 4", value: 4 },
-        { label: "Option 4", value: 4 },
-        { label: "Option 4", value: 4 },
-        { label: "Option 4", value: 4 },
-        { label: "Option 4", value: 4 },
-        { label: "Option 4", value: 4 },
-        { label: "Option 4", value: 4 },
-        { label: "Option 4", value: 4 },
-        { label: "Option 1", value: 1 },
-        { label: "Option 2", value: 2 },
-        { label: "Option 3", value: 3 },
-        { label: "Option 4", value: 4 },
-        { label: "Option 4", value: 4 },
-        { label: "Option 4", value: 4 },
-        { label: "Option 4", value: 4 },
-        { label: "Option 4", value: 4 },
-        { label: "Option 4", value: 4 },
-        { label: "Option 4", value: 4 },
-        { label: "Option 4", value: 4 },
-        { label: "Option 1", value: 1 },
-        { label: "Option 2", value: 2 },
-        { label: "Option 3", value: 3 },
-        { label: "Option 4", value: 4 },
-        { label: "Option 4", value: 4 },
-        { label: "Option 4", value: 4 },
-        { label: "Option 4", value: 4 },
-        { label: "Option 4", value: 4 },
-        { label: "Option 4", value: 4 },
-        { label: "Option 4", value: 4 },
-        { label: "Option 4", value: 4 },
+        { label: "Option 4", value: 4 }
     ];
     /** Stores the voucher API version of current company */
     public voucherApiVersion: 1 | 2;
@@ -179,6 +141,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
     public lastVouchers: PreviousInvoicesVm[] = [];
     /** Form Group for invoice form */
     public invoiceForm: UntypedFormGroup;
+    /** This will open account dropdown by default */
+    public openAccountDropdown: boolean = false;
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -204,6 +172,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
         this.activatedRoute.params.pipe(delay(0), takeUntil(this.destroyed$)).subscribe(params => {
             if (params) {
                 this.voucherType = this.vouchersUtilityService.parseVoucherType(params.voucherType);
+
+                /** Open account dropdown on create */
+                if (!params?.uniqueName) {
+                    this.openAccountDropdown = true;
+                }
 
                 this.getVoucherType();
                 this.searchAccount();
@@ -452,12 +425,27 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
         if (this.voucherType === VoucherTypeEnum.cash) {
             return;
         }
-        const requestObject = this.vouchersUtilityService.getSearchRequestObject(this.voucherType, query, page, SearchType.CUSTOMER);
 
-        this.searchService.searchAccountV3(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                this.voucherAccountResults$ = of(response?.body?.results?.map(res => { return { label: res.name, value: res.uniqueName, additional: res } }));
+        if (this.accountSearchRequest?.isLoading) {
+            return;
+        }
+
+        this.accountSearchRequest = this.vouchersUtilityService.getSearchRequestObject(this.voucherType, query, page, SearchType.CUSTOMER);
+        this.accountSearchRequest.isLoading = true;
+
+        this.searchService.searchAccountV3(this.accountSearchRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.body?.results?.length) {
+                this.accountSearchRequest.loadMore = true;
+                let voucherAccountResults = [];
+                if (page > 1) {
+                    this.voucherAccountResults$.subscribe(res => voucherAccountResults = res);
+                }
+                const newResults = response?.body?.results?.map(res => { return { label: res.name, value: res.uniqueName, additional: res } });
+                this.voucherAccountResults$ = of(voucherAccountResults.concat(...newResults));
+            } else {
+                this.accountSearchRequest.loadMore = false;
             }
+            this.accountSearchRequest.isLoading = false;
         });
     }
 
@@ -499,13 +487,31 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
         });
     }
 
-    public selectDropdown(event: any): void {
+    public handleSearchAccountScrollEnd(): void {
+        if (this.accountSearchRequest.loadMore) {
+            let page = this.accountSearchRequest.page;
+            page = page + 1;
+            this.searchAccount(this.accountSearchRequest.query, page);
+        }
+    }
 
+    public selectAccount(event: any, isClear: boolean = false): void {
+        if (isClear) {
+            this.invoiceForm.get("account")?.patchValue("");
+        } else {
+
+        }
+    }
+
+    public translationComplete(event: any): void {
+        if (event) {
+
+        }
     }
 
     private initVoucherForm(): void {
         this.invoiceForm = this.formBuilder.group({
-            account: ['default', Validators.required]
+            account: ['', Validators.required]
         });
     }
 
