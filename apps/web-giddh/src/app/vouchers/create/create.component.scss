@@ -36,12 +36,10 @@
 
         .vouchers-form-fields-detail {
             color: var(--color-blue);
-            font-size: var(--font-size-12);
         }
 
         .vouchers-copy-sales {
             color: var(--color-blue);
-            font-size: var(--font-size-14);
         }
     }
 
@@ -185,7 +183,7 @@
                 max-width: calc(100% - 36px);
 
                 .vouchers-attachment{
-
+                    height: 48px;
                     .attachment-add-icon{
                         width: 36px;
                         height: 36px;

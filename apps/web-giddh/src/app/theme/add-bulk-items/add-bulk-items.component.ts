@@ -6,5 +6,5 @@ import { Component } from "@angular/core";
     styleUrls: ["./add-bulk-items.component.scss"]
 })
 export class AddBulkItemsComponent {
-    
+
 }

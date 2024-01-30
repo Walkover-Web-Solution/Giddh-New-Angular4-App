@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { VoucherComponentStore } from "../utility/vouchers.store";
 import { AppState } from "../../store";
 import { Store } from "@ngrx/store";
-import { Observable, ReplaySubject, delay, of, takeUntil } from "rxjs";
+import { Observable, ReplaySubject, delay, of, take, takeUntil } from "rxjs";
 import { GeneralService } from "../../services/general.service";
 import { OnboardingFormRequest } from "../../models/api-models/Common";
 import { CommonActions } from "../../actions/common.actions";
@@ -21,6 +21,8 @@ import { GIDDH_DATE_FORMAT } from "../../shared/helpers/defaultDateFormat";
 import * as dayjs from "dayjs";
 import { BriedAccountsGroup, SearchType, VoucherTypeEnum, OptionInterface } from "../utility/vouchers.const";
 import { SearchService } from "../../services/search.service";
+import { MatDialog } from "@angular/material/dialog";
+import { AddBulkItemsComponent } from "../../theme/add-bulk-items/add-bulk-items.component";
 
 @Component({
     selector: "create",
@@ -193,7 +195,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
         private settingsUtilityService: SettingsUtilityService,
         private settingsBranchAction: SettingsBranchActions,
         private formBuilder: FormBuilder,
-        private searchService: SearchService
+        private searchService: SearchService,
+        private dialog: MatDialog
     ) {
 
     }
@@ -506,6 +509,18 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
     private initVoucherForm(): void {
         this.invoiceForm = this.formBuilder.group({
             account: ['', Validators.required]
+        });
+    }
+
+    public openBulkEntryDialog(): void {
+        let bulkEntryDialogRef = this.dialog.open(AddBulkItemsComponent);
+
+        bulkEntryDialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            if (response) {
+               console.log("Close with true");
+            } else {
+                console.log("Close with false");
+            }
         });
     }
 
