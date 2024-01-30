@@ -51,7 +51,7 @@ export class VouchersUtilityService {
     }
 
     public parseVoucherType(voucherType: string): string {
-        return voucherType.toString().replace("-", " ");
+        return voucherType === VoucherTypeEnum.debitNote || voucherType === VoucherTypeEnum.creditNote ? voucherType.toString().replace("-", " ") : voucherType;
     }
 
     public createQueryString(url: string, model: any): string {

@@ -1,11 +1,20 @@
 <div class="vouchers">
-
     <!-- Voucher Page Heading -->
     <div class="vouchers-title d-flex align-items-center container-lg">
         <h1 *ngIf="invoiceType.isSalesInvoice">Sales</h1>
         <h1 *ngIf="invoiceType.isCashInvoice">Cash</h1>
         <h1 *ngIf="invoiceType.isPurchaseInvoice">Purchase Bill</h1>
-        <span class="ml-auto">How to create an Invoice?</span>
+        <h1 *ngIf="invoiceType.isPurchaseOrder">Purchase Order</h1>
+        <ng-container *ngIf="invoiceType.isSalesInvoice || invoiceType.isCashInvoice">
+            <div class="ml-auto">
+                <!-- Video link for  Sales Invoice -->
+                <watch-video *ngIf="invoiceType.isSalesInvoice" [cssClass]="'text-primary'"
+                    [moduleName]="'VOUCHER_SALES'"></watch-video>
+                <!-- Video link for Cash Invoice -->
+                <watch-video *ngIf="invoiceType.isCashInvoice" [cssClass]="'text-primary'"
+                    [moduleName]="'VOUCHER_CASH'"></watch-video>
+            </div>
+        </ng-container>
     </div>
 
     <div class="vouchers-content-wrapper">
@@ -44,23 +53,34 @@
                         <h2>0.00</h2>
                     </div>
                     <div class="col-12">
-                        <span *ngIf="invoiceType.isSalesInvoice || invoiceType.isPurchaseInvoice"
-                            class="vouchers-form-fields-detail cursor-pointer">
+                        <span *ngIf="invoiceType.isSalesInvoice" class="vouchers-form-fields-detail cursor-pointer">
                             {{ invoiceType.isSalesInvoice ? 'Customer Details' : 'Vendor Details'}}</span>
 
                         <img src="/assets/images/new/search_customer.svg" height="70" class="mb-3"
+                            *ngIf="invoiceType.isPurchaseInvoice" />
+                        <img src="/assets/images/new/search-customer-cash-invoice.svg" height="70" class="mb-3"
                             *ngIf="invoiceType.isCashInvoice" />
+
+                        <ng-container *ngIf="invoiceType.isPurchaseOrder">
+                            <div class="mt-2">Pending Purchase order of selected vendor</div>
+                            <div class="text-blue cursor-pointer">PO-20230414-8</div>
+                        </ng-container>
                     </div>
                 </div>
             </div>
 
             <!-- Voucher Form Main Section -->
-            <div class="vouchers-secondary-form container-lg">
+            <!-- TO DISABLE FORM USE CLASS "vouchers-form-disable" -->
+            <div class="vouchers-secondary-form position-relative container-lg"
+                [ngClass]="{'vouchers-form-disable' : false}">
                 <div class="vouchers-small-container">
                     <!-- Row 1 -->
                     <div class="row row-gap">
 
                         <!-- Billing Address -->
+                        <div class="col-12 mr-t15" *ngIf="invoiceType.isPurchaseOrder">
+                            <span>Deliver From</span>
+                        </div>
                         <div class="col-6">
                             <label for="billingAddress" class="billing-label">Billing Address</label> <i
                                 [matMenuTriggerFor]="billingAddress"
@@ -77,8 +97,6 @@
                                             </div>
                                             <i class="icon-tick"></i>
                                         </div>
-
-
                                     </button>
                                     <button mat-menu-item>Item 2</button>
                                     <button mat-menu-item>Item 3</button>
@@ -122,7 +140,6 @@
                                     </select-field>
                                 </div>
                                 <div class="gstin-field">
-
                                     <text-field type="text" name="gstin" [placeholder]="'GSTIN'"
                                         [cssClass]="'border-0'"></text-field>
                                 </div>
@@ -152,8 +169,6 @@
                                                 </div>
                                                 <i class="icon-tick"></i>
                                             </div>
-
-
                                         </button>
                                         <button mat-menu-item>Item 2</button>
                                         <button mat-menu-item>Item 3</button>
@@ -229,14 +244,15 @@
                         <div class="col-6">
                             <input-field [name]="'mobile-number'" [type]="'tel'" #initContactProforma class="flag-input"
                                 [id]="'init-contact-proforma'" (keydown.enter)="$event.preventDefault()"
-                                [label]="'Mobile Number'" [placeholder]="'98XXXXXXXX'" [floatLabel]="'always'">
+                                [label]="'Mobile Number'" [placeholder]="'98XXXXXXXX'" [floatLabel]="'auto'">
                             </input-field>
                             <span id="init-contact-proforma-valid-msg" class="d-none"></span>
                             <span id="init-contact-proforma-error-msg" class="d-none"></span>
                         </div>
 
                         <!-- Warehouse -->
-                        <div class="col-6" *ngIf="invoiceType.isSalesInvoice || invoiceType.isPurchaseInvoice">
+                        <div class="col-6"
+                            *ngIf="invoiceType.isSalesInvoice || invoiceType.isCashInvoice || invoiceType.isPurchaseOrder">
                             <dropdown-field [label]="'Warehouse'" [placeholder]="'Select warehouse'"
                                 [options]="dummyOptions" (selectedOption)="selectDropdown($event)" [defaultValue]="''">
                             </dropdown-field>
@@ -244,7 +260,7 @@
                     </div>
 
                     <!-- Row 2 for Deliver To Only show in Cash Invoice -->
-                    <div class="row row-gap" *ngIf="invoiceType.isCashInvoice">
+                    <div class="row row-gap" *ngIf="invoiceType.isCashInvoice || invoiceType.isPurchaseOrder">
                         <div class="col-12 mr-t15">
                             <span>Deliver To</span>
                         </div>
@@ -269,7 +285,6 @@
                                     </select-field>
                                 </div>
                                 <div class="gstin-field">
-
                                     <text-field type="text" name="gstin" [placeholder]="'GSTIN'"
                                         [cssClass]="'border-0'"></text-field>
                                 </div>
@@ -299,8 +314,6 @@
                                                 </div>
                                                 <i class="icon-tick"></i>
                                             </div>
-
-
                                         </button>
                                         <button mat-menu-item>Item 2</button>
                                         <button mat-menu-item>Item 3</button>
@@ -331,7 +344,6 @@
                                 </mat-menu>
                             </ng-container>
 
-
                             <div *ngIf="!invoiceType.isCashInvoice" class="mt-2">Address 2 </div>
                             <div class="vouchers-address-form form-disabled" *ngIf="invoiceType.isCashInvoice">
                                 <div class="address-field">
@@ -347,7 +359,6 @@
                                     </select-field>
                                 </div>
                                 <div class="gstin-field">
-
                                     <text-field type="text" name="gstin" [placeholder]="'GSTIN'"
                                         [cssClass]="'border-0'"></text-field>
                                 </div>
@@ -360,10 +371,10 @@
                     </div>
 
                     <!-- Row 3 -->
-                    <div class="row row-gap mr-t15">
+                    <div class="row row-gap mr-t15 mr-b15" *ngIf="invoiceType.isPurchaseInvoice">
 
                         <!-- Purchase Order -->
-                        <div class="col-6" *ngIf="invoiceType.isPurchaseInvoice">
+                        <div class="col-6">
                             <mat-select name="linkedPO" class="po-mat-select" [placeholder]="'Purchase Order'">
                                 <mat-select-trigger>
                                     List of selected items
@@ -391,25 +402,64 @@
                     <div class="row row-gap mr-t15">
 
                         <!-- Voucher Number -->
-                        <div class="col-6">
+                        <div class="col-6" *ngIf="!invoiceType.isPurchaseOrder">
                             <input-field [name]="'vouchers-number'" [label]="'Voucher Number'"
                                 [placeholder]="'Enter voucher number'" [type]="'text'">
                             </input-field>
                         </div>
 
+                        <!-- Order # -->
+                        <div class="col-6" *ngIf="invoiceType.isPurchaseOrder">
+                            <input-field [name]="'vouchers-number'" [label]="'Order #'" [placeholder]="'Enter order #'"
+                                [type]="'text'">
+                            </input-field>
+                        </div>
+
+                        <!-- Credit Note Date -->
+                        <div class="col-6" *ngIf="invoiceType.isCreditNote">
+                            <giddh-datepicker type="text" (keydown.enter)="$event.preventDefault()"
+                                [label]="'Credit Note Date'" [placeholder]="'DDMMYYYY'" name="credit-note-date"
+                                [showToggleIcon]="false" [appearance]="'outline'">
+                            </giddh-datepicker>
+                        </div>
+
+                        <!-- Debit Note Date -->
+                        <div class="col-6" *ngIf="invoiceType.isDebitNote">
+                            <giddh-datepicker type="text" (keydown.enter)="$event.preventDefault()"
+                                [label]="'Debit Note Date'" [placeholder]="'DDMMYYYY'" name="debit-note-date"
+                                [showToggleIcon]="false" [appearance]="'outline'">
+                            </giddh-datepicker>
+                        </div>
+
+                        <!-- Order Date -->
+                        <div class="col-3" *ngIf="invoiceType.isPurchaseOrder">
+                            <giddh-datepicker type="text" (keydown.enter)="$event.preventDefault()"
+                                [label]="'Order Date'" [placeholder]="'DDMMYYYY'" name="voucherDate"
+                                [showToggleIcon]="false" [appearance]="'outline'">
+                            </giddh-datepicker>
+                        </div>
+
+                        <!-- Expected Delivery Date -->
+                        <div class="col-3" *ngIf="invoiceType.isPurchaseOrder">
+                            <giddh-datepicker type="text" (keydown.enter)="$event.preventDefault()"
+                                [label]="'Expected Delivery'" [placeholder]="'DDMMYYYY'" name="voucherBillDate"
+                                [showToggleIcon]="false" [appearance]="'outline'">
+                            </giddh-datepicker>
+                        </div>
+
                         <!-- Invoice Date -->
                         <div class="col-3" *ngIf="invoiceType.isSalesInvoice || invoiceType.isCashInvoice">
-                            <giddh-datepicker type="text" (keydown.enter)="$event.preventDefault()" [label]="'Invoie Date'"
-                                [placeholder]="'DDMMYYYY'" name="voucherDate" [showToggleIcon]="false"
-                                [appearance]="'outline'">
+                            <giddh-datepicker type="text" (keydown.enter)="$event.preventDefault()"
+                                [label]="'Invoie Date'" [placeholder]="'DDMMYYYY'" name="voucherDate"
+                                [showToggleIcon]="false" [appearance]="'outline'">
                             </giddh-datepicker>
                         </div>
 
                         <!-- Bill Date -->
                         <div class="col-3" *ngIf="invoiceType.isPurchaseInvoice">
-                            <giddh-datepicker type="text" (keydown.enter)="$event.preventDefault()" [label]="'Bill Date'"
-                                [placeholder]="'DDMMYYYY'" name="voucherBillDate" [showToggleIcon]="false"
-                                [appearance]="'outline'">
+                            <giddh-datepicker type="text" (keydown.enter)="$event.preventDefault()"
+                                [label]="'Bill Date'" [placeholder]="'DDMMYYYY'" name="voucherBillDate"
+                                [showToggleIcon]="false" [appearance]="'outline'">
                             </giddh-datepicker>
                         </div>
 
@@ -430,15 +480,26 @@
                     </div>
                 </div>
 
-                <div class="vouchers-large-container mt-4">
+                <div class="vouchers-large-container mt-4 pt-4">
+                    <div
+                        class="change-currency  d-flex justify-content-end align-items-center column-gap1 text-uppercase pb-2">
+                        <span>1 AUD </span>
+                        <img alt="switch-icon" height="15px" src="/assets/images/switch-icon.svg" />
+                        <span>33.00 INR</span>
+                        <div class="currency-input-wrapper">
+                            <text-field [cssClass]="'form-control'" [type]="'number'"></text-field>
+                        </div>
+                        <i class="icon-edit color-primary cursor-pointer"></i>
+                        <i class="icon-save color-primary cursor-pointer"></i>
+                    </div>
 
                     <!-- Voucher Grid for Multiple Entries-->
-                    <div class="vouchers-entry-grid mt-4">
+                    <div class="vouchers-entry-grid">
 
                         <!-- Grid Head | Row 1 -->
 
-                        <div class="head-item">#</div>
-                        <div class="head-item">Product/Service Description</div>
+                        <div class="head-item text-left">#</div>
+                        <div class="head-item text-left">Product/Service Description</div>
                         <div class="head-item">Qty/Unit</div>
                         <div class="head-item">Rate</div>
                         <div class="head-item">Amount</div>
@@ -446,17 +507,16 @@
                         <div class="head-item">Tax</div>
                         <div class="head-item">Total</div>
                         <div class="border-end-0 border-bottom-0 p-0">
-                            <!-- Don't Delete this element it is working as column for delete icon -->
+                            <!-- Don't Delete this element it is working as column(<th> tag like) for delete icon -->
                         </div>
 
                         <!-- Grid Body | Row 2-->
 
                         <!-- # -->
-                        <div class="body-item">1</div>
+                        <div class="body-item text-left">1</div>
 
                         <!-- Product/Service Description -->
-                        <div class="body-item">
-
+                        <div class="body-item text-left">
                             <span class="select-account-label">111 </span>
 
                             <div class="mt-2 font-12">
@@ -500,28 +560,29 @@
                             <i class="icon-trash"></i>
                         </div>
 
-
-
                         <!-- Grid Body | Row 3-->
 
                         <!-- # -->
-                        <div class="body-item active-item">2</div>
+                        <div class="body-item text-left">2</div>
 
                         <!-- Product/Service Description -->
-                        <div class="body-item active-item">
-                            <select-field [cssClass]="'form-control'" [name]="'account'" [placeholder]="'Select account'"
-                                [options]="dummyOptions" (selectedOption)="selectDropdown($event)" [defaultValue]="''" [enableDynamicSearch]="true"
-                                (dynamicSearchedQuery)="searchStock($event, 1)">
+                        <div class="body-item text-left">
+                            <select-field [cssClass]="'form-control'" [name]="'account'"
+                                [placeholder]="'Select account'" [options]="dummyOptions"
+                                (selectedOption)="selectDropdown($event)" [defaultValue]="''"
+                                [enableDynamicSearch]="true" (dynamicSearchedQuery)="searchStock($event, 1)">
                             </select-field>
 
-                            <textarea rows="2" matInput class="form-control mt-2" placeholder="Add Description"></textarea>
+                            <textarea rows="2" matInput class="form-control mt-2"
+                                placeholder="Add Description"></textarea>
                             <span class="mt-2 font-12">Characters Left: 300</span>
 
                             <div class="d-flex justify-content-between">
                                 <div class="w-50">
                                     <div class="mt-2 font-12">
                                         <span>Entry Date</span>
-                                        <div class="mt-1">22-01-2024 <i class="icon-edit color-primary cursor-pointer"></i>
+                                        <div class="mt-1">22-01-2024 <i
+                                                class="icon-edit color-primary cursor-pointer"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -535,8 +596,10 @@
                                         <mat-menu #update="matMenu">
                                             <div class="p-3" (click)="$event.stopPropagation();">
                                                 <mat-radio-group>
-                                                    <mat-radio-button color="primary" value="1">HSN Code</mat-radio-button>
-                                                    <mat-radio-button color="primary" value="2">SAC Code</mat-radio-button>
+                                                    <mat-radio-button color="primary" value="1">HSN
+                                                        Code</mat-radio-button>
+                                                    <mat-radio-button color="primary" value="2">SAC
+                                                        Code</mat-radio-button>
                                                 </mat-radio-group>
 
                                                 <div class="mt-3">
@@ -546,7 +609,8 @@
                                                 </div>
 
                                                 <div class="mt-3">
-                                                    <button mat-stroked-button color="primary" class="mr-2">Save</button>
+                                                    <button mat-stroked-button color="primary"
+                                                        class="mr-2">Save</button>
                                                     <button mat-stroked-button>Cancel</button>
                                                 </div>
                                             </div>
@@ -557,8 +621,9 @@
                         </div>
 
                         <!-- Qty/Unit -->
-                        <div class="body-item active-item">
-                            <text-field [placeholder]="'Enter Qty'" [cssClass]="'form-control text-right'" [type]="'text'">
+                        <div class="body-item">
+                            <text-field [placeholder]="'Enter Qty'" [cssClass]="'form-control text-right'"
+                                [type]="'text'">
                             </text-field>
                             <mat-select name="qty" [placeholder]="'Select'" class="form-control mt-2">
                                 <mat-option [value]="1">Opt 1</mat-option>
@@ -568,33 +633,33 @@
                         </div>
 
                         <!-- Rate -->
-                        <div class="body-item active-item">
+                        <div class="body-item">
                             <text-field [placeholder]="'Enter'" [cssClass]="'form-control text-right'" [type]="'text'">
                             </text-field>
                         </div>
 
                         <!-- Amount -->
-                        <div class="body-item active-item">
+                        <div class="body-item">
                             <text-field [placeholder]="'Enter'" [cssClass]="'form-control text-right'" [type]="'text'">
                             </text-field>
                         </div>
 
                         <!-- Discount -->
-                        <div class="body-item active-item">
+                        <div class="body-item">
                             <!-- Discount control component -->
                             <text-field [placeholder]="'Enter'" [cssClass]="'form-control text-right'" [type]="'text'">
                             </text-field>
                         </div>
 
                         <!-- Tax -->
-                        <div class="body-item active-item">
+                        <div class="body-item">
                             <!-- tax-control component -->
                             <text-field [placeholder]="'Enter'" [cssClass]="'form-control text-right'" [type]="'text'">
                             </text-field>
                         </div>
 
                         <!-- Total -->
-                        <div class="body-item active-item">
+                        <div class="body-item">
                             <text-field [placeholder]="'Enter'" [cssClass]="'form-control text-right'" [type]="'text'">
                             </text-field>
                             <div class="d-flex align-items-center">
@@ -617,77 +682,121 @@
 
                     <div class="vouchers-other-detail container-lg mt-4 px-0">
                         <div class="row mx-0">
-                            <div class="col-6 px-0">
+                            <div class="col-8 px-0">
+                                <div class="container px-0">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <mat-accordion>
+                                                <mat-expansion-panel>
+                                                    <mat-expansion-panel-header>
+                                                        <mat-panel-title>
+                                                            Other Details
+                                                        </mat-panel-title>
+                                                    </mat-expansion-panel-header>
 
-
-                                <mat-accordion>
-                                    <mat-expansion-panel>
-                                        <mat-expansion-panel-header>
-                                            <mat-panel-title>
-                                                Other Details
-                                            </mat-panel-title>
-                                        </mat-expansion-panel-header>
-
-                                        <div class="row row-gap mx-0 px-2 pb-3">
-                                            <div class="col-4 px-2">
-                                                <giddh-datepicker type="text" (keydown.enter)="$event.preventDefault()"
-                                                    [label]="'Ship Date'" [placeholder]="'DDMMYYYY'" name="voucherDueDate"
-                                                    [showToggleIcon]="false" [appearance]="'outline'">
-                                                </giddh-datepicker>
-                                            </div>
-                                            <div class="col-4 px-2">
-                                                <input-field [type]="'text'" [placeholder]="'Ship Via'">
-                                                </input-field>
-                                            </div>
-                                            <div class="col-4 px-2">
-                                                <input-field [type]="'text'" [placeholder]="'Tracking No.'">
-                                                </input-field>
-                                            </div>
-                                            <div class="col-4 px-2">
-                                                <input-field [type]="'text'" [placeholder]="'Custom Field 1'">
-                                                </input-field>
-                                            </div>
-                                            <div class="col-4 px-2">
-                                                <input-field [type]="'text'" [placeholder]="'Custom Field 2'">
-                                                </input-field>
-                                            </div>
-                                            <div class="col-4 px-2">
-                                                <input-field [type]="'text'" [placeholder]="'Custom Field 3'">
-                                                </input-field>
-                                            </div>
-                                            <div class="col-12 px-2">
-                                                <mat-form-field class="w-100" appearance="outline">
-                                                    <mat-label>Note</mat-label>
-                                                    <textarea matInput placeholder="Enter Note"></textarea>
-                                                </mat-form-field>
-                                            </div>
+                                                    <div class="row row-gap mx-0 px-2 pb-3">
+                                                        <div class="col-4 px-2">
+                                                            <giddh-datepicker type="text"
+                                                                (keydown.enter)="$event.preventDefault()"
+                                                                [label]="'Ship Date'" [placeholder]="'DDMMYYYY'"
+                                                                name="voucherDueDate" [showToggleIcon]="false"
+                                                                [appearance]="'outline'">
+                                                            </giddh-datepicker>
+                                                        </div>
+                                                        <div class="col-4 px-2">
+                                                            <input-field [type]="'text'" [placeholder]="'Ship Via'">
+                                                            </input-field>
+                                                        </div>
+                                                        <div class="col-4 px-2">
+                                                            <input-field [type]="'text'" [placeholder]="'Tracking No.'">
+                                                            </input-field>
+                                                        </div>
+                                                        <div class="col-4 px-2">
+                                                            <input-field [type]="'text'"
+                                                                [placeholder]="'Custom Field 1'">
+                                                            </input-field>
+                                                        </div>
+                                                        <div class="col-4 px-2">
+                                                            <input-field [type]="'text'"
+                                                                [placeholder]="'Custom Field 2'">
+                                                            </input-field>
+                                                        </div>
+                                                        <div class="col-4 px-2">
+                                                            <input-field [type]="'text'"
+                                                                [placeholder]="'Custom Field 3'">
+                                                            </input-field>
+                                                        </div>
+                                                        <div class="col-12 px-2">
+                                                            <mat-form-field class="w-100" appearance="outline">
+                                                                <mat-label>Note</mat-label>
+                                                                <textarea matInput placeholder="Enter Note"></textarea>
+                                                            </mat-form-field>
+                                                        </div>
+                                                    </div>
+                                                </mat-expansion-panel>
+                                            </mat-accordion>
                                         </div>
-                                    </mat-expansion-panel>
-                                </mat-accordion>
 
+                                        <div class="col-12 mt-3">
+                                            <mat-card>
+                                                <mat-card-header>
+                                                    <mat-card-title>
+                                                        <p class="font-16 mb-3">Deposit</p>
+                                                    </mat-card-title>
+                                                </mat-card-header>
+                                                <mat-card-content>
+                                                    <div class="container px-0">
+                                                        <div class="row align-items-center">
+                                                            <ng-container *ngIf="true">
+                                                                <div class="col-6">
+                                                                    <dropdown-field [label]="'Customer'"
+                                                                        [placeholder]="'Select Account'"
+                                                                        [options]="dummyOptions"
+                                                                        (selectedOption)="selectDropdown($event)"
+                                                                        [defaultValue]="''">
+                                                                    </dropdown-field>
+                                                                </div>
+                                                                <div class="col-6">
+                                                                    <input-field [name]="''" [label]="'Amount'"
+                                                                        [placeholder]="'Enter amount'"
+                                                                        [type]="'number'">
+                                                                    </input-field>
+                                                                </div>
+                                                            </ng-container>
 
-
-
-
-                                <!-- <div class="d-flex align-items-center mb-3 column-gap1">
-                                    <div class="icon-box">
-                                        <i class="icon-minus"></i>
-                                    </div>
-                                    Other Details
-                                </div> -->
-
-                                <div class="mt-3">
-                                    <div class="vouchers-attachment position-relative cursor-pointer d-flex align-items-center column-gap1"
-                                        [matTooltip]="'No file chosen'" matTooltipPosition="right">
-                                        <input type="file" class="position-absolute" title="" />
-                                        <div class="attachment-add-icon">
-                                            <i class="icon-add"></i>
+                                                            <div class="col" *ngIf="false">
+                                                                <div class="d-flex align-items-center column-gap1">
+                                                                    <span>Adjust Amount</span>
+                                                                    <span class="text-gray">00.00</span>
+                                                                    <i class="icon-edit color-primary font-12"></i>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </mat-card-content>
+                                            </mat-card>
                                         </div>
-                                        <span class="attachment-placeholder">Attach File to voucher</span>
+
+                                        <div class="col-12 mt-3">
+                                            <mat-card>
+                                                <mat-card-content>
+                                                    <div class="vouchers-attachment d-flex align-items-center column-gap1"
+                                                        [matTooltip]="'No file chosen'" matTooltipPosition="right">
+                                                        <input type="file" class="position-absolute" title="" />
+                                                        <div class="attachment-add-icon">
+                                                            <i class="icon-add"></i>
+                                                        </div>
+                                                        <span class="attachment-placeholder">Attach File to
+                                                            voucher</span>
+                                                    </div>
+                                                </mat-card-content>
+                                            </mat-card>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-6 px-0">
+
+                            <div class="col-4 px-0">
                                 <div class="row text-right row-gap">
                                     <div class="col-9">
                                         Total Amount
@@ -725,23 +834,11 @@
                                     <div class="col-3">
                                         840.00
                                     </div>
-                                </div>
-                                <div class="vouchers-desposit-wrapper pd-1 ml-auto mt-3">
-                                    <span>Deposit</span>
-                                    <div class="mt-3 pl-3">
-                                        <dropdown-field [label]="'Customer'" [placeholder]="'Select Account'"
-                                            [options]="dummyOptions" (selectedOption)="selectDropdown($event)"
-                                            [defaultValue]="''">
-                                        </dropdown-field>
+                                    <div class="col-9">
+                                        Balance Due
                                     </div>
-                                    <div class="mt-3 pl-3">
-                                        <input-field [name]="''" [label]="'Amount'" [placeholder]="'Enter amount'"
-                                            [type]="'number'">
-                                        </input-field>
-                                    </div>
-                                    <div class="mt-3 pl-3">
-                                        <span>Balance Due</span>
-                                        <span>0.00</span>
+                                    <div class="col-3">
+                                        0.00
                                     </div>
                                 </div>
                             </div>
@@ -750,6 +847,7 @@
 
                     <div class="vouchers-actions d-flex justify-content-end column-gap1 pd-t2 pd-b2 mt-4">
                         <button mat-stroked-button> Clear </button>
+
                         <button mat-stroked-button color="primary"> Generate Sales & Update A/c </button>
                         <button mat-stroked-button color="primary"> Generate Sales </button>
 
@@ -758,10 +856,8 @@
 
                         <button mat-stroked-button color="primary"> Save </button>
                         <button mat-stroked-button> <i class="caret"></i> </button>
-
                     </div>
                 </div>
-
 
             </div>
         </form>

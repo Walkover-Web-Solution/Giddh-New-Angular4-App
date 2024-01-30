@@ -2154,6 +2154,12 @@ bs-datepicker-container {
     flex-direction: column;
     -ms-flex-direction: column;
 }
+.flex-wrap {
+    flex-wrap: wrap;
+}
+.row-gap1 {
+    row-gap: 10px;
+}
 
 /* cmdk modal styles */
 .modal-dialog.universal_modal .modal-body {
