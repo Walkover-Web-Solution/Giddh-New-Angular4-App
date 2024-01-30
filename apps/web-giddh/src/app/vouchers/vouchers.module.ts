@@ -39,6 +39,8 @@ import { HistoryDialogComponent } from "./history-dialog/history-dialog.componen
 import { OtherTaxModule } from "../theme/other-tax/other-tax.module";
 import { AddBulkItemsModule } from "../theme/add-bulk-items/add-bulk-items.module";
 import { OptionsScrollDirective } from "../theme/form-fields/reactive-dropdown-field/reactive-dropdown-options-scroll.directive";
+import { EmailSendDialogComponent } from "./email-send-dialog/email-send-dialog.component";
+import { MatSlideToggleModule } from "@angular/material/slide-toggle";
 
 @NgModule({
     declarations: [
@@ -53,6 +55,7 @@ import { OptionsScrollDirective } from "../theme/form-fields/reactive-dropdown-f
         BulkUpdateComponent,
         OptionsScrollDirective,
         HistoryDialogComponent,
+        EmailSendDialogComponent
     ],
     imports: [
         CommonModule,
@@ -84,7 +87,8 @@ import { OptionsScrollDirective } from "../theme/form-fields/reactive-dropdown-f
         ScrollingModule,
         NoDataModule,
         OtherTaxModule,
-        AddBulkItemsModule
+        AddBulkItemsModule,
+        MatSlideToggleModule
     ],
     exports: [
 

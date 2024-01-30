@@ -51,17 +51,17 @@
                         History
                     </button>
                     <div class="d-flex action-btn">
-                        <button mat-stroked-button color="primary" class="mat-icon-btn" [matTooltip]="'Edit'"
+                        <button mat-stroked-button color="primary" class="mat-icon-sm-btn" [matTooltip]="'Edit'"
                             [matTooltipPosition]="'above'"><i class="icon-edit-pencil"></i></button>
-                        <button mat-stroked-button color="primary" class="mat-icon-btn" [matTooltip]="'Send Email'"
-                            [matTooltipPosition]="'above'"><i class="icon-envelope"></i></button>
-                        <button mat-stroked-button color="primary" class="mat-icon-btn" [matTooltip]="'Print'"
+                        <button mat-stroked-button color="primary" class="mat-icon-sm-btn" [matTooltip]="'Send Email'"
+                            [matTooltipPosition]="'above'" (click)="openEmailSendDialog()"><i class="icon-envelope"></i></button>
+                        <button mat-stroked-button color="primary" class="mat-icon-sm-btn" [matTooltip]="'Print'"
                             [matTooltipPosition]="'above'"><i class="fa fa-print"></i></button>
-                        <button mat-stroked-button color="primary" class="mat-icon-btn" [matTooltip]="'Print Receipt'"
+                        <button mat-stroked-button color="primary" class="mat-icon-sm-btn" [matTooltip]="'Print Receipt'"
                             [matTooltipPosition]="'above'"><i class="fa fa-print"></i></button>
-                        <button mat-stroked-button color="primary" class="mat-icon-btn" [matTooltip]="'Download PDF'"
+                        <button mat-stroked-button color="primary" class="mat-icon-sm-btn" [matTooltip]="'Download PDF'"
                             [matTooltipPosition]="'above'"><i class="icon-download-circle"></i></button>
-                        <button mat-stroked-button color="primary" class="mat-icon-btn" [matTooltip]="'Delete'"
+                        <button mat-stroked-button color="primary" class="mat-icon-sm-btn" [matTooltip]="'Delete'"
                             [matTooltipPosition]="'above'"><i class="icon-trash"></i></button>
                     </div>
                     <button mat-stroked-button color="primary" [matMenuTriggerFor]="changeStatus">
@@ -78,7 +78,7 @@
                     <button mat-stroked-button>
                         Cancel
                     </button>
-                    <button mat-stroked-button class="mat-icon-btn">
+                    <button mat-stroked-button class="mat-icon-sm-btn">
                         <i class="icon-cross"></i>
                     </button>
                 </div>
@@ -128,4 +128,8 @@
 <!-- history dialog -->
 <ng-template #historyAsideDialog>
     <app-history-dialog></app-history-dialog>
+</ng-template>
+<!-- email-dialog -->
+<ng-template #emailSendDialog>
+    <app-email-send-dialog></app-email-send-dialog>
 </ng-template>

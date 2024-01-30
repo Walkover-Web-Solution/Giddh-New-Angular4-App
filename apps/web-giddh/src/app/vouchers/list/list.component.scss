@@ -57,6 +57,13 @@ table {
     z-index: 10;
 }
 
+// setting-tabs
+.tabs-box-content {
+    .settings-field {
+        width: 290px;
+    }
+}
+
 @media screen and (max-width: 1024px) {
     .video-link {
         display: none;

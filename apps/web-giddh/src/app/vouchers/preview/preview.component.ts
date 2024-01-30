@@ -18,6 +18,8 @@ export class VouchersPreviewComponent {
     @ViewChild('adjustPaymentDialog', { static: true }) public adjustPaymentDialog: TemplateRef<any>;
     // history dialog
     @ViewChild('historyAsideDialog', { static: true }) public historyAsideDialog: TemplateRef<any>;
+    // email dialog
+    @ViewChild('emailSendDialog', { static: true }) public emailSendDialog: TemplateRef<any>;
     /* This will hold local JSON data */
     @Input() public localeData: any = {};
     /* This will hold common JSON data */
@@ -42,7 +44,7 @@ export class VouchersPreviewComponent {
     }
     // email send dialog
     public openEmailSendDialog():void {
-        this.dialog.open(SendEmailInvoiceComponent, {
+        this.dialog.open(this.emailSendDialog, {
             panelClass: ['mat-dialog-md']
         });
     }
