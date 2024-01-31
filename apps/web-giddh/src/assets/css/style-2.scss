@@ -2691,6 +2691,13 @@ modal-container.modal {
     color: var(--color-nero) !important;
     box-shadow: none;
     font-size: var(--font-size-15) !important;
+
+    .mat-mdc-select-placeholder, .mat-mdc-select-arrow{
+        color: var(--color-popup-list-input-text) !important;
+    }
+    .mat-mdc-select-arrow{
+        margin-left: 4px;
+    }
 }
 
 .form-control.mat-mdc-select-disabled {
@@ -14568,4 +14575,4 @@ aside-menu-product-service {
 
 .width-60{
     width: 60px !important;
-}   
+}

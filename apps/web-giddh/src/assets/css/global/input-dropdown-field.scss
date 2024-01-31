@@ -8,7 +8,8 @@ dropdown-field,
 input-field,
 stock-balance,
 mat-form-field,
-reactive-dropdown-field {
+reactive-dropdown-field,
+.custom-mat-form-field {
     .mat-mdc-form-field {
         width: 100%;
     }
@@ -68,6 +69,9 @@ reactive-dropdown-field {
             }
             &.mdc-text-field--focused {
                 .mdc-notched-outline__notch {
+                    border-color: var(--color-border-focus) !important;
+                }
+                .mdc-notched-outline__trailing{
                     border-color: var(--color-border-focus) !important;
                 }
                 .mdc-notched-outline__leading {
@@ -170,6 +174,7 @@ reactive-dropdown-field {
         color: var(--color-popup-list-input-text) !important;
     }
 }
+
 .mat-mdc-form-field{
     &.mat-focused{
         background-color: transparent;
