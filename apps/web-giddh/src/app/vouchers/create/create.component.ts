@@ -68,6 +68,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
     public exchangeRate$: Observable<any> = this.componentStore.exchangeRate$;
     /** Brief accounts Observable */
     public briefAccounts$: Observable<any> = this.componentStore.briefAccounts$;
+    /** Account details Observable */
+    public accountDetails$: Observable<any> = this.componentStore.accountDetails$;
+    /** Country data Observable */
+    public countryData$: Observable<any> = this.componentStore.countryData$;
     /** Holds boolean of TCS/TDS Applicable Observable */
     public isTcsTdsApplicable$: Observable<any> = this.componentStore.isTcsTdsApplicable$;
     /** Last vouchers get in progress Observable */
@@ -154,6 +158,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /** True if warehouse field will be visible */
     public showWarehouse: boolean = false;
+    /** Holds account state list */
+    public accountStateList$: Observable<OptionInterface[]> = of(null);
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -202,6 +208,24 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
                 this.getCompanyBranches();
                 this.getCreatedTemplates();
                 this.getBriefAccounts();
+            }
+        });
+
+        this.accountDetails$.subscribe(response => {
+            if (response) {
+                console.log(response);
+                this.account = {
+                    countryName: response.country?.countryName,
+                    countryCode: response.country?.countryCode,
+                    baseCurrency: response.currency,
+                    baseCurrencySymbol: response.currencySymbol
+                }
+            }
+        });
+
+        this.countryData$.subscribe(response => {
+            if (response) {
+                this.accountStateList$ = of(response?.stateList?.map(res => { return { label: res.name, value: res.code } }));
             }
         });
     }
@@ -258,7 +282,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
 
     private getCompanyProfile(): void {
         this.companyProfile$.subscribe(profile => {
-            if (profile && Object.keys(profile).length) {
+            if (profile && Object.keys(profile).length && !this.company?.countryName) {
                 this.company.countryName = profile.country;
                 this.company.countryCode = profile.countryCode || profile.countryV2.alpha2CountryCode;
                 this.company.baseCurrency = profile.baseCurrency;
@@ -266,6 +290,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
                 this.company.inputMaskFormat = profile.balanceDisplayFormat?.toLowerCase() || '';
 
                 this.showTaxTypeByCountry(this.company.countryCode);
+
+                if (this.invoiceType.isCashInvoice) {
+                    this.getCountryData(this.company.countryCode);
+                }
             }
         });
     }
@@ -501,6 +529,14 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
         });
     }
 
+    private getAccountDetails(accountUniqueName: string): void {
+        this.componentStore.getAccountDetails(accountUniqueName);
+    }
+
+    private getCountryData(countryCode: string): void {
+        this.componentStore.getCountryStates(countryCode);
+    }
+
     public handleSearchAccountScrollEnd(): void {
         if (this.accountSearchRequest.loadMore) {
             let page = this.accountSearchRequest.page;
@@ -514,6 +550,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
             this.invoiceForm.reset();
         } else {
             this.invoiceForm.controls["account"].get("customerName")?.patchValue(event?.label);
+            this.getAccountDetails(event?.value);
         }
     }
 
@@ -548,7 +585,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
             address: [''],
             pincode: [''],
             taxNumber: [''],
-            gstNumber: [''],
             state: this.getStateFormGroup()
         });
     }

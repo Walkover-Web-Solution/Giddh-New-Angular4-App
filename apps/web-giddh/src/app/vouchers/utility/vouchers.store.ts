@@ -16,6 +16,7 @@ import { LedgerService } from "../../services/ledger.service";
 import { IVariant } from "../../models/api-models/Ledger";
 import { CommonService } from "../../services/common.service";
 import { LastVouchersResponse } from "../../models/api-models/Voucher";
+import { AccountService } from "../../services/account.service";
 
 export interface VoucherState {
     isLoading: boolean;
@@ -31,6 +32,8 @@ export interface VoucherState {
     barcodeData: any;
     exchangeRate: number;
     briefAccounts: any[];
+    accountDetails: any;
+    countryData: any;
 }
 
 const DEFAULT_STATE: VoucherState = {
@@ -46,7 +49,9 @@ const DEFAULT_STATE: VoucherState = {
     stockVariants: null,
     barcodeData: null,
     exchangeRate: null,
-    briefAccounts: null
+    briefAccounts: null,
+    accountDetails: null,
+    countryData: null
 };
 
 @Injectable()
@@ -58,7 +63,8 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
         private settingsDiscountService: SettingsDiscountService,
         private voucherService: VoucherService,
         private ledgerService: LedgerService,
-        private commonService: CommonService
+        private commonService: CommonService,
+        private accountService: AccountService
     ) {
         super(DEFAULT_STATE);
     }
@@ -73,6 +79,9 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
     public stockVariants$ = this.select((state) => state.stockVariants);
     public exchangeRate$ = this.select((state) => state.exchangeRate);
     public briefAccounts$ = this.select((state) => state.briefAccounts);
+    public accountDetails$ = this.select((state) => state.accountDetails);
+    public countryData$ = this.select((state) => state.countryData);
+
     public companyProfile$: Observable<any> = this.select(this.store.select(state => state.settings.profile), (response) => response);
     public activeCompany$: Observable<any> = this.select(this.store.select(state => state.session.activeCompany), (response) => response);
     public onboardingForm$: Observable<any> = this.select(this.store.select(state => state.common.onboardingform), (response) => response);
@@ -314,6 +323,52 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             this.showErrorToast(error);
                             return this.patchState({
                                 briefAccounts: []
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    readonly getAccountDetails = this.effect((data: Observable<string>) => {
+        return data.pipe(
+            switchMap((req) => {
+                return this.accountService.GetAccountDetailsV2(req).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            return this.patchState({
+                                accountDetails: res?.body ?? {}
+                            });
+                        },
+                        (error: any) => {
+                            this.showErrorToast(error);
+                            return this.patchState({
+                                accountDetails: {}
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+    
+    readonly getCountryStates = this.effect((data: Observable<string>) => {
+        return data.pipe(
+            switchMap((req) => {
+                return this.voucherService.getCountryStates(req).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            return this.patchState({
+                                countryData: res?.body ?? {}
+                            });
+                        },
+                        (error: any) => {
+                            this.showErrorToast(error);
+                            return this.patchState({
+                                countryData: {}
                             });
                         }
                     ),
