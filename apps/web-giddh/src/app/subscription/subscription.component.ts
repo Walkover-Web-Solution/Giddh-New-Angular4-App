@@ -64,7 +64,8 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
 
     constructor(public dialog: MatDialog,
         private toaster: ToasterService,
-        private changeDetection: ChangeDetectorRef) { }
+        private changeDetection: ChangeDetectorRef
+    ) { }
 
     public ngOnInit(): void {
         document.body?.classList?.add("subscription-page");
@@ -81,25 +82,6 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
             data: element,
             panelClass: 'subscription-sidebar'
         });
-        this.addZindexCdkOverlay();
-    }
-
-    /**
- * Adds Z-index class to cdk-overlay element
- *
- * @memberof SubscriptionComponent
- */
-    public addZindexCdkOverlay(): void {
-        document.querySelector('.cdk-overlay-container')?.classList?.add('cdk-overlay-container-z-index');
-    }
-
-    /**
-     * Removes Z-index class to cdk-overlay element
-     *
-     * @memberof SubscriptionComponent
-     */
-    public removeZindexCdkOverlay(): void {
-        document.querySelector('.cdk-overlay-container')?.classList?.remove('cdk-overlay-container-z-index');
     }
 
     /**

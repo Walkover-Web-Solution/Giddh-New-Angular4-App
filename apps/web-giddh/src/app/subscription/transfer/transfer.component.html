@@ -1,0 +1,42 @@
+<ng-container appTranslate [file]="'subscription'" (localeData)="localeData = $event">
+    <div class="modal-header d-flex align-items-center">
+        <h3>Transfer</h3>
+        <button aria-hidden="true" class="close" mat-dialog-close>×</button>
+    </div>
+    <mat-dialog-content class="w-100">
+            <div class="form-container  pd-15">
+                <form [formGroup]="transferForm" (ngSubmit)="onSubmit()">
+                    <div class="d-flex column-gap15 ">
+                    <div class="form-group w-50">
+                        <input-field [type]="'text'" [name]="'name'" [label]="'Name'" formControlName="name">
+                        </input-field>
+                    </div>
+                    <div class="form-group w-50">
+                        <input-field
+                            [type]="'text'"
+                            [name]="'lastname'"
+                            [label]="'Last Name'"
+                            formControlName="lastname"
+                        >
+                        </input-field>
+                    </div>
+                    </div>
+                    <div class="form-group">
+                        <input-field [type]="'text'" [name]="'email'" [label]="'Email'" formControlName="email">
+                        </input-field>
+                    </div>
+                    <div class="d-flex column-gap15">
+                      <button mat-stroked-button color="primary"  (click)="onSubmit()">
+                             Submit
+                            </button>
+                            <button
+                                mat-stroked-button
+                                (click)="onCancel()"
+                            >
+                            Cancel
+                            </button>
+                    </div>
+                </form>
+            </div>
+    </mat-dialog-content>
+</ng-container>

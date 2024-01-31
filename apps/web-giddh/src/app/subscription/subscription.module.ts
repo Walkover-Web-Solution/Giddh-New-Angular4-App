@@ -15,6 +15,9 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatMenuModule } from '@angular/material/menu';
 import { CompanyListComponent } from './company-list/company-list.component';
 import { MatSortModule } from '@angular/material/sort';
+import { TransferComponent } from './transfer/transfer.component';
+import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
     imports: [
@@ -31,8 +34,11 @@ import { MatSortModule } from '@angular/material/sort';
         GiddhPageLoaderModule,
         HamburgerMenuModule,
         MatMenuModule,
-        MatSortModule
+        MatSortModule,
+        FormFieldsModule,
+        ReactiveFormsModule,
+        FormsModule
     ],
-    declarations: [SubscriptionComponent, CompanyListComponent]
+    declarations: [SubscriptionComponent, CompanyListComponent, TransferComponent]
 })
 export class SubscriptionModule { }

@@ -1331,6 +1331,20 @@ table:focus {
         }
     }
 }
+
+.column-gap5 {
+    column-gap: 5px;
+}
+.column-gap1 {
+    column-gap: 10px;
+}
+.column-gap15 {
+    column-gap: 15px;
+}
+.column-gap2 {
+    column-gap: 20px;
+}
+
 @media only screen and (max-width: 1440px) {
     body.unresponsive {
         width: 100%;
@@ -2503,7 +2517,7 @@ form#groupDetailForm {
         aside-setting {
             .aside-pane {
                 height: calc(100vh - 60px) !important;
-            } 
+            }
         }
     }
 }
