@@ -13,17 +13,18 @@ import { WarehouseActions } from "../../settings/warehouse/action/warehouse.acti
 import { SettingsUtilityService } from "../../settings/services/settings-utility.service";
 import { SettingsBranchActions } from "../../actions/settings/branch/settings.branch.action";
 import { OrganizationType } from "../../models/user-login-state";
-import { PreviousInvoicesVm, ProformaFilter, ProformaResponse } from "../../models/api-models/proforma";
+import { ProformaFilter, ProformaResponse } from "../../models/api-models/proforma";
 import { InvoiceReceiptFilter, ReciptResponse } from "../../models/api-models/recipt";
 import { VouchersUtilityService } from "../utility/vouchers.utility.service";
 import { FormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 import { GIDDH_DATE_FORMAT } from "../../shared/helpers/defaultDateFormat";
 import * as dayjs from "dayjs";
-import { BriedAccountsGroup, SearchType, VoucherTypeEnum, OptionInterface } from "../utility/vouchers.const";
+import { BriedAccountsGroup, SearchType, VoucherTypeEnum } from "../utility/vouchers.const";
 import { SearchService } from "../../services/search.service";
 import { MatDialog } from "@angular/material/dialog";
 import { AddBulkItemsComponent } from "../../theme/add-bulk-items/add-bulk-items.component";
 import { OtherTaxComponent } from "../../theme/other-tax/other-tax.component";
+import { LastInvoices, OptionInterface } from "../../models/api-models/Voucher";
 
 @Component({
     selector: "create",
@@ -70,6 +71,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
     public briefAccounts$: Observable<any> = this.componentStore.briefAccounts$;
     /** Holds boolean of TCS/TDS Applicable Observable */
     public isTcsTdsApplicable$: Observable<any> = this.componentStore.isTcsTdsApplicable$;
+    /** Last vouchers get in progress Observable */
+    public getLastVouchersInProgress$: Observable<any> = this.componentStore.getLastVouchersInProgress$;
     /** Account search request */
     public accountSearchRequest: any;
     public dummyOptions: any[] = [
@@ -141,7 +144,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
         showNotesAtLastPage: false
     };
     /** Holds list of last vouchers */
-    public lastVouchers: PreviousInvoicesVm[] = [];
+    public lastVouchersList$: Observable<LastInvoices[]> = of(null);
     /** Form Group for invoice form */
     public invoiceForm: UntypedFormGroup;
     /** This will open account dropdown by default */
@@ -150,6 +153,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** True if warehouse field will be visible */
+    public showWarehouse: boolean = false;
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -180,6 +185,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
                 /** Open account dropdown on create */
                 if (!params?.uniqueName) {
                     this.openAccountDropdown = true;
+                } else {
+                    this.invoiceForm.get('uniqueName').patchValue(params?.uniqueName);
                 }
 
                 this.getVoucherType();
@@ -317,6 +324,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
                 let warehouseResults = response.results?.filter(wh => !wh.isArchived);
                 const warehouseData = this.settingsUtilityService.getFormattedWarehouseData(warehouseResults);
                 this.warehouses = warehouseData.formattedWarehouses;
+
+                this.showWarehouse = true;
             }
         });
     }
@@ -343,13 +352,15 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
     public getPreviousVouchers(): void {
         this.lastVouchers$.subscribe(response => {
             if (response) {
-                const lastVouchers: PreviousInvoicesVm[] = [];
+                const lastVouchers: LastInvoices[] = [];
                 if (!this.invoiceType.isProformaInvoice && !this.invoiceType.isEstimateInvoice) {
                     if (response) {
                         response = response as ReciptResponse;
                         response?.items.forEach(item => {
                             lastVouchers.push({
-                                versionNumber: item.voucherNumber, date: item.voucherDate, grandTotal: item.grandTotal,
+                                voucherNumber: item.voucherNumber, 
+                                date: item.voucherDate, 
+                                grandTotal: item.grandTotal,
                                 account: { name: item.account?.name, uniqueName: item.account?.uniqueName },
                                 uniqueName: item?.uniqueName
                             });
@@ -361,7 +372,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
                         if (response && response.items) {
                             response.items.forEach(item => {
                                 lastVouchers.push({
-                                    versionNumber: this.invoiceType.isProformaInvoice ? item.proformaNumber : item.estimateNumber,
+                                    voucherNumber: this.invoiceType.isProformaInvoice ? item.proformaNumber : item.estimateNumber,
                                     date: item.voucherDate,
                                     grandTotal: item.grandTotal,
                                     account: { name: item.customerName, uniqueName: item.customerUniqueName },
@@ -371,7 +382,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
                         }
                     }
                 }
-                this.lastVouchers = [...lastVouchers];
+                this.lastVouchersList$ = of([...lastVouchers]);
             } else {
                 if (this.invoiceType.isProformaInvoice || this.invoiceType.isEstimateInvoice) {
                     let filterRequest: ProformaFilter = new ProformaFilter();
@@ -501,21 +512,51 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
 
     public selectAccount(event: any, isClear: boolean = false): void {
         if (isClear) {
-            this.invoiceForm.get("account")?.patchValue("");
+            this.invoiceForm.reset();
         } else {
-
+            this.invoiceForm.controls["account"].get("customerName")?.patchValue(event?.label);
         }
     }
 
     public translationComplete(event: any): void {
         if (event) {
-
+            
         }
     }
 
     private initVoucherForm(): void {
         this.invoiceForm = this.formBuilder.group({
-            account: ['', Validators.required]
+            account: this.getAccountFormGroup(),
+            uniqueName: ['']
+        });
+    }
+
+    private getAccountFormGroup(): UntypedFormGroup {
+        return this.formBuilder.group({
+            customerName: [''],
+            uniqueName: ['', Validators.required],
+            attentionTo: [''],
+            contactNumber: [''],
+            mobileNumber: [''],
+            email: [''],
+            billingAddress: this.getAddressFormGroup(),
+            shippingAddress: this.getAddressFormGroup()
+        });
+    }
+
+    private getAddressFormGroup(): UntypedFormGroup {
+        return this.formBuilder.group({
+            address: [''],
+            pincode: [''],
+            taxNumber: [''],
+            gstNumber: [''],
+            state: this.getStateFormGroup()
+        });
+    }
+
+    private getStateFormGroup(): UntypedFormGroup {
+        return this.formBuilder.group({
+            code: [''],
         });
     }
 
