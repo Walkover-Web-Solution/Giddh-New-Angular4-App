@@ -76,7 +76,7 @@ export class VouchersUtilityService {
     public getSearchRequestObject(voucherType: string, query: string, page: number = 1, searchType: string): any {
         let withStocks: boolean;
         let group: string;
-        
+
         if (searchType === SearchType.CUSTOMER) {
             group = (voucherType === VoucherTypeEnum.debitNote) ? 'sundrycreditors' : (voucherType === VoucherTypeEnum.purchase) ? (this.generalService.voucherApiVersion === 2) ? 'sundrycreditors' : 'sundrycreditors, bankaccounts, cash' : 'sundrydebtors';
         } else if (searchType === SearchType.ITEM) {
@@ -102,5 +102,65 @@ export class VouchersUtilityService {
             requestObject['withStocks'] = withStocks;
         }
         return requestObject;
+    }
+
+    public getVoucherNameByType(voucherType: string, localeData: any): string {
+        let voucherName = "";
+
+        switch (voucherType) {
+            case VoucherTypeEnum.proforma:
+                voucherName = localeData?.invoice_types?.proforma;
+                break;
+
+            case VoucherTypeEnum.generateProforma:
+                voucherName = localeData?.invoice_types?.proforma;
+                break;
+
+            case VoucherTypeEnum.estimate:
+                voucherName = localeData?.invoice_types?.estimate;
+                break;
+
+            case VoucherTypeEnum.generateEstimate:
+                voucherName = localeData?.invoice_types?.estimate;
+                break;
+
+            case VoucherTypeEnum.sales:
+                voucherName = localeData?.invoice_types?.sales;
+                break;
+
+            case VoucherTypeEnum.creditNote:
+                voucherName = localeData?.invoice_types?.credit_note;
+                break;
+
+            case VoucherTypeEnum.debitNote:
+                voucherName = localeData?.invoice_types?.debit_note;
+                break;
+
+            case VoucherTypeEnum.purchase:
+                voucherName = localeData?.invoice_types?.purchase;
+                break;
+
+            case VoucherTypeEnum.cash:
+                voucherName = localeData?.invoice_types?.cash;
+                break;
+            
+            case VoucherTypeEnum.cashBill:
+                voucherName = localeData?.invoice_types?.cash_bill;
+                break;
+
+            case VoucherTypeEnum.cashCreditNote:
+                voucherName = localeData?.invoice_types?.cash_credit_note;
+                break;
+
+            case VoucherTypeEnum.cashDebitNote:
+                voucherName = localeData?.invoice_types?.cash_debit_note;
+                break;
+
+            default:
+                voucherName = voucherType;
+                break;
+        }
+
+        return voucherName;
     }
 }
