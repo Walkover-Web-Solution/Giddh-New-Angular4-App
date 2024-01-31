@@ -1,0 +1,28 @@
+.discount-wrapper{
+    width: 200px;
+
+    .discount-separator {
+        color: var(--color-common-secondary-border);
+    
+        .discount-separator-msg {
+            z-index: 1;
+            position: relative;
+            background: white;
+            padding: 0 8px;
+        }
+    
+        .discount-separator-line {  
+            height: 1px;
+            background-color: var(--color-common-secondary-border);
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            z-index: 0;
+        }
+    }
+    .discount-checkbox-wrapper{
+        max-height: 120px;
+        overflow-y: auto;
+    }
+}

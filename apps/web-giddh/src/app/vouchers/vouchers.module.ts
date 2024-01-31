@@ -44,6 +44,8 @@ import { TranslateDirectiveModule } from "../theme/translate/translate.directive
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { VoucherNameModule } from "./utility/pipe/voucher-name/voucher-name.module";
 import { VoucherCopyLinkModule } from "./utility/pipe/voucher-copy-link/voucher-copy-link.module";
+import { TaxDropdownModule } from "../theme/tax-dropdown/tax-dropdown.module";
+import { DiscountDropdownModule } from "../theme/discount-dropdown/discount-dropdown.module";
 
 @NgModule({
     declarations: [
@@ -94,7 +96,9 @@ import { VoucherCopyLinkModule } from "./utility/pipe/voucher-copy-link/voucher-
         TranslateDirectiveModule,
         VoucherNameModule,
         VoucherCopyLinkModule,
-        MatProgressSpinnerModule
+        MatProgressSpinnerModule,
+        TaxDropdownModule,
+        DiscountDropdownModule
     ],
     exports: [
 
