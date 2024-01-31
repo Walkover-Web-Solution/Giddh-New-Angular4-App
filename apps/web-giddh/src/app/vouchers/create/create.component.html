@@ -1,10 +1,5 @@
-<ng-container
-    appTranslate
-    [file]="'proforma-invoice'"
-    (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event"
-    (translationComplete)="translationComplete($event)"
->
+<ng-container appTranslate [file]="'proforma-invoice'" (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
     <hamburger-menu></hamburger-menu>
     <div class="vouchers">
         <!-- Voucher Page Heading -->
@@ -16,10 +11,10 @@
             <ng-container *ngIf="invoiceType.isSalesInvoice || invoiceType.isCashInvoice">
                 <div class="ml-auto">
                     <!-- Video link for  Sales Invoice -->
-                    <watch-video *ngIf="invoiceType.isSalesInvoice" [cssClass]="'text-primary'"
+                    <watch-video *ngIf="invoiceType.isSalesInvoice" [cssClass]="'text-blue'"
                         [moduleName]="'VOUCHER_SALES'"></watch-video>
                     <!-- Video link for Cash Invoice -->
-                    <watch-video *ngIf="invoiceType.isCashInvoice" [cssClass]="'text-primary'"
+                    <watch-video *ngIf="invoiceType.isCashInvoice" [cssClass]="'text-blue'"
                         [moduleName]="'VOUCHER_CASH'"></watch-video>
                 </div>
             </ng-container>
@@ -33,9 +28,16 @@
                         <div class="col-10">
                             <div class="d-flex align-items-center">
                                 <div class="vouchers-form-fields w-100">
-                                    <reactive-dropdown-field [label]="'Customer'" [placeholder]="'Select Customer'" formControlName="account" [name]="'account'"
-                                        [options]="voucherAccountResults$ | async" [showCreateNew]="true" [enableDynamicSearch]="true" [isPaginationEnabled]="true" [openDropdown]="openAccountDropdown" [createNewText]="!invoiceType.isPurchaseInvoice && !invoiceType.isDebitNote ? localeData?.add_customer : localeData?.add_vendor" (scrollEnd)="handleSearchAccountScrollEnd()" (selectedOption)="selectAccount($event)"
-                                        (dynamicSearchedQuery)="searchAccount($event, 1)" (onClear)="selectAccount($event, true)">
+                                    <reactive-dropdown-field [label]="'Customer'" [placeholder]="'Select Customer'"
+                                        formControlName="account" [name]="'account'"
+                                        [options]="voucherAccountResults$ | async" [showCreateNew]="true"
+                                        [enableDynamicSearch]="true" [isPaginationEnabled]="true"
+                                        [openDropdown]="openAccountDropdown"
+                                        [createNewText]="!invoiceType.isPurchaseInvoice && !invoiceType.isDebitNote ? localeData?.add_customer : localeData?.add_vendor"
+                                        (scrollEnd)="handleSearchAccountScrollEnd()"
+                                        (selectedOption)="selectAccount($event)"
+                                        (dynamicSearchedQuery)="searchAccount($event, 1)"
+                                        (onClear)="selectAccount($event, true)">
                                     </reactive-dropdown-field>
                                 </div>
                                 <ng-container *ngIf="invoiceType.isSalesInvoice">
@@ -82,7 +84,7 @@
                     [ngClass]="{'vouchers-form-disable' : !invoiceForm.get('account')?.value}">
                     <div class="vouchers-small-container">
                         <!-- Row 1 -->
-                        <div class="row row-gap">
+                        <div class="row row-gap">   
 
                             <!-- Billing Address -->
                             <div class="col-12 mr-t15" *ngIf="invoiceType.isPurchaseOrder">
@@ -91,7 +93,7 @@
                             <div class="col-6">
                                 <label for="billingAddress" class="billing-label">Billing Address</label> <i
                                     [matMenuTriggerFor]="billingAddress"
-                                    class="icon-edit color-primary cursor-pointer pl-2 font-12"></i>
+                                    class="icon-edit text-blue cursor-pointer pl-2 font-12"></i>
 
                                 <div *ngIf="!invoiceType.isCashInvoice" class="mt-2">Address 1 </div>
 
@@ -165,7 +167,7 @@
                                 <ng-container *ngIf="!invoiceType.isCashInvoice">
                                     <label for="billingAddress" class="billing-label">Shipping Address</label> <i
                                         [matMenuTriggerFor]="shippingAddress"
-                                        class="icon-edit color-primary cursor-pointer pl-2 font-12"></i>
+                                        class="icon-edit text-blue cursor-pointer pl-2 font-12"></i>
 
                                     <mat-menu #shippingAddress="matMenu">
                                         <div class="mat-menu-width-large  vouchers-address-menu">
@@ -235,8 +237,8 @@
 
                             <!-- Attention to -->
                             <div class="col-6">
-                                <input-field [name]="'attention-to'" [label]="'Attention to'" [placeholder]="'Enter name'"
-                                    [type]="'text'">
+                                <input-field [name]="'attention-to'" [label]="'Attention to'"
+                                    [placeholder]="'Enter name'" [type]="'text'">
                                 </input-field>
                             </div>
 
@@ -249,9 +251,10 @@
 
                             <!-- Mobile Number -->
                             <div class="col-6">
-                                <input-field [name]="'mobile-number'" [type]="'tel'" #initContactProforma class="flag-input"
-                                    [id]="'init-contact-proforma'" (keydown.enter)="$event.preventDefault()"
-                                    [label]="'Mobile Number'" [placeholder]="'98XXXXXXXX'" [floatLabel]="'auto'">
+                                <input-field [name]="'mobile-number'" [type]="'tel'" #initContactProforma
+                                    class="flag-input" [id]="'init-contact-proforma'"
+                                    (keydown.enter)="$event.preventDefault()" [label]="'Mobile Number'"
+                                    [placeholder]="'98XXXXXXXX'" [floatLabel]="'auto'">
                                 </input-field>
                                 <span id="init-contact-proforma-valid-msg" class="d-none"></span>
                                 <span id="init-contact-proforma-error-msg" class="d-none"></span>
@@ -261,7 +264,8 @@
                             <div class="col-6"
                                 *ngIf="invoiceType.isSalesInvoice || invoiceType.isCashInvoice || invoiceType.isPurchaseOrder">
                                 <dropdown-field [label]="'Warehouse'" [placeholder]="'Select warehouse'"
-                                    [options]="dummyOptions" (selectedOption)="selectDropdown($event)" [defaultValue]="''">
+                                    [options]="dummyOptions" (selectedOption)="selectDropdown($event)"
+                                    [defaultValue]="''">
                                 </dropdown-field>
                             </div>
                         </div>
@@ -275,7 +279,7 @@
                             <!-- Billing Address -->
                             <div class="col-6">
                                 <label for="billingAddress" class="billing-label">Billing Address</label> <i
-                                    class="icon-edit color-primary cursor-pointer pl-2 font-12"></i>
+                                    class="icon-edit text-blue cursor-pointer pl-2 font-12"></i>
                                 <div *ngIf="!invoiceType.isCashInvoice" class="mt-2">Address 1 </div>
 
                                 <div class="vouchers-address-form" *ngIf="invoiceType.isCashInvoice">
@@ -310,7 +314,7 @@
                                 <ng-container *ngIf="!invoiceType.isCashInvoice">
                                     <label for="billingAddress" class="billing-label">Shipping Address</label> <i
                                         [matMenuTriggerFor]="shippingAddress"
-                                        class="icon-edit color-primary cursor-pointer pl-2 font-12"></i>
+                                        class="icon-edit text-blue cursor-pointer pl-2 font-12"></i>
 
                                     <mat-menu #shippingAddress="matMenu">
                                         <div class="mat-menu-width-large  vouchers-address-menu">
@@ -417,8 +421,8 @@
 
                             <!-- Order # -->
                             <div class="col-6" *ngIf="invoiceType.isPurchaseOrder">
-                                <input-field [name]="'vouchers-number'" [label]="'Order #'" [placeholder]="'Enter order #'"
-                                    [type]="'text'">
+                                <input-field [name]="'vouchers-number'" [label]="'Order #'"
+                                    [placeholder]="'Enter order #'" [type]="'text'">
                                 </input-field>
                             </div>
 
@@ -472,9 +476,9 @@
 
                             <!-- Due Date -->
                             <div class="col-3" *ngIf="invoiceType.isSalesInvoice || invoiceType.isPurchaseInvoice">
-                                <giddh-datepicker type="text" (keydown.enter)="$event.preventDefault()" [label]="'Due Date'"
-                                    [placeholder]="'DDMMYYYY'" name="voucherDueDate" [showToggleIcon]="false"
-                                    [appearance]="'outline'">
+                                <giddh-datepicker type="text" (keydown.enter)="$event.preventDefault()"
+                                    [label]="'Due Date'" [placeholder]="'DDMMYYYY'" name="voucherDueDate"
+                                    [showToggleIcon]="false" [appearance]="'outline'">
                                 </giddh-datepicker>
                             </div>
 
@@ -496,8 +500,8 @@
                             <div class="currency-input-wrapper">
                                 <text-field [cssClass]="'form-control'" [type]="'number'"></text-field>
                             </div>
-                            <i class="icon-edit color-primary cursor-pointer"></i>
-                            <i class="icon-save color-primary cursor-pointer"></i>
+                            <i class="icon-edit text-blue cursor-pointer"></i>
+                            <i class="icon-save text-blue cursor-pointer"></i>
                         </div>
 
                         <!-- Voucher Grid for Multiple Entries-->
@@ -575,8 +579,7 @@
                             <!-- Product/Service Description -->
                             <div class="body-item text-left">
                                 <select-field [cssClass]="'form-control'" [name]="'account'"
-                                    [placeholder]="'Select account'" [options]="dummyOptions"
-                                    [defaultValue]="''"
+                                    [placeholder]="'Select account'" [options]="dummyOptions" [defaultValue]="''"
                                     [enableDynamicSearch]="true" (dynamicSearchedQuery)="searchStock($event, 1)">
                                 </select-field>
 
@@ -589,14 +592,14 @@
                                         <div class="mt-2 font-12">
                                             <span>Entry Date</span>
                                             <div class="mt-1">22-01-2024 <i
-                                                    class="icon-edit color-primary cursor-pointer"></i>
+                                                    class="icon-edit text-blue cursor-pointer"></i>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="w-50 text-right">
                                         <div class="mt-2 font-12">
                                             <span>SAC:</span>
-                                            <div class="mt-1">Update <i class="icon-edit color-primary cursor-pointer"
+                                            <div class="mt-1">Update <i class="icon-edit text-blue cursor-pointer"
                                                     [matMenuTriggerFor]="update"></i></div>
 
                                             <!-- Update Menu  -->
@@ -641,35 +644,40 @@
 
                             <!-- Rate -->
                             <div class="body-item">
-                                <text-field [placeholder]="'Enter'" [cssClass]="'form-control text-right'" [type]="'text'">
+                                <text-field [placeholder]="'Enter'" [cssClass]="'form-control text-right'"
+                                    [type]="'text'">
                                 </text-field>
                             </div>
 
                             <!-- Amount -->
                             <div class="body-item">
-                                <text-field [placeholder]="'Enter'" [cssClass]="'form-control text-right'" [type]="'text'">
+                                <text-field [placeholder]="'Enter'" [cssClass]="'form-control text-right'"
+                                    [type]="'text'">
                                 </text-field>
                             </div>
 
                             <!-- Discount -->
                             <div class="body-item">
                                 <!-- Discount control component -->
-                                <text-field [placeholder]="'Enter'" [cssClass]="'form-control text-right'" [type]="'text'">
+                                <text-field [placeholder]="'Enter'" [cssClass]="'form-control text-right'"
+                                    [type]="'text'">
                                 </text-field>
                             </div>
 
                             <!-- Tax -->
                             <div class="body-item">
                                 <!-- tax-control component -->
-                                <text-field [placeholder]="'Enter'" [cssClass]="'form-control text-right'" [type]="'text'">
+                                <text-field [placeholder]="'Enter'" [cssClass]="'form-control text-right'"
+                                    [type]="'text'">
                                 </text-field>
                             </div>
 
                             <!-- Total -->
                             <div class="body-item">
-                                <text-field [placeholder]="'Enter'" [cssClass]="'form-control text-right'" [type]="'text'">
+                                <text-field [placeholder]="'Enter'" [cssClass]="'form-control text-right'"
+                                    [type]="'text'">
                                 </text-field>
-                                <div class="d-flex align-items-center">
+                                <div class="d-flex align-items-center" (click)="openBulkEntryDialog('othertax')">
                                     <mat-checkbox type="checkbox" color="primary">
                                     </mat-checkbox>
                                     Other Tax?
@@ -682,9 +690,9 @@
                             </div>
                         </div>
                         <!-- Add new grid row/line -->
-                        <div class="font-12 color-primary mt-2 px-2">
-                            <span class="cursor-pointer">+ Add New Line</span> <span class="grey-color px-2">|</span> <span
-                                class="cursor-pointer" (click)="openBulkEntryDialog()">+ Add Bulk Entries</span>
+                        <div class="font-12 text-blue mt-2 px-2">
+                            <span class="cursor-pointer">+ Add New Line</span> <span class="grey-color px-2">|</span>
+                            <span class="cursor-pointer" (click)="openBulkEntryDialog()">+ Add Bulk Entries</span>
                         </div>
 
                         <div class="vouchers-other-detail container-lg mt-4 px-0">
@@ -715,7 +723,8 @@
                                                                 </input-field>
                                                             </div>
                                                             <div class="col-4 px-2">
-                                                                <input-field [type]="'text'" [placeholder]="'Tracking No.'">
+                                                                <input-field [type]="'text'"
+                                                                    [placeholder]="'Tracking No.'">
                                                                 </input-field>
                                                             </div>
                                                             <div class="col-4 px-2">
@@ -736,7 +745,8 @@
                                                             <div class="col-12 px-2">
                                                                 <mat-form-field class="w-100" appearance="outline">
                                                                     <mat-label>Note</mat-label>
-                                                                    <textarea matInput placeholder="Enter Note"></textarea>
+                                                                    <textarea matInput
+                                                                        placeholder="Enter Note"></textarea>
                                                                 </mat-form-field>
                                                             </div>
                                                         </div>
@@ -775,7 +785,7 @@
                                                                     <div class="d-flex align-items-center column-gap1">
                                                                         <span>Adjust Amount</span>
                                                                         <span class="text-gray">00.00</span>
-                                                                        <i class="icon-edit color-primary font-12"></i>
+                                                                        <i class="icon-edit text-blue font-12"></i>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -803,12 +813,15 @@
                                             <div class="col-12 mt-3">
                                                 <mat-card>
                                                     <mat-card-content class="py-0">
-                                                        <div class="vouchers-attachment d-flex align-items-center column-gap1 text-success">
+                                                        <div
+                                                            class="vouchers-attachment d-flex align-items-center column-gap1 text-success">
                                                             <div class="attachment-add-icon">
                                                                 <i class="icon-tick"></i>
                                                             </div>
-                                                            <span class="attachment-placeholder">Screenshot 2024-01-22 at 2.57.42 PM.png</span>
-                                                            <button mat-icon-button class="ml-auto remove-attachment font-16">
+                                                            <span class="attachment-placeholder">Screenshot 2024-01-22
+                                                                at 2.57.42 PM.png</span>
+                                                            <button mat-icon-button
+                                                                class="ml-auto remove-attachment font-16">
                                                                 <i class="icon-cross"></i>
                                                             </button>
                                                         </div>
@@ -878,7 +891,12 @@
                             <button mat-stroked-button color="primary"> Generate Credit Note </button>
 
                             <button mat-stroked-button color="primary"> Save </button>
-                            <button mat-stroked-button> <i class="caret"></i> </button>
+                            <button mat-stroked-button [matMenuTriggerFor]="moreOptions" class="vouchers-more-option-btn"> <i class="caret"></i>
+                            </button>
+                            <mat-menu #moreOptions="matMenu">
+                                <button mat-menu-item>Create & Send</button>
+                                <button mat-menu-item>Create & Print</button>
+                            </mat-menu>
                         </div>
                     </div>
 

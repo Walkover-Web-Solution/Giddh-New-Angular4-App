@@ -23,6 +23,7 @@ import { BriedAccountsGroup, SearchType, VoucherTypeEnum, OptionInterface } from
 import { SearchService } from "../../services/search.service";
 import { MatDialog } from "@angular/material/dialog";
 import { AddBulkItemsComponent } from "../../theme/add-bulk-items/add-bulk-items.component";
+import { OtherTaxComponent } from "../../theme/other-tax/other-tax.component";
 
 @Component({
     selector: "create",
@@ -518,10 +519,20 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
         });
     }
 
-    public openBulkEntryDialog(): void {
-        let bulkEntryDialogRef = this.dialog.open(AddBulkItemsComponent);
+    public openBulkEntryDialog(input: string = ''): void {
+        let dialogRef
+        if(input === 'othertax'){
+            dialogRef = this.dialog.open(OtherTaxComponent, {
+                position: {
+                    top: '0',
+                    right: '0'
+                }
+            });
+        } else {
+            dialogRef = this.dialog.open(AddBulkItemsComponent);
+        }
 
-        bulkEntryDialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response) {
                console.log("Close with true");
             } else {

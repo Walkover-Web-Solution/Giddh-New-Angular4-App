@@ -66,7 +66,13 @@
             }
     }
         
-    
+    .vouchers-actions{
+        .vouchers-more-option-btn{
+            .caret{
+                transform: rotate(180deg);
+            }
+        }
+    }
 }
 .mat-menu-width-large{
     min-width: 400px;
