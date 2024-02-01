@@ -46,6 +46,7 @@ import { VoucherNameModule } from "./utility/pipe/voucher-name/voucher-name.modu
 import { VoucherCopyLinkModule } from "./utility/pipe/voucher-copy-link/voucher-copy-link.module";
 import { TaxDropdownModule } from "../theme/tax-dropdown/tax-dropdown.module";
 import { DiscountDropdownModule } from "../theme/discount-dropdown/discount-dropdown.module";
+import { PrintVoucherComponent } from "./print-voucher/print-voucher.component";
 
 @NgModule({
     declarations: [
@@ -59,7 +60,8 @@ import { DiscountDropdownModule } from "../theme/discount-dropdown/discount-drop
         AdjustPaymentDialogComponent,
         BulkUpdateComponent,
         HistoryDialogComponent,
-        EmailSendDialogComponent
+        EmailSendDialogComponent,
+        PrintVoucherComponent
     ],
     imports: [
         CommonModule,

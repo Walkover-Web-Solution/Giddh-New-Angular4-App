@@ -25,6 +25,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { AddBulkItemsComponent } from "../../theme/add-bulk-items/add-bulk-items.component";
 import { OtherTaxComponent } from "../../theme/other-tax/other-tax.component";
 import { LastInvoices, OptionInterface } from "../../models/api-models/Voucher";
+import { PrintVoucherComponent } from "../print-voucher/print-voucher.component";
 
 @Component({
     selector: "create",
@@ -615,6 +616,13 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
             } else {
                 console.log("Close with false");
             }
+        });
+    }
+
+    public openPrintPreviewDialog(): void {
+        this.dialog.open(PrintVoucherComponent, {
+            width: '60vw',
+            height: '80vh'
         });
     }
 

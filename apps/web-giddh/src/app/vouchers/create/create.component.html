@@ -814,7 +814,7 @@
                             </button>
                             <mat-menu #moreOptions="matMenu">
                                 <button mat-menu-item>Create & Send</button>
-                                <button mat-menu-item>Create & Print</button>
+                                <button mat-menu-item (click)="openPrintPreviewDialog()">Create & Print</button>
                             </mat-menu>
                         </div>
                     </div>
