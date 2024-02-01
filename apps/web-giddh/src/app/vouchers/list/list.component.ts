@@ -7,6 +7,8 @@ import { MatSort } from "@angular/material/sort";
 import { NewConfirmationModalComponent } from "../../theme/new-confirmation-modal/confirmation-modal.component";
 import { ConfirmationModalConfiguration } from "../../theme/confirmation-modal/confirmation-modal.interface";
 import { GeneralService } from "../../services/general.service";
+import { TemplatePreviewDialogComponent } from "../template-preview-dialog/template-preview-dialog.component";
+import { TemplateEditDialogComponent } from "../template-edit-dialog/template-edit-dialog.component";
 
 // invoice-table
 export interface PeriodicElement {
@@ -207,6 +209,18 @@ export class VoucherListComponent implements OnInit, OnDestroy, AfterViewInit {
             data: {
                 configuration: this.InvoiceConfirmationConfiguration
             }
+        });
+    }
+    // template dialog
+    public templateDialog():void {
+        this.dialog.open(TemplatePreviewDialogComponent, {
+            width: '980px'
+        });
+    }
+    // template edit dialog
+    public templateEdit():void {
+        this.dialog.open(TemplateEditDialogComponent, {
+            width: '100%'
         });
     }
 
