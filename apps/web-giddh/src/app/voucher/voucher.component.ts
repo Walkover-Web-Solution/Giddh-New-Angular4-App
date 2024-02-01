@@ -1919,14 +1919,13 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
     public makeCustomerList() {
         if (!(this.invoiceType === VoucherTypeEnum.debitNote || this.invoiceType === VoucherTypeEnum.purchase)) {
-            this.customerAcList$ = observableOf(orderBy(this.sundryDebtorsAcList, 'label'));
-
-            this.salesAccounts$ = observableOf(orderBy(this.prdSerAcListForDeb, 'label'));
+            this.customerAcList$ = observableOf(this.sundryDebtorsAcList);
+            this.salesAccounts$ = observableOf(this.prdSerAcListForDeb);
             this.selectedGrpUniqueNameForAddEditAccountModal = 'sundrydebtors';
         } else {
             this.selectedGrpUniqueNameForAddEditAccountModal = 'sundrycreditors';
-            this.customerAcList$ = observableOf(orderBy(this.sundryCreditorsAcList, 'label'));
-            this.salesAccounts$ = observableOf(orderBy(this.prdSerAcListForCred, 'label'));
+            this.customerAcList$ = observableOf(this.sundryCreditorsAcList);
+            this.salesAccounts$ = observableOf(this.prdSerAcListForCred);
         }
     }
 
@@ -6539,8 +6538,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     private handleGenerateResponse(response: BaseResponse<any, GenericRequestForGenerateSCD | PurchaseRecordRequest>, form: NgForm): void {
         this.store.dispatch(this.salesAction.resetAccountDetailsForSales());
         if (response?.status === 'success') {
-            this.customerAcList$ = observableOf(orderBy(this.defaultCustomerSuggestions, 'label'));
-            this.salesAccounts$ = observableOf(orderBy(this.defaultItemSuggestions, 'label'));
+            this.customerAcList$ = observableOf(this.defaultCustomerSuggestions);
+            this.salesAccounts$ = observableOf(this.defaultItemSuggestions);
             // reset form and other
             this.resetInvoiceForm(form);
 
