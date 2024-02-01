@@ -2474,8 +2474,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                 this.isFormSaveInProgress = false;
                 this.toaster.clearAllToaster();
                 if (response && response.status === "success") {
-                    this.vendorAcList$ = observableOf(_.orderBy(this.defaultVendorSuggestions, 'label'));
-                    this.salesAccounts$ = observableOf(_.orderBy(this.defaultItemSuggestions, 'label'));
+                    this.vendorAcList$ = observableOf(this.defaultVendorSuggestions);
+                    this.salesAccounts$ = observableOf(this.defaultItemSuggestions);
                     this.resetForm();
 
                     let poCreated = this.localeData?.po_created;
@@ -3659,9 +3659,9 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
      */
     private assignSearchResultToList(searchType: string): void {
         if (searchType === SEARCH_TYPE.VENDOR) {
-            this.vendorAcList$ = observableOf(_.orderBy(this.searchResults, 'label'));
+            this.vendorAcList$ = observableOf(this.searchResults);
         } else if (searchType === SEARCH_TYPE.ITEM) {
-            this.salesAccounts$ = observableOf(_.orderBy(this.searchResults, 'label'));
+            this.salesAccounts$ = observableOf(this.searchResults);
         }
     }
 
