@@ -18,7 +18,7 @@
                     <div class="row">
                         <div class="col-10">
                             <div class="d-flex align-items-center">
-                                <div class="vouchers-form-fields w-100">
+                                <div class="vouchers-form-fields w-100" [keyboardShortcut]="'alt+c'" (onShortcutPress)="toggleAccountAsidePane()">
                                     <reactive-dropdown-field *ngIf="!invoiceType.isCashInvoice" [label]="invoiceType.isPurchaseInvoice || invoiceType.isDebitNote ? localeData?.vendor_name : localeData?.customer_name" [placeholder]="invoiceType.isPurchaseInvoice || invoiceType.isDebitNote ? localeData?.select_vendor : localeData?.select_customer" formControlName="uniqueName" [name]="'account'"
                                         [options]="voucherAccountResults$ | async" [showCreateNew]="true" [enableDynamicSearch]="true" [isPaginationEnabled]="true" [openDropdown]="openAccountDropdown" [createNewText]="!invoiceType.isPurchaseInvoice && !invoiceType.isDebitNote ? localeData?.add_customer : localeData?.add_vendor" [labelValue]="invoiceForm.controls['account'].get('customerName')?.value" (scrollEnd)="handleSearchAccountScrollEnd()" (selectedOption)="selectAccount($event)"
                                         (dynamicSearchedQuery)="searchAccount($event, 1)" (onClear)="selectAccount($event, true)" (createOption)="toggleAccountAsidePane()">
@@ -596,7 +596,7 @@
                                 <text-field [placeholder]="'Enter'" [cssClass]="'form-control text-right'"
                                     [type]="'text'">
                                 </text-field>
-                                <div class="d-flex align-items-center" (click)="openBulkEntryDialog('othertax')">
+                                <div class="d-flex align-items-center" (click)="openOtherTaxDialog()">
                                     <mat-checkbox type="checkbox" color="primary">
                                     </mat-checkbox>
                                     Other Tax?

@@ -796,6 +796,20 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
     private initVoucherForm(): void {
         this.invoiceForm = this.formBuilder.group({
             account: this.getAccountFormGroup(),
+            date: ['', Validators.required],
+            dueDate: ['', Validators.required],
+            exchangeRate: [1, Validators.required],
+            number: [''],
+            roundOffApplicable: [true],
+            type: ['', Validators.required],
+            updateAccountDetails: [false],
+            subVoucher: [''],
+            deposit: this.getDepositFormGroup(),
+            warehouse: this.getWarehouseFormGroup(),
+            templateDetails: this.formBuilder.group({
+                other: this.getTemplateDetailsFormGroup()
+            }),
+            entries: this.getEntriesFormGroup(),
             uniqueName: ['']
         });
     }
@@ -832,41 +846,102 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
             address: [''],
             pincode: [''],
             taxNumber: [''],
-            state: this.getStateFormGroup()
+            state: this.formBuilder.group({
+                code: ['']
+            })
         });
     }
 
     /**
-     * Returns state form group
+     * Returns deposit form group
      *
      * @private
      * @return {*}  {UntypedFormGroup}
      * @memberof VoucherCreateComponent
      */
-    private getStateFormGroup(): UntypedFormGroup {
+    private getDepositFormGroup(): UntypedFormGroup {
         return this.formBuilder.group({
-            code: [''],
+            accountUniqueName: [''],
+            amountForCompany: [''],
+            type: ['DEBIT']
+        });
+    }
+
+    /**
+     * Returns warehouse form group
+     *
+     * @private
+     * @return {*}  {UntypedFormGroup}
+     * @memberof VoucherCreateComponent
+     */
+    private getWarehouseFormGroup(): UntypedFormGroup {
+        return this.formBuilder.group({
+            name: [''],
+            uniqueName: ['']
+        });
+    }
+
+    /**
+     * Returns template details form group
+     *
+     * @private
+     * @return {*}  {UntypedFormGroup}
+     * @memberof VoucherCreateComponent
+     */
+    private getTemplateDetailsFormGroup(): UntypedFormGroup {
+        return this.formBuilder.group({
+            customField1: [''],
+            customField2: [''],
+            customField3: [''],
+            message2: [''],
+            shippedVia: [''],
+            shippingDate: [''],
+            trackingNumber: ['']
+        });
+    }
+
+    /**
+     * Returns entries form group
+     *
+     * @private
+     * @return {*}  {UntypedFormGroup}
+     * @memberof VoucherCreateComponent
+     */
+    private getEntriesFormGroup(): UntypedFormGroup {
+        return this.formBuilder.group({
+            date: [''],
+            voucherType: ['']
         });
     }
 
     /**
      * Opens bulk entry dialog
      *
-     * @param {string} [input='']
      * @memberof VoucherCreateComponent
      */
-    public openBulkEntryDialog(input: string = ''): void {
-        let dialogRef
-        if (input === 'othertax') {
-            dialogRef = this.dialog.open(OtherTaxComponent, {
-                position: {
-                    top: '0',
-                    right: '0'
-                }
-            });
-        } else {
-            dialogRef = this.dialog.open(AddBulkItemsComponent);
-        }
+    public openBulkEntryDialog(): void {
+        const dialogRef = this.dialog.open(AddBulkItemsComponent);
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            if (response) {
+                console.log("Close with true");
+            } else {
+                console.log("Close with false");
+            }
+        });
+    }
+
+    /**
+     * Opens other tax dialog
+     *
+     * @memberof VoucherCreateComponent
+     */
+    public openOtherTaxDialog(): void {
+        let dialogRef = this.dialog.open(OtherTaxComponent, {
+            position: {
+                top: '0',
+                right: '0'
+            }
+        });
 
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response) {
