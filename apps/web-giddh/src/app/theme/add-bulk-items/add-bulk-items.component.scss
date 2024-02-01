@@ -1,0 +1,79 @@
+.bulk-entry {
+    $height: 85vh;
+    width: 1200px;
+    max-width: 80vw;
+    height: $height;
+
+    .bulk-entry-header {
+        background-color: var(--color-primary-header-background);
+        color: var(--color-popup-list-head-text);
+        height: 60px;
+    }
+
+    .bulk-entry-body {
+        padding: 16px;
+
+        .bulk-entry-list {
+            border-right: 1px solid var(--color-common-primary-border);
+            padding-right: 16px;
+
+            .list-wrapper {
+                .list-viewport {
+                    height: calc(#{$height} - 154.5px);
+                }
+
+                .list-item {
+                    min-height: 40px;
+
+                    &:hover {
+                        background-color: var(--color-table-row-hover-secondary-background);
+                    }
+                }
+            }
+
+        }
+
+        .bulk-entry-selected-items {
+                padding: 0 16px;
+
+                .selected-item-title, .selected-item-action {
+                    height: 52px;
+                }
+                .selected-item-title {
+                    line-height: 52px;
+                }
+                .selected-item-action {
+                    padding-top: 10px;
+                }
+            
+            .selected-item-wrapper {
+                overflow-y: auto;
+                padding-top: 10px;
+                padding-bottom: 10px;
+                height: calc(#{$height} - 196px);
+                border-top: 1px solid var(--color-common-primary-border);
+                border-bottom: 1px solid var(--color-common-primary-border);
+
+                mat-list-item{
+                    height: auto;
+                    min-height: 48px;
+
+                    p{
+                        width: 85%;
+                        white-space: normal;
+                        word-break: break-all;
+                        line-height: 18px;
+                    }
+                }
+
+                button{
+                    width: 0;
+                    min-width: 36px;
+                    height: 36px;
+                    padding-top: 4px;
+                }
+            }
+
+        }
+    }
+}

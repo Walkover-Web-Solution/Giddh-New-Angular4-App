@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { VoucherComponentStore } from "../utility/vouchers.store";
 import { AppState } from "../../store";
 import { Store } from "@ngrx/store";
-import { Observable, ReplaySubject, delay, of, takeUntil } from "rxjs";
+import { Observable, ReplaySubject, delay, of, take, takeUntil } from "rxjs";
 import { GeneralService } from "../../services/general.service";
 import { OnboardingFormRequest } from "../../models/api-models/Common";
 import { CommonActions } from "../../actions/common.actions";
@@ -13,14 +13,18 @@ import { WarehouseActions } from "../../settings/warehouse/action/warehouse.acti
 import { SettingsUtilityService } from "../../settings/services/settings-utility.service";
 import { SettingsBranchActions } from "../../actions/settings/branch/settings.branch.action";
 import { OrganizationType } from "../../models/user-login-state";
-import { PreviousInvoicesVm, ProformaFilter, ProformaResponse } from "../../models/api-models/proforma";
+import { ProformaFilter, ProformaResponse } from "../../models/api-models/proforma";
 import { InvoiceReceiptFilter, ReciptResponse } from "../../models/api-models/recipt";
 import { VouchersUtilityService } from "../utility/vouchers.utility.service";
 import { FormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 import { GIDDH_DATE_FORMAT } from "../../shared/helpers/defaultDateFormat";
 import * as dayjs from "dayjs";
-import { BriedAccountsGroup, SearchType, VoucherTypeEnum, OptionInterface } from "../utility/vouchers.const";
+import { BriedAccountsGroup, SearchType, VoucherTypeEnum } from "../utility/vouchers.const";
 import { SearchService } from "../../services/search.service";
+import { MatDialog } from "@angular/material/dialog";
+import { AddBulkItemsComponent } from "../../theme/add-bulk-items/add-bulk-items.component";
+import { OtherTaxComponent } from "../../theme/other-tax/other-tax.component";
+import { LastInvoices, OptionInterface } from "../../models/api-models/Voucher";
 
 @Component({
     selector: "create",
@@ -65,8 +69,14 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
     public exchangeRate$: Observable<any> = this.componentStore.exchangeRate$;
     /** Brief accounts Observable */
     public briefAccounts$: Observable<any> = this.componentStore.briefAccounts$;
+    /** Account details Observable */
+    public accountDetails$: Observable<any> = this.componentStore.accountDetails$;
+    /** Country data Observable */
+    public countryData$: Observable<any> = this.componentStore.countryData$;
     /** Holds boolean of TCS/TDS Applicable Observable */
     public isTcsTdsApplicable$: Observable<any> = this.componentStore.isTcsTdsApplicable$;
+    /** Last vouchers get in progress Observable */
+    public getLastVouchersInProgress$: Observable<any> = this.componentStore.getLastVouchersInProgress$;
     /** Account search request */
     public accountSearchRequest: any;
     public dummyOptions: any[] = [
@@ -138,7 +148,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
         showNotesAtLastPage: false
     };
     /** Holds list of last vouchers */
-    public lastVouchers: PreviousInvoicesVm[] = [];
+    public lastVouchersList$: Observable<LastInvoices[]> = of(null);
     /** Form Group for invoice form */
     public invoiceForm: UntypedFormGroup;
     /** This will open account dropdown by default */
@@ -147,6 +157,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** True if warehouse field will be visible */
+    public showWarehouse: boolean = false;
+    /** Holds account state list */
+    public accountStateList$: Observable<OptionInterface[]> = of(null);
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -161,7 +175,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
         private settingsUtilityService: SettingsUtilityService,
         private settingsBranchAction: SettingsBranchActions,
         private formBuilder: FormBuilder,
-        private searchService: SearchService
+        private searchService: SearchService,
+        private dialog: MatDialog
     ) {
 
     }
@@ -176,6 +191,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
                 /** Open account dropdown on create */
                 if (!params?.uniqueName) {
                     this.openAccountDropdown = true;
+                } else {
+                    this.invoiceForm.get('uniqueName').patchValue(params?.uniqueName);
                 }
 
                 this.getVoucherType();
@@ -192,6 +209,24 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
                 this.getCompanyBranches();
                 this.getCreatedTemplates();
                 this.getBriefAccounts();
+            }
+        });
+
+        this.accountDetails$.subscribe(response => {
+            if (response) {
+                console.log(response);
+                this.account = {
+                    countryName: response.country?.countryName,
+                    countryCode: response.country?.countryCode,
+                    baseCurrency: response.currency,
+                    baseCurrencySymbol: response.currencySymbol
+                }
+            }
+        });
+
+        this.countryData$.subscribe(response => {
+            if (response) {
+                this.accountStateList$ = of(response?.stateList?.map(res => { return { label: res.name, value: res.code } }));
             }
         });
     }
@@ -248,7 +283,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
 
     private getCompanyProfile(): void {
         this.companyProfile$.subscribe(profile => {
-            if (profile && Object.keys(profile).length) {
+            if (profile && Object.keys(profile).length && !this.company?.countryName) {
                 this.company.countryName = profile.country;
                 this.company.countryCode = profile.countryCode || profile.countryV2.alpha2CountryCode;
                 this.company.baseCurrency = profile.baseCurrency;
@@ -256,6 +291,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
                 this.company.inputMaskFormat = profile.balanceDisplayFormat?.toLowerCase() || '';
 
                 this.showTaxTypeByCountry(this.company.countryCode);
+
+                if (this.invoiceType.isCashInvoice) {
+                    this.getCountryData(this.company.countryCode);
+                }
             }
         });
     }
@@ -313,6 +352,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
                 let warehouseResults = response.results?.filter(wh => !wh.isArchived);
                 const warehouseData = this.settingsUtilityService.getFormattedWarehouseData(warehouseResults);
                 this.warehouses = warehouseData.formattedWarehouses;
+
+                this.showWarehouse = true;
             }
         });
     }
@@ -339,13 +380,15 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
     public getPreviousVouchers(): void {
         this.lastVouchers$.subscribe(response => {
             if (response) {
-                const lastVouchers: PreviousInvoicesVm[] = [];
+                const lastVouchers: LastInvoices[] = [];
                 if (!this.invoiceType.isProformaInvoice && !this.invoiceType.isEstimateInvoice) {
                     if (response) {
                         response = response as ReciptResponse;
                         response?.items.forEach(item => {
                             lastVouchers.push({
-                                versionNumber: item.voucherNumber, date: item.voucherDate, grandTotal: item.grandTotal,
+                                voucherNumber: item.voucherNumber, 
+                                date: item.voucherDate, 
+                                grandTotal: item.grandTotal,
                                 account: { name: item.account?.name, uniqueName: item.account?.uniqueName },
                                 uniqueName: item?.uniqueName
                             });
@@ -357,7 +400,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
                         if (response && response.items) {
                             response.items.forEach(item => {
                                 lastVouchers.push({
-                                    versionNumber: this.invoiceType.isProformaInvoice ? item.proformaNumber : item.estimateNumber,
+                                    voucherNumber: this.invoiceType.isProformaInvoice ? item.proformaNumber : item.estimateNumber,
                                     date: item.voucherDate,
                                     grandTotal: item.grandTotal,
                                     account: { name: item.customerName, uniqueName: item.customerUniqueName },
@@ -367,7 +410,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
                         }
                     }
                 }
-                this.lastVouchers = [...lastVouchers];
+                this.lastVouchersList$ = of([...lastVouchers]);
             } else {
                 if (this.invoiceType.isProformaInvoice || this.invoiceType.isEstimateInvoice) {
                     let filterRequest: ProformaFilter = new ProformaFilter();
@@ -487,6 +530,14 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
         });
     }
 
+    private getAccountDetails(accountUniqueName: string): void {
+        this.componentStore.getAccountDetails(accountUniqueName);
+    }
+
+    private getCountryData(countryCode: string): void {
+        this.componentStore.getCountryStates(countryCode);
+    }
+
     public handleSearchAccountScrollEnd(): void {
         if (this.accountSearchRequest.loadMore) {
             let page = this.accountSearchRequest.page;
@@ -497,21 +548,73 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
 
     public selectAccount(event: any, isClear: boolean = false): void {
         if (isClear) {
-            this.invoiceForm.get("account")?.patchValue("");
+            this.invoiceForm.reset();
         } else {
-
+            this.invoiceForm.controls["account"].get("customerName")?.patchValue(event?.label);
+            this.getAccountDetails(event?.value);
         }
     }
 
     public translationComplete(event: any): void {
         if (event) {
-
+            
         }
     }
 
     private initVoucherForm(): void {
         this.invoiceForm = this.formBuilder.group({
-            account: ['', Validators.required]
+            account: this.getAccountFormGroup(),
+            uniqueName: ['']
+        });
+    }
+
+    private getAccountFormGroup(): UntypedFormGroup {
+        return this.formBuilder.group({
+            customerName: [''],
+            uniqueName: ['', Validators.required],
+            attentionTo: [''],
+            contactNumber: [''],
+            mobileNumber: [''],
+            email: [''],
+            billingAddress: this.getAddressFormGroup(),
+            shippingAddress: this.getAddressFormGroup()
+        });
+    }
+
+    private getAddressFormGroup(): UntypedFormGroup {
+        return this.formBuilder.group({
+            address: [''],
+            pincode: [''],
+            taxNumber: [''],
+            state: this.getStateFormGroup()
+        });
+    }
+
+    private getStateFormGroup(): UntypedFormGroup {
+        return this.formBuilder.group({
+            code: [''],
+        });
+    }
+
+    public openBulkEntryDialog(input: string = ''): void {
+        let dialogRef
+        if(input === 'othertax'){
+            dialogRef = this.dialog.open(OtherTaxComponent, {
+                position: {
+                    top: '0',
+                    right: '0'
+                }
+            });
+        } else {
+            dialogRef = this.dialog.open(AddBulkItemsComponent);
+        }
+
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            if (response) {
+               console.log("Close with true");
+            } else {
+                console.log("Close with false");
+            }
         });
     }
 

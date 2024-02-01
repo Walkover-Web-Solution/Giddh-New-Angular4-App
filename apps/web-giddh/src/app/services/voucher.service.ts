@@ -156,4 +156,12 @@ export class VoucherService {
         url = this.generalService.createQueryString(url, params);
         return this.http.get(url);
     }
+
+    public getCountryStates(country: string): Observable<any> {
+        let url = this.config.apiUrl + 'country/' + country;
+        return this.http.get(url).pipe(map((res) => {
+            let data = res;
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch(e)));
+    }
 }

@@ -38,10 +38,3 @@ export enum BriedAccountsGroup {
     'V1' = 'cash, bankaccounts',
     'V2' = 'cash, bankaccounts, loanandoverdraft'
 };
-
-export interface OptionInterface {
-    value: string;
-    label: string;
-    disabled?: boolean;
-    additional?: any;
-}

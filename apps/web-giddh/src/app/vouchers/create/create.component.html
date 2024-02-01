@@ -1,55 +1,47 @@
-<ng-container
-    appTranslate
-    [file]="'proforma-invoice'"
-    (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event"
-    (translationComplete)="translationComplete($event)"
->
+<ng-container appTranslate [file]="'proforma-invoice'" (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
     <hamburger-menu></hamburger-menu>
     <div class="vouchers">
         <!-- Voucher Page Heading -->
         <div class="vouchers-title d-flex align-items-center container-lg">
-            <h1 *ngIf="invoiceType.isSalesInvoice">Sales</h1>
-            <h1 *ngIf="invoiceType.isCashInvoice">Cash</h1>
-            <h1 *ngIf="invoiceType.isPurchaseInvoice">Purchase Bill</h1>
-            <h1 *ngIf="invoiceType.isPurchaseOrder">Purchase Order</h1>
-            <ng-container *ngIf="invoiceType.isSalesInvoice || invoiceType.isCashInvoice">
-                <div class="ml-auto">
-                    <!-- Video link for  Sales Invoice -->
-                    <watch-video *ngIf="invoiceType.isSalesInvoice" [cssClass]="'text-primary'"
-                        [moduleName]="'VOUCHER_SALES'"></watch-video>
-                    <!-- Video link for Cash Invoice -->
-                    <watch-video *ngIf="invoiceType.isCashInvoice" [cssClass]="'text-primary'"
-                        [moduleName]="'VOUCHER_CASH'"></watch-video>
-                </div>
-            </ng-container>
+            <h1>{{ voucherType | voucherName: localeData | titlecase }}</h1>
+            <div class="ml-auto" *ngIf="invoiceType.isSalesInvoice || invoiceType.isCashInvoice">
+                <watch-video [cssClass]="'text-blue'"
+                    [moduleName]="invoiceType.isSalesInvoice ? 'VOUCHER_SALES' : 'VOUCHER_CASH'"></watch-video>
+            </div>
         </div>
 
         <div class="vouchers-content-wrapper">
             <form autocomplete="off" novalidate name="invoiceForm" [formGroup]="invoiceForm">
                 <!-- Voucher Form Top Section -->
-                <div class="vouchers-primary-form container-lg">
+                <div class="vouchers-primary-form container-lg" formGroupName="account">
                     <div class="row">
                         <div class="col-10">
                             <div class="d-flex align-items-center">
                                 <div class="vouchers-form-fields w-100">
-                                    <reactive-dropdown-field [label]="'Customer'" [placeholder]="'Select Customer'" formControlName="account" [name]="'account'"
+                                    <reactive-dropdown-field *ngIf="invoiceType.isSalesInvoice" [label]="'Customer'" [placeholder]="'Select Customer'" formControlName="uniqueName" [name]="'account'"
                                         [options]="voucherAccountResults$ | async" [showCreateNew]="true" [enableDynamicSearch]="true" [isPaginationEnabled]="true" [openDropdown]="openAccountDropdown" [createNewText]="!invoiceType.isPurchaseInvoice && !invoiceType.isDebitNote ? localeData?.add_customer : localeData?.add_vendor" (scrollEnd)="handleSearchAccountScrollEnd()" (selectedOption)="selectAccount($event)"
                                         (dynamicSearchedQuery)="searchAccount($event, 1)" (onClear)="selectAccount($event, true)">
                                     </reactive-dropdown-field>
+                                    <input-field *ngIf="invoiceType.isCashInvoice" [name]="'account'" [label]="'Enter customer name'" [placeholder]="'Enter email'" [type]="'text'" formControlName="customerName"></input-field>
                                 </div>
-                                <ng-container *ngIf="invoiceType.isSalesInvoice">
+                                <ng-container *ngIf="invoiceType.isSalesInvoice && invoiceForm.controls['account'].get('uniqueName')?.value">
                                     <div class="vouchers-copy-sales ml-3 cursor-pointer" (click)="getPreviousVouchers()"
                                         [matMenuTriggerFor]="copySales">
                                         <i class="icon-copy-file"></i>
-                                        Copy Previous Sales Invoices
+                                        {{ voucherType | voucherCopyLink: localeData | titlecase }}
                                     </div>
                                     <mat-menu #copySales="matMenu">
                                         <div class="mat-menu-width-large">
-                                            <button mat-menu-item>Item 1</button>
-                                            <button mat-menu-item>Item 2</button>
-                                            <button mat-menu-item>Item 3</button>
-                                            <button mat-menu-item>Item 4</button>
+                                            <ng-container *ngIf="getLastVouchersInProgress$ | async">
+                                                <mat-spinner [diameter]="30"></mat-spinner>
+                                            </ng-container>
+                                            <ng-container *ngIf="(lastVouchersList$ | async)?.length">
+                                                <button mat-menu-item *ngFor="let voucher of lastVouchersList$ | async">{{ voucher?.voucherNumber }}</button>
+                                            </ng-container>
+                                            <ng-container *ngIf="!(lastVouchersList$ | async)?.length && !getLastVouchersInProgress$ | async">
+                                                {{ commonLocaleData?.app_no_result_found }}
+                                            </ng-container>
                                         </div>
                                     </mat-menu>
                                 </ng-container>
@@ -60,13 +52,33 @@
                             <h2>0.00</h2>
                         </div>
                         <div class="col-12">
-                            <span *ngIf="invoiceType.isSalesInvoice" class="vouchers-form-fields-detail cursor-pointer">
-                                {{ invoiceType.isSalesInvoice ? 'Customer Details' : 'Vendor Details'}}</span>
+                            <span *ngIf="!invoiceType.isCashInvoice && !invoiceForm.controls['account'].get('uniqueName')?.value && invoiceForm.controls['account'].get('customerName')?.value" class="vouchers-form-fields-detail cursor-pointer">
+                                {{ !invoiceType.isPurchaseInvoice ? localeData?.customer_details : localeData?.vendor_details}}</span>
 
-                            <img src="/assets/images/new/search_customer.svg" height="70" class="mb-3"
-                                *ngIf="invoiceType.isPurchaseInvoice" />
-                            <img src="/assets/images/new/search-customer-cash-invoice.svg" height="70" class="mb-3"
-                                *ngIf="invoiceType.isCashInvoice" />
+                            <ng-container *ngIf="invoiceType.isSalesInvoice && !invoiceType.isCashInvoice">
+                                <img
+                                    src="{{ imgPath }}new/search_customer.svg"
+                                    height="70"
+                                    class="mb-3"
+                                    *ngIf="!invoiceForm.controls['account'].get('customerName')?.value"
+                                />
+                            </ng-container>
+                            <ng-container *ngIf="invoiceType.isPurchaseInvoice">
+                                <img
+                                    src="{{ imgPath }}new/search-vendor.svg"
+                                    height="70"
+                                    class="mb-3"
+                                    *ngIf="!invoiceForm.controls['account'].get('customerName')?.value"
+                                />
+                            </ng-container>
+                            <ng-container *ngIf="invoiceType.isCashInvoice">
+                                <img
+                                    src="{{ imgPath }}new/search-customer-cash-invoice.svg"
+                                    height="70"
+                                    class="mb-3"
+                                    *ngIf="!invoiceForm.controls['account'].get('customerName')?.value"
+                                />
+                            </ng-container>
 
                             <ng-container *ngIf="invoiceType.isPurchaseOrder">
                                 <div class="mt-2">Pending Purchase order of selected vendor</div>
@@ -77,333 +89,249 @@
                 </div>
 
                 <!-- Voucher Form Main Section -->
-                <!-- TO DISABLE FORM USE CLASS "vouchers-form-disable" -->
                 <div class="vouchers-secondary-form position-relative container-lg"
-                    [ngClass]="{'vouchers-form-disable' : !invoiceForm.get('account')?.value}">
+                    [ngClass]="{'vouchers-form-disable' : !invoiceForm.controls['account'].get('customerName')?.value }">
                     <div class="vouchers-small-container">
-                        <!-- Row 1 -->
-                        <div class="row row-gap">
+                        <ng-container formGroupName="account">
+                            <div class="row row-gap">
+                                <!-- Billing Address -->
+                                <div class="col-12 mr-t15" *ngIf="invoiceType.isPurchaseOrder">
+                                    <span>Deliver From</span>
+                                </div>
+                                <div class="col-6" formGroupName="billingAddress">
+                                    <label for="billingAddress" class="billing-label">Billing Address</label> <i
+                                        *ngIf="!invoiceType.isCashInvoice"
+                                        [matMenuTriggerFor]="billingAddress"
+                                        class="icon-edit text-blue cursor-pointer pl-2 font-12"></i>
 
-                            <!-- Billing Address -->
-                            <div class="col-12 mr-t15" *ngIf="invoiceType.isPurchaseOrder">
-                                <span>Deliver From</span>
-                            </div>
-                            <div class="col-6">
-                                <label for="billingAddress" class="billing-label">Billing Address</label> <i
-                                    [matMenuTriggerFor]="billingAddress"
-                                    class="icon-edit color-primary cursor-pointer pl-2 font-12"></i>
-
-                                <div *ngIf="!invoiceType.isCashInvoice" class="mt-2">Address 1 </div>
-
-                                <mat-menu #billingAddress="matMenu">
-                                    <div class="mat-menu-width-large  vouchers-address-menu">
-                                        <button mat-menu-item>
-                                            <div class="d-flex justify-content-between align-items-center">
-                                                <div>
-                                                    Indore, <p>Madhya Pradesh</p>
+                                    <div *ngIf="!invoiceType.isCashInvoice" class="mt-2">Address 1 </div>
+                                    <mat-menu #billingAddress="matMenu">
+                                        <div class="mat-menu-width-large vouchers-address-menu">
+                                            <button mat-menu-item>
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <div>
+                                                        Indore, <p>Madhya Pradesh</p>
+                                                    </div>
+                                                    <i class="icon-tick"></i>
                                                 </div>
-                                                <i class="icon-tick"></i>
+                                            </button>
+                                            <button mat-menu-item>Item 2</button>
+                                            <button mat-menu-item>Item 3</button>
+                                            <button mat-menu-item class="vouchers-add-new">+ Add new address</button>
+                                        </div>
+                                    </mat-menu>
+                                    <div class="vouchers-address-form" *ngIf="invoiceType.isCashInvoice">
+                                        <div class="address-field">
+                                            <textarea rows="2" matInput class="w-100" id="billingAddress" formControlName="address"></textarea>
+                                        </div>
+                                        <div class="country-field">
+                                            <span>{{ invoiceType?.isCashInvoice ? company?.countryName : account?.countryName }}</span>
+                                        </div>
+                                        <div class="state-field" formGroupName="state">
+                                            <reactive-dropdown-field [cssClass]="'border-0'" formControlName="code" [name]="'billingStateCode'" [label]="'State'" [placeholder]="'Select'" [options]="accountStateList$ | async"></reactive-dropdown-field>
+                                        </div>
+                                        <div class="gstin-field">
+                                            <text-field type="text" [name]="'taxNumber'" [placeholder]="'GSTIN'" [cssClass]="'border-0'" formControlName="taxNumber"></text-field>
+                                        </div>
+                                        <div class="pin-code-field">
+                                            <text-field type="text" [name]="'pincode'" [placeholder]="'PIN Code'" [cssClass]="'border-0'" formControlName="pincode"></text-field>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Shipping Address -->
+                                <div class="col-6" formGroupName="shippingAddress">
+                                    <mat-checkbox type="checkbox" color="primary" *ngIf="invoiceType.isCashInvoice">
+                                        Shipping Address Same as Billing Address
+                                    </mat-checkbox>
+                                    <ng-container *ngIf="!invoiceType.isCashInvoice">
+                                        <label for="billingAddress" class="billing-label">Shipping Address</label> <i
+                                            *ngIf="!invoiceType.isCashInvoice"
+                                            [matMenuTriggerFor]="shippingAddress"
+                                            class="icon-edit text-blue cursor-pointer pl-2 font-12"></i>
+
+                                        <mat-menu #shippingAddress="matMenu">
+                                            <div class="mat-menu-width-large vouchers-address-menu">
+                                                <button mat-menu-item>
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <div>
+                                                            Indore, <p>Madhya Pradesh</p>
+                                                        </div>
+                                                        <i class="icon-tick"></i>
+                                                    </div>
+                                                </button>
+                                                <button mat-menu-item>Item 2</button>
+                                                <button mat-menu-item>Item 3</button>
+                                                <button mat-menu-item class="vouchers-add-new">+ Add new address</button>
                                             </div>
-                                        </button>
-                                        <button mat-menu-item>Item 2</button>
-                                        <button mat-menu-item>Item 3</button>
-                                        <button mat-menu-item>Item 4</button>
-                                        <button mat-menu-item>Item 1</button>
-                                        <button mat-menu-item>Item 2</button>
-                                        <button mat-menu-item>Item 3</button>
-                                        <button mat-menu-item>Item 4</button>
-                                        <button mat-menu-item>Item 1</button>
-                                        <button mat-menu-item>Item 2</button>
-                                        <button mat-menu-item>Item 3</button>
-                                        <button mat-menu-item>Item 4</button>
-                                        <button mat-menu-item>Item 1</button>
-                                        <button mat-menu-item>Item 2</button>
-                                        <button mat-menu-item>Item 3</button>
-                                        <button mat-menu-item>Item 4</button>
-                                        <button mat-menu-item>Item 1</button>
-                                        <button mat-menu-item>Item 2</button>
-                                        <button mat-menu-item>Item 3</button>
-                                        <button mat-menu-item>Item 4</button>
-                                        <button mat-menu-item>Item 1</button>
-                                        <button mat-menu-item>Item 2</button>
-                                        <button mat-menu-item>Item 3</button>
-                                        <button mat-menu-item>Item 4</button>
-                                        <button mat-menu-item class="vouchers-add-new">+ Add new address</button>
+                                        </mat-menu>
+                                    </ng-container>
 
-                                    </div>
-                                </mat-menu>
+                                    <div *ngIf="!invoiceType.isCashInvoice" class="mt-2">Address 2 </div>
 
-                                <div class="vouchers-address-form" *ngIf="invoiceType.isCashInvoice">
-                                    <div class="address-field">
-                                        <textarea rows="2" matInput class="w-100" id="billingAddress"></textarea>
-                                    </div>
-                                    <div class="country-field">
-                                        <span>India</span>
-                                    </div>
-                                    <div class="state-field">
-                                        <select-field [cssClass]="'border-0'" [name]="'fields'" [placeholder]="'Punjab'"
-                                            [options]="dummyOptions" (selectedOption)="selectDropdown($event)"
-                                            [defaultValue]="''">
-                                        </select-field>
-                                    </div>
-                                    <div class="gstin-field">
-                                        <text-field type="text" name="gstin" [placeholder]="'GSTIN'"
-                                            [cssClass]="'border-0'"></text-field>
-                                    </div>
-                                    <div class="pin-code-field">
-                                        <text-field type="text" name="gstin" [placeholder]="'PIN Code'"
-                                            [cssClass]="'border-0'"></text-field>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Shipping Address -->
-                            <div class="col-6">
-                                <mat-checkbox type="checkbox" color="primary" *ngIf="invoiceType.isCashInvoice">
-                                    Shipping Address Same as Billing Address
-                                </mat-checkbox>
-                                <ng-container *ngIf="!invoiceType.isCashInvoice">
-                                    <label for="billingAddress" class="billing-label">Shipping Address</label> <i
-                                        [matMenuTriggerFor]="shippingAddress"
-                                        class="icon-edit color-primary cursor-pointer pl-2 font-12"></i>
-
-                                    <mat-menu #shippingAddress="matMenu">
-                                        <div class="mat-menu-width-large  vouchers-address-menu">
-                                            <button mat-menu-item>
-                                                <div class="d-flex justify-content-between align-items-center">
-                                                    <div>
-                                                        Indore, <p>Madhya Pradesh</p>
-                                                    </div>
-                                                    <i class="icon-tick"></i>
-                                                </div>
-                                            </button>
-                                            <button mat-menu-item>Item 2</button>
-                                            <button mat-menu-item>Item 3</button>
-                                            <button mat-menu-item>Item 4</button>
-                                            <button mat-menu-item>Item 1</button>
-                                            <button mat-menu-item>Item 2</button>
-                                            <button mat-menu-item>Item 3</button>
-                                            <button mat-menu-item>Item 4</button>
-                                            <button mat-menu-item>Item 1</button>
-                                            <button mat-menu-item>Item 2</button>
-                                            <button mat-menu-item>Item 3</button>
-                                            <button mat-menu-item>Item 4</button>
-                                            <button mat-menu-item>Item 1</button>
-                                            <button mat-menu-item>Item 2</button>
-                                            <button mat-menu-item>Item 3</button>
-                                            <button mat-menu-item>Item 4</button>
-                                            <button mat-menu-item>Item 1</button>
-                                            <button mat-menu-item>Item 2</button>
-                                            <button mat-menu-item>Item 3</button>
-                                            <button mat-menu-item>Item 4</button>
-                                            <button mat-menu-item>Item 1</button>
-                                            <button mat-menu-item>Item 2</button>
-                                            <button mat-menu-item>Item 3</button>
-                                            <button mat-menu-item>Item 4</button>
-                                            <button mat-menu-item class="vouchers-add-new">+ Add new address</button>
-
+                                    <div class="vouchers-address-form form-disabled" *ngIf="invoiceType.isCashInvoice">
+                                        <div class="address-field">
+                                            <textarea rows="2" matInput class="w-100" id="shippingAddress" formControlName="address"></textarea>
                                         </div>
-                                    </mat-menu>
-                                </ng-container>
-
-                                <div *ngIf="!invoiceType.isCashInvoice" class="mt-2">Address 2 </div>
-
-                                <div class="vouchers-address-form form-disabled" *ngIf="invoiceType.isCashInvoice">
-                                    <div class="address-field">
-                                        <textarea rows="2" matInput class="w-100"></textarea>
-                                    </div>
-                                    <div class="country-field">
-                                        <span>India</span>
-                                    </div>
-                                    <div class="state-field">
-                                        <select-field [cssClass]="'border-0'" [name]="'fields'" [placeholder]="'Punjab'"
-                                            [options]="dummyOptions" (selectedOption)="selectDropdown($event)"
-                                            [defaultValue]="''">
-                                        </select-field>
-                                    </div>
-                                    <div class="gstin-field">
-
-                                        <text-field type="text" name="gstin" [placeholder]="'GSTIN'"
-                                            [cssClass]="'border-0'"></text-field>
-                                    </div>
-                                    <div class="pin-code-field">
-                                        <text-field type="text" name="gstin" [placeholder]="'PIN Code'"
-                                            [cssClass]="'border-0'"></text-field>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Attention to -->
-                            <div class="col-6">
-                                <input-field [name]="'attention-to'" [label]="'Attention to'" [placeholder]="'Enter name'"
-                                    [type]="'text'">
-                                </input-field>
-                            </div>
-
-                            <!-- Email Id -->
-                            <div class="col-6">
-                                <input-field [name]="'email'" [label]="'Email Id'" [placeholder]="'Enter email'"
-                                    [type]="'text'">
-                                </input-field>
-                            </div>
-
-                            <!-- Mobile Number -->
-                            <div class="col-6">
-                                <input-field [name]="'mobile-number'" [type]="'tel'" #initContactProforma class="flag-input"
-                                    [id]="'init-contact-proforma'" (keydown.enter)="$event.preventDefault()"
-                                    [label]="'Mobile Number'" [placeholder]="'98XXXXXXXX'" [floatLabel]="'auto'">
-                                </input-field>
-                                <span id="init-contact-proforma-valid-msg" class="d-none"></span>
-                                <span id="init-contact-proforma-error-msg" class="d-none"></span>
-                            </div>
-
-                            <!-- Warehouse -->
-                            <div class="col-6"
-                                *ngIf="invoiceType.isSalesInvoice || invoiceType.isCashInvoice || invoiceType.isPurchaseOrder">
-                                <dropdown-field [label]="'Warehouse'" [placeholder]="'Select warehouse'"
-                                    [options]="dummyOptions" (selectedOption)="selectDropdown($event)" [defaultValue]="''">
-                                </dropdown-field>
-                            </div>
-                        </div>
-
-                        <!-- Row 2 for Deliver To Only show in Cash Invoice -->
-                        <div class="row row-gap" *ngIf="invoiceType.isCashInvoice || invoiceType.isPurchaseOrder">
-                            <div class="col-12 mr-t15">
-                                <span>Deliver To</span>
-                            </div>
-
-                            <!-- Billing Address -->
-                            <div class="col-6">
-                                <label for="billingAddress" class="billing-label">Billing Address</label> <i
-                                    class="icon-edit color-primary cursor-pointer pl-2 font-12"></i>
-                                <div *ngIf="!invoiceType.isCashInvoice" class="mt-2">Address 1 </div>
-
-                                <div class="vouchers-address-form" *ngIf="invoiceType.isCashInvoice">
-                                    <div class="address-field">
-                                        <textarea rows="2" matInput class="w-100" id="billingAddress"></textarea>
-                                    </div>
-                                    <div class="country-field">
-                                        <span>India</span>
-                                    </div>
-                                    <div class="state-field">
-                                        <select-field [cssClass]="'border-0'" [name]="'fields'" [placeholder]="'Punjab'"
-                                            [options]="dummyOptions" (selectedOption)="selectDropdown($event)"
-                                            [defaultValue]="''">
-                                        </select-field>
-                                    </div>
-                                    <div class="gstin-field">
-                                        <text-field type="text" name="gstin" [placeholder]="'GSTIN'"
-                                            [cssClass]="'border-0'"></text-field>
-                                    </div>
-                                    <div class="pin-code-field">
-                                        <text-field type="text" name="gstin" [placeholder]="'PIN Code'"
-                                            [cssClass]="'border-0'"></text-field>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Shipping Address -->
-                            <div class="col-6">
-                                <mat-checkbox type="checkbox" color="primary" *ngIf="invoiceType.isCashInvoice">
-                                    Shipping Address Same as Billing Address
-                                </mat-checkbox>
-                                <ng-container *ngIf="!invoiceType.isCashInvoice">
-                                    <label for="billingAddress" class="billing-label">Shipping Address</label> <i
-                                        [matMenuTriggerFor]="shippingAddress"
-                                        class="icon-edit color-primary cursor-pointer pl-2 font-12"></i>
-
-                                    <mat-menu #shippingAddress="matMenu">
-                                        <div class="mat-menu-width-large  vouchers-address-menu">
-                                            <button mat-menu-item>
-                                                <div class="d-flex justify-content-between align-items-center">
-                                                    <div>
-                                                        Indore, <p>Madhya Pradesh</p>
-                                                    </div>
-                                                    <i class="icon-tick"></i>
-                                                </div>
-                                            </button>
-                                            <button mat-menu-item>Item 2</button>
-                                            <button mat-menu-item>Item 3</button>
-                                            <button mat-menu-item>Item 4</button>
-                                            <button mat-menu-item>Item 1</button>
-                                            <button mat-menu-item>Item 2</button>
-                                            <button mat-menu-item>Item 3</button>
-                                            <button mat-menu-item>Item 4</button>
-                                            <button mat-menu-item>Item 1</button>
-                                            <button mat-menu-item>Item 2</button>
-                                            <button mat-menu-item>Item 3</button>
-                                            <button mat-menu-item>Item 4</button>
-                                            <button mat-menu-item>Item 1</button>
-                                            <button mat-menu-item>Item 2</button>
-                                            <button mat-menu-item>Item 3</button>
-                                            <button mat-menu-item>Item 4</button>
-                                            <button mat-menu-item>Item 1</button>
-                                            <button mat-menu-item>Item 2</button>
-                                            <button mat-menu-item>Item 3</button>
-                                            <button mat-menu-item>Item 4</button>
-                                            <button mat-menu-item>Item 1</button>
-                                            <button mat-menu-item>Item 2</button>
-                                            <button mat-menu-item>Item 3</button>
-                                            <button mat-menu-item>Item 4</button>
-                                            <button mat-menu-item class="vouchers-add-new">+ Add new address</button>
-
+                                        <div class="country-field">
+                                            <span>{{ invoiceType?.isCashInvoice ? company?.countryName : account?.countryName }}</span>
                                         </div>
-                                    </mat-menu>
-                                </ng-container>
+                                        <div class="state-field" formGroupName="state">
+                                            <reactive-dropdown-field [cssClass]="'border-0'" formControlName="code" [name]="'shippingStateCode'" [label]="'State'" [placeholder]="'Select'" [options]="accountStateList$ | async"></reactive-dropdown-field>
+                                        </div>
+                                        <div class="gstin-field">
+                                            <text-field type="text" [name]="'taxNumber'" [placeholder]="'GSTIN'" [cssClass]="'border-0'" formControlName="taxNumber"></text-field>
+                                        </div>
+                                        <div class="pin-code-field">
+                                            <text-field type="text" [name]="'pincode'" [placeholder]="'PIN Code'" [cssClass]="'border-0'" formControlName="pincode"></text-field>
+                                        </div>
+                                    </div>
+                                </div>
 
-                                <div *ngIf="!invoiceType.isCashInvoice" class="mt-2">Address 2 </div>
-                                <div class="vouchers-address-form form-disabled" *ngIf="invoiceType.isCashInvoice">
-                                    <div class="address-field">
-                                        <textarea rows="2" matInput class="w-100"></textarea>
+                                <!-- Attention to -->
+                                <div class="col-6">
+                                    <input-field [name]="'attentionTo'" [label]="'Attention to'" [placeholder]="'Enter name'" [type]="'text'" formControlName="attentionTo"></input-field>
+                                </div>
+
+                                <!-- Email Id -->
+                                <div class="col-6">
+                                    <input-field [name]="'email'" [label]="'Email Id'" [placeholder]="'Enter email'" [type]="'text'" formControlName="email"></input-field>
+                                </div>
+
+                                <!-- Mobile Number -->
+                                <div class="col-6">
+                                    <input-field [name]="'mobile-number'" [type]="'tel'" #initContactProforma class="flag-input"
+                                        [id]="'init-contact-proforma'" (keydown.enter)="$event.preventDefault()"
+                                        [label]="'Mobile Number'" [placeholder]="'98XXXXXXXX'" [floatLabel]="'auto'">
+                                    </input-field>
+                                    <span id="init-contact-proforma-valid-msg" class="d-none"></span>
+                                    <span id="init-contact-proforma-error-msg" class="d-none"></span>
+                                </div>
+
+                                <!-- Warehouse -->
+                                <div class="col-6"
+                                    *ngIf="showWarehouse">
+                                    <reactive-dropdown-field [cssClass]="'border-0'" [name]="'warehouse'" [label]="'Warehouse'" [placeholder]="'Select'" [options]="warehouses"></reactive-dropdown-field>
+                                </div>
+                            </div>
+
+                            <!-- Row 2 for Deliver To Only show in Cash Invoice -->
+                            <div class="row row-gap" *ngIf="invoiceType.isCashInvoice || invoiceType.isPurchaseOrder">
+                                <div class="col-12 mr-t15">
+                                    <span>Deliver To</span>
+                                </div>
+
+                                <!-- Billing Address -->
+                                <div class="col-6">
+                                    <label for="billingAddress" class="billing-label">Billing Address</label> <i
+                                        class="icon-edit text-blue cursor-pointer pl-2 font-12"></i>
+                                    <div *ngIf="!invoiceType.isCashInvoice" class="mt-2">Address 1 </div>
+
+                                    <div class="vouchers-address-form" *ngIf="invoiceType.isCashInvoice">
+                                        <div class="address-field">
+                                            <textarea rows="2" matInput class="w-100" id="billingAddress"></textarea>
+                                        </div>
+                                        <div class="country-field">
+                                            <span>India</span>
+                                        </div>
+                                        <div class="state-field">
+                                            <select-field [cssClass]="'border-0'" [name]="'fields'" [placeholder]="'Punjab'"
+                                                [options]="dummyOptions" (selectedOption)="selectDropdown($event)"
+                                                [defaultValue]="''">
+                                            </select-field>
+                                        </div>
+                                        <div class="gstin-field">
+                                            <text-field type="text" name="gstin" [placeholder]="'GSTIN'"
+                                                [cssClass]="'border-0'"></text-field>
+                                        </div>
+                                        <div class="pin-code-field">
+                                            <text-field type="text" name="gstin" [placeholder]="'PIN Code'"
+                                                [cssClass]="'border-0'"></text-field>
+                                        </div>
                                     </div>
-                                    <div class="country-field">
-                                        <span>India</span>
-                                    </div>
-                                    <div class="state-field">
-                                        <select-field [cssClass]="'border-0'" [name]="'fields'" [placeholder]="'Punjab'"
-                                            [options]="dummyOptions" (selectedOption)="selectDropdown($event)"
-                                            [defaultValue]="''">
-                                        </select-field>
-                                    </div>
-                                    <div class="gstin-field">
-                                        <text-field type="text" name="gstin" [placeholder]="'GSTIN'"
-                                            [cssClass]="'border-0'"></text-field>
-                                    </div>
-                                    <div class="pin-code-field">
-                                        <text-field type="text" name="gstin" [placeholder]="'PIN Code'"
-                                            [cssClass]="'border-0'"></text-field>
+                                </div>
+
+                                <!-- Shipping Address -->
+                                <div class="col-6">
+                                    <mat-checkbox type="checkbox" color="primary" *ngIf="invoiceType.isCashInvoice">
+                                        Shipping Address Same as Billing Address
+                                    </mat-checkbox>
+                                    <ng-container *ngIf="!invoiceType.isCashInvoice">
+                                        <label for="billingAddress" class="billing-label">Shipping Address</label> <i
+                                            [matMenuTriggerFor]="shippingAddress"
+                                            class="icon-edit text-blue cursor-pointer pl-2 font-12"></i>
+
+                                        <mat-menu #shippingAddress="matMenu">
+                                            <div class="mat-menu-width-large  vouchers-address-menu">
+                                                <button mat-menu-item>
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <div>
+                                                            Indore, <p>Madhya Pradesh</p>
+                                                        </div>
+                                                        <i class="icon-tick"></i>
+                                                    </div>
+                                                </button>
+                                                <button mat-menu-item>Item 2</button>
+                                                <button mat-menu-item>Item 3</button>
+                                                <button mat-menu-item class="vouchers-add-new">+ Add new address</button>
+                                            </div>
+                                        </mat-menu>
+                                    </ng-container>
+
+                                    <div *ngIf="!invoiceType.isCashInvoice" class="mt-2">Address 2 </div>
+                                    <div class="vouchers-address-form form-disabled" *ngIf="invoiceType.isCashInvoice">
+                                        <div class="address-field">
+                                            <textarea rows="2" matInput class="w-100"></textarea>
+                                        </div>
+                                        <div class="country-field">
+                                            <span>India</span>
+                                        </div>
+                                        <div class="state-field">
+                                            <select-field [cssClass]="'border-0'" [name]="'fields'" [placeholder]="'Punjab'"
+                                                [options]="dummyOptions" (selectedOption)="selectDropdown($event)"
+                                                [defaultValue]="''">
+                                            </select-field>
+                                        </div>
+                                        <div class="gstin-field">
+                                            <text-field type="text" name="gstin" [placeholder]="'GSTIN'"
+                                                [cssClass]="'border-0'"></text-field>
+                                        </div>
+                                        <div class="pin-code-field">
+                                            <text-field type="text" name="gstin" [placeholder]="'PIN Code'"
+                                                [cssClass]="'border-0'"></text-field>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <!-- Row 3 -->
-                        <div class="row row-gap mr-t15 mr-b15" *ngIf="invoiceType.isPurchaseInvoice">
+                            <!-- Row 3 -->
+                            <div class="row row-gap mr-t15 mr-b15" *ngIf="invoiceType.isPurchaseInvoice">
 
-                            <!-- Purchase Order -->
-                            <div class="col-6">
-                                <mat-select name="linkedPO" class="po-mat-select" [placeholder]="'Purchase Order'">
-                                    <mat-select-trigger>
-                                        List of selected items
-                                    </mat-select-trigger>
-                                    <mat-option class="po-options-line">
-                                        <ngx-mat-select-search [noEntriesFoundLabel]="'No Data Found'"
-                                            [placeholderLabel]="'Select order'">
-                                            <i class="icon-cross" ngxMatSelectSearchClear></i>
-                                        </ngx-mat-select-search>
-                                    </mat-option>
+                                <!-- Purchase Order -->
+                                <div class="col-6">
+                                    <mat-select name="linkedPO" class="po-mat-select" [placeholder]="'Purchase Order'">
+                                        <mat-select-trigger>
+                                            List of selected items
+                                        </mat-select-trigger>
+                                        <mat-option class="po-options-line">
+                                            <ngx-mat-select-search [noEntriesFoundLabel]="'No Data Found'"
+                                                [placeholderLabel]="'Select order'">
+                                                <i class="icon-cross" ngxMatSelectSearchClear></i>
+                                            </ngx-mat-select-search>
+                                        </mat-option>
 
-                                    <mat-option [value]="1" class="po-options-line">
-                                        <span class="po-option-label"> Item Label</span>
-                                        <span class="po-option-value">
-                                            Pending : additonal text</span>
-                                        <span class="po-option-value">
-                                            Amount : 500
-                                        </span>
-                                    </mat-option>
-                                </mat-select>
+                                        <mat-option [value]="1" class="po-options-line">
+                                            <span class="po-option-label"> Item Label</span>
+                                            <span class="po-option-value">
+                                                Pending : additonal text</span>
+                                            <span class="po-option-value">
+                                                Amount : 500
+                                            </span>
+                                        </mat-option>
+                                    </mat-select>
+                                </div>
                             </div>
-                        </div>
+                        </ng-container>
+
 
                         <!-- Row 4 -->
                         <div class="row row-gap mr-t15">
@@ -417,8 +345,8 @@
 
                             <!-- Order # -->
                             <div class="col-6" *ngIf="invoiceType.isPurchaseOrder">
-                                <input-field [name]="'vouchers-number'" [label]="'Order #'" [placeholder]="'Enter order #'"
-                                    [type]="'text'">
+                                <input-field [name]="'vouchers-number'" [label]="'Order #'"
+                                    [placeholder]="'Enter order #'" [type]="'text'">
                                 </input-field>
                             </div>
 
@@ -472,9 +400,9 @@
 
                             <!-- Due Date -->
                             <div class="col-3" *ngIf="invoiceType.isSalesInvoice || invoiceType.isPurchaseInvoice">
-                                <giddh-datepicker type="text" (keydown.enter)="$event.preventDefault()" [label]="'Due Date'"
-                                    [placeholder]="'DDMMYYYY'" name="voucherDueDate" [showToggleIcon]="false"
-                                    [appearance]="'outline'">
+                                <giddh-datepicker type="text" (keydown.enter)="$event.preventDefault()"
+                                    [label]="'Due Date'" [placeholder]="'DDMMYYYY'" name="voucherDueDate"
+                                    [showToggleIcon]="false" [appearance]="'outline'">
                                 </giddh-datepicker>
                             </div>
 
@@ -496,8 +424,8 @@
                             <div class="currency-input-wrapper">
                                 <text-field [cssClass]="'form-control'" [type]="'number'"></text-field>
                             </div>
-                            <i class="icon-edit color-primary cursor-pointer"></i>
-                            <i class="icon-save color-primary cursor-pointer"></i>
+                            <i class="icon-edit text-blue cursor-pointer"></i>
+                            <i class="icon-save text-blue cursor-pointer"></i>
                         </div>
 
                         <!-- Voucher Grid for Multiple Entries-->
@@ -575,8 +503,7 @@
                             <!-- Product/Service Description -->
                             <div class="body-item text-left">
                                 <select-field [cssClass]="'form-control'" [name]="'account'"
-                                    [placeholder]="'Select account'" [options]="dummyOptions"
-                                    [defaultValue]="''"
+                                    [placeholder]="'Select account'" [options]="dummyOptions" [defaultValue]="''"
                                     [enableDynamicSearch]="true" (dynamicSearchedQuery)="searchStock($event, 1)">
                                 </select-field>
 
@@ -589,14 +516,14 @@
                                         <div class="mt-2 font-12">
                                             <span>Entry Date</span>
                                             <div class="mt-1">22-01-2024 <i
-                                                    class="icon-edit color-primary cursor-pointer"></i>
+                                                    class="icon-edit text-blue cursor-pointer"></i>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="w-50 text-right">
                                         <div class="mt-2 font-12">
                                             <span>SAC:</span>
-                                            <div class="mt-1">Update <i class="icon-edit color-primary cursor-pointer"
+                                            <div class="mt-1">Update <i class="icon-edit text-blue cursor-pointer"
                                                     [matMenuTriggerFor]="update"></i></div>
 
                                             <!-- Update Menu  -->
@@ -641,35 +568,35 @@
 
                             <!-- Rate -->
                             <div class="body-item">
-                                <text-field [placeholder]="'Enter'" [cssClass]="'form-control text-right'" [type]="'text'">
+                                <text-field [placeholder]="'Enter'" [cssClass]="'form-control text-right'"
+                                    [type]="'text'">
                                 </text-field>
                             </div>
 
                             <!-- Amount -->
                             <div class="body-item">
-                                <text-field [placeholder]="'Enter'" [cssClass]="'form-control text-right'" [type]="'text'">
+                                <text-field [placeholder]="'Enter'" [cssClass]="'form-control text-right'"
+                                    [type]="'text'">
                                 </text-field>
                             </div>
 
                             <!-- Discount -->
                             <div class="body-item">
                                 <!-- Discount control component -->
-                                <text-field [placeholder]="'Enter'" [cssClass]="'form-control text-right'" [type]="'text'">
-                                </text-field>
+                                <discount-dropdown></discount-dropdown>
                             </div>
 
                             <!-- Tax -->
                             <div class="body-item">
-                                <!-- tax-control component -->
-                                <text-field [placeholder]="'Enter'" [cssClass]="'form-control text-right'" [type]="'text'">
-                                </text-field>
+                                <tax-dropdown></tax-dropdown>
                             </div>
 
                             <!-- Total -->
                             <div class="body-item">
-                                <text-field [placeholder]="'Enter'" [cssClass]="'form-control text-right'" [type]="'text'">
+                                <text-field [placeholder]="'Enter'" [cssClass]="'form-control text-right'"
+                                    [type]="'text'">
                                 </text-field>
-                                <div class="d-flex align-items-center">
+                                <div class="d-flex align-items-center" (click)="openBulkEntryDialog('othertax')">
                                     <mat-checkbox type="checkbox" color="primary">
                                     </mat-checkbox>
                                     Other Tax?
@@ -682,9 +609,9 @@
                             </div>
                         </div>
                         <!-- Add new grid row/line -->
-                        <div class="font-12 color-primary mt-2 px-2">
-                            <span class="cursor-pointer">+ Add New Line</span> <span class="grey-color px-2">|</span> <span
-                                class="cursor-pointer">+ Add Bulk Entries</span>
+                        <div class="font-12 text-blue mt-2 px-2">
+                            <span class="cursor-pointer">+ Add New Line</span> <span class="grey-color px-2">|</span>
+                            <span class="cursor-pointer" (click)="openBulkEntryDialog()">+ Add Bulk Entries</span>
                         </div>
 
                         <div class="vouchers-other-detail container-lg mt-4 px-0">
@@ -715,7 +642,8 @@
                                                                 </input-field>
                                                             </div>
                                                             <div class="col-4 px-2">
-                                                                <input-field [type]="'text'" [placeholder]="'Tracking No.'">
+                                                                <input-field [type]="'text'"
+                                                                    [placeholder]="'Tracking No.'">
                                                                 </input-field>
                                                             </div>
                                                             <div class="col-4 px-2">
@@ -736,7 +664,8 @@
                                                             <div class="col-12 px-2">
                                                                 <mat-form-field class="w-100" appearance="outline">
                                                                     <mat-label>Note</mat-label>
-                                                                    <textarea matInput placeholder="Enter Note"></textarea>
+                                                                    <textarea matInput
+                                                                        placeholder="Enter Note"></textarea>
                                                                 </mat-form-field>
                                                             </div>
                                                         </div>
@@ -775,7 +704,7 @@
                                                                     <div class="d-flex align-items-center column-gap1">
                                                                         <span>Adjust Amount</span>
                                                                         <span class="text-gray">00.00</span>
-                                                                        <i class="icon-edit color-primary font-12"></i>
+                                                                        <i class="icon-edit text-blue font-12"></i>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -786,7 +715,7 @@
 
                                             <div class="col-12 mt-3">
                                                 <mat-card>
-                                                    <mat-card-content>
+                                                    <mat-card-content class="py-0">
                                                         <div class="vouchers-attachment d-flex align-items-center column-gap1"
                                                             [matTooltip]="'No file chosen'" matTooltipPosition="right">
                                                             <input type="file" class="position-absolute" title="" />
@@ -795,6 +724,25 @@
                                                             </div>
                                                             <span class="attachment-placeholder">Attach File to
                                                                 voucher</span>
+                                                        </div>
+                                                    </mat-card-content>
+                                                </mat-card>
+                                            </div>
+
+                                            <div class="col-12 mt-3">
+                                                <mat-card>
+                                                    <mat-card-content class="py-0">
+                                                        <div
+                                                            class="vouchers-attachment d-flex align-items-center column-gap1 text-success">
+                                                            <div class="attachment-add-icon">
+                                                                <i class="icon-tick"></i>
+                                                            </div>
+                                                            <span class="attachment-placeholder">Screenshot 2024-01-22
+                                                                at 2.57.42 PM.png</span>
+                                                            <button mat-icon-button
+                                                                class="ml-auto remove-attachment font-16">
+                                                                <i class="icon-cross"></i>
+                                                            </button>
                                                         </div>
                                                     </mat-card-content>
                                                 </mat-card>
@@ -862,7 +810,12 @@
                             <button mat-stroked-button color="primary"> Generate Credit Note </button>
 
                             <button mat-stroked-button color="primary"> Save </button>
-                            <button mat-stroked-button> <i class="caret"></i> </button>
+                            <button mat-stroked-button [matMenuTriggerFor]="moreOptions" class="vouchers-more-option-btn"> <i class="caret"></i>
+                            </button>
+                            <mat-menu #moreOptions="matMenu">
+                                <button mat-menu-item>Create & Send</button>
+                                <button mat-menu-item>Create & Print</button>
+                            </mat-menu>
                         </div>
                     </div>
 

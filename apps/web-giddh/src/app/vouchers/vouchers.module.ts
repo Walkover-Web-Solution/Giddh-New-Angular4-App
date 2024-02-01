@@ -38,10 +38,14 @@ import { NoDataModule } from "../shared/no-data/no-data.module";
 import { HistoryDialogComponent } from "./history-dialog/history-dialog.component";
 import { OtherTaxModule } from "../theme/other-tax/other-tax.module";
 import { AddBulkItemsModule } from "../theme/add-bulk-items/add-bulk-items.module";
-import { OptionsScrollDirective } from "../theme/form-fields/reactive-dropdown-field/reactive-dropdown-options-scroll.directive";
 import { EmailSendDialogComponent } from "./email-send-dialog/email-send-dialog.component";
 import { MatSlideToggleModule } from "@angular/material/slide-toggle";
 import { TranslateDirectiveModule } from "../theme/translate/translate.directive.module";
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
+import { VoucherNameModule } from "./utility/pipe/voucher-name/voucher-name.module";
+import { VoucherCopyLinkModule } from "./utility/pipe/voucher-copy-link/voucher-copy-link.module";
+import { TaxDropdownModule } from "../theme/tax-dropdown/tax-dropdown.module";
+import { DiscountDropdownModule } from "../theme/discount-dropdown/discount-dropdown.module";
 
 @NgModule({
     declarations: [
@@ -89,7 +93,12 @@ import { TranslateDirectiveModule } from "../theme/translate/translate.directive
         OtherTaxModule,
         AddBulkItemsModule,
         MatSlideToggleModule,
-        TranslateDirectiveModule
+        TranslateDirectiveModule,
+        VoucherNameModule,
+        VoucherCopyLinkModule,
+        MatProgressSpinnerModule,
+        TaxDropdownModule,
+        DiscountDropdownModule
     ],
     exports: [
 

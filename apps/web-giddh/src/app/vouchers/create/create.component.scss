@@ -35,19 +35,17 @@
         }
 
         .vouchers-form-fields-detail {
-            color: var(--color-blue);
-            font-size: var(--font-size-12);
+            color: var(--color-giddh-blue);
         }
 
         .vouchers-copy-sales {
-            color: var(--color-blue);
-            font-size: var(--font-size-14);
+            color: var(--color-giddh-blue);
         }
     }
 
     .vouchers-secondary-form {
-        &.vouchers-form-disable{
-            &::before{
+        &.vouchers-form-disable {
+            &::before {
                 content: "";
                 display: block;
                 position: absolute;
@@ -56,7 +54,7 @@
                 z-index: 2;
                 width: 100%;
                 height: 100%;
-                background-color:  var(--color-primary-performa-invoice-dissabled-background);
+                background-color: var(--color-primary-performa-invoice-dissabled-background);
                 opacity: 0.7;
             }
         }
@@ -121,9 +119,10 @@
         .vouchers-large-container {
             border-top: 1px solid var(--color-common-secondary-border);
 
-            .change-currency{
+            .change-currency {
                 max-width: calc(100% - 36px);
-                .currency-input-wrapper{
+
+                .currency-input-wrapper {
                     width: 80px;
                 }
             }
@@ -131,9 +130,11 @@
             .vouchers-entry-grid {
                 display: grid;
                 grid-template-columns: 40px minmax(230px, auto) repeat(5, 1fr) 140px auto;
+
                 @media screen and (max-width: 1359px) {
                     grid-template-columns: 40px 180px repeat(5, 1fr) 140px auto;
                 }
+
                 grid-template-rows: minmax(40px, auto);
                 // max-width: 1075px;
 
@@ -151,13 +152,16 @@
                         display: inline-flex;
                         align-items: center;
                         justify-content: flex-end;
-                        &:first-child, &:nth-child(2){
+
+                        &:first-child,
+                        &:nth-child(2) {
                             justify-content: flex-start;
                         }
                     }
-                    &.body-item{
 
-                        &.delete-btn{
+                    &.body-item {
+
+                        &.delete-btn {
                             padding: 0 0 0 10px;
                             border-top: none;
                             border-right: none;
@@ -165,13 +169,14 @@
                             display: inline-flex;
                             align-items: center;
                             justify-content: center;
-                            .icon-trash{
+
+                            .icon-trash {
                                 border: 1px solid var(--color-grey-bootstrap-border);
                                 border-radius: 50%;
                                 padding: 4px;
                             }
                         }
-                    }  
+                    }
                 }
 
                 .select-account-label {
@@ -180,13 +185,14 @@
 
             }
 
-            .vouchers-other-detail{
+            .vouchers-other-detail {
                 margin: 0;
                 max-width: calc(100% - 36px);
 
-                .vouchers-attachment{
+                .vouchers-attachment {
+                    height: 48px;
 
-                    .attachment-add-icon{
+                    .attachment-add-icon {
                         width: 36px;
                         height: 36px;
                         text-align: center;
@@ -194,10 +200,27 @@
                         border-radius: 50%;
                         border: 1px solid var(--color-grey-bootstrap-border);
                     }
-                    .attachment-placeholder{
+
+                    &.text-success {
+                        .attachment-add-icon {
+                            border-color: var(--color-success-enable);
+                            font-size: var(--font-size-12);
+                        }
+
+                        .attachment-placeholder {
+                            color: var(--color-success-enable);
+                            width: 80%;
+                            white-space: nowrap;
+                            text-overflow: ellipsis;
+                            overflow: hidden;
+                        }
+                    }
+
+                    .attachment-placeholder {
                         color: var(--color-giddh-blue);
                     }
-                    input{
+
+                    input {
                         width: 100%;
                         height: 100%;
                         left: 0;
@@ -205,15 +228,28 @@
                         z-index: 1;
                         opacity: 0;
                         cursor: pointer;
+
                         //  This will hide "Default Choose file" button
                         &::-webkit-file-upload-button {
                             display: none;
-                         }
+                        }
+                    }
+
+                    .remove-attachment {
+                        height: 25px;
+                        width: 25px;
+                        padding: 1px;
+                        color: black;
                     }
                 }
             }
-            .vouchers-actions{
+
+            .vouchers-actions {
                 border-top: 1px solid var(--color-common-secondary-border);
+
+                .vouchers-more-option-btn {
+                    min-width: unset;
+                }
             }
         }
     }

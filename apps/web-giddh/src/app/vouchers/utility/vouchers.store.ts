@@ -6,7 +6,7 @@ import { BaseResponse } from "../../models/api-models/BaseResponse";
 import { CustomTemplateResponse } from "../../models/api-models/Invoice";
 import { IDiscountList } from "../../models/api-models/SettingsDiscount";
 import { ProformaFilter } from "../../models/api-models/proforma";
-import { ReciptResponse, InvoiceReceiptFilter } from "../../models/api-models/recipt";
+import { InvoiceReceiptFilter } from "../../models/api-models/recipt";
 import { InvoiceSetting } from "../../models/interfaces/invoice.setting.interface";
 import { SettingsDiscountService } from "../../services/settings.discount.service";
 import { ToasterService } from "../../services/toaster.service";
@@ -15,20 +15,25 @@ import { AppState } from "../../store";
 import { LedgerService } from "../../services/ledger.service";
 import { IVariant } from "../../models/api-models/Ledger";
 import { CommonService } from "../../services/common.service";
+import { LastVouchersResponse } from "../../models/api-models/Voucher";
+import { AccountService } from "../../services/account.service";
 
 export interface VoucherState {
     isLoading: boolean;
     createUpdateInProgress: boolean;
     deleteAttachmentInProgress: boolean;
     deleteAttachmentIsSuccess: boolean;
+    getLastVouchersInProgress: boolean;
     discountsList: IDiscountList[];
     invoiceSettings: InvoiceSetting;
-    lastVouchers: ReciptResponse;
+    lastVouchers: LastVouchersResponse;
     createdTemplates: CustomTemplateResponse[];
     stockVariants: any[];
     barcodeData: any;
     exchangeRate: number;
     briefAccounts: any[];
+    accountDetails: any;
+    countryData: any;
 }
 
 const DEFAULT_STATE: VoucherState = {
@@ -36,6 +41,7 @@ const DEFAULT_STATE: VoucherState = {
     createUpdateInProgress: null,
     deleteAttachmentInProgress: null,
     deleteAttachmentIsSuccess: null,
+    getLastVouchersInProgress: null,
     discountsList: null,
     invoiceSettings: null,
     lastVouchers: null,
@@ -43,7 +49,9 @@ const DEFAULT_STATE: VoucherState = {
     stockVariants: null,
     barcodeData: null,
     exchangeRate: null,
-    briefAccounts: null
+    briefAccounts: null,
+    accountDetails: null,
+    countryData: null
 };
 
 @Injectable()
@@ -55,13 +63,15 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
         private settingsDiscountService: SettingsDiscountService,
         private voucherService: VoucherService,
         private ledgerService: LedgerService,
-        private commonService: CommonService
+        private commonService: CommonService,
+        private accountService: AccountService
     ) {
         super(DEFAULT_STATE);
     }
 
     public isLoading$ = this.select((state) => state.isLoading);
     public createUpdateInProgress$ = this.select((state) => state.createUpdateInProgress);
+    public getLastVouchersInProgress$ = this.select((state) => state.getLastVouchersInProgress);
     public discountsList$ = this.select((state) => state.discountsList);
     public invoiceSettings$ = this.select((state) => state.invoiceSettings);
     public createdTemplates$ = this.select((state) => state.createdTemplates);
@@ -69,6 +79,9 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
     public stockVariants$ = this.select((state) => state.stockVariants);
     public exchangeRate$ = this.select((state) => state.exchangeRate);
     public briefAccounts$ = this.select((state) => state.briefAccounts);
+    public accountDetails$ = this.select((state) => state.accountDetails);
+    public countryData$ = this.select((state) => state.countryData);
+
     public companyProfile$: Observable<any> = this.select(this.store.select(state => state.settings.profile), (response) => response);
     public activeCompany$: Observable<any> = this.select(this.store.select(state => state.session.activeCompany), (response) => response);
     public onboardingForm$: Observable<any> = this.select(this.store.select(state => state.common.onboardingform), (response) => response);
@@ -84,13 +97,13 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                     tapResponse(
                         (res: BaseResponse<IDiscountList[], any>) => {
                             return this.patchState({
-                                discountsList: res?.body ?? null
+                                discountsList: res?.body ?? []
                             });
                         },
                         (error: any) => {
                             this.showErrorToast(error);
                             return this.patchState({
-                                discountsList: null
+                                discountsList: []
                             });
                         }
                     ),
@@ -129,16 +142,19 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
     readonly getPreviousVouchers = this.effect((data: Observable<{ model: InvoiceReceiptFilter, type: string }>) => {
         return data.pipe(
             switchMap((req) => {
+                this.patchState({getLastVouchersInProgress: true});
                 return this.voucherService.getAllVouchers(req.model, req.type).pipe(
                     tapResponse(
-                        (res: BaseResponse<ReciptResponse, any>) => {
+                        (res: BaseResponse<LastVouchersResponse, any>) => {
                             return this.patchState({
-                                lastVouchers: res?.body ?? null
+                                getLastVouchersInProgress: false,
+                                lastVouchers: res?.body ?? {}
                             });
                         },
                         (error: any) => {
                             this.showErrorToast(error);
                             return this.patchState({
+                                getLastVouchersInProgress: false,
                                 lastVouchers: null
                             });
                         }
@@ -152,17 +168,20 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
     readonly getPreviousProformaEstimates = this.effect((data: Observable<{ model: ProformaFilter, type: string }>) => {
         return data.pipe(
             switchMap((req) => {
+                this.patchState({getLastVouchersInProgress: true});
                 return this.voucherService.getAllProformaEstimate(req.model, req.type).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             return this.patchState({
-                                lastVouchers: res?.body ?? null
+                                getLastVouchersInProgress: false,
+                                lastVouchers: res?.body ?? {}
                             });
                         },
                         (error: any) => {
                             this.showErrorToast(error);
                             return this.patchState({
-                                lastVouchers: null
+                                getLastVouchersInProgress: false,
+                                lastVouchers: {}
                             });
                         }
                     ),
@@ -179,13 +198,13 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             return this.patchState({
-                                createdTemplates: res?.body ?? null
+                                createdTemplates: res?.body ?? []
                             });
                         },
                         (error: any) => {
                             this.showErrorToast(error);
                             return this.patchState({
-                                createdTemplates: null
+                                createdTemplates: []
                             });
                         }
                     ),
@@ -202,13 +221,13 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                     tapResponse(
                         (res: Array<IVariant>) => {
                             return this.patchState({
-                                stockVariants: res ?? null
+                                stockVariants: res ?? []
                             });
                         },
                         (error: any) => {
                             this.showErrorToast(error);
                             return this.patchState({
-                                stockVariants: null
+                                stockVariants: []
                             });
                         }
                     ),
@@ -225,13 +244,13 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             return this.patchState({
-                                barcodeData: res?.body ?? null
+                                barcodeData: res?.body ?? {}
                             });
                         },
                         (error: any) => {
                             this.showErrorToast(error);
                             return this.patchState({
-                                barcodeData: null
+                                barcodeData: {}
                             });
                         }
                     ),
@@ -274,13 +293,13 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             return this.patchState({
-                                exchangeRate: res?.body ?? null
+                                exchangeRate: res?.body ?? 1
                             });
                         },
                         (error: any) => {
                             this.showErrorToast(error);
                             return this.patchState({
-                                exchangeRate: null
+                                exchangeRate: 1
                             });
                         }
                     ),
@@ -297,13 +316,59 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             return this.patchState({
-                                briefAccounts: res?.body?.results?.map(res => { return { label: res.name, value: res.uniqueName, additional: { currency: res?.currency } } }) ?? null
+                                briefAccounts: res?.body?.results?.map(res => { return { label: res.name, value: res.uniqueName, additional: { currency: res?.currency } } }) ?? []
                             });
                         },
                         (error: any) => {
                             this.showErrorToast(error);
                             return this.patchState({
-                                briefAccounts: null
+                                briefAccounts: []
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    readonly getAccountDetails = this.effect((data: Observable<string>) => {
+        return data.pipe(
+            switchMap((req) => {
+                return this.accountService.GetAccountDetailsV2(req).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            return this.patchState({
+                                accountDetails: res?.body ?? {}
+                            });
+                        },
+                        (error: any) => {
+                            this.showErrorToast(error);
+                            return this.patchState({
+                                accountDetails: {}
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+    
+    readonly getCountryStates = this.effect((data: Observable<string>) => {
+        return data.pipe(
+            switchMap((req) => {
+                return this.voucherService.getCountryStates(req).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            return this.patchState({
+                                countryData: res?.body ?? {}
+                            });
+                        },
+                        (error: any) => {
+                            this.showErrorToast(error);
+                            return this.patchState({
+                                countryData: {}
                             });
                         }
                     ),

@@ -1,1 +1,221 @@
-Vouchers Add Bulk Items
+<div class="bulk-entry">
+    <div class="bulk-entry-header d-flex justify-content-between align-items-center px-3">
+        <span class="font-16">Add bulk items</span>
+        <i class="icon-cross" mat-dialog-close></i>
+    </div>
+    <div class="bulk-entry-body d-flex">
+        <div class="bulk-entry-list w-50">
+            <input-field [name]="'search'" [type]="'text'" [placeholder]="'Search stock'" [label]="'Search'">
+            </input-field>
+
+            <div class="list-wrapper mt-2">
+                <mat-list class="p-0">
+                    <cdk-virtual-scroll-viewport [itemSize]="40" class="list-viewport">
+                        <ng-container *cdkVirtualFor="let item of [1,2,3,4,5,6,7,8]">
+                            <mat-list-item class="list-item px-2">
+                                {{'Stock - ' + item }}
+                            </mat-list-item>
+                            <div>
+                                <mat-list-item class="list-item pr-2 pl-4">Variant 1</mat-list-item>
+                                <mat-list-item class="list-item pr-2 pl-4">Variant 2</mat-list-item>
+                                <mat-list-item class="list-item pr-2 pl-4">Variant 3</mat-list-item>
+                                <mat-list-item class="list-item pr-2 pl-4">Variant 4</mat-list-item>
+                            </div>
+                        </ng-container>
+                    </cdk-virtual-scroll-viewport>
+                </mat-list>
+            </div>
+        </div>
+        <div class="bulk-entry-selected-items w-50 d-flex flex-column">
+            <div class="selected-item-title">Selected Stocks (4)</div>
+            <div class="selected-item-wrapper">
+                <mat-list class="p-0">
+                        <mat-list-item class="px-0 mb-3">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div class="w-75">
+                                    <p>Sales</p> 
+                                    <p class="mt-1">Rate: 0</p>
+                                </div>
+
+                                <div class="d-flex align-items-center justify-content-between column-gap1" >
+                                    <button mat-stroked-button><i class="icon-minus"></i></button>
+                                    <text-field [name]="'qty'" [type]="'number'" [cssClass]="'form-control rounded-0 text-center width-60'"></text-field>
+                                    <button mat-stroked-button><i class="icon-add font-16 fw-bold"></i></button>
+                                    <button mat-button> <i class="icon-cross font-16"></i></button>
+                                </div>
+                            </div>
+                        </mat-list-item>
+                        <mat-list-item class="px-0 mb-3">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div class="w-75">
+                                    <p>Sales (Service stock ) - Service stock fdufh dfdf dfd fd ffd ifdh ff</p> 
+                                    <p class="mt-1">Rate: 0</p>
+                                </div>
+
+                                <div class="d-flex align-items-center justify-content-between column-gap1" >
+                                    <button mat-stroked-button><i class="icon-minus"></i></button>
+                                    <text-field [name]="'qty'" [type]="'number'" [cssClass]="'form-control rounded-0 text-center width-60'"></text-field>
+                                    <button mat-stroked-button><i class="icon-add font-16 fw-bold"></i></button>
+                                    <button mat-button> <i class="icon-cross font-16"></i></button>
+                                </div>
+                            </div>
+                        </mat-list-item>
+                        <mat-list-item class="px-0 mb-3">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div class="w-75">
+                                    <p>Sales</p> 
+                                    <p class="mt-1">Rate: 0 djskd jsdsds sjdskskdjsd sdksj dskjdskjdks jdks djsdskj dsd</p>
+                                </div>
+
+                                <div class="d-flex align-items-center justify-content-between column-gap1" >
+                                    <button mat-stroked-button><i class="icon-minus"></i></button>
+                                    <text-field [name]="'qty'" [type]="'number'" [cssClass]="'form-control rounded-0 text-center width-60'"></text-field>
+                                    <button mat-stroked-button><i class="icon-add font-16 fw-bold"></i></button>
+                                    <button mat-button> <i class="icon-cross font-16"></i></button>
+                                </div>
+                            </div>
+                        </mat-list-item>
+                        <mat-list-item class="px-0 mb-3">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div class="w-75">
+                                    <p>Sales</p> 
+                                    <p class="mt-1">Rate: 0</p>
+                                </div>
+
+                                <div class="d-flex align-items-center justify-content-between column-gap1" >
+                                    <button mat-stroked-button><i class="icon-minus"></i></button>
+                                    <text-field [name]="'qty'" [type]="'number'" [cssClass]="'form-control rounded-0 text-center width-60'"></text-field>
+                                    <button mat-stroked-button><i class="icon-add font-16 fw-bold"></i></button>
+                                    <button mat-button> <i class="icon-cross font-16"></i></button>
+                                </div>
+                            </div>
+                        </mat-list-item>
+                        <mat-list-item class="px-0 mb-3">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div class="w-75">
+                                    <p>Sales</p> 
+                                    <p class="mt-1">Rate: 0</p>
+                                </div>
+
+                                <div class="d-flex align-items-center justify-content-between column-gap1" >
+                                    <button mat-stroked-button><i class="icon-minus"></i></button>
+                                    <text-field [name]="'qty'" [type]="'number'" [cssClass]="'form-control rounded-0 text-center width-60'"></text-field>
+                                    <button mat-stroked-button><i class="icon-add font-16 fw-bold"></i></button>
+                                    <button mat-button> <i class="icon-cross font-16"></i></button>
+                                </div>
+                            </div>
+                        </mat-list-item>
+                        <mat-list-item class="px-0 mb-3">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div class="w-75">
+                                    <p>Sales</p> 
+                                    <p class="mt-1">Rate: 0</p>
+                                </div>
+
+                                <div class="d-flex align-items-center justify-content-between column-gap1" >
+                                    <button mat-stroked-button><i class="icon-minus"></i></button>
+                                    <text-field [name]="'qty'" [type]="'number'" [cssClass]="'form-control rounded-0 text-center width-60'"></text-field>
+                                    <button mat-stroked-button><i class="icon-add font-16 fw-bold"></i></button>
+                                    <button mat-button> <i class="icon-cross font-16"></i></button>
+                                </div>
+                            </div>
+                        </mat-list-item>
+                        <mat-list-item class="px-0 mb-3">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div class="w-75">
+                                    <p>Sales</p> 
+                                    <p class="mt-1">Rate: 0</p>
+                                </div>
+
+                                <div class="d-flex align-items-center justify-content-between column-gap1" >
+                                    <button mat-stroked-button><i class="icon-minus"></i></button>
+                                    <text-field [name]="'qty'" [type]="'number'" [cssClass]="'form-control rounded-0 text-center width-60'"></text-field>
+                                    <button mat-stroked-button><i class="icon-add font-16 fw-bold"></i></button>
+                                    <button mat-button> <i class="icon-cross font-16"></i></button>
+                                </div>
+                            </div>
+                        </mat-list-item>
+                        <mat-list-item class="px-0 mb-3">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div class="w-75">
+                                    <p>Sales</p> 
+                                    <p class="mt-1">Rate: 0</p>
+                                </div>
+
+                                <div class="d-flex align-items-center justify-content-between column-gap1" >
+                                    <button mat-stroked-button><i class="icon-minus"></i></button>
+                                    <text-field [name]="'qty'" [type]="'number'" [cssClass]="'form-control rounded-0 text-center width-60'"></text-field>
+                                    <button mat-stroked-button><i class="icon-add font-16 fw-bold"></i></button>
+                                    <button mat-button> <i class="icon-cross font-16"></i></button>
+                                </div>
+                            </div>
+                        </mat-list-item>
+                        <mat-list-item class="px-0 mb-3">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div class="w-75">
+                                    <p>Sales</p> 
+                                    <p class="mt-1">Rate: 0</p>
+                                </div>
+
+                                <div class="d-flex align-items-center justify-content-between column-gap1" >
+                                    <button mat-stroked-button><i class="icon-minus"></i></button>
+                                    <text-field [name]="'qty'" [type]="'number'" [cssClass]="'form-control rounded-0 text-center width-60'"></text-field>
+                                    <button mat-stroked-button><i class="icon-add font-16 fw-bold"></i></button>
+                                    <button mat-button> <i class="icon-cross font-16"></i></button>
+                                </div>
+                            </div>
+                        </mat-list-item>
+                        <mat-list-item class="px-0 mb-3">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div class="w-75">
+                                    <p>Sales</p> 
+                                    <p class="mt-1">Rate: 0</p>
+                                </div>
+
+                                <div class="d-flex align-items-center justify-content-between column-gap1" >
+                                    <button mat-stroked-button><i class="icon-minus"></i></button>
+                                    <text-field [name]="'qty'" [type]="'number'" [cssClass]="'form-control rounded-0 text-center width-60'"></text-field>
+                                    <button mat-stroked-button><i class="icon-add font-16 fw-bold"></i></button>
+                                    <button mat-button> <i class="icon-cross font-16"></i></button>
+                                </div>
+                            </div>
+                        </mat-list-item>
+                        <mat-list-item class="px-0 mb-3">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div class="w-75">
+                                    <p>Sales</p> 
+                                    <p class="mt-1">Rate: 0</p>
+                                </div>
+
+                                <div class="d-flex align-items-center justify-content-between column-gap1" >
+                                    <button mat-stroked-button><i class="icon-minus"></i></button>
+                                    <text-field [name]="'qty'" [type]="'number'" [cssClass]="'form-control rounded-0 text-center width-60'"></text-field>
+                                    <button mat-stroked-button><i class="icon-add font-16 fw-bold"></i></button>
+                                    <button mat-button> <i class="icon-cross font-16"></i></button>
+                                </div>
+                            </div>
+                        </mat-list-item>
+                        <mat-list-item class="px-0 mb-3">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div class="w-75">
+                                    <p>Sales</p> 
+                                    <p class="mt-1">Rate: 0</p>
+                                </div>
+
+                                <div class="d-flex align-items-center justify-content-between column-gap1" >
+                                    <button mat-stroked-button><i class="icon-minus"></i></button>
+                                    <text-field [name]="'qty'" [type]="'number'" [cssClass]="'form-control rounded-0 text-center width-60'"></text-field>
+                                    <button mat-stroked-button><i class="icon-add font-16 fw-bold"></i></button>
+                                    <button mat-button> <i class="icon-cross font-16"></i></button>
+                                </div>
+                            </div>
+                        </mat-list-item>
+                </mat-list>
+            </div>
+            <div class="selected-item-action d-flex column-gap1">
+                <button mat-stroked-button color="primary">Add</button>
+                <button mat-stroked-button>Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>

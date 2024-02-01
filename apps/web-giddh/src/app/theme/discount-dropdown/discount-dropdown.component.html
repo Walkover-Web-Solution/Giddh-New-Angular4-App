@@ -1,0 +1,31 @@
+<div class="multi-select">
+    <input type="number" class="form-control text-right" [matMenuTriggerFor]="discountControlMenu" placeholder="₹0"
+        readonly value="0">
+    <mat-menu #discountControlMenu="matMenu">
+        <div class="d-flex flex-column px-3 pt-2 discount-wrapper" (click)="$event.stopPropagation()">
+            <div>
+                <input-field [type]="'number'" [label]="'Percent'" [placeholder]="''"
+                    [matSuffix]="'%'" class="d-block" [cssClass]="'text-right'">
+                </input-field>
+
+                <input-field [type]="'number'" [min]="0" [label]="'Value'" [placeholder]="''"
+                    class="d-block mt-3" [cssClass]="'text-right'">
+                </input-field>
+            </div>
+            <div class="discount-separator position-relative text-center my-2">
+                <span class="discount-separator-msg">And</span>
+                <div class="discount-separator-line"></div>
+            </div>
+            <div class="discount-checkbox-wrapper d-flex flex-column">
+                <mat-checkbox type="checkbox" color="primary"><span class="font-15">Tax 1</span></mat-checkbox>
+                <mat-checkbox type="checkbox" color="primary"><span class="font-15">Tax 13</span></mat-checkbox>
+                <mat-checkbox type="checkbox" color="primary"><span class="font-15">Tax 13d</span></mat-checkbox>
+                <mat-checkbox type="checkbox" color="primary"><span class="font-15">Tax 31</span></mat-checkbox>
+                <mat-checkbox type="checkbox" color="primary"><span class="font-15">Tax 31</span></mat-checkbox>
+                <mat-checkbox type="checkbox" color="primary"><span class="font-15">Tax 331</span></mat-checkbox>
+                <mat-checkbox type="checkbox" color="primary"><span class="font-15">Tax 13</span></mat-checkbox>
+                <mat-checkbox type="checkbox" color="primary"><span class="font-15">Tax 2</span></mat-checkbox>
+            </div>
+        </div>
+    </mat-menu>
+</div>
