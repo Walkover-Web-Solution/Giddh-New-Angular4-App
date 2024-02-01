@@ -12,15 +12,35 @@
                 <mat-list class="p-0">
                     <cdk-virtual-scroll-viewport [itemSize]="40" class="list-viewport">
                         <ng-container *cdkVirtualFor="let item of [1,2,3,4,5,6,7,8]">
-                            <mat-list-item class="list-item px-2">
-                                {{'Stock - ' + item }}
-                            </mat-list-item>
-                            <div>
-                                <mat-list-item class="list-item pr-2 pl-4">Variant 1</mat-list-item>
-                                <mat-list-item class="list-item pr-2 pl-4">Variant 2</mat-list-item>
-                                <mat-list-item class="list-item pr-2 pl-4">Variant 3</mat-list-item>
-                                <mat-list-item class="list-item pr-2 pl-4">Variant 4</mat-list-item>
-                            </div>
+
+
+                            <mat-accordion>
+                                <mat-expansion-panel class="my-2">
+                                    <mat-expansion-panel-header>
+                                        <mat-panel-title>
+                                            <mat-list-item class="list-item px-2">
+                                                <img src="assets/images/item-wise.svg" width="18" height="18" class="stock-icon" />
+                                                {{'Stock - ' + item }}
+                                            </mat-list-item>
+                                        </mat-panel-title>
+                                    </mat-expansion-panel-header>
+                                    
+                                    <div class="variants-wrapper">
+                                        <mat-list-item class="list-item pr-2 pl-4">Variant 1</mat-list-item>
+                                        <mat-list-item class="list-item pr-2 pl-4">Variant 2</mat-list-item>
+                                        <mat-list-item class="list-item pr-2 pl-4">Variant 3</mat-list-item>
+                                        <mat-list-item class="list-item pr-2 pl-4">Variant 4</mat-list-item>
+                                    </div>
+
+                                </mat-expansion-panel>
+                            </mat-accordion>
+
+
+
+
+
+                            
+                            
                         </ng-container>
                     </cdk-virtual-scroll-viewport>
                 </mat-list>
@@ -48,7 +68,7 @@
                         <mat-list-item class="px-0 mb-3">
                             <div class="d-flex align-items-center justify-content-between">
                                 <div class="w-75">
-                                    <p>Sales (Service stock ) - Service stock fdufh dfdf dfd fd ffd ifdh ff</p> 
+                                    <p>Sales (Service stock ) - Service stock</p> 
                                     <p class="mt-1">Rate: 0</p>
                                 </div>
 
@@ -64,7 +84,7 @@
                             <div class="d-flex align-items-center justify-content-between">
                                 <div class="w-75">
                                     <p>Sales</p> 
-                                    <p class="mt-1">Rate: 0 djskd jsdsds sjdskskdjsd sdksj dskjdskjdks jdks djsdskj dsd</p>
+                                    <p class="mt-1">Rate: 0 </p>
                                 </div>
 
                                 <div class="d-flex align-items-center justify-content-between column-gap1" >

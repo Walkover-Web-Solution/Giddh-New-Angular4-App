@@ -4,6 +4,7 @@ import { MainComponent } from "./main.component";
 import { VoucherListComponent } from "./list/list.component";
 import { VouchersPreviewComponent } from "./preview/preview.component";
 import { VoucherCreateComponent } from "./create/create.component";
+import { PageLeaveConfirmationGuard } from "../decorators/page-leave-confirmation-guard";
 
 const routes: Routes = [
     {
@@ -25,7 +26,8 @@ const routes: Routes = [
             },
             {
                 path: ":voucherType/create",
-                component: VoucherCreateComponent
+                component: VoucherCreateComponent,
+                canDeactivate: [PageLeaveConfirmationGuard]
             },
             {
                 path: ":voucherType/edit/:uniqueName",

@@ -34,7 +34,4 @@ export const SearchType = {
     BANK: 'bank'
 };
 
-export enum BriedAccountsGroup {
-    'V1' = 'cash, bankaccounts',
-    'V2' = 'cash, bankaccounts, loanandoverdraft'
-};
+export const BriedAccountsGroup = 'cash, bankaccounts, loanandoverdraft';

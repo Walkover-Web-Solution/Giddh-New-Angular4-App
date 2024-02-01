@@ -1,4 +1,4 @@
-<ng-container appTranslate [file]="'proforma-invoice'" (localeData)="localeData = $event"
+<ng-container appTranslate [file]="'vouchers'" (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
     <hamburger-menu></hamburger-menu>
     <div class="vouchers">
@@ -18,20 +18,20 @@
                     <div class="row">
                         <div class="col-10">
                             <div class="d-flex align-items-center">
-                                <div class="vouchers-form-fields w-100">
-                                    <reactive-dropdown-field *ngIf="invoiceType.isSalesInvoice" [label]="'Customer'" [placeholder]="'Select Customer'" formControlName="uniqueName" [name]="'account'"
-                                        [options]="voucherAccountResults$ | async" [showCreateNew]="true" [enableDynamicSearch]="true" [isPaginationEnabled]="true" [openDropdown]="openAccountDropdown" [createNewText]="!invoiceType.isPurchaseInvoice && !invoiceType.isDebitNote ? localeData?.add_customer : localeData?.add_vendor" (scrollEnd)="handleSearchAccountScrollEnd()" (selectedOption)="selectAccount($event)"
-                                        (dynamicSearchedQuery)="searchAccount($event, 1)" (onClear)="selectAccount($event, true)">
+                                <div class="vouchers-form-fields w-100" [keyboardShortcut]="'alt+c'" (onShortcutPress)="toggleAccountAsidePane()">
+                                    <reactive-dropdown-field *ngIf="!invoiceType.isCashInvoice" [label]="invoiceType.isPurchaseInvoice || invoiceType.isDebitNote ? localeData?.vendor_name : localeData?.customer_name" [placeholder]="invoiceType.isPurchaseInvoice || invoiceType.isDebitNote ? localeData?.select_vendor : localeData?.select_customer" formControlName="uniqueName" [name]="'account'"
+                                        [options]="voucherAccountResults$ | async" [showCreateNew]="true" [enableDynamicSearch]="true" [isPaginationEnabled]="true" [openDropdown]="openAccountDropdown" [createNewText]="!invoiceType.isPurchaseInvoice && !invoiceType.isDebitNote ? localeData?.add_customer : localeData?.add_vendor" [labelValue]="invoiceForm.controls['account'].get('customerName')?.value" (scrollEnd)="handleSearchAccountScrollEnd()" (selectedOption)="selectAccount($event)"
+                                        (dynamicSearchedQuery)="searchAccount($event, 1)" (onClear)="selectAccount($event, true)" (createOption)="toggleAccountAsidePane()">
                                     </reactive-dropdown-field>
-                                    <input-field *ngIf="invoiceType.isCashInvoice" [name]="'account'" [label]="'Enter customer name'" [placeholder]="'Enter email'" [type]="'text'" formControlName="customerName"></input-field>
+                                    <input-field *ngIf="invoiceType.isCashInvoice" [name]="'account'" [label]="localeData?.customer_name" [placeholder]="localeData?.enter_customer_name" [type]="'text'" [autoFocus]="true" formControlName="customerName"></input-field>
                                 </div>
-                                <ng-container *ngIf="invoiceType.isSalesInvoice && invoiceForm.controls['account'].get('uniqueName')?.value">
+                                <ng-container *ngIf="!invoiceType.isCashInvoice && invoiceForm.controls['account'].get('uniqueName')?.value">
                                     <div class="vouchers-copy-sales ml-3 cursor-pointer" (click)="getPreviousVouchers()"
-                                        [matMenuTriggerFor]="copySales">
+                                        [matMenuTriggerFor]="copyLastVouchers">
                                         <i class="icon-copy-file"></i>
                                         {{ voucherType | voucherCopyLink: localeData | titlecase }}
                                     </div>
-                                    <mat-menu #copySales="matMenu">
+                                    <mat-menu #copyLastVouchers="matMenu">
                                         <div class="mat-menu-width-large">
                                             <ng-container *ngIf="getLastVouchersInProgress$ | async">
                                                 <mat-spinner [diameter]="30"></mat-spinner>
@@ -52,8 +52,8 @@
                             <h2>0.00</h2>
                         </div>
                         <div class="col-12">
-                            <span *ngIf="!invoiceType.isCashInvoice && !invoiceForm.controls['account'].get('uniqueName')?.value && invoiceForm.controls['account'].get('customerName')?.value" class="vouchers-form-fields-detail cursor-pointer">
-                                {{ !invoiceType.isPurchaseInvoice ? localeData?.customer_details : localeData?.vendor_details}}</span>
+                            <span *ngIf="!invoiceType.isCashInvoice && invoiceForm.controls['account'].get('uniqueName')?.value" class="vouchers-form-fields-detail cursor-pointer" (click)="toggleAccountAsidePane()">
+                                {{ !invoiceType.isPurchaseInvoice ? localeData?.customer_details : localeData?.vendor_details }}</span>
 
                             <ng-container *ngIf="invoiceType.isSalesInvoice && !invoiceType.isCashInvoice">
                                 <img
@@ -596,7 +596,7 @@
                                 <text-field [placeholder]="'Enter'" [cssClass]="'form-control text-right'"
                                     [type]="'text'">
                                 </text-field>
-                                <div class="d-flex align-items-center" (click)="openBulkEntryDialog('othertax')">
+                                <div class="d-flex align-items-center" (click)="openOtherTaxDialog()">
                                     <mat-checkbox type="checkbox" color="primary">
                                     </mat-checkbox>
                                     Other Tax?
@@ -814,7 +814,7 @@
                             </button>
                             <mat-menu #moreOptions="matMenu">
                                 <button mat-menu-item>Create & Send</button>
-                                <button mat-menu-item>Create & Print</button>
+                                <button mat-menu-item (click)="openPrintPreviewDialog()">Create & Print</button>
                             </mat-menu>
                         </div>
                     </div>
@@ -824,3 +824,20 @@
         </div>
     </div>
 </ng-container>
+<div
+    class="aside-overlay"
+    *ngIf="accountAsideMenuState === 'in'"
+></div>
+<generic-aside-menu-account
+    [class]="accountAsideMenuState"
+    [@slideInOut]="accountAsideMenuState"
+    (closeAsideEvent)="toggleAccountAsidePane($event)"
+    [selectedGrpUniqueName]="accountParentGroup"
+    [keyboardShortcut]="{ 'esc': accountAsideMenuState === 'in' && !hasUnsavedChanges }"
+    *ngIf="accountAsideMenuState === 'in'"
+    [selectedAccountUniqueName]="invoiceForm.controls['account'].get('uniqueName')?.value"
+    (onShortcutPress)="toggleAccountAsidePane()"
+    (addEvent)="addNewAccount($event)"
+    (updateEvent)="updateAccount($event)"
+>
+</generic-aside-menu-account>

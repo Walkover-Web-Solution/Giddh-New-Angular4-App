@@ -49,6 +49,9 @@ import { DiscountDropdownModule } from "../theme/discount-dropdown/discount-drop
 import { GstTemplateAComponent } from "./template/gst-template-a/gst-template-a.component";
 import { TemplatePreviewDialogComponent } from "./template-preview-dialog/template-preview-dialog.component";
 import { TemplateEditDialogComponent } from "./template-edit-dialog/template-edit-dialog.component";
+import { PrintVoucherComponent } from "./print-voucher/print-voucher.component";
+import { GenericAsideMenuAccountModule } from "../shared/generic-aside-menu-account/generic.aside.menu.account.module";
+import { KeyboardShortutModule } from "../shared/helpers/directives/keyboardShortcut/keyboardShortut.module";
 
 @NgModule({
     declarations: [
@@ -65,7 +68,8 @@ import { TemplateEditDialogComponent } from "./template-edit-dialog/template-edi
         EmailSendDialogComponent,
         GstTemplateAComponent,
         TemplatePreviewDialogComponent,
-        TemplateEditDialogComponent
+        TemplateEditDialogComponent,
+        PrintVoucherComponent
     ],
     imports: [
         CommonModule,
@@ -104,7 +108,9 @@ import { TemplateEditDialogComponent } from "./template-edit-dialog/template-edi
         VoucherCopyLinkModule,
         MatProgressSpinnerModule,
         TaxDropdownModule,
-        DiscountDropdownModule
+        DiscountDropdownModule,
+        GenericAsideMenuAccountModule,
+        KeyboardShortutModule
     ],
     exports: [
 
