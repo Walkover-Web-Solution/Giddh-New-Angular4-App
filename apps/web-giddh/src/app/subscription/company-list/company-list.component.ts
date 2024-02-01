@@ -1,15 +1,16 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { SubscriptionReportRequest } from '../../models/api-models/Subscriptions';
-import { ReplaySubject } from 'rxjs';
+import { ReplaySubject, debounceTime, takeUntil } from 'rxjs';
 import { TransferComponent } from '../transfer/transfer.component';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 export interface PeriodicElement {
     name: string;
     count: number;
 }
 
 const ELEMENT_DATA: PeriodicElement[] = [
-    { name: "Walkover", count: 2 },
+    { name: "Walkover technologies", count: 2 },
     { name: "Hello", count: 5 },
     { name: "Segmento", count: 8 },
 ];
@@ -28,18 +29,31 @@ export class CompanyListComponent implements OnInit {
     public subscriptionReportRequest: SubscriptionReportRequest = new SubscriptionReportRequest();
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    displayedColumns: string[] = ['name', 'count'];
-    dataSource = ELEMENT_DATA;
+    public displayedColumns: string[] = ['name', 'count'];
+    public dataSource = ELEMENT_DATA;
+    public companyListForm: UntypedFormGroup;
 
 
-    constructor(@Inject(MAT_DIALOG_DATA) public inputData, private changeDetection: ChangeDetectorRef, public dialog: MatDialog,
+    constructor(@Inject(MAT_DIALOG_DATA) public inputData, private changeDetection: ChangeDetectorRef, public dialog: MatDialog, private fb: UntypedFormBuilder,
         public dialogRef: MatDialogRef<any>) {
     }
 
     public ngOnInit(): void {
         this.dialogRef.updatePosition({ top: '0px', right: '0px' });
         document.body?.classList?.add("subscription-sidebar");
+        this.initFrom();
+        this.companyListForm.get('companyName').valueChanges.pipe(
+            debounceTime(700), takeUntil(this.destroyed$))
+            .subscribe((value) => {
+                console.log('Name value changed (debounced):', value);
+            });
         this.changeDetection.detectChanges();
+    }
+
+    public initFrom(): void {
+        this.companyListForm = this.fb.group({
+            companyName: [''],
+        });
     }
 
 
@@ -54,19 +68,7 @@ export class CompanyListComponent implements OnInit {
         this.subscriptionReportRequest.sort = event?.direction;
     }
 
-    /**
-   * This function will use for get log details
-   *
-   * @param {*} element
-   * @memberof SubscriptionComponent
-   */
-    public transferSubscription(event: any, element: any): void {
-        this.dialog.open(TransferComponent, {
-            data: element,
-            panelClass: 'transfer-popup',
-            width: "630px"
-        });
-    }
+
 
     public ngOnDestroy(): void {
         document.body?.classList?.remove("subscription-sidebar");

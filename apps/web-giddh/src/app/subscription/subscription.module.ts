@@ -18,6 +18,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { TransferComponent } from './transfer/transfer.component';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NewConfirmationModalModule } from '../theme/new-confirmation-modal/confirmation-modal.module';
 
 @NgModule({
     imports: [
@@ -37,7 +38,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
         MatSortModule,
         FormFieldsModule,
         ReactiveFormsModule,
-        FormsModule
+        FormsModule,
+        MatTooltipModule,
+        NewConfirmationModalModule
     ],
     declarations: [SubscriptionComponent, CompanyListComponent, TransferComponent]
 })

@@ -5,49 +5,72 @@
     </div>
     <mat-dialog-content class="w-100">
         <div #companyList class="logs-content">
-            <table
-                mat-table
-                [dataSource]="dataSource"
-                matSort
-                (matSortChange)="sortChange($event)"
-                [matSortActive]="subscriptionReportRequest.sortBy"
-                [matSortDirection]="subscriptionReportRequest.sort"
-                class="mat-elevation-z8 subscription-report-table"
-            >
-                <ng-container matColumnDef="name">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header width="20%">Name</th>
-                    <td mat-cell *matCellDef="let element" width="20%">{{ element.name }}</td>
-                </ng-container>
+            <div class="col-lg-12">
+                <div class="d-flex pd-t15 pd-b15 align-items-center justify-content-between">
+                        <form [formGroup]="companyListForm">
+                            <input-field
+                                [name]="'name'"
+                                [label]="'Company Name'"
+                                [placeholder]="'Searcn Company'"
+                                [type]="'text'"
+                                formControlName="companyName"
+                            >
+                            </input-field>
+                        </form>
+                        <button
+                            mat-stroked-button
+                            [matTooltip]="'Add company in subscription'"
+                            [matTooltipPosition]="'above'"
+                            matTooltipClass="tooltip-black"
+                        >
+                            Add Company
+                        </button>
+                </div>
 
-                <ng-container matColumnDef="count">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header width="80%">Count</th>
-                    <td mat-cell *matCellDef="let element" width="80%" class="position-relative word-wrap">
-                        <div class="d-flex align-items-center">
+                <table
+                    mat-table
+                    [dataSource]="dataSource"
+                    matSort
+                    (matSortChange)="sortChange($event)"
+                    [matSortActive]="subscriptionReportRequest.sortBy"
+                    [matSortDirection]="subscriptionReportRequest.sort"
+                    class="subscription-report-table giddh-table table"
+                >
+                    <ng-container matColumnDef="name">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header width="40%">Name</th>
+                        <td mat-cell *matCellDef="let element" width="40%">{{ element.name }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="count">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header width="60%">Count</th>
+                        <td mat-cell *matCellDef="let element" width="60%" class="position-relative word-wrap">
                             <div class="d-flex align-items-center">
-                                {{ element.count }}
-                                <button
-                                    mat-icon-button
-                                    id="edit-model-basic"
-                                    class="table-menu-first-td"
-                                    [matMenuTriggerFor]="editModelBasic"
-                                    #trigger="matMenuTrigger"
-                                >
-                                    <span class="icon-dots-three-vertical"></span>
-                                </button>
-                            </div>
-                            <mat-menu #editModelBasic="matMenu">
-                                <div class="account-detail-custom-header">
-                                    <button mat-menu-item>Archive</button>
-                                    <button mat-menu-item         (click)="transferSubscription($event, element)">Transfer</button>
+                                <div class="d-flex align-items-center">
+                                    {{ element.count }}
+                                    <button
+                                        mat-icon-button
+                                        id="edit-model-basic"
+                                        class="table-menu-first-td"
+                                        [matMenuTriggerFor]="editModelBasic"
+                                        #trigger="matMenuTrigger"
+                                    >
+                                        <span class="icon-dots-three-vertical"></span>
+                                    </button>
                                 </div>
-                            </mat-menu>
-                        </div>
-                    </td>
-                </ng-container>
+                                <mat-menu #editModelBasic="matMenu">
+                                    <div class="account-detail-custom-header">
+                                        <button mat-menu-item>Archive</button>
+                                        <button mat-menu-item>Move</button>
+                                    </div>
+                                </mat-menu>
+                            </div>
+                        </td>
+                    </ng-container>
 
-                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-            </table>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                </table>
+            </div>
         </div>
     </mat-dialog-content>
 </ng-container>

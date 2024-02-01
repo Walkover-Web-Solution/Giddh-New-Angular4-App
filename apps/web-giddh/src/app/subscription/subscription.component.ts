@@ -3,9 +3,13 @@ import { MatDialog } from '@angular/material/dialog';
 import { ReplaySubject } from 'rxjs';
 import { ToasterService } from '../services/toaster.service';
 import { CompanyListComponent } from './company-list/company-list.component';
+import { TransferComponent } from './transfer/transfer.component';
+import { GeneralService } from '../services/general.service';
+import { ConfirmModalComponent } from "../theme/new-confirm-modal/confirm-modal.component";
 /** This will use for interface */
 export interface GetSubscriptions {
     name: string;
+    count: number;
     billingAccount: string;
     subscriber: string;
     country: string;
@@ -18,23 +22,23 @@ export interface GetSubscriptions {
 /** Hold information of activity logs */
 const ELEMENT_DATA: GetSubscriptions[] = [
     {
-        name: 'Walkover', billingAccount: 'HDFC', subscriber: 'Dilpreet', country: 'US', subscriptionId
+        name: 'Walkover', count: 10, billingAccount: 'HDFC', subscriber: 'Dilpreet', country: 'US', subscriptionId
             : 1234, planSubName: 'Sequa', status: 'Active', monthYearly: 'Monthly', renewalDate: '10-01-2023'
     },
     {
-        name: 'MSG91', billingAccount: 'HDFC', subscriber: 'Ravinder', country: 'India', subscriptionId
+        name: 'MSG91', count: 10, billingAccount: 'HDFC', subscriber: 'Ravinder', country: 'India', subscriptionId
             : 1234, planSubName: 'Vine', status: 'In trial', monthYearly: 'Yearly', renewalDate: '10-01-2023'
     },
     {
-        name: 'Hello', billingAccount: 'HDFC', subscriber: 'Nisha', country: 'Nepal', subscriptionId
+        name: 'Hello', count: 10, billingAccount: 'HDFC', subscriber: 'Nisha', country: 'Nepal', subscriptionId
             : 1234, planSubName: 'Birch', status: 'Active', monthYearly: 'Yearly', renewalDate: '10-01-2023'
     },
     {
-        name: 'Segmento', billingAccount: 'HDFC', subscriber: 'Divyanshu', country: 'Europe', subscriptionId
+        name: 'Segmento', count: 10, billingAccount: 'HDFC', subscriber: 'Divyanshu', country: 'Europe', subscriptionId
             : 1234, planSubName: 'Vine', status: 'Inactive', monthYearly: 'Monthly', renewalDate: '10-01-2023'
     },
     {
-        name: 'Whatsapp', billingAccount: 'HDFC', subscriber: 'Ashish', country: 'UK', subscriptionId
+        name: 'Whatsapp', count: 10, billingAccount: 'HDFC', subscriber: 'Ashish', country: 'UK', subscriptionId
             : 1234, planSubName: 'Vine', status: 'In trial', monthYearly: 'Monthly', renewalDate: '10-01-2023'
     },
 ];
@@ -54,17 +58,18 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** This will use for table heading */
-    public displayedColumns: string[] = ['name', 'billingAccount', 'subscriber', 'country', 'subscriptionId', 'planSubName', 'status', 'monthYearly', 'renewalDate'];
+    public displayedColumns: string[] = ['name', 'count', 'billingAccount', 'subscriber', 'country', 'planSubName', 'status', 'monthYearly', 'renewalDate'];
     /** Hold the data of activity logs */
     public dataSource = ELEMENT_DATA;
     /** Hold the list of mat menu  */
-    public menuList: any[] = ['Change / Buy Plan', 'View Subscription', 'Change Billing', 'Transfer', 'Cancel'];
+    public menuList: any[] = ['Change Plan', 'Buy Plan', 'View Subscription', 'Change Billing', 'Transfer', 'Cancel', 'Move'];
     /** True if translations loaded */
     public translationLoaded: boolean = false;
 
     constructor(public dialog: MatDialog,
         private toaster: ToasterService,
-        private changeDetection: ChangeDetectorRef
+        private changeDetection: ChangeDetectorRef,
+        private generalService: GeneralService
     ) { }
 
     public ngOnInit(): void {
@@ -82,6 +87,40 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
             data: element,
             panelClass: 'subscription-sidebar'
         });
+    }
+
+    /**
+* This function will use for get log details
+*
+* @param {*} element
+* @memberof SubscriptionComponent
+*/
+    public transferSubscription(event: any, element: any, type: string): void {
+        console.log(event, element, type);
+        if (type === 'transfer') {
+            this.dialog.open(TransferComponent, {
+                data: element,
+                panelClass: 'transfer-popup',
+                width: "630px"
+            });
+        } if (type === 'Cancel') {
+            let dialogRef = this.dialog.open(ConfirmModalComponent, {
+                data: {
+                    title: 'Cancel Subscription',
+                    body: 'Subscription will be cancel on Expiry Date',
+                    ok: 'Yes',
+                    cancel: 'Cancel'
+                },
+                panelClass: 'cancel-confirmation-modal',
+
+                width: '585px'
+            });
+
+            dialogRef.afterClosed().subscribe((action) => {
+                if (action) {
+                }
+            });
+        }
     }
 
     /**

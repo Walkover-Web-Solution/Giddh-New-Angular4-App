@@ -21,61 +21,62 @@
                 *ngIf="dataSource?.length"
                 class="giddh-table table"
             >
-                <!-- UserName Column -->
                 <ng-container matColumnDef="name">
                     <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_name }}</th>
+                    <td class="subscription-td" mat-cell *matCellDef="let element">
+                         {{ element.name }}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="count">
+                    <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_count }}</th>
                     <td
                         class="subscription-td cursor-pointer"
                         mat-cell
                         *matCellDef="let element"
                         (click)="getCompanyList($event, element)"
                     >
-                        <strong class="subscription-name"> {{ element.name }}</strong>
+                        <strong class="subscription-name"> {{ element.count }}</strong>
                     </td>
                 </ng-container>
-                <!-- Date Column -->
                 <ng-container matColumnDef="billingAccount">
                     <th mat-header-cell *matHeaderCellDef>Billing Account</th>
                     <td class="subscription-td" mat-cell *matCellDef="let element">
                         {{ element.billingAccount }}
                     </td>
                 </ng-container>
-                <!-- IP Column -->
                 <ng-container matColumnDef="subscriber">
                     <th mat-header-cell *matHeaderCellDef>Subscriber</th>
                     <td class="subscription-td" mat-cell *matCellDef="let element">
                         {{ element.subscriber }}
                     </td>
                 </ng-container>
-                <!-- Entity Column -->
                 <ng-container matColumnDef="country">
                     <th mat-header-cell *matHeaderCellDef>Country</th>
                     <td class="subscription-td" mat-cell *matCellDef="let element">
                         {{ element.country }}
                     </td>
                 </ng-container>
-                <!-- Operation Column , 'subscriptionId', 'planSubName', 'status', 'monthYearly', 'renewalDate' -->
-                <ng-container matColumnDef="subscriptionId">
-                    <th mat-header-cell *matHeaderCellDef>Subscription Id</th>
-                    <td mat-cell *matCellDef="let element" class="position-relative">
-                        {{ element.subscriptionId }}
-                    </td>
-                </ng-container>
-                <!-- History Column -->
                 <ng-container matColumnDef="planSubName">
                     <th mat-header-cell *matHeaderCellDef>Plan Sub Name</th>
-                    <td mat-cell *matCellDef="let element" class="position-relative">
+                    <td
+                        mat-cell
+                        *matCellDef="let element"
+                        class="position-relative"
+                        [matTooltip]="element?.subscriptionId"
+                        [matTooltipPosition]="'above'"
+                        matTooltipClass="tooltip-black"
+                    >
                         {{ element.planSubName }}
                     </td>
                 </ng-container>
                 <ng-container matColumnDef="status">
                     <th mat-header-cell *matHeaderCellDef>Status</th>
                     <td mat-cell *matCellDef="let element" class="position-relative">
-                   <span [ngClass]="{'text-success':element.status === 'active'}" >{{ element.status }}</span>
+                        <span [ngClass]="{ 'text-success': element.status === 'active' }">{{ element.status }}</span>
                     </td>
                 </ng-container>
                 <ng-container matColumnDef="monthYearly">
-                    <th mat-header-cell *matHeaderCellDef>Monthly/ Yearly</th>
+                    <th mat-header-cell *matHeaderCellDef>Monthly / Yearly</th>
                     <td mat-cell *matCellDef="let element" class="position-relative">
                         {{ element.monthYearly }}
                     </td>
@@ -98,7 +99,7 @@
                         <mat-menu #editModelBasic="matMenu">
                             <div class="account-detail-custom-header">
                                 <ng-container *ngFor="let list of menuList">
-                                    <button mat-menu-item>{{ list }}</button>
+                                    <button mat-menu-item (click)="transferSubscription($event, element, list)">{{ list }}</button>
                                 </ng-container>
                             </div>
                         </mat-menu>
