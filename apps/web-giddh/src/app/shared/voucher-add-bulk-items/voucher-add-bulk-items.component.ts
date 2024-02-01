@@ -208,6 +208,7 @@ export class VoucherAddBulkItemsComponent implements OnDestroy {
                     map((e: any) => e.target?.value),
                     takeUntil(this.destroyed$)
                 ).subscribe((res: string) => {
+                    this.isAccountSearchData = true;
                     this.onSearchQueryChanged(res, 1);
                 });
             }, 100);
