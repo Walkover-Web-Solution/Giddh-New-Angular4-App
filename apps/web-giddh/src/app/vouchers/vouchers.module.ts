@@ -46,6 +46,9 @@ import { VoucherNameModule } from "./utility/pipe/voucher-name/voucher-name.modu
 import { VoucherCopyLinkModule } from "./utility/pipe/voucher-copy-link/voucher-copy-link.module";
 import { TaxDropdownModule } from "../theme/tax-dropdown/tax-dropdown.module";
 import { DiscountDropdownModule } from "../theme/discount-dropdown/discount-dropdown.module";
+import { GstTemplateAComponent } from "./template/gst-template-a/gst-template-a.component";
+import { TemplatePreviewDialogComponent } from "./template-preview-dialog/template-preview-dialog.component";
+import { TemplateEditDialogComponent } from "./template-edit-dialog/template-edit-dialog.component";
 import { PrintVoucherComponent } from "./print-voucher/print-voucher.component";
 import { GenericAsideMenuAccountModule } from "../shared/generic-aside-menu-account/generic.aside.menu.account.module";
 import { KeyboardShortutModule } from "../shared/helpers/directives/keyboardShortcut/keyboardShortut.module";
@@ -65,6 +68,9 @@ import { AsideMenuCreateTaxModule } from "../shared/aside-menu-create-tax/aside-
         BulkUpdateComponent,
         HistoryDialogComponent,
         EmailSendDialogComponent,
+        GstTemplateAComponent,
+        TemplatePreviewDialogComponent,
+        TemplateEditDialogComponent,
         PrintVoucherComponent
     ],
     imports: [
