@@ -47,6 +47,8 @@ import { VoucherCopyLinkModule } from "./utility/pipe/voucher-copy-link/voucher-
 import { TaxDropdownModule } from "../theme/tax-dropdown/tax-dropdown.module";
 import { DiscountDropdownModule } from "../theme/discount-dropdown/discount-dropdown.module";
 import { PrintVoucherComponent } from "./print-voucher/print-voucher.component";
+import { GenericAsideMenuAccountModule } from "../shared/generic-aside-menu-account/generic.aside.menu.account.module";
+import { KeyboardShortutModule } from "../shared/helpers/directives/keyboardShortcut/keyboardShortut.module";
 
 @NgModule({
     declarations: [
@@ -100,7 +102,9 @@ import { PrintVoucherComponent } from "./print-voucher/print-voucher.component";
         VoucherCopyLinkModule,
         MatProgressSpinnerModule,
         TaxDropdownModule,
-        DiscountDropdownModule
+        DiscountDropdownModule,
+        GenericAsideMenuAccountModule,
+        KeyboardShortutModule
     ],
     exports: [
 

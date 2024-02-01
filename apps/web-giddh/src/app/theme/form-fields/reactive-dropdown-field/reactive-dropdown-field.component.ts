@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, ViewChild, forwardRef } from "@angular/core";
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild, forwardRef } from "@angular/core";
 import { IOption } from "../../ng-virtual-select/sh-options.interface";
 import { BehaviorSubject, Observable, ReplaySubject, Subject, debounceTime, exhaustMap, of, scan, skip, startWith, switchMap, takeUntil, tap } from "rxjs";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
@@ -61,8 +61,8 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     @Input() public label: string;
     /** Adds red border around field if true */
     @Input() public showError: boolean = false;
-    /** Holds value */
-    @Input() public value: any = '';
+    /** Holds label of value */
+    @Input() public labelValue: any = '';
     /** Close autocomplete on focus out if true - Need to set closeOnFocusOut = true if parent element contains event stop propogation on click */
     @Input() public closeOnFocusOut: boolean = false;
     /** Emits the scroll to bottom event when pagination is required  */
@@ -75,6 +75,8 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     @Output() public onClear: EventEmitter<any> = new EventEmitter<any>();
     /** Callback for option selected */
     @Output() public selectedOption: EventEmitter<any> = new EventEmitter<any>();
+    /** Holds value */
+    public value: any = '';
     /** Holds global translations */
     public commonLocaleData: any = {};
     /** Search field form control */
@@ -147,8 +149,10 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
         return of(filteredOptions);
     }
 
-    public ngOnChanges(): void {
-        this.fieldFilteredOptions$ = of(this.options);
+    public ngOnChanges(changes: SimpleChanges): void {
+        if (changes?.options) {
+            this.fieldFilteredOptions$ = of(this.options);
+        }
     }
 
     public ngOnDestroy(): void {
