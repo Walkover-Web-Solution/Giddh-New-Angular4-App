@@ -9460,6 +9460,13 @@ span#HW_badge_cont:nth-child(3) {
 /*flex css start*/
 .flex-column {
     flex-direction: column;
+    -ms-flex-direction: column;
+}
+.flex-wrap {
+    flex-wrap: wrap;
+}
+.row-gap1 {
+    row-gap: 10px;
 }
 
 /*flex css start*/

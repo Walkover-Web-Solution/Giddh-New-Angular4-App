@@ -8,6 +8,7 @@ import { NewConfirmationModalComponent } from "../../theme/new-confirmation-moda
 import { ConfirmationModalConfiguration } from "../../theme/confirmation-modal/confirmation-modal.interface";
 import { GeneralService } from "../../services/general.service";
 
+// invoice-table
 export interface PeriodicElement {
     invoice: string;
     position: number;
@@ -19,14 +20,82 @@ export interface PeriodicElement {
     invoicestatus: string;
     status: string;
 }
-
+// invoice-table
 const ELEMENT_DATA: PeriodicElement[] = [
     { position: 1, invoice: 'Hydrogen', customer: '1.0079', invoicedate: 'H', amount: 'H', balance: '', duedate: '', invoicestatus:'', status:'' },
     { position: 2, invoice: 'Helium', customer: '4.0026', invoicedate: 'He', amount: 'H', balance: '', duedate: '', invoicestatus:'', status:'' },
-    { position: 2, invoice: 'Helium', customer: '4.0026', invoicedate: 'He', amount: 'H', balance: '', duedate: '', invoicestatus:'', status:'' },
-    { position: 2, invoice: 'Helium', customer: '4.0026', invoicedate: 'He', amount: 'H', balance: '', duedate: '', invoicestatus:'', status:'' },
-    { position: 2, invoice: 'Helium', customer: '4.0026', invoicedate: 'He', amount: 'H', balance: '', duedate: '', invoicestatus:'', status:'' },
-    { position: 2, invoice: 'Helium', customer: '4.0026', invoicedate: 'He', amount: 'H', balance: '', duedate: '', invoicestatus:'', status:'' },
+    { position: 3, invoice: 'Helium', customer: '4.0026', invoicedate: 'He', amount: 'H', balance: '', duedate: '', invoicestatus:'', status:'' },
+    { position: 4, invoice: 'Helium', customer: '4.0026', invoicedate: 'He', amount: 'H', balance: '', duedate: '', invoicestatus:'', status:'' },
+    { position: 5, invoice: 'Helium', customer: '4.0026', invoicedate: 'He', amount: 'H', balance: '', duedate: '', invoicestatus:'', status:'' },
+    { position: 6, invoice: 'Helium', customer: '4.0026', invoicedate: 'He', amount: 'H', balance: '', duedate: '', invoicestatus:'', status:'' },
+];
+
+// estimate-table
+export interface PeriodicElementEstimate {
+    estimate: string;
+    position: number;
+    customer: string;
+    estimatedate: string;
+    amount: string;
+    expirydate: string;
+    status: string;
+    action: string;
+}
+// estimate-table
+const ESTIMATE_DATA: PeriodicElementEstimate[] = [
+    { position: 1, estimate: 'EST-20240111-1', customer: '00000000', estimatedate: '11-01-2024', amount: 'H', expirydate: '11-01-2024', status:'', action:'' },
+    { position: 2, estimate: 'EST-20240111-1', customer: '00000000', estimatedate: '11-01-2024', amount: 'H', expirydate: '11-01-2024', status:'', action:'' },
+    { position: 3, estimate: 'EST-20240111-1', customer: '00000000', estimatedate: '11-01-2024', amount: 'H', expirydate: '11-01-2024', status:'', action:'' },
+    { position: 4, estimate: 'EST-20240111-1', customer: '00000000', estimatedate: '11-01-2024', amount: 'H', expirydate: '11-01-2024', status:'', action:'' },
+    { position: 5, estimate: 'EST-20240111-1', customer: '00000000', estimatedate: '11-01-2024', amount: 'H', expirydate: '11-01-2024', status:'', action:'' },
+    { position: 6, estimate: 'EST-20240111-1', customer: '00000000', estimatedate: '11-01-2024', amount: 'H', expirydate: '11-01-2024', status:'', action:'' }
+];
+
+// prforma-table
+export interface PeriodicElementProforma {
+    proforma: string;
+    position: number;
+    customer: string;
+    proformadate: string;
+    amount: string;
+    expirydate: string;
+    status: string;
+    action: string;
+}
+// prforma-table
+const PROFORMA_DATA: PeriodicElementProforma[] = [
+    { position: 1, proforma: 'PR-20240111-2', customer: '00000000', proformadate: '11-01-2024', amount: 'H', expirydate: '11-01-2024', status:'', action:'' }
+];
+
+// pending-table
+export interface PeriodicElementPending {
+    date: string;
+    position: number;
+    particular: string;
+    amount: string;
+    account: string;
+    total: string;
+    description: string;
+}
+// pending-table
+const PENDING_DATA: PeriodicElementPending[] = [
+    { position: 1, date: '08-04-2023', particular: 'Sales', amount: 'H', account: 'USA debtor', total:'₹23.1', description:'' }
+];
+
+// credit-table
+export interface PeriodicElementCredit {
+    credit: string;
+    position: number;
+    customer: string;
+    date: string;
+    linked: string;
+    amount: string;
+    einvoicestatus: string;
+    status: string;
+}
+// invoice-table
+const CREDIT_DATA: PeriodicElementCredit[] = [
+    { position: 1, credit: 'Hydrogen', customer: '1.0079', date: 'H', linked: 'H', amount: '', einvoicestatus:'', status:'' }
 ];
 
 @Component({
@@ -42,9 +111,21 @@ export class VoucherListComponent implements OnInit, OnDestroy, AfterViewInit {
     public selectedDateRangeUi: any;
     // Selected range label
     public selectedRangeLabel: any = "";
-    // table data
+    // invoice table data
     displayedColumns: string[] = ['position', 'invoice', 'customer', 'invoicedate', 'amount', 'balance', 'duedate', 'invoicestatus', 'status'];
-    dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);;
+    dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
+    // estimate-table
+    displayedColumnEstimate: string[] = ['position', 'estimate', 'customer', 'estimatedate', 'amount', 'expirydate', 'status', 'action'];
+    dataSourceEstimate = new MatTableDataSource<PeriodicElementEstimate>(ESTIMATE_DATA);
+    // proforma-table
+    displayedColumnProforma: string[] = ['position', 'proforma', 'customer', 'proformadate', 'amount', 'expirydate', 'status', 'action'];
+    dataSourceProforma = new MatTableDataSource<PeriodicElementProforma>(PROFORMA_DATA);
+    // pending-table
+    displayedColumnPending: string[] = ['position', 'date', 'particular', 'amount', 'account', 'total', 'description'];
+    dataSourcePending = new MatTableDataSource<PeriodicElementPending>(PENDING_DATA);
+    // credit-table
+    displayedColumnsCredit: string[] = ['position', 'credit', 'customer', 'date', 'linked', 'amount', 'einvoicestatus', 'status'];
+    dataSourceCredit = new MatTableDataSource<PeriodicElementCredit>(CREDIT_DATA);
 
     // advance search dialog
     @ViewChild('advancesearch', { static: true }) public advancesearch: TemplateRef<any>;

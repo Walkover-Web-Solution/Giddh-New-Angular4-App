@@ -2,11 +2,372 @@
     <hamburger-menu class="hamburger-menu"></hamburger-menu>
     <div class="position-relative invoice-list">
         <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
-            <mat-tab label="Estimates (Beta)">Estimates (Beta)</mat-tab>
-            <mat-tab label="Proformas">Proformas</mat-tab>
+            <!-- estimate-content-start -->
+            <mat-tab label="Estimates (Beta)">
+                <div class="vouchers-wrapper pt-3 px-4">
+                    <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
+                        <div class="d-flex align-items-center column-gap1">
+                            <button mat-stroked-button color="primary">
+                                <span>+ New Estimate</span>
+                            </button>
+                            <div class="custom-datepicker-wrapper">
+                                <div class="custom-datepicker">
+                                    <input type="text" name="selectedDateRange"
+                                        class="giddh-datepicker date-range-picker" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center column-gap1">
+                            <button mat-stroked-button color="primary" [matMenuTriggerFor]="moreEstimate">
+                                <span>More</span>
+                                <i class="icon-arrow-down icon-font-11 ml-2"></i>
+                            </button>
+                            <mat-menu #moreEstimate="matMenu">
+                                <button mat-menu-item (click)="deleteVoucherDialog()">Delete</button>
+                            </mat-menu>
+                            <button mat-stroked-button colo="primary" (click)="advanceSearchDialog()">Filter
+                                <i class="icon-advance-filter"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table mat-table [dataSource]="dataSourceEstimate" matSort class="w-100">
+                            <ng-container matColumnDef="position">
+                                <th mat-header-cell *matHeaderCellDef> # 
+                                    <!-- <span>
+                                        <mat-checkbox
+                                            color="primary"
+                                        ></mat-checkbox>
+                                    </span> -->
+                                </th>
+                                <td mat-cell *matCellDef="let element">
+                                    <div class="d-flex align-items-center">
+                                        <div class="invoice-number">
+                                            {{element.position}}
+                                        </div>
+                                        <div class="checkbox-hide">
+                                            <mat-checkbox
+                                                color="primary"
+                                            ></mat-checkbox>
+                                        </div>
+                                    </div>
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="estimate">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    <div class="d-flex align-items-center column-gap5">
+                                        <ng-container
+                                            *ngTemplateOutlet="
+                                                searchTemplate;
+                                                context: {
+                                                    $implicit: showNameSearch,
+                                                    fieldName: 'name',
+                                                    formControl: searchedName,
+                                                    title: name
+                                                }
+                                            "
+                                        ></ng-container>
+                                        Estimate No.
+                                    </div>
+                                    </th>
+                                <td mat-cell *matCellDef="let element">
+                                    <a href="javascript:;" class="btn-link-2">
+                                        {{element.estimate}}
+                                    </a>
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="customer">
+                                <th mat-header-cell *matHeaderCellDef> 
+                                    <div class="d-flex align-items-center column-gap5">
+                                        <ng-container
+                                            *ngTemplateOutlet="
+                                                searchTemplate;
+                                                context: {
+                                                    $implicit: showNameSearch,
+                                                    fieldName: 'name',
+                                                    formControl: searchedName,
+                                                    title: name
+                                                }
+                                            "
+                                        ></ng-container>
+                                        Customer
+                                    </div>    
+                                </th>
+                                <td mat-cell *matCellDef="let element" class="no-dbl-click-select">
+                                    <div class="cp">{{element.customer}}</div>
+                                    <!-- account-detail-double-click -->
+                                    <!-- <mat-card class="outline-card account-detail-wrapper">
+                                        <div class="p-3 border-bottom account-header">
+                                            <div class="d-flex align-items-center justify-content-between column-gap15 ">
+                                                <h3>00000000</h3>
+                                                <span class="cp">
+                                                    <img src="./assets/images/path.svg" />
+                                                </span>
+                                            </div>
+                                            <p class="mt-2">919111525164</p>
+                                            <p>ravinder@walkover.in</p>
+                                        </div>
+                                        <mat-card-content class="pt-3">
+                                            <ul class="list-unstyled">
+                                                <li class="text-left"><a href="javascript:;" class="default-color">Go to Ledger</a></li>
+                                                <li class="text-left mr-t05"><a href="javascript:;" class="default-color">Generate Invoice</a></li>
+                                            </ul>
+                                        </mat-card-content>
+                                    </mat-card> -->
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="estimatedate">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                    Estimate Date
+                                </th>
+                                <td mat-cell *matCellDef="let element"> 
+                                    {{element.estimatedate}}
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="amount">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-right">
+                                    Total Amt.
+                                </th>
+                                <td mat-cell *matCellDef="let element" class="text-right" matTooltip="In INR: 1.239 (Conversion Rate: 0.005)"
+                                matTooltipPosition="above"> 
+                                    Rp233.00
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="expirydate">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                    Expiry Date
+                                </th>
+                                <td mat-cell *matCellDef="let element" matTooltip="In INR: 1.239 (Conversion Rate: 0.005)"
+                                matTooltipPosition="above"> 
+                                    {{element.expirydate}}
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="status">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    Status
+                                </th>
+                                <td mat-cell *matCellDef="let element">
+                                    <div [matTooltip]="'Credential are Invalid, please add valid credentials.'" [matTooltipPosition]="'above'">
+                                        Actual
+                                    </div>
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="action">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    Action
+                                </th>
+                                <td mat-cell *matCellDef="let element"> 
+                                    <div class="d-flex justify-content-between align-items-center column-gap5">
+                                        <p>Expired</p>
+                                        <span [matMenuTriggerFor]="menu" class="cp">
+                                            <i class="icon-dots-three-vertical"></i>
+                                        </span>
+                                        <mat-menu #menu="matMenu">
+                                            <button mat-menu-item>Accepted</button>
+                                            <button mat-menu-item>Declined</button>
+                                            <button mat-menu-item>Convert to Proforma</button>
+                                            <button mat-menu-item>Convert to Invoice</button>
+                                            <button mat-menu-item>Expired</button>
+                                        </mat-menu>
+                                    </div>
+                                </td>
+                            </ng-container>
+                            <tr mat-header-row *matHeaderRowDef="displayedColumnEstimate"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumnEstimate;" class="checkbox-show"></tr>
+                        </table>
+                        <mat-paginator [pageSizeOptions]="[5, 10, 20]"
+                            showFirstLastButtons
+                            aria-label="Select page of periodic elements">
+                        </mat-paginator>
+                    </div>
+                </div>
+            </mat-tab>
+            <!-- estimate-content-end -->
+
+            <!-- proforma-content-start -->
+            <mat-tab label="Proformas">
+                <div class="vouchers-wrapper pt-3 px-4">
+                    <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
+                        <div class="d-flex align-items-center column-gap1">
+                            <button mat-stroked-button color="primary">
+                                <span>+ New Proforma</span>
+                            </button>
+                            <div class="custom-datepicker-wrapper">
+                                <div class="custom-datepicker">
+                                    <input type="text" name="selectedDateRange"
+                                        class="giddh-datepicker date-range-picker" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center column-gap1">
+                            <button mat-stroked-button color="primary" [matMenuTriggerFor]="moreProforma">
+                                <span>More</span>
+                                <i class="icon-arrow-down icon-font-11 ml-2"></i>
+                            </button>
+                            <mat-menu #moreProforma="matMenu">
+                                <button mat-menu-item (click)="deleteVoucherDialog()">Delete</button>
+                            </mat-menu>
+                            <button mat-stroked-button colo="primary" (click)="advanceSearchDialog()">Filter
+                                <i class="icon-advance-filter"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table mat-table [dataSource]="dataSourceProforma" matSort class="w-100">
+                            <ng-container matColumnDef="position">
+                                <th mat-header-cell *matHeaderCellDef> #
+                                    <!-- <span>
+                                        <mat-checkbox
+                                            color="primary"
+                                        ></mat-checkbox>
+                                    </span> -->
+                                </th>
+                                <td mat-cell *matCellDef="let element">
+                                    <div class="d-flex align-items-center">
+                                        <div class="invoice-number">
+                                            {{element.position}}
+                                        </div>
+                                        <div class="checkbox-hide">
+                                            <mat-checkbox
+                                                color="primary"
+                                            ></mat-checkbox>
+                                        </div>
+                                    </div>
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="proforma">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    <div class="d-flex align-items-center column-gap5">
+                                        <ng-container
+                                            *ngTemplateOutlet="
+                                                searchTemplate;
+                                                context: {
+                                                    $implicit: showNameSearch,
+                                                    fieldName: 'name',
+                                                    formControl: searchedName,
+                                                    title: name
+                                                }
+                                            "
+                                        ></ng-container>
+                                        Proforma No.
+                                    </div>
+                                    </th>
+                                <td mat-cell *matCellDef="let element">
+                                    <a href="javascript:;" class="btn-link-2">
+                                        {{element.proforma}}
+                                    </a>
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="customer">
+                                <th mat-header-cell *matHeaderCellDef> 
+                                    <div class="d-flex align-items-center column-gap5">
+                                        <ng-container
+                                            *ngTemplateOutlet="
+                                                searchTemplate;
+                                                context: {
+                                                    $implicit: showNameSearch,
+                                                    fieldName: 'name',
+                                                    formControl: searchedName,
+                                                    title: name
+                                                }
+                                            "
+                                        ></ng-container>
+                                        Customer
+                                    </div>    
+                                </th>
+                                <td mat-cell *matCellDef="let element" class="no-dbl-click-select">
+                                    <div class="cp">{{element.customer}}</div>
+                                    <!-- account-detail-double-click -->
+                                    <!-- <mat-card class="outline-card account-detail-wrapper">
+                                        <div class="p-3 border-bottom account-header">
+                                            <div class="d-flex align-items-center justify-content-between column-gap15 ">
+                                                <h3>00000000</h3>
+                                                <span class="cp">
+                                                    <img src="./assets/images/path.svg" />
+                                                </span>
+                                            </div>
+                                            <p class="mt-2">919111525164</p>
+                                            <p>ravinder@walkover.in</p>
+                                        </div>
+                                        <mat-card-content class="pt-3">
+                                            <ul class="list-unstyled">
+                                                <li class="text-left"><a href="javascript:;" class="default-color">Go to Ledger</a></li>
+                                                <li class="text-left mr-t05"><a href="javascript:;" class="default-color">Generate Invoice</a></li>
+                                            </ul>
+                                        </mat-card-content>
+                                    </mat-card> -->
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="proformadate">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                    Proforma Date
+                                </th>
+                                <td mat-cell *matCellDef="let element"> 
+                                    {{element.proformadate}}
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="amount">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-right">
+                                    Total Amt.
+                                </th>
+                                <td mat-cell *matCellDef="let element" class="text-right" matTooltip="In INR: 1.239 (Conversion Rate: 0.005)"
+                                matTooltipPosition="above"> 
+                                    Rp233.00
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="expirydate">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                    Expiry Date
+                                </th>
+                                <td mat-cell *matCellDef="let element" matTooltip="In INR: 1.239 (Conversion Rate: 0.005)"
+                                matTooltipPosition="above"> 
+                                    {{element.expirydate}}
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="status">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    Status
+                                </th>
+                                <td mat-cell *matCellDef="let element">
+                                    <div [matTooltip]="'Credential are Invalid, please add valid credentials.'" [matTooltipPosition]="'above'">
+                                        {{element.status}}
+                                    </div>
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="action">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    Action
+                                </th>
+                                <td mat-cell *matCellDef="let element"> 
+                                    <div class="d-flex justify-content-between align-items-center column-gap5">
+                                        <p>Expired</p>
+                                        <span [matMenuTriggerFor]="menu" class="cp">
+                                            <i class="icon-dots-three-vertical"></i>
+                                        </span>
+                                        <mat-menu #menu="matMenu">
+                                            <button mat-menu-item>Accepted</button>
+                                            <button mat-menu-item>Declined</button>
+                                            <button mat-menu-item>Convert to Invoice</button>
+                                            <button mat-menu-item>Expired</button>
+                                        </mat-menu>
+                                    </div>
+                                </td>
+                            </ng-container>
+                            <tr mat-header-row *matHeaderRowDef="displayedColumnProforma"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumnProforma;" class="checkbox-show"></tr>
+                        </table>
+                        <mat-paginator [pageSizeOptions]="[5, 10, 20]"
+                            showFirstLastButtons
+                            aria-label="Select page of periodic elements">
+                        </mat-paginator>
+                    </div>
+                </div>
+            </mat-tab>
+            <!-- proforma-content-end -->
+            
             <!-- invoice-content-start -->
             <mat-tab label="Invoices">
-                <div class="invoice-wrapper pd-15">
+                <div class="vouchers-wrapper pt-3 px-4">
                     <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
                         <div class="d-flex align-items-center column-gap1">
                             <button mat-stroked-button color="primary" [matMenuTriggerFor]="downloadCsvEmail">
@@ -57,7 +418,13 @@
                     <div class="table-responsive">
                         <table mat-table [dataSource]="dataSource" matSort class="w-100">
                             <ng-container matColumnDef="position">
-                                <th mat-header-cell *matHeaderCellDef> # </th>
+                                <th mat-header-cell *matHeaderCellDef> #
+                                    <!-- <span>
+                                        <mat-checkbox
+                                            color="primary"
+                                        ></mat-checkbox>
+                                    </span> -->
+                                </th>
                                 <td mat-cell *matCellDef="let element">
                                     <div class="d-flex align-items-center">
                                         <div class="invoice-number">
@@ -205,17 +572,314 @@
                 </div>
             </mat-tab>
             <!-- invoice-content-end -->
-            <mat-tab label="Credit Note">Credit Note</mat-tab>
-            <mat-tab label="Pending">Pending</mat-tab>
+
+            <!-- credit-note-content-start -->
+            <mat-tab label="Credit Note">
+                <div class="vouchers-wrapper pt-3 px-4">
+                    <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
+                        <div class="d-flex align-items-center column-gap1">
+                            <button mat-stroked-button color="primary">
+                                <span>+ New Cr. Note</span>
+                            </button>
+                            <div class="custom-datepicker-wrapper">
+                                <div class="custom-datepicker">
+                                    <input type="text" name="selectedDateRange"
+                                        class="giddh-datepicker date-range-picker" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center column-gap1">
+                            <button mat-stroked-button color="primary" [matMenuTriggerFor]="moreCredit">
+                                <span>More</span>
+                                <i class="icon-arrow-down icon-font-11 ml-2"></i>
+                            </button>
+                            <mat-menu #moreCredit="matMenu">
+                                <button mat-menu-item (click)="bulkUpdateDialog()">Bulk Update</button>
+                                <button mat-menu-item>Create E-invoice</button>
+                                <button mat-menu-item (click)="deleteVoucherDialog()">Delete</button>
+                            </mat-menu>
+                            <button mat-stroked-button colo="primary" (click)="advanceSearchDialog()">Filter
+                                <i class="icon-advance-filter"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="total-wrapper d-flex column-gap5 w-100">
+                        <div class="total-sale opening-box pd-1 w-100">
+                            <p class="font-12">Total Sale:</p>
+                            <span class="font-16">₹4,17,193.26/-</span>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table mat-table [dataSource]="dataSourceCredit" matSort class="w-100">
+                            <ng-container matColumnDef="position">
+                                <th mat-header-cell *matHeaderCellDef> # 
+                                    <!-- <span>
+                                        <mat-checkbox
+                                            color="primary"
+                                        ></mat-checkbox>
+                                    </span> -->
+                                </th>
+                                <td mat-cell *matCellDef="let element">
+                                    <div class="d-flex align-items-center">
+                                        <div class="invoice-number">
+                                            {{element.position}}
+                                        </div>
+                                        <div class="checkbox-hide">
+                                            <mat-checkbox
+                                                color="primary"
+                                            ></mat-checkbox>
+                                        </div>
+                                    </div>
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="credit">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    <div class="d-flex align-items-center column-gap5">
+                                        <ng-container
+                                            *ngTemplateOutlet="
+                                                searchTemplate;
+                                                context: {
+                                                    $implicit: showNameSearch,
+                                                    fieldName: 'name',
+                                                    formControl: searchedName,
+                                                    title: name
+                                                }
+                                            "
+                                        ></ng-container>
+                                        Cr Note No.
+                                    </div>
+                                    </th>
+                                <td mat-cell *matCellDef="let element">
+                                    <a href="javascript:;" class="btn-link-2">CR-240111-2</a>
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="customer">
+                                <th mat-header-cell *matHeaderCellDef> 
+                                    <div class="d-flex align-items-center column-gap5">
+                                        <ng-container
+                                            *ngTemplateOutlet="
+                                                searchTemplate;
+                                                context: {
+                                                    $implicit: showNameSearch,
+                                                    fieldName: 'name',
+                                                    formControl: searchedName,
+                                                    title: name
+                                                }
+                                            "
+                                        ></ng-container>
+                                        Customer
+                                    </div>    
+                                </th>
+                                <td mat-cell *matCellDef="let element" class="no-dbl-click-select">
+                                    <div class="cp">00000000</div>
+                                    <!-- account-detail-double-click -->
+                                    <!-- <mat-card class="outline-card account-detail-wrapper">
+                                        <div class="d-flex align-items-center justify-content-between column-gap15 p-3 border-bottom account-header">
+                                            <h3>00000000</h3>
+                                            <span class="cp">
+                                                <img src="./assets/images/path.svg" />
+                                            </span>
+                                        </div>
+                                        <mat-card-content class="pt-3">
+                                            <ul class="list-unstyled">
+                                                <li class="text-left"><a href="javascript:;" class="default-color">Go to Ledger</a></li>
+                                                <li class="text-left mr-t05"><a href="javascript:;" class="default-color">Generate Invoice</a></li>
+                                            </ul>
+                                        </mat-card-content>
+                                    </mat-card> -->
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="date">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                    Date
+                                </th>
+                                <td mat-cell *matCellDef="let element"> 
+                                    11-01-2024
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="linked">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    Linked Invoice
+                                </th>
+                                <td mat-cell *matCellDef="let element"> 
+                                    ASH_102
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="amount">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-right">
+                                    Total Amount
+                                </th>
+                                <td mat-cell *matCellDef="let element" class="text-right" matTooltip="In INR: 1.239 (Conversion Rate: 0.005)"
+                                matTooltipPosition="above"> 
+                                    ₹22.00
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="einvoicestatus">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    E-invoice Status
+                                </th>
+                                <td mat-cell *matCellDef="let element">
+                                    <div [matTooltip]="'e-Invoice creation is not applicable for this transaction.'" [matTooltipPosition]="'above'">
+                                        Yet-To-Be Pushed
+                                    </div>
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="status">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    Status
+                                </th>
+                                <td mat-cell *matCellDef="let element"> 
+                                    <div class="d-flex justify-content-between align-items-center column-gap5">
+                                        <p>Cancel</p>
+                                        <span [matMenuTriggerFor]="menu" class="cp">
+                                            <i class="icon-dots-three-vertical"></i>
+                                        </span>
+                                        <mat-menu #menu="matMenu">
+                                            <button mat-menu-item>Cancel</button>
+                                        </mat-menu>
+                                    </div>
+                                </td>
+                            </ng-container>
+                            <tr mat-header-row *matHeaderRowDef="displayedColumnsCredit"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumnsCredit;" class="checkbox-show"></tr>
+                        </table>
+                        <mat-paginator [pageSizeOptions]="[5, 10, 20]"
+                            showFirstLastButtons
+                            aria-label="Select page of periodic elements">
+                        </mat-paginator>
+                    </div>
+                </div>
+            </mat-tab>
+            <!-- credit-note-content-end -->
+
+            <!-- pending-content-start -->
+            <mat-tab label="Pending">
+                <div class="vouchers-wrapper pt-3 px-4">
+                    <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
+                        <div class="d-flex align-items-center column-gap1">
+                            <div class="custom-datepicker-wrapper">
+                                <div class="custom-datepicker">
+                                    <input type="text" name="selectedDateRange"
+                                        class="giddh-datepicker date-range-picker" />
+                                </div>
+                            </div>
+                            <button mat-stroked-button color="primary">Generate Multiple</button>
+                            <button mat-stroked-button color="primary">Generate Compound</button>
+                            <button mat-stroked-button color="primary">Preview & Generate</button>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table mat-table [dataSource]="dataSourcePending" matSort class="w-100">
+                            <ng-container matColumnDef="position">
+                                <th mat-header-cell *matHeaderCellDef> # 
+                                    <!-- <span>
+                                        <mat-checkbox
+                                            color="primary"
+                                        ></mat-checkbox>
+                                    </span> -->
+                                </th>
+                                <td mat-cell *matCellDef="let element">
+                                    <div class="d-flex align-items-center">
+                                        <div class="invoice-number">
+                                            {{element.position}}
+                                        </div>
+                                        <div class="checkbox-hide">
+                                            <mat-checkbox
+                                                color="primary"
+                                            ></mat-checkbox>
+                                        </div>
+                                    </div>
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="date">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    Date
+                                </th>
+                                <td mat-cell *matCellDef="let element">
+                                    {{element.date}}
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="particular">
+                                <th mat-header-cell *matHeaderCellDef> 
+                                    Particular
+                                </th>
+                                <td mat-cell *matCellDef="let element" class="no-dbl-click-select">
+                                    {{element.particular}}
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="amount">
+                                <th mat-header-cell *matHeaderCellDef class="text-right">
+                                    Amount
+                                </th>
+                                <td mat-cell *matCellDef="let element" class="text-right"> 
+                                    $ 10.00
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="account">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    Account
+                                </th>
+                                <td mat-cell *matCellDef="let element"> 
+                                    <div class="cp">
+                                        {{element.account}}
+                                    </div>
+                                    <!-- account-detail-double-click -->
+                                    <!-- <mat-card class="outline-card account-detail-wrapper">
+                                        <div class="p-3 border-bottom account-header">
+                                            <div class="d-flex align-items-center justify-content-between column-gap15 ">
+                                                <h3>USA debtor</h3>
+                                                <span class="cp">
+                                                    <img src="./assets/images/path.svg" />
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <mat-card-content class="pt-3">
+                                            <ul class="list-unstyled">
+                                                <li class="text-left"><a href="javascript:;" class="default-color">Go to Ledger</a></li>
+                                                <li class="text-left mr-t05"><a href="javascript:;" class="default-color">Generate Invoice</a></li>
+                                            </ul>
+                                        </mat-card-content>
+                                    </mat-card> -->
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="total">
+                                <th mat-header-cell *matHeaderCellDef class="text-right">
+                                    Total
+                                </th>
+                                <td mat-cell *matCellDef="let element" class="text-right">
+                                    <div [matTooltip]="'In INR: 23.1 (Conversion Rate: 1)'" [matTooltipPosition]="'above'">
+                                        {{element.total}}
+                                    </div>
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="description">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    Description
+                                </th>
+                                <td mat-cell *matCellDef="let element">-</td>
+                            </ng-container>
+                            <tr mat-header-row *matHeaderRowDef="displayedColumnPending"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumnPending;" class="checkbox-show"></tr>
+                        </table>
+                        <mat-paginator [pageSizeOptions]="[5, 10, 20]"
+                            showFirstLastButtons
+                            aria-label="Select page of periodic elements">
+                        </mat-paginator>
+                    </div>
+                </div>
+            </mat-tab>
+            <!-- pending-content-end -->
+
+            <!-- setting-content-start -->
             <mat-tab label="Settings">
-                <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" class="tabs-box-wrap pt-3 pl-4 pr-3">
+                <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" class="tabs-box-wrap pt-3 px-4">
                     <mat-tab>
                       <ng-template mat-tab-label>
                         <i class="icon-chat2"></i>
                         General
                       </ng-template>
                       <div class="tabs-box-content py-3">
-                        <h4 class="font-16 border-bottom pb-2 mb-3">General <span class="text-gray font-12">(These settings will be applicable on Estimates, Proforma and Invoices)</span> </h4>
+                        <h4 class="font-16 border-bottom pb-2 mb-3">General <span class="text-gray font-12">(These settings will be applicable on Estimates, Proforma and Invoices)</span></h4>
                         <mat-slide-toggle
                             name="enableNarrationOnInvAndVoucher"
                             class="show-on-mobile disable-toggle slide-toggle"
@@ -522,7 +1186,222 @@
                     </mat-tab>
                 </mat-tab-group>
             </mat-tab>
-            <mat-tab label="Templates">Templates</mat-tab>
+            <!-- setting-content-end -->
+
+            <!-- template-content-start -->
+            <mat-tab label="Templates">
+                <div class="vouchers-wrapper pt-3 px-4">
+                    <dropdown-field
+                        [name]="'design'"
+                        [label]="'Select Design for'"
+                        [placeholder]="'Select'"
+                        class="w-50"
+                    >
+                    </dropdown-field>
+                    <div class="template-wrapper mt-3">
+                        <mat-card class="outline-card add-template-wrapper">
+                            <mat-card-content class="pt-3">
+                                <h3 class="fonr-16">Design Template</h3>
+                                <p class="my-3">Click to add a template from our gallery. You can customize the template title, columns,and headers in line item table.</p>
+                                <button mat-stroked-button color="primary">Add New</button>
+                            </mat-card-content>
+                        </mat-card>
+                        <mat-card class="outline-card add-template-wrapper text-center">
+                            <mat-card-content class="pt-3 d-flex flex-column align-items-center template-box-gap">
+                                <h3 class="fonr-16">Kriti - 28Sep</h3>
+                                <span class="default-wrap font-12 p-2 cp">
+                                    <i class="icon-favorite-selected"></i>
+                                    Set as Default
+                                </span>
+                                <div class="d-flex column-gap1 justify-content-center">
+                                    <button mat-stroked-button color="primary" class="mat-icon-md-btn" matTooltip="Preview"
+                                        matTooltipPosition="above">
+                                        <i class="icon-eye"></i>
+                                    </button>
+                                    <button mat-stroked-button color="primary" class="mat-icon-md-btn" matTooltip="Edit Template"
+                                        matTooltipPosition="above">
+                                        <i class="icon-edit-pencil"></i>
+                                    </button>
+                                    <button mat-stroked-button color="primary" class="mat-icon-md-btn" matTooltip="Delete"
+                                        matTooltipPosition="above">
+                                        <i class="icon-trash"></i>
+                                    </button>
+                                </div>
+                                <p class="text-ellipsis d-inline-block template-content">Created by: Dilpreet Singh Dang</p>
+                            </mat-card-content>
+                        </mat-card>
+                        <mat-card class="outline-card add-template-wrapper text-center">
+                            <mat-card-content class="pt-3 d-flex flex-column align-items-center template-box-gap">
+                                <h3 class="fonr-16">Kriti - 28Sep</h3>
+                                <span class="default-wrap font-12 p-2 cp active">
+                                    <i class="icon-favorite-selected"></i>
+                                    Set as Default
+                                </span>
+                                <div class="d-flex column-gap1 justify-content-center">
+                                    <button mat-stroked-button color="primary" class="mat-icon-md-btn" matTooltip="Preview"
+                                        matTooltipPosition="above">
+                                        <i class="icon-eye"></i>
+                                    </button>
+                                    <button mat-stroked-button color="primary" class="mat-icon-md-btn" matTooltip="Edit Template"
+                                        matTooltipPosition="above">
+                                        <i class="icon-edit-pencil"></i>
+                                    </button>
+                                    <button mat-stroked-button color="primary" class="mat-icon-md-btn" matTooltip="Delete"
+                                        matTooltipPosition="above">
+                                        <i class="icon-trash"></i>
+                                    </button>
+                                </div>
+                                <p class="text-ellipsis d-inline-block template-content">Created by: Dilpreet Singh Dang</p>
+                            </mat-card-content>
+                        </mat-card>
+                        <mat-card class="outline-card add-template-wrapper text-center">
+                            <mat-card-content class="pt-3 d-flex flex-column align-items-center template-box-gap">
+                                <h3 class="fonr-16">Kriti - 28Sep</h3>
+                                <span class="default-wrap font-12 p-2 cp">
+                                    <i class="icon-favorite-selected"></i>
+                                    Set as Default
+                                </span>
+                                <div class="d-flex column-gap1 justify-content-center">
+                                    <button mat-stroked-button color="primary" class="mat-icon-md-btn" matTooltip="Preview"
+                                        matTooltipPosition="above">
+                                        <i class="icon-eye"></i>
+                                    </button>
+                                    <button mat-stroked-button color="primary" class="mat-icon-md-btn" matTooltip="Edit Template"
+                                        matTooltipPosition="above">
+                                        <i class="icon-edit-pencil"></i>
+                                    </button>
+                                    <button mat-stroked-button color="primary" class="mat-icon-md-btn" matTooltip="Delete"
+                                        matTooltipPosition="above">
+                                        <i class="icon-trash"></i>
+                                    </button>
+                                </div>
+                                <p class="text-ellipsis d-inline-block template-content">Created by: Dilpreet Singh Dang</p>
+                            </mat-card-content>
+                        </mat-card>
+                        <mat-card class="outline-card add-template-wrapper text-center">
+                            <mat-card-content class="pt-3 d-flex flex-column align-items-center template-box-gap">
+                                <h3 class="fonr-16">Kriti - 28Sep</h3>
+                                <span class="default-wrap font-12 p-2 cp">
+                                    <i class="icon-favorite-selected"></i>
+                                    Set as Default
+                                </span>
+                                <div class="d-flex column-gap1 justify-content-center">
+                                    <button mat-stroked-button color="primary" class="mat-icon-md-btn" matTooltip="Preview"
+                                        matTooltipPosition="above">
+                                        <i class="icon-eye"></i>
+                                    </button>
+                                    <button mat-stroked-button color="primary" class="mat-icon-md-btn" matTooltip="Edit Template"
+                                        matTooltipPosition="above">
+                                        <i class="icon-edit-pencil"></i>
+                                    </button>
+                                    <button mat-stroked-button color="primary" class="mat-icon-md-btn" matTooltip="Delete"
+                                        matTooltipPosition="above">
+                                        <i class="icon-trash"></i>
+                                    </button>
+                                </div>
+                                <p class="text-ellipsis d-inline-block template-content">Created by: Dilpreet Singh Dang</p>
+                            </mat-card-content>
+                        </mat-card>
+                        <mat-card class="outline-card add-template-wrapper text-center">
+                            <mat-card-content class="pt-3 d-flex flex-column align-items-center template-box-gap">
+                                <h3 class="fonr-16">Kriti - 28Sep</h3>
+                                <span class="default-wrap font-12 p-2 cp">
+                                    <i class="icon-favorite-selected"></i>
+                                    Set as Default
+                                </span>
+                                <div class="d-flex column-gap1 justify-content-center">
+                                    <button mat-stroked-button color="primary" class="mat-icon-md-btn" matTooltip="Preview"
+                                        matTooltipPosition="above">
+                                        <i class="icon-eye"></i>
+                                    </button>
+                                    <button mat-stroked-button color="primary" class="mat-icon-md-btn" matTooltip="Edit Template"
+                                        matTooltipPosition="above">
+                                        <i class="icon-edit-pencil"></i>
+                                    </button>
+                                    <button mat-stroked-button color="primary" class="mat-icon-md-btn" matTooltip="Delete"
+                                        matTooltipPosition="above">
+                                        <i class="icon-trash"></i>
+                                    </button>
+                                </div>
+                                <p class="text-ellipsis d-inline-block template-content">Created by: Dilpreet Singh Dang</p>
+                            </mat-card-content>
+                        </mat-card>
+                        <mat-card class="outline-card add-template-wrapper text-center">
+                            <mat-card-content class="pt-3 d-flex flex-column align-items-center template-box-gap">
+                                <h3 class="fonr-16">Kriti - 28Sep</h3>
+                                <span class="default-wrap font-12 p-2 cp">
+                                    <i class="icon-favorite-selected"></i>
+                                    Set as Default
+                                </span>
+                                <div class="d-flex column-gap1 justify-content-center">
+                                    <button mat-stroked-button color="primary" class="mat-icon-md-btn" matTooltip="Preview"
+                                        matTooltipPosition="above">
+                                        <i class="icon-eye"></i>
+                                    </button>
+                                    <button mat-stroked-button color="primary" class="mat-icon-md-btn" matTooltip="Edit Template"
+                                        matTooltipPosition="above">
+                                        <i class="icon-edit-pencil"></i>
+                                    </button>
+                                    <button mat-stroked-button color="primary" class="mat-icon-md-btn" matTooltip="Delete"
+                                        matTooltipPosition="above">
+                                        <i class="icon-trash"></i>
+                                    </button>
+                                </div>
+                                <p class="text-ellipsis d-inline-block template-content">Created by: Dilpreet Singh Dang</p>
+                            </mat-card-content>
+                        </mat-card>
+                        <mat-card class="outline-card add-template-wrapper text-center">
+                            <mat-card-content class="pt-3 d-flex flex-column align-items-center template-box-gap">
+                                <h3 class="fonr-16">Kriti - 28Sep</h3>
+                                <span class="default-wrap font-12 p-2 cp">
+                                    <i class="icon-favorite-selected"></i>
+                                    Set as Default
+                                </span>
+                                <div class="d-flex column-gap1 justify-content-center">
+                                    <button mat-stroked-button color="primary" class="mat-icon-md-btn" matTooltip="Preview"
+                                        matTooltipPosition="above">
+                                        <i class="icon-eye"></i>
+                                    </button>
+                                    <button mat-stroked-button color="primary" class="mat-icon-md-btn" matTooltip="Edit Template"
+                                        matTooltipPosition="above">
+                                        <i class="icon-edit-pencil"></i>
+                                    </button>
+                                    <button mat-stroked-button color="primary" class="mat-icon-md-btn" matTooltip="Delete"
+                                        matTooltipPosition="above">
+                                        <i class="icon-trash"></i>
+                                    </button>
+                                </div>
+                                <p class="text-ellipsis d-inline-block template-content">Created by: Dilpreet Singh Dang</p>
+                            </mat-card-content>
+                        </mat-card>
+                        <mat-card class="outline-card add-template-wrapper text-center">
+                            <mat-card-content class="pt-3 d-flex flex-column align-items-center template-box-gap">
+                                <h3 class="fonr-16">Kriti - 28Sep</h3>
+                                <span class="default-wrap font-12 p-2 cp">
+                                    <i class="icon-favorite-selected"></i>
+                                    Set as Default
+                                </span>
+                                <div class="d-flex column-gap1 justify-content-center">
+                                    <button mat-stroked-button color="primary" class="mat-icon-md-btn" matTooltip="Preview"
+                                        matTooltipPosition="above">
+                                        <i class="icon-eye"></i>
+                                    </button>
+                                    <button mat-stroked-button color="primary" class="mat-icon-md-btn" matTooltip="Edit Template"
+                                        matTooltipPosition="above">
+                                        <i class="icon-edit-pencil"></i>
+                                    </button>
+                                    <button mat-stroked-button color="primary" class="mat-icon-md-btn" matTooltip="Delete"
+                                        matTooltipPosition="above">
+                                        <i class="icon-trash"></i>
+                                    </button>
+                                </div>
+                                <p class="text-ellipsis d-inline-block template-content">Created by: Dilpreet Singh Dang</p>
+                            </mat-card-content>
+                        </mat-card>
+                    </div>
+                </div>
+            </mat-tab>
+            <!-- template-content-end -->
         </mat-tab-group>
         <div class="video-link position-absolute">
             <watch-video [cssClass]="'text-blue'" [moduleName]="'SALES_PREVIEW'"></watch-video>
