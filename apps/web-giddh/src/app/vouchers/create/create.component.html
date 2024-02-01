@@ -583,12 +583,12 @@
                             <!-- Discount -->
                             <div class="body-item">
                                 <!-- Discount control component -->
-                                <discount-dropdown></discount-dropdown>
+                                <discount-dropdown (createOption)="toggleCreateDiscountAsidePane()"></discount-dropdown>
                             </div>
 
                             <!-- Tax -->
                             <div class="body-item">
-                                <tax-dropdown></tax-dropdown>
+                                <tax-dropdown (createOption)="toggleCreateTaxAsidepan()"></tax-dropdown>
                             </div>
 
                             <!-- Total -->
@@ -841,3 +841,15 @@
     (updateEvent)="updateAccount($event)"
 >
 </generic-aside-menu-account>
+
+<!-- region open tax aside -->
+<!-- <div class="aside-overlay" *ngIf="taxAsideMenuState === 'in'"></div>
+<aside-menu-create-tax-component
+    [class]="taxAsideMenuState"
+    [tax]="selectedTax"
+    *ngIf="taxAsideMenuState === 'in'"
+    [@slideInOut]="taxAsideMenuState"
+    [localeData]="localeData"
+    [commonLocaleData]="commonLocaleData"
+    (closeEvent)="toggleTaxAsidePane()"
+></aside-menu-create-tax-component> -->

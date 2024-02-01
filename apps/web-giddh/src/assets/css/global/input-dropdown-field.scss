@@ -68,13 +68,13 @@ reactive-dropdown-field,
                 border-color: var(--color-fields-border) !important;
             }
             &.mdc-text-field--focused {
+                .mdc-notched-outline__leading {
+                    border-color: var(--color-border-focus) !important;
+                }
                 .mdc-notched-outline__notch {
                     border-color: var(--color-border-focus) !important;
                 }
                 .mdc-notched-outline__trailing{
-                    border-color: var(--color-border-focus) !important;
-                }
-                .mdc-notched-outline__leading {
                     border-color: var(--color-border-focus) !important;
                 }
             }
@@ -114,6 +114,9 @@ reactive-dropdown-field,
                         border-color: var(--color-red) !important;
                     }
                     .mdc-notched-outline__leading {
+                        border-color: var(--color-red) !important;
+                    }
+                    .mdc-notched-outline__trailing{
                         border-color: var(--color-red) !important;
                     }
                 }

@@ -30,6 +30,8 @@ import { PageLeaveUtilityService } from "../../services/page-leave-utility.servi
 import { AddAccountRequest, UpdateAccountRequest } from "../../models/api-models/Account";
 import { SalesActions } from "../../actions/sales/sales.action";
 import { animate, state, style, transition, trigger } from "@angular/animations";
+import { CreateDiscountComponent } from "../../theme/create-discount/create-discount.component";
+import { AsideMenuCreateTaxComponent } from "../../shared/aside-menu-create-tax/aside-menu-create-tax.component";
 
 @Component({
     selector: "create",
@@ -1037,6 +1039,24 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
         this.invoiceForm.controls["account"].get("uniqueName")?.patchValue(response?.uniqueName);
         this.invoiceForm.controls["account"].get("customerName")?.patchValue(response?.name);
         this.updateAccountDataInForm(response);
+    }
+
+    public toggleCreateDiscountAsidePane(): void {
+        this.dialog.open(CreateDiscountComponent,  {
+            position: {
+                right: '0',
+                top: '0'
+            }
+        });
+    }
+
+    public toggleCreateTaxAsidepan(): void {
+        this.dialog.open(AsideMenuCreateTaxComponent,  {
+            position: {
+                right: '0',
+                top: '0'
+            }
+        });
     }
 
     /**

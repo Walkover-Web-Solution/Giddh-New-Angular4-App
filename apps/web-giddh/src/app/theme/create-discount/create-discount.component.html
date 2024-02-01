@@ -1,0 +1,40 @@
+<div class="dialog-asidepan">
+    <div class="dialog-header">
+        <span mat-dialog-title class="font-16">Create Discount</span>
+        <i mat-dialog-close class="icon-cross icon-font-16"></i>
+    </div>
+    <div mat-dialog-content class="create-discount-aside dialog-body">
+
+        <div class="row row-gap15 mt-2">
+            <div class="col-6">
+                <span class="custom-mat-form-field">
+                    <mat-form-field appearance="outline" placeholder="Select Discount Type">
+                        <mat-label>Discount Type</mat-label>
+                        <mat-select required="true">
+                            <mat-option [value]="'FIXED_VALUE'">As per value</mat-option>
+                            <mat-option [value]="'PERCENT'">As per percent</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </span>
+            </div>
+            <div class="col-6">
+                <input-field [type]="'text'" [name]="'discount-name'" [placeholder]="'Enter name'" [label]="'Name'"
+                    [required]="true"></input-field>
+            </div>
+            <div class="col-6">
+                <input-field [type]="'number'" [name]="'discount-value'" [placeholder]="'Enter value'" [label]="'Value'"
+                    [required]="true"></input-field>
+            </div>
+            <div class="col-6">
+                <dropdown-field [label]="'Linked Accounts'" [placeholder]="'Select discount'" [showCreateNew]="true" [required]="true"
+                    [options]="dummyOptions" (selectedOption)="selectTax($event)" [defaultValue]="''">
+                </dropdown-field>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-12">
+                <button mat-stroked-button color="primary">Add</button>
+            </div>
+        </div>
+    </div>
+</div>

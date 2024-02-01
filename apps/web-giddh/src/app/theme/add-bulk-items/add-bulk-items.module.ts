@@ -6,6 +6,7 @@ import { ScrollingModule } from "@angular/cdk/scrolling";
 import { MatButtonModule } from "@angular/material/button";
 import { MatDialogModule } from "@angular/material/dialog";
 import { MatExpansionModule } from "@angular/material/expansion";
+import { MatTooltipModule } from "@angular/material/tooltip";
 
 @NgModule({
     declarations: [
@@ -17,7 +18,8 @@ import { MatExpansionModule } from "@angular/material/expansion";
         ScrollingModule,
         MatButtonModule,
         MatDialogModule,
-        MatExpansionModule
+        MatExpansionModule,
+        MatTooltipModule
     ],
     exports: [
         AddBulkItemsComponent

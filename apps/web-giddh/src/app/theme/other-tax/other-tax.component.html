@@ -1,9 +1,9 @@
-<div class="other-tax">
-    <div class="other-tax-header d-flex justify-content-between align-items-center px-3">
-        <span class="font-16">Tax applicable</span>
-        <i class="icon-cross" mat-dialog-close></i>
+<div class="other-tax dialog-asidepan">
+    <div class="dialog-header">
+        <span mat-dialog-title  class="font-16">Tax applicable</span>
+        <i mat-dialog-close class="icon-cross"></i>
     </div>
-    <div class="other-tax-body container pd-15">
+    <div mat-dialog-content class="dialog-body">
         <div class="row mt-2">
             <div class="col-6">
                 <dropdown-field [label]="'Select Tax'" [placeholder]="'Select tax'" [required]="true"

@@ -49,6 +49,8 @@ import { DiscountDropdownModule } from "../theme/discount-dropdown/discount-drop
 import { PrintVoucherComponent } from "./print-voucher/print-voucher.component";
 import { GenericAsideMenuAccountModule } from "../shared/generic-aside-menu-account/generic.aside.menu.account.module";
 import { KeyboardShortutModule } from "../shared/helpers/directives/keyboardShortcut/keyboardShortut.module";
+import { CreateDiscountModule } from "../theme/create-discount/create-discount.module";
+import { AsideMenuCreateTaxModule } from "../shared/aside-menu-create-tax/aside-menu-create-tax.module";
 
 @NgModule({
     declarations: [
@@ -104,7 +106,9 @@ import { KeyboardShortutModule } from "../shared/helpers/directives/keyboardShor
         TaxDropdownModule,
         DiscountDropdownModule,
         GenericAsideMenuAccountModule,
-        KeyboardShortutModule
+        KeyboardShortutModule,
+        CreateDiscountModule,
+        AsideMenuCreateTaxModule
     ],
     exports: [
 
