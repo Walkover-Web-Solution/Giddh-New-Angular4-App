@@ -89,6 +89,9 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
     public companyTaxes$: Observable<any> = this.select(this.store.select(state => state.company.taxes), (response) => response);
     public warehouseList$: Observable<any> = this.select(this.store.select(state => state.warehouse.warehouses), (response) => response);
     public branchList$: Observable<any> = this.select(this.store.select(state => state.settings.branches), (response) => response);
+    public hasSavedChanges$: Observable<any> = this.select(this.store.select(state => state.groupwithaccounts.hasUnsavedChanges), (response) => response);
+    public newAccountDetails$: Observable<any> = this.select(this.store.select(state => state.sales.createdAccountDetails), (response) => response);
+    public updatedAccountDetails$: Observable<any> = this.select(this.store.select(state => state.sales.updatedAccountDetails), (response) => response);
 
     readonly getDiscountsList = this.effect((data: Observable<void>) => {
         return data.pipe(

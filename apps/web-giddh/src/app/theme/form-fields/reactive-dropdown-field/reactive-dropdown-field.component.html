@@ -1,18 +1,31 @@
 <ng-container appTranslate (commonLocaleData)="commonLocaleData = $event">
     <mat-form-field [appearance]="appearance">
         <mat-label>{{ label ? label : placeholder }}</mat-label>
-        <input type="text" [ngClass]="cssClass" class="select-field-input" [placeholder]="placeholder" matInput
-            [readonly]="readonly" [matAutocomplete]="auto" [name]="name" [autocomplete]="autocomplete"
-            [required]="required" [attr.aria-expanded]="readonly ? false : true"
+        <input 
+            type="text" 
+            [ngClass]="cssClass" 
+            class="select-field-input" 
+            [placeholder]="placeholder" 
+            matInput
+            [readonly]="readonly" 
+            [matAutocomplete]="auto" 
+            [name]="name" 
+            [autocomplete]="autocomplete"
+            [required]="required" 
+            [attr.aria-expanded]="readonly ? false : true"
             (input)="searchFormControl.next($event.target.value)"
-            (click)="!readonly ? trigger?.openPanel() : trigger?.closePanel()" #trigger="matAutocompleteTrigger"
-            #selectField matAutocompletePosition="auto" (focusout)="
+            (click)="!readonly ? trigger?.openPanel() : trigger?.closePanel()" 
+            #trigger="matAutocompleteTrigger"
+            #selectField 
+            matAutocompletePosition="auto" 
+            (focusout)="
                 closeOnFocusOut &&
                 $event?.relatedTarget?.nodeName !== 'MAT-OPTION' &&
                 $event?.relatedTarget?.nodeName !== 'A'
                     ? trigger.closePanel()
                     : null
-            " />
+            " 
+            [value]="labelValue" />
         <mat-autocomplete (optionSelected)="optionSelected($event)" optionsScroll
             [enableDynamicSearch]="enableDynamicSearch" (optionsScroll)="onScroll()" autoActiveFirstOption
             [displayWith]="displayLabel" #auto="matAutocomplete">
