@@ -220,7 +220,8 @@ export class VoucherListComponent implements OnInit, OnDestroy, AfterViewInit {
     // template edit dialog
     public templateEdit():void {
         this.dialog.open(TemplateEditDialogComponent, {
-            width: '100%'
+            width: '100%',
+            height: '100vh'
         });
     }
 
