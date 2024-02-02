@@ -59,7 +59,6 @@
             }
         }
 
-        // margin: 0;
 
         .vouchers-small-container {
             max-width: 860px;
@@ -67,6 +66,11 @@
             .billing-label {
                 height: 40px;
                 padding: 11px 0;
+            }
+            .billing-deliver-label{
+                font-size: var(--font-size-16);
+                font-weight: 600;
+                color: var(--color-giddh-blue);
             }
 
             .vouchers-address-form {
