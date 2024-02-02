@@ -31,7 +31,6 @@ import { AddAccountRequest, UpdateAccountRequest } from "../../models/api-models
 import { SalesActions } from "../../actions/sales/sales.action";
 import { animate, state, style, transition, trigger } from "@angular/animations";
 import { CreateDiscountComponent } from "../../theme/create-discount/create-discount.component";
-import { AsideMenuCreateTaxComponent } from "../../shared/aside-menu-create-tax/aside-menu-create-tax.component";
 
 @Component({
     selector: "create",
@@ -126,7 +125,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
         taxType: '',
         isTcsTdsApplicable: false,
         isActive: false,
-        branch: null
+        branch: null,
+        addresses: null
     };
     /** Holds account specific data */
     public account: any = {
@@ -409,6 +409,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
     private getActiveCompany(): void {
         this.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe(activeCompany => {
             this.activeCompany = activeCompany;
+            this.company.addresses = activeCompany.addresses;
         })
     }
 
@@ -711,8 +712,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
         this.briefAccounts$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (!response) {
                 this.componentStore.getBriefAccounts({ group: BriedAccountsGroup });
-            } else {
-
             }
         });
     }
@@ -793,8 +792,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
         index = accountDefaultAddress.defaultAddressIndex;
 
         if (defaultAddress) {
-            this.fillBillingShippingAddress("billingAddress", defaultAddress, index);
-            this.fillBillingShippingAddress("shippingAddress", defaultAddress, index);
+            this.fillBillingShippingAddress("account", "billingAddress", defaultAddress, index);
+            this.fillBillingShippingAddress("account", "shippingAddress", defaultAddress, index);
         }
     }
 
@@ -805,13 +804,13 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
      * @param {*} address
      * @memberof VoucherCreateComponent
      */
-    public fillBillingShippingAddress(addressType: string, address: any, index: number): void {
-        this.invoiceForm.controls['account'].get(addressType).get("index").patchValue(index);
-        this.invoiceForm.controls['account'].get(addressType).get("address").patchValue([address?.address]);
-        this.invoiceForm.controls['account'].get(addressType).get("pincode").patchValue(address?.pincode);
-        this.invoiceForm.controls['account'].get(addressType).get("taxNumber").patchValue(address?.gstNumber);
-        this.invoiceForm.controls['account'].get(addressType).get("state").get("name").patchValue(address?.state?.name);
-        this.invoiceForm.controls['account'].get(addressType).get("state").get("code").patchValue(address?.state?.code);
+    public fillBillingShippingAddress(entityType: string, addressType: string, address: any, index: number): void {
+        this.invoiceForm.controls[entityType].get(addressType).get("index").patchValue(index);
+        this.invoiceForm.controls[entityType].get(addressType).get("address").patchValue([address?.address]);
+        this.invoiceForm.controls[entityType].get(addressType).get("pincode").patchValue(address?.pincode);
+        this.invoiceForm.controls[entityType].get(addressType).get("taxNumber").patchValue(address?.gstNumber);
+        this.invoiceForm.controls[entityType].get(addressType).get("state").get("name").patchValue(address?.state?.name);
+        this.invoiceForm.controls[entityType].get(addressType).get("state").get("code").patchValue(address?.state?.code);
     }
 
     /**
@@ -835,6 +834,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
     private initVoucherForm(): void {
         this.invoiceForm = this.formBuilder.group({
             account: this.getAccountFormGroup(),
+            company: this.getCompanyFormGroup(),
             date: ['', Validators.required],
             dueDate: ['', Validators.required],
             exchangeRate: [1, Validators.required],
@@ -868,6 +868,20 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
             contactNumber: [''],
             mobileNumber: [''],
             email: [''],
+            billingAddress: this.getAddressFormGroup(),
+            shippingAddress: this.getAddressFormGroup()
+        });
+    }
+
+    /**
+     * Returns company form group
+     *
+     * @private
+     * @return {*}  {UntypedFormGroup}
+     * @memberof VoucherCreateComponent
+     */
+    private getCompanyFormGroup(): UntypedFormGroup {
+        return this.formBuilder.group({
             billingAddress: this.getAddressFormGroup(),
             shippingAddress: this.getAddressFormGroup()
         });
@@ -1104,7 +1118,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
      * @param {*} event
      * @memberof VoucherCreateComponent
      */
-    public copyBillingInShipping(event: any): void {
+    public copyBillingInShipping(entityType: string, event: any): void {
         if (event?.checked) {
             let defaultAddress = {
                 index: this.invoiceForm.controls['account'].get("billingAddress").get("index")?.value || 0,
@@ -1113,7 +1127,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
                 gstNumber: this.invoiceForm.controls['account'].get("billingAddress").get("taxNumber")?.value,
                 state: { name: this.invoiceForm.controls['account'].get("billingAddress").get("state").get("name")?.value, code: this.invoiceForm.controls['account'].get("billingAddress").get("state").get("code")?.value }
             };
-            this.fillBillingShippingAddress("shippingAddress", defaultAddress, defaultAddress.index);
+            this.fillBillingShippingAddress(entityType, "shippingAddress", defaultAddress, defaultAddress.index);
         }
     }
 

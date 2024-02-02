@@ -25,7 +25,7 @@
                                     </reactive-dropdown-field>
                                     <input-field *ngIf="invoiceType.isCashInvoice" [name]="'account'" [label]="localeData?.customer_name" [placeholder]="localeData?.enter_customer_name" [type]="'text'" [autoFocus]="true" formControlName="customerName"></input-field>
                                 </div>
-                                <ng-container *ngIf="!invoiceType.isCashInvoice && invoiceForm.controls['account'].get('uniqueName')?.value">
+                                <ng-container *ngIf="!invoiceType.isCashInvoice && !invoiceType.isPurchaseOrder && invoiceForm.controls['account'].get('uniqueName')?.value">
                                     <div class="vouchers-copy-sales ml-3 cursor-pointer" (click)="getPreviousVouchers()"
                                         [matMenuTriggerFor]="copyLastVouchers">
                                         <i class="icon-copy-file"></i>
@@ -87,8 +87,8 @@
                 <div class="vouchers-secondary-form position-relative container-lg"
                     [ngClass]="{'vouchers-form-disable' : !invoiceForm.controls['account'].get('customerName')?.value }">
                     <div class="vouchers-small-container">
-                        <ng-container formGroupName="account">
-                            <div class="row row-gap">
+                        <div class="row row-gap">
+                            <ng-container formGroupName="account">
                                 <!-- Billing Address -->
                                 <div class="col-12 mr-t15" *ngIf="invoiceType.isPurchaseOrder">
                                     <span>Deliver From</span>
@@ -102,7 +102,7 @@
                                     <div *ngIf="!invoiceType.isCashInvoice" class="mt-2">Address {{ invoiceForm.controls['account'].get("billingAddress").get("index")?.value + 1 }} </div>
                                     <mat-menu #billingAddress="matMenu">
                                         <div class="mat-menu-width-large vouchers-address-menu">
-                                            <button mat-menu-item *ngFor="let address of account?.addresses; let i = index" (click)="fillBillingShippingAddress('billingAddress', address, i)">
+                                            <button mat-menu-item *ngFor="let address of account?.addresses; let i = index" (click)="fillBillingShippingAddress('account', 'billingAddress', address, i)">
                                                 <div class="d-flex justify-content-between align-items-center">
                                                     <div>
                                                         Address {{ i + 1}}
@@ -146,7 +146,7 @@
 
                                         <mat-menu #shippingAddress="matMenu">
                                             <div class="mat-menu-width-large vouchers-address-menu">
-                                                <button mat-menu-item *ngFor="let address of account?.addresses; let i = index" (click)="fillBillingShippingAddress('shippingAddress', address, i)">
+                                                <button mat-menu-item *ngFor="let address of account?.addresses; let i = index" (click)="fillBillingShippingAddress('account','shippingAddress', address, i)">
                                                     <div class="d-flex justify-content-between align-items-center">
                                                         <div>
                                                             Address {{ i + 1}}
@@ -201,81 +201,95 @@
                                     <span id="init-contact-proforma-valid-msg" class="d-none"></span>
                                     <span id="init-contact-proforma-error-msg" class="d-none"></span>
                                 </div>
+                            </ng-container>
+
+                            <!-- Warehouse -->
+                            <div class="col-6" *ngIf="showWarehouse" formGroupName="warehouse">
+                                <reactive-dropdown-field [cssClass]="'border-0'" [name]="'warehouse'" formControlName="uniqueName" [label]="'Warehouse'" [placeholder]="'Select'" [options]="warehouses"></reactive-dropdown-field>
+                            </div>
+                        </div>
+
+                        <!-- Row 2 for Deliver To Only show in Cash Invoice -->
+                        <div class="row row-gap" *ngIf="invoiceType.isPurchaseOrder" formGroupName="account">
+                            <div class="col-12 mr-t15">
+                                <span>Deliver To</span>
                             </div>
 
-                            <!-- Row 2 for Deliver To Only show in Cash Invoice -->
-                            <div class="row row-gap" *ngIf="invoiceType.isPurchaseOrder">
-                                <div class="col-12 mr-t15">
-                                    <span>Deliver To</span>
-                                </div>
+                            <!-- Billing Address -->
+                            <div class="col-6">
+                                <label for="billingAddress" class="billing-label">Billing Address</label> <i
+                                    [matMenuTriggerFor]="companyBillingAddress"
+                                    class="icon-edit text-blue cursor-pointer pl-2 font-12"></i>
 
-                                <!-- Billing Address -->
-                                <div class="col-6">
-                                    <label for="billingAddress" class="billing-label">Billing Address</label> <i
-                                        class="icon-edit text-blue cursor-pointer pl-2 font-12"></i>
-                                    <div class="mt-2">Address 1 </div>
-                                </div>
-
-                                <!-- Shipping Address -->
-                                <div class="col-6">
-                                    <ng-container>
-                                        <label for="billingAddress" class="billing-label">Shipping Address</label> <i
-                                            [matMenuTriggerFor]="shippingAddress"
-                                            class="icon-edit text-blue cursor-pointer pl-2 font-12"></i>
-
-                                        <mat-menu #shippingAddress="matMenu">
-                                            <div class="mat-menu-width-large  vouchers-address-menu">
-                                                <button mat-menu-item>
-                                                    <div class="d-flex justify-content-between align-items-center">
-                                                        <div>
-                                                            Indore, <p>Madhya Pradesh</p>
-                                                        </div>
-                                                        <i class="icon-tick"></i>
-                                                    </div>
-                                                </button>
-                                                <button mat-menu-item>Item 2</button>
-                                                <button mat-menu-item>Item 3</button>
-                                                <button mat-menu-item class="vouchers-add-new">+ Add new address</button>
+                                <mat-menu #companyBillingAddress="matMenu">
+                                    <div class="mat-menu-width-large vouchers-address-menu">
+                                        <button mat-menu-item *ngFor="let address of company?.addresses; let i = index" (click)="fillBillingShippingAddress('company', 'billingAddress', address, i)">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <div>
+                                                    Address {{ i + 1}}
+                                                    <p>{{ address.address ? address.address + ", " : "" }}{{ address.state?.name }}</p>
+                                                    <p>{{ address.gstNumber ? (company.taxType === taxTypes.GST ? commonLocaleData?.app_gstin + ": " : company.taxType === taxTypes.TRN ? commonLocaleData?.app_trn + ": " : company.taxType === taxTypes.VAT ? commonLocaleData?.enter_vat_no + ": " : "") + address.gstNumber : "" }}</p>
+                                                </div>
+                                                <i class="icon-tick" *ngIf="invoiceForm.controls['company'].get('billingAddress').get('index')?.value === i"></i>
                                             </div>
-                                        </mat-menu>
-                                    </ng-container>
-
-                                    <div class="mt-2">Address 2 </div>
-                                </div>
+                                        </button>
+                                        <button mat-menu-item class="vouchers-add-new">+ Add new address</button>
+                                    </div>
+                                </mat-menu>
+                                <div class="mt-2">Address {{ invoiceForm.controls['company'].get("billingAddress").get("index")?.value + 1 }} </div>
                             </div>
 
-                            <!-- Row 3 -->
-                            <div class="row row-gap mr-t15 mr-b15" *ngIf="invoiceType.isPurchaseInvoice">
+                            <!-- Shipping Address -->
+                            <div class="col-6">
+                                <label for="billingAddress" class="billing-label">Shipping Address</label> <i
+                                    [matMenuTriggerFor]="companyShippingAddress"
+                                    class="icon-edit text-blue cursor-pointer pl-2 font-12"></i>
 
-                                <!-- Purchase Order -->
-                                <div class="col-6">
-                                    <mat-select name="linkedPO" class="po-mat-select" [placeholder]="'Purchase Order'">
-                                        <mat-select-trigger>
-                                            List of selected items
-                                        </mat-select-trigger>
-                                        <mat-option class="po-options-line">
-                                            <ngx-mat-select-search [noEntriesFoundLabel]="'No Data Found'"
-                                                [placeholderLabel]="'Select order'">
-                                                <i class="icon-cross" ngxMatSelectSearchClear></i>
-                                            </ngx-mat-select-search>
-                                        </mat-option>
-
-                                        <mat-option [value]="1" class="po-options-line">
-                                            <span class="po-option-label"> Item Label</span>
-                                            <span class="po-option-value">
-                                                Pending : additonal text</span>
-                                            <span class="po-option-value">
-                                                Amount : 500
-                                            </span>
-                                        </mat-option>
-                                    </mat-select>
-                                </div>
+                                <mat-menu #companyShippingAddress="matMenu">
+                                    <div class="mat-menu-width-large  vouchers-address-menu">
+                                        <button mat-menu-item *ngFor="let address of company?.addresses; let i = index" (click)="fillBillingShippingAddress('company', 'shippingAddress', address, i)">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <div>
+                                                    Address {{ i + 1}}
+                                                    <p>{{ address.address ? address.address + ", " : "" }}{{ address.state?.name }}</p>
+                                                    <p>{{ address.gstNumber ? (company.taxType === taxTypes.GST ? commonLocaleData?.app_gstin + ": " : company.taxType === taxTypes.TRN ? commonLocaleData?.app_trn + ": " : company.taxType === taxTypes.VAT ? commonLocaleData?.enter_vat_no + ": " : "") + address.gstNumber : "" }}</p>
+                                                </div>
+                                                <i class="icon-tick" *ngIf="invoiceForm.controls['company'].get('shippingAddress').get('index')?.value === i"></i>
+                                            </div>
+                                        </button>
+                                        <button mat-menu-item class="vouchers-add-new">+ Add new address</button>
+                                    </div>
+                                </mat-menu>
+                                <div class="mt-2">Address {{ invoiceForm.controls['company'].get("shippingAddress").get("index")?.value + 1 }} </div>
                             </div>
-                        </ng-container>
+                        </div>
 
-                        <!-- Warehouse -->
-                        <div class="col-6" *ngIf="showWarehouse" formGroupName="warehouse">
-                            <reactive-dropdown-field [cssClass]="'border-0'" [name]="'warehouse'" formControlName="uniqueName" [label]="'Warehouse'" [placeholder]="'Select'" [options]="warehouses"></reactive-dropdown-field>
+                        <!-- Row 3 -->
+                        <div class="row row-gap mr-t15 mr-b15" *ngIf="invoiceType.isPurchaseInvoice">
+
+                            <!-- Purchase Order -->
+                            <div class="col-6">
+                                <mat-select name="linkedPO" class="po-mat-select" [placeholder]="'Purchase Order'">
+                                    <mat-select-trigger>
+                                        List of selected items
+                                    </mat-select-trigger>
+                                    <mat-option class="po-options-line">
+                                        <ngx-mat-select-search [noEntriesFoundLabel]="'No Data Found'"
+                                            [placeholderLabel]="'Select order'">
+                                            <i class="icon-cross" ngxMatSelectSearchClear></i>
+                                        </ngx-mat-select-search>
+                                    </mat-option>
+
+                                    <mat-option [value]="1" class="po-options-line">
+                                        <span class="po-option-label"> Item Label</span>
+                                        <span class="po-option-value">
+                                            Pending : additonal text</span>
+                                        <span class="po-option-value">
+                                            Amount : 500
+                                        </span>
+                                    </mat-option>
+                                </mat-select>
+                            </div>
                         </div>
 
                         <!-- Row 4 -->
@@ -585,8 +599,7 @@
                                                                     <div class="col-6">
                                                                         <reactive-dropdown-field [label]="'Account'"
                                                                             [placeholder]="'Select Account'"
-                                                                            [options]="dummyOptions"
-                                                                            (selectedOption)="selectDropdown($event)"
+                                                                            [options]="briefAccounts$ | async"
                                                                             formControlName="accountUniqueName">
                                                                         </reactive-dropdown-field>
                                                                     </div>
@@ -611,7 +624,7 @@
                                                 </mat-card>
                                             </div>
 
-                                            <div class="col-12 mt-3">
+                                            <div class="col-12 mt-3" *ngIf="!invoiceType.isPurchaseOrder">
                                                 <mat-card>
                                                     <mat-card-content class="py-0">
                                                         <div class="vouchers-attachment d-flex align-items-center column-gap1"
@@ -624,11 +637,6 @@
                                                                 voucher</span>
                                                         </div>
                                                     </mat-card-content>
-                                                </mat-card>
-                                            </div>
-
-                                            <div class="col-12 mt-3">
-                                                <mat-card>
                                                     <mat-card-content class="py-0">
                                                         <div
                                                             class="vouchers-attachment d-flex align-items-center column-gap1 text-success">
