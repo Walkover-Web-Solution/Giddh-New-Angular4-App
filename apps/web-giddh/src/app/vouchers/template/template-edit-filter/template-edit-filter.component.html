@@ -1,0 +1,34 @@
+<!-- <div>
+  <div class="d-flex column-gap1">
+    <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
+      <mat-tab label="First">Content 1</mat-tab>
+      <mat-tab label="Second">Content 2</mat-tab>
+      <mat-tab label="Third">Content 3</mat-tab>
+    </mat-tab-group>
+    <button mat-stroked-button color="primary">Design</button>
+    <button mat-stroked-button color="primary"><span matBadge="4" matBadgeOverlap="false">Content</span></button>
+  </div>
+  <div>
+    <app-design-filter></app-design-filter>
+    <app-content-filter></app-content-filter>
+  </div>
+</div> -->
+
+<div>
+  <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
+    <mat-tab>
+      <ng-template mat-tab-label>
+        Design
+      </ng-template>
+      <app-design-filter></app-design-filter>
+    </mat-tab>
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <div matBadge="2" matBadgePosition="false">
+          <p>Content</p>
+        </div>
+      </ng-template>
+      <app-content-filter></app-content-filter>
+    </mat-tab>
+  </mat-tab-group>
+</div>

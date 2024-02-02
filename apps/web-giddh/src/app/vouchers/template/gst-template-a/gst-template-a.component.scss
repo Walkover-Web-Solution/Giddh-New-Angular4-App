@@ -651,6 +651,31 @@ table.tax-table.item {
         }
     }
 
+    .disabled-area {
+        &::after {
+            content: " ";
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            pointer-events: none;
+            background: rgba(204, 204, 204, 0.5);
+            border: 1px dashed var(--color-common-secondary-border);
+        }
+    }
+
+    .edit-template {
+        position: absolute;
+        top: 0;
+        right: 0;
+        padding: 4px;
+        width: 20px;
+        height: 15px;
+        z-index: 1;
+        background: var(--color-primary-invoice-preview-background);
+    }
+
     .template-footer {
         .footer-border {
             border-bottom: 1px solid var(--color-danger);
