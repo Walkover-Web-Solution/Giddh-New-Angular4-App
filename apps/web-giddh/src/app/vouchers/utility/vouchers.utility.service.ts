@@ -1,6 +1,8 @@
 import { Injectable } from "@angular/core";
 import { SearchType, TaxSupportedCountries, TaxType, VoucherTypeEnum } from "./vouchers.const";
 import { GeneralService } from "../../services/general.service";
+import { VoucherForm } from "../../models/api-models/Voucher";
+import { GIDDH_VOUCHER_FORM } from "../../app.constant";
 
 @Injectable({
     providedIn: 'any'
@@ -189,5 +191,21 @@ export class VouchersUtilityService {
         }
 
         return { defaultAddress, defaultAddressIndex };
+    }
+
+    /**
+     * Prepares the voucher form based on current voucher type
+     *
+     * @param {string} voucherType Current voucher type
+     * @param {*} [formConfiguration] If form configuration are loaded from the API
+     * @return {VoucherForm} Voucher form configuration for current voucher
+     * @memberof VouchersUtilityService
+     */
+    public prepareVoucherForm(voucherType: string, formConfiguration?: any): VoucherForm {
+        if (formConfiguration) {
+            return formConfiguration.find(form => form.type === voucherType);
+        } else {
+            return GIDDH_VOUCHER_FORM.find(form => form.type === voucherType);
+        }
     }
 }

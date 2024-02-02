@@ -319,25 +319,82 @@
                             </div>
 
                             <!-- Reverse Charge Checkbox -->
-                            <div class="col-6" *ngIf="invoiceType.isSalesInvoice || invoiceType.isPurchaseInvoice">
-                                <mat-checkbox type="checkbox" color="primary">
-                                    Is this transaction applicable for reverse charge?
+                            <div class="col-6" *ngIf="invoiceType.isPurchaseInvoice || (currentVoucherFormDetails?.rcmAllowed && (company.countryName === 'India' || company.countryName === 'United Kingdom'))">
+                                <mat-checkbox
+                                    (keydown.enter)="$event.preventDefault()"
+                                    #rcmCheckbox
+                                    id="reverse-charge"
+                                    formControlName="isRcmEntry"
+                                    (change)="changeRcmCheckboxState($event)"
+                                    class="mr-r1"
+                                    name="rcmEntry"
+                                    [disabled]="isEinvoiceGenerated"
+                                    color="primary"
+                                >
                                 </mat-checkbox>
+                                <label
+                                    class="checkbox-custom-label"
+                                    for="reverse-charge"
+                                    (click)="
+                                        !isEinvoiceGenerated ? toggleRcmCheckbox(rcmCheckbox, 'label') : ''
+                                    "
+                                    [innerHTML]="localeData?.transaction_reverse_charge"
+                                >
+                                </label>
                             </div>
+                            <!-- For Tourist Scheme start -->
+                            <ng-container *ngIf="company?.countryCode === 'AE'">
+                                <div class="row mt-1" *ngIf="invoiceType.isSalesInvoice || invoiceType.isCashInvoice">
+                                    <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
+                                        <div class="col-sm-12 col-xl-10 col-lg-10 col-md-10 pl-0 ">
+                                            <mat-checkbox
+                                                color="primary"
+                                                (keydown.enter)="$event.preventDefault()"
+                                                id="tourist-scheme"
+                                                name="touristSchemeApplicable"
+                                                formControlName="touristSchemeApplicable"
+                                                (change)="toggleTouristSchemeApplicable()"
+                                                [disabled]="isEinvoiceGenerated"
+                                            >
+                                                {{ localeData?.transaction_tourist_scheme }}
+                                            </mat-checkbox>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div
+                                    class="row mr-t15"
+                                    *ngIf="(invoiceType.isSalesInvoice || invoiceType.isCashInvoice) && invoiceForm.get('touristSchemeApplicable')"
+                                >
+                                    <div class="col-sm-12 col-xl-6 col-lg-6 col-md-6 col-xs-12">
+                                        <input-field
+                                            [type]="'text'"
+                                            [name]="'passportNumber'"
+                                            [placeholder]="localeData?.passport_number"
+                                            [cssClass]="'attention-to'"
+                                            formControlName="passportNumber"
+                                            (keypress)="allowAlphanumericChar()"
+                                            (blur)="allowAlphanumericChar()"
+                                        ></input-field>
+                                    </div>
+                                </div>
+                            </ng-container>
+                            <!-- For Tourist Scheme end -->
                         </div>
                     </div>
 
                     <div class="vouchers-large-container mt-4 pt-4">
                         <div
-                            class="change-currency  d-flex justify-content-end align-items-center column-gap1 text-uppercase pb-2">
-                            <span>1 AUD </span>
+                            class="change-currency  d-flex justify-content-end align-items-center column-gap1 text-uppercase pb-2"
+                            *ngIf="isMultiCurrencyVoucher"
+                            >
+                            <span>{{ commonLocaleData?.app_numbers?.one }} {{ company?.baseCurrency }}</span>
                             <img alt="switch-icon" height="15px" src="/assets/images/switch-icon.svg" />
-                            <span>33.00 INR</span>
-                            <div class="currency-input-wrapper">
-                                <text-field [cssClass]="'form-control'" [type]="'number'"></text-field>
+                            <span *ngIf="!showExchangeRateEditField">{{ invoiceForm.get('exchangeRate')?.value }} {{ account?.baseCurrency }}</span>
+                            <div class="currency-input-wrapper" *ngIf="showExchangeRateEditField">
+                                <text-field [cssClass]="'form-control'" [type]="'number'" [matSuffix]="account?.baseCurrency" formControlName="exchangeRate"></text-field>
                             </div>
-                            <i class="icon-edit text-blue cursor-pointer"></i>
-                            <i class="icon-save text-blue cursor-pointer"></i>
+                            <i class="icon-edit text-blue cursor-pointer" (click)="showExchangeRateEditField = true" *ngIf="!showExchangeRateEditField"></i>
+                            <i class="icon-save text-blue cursor-pointer" (click)="showExchangeRateEditField = false" *ngIf="showExchangeRateEditField"></i>
                         </div>
 
                         <!-- Voucher Grid for Multiple Entries-->
@@ -626,26 +683,32 @@
 
                                             <div class="col-12 mt-3" *ngIf="!invoiceType.isPurchaseOrder">
                                                 <mat-card>
-                                                    <mat-card-content class="py-0">
+                                                    <mat-card-content class="py-0" *ngIf="!selectedFileName">
                                                         <div class="vouchers-attachment d-flex align-items-center column-gap1"
                                                             [matTooltip]="'No file chosen'" matTooltipPosition="right">
-                                                            <input type="file" class="position-absolute" title="" />
-                                                            <div class="attachment-add-icon">
-                                                                <i class="icon-add"></i>
-                                                            </div>
-                                                            <span class="attachment-placeholder">Attach File to
-                                                                voucher</span>
+                                                            <input type="file" class="position-absolute" name="invoiceFile" id="invoiceFile" (change)="uploadFile()"
+                                                            droppable="true" />
+                                                            <ng-container *ngIf="isFileUploading">
+                                                                <mat-spinner [diameter]="30"></mat-spinner>
+                                                            </ng-container>
+                                                            <ng-container *ngIf="!isFileUploading">
+                                                                <div class="attachment-add-icon">
+                                                                    <i class="icon-add"></i>
+                                                                </div>
+                                                                <span class="attachment-placeholder">Attach File to
+                                                                    voucher</span>
+                                                            </ng-container>
                                                         </div>
                                                     </mat-card-content>
-                                                    <mat-card-content class="py-0">
+                                                    <mat-card-content class="py-0" *ngIf="!isFileUploading && selectedFileName">
                                                         <div
                                                             class="vouchers-attachment d-flex align-items-center column-gap1 text-success">
                                                             <div class="attachment-add-icon">
                                                                 <i class="icon-tick"></i>
                                                             </div>
-                                                            <span class="attachment-placeholder">Screenshot 2024-01-22
-                                                                at 2.57.42 PM.png</span>
+                                                            <span class="attachment-placeholder">{{ selectedFileName }}</span>
                                                             <button mat-icon-button
+                                                                (click)="deleteAttachementConfirmation()"
                                                                 class="ml-auto remove-attachment font-16">
                                                                 <i class="icon-cross"></i>
                                                             </button>

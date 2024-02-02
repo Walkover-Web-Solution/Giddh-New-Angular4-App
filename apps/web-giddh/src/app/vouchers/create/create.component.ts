@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { VoucherComponentStore } from "../utility/vouchers.store";
 import { AppState } from "../../store";
@@ -24,13 +24,17 @@ import { SearchService } from "../../services/search.service";
 import { MatDialog } from "@angular/material/dialog";
 import { AddBulkItemsComponent } from "../../theme/add-bulk-items/add-bulk-items.component";
 import { OtherTaxComponent } from "../../theme/other-tax/other-tax.component";
-import { LastInvoices, OptionInterface } from "../../models/api-models/Voucher";
+import { LastInvoices, OptionInterface, VoucherForm } from "../../models/api-models/Voucher";
 import { PrintVoucherComponent } from "../print-voucher/print-voucher.component";
 import { PageLeaveUtilityService } from "../../services/page-leave-utility.service";
 import { AddAccountRequest, UpdateAccountRequest } from "../../models/api-models/Account";
 import { SalesActions } from "../../actions/sales/sales.action";
 import { animate, state, style, transition, trigger } from "@angular/animations";
 import { CreateDiscountComponent } from "../../theme/create-discount/create-discount.component";
+import { ConfirmationModalConfiguration } from "../../theme/confirmation-modal/confirmation-modal.interface";
+import { NewConfirmationModalComponent } from "../../theme/new-confirmation-modal/confirmation-modal.component";
+import { ToasterService } from "../../services/toaster.service";
+import { CommonService } from "../../services/common.service";
 
 @Component({
     selector: "create",
@@ -51,6 +55,8 @@ import { CreateDiscountComponent } from "../../theme/create-discount/create-disc
     ]
 })
 export class VoucherCreateComponent implements OnInit, OnDestroy {
+    /** Instance of RCM checkbox */
+    @ViewChild("rcmCheckbox") public rcmCheckbox: ElementRef;
     /**  This will use for dayjs */
     public dayjs = dayjs;
     /** Holds current voucher type */
@@ -199,6 +205,20 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
     public taxTypes: any = TaxType;
     public taxAsideMenuState: string = 'out';
     public selectedTax: TaxResponse = null;
+    /** Stores the current voucher form detail */
+    public currentVoucherFormDetails: VoucherForm;
+    /** RCM modal configuration */
+    public rcmConfiguration: ConfirmationModalConfiguration;
+    /** True if einvoice is generated for the voucher */
+    public isEinvoiceGenerated: boolean = false;
+    /** True if voucher is multi currency */
+    public isMultiCurrencyVoucher: boolean = false;
+    /** True if we need to show exchange rate edit field */
+    public showExchangeRateEditField: boolean = false;
+    /** True if file upload in progress */
+    public isFileUploading: boolean = false;
+    /** Name of the selected file */
+    public selectedFileName: string = '';
 
     /** Returns true if account is selected else false */
     public get showPageLeaveConfirmation(): boolean {
@@ -221,7 +241,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
         private searchService: SearchService,
         private dialog: MatDialog,
         private pageLeaveUtilityService: PageLeaveUtilityService,
-        private salesAction: SalesActions
+        private salesAction: SalesActions,
+        private toasterService: ToasterService,
+        private commonService: CommonService
     ) {
 
     }
@@ -299,6 +321,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
                 this.createUpdateAccountCallback(response);
             }
         });
+
+        /** Exchange rate */
+        this.exchangeRate$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            this.invoiceForm.get('exchangeRate')?.patchValue(response);
+        });
     }
 
     /**
@@ -309,6 +336,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
      */
     private getVoucherType(): void {
         this.invoiceType = this.vouchersUtilityService.getVoucherType(this.voucherType);
+        this.currentVoucherFormDetails = this.vouchersUtilityService.prepareVoucherForm(this.voucherType);
     }
 
     /**
@@ -407,9 +435,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
      * @memberof VoucherCreateComponent
      */
     private getActiveCompany(): void {
-        this.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            this.activeCompany = activeCompany;
-            this.company.addresses = activeCompany.addresses;
+        this.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.activeCompany = response;
+                this.company.addresses = response.addresses;
+            }
         })
     }
 
@@ -696,10 +726,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
             }
             this.componentStore.getExchangeRate({ fromCurrency, toCurrency, date });
         }
-
-        this.exchangeRate$.subscribe(response => {
-            console.log(response);
-        });
     }
 
     /**
@@ -795,6 +821,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
             this.fillBillingShippingAddress("account", "billingAddress", defaultAddress, index);
             this.fillBillingShippingAddress("account", "shippingAddress", defaultAddress, index);
         }
+
+        this.isMultiCurrencyVoucher = this.account.baseCurrency !== this.company.baseCurrency;
+        if (this.isMultiCurrencyVoucher) {
+            this.getExchangeRate(this.account.baseCurrency, this.company.baseCurrency, this.invoiceForm.get('date')?.value);
+        }
     }
 
     /**
@@ -849,7 +880,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
                 other: this.getTemplateDetailsFormGroup()
             }),
             entries: this.getEntriesFormGroup(),
-            uniqueName: ['']
+            uniqueName: [''],
+            isRcmEntry: [false],
+            touristSchemeApplicable: [false],
+            passportNumber: ['']
         });
     }
 
@@ -1140,6 +1174,134 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
      */
     public selectState(addressType: string, event: any): void {
         this.invoiceForm.controls['account'].get(addressType).get("state").get("name").patchValue(event?.label);
+    }
+
+    /**
+     * Toggle the RCM checkbox based on user confirmation
+     *
+     * @param {*} event Click event
+     * @memberof VoucherCreateComponent
+     */
+    public toggleRcmCheckbox(event: any, element: string): void {
+        let isChecked;
+        if (element === "checkbox") {
+            isChecked = event?.checked;
+            this.rcmCheckbox['checked'] = !isChecked;
+        } else {
+            isChecked = !event?._checked;
+        }
+        
+        this.rcmConfiguration = this.generalService.getRcmConfiguration(isChecked, this.commonLocaleData);
+        let dialogRef = this.dialog.open(NewConfirmationModalComponent, {
+            width: '630px',
+            data: {
+                configuration: this.rcmConfiguration
+            }
+        });
+
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            document.querySelector('body').classList.remove('fixed');
+            this.handleRcmChange(response);
+        });
+    }
+
+    /**
+     * RCM change handler, triggerreed when the user performs any
+     * action with the RCM popup
+     *
+     * @param {string} action Action performed by user
+     * @memberof VoucherCreateComponent
+     */
+    public handleRcmChange(action: string): void {
+        if (action === this.commonLocaleData?.app_yes) {
+            // Toggle the state of RCM as user accepted the terms of RCM modal
+            this.invoiceForm.get('isRcmEntry').patchValue(!this.invoiceForm.get('isRcmEntry')?.value);
+            this.rcmCheckbox['checked'] = this.invoiceForm.get('isRcmEntry')?.value;
+        }
+    }
+
+    /**
+     * This will reset the state of checkbox and ngModel to make sure we update it based on user confirmation later
+     *
+     * @param {*} event
+     * @memberof VoucherCreateComponent
+     */
+    public changeRcmCheckboxState(event: any): void {
+        this.invoiceForm.get('isRcmEntry').patchValue(!this.invoiceForm.get('isRcmEntry')?.value);
+        this.toggleRcmCheckbox(event, 'checkbox');
+    }
+
+    /**
+     * Removes the passport number if tourist scheme applicable checkbox toggled
+     *
+     * @memberof VoucherCreateComponent
+     */
+    public toggleTouristSchemeApplicable(): void {
+        this.invoiceForm.get('passportNumber').patchValue('');
+    }
+
+    /**
+     * Allows alphanumeric characters only in passport number field
+     *
+     * @memberof VoucherCreateComponent
+     */
+    public allowAlphanumericChar(): void {
+        this.generalService.allowAlphanumericChar(this.invoiceForm.get('passportNumber')?.value);
+    }
+
+    /**
+     * Uploads attachment
+     *
+     * @memberof VoucherCreateComponent
+     */
+    public uploadFile(): void {
+        const selectedFile: any = document.getElementById("invoiceFile");
+        this.selectedFileName = '';
+        if (selectedFile?.files?.length) {
+            const file = selectedFile?.files[0];
+
+            this.generalService.getSelectedFile(file, (blob, file) => {
+                this.isFileUploading = true;
+                this.selectedFileName = file.name;
+
+                this.commonService.uploadFile({ file: blob, fileName: file.name }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                    this.isFileUploading = false;
+
+                    if (response?.status === 'success') {
+                        //this.invFormData.entries[0].attachedFile = response.body?.uniqueName;
+                        //this.invFormData.entries[0].attachedFileName = response.body?.name;
+                        this.toasterService.showSnackBar("success", this.localeData?.file_uploaded);
+                    } else {
+                        //this.invFormData.entries[0].attachedFile = '';
+                        //this.invFormData.entries[0].attachedFileName = '';
+                        this.toasterService.showSnackBar("error", response.message);
+                    }
+                });
+            });
+        }
+    }
+
+    /**
+     * Shows confirmation modal to delete attachment
+     *
+     * @memberof VoucherCreateComponent
+     */
+    public deleteAttachementConfirmation(): void {
+        let attachmentDeleteConfiguration = this.generalService.getAttachmentDeleteConfiguration(this.localeData, this.commonLocaleData);
+        let dialogRef = this.dialog.open(NewConfirmationModalComponent, {
+            width: '630px',
+            data: {
+                configuration: attachmentDeleteConfiguration
+            }
+        });
+
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            if (response === this.commonLocaleData?.app_yes) {
+                this.componentStore.deleteAttachment('');
+            } else {
+                this.dialog.closeAll();
+            }
+        });
     }
 
     /**
