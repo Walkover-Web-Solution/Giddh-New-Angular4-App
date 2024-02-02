@@ -19,7 +19,7 @@ import { InvoiceReceiptFilter, ReciptResponse } from "../../models/api-models/re
 import { VouchersUtilityService } from "../utility/vouchers.utility.service";
 import { FormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 import { GIDDH_DATE_FORMAT } from "../../shared/helpers/defaultDateFormat";
-import { BriedAccountsGroup, SearchType, VoucherTypeEnum } from "../utility/vouchers.const";
+import { BriedAccountsGroup, SearchType, TaxType, VoucherTypeEnum } from "../utility/vouchers.const";
 import { SearchService } from "../../services/search.service";
 import { MatDialog } from "@angular/material/dialog";
 import { AddBulkItemsComponent } from "../../theme/add-bulk-items/add-bulk-items.component";
@@ -133,7 +133,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
         countryName: '',
         countryCode: '',
         baseCurrency: '',
-        baseCurrencySymbol: ''
+        baseCurrencySymbol: '',
+        addresses: null
     };
     /** Invoice Settings */
     public activeCompany: any;
@@ -194,6 +195,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
     public accountParentGroup: string = '';
     /** True if account has unsaved changes */
     public hasUnsavedChanges: boolean = false;
+    /** Holds tax types */
+    public taxTypes: any = TaxType;
     public taxAsideMenuState: string = 'out';
     public selectedTax: TaxResponse = null;
 
@@ -772,12 +775,43 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
      * @memberof VoucherCreateComponent
      */
     private updateAccountDataInForm(accountData: any): void {
+        this.showTaxTypeByCountry(accountData.country?.countryCode);
+
         this.account = {
             countryName: accountData.country?.countryName,
             countryCode: accountData.country?.countryCode,
             baseCurrency: accountData.currency,
-            baseCurrencySymbol: accountData.currencySymbol
+            baseCurrencySymbol: accountData.currencySymbol,
+            addresses: accountData.addresses
         };
+
+        let defaultAddress = null;
+        let index = 0;
+
+        let accountDefaultAddress = this.vouchersUtilityService.getDefaultAddress(accountData);
+        defaultAddress = accountDefaultAddress.defaultAddress;
+        index = accountDefaultAddress.defaultAddressIndex;
+
+        if (defaultAddress) {
+            this.fillBillingShippingAddress("billingAddress", defaultAddress, index);
+            this.fillBillingShippingAddress("shippingAddress", defaultAddress, index);
+        }
+    }
+
+    /**
+     * Fills billing / shipping address in form group
+     *
+     * @param {string} addressType
+     * @param {*} address
+     * @memberof VoucherCreateComponent
+     */
+    public fillBillingShippingAddress(addressType: string, address: any, index: number): void {
+        this.invoiceForm.controls['account'].get(addressType).get("index").patchValue(index);
+        this.invoiceForm.controls['account'].get(addressType).get("address").patchValue([address?.address]);
+        this.invoiceForm.controls['account'].get(addressType).get("pincode").patchValue(address?.pincode);
+        this.invoiceForm.controls['account'].get(addressType).get("taxNumber").patchValue(address?.gstNumber);
+        this.invoiceForm.controls['account'].get(addressType).get("state").get("name").patchValue(address?.state?.name);
+        this.invoiceForm.controls['account'].get(addressType).get("state").get("code").patchValue(address?.state?.code);
     }
 
     /**
@@ -848,10 +882,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
      */
     private getAddressFormGroup(): UntypedFormGroup {
         return this.formBuilder.group({
+            index: [''],
             address: [''],
             pincode: [''],
             taxNumber: [''],
             state: this.formBuilder.group({
+                name: [''],
                 code: ['']
             })
         });
@@ -915,7 +951,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
     private getEntriesFormGroup(): UntypedFormGroup {
         return this.formBuilder.group({
             date: [''],
-            voucherType: ['']
+            voucherType: [''],
+            uniqueName: [''],
+            discounts: this.formBuilder.array([]),
+            taxes: this.formBuilder.array([]),
+            transitions: this.formBuilder.array([])
         });
     }
 
@@ -985,9 +1025,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
             event.preventDefault();
         }
         this.accountAsideMenuState = this.accountAsideMenuState === 'out' ? 'in' : 'out';
-
         this.toggleBodyClass();
-
         setTimeout(() => {
             if (this.accountAsideMenuState === "out" && this.showPageLeaveConfirmation) {
                 this.pageLeaveUtilityService.addBrowserConfirmationDialog();
@@ -1044,7 +1082,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
     }
 
     public toggleCreateDiscountAsidePane(): void {
-        this.dialog.open(CreateDiscountComponent,  {
+        this.dialog.open(CreateDiscountComponent, {
             position: {
                 right: '0',
                 top: '0'
@@ -1058,6 +1096,36 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
         }
         this.taxAsideMenuState = this.taxAsideMenuState === 'out' ? 'in' : 'out';
         this.toggleBodyClass();
+    }
+
+    /**
+     * Copies billing details in shipping details
+     *
+     * @param {*} event
+     * @memberof VoucherCreateComponent
+     */
+    public copyBillingInShipping(event: any): void {
+        if (event?.checked) {
+            let defaultAddress = {
+                index: this.invoiceForm.controls['account'].get("billingAddress").get("index")?.value || 0,
+                address: this.invoiceForm.controls['account'].get("billingAddress").get("address")?.value,
+                pincode: this.invoiceForm.controls['account'].get("billingAddress").get("pincode")?.value,
+                gstNumber: this.invoiceForm.controls['account'].get("billingAddress").get("taxNumber")?.value,
+                state: { name: this.invoiceForm.controls['account'].get("billingAddress").get("state").get("name")?.value, code: this.invoiceForm.controls['account'].get("billingAddress").get("state").get("code")?.value }
+            };
+            this.fillBillingShippingAddress("shippingAddress", defaultAddress, defaultAddress.index);
+        }
+    }
+
+    /**
+     * Callback for state
+     *
+     * @param {string} addressType
+     * @param {*} event
+     * @memberof VoucherCreateComponent
+     */
+    public selectState(addressType: string, event: any): void {
+        this.invoiceForm.controls['account'].get(addressType).get("state").get("name").patchValue(event?.label);
     }
 
     /**

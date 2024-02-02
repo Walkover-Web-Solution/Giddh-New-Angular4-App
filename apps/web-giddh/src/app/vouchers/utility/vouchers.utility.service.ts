@@ -171,4 +171,23 @@ export class VouchersUtilityService {
             return 'sundrydebtors';
         }
     }
+
+    public getDefaultAddress(accountData: any): any {
+        let defaultAddress = null;
+        let defaultAddressIndex = null;
+
+        if (accountData.addresses?.length === 1) {
+            defaultAddress = accountData.addresses[0];
+            defaultAddressIndex = 0;
+        } else {
+            accountData.addresses?.forEach((address, index) => {
+                if (address.isDefault) {
+                    defaultAddress = address;
+                    defaultAddressIndex = index;
+                }
+            });
+        }
+
+        return { defaultAddress, defaultAddressIndex };
+    }
 }
