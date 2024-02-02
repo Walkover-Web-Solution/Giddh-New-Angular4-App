@@ -55,6 +55,8 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
     public firstStepForm: UntypedFormGroup;
     /** Form Group for company address form */
     public secondStepForm: UntypedFormGroup;
+    /** Form Group for subscription company form */
+    public thirdStepForm: UntypedFormGroup;
     /** True if api call in progress */
     public isLoading: boolean = false;
     /** Subject to unsubscribe from listeners */
@@ -181,6 +183,8 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
     public verifyOtpInProgress: boolean = false;
     /** True if need to focus in otp field */
     public showFocusInOtpField: boolean = false;
+    /** Hold selected country */
+    public selectedRole: string = '';
 
     /** Returns true if form is dirty else false */
     public get showPageLeaveConfirmation(): boolean {
@@ -219,6 +223,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         this.getCountry();
         this.getStates();
         this.getCurrency();
+        this.getRoles();
 
         /** Library to separate phone number and calling code */
         if (window['libphonenumber'] === undefined) {
@@ -500,9 +505,16 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
             address: [''],
         });
 
+        this.thirdStepForm = this.formBuilder.group({
+            emailId: [''],
+            role: ['', Validators.required],
+            ownerPermission: ['']
+        });
+
         this.companyForm = this.formBuilder.group({
             firstStepForm: this.firstStepForm,
-            secondStepForm: this.secondStepForm
+            secondStepForm: this.secondStepForm,
+            thirdStepForm: this.thirdStepForm
         });
 
         this.firstStepForm.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(result => {
@@ -682,6 +694,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      * @memberof AddCompanyComponent
      */
     public onSelectedTab(event: any): void {
+        console.log(event);
         this.selectedStep = event?.selectedIndex;
         if (this.showMobileField) {
             setTimeout(() => {
@@ -882,6 +895,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
             this.fireSocketCompanyCreateRequest();
         }
     }
+
 
     /**
      * Get random string for company
@@ -1192,6 +1206,17 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         }
     }
 
+    public getRoles(): void {
+
+    }
+
+    public selectRole(event: any): void {
+
+    }
+
+    public setOwnerPermission(event: any): void {
+
+    }
     /**
      * Callback for translation response complete
      *

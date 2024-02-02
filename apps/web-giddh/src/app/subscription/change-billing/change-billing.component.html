@@ -1,0 +1,122 @@
+<!-- <ng-container
+    appTranslate
+    [file]="'subscription'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+> -->
+<hamburger-menu></hamburger-menu>
+<div id="main" class="welcome-outer">
+    <div class="main-heading-billing">
+        <div class="row display-line">
+            <div class="col-sm-1">
+                <div class="back-btnn">
+                    <button mat-stroked-button class="back-button">
+                        <i class="icon-left back-left"></i>
+                        Back
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="welcome-msg">
+        <div class="row display-line">
+            <div class="col-sm-6 user-main">
+                <div class="user-details">
+                    <p class="user-title">Hello Dilpreet Sing Dang !</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="billing-details">
+        <div class="col-md-2 billing-name-content">
+            <h3 class="billing-name">Billing Detais</h3>
+        </div>
+        <div class="row display-line">
+            <div class="col-md-3 left-side">
+                <div class="billing-wrapper">
+                    <form [formGroup]="changeBillingForm">
+                        <div class="form-group">
+                            <input-field
+                                [type]="'text'"
+                                [name]="'billingName'"
+                                [label]="'Billing Name'"
+                                formControlName="billingName"
+                            >
+                            </input-field>
+                        </div>
+                        <div class="form-group">
+                            <input-field
+                                [type]="'text'"
+                                [name]="'companyName'"
+                                [label]="'Company Name'"
+                                formControlName="companyName"
+                            >
+                            </input-field>
+                        </div>
+                        <div class="form-group">
+                            <input-field
+                                [type]="'text'"
+                                [name]="'emailId'"
+                                [label]="'Email Id'"
+                                formControlName="emailId"
+                            >
+                            </input-field>
+                        </div>
+                        <div class="form-group">
+                            <input-field
+                                [type]="'number'"
+                                [name]="'pincode'"
+                                [label]="'Pincode'"
+                                formControlName="pincode"
+                            >
+                            </input-field>
+                        </div>
+                        <div class="form-group">
+                            <input-field
+                                [type]="'number'"
+                                [name]="'mobile'"
+                                [label]="'Mobile No'"
+                                formControlName="mobile"
+                            >
+                            </input-field>
+                        </div>
+                        <div class="form-group">
+                            <input-field
+                                [type]="'text'"
+                                [name]="'gstin'"
+                                [label]="'GST/TRN No'"
+                                formControlName="gstin"
+                            >
+                            </input-field>
+                        </div>
+                        <div class="form-group">
+                            <div class="mat-field-select width-100 only-bottom-border mat-input">
+                                <dropdown-field
+                                    [name]="'county'"
+                                    [label]="'County' + '*'"
+                                    [placeholder]="'Select County'"
+                                >
+                                </dropdown-field>
+                                <dropdown-field [name]="'state'" [label]="'State' + '*'" [placeholder]="'Select State'">
+                                </dropdown-field>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <mat-form-field appearance="outline" class="w-100">
+                                <mat-label>Address</mat-label>
+                                <textarea matInput placeholder="Enter Address..."></textarea>
+                            </mat-form-field>
+                        </div>
+                        <div class="form-group">
+                            <div class="pt-2 d-flex column-gap15">
+                                <button mat-stroked-button color="primary">Submit</button>
+                                <button mat-stroked-button>Cancel</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- </ng-container> -->

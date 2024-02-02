@@ -6,6 +6,7 @@ import { CompanyListComponent } from './company-list/company-list.component';
 import { TransferComponent } from './transfer/transfer.component';
 import { GeneralService } from '../services/general.service';
 import { ConfirmModalComponent } from "../theme/new-confirm-modal/confirm-modal.component";
+import { Router } from '@angular/router';
 /** This will use for interface */
 export interface GetSubscriptions {
     name: string;
@@ -61,15 +62,14 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
     public displayedColumns: string[] = ['name', 'count', 'billingAccount', 'subscriber', 'country', 'planSubName', 'status', 'monthYearly', 'renewalDate'];
     /** Hold the data of activity logs */
     public dataSource = ELEMENT_DATA;
-    /** Hold the list of mat menu  */
-    public menuList: any[] = ['Change Plan', 'Buy Plan', 'View Subscription', 'Change Billing', 'Transfer', 'Cancel', 'Move'];
     /** True if translations loaded */
     public translationLoaded: boolean = false;
 
     constructor(public dialog: MatDialog,
         private toaster: ToasterService,
         private changeDetection: ChangeDetectorRef,
-        private generalService: GeneralService
+        private generalService: GeneralService,
+        private router: Router
     ) { }
 
     public ngOnInit(): void {
@@ -95,32 +95,45 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
 * @param {*} element
 * @memberof SubscriptionComponent
 */
-    public transferSubscription(event: any, element: any, type: string): void {
-        console.log(event, element, type);
-        if (type === 'transfer') {
-            this.dialog.open(TransferComponent, {
-                data: element,
-                panelClass: 'transfer-popup',
-                width: "630px"
-            });
-        } if (type === 'Cancel') {
-            let dialogRef = this.dialog.open(ConfirmModalComponent, {
-                data: {
-                    title: 'Cancel Subscription',
-                    body: 'Subscription will be cancel on Expiry Date',
-                    ok: 'Yes',
-                    cancel: 'Cancel'
-                },
-                panelClass: 'cancel-confirmation-modal',
+    public transferSubscription(): void {
+        this.dialog.open(TransferComponent, {
+            data: 'element',
+            panelClass: 'transfer-popup',
+            width: "630px"
+        });
+    }
 
-                width: '585px'
-            });
+    public cancelSubscription(): void {
+        let cancelDialogRef = this.dialog.open(ConfirmModalComponent, {
+            data: {
+                title: 'Cancel Subscription',
+                body: 'Subscription will be cancel on Expiry Date',
+                ok: 'Proceed',
+                cancel: 'Cancel'
+            },
+            panelClass: 'cancel-confirmation-modal',
+            width: '585px'
+        });
 
-            dialogRef.afterClosed().subscribe((action) => {
-                if (action) {
-                }
-            });
-        }
+        cancelDialogRef.afterClosed().subscribe((action) => {
+            if (action) {
+                console.log('cancelDialogRef');
+            } else {
+                cancelDialogRef.close();
+            }
+        });
+    }
+
+    public moveSubscription(): void {
+    }
+    public changeBilling(): void {
+        this.router.navigate(['/pages/subscription/change-billing']);
+    }
+    public viewSubscription(): void {
+    }
+    public buyPlan(): void {
+    }
+    public changePlan(): void {
     }
 
     /**

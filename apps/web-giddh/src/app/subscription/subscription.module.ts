@@ -19,6 +19,9 @@ import { TransferComponent } from './transfer/transfer.component';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NewConfirmationModalModule } from '../theme/new-confirmation-modal/confirmation-modal.module';
+import { ChangeBillingComponent } from './change-billing/change-billing.component';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 @NgModule({
     imports: [
@@ -26,6 +29,8 @@ import { NewConfirmationModalModule } from '../theme/new-confirmation-modal/conf
         RouterModule,
         TranslateDirectiveModule,
         SubscriptionRoutingModule,
+        MatFormFieldModule,
+        MatInputModule,
         MatButtonModule,
         MatPaginatorModule,
         MatDialogModule,
@@ -42,6 +47,8 @@ import { NewConfirmationModalModule } from '../theme/new-confirmation-modal/conf
         MatTooltipModule,
         NewConfirmationModalModule
     ],
-    declarations: [SubscriptionComponent, CompanyListComponent, TransferComponent]
+    exports: [
+    ],
+    declarations: [SubscriptionComponent, CompanyListComponent, TransferComponent, ChangeBillingComponent]
 })
 export class SubscriptionModule { }

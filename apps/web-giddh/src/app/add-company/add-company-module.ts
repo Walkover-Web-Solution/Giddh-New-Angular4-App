@@ -14,6 +14,7 @@ import { AddCompanyComponent } from "./add-company.component";
 import { AddCompanyRoutingModule } from "./add-company.routing.module";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { ClickOutsideModule } from "ng-click-outside";
+import { MatRadioModule } from "@angular/material/radio";
 
 @NgModule({
     declarations: [
@@ -34,7 +35,8 @@ import { ClickOutsideModule } from "ng-click-outside";
         TranslateDirectiveModule,
         GiddhPageLoaderModule,
         MatProgressSpinnerModule,
-        ClickOutsideModule
+        ClickOutsideModule,
+        MatRadioModule
     ],
     providers: [
 
