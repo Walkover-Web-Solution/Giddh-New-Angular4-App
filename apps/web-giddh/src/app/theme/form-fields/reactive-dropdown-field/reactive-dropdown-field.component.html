@@ -1,6 +1,6 @@
 <ng-container appTranslate (commonLocaleData)="commonLocaleData = $event">
     <mat-form-field [appearance]="appearance">
-        <mat-label>{{ label ? label : placeholder }}</mat-label>
+        <mat-label *ngIf="showLabel">{{ label ? label : placeholder }}</mat-label>
         <input 
             type="text" 
             [ngClass]="cssClass" 
