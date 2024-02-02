@@ -87,11 +87,11 @@
                 <div class="vouchers-secondary-form position-relative container-lg"
                     [ngClass]="{'vouchers-form-disable' : !invoiceForm.controls['account'].get('customerName')?.value }">
                     <div class="vouchers-small-container">
-                        <div class="row row-gap">
+                        <div class="row">
                             <ng-container formGroupName="account">
                                 <!-- Billing Address -->
                                 <div class="col-12 mr-t15" *ngIf="invoiceType.isPurchaseOrder">
-                                    <span>Deliver From</span>
+                                    <span class="billing-deliver-label">Deliver From</span>
                                 </div>
                                 <div class="col-6" formGroupName="billingAddress">
                                     <label for="billingAddress" class="billing-label">Billing Address</label> <i
@@ -183,17 +183,17 @@
                                 </div>
 
                                 <!-- Attention to -->
-                                <div class="col-6">
+                                <div class="col-6 mr-t15">
                                     <input-field [name]="'attentionTo'" [label]="'Attention to'" [placeholder]="'Enter name'" [type]="'text'" formControlName="attentionTo"></input-field>
                                 </div>
 
                                 <!-- Email Id -->
-                                <div class="col-6">
+                                <div class="col-6 mr-t15">
                                     <input-field [name]="'email'" [label]="'Email Id'" [placeholder]="'Enter email'" [type]="'text'" formControlName="email"></input-field>
                                 </div>
 
                                 <!-- Mobile Number -->
-                                <div class="col-6">
+                                <div class="col-6 mr-t15">
                                     <input-field [name]="'mobile-number'" [type]="'tel'" #initContactProforma class="flag-input"
                                         [id]="'init-contact-proforma'" (keydown.enter)="$event.preventDefault()"
                                         [label]="'Mobile Number'" [placeholder]="'98XXXXXXXX'" [floatLabel]="'auto'">
@@ -204,15 +204,15 @@
                             </ng-container>
 
                             <!-- Warehouse -->
-                            <div class="col-6" *ngIf="showWarehouse" formGroupName="warehouse">
+                            <div class="col-6 mr-t15" *ngIf="showWarehouse" formGroupName="warehouse">
                                 <reactive-dropdown-field [cssClass]="'border-0'" [name]="'warehouse'" formControlName="uniqueName" [label]="'Warehouse'" [placeholder]="'Select'" [options]="warehouses"></reactive-dropdown-field>
                             </div>
                         </div>
 
                         <!-- Row 2 for Deliver To Only show in Cash Invoice -->
-                        <div class="row row-gap" *ngIf="invoiceType.isPurchaseOrder" formGroupName="account">
+                        <div class="row" *ngIf="invoiceType.isPurchaseOrder" formGroupName="account">
                             <div class="col-12 mr-t15">
-                                <span>Deliver To</span>
+                                <span class="billing-deliver-label">Deliver To</span>
                             </div>
 
                             <!-- Billing Address -->
