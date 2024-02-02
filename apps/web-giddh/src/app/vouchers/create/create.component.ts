@@ -194,6 +194,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
     public accountParentGroup: string = '';
     /** True if account has unsaved changes */
     public hasUnsavedChanges: boolean = false;
+    public taxAsideMenuState: string = 'out';
+    public selectedTax: TaxResponse = null;
 
     /** Returns true if account is selected else false */
     public get showPageLeaveConfirmation(): boolean {
@@ -1050,13 +1052,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
         });
     }
 
-    public toggleCreateTaxAsidepan(): void {
-        this.dialog.open(AsideMenuCreateTaxComponent,  {
-            position: {
-                right: '0',
-                top: '0'
-            }
-        });
+    public toggleTaxAsidePane(event?): void {
+        if (event) {
+            event.preventDefault();
+        }
+        this.taxAsideMenuState = this.taxAsideMenuState === 'out' ? 'in' : 'out';
+        this.toggleBodyClass();
     }
 
     /**

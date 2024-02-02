@@ -128,7 +128,7 @@
                                             <span>{{ invoiceType?.isCashInvoice ? company?.countryName : account?.countryName }}</span>
                                         </div>
                                         <div class="state-field" formGroupName="state">
-                                            <reactive-dropdown-field [cssClass]="'border-0'" formControlName="code" [name]="'billingStateCode'" [label]="'State'" [placeholder]="'Select'" [options]="accountStateList$ | async"></reactive-dropdown-field>
+                                            <reactive-dropdown-field [cssClass]="'border-0'" formControlName="code" [name]="'billingStateCode'" [showLabel]="false" [placeholder]="'State'" [options]="accountStateList$ | async" [appearance]="'legacy'"></reactive-dropdown-field>
                                         </div>
                                         <div class="gstin-field">
                                             <text-field type="text" [name]="'taxNumber'" [placeholder]="'GSTIN'" [cssClass]="'border-0'" formControlName="taxNumber"></text-field>
@@ -176,7 +176,7 @@
                                             <span>{{ invoiceType?.isCashInvoice ? company?.countryName : account?.countryName }}</span>
                                         </div>
                                         <div class="state-field" formGroupName="state">
-                                            <reactive-dropdown-field [cssClass]="'border-0'" formControlName="code" [name]="'shippingStateCode'" [label]="'State'" [placeholder]="'Select'" [options]="accountStateList$ | async"></reactive-dropdown-field>
+                                            <reactive-dropdown-field [cssClass]="'border-0'" formControlName="code" [name]="'billingStateCode'" [showLabel]="false" [placeholder]="'State'" [options]="accountStateList$ | async" [appearance]="'legacy'"></reactive-dropdown-field>
                                         </div>
                                         <div class="gstin-field">
                                             <text-field type="text" [name]="'taxNumber'" [placeholder]="'GSTIN'" [cssClass]="'border-0'" formControlName="taxNumber"></text-field>
@@ -234,10 +234,7 @@
                                             <span>India</span>
                                         </div>
                                         <div class="state-field">
-                                            <select-field [cssClass]="'border-0'" [name]="'fields'" [placeholder]="'Punjab'"
-                                                [options]="dummyOptions" (selectedOption)="selectDropdown($event)"
-                                                [defaultValue]="''">
-                                            </select-field>
+                                            <reactive-dropdown-field [cssClass]="'border-0'" formControlName="code" [name]="'billingStateCode'" [showLabel]="false" [placeholder]="'State'" [options]="accountStateList$ | async" [appearance]="'legacy'"></reactive-dropdown-field>
                                         </div>
                                         <div class="gstin-field">
                                             <text-field type="text" name="gstin" [placeholder]="'GSTIN'"
@@ -286,10 +283,7 @@
                                             <span>India</span>
                                         </div>
                                         <div class="state-field">
-                                            <select-field [cssClass]="'border-0'" [name]="'fields'" [placeholder]="'Punjab'"
-                                                [options]="dummyOptions" (selectedOption)="selectDropdown($event)"
-                                                [defaultValue]="''">
-                                            </select-field>
+                                            <reactive-dropdown-field [cssClass]="'border-0'" formControlName="code" [name]="'billingStateCode'" [showLabel]="false" [placeholder]="'State'" [options]="accountStateList$ | async" [appearance]="'legacy'"></reactive-dropdown-field>
                                         </div>
                                         <div class="gstin-field">
                                             <text-field type="text" name="gstin" [placeholder]="'GSTIN'"
@@ -588,7 +582,7 @@
 
                             <!-- Tax -->
                             <div class="body-item">
-                                <tax-dropdown (createOption)="toggleCreateTaxAsidepan()"></tax-dropdown>
+                                <tax-dropdown (createOption)="toggleTaxAsidePane()"></tax-dropdown>
                             </div>
 
                             <!-- Total -->
@@ -842,8 +836,8 @@
 >
 </generic-aside-menu-account>
 
-<!-- region open tax aside -->
-<!-- <div class="aside-overlay" *ngIf="taxAsideMenuState === 'in'"></div>
+<!-- Create Tax Asidepane -->
+<div class="aside-overlay" *ngIf="taxAsideMenuState === 'in'"></div>
 <aside-menu-create-tax-component
     [class]="taxAsideMenuState"
     [tax]="selectedTax"
@@ -852,4 +846,4 @@
     [localeData]="localeData"
     [commonLocaleData]="commonLocaleData"
     (closeEvent)="toggleTaxAsidePane()"
-></aside-menu-create-tax-component> -->
+></aside-menu-create-tax-component>

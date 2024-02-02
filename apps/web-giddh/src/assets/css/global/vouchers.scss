@@ -2,6 +2,20 @@
     .vouchers-address-form{
         input, textarea{
             background: var(--color-transparent-background);
+            
+            &::placeholder {
+                color: var(--color-common-primary-input-placeholder);
+            }
+        }
+        reactive-dropdown-field {
+            .mat-mdc-form-field-infix{
+                padding-bottom: 1px !important;
+                min-height: 1rem !important;
+                padding-top: 0px !important;
+            }
+            .mdc-text-field--no-label{
+                padding: 0 !important;
+            }
         }
     }
 
