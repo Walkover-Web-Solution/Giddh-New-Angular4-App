@@ -104,43 +104,43 @@
                                         [matMenuTriggerFor]="billingAddress"
                                         class="icon-edit text-blue cursor-pointer pl-2 font-12"></i>
 
-                                    <div *ngIf="!invoiceType.isCashInvoice" class="mt-2">Address 1 </div>
+                                    <div *ngIf="!invoiceType.isCashInvoice" class="mt-2">Address {{ invoiceForm.controls['account'].get("billingAddress").get("index")?.value + 1 }} </div>
                                     <mat-menu #billingAddress="matMenu">
                                         <div class="mat-menu-width-large vouchers-address-menu">
-                                            <button mat-menu-item>
+                                            <button mat-menu-item *ngFor="let address of account?.addresses; let i = index" (click)="fillBillingShippingAddress('billingAddress', address, i)">
                                                 <div class="d-flex justify-content-between align-items-center">
                                                     <div>
-                                                        Indore, <p>Madhya Pradesh</p>
+                                                        Address {{ i + 1}}
+                                                        <p>{{ address.address ? address.address + ", " : "" }}{{ address.state?.name }}</p>
+                                                        <p>{{ address.gstNumber ? (company.taxType === taxTypes.GST ? commonLocaleData?.app_gstin + ": " : company.taxType === taxTypes.TRN ? commonLocaleData?.app_trn + ": " : company.taxType === taxTypes.VAT ? commonLocaleData?.enter_vat_no + ": " : "") + address.gstNumber : "" }}</p>
                                                     </div>
-                                                    <i class="icon-tick"></i>
+                                                    <i class="icon-tick" *ngIf="invoiceForm.controls['account'].get('billingAddress').get('index')?.value === i"></i>
                                                 </div>
                                             </button>
-                                            <button mat-menu-item>Item 2</button>
-                                            <button mat-menu-item>Item 3</button>
-                                            <button mat-menu-item class="vouchers-add-new">+ Add new address</button>
+                                            <button mat-menu-item class="vouchers-add-new" (click)="toggleAccountAsidePane()">+ Add new address</button>
                                         </div>
                                     </mat-menu>
                                     <div class="vouchers-address-form" *ngIf="invoiceType.isCashInvoice">
                                         <div class="address-field">
-                                            <textarea rows="2" matInput class="w-100" id="billingAddress" formControlName="address"></textarea>
+                                            <textarea rows="2" matInput class="w-100" name="billingAddress" formControlName="address"></textarea>
                                         </div>
                                         <div class="country-field">
                                             <span>{{ invoiceType?.isCashInvoice ? company?.countryName : account?.countryName }}</span>
                                         </div>
                                         <div class="state-field" formGroupName="state">
-                                            <reactive-dropdown-field [cssClass]="'border-0'" formControlName="code" [name]="'billingStateCode'" [label]="'State'" [placeholder]="'Select'" [options]="accountStateList$ | async"></reactive-dropdown-field>
+                                            <reactive-dropdown-field [cssClass]="'border-0'" formControlName="code" [name]="'billingStateCode'" [label]="'State'" [placeholder]="'Select'" [options]="accountStateList$ | async" [labelValue]="invoiceForm.controls['account'].get('billingAddress').get('state').get('name')?.value" (selectedOption)="selectState('billingAddress', $event)"></reactive-dropdown-field>
                                         </div>
                                         <div class="gstin-field">
-                                            <text-field type="text" [name]="'taxNumber'" [placeholder]="'GSTIN'" [cssClass]="'border-0'" formControlName="taxNumber"></text-field>
+                                            <text-field [type]="'text'" [name]="'billingTaxNumber'" [placeholder]="'GSTIN'" [cssClass]="'border-0'" formControlName="taxNumber"></text-field>
                                         </div>
                                         <div class="pin-code-field">
-                                            <text-field type="text" [name]="'pincode'" [placeholder]="'PIN Code'" [cssClass]="'border-0'" formControlName="pincode"></text-field>
+                                            <text-field [type]="'text'" [name]="'billingPinCode'" [placeholder]="'PIN Code'" [cssClass]="'border-0'" formControlName="pincode"></text-field>
                                         </div>
                                     </div>
                                 </div>
                                 <!-- Shipping Address -->
                                 <div class="col-6" formGroupName="shippingAddress">
-                                    <mat-checkbox type="checkbox" color="primary" *ngIf="invoiceType.isCashInvoice">
+                                    <mat-checkbox type="checkbox" color="primary" *ngIf="invoiceType.isCashInvoice" (change)="copyBillingInShipping($event)">
                                         Shipping Address Same as Billing Address
                                     </mat-checkbox>
                                     <ng-container *ngIf="!invoiceType.isCashInvoice">
@@ -151,38 +151,38 @@
 
                                         <mat-menu #shippingAddress="matMenu">
                                             <div class="mat-menu-width-large vouchers-address-menu">
-                                                <button mat-menu-item>
+                                                <button mat-menu-item *ngFor="let address of account?.addresses; let i = index" (click)="fillBillingShippingAddress('shippingAddress', address, i)">
                                                     <div class="d-flex justify-content-between align-items-center">
                                                         <div>
-                                                            Indore, <p>Madhya Pradesh</p>
+                                                            Address {{ i + 1}}
+                                                            <p>{{ address.address ? address.address + ", " : "" }}{{ address.state?.name }}</p>
+                                                            <p>{{ address.gstNumber ? (company.taxType === taxTypes.GST ? commonLocaleData?.app_gstin + ": " : company.taxType === taxTypes.TRN ? commonLocaleData?.app_trn + ": " : company.taxType === taxTypes.VAT ? commonLocaleData?.enter_vat_no + ": " : "") + address.gstNumber : "" }}</p>
                                                         </div>
-                                                        <i class="icon-tick"></i>
+                                                        <i class="icon-tick" *ngIf="invoiceForm.controls['account'].get('shippingAddress').get('index')?.value === i"></i>
                                                     </div>
                                                 </button>
-                                                <button mat-menu-item>Item 2</button>
-                                                <button mat-menu-item>Item 3</button>
-                                                <button mat-menu-item class="vouchers-add-new">+ Add new address</button>
+                                                <button mat-menu-item class="vouchers-add-new" (click)="toggleAccountAsidePane()">+ Add new address</button>
                                             </div>
                                         </mat-menu>
                                     </ng-container>
 
-                                    <div *ngIf="!invoiceType.isCashInvoice" class="mt-2">Address 2 </div>
+                                    <div *ngIf="!invoiceType.isCashInvoice" class="mt-2">Address {{ invoiceForm.controls['account'].get("shippingAddress").get("index")?.value + 1 }} </div>
 
                                     <div class="vouchers-address-form form-disabled" *ngIf="invoiceType.isCashInvoice">
                                         <div class="address-field">
-                                            <textarea rows="2" matInput class="w-100" id="shippingAddress" formControlName="address"></textarea>
+                                            <textarea rows="2" matInput class="w-100" name="shippingAddress" formControlName="address"></textarea>
                                         </div>
                                         <div class="country-field">
                                             <span>{{ invoiceType?.isCashInvoice ? company?.countryName : account?.countryName }}</span>
                                         </div>
                                         <div class="state-field" formGroupName="state">
-                                            <reactive-dropdown-field [cssClass]="'border-0'" formControlName="code" [name]="'shippingStateCode'" [label]="'State'" [placeholder]="'Select'" [options]="accountStateList$ | async"></reactive-dropdown-field>
+                                            <reactive-dropdown-field [cssClass]="'border-0'" formControlName="code" [name]="'shippingStateCode'" [label]="'State'" [placeholder]="'Select'" [options]="accountStateList$ | async" [labelValue]="invoiceForm.controls['account'].get('shippingAddress').get('state').get('name')?.value" (selectedOption)="selectState('shippingAddress', $event)"></reactive-dropdown-field>
                                         </div>
                                         <div class="gstin-field">
-                                            <text-field type="text" [name]="'taxNumber'" [placeholder]="'GSTIN'" [cssClass]="'border-0'" formControlName="taxNumber"></text-field>
+                                            <text-field [type]="'text'" [name]="'shippingTaxNumber'" [placeholder]="'GSTIN'" [cssClass]="'border-0'" formControlName="taxNumber"></text-field>
                                         </div>
                                         <div class="pin-code-field">
-                                            <text-field type="text" [name]="'pincode'" [placeholder]="'PIN Code'" [cssClass]="'border-0'" formControlName="pincode"></text-field>
+                                            <text-field [type]="'text'" [name]="'shippingPinCode'" [placeholder]="'PIN Code'" [cssClass]="'border-0'" formControlName="pincode"></text-field>
                                         </div>
                                     </div>
                                 </div>
