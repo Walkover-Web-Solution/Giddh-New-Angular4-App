@@ -29,7 +29,7 @@ import { cloneDeep, find, forEach, isEqual, isUndefined, omit, orderBy, uniqBy }
 import { InvoiceSetting } from '../models/interfaces/invoice.setting.interface';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { LedgerDiscountClass } from '../models/api-models/SettingsDiscount';
-import { SubVoucher, RATE_FIELD_PRECISION, HIGH_RATE_FIELD_PRECISION, SearchResultText, TCS_TDS_TAXES_TYPES, ENTRY_DESCRIPTION_LENGTH, EMAIL_REGEX_PATTERN, AdjustedVoucherType, MOBILE_NUMBER_UTIL_URL, MOBILE_NUMBER_SELF_URL, MOBILE_NUMBER_IP_ADDRESS_URL, MOBILE_NUMBER_ADDRESS_JSON_URL } from '../app.constant';
+import { SubVoucher, RATE_FIELD_PRECISION, HIGH_RATE_FIELD_PRECISION, SearchResultText, TCS_TDS_TAXES_TYPES, ENTRY_DESCRIPTION_LENGTH, EMAIL_REGEX_PATTERN, AdjustedVoucherType, MOBILE_NUMBER_UTIL_URL, MOBILE_NUMBER_SELF_URL, MOBILE_NUMBER_IP_ADDRESS_URL, MOBILE_NUMBER_ADDRESS_JSON_URL, VOUCHERS_PAGINATION_LIMIT } from '../app.constant';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { ProformaActions } from '../actions/proforma/proforma.actions';
 import { PreviousInvoicesVm, ProformaFilter, ProformaGetRequest, ProformaResponse } from '../models/api-models/proforma';
@@ -497,31 +497,31 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     /** Stores the search results pagination details for customer */
     public searchCustomerResultsPaginationData = {
         page: 0,
-        totalPages: 0,
+        count: VOUCHERS_PAGINATION_LIMIT,
         query: ''
     };
     /** Stores the search results pagination details for stock or service  */
     public searchItemResultsPaginationData = {
         page: 0,
-        totalPages: 0,
+        count: VOUCHERS_PAGINATION_LIMIT,
         query: ''
     };
     /** Stores the search results pagination details for bank */
     public searchBankResultsPaginationData = {
         page: 0,
-        totalPages: 0,
+        count: VOUCHERS_PAGINATION_LIMIT,
         query: ''
     };
     /** Stores the default search results pagination details for customer */
     public defaultCustomerResultsPaginationData = {
         page: 0,
-        totalPages: 0,
+        count: VOUCHERS_PAGINATION_LIMIT,
         query: ''
     };
     /** Stores the default search results pagination details for stock or service */
     public defaultItemResultsPaginationData = {
         page: 0,
-        totalPages: 0,
+        count: VOUCHERS_PAGINATION_LIMIT,
         query: ''
     };
     /** No results found label for dynamic search */
@@ -741,6 +741,10 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public lastScannedKey: string = '';
     /** True if barcode maching is typing */
     public isBarcodeMachineTyping: boolean = false;
+    /** False if there is no data in account search */
+    public isAccountSearchData: boolean = true;
+    /** True if there is initial call */
+    public initialApiCall: boolean = false;
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -1788,19 +1792,24 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         if (this.accountUniqueName && !this.invoiceNo) {
             if (!this.isCashInvoice) {
                 const requestObject = this.getSearchRequestObject(this.accountUniqueName, 1, SEARCH_TYPE.CUSTOMER);
-                this.searchAccount(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
-                    if (data && data.body && data.body.results) {
-                        this.prepareSearchLists(data.body.results, 1, SEARCH_TYPE.CUSTOMER);
-                        this.makeCustomerList();
-                        const item = data.body.results.find(result => result?.uniqueName === this.accountUniqueName);
-                        if (item) {
-                            this.invFormData.voucherDetails.customerName = item.name;
-                            this.invFormData.voucherDetails.customerUniquename = item.accountUniqueName;
-                            this.isCustomerSelected = true;
-                            this.invFormData.accountDetails.name = '';
+                if (this.isAccountSearchData) {
+                    this.searchAccount(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+                        if (data?.body?.results?.length && (this.searchItemResultsPaginationData.count || this.defaultCustomerResultsPaginationData.count || this.defaultItemResultsPaginationData.count || this.defaultItemResultsPaginationData.count) !== data?.body?.count) {
+                            this.isAccountSearchData = false;
                         }
-                    }
-                });
+                        if (data && data.body && data.body.results) {
+                            this.prepareSearchLists(data.body.results, 1, SEARCH_TYPE.CUSTOMER);
+                            this.makeCustomerList();
+                            const item = data.body.results.find(result => result?.uniqueName === this.accountUniqueName);
+                            if (item) {
+                                this.invFormData.voucherDetails.customerName = item.name;
+                                this.invFormData.voucherDetails.customerUniquename = item.accountUniqueName;
+                                this.isCustomerSelected = true;
+                                this.invFormData.accountDetails.name = '';
+                            }
+                        }
+                    });
+                }
             } else {
                 this.prepareSearchLists([{
                     name: this.invFormData.accountDetails?.name,
@@ -1911,7 +1920,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public makeCustomerList() {
         if (!(this.invoiceType === VoucherTypeEnum.debitNote || this.invoiceType === VoucherTypeEnum.purchase)) {
             this.customerAcList$ = observableOf(orderBy(this.sundryDebtorsAcList, 'label'));
-
             this.salesAccounts$ = observableOf(orderBy(this.prdSerAcListForDeb, 'label'));
             this.selectedGrpUniqueNameForAddEditAccountModal = 'sundrydebtors';
         } else {
@@ -6565,7 +6573,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         } else if (response?.status === "einvoice-confirm") {
             this.isShowLoader = false;
             this.startLoader(false);
-            
+
             let dialogRef = this.dialog.open(ConfirmModalComponent, {
                 data: {
                     title: this.commonLocaleData?.app_confirm,
@@ -6907,9 +6915,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             searchType === SEARCH_TYPE.ITEM ? this.searchItemResultsPaginationData.page :
                 searchType === SEARCH_TYPE.BANK ? this.searchBankResultsPaginationData.page : 1;
         if (
-            (searchType === SEARCH_TYPE.CUSTOMER && this.searchCustomerResultsPaginationData.page < this.searchCustomerResultsPaginationData.totalPages) ||
-            (searchType === SEARCH_TYPE.ITEM && this.searchItemResultsPaginationData.page < this.searchItemResultsPaginationData.totalPages) ||
-            (searchType === SEARCH_TYPE.BANK && this.searchBankResultsPaginationData.page < this.searchBankResultsPaginationData.totalPages)) {
+            (searchType === SEARCH_TYPE.CUSTOMER) ||
+            (searchType === SEARCH_TYPE.ITEM) ||
+            (searchType === SEARCH_TYPE.BANK)) {
             this.onSearchQueryChanged(
                 query,
                 page + 1,
@@ -6926,14 +6934,12 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         if (searchType === SEARCH_TYPE.CUSTOMER) {
                             this.defaultCustomerSuggestions = this.defaultCustomerSuggestions.concat(...results);
                             this.defaultCustomerResultsPaginationData.page = this.searchCustomerResultsPaginationData.page;
-                            this.defaultCustomerResultsPaginationData.totalPages = this.searchCustomerResultsPaginationData.totalPages;
                             this.searchResults = [...this.defaultCustomerSuggestions];
                             this.assignSearchResultToList(SEARCH_TYPE.CUSTOMER);
                             this.makeCustomerList();
                         } else if (searchType === SEARCH_TYPE.ITEM) {
                             this.defaultItemSuggestions = this.defaultItemSuggestions.concat(...results);
                             this.defaultItemResultsPaginationData.page = this.searchItemResultsPaginationData.page;
-                            this.defaultItemResultsPaginationData.totalPages = this.searchItemResultsPaginationData.totalPages;
                             this.searchResults = [...this.defaultItemSuggestions];
                             this.assignSearchResultToList(SEARCH_TYPE.ITEM);
                             this.makeCustomerList();
@@ -6967,44 +6973,71 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 this.searchBankResultsPaginationData.query = query;
             }
             const requestObject = this.getSearchRequestObject(query, page, searchType);
-            this.searchAccount(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
-                if (data && data.body && data.body.results) {
-                    this.prepareSearchLists(data.body.results, page, searchType);
-                    this.makeCustomerList();
-                    this.noResultsFoundLabel = SearchResultText.NotFound;
-                    this.changeDetectorRef.detectChanges();
-                    if (searchType === SEARCH_TYPE.CUSTOMER) {
-                        this.searchCustomerResultsPaginationData.page = data.body.page;
-                        this.searchCustomerResultsPaginationData.totalPages = data.body.totalPages;
-                    } else if (searchType === SEARCH_TYPE.ITEM) {
-                        this.searchItemResultsPaginationData.page = data.body.page;
-                        this.searchItemResultsPaginationData.totalPages = data.body.totalPages;
-                    } else if (searchType === SEARCH_TYPE.BANK) {
-                        this.searchBankResultsPaginationData.page = data.body.page;
-                        this.searchBankResultsPaginationData.totalPages = data.body.totalPages;
-                    }
-                    if (successCallback) {
-                        successCallback(data.body.results);
-                    } else {
+            if (!this.initialApiCall) {
+                this.searchAccount(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+                    if (data && data.body && data.body.results) {
+                        this.initialApiCall = true;
+                        this.prepareSearchLists(data.body.results, page, searchType);
+                        this.makeCustomerList();
+                        this.noResultsFoundLabel = SearchResultText.NotFound;
+                        this.changeDetectorRef.detectChanges();
                         if (searchType === SEARCH_TYPE.CUSTOMER) {
-                            this.defaultCustomerResultsPaginationData.page = data.body.page;
-                            this.defaultCustomerResultsPaginationData.totalPages = data.body.totalPages;
+                            this.searchCustomerResultsPaginationData.page = data.body.page;
                         } else if (searchType === SEARCH_TYPE.ITEM) {
-                            this.defaultItemResultsPaginationData.page = data.body.page;
-                            this.defaultItemResultsPaginationData.totalPages = data.body.totalPages;
+                            this.searchItemResultsPaginationData.page = data.body.page;
+                        } else if (searchType === SEARCH_TYPE.BANK) {
+                            this.searchBankResultsPaginationData.page = data.body.page;
+                        }
+                        if (successCallback) {
+                            successCallback(data.body.results);
+                        } else {
+                            if (searchType === SEARCH_TYPE.CUSTOMER) {
+                                this.defaultCustomerResultsPaginationData.page = data.body.page;
+                            } else if (searchType === SEARCH_TYPE.ITEM) {
+                                this.defaultItemResultsPaginationData.page = data.body.page;
+                            }
                         }
                     }
+                });
+            } else {
+                if (this.isAccountSearchData) {
+                    this.searchAccount(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+                        if (!data?.body?.results?.length || (data?.body?.results?.length && VOUCHERS_PAGINATION_LIMIT !== data?.body?.count)) {
+                            this.isAccountSearchData = false;
+                        }
+                        if (data && data.body && data.body.results) {
+                            this.prepareSearchLists(data.body.results, page, searchType);
+                            this.makeCustomerList();
+                            this.noResultsFoundLabel = SearchResultText.NotFound;
+                            this.changeDetectorRef.detectChanges();
+                            if (searchType === SEARCH_TYPE.CUSTOMER) {
+                                this.searchCustomerResultsPaginationData.page = data.body.page;
+                            } else if (searchType === SEARCH_TYPE.ITEM) {
+                                this.searchItemResultsPaginationData.page = data.body.page;
+                            } else if (searchType === SEARCH_TYPE.BANK) {
+                                this.searchBankResultsPaginationData.page = data.body.page;
+                            }
+                            if (successCallback) {
+                                successCallback(data.body.results);
+                            } else {
+                                if (searchType === SEARCH_TYPE.CUSTOMER) {
+                                    this.defaultCustomerResultsPaginationData.page = data.body.page;
+                                    } else if (searchType === SEARCH_TYPE.ITEM) {
+                                        this.defaultItemResultsPaginationData.page = data.body.page;
+                                }
+                            }
+                        }
+                    });
                 }
-            });
+            }
+
         } else {
             if (searchType === SEARCH_TYPE.CUSTOMER) {
                 this.searchResults = [...this.defaultCustomerSuggestions];
                 this.searchCustomerResultsPaginationData.page = this.defaultCustomerResultsPaginationData.page;
-                this.searchCustomerResultsPaginationData.totalPages = this.defaultCustomerResultsPaginationData.totalPages;
             } else if (searchType === SEARCH_TYPE.ITEM) {
                 this.searchResults = [...this.defaultItemSuggestions];
                 this.searchItemResultsPaginationData.page = this.defaultItemResultsPaginationData.page;
-                this.searchItemResultsPaginationData.totalPages = this.defaultItemResultsPaginationData.totalPages;
             }
             this.assignSearchResultToList(searchType);
             this.makeCustomerList();
@@ -7080,7 +7113,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         const requestObject = {
             q: encodeURIComponent(query),
             page,
-            group: encodeURIComponent(group)
+            group: encodeURIComponent(group),
+            count: VOUCHERS_PAGINATION_LIMIT
         };
         if (withStocks) {
             requestObject['withStocks'] = withStocks;
@@ -7113,13 +7147,13 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             if (searchType === SEARCH_TYPE.CUSTOMER) {
                 this.searchCustomerResultsPaginationData = {
                     page: 0,
-                    totalPages: 0,
+                    count: VOUCHERS_PAGINATION_LIMIT,
                     query: ''
                 };
             } else if (searchType === SEARCH_TYPE.ITEM) {
                 this.searchItemResultsPaginationData = {
                     page: 0,
-                    totalPages: 0,
+                    count: VOUCHERS_PAGINATION_LIMIT,
                     query: ''
                 };
             }
@@ -7130,27 +7164,27 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             this.defaultItemSuggestions = [];
             this.searchCustomerResultsPaginationData = {
                 page: 0,
-                totalPages: 0,
+                count: VOUCHERS_PAGINATION_LIMIT,
                 query: ''
             };
             this.searchItemResultsPaginationData = {
                 page: 0,
-                totalPages: 0,
+                count: VOUCHERS_PAGINATION_LIMIT,
                 query: ''
             };
             this.searchBankResultsPaginationData = {
                 page: 0,
-                totalPages: 0,
+                count: VOUCHERS_PAGINATION_LIMIT,
                 query: ''
             };
             this.defaultCustomerResultsPaginationData = {
                 page: 0,
-                totalPages: 0,
+                count: VOUCHERS_PAGINATION_LIMIT,
                 query: ''
             };
             this.defaultItemResultsPaginationData = {
                 page: 0,
-                totalPages: 0,
+                count: VOUCHERS_PAGINATION_LIMIT,
                 query: ''
             };
             this.noResultsFoundLabel = SearchResultText.NewSearch;

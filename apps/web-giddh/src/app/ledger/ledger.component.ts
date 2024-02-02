@@ -193,15 +193,15 @@ export class LedgerComponent implements OnInit, OnDestroy {
     /** Stores the search results pagination details */
     public searchResultsPaginationData = {
         page: 0,
-        totalPages: 0,
+        count: PAGINATION_LIMIT,
         query: ''
     };
     /** Stores the default search results pagination details (required only for passing
      * default search pagination details to Update ledger component) */
     public defaultResultsPaginationData = {
         page: 0,
-        totalPages: 0,
-        query: ''
+        count: PAGINATION_LIMIT,
+        query: '',
     };
     /** No results found label for dynamic search */
     public noResultsFoundLabel = SearchResultText.NewSearch;
@@ -296,6 +296,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     private isCombined: boolean = null;
     /** Duplicate copy of entry unique names for bulk action variable */
     public entryUniqueNamesForBulkActionDuplicateCopy: string[] = [];
+    /** False if there is no data in account search */
+    public isAccountSearchData: boolean = true;
 
     constructor(
         private store: Store<AppState>,
@@ -786,7 +788,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.store.pipe(select(state => state.ledger.showBulkGenerateVoucherConfirmation), takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.message) {
                 this.store.dispatch(this.ledgerActions.setBulkGenerateConfirm(null));
-                
+
                 let dialogRef = this.dialog.open(ConfirmModalComponent, {
                     data: {
                         title: this.commonLocaleData?.app_confirm,
@@ -1328,7 +1330,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @memberof LedgerComponent
      */
     public handleScrollEnd(): void {
-        if (this.searchResultsPaginationData.page < this.searchResultsPaginationData.totalPages) {
+        if (this.searchResultsPaginationData.page) {
             this.onSearchQueryChanged(
                 this.searchResultsPaginationData.query,
                 this.searchResultsPaginationData.page + 1,
@@ -1344,7 +1346,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
                         }) || [];
                         this.defaultSuggestions = this.defaultSuggestions.concat(...results);
                         this.defaultResultsPaginationData.page = this.searchResultsPaginationData.page;
-                        this.defaultResultsPaginationData.totalPages = this.searchResultsPaginationData.totalPages;
                     }
                 });
         }
@@ -1563,6 +1564,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @memberof LedgerComponent
      */
     public onSearchQueryChanged(query: string, page: number = 1, withStocks: boolean = true, successCallback?: Function): void {
+
         this.searchResultsPaginationData.query = query;
         if (!this.preventDefaultScrollApiCall &&
             (query || (this.defaultSuggestions && this.defaultSuggestions.length === 0) || successCallback)) {
@@ -1576,41 +1578,44 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 q: encodeURIComponent(query),
                 page,
                 withStocks,
-                stockAccountUniqueName: encodeURIComponent(accountUniqueName) || undefined
+                stockAccountUniqueName: encodeURIComponent(accountUniqueName) || undefined,
+                count: PAGINATION_LIMIT
             }
-            this.searchService.searchAccount(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
-                if (data && data.body && data.body.results) {
-                    const searchResults = data.body.results.map(result => {
-                        return {
-                            value: result.stock ? `${result?.uniqueName}#${result?.stock?.uniqueName}` : result?.uniqueName,
-                            label: result.stock ? `${result?.name} (${result?.stock?.name})` : result?.name,
-                            additional: result
+            if (this.isAccountSearchData) {
+                this.searchService.searchAccount(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+                    if (!data?.body?.results?.length || (data?.body?.results?.length && PAGINATION_LIMIT !== data?.body?.count)) {
+                        this.isAccountSearchData = false;
+                    }
+                    if (data && data.body && data.body.results) {
+                        const searchResults = data.body.results.map(result => {
+                            return {
+                                value: result.stock ? `${result?.uniqueName}#${result?.stock?.uniqueName}` : result?.uniqueName,
+                                label: result.stock ? `${result?.name} (${result?.stock?.name})` : result?.name,
+                                additional: result
+                            }
+                        }) || [];
+                        this.noResultsFoundLabel = SearchResultText.NotFound;
+                        if (page === 1) {
+                            this.searchResults = searchResults;
+                        } else {
+                            this.searchResults = [
+                                ...this.searchResults,
+                                ...searchResults
+                            ];
                         }
-                    }) || [];
-                    this.noResultsFoundLabel = SearchResultText.NotFound;
-                    if (page === 1) {
-                        this.searchResults = searchResults;
-                    } else {
-                        this.searchResults = [
-                            ...this.searchResults,
-                            ...searchResults
-                        ];
+                        this.searchResultsPaginationData.page = data.body.page;
+                        if (successCallback) {
+                            successCallback(data.body.results);
+                        } else {
+                            this.defaultResultsPaginationData.page = this.searchResultsPaginationData.page;
+                        }
+                        this.cdRf.detectChanges();
                     }
-                    this.searchResultsPaginationData.page = data.body.page;
-                    this.searchResultsPaginationData.totalPages = data.body.totalPages;
-                    if (successCallback) {
-                        successCallback(data.body.results);
-                    } else {
-                        this.defaultResultsPaginationData.page = this.searchResultsPaginationData.page;
-                        this.defaultResultsPaginationData.totalPages = this.searchResultsPaginationData.totalPages;
-                    }
-                    this.cdRf.detectChanges();
-                }
-            });
+                });
+            }
         } else {
             this.searchResults = [...this.defaultSuggestions];
             this.searchResultsPaginationData.page = this.defaultResultsPaginationData.page;
-            this.searchResultsPaginationData.totalPages = this.defaultResultsPaginationData.totalPages;
             this.preventDefaultScrollApiCall = true;
             setTimeout(() => {
                 this.preventDefaultScrollApiCall = false;
@@ -1628,7 +1633,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.searchResults = [...this.defaultSuggestions];
         this.searchResultsPaginationData = {
             page: 0,
-            totalPages: 0,
+            count: 0,
             query: ''
         };
         this.noResultsFoundLabel = SearchResultText.NewSearch;
@@ -2327,7 +2332,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 }
             }) || [];
             this.defaultResultsPaginationData.page = this.searchResultsPaginationData.page;
-            this.defaultResultsPaginationData.totalPages = this.searchResultsPaginationData.totalPages;
             this.searchResults = [...this.defaultSuggestions];
             this.noResultsFoundLabel = SearchResultText.NotFound;
         });

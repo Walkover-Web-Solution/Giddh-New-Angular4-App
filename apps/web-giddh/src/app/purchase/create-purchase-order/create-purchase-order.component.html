@@ -52,7 +52,9 @@
                                                     [doNotReset]="true"
                                                     [isPaginationEnabled]="true"
                                                     (scrollEnd)="handleScrollEnd('vendor')"
-                                                    (dynamicSearchedQuery)="onSearchQueryChanged($event, 1, 'vendor')"
+                                                    (dynamicSearchedQuery)="  isAccountSearchData = true;
+                                                        onSearchQueryChanged($event, 1, 'vendor')
+                                                    "
                                                     [notFoundMsg]="noResultsFoundLabel"
                                                     [enableDynamicSearch]="true"
                                                     [fixedValue]="purchaseOrder.account.name"
@@ -1667,12 +1669,17 @@
                                         #selectAccount
                                         [(ngModel)]="transaction.fakeAccForSelect2"
                                         name="transaction.fakeAccForSelect2_{{ entryIdx }}"
-                                        (selected)="entry['initiallyCall'] = undefined; onSelectSalesAccount($event, transaction, entry, false, entryIdx)"
+                                        (selected)="
+                                            entry['initiallyCall'] = undefined;
+                                            onSelectSalesAccount($event, transaction, entry, false, entryIdx)
+                                        "
                                         [placeholder]="localeData?.select_acc"
                                         [notFoundLink]="true"
                                         [isPaginationEnabled]="true"
                                         (scrollEnd)="handleScrollEnd('item')"
-                                        (dynamicSearchedQuery)="onSearchQueryChanged($event, 1, 'item')"
+                                        (dynamicSearchedQuery)="isAccountSearchData = true;
+                                            onSearchQueryChanged($event, 1, 'item')
+                                        "
                                         (onHide)="noResultsFoundLabel = localeData?.search_acc"
                                         [notFoundMsg]="noResultsFoundLabel"
                                         [enableDynamicSearch]="true"
