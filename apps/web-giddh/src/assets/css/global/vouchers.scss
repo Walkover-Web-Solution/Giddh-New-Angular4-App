@@ -110,3 +110,10 @@
 .d-grid {
     display: grid;
 }
+
+// template scroll
+.template-scroll {
+    overflow-y: auto;
+    padding-right: 15px;
+    max-height: calc(100vh - 245px);
+}

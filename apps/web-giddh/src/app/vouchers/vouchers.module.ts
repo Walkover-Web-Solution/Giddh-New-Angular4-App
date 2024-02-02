@@ -52,6 +52,10 @@ import { TemplateEditDialogComponent } from "./template-edit-dialog/template-edi
 import { PrintVoucherComponent } from "./print-voucher/print-voucher.component";
 import { GenericAsideMenuAccountModule } from "../shared/generic-aside-menu-account/generic.aside.menu.account.module";
 import { KeyboardShortutModule } from "../shared/helpers/directives/keyboardShortcut/keyboardShortut.module";
+import { TemplateEditFilterComponent } from "./template/template-edit-filter/template-edit-filter.component";
+import {MatBadgeModule} from '@angular/material/badge';
+import { DesignFilterComponent } from "./template/design-filter/design-filter.component";
+import { ContentFilterComponent } from "./template/content-filter/content-filter.component";
 
 @NgModule({
     declarations: [
@@ -69,7 +73,10 @@ import { KeyboardShortutModule } from "../shared/helpers/directives/keyboardShor
         GstTemplateAComponent,
         TemplatePreviewDialogComponent,
         TemplateEditDialogComponent,
-        PrintVoucherComponent
+        PrintVoucherComponent,
+        TemplateEditFilterComponent,
+        DesignFilterComponent,
+        ContentFilterComponent
     ],
     imports: [
         CommonModule,
@@ -110,7 +117,8 @@ import { KeyboardShortutModule } from "../shared/helpers/directives/keyboardShor
         TaxDropdownModule,
         DiscountDropdownModule,
         GenericAsideMenuAccountModule,
-        KeyboardShortutModule
+        KeyboardShortutModule,
+        MatBadgeModule
     ],
     exports: [
 
