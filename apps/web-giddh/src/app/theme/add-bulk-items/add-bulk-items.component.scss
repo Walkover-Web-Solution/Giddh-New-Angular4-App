@@ -4,18 +4,11 @@
     max-width: 80vw;
     height: $height;
 
-    .bulk-entry-header {
-        background-color: var(--color-primary-header-background);
-        color: var(--color-popup-list-head-text);
-        height: 60px;
-    }
-
     .bulk-entry-body {
-        padding: 16px;
-
         .bulk-entry-list {
             border-right: 1px solid var(--color-common-primary-border);
             padding-right: 16px;
+            width: 40%;
 
             .list-wrapper {
                 .list-viewport {
@@ -24,31 +17,52 @@
 
                 .list-item {
                     min-height: 40px;
+                    max-width: 80%;
                     cursor: pointer;
-                    .stock-icon{
+
+                    .stock-icon {
                         margin-bottom: 2px;
                     }
                 }
-                .variants-wrapper{
-                    margin-left: 22px;
+
+                .variants-wrapper {
+                    margin-left: 15px;
+
+                    .list-item {
+                        padding-left: 32px !important;
+                        max-width: 86%;
+                    }
+                }
+
+                .mat-expansion-panel {
+                    box-shadow: unset !important;
+                }
+
+                .mat-expansion-panel-header {
+                    &.mat-expanded {
+                        height: unset;
+                    }
                 }
             }
-
         }
 
         .bulk-entry-selected-items {
-                padding: 0 16px;
+            padding: 0 16px;
+            width: 60%;
 
-                .selected-item-title, .selected-item-action {
-                    height: 52px;
-                }
-                .selected-item-title {
-                    line-height: 52px;
-                }
-                .selected-item-action {
-                    padding-top: 10px;
-                }
-            
+            .selected-item-title,
+            .selected-item-action {
+                height: 52px;
+            }
+
+            .selected-item-title {
+                line-height: 52px;
+            }
+
+            .selected-item-action {
+                padding-top: 10px;
+            }
+
             .selected-item-wrapper {
                 overflow-y: auto;
                 padding-top: 10px;
@@ -57,11 +71,11 @@
                 border-top: 1px solid var(--color-common-primary-border);
                 border-bottom: 1px solid var(--color-common-primary-border);
 
-                mat-list-item{
+                mat-list-item {
                     height: auto;
                     min-height: 48px;
 
-                    p{
+                    p {
                         width: 85%;
                         white-space: normal;
                         word-break: break-all;
@@ -69,7 +83,7 @@
                     }
                 }
 
-                button{
+                button {
                     width: 0;
                     min-width: 36px;
                     height: 36px;

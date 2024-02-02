@@ -1,15 +1,21 @@
 <mat-select multiple class="form-control text-right" placeholder="₹0" panelWidth="null"
-    panelClass="tax-control-options-wrapper">
+    panelClass="tax-control">
     <mat-select-trigger>
         <span>₹30</span>
     </mat-select-trigger>
-    <mat-option [value]="1">CESS</mat-option>
-    <mat-option [value]="1">GST</mat-option>
-    <mat-option [value]="1">SGST</mat-option>
-    <mat-option [value]="1">DDD X1</mat-option>
+    <div class="tax-control-options-wrapper">
 
-    <mat-option [value]="1">CESS</mat-option>
-    <mat-option [value]="1">GST</mat-option>
-    <mat-option [value]="1">SGST</mat-option>
-    <mat-option [value]="1">DDD </mat-option>
+        <mat-option [value]="1">CESS</mat-option>
+        <mat-option [value]="1">GST</mat-option>
+        <mat-option [value]="1">SGST</mat-option>
+        <mat-option [value]="1">DDD X1</mat-option>
+    
+        <mat-option [value]="1">CESS</mat-option>
+        <mat-option [value]="1">GST</mat-option>
+        <mat-option [value]="1">SGST</mat-option>
+        <mat-option [value]="1">DDD </mat-option>
+    </div>
+    <div class="create-new pt-2 mt-2 text-center cursor-pointer" (click)="createNewDiscount()">
+        <span class="text-blue">Create New</span>
+    </div>
 </mat-select>

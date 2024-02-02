@@ -1,7 +1,25 @@
 .vouchers {
-    .vouchers-address-form{
-        input, textarea{
+    .vouchers-address-form {
+
+        input,
+        textarea {
             background: var(--color-transparent-background);
+
+            &::placeholder {
+                color: var(--color-gray) !important;
+            }
+        }
+
+        reactive-dropdown-field {
+            .mat-mdc-form-field-infix {
+                padding-bottom: 1px !important;
+                min-height: 1rem !important;
+                padding-top: 0px !important;
+            }
+
+            .mdc-text-field--no-label {
+                padding: 0 !important;
+            }
         }
     }
 
@@ -11,10 +29,12 @@
         padding: 10px 0;
         // font-size: var(--font-size-12);
         height: 48px;
-        .mat-mdc-select-trigger{
+
+        .mat-mdc-select-trigger {
             padding: 0 10px;
         }
     }
+
     .po-options-line {
         height: auto !important;
         padding-bottom: 5px !important;
@@ -57,30 +77,37 @@
 
     }
 
-    input, textarea, mat-select{
+    input,
+    textarea,
+    mat-select {
 
-        &.form-control{
-                &:hover, &:focus{
-                    border-color: var(--color-common-tertiary-text) !important;
-                }
+        &.form-control {
+
+            &:hover,
+            &:focus {
+                border-color: var(--color-common-tertiary-text) !important;
             }
+        }
     }
-        
-    .vouchers-actions{
-        .vouchers-more-option-btn{
-            .caret{
+
+    .vouchers-actions {
+        .vouchers-more-option-btn {
+            .caret {
                 transform: rotate(180deg);
             }
         }
     }
 }
-.mat-menu-width-large{
+
+.mat-menu-width-large {
     min-width: 400px;
     max-height: 50vh;
 }
-.vouchers-address-menu{
+
+.vouchers-address-menu {
     position: relative;
-    .vouchers-add-new{
+
+    .vouchers-add-new {
         position: sticky;
         bottom: 0;
         color: var(--color-giddh-blue);
@@ -95,6 +122,7 @@
         column-gap: 10px;
     }
 }
+
 .disable-toggle {
     .mdc-switch {
         .mdc-switch__ripple {
@@ -102,6 +130,7 @@
         }
     }
 }
+
 .text-success {
     color: var(--color-teal);
 }
