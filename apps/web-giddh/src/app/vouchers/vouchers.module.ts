@@ -58,6 +58,7 @@ import { DesignFilterComponent } from "./template/design-filter/design-filter.co
 import { ContentFilterComponent } from "./template/content-filter/content-filter.component";
 import { CreateDiscountModule } from "../theme/create-discount/create-discount.module";
 import { AsideMenuCreateTaxModule } from "../shared/aside-menu-create-tax/aside-menu-create-tax.module";
+import { MatDividerModule } from "@angular/material/divider";
 
 @NgModule({
     declarations: [
@@ -122,7 +123,8 @@ import { AsideMenuCreateTaxModule } from "../shared/aside-menu-create-tax/aside-
         KeyboardShortutModule,
         MatBadgeModule,
         CreateDiscountModule,
-        AsideMenuCreateTaxModule
+        AsideMenuCreateTaxModule,
+        MatDividerModule
     ],
     exports: [
 

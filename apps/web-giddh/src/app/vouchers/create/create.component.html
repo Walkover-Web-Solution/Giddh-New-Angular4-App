@@ -26,7 +26,7 @@
                                     <input-field *ngIf="invoiceType.isCashInvoice" [name]="'account'" [label]="localeData?.customer_name" [placeholder]="localeData?.enter_customer_name" [type]="'text'" [autoFocus]="true" formControlName="customerName"></input-field>
                                 </div>
                                 <ng-container *ngIf="!invoiceType.isCashInvoice && !invoiceType.isPurchaseOrder && invoiceForm.controls['account'].get('uniqueName')?.value">
-                                    <div class="vouchers-copy-sales ml-3 cursor-pointer" (click)="getPreviousVouchers()"
+                                    <div class="vouchers-copy-sales mr-l3 cursor-pointer" (click)="getPreviousVouchers()"
                                         [matMenuTriggerFor]="copyLastVouchers">
                                         <i class="icon-copy-file"></i>
                                         {{ voucherType | voucherCopyLink: localeData | titlecase }}
@@ -112,6 +112,7 @@
                                                     <i class="icon-tick" *ngIf="invoiceForm.controls['account'].get('billingAddress').get('index')?.value === i"></i>
                                                 </div>
                                             </button>
+                                            <mat-divider></mat-divider>
                                             <button mat-menu-item class="vouchers-add-new" (click)="toggleAccountAsidePane()">+ Add new address</button>
                                         </div>
                                     </mat-menu>
@@ -156,6 +157,7 @@
                                                         <i class="icon-tick" *ngIf="invoiceForm.controls['account'].get('shippingAddress').get('index')?.value === i"></i>
                                                     </div>
                                                 </button>
+                                                <mat-divider></mat-divider>
                                                 <button mat-menu-item class="vouchers-add-new" (click)="toggleAccountAsidePane()">+ Add new address</button>
                                             </div>
                                         </mat-menu>
@@ -233,6 +235,7 @@
                                                 <i class="icon-tick" *ngIf="invoiceForm.controls['company'].get('billingAddress').get('index')?.value === i"></i>
                                             </div>
                                         </button>
+                                        <mat-divider></mat-divider>
                                         <button mat-menu-item class="vouchers-add-new">+ Add new address</button>
                                     </div>
                                 </mat-menu>
@@ -257,6 +260,7 @@
                                                 <i class="icon-tick" *ngIf="invoiceForm.controls['company'].get('shippingAddress').get('index')?.value === i"></i>
                                             </div>
                                         </button>
+                                        <mat-divider></mat-divider>
                                         <button mat-menu-item class="vouchers-add-new">+ Add new address</button>
                                     </div>
                                 </mat-menu>
@@ -303,7 +307,7 @@
                             </div>
 
                             <!-- Voucher Date -->
-                            <div class="col-3">
+                            <div class="col-3 pr-2">
                                 <giddh-datepicker type="text" (keydown.enter)="$event.preventDefault()"
                                     [label]="'Invoice Date'" [placeholder]="'DDMMYYYY'" name="voucherDate"
                                     [showToggleIcon]="false" [appearance]="'outline'" formControlName="date">
@@ -311,7 +315,7 @@
                             </div>
 
                             <!-- Due Date -->
-                            <div class="col-3" *ngIf="invoiceType.isSalesInvoice || invoiceType.isPurchaseInvoice">
+                            <div class="col-3 pl-2" *ngIf="invoiceType.isSalesInvoice || invoiceType.isPurchaseInvoice">
                                 <giddh-datepicker type="text" (keydown.enter)="$event.preventDefault()"
                                     [label]="'Due Date'" [placeholder]="'DDMMYYYY'" name="voucherDueDate"
                                     [showToggleIcon]="false" [appearance]="'outline'" formControlName="dueDate">
