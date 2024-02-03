@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import { Component, ElementRef, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { VoucherComponentStore } from "../utility/vouchers.store";
 import { AppState } from "../../store";
@@ -21,7 +21,7 @@ import { FormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 import { GIDDH_DATE_FORMAT } from "../../shared/helpers/defaultDateFormat";
 import { BriedAccountsGroup, SearchType, TaxType, VoucherTypeEnum } from "../utility/vouchers.const";
 import { SearchService } from "../../services/search.service";
-import { MatDialog } from "@angular/material/dialog";
+import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { AddBulkItemsComponent } from "../../theme/add-bulk-items/add-bulk-items.component";
 import { OtherTaxComponent } from "../../theme/other-tax/other-tax.component";
 import { LastInvoices, OptionInterface, VoucherForm } from "../../models/api-models/Voucher";
@@ -57,6 +57,10 @@ import { CommonService } from "../../services/common.service";
 export class VoucherCreateComponent implements OnInit, OnDestroy {
     /** Instance of RCM checkbox */
     @ViewChild("rcmCheckbox") public rcmCheckbox: ElementRef;
+    /** Template Reference for Generic aside menu account */
+    @ViewChild("accountAsideMenu") public accountAsideMenu: TemplateRef<any>;
+    /** Template Reference for Create Tax aside menu */
+    @ViewChild("createTax") public createTax: TemplateRef<any>;
     /**  This will use for dayjs */
     public dayjs = dayjs;
     /** Holds current voucher type */
@@ -193,8 +197,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
     public showWarehouse: boolean = false;
     /** Holds account state list */
     public accountStateList$: Observable<OptionInterface[]> = of(null);
-    /** Hold account aside menu state  */
-    public accountAsideMenuState: string = 'out';
+    /** Hold account aside menu reference  */
+    public accountAsideMenuRef: MatDialogRef<any>;
     /** True if it's voucher update mode */
     public isUpdateMode: boolean = false;
     /** Holds parent group unique name for create account modal */
@@ -203,8 +207,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
     public hasUnsavedChanges: boolean = false;
     /** Holds tax types */
     public taxTypes: any = TaxType;
-    public taxAsideMenuState: string = 'out';
-    public selectedTax: TaxResponse = null;
+    /** Create tax dialog ref  */
+    public taxAsideMenuRef: MatDialogRef<any>;
     /** Stores the current voucher form detail */
     public currentVoucherFormDetails: VoucherForm;
     /** RCM modal configuration */
@@ -1072,26 +1076,18 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
         if (event) {
             event.preventDefault();
         }
-        this.accountAsideMenuState = this.accountAsideMenuState === 'out' ? 'in' : 'out';
-        this.toggleBodyClass();
-        setTimeout(() => {
-            if (this.accountAsideMenuState === "out" && this.showPageLeaveConfirmation) {
+
+        this.accountAsideMenuRef = this.dialog.open(this.accountAsideMenu, {
+            position: {
+                right: '0',
+                top: '0'
+            }
+        })
+        this.accountAsideMenuRef.afterClosed().pipe(take(1)).subscribe(response => {
+            if (this.showPageLeaveConfirmation) {
                 this.pageLeaveUtilityService.addBrowserConfirmationDialog();
             }
-        }, 100);
-    }
-
-    /**
-     * Toggle's fixed class on body
-     *
-     * @memberof VoucherCreateComponent
-     */
-    public toggleBodyClass(): void {
-        if (this.accountAsideMenuState === 'in') {
-            document.querySelector('body').classList.add('fixed');
-        } else {
-            document.querySelector('body').classList.remove('fixed');
-        }
+        });
     }
 
     /**
@@ -1129,8 +1125,13 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
         this.updateAccountDataInForm(response);
     }
 
-    public toggleCreateDiscountAsidePane(): void {
-        this.dialog.open(CreateDiscountComponent, {
+    /**
+     * Shows create new tax dialog
+     *
+     * @memberof VoucherCreateComponent
+     */
+    public showCreateTaxDialog(): void {
+        this.taxAsideMenuRef = this.dialog.open(this.createTax, {
             position: {
                 right: '0',
                 top: '0'
@@ -1138,12 +1139,22 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
         });
     }
 
-    public toggleTaxAsidePane(event?): void {
-        if (event) {
-            event.preventDefault();
-        }
-        this.taxAsideMenuState = this.taxAsideMenuState === 'out' ? 'in' : 'out';
-        this.toggleBodyClass();
+    /**
+     * Shows create new discount dialog
+     *
+     * @memberof VoucherCreateComponent
+     */
+    public showCreateDiscountDialog(): void {
+        let discountDialogRef = this.dialog.open(CreateDiscountComponent, {
+            position: {
+                right: '0',
+                top: '0'
+            }
+        });
+
+        discountDialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+
+        });
     }
 
     /**
