@@ -2,878 +2,936 @@
     (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
     <hamburger-menu></hamburger-menu>
     <div class="vouchers">
-        <!-- Voucher Page Heading -->
-        <div class="vouchers-title d-flex align-items-center container-lg">
-            <h1>{{ voucherType | voucherName: localeData | titlecase }}</h1>
-            <div class="ml-auto" *ngIf="invoiceType.isSalesInvoice || invoiceType.isCashInvoice">
-                <watch-video [cssClass]="'text-blue'"
-                    [moduleName]="invoiceType.isSalesInvoice ? 'VOUCHER_SALES' : 'VOUCHER_CASH'"></watch-video>
-            </div>
-        </div>
+        <mat-card class="container-lg">
+            <mat-card-content>
 
-        <div class="vouchers-content-wrapper">
-            <form autocomplete="off" novalidate name="invoiceForm" [formGroup]="invoiceForm">
-                <!-- Voucher Form Top Section -->
-                <div class="vouchers-primary-form container-lg" formGroupName="account">
-                    <div class="row">
-                        <div class="col-10">
-                            <div class="d-flex align-items-center">
-                                <div class="vouchers-form-fields w-100" [keyboardShortcut]="'alt+c'"
-                                    (onShortcutPress)="toggleAccountAsidePane()">
-                                    <reactive-dropdown-field *ngIf="!invoiceType.isCashInvoice"
-                                        [label]="invoiceType.isPurchaseInvoice || invoiceType.isDebitNote ? localeData?.vendor_name : localeData?.customer_name"
-                                        [placeholder]="invoiceType.isPurchaseInvoice || invoiceType.isDebitNote ? localeData?.select_vendor : localeData?.select_customer"
-                                        formControlName="uniqueName" [name]="'account'"
-                                        [options]="voucherAccountResults$ | async" [showCreateNew]="true"
-                                        [enableDynamicSearch]="true" [isPaginationEnabled]="true"
-                                        [openDropdown]="openAccountDropdown"
-                                        [createNewText]="!invoiceType.isPurchaseInvoice && !invoiceType.isDebitNote ? localeData?.add_customer : localeData?.add_vendor"
-                                        [labelValue]="invoiceForm.controls['account'].get('customerName')?.value"
-                                        [showKeyboardCommand]="commonLocaleData?.app_alt_c"
-                                        (scrollEnd)="handleSearchAccountScrollEnd()"
-                                        (selectedOption)="selectAccount($event)"
-                                        (dynamicSearchedQuery)="searchAccount($event, 1)"
-                                        (onClear)="selectAccount($event, true)"
-                                        (createOption)="toggleAccountAsidePane()">
-                                    </reactive-dropdown-field>
-                                    <input-field *ngIf="invoiceType.isCashInvoice" [name]="'account'"
-                                        [label]="localeData?.customer_name"
-                                        [placeholder]="localeData?.enter_customer_name" [type]="'text'"
-                                        [autoFocus]="true" formControlName="customerName"></input-field>
-                                </div>
-                                <ng-container
-                                    *ngIf="!invoiceType.isCashInvoice && !invoiceType.isPurchaseOrder && invoiceForm.controls['account'].get('uniqueName')?.value">
-                                    <div class="vouchers-copy-sales mr-l3 cursor-pointer"
-                                        (click)="getPreviousVouchers()" [matMenuTriggerFor]="copyLastVouchers">
-                                        <i class="icon-copy-file"></i>
-                                        {{ voucherType | voucherCopyLink: localeData | titlecase }}
-                                    </div>
-                                    <mat-menu #copyLastVouchers="matMenu">
-                                        <div class="mat-menu-width-large">
-                                            <ng-container *ngIf="getLastVouchersInProgress$ | async">
-                                                <mat-spinner [diameter]="30"></mat-spinner>
-                                            </ng-container>
-                                            <ng-container *ngIf="(lastVouchersList$ | async)?.length">
-                                                <button mat-menu-item
-                                                    *ngFor="let voucher of lastVouchersList$ | async">{{
-                                                    voucher?.voucherNumber }}</button>
-                                            </ng-container>
-                                            <ng-container
-                                                *ngIf="!(lastVouchersList$ | async)?.length && !getLastVouchersInProgress$ | async">
-                                                {{ commonLocaleData?.app_no_result_found }}
-                                            </ng-container>
-                                        </div>
-                                    </mat-menu>
-                                </ng-container>
-                            </div>
-                        </div>
-                        <div class="col-2 text-right">
-                            <span class="balance-due-label">Balance Due</span>
-                            <h2>0.00</h2>
-                        </div>
-                        <div class="col-12">
-                            <span
-                                *ngIf="!invoiceType.isCashInvoice && invoiceForm.controls['account'].get('uniqueName')?.value"
-                                class="vouchers-form-fields-detail cursor-pointer" (click)="toggleAccountAsidePane()">
-                                {{ !invoiceType.isPurchaseInvoice ? localeData?.customer_details :
-                                localeData?.vendor_details }}</span>
-
-                            <ng-container *ngIf="invoiceType.isSalesInvoice && !invoiceType.isCashInvoice">
-                                <img src="{{ imgPath }}new/search_customer.svg" height="70" class="mb-3"
-                                    *ngIf="!invoiceForm.controls['account'].get('customerName')?.value" />
-                            </ng-container>
-                            <ng-container *ngIf="invoiceType.isPurchaseInvoice">
-                                <img src="{{ imgPath }}new/search-vendor.svg" height="70" class="mb-3"
-                                    *ngIf="!invoiceForm.controls['account'].get('customerName')?.value" />
-                            </ng-container>
-                            <ng-container *ngIf="invoiceType.isCashInvoice">
-                                <img src="{{ imgPath }}new/search-customer-cash-invoice.svg" height="70" class="mb-3"
-                                    *ngIf="!invoiceForm.controls['account'].get('customerName')?.value" />
-                            </ng-container>
-                        </div>
+                <!-- Voucher Page Heading -->
+                <div class="vouchers-title d-flex align-items-center">
+                    <h1>{{ voucherType | voucherName: localeData | titlecase }}</h1>
+                    <div class="ml-auto" *ngIf="invoiceType.isSalesInvoice || invoiceType.isCashInvoice">
+                        <watch-video [cssClass]="'text-blue'"
+                            [moduleName]="invoiceType.isSalesInvoice ? 'VOUCHER_SALES' : 'VOUCHER_CASH'"></watch-video>
                     </div>
                 </div>
 
-                <!-- Voucher Form Main Section -->
-                <div class="vouchers-secondary-form position-relative container-lg"
-                    [ngClass]="{'vouchers-form-disable' : !invoiceForm.controls['account'].get('customerName')?.value }">
-                    <div class="vouchers-small-container">
-                        <div class="row">
-                            <ng-container formGroupName="account">
-                                <!-- Billing Address -->
-                                <div class="col-12 mr-t15" *ngIf="invoiceType.isPurchaseOrder">
-                                    <span class="billing-deliver-label">Deliver From</span>
-                                </div>
-                                <div class="col-6" formGroupName="billingAddress">
-                                    <label for="billingAddress" class="billing-label">Billing Address</label> <i
-                                        *ngIf="!invoiceType.isCashInvoice" [matMenuTriggerFor]="billingAddress"
-                                        class="icon-edit text-blue cursor-pointer pl-2 font-12"></i>
-
-                                    <div *ngIf="!invoiceType.isCashInvoice" class="mt-2">Address {{
-                                        invoiceForm.controls['account'].get("billingAddress").get("index")?.value + 1 }}
-                                    </div>
-                                    <mat-menu #billingAddress="matMenu">
-                                        <div class="mat-menu-width-large vouchers-address-menu">
-                                            <button mat-menu-item
-                                                *ngFor="let address of account?.addresses; let i = index"
-                                                (click)="fillBillingShippingAddress('account', 'billingAddress', address, i)">
-                                                <div class="d-flex justify-content-between align-items-center">
-                                                    <div>
-                                                        Address {{ i + 1}}
-                                                        <p>{{ address.address ? address.address + ", " : "" }}{{
-                                                            address.state?.name }}</p>
-                                                        <p>{{ address.gstNumber ? (company.taxType === taxTypes.GST ?
-                                                            commonLocaleData?.app_gstin + ": " : company.taxType ===
-                                                            taxTypes.TRN ? commonLocaleData?.app_trn + ": " :
-                                                            company.taxType === taxTypes.VAT ?
-                                                            commonLocaleData?.enter_vat_no + ": " : "") +
-                                                            address.gstNumber : "" }}</p>
-                                                    </div>
-                                                    <i class="icon-tick"
-                                                        *ngIf="invoiceForm.controls['account'].get('billingAddress').get('index')?.value === i"></i>
+                <div class="vouchers-content-wrapper">
+                    <form autocomplete="off" novalidate name="invoiceForm" [formGroup]="invoiceForm">
+                        <!-- Voucher Form Top Section -->
+                        <div class="vouchers-primary-form" formGroupName="account">
+                            <div class="row">
+                                <div class="col-10">
+                                    <div class="d-flex align-items-center">
+                                        <div class="vouchers-form-fields w-100" [keyboardShortcut]="'alt+c'"
+                                            (onShortcutPress)="toggleAccountAsidePane()">
+                                            <reactive-dropdown-field *ngIf="!invoiceType.isCashInvoice"
+                                                [label]="invoiceType.isPurchaseInvoice || invoiceType.isDebitNote ? localeData?.vendor_name : localeData?.customer_name"
+                                                [placeholder]="invoiceType.isPurchaseInvoice || invoiceType.isDebitNote ? localeData?.select_vendor : localeData?.select_customer"
+                                                formControlName="uniqueName" [name]="'account'"
+                                                [options]="voucherAccountResults$ | async" [showCreateNew]="true"
+                                                [enableDynamicSearch]="true" [isPaginationEnabled]="true"
+                                                [openDropdown]="openAccountDropdown"
+                                                [createNewText]="!invoiceType.isPurchaseInvoice && !invoiceType.isDebitNote ? localeData?.add_customer : localeData?.add_vendor"
+                                                [labelValue]="invoiceForm.controls['account'].get('customerName')?.value"
+                                                [showKeyboardCommand]="commonLocaleData?.app_alt_c"
+                                                (scrollEnd)="handleSearchAccountScrollEnd()"
+                                                (selectedOption)="selectAccount($event)"
+                                                (dynamicSearchedQuery)="searchAccount($event, 1)"
+                                                (onClear)="selectAccount($event, true)"
+                                                (createOption)="toggleAccountAsidePane()">
+                                            </reactive-dropdown-field>
+                                            <input-field *ngIf="invoiceType.isCashInvoice" [name]="'account'"
+                                                [label]="localeData?.customer_name"
+                                                [placeholder]="localeData?.enter_customer_name" [type]="'text'"
+                                                [autoFocus]="true" formControlName="customerName"></input-field>
+                                        </div>
+                                        <ng-container
+                                            *ngIf="!invoiceType.isCashInvoice && !invoiceType.isPurchaseOrder && invoiceForm.controls['account'].get('uniqueName')?.value">
+                                            <div class="vouchers-copy-sales mr-l3 cursor-pointer"
+                                                (click)="getPreviousVouchers()" [matMenuTriggerFor]="copyLastVouchers">
+                                                <i class="icon-copy-file"></i>
+                                                {{ voucherType | voucherCopyLink: localeData | titlecase }}
+                                            </div>
+                                            <mat-menu #copyLastVouchers="matMenu">
+                                                <div class="mat-menu-width-large">
+                                                    <ng-container *ngIf="getLastVouchersInProgress$ | async">
+                                                        <mat-spinner [diameter]="30"></mat-spinner>
+                                                    </ng-container>
+                                                    <ng-container *ngIf="(lastVouchersList$ | async)?.length">
+                                                        <button mat-menu-item
+                                                            *ngFor="let voucher of lastVouchersList$ | async">{{
+                                                            voucher?.voucherNumber }}</button>
+                                                    </ng-container>
+                                                    <ng-container
+                                                        *ngIf="!(lastVouchersList$ | async)?.length && !getLastVouchersInProgress$ | async">
+                                                        {{ commonLocaleData?.app_no_result_found }}
+                                                    </ng-container>
                                                 </div>
-                                            </button>
-                                            <mat-divider></mat-divider>
-                                            <button mat-menu-item class="vouchers-add-new"
-                                                (click)="toggleAccountAsidePane()">+ Add new address</button>
-                                        </div>
-                                    </mat-menu>
-                                    <div class="vouchers-address-form" *ngIf="invoiceType.isCashInvoice">
-                                        <div class="address-field">
-                                            <textarea rows="2" matInput class="w-100" name="billingAddress"
-                                                formControlName="address"></textarea>
-                                        </div>
-                                        <div class="country-field">
-                                            <span>{{ invoiceType?.isCashInvoice ? company?.countryName :
-                                                account?.countryName }}</span>
-                                        </div>
-                                        <div class="state-field" formGroupName="state">
-                                            <reactive-dropdown-field [cssClass]="'border-0'" formControlName="code"
-                                                [name]="'billingStateCode'" [label]="'State'" [placeholder]="'Select'"
-                                                [options]="accountStateList$ | async"
-                                                [labelValue]="invoiceForm.controls['account'].get('billingAddress').get('state').get('name')?.value"
-                                                [appearance]="'fill'" [showLabel]="false"
-                                                (selectedOption)="selectState('billingAddress', $event)"></reactive-dropdown-field>
-                                        </div>
-                                        <div class="gstin-field">
-                                            <text-field [type]="'text'" [name]="'billingTaxNumber'"
-                                                [placeholder]="'GSTIN'" [cssClass]="'border-0'"
-                                                formControlName="taxNumber"></text-field>
-                                        </div>
-                                        <div class="pin-code-field">
-                                            <text-field [type]="'text'" [name]="'billingPinCode'"
-                                                [placeholder]="'PIN Code'" [cssClass]="'border-0'"
-                                                formControlName="pincode"></text-field>
-                                        </div>
+                                            </mat-menu>
+                                        </ng-container>
                                     </div>
                                 </div>
-                                <!-- Shipping Address -->
-                                <div class="col-6" formGroupName="shippingAddress">
-                                    <mat-checkbox type="checkbox" color="primary" *ngIf="invoiceType.isCashInvoice"
-                                        (change)="copyBillingInShipping($event)">
-                                        Shipping Address Same as Billing Address
-                                    </mat-checkbox>
-                                    <ng-container *ngIf="!invoiceType.isCashInvoice">
-                                        <label for="billingAddress" class="billing-label">Shipping Address</label> <i
-                                            *ngIf="!invoiceType.isCashInvoice" [matMenuTriggerFor]="shippingAddress"
+                                <div class="col-2 text-right">
+                                    <span class="balance-due-label">Balance Due</span>
+                                    <h2>0.00</h2>
+                                </div>
+                                <div class="col-12">
+                                    <span
+                                        *ngIf="!invoiceType.isCashInvoice && invoiceForm.controls['account'].get('uniqueName')?.value"
+                                        class="vouchers-form-fields-detail cursor-pointer"
+                                        (click)="toggleAccountAsidePane()">
+                                        {{ !invoiceType.isPurchaseInvoice ? localeData?.customer_details :
+                                        localeData?.vendor_details }}</span>
+
+                                    <ng-container *ngIf="invoiceType.isSalesInvoice && !invoiceType.isCashInvoice">
+                                        <img src="{{ imgPath }}new/search_customer.svg" height="70" class="mb-3"
+                                            *ngIf="!invoiceForm.controls['account'].get('customerName')?.value" />
+                                    </ng-container>
+                                    <ng-container *ngIf="invoiceType.isPurchaseInvoice">
+                                        <img src="{{ imgPath }}new/search-vendor.svg" height="70" class="mb-3"
+                                            *ngIf="!invoiceForm.controls['account'].get('customerName')?.value" />
+                                    </ng-container>
+                                    <ng-container *ngIf="invoiceType.isCashInvoice">
+                                        <img src="{{ imgPath }}new/search-customer-cash-invoice.svg" height="70"
+                                            class="mb-3"
+                                            *ngIf="!invoiceForm.controls['account'].get('customerName')?.value" />
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Voucher Form Main Section -->
+                        <div class="vouchers-secondary-form position-relative"
+                            [ngClass]="{'vouchers-form-disable' : !invoiceForm.controls['account'].get('customerName')?.value }">
+                            <div class="vouchers-small-container">
+                                <div class="row">
+                                    <ng-container formGroupName="account">
+                                        <!-- Billing Address -->
+                                        <div class="col-12 mr-t15" *ngIf="invoiceType.isPurchaseOrder">
+                                            <span class="billing-deliver-label">Deliver From</span>
+                                        </div>
+                                        <div class="col-6" formGroupName="billingAddress">
+                                            <label for="billingAddress" class="billing-label"
+                                                [ngClass]="{ 'p-0' : invoiceType.isCashInvoice }">Billing
+                                                Address</label> <i *ngIf="!invoiceType.isCashInvoice"
+                                                [matMenuTriggerFor]="billingAddress"
+                                                class="icon-edit text-blue cursor-pointer pl-2 font-12"></i>
+
+                                            <div *ngIf="!invoiceType.isCashInvoice" class="mt-2">Address {{
+                                                invoiceForm.controls['account'].get("billingAddress").get("index")?.value
+                                                + 1 }}
+                                            </div>
+                                            <mat-menu #billingAddress="matMenu">
+                                                <div class="mat-menu-width-large vouchers-address-menu">
+                                                    <button mat-menu-item
+                                                        *ngFor="let address of account?.addresses; let i = index"
+                                                        (click)="fillBillingShippingAddress('account', 'billingAddress', address, i)">
+                                                        <div class="d-flex justify-content-between align-items-center">
+                                                            <div>
+                                                                Address {{ i + 1}}
+                                                                <p>{{ address.address ? address.address + ", " : "" }}{{
+                                                                    address.state?.name }}</p>
+                                                                <p>{{ address.gstNumber ? (company.taxType ===
+                                                                    taxTypes.GST ?
+                                                                    commonLocaleData?.app_gstin + ": " : company.taxType
+                                                                    ===
+                                                                    taxTypes.TRN ? commonLocaleData?.app_trn + ": " :
+                                                                    company.taxType === taxTypes.VAT ?
+                                                                    commonLocaleData?.enter_vat_no + ": " : "") +
+                                                                    address.gstNumber : "" }}</p>
+                                                            </div>
+                                                            <i class="icon-tick"
+                                                                *ngIf="invoiceForm.controls['account'].get('billingAddress').get('index')?.value === i"></i>
+                                                        </div>
+                                                    </button>
+                                                    <mat-divider></mat-divider>
+                                                    <button mat-menu-item class="vouchers-add-new"
+                                                        (click)="toggleAccountAsidePane()">+ Add new address</button>
+                                                </div>
+                                            </mat-menu>
+                                            <div class="vouchers-address-form" *ngIf="invoiceType.isCashInvoice">
+                                                <div class="address-field">
+                                                    <textarea rows="2" matInput class="w-100" name="billingAddress"
+                                                        formControlName="address"></textarea>
+                                                </div>
+                                                <div class="country-field">
+                                                    <span>{{ invoiceType?.isCashInvoice ? company?.countryName :
+                                                        account?.countryName }}</span>
+                                                </div>
+                                                <div class="state-field" formGroupName="state">
+                                                    <reactive-dropdown-field [cssClass]="'border-0'"
+                                                        formControlName="code" [name]="'billingStateCode'"
+                                                        [label]="'State'" [placeholder]="'Select'"
+                                                        [options]="accountStateList$ | async"
+                                                        [labelValue]="invoiceForm.controls['account'].get('billingAddress').get('state').get('name')?.value"
+                                                        [appearance]="'fill'" [showLabel]="false"
+                                                        (selectedOption)="selectState('billingAddress', $event)"></reactive-dropdown-field>
+                                                </div>
+                                                <div class="gstin-field">
+                                                    <text-field [type]="'text'" [name]="'billingTaxNumber'"
+                                                        [placeholder]="'GSTIN'" [cssClass]="'border-0'"
+                                                        formControlName="taxNumber"></text-field>
+                                                </div>
+                                                <div class="pin-code-field">
+                                                    <text-field [type]="'text'" [name]="'billingPinCode'"
+                                                        [placeholder]="'PIN Code'" [cssClass]="'border-0'"
+                                                        formControlName="pincode"></text-field>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Shipping Address -->
+                                        <div class="col-6" formGroupName="shippingAddress">
+                                            <mat-checkbox type="checkbox" color="primary"
+                                                *ngIf="invoiceType.isCashInvoice"
+                                                (change)="copyBillingInShipping($event)">
+                                                Shipping Address Same as Billing Address
+                                            </mat-checkbox>
+                                            <ng-container *ngIf="!invoiceType.isCashInvoice">
+                                                <label for="billingAddress" class="billing-label">Shipping
+                                                    Address</label> <i *ngIf="!invoiceType.isCashInvoice"
+                                                    [matMenuTriggerFor]="shippingAddress"
+                                                    class="icon-edit text-blue cursor-pointer pl-2 font-12"></i>
+
+                                                <mat-menu #shippingAddress="matMenu">
+                                                    <div class="mat-menu-width-large vouchers-address-menu">
+                                                        <button mat-menu-item
+                                                            *ngFor="let address of account?.addresses; let i = index"
+                                                            (click)="fillBillingShippingAddress('account','shippingAddress', address, i)">
+                                                            <div
+                                                                class="d-flex justify-content-between align-items-center">
+                                                                <div>
+                                                                    Address {{ i + 1}}
+                                                                    <p>{{ address.address ? address.address + ", " : ""
+                                                                        }}{{
+                                                                        address.state?.name }}</p>
+                                                                    <p>{{ address.gstNumber ? (company.taxType ===
+                                                                        taxTypes.GST
+                                                                        ? commonLocaleData?.app_gstin + ": " :
+                                                                        company.taxType
+                                                                        === taxTypes.TRN ? commonLocaleData?.app_trn +
+                                                                        ": " :
+                                                                        company.taxType === taxTypes.VAT ?
+                                                                        commonLocaleData?.enter_vat_no + ": " : "") +
+                                                                        address.gstNumber : "" }}</p>
+                                                                </div>
+                                                                <i class="icon-tick"
+                                                                    *ngIf="invoiceForm.controls['account'].get('shippingAddress').get('index')?.value === i"></i>
+                                                            </div>
+                                                        </button>
+                                                        <mat-divider></mat-divider>
+                                                        <button mat-menu-item class="vouchers-add-new"
+                                                            (click)="toggleAccountAsidePane()">+ Add new
+                                                            address</button>
+                                                    </div>
+                                                </mat-menu>
+                                            </ng-container>
+
+                                            <div *ngIf="!invoiceType.isCashInvoice" class="mt-2">Address {{
+                                                invoiceForm.controls['account'].get("shippingAddress").get("index")?.value
+                                                + 1
+                                                }} </div>
+
+                                            <div class="vouchers-address-form form-disabled"
+                                                *ngIf="invoiceType.isCashInvoice">
+                                                <div class="address-field">
+                                                    <textarea rows="2" matInput class="w-100" name="shippingAddress"
+                                                        formControlName="address"></textarea>
+                                                </div>
+                                                <div class="country-field">
+                                                    <span>{{ invoiceType?.isCashInvoice ? company?.countryName :
+                                                        account?.countryName }}</span>
+                                                </div>
+                                                <div class="state-field" formGroupName="state">
+                                                    <reactive-dropdown-field [cssClass]="'border-0'"
+                                                        formControlName="code" [name]="'shippingStateCode'"
+                                                        [label]="'State'" [placeholder]="'Select'"
+                                                        [options]="accountStateList$ | async"
+                                                        [labelValue]="invoiceForm.controls['account'].get('shippingAddress').get('state').get('name')?.value"
+                                                        [appearance]="'fill'" [showLabel]="false"
+                                                        (selectedOption)="selectState('shippingAddress', $event)"></reactive-dropdown-field>
+                                                </div>
+                                                <div class="gstin-field">
+                                                    <text-field [type]="'text'" [name]="'shippingTaxNumber'"
+                                                        [placeholder]="'GSTIN'" [cssClass]="'border-0'"
+                                                        formControlName="taxNumber"></text-field>
+                                                </div>
+                                                <div class="pin-code-field">
+                                                    <text-field [type]="'text'" [name]="'shippingPinCode'"
+                                                        [placeholder]="'PIN Code'" [cssClass]="'border-0'"
+                                                        formControlName="pincode"></text-field>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Attention to -->
+                                        <div class="col-6 mr-t15">
+                                            <input-field [name]="'attentionTo'" [label]="'Attention to'"
+                                                [placeholder]="'Enter name'" [type]="'text'"
+                                                formControlName="attentionTo"></input-field>
+                                        </div>
+
+                                        <!-- Email Id -->
+                                        <div class="col-6 mr-t15">
+                                            <input-field [name]="'email'" [label]="'Email Id'"
+                                                [placeholder]="'Enter email'" [type]="'text'"
+                                                formControlName="email"></input-field>
+                                        </div>
+
+                                        <!-- Mobile Number -->
+                                        <div class="col-6 mr-t15">
+                                            <input-field [name]="'mobile-number'" [type]="'tel'" #initContactProforma
+                                                class="flag-input" [id]="'init-contact-proforma'"
+                                                (keydown.enter)="$event.preventDefault()" [label]="'Mobile Number'"
+                                                [placeholder]="'98XXXXXXXX'" [floatLabel]="'auto'">
+                                            </input-field>
+                                            <span id="init-contact-proforma-valid-msg" class="d-none"></span>
+                                            <span id="init-contact-proforma-error-msg" class="d-none"></span>
+                                        </div>
+                                    </ng-container>
+
+                                    <!-- Warehouse -->
+                                    <div class="col-6 mr-t15" *ngIf="showWarehouse" formGroupName="warehouse">
+                                        <reactive-dropdown-field [cssClass]="'border-0'" [name]="'warehouse'"
+                                            formControlName="uniqueName" [label]="'Warehouse'" [placeholder]="'Select'"
+                                            [options]="warehouses"></reactive-dropdown-field>
+                                    </div>
+                                </div>
+
+                                <!-- Row 2 for Deliver To Only show in Cash Invoice -->
+                                <div class="row" *ngIf="invoiceType.isPurchaseOrder" formGroupName="account">
+                                    <div class="col-12 mr-t15">
+                                        <span class="billing-deliver-label">Deliver To</span>
+                                    </div>
+
+                                    <!-- Billing Address -->
+                                    <div class="col-6">
+                                        <label for="billingAddress" class="billing-label"
+                                            [ngClass]="{ 'p-0' : invoiceType.isCashInvoice }">Billing Address</label> <i
+                                            [matMenuTriggerFor]="companyBillingAddress"
                                             class="icon-edit text-blue cursor-pointer pl-2 font-12"></i>
 
-                                        <mat-menu #shippingAddress="matMenu">
+                                        <mat-menu #companyBillingAddress="matMenu">
                                             <div class="mat-menu-width-large vouchers-address-menu">
                                                 <button mat-menu-item
-                                                    *ngFor="let address of account?.addresses; let i = index"
-                                                    (click)="fillBillingShippingAddress('account','shippingAddress', address, i)">
+                                                    *ngFor="let address of company?.addresses; let i = index"
+                                                    (click)="fillBillingShippingAddress('company', 'billingAddress', address, i)">
                                                     <div class="d-flex justify-content-between align-items-center">
                                                         <div>
                                                             Address {{ i + 1}}
                                                             <p>{{ address.address ? address.address + ", " : "" }}{{
                                                                 address.state?.name }}</p>
                                                             <p>{{ address.gstNumber ? (company.taxType === taxTypes.GST
-                                                                ? commonLocaleData?.app_gstin + ": " : company.taxType
-                                                                === taxTypes.TRN ? commonLocaleData?.app_trn + ": " :
+                                                                ?
+                                                                commonLocaleData?.app_gstin + ": " : company.taxType ===
+                                                                taxTypes.TRN ? commonLocaleData?.app_trn + ": " :
                                                                 company.taxType === taxTypes.VAT ?
                                                                 commonLocaleData?.enter_vat_no + ": " : "") +
-                                                                address.gstNumber : "" }}</p>
+                                                                address.gstNumber
+                                                                : "" }}</p>
                                                         </div>
                                                         <i class="icon-tick"
-                                                            *ngIf="invoiceForm.controls['account'].get('shippingAddress').get('index')?.value === i"></i>
+                                                            *ngIf="invoiceForm.controls['company'].get('billingAddress').get('index')?.value === i"></i>
                                                     </div>
                                                 </button>
                                                 <mat-divider></mat-divider>
-                                                <button mat-menu-item class="vouchers-add-new"
-                                                    (click)="toggleAccountAsidePane()">+ Add new address</button>
+                                                <button mat-menu-item class="vouchers-add-new">+ Add new
+                                                    address</button>
                                             </div>
                                         </mat-menu>
+                                        <div class="mt-2">Address {{
+                                            invoiceForm.controls['company'].get("billingAddress").get("index")?.value +
+                                            1 }}
+                                        </div>
+                                    </div>
+
+                                    <!-- Shipping Address -->
+                                    <div class="col-6">
+                                        <label for="billingAddress" class="billing-label">Shipping Address</label> <i
+                                            [matMenuTriggerFor]="companyShippingAddress"
+                                            class="icon-edit text-blue cursor-pointer pl-2 font-12"></i>
+
+                                        <mat-menu #companyShippingAddress="matMenu">
+                                            <div class="mat-menu-width-large  vouchers-address-menu">
+                                                <button mat-menu-item
+                                                    *ngFor="let address of company?.addresses; let i = index"
+                                                    (click)="fillBillingShippingAddress('company', 'shippingAddress', address, i)">
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <div>
+                                                            Address {{ i + 1}}
+                                                            <p>{{ address.address ? address.address + ", " : "" }}{{
+                                                                address.state?.name }}</p>
+                                                            <p>{{ address.gstNumber ? (company.taxType === taxTypes.GST
+                                                                ?
+                                                                commonLocaleData?.app_gstin + ": " : company.taxType ===
+                                                                taxTypes.TRN ? commonLocaleData?.app_trn + ": " :
+                                                                company.taxType === taxTypes.VAT ?
+                                                                commonLocaleData?.enter_vat_no + ": " : "") +
+                                                                address.gstNumber
+                                                                : "" }}</p>
+                                                        </div>
+                                                        <i class="icon-tick"
+                                                            *ngIf="invoiceForm.controls['company'].get('shippingAddress').get('index')?.value === i"></i>
+                                                    </div>
+                                                </button>
+                                                <mat-divider></mat-divider>
+                                                <button mat-menu-item class="vouchers-add-new">+ Add new
+                                                    address</button>
+                                            </div>
+                                        </mat-menu>
+                                        <div class="mt-2">Address {{
+                                            invoiceForm.controls['company'].get("shippingAddress").get("index")?.value +
+                                            1 }}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Row 3 -->
+                                <div class="row row-gap mr-t15 mr-b15" *ngIf="invoiceType.isPurchaseInvoice">
+
+                                    <!-- Purchase Order -->
+                                    <div class="col-6">
+                                        <mat-select name="linkedPO" class="po-mat-select mat-form-field-border"
+                                            [placeholder]="'Purchase Order'">
+                                            <mat-select-trigger>
+                                                List of selected items
+                                            </mat-select-trigger>
+                                            <mat-option class="po-options-line">
+                                                <ngx-mat-select-search [noEntriesFoundLabel]="'No Data Found'"
+                                                    [placeholderLabel]="'Select order'">
+                                                    <i class="icon-cross" ngxMatSelectSearchClear></i>
+                                                </ngx-mat-select-search>
+                                            </mat-option>
+
+                                            <mat-option [value]="1" class="po-options-line">
+                                                <span class="po-option-label"> Item Label</span>
+                                                <span class="po-option-value">
+                                                    Pending : additonal text</span>
+                                                <span class="po-option-value">
+                                                    Amount : 500
+                                                </span>
+                                            </mat-option>
+                                        </mat-select>
+                                    </div>
+                                </div>
+
+                                <!-- Row 4 -->
+                                <div class="row row-gap mr-t15">
+
+                                    <!-- Voucher Number -->
+                                    <div class="col-6">
+                                        <input-field [name]="'vouchers-number'" [label]="'Voucher Number'"
+                                            [placeholder]="'Enter voucher number'" [type]="'text'"
+                                            formControlName="number">
+                                        </input-field>
+                                    </div>
+
+                                    <!-- Voucher Date -->
+                                    <div class="col-3 pr-2">
+                                        <giddh-datepicker type="text" (keydown.enter)="$event.preventDefault()"
+                                            [label]="'Invoice Date'" [placeholder]="'DDMMYYYY'" name="voucherDate"
+                                            [showToggleIcon]="false" [appearance]="'outline'" formControlName="date">
+                                        </giddh-datepicker>
+                                    </div>
+
+                                    <!-- Due Date -->
+                                    <div class="col-3 pl-2"
+                                        *ngIf="invoiceType.isSalesInvoice || invoiceType.isPurchaseInvoice">
+                                        <giddh-datepicker type="text" (keydown.enter)="$event.preventDefault()"
+                                            [label]="'Due Date'" [placeholder]="'DDMMYYYY'" name="voucherDueDate"
+                                            [showToggleIcon]="false" [appearance]="'outline'" formControlName="dueDate">
+                                        </giddh-datepicker>
+                                    </div>
+
+                                    <!-- Reverse Charge Checkbox -->
+                                    <div class="col-6"
+                                        *ngIf="invoiceType.isPurchaseInvoice || (currentVoucherFormDetails?.rcmAllowed && (company.countryName === 'India' || company.countryName === 'United Kingdom'))">
+                                        <mat-checkbox (keydown.enter)="$event.preventDefault()" #rcmCheckbox
+                                            id="reverse-charge" formControlName="isRcmEntry"
+                                            (change)="changeRcmCheckboxState($event)" class="mr-r1" name="rcmEntry"
+                                            [disabled]="isEinvoiceGenerated" color="primary">
+                                        </mat-checkbox>
+                                        <label for="reverse-charge" (click)="
+                                                !isEinvoiceGenerated ? toggleRcmCheckbox(rcmCheckbox, 'label') : ''
+                                            " [innerHTML]="localeData?.transaction_reverse_charge">
+                                        </label>
+                                    </div>
+                                    <!-- For Tourist Scheme start -->
+                                    <ng-container *ngIf="company?.countryCode === 'AE'">
+                                        <div class="col-6"
+                                            *ngIf="invoiceType.isSalesInvoice || invoiceType.isCashInvoice">
+                                            <mat-checkbox color="primary" (keydown.enter)="$event.preventDefault()"
+                                                id="tourist-scheme" name="touristSchemeApplicable" class="mr-r1"
+                                                formControlName="touristSchemeApplicable"
+                                                (change)="toggleTouristSchemeApplicable()"
+                                                [disabled]="isEinvoiceGenerated">
+                                                {{ localeData?.transaction_tourist_scheme }}
+                                            </mat-checkbox>
+                                        </div>
+                                        <div class="col-6">
+                                            <input-field [type]="'text'" [name]="'passportNumber'"
+                                                [placeholder]="localeData?.passport_number" [cssClass]="'attention-to'"
+                                                formControlName="passportNumber" (keypress)="allowAlphanumericChar()"
+                                                (blur)="allowAlphanumericChar()"></input-field>
+                                        </div>
                                     </ng-container>
+                                    <!-- For Tourist Scheme end -->
+                                </div>
+                            </div>
 
-                                    <div *ngIf="!invoiceType.isCashInvoice" class="mt-2">Address {{
-                                        invoiceForm.controls['account'].get("shippingAddress").get("index")?.value + 1
-                                        }} </div>
-
-                                    <div class="vouchers-address-form form-disabled" *ngIf="invoiceType.isCashInvoice">
-                                        <div class="address-field">
-                                            <textarea rows="2" matInput class="w-100" name="shippingAddress"
-                                                formControlName="address"></textarea>
-                                        </div>
-                                        <div class="country-field">
-                                            <span>{{ invoiceType?.isCashInvoice ? company?.countryName :
-                                                account?.countryName }}</span>
-                                        </div>
-                                        <div class="state-field" formGroupName="state">
-                                            <reactive-dropdown-field [cssClass]="'border-0'" formControlName="code"
-                                                [name]="'shippingStateCode'" [label]="'State'" [placeholder]="'Select'"
-                                                [options]="accountStateList$ | async"
-                                                [labelValue]="invoiceForm.controls['account'].get('shippingAddress').get('state').get('name')?.value"
-                                                [appearance]="'fill'" [showLabel]="false"
-                                                (selectedOption)="selectState('shippingAddress', $event)"></reactive-dropdown-field>
-                                        </div>
-                                        <div class="gstin-field">
-                                            <text-field [type]="'text'" [name]="'shippingTaxNumber'"
-                                                [placeholder]="'GSTIN'" [cssClass]="'border-0'"
-                                                formControlName="taxNumber"></text-field>
-                                        </div>
-                                        <div class="pin-code-field">
-                                            <text-field [type]="'text'" [name]="'shippingPinCode'"
-                                                [placeholder]="'PIN Code'" [cssClass]="'border-0'"
-                                                formControlName="pincode"></text-field>
-                                        </div>
+                            <div class="vouchers-large-container mt-4 pt-4">
+                                <div class="change-currency  d-flex justify-content-end align-items-center column-gap1 text-uppercase pb-2"
+                                    *ngIf="isMultiCurrencyVoucher">
+                                    <span>{{ commonLocaleData?.app_numbers?.one }} {{ company?.baseCurrency }}</span>
+                                    <img alt="switch-icon" height="15px" src="/assets/images/switch-icon.svg" />
+                                    <span *ngIf="!showExchangeRateEditField">{{ invoiceForm.get('exchangeRate')?.value
+                                        }} {{
+                                        account?.baseCurrency }}</span>
+                                    <div class="currency-input-wrapper" *ngIf="showExchangeRateEditField">
+                                        <text-field [cssClass]="'form-control'" [type]="'number'"
+                                            [matSuffix]="account?.baseCurrency"
+                                            formControlName="exchangeRate"></text-field>
                                     </div>
+                                    <i class="icon-edit text-blue cursor-pointer"
+                                        (click)="showExchangeRateEditField = true"
+                                        *ngIf="!showExchangeRateEditField"></i>
+                                    <i class="icon-save text-blue cursor-pointer"
+                                        (click)="showExchangeRateEditField = false"
+                                        *ngIf="showExchangeRateEditField"></i>
                                 </div>
 
-                                <!-- Attention to -->
-                                <div class="col-6 mr-t15">
-                                    <input-field [name]="'attentionTo'" [label]="'Attention to'"
-                                        [placeholder]="'Enter name'" [type]="'text'"
-                                        formControlName="attentionTo"></input-field>
-                                </div>
+                                <!-- Voucher Grid for Multiple Entries-->
+                                <div class="vouchers-entry-grid">
 
-                                <!-- Email Id -->
-                                <div class="col-6 mr-t15">
-                                    <input-field [name]="'email'" [label]="'Email Id'" [placeholder]="'Enter email'"
-                                        [type]="'text'" formControlName="email"></input-field>
-                                </div>
+                                    <!-- Grid Head | Row 1 -->
 
-                                <!-- Mobile Number -->
-                                <div class="col-6 mr-t15">
-                                    <input-field [name]="'mobile-number'" [type]="'tel'" #initContactProforma
-                                        class="flag-input" [id]="'init-contact-proforma'"
-                                        (keydown.enter)="$event.preventDefault()" [label]="'Mobile Number'"
-                                        [placeholder]="'98XXXXXXXX'" [floatLabel]="'auto'">
-                                    </input-field>
-                                    <span id="init-contact-proforma-valid-msg" class="d-none"></span>
-                                    <span id="init-contact-proforma-error-msg" class="d-none"></span>
-                                </div>
-                            </ng-container>
-
-                            <!-- Warehouse -->
-                            <div class="col-6 mr-t15" *ngIf="showWarehouse" formGroupName="warehouse">
-                                <reactive-dropdown-field [cssClass]="'border-0'" [name]="'warehouse'"
-                                    formControlName="uniqueName" [label]="'Warehouse'" [placeholder]="'Select'"
-                                    [options]="warehouses"></reactive-dropdown-field>
-                            </div>
-                        </div>
-
-                        <!-- Row 2 for Deliver To Only show in Cash Invoice -->
-                        <div class="row" *ngIf="invoiceType.isPurchaseOrder" formGroupName="account">
-                            <div class="col-12 mr-t15">
-                                <span class="billing-deliver-label">Deliver To</span>
-                            </div>
-
-                            <!-- Billing Address -->
-                            <div class="col-6">
-                                <label for="billingAddress" class="billing-label">Billing Address</label> <i
-                                    [matMenuTriggerFor]="companyBillingAddress"
-                                    class="icon-edit text-blue cursor-pointer pl-2 font-12"></i>
-
-                                <mat-menu #companyBillingAddress="matMenu">
-                                    <div class="mat-menu-width-large vouchers-address-menu">
-                                        <button mat-menu-item *ngFor="let address of company?.addresses; let i = index"
-                                            (click)="fillBillingShippingAddress('company', 'billingAddress', address, i)">
-                                            <div class="d-flex justify-content-between align-items-center">
-                                                <div>
-                                                    Address {{ i + 1}}
-                                                    <p>{{ address.address ? address.address + ", " : "" }}{{
-                                                        address.state?.name }}</p>
-                                                    <p>{{ address.gstNumber ? (company.taxType === taxTypes.GST ?
-                                                        commonLocaleData?.app_gstin + ": " : company.taxType ===
-                                                        taxTypes.TRN ? commonLocaleData?.app_trn + ": " :
-                                                        company.taxType === taxTypes.VAT ?
-                                                        commonLocaleData?.enter_vat_no + ": " : "") + address.gstNumber
-                                                        : "" }}</p>
-                                                </div>
-                                                <i class="icon-tick"
-                                                    *ngIf="invoiceForm.controls['company'].get('billingAddress').get('index')?.value === i"></i>
-                                            </div>
-                                        </button>
-                                        <mat-divider></mat-divider>
-                                        <button mat-menu-item class="vouchers-add-new">+ Add new address</button>
+                                    <div class="head-item text-left">#</div>
+                                    <div class="head-item text-left">Product/Service Description</div>
+                                    <div class="head-item">Qty/Unit</div>
+                                    <div class="head-item">Rate</div>
+                                    <div class="head-item">Amount</div>
+                                    <div class="head-item">Discount</div>
+                                    <div class="head-item">Tax</div>
+                                    <div class="head-item">Total</div>
+                                    <div class="border-end-0 border-bottom-0 p-0">
+                                        <!-- Don't Delete this element it is working as column(<th> tag like) for delete icon -->
                                     </div>
-                                </mat-menu>
-                                <div class="mt-2">Address {{
-                                    invoiceForm.controls['company'].get("billingAddress").get("index")?.value + 1 }}
-                                </div>
-                            </div>
 
-                            <!-- Shipping Address -->
-                            <div class="col-6">
-                                <label for="billingAddress" class="billing-label">Shipping Address</label> <i
-                                    [matMenuTriggerFor]="companyShippingAddress"
-                                    class="icon-edit text-blue cursor-pointer pl-2 font-12"></i>
+                                    <!-- Grid Body | Row 2-->
 
-                                <mat-menu #companyShippingAddress="matMenu">
-                                    <div class="mat-menu-width-large  vouchers-address-menu">
-                                        <button mat-menu-item *ngFor="let address of company?.addresses; let i = index"
-                                            (click)="fillBillingShippingAddress('company', 'shippingAddress', address, i)">
-                                            <div class="d-flex justify-content-between align-items-center">
-                                                <div>
-                                                    Address {{ i + 1}}
-                                                    <p>{{ address.address ? address.address + ", " : "" }}{{
-                                                        address.state?.name }}</p>
-                                                    <p>{{ address.gstNumber ? (company.taxType === taxTypes.GST ?
-                                                        commonLocaleData?.app_gstin + ": " : company.taxType ===
-                                                        taxTypes.TRN ? commonLocaleData?.app_trn + ": " :
-                                                        company.taxType === taxTypes.VAT ?
-                                                        commonLocaleData?.enter_vat_no + ": " : "") + address.gstNumber
-                                                        : "" }}</p>
-                                                </div>
-                                                <i class="icon-tick"
-                                                    *ngIf="invoiceForm.controls['company'].get('shippingAddress').get('index')?.value === i"></i>
-                                            </div>
-                                        </button>
-                                        <mat-divider></mat-divider>
-                                        <button mat-menu-item class="vouchers-add-new">+ Add new address</button>
-                                    </div>
-                                </mat-menu>
-                                <div class="mt-2">Address {{
-                                    invoiceForm.controls['company'].get("shippingAddress").get("index")?.value + 1 }}
-                                </div>
-                            </div>
-                        </div>
+                                    <!-- # -->
+                                    <div class="body-item text-left">1</div>
 
-                        <!-- Row 3 -->
-                        <div class="row row-gap mr-t15 mr-b15" *ngIf="invoiceType.isPurchaseInvoice">
+                                    <!-- Product/Service Description -->
+                                    <div class="body-item text-left">
+                                        <span class="select-account-label">111 </span>
 
-                            <!-- Purchase Order -->
-                            <div class="col-6">
-                                <mat-select name="linkedPO" class="po-mat-select" [placeholder]="'Purchase Order'">
-                                    <mat-select-trigger>
-                                        List of selected items
-                                    </mat-select-trigger>
-                                    <mat-option class="po-options-line">
-                                        <ngx-mat-select-search [noEntriesFoundLabel]="'No Data Found'"
-                                            [placeholderLabel]="'Select order'">
-                                            <i class="icon-cross" ngxMatSelectSearchClear></i>
-                                        </ngx-mat-select-search>
-                                    </mat-option>
-
-                                    <mat-option [value]="1" class="po-options-line">
-                                        <span class="po-option-label"> Item Label</span>
-                                        <span class="po-option-value">
-                                            Pending : additonal text</span>
-                                        <span class="po-option-value">
-                                            Amount : 500
-                                        </span>
-                                    </mat-option>
-                                </mat-select>
-                            </div>
-                        </div>
-
-                        <!-- Row 4 -->
-                        <div class="row row-gap mr-t15">
-
-                            <!-- Voucher Number -->
-                            <div class="col-6">
-                                <input-field [name]="'vouchers-number'" [label]="'Voucher Number'"
-                                    [placeholder]="'Enter voucher number'" [type]="'text'" formControlName="number">
-                                </input-field>
-                            </div>
-
-                            <!-- Voucher Date -->
-                            <div class="col-3 pr-2">
-                                <giddh-datepicker type="text" (keydown.enter)="$event.preventDefault()"
-                                    [label]="'Invoice Date'" [placeholder]="'DDMMYYYY'" name="voucherDate"
-                                    [showToggleIcon]="false" [appearance]="'outline'" formControlName="date">
-                                </giddh-datepicker>
-                            </div>
-
-                            <!-- Due Date -->
-                            <div class="col-3 pl-2" *ngIf="invoiceType.isSalesInvoice || invoiceType.isPurchaseInvoice">
-                                <giddh-datepicker type="text" (keydown.enter)="$event.preventDefault()"
-                                    [label]="'Due Date'" [placeholder]="'DDMMYYYY'" name="voucherDueDate"
-                                    [showToggleIcon]="false" [appearance]="'outline'" formControlName="dueDate">
-                                </giddh-datepicker>
-                            </div>
-
-                            <!-- Reverse Charge Checkbox -->
-                            <div class="col-6"
-                                *ngIf="invoiceType.isPurchaseInvoice || (currentVoucherFormDetails?.rcmAllowed && (company.countryName === 'India' || company.countryName === 'United Kingdom'))">
-                                <mat-checkbox (keydown.enter)="$event.preventDefault()" #rcmCheckbox id="reverse-charge"
-                                    formControlName="isRcmEntry" (change)="changeRcmCheckboxState($event)" class="mr-r1"
-                                    name="rcmEntry" [disabled]="isEinvoiceGenerated" color="primary">
-                                </mat-checkbox>
-                                <label for="reverse-charge" (click)="
-                                        !isEinvoiceGenerated ? toggleRcmCheckbox(rcmCheckbox, 'label') : ''
-                                    " [innerHTML]="localeData?.transaction_reverse_charge">
-                                </label>
-                            </div>
-                            <!-- For Tourist Scheme start -->
-                            <ng-container *ngIf="company?.countryCode === 'AE'">
-                                <div class="col-6" *ngIf="invoiceType.isSalesInvoice || invoiceType.isCashInvoice">
-                                    <mat-checkbox color="primary" (keydown.enter)="$event.preventDefault()"
-                                        id="tourist-scheme" name="touristSchemeApplicable"
-                                        class="mr-r1"
-                                        formControlName="touristSchemeApplicable"
-                                        (change)="toggleTouristSchemeApplicable()" [disabled]="isEinvoiceGenerated">
-                                        {{ localeData?.transaction_tourist_scheme }}
-                                    </mat-checkbox>
-                                </div>
-                                <div class="col-6">
-                                    <input-field [type]="'text'" [name]="'passportNumber'"
-                                        [placeholder]="localeData?.passport_number" [cssClass]="'attention-to'"
-                                        formControlName="passportNumber" (keypress)="allowAlphanumericChar()"
-                                        (blur)="allowAlphanumericChar()"></input-field>
-                                </div>
-                            </ng-container>
-                            <!-- For Tourist Scheme end -->
-                        </div>
-                    </div>
-
-                    <div class="vouchers-large-container mt-4 pt-4">
-                        <div class="change-currency  d-flex justify-content-end align-items-center column-gap1 text-uppercase pb-2"
-                            *ngIf="isMultiCurrencyVoucher">
-                            <span>{{ commonLocaleData?.app_numbers?.one }} {{ company?.baseCurrency }}</span>
-                            <img alt="switch-icon" height="15px" src="/assets/images/switch-icon.svg" />
-                            <span *ngIf="!showExchangeRateEditField">{{ invoiceForm.get('exchangeRate')?.value }} {{
-                                account?.baseCurrency }}</span>
-                            <div class="currency-input-wrapper" *ngIf="showExchangeRateEditField">
-                                <text-field [cssClass]="'form-control'" [type]="'number'"
-                                    [matSuffix]="account?.baseCurrency" formControlName="exchangeRate"></text-field>
-                            </div>
-                            <i class="icon-edit text-blue cursor-pointer" (click)="showExchangeRateEditField = true"
-                                *ngIf="!showExchangeRateEditField"></i>
-                            <i class="icon-save text-blue cursor-pointer" (click)="showExchangeRateEditField = false"
-                                *ngIf="showExchangeRateEditField"></i>
-                        </div>
-
-                        <!-- Voucher Grid for Multiple Entries-->
-                        <div class="vouchers-entry-grid">
-
-                            <!-- Grid Head | Row 1 -->
-
-                            <div class="head-item text-left">#</div>
-                            <div class="head-item text-left">Product/Service Description</div>
-                            <div class="head-item">Qty/Unit</div>
-                            <div class="head-item">Rate</div>
-                            <div class="head-item">Amount</div>
-                            <div class="head-item">Discount</div>
-                            <div class="head-item">Tax</div>
-                            <div class="head-item">Total</div>
-                            <div class="border-end-0 border-bottom-0 p-0">
-                                <!-- Don't Delete this element it is working as column(<th> tag like) for delete icon -->
-                            </div>
-
-                            <!-- Grid Body | Row 2-->
-
-                            <!-- # -->
-                            <div class="body-item text-left">1</div>
-
-                            <!-- Product/Service Description -->
-                            <div class="body-item text-left">
-                                <span class="select-account-label">111 </span>
-
-                                <div class="mt-2 font-12">
-                                    <span>Entry Date</span>
-                                    <div class="mt-1">22-01-2024</div>
-                                </div>
-                            </div>
-
-                            <!-- Qty/Unit -->
-                            <div class="body-item">
-
-                            </div>
-
-                            <!-- Rate -->
-                            <div class="body-item">
-
-                            </div>
-
-                            <!-- Amount -->
-                            <div class="body-item">
-                                <span>0.00</span>
-                            </div>
-
-                            <!-- Discount -->
-                            <div class="body-item">
-                                <span>0.00</span>
-                            </div>
-
-                            <!-- Tax -->
-                            <div class="body-item">
-                                <span>0.00</span>
-                            </div>
-
-                            <!-- Total -->
-                            <div class="body-item">
-                                <span>0.00</span>
-                            </div>
-
-                            <!-- Delete -->
-                            <div class="body-item delete-btn">
-                                <i class="icon-trash cursor-pointer"></i>
-                            </div>
-
-                            <!-- Grid Body | Row 3-->
-
-                            <!-- # -->
-                            <div class="body-item text-left">2</div>
-
-                            <!-- Product/Service Description -->
-                            <div class="body-item text-left">
-                                <reactive-dropdown-field [cssClass]="'form-control'" [createNewText]="'Create New'"
-                                    [showLabel]="false" [name]="'account'" [placeholder]="'Select account'"
-                                    [options]="dummyOptions" [enableDynamicSearch]="true"
-                                    (dynamicSearchedQuery)="searchStock($event, 1)">
-                                </reactive-dropdown-field>
-
-                                <textarea rows="2" matInput class="form-control mt-2"
-                                    placeholder="Add Description"></textarea>
-                                <span class="mt-2 font-12">Characters Left: 300</span>
-
-                                <div class="d-flex justify-content-between">
-                                    <div class="w-50">
                                         <div class="mt-2 font-12">
                                             <span>Entry Date</span>
-                                            <div class="mt-1">22-01-2024 <i
-                                                    class="icon-edit text-blue cursor-pointer"></i>
-                                            </div>
+                                            <div class="mt-1">22-01-2024</div>
                                         </div>
                                     </div>
-                                    <div class="w-50 text-right">
-                                        <div class="mt-2 font-12">
-                                            <span>SAC:</span>
-                                            <div class="mt-1">Update <i class="icon-edit text-blue cursor-pointer"
-                                                    [matMenuTriggerFor]="update"></i></div>
 
-                                            <!-- Update Menu  -->
-                                            <mat-menu #update="matMenu">
-                                                <div class="p-3" (click)="$event.stopPropagation();">
-                                                    <mat-radio-group>
-                                                        <mat-radio-button color="primary" value="1">HSN
-                                                            Code</mat-radio-button>
-                                                        <mat-radio-button color="primary" value="2">SAC
-                                                            Code</mat-radio-button>
-                                                    </mat-radio-group>
+                                    <!-- Qty/Unit -->
+                                    <div class="body-item">
 
-                                                    <div class="mt-3">
-                                                        <text-field [placeholder]="'HSN Number'"
-                                                            [cssClass]="'form-control text-right'" [type]="'number'">
-                                                        </text-field>
-                                                    </div>
+                                    </div>
 
-                                                    <div class="mt-3">
-                                                        <button mat-stroked-button color="primary"
-                                                            class="mr-2">Save</button>
-                                                        <button mat-stroked-button>Cancel</button>
+                                    <!-- Rate -->
+                                    <div class="body-item">
+
+                                    </div>
+
+                                    <!-- Amount -->
+                                    <div class="body-item">
+                                        <span>0.00</span>
+                                    </div>
+
+                                    <!-- Discount -->
+                                    <div class="body-item">
+                                        <span>0.00</span>
+                                    </div>
+
+                                    <!-- Tax -->
+                                    <div class="body-item">
+                                        <span>0.00</span>
+                                    </div>
+
+                                    <!-- Total -->
+                                    <div class="body-item">
+                                        <span>0.00</span>
+                                    </div>
+
+                                    <!-- Delete -->
+                                    <div class="body-item delete-btn">
+                                        <i class="icon-trash cursor-pointer"></i>
+                                    </div>
+
+                                    <!-- Grid Body | Row 3-->
+
+                                    <!-- # -->
+                                    <div class="body-item text-left">2</div>
+
+                                    <!-- Product/Service Description -->
+                                    <div class="body-item text-left">
+                                        <reactive-dropdown-field [cssClass]="'form-control'"
+                                            [createNewText]="'Create New'" [showLabel]="false" [name]="'account'"
+                                            [placeholder]="'Select account'" [options]="dummyOptions"
+                                            [enableDynamicSearch]="true"
+                                            (dynamicSearchedQuery)="searchStock($event, 1)">
+                                        </reactive-dropdown-field>
+
+                                        <textarea rows="2" matInput class="form-control mt-2"
+                                            placeholder="Add Description"></textarea>
+                                        <span class="mt-2 font-12">Characters Left: 300</span>
+
+                                        <div class="d-flex justify-content-between">
+                                            <div class="w-50">
+                                                <div class="mt-2 font-12">
+                                                    <span>Entry Date</span>
+                                                    <div class="mt-1">22-01-2024 <i
+                                                            class="icon-edit text-blue cursor-pointer"></i>
                                                     </div>
                                                 </div>
-                                            </mat-menu>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                                            </div>
+                                            <div class="w-50 text-right">
+                                                <div class="mt-2 font-12">
+                                                    <span>SAC:</span>
+                                                    <div class="mt-1">Update <i
+                                                            class="icon-edit text-blue cursor-pointer"
+                                                            [matMenuTriggerFor]="update"></i></div>
 
-                            <!-- Qty/Unit -->
-                            <div class="body-item">
-                                <text-field [placeholder]="'Enter Qty'" [cssClass]="'form-control text-right'"
-                                    [type]="'text'">
-                                </text-field>
-                                <mat-select name="qty" [placeholder]="'Select'" class="form-control mt-2">
-                                    <mat-option [value]="1">Opt 1</mat-option>
-                                    <mat-option [value]="2">Opt 2</mat-option>
-                                    <mat-option [value]="3">Opt 3</mat-option>
-                                </mat-select>
-                            </div>
+                                                    <!-- Update Menu  -->
+                                                    <mat-menu #update="matMenu">
+                                                        <div class="p-3" (click)="$event.stopPropagation();">
+                                                            <mat-radio-group>
+                                                                <mat-radio-button color="primary" value="1">HSN
+                                                                    Code</mat-radio-button>
+                                                                <mat-radio-button color="primary" value="2">SAC
+                                                                    Code</mat-radio-button>
+                                                            </mat-radio-group>
 
-                            <!-- Rate -->
-                            <div class="body-item">
-                                <text-field [placeholder]="'Enter'" [cssClass]="'form-control text-right'"
-                                    [type]="'text'">
-                                </text-field>
-                            </div>
-
-                            <!-- Amount -->
-                            <div class="body-item">
-                                <text-field [placeholder]="'Enter'" [cssClass]="'form-control text-right'"
-                                    [type]="'text'">
-                                </text-field>
-                            </div>
-
-                            <!-- Discount -->
-                            <div class="body-item">
-                                <!-- Discount control component -->
-                                <discount-dropdown (createOption)="showCreateDiscountDialog()"></discount-dropdown>
-                            </div>
-
-                            <!-- Tax -->
-                            <div class="body-item">
-                                <tax-dropdown (createOption)="showCreateTaxDialog()"></tax-dropdown>
-                            </div>
-
-                            <!-- Total -->
-                            <div class="body-item">
-                                <text-field [placeholder]="'Enter'" [cssClass]="'form-control text-right'"
-                                    [type]="'text'">
-                                </text-field>
-                                <div class="d-flex align-items-center" (click)="openOtherTaxDialog()">
-                                    <mat-checkbox type="checkbox" color="primary">
-                                    </mat-checkbox>
-                                    Other Tax?
-                                </div>
-                            </div>
-
-                            <!-- Delete -->
-                            <div class="body-item delete-btn">
-                                <i class="icon-trash cursor-pointer"></i>
-                            </div>
-                        </div>
-                        <!-- Add new grid row/line -->
-                        <div class="font-12 text-blue mt-2 px-2">
-                            <span class="cursor-pointer">+ Add New Line</span> <span class="grey-color px-2">|</span>
-                            <span class="cursor-pointer" (click)="openBulkEntryDialog()">+ Add Bulk Entries</span>
-                        </div>
-
-                        <div class="vouchers-other-detail container-lg mt-4 px-0">
-                            <div class="row mx-0">
-                                <div class="col-8 px-0">
-                                    <div class="container px-0">
-                                        <div class="row">
-                                            <div class="col-12" formGroupName="templateDetails">
-                                                <mat-accordion>
-                                                    <mat-expansion-panel>
-                                                        <mat-expansion-panel-header>
-                                                            <mat-panel-title>
-                                                                Other Details
-                                                            </mat-panel-title>
-                                                        </mat-expansion-panel-header>
-
-                                                        <div class="row row-gap mx-0 px-2 pb-3" formGroupName="other">
-                                                            <div class="col-4 px-2">
-                                                                <giddh-datepicker type="text"
-                                                                    (keydown.enter)="$event.preventDefault()"
-                                                                    [label]="'Ship Date'" [placeholder]="'DDMMYYYY'"
-                                                                    name="shippingDate" [showToggleIcon]="false"
-                                                                    [appearance]="'outline'"
-                                                                    formControlName="shippingDate">
-                                                                </giddh-datepicker>
+                                                            <div class="mt-3">
+                                                                <text-field [placeholder]="'HSN Number'"
+                                                                    [cssClass]="'form-control text-right'"
+                                                                    [type]="'number'">
+                                                                </text-field>
                                                             </div>
-                                                            <div class="col-4 px-2">
-                                                                <input-field [type]="'text'" [placeholder]="'Ship Via'"
-                                                                    [name]="'shippedVia'" formControlName="shippedVia">
-                                                                </input-field>
-                                                            </div>
-                                                            <div class="col-4 px-2">
-                                                                <input-field [type]="'text'"
-                                                                    [placeholder]="'Tracking No.'"
-                                                                    [name]="'trackingNumber'"
-                                                                    formControlName="trackingNumber">
-                                                                </input-field>
-                                                            </div>
-                                                            <div class="col-4 px-2">
-                                                                <input-field [type]="'text'"
-                                                                    [placeholder]="'Custom Field 1'"
-                                                                    [name]="'customField1'"
-                                                                    formControlName="customField1">
-                                                                </input-field>
-                                                            </div>
-                                                            <div class="col-4 px-2">
-                                                                <input-field [type]="'text'"
-                                                                    [placeholder]="'Custom Field 2'"
-                                                                    [name]="'customField2'"
-                                                                    formControlName="customField2">
-                                                                </input-field>
-                                                            </div>
-                                                            <div class="col-4 px-2">
-                                                                <input-field [type]="'text'"
-                                                                    [placeholder]="'Custom Field 3'"
-                                                                    [name]="'customField3'"
-                                                                    formControlName="customField3">
-                                                                </input-field>
-                                                            </div>
-                                                            <div class="col-12 px-2">
-                                                                <mat-form-field class="w-100" appearance="outline">
-                                                                    <mat-label>Note</mat-label>
-                                                                    <textarea matInput placeholder="Enter Note"
-                                                                        name="message2"
-                                                                        formControlName="message2"></textarea>
-                                                                </mat-form-field>
+
+                                                            <div class="mt-3">
+                                                                <button mat-stroked-button color="primary"
+                                                                    class="mr-2">Save</button>
+                                                                <button mat-stroked-button>Cancel</button>
                                                             </div>
                                                         </div>
-                                                    </mat-expansion-panel>
-                                                </mat-accordion>
+                                                    </mat-menu>
+                                                </div>
                                             </div>
+                                        </div>
+                                    </div>
 
-                                            <div class="col-12 mt-3">
-                                                <mat-card>
-                                                    <mat-card-header>
-                                                        <mat-card-title>
-                                                            <p class="font-16 mb-3">Deposit</p>
-                                                        </mat-card-title>
-                                                    </mat-card-header>
-                                                    <mat-card-content>
-                                                        <div class="container px-0" formGroupName="deposit">
-                                                            <div class="row align-items-center">
-                                                                <ng-container *ngIf="true">
-                                                                    <div class="col-6">
-                                                                        <reactive-dropdown-field [label]="'Account'"
-                                                                            [placeholder]="'Select Account'"
-                                                                            [options]="briefAccounts$ | async"
-                                                                            formControlName="accountUniqueName">
-                                                                        </reactive-dropdown-field>
+                                    <!-- Qty/Unit -->
+                                    <div class="body-item">
+                                        <text-field [placeholder]="'Enter Qty'" [cssClass]="'form-control text-right'"
+                                            [type]="'text'">
+                                        </text-field>
+                                        <mat-select name="qty" [placeholder]="'Select'" class="form-control mt-2">
+                                            <mat-option [value]="1">Opt 1</mat-option>
+                                            <mat-option [value]="2">Opt 2</mat-option>
+                                            <mat-option [value]="3">Opt 3</mat-option>
+                                        </mat-select>
+                                    </div>
+
+                                    <!-- Rate -->
+                                    <div class="body-item">
+                                        <text-field [placeholder]="'Enter'" [cssClass]="'form-control text-right'"
+                                            [type]="'text'">
+                                        </text-field>
+                                    </div>
+
+                                    <!-- Amount -->
+                                    <div class="body-item">
+                                        <text-field [placeholder]="'Enter'" [cssClass]="'form-control text-right'"
+                                            [type]="'text'">
+                                        </text-field>
+                                    </div>
+
+                                    <!-- Discount -->
+                                    <div class="body-item">
+                                        <!-- Discount control component -->
+                                        <discount-dropdown
+                                            (createOption)="showCreateDiscountDialog()"></discount-dropdown>
+                                    </div>
+
+                                    <!-- Tax -->
+                                    <div class="body-item">
+                                        <tax-dropdown (createOption)="showCreateTaxDialog()"></tax-dropdown>
+                                    </div>
+
+                                    <!-- Total -->
+                                    <div class="body-item">
+                                        <text-field [placeholder]="'Enter'" [cssClass]="'form-control text-right'"
+                                            [type]="'text'">
+                                        </text-field>
+                                        <div class="d-flex align-items-center" (click)="openOtherTaxDialog()">
+                                            <mat-checkbox type="checkbox" color="primary">
+                                            </mat-checkbox>
+                                            Other Tax?
+                                        </div>
+                                    </div>
+
+                                    <!-- Delete -->
+                                    <div class="body-item delete-btn">
+                                        <i class="icon-trash cursor-pointer"></i>
+                                    </div>
+                                </div>
+                                <!-- Add new grid row/line -->
+                                <div class="text-blue mt-2 px-0">
+                                    <span class="cursor-pointer">+ Add New Line</span> <span
+                                        class="grey-color px-2">|</span>
+                                    <span class="cursor-pointer" (click)="openBulkEntryDialog()">+ Add Bulk
+                                        Entries</span>
+                                </div>
+
+                                <div class="vouchers-other-detail container-lg mt-4 px-0">
+                                    <div class="row mx-0">
+                                        <div class="col-8 px-0">
+                                            <div class="container px-0">
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        <mat-card>
+                                                            <mat-card-header>
+                                                                <mat-card-title>
+                                                                    <p class="font-16 mb-3">Deposit</p>
+                                                                </mat-card-title>
+                                                            </mat-card-header>
+                                                            <mat-card-content>
+                                                                <div class="container px-0" formGroupName="deposit">
+                                                                    <div class="row align-items-center">
+                                                                        <ng-container *ngIf="true">
+                                                                            <div class="col-6">
+                                                                                <reactive-dropdown-field
+                                                                                    [label]="'Account'"
+                                                                                    [placeholder]="'Select Account'"
+                                                                                    [options]="briefAccounts$ | async"
+                                                                                    formControlName="accountUniqueName">
+                                                                                </reactive-dropdown-field>
+                                                                            </div>
+                                                                            <div class="col-6">
+                                                                                <input-field [name]="'amountForCompany'"
+                                                                                    [label]="'Amount'"
+                                                                                    [placeholder]="'Enter amount'"
+                                                                                    [type]="'number'"
+                                                                                    formControlName="amountForCompany">
+                                                                                </input-field>
+                                                                            </div>
+                                                                        </ng-container>
+
+                                                                        <div class="col" *ngIf="false">
+                                                                            <div
+                                                                                class="d-flex align-items-center column-gap1">
+                                                                                <span>Adjust Amount</span>
+                                                                                <span class="text-gray">00.00</span>
+                                                                                <i
+                                                                                    class="icon-edit text-blue font-12"></i>
+                                                                            </div>
+                                                                        </div>
                                                                     </div>
-                                                                    <div class="col-6">
-                                                                        <input-field [name]="'amountForCompany'"
-                                                                            [label]="'Amount'"
-                                                                            [placeholder]="'Enter amount'"
-                                                                            [type]="'number'"
-                                                                            formControlName="amountForCompany">
+                                                                </div>
+                                                            </mat-card-content>
+                                                        </mat-card>
+                                                    </div>
+                                                    <div class="col-12 mt-3" formGroupName="templateDetails">
+                                                        <mat-accordion>
+                                                            <mat-expansion-panel>
+                                                                <mat-expansion-panel-header>
+                                                                    <mat-panel-title>
+                                                                        Other Details
+                                                                    </mat-panel-title>
+                                                                </mat-expansion-panel-header>
+
+                                                                <div class="row row-gap mx-0 px-2 pb-3"
+                                                                    formGroupName="other">
+                                                                    <div class="col-4 px-2">
+                                                                        <giddh-datepicker type="text"
+                                                                            (keydown.enter)="$event.preventDefault()"
+                                                                            [label]="'Ship Date'"
+                                                                            [placeholder]="'DDMMYYYY'"
+                                                                            name="shippingDate" [showToggleIcon]="false"
+                                                                            [appearance]="'outline'"
+                                                                            formControlName="shippingDate">
+                                                                        </giddh-datepicker>
+                                                                    </div>
+                                                                    <div class="col-4 px-2">
+                                                                        <input-field [type]="'text'"
+                                                                            [placeholder]="'Ship Via'"
+                                                                            [name]="'shippedVia'"
+                                                                            formControlName="shippedVia">
                                                                         </input-field>
                                                                     </div>
-                                                                </ng-container>
-
-                                                                <div class="col" *ngIf="false">
-                                                                    <div class="d-flex align-items-center column-gap1">
-                                                                        <span>Adjust Amount</span>
-                                                                        <span class="text-gray">00.00</span>
-                                                                        <i class="icon-edit text-blue font-12"></i>
+                                                                    <div class="col-4 px-2">
+                                                                        <input-field [type]="'text'"
+                                                                            [placeholder]="'Tracking No.'"
+                                                                            [name]="'trackingNumber'"
+                                                                            formControlName="trackingNumber">
+                                                                        </input-field>
+                                                                    </div>
+                                                                    <div class="col-4 px-2">
+                                                                        <input-field [type]="'text'"
+                                                                            [placeholder]="'Custom Field 1'"
+                                                                            [name]="'customField1'"
+                                                                            formControlName="customField1">
+                                                                        </input-field>
+                                                                    </div>
+                                                                    <div class="col-4 px-2">
+                                                                        <input-field [type]="'text'"
+                                                                            [placeholder]="'Custom Field 2'"
+                                                                            [name]="'customField2'"
+                                                                            formControlName="customField2">
+                                                                        </input-field>
+                                                                    </div>
+                                                                    <div class="col-4 px-2">
+                                                                        <input-field [type]="'text'"
+                                                                            [placeholder]="'Custom Field 3'"
+                                                                            [name]="'customField3'"
+                                                                            formControlName="customField3">
+                                                                        </input-field>
+                                                                    </div>
+                                                                    <div class="col-12 px-2">
+                                                                        <mat-form-field class="w-100"
+                                                                            appearance="outline">
+                                                                            <mat-label>Note</mat-label>
+                                                                            <textarea matInput placeholder="Enter Note"
+                                                                                name="message2"
+                                                                                formControlName="message2"></textarea>
+                                                                        </mat-form-field>
+                                                                    </div>
+                                                                    <div class="col-12 px-2">
+                                                                        <ng-container *ngIf="!selectedFileName">
+                                                                            <div class="vouchers-attachment mat-form-field-border d-flex align-items-center column-gap1 p-2"
+                                                                                [matTooltip]="'No file chosen'"
+                                                                                matTooltipPosition="right">
+                                                                                <input type="file" class="position-absolute"
+                                                                                    name="invoiceFile" id="invoiceFile"
+                                                                                    (change)="uploadFile()" droppable="true" />
+                                                                                <ng-container *ngIf="isFileUploading">
+                                                                                    <mat-spinner [diameter]="30"></mat-spinner>
+                                                                                </ng-container>
+                                                                                <ng-container *ngIf="!isFileUploading">
+                                                                                    <div class="attachment-add-icon">
+                                                                                        <i class="icon-add"></i>
+                                                                                    </div>
+                                                                                    <span class="attachment-placeholder">Attach File
+                                                                                        to
+                                                                                        voucher</span>
+                                                                                </ng-container>
+                                                                            </div>
+                                                                        </ng-container>
+                                                                        <ng-container *ngIf="!isFileUploading && selectedFileName">
+                                                                            <div
+                                                                                class="vouchers-attachment mat-form-field-border d-flex align-items-center column-gap1 p-2 text-success">
+                                                                                <div class="attachment-add-icon">
+                                                                                    <i class="icon-tick"></i>
+                                                                                </div>
+                                                                                <span class="attachment-placeholder">{{
+                                                                                    selectedFileName
+                                                                                    }}</span>
+                                                                                <button mat-icon-button
+                                                                                    (click)="deleteAttachementConfirmation()"
+                                                                                    class="ml-auto remove-attachment font-16">
+                                                                                    <i class="icon-cross"></i>
+                                                                                </button>
+                                                                            </div>
+                                                                        </ng-container>
                                                                     </div>
                                                                 </div>
-                                                            </div>
-                                                        </div>
-                                                    </mat-card-content>
-                                                </mat-card>
+                                                            </mat-expansion-panel>
+                                                        </mat-accordion>
+                                                    </div>
+                                                </div>
                                             </div>
+                                        </div>
 
-                                            <div class="col-12 mt-3" *ngIf="!invoiceType.isPurchaseOrder">
-                                                <mat-card>
-                                                    <mat-card-content class="py-0" *ngIf="!selectedFileName">
-                                                        <div class="vouchers-attachment d-flex align-items-center column-gap1"
-                                                            [matTooltip]="'No file chosen'" matTooltipPosition="right">
-                                                            <input type="file" class="position-absolute"
-                                                                name="invoiceFile" id="invoiceFile"
-                                                                (change)="uploadFile()" droppable="true" />
-                                                            <ng-container *ngIf="isFileUploading">
-                                                                <mat-spinner [diameter]="30"></mat-spinner>
-                                                            </ng-container>
-                                                            <ng-container *ngIf="!isFileUploading">
-                                                                <div class="attachment-add-icon">
-                                                                    <i class="icon-add"></i>
-                                                                </div>
-                                                                <span class="attachment-placeholder">Attach File to
-                                                                    voucher</span>
-                                                            </ng-container>
-                                                        </div>
-                                                    </mat-card-content>
-                                                    <mat-card-content class="py-0"
-                                                        *ngIf="!isFileUploading && selectedFileName">
-                                                        <div
-                                                            class="vouchers-attachment d-flex align-items-center column-gap1 text-success">
-                                                            <div class="attachment-add-icon">
-                                                                <i class="icon-tick"></i>
-                                                            </div>
-                                                            <span class="attachment-placeholder">{{ selectedFileName
-                                                                }}</span>
-                                                            <button mat-icon-button
-                                                                (click)="deleteAttachementConfirmation()"
-                                                                class="ml-auto remove-attachment font-16">
-                                                                <i class="icon-cross"></i>
-                                                            </button>
-                                                        </div>
-                                                    </mat-card-content>
-                                                </mat-card>
+                                        <div class="col-4 px-0">
+                                            <div class="row text-right row-gap">
+                                                <div class="col-9">
+                                                    Total Amount
+                                                </div>
+                                                <div class="col-3">
+                                                    750.00
+                                                </div>
+                                                <div class="col-9">
+                                                    Discount
+                                                </div>
+                                                <div class="col-3">
+                                                    0.00
+                                                </div>
+                                                <div class="col-9">
+                                                    Taxable Value
+                                                </div>
+                                                <div class="col-3">
+                                                    750.00
+                                                </div>
+                                                <div class="col-9">
+                                                    Tax
+                                                </div>
+                                                <div class="col-3">
+                                                    90.00
+                                                </div>
+                                                <div class="col-9">
+                                                    CESS
+                                                </div>
+                                                <div class="col-3">
+                                                    0.00
+                                                </div>
+                                                <div class="col-9">
+                                                    Total
+                                                </div>
+                                                <div class="col-3">
+                                                    840.00
+                                                </div>
+                                                <div class="col-9">
+                                                    Balance Due
+                                                </div>
+                                                <div class="col-3">
+                                                    0.00
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div class="col-4 px-0">
-                                    <div class="row text-right row-gap">
-                                        <div class="col-9">
-                                            Total Amount
-                                        </div>
-                                        <div class="col-3">
-                                            750.00
-                                        </div>
-                                        <div class="col-9">
-                                            Discount
-                                        </div>
-                                        <div class="col-3">
-                                            0.00
-                                        </div>
-                                        <div class="col-9">
-                                            Taxable Value
-                                        </div>
-                                        <div class="col-3">
-                                            750.00
-                                        </div>
-                                        <div class="col-9">
-                                            Tax
-                                        </div>
-                                        <div class="col-3">
-                                            90.00
-                                        </div>
-                                        <div class="col-9">
-                                            CESS
-                                        </div>
-                                        <div class="col-3">
-                                            0.00
-                                        </div>
-                                        <div class="col-9">
-                                            Total
-                                        </div>
-                                        <div class="col-3">
-                                            840.00
-                                        </div>
-                                        <div class="col-9">
-                                            Balance Due
-                                        </div>
-                                        <div class="col-3">
-                                            0.00
-                                        </div>
-                                    </div>
+                                <div class="vouchers-actions d-flex justify-content-end column-gap1 pd-t2 pd-b2 mt-4">
+                                    <button mat-stroked-button> Clear </button>
+
+                                    <button mat-stroked-button color="primary"> Generate Sales & Update A/c </button>
+                                    <button mat-stroked-button color="primary"> Generate Sales </button>
+
+                                    <button mat-stroked-button color="primary"> Generate Credit Note & Update A/c
+                                    </button>
+                                    <button mat-stroked-button color="primary"> Generate Credit Note </button>
+
+                                    <button mat-stroked-button color="primary"> Save </button>
+                                    <button mat-stroked-button [matMenuTriggerFor]="moreOptions"
+                                        class="vouchers-more-option-btn"> <i class="caret"></i>
+                                    </button>
+                                    <mat-menu #moreOptions="matMenu">
+                                        <button mat-menu-item>Create & Send</button>
+                                        <button mat-menu-item (click)="openPrintPreviewDialog()">Create & Print</button>
+                                    </mat-menu>
                                 </div>
                             </div>
+
                         </div>
-
-                        <div class="vouchers-actions d-flex justify-content-end column-gap1 pd-t2 pd-b2 mt-4">
-                            <button mat-stroked-button> Clear </button>
-
-                            <button mat-stroked-button color="primary"> Generate Sales & Update A/c </button>
-                            <button mat-stroked-button color="primary"> Generate Sales </button>
-
-                            <button mat-stroked-button color="primary"> Generate Credit Note & Update A/c </button>
-                            <button mat-stroked-button color="primary"> Generate Credit Note </button>
-
-                            <button mat-stroked-button color="primary"> Save </button>
-                            <button mat-stroked-button [matMenuTriggerFor]="moreOptions"
-                                class="vouchers-more-option-btn"> <i class="caret"></i>
-                            </button>
-                            <mat-menu #moreOptions="matMenu">
-                                <button mat-menu-item>Create & Send</button>
-                                <button mat-menu-item (click)="openPrintPreviewDialog()">Create & Print</button>
-                            </mat-menu>
-                        </div>
-                    </div>
-
+                    </form>
                 </div>
-            </form>
-        </div>
+
+            </mat-card-content>
+        </mat-card>
     </div>
 </ng-container>
 
 <ng-template #accountAsideMenu>
-    <generic-aside-menu-account
-        (closeAsideEvent)="accountAsideMenuRef.close()" [class]="'in'" [selectedGrpUniqueName]="accountParentGroup"
-        [keyboardShortcut]="{ 'esc': !hasUnsavedChanges }"
+    <generic-aside-menu-account (closeAsideEvent)="accountAsideMenuRef.close()" [class]="'in'"
+        [selectedGrpUniqueName]="accountParentGroup" [keyboardShortcut]="{ 'esc': !hasUnsavedChanges }"
         [selectedAccountUniqueName]="invoiceForm.controls['account'].get('uniqueName')?.value"
         (onShortcutPress)="accountAsideMenuRef.close()" (addEvent)="addNewAccount($event)"
         (updateEvent)="updateAccount($event)">
@@ -882,7 +940,6 @@
 
 <!-- Create Tax Asidepane -->
 <ng-template #createTax>
-    <aside-menu-create-tax-component [class]="'in'" [tax]="selectedTax"
-        [localeData]="localeData" [commonLocaleData]="commonLocaleData"
-        (closeEvent)="taxAsideMenuRef.close()"></aside-menu-create-tax-component>
+    <aside-menu-create-tax-component [class]="'in'" [tax]="selectedTax" [localeData]="localeData"
+        [commonLocaleData]="commonLocaleData" (closeEvent)="taxAsideMenuRef.close()"></aside-menu-create-tax-component>
 </ng-template>
