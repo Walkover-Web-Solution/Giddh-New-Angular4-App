@@ -3431,7 +3431,6 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         if (!this.preventDefaultScrollApiCall &&
             (query || (searchType === SEARCH_TYPE.VENDOR && this.defaultVendorSuggestions && this.defaultVendorSuggestions.length === 0) ||
                 (searchType === SEARCH_TYPE.ITEM && this.defaultItemSuggestions && this.defaultItemSuggestions.length === 0) || successCallback)) {
-            23
             if (searchType === SEARCH_TYPE.VENDOR) {
                 this.searchVendorResultsPaginationData.query = query;
             } else if (searchType === SEARCH_TYPE.ITEM) {
