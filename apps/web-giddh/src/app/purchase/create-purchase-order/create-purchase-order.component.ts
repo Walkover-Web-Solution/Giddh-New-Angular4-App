@@ -19,7 +19,7 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
 import { ToasterService } from '../../services/toaster.service';
 import { OnboardingFormRequest } from '../../models/api-models/Common';
 import { CommonActions } from '../../actions/common.actions';
-import { VAT_SUPPORTED_COUNTRIES, SubVoucher, HIGH_RATE_FIELD_PRECISION, RATE_FIELD_PRECISION, SearchResultText, ENTRY_DESCRIPTION_LENGTH, EMAIL_REGEX_PATTERN, VOUCHERS_PAGINATION_LIMIT } from '../../app.constant';
+import { VAT_SUPPORTED_COUNTRIES, SubVoucher, HIGH_RATE_FIELD_PRECISION, RATE_FIELD_PRECISION, SearchResultText, ENTRY_DESCRIPTION_LENGTH, EMAIL_REGEX_PATTERN, ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT } from '../../app.constant';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { IForceClear, SalesTransactionItemClass, SalesEntryClass, IStockUnit, SalesOtherTaxesModal, SalesOtherTaxesCalculationMethodEnum, VoucherClass, VoucherTypeEnum, SalesAddBulkStockItems, SalesEntryClassMulticurrency, TransactionClassMulticurrency, CodeStockMulticurrency, DiscountMulticurrency, AccountDetailsClass } from '../../models/api-models/Sales';
 import { TaxResponse } from '../../models/api-models/Company';
@@ -336,25 +336,25 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     /** Stores the search results pagination details for vendor */
     public searchVendorResultsPaginationData = {
         page: 0,
-        count: VOUCHERS_PAGINATION_LIMIT,
+        count: ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT,
         query: ''
     };
     /** Stores the search results pagination details for stock or service  */
     public searchItemResultsPaginationData = {
         page: 0,
-        count: VOUCHERS_PAGINATION_LIMIT,
+        count: ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT,
         query: ''
     };
     /** Stores the default search results pagination details for vendor */
     public defaultVendorResultsPaginationData = {
         page: 0,
-        count: VOUCHERS_PAGINATION_LIMIT,
+        count: ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT,
         query: ''
     };
     /** Stores the default search results pagination details for stock or service */
     public defaultItemResultsPaginationData = {
         page: 0,
-        count: VOUCHERS_PAGINATION_LIMIT,
+        count: ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT,
         query: ''
     };
     /** No results found label for dynamic search */
@@ -3439,7 +3439,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             const requestObject = this.getSearchRequestObject(query, page, searchType);
             if (this.isAccountSearchData) {
                 this.searchAccount(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
-                    if (!data?.body?.results?.length || (data?.body?.results?.length && VOUCHERS_PAGINATION_LIMIT !== data?.body?.count)) {
+                    if (!data?.body?.results?.length || (data?.body?.results?.length && ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT !== data?.body?.count)) {
                         this.isAccountSearchData = false;
                     }
                     if (data && data.body && data.body.results) {
@@ -3549,7 +3549,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             q: encodeURIComponent(query),
             page,
             group: encodeURIComponent(group),
-            count: VOUCHERS_PAGINATION_LIMIT
+            count: ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT
         };
         if (withStocks) {
             requestObject['withStocks'] = withStocks;
