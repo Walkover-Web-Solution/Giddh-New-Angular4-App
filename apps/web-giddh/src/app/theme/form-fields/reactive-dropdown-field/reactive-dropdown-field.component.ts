@@ -67,6 +67,8 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     @Input() public closeOnFocusOut: boolean = false;
     /** Show or Hide Label */
     @Input() public showLabel: boolean = true;
+    /** Keyboard command label */
+    @Input() public showKeyboardCommand: string = '';
     /** Emits the scroll to bottom event when pagination is required  */
     @Output() public scrollEnd: EventEmitter<void> = new EventEmitter();
     /** Emits dynamic searched query */

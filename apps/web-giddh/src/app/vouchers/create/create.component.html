@@ -20,7 +20,7 @@
                             <div class="d-flex align-items-center">
                                 <div class="vouchers-form-fields w-100" [keyboardShortcut]="'alt+c'" (onShortcutPress)="toggleAccountAsidePane()">
                                     <reactive-dropdown-field *ngIf="!invoiceType.isCashInvoice" [label]="invoiceType.isPurchaseInvoice || invoiceType.isDebitNote ? localeData?.vendor_name : localeData?.customer_name" [placeholder]="invoiceType.isPurchaseInvoice || invoiceType.isDebitNote ? localeData?.select_vendor : localeData?.select_customer" formControlName="uniqueName" [name]="'account'"
-                                        [options]="voucherAccountResults$ | async" [showCreateNew]="true" [enableDynamicSearch]="true" [isPaginationEnabled]="true" [openDropdown]="openAccountDropdown" [createNewText]="!invoiceType.isPurchaseInvoice && !invoiceType.isDebitNote ? localeData?.add_customer : localeData?.add_vendor" [labelValue]="invoiceForm.controls['account'].get('customerName')?.value" (scrollEnd)="handleSearchAccountScrollEnd()" (selectedOption)="selectAccount($event)"
+                                        [options]="voucherAccountResults$ | async" [showCreateNew]="true" [enableDynamicSearch]="true" [isPaginationEnabled]="true" [openDropdown]="openAccountDropdown" [createNewText]="!invoiceType.isPurchaseInvoice && !invoiceType.isDebitNote ? localeData?.add_customer : localeData?.add_vendor" [labelValue]="invoiceForm.controls['account'].get('customerName')?.value" [showKeyboardCommand]="commonLocaleData?.app_alt_c" (scrollEnd)="handleSearchAccountScrollEnd()" (selectedOption)="selectAccount($event)"
                                         (dynamicSearchedQuery)="searchAccount($event, 1)" (onClear)="selectAccount($event, true)" (createOption)="toggleAccountAsidePane()">
                                     </reactive-dropdown-field>
                                     <input-field *ngIf="invoiceType.isCashInvoice" [name]="'account'" [label]="localeData?.customer_name" [placeholder]="localeData?.enter_customer_name" [type]="'text'" [autoFocus]="true" formControlName="customerName"></input-field>
@@ -471,10 +471,10 @@
 
                             <!-- Product/Service Description -->
                             <div class="body-item text-left">
-                                <select-field [cssClass]="'form-control'" [name]="'account'"
-                                    [placeholder]="'Select account'" [options]="dummyOptions" [defaultValue]="''"
+                                <reactive-dropdown-field [cssClass]="'form-control'" [createNewText]="'Create New'" [showLabel]="false" [name]="'account'"
+                                    [placeholder]="'Select account'" [options]="dummyOptions"
                                     [enableDynamicSearch]="true" (dynamicSearchedQuery)="searchStock($event, 1)">
-                                </select-field>
+                                </reactive-dropdown-field>
 
                                 <textarea rows="2" matInput class="form-control mt-2"
                                     placeholder="Add Description"></textarea>
