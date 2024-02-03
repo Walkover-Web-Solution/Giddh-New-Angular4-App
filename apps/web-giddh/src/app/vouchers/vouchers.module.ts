@@ -58,6 +58,7 @@ import { DesignFilterComponent } from "./template/design-filter/design-filter.co
 import { ContentFilterComponent } from "./template/content-filter/content-filter.component";
 import { CreateDiscountModule } from "../theme/create-discount/create-discount.module";
 import { AsideMenuCreateTaxModule } from "../shared/aside-menu-create-tax/aside-menu-create-tax.module";
+import { ConvertBillDialogComponent } from "./convert-bill-dialog/convert-bill-dialog.component";
 
 @NgModule({
     declarations: [
@@ -78,7 +79,8 @@ import { AsideMenuCreateTaxModule } from "../shared/aside-menu-create-tax/aside-
         PrintVoucherComponent,
         TemplateEditFilterComponent,
         DesignFilterComponent,
-        ContentFilterComponent
+        ContentFilterComponent,
+        ConvertBillDialogComponent
     ],
     imports: [
         CommonModule,

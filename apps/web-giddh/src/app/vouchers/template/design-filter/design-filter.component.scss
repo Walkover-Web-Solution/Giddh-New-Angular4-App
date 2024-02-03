@@ -1,3 +1,6 @@
+.design-field {
+    max-width: 300px;
+}
 .template-design-wrap {
     .template-view-design {
         width: 190px;
@@ -26,11 +29,13 @@
     }
     // colour change
     .colour-wrap {
-        .colour-box {
+        .colour-box-wrap {
             width: 100px;
-            height: 100px;
-            background-color: red;
-            border-radius: 50px;
+            .colour-box {
+                height: 100px;
+                background-color: red;
+                border-radius: 50px;
+            }
         }
         .colour-picker {
             ul {
@@ -41,6 +46,11 @@
                     cursor: pointer;
                 }
             }
+        }
+    }
+    .print-field {
+        input-field {
+            width: 20%;
         }
     }
 }

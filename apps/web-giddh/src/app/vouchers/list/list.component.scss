@@ -25,6 +25,30 @@
             }
         }
     }
+    table {
+        tr {
+            td {
+                .action-btn {
+                    visibility: hidden;
+                }
+            }
+
+            &:hover {
+                td {
+                    .action-btn {
+                        visibility: visible;
+                    }
+                }
+            }
+        }
+    }
+    // template field
+    .template-design {
+        max-width: 258px;
+    }
+    .invoice-video {
+        display: none;
+    }
 }
 
 table {
@@ -82,16 +106,30 @@ table {
         background: var(--color-dark-fog);
         border-radius: 50px;
         color: var(--color-nero);
+
         &.active {
-            background-color: var(--color-quaternary-button-background)!important;
+            background-color: var(--color-quaternary-button-background) !important;
             color: var(--color-white);
         }
     }
+
     .template-box-gap {
         row-gap: 20px;
     }
+
     .template-content {
         width: 200px;
+    }
+}
+
+@media screen and (max-width: 1199px) {
+    .vouchers-wrapper {
+        .invoice-video {
+            display: block;
+        }
+    }
+    .video-link {
+        display: none;
     }
 }
 

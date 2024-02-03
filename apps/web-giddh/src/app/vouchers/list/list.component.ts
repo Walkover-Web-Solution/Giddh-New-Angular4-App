@@ -95,9 +95,43 @@ export interface PeriodicElementCredit {
     einvoicestatus: string;
     status: string;
 }
-// invoice-table
+// credit-table
 const CREDIT_DATA: PeriodicElementCredit[] = [
     { position: 1, credit: 'Hydrogen', customer: '1.0079', date: 'H', linked: 'H', amount: '', einvoicestatus:'', status:'' }
+];
+
+// purchase-table
+export interface PeriodicElementPurchase {
+    date: string;
+    position: number;
+    purchase: string;
+    vendorname: string;
+    amount: string;
+    delivery: string;
+    status: string;
+}
+// purchase-table
+const PURCHASE_DATA: PeriodicElementPurchase[] = [
+    { position: 1, date: '11-01-2024', purchase: '2116', vendorname: '14 April', amount: 'H', delivery: 'Delayed By 8 Days', status:''},
+    { position: 2, date: '11-01-2024', purchase: '2116', vendorname: '14 April', amount: 'H', delivery: 'Delayed By 8 Days', status:''},
+    { position: 3, date: '11-01-2024', purchase: '2116', vendorname: '14 April', amount: 'H', delivery: 'Delayed By 8 Days', status:''},
+    { position: 4, date: '11-01-2024', purchase: '2116', vendorname: '14 April', amount: 'H', delivery: 'Delayed By 8 Days', status:''}
+];
+
+// bill-table
+export interface PeriodicElementBill {
+    bill: string;
+    position: number;
+    vendor: string;
+    billdate: string;
+    order: string;
+    amount: string;
+    duedate: string;
+    status: string;
+}
+// bill-table
+const BILL_DATA: PeriodicElementBill[] = [
+    { position: 1, bill: 'Hydrogen', vendor: 'Ashish RANJAN', billdate: 'H', order: 'H', amount: '', duedate:'', status:'' }
 ];
 
 @Component({
@@ -128,6 +162,12 @@ export class VoucherListComponent implements OnInit, OnDestroy, AfterViewInit {
     // credit-table
     displayedColumnsCredit: string[] = ['position', 'credit', 'customer', 'date', 'linked', 'amount', 'einvoicestatus', 'status'];
     dataSourceCredit = new MatTableDataSource<PeriodicElementCredit>(CREDIT_DATA);
+    // purchase-table
+    displayedColumnPurchase: string[] = ['position', 'date', 'purchase', 'vendorname', 'amount', 'delivery', 'status'];
+    dataSourcePurchase = new MatTableDataSource<PeriodicElementPurchase>(PURCHASE_DATA);
+    // bill-table
+    displayedColumnsBill: string[] = ['position', 'bill', 'vendor', 'billdate', 'order', 'amount', 'duedate', 'status'];
+    dataSourceBill = new MatTableDataSource<PeriodicElementBill>(BILL_DATA);
 
     // advance search dialog
     @ViewChild('advancesearch', { static: true }) public advancesearch: TemplateRef<any>;
@@ -141,6 +181,8 @@ export class VoucherListComponent implements OnInit, OnDestroy, AfterViewInit {
     @ViewChild('bulkUpdate', { static: true }) public bulkUpdate: TemplateRef<any>;
     // table paginator
     @ViewChild(MatPaginator) paginator: MatPaginator;
+    // convert bill dialog
+    @ViewChild('convertBill', { static: true }) public convertBill: TemplateRef<any>;
     // table sorting
     @ViewChild(MatSort) sort: MatSort;
     ngAfterViewInit() {
@@ -229,5 +271,12 @@ export class VoucherListComponent implements OnInit, OnDestroy, AfterViewInit {
         if (fieldName === "name") {
             this.showNameSearch = true;
         }
+    }
+
+    // convert bill dialog
+    public ConvertBillDialog():void {
+        this.dialog.open(this.convertBill, {
+            width: '600px'
+        })
     }
 }

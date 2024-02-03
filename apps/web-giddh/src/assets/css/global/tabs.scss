@@ -9,10 +9,17 @@
             .mdc-tab__text-label {
                 font-size: var(--font-size-16);
                 color: var(--color-tab-primary-inactive);
+                // for voucher
+                .voucher-svg {
+                    fill: var(--color-tab-primary-inactive);
+                }
             }
             &.mdc-tab--active {
                 .mdc-tab__text-label{
                     color: var(--color-giddh-blue);
+                    .voucher-svg {
+                        fill: var(--color-giddh-blue);
+                    }
                 }
             }
         }
