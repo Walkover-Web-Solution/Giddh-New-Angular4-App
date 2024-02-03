@@ -19,7 +19,7 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
 import { ToasterService } from '../../services/toaster.service';
 import { OnboardingFormRequest } from '../../models/api-models/Common';
 import { CommonActions } from '../../actions/common.actions';
-import { VAT_SUPPORTED_COUNTRIES, SubVoucher, HIGH_RATE_FIELD_PRECISION, RATE_FIELD_PRECISION, SearchResultText, ENTRY_DESCRIPTION_LENGTH, EMAIL_REGEX_PATTERN } from '../../app.constant';
+import { VAT_SUPPORTED_COUNTRIES, SubVoucher, HIGH_RATE_FIELD_PRECISION, RATE_FIELD_PRECISION, SearchResultText, ENTRY_DESCRIPTION_LENGTH, EMAIL_REGEX_PATTERN, VOUCHERS_PAGINATION_LIMIT } from '../../app.constant';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { IForceClear, SalesTransactionItemClass, SalesEntryClass, IStockUnit, SalesOtherTaxesModal, SalesOtherTaxesCalculationMethodEnum, VoucherClass, VoucherTypeEnum, SalesAddBulkStockItems, SalesEntryClassMulticurrency, TransactionClassMulticurrency, CodeStockMulticurrency, DiscountMulticurrency, AccountDetailsClass } from '../../models/api-models/Sales';
 import { TaxResponse } from '../../models/api-models/Company';
@@ -336,25 +336,25 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     /** Stores the search results pagination details for vendor */
     public searchVendorResultsPaginationData = {
         page: 0,
-        totalPages: 0,
+        count: VOUCHERS_PAGINATION_LIMIT,
         query: ''
     };
     /** Stores the search results pagination details for stock or service  */
     public searchItemResultsPaginationData = {
         page: 0,
-        totalPages: 0,
+        count: VOUCHERS_PAGINATION_LIMIT,
         query: ''
     };
     /** Stores the default search results pagination details for vendor */
     public defaultVendorResultsPaginationData = {
         page: 0,
-        totalPages: 0,
+        count: VOUCHERS_PAGINATION_LIMIT,
         query: ''
     };
     /** Stores the default search results pagination details for stock or service */
     public defaultItemResultsPaginationData = {
         page: 0,
-        totalPages: 0,
+        count: VOUCHERS_PAGINATION_LIMIT,
         query: ''
     };
     /** No results found label for dynamic search */
@@ -420,6 +420,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     public isBarcodeMachineTyping: boolean = false;
     /** account's applied discounts list */
     public accountAssignedApplicableDiscounts: any[] = [];
+    /** False if there is no data in account search */
+    public isAccountSearchData: boolean = true;
 
     constructor(
         private store: Store<AppState>,
@@ -3435,39 +3437,38 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                 this.searchItemResultsPaginationData.query = query;
             }
             const requestObject = this.getSearchRequestObject(query, page, searchType);
-            this.searchAccount(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
-                if (data && data.body && data.body.results) {
-                    this.prepareSearchLists(data.body.results, page, searchType);
-                    this.noResultsFoundLabel = SearchResultText.NotFound;
-                    if (searchType === SEARCH_TYPE.VENDOR) {
-                        this.searchVendorResultsPaginationData.page = data.body.page;
-                        this.searchVendorResultsPaginationData.totalPages = data.body.totalPages;
-                    } else if (searchType === SEARCH_TYPE.ITEM) {
-                        this.searchItemResultsPaginationData.page = data.body.page;
-                        this.searchItemResultsPaginationData.totalPages = data.body.totalPages;
+            if (this.isAccountSearchData) {
+                this.searchAccount(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+                    if (!data?.body?.results?.length || (data?.body?.results?.length && VOUCHERS_PAGINATION_LIMIT !== data?.body?.count)) {
+                        this.isAccountSearchData = false;
                     }
-                    if (successCallback) {
-                        successCallback(data.body.results);
-                    } else {
+                    if (data && data.body && data.body.results) {
+                        this.prepareSearchLists(data.body.results, page, searchType);
+                        this.noResultsFoundLabel = SearchResultText.NotFound;
                         if (searchType === SEARCH_TYPE.VENDOR) {
-                            this.defaultVendorResultsPaginationData.page = data.body.page;
-                            this.defaultVendorResultsPaginationData.totalPages = data.body.totalPages;
+                            this.searchVendorResultsPaginationData.page = data.body.page;
                         } else if (searchType === SEARCH_TYPE.ITEM) {
-                            this.defaultItemResultsPaginationData.page = data.body.page;
-                            this.defaultItemResultsPaginationData.totalPages = data.body.totalPages;
+                            this.searchItemResultsPaginationData.page = data.body.page;
+                        }
+                        if (successCallback) {
+                            successCallback(data.body.results);
+                        } else {
+                            if (searchType === SEARCH_TYPE.VENDOR) {
+                                this.defaultVendorResultsPaginationData.page = data.body.page;
+                            } else if (searchType === SEARCH_TYPE.ITEM) {
+                                this.defaultItemResultsPaginationData.page = data.body.page;
+                            }
                         }
                     }
-                }
-            });
+                });
+            }
         } else {
             if (searchType === SEARCH_TYPE.VENDOR) {
                 this.searchResults = [...this.defaultVendorSuggestions];
                 this.searchVendorResultsPaginationData.page = this.defaultVendorResultsPaginationData.page;
-                this.searchVendorResultsPaginationData.totalPages = this.defaultVendorResultsPaginationData.totalPages;
             } else if (searchType === SEARCH_TYPE.ITEM) {
                 this.searchResults = [...this.defaultItemSuggestions];
                 this.searchItemResultsPaginationData.page = this.defaultItemResultsPaginationData.page;
-                this.searchItemResultsPaginationData.totalPages = this.defaultItemResultsPaginationData.totalPages;
             }
             this.assignSearchResultToList(searchType);
             this.preventDefaultScrollApiCall = true;
@@ -3489,8 +3490,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         const page = searchType === SEARCH_TYPE.VENDOR ? this.searchVendorResultsPaginationData.page :
             searchType === SEARCH_TYPE.ITEM ? this.searchItemResultsPaginationData.page : 1;
         if (
-            (searchType === SEARCH_TYPE.VENDOR && this.searchVendorResultsPaginationData.page < this.searchVendorResultsPaginationData.totalPages) ||
-            (searchType === SEARCH_TYPE.ITEM && this.searchItemResultsPaginationData.page < this.searchItemResultsPaginationData.totalPages)) {
+            (searchType === SEARCH_TYPE.VENDOR) ||
+            (searchType === SEARCH_TYPE.ITEM)) {
             this.onSearchQueryChanged(
                 query,
                 page + 1,
@@ -3507,13 +3508,11 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                         if (searchType === SEARCH_TYPE.VENDOR) {
                             this.defaultVendorSuggestions = this.defaultVendorSuggestions.concat(...results);
                             this.defaultVendorResultsPaginationData.page = this.searchVendorResultsPaginationData.page;
-                            this.defaultVendorResultsPaginationData.totalPages = this.searchVendorResultsPaginationData.totalPages;
                             this.searchResults = [...this.defaultVendorSuggestions];
                             this.assignSearchResultToList(SEARCH_TYPE.VENDOR);
                         } else if (searchType === SEARCH_TYPE.ITEM) {
                             this.defaultItemSuggestions = this.defaultItemSuggestions.concat(...results);
                             this.defaultItemResultsPaginationData.page = this.searchItemResultsPaginationData.page;
-                            this.defaultItemResultsPaginationData.totalPages = this.searchItemResultsPaginationData.totalPages;
                             this.searchResults = [...this.defaultItemSuggestions];
                             this.assignSearchResultToList(SEARCH_TYPE.ITEM);
                         }
@@ -3549,7 +3548,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         const requestObject = {
             q: encodeURIComponent(query),
             page,
-            group: encodeURIComponent(group)
+            group: encodeURIComponent(group),
+            count: VOUCHERS_PAGINATION_LIMIT
         };
         if (withStocks) {
             requestObject['withStocks'] = withStocks;

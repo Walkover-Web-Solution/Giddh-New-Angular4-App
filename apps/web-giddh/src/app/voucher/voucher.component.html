@@ -162,7 +162,7 @@
                                                         [defaultValue]="invFormData.voucherDetails.customerName"
                                                         [createNewText]="customerNotFoundText"
                                                         [enableDynamicSearch]="true"
-                                                        (dynamicSearchedQuery)="
+                                                        (dynamicSearchedQuery)="isAccountSearchData = true ;
                                                             onSearchQueryChanged($event, 1, 'customer')
                                                         "
                                                         [allowValueReset]="true"
@@ -2643,7 +2643,7 @@
                                                             : transaction.accountName
                                                     "
                                                     [enableDynamicSearch]="true"
-                                                    (dynamicSearchedQuery)="onSearchQueryChanged($event, 1, 'item')"
+                                                    (dynamicSearchedQuery)="isAccountSearchData = true ; onSearchQueryChanged($event, 1, 'item')"
                                                     (onClear)="onClearSalesAccount(transaction)"
                                                     [hasMoreValue]="true"
                                                     [readonly]="isEinvoiceGenerated"
