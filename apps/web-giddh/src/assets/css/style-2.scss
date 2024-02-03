@@ -14587,3 +14587,13 @@ aside-menu-product-service {
 .width-60{
     width: 60px !important;
 }
+
+// This Class will use globllay for border like mat input field
+.mat-form-field-border{
+    border-radius: 4px;
+    border: 1px solid var(--color-fields-border);
+
+    &:hover{
+        border-color: var(--color-field-hover);
+    }
+}
