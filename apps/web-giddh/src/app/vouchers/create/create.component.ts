@@ -207,8 +207,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
     public hasUnsavedChanges: boolean = false;
     /** Holds tax types */
     public taxTypes: any = TaxType;
+    /** Create tax dialog ref  */
     public taxAsideMenuRef: MatDialogRef<any>;
-    public selectedTax: TaxResponse = null;
     /** Stores the current voucher form detail */
     public currentVoucherFormDetails: VoucherForm;
     /** RCM modal configuration */
@@ -1125,8 +1125,13 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
         this.updateAccountDataInForm(response);
     }
 
-    public toggleCreateDiscountAsidePane(): void {
-        this.dialog.open(this.createTax, {
+    /**
+     * Shows create new tax dialog
+     *
+     * @memberof VoucherCreateComponent
+     */
+    public showCreateTaxDialog(): void {
+        this.taxAsideMenuRef = this.dialog.open(this.createTax, {
             position: {
                 right: '0',
                 top: '0'
@@ -1134,6 +1139,23 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Shows create new discount dialog
+     *
+     * @memberof VoucherCreateComponent
+     */
+    public showCreateDiscountDialog(): void {
+        let discountDialogRef = this.dialog.open(CreateDiscountComponent, {
+            position: {
+                right: '0',
+                top: '0'
+            }
+        });
+
+        discountDialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+
+        });
+    }
 
     /**
      * Copies billing details in shipping details
