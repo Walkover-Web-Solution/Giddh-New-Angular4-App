@@ -13,7 +13,7 @@ import { CompanyActions } from "../../../actions/company.actions";
 import { InvoiceActions } from "../../../actions/invoice/invoice.actions";
 import { InvoiceReceiptActions } from "../../../actions/invoice/receipt/receipt.actions";
 import { SalesActions } from "../../../actions/sales/sales.action";
-import { VOUCHERS_LEDGER_PAGINATION_LIMIT, SearchResultText, SubVoucher } from "../../../app.constant";
+import { ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT, SearchResultText, SubVoucher } from "../../../app.constant";
 import { cloneDeep, find, isEqual, orderBy, uniqBy } from "../../../lodash-optimized";
 import { AccountResponseV2, AddAccountRequest, UpdateAccountRequest } from "../../../models/api-models/Account";
 import { OnboardingFormRequest } from "../../../models/api-models/Common";
@@ -68,13 +68,13 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
     /** Stores the search results pagination details for customer */
     public searchCustomerResultsPaginationData = {
         page: 0,
-        count: VOUCHERS_LEDGER_PAGINATION_LIMIT,
+        count: ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT,
         query: ''
     };
     /** Stores the default search results pagination details for customer */
     public defaultCustomerResultsPaginationData = {
         page: 0,
-        count: VOUCHERS_LEDGER_PAGINATION_LIMIT,
+        count: ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT,
         query: ''
     };
     /** True, if API call should be prevented on default scroll caused by scroll in list */
@@ -578,7 +578,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
             const requestObject = this.getSearchRequestObject(query, page);
             if (this.isAccountSearchData) {
                 this.searchAccount(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
-                    if (!data?.body?.results?.length || (data?.body?.results?.length && VOUCHERS_LEDGER_PAGINATION_LIMIT !== data?.body?.count)) {
+                    if (!data?.body?.results?.length || (data?.body?.results?.length && ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT !== data?.body?.count)) {
                         this.isAccountSearchData = false;
                     }
                     if (data && data.body && data.body.results) {
@@ -707,7 +707,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
             this.searchResults = [...this.defaultCustomerSuggestions];
             this.searchCustomerResultsPaginationData = {
                 page: 0,
-                count: VOUCHERS_LEDGER_PAGINATION_LIMIT,
+                count: ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT,
                 query: ''
             };
             this.noResultsFoundLabel = SearchResultText.NotFound;
@@ -716,12 +716,12 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
             this.defaultCustomerSuggestions = [];
             this.searchCustomerResultsPaginationData = {
                 page: 0,
-                count: VOUCHERS_LEDGER_PAGINATION_LIMIT,
+                count: ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT,
                 query: ''
             };
             this.defaultCustomerResultsPaginationData = {
                 page: 0,
-                count: VOUCHERS_LEDGER_PAGINATION_LIMIT,
+                count: ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT,
                 query: ''
             };
             this.noResultsFoundLabel = SearchResultText.NewSearch;
