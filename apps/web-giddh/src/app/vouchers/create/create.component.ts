@@ -868,8 +868,20 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
      */
     private initVoucherForm(): void {
         this.invoiceForm = this.formBuilder.group({
-            account: this.getAccountFormGroup(),
-            company: this.getCompanyFormGroup(),
+            account: this.formBuilder.group({
+                customerName: [''],
+                uniqueName: ['', Validators.required],
+                attentionTo: [''],
+                contactNumber: [''],
+                mobileNumber: [''],
+                email: [''],
+                billingAddress: this.getAddressFormGroup(),
+                shippingAddress: this.getAddressFormGroup()
+            }),
+            company: this.formBuilder.group({
+                billingAddress: this.getAddressFormGroup(),
+                shippingAddress: this.getAddressFormGroup()
+            }),
             date: ['', Validators.required],
             dueDate: ['', Validators.required],
             exchangeRate: [1, Validators.required],
@@ -878,51 +890,34 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
             type: ['', Validators.required],
             updateAccountDetails: [false],
             subVoucher: [''],
-            deposit: this.getDepositFormGroup(),
-            warehouse: this.getWarehouseFormGroup(),
-            templateDetails: this.formBuilder.group({
-                other: this.getTemplateDetailsFormGroup()
+            deposit: this.formBuilder.group({
+                accountUniqueName: [''],
+                amountForCompany: [''],
+                type: ['DEBIT']
             }),
-            entries: this.getEntriesFormGroup(),
+            warehouse: this.formBuilder.group({
+                name: [''],
+                uniqueName: ['']
+            }),
+            templateDetails: this.formBuilder.group({
+                other: this.formBuilder.group({
+                    customField1: [''],
+                    customField2: [''],
+                    customField3: [''],
+                    message2: [''],
+                    shippedVia: [''],
+                    shippingDate: [''],
+                    trackingNumber: ['']
+                })
+            }),
+            entries: this.formBuilder.array([this.getEntriesFormGroup()]),
             uniqueName: [''],
             isRcmEntry: [false],
             touristSchemeApplicable: [false],
             passportNumber: ['']
         });
-    }
 
-    /**
-     * Returns account form group
-     *
-     * @private
-     * @return {*}  {UntypedFormGroup}
-     * @memberof VoucherCreateComponent
-     */
-    private getAccountFormGroup(): UntypedFormGroup {
-        return this.formBuilder.group({
-            customerName: [''],
-            uniqueName: ['', Validators.required],
-            attentionTo: [''],
-            contactNumber: [''],
-            mobileNumber: [''],
-            email: [''],
-            billingAddress: this.getAddressFormGroup(),
-            shippingAddress: this.getAddressFormGroup()
-        });
-    }
-
-    /**
-     * Returns company form group
-     *
-     * @private
-     * @return {*}  {UntypedFormGroup}
-     * @memberof VoucherCreateComponent
-     */
-    private getCompanyFormGroup(): UntypedFormGroup {
-        return this.formBuilder.group({
-            billingAddress: this.getAddressFormGroup(),
-            shippingAddress: this.getAddressFormGroup()
-        });
+        console.log(this.invoiceForm);
     }
 
     /**
@@ -946,54 +941,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Returns deposit form group
-     *
-     * @private
-     * @return {*}  {UntypedFormGroup}
-     * @memberof VoucherCreateComponent
-     */
-    private getDepositFormGroup(): UntypedFormGroup {
-        return this.formBuilder.group({
-            accountUniqueName: [''],
-            amountForCompany: [''],
-            type: ['DEBIT']
-        });
-    }
-
-    /**
-     * Returns warehouse form group
-     *
-     * @private
-     * @return {*}  {UntypedFormGroup}
-     * @memberof VoucherCreateComponent
-     */
-    private getWarehouseFormGroup(): UntypedFormGroup {
-        return this.formBuilder.group({
-            name: [''],
-            uniqueName: ['']
-        });
-    }
-
-    /**
-     * Returns template details form group
-     *
-     * @private
-     * @return {*}  {UntypedFormGroup}
-     * @memberof VoucherCreateComponent
-     */
-    private getTemplateDetailsFormGroup(): UntypedFormGroup {
-        return this.formBuilder.group({
-            customField1: [''],
-            customField2: [''],
-            customField3: [''],
-            message2: [''],
-            shippedVia: [''],
-            shippingDate: [''],
-            trackingNumber: ['']
-        });
-    }
-
-    /**
      * Returns entries form group
      *
      * @private
@@ -1005,9 +952,72 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
             date: [''],
             voucherType: [''],
             uniqueName: [''],
-            discounts: this.formBuilder.array([]),
-            taxes: this.formBuilder.array([]),
-            transitions: this.formBuilder.array([])
+            hsnNumber: [''],
+            discounts: this.formBuilder.array([
+                this.getTransactionDiscountFormGroup()
+            ]),
+            taxes: this.formBuilder.array([
+                this.getTransactionTaxFormGroup()
+            ]),
+            transactions: this.formBuilder.array([
+                this.formBuilder.group({
+                    account: this.formBuilder.group({
+                        name: [''],
+                        uniqueName: ['']
+                    }),
+                    amount: this.formBuilder.group({
+                        amountForAccount: [''],
+                        type: ['DEBIT']
+                    }),
+                    stock: this.formBuilder.group({
+                        name: [''],
+                        quantity: [1],
+                        rate: this.formBuilder.group({
+                            rateForAccount: [1]
+                        }),
+                        stockUnit: this.formBuilder.group({
+                            code: [''],
+                            uniqueName: ['']
+                        }),
+                        variant: this.formBuilder.group({
+                            name: [''],
+                            uniqueName: ['']
+                        }),
+                        uniqueName: ['']
+                    })
+                })
+            ])
+        });
+    }
+
+    /**
+     * Returns address form group
+     *
+     * @private
+     * @return {*}  {UntypedFormGroup}
+     * @memberof VoucherCreateComponent
+     */
+    private getTransactionDiscountFormGroup(): UntypedFormGroup {
+        return this.formBuilder.group({
+            amount: this.formBuilder.group({
+                amountForAccount: [''],
+                type: ['DEBIT']
+            }),
+            calculationMethod: ['FIX_AMOUNT'],
+            discountValue: [''],
+            name: [''],
+            particular: [''],
+            uniqueName: ['']
+        });
+    }
+
+
+    private getTransactionTaxFormGroup(): UntypedFormGroup {
+        return this.formBuilder.group({
+            accountName: [''],
+            accountUniqueName: [''],
+            calculationMethod: [''],
+            uniqueName: ['']
         });
     }
 
@@ -1201,7 +1211,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
         } else {
             isChecked = !event?._checked;
         }
-        
+
         this.rcmConfiguration = this.generalService.getRcmConfiguration(isChecked, this.commonLocaleData);
         let dialogRef = this.dialog.open(NewConfirmationModalComponent, {
             width: '630px',
