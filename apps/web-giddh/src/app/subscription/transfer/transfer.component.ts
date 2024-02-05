@@ -38,9 +38,4 @@ export class TransferComponent implements OnInit {
 
     }
 
-    public onCancel(): void {
-        this.dialogRef.close();
-        this.transferForm.reset();
-    }
-
 }

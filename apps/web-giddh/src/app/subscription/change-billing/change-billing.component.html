@@ -5,116 +5,108 @@
     (commonLocaleData)="commonLocaleData = $event"
 > -->
 <hamburger-menu></hamburger-menu>
-<div id="main" class="welcome-outer">
-    <div class="main-heading-billing">
-        <div class="row display-line">
-            <div class="col-sm-1">
-                <div class="back-btnn">
-                    <button mat-stroked-button class="back-button">
-                        <i class="icon-left back-left"></i>
-                        Back
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
+<div id="main" class="welcome-outer pd-15">
+    <button mat-stroked-button class="mb-3">
+        <i class="icon-left back-left"></i>
+        Back
+    </button>
     <div class="welcome-msg">
-        <div class="row display-line">
-            <div class="col-sm-6 user-main">
-                <div class="user-details">
-                    <p class="user-title">Hello Dilpreet Sing Dang !</p>
-                </div>
-            </div>
-        </div>
+        <p class="user-title font-16 my-3">Hello Dilpreet Sing Dang !</p>
     </div>
     <div class="billing-details">
-        <div class="col-md-2 billing-name-content">
-            <h3 class="billing-name">Billing Detais</h3>
-        </div>
+        <h3 class="billing-name mb-3 light-gray my-3">Billing Details</h3>
         <div class="row display-line">
             <div class="col-md-3 left-side">
-                <div class="billing-wrapper">
-                    <form [formGroup]="changeBillingForm">
-                        <div class="form-group">
-                            <input-field
-                                [type]="'text'"
-                                [name]="'billingName'"
-                                [label]="'Billing Name'"
-                                formControlName="billingName"
+                <form [formGroup]="changeBillingForm">
+                    <div class="form-group">
+                        <input-field
+                            [type]="'text'"
+                            [name]="'billingName'"
+                            [label]="'Billing Name'"
+                            [placeholder]="'Billing Name'"
+                        >
+                        </input-field>
+                    </div>
+                    <div class="form-group">
+                        <input-field
+                            [type]="'text'"
+                            [name]="'companyName'"
+                            [label]="'Company Name'"
+                            formControlName="companyName"
+                            [placeholder]="'Company Name'"
+                        >
+                        </input-field>
+                    </div>
+                    <div class="form-group">
+                        <input-field
+                            [type]="'text'"
+                            [name]="'emailId'"
+                            [label]="'Email Id'"
+                            formControlName="emailId"
+                            [placeholder]="'Email Id'"
+                        >
+                        </input-field>
+                    </div>
+                    <div class="form-group">
+                        <input-field
+                            [type]="'number'"
+                            [name]="'pincode'"
+                            [label]="'Pincode'"
+                            formControlName="pincode"
+                            [placeholder]="'Pincode'"
+                        >
+                        </input-field>
+                    </div>
+                    <div class="form-group">
+                        <input-field
+                            [type]="'number'"
+                            [name]="'mobile'"
+                            [label]="'Mobile No'"
+                            formControlName="mobile"
+                            [placeholder]="'Enter Mobile No'"
+                        >
+                        </input-field>
+                    </div>
+                    <div class="form-group">
+                        <input-field
+                            [type]="'text'"
+                            [name]="'gstin'"
+                            [label]="'GST/TRN No'"
+                            formControlName="gstin"
+                            [placeholder]="'GST/TRN No'"
+                        >
+                        </input-field>
+                    </div>
+                    <div class="form-group">
+                        <div class="width-100">
+                            <dropdown-field
+                                [name]="'county'"
+                                [label]="'County' + '*'"
+                                [placeholder]="'Select County'"
+                                class="mb-3 d-block"
                             >
-                            </input-field>
-                        </div>
-                        <div class="form-group">
-                            <input-field
-                                [type]="'text'"
-                                [name]="'companyName'"
-                                [label]="'Company Name'"
-                                formControlName="companyName"
+                            </dropdown-field>
+                            <dropdown-field 
+                                [name]="'state'" 
+                                [label]="'State' + '*'" 
+                                [placeholder]="'Select State'"
                             >
-                            </input-field>
+                            </dropdown-field>
                         </div>
-                        <div class="form-group">
-                            <input-field
-                                [type]="'text'"
-                                [name]="'emailId'"
-                                [label]="'Email Id'"
-                                formControlName="emailId"
-                            >
-                            </input-field>
+                    </div>
+                    <div class="form-group">
+                        <mat-form-field appearance="outline" class="w-100">
+                            <mat-label>Address</mat-label>
+                            <textarea matInput placeholder="Enter Address..."></textarea>
+                        </mat-form-field>
+                    </div>
+                    <div class="form-group">
+                        <div class="pt-2 d-flex column-gap15">
+                            <button mat-stroked-button color="primary">Submit</button>
+                            <button mat-stroked-button>Cancel</button>
                         </div>
-                        <div class="form-group">
-                            <input-field
-                                [type]="'number'"
-                                [name]="'pincode'"
-                                [label]="'Pincode'"
-                                formControlName="pincode"
-                            >
-                            </input-field>
-                        </div>
-                        <div class="form-group">
-                            <input-field
-                                [type]="'number'"
-                                [name]="'mobile'"
-                                [label]="'Mobile No'"
-                                formControlName="mobile"
-                            >
-                            </input-field>
-                        </div>
-                        <div class="form-group">
-                            <input-field
-                                [type]="'text'"
-                                [name]="'gstin'"
-                                [label]="'GST/TRN No'"
-                                formControlName="gstin"
-                            >
-                            </input-field>
-                        </div>
-                        <div class="form-group">
-                            <div class="mat-field-select width-100 only-bottom-border mat-input">
-                                <dropdown-field
-                                    [name]="'county'"
-                                    [label]="'County' + '*'"
-                                    [placeholder]="'Select County'"
-                                >
-                                </dropdown-field>
-                                <dropdown-field [name]="'state'" [label]="'State' + '*'" [placeholder]="'Select State'">
-                                </dropdown-field>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <mat-form-field appearance="outline" class="w-100">
-                                <mat-label>Address</mat-label>
-                                <textarea matInput placeholder="Enter Address..."></textarea>
-                            </mat-form-field>
-                        </div>
-                        <div class="form-group">
-                            <div class="pt-2 d-flex column-gap15">
-                                <button mat-stroked-button color="primary">Submit</button>
-                                <button mat-stroked-button>Cancel</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

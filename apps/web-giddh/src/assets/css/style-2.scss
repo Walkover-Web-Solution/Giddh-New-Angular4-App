@@ -3444,6 +3444,10 @@ input[type="checkbox"]:checked:after {
     font-size: 22px;
 }
 
+.font-20 {
+    font-size: var(--font-size-20) !important;
+}
+
 .font-24 {
     font-size: var(--font-size-24) !important;
 }
@@ -14563,4 +14567,7 @@ aside-menu-product-service {
             text-decoration: underline;
         }
     }
+}
+.strong {
+    font-weight: bold;
 }

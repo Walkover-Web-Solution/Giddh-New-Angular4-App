@@ -1,0 +1,99 @@
+<ng-container>
+  <div class="buy-plan-wrapper pd-15 w-100">
+    <mat-stepper linear #stepper>
+      <mat-step [stepControl]="firstStepForm">
+        <form name="firstStepForm" autocomplete="off">
+          <div class="plan-summary d-flex">
+            <div class="plan-width">
+              <ng-template matStepLabel>Plans</ng-template>
+              <h4 class="font-16 mb-3 strong">Choose Your Plan</h4>
+              <div class="new-plan table-responsive">
+                <table class="w-100">
+                  <tr class="table-header-fix">
+                    <th></th>
+                    <th class="active">
+                      <div class="new-plan-wrapper">
+                        <div class="popular-txt">
+                        </div>
+                        <div class="plan-content">
+                          <h2 class="font-20 strong">Premium</h2>
+                          <p class="font-12 my-3 feature-txt">Streamlined accounting tools plus <br /> multi-currency for employing <br />
+                            businesses</p>
+                          <p class="mb-3"><span class="strong">$62</span> /month</p>
+                          <button mat-stroked-button color="primary" class="w-100">Select Plan</button>
+                        </div>
+                      </div>
+                    </th>
+                    <th>
+                      <div class="new-plan-wrapper">
+                        <div class="popular-txt">
+                          <span class="text-center d-block font-12">Most Popular</span>
+                        </div>
+                        <div class="plan-content">
+                          <h2 class="font-20 strong">Standard</h2>
+                          <p class="font-12 my-3 feature-txt">Streamlined accounting tools to <br /> help automate admin</p>
+                          <p class="mb-3"><span class="strong">$62</span> /month</p>
+                          <button mat-stroked-button color="primary" class="w-100">Select Plan</button>
+                        </div>
+                      </div>
+                    </th>
+                    <th>
+                      <div class="new-plan-wrapper">
+                        <div class="popular-txt">
+                        </div>
+                        <div class="plan-content">
+                          <h2 class="font-20 strong">Starter</h2>
+                          <p class="font-12 my-3 feature-txt">Basic accounting tools for the self-<br />employed to help simplify admin</p>
+                          <p class="mb-3"><span class="strong">$62</span> /month</p>
+                          <button mat-stroked-button color="primary" class="w-100">Select Plan</button>
+                        </div>
+                      </div>
+                    </th>
+                  </tr>
+                  <tr>
+                    <td>
+                      <span>Send invoices and quotes</span>
+                    </td>
+                    <td class="text-center active">
+                      <i class="icon-tick"></i>
+                    </td>
+                    <td class="text-center">
+                      <i class="icon-tick"></i>
+                    </td>
+                    <td class="text-center">
+                      <div class="d-flex column-gap15">
+                        <span>20 invoices</span>
+                        <i class="icon-info cp" [matTooltip]="'Upgrade your plan at any time to send more than 20 invoices'" [matTooltipPosition]="'above'"></i>
+                      </div>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+            <ng-container *ngTemplateOutlet="planSummary"></ng-container>
+          </div>
+        </form>
+      </mat-step>
+      <mat-step [stepControl]="secondStepForm" name="secondStepForm">
+        <form autocomplete="off" novalidate>
+          <ng-template matStepLabel>Select billing account</ng-template>
+
+        </form>
+      </mat-step>
+
+      <mat-step [stepControl]="thirdStepForm">
+        <form name="thirdStepForm" autocomplete="off">
+          <ng-template matStepLabel>Review and pay</ng-template>
+
+        </form>
+      </mat-step>
+    </mat-stepper>
+  </div>
+
+  <!-- plan-summary -->
+  <ng-template #planSummary>
+    <div class="summary-wrapper">
+      <p>Plan Summary</p>
+    </div>
+  </ng-template>
+</ng-container>

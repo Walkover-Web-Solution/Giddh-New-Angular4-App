@@ -22,6 +22,10 @@ import { NewConfirmationModalModule } from '../theme/new-confirmation-modal/conf
 import { ChangeBillingComponent } from './change-billing/change-billing.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatCardModule } from '@angular/material/card';
+import { ViewSubscriptionComponent } from './view-subscription/view-subscription.component';
+import { BuyPlanComponent } from './buy-plan/buy-plan.component';
+import { MatStepperModule } from '@angular/material/stepper';
 
 @NgModule({
     imports: [
@@ -45,10 +49,12 @@ import { MatInputModule } from '@angular/material/input';
         ReactiveFormsModule,
         FormsModule,
         MatTooltipModule,
-        NewConfirmationModalModule
+        NewConfirmationModalModule,
+        MatCardModule,
+        MatStepperModule
     ],
     exports: [
     ],
-    declarations: [SubscriptionComponent, CompanyListComponent, TransferComponent, ChangeBillingComponent]
+    declarations: [SubscriptionComponent, CompanyListComponent, TransferComponent, ChangeBillingComponent, ViewSubscriptionComponent, BuyPlanComponent]
 })
 export class SubscriptionModule { }
