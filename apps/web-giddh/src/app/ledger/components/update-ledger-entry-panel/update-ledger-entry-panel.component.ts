@@ -1505,7 +1505,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 q: encodeURIComponent(query),
                 page,
                 withStocks,
-                accountUniqueName: encodeURIComponent(accountUniqueName)
+                accountUniqueName: encodeURIComponent(accountUniqueName),
+                count: ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT
             }
             if (this.isAccountSearchData) {
                 this.searchService.searchAccount(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
