@@ -4,17 +4,23 @@
         <i mat-dialog-close class="icon-cross"></i>
     </div>
     <div mat-dialog-content class="dialog-body">
+        <form autocomplete="off" novalidate name="otherTaxForm" [formGroup]="otherTaxForm">
         <div class="row mt-2">
             <div class="col-6">
-                <dropdown-field [label]="'Select Tax'" [placeholder]="'Select tax'" [required]="true"
-                    [options]="dummyOptions" (selectedOption)="selectTax($event)" [defaultValue]="''">
-                </dropdown-field>
+                <reactive-dropdown-field [label]="'Select Tax'" [placeholder]="'Select tax'"
+                formControlName="accountUniqueName" [name]="'accountUniqueName'"
+                [options]="companyTaxes$| async" [enableDynamicSearch]="true" [required]="true"
+                [showError]="isFormSubmitted && !otherTaxForm.get('linkedAccount')?.value"
+                (createOption)="createTaxDialog()"
+                [createNewText]="'Create New'"
+                (onClear)="selectTax($event, true)">
+            </reactive-dropdown-field>
             </div>
             <div class="col-6">
                 <span class="custom-mat-form-field">
                     <mat-form-field appearance="outline">
                         <mat-label>Calculation Method</mat-label>
-                        <mat-select required="true">
+                        <mat-select required="true" [formControlName]="'type'">
                             <mat-option [value]="1">On Taxable Value (Amt - Dis)</mat-option>
                             <mat-option [value]="2">On Total Value (Taxable + Gst + Cess)</mat-option>
                         </mat-select>
@@ -27,5 +33,25 @@
                 <button mat-stroked-button color="primary">Apply</button>
             </div>
         </div>
+        </form>
     </div>
+</div>
+
+<!-- Create Tax Asidepane -->
+<div id="top0">
+    <app-aside-menu-other-taxes
+        *ngIf="asideMenuStateForOtherTaxes === 'in'"
+        [class]="asideMenuStateForOtherTaxes"
+        [taxes]="companyTaxesList"
+        [otherTaxesModal]="activeEntry.otherTaxModal"
+        [commonLocaleData]="commonLocaleData"
+        [@slideInOut]="asideMenuStateForOtherTaxes"
+        (closeModal)="closeAsideMenuStateForOtherTaxes()"
+        (applyTaxes)="
+            calculateOtherTaxes($event, activeEntry);
+            toggleOtherTaxesAsidePane(true, null);
+            calculateAffectedThingsFromOtherTaxChanges()
+        "
+    >
+    </app-aside-menu-other-taxes>
 </div>
