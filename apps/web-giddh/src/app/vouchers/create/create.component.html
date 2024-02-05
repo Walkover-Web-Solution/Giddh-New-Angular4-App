@@ -26,9 +26,12 @@
                                             <reactive-dropdown-field *ngIf="!invoiceType.isCashInvoice"
                                                 [label]="invoiceType.isPurchaseInvoice || invoiceType.isDebitNote ? localeData?.vendor_name : localeData?.customer_name"
                                                 [placeholder]="invoiceType.isPurchaseInvoice || invoiceType.isDebitNote ? localeData?.select_vendor : localeData?.select_customer"
-                                                formControlName="uniqueName" [name]="'account'"
-                                                [options]="voucherAccountResults$ | async" [showCreateNew]="true"
-                                                [enableDynamicSearch]="true" [isPaginationEnabled]="true"
+                                                formControlName="uniqueName" 
+                                                [name]="'account'"
+                                                [options]="voucherAccountResults$ | async" 
+                                                [showCreateNew]="true"
+                                                [enableDynamicSearch]="true" 
+                                                [isPaginationEnabled]="true"
                                                 [openDropdown]="openAccountDropdown"
                                                 [createNewText]="!invoiceType.isPurchaseInvoice && !invoiceType.isDebitNote ? localeData?.add_customer : localeData?.add_vendor"
                                                 [labelValue]="invoiceForm.controls['account'].get('customerName')?.value"
@@ -487,10 +490,8 @@
                                 </div>
 
                                 <!-- Voucher Grid for Multiple Entries-->
-                                <div class="vouchers-entry-grid">
-
+                                <div class="vouchers-entry-grid" formArrayName="entries">
                                     <!-- Grid Head | Row 1 -->
-
                                     <div class="head-item text-left">#</div>
                                     <div class="head-item text-left">Product/Service Description</div>
                                     <div class="head-item">Qty/Unit</div>
@@ -502,7 +503,6 @@
                                     <div class="border-end-0 border-bottom-0 p-0">
                                         <!-- Don't Delete this element it is working as column(<th> tag like) for delete icon -->
                                     </div>
-
                                     <!-- Grid Body | Row 2-->
 
                                     <!-- # -->
@@ -554,122 +554,176 @@
                                     </div>
 
                                     <!-- Grid Body | Row 3-->
+                                    <ng-container *ngFor="let entry of invoiceForm?.get('entries')['controls']; let entryIndex = index">
+                                        <ng-container formGroupName="0">
+                                            <!-- # -->
+                                            <div class="body-item text-left">{{ entryIndex + 1 }}</div>
 
-                                    <!-- # -->
-                                    <div class="body-item text-left">2</div>
+                                            <!-- Product/Service Description -->
+                                            <div class="body-item text-left">
+                                                <ng-container formArrayName="transactions">
+                                                    <ng-container formGroupName="0">
+                                                        <ng-container formGroupName="account">
+                                                            <reactive-dropdown-field
+                                                                [label]="commonLocaleData?.app_account"
+                                                                [placeholder]="localeData?.select_acc"
+                                                                formControlName="uniqueName"
+                                                                [name]="'transactionAccountUniqueName' + entryIndex"
+                                                                [options]="voucherStockResults$ | async" 
+                                                                [showCreateNew]="true"
+                                                                [enableDynamicSearch]="true"
+                                                                [isPaginationEnabled]="true"
+                                                                [createNewText]="commonLocaleData?.app_create_new"
+                                                                (scrollEnd)="handleSearchStockScrollEnd()"
+                                                                (selectedOption)="selectStock($event, entryIndex)"
+                                                                (dynamicSearchedQuery)="searchStock($event, 1)"
+                                                                (onClear)="selectStock($event, entryIndex, true)"
+                                                                (createOption)="toggleStockAsidePane()">
 
-                                    <!-- Product/Service Description -->
-                                    <div class="body-item text-left">
-                                        <reactive-dropdown-field [cssClass]="'form-control'"
-                                            [createNewText]="'Create New'" [showLabel]="false" [name]="'account'"
-                                            [placeholder]="'Select account'" [options]="dummyOptions"
-                                            [enableDynamicSearch]="true"
-                                            (dynamicSearchedQuery)="searchStock($event, 1)">
-                                        </reactive-dropdown-field>
+                                                                <ng-template #optionTemplate let-option="option">
+                                                                    <ng-container *ngIf="!option.additional?.stock">
+                                                                        <a href="javascript:void(0)" class="flex-column">
+                                                                            <div class="option-label">{{ option?.label }}</div>
+                                                                            <div class="option-value">
+                                                                                {{ option.additional?.uniqueName }}
+                                                                            </div>
+                                                                        </a>
+                                                                    </ng-container>
+                                                                    <ng-container *ngIf="option.additional?.stock">
+                                                                        <a href="javascript:void(0)" class="flex-column">
+                                                                            <div class="option-label">{{ option?.label }}</div>
+                                                                            <div class="option-value">
+                                                                                {{ option.additional?.uniqueName }}
+                                                                            </div>
+                                                                            <div class="option-value-stock">
+                                                                                {{ commonLocaleData?.app_stock }}:
+                                                                                {{ option.additional?.stock?.uniqueName }}
+                                                                            </div>
+                                                                        </a>
+                                                                    </ng-container>
+                                                                </ng-template>
+                                                            </reactive-dropdown-field>
+                                                        </ng-container>
+                                                        <ng-container *ngIf="(stockVariants[entryIndex] | async)?.length > 1" formGroupName="stock">
+                                                            <ng-container formGroupName="variant">
+                                                                <reactive-dropdown-field
+                                                                    [label]="localeData?.select_variant"
+                                                                    [placeholder]="localeData?.select_variant"
+                                                                    formControlName="uniqueName"
+                                                                    [name]="'transactionStockVariantUniqueName' + entryIndex"
+                                                                    [options]="stockVariants[entryIndex] | async"
+                                                                    (selectedOption)="selectVariant($event, i)"
+                                                                    (onClear)="selectVariant($event, i, true)">
+                                                                </reactive-dropdown-field>
+                                                            </ng-container>
+                                                        </ng-container>
+                                                    </ng-container>
+                                                </ng-container>
 
-                                        <textarea rows="2" matInput class="form-control mt-2"
-                                            placeholder="Add Description"></textarea>
-                                        <span class="mt-2 font-12">Characters Left: 300</span>
+                                                <textarea rows="2" matInput class="form-control mt-2" placeholder="Add Description" formControlName="description" [maxlength]="entryDescriptionLength"></textarea>
+                                                <span class="mt-2 font-12">{{ commonLocaleData?.app_characters_left }}: {{ entryDescriptionLength - entry.get("description")?.value?.length }}</span>
 
-                                        <div class="d-flex justify-content-between">
-                                            <div class="w-50">
-                                                <div class="mt-2 font-12">
-                                                    <span>Entry Date</span>
-                                                    <div class="mt-1">22-01-2024 <i
-                                                            class="icon-edit text-blue cursor-pointer"></i>
+                                                <div class="d-flex justify-content-between">
+                                                    <div class="w-50">
+                                                        <div class="mt-2 font-12">
+                                                            <span>Entry Date</span>
+                                                            <div class="mt-1">{{ entry.get('date')?.value }} <i
+                                                                    class="icon-edit text-blue cursor-pointer"></i>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="w-50 text-right">
+                                                        <div class="mt-2 font-12">
+                                                            <span>SAC:</span>
+                                                            <div class="mt-1">Update <i
+                                                                    class="icon-edit text-blue cursor-pointer"
+                                                                    [matMenuTriggerFor]="update"></i></div>
+
+                                                            <!-- Update Menu  -->
+                                                            <mat-menu #update="matMenu">
+                                                                <div class="p-3" (click)="$event.stopPropagation()">
+                                                                    <mat-radio-group>
+                                                                        <mat-radio-button color="primary" value="1">HSN
+                                                                            Code</mat-radio-button>
+                                                                        <mat-radio-button color="primary" value="2">SAC
+                                                                            Code</mat-radio-button>
+                                                                    </mat-radio-group>
+
+                                                                    <div class="mt-3">
+                                                                        <text-field [placeholder]="'HSN Number'"
+                                                                            [cssClass]="'form-control text-right'"
+                                                                            [type]="'number'">
+                                                                        </text-field>
+                                                                    </div>
+
+                                                                    <div class="mt-3">
+                                                                        <button mat-stroked-button color="primary"
+                                                                            class="mr-2">Save</button>
+                                                                        <button mat-stroked-button>Cancel</button>
+                                                                    </div>
+                                                                </div>
+                                                            </mat-menu>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="w-50 text-right">
-                                                <div class="mt-2 font-12">
-                                                    <span>SAC:</span>
-                                                    <div class="mt-1">Update <i
-                                                            class="icon-edit text-blue cursor-pointer"
-                                                            [matMenuTriggerFor]="update"></i></div>
 
-                                                    <!-- Update Menu  -->
-                                                    <mat-menu #update="matMenu">
-                                                        <div class="p-3" (click)="$event.stopPropagation();">
-                                                            <mat-radio-group>
-                                                                <mat-radio-button color="primary" value="1">HSN
-                                                                    Code</mat-radio-button>
-                                                                <mat-radio-button color="primary" value="2">SAC
-                                                                    Code</mat-radio-button>
-                                                            </mat-radio-group>
+                                            <!-- Qty/Unit -->
+                                            <div class="body-item">
+                                                <text-field [placeholder]="'Enter Qty'" [cssClass]="'form-control text-right'"
+                                                    [type]="'text'">
+                                                </text-field>
+                                                <mat-select name="qty" [placeholder]="'Select'" class="form-control mt-2">
+                                                    <mat-option [value]="1">Opt 1</mat-option>
+                                                    <mat-option [value]="2">Opt 2</mat-option>
+                                                    <mat-option [value]="3">Opt 3</mat-option>
+                                                </mat-select>
+                                            </div>
 
-                                                            <div class="mt-3">
-                                                                <text-field [placeholder]="'HSN Number'"
-                                                                    [cssClass]="'form-control text-right'"
-                                                                    [type]="'number'">
-                                                                </text-field>
-                                                            </div>
+                                            <!-- Rate -->
+                                            <div class="body-item">
+                                                <text-field [placeholder]="'Enter'" [cssClass]="'form-control text-right'"
+                                                    [type]="'text'">
+                                                </text-field>
+                                            </div>
 
-                                                            <div class="mt-3">
-                                                                <button mat-stroked-button color="primary"
-                                                                    class="mr-2">Save</button>
-                                                                <button mat-stroked-button>Cancel</button>
-                                                            </div>
-                                                        </div>
-                                                    </mat-menu>
+                                            <!-- Amount -->
+                                            <div class="body-item">
+                                                <text-field [placeholder]="'Enter'" [cssClass]="'form-control text-right'"
+                                                    [type]="'text'">
+                                                </text-field>
+                                            </div>
+
+                                            <!-- Discount -->
+                                            <div class="body-item">
+                                                <!-- Discount control component -->
+                                                <discount-dropdown
+                                                    (createOption)="showCreateDiscountDialog()"></discount-dropdown>
+                                            </div>
+
+                                            <!-- Tax -->
+                                            <div class="body-item">
+                                                <tax-dropdown (createOption)="showCreateTaxDialog()"></tax-dropdown>
+                                            </div>
+
+                                            <!-- Total -->
+                                            <div class="body-item">
+                                                <text-field [placeholder]="'Enter'" [cssClass]="'form-control text-right'"
+                                                    [type]="'text'">
+                                                </text-field>
+                                                <div class="d-flex align-items-center" (click)="openOtherTaxDialog()">
+                                                    <mat-checkbox type="checkbox" color="primary">
+                                                    </mat-checkbox>
+                                                    Other Tax?
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
 
-                                    <!-- Qty/Unit -->
-                                    <div class="body-item">
-                                        <text-field [placeholder]="'Enter Qty'" [cssClass]="'form-control text-right'"
-                                            [type]="'text'">
-                                        </text-field>
-                                        <mat-select name="qty" [placeholder]="'Select'" class="form-control mt-2">
-                                            <mat-option [value]="1">Opt 1</mat-option>
-                                            <mat-option [value]="2">Opt 2</mat-option>
-                                            <mat-option [value]="3">Opt 3</mat-option>
-                                        </mat-select>
-                                    </div>
-
-                                    <!-- Rate -->
-                                    <div class="body-item">
-                                        <text-field [placeholder]="'Enter'" [cssClass]="'form-control text-right'"
-                                            [type]="'text'">
-                                        </text-field>
-                                    </div>
-
-                                    <!-- Amount -->
-                                    <div class="body-item">
-                                        <text-field [placeholder]="'Enter'" [cssClass]="'form-control text-right'"
-                                            [type]="'text'">
-                                        </text-field>
-                                    </div>
-
-                                    <!-- Discount -->
-                                    <div class="body-item">
-                                        <!-- Discount control component -->
-                                        <discount-dropdown
-                                            (createOption)="showCreateDiscountDialog()"></discount-dropdown>
-                                    </div>
-
-                                    <!-- Tax -->
-                                    <div class="body-item">
-                                        <tax-dropdown (createOption)="showCreateTaxDialog()"></tax-dropdown>
-                                    </div>
-
-                                    <!-- Total -->
-                                    <div class="body-item">
-                                        <text-field [placeholder]="'Enter'" [cssClass]="'form-control text-right'"
-                                            [type]="'text'">
-                                        </text-field>
-                                        <div class="d-flex align-items-center" (click)="openOtherTaxDialog()">
-                                            <mat-checkbox type="checkbox" color="primary">
-                                            </mat-checkbox>
-                                            Other Tax?
-                                        </div>
-                                    </div>
-
-                                    <!-- Delete -->
-                                    <div class="body-item delete-btn">
-                                        <i class="icon-trash cursor-pointer"></i>
-                                    </div>
+                                            <!-- Delete -->
+                                            <div class="body-item delete-btn">
+                                                <i class="icon-trash cursor-pointer"></i>
+                                            </div>
+                                        </ng-container>
+                                    </ng-container>
                                 </div>
                                 <!-- Add new grid row/line -->
                                 <div class="text-blue mt-2 px-0">
@@ -926,8 +980,16 @@
     </generic-aside-menu-account>
 </ng-template>
 
-<!-- Create Tax Asidepane -->
+<!-- Create Tax Aside Pane -->
 <ng-template #createTax>
     <aside-menu-create-tax-component [class]="'in'" [tax]="selectedTax" [localeData]="localeData"
         [commonLocaleData]="commonLocaleData" (closeEvent)="taxAsideMenuRef.close()"></aside-menu-create-tax-component>
+</ng-template>
+
+<ng-template #asideMenuProductService>
+    <aside-menu-product-service
+        [selectedVoucherType]="invoiceType"
+        (closeAsideEvent)="closeAsideMenuProductServiceModal()"
+    >
+    </aside-menu-product-service>
 </ng-template>

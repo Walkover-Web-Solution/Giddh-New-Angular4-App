@@ -17,7 +17,7 @@ import { OrganizationType } from "../../models/user-login-state";
 import { ProformaFilter, ProformaResponse } from "../../models/api-models/proforma";
 import { InvoiceReceiptFilter, ReciptResponse } from "../../models/api-models/recipt";
 import { VouchersUtilityService } from "../utility/vouchers.utility.service";
-import { FormArray, FormBuilder, FormGroup, UntypedFormArray, UntypedFormGroup, Validators } from "@angular/forms";
+import { FormBuilder, UntypedFormArray, UntypedFormGroup, Validators } from "@angular/forms";
 import { GIDDH_DATE_FORMAT } from "../../shared/helpers/defaultDateFormat";
 import { BriedAccountsGroup, SearchType, TaxType, VoucherTypeEnum } from "../utility/vouchers.const";
 import { SearchService } from "../../services/search.service";
@@ -36,6 +36,8 @@ import { NewConfirmationModalComponent } from "../../theme/new-confirmation-moda
 import { ToasterService } from "../../services/toaster.service";
 import { CommonService } from "../../services/common.service";
 import { PURCHASE_ORDER_STATUS } from "../../shared/helpers/purchaseOrderStatus";
+import { cloneDeep } from "../../lodash-optimized";
+import { ENTRY_DESCRIPTION_LENGTH } from "../../app.constant";
 
 @Component({
     selector: "create",
@@ -60,6 +62,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
     @ViewChild("rcmCheckbox") public rcmCheckbox: ElementRef;
     /** Template Reference for Generic aside menu account */
     @ViewChild("accountAsideMenu") public accountAsideMenu: TemplateRef<any>;
+    /** Instance of aside Menu Product Service modal */
+    @ViewChild('asideMenuProductService') asideMenuProductService: TemplateRef<any>;
     /** Template Reference for Create Tax aside menu */
     @ViewChild("createTax") public createTax: TemplateRef<any>;
     /**  This will use for dayjs */
@@ -92,6 +96,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
     public lastVouchers$: Observable<any> = this.componentStore.lastVouchers$;
     /** Voucher account results Observable */
     public voucherAccountResults$: Observable<OptionInterface[]> = of(null);
+    /** Voucher stock results Observable */
+    public voucherStockResults$: Observable<OptionInterface[]> = of(null);
     /** Stock variants Observable */
     public stockVariants$: Observable<any> = this.componentStore.stockVariants$;
     /** Exchange rate Observable */
@@ -116,14 +122,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
     public vendorPurchaseOrders$: Observable<any> = this.componentStore.vendorPurchaseOrders$;
     /** Vendor purchase orders Observable */
     public linkedPoOrders$: Observable<any> = this.componentStore.linkedPoOrders$;
+    /** Universal date Observable */
+    public universalDate$: Observable<any> = this.componentStore.universalDate$;
     /** Account search request */
     public accountSearchRequest: any;
-    public dummyOptions: any[] = [
-        { label: "Option 1", value: 1 },
-        { label: "Option 2", value: 2 },
-        { label: "Option 3", value: 3 },
-        { label: "Option 4", value: 4 }
-    ];
+    /** Stock search request */
+    public stockSearchRequest: any;
     /** Stores the voucher API version of current company */
     public voucherApiVersion: 1 | 2;
     /** Invoice Settings */
@@ -214,6 +218,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
     public taxTypes: any = TaxType;
     /** Create tax dialog ref  */
     public taxAsideMenuRef: MatDialogRef<any>;
+    /** Hold aside menu state for product service  */
+    public productServiceAsideMenuRef: MatDialogRef<any>;
     /** Stores the current voucher form detail */
     public currentVoucherFormDetails: VoucherForm;
     /** RCM modal configuration */
@@ -228,6 +234,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
     public isFileUploading: boolean = false;
     /** Name of the selected file */
     public selectedFileName: string = '';
+    /** Length of entry description */
+    public entryDescriptionLength: number = ENTRY_DESCRIPTION_LENGTH;
+    /** Holds universal date */
+    public universalDate: any;
+    /** List of stock variants */
+    public stockVariants: any[] = [];
 
     /** Returns true if account is selected else false */
     public get showPageLeaveConfirmation(): boolean {
@@ -295,6 +307,25 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
                 this.getWarehouses();
                 this.getBriefAccounts();
                 this.getParentGroupForCreateAccount();
+                this.searchStock();
+            }
+        });
+
+        /** Universal date */
+        this.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                try {
+                    this.universalDate = dayjs(response[1]).format(GIDDH_DATE_FORMAT);
+                    if (!this.isUpdateMode) {
+                        this.invoiceForm.get('date')?.patchValue(this.universalDate);
+
+                        let entryFields = [];
+                        entryFields.push({ key: 'date', value: this.universalDate });
+                        this.updateEntry(0, entryFields);
+                    }
+                } catch (e) {
+                    this.universalDate = dayjs().format(GIDDH_DATE_FORMAT);
+                }
             }
         });
 
@@ -334,6 +365,22 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
         /** Exchange rate */
         this.exchangeRate$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.invoiceForm.get('exchangeRate')?.patchValue(response);
+        });
+
+        /** Stock Variants */
+        this.stockVariants$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.stockVariants[response.entryIndex] = of(response.results);
+
+                if (response?.results?.length === 1) {
+                    const entryFormGroup = this.getEntryFormGroup(response.entryIndex);
+                    const transactionFormGroup = this.getTransactionFormGroup(entryFormGroup);
+                    const transactionStockVariantFormGroup = transactionFormGroup.get('stock').get('variant');
+
+                    transactionStockVariantFormGroup.get('name')?.patchValue(response.results[0]?.label);
+                    transactionStockVariantFormGroup.get('uniqueName')?.patchValue(response.results[0]?.value);
+                }
+            }
         });
     }
 
@@ -677,7 +724,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
         }
 
         let accountSearchRequest = this.vouchersUtilityService.getSearchRequestObject(this.voucherType, query, page, SearchType.CUSTOMER);
-        this.accountSearchRequest = accountSearchRequest;
+        this.accountSearchRequest = cloneDeep(accountSearchRequest);
         this.accountSearchRequest.isLoading = true;
 
         this.searchService.searchAccountV3(accountSearchRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -705,15 +752,27 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
      * @memberof VoucherCreateComponent
      */
     public searchStock(query: string = '', page: number = 1): void {
-        if (this.voucherType === VoucherTypeEnum.cash) {
+        if (this.stockSearchRequest?.isLoading) {
             return;
         }
-        const requestObject = this.vouchersUtilityService.getSearchRequestObject(this.voucherType, query, page, SearchType.ITEM);
 
-        this.searchService.searchAccountV3(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                console.log(response);
+        let stockSearchRequest = this.vouchersUtilityService.getSearchRequestObject(this.voucherType, query, page, SearchType.ITEM);
+        this.stockSearchRequest = cloneDeep(stockSearchRequest);
+        this.stockSearchRequest.isLoading = true;
+
+        this.searchService.searchAccountV3(stockSearchRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.body?.results?.length) {
+                this.stockSearchRequest.loadMore = true;
+                let voucherStockResults = [];
+                if (page > 1) {
+                    this.voucherStockResults$.subscribe(res => voucherStockResults = res);
+                }
+                const newResults = response?.body?.results?.map(res => { return { label: res.name, value: res.uniqueName, additional: res } });
+                this.voucherStockResults$ = of(voucherStockResults.concat(...newResults));
+            } else {
+                this.stockSearchRequest.loadMore = false;
             }
+            this.stockSearchRequest.isLoading = false;
         });
     }
 
@@ -790,6 +849,18 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Callback for stock scroll end
+     *
+     * @memberof VoucherCreateComponent
+     */
+    public handleSearchStockScrollEnd(): void {
+        if (this.stockSearchRequest.loadMore) {
+            let page = this.stockSearchRequest.page + 1;
+            this.searchStock(this.stockSearchRequest.query, page);
+        }
+    }
+
+    /**
      * Callback for select account
      *
      * @param {*} event
@@ -802,6 +873,57 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
         } else {
             this.invoiceForm.controls["account"].get("customerName")?.patchValue(event?.label);
             this.getAccountDetails(event?.value);
+        }
+    }
+
+    /**
+     * Callback for select stock
+     *
+     * @param {*} event
+     * @param {number} entryIndex
+     * @param {boolean} [isClear=false]
+     * @memberof VoucherCreateComponent
+     */
+    public selectStock(event: any, entryIndex: number, isClear: boolean = false): void {
+        if (event || isClear) {
+            const entryFormGroup = this.getEntryFormGroup(entryIndex);
+            const transactionFormGroup = this.getTransactionFormGroup(entryFormGroup);
+
+            if (isClear) {
+
+            } else {
+                let keysToUpdate = {
+                    accountName: event?.label,
+                    stockName: "",
+                    stockUniqueName: ""
+                };
+
+                if (event?.additional?.stock?.uniqueName) {
+                    keysToUpdate.stockName = event?.additional?.stock?.name;
+                    keysToUpdate.stockUniqueName = event?.additional?.stock?.uniqueName;
+                    this.componentStore.getStockVariants({ q: event?.additional?.stock?.uniqueName, index: entryIndex });
+                }
+
+                transactionFormGroup.get('account').get('name')?.patchValue(keysToUpdate.accountName);
+                transactionFormGroup.get('stock').get('name')?.patchValue(keysToUpdate.stockName);
+                transactionFormGroup.get('stock').get('uniqueName')?.patchValue(keysToUpdate.stockUniqueName);
+            }
+        }
+    }
+
+    /**
+     * Callback for select variant
+     *
+     * @param {*} event
+     * @param {number} entryIndex
+     * @param {boolean} [isClear=false]
+     * @memberof VoucherCreateComponent
+     */
+    public selectVariant(event: any, entryIndex: number, isClear: boolean = false): void {
+        console.log(event);
+
+        if (event || isClear) {
+
         }
     }
 
@@ -958,10 +1080,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
      */
     private getEntriesFormGroup(): UntypedFormGroup {
         return this.formBuilder.group({
-            date: [''],
+            date: [this.universalDate || dayjs().format(GIDDH_DATE_FORMAT)],
+            description: [''],
             voucherType: [''],
             uniqueName: [''],
             hsnNumber: [''],
+            sacNumber: [''],
             attachedFile: [''],
             attachedFileName: [''],
             discounts: this.formBuilder.array([
@@ -1109,6 +1233,45 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
                 this.pageLeaveUtilityService.addBrowserConfirmationDialog();
             }
         });
+    }
+
+    /**
+     * Toggle's stock create dialog
+     *
+     * @param {*} [event]
+     * @memberof VoucherCreateComponent
+     */
+    public toggleStockAsidePane(event?: any): void {
+        if (event) {
+            event.preventDefault();
+        }
+
+        this.productServiceAsideMenuRef = this.dialog.open(this.asideMenuProductService, {
+            position: {
+                right: '0',
+                top: '0'
+            },
+            width: '760px',
+            height: '100vh !important',
+            disableClose: true
+        });
+
+        this.productServiceAsideMenuRef.afterClosed().pipe(take(1)).subscribe(response => {
+            setTimeout(() => {
+                if (this.showPageLeaveConfirmation) {
+                    this.pageLeaveUtilityService.addBrowserConfirmationDialog();
+                }
+            }, 100);
+        });
+    }
+
+    /**
+     * This Function is used to close Aside Menu Sidebar
+     *
+     * @memberof VoucherCreateComponent
+     */
+    public closeAsideMenuProductServiceModal(): void {
+        this.productServiceAsideMenuRef?.close();
     }
 
     /**
@@ -1282,6 +1445,48 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Returns entry form group
+     *
+     * @private
+     * @param {number} index
+     * @return {UntypedFormGroup}  {*}
+     * @memberof VoucherCreateComponent
+     */
+    private getEntryFormGroup(index: number): UntypedFormGroup {
+        const entriesArray = this.invoiceForm.get('entries') as UntypedFormArray;
+        return entriesArray.at(index) as UntypedFormGroup;
+    }
+
+    /**
+     * Returns transaction form group
+     *
+     * @private
+     * @param {number} index
+     * @return {UntypedFormGroup}  {*}
+     * @memberof VoucherCreateComponent
+     */
+    private getTransactionFormGroup(entryFormGroup: UntypedFormGroup): UntypedFormGroup {
+        const transactionsArray = entryFormGroup.get('transactions') as UntypedFormArray;
+        return transactionsArray.at(0) as UntypedFormGroup;
+    }
+
+    /**
+     * Updates entry key value
+     *
+     * @param {number} index
+     * @param {string} field
+     * @param {*} value
+     * @memberof VoucherCreateComponent
+     */
+    public updateEntry(index: number, fields: any[]): void {
+        const entryFormGroup = this.getEntryFormGroup(index);
+
+        fields?.forEach(field => {
+            entryFormGroup?.get(field.key)?.patchValue(field.value);
+        });
+    }
+
+    /**
      * Uploads attachment
      *
      * @memberof VoucherCreateComponent
@@ -1292,25 +1497,26 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
         if (selectedFile?.files?.length) {
             const file = selectedFile?.files[0];
 
-            this.generalService.getSelectedFile(file, (blob, file) => {
+            this.generalService.getSelectedFile(file, (blob: any, file: any) => {
                 this.isFileUploading = true;
                 this.selectedFileName = file.name;
 
                 this.commonService.uploadFile({ file: blob, fileName: file.name }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     this.isFileUploading = false;
 
-                    const entriesArray = this.invoiceForm.get('entries') as UntypedFormArray;
-                    const firstEntryFormGroup = entriesArray.at(0) as UntypedFormGroup;
+                    let entryFields = [];
 
                     if (response?.status === 'success') {
-                        firstEntryFormGroup.get('attachedFile').patchValue(response.body?.uniqueName);
-                        firstEntryFormGroup.get('attachedFileName').patchValue(response.body?.name);
+                        entryFields.push({ key: 'attachedFile', value: response.body?.uniqueName });
+                        entryFields.push({ key: 'attachedFileName', value: response.body?.name });
                         this.toasterService.showSnackBar("success", this.localeData?.file_uploaded);
                     } else {
-                        firstEntryFormGroup.get('attachedFile').patchValue("");
-                        firstEntryFormGroup.get('attachedFileName').patchValue("");
+                        entryFields.push({ key: 'attachedFile', value: "" });
+                        entryFields.push({ key: 'attachedFileName', value: "" });
                         this.toasterService.showSnackBar("error", response.message);
                     }
+
+                    this.updateEntry(0, entryFields);
                 });
             });
         }

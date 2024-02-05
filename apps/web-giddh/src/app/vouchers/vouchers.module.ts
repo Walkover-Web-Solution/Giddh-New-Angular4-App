@@ -59,6 +59,7 @@ import { CreateDiscountModule } from "../theme/create-discount/create-discount.m
 import { AsideMenuCreateTaxModule } from "../shared/aside-menu-create-tax/aside-menu-create-tax.module";
 import { ConvertBillDialogComponent } from "./convert-bill-dialog/convert-bill-dialog.component";
 import { MatDividerModule } from "@angular/material/divider";
+import { AsideMenuProductServiceModule } from "../shared/aside-menu-product-service/aside-menu-product-service.module";
 
 @NgModule({
     declarations: [
@@ -124,7 +125,8 @@ import { MatDividerModule } from "@angular/material/divider";
         MatBadgeModule,
         CreateDiscountModule,
         AsideMenuCreateTaxModule,
-        MatDividerModule
+        MatDividerModule,
+        AsideMenuProductServiceModule
     ],
     exports: [
 
