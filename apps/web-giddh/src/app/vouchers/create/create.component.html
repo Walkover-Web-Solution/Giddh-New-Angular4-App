@@ -561,14 +561,20 @@
 
                                             <!-- Product/Service Description -->
                                             <div class="body-item text-left">
-                                                <ng-container formArrayName="transactions">
-                                                    <ng-container formGroupName="0">
+                                                <ng-container *ngFor="let transaction of entry?.get('transactions')['controls']; let transactionIndex = index" formArrayName="transactions">
+                                                    <ng-container [formGroupName]="transactionIndex">
                                                         <ng-container formGroupName="account">
                                                             <reactive-dropdown-field
                                                                 [label]="commonLocaleData?.app_account"
                                                                 [placeholder]="localeData?.select_acc"
                                                                 formControlName="uniqueName"
                                                                 [name]="'transactionAccountUniqueName' + entryIndex"
+                                                                [labelValue]="transaction.get('stock').get('name')?.value
+                                                                ? transaction.get('account').get('name')?.value +
+                                                                ' (' +
+                                                                transaction.get('stock').get('name')?.value +
+                                                                ')'
+                                                                : transaction.get('account').get('name')?.value"
                                                                 [options]="voucherStockResults$ | async" 
                                                                 [showCreateNew]="true"
                                                                 [enableDynamicSearch]="true"
@@ -579,7 +585,6 @@
                                                                 (dynamicSearchedQuery)="searchStock($event, 1)"
                                                                 (onClear)="selectStock($event, entryIndex, true)"
                                                                 (createOption)="toggleStockAsidePane()">
-
                                                                 <ng-template #optionTemplate let-option="option">
                                                                     <ng-container *ngIf="!option.additional?.stock">
                                                                         <a href="javascript:void(0)" class="flex-column">

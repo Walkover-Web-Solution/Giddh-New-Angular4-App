@@ -17,6 +17,7 @@ import { IVariant } from "../../models/api-models/Ledger";
 import { CommonService } from "../../services/common.service";
 import { LastVouchersResponse } from "../../models/api-models/Voucher";
 import { AccountService } from "../../services/account.service";
+import { SearchService } from "../../services/search.service";
 
 export interface VoucherState {
     isLoading: boolean;
@@ -36,6 +37,7 @@ export interface VoucherState {
     countryData: any;
     vendorPurchaseOrders: any[];
     linkedPoOrders: any[];
+    particularDetails: any;
 }
 
 const DEFAULT_STATE: VoucherState = {
@@ -55,7 +57,8 @@ const DEFAULT_STATE: VoucherState = {
     accountDetails: null,
     countryData: null,
     vendorPurchaseOrders: null,
-    linkedPoOrders: null
+    linkedPoOrders: null,
+    particularDetails: null
 };
 
 @Injectable()
@@ -68,7 +71,8 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
         private voucherService: VoucherService,
         private ledgerService: LedgerService,
         private commonService: CommonService,
-        private accountService: AccountService
+        private accountService: AccountService,
+        private searchService: SearchService
     ) {
         super(DEFAULT_STATE);
     }
@@ -427,6 +431,29 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             return this.patchState({
                                 vendorPurchaseOrders: [],
                                 linkedPoOrders: []
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    readonly getParticularDetails = this.effect((data: Observable<{ accountUniqueName: string, payload: any }>) => {
+        return data.pipe(
+            switchMap((req) => {
+                return this.searchService.loadDetails(req.accountUniqueName, req.payload).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            return this.patchState({
+                                particularDetails: res?.body ?? {}
+                            });
+                        },
+                        (error: any) => {
+                            this.showErrorToast(error);
+                            return this.patchState({
+                                particularDetails: {}
                             });
                         }
                     ),

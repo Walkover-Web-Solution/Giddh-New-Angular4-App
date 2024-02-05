@@ -373,12 +373,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
                 this.stockVariants[response.entryIndex] = of(response.results);
 
                 if (response?.results?.length === 1) {
-                    const entryFormGroup = this.getEntryFormGroup(response.entryIndex);
-                    const transactionFormGroup = this.getTransactionFormGroup(entryFormGroup);
-                    const transactionStockVariantFormGroup = transactionFormGroup.get('stock').get('variant');
-
-                    transactionStockVariantFormGroup.get('name')?.patchValue(response.results[0]?.label);
-                    transactionStockVariantFormGroup.get('uniqueName')?.patchValue(response.results[0]?.value);
+                    this.selectVariant(response.results[0], response.entryIndex);
                 }
             }
         });
@@ -820,9 +815,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
     private getAccountDetails(accountUniqueName: string): void {
         this.componentStore.getAccountDetails(accountUniqueName);
 
-        let request = { companyUniqueName: this.activeCompany?.uniqueName, accountUniqueName: accountUniqueName, page: 1, count: 100, sort: '', sortBy: '' };
-        let payload = { statuses: [PURCHASE_ORDER_STATUS.open, PURCHASE_ORDER_STATUS.partiallyConverted] };
-        this.componentStore.getVendorPurchaseOrders({ request: request, payload: payload, commonLocaleData: this.commonLocaleData });
+        if (this.invoiceType.isPurchaseInvoice) {
+            let request = { companyUniqueName: this.activeCompany?.uniqueName, accountUniqueName: accountUniqueName, page: 1, count: 100, sort: '', sortBy: '' };
+            let payload = { statuses: [PURCHASE_ORDER_STATUS.open, PURCHASE_ORDER_STATUS.partiallyConverted] };
+            this.componentStore.getVendorPurchaseOrders({ request: request, payload: payload, commonLocaleData: this.commonLocaleData });
+        }
     }
 
     /**
@@ -923,7 +920,18 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
         console.log(event);
 
         if (event || isClear) {
+            if (isClear) {
 
+            } else {
+                const entryFormGroup = this.getEntryFormGroup(entryIndex);
+                const transactionFormGroup = this.getTransactionFormGroup(entryFormGroup);
+                const transactionStockVariantFormGroup = transactionFormGroup.get('stock').get('variant');
+
+                transactionStockVariantFormGroup.get('name')?.patchValue(event?.label);
+                transactionStockVariantFormGroup.get('uniqueName')?.patchValue(event?.value);
+
+                this.componentStore.getParticularDetails({ accountUniqueName: transactionFormGroup.get("account").get('uniqueName')?.value, payload: { variantUniqueName: event?.value, customerUniqueName: this.invoiceForm.controls['account'].get('uniqueName')?.value } });
+            }
         }
     }
 
