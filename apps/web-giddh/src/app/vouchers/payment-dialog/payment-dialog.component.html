@@ -43,66 +43,68 @@
       [placeholder]="'DDMMYYYY'" name="voucherDate" [showToggleIcon]="false" [appearance]="'outline'" class="w-50">
     </giddh-datepicker>
   </div>
-  <div class="currency-change mr-b15">
-    <span class="text-light d-inline-block">Base Currency</span>
-    <span class="mx-1">1</span>
-    <span>
-      <img
-        class="switch-icon middle mr-1 ml-1"
-        src="assets/images/switch-icon.svg"
-        alt="switch-icon"
-      />
-    </span>
-    <span class="mx-1">
-      <img
-        src="assets/images/edit-pencilicon.svg"
-        class="cp mr-1"
-      />
-      <img
-          src=" assets/images/autosave.svg"
+  <div class="d-flex column-gap1">
+    <div class="currency-change mr-b15 w-50">
+      <span class="text-light d-inline-block">Base Currency</span>
+      <span class="mx-1">1</span>
+      <span>
+        <img
+          class="switch-icon middle mr-1 ml-1"
+          src="assets/images/switch-icon.svg"
+          alt="switch-icon"
+        />
+      </span>
+      <span class="mx-1">
+        <img
+          src="assets/images/edit-pencilicon.svg"
           class="cp mr-1"
-      />
-    </span>
-    <span class="mr-1">65465</span>
-    <span>INR</span>
-    <div class="mr-t15 w-50 option-value-field">
-      <text-field 
-        [type]="'tel'"
-        [name]="'rate'"
-        [cssClass]="'w-100'" 
-      >
-      </text-field>
+        />
+        <img
+            src=" assets/images/autosave.svg"
+            class="cp mr-1"
+        />
+      </span>
+      <span class="mr-1">65465</span>
+      <span>INR</span>
+      <div class="mr-t15 option-value-field">
+        <text-field 
+          [type]="'tel'"
+          [name]="'rate'"
+          [cssClass]="'w-100'" 
+        >
+        </text-field>
+      </div>
     </div>
-  </div>
-  <div class="currency-change mr-b15">
-    <span class="text-light d-inline-block">Base Currency</span>
-    <span class="mx-1">1</span>
-    <span>
-      <img
-        class="switch-icon middle mr-1 ml-1"
-        src="assets/images/switch-icon.svg"
-        alt="switch-icon"
-      />
-    </span>
-    <span class="mx-1">
-      <img
-        src="assets/images/edit-pencilicon.svg"
-        class="cp mr-1"
-      />
-      <img
-          src=" assets/images/autosave.svg"
+    <div class="currency-change mr-b15 w-50">
+      <span class="text-light d-inline-block">Base Currency</span>
+      <span class="mx-1">1</span>
+      <span>
+        <img
+          class="switch-icon middle mr-1 ml-1"
+          src="assets/images/switch-icon.svg"
+          alt="switch-icon"
+        />
+      </span>
+      <span class="mx-1">
+        <img
+          src="assets/images/edit-pencilicon.svg"
           class="cp mr-1"
-      />
-    </span>
-    <span class="mr-1">65465</span>
-    <span>INR</span>
-    <div class="mr-t15 w-50 option-value-field">
-      <text-field 
-        [type]="'tel'"
-        [name]="'rate'"
-        [cssClass]="'w-100'" 
-      >
-      </text-field>
+        />
+        <img
+            src=" assets/images/autosave.svg"
+            class="cp mr-1"
+        />
+      </span>
+      <span class="mr-1">65465</span>
+      <span>INR</span>
+      <div class="mr-t15 option-value-field">
+        <text-field 
+          [type]="'tel'"
+          [name]="'rate'"
+          [cssClass]="'w-100'" 
+        >
+        </text-field>
+      </div>
     </div>
   </div>
   <mat-form-field appearance="outline" class="w-100 mr-b15">
@@ -115,6 +117,6 @@
   </mat-form-field>
   <div class="d-flex column-gap1 justify-content-end">
     <button mat-stroked-button color="primary">Save</button>
-    <button mat-stroked-button>Cancel</button>
+    <button mat-stroked-button mat-dialog-close>Cancel</button>
   </div>
 </div>

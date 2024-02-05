@@ -945,6 +945,7 @@
                                     [placeholder]="'00'"
                                     [type]="'text'"
                                     class="settings-field d-block"
+                                    [matSuffix]="'days'"
                                 ></input-field>
                             </div>
                             <label for="">Next step to Estimate</label>
@@ -990,6 +991,7 @@
                                     [placeholder]="'00'"
                                     [type]="'text'"
                                     class="settings-field d-block"
+                                    [matSuffix]="'days'"
                                 ></input-field>
                             </div>
                             <mat-slide-toggle
@@ -1030,6 +1032,7 @@
                                     [placeholder]="'00'"
                                     [type]="'text'"
                                     class="settings-field d-block mb-3"
+                                    [matSuffix]="'days'"
                                 ></input-field>
                                 <giddh-datepicker type="text" (keydown.enter)="$event.preventDefault()" [label]="'Invoice Lock Date'"
                                     [placeholder]="'Select Date'" name="voucherDate" [showToggleIcon]="false" [appearance]="'outline'" class="settings-field d-block">
@@ -1245,6 +1248,7 @@
                                     [placeholder]="'00'"
                                     [type]="'text'"
                                     class="settings-field d-block"
+                                    [matSuffix]="'days'"
                                 ></input-field>
                             </div>
                             <mat-slide-toggle
