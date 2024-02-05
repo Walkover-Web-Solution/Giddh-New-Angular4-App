@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild, forwardRef } from "@angular/core";
+import { AfterViewInit, Component, ContentChild, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, TemplateRef, ViewChild, forwardRef } from "@angular/core";
 import { IOption } from "../../ng-virtual-select/sh-options.interface";
 import { BehaviorSubject, Observable, ReplaySubject, Subject, debounceTime, exhaustMap, of, scan, skip, startWith, switchMap, takeUntil, tap } from "rxjs";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
@@ -17,6 +17,8 @@ import { MatAutocompleteTrigger } from "@angular/material/autocomplete";
     ]
 })
 export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnInit, AfterViewInit, OnChanges, OnDestroy {
+    /** Holds template of options on the component itself */
+    @ContentChild('optionTemplate', { static: false }) public optionTemplate: TemplateRef<any>;
     /** Trigger instance for auto complete */
     @ViewChild('trigger', { static: false, read: MatAutocompleteTrigger }) trigger: MatAutocompleteTrigger;
     /** Select Field instance for auto focus */
@@ -93,6 +95,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     private onChange: (value: any) => void = () => { };
     /** Function to be called when the control is touched */
     private onTouched: () => void = () => { };
+    /** Next observable */
     public next$: Subject<void> = new Subject();
 
     constructor(

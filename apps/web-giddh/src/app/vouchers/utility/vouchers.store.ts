@@ -17,6 +17,7 @@ import { IVariant } from "../../models/api-models/Ledger";
 import { CommonService } from "../../services/common.service";
 import { LastVouchersResponse } from "../../models/api-models/Voucher";
 import { AccountService } from "../../services/account.service";
+import { SearchService } from "../../services/search.service";
 
 export interface VoucherState {
     isLoading: boolean;
@@ -28,7 +29,7 @@ export interface VoucherState {
     invoiceSettings: InvoiceSetting;
     lastVouchers: LastVouchersResponse;
     createdTemplates: CustomTemplateResponse[];
-    stockVariants: any[];
+    stockVariants: any;
     barcodeData: any;
     exchangeRate: number;
     briefAccounts: any[];
@@ -36,6 +37,7 @@ export interface VoucherState {
     countryData: any;
     vendorPurchaseOrders: any[];
     linkedPoOrders: any[];
+    particularDetails: any;
 }
 
 const DEFAULT_STATE: VoucherState = {
@@ -55,7 +57,8 @@ const DEFAULT_STATE: VoucherState = {
     accountDetails: null,
     countryData: null,
     vendorPurchaseOrders: null,
-    linkedPoOrders: null
+    linkedPoOrders: null,
+    particularDetails: null
 };
 
 @Injectable()
@@ -68,7 +71,8 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
         private voucherService: VoucherService,
         private ledgerService: LedgerService,
         private commonService: CommonService,
-        private accountService: AccountService
+        private accountService: AccountService,
+        private searchService: SearchService
     ) {
         super(DEFAULT_STATE);
     }
@@ -98,6 +102,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
     public hasSavedChanges$: Observable<any> = this.select(this.store.select(state => state.groupwithaccounts.hasUnsavedChanges), (response) => response);
     public newAccountDetails$: Observable<any> = this.select(this.store.select(state => state.sales.createdAccountDetails), (response) => response);
     public updatedAccountDetails$: Observable<any> = this.select(this.store.select(state => state.sales.updatedAccountDetails), (response) => response);
+    public universalDate$: Observable<any> = this.select(this.store.select(state => state.session.applicationDate), (response) => response);
 
     readonly getDiscountsList = this.effect((data: Observable<void>) => {
         return data.pipe(
@@ -151,7 +156,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
     readonly getPreviousVouchers = this.effect((data: Observable<{ model: InvoiceReceiptFilter, type: string }>) => {
         return data.pipe(
             switchMap((req) => {
-                this.patchState({getLastVouchersInProgress: true});
+                this.patchState({ getLastVouchersInProgress: true });
                 return this.voucherService.getAllVouchers(req.model, req.type).pipe(
                     tapResponse(
                         (res: BaseResponse<LastVouchersResponse, any>) => {
@@ -177,7 +182,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
     readonly getPreviousProformaEstimates = this.effect((data: Observable<{ model: ProformaFilter, type: string }>) => {
         return data.pipe(
             switchMap((req) => {
-                this.patchState({getLastVouchersInProgress: true});
+                this.patchState({ getLastVouchersInProgress: true });
                 return this.voucherService.getAllProformaEstimate(req.model, req.type).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
@@ -223,20 +228,20 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
         );
     });
 
-    readonly getStockVariants = this.effect((data: Observable<string>) => {
+    readonly getStockVariants = this.effect((data: Observable<{ q: any, index: number }>) => {
         return data.pipe(
             switchMap((req) => {
-                return this.ledgerService.loadStockVariants(req).pipe(
+                return this.ledgerService.loadStockVariants(req.q).pipe(
                     tapResponse(
                         (res: Array<IVariant>) => {
                             return this.patchState({
-                                stockVariants: res ?? []
+                                stockVariants: { results: res?.map(res => { return { label: res.name, value: res.uniqueName } }) ?? [], entryIndex: req.index }
                             });
                         },
                         (error: any) => {
                             this.showErrorToast(error);
                             return this.patchState({
-                                stockVariants: []
+                                stockVariants: { results: [], entryIndex: req.index }
                             });
                         }
                     ),
@@ -363,7 +368,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
             })
         );
     });
-    
+
     readonly getCountryStates = this.effect((data: Observable<string>) => {
         return data.pipe(
             switchMap((req) => {
@@ -387,7 +392,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
         );
     });
 
-    readonly getVendorPurchaseOrders = this.effect((data: Observable<{request: any, payload: any, commonLocaleData: any}>) => {
+    readonly getVendorPurchaseOrders = this.effect((data: Observable<{ request: any, payload: any, commonLocaleData: any }>) => {
         return data.pipe(
             switchMap((req) => {
                 return this.voucherService.getVendorPurchaseOrders(req.request, req.payload).pipe(
@@ -410,7 +415,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                                 }
 
                                 vendorPurchaseOrders.push({ label: item.number, value: item?.uniqueName, additional: { grandTotal: item.pendingDetails.grandTotal, pending: pending.join(", "), totalPending: totalPending } });
-                                
+
                                 linkedPoOrders[item?.uniqueName] = [];
                                 linkedPoOrders[item?.uniqueName]['voucherNumber'] = item.number;
                                 linkedPoOrders[item?.uniqueName]['items'] = [];
@@ -426,6 +431,29 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             return this.patchState({
                                 vendorPurchaseOrders: [],
                                 linkedPoOrders: []
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    readonly getParticularDetails = this.effect((data: Observable<{ accountUniqueName: string, payload: any }>) => {
+        return data.pipe(
+            switchMap((req) => {
+                return this.searchService.loadDetails(req.accountUniqueName, req.payload).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            return this.patchState({
+                                particularDetails: res?.body ?? {}
+                            });
+                        },
+                        (error: any) => {
+                            this.showErrorToast(error);
+                            return this.patchState({
+                                particularDetails: {}
                             });
                         }
                     ),
