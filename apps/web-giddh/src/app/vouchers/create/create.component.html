@@ -385,31 +385,19 @@
                                 </div>
 
                                 <!-- Row 3 -->
-                                <div class="row row-gap mr-t15 mr-b15" *ngIf="invoiceType.isPurchaseInvoice">
-
+                                <div class="row row-gap mr-t15 mr-b15" *ngIf="invoiceType.isPurchaseInvoice && (vendorPurchaseOrders$ | async)?.length">
                                     <!-- Purchase Order -->
                                     <div class="col-6">
-                                        <mat-select name="linkedPO" class="po-mat-select mat-form-field-border"
-                                            [placeholder]="'Purchase Order'">
-                                            <mat-select-trigger>
-                                                List of selected items
-                                            </mat-select-trigger>
-                                            <mat-option class="po-options-line">
-                                                <ngx-mat-select-search [noEntriesFoundLabel]="'No Data Found'"
-                                                    [placeholderLabel]="'Select order'">
-                                                    <i class="icon-cross" ngxMatSelectSearchClear></i>
-                                                </ngx-mat-select-search>
-                                            </mat-option>
-
-                                            <mat-option [value]="1" class="po-options-line">
-                                                <span class="po-option-label"> Item Label</span>
-                                                <span class="po-option-value">
-                                                    Pending : additonal text</span>
-                                                <span class="po-option-value">
-                                                    Amount : 500
-                                                </span>
-                                            </mat-option>
-                                        </mat-select>
+                                        <select-multiple-fields
+                                            [placeholder]="localeData?.select_order_placeholder"
+                                            [appearance]="'outline'"
+                                            [isPurchaseOrder]="true"
+                                            [localeData]="localeData"
+                                            [options]="vendorPurchaseOrders$ | async"
+                                            [selectedValues]="null"
+                                            [name]="'purchase-orders'"
+                                            class="select-multiple-chiplist"
+                                        ></select-multiple-fields>
                                     </div>
                                 </div>
 

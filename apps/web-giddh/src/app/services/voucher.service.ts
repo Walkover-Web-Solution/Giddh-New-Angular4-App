@@ -16,6 +16,7 @@ import { PURCHASE_RECORD_DATE_OPERATION, PURCHASE_RECORD_DUE_DATE_OPERATION, PUR
 import { CustomTemplateResponse } from "../models/api-models/Invoice";
 import { VouchersUtilityService } from "../vouchers/utility/vouchers.utility.service";
 import { SALES_API_V2 } from "./apiurls/sales.api";
+import { PURCHASE_ORDER_API } from "./apiurls/purchase-order.api";
 
 
 @Injectable()
@@ -157,11 +158,25 @@ export class VoucherService {
         return this.http.get(url);
     }
 
-    public getCountryStates(country: string): Observable<any> {
-        let url = this.config.apiUrl + 'country/' + country;
-        return this.http.get(url).pipe(map((res) => {
-            let data = res;
-            return data;
-        }), catchError((e) => this.errorHandler.HandleCatch(e)));
+    /**
+     * This will send the api request to get all pending purchase orders
+     *
+     * @param {*} getRequestObject
+     * @param {*} postRequestObject
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof PurchaseOrderService
+     */
+    public getVendorPurchaseOrders(getRequestObject: any, postRequestObject: any): Observable<BaseResponse<any, any>> {
+        let url: string = this.config.apiUrl + PURCHASE_ORDER_API.GET_ALL_PENDING;
+        url = url?.replace(':companyUniqueName', getRequestObject.companyUniqueName);
+        url = url?.replace(':accountUniqueName', encodeURIComponent(getRequestObject.accountUniqueName));
+        url = url?.replace(':from', getRequestObject.from);
+        url = url?.replace(':to', getRequestObject.to);
+        url = url?.replace(':page', getRequestObject.page);
+        url = url?.replace(':count', getRequestObject.count);
+        url = url?.replace(':sort', getRequestObject.sort);
+        url = url?.replace(':sortBy', getRequestObject.sortBy);
+
+        return this.http.post(url, postRequestObject).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, getRequestObject)));
     }
 }

@@ -17,7 +17,7 @@ import { OrganizationType } from "../../models/user-login-state";
 import { ProformaFilter, ProformaResponse } from "../../models/api-models/proforma";
 import { InvoiceReceiptFilter, ReciptResponse } from "../../models/api-models/recipt";
 import { VouchersUtilityService } from "../utility/vouchers.utility.service";
-import { FormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
+import { FormArray, FormBuilder, FormGroup, UntypedFormArray, UntypedFormGroup, Validators } from "@angular/forms";
 import { GIDDH_DATE_FORMAT } from "../../shared/helpers/defaultDateFormat";
 import { BriedAccountsGroup, SearchType, TaxType, VoucherTypeEnum } from "../utility/vouchers.const";
 import { SearchService } from "../../services/search.service";
@@ -35,6 +35,7 @@ import { ConfirmationModalConfiguration } from "../../theme/confirmation-modal/c
 import { NewConfirmationModalComponent } from "../../theme/new-confirmation-modal/confirmation-modal.component";
 import { ToasterService } from "../../services/toaster.service";
 import { CommonService } from "../../services/common.service";
+import { PURCHASE_ORDER_STATUS } from "../../shared/helpers/purchaseOrderStatus";
 
 @Component({
     selector: "create",
@@ -111,6 +112,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
     public newAccountDetails$: Observable<any> = this.componentStore.newAccountDetails$;
     /** Updated account Observable */
     public updatedAccountDetails$: Observable<any> = this.componentStore.updatedAccountDetails$;
+    /** Vendor purchase orders Observable */
+    public vendorPurchaseOrders$: Observable<any> = this.componentStore.vendorPurchaseOrders$;
+    /** Vendor purchase orders Observable */
+    public linkedPoOrders$: Observable<any> = this.componentStore.linkedPoOrders$;
     /** Account search request */
     public accountSearchRequest: any;
     public dummyOptions: any[] = [
@@ -755,6 +760,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
      */
     private getAccountDetails(accountUniqueName: string): void {
         this.componentStore.getAccountDetails(accountUniqueName);
+
+        let request = { companyUniqueName: this.activeCompany?.uniqueName, accountUniqueName: accountUniqueName, page: 1, count: 100, sort: '', sortBy: '' };
+        let payload = { statuses: [PURCHASE_ORDER_STATUS.open, PURCHASE_ORDER_STATUS.partiallyConverted] };
+        this.componentStore.getVendorPurchaseOrders({ request: request, payload: payload, commonLocaleData: this.commonLocaleData });
     }
 
     /**
@@ -953,6 +962,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
             voucherType: [''],
             uniqueName: [''],
             hsnNumber: [''],
+            attachedFile: [''],
+            attachedFileName: [''],
             discounts: this.formBuilder.array([
                 this.getTransactionDiscountFormGroup()
             ]),
@@ -1288,13 +1299,16 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
                 this.commonService.uploadFile({ file: blob, fileName: file.name }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     this.isFileUploading = false;
 
+                    const entriesArray = this.invoiceForm.get('entries') as UntypedFormArray;
+                    const firstEntryFormGroup = entriesArray.at(0) as UntypedFormGroup;
+
                     if (response?.status === 'success') {
-                        //this.invFormData.entries[0].attachedFile = response.body?.uniqueName;
-                        //this.invFormData.entries[0].attachedFileName = response.body?.name;
+                        firstEntryFormGroup.get('attachedFile').patchValue(response.body?.uniqueName);
+                        firstEntryFormGroup.get('attachedFileName').patchValue(response.body?.name);
                         this.toasterService.showSnackBar("success", this.localeData?.file_uploaded);
                     } else {
-                        //this.invFormData.entries[0].attachedFile = '';
-                        //this.invFormData.entries[0].attachedFileName = '';
+                        firstEntryFormGroup.get('attachedFile').patchValue("");
+                        firstEntryFormGroup.get('attachedFileName').patchValue("");
                         this.toasterService.showSnackBar("error", response.message);
                     }
                 });

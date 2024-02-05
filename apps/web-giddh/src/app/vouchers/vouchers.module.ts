@@ -19,7 +19,6 @@ import { GiddhDatepickerModule } from "../theme/giddh-datepicker/giddh-datepicke
 import { MatSelectModule } from "@angular/material/select";
 import { MatRadioModule } from "@angular/material/radio";
 import { MatFormFieldModule } from "@angular/material/form-field";
-import { NgxMatSelectSearchModule } from "ngx-mat-select-search";
 import { BulkExportComponent } from "./bulk-export/bulk-export.component";
 import { PaymentDialogComponent } from "./payment-dialog/payment-dialog.component";
 import { AdjustPaymentDialogComponent } from "./adjust-payment-dialog/adjust-payment-dialog.component";
@@ -105,7 +104,6 @@ import { MatDividerModule } from "@angular/material/divider";
         MatCardModule,
         MatRadioModule,
         MatFormFieldModule,
-        NgxMatSelectSearchModule,
         MatDialogModule,
         MatExpansionModule,
         WatchVideoModule,

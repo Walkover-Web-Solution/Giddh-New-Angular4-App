@@ -34,6 +34,8 @@ export interface VoucherState {
     briefAccounts: any[];
     accountDetails: any;
     countryData: any;
+    vendorPurchaseOrders: any[];
+    linkedPoOrders: any[];
 }
 
 const DEFAULT_STATE: VoucherState = {
@@ -51,7 +53,9 @@ const DEFAULT_STATE: VoucherState = {
     exchangeRate: null,
     briefAccounts: null,
     accountDetails: null,
-    countryData: null
+    countryData: null,
+    vendorPurchaseOrders: null,
+    linkedPoOrders: null
 };
 
 @Injectable()
@@ -81,6 +85,8 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
     public briefAccounts$ = this.select((state) => state.briefAccounts);
     public accountDetails$ = this.select((state) => state.accountDetails);
     public countryData$ = this.select((state) => state.countryData);
+    public vendorPurchaseOrders$ = this.select((state) => state.vendorPurchaseOrders);
+    public linkedPoOrders$ = this.select((state) => state.linkedPoOrders);
 
     public companyProfile$: Observable<any> = this.select(this.store.select(state => state.settings.profile), (response) => response);
     public activeCompany$: Observable<any> = this.select(this.store.select(state => state.session.activeCompany), (response) => response);
@@ -361,7 +367,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
     readonly getCountryStates = this.effect((data: Observable<string>) => {
         return data.pipe(
             switchMap((req) => {
-                return this.voucherService.getCountryStates(req).pipe(
+                return this.commonService.getCountryStates(req).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             return this.patchState({
@@ -372,6 +378,54 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             this.showErrorToast(error);
                             return this.patchState({
                                 countryData: {}
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    readonly getVendorPurchaseOrders = this.effect((data: Observable<{request: any, payload: any, commonLocaleData: any}>) => {
+        return data.pipe(
+            switchMap((req) => {
+                return this.voucherService.getVendorPurchaseOrders(req.request, req.payload).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            let vendorPurchaseOrders = [];
+                            let linkedPoOrders = [];
+
+                            res.body.forEach(item => {
+                                let pending = [];
+                                let totalPending = 0;
+
+                                if (item.pendingDetails.stocks) {
+                                    pending.push(item.pendingDetails.stocks + ((item.pendingDetails.stocks === 1) ? " " + req.commonLocaleData?.app_product : " " + req.commonLocaleData?.app_products));
+                                    totalPending += item.pendingDetails.stocks;
+                                }
+                                if (item.pendingDetails.services) {
+                                    pending.push(item.pendingDetails.services + ((item.pendingDetails.services === 1) ? " " + req.commonLocaleData?.app_service : " " + req.commonLocaleData?.app_services));
+                                    totalPending += item.pendingDetails.services;
+                                }
+
+                                vendorPurchaseOrders.push({ label: item.number, value: item?.uniqueName, additional: { grandTotal: item.pendingDetails.grandTotal, pending: pending.join(", "), totalPending: totalPending } });
+                                
+                                linkedPoOrders[item?.uniqueName] = [];
+                                linkedPoOrders[item?.uniqueName]['voucherNumber'] = item.number;
+                                linkedPoOrders[item?.uniqueName]['items'] = [];
+                            });
+
+                            return this.patchState({
+                                vendorPurchaseOrders: vendorPurchaseOrders,
+                                linkedPoOrders: linkedPoOrders
+                            });
+                        },
+                        (error: any) => {
+                            this.showErrorToast(error);
+                            return this.patchState({
+                                vendorPurchaseOrders: [],
+                                linkedPoOrders: []
                             });
                         }
                     ),
