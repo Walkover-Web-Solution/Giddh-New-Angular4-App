@@ -225,6 +225,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
         hsnNumber: '',
         sacNumber: ''
     };
+    /** Entry index which is open in edit mode */
+    public activeEntryIndex: number = null;
 
     /** Returns true if account is selected else false */
     public get showPageLeaveConfirmation(): boolean {
@@ -274,6 +276,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
                 /** Open account dropdown on create */
                 if (!params?.uniqueName) {
                     this.openAccountDropdown = true;
+                    this.activeEntryIndex = 0;
                 } else {
                     this.invoiceForm.get('uniqueName').patchValue(params?.uniqueName);
                 }
@@ -1650,6 +1653,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
      */
     public addNewLineEntry(): void {
         this.invoiceForm.get('entries')['controls'].push(this.getEntriesFormGroup());
+        const entries = this.invoiceForm.get('entries') as FormArray;
+        this.activeEntryIndex = entries?.length;
     }
 
     /**
@@ -1661,6 +1666,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
     public deleteLineEntry(entryIndex: number): void {
         const entries = this.invoiceForm.get('entries') as FormArray;
         entries.removeAt(entryIndex);
+    }
+
+    public handleOutsideClick(event: any): void {
+        if ((typeof event?.target?.className === "string" && event?.target?.className?.indexOf("option") === -1) && event?.currentTarget?.activeElement?.className?.indexOf("select-field-input") === -1) {
+            this.activeEntryIndex = null;
+        }
     }
 
     /**
