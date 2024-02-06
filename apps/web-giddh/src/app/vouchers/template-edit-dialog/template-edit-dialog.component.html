@@ -1,0 +1,16 @@
+<ng-container>
+  <div class="create-discount-aside p-3">
+    <div class="d-flex column-gap1">
+      <div class="template-left-side">
+        <app-template-edit-filter></app-template-edit-filter>
+      </div>
+      <div class="template-right-side">
+        <app-gst-template-a></app-gst-template-a>
+      </div>
+    </div>
+    <div class="d-flex column-gap1 justify-content-end mt-3">
+      <button mat-stroked-button color="primary">Update Template</button>
+      <button mat-stroked-button (click)="deleteVoucherDialog()">Close</button>
+    </div>
+  </div>
+</ng-container>

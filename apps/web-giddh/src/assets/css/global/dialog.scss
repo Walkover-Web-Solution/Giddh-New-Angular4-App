@@ -1,0 +1,32 @@
+.dialog-header{
+    height: 60px;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: var(--color-white);
+    background-color: var(--color-primary-header-background);
+}
+.dialog-body{
+    width: 100%;
+    height: calc(100% - 60px);
+
+    &.mat-mdc-dialog-content{
+        max-height: unset !important;
+    }
+    &.mdc-dialog__content{
+        &.mat-mdc-dialog-content{
+            padding: 15px !important;
+        }
+    }
+}
+
+// Handel Asidepan header height with giddh header
+.cdk-overlay-pane{
+    margin-top: -1px !important;
+}
+
+.dialog-asidepan {
+    width: 760px;
+    height: 100vh;
+}

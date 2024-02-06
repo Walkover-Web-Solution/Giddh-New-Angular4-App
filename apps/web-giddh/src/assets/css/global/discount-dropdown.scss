@@ -1,0 +1,32 @@
+.discount-wrapper{
+    width: 260px;
+
+    .discount-separator {
+        color: var(--color-tertiary-button-text);
+    
+        .discount-separator-msg {
+            z-index: 1;
+            position: relative;
+            background: var(--color-common-primary-background-for-all-components);
+            padding: 0 8px;
+            font-weight: 600;
+        }
+    
+        .discount-separator-line {  
+            height: 1px;
+            background-color: var(--color-common-secondary-border);
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            z-index: 0;
+        }
+    }
+    .discount-checkbox-wrapper{
+        max-height: 156px;
+        overflow-y: auto;
+    }
+    .create-new{
+        border-top: 1px solid var(--color-common-secondary-border);
+    }
+}

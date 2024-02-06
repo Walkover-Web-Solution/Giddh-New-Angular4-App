@@ -123,4 +123,28 @@ export class SearchService {
             .pipe(catchError((error) => this.errorHandler.HandleCatch<SearchResponse[], SearchRequest>(error)));
     }
 
+    /**
+     * Searches account
+     *
+     * @param {*} params Request payload for API call
+     * @returns {Observable<any>} Observable to carry out further operations
+     * @memberof SearchService
+     */
+    public searchAccountV3(params: any): Observable<any> {
+        const companyUniqueName = this.generalService.companyUniqueName;
+        let contextPath = `${this.config.apiUrl}${SEARCH_API.ACCOUNT_SEARCH_V3}`?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName));
+        if (params) {
+            Object.keys(params).forEach((key, index) => {
+                const delimiter = index === 0 ? '?' : '&'
+                if (params[key] !== undefined) {
+                    if (key === 'branchUniqueName') {
+                        params[key] = params[key] === companyUniqueName ? '' : params[key];
+                    }
+                    contextPath += `${delimiter}${key}=${params[key]}`
+                }
+            });
+        }
+        return this.http.get(contextPath)
+            .pipe(catchError((error) => this.errorHandler.HandleCatch<SearchResponse[], SearchRequest>(error)));
+    }
 }

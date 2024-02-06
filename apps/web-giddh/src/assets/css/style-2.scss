@@ -28,6 +28,11 @@ $custom-typography: mat-typography-config(
 @import "../css/global/tabs.scss";
 @import "../css/global/table.scss";
 @import "../css/global/custom-price.scss";
+@import "../css/global/vouchers.scss";
+@import "../css/global/tax-dropdown.scss";
+@import "../css/global/discount-dropdown.scss";
+@import "../css/global/dialog.scss";
+
 
 /* table css need to removed at last  (start)Don't touch this table css (If any body work on that contact shalinee..)
 */
@@ -2690,6 +2695,13 @@ modal-container.modal {
     color: var(--color-nero) !important;
     box-shadow: none;
     font-size: var(--font-size-15) !important;
+
+    .mat-mdc-select-placeholder, .mat-mdc-select-arrow{
+        color: var(--color-popup-list-input-text) !important;
+    }
+    .mat-mdc-select-arrow{
+        margin-left: 4px;
+    }
 }
 
 .form-control.mat-mdc-select-disabled {
@@ -3422,6 +3434,10 @@ input[type="checkbox"]:checked:after {
 
 .icon-font-11 {
     font-size: 11px !important;
+}
+
+.icon-font-16 {
+    font-size: 16px !important;
 }
 
 .font-12 {
@@ -9455,6 +9471,13 @@ span#HW_badge_cont:nth-child(3) {
 /*flex css start*/
 .flex-column {
     flex-direction: column;
+    -ms-flex-direction: column;
+}
+.flex-wrap {
+    flex-wrap: wrap;
+}
+.row-gap1 {
+    row-gap: 10px;
 }
 
 /*flex css start*/
@@ -14422,6 +14445,7 @@ voucher-component {
 .mdc-dialog {
     .mdc-dialog__content {
         padding: 0 !important;
+        color: var(--color-common-primary-text) !important;
     }
 }
 
@@ -14515,5 +14539,61 @@ aside-menu-product-service {
             color: var(--color-toast-primary-text) !important;
             text-decoration: underline;
         }
+    }
+}
+
+// common-dialog md width 
+.mat-dialog-md {
+    width: 700px;
+}
+
+// material-pagination
+.mat-mdc-paginator {
+    .mat-mdc-form-field {
+        .mat-mdc-select {
+            padding: 0 !important;
+        }
+    }
+}
+
+// outline-card
+.mat-mdc-card {
+    &.outline-card {
+        border: 1px solid var(--color-iron);
+        box-shadow: none;
+    }
+} 
+// invoice preview list
+.invoice-preview-wrapper {
+    .mat-grid-wrapper {
+        .mat-list-wrap {
+            .mat-mdc-list {
+                .mat-mdc-list-item {
+                    height: 60px;
+                }
+            }
+        }
+    }
+}
+.fw-bold {
+    font-weight: 600;
+}
+.preview-list {
+    .form-control {
+        padding-left: 30px !important;
+    }
+}
+
+.width-60{
+    width: 60px !important;
+}
+
+// This Class will use globllay for border like mat input field
+.mat-form-field-border{
+    border-radius: 4px;
+    border: 1px solid var(--color-fields-border);
+
+    &:hover{
+        border-color: var(--color-field-hover);
     }
 }

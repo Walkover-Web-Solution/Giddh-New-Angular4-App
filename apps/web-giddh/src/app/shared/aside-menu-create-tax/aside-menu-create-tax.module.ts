@@ -7,6 +7,7 @@ import { LaddaModule } from 'angular2-ladda';
 import { DecimalDigitsModule } from '../helpers/directives/decimalDigits/decimalDigits.module';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { KeyboardShortutModule } from '../helpers/directives/keyboardShortcut/keyboardShortut.module';
+import { TranslateDirectiveModule } from '../../theme/translate/translate.directive.module';
 
 
 @NgModule({
@@ -14,7 +15,7 @@ import { KeyboardShortutModule } from '../helpers/directives/keyboardShortcut/ke
         CommonModule, FormsModule, ReactiveFormsModule, ShSelectModule, LaddaModule.forRoot({
             style: 'slide-left',
             spinnerSize: 30
-        }), DecimalDigitsModule, BsDatepickerModule.forRoot(), KeyboardShortutModule
+        }), DecimalDigitsModule, BsDatepickerModule.forRoot(), KeyboardShortutModule, TranslateDirectiveModule
     ],
     exports: [AsideMenuCreateTaxComponent],
     declarations: [AsideMenuCreateTaxComponent],

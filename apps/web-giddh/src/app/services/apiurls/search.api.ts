@@ -3,4 +3,5 @@ export const SEARCH_API = {
     ACCOUNT_SEARCH: 'company/:companyUniqueName/:version/account-search',
     ACCOUNT_SEARCH_V2: 'company/:companyUniqueName/account-search-2',
     ACCOUNT_DETAIL: ':version/company/:companyUniqueName/particular/:accountUniqueName',
+    ACCOUNT_SEARCH_V3: 'company/:companyUniqueName/v3/account-search'
 };

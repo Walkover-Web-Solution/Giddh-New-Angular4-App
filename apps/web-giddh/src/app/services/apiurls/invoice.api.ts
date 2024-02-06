@@ -25,7 +25,8 @@ export const INVOICE_API = {
     CANCEL_E_INVOICE_API: COMMON_URL + 'invoice/:invoiceUniqueName/cancel-einvoice',
     CANCEL_CN_DN_E_INVOICE_API: COMMON_URL + 'voucher/:voucherUniqueName/cancel-einvoice',
     VERIFY_EMAIL: COMMON_URL + 'invoice-setting/verify-email?emailAddress=:emailAddress&scope=:scope&branchUniqueName=:branchUniqueName',
-    GET_ALL_VERSIONS: COMMON_URL + 'voucher/:voucherUniqueName/versions?page=:page&count=:count'
+    GET_ALL_VERSIONS: COMMON_URL + 'voucher/:voucherUniqueName/versions?page=:page&count=:count',
+    GET_CREATED_TEMPLATES: 'v2/company/:companyUniqueName/templates?type=:voucherType'
 };
 
 export const INVOICE_API_2 = {
