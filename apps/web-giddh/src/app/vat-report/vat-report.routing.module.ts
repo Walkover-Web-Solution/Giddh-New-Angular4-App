@@ -3,6 +3,7 @@ import { RouterModule } from '@angular/router';
 import { VatReportComponent } from './vat-report.component';
 import { VatReportTransactionsComponent } from './transactions/vat-report-transactions.component';
 import { NeedsAuthentication } from '../decorators/needsAuthentication';
+import { ObligationsComponent } from './obligations/obligations.component';
 
 @NgModule({
     imports: [
@@ -19,6 +20,11 @@ import { NeedsAuthentication } from '../decorators/needsAuthentication';
             {
                 path: 'transactions/section/:section',
                 component: VatReportTransactionsComponent,
+                canActivate: [NeedsAuthentication]
+            },
+            {
+                path: 'obligations',
+                component: ObligationsComponent,
                 canActivate: [NeedsAuthentication]
             }
         ])

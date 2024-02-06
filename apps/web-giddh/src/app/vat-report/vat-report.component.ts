@@ -1,5 +1,5 @@
 import { Observable, ReplaySubject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { take, takeUntil } from 'rxjs/operators';
 import { ChangeDetectorRef, Component, TemplateRef, OnDestroy, OnInit, ViewChild, } from '@angular/core';
 import { Router } from '@angular/router';
 import { VatReportRequest } from '../models/api-models/Vat';
@@ -101,6 +101,8 @@ export class VatReportComponent implements OnInit, OnDestroy {
     public isLoading: boolean = false;
     /** Hold selected month value */
     public selectedMonth: any = "";
+    /** Hold HMRC portal url */
+    public connectToHMRCUrl: string = null;
 
     constructor(
         private gstReconcileService: GstReconcileService,
@@ -140,9 +142,13 @@ export class VatReportComponent implements OnInit, OnDestroy {
 
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if (activeCompany) {
+            if (activeCompany && !this.activeCompany) {
                 this.activeCompany = activeCompany;
                 this.isUKCompany = this.activeCompany?.countryV2?.alpha2CountryCode === 'GB' ? true : false;
+
+                if (this.isUKCompany) {
+                    this.getURLHMRCAuthorization();
+                }
             }
         });
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
@@ -389,5 +395,18 @@ export class VatReportComponent implements OnInit, OnDestroy {
             this.toDate = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
             this.getVatReport();
         }
+    }
+
+    /**
+     * This will call API to get HMRC get authorization url
+     *
+     * @memberof VatReportComponent
+     */
+    public getURLHMRCAuthorization(): void {
+        this.vatService.getHMRCAuthorization(this.activeCompany.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+            if (res?.body) {
+                this.connectToHMRCUrl = res?.body;
+            }
+        })
     }
 }

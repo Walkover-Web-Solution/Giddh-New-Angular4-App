@@ -3,4 +3,9 @@ export const VAT_API = {
     VIEW_REPORT_V2: 'v2/company/:companyUniqueName/vat-report?from=:from&to=:to&taxNumber=:taxNumber',
     DOWNLOAD_REPORT: 'v2/company/:companyUniqueName/vat-report-download?from=:from&to=:to&taxNumber=:taxNumber&fileType=base64',
     VIEW_TRANSACTIONS_REPORT: 'v2/company/:companyUniqueName/vat-report-detailed?from=:from&to=:to&taxNumber=:taxNumber&section=:section&page=:page&count=:count',
+    CHECK_HRMC_AUTHORIZATION: 'company/:companyUniqueName/authorize',
+    SAVE_AUTHORIZATION_CODE: 'company/:companyUniqueName/save-authorization-code',
+    VAT_OBLIGATIONS: 'company/:companyUniqueName/uk/vat-obligations?branchUniqueName=:branchUniqueName&taxNumber=:taxNumber&status=:status&from=:from&to=:to',
+    VIEW_VAT_RETURN: 'company/:companyUniqueName/uk/view-vat-return?taxNumber=:taxNumber&periodKey=:periodKey&from=:from&to=:to',
+    SUBMIT_VAT_RETURN: 'company/:companyUniqueName/uk/submit-vat-return?taxNumber=:taxNumber&periodKey=:periodKey&from=:from&to=:to&branchUniqueName=:branchUniqueName'
 };

@@ -110,4 +110,107 @@ export class VatService {
                 return data;
             }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, request)));
     }
+
+    /**
+     * This will get the HMRC Authorization URL
+     *
+     * @param {string} companyUniqueName
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof VatService
+     */
+    public getHMRCAuthorization(companyUniqueName: string): Observable<BaseResponse<any, any>> {
+        let url = this.config.apiUrl + VAT_API.CHECK_HRMC_AUTHORIZATION;
+        url = url?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName));
+        return this.http.get(url).pipe(
+            map((res) => {
+                let data: BaseResponse<any, any> = res;
+                return data;
+            }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
+    }
+
+    /**
+     * This will save Authorization Code which get from HMRC Portal
+     *
+     * @param {string} companyUniqueName
+     * @param {*} model
+     * @returns
+     * @memberof VatService
+     */
+    public saveAuthorizationCode(companyUniqueName: string, model: any) {
+        let url = this.config.apiUrl + VAT_API.SAVE_AUTHORIZATION_CODE;
+        url = url?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName));
+        return this.http.post(url, model).pipe(
+            map((res) => {
+                let data: BaseResponse<any, any> = res;
+                return data;
+            }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
+    }
+
+    /**
+     * This will get VAT Obligations records
+     *
+     * @param {string} companyUniqueName
+     * @param {*} model
+     * @returns
+     * @memberof VatService
+     */
+    public vatObligations(companyUniqueName: string, model: any) {
+        let url = this.config.apiUrl + VAT_API.VAT_OBLIGATIONS;
+        url = url?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName));
+        url = url?.replace(':branchUniqueName', encodeURIComponent(model?.branchUniqueName));
+        url = url?.replace(':taxNumber', encodeURIComponent(model?.taxNumber));
+        url = url?.replace(':status', encodeURIComponent(model?.status));
+        url = url?.replace(':from', encodeURIComponent(model?.from));
+        url = url?.replace(':to', encodeURIComponent(model?.to));
+        return this.http.get(url).pipe(
+            map((res) => {
+                let data: any = res;
+                return data;
+            }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
+    }
+
+    /**
+     * This is used to File VAT Return
+     *
+     * @param {string} companyUniqueName
+     * @param {*} model
+     * @returns
+     * @memberof VatService
+     */
+    public fileVatReturn(companyUniqueName: string, model: any) {
+        let url = this.config.apiUrl + VAT_API.SUBMIT_VAT_RETURN;
+        url = url?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName));
+        url = url?.replace(':branchUniqueName', encodeURIComponent(model?.branchUniqueName));
+        url = url?.replace(':taxNumber', encodeURIComponent(model?.taxNumber));
+        url = url?.replace(':periodKey', encodeURIComponent(model?.periodKey));
+        url = url?.replace(':from', encodeURIComponent(model?.from));
+        url = url?.replace(':to', encodeURIComponent(model?.to));
+        return this.http.post(url, {}).pipe(
+            map((res) => {
+                let data: any = res;
+                return data;
+            }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
+    }
+
+    /**
+     * This will get for view VAT return record
+     *
+     * @param {string} companyUniqueName
+     * @param {*} model
+     * @returns
+     * @memberof VatService
+     */
+    public viewVatReturn(companyUniqueName: string, model: any) {
+        let url = this.config.apiUrl + VAT_API.VIEW_VAT_RETURN;
+        url = url?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName));
+        url = url?.replace(':taxNumber', encodeURIComponent(model?.taxNumber));
+        url = url?.replace(':periodKey', encodeURIComponent(model?.periodKey));
+        url = url?.replace(':from', encodeURIComponent(model?.from));
+        url = url?.replace(':to', encodeURIComponent(model?.to));
+        return this.http.get(url).pipe(
+            map((res) => {
+                let data: any = res;
+                return data;
+            }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
+    }
 }
