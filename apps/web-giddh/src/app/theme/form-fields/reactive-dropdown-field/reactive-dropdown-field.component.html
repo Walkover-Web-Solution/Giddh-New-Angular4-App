@@ -1,6 +1,6 @@
 <ng-container appTranslate (commonLocaleData)="commonLocaleData = $event">
     <ng-container *ngIf="showLabel">
-        <mat-form-field [appearance]="appearance">
+        <mat-form-field [appearance]="appearance" [ngClass]="{ 'mat-form-field-invalid': showError }">
             <mat-label>{{ label ? label : placeholder }}</mat-label>
             <input type="text" [ngClass]="cssClass" class="select-field-input" [placeholder]="placeholder" matInput
                 [readonly]="readonly" [matAutocomplete]="auto" [name]="name" [autocomplete]="autocomplete"
@@ -20,10 +20,8 @@
                 <span class="position-relative">
                     <mat-option *ngFor="let option of fieldFilteredOptions$ | async" [value]="option"
                         [matTooltip]="option?.label" matTooltipPosition="right">
-                        <ng-template
-                            [ngTemplateOutletContext]="{ option: option }"
-                            [ngTemplateOutlet]="optionTemplate"
-                        ></ng-template>
+                        <ng-template [ngTemplateOutletContext]="{ option: option }"
+                            [ngTemplateOutlet]="optionTemplate"></ng-template>
                         <ng-container *ngIf="!optionTemplate">
                             {{ option?.label }}
                         </ng-container>

@@ -66,6 +66,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
     @ViewChild('asideMenuProductService') asideMenuProductService: TemplateRef<any>;
     /** Template Reference for Create Tax aside menu */
     @ViewChild("createTax") public createTax: TemplateRef<any>;
+    /* Selector for send email  modal */
+    @ViewChild('sendEmailModal', { static: true }) public sendEmailModal: any;
+    /* Selector for print  modal */
+    @ViewChild('printVoucherModal', { static: true }) public printVoucherModal: any;
     /**  This will use for dayjs */
     public dayjs = dayjs;
     /** Holds current voucher type */
@@ -1202,13 +1206,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
         });
     }
 
-    public openPrintPreviewDialog(): void {
-        this.dialog.open(PrintVoucherComponent, {
-            width: '60vw',
-            height: '80vh'
-        });
-    }
-
     /**
      * Finds parent group for new account create modal by voucher type
      *
@@ -1551,6 +1548,37 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
                 this.dialog.closeAll();
             }
         });
+    }
+
+    /**
+     * This will be use for create and send voucher
+     *
+     * @memberof VoucherCreateComponent
+     */
+    public createSendVoucher(): void {
+        this.dialog.open(this.sendEmailModal, {
+            width: '650px'
+        });
+    }
+    /**
+     * This will be use for create and print voucher
+     *
+     * @memberof VoucherCreateComponent
+     */
+    public createPrintVoucher(): void {
+        this.dialog.open(this.printVoucherModal, {
+            width: '60vw',
+            height: '80vh'
+        });
+    }
+
+    /**
+    * This will use for cancel email modal
+    *
+    * @memberof VoucherCreateComponent
+    */
+    public cancelEmailModal(): void {
+        this.dialog.closeAll();
     }
 
     /**

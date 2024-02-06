@@ -26,12 +26,9 @@
                                             <reactive-dropdown-field *ngIf="!invoiceType.isCashInvoice"
                                                 [label]="invoiceType.isPurchaseInvoice || invoiceType.isDebitNote ? localeData?.vendor_name : localeData?.customer_name"
                                                 [placeholder]="invoiceType.isPurchaseInvoice || invoiceType.isDebitNote ? localeData?.select_vendor : localeData?.select_customer"
-                                                formControlName="uniqueName" 
-                                                [name]="'account'"
-                                                [options]="voucherAccountResults$ | async" 
-                                                [showCreateNew]="true"
-                                                [enableDynamicSearch]="true" 
-                                                [isPaginationEnabled]="true"
+                                                formControlName="uniqueName" [name]="'account'"
+                                                [options]="voucherAccountResults$ | async" [showCreateNew]="true"
+                                                [enableDynamicSearch]="true" [isPaginationEnabled]="true"
                                                 [openDropdown]="openAccountDropdown"
                                                 [createNewText]="!invoiceType.isPurchaseInvoice && !invoiceType.isDebitNote ? localeData?.add_customer : localeData?.add_vendor"
                                                 [labelValue]="invoiceForm.controls['account'].get('customerName')?.value"
@@ -388,19 +385,15 @@
                                 </div>
 
                                 <!-- Row 3 -->
-                                <div class="row row-gap mr-t15 mr-b15" *ngIf="invoiceType.isPurchaseInvoice && (vendorPurchaseOrders$ | async)?.length">
+                                <div class="row row-gap mr-t15 mr-b15"
+                                    *ngIf="invoiceType.isPurchaseInvoice && (vendorPurchaseOrders$ | async)?.length">
                                     <!-- Purchase Order -->
                                     <div class="col-6">
-                                        <select-multiple-fields
-                                            [placeholder]="localeData?.select_order_placeholder"
-                                            [appearance]="'outline'"
-                                            [isPurchaseOrder]="true"
-                                            [localeData]="localeData"
-                                            [options]="vendorPurchaseOrders$ | async"
-                                            [selectedValues]="null"
+                                        <select-multiple-fields [placeholder]="localeData?.select_order_placeholder"
+                                            [appearance]="'outline'" [isPurchaseOrder]="true" [localeData]="localeData"
+                                            [options]="vendorPurchaseOrders$ | async" [selectedValues]="null"
                                             [name]="'purchase-orders'"
-                                            class="select-multiple-chiplist"
-                                        ></select-multiple-fields>
+                                            class="select-multiple-chiplist"></select-multiple-fields>
                                     </div>
                                 </div>
 
@@ -554,14 +547,17 @@
                                     </div>
 
                                     <!-- Grid Body | Row 3-->
-                                    <ng-container *ngFor="let entry of invoiceForm?.get('entries')['controls']; let entryIndex = index">
+                                    <ng-container
+                                        *ngFor="let entry of invoiceForm?.get('entries')['controls']; let entryIndex = index">
                                         <ng-container formGroupName="0">
                                             <!-- # -->
                                             <div class="body-item text-left">{{ entryIndex + 1 }}</div>
 
                                             <!-- Product/Service Description -->
                                             <div class="body-item text-left">
-                                                <ng-container *ngFor="let transaction of entry?.get('transactions')['controls']; let transactionIndex = index" formArrayName="transactions">
+                                                <ng-container
+                                                    *ngFor="let transaction of entry?.get('transactions')['controls']; let transactionIndex = index"
+                                                    formArrayName="transactions">
                                                     <ng-container [formGroupName]="transactionIndex">
                                                         <ng-container formGroupName="account">
                                                             <reactive-dropdown-field
@@ -575,9 +571,8 @@
                                                                 transaction.get('stock').get('name')?.value +
                                                                 ')'
                                                                 : transaction.get('account').get('name')?.value"
-                                                                [options]="voucherStockResults$ | async" 
-                                                                [showCreateNew]="true"
-                                                                [enableDynamicSearch]="true"
+                                                                [options]="voucherStockResults$ | async"
+                                                                [showCreateNew]="true" [enableDynamicSearch]="true"
                                                                 [isPaginationEnabled]="true"
                                                                 [createNewText]="commonLocaleData?.app_create_new"
                                                                 (scrollEnd)="handleSearchStockScrollEnd()"
@@ -587,29 +582,36 @@
                                                                 (createOption)="toggleStockAsidePane()">
                                                                 <ng-template #optionTemplate let-option="option">
                                                                     <ng-container *ngIf="!option.additional?.stock">
-                                                                        <a href="javascript:void(0)" class="flex-column">
-                                                                            <div class="option-label">{{ option?.label }}</div>
+                                                                        <a href="javascript:void(0)"
+                                                                            class="flex-column">
+                                                                            <div class="option-label">{{ option?.label
+                                                                                }}</div>
                                                                             <div class="option-value">
                                                                                 {{ option.additional?.uniqueName }}
                                                                             </div>
                                                                         </a>
                                                                     </ng-container>
                                                                     <ng-container *ngIf="option.additional?.stock">
-                                                                        <a href="javascript:void(0)" class="flex-column">
-                                                                            <div class="option-label">{{ option?.label }}</div>
+                                                                        <a href="javascript:void(0)"
+                                                                            class="flex-column">
+                                                                            <div class="option-label">{{ option?.label
+                                                                                }}</div>
                                                                             <div class="option-value">
                                                                                 {{ option.additional?.uniqueName }}
                                                                             </div>
                                                                             <div class="option-value-stock">
                                                                                 {{ commonLocaleData?.app_stock }}:
-                                                                                {{ option.additional?.stock?.uniqueName }}
+                                                                                {{ option.additional?.stock?.uniqueName
+                                                                                }}
                                                                             </div>
                                                                         </a>
                                                                     </ng-container>
                                                                 </ng-template>
                                                             </reactive-dropdown-field>
                                                         </ng-container>
-                                                        <ng-container *ngIf="(stockVariants[entryIndex] | async)?.length > 1" formGroupName="stock">
+                                                        <ng-container
+                                                            *ngIf="(stockVariants[entryIndex] | async)?.length > 1"
+                                                            formGroupName="stock">
                                                             <ng-container formGroupName="variant">
                                                                 <reactive-dropdown-field
                                                                     [label]="localeData?.select_variant"
@@ -625,8 +627,12 @@
                                                     </ng-container>
                                                 </ng-container>
 
-                                                <textarea rows="2" matInput class="form-control mt-2" placeholder="Add Description" formControlName="description" [maxlength]="entryDescriptionLength"></textarea>
-                                                <span class="mt-2 font-12">{{ commonLocaleData?.app_characters_left }}: {{ entryDescriptionLength - entry.get("description")?.value?.length }}</span>
+                                                <textarea rows="2" matInput class="form-control mt-2"
+                                                    placeholder="Add Description" formControlName="description"
+                                                    [maxlength]="entryDescriptionLength"></textarea>
+                                                <span class="mt-2 font-12">{{ commonLocaleData?.app_characters_left }}:
+                                                    {{ entryDescriptionLength - entry.get("description")?.value?.length
+                                                    }}</span>
 
                                                 <div class="d-flex justify-content-between">
                                                     <div class="w-50">
@@ -675,10 +681,11 @@
 
                                             <!-- Qty/Unit -->
                                             <div class="body-item">
-                                                <text-field [placeholder]="'Enter Qty'" [cssClass]="'form-control text-right'"
-                                                    [type]="'text'">
+                                                <text-field [placeholder]="'Enter Qty'"
+                                                    [cssClass]="'form-control text-right'" [type]="'text'">
                                                 </text-field>
-                                                <mat-select name="qty" [placeholder]="'Select'" class="form-control mt-2">
+                                                <mat-select name="qty" [placeholder]="'Select'"
+                                                    class="form-control mt-2">
                                                     <mat-option [value]="1">Opt 1</mat-option>
                                                     <mat-option [value]="2">Opt 2</mat-option>
                                                     <mat-option [value]="3">Opt 3</mat-option>
@@ -687,15 +694,15 @@
 
                                             <!-- Rate -->
                                             <div class="body-item">
-                                                <text-field [placeholder]="'Enter'" [cssClass]="'form-control text-right'"
-                                                    [type]="'text'">
+                                                <text-field [placeholder]="'Enter'"
+                                                    [cssClass]="'form-control text-right'" [type]="'text'">
                                                 </text-field>
                                             </div>
 
                                             <!-- Amount -->
                                             <div class="body-item">
-                                                <text-field [placeholder]="'Enter'" [cssClass]="'form-control text-right'"
-                                                    [type]="'text'">
+                                                <text-field [placeholder]="'Enter'"
+                                                    [cssClass]="'form-control text-right'" [type]="'text'">
                                                 </text-field>
                                             </div>
 
@@ -713,8 +720,8 @@
 
                                             <!-- Total -->
                                             <div class="body-item">
-                                                <text-field [placeholder]="'Enter'" [cssClass]="'form-control text-right'"
-                                                    [type]="'text'">
+                                                <text-field [placeholder]="'Enter'"
+                                                    [cssClass]="'form-control text-right'" [type]="'text'">
                                                 </text-field>
                                                 <div class="d-flex align-items-center" (click)="openOtherTaxDialog()">
                                                     <mat-checkbox type="checkbox" color="primary">
@@ -856,23 +863,29 @@
                                                                             <div class="vouchers-attachment mat-form-field-border d-flex align-items-center column-gap1 p-2"
                                                                                 [matTooltip]="'No file chosen'"
                                                                                 matTooltipPosition="right">
-                                                                                <input type="file" class="position-absolute"
+                                                                                <input type="file"
+                                                                                    class="position-absolute"
                                                                                     name="invoiceFile" id="invoiceFile"
-                                                                                    (change)="uploadFile()" droppable="true" />
+                                                                                    (change)="uploadFile()"
+                                                                                    droppable="true" />
                                                                                 <ng-container *ngIf="isFileUploading">
-                                                                                    <mat-spinner [diameter]="30"></mat-spinner>
+                                                                                    <mat-spinner
+                                                                                        [diameter]="30"></mat-spinner>
                                                                                 </ng-container>
                                                                                 <ng-container *ngIf="!isFileUploading">
                                                                                     <div class="attachment-add-icon">
                                                                                         <i class="icon-add"></i>
                                                                                     </div>
-                                                                                    <span class="attachment-placeholder">Attach File
+                                                                                    <span
+                                                                                        class="attachment-placeholder">Attach
+                                                                                        File
                                                                                         to
                                                                                         voucher</span>
                                                                                 </ng-container>
                                                                             </div>
                                                                         </ng-container>
-                                                                        <ng-container *ngIf="!isFileUploading && selectedFileName">
+                                                                        <ng-container
+                                                                            *ngIf="!isFileUploading && selectedFileName">
                                                                             <div
                                                                                 class="vouchers-attachment mat-form-field-border d-flex align-items-center column-gap1 p-2 text-success">
                                                                                 <div class="attachment-add-icon">
@@ -961,8 +974,11 @@
                                         class="vouchers-more-option-btn"> <i class="caret"></i>
                                     </button>
                                     <mat-menu #moreOptions="matMenu">
-                                        <button mat-menu-item>Create & Send</button>
-                                        <button mat-menu-item (click)="openPrintPreviewDialog()">Create & Print</button>
+                                        <button mat-menu-item (click)="
+                                      createSendVoucher()
+                                    ">Create & Send</button>
+                                        <button mat-menu-item (click)="
+                                        createPrintVoucher()">Create & Print</button>
                                     </mat-menu>
                                 </div>
                             </div>
@@ -992,9 +1008,34 @@
 </ng-template>
 
 <ng-template #asideMenuProductService>
-    <aside-menu-product-service
-        [selectedVoucherType]="invoiceType"
-        (closeAsideEvent)="closeAsideMenuProductServiceModal()"
-    >
+    <aside-menu-product-service [selectedVoucherType]="invoiceType"
+        (closeAsideEvent)="closeAsideMenuProductServiceModal()">
     </aside-menu-product-service>
 </ng-template>
+
+<!-- region print voucher popup -->
+<ng-template #printVoucherModal>
+    <!-- *ngIf="actionAfterGenerateORUpdate === 3 && invoiceNo && accountUniqueName" -->
+    <ng-container >
+        <print-voucher [voucherType]="invoiceType" [localeData]="localeData"
+            [commonLocaleData]="commonLocaleData" [selectedItem]="{
+                    voucherNumber: invoiceNo,
+                    uniqueName: accountUniqueName,
+                    voucherUniqueName: newVoucherUniqueName
+                }" (cancelEvent)="cancelPrintModal()"></print-voucher>
+    </ng-container>
+</ng-template>
+
+<!-- region send email popup -->
+<ng-template #sendEmailModal>
+    <!-- *ngIf="actionAfterGenerateORUpdate === 2" -->
+    <ng-container >
+        <app-send-email-invoice-component [voucherType]="invoiceType" (successEvent)="sendEmail($event)" [selectedItem]="{
+                    voucherNumber: invoiceNo,
+                    uniqueName: accountUniqueName,
+                    account: customerAccount,
+                    voucherUniqueName: newVoucherUniqueName
+                }" (cancelEvent)="cancelEmailModal()"></app-send-email-invoice-component>
+    </ng-container>
+</ng-template>
+<!-- endregion -->

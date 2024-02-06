@@ -60,6 +60,7 @@ import { AsideMenuCreateTaxModule } from "../shared/aside-menu-create-tax/aside-
 import { ConvertBillDialogComponent } from "./convert-bill-dialog/convert-bill-dialog.component";
 import { MatDividerModule } from "@angular/material/divider";
 import { AsideMenuProductServiceModule } from "../shared/aside-menu-product-service/aside-menu-product-service.module";
+import { SendEmailInvoiceModule } from "../shared/send-email-invoice/send-email-invoice.module";
 
 @NgModule({
     declarations: [
@@ -126,7 +127,8 @@ import { AsideMenuProductServiceModule } from "../shared/aside-menu-product-serv
         CreateDiscountModule,
         AsideMenuCreateTaxModule,
         MatDividerModule,
-        AsideMenuProductServiceModule
+        AsideMenuProductServiceModule,
+        SendEmailInvoiceModule
     ],
     exports: [
 
