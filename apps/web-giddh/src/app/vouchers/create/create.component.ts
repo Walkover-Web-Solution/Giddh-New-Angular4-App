@@ -17,7 +17,7 @@ import { OrganizationType } from "../../models/user-login-state";
 import { ProformaFilter, ProformaResponse } from "../../models/api-models/proforma";
 import { InvoiceReceiptFilter, ReciptResponse } from "../../models/api-models/recipt";
 import { VouchersUtilityService } from "../utility/vouchers.utility.service";
-import { FormBuilder, UntypedFormArray, UntypedFormGroup, Validators } from "@angular/forms";
+import { FormBuilder, FormArray, FormGroup, Validators } from "@angular/forms";
 import { GIDDH_DATE_FORMAT } from "../../shared/helpers/defaultDateFormat";
 import { BriedAccountsGroup, SearchType, TaxType, VoucherTypeEnum } from "../utility/vouchers.const";
 import { SearchService } from "../../services/search.service";
@@ -161,7 +161,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
     /** Holds list of last vouchers */
     public lastVouchersList$: Observable<LastInvoices[]> = of(null);
     /** Form Group for invoice form */
-    public invoiceForm: UntypedFormGroup;
+    public invoiceForm: FormGroup;
     /** This will open account dropdown by default */
     public openAccountDropdown: boolean = false;
     /* This will hold local JSON data */
@@ -206,14 +206,21 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
     public universalDate: any;
     /** List of stock variants */
     public stockVariants: any[] = [];
+    /** List of stock units */
+    public stockUnits: any[] = [];
     /** True if we need to show entry datepicker */
     public openEntryDatepicker: boolean = false;
     /** Entry form group */
-    private entryFormGroup: UntypedFormGroup;
+    private entryFormGroup: FormGroup;
     /** Date change type (voucher/entry) */
     private dateChangeType: string = '';
     /** Date Change modal configuration */
     public dateChangeConfiguration: ConfirmationModalConfiguration;
+    /** Holds hsn/sac before edit */
+    public currentHsnSac: any = {
+        hsnNumber: '',
+        sacNumber: ''
+    };
 
     /** Returns true if account is selected else false */
     public get showPageLeaveConfirmation(): boolean {
@@ -360,6 +367,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
 
                 transactionFormGroup.get('stock').get('skuCode')?.patchValue(response.body.stock.skuCode);
                 transactionFormGroup.get('stock').get('skuCodeHeading')?.patchValue(response.body.stock.skuCodeHeading);
+
+                this.stockUnits[response.entryIndex] = of(response.body.stock.variant.unitRates);
             }
         });
     }
@@ -1044,10 +1053,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
      * Returns address form group
      *
      * @private
-     * @return {*}  {UntypedFormGroup}
+     * @return {*}  {FormGroup}
      * @memberof VoucherCreateComponent
      */
-    private getAddressFormGroup(): UntypedFormGroup {
+    private getAddressFormGroup(): FormGroup {
         return this.formBuilder.group({
             index: [''],
             address: [''],
@@ -1064,10 +1073,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
      * Returns entries form group
      *
      * @private
-     * @return {*}  {UntypedFormGroup}
+     * @return {*}  {FormGroup}
      * @memberof VoucherCreateComponent
      */
-    private getEntriesFormGroup(): UntypedFormGroup {
+    private getEntriesFormGroup(): FormGroup {
         return this.formBuilder.group({
             date: [this.universalDate || dayjs().format(GIDDH_DATE_FORMAT)],
             description: [''],
@@ -1113,7 +1122,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
                         uniqueName: ['']
                     })
                 })
-            ])
+            ]),
+            total: this.formBuilder.group({
+                amountForAccount: [''],
+                amountForCompany: ['']
+            })
         });
     }
 
@@ -1121,10 +1134,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
      * Returns address form group
      *
      * @private
-     * @return {*}  {UntypedFormGroup}
+     * @return {*}  {FormGroup}
      * @memberof VoucherCreateComponent
      */
-    private getTransactionDiscountFormGroup(): UntypedFormGroup {
+    private getTransactionDiscountFormGroup(): FormGroup {
         return this.formBuilder.group({
             amount: this.formBuilder.group({
                 amountForAccount: [''],
@@ -1139,7 +1152,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
     }
 
 
-    private getTransactionTaxFormGroup(): UntypedFormGroup {
+    private getTransactionTaxFormGroup(): FormGroup {
         return this.formBuilder.group({
             accountName: [''],
             accountUniqueName: [''],
@@ -1441,12 +1454,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
      *
      * @private
      * @param {number} index
-     * @return {UntypedFormGroup}  {*}
+     * @return {FormGroup}  {*}
      * @memberof VoucherCreateComponent
      */
-    private getEntryFormGroup(index: number): UntypedFormGroup {
-        const entriesArray = this.invoiceForm.get('entries') as UntypedFormArray;
-        return entriesArray.at(index) as UntypedFormGroup;
+    private getEntryFormGroup(index: number): FormGroup {
+        const entriesArray = this.invoiceForm.get('entries') as FormArray;
+        return entriesArray.at(index) as FormGroup;
     }
 
     /**
@@ -1454,12 +1467,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
      *
      * @private
      * @param {number} index
-     * @return {UntypedFormGroup}  {*}
+     * @return {FormGroup}  {*}
      * @memberof VoucherCreateComponent
      */
-    private getTransactionFormGroup(entryFormGroup: UntypedFormGroup): UntypedFormGroup {
-        const transactionsArray = entryFormGroup.get('transactions') as UntypedFormArray;
-        return transactionsArray.at(0) as UntypedFormGroup;
+    private getTransactionFormGroup(entryFormGroup: FormGroup): FormGroup {
+        const transactionsArray = entryFormGroup.get('transactions') as FormArray;
+        return transactionsArray.at(0) as FormGroup;
     }
 
     /**
@@ -1540,10 +1553,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
     /**
      * Callback for entry date change
      *
-     * @param {UntypedFormGroup} entry
+     * @param {FormGroup} entry
      * @memberof VoucherComponent
      */
-    public onBlurEntryDate(entryFormGroup: UntypedFormGroup): void {
+    public onBlurEntryDate(entryFormGroup: FormGroup): void {
         if (typeof (entryFormGroup.get('date')?.value) === "object") {
             entryFormGroup.get('date')?.patchValue(dayjs(entryFormGroup.get('date')?.value).format(GIDDH_DATE_FORMAT));
         }
@@ -1580,6 +1593,49 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
         }
 
         this.dialog.closeAll();
+    }
+
+    /**
+     * Updated hsn/sac before edit
+     *
+     * @memberof VoucherCreateComponent
+     */
+    public updateCurrentHsnSac(entry: FormGroup): void {
+        this.currentHsnSac = {
+            hsnNumber: entry.get('hsnNumber')?.value,
+            sacNumber: entry.get('sacNumber')?.value
+        };
+    }
+
+    /**
+     * Updates previous hsn/sac
+     *
+     * @param {FormGroup} entry
+     * @memberof VoucherCreateComponent
+     */
+    public cancelHsnSacEdit(entry: FormGroup): void {
+        entry.get('hsnNumber')?.patchValue(this.currentHsnSac.hsnNumber);
+        entry.get('sacNumber')?.patchValue(this.currentHsnSac.sacNumber);
+    }
+
+    /**
+     * Adds new line entry
+     *
+     * @memberof VoucherCreateComponent
+     */
+    public addNewLineEntry(): void {
+        this.invoiceForm.get('entries')['controls'].push(this.getEntriesFormGroup());
+    }
+
+    /**
+     * Removes line entry
+     *
+     * @param {number} entryIndex
+     * @memberof VoucherCreateComponent
+     */
+    public deleteLineEntry(entryIndex: number): void {
+        const entries = this.invoiceForm.get('entries') as FormArray;
+        entries.removeAt(entryIndex);
     }
 
     /**
