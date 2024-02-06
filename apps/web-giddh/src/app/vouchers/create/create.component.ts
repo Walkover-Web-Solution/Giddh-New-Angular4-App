@@ -264,6 +264,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         this.getVoucherVersion();
         this.initVoucherForm();
+        this.getDiscountsList();
+        this.getCompanyBranches();
+        this.getCompanyProfile();
+        this.getCompanyTaxes();
+        this.getWarehouses();
 
         this.activatedRoute.params.pipe(delay(0), takeUntil(this.destroyed$)).subscribe(params => {
             if (params) {
@@ -286,13 +291,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
                 this.getIsTcsTdsApplicable();
                 this.getActiveCompany();
                 this.getInvoiceSettings();
-                this.getCompanyBranches();
-                this.getCompanyProfile();
                 this.getCreatedTemplates();
                 this.getOnboardingFormData();
-                this.getDiscountsList();
-                this.getCompanyTaxes();
-                this.getWarehouses();
                 this.getBriefAccounts();
                 this.getParentGroupForCreateAccount();
                 this.searchStock();
