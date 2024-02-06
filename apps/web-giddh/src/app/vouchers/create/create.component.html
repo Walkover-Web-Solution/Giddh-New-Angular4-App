@@ -252,13 +252,33 @@
 
                                         <!-- Mobile Number -->
                                         <div class="col-6 mr-t15">
-                                            <input-field [name]="'mobile-number'" [type]="'tel'" #initContactProforma
-                                                class="flag-input" [id]="'init-contact-proforma'"
-                                                (keydown.enter)="$event.preventDefault()" [label]="'Mobile Number'"
-                                                [placeholder]="'98XXXXXXXX'" [floatLabel]="'auto'">
-                                            </input-field>
-                                            <span id="init-contact-proforma-valid-msg" class="d-none"></span>
-                                            <span id="init-contact-proforma-error-msg" class="d-none"></span>
+                                            <div id="init-contact-wrapper" style="position: relative" class="w-100">
+                                        
+                                                <input
+                                                    type="tel"
+                                                    #initContact
+                                                    aria-autocomplete="none"
+                                                    autocomplete="off"
+                                                    (keypress)="intlClass?.onlyPhoneNumber($event); validateMobileField()"
+                                                    id="init-contact"
+                                                    placeholder="Mobile Number"
+                                                    formControlName="mobileNumber"
+                                                    [ngClass]="{
+                                                        'invalid-input':
+                                                            (invoiceForm.controls['account'].get('mobileNumber')?.touched ||
+                                                            invoiceForm.controls['account'].get('mobileNumber')?.touched) &&
+                                                            !intlClass?.isRequiredValidNumber
+                                                    }"
+                                                />
+                                                <mat-error
+                                                    *ngIf="
+                                                        (invoiceForm.controls['account'].get('mobileNumber')?.touched ||
+                                                        invoiceForm.controls['account'].get('mobileNumber')?.touched) &&
+                                                        !intlClass?.isRequiredValidNumber
+                                                    "
+                                                    >Please enter valid mobile number</mat-error
+                                                >
+                                            </div>
                                         </div>
                                     </ng-container>
 
@@ -1006,3 +1026,10 @@
         (buttonClicked)="handleDateChangeConfirmation($event)"
     ></confirmation-modal>
 </ng-template>
+
+    <!-- region bulk items -->
+    <ng-template #bulkItemsModal>
+        <add-bulk-items
+            (closeEvent)="cancelBulkItemsModal()"
+        ></add-bulk-items>
+    </ng-template>
