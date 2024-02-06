@@ -129,19 +129,7 @@
                                                         *ngFor="let address of account?.addresses; let i = index"
                                                         (click)="fillBillingShippingAddress('account', 'billingAddress', address, i)">
                                                         <div class="d-flex justify-content-between align-items-center">
-                                                            <div>
-                                                                Address {{ i + 1}}
-                                                                <p>{{ address.address ? address.address + ", " : "" }}{{
-                                                                    address.state?.name }}</p>
-                                                                <p>{{ address.gstNumber ? (company.taxType ===
-                                                                    taxTypes.GST ?
-                                                                    commonLocaleData?.app_gstin + ": " : company.taxType
-                                                                    ===
-                                                                    taxTypes.TRN ? commonLocaleData?.app_trn + ": " :
-                                                                    company.taxType === taxTypes.VAT ?
-                                                                    commonLocaleData?.enter_vat_no + ": " : "") +
-                                                                    address.gstNumber : "" }}</p>
-                                                            </div>
+                                                            <full-address [address]="address" [localeData]="localeData" [commonLocaleData]="commonLocaleData" [addressNo]="i + 1" [company]="company"></full-address>
                                                             <i class="icon-tick"
                                                                 *ngIf="invoiceForm.controls['account'].get('billingAddress').get('index')?.value === i"></i>
                                                         </div>
@@ -201,21 +189,7 @@
                                                             (click)="fillBillingShippingAddress('account','shippingAddress', address, i)">
                                                             <div
                                                                 class="d-flex justify-content-between align-items-center">
-                                                                <div>
-                                                                    Address {{ i + 1}}
-                                                                    <p>{{ address.address ? address.address + ", " : ""
-                                                                        }}{{
-                                                                        address.state?.name }}</p>
-                                                                    <p>{{ address.gstNumber ? (company.taxType ===
-                                                                        taxTypes.GST
-                                                                        ? commonLocaleData?.app_gstin + ": " :
-                                                                        company.taxType
-                                                                        === taxTypes.TRN ? commonLocaleData?.app_trn +
-                                                                        ": " :
-                                                                        company.taxType === taxTypes.VAT ?
-                                                                        commonLocaleData?.enter_vat_no + ": " : "") +
-                                                                        address.gstNumber : "" }}</p>
-                                                                </div>
+                                                                <full-address [address]="address" [localeData]="localeData" [commonLocaleData]="commonLocaleData" [addressNo]="i + 1" [company]="company"></full-address>
                                                                 <i class="icon-tick"
                                                                     *ngIf="invoiceForm.controls['account'].get('shippingAddress').get('index')?.value === i"></i>
                                                             </div>
@@ -318,19 +292,7 @@
                                                     *ngFor="let address of company?.addresses; let i = index"
                                                     (click)="fillBillingShippingAddress('company', 'billingAddress', address, i)">
                                                     <div class="d-flex justify-content-between align-items-center">
-                                                        <div>
-                                                            Address {{ i + 1}}
-                                                            <p>{{ address.address ? address.address + ", " : "" }}{{
-                                                                address.state?.name }}</p>
-                                                            <p>{{ address.gstNumber ? (company.taxType === taxTypes.GST
-                                                                ?
-                                                                commonLocaleData?.app_gstin + ": " : company.taxType ===
-                                                                taxTypes.TRN ? commonLocaleData?.app_trn + ": " :
-                                                                company.taxType === taxTypes.VAT ?
-                                                                commonLocaleData?.enter_vat_no + ": " : "") +
-                                                                address.gstNumber
-                                                                : "" }}</p>
-                                                        </div>
+                                                        <full-address [address]="address" [localeData]="localeData" [commonLocaleData]="commonLocaleData" [addressNo]="i + 1" [company]="company"></full-address>
                                                         <i class="icon-tick"
                                                             *ngIf="invoiceForm.controls['company'].get('billingAddress').get('index')?.value === i"></i>
                                                     </div>
@@ -358,19 +320,7 @@
                                                     *ngFor="let address of company?.addresses; let i = index"
                                                     (click)="fillBillingShippingAddress('company', 'shippingAddress', address, i)">
                                                     <div class="d-flex justify-content-between align-items-center">
-                                                        <div>
-                                                            Address {{ i + 1}}
-                                                            <p>{{ address.address ? address.address + ", " : "" }}{{
-                                                                address.state?.name }}</p>
-                                                            <p>{{ address.gstNumber ? (company.taxType === taxTypes.GST
-                                                                ?
-                                                                commonLocaleData?.app_gstin + ": " : company.taxType ===
-                                                                taxTypes.TRN ? commonLocaleData?.app_trn + ": " :
-                                                                company.taxType === taxTypes.VAT ?
-                                                                commonLocaleData?.enter_vat_no + ": " : "") +
-                                                                address.gstNumber
-                                                                : "" }}</p>
-                                                        </div>
+                                                        <full-address [address]="address" [localeData]="localeData" [commonLocaleData]="commonLocaleData" [addressNo]="i + 1" [company]="company"></full-address>
                                                         <i class="icon-tick"
                                                             *ngIf="invoiceForm.controls['company'].get('shippingAddress').get('index')?.value === i"></i>
                                                     </div>
@@ -587,7 +537,7 @@
                                                                 (createOption)="toggleStockAsidePane()">
                                                                 <ng-template #optionTemplate let-option="option">
                                                                     <ng-container *ngIf="!option.additional?.stock">
-                                                                        <a href="javascript:void(0)" class="flex-column">
+                                                                        <a href="javascript:;" class="flex-column">
                                                                             <div class="option-label">{{ option?.label }}</div>
                                                                             <div class="option-value">
                                                                                 {{ option.additional?.uniqueName }}
@@ -595,7 +545,7 @@
                                                                         </a>
                                                                     </ng-container>
                                                                     <ng-container *ngIf="option.additional?.stock">
-                                                                        <a href="javascript:void(0)" class="flex-column">
+                                                                        <a href="javascript:;" class="flex-column">
                                                                             <div class="option-label">{{ option?.label }}</div>
                                                                             <div class="option-value">
                                                                                 {{ option.additional?.uniqueName }}
@@ -617,8 +567,8 @@
                                                                     formControlName="uniqueName"
                                                                     [name]="'transactionStockVariantUniqueName' + entryIndex"
                                                                     [options]="stockVariants[entryIndex] | async"
-                                                                    (selectedOption)="selectVariant($event, i)"
-                                                                    (onClear)="selectVariant($event, i, true)">
+                                                                    (selectedOption)="selectVariant($event, entryIndex)"
+                                                                    (onClear)="selectVariant($event, entryIndex, true)">
                                                                 </reactive-dropdown-field>
                                                             </ng-container>
                                                         </ng-container>
@@ -628,36 +578,66 @@
                                                 <textarea rows="2" matInput class="form-control mt-2" placeholder="Add Description" formControlName="description" [maxlength]="entryDescriptionLength"></textarea>
                                                 <span class="mt-2 font-12">{{ commonLocaleData?.app_characters_left }}: {{ entryDescriptionLength - entry.get("description")?.value?.length }}</span>
 
+                                                <ng-container *ngFor="let transaction of entry.get('transactions')['controls']; let transactionIndex = index" formArrayName="transactions">
+                                                    <ng-container [formGroupName]="transactionIndex">
+                                                        <ng-container *ngIf="transaction.get('stock')?.get('skuCode')?.value">
+                                                            <span class="mt-2 font-12">{{ transaction.get('stock')?.get('skuCodeHeading')?.value }}: {{ transaction.get('stock')?.get('skuCode')?.value }}</span>
+                                                        </ng-container>
+                                                    </ng-container>
+                                                </ng-container>
+
                                                 <div class="d-flex justify-content-between">
                                                     <div class="w-50">
                                                         <div class="mt-2 font-12">
                                                             <span>Entry Date</span>
-                                                            <div class="mt-1">{{ entry.get('date')?.value }} <i
-                                                                    class="icon-edit text-blue cursor-pointer"></i>
+                                                            <div class="mt-1">
+                                                                <ng-container *ngIf="isUpdateMode">
+                                                                    {{ entry.get('date')?.value }}
+                                                                </ng-container>
+                                                                <ng-container *ngIf="!isUpdateMode">
+                                                                    <giddh-datepicker
+                                                                        class="date-border"
+                                                                        [showToggleIcon]="true"
+                                                                        #dp
+                                                                        (keydown.enter)="$event.preventDefault()"
+                                                                        (dateSelected)="onBlurEntryDate(entry, true)"
+                                                                        id="transaction.date_{{ entryIndex }}"
+                                                                        [disabled]="isUpdateMode"
+                                                                        [cssClass]="'entry-custom-date'"
+                                                                        name="transaction.date_{{ entryIndex }}"
+                                                                        formControlName="date"
+                                                                        [appearance]="'fill'"
+                                                                        (datepickerState)="openEntryDatepicker = $event"
+                                                                        [isOpened]="openEntryDatepicker"
+                                                                    >
+                                                                    </giddh-datepicker>
+                                                                </ng-container>
+                                                                <i class="icon-edit text-blue cursor-pointer" (click)="openEntryDatepicker = true"></i>
                                                             </div>
                                                         </div>
                                                     </div>
+
                                                     <div class="w-50 text-right">
                                                         <div class="mt-2 font-12">
-                                                            <span>SAC:</span>
-                                                            <div class="mt-1">Update <i
-                                                                    class="icon-edit text-blue cursor-pointer"
-                                                                    [matMenuTriggerFor]="update"></i></div>
+                                                            <span>{{ entry.get('showCodeType')?.value === 'hsn' ? commonLocaleData?.app_hsn_code : commonLocaleData?.app_sac_code }}: {{ entry.get('showCodeType')?.value === 'hsn' ? entry.get('hsnNumber')?.value : entry.get('sacNumber')?.value }}</span>
+                                                            <div class="mt-1">Update <i class="icon-edit text-blue cursor-pointer" [matMenuTriggerFor]="update"></i></div>
 
                                                             <!-- Update Menu  -->
                                                             <mat-menu #update="matMenu">
                                                                 <div class="p-3" (click)="$event.stopPropagation()">
-                                                                    <mat-radio-group>
-                                                                        <mat-radio-button color="primary" value="1">HSN
+                                                                    <mat-radio-group formControlName="showCodeType" [disabled]="isEinvoiceGenerated">
+                                                                        <mat-radio-button color="primary" value="hsn">HSN
                                                                             Code</mat-radio-button>
-                                                                        <mat-radio-button color="primary" value="2">SAC
+                                                                        <mat-radio-button color="primary" value="sac">SAC
                                                                             Code</mat-radio-button>
                                                                     </mat-radio-group>
 
                                                                     <div class="mt-3">
-                                                                        <text-field [placeholder]="'HSN Number'"
-                                                                            [cssClass]="'form-control text-right'"
-                                                                            [type]="'number'">
+                                                                        <text-field *ngIf="entry.get('showCodeType')?.value === 'hsn'" [placeholder]="commonLocaleData?.app_hsn_code"
+                                                                            [cssClass]="'form-control text-right'" [type]="'number'" formControlName="hsnNumber" maxLength="10" [allowDecimalDigitsOnly]="true" [placeholder]="localeData?.hsn_number" [readonly]="isEinvoiceGenerated"[name]="'hsnNumber_' + entryIndex">
+                                                                        </text-field>
+                                                                        <text-field *ngIf="entry.get('showCodeType')?.value === 'sac'" [placeholder]="commonLocaleData?.app_sac_code"
+                                                                            [cssClass]="'form-control text-right'" [type]="'number'" formControlName="sacNumber" maxLength="10" [allowDecimalDigitsOnly]="true" [placeholder]="localeData?.sac_number" [readonly]="isEinvoiceGenerated" [name]="'sacNumber_' + entryIndex">
                                                                         </text-field>
                                                                     </div>
 
@@ -997,4 +977,11 @@
         (closeAsideEvent)="closeAsideMenuProductServiceModal()"
     >
     </aside-menu-product-service>
+</ng-template>
+
+<ng-template #dateChangeConfirmationModel>
+    <confirmation-modal
+        [configuration]="dateChangeConfiguration"
+        (buttonClicked)="handleDateChangeConfirmation($event)"
+    ></confirmation-modal>
 </ng-template>

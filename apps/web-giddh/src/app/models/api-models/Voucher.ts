@@ -45,7 +45,7 @@ export class LastInvoices {
 }
 
 export interface LastVouchersResponse {
-    items?: ReceiptItem[];
+    items?: any[];
     page?: number;
     count?: number;
     totalPages?: number;

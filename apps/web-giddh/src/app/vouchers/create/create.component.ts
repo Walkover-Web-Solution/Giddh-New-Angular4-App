@@ -66,6 +66,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
     @ViewChild('asideMenuProductService') asideMenuProductService: TemplateRef<any>;
     /** Template Reference for Create Tax aside menu */
     @ViewChild("createTax") public createTax: TemplateRef<any>;
+    /** Date change confirmation modal */
+    @ViewChild('dateChangeConfirmationModel', { static: true }) public dateChangeConfirmationModel: any;
     /**  This will use for dayjs */
     public dayjs = dayjs;
     /** Holds current voucher type */
@@ -74,62 +76,26 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
     public imgPath: string = isElectron ? "assets/images/" : AppUrl + APP_FOLDER + "assets/images/";
     /** Loading Observable */
     public isLoading$: Observable<any> = this.componentStore.isLoading$;
-    /** Invoice settings Observable */
-    public invoiceSettings$: Observable<any> = this.componentStore.invoiceSettings$;
     /** Discounts list Observable */
     public discountsList$: Observable<any> = this.componentStore.discountsList$;
-    /** Company profile Observable */
-    public companyProfile$: Observable<any> = this.componentStore.companyProfile$;
-    /** Active company Observable */
-    public activeCompany$: Observable<any> = this.componentStore.activeCompany$;
-    /** Onboarding form Observable */
-    public onboardingForm$: Observable<any> = this.componentStore.onboardingForm$;
-    /** Company taxes Observable */
-    public companyTaxes$: Observable<any> = this.componentStore.companyTaxes$;
-    /** Warehouses Observable */
-    public warehouseList$: Observable<any> = this.componentStore.warehouseList$;
-    /** Branches Observable */
-    public branchList$: Observable<any> = this.componentStore.branchList$;
-    /** Created templates Observable */
-    public createdTemplates$: Observable<any> = this.componentStore.createdTemplates$;
-    /** Created templates Observable */
-    public lastVouchers$: Observable<any> = this.componentStore.lastVouchers$;
     /** Voucher account results Observable */
     public voucherAccountResults$: Observable<OptionInterface[]> = of(null);
     /** Voucher stock results Observable */
     public voucherStockResults$: Observable<OptionInterface[]> = of(null);
-    /** Stock variants Observable */
-    public stockVariants$: Observable<any> = this.componentStore.stockVariants$;
-    /** Exchange rate Observable */
-    public exchangeRate$: Observable<any> = this.componentStore.exchangeRate$;
     /** Brief accounts Observable */
-    public briefAccounts$: Observable<any> = this.componentStore.briefAccounts$;
-    /** Account details Observable */
-    public accountDetails$: Observable<any> = this.componentStore.accountDetails$;
-    /** Country data Observable */
-    public countryData$: Observable<any> = this.componentStore.countryData$;
-    /** Holds boolean of TCS/TDS Applicable Observable */
-    public isTcsTdsApplicable$: Observable<any> = this.componentStore.isTcsTdsApplicable$;
+    public briefAccounts$: Observable<OptionInterface[]> = of(null);
     /** Last vouchers get in progress Observable */
     public getLastVouchersInProgress$: Observable<any> = this.componentStore.getLastVouchersInProgress$;
-    /** Has unsaved changes Observable */
-    public hasUnsavedChanges$: Observable<any> = this.componentStore.hasSavedChanges$;
-    /** New account created Observable */
-    public newAccountDetails$: Observable<any> = this.componentStore.newAccountDetails$;
-    /** Updated account Observable */
-    public updatedAccountDetails$: Observable<any> = this.componentStore.updatedAccountDetails$;
     /** Vendor purchase orders Observable */
     public vendorPurchaseOrders$: Observable<any> = this.componentStore.vendorPurchaseOrders$;
     /** Vendor purchase orders Observable */
     public linkedPoOrders$: Observable<any> = this.componentStore.linkedPoOrders$;
-    /** Universal date Observable */
-    public universalDate$: Observable<any> = this.componentStore.universalDate$;
     /** Account search request */
     public accountSearchRequest: any;
     /** Stock search request */
     public stockSearchRequest: any;
     /** Stores the voucher API version of current company */
-    public voucherApiVersion: 1 | 2;
+    public voucherApiVersion: 1 | 2 = 2;
     /** Invoice Settings */
     public invoiceSettings: any;
     /** True if round off will be applicable */
@@ -240,6 +206,14 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
     public universalDate: any;
     /** List of stock variants */
     public stockVariants: any[] = [];
+    /** True if we need to show entry datepicker */
+    public openEntryDatepicker: boolean = false;
+    /** Entry form group */
+    private entryFormGroup: UntypedFormGroup;
+    /** Date change type (voucher/entry) */
+    private dateChangeType: string = '';
+    /** Date Change modal configuration */
+    public dateChangeConfiguration: ConfirmationModalConfiguration;
 
     /** Returns true if account is selected else false */
     public get showPageLeaveConfirmation(): boolean {
@@ -312,7 +286,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
         });
 
         /** Universal date */
-        this.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.componentStore.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 try {
                     this.universalDate = dayjs(response[1]).format(GIDDH_DATE_FORMAT);
@@ -330,51 +304,62 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
         });
 
         /** Account details */
-        this.accountDetails$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.componentStore.accountDetails$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.updateAccountDataInForm(response);
             }
         });
 
         /** Country details */
-        this.countryData$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.componentStore.countryData$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.accountStateList$ = of(response?.stateList?.map(res => { return { label: res.name, value: res.code } }));
             }
         });
 
         /** Has unsaved changes */
-        this.hasUnsavedChanges$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.componentStore.hasSavedChanges$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.hasUnsavedChanges = response;
         });
 
         /** New account details */
-        this.newAccountDetails$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.componentStore.newAccountDetails$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.createUpdateAccountCallback(response);
             }
         });
 
         /** Updated account details */
-        this.updatedAccountDetails$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.componentStore.updatedAccountDetails$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.createUpdateAccountCallback(response);
             }
         });
 
         /** Exchange rate */
-        this.exchangeRate$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.componentStore.exchangeRate$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.invoiceForm.get('exchangeRate')?.patchValue(response);
         });
 
         /** Stock Variants */
-        this.stockVariants$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.componentStore.stockVariants$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.stockVariants[response.entryIndex] = of(response.results);
 
                 if (response?.results?.length === 1) {
                     this.selectVariant(response.results[0], response.entryIndex);
                 }
+            }
+        });
+
+        /** Particular details */
+        this.componentStore.particularDetails$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.body) {
+                const entryFormGroup = this.getEntryFormGroup(response.entryIndex);
+                const transactionFormGroup = this.getTransactionFormGroup(entryFormGroup);
+
+                transactionFormGroup.get('stock').get('skuCode')?.patchValue(response.body.stock.skuCode);
+                transactionFormGroup.get('stock').get('skuCodeHeading')?.patchValue(response.body.stock.skuCodeHeading);
             }
         });
     }
@@ -407,7 +392,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
      * @memberof VoucherCreateComponent
      */
     private getIsTcsTdsApplicable(): void {
-        this.isTcsTdsApplicable$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.componentStore.isTcsTdsApplicable$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.company.isTcsTdsApplicable = response;
         });
     }
@@ -419,7 +404,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
      * @memberof VoucherCreateComponent
      */
     private getInvoiceSettings(): void {
-        this.invoiceSettings$.pipe(takeUntil(this.destroyed$)).subscribe(settings => {
+        this.componentStore.invoiceSettings$.pipe(takeUntil(this.destroyed$)).subscribe(settings => {
             if (!settings) {
                 this.componentStore.getInvoiceSettings();
             } else {
@@ -462,7 +447,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
      * @memberof VoucherCreateComponent
      */
     private getCompanyProfile(): void {
-        this.companyProfile$.pipe(takeUntil(this.destroyed$)).subscribe(profile => {
+        this.componentStore.companyProfile$.pipe(takeUntil(this.destroyed$)).subscribe(profile => {
             if (profile && Object.keys(profile).length && !this.company?.countryName) {
                 this.company.countryName = profile.country;
                 this.company.countryCode = profile.countryCode || profile.countryV2.alpha2CountryCode;
@@ -486,7 +471,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
      * @memberof VoucherCreateComponent
      */
     private getActiveCompany(): void {
-        this.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.componentStore.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.activeCompany = response;
                 this.company.addresses = response.addresses;
@@ -530,7 +515,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
      * @memberof VoucherCreateComponent
      */
     private getOnboardingFormData(): void {
-        this.onboardingForm$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.componentStore.onboardingForm$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.formFields = [];
                 Object.keys(response.fields).forEach(key => {
@@ -550,7 +535,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
      * @memberof VoucherCreateComponent
      */
     private getCompanyTaxes(): void {
-        this.companyTaxes$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.componentStore.companyTaxes$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (!response) {
                 this.store.dispatch(this.companyActions.getTax());
             } else {
@@ -566,7 +551,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
      * @memberof VoucherCreateComponent
      */
     private getWarehouses(): void {
-        this.warehouseList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.componentStore.warehouseList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (!response) {
                 this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: 0 }));
             } else {
@@ -585,7 +570,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
      * @memberof VoucherCreateComponent
      */
     private getCompanyBranches(): void {
-        this.branchList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.componentStore.branchList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (!response) {
                 this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));
             } else {
@@ -609,7 +594,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
      * @memberof VoucherCreateComponent
      */
     public getPreviousVouchers(): void {
-        this.lastVouchers$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.componentStore.lastVouchers$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 const lastVouchers: LastInvoices[] = [];
                 if (!this.invoiceType.isProformaInvoice && !this.invoiceType.isEstimateInvoice) {
@@ -669,7 +654,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
      * @memberof VoucherCreateComponent
      */
     private getCreatedTemplates(): void {
-        this.createdTemplates$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.componentStore.createdTemplates$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (!response) {
                 this.componentStore.getCreatedTemplates(this.invoiceType.isDebitNote || this.invoiceType.isCreditNote ? 'voucher' : 'invoice');
             } else {
@@ -798,7 +783,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
      * @memberof VoucherCreateComponent
      */
     private getBriefAccounts(): void {
-        this.briefAccounts$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.componentStore.briefAccounts$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (!response) {
                 this.componentStore.getBriefAccounts({ group: BriedAccountsGroup });
             }
@@ -917,8 +902,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
      * @memberof VoucherCreateComponent
      */
     public selectVariant(event: any, entryIndex: number, isClear: boolean = false): void {
-        console.log(event);
-
         if (event || isClear) {
             if (isClear) {
 
@@ -930,7 +913,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
                 transactionStockVariantFormGroup.get('name')?.patchValue(event?.label);
                 transactionStockVariantFormGroup.get('uniqueName')?.patchValue(event?.value);
 
-                this.componentStore.getParticularDetails({ accountUniqueName: transactionFormGroup.get("account").get('uniqueName')?.value, payload: { variantUniqueName: event?.value, customerUniqueName: this.invoiceForm.controls['account'].get('uniqueName')?.value } });
+                this.componentStore.getParticularDetails({ accountUniqueName: transactionFormGroup.get("account").get('uniqueName')?.value, payload: { variantUniqueName: event?.value, customerUniqueName: this.invoiceForm.controls['account'].get('uniqueName')?.value }, entryIndex: entryIndex });
             }
         }
     }
@@ -1055,8 +1038,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
             touristSchemeApplicable: [false],
             passportNumber: ['']
         });
-
-        console.log(this.invoiceForm);
     }
 
     /**
@@ -1092,6 +1073,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
             description: [''],
             voucherType: [''],
             uniqueName: [''],
+            showCodeType: ['sac'],
             hsnNumber: [''],
             sacNumber: [''],
             attachedFile: [''],
@@ -1126,6 +1108,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
                             name: [''],
                             uniqueName: ['']
                         }),
+                        skuCodeHeading: [''],
+                        skuCode: [''],
                         uniqueName: ['']
                     })
                 })
@@ -1551,6 +1535,51 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
                 this.dialog.closeAll();
             }
         });
+    }
+
+    /**
+     * Callback for entry date change
+     *
+     * @param {UntypedFormGroup} entry
+     * @memberof VoucherComponent
+     */
+    public onBlurEntryDate(entryFormGroup: UntypedFormGroup): void {
+        if (typeof (entryFormGroup.get('date')?.value) === "object") {
+            entryFormGroup.get('date')?.patchValue(dayjs(entryFormGroup.get('date')?.value).format(GIDDH_DATE_FORMAT));
+        }
+
+        if (this.invoiceForm.get("entries")?.value.length > 1) {
+            this.dateChangeType = "entry";
+            this.entryFormGroup = entryFormGroup;
+            this.dateChangeConfiguration = this.generalService.getDateChangeConfiguration(this.localeData, this.commonLocaleData, false);
+            this.dialog.open(this.dateChangeConfirmationModel, {
+                width: '650px',
+            });
+        }
+    }
+
+    /**
+     * This will handle date change modal confirmation
+     *
+     * @param {string} action
+     * @memberof VoucherComponent
+     */
+    public handleDateChangeConfirmation(action: string): void {
+        if (action === this.commonLocaleData?.app_yes) {
+            if (this.dateChangeType === "voucher") {
+                this.invoiceForm?.get('entries')['controls'].forEach(entry => {
+                    entry.get('date')?.patchValue(dayjs(this.invoiceForm.get('date')?.value).format(GIDDH_DATE_FORMAT));
+                });
+            } else if (this.dateChangeType === "entry") {
+                if (typeof (this.entryFormGroup.get('date')?.value === "object")) {
+                    this.entryFormGroup.get('date')?.patchValue(dayjs(this.entryFormGroup.get('date')?.value).format(GIDDH_DATE_FORMAT));
+                } else {
+                    this.entryFormGroup.get('date')?.patchValue(dayjs(this.entryFormGroup.get('date')?.value, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT));
+                }
+            }
+        }
+
+        this.dialog.closeAll();
     }
 
     /**

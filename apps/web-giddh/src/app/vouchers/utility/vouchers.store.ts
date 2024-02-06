@@ -91,6 +91,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
     public countryData$ = this.select((state) => state.countryData);
     public vendorPurchaseOrders$ = this.select((state) => state.vendorPurchaseOrders);
     public linkedPoOrders$ = this.select((state) => state.linkedPoOrders);
+    public particularDetails$ = this.select((state) => state.particularDetails);
 
     public companyProfile$: Observable<any> = this.select(this.store.select(state => state.settings.profile), (response) => response);
     public activeCompany$: Observable<any> = this.select(this.store.select(state => state.session.activeCompany), (response) => response);
@@ -440,20 +441,20 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
         );
     });
 
-    readonly getParticularDetails = this.effect((data: Observable<{ accountUniqueName: string, payload: any }>) => {
+    readonly getParticularDetails = this.effect((data: Observable<{ accountUniqueName: string, payload: any, entryIndex: number }>) => {
         return data.pipe(
             switchMap((req) => {
                 return this.searchService.loadDetails(req.accountUniqueName, req.payload).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             return this.patchState({
-                                particularDetails: res?.body ?? {}
+                                particularDetails: { body: res?.body ?? {}, entryIndex: req.entryIndex }
                             });
                         },
                         (error: any) => {
                             this.showErrorToast(error);
                             return this.patchState({
-                                particularDetails: {}
+                                particularDetails: { body: {}, entryIndex: req.entryIndex }
                             });
                         }
                     ),
