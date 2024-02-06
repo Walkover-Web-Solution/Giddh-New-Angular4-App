@@ -226,6 +226,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         hsnNumber: '',
         sacNumber: ''
     };
+    /** Entry index which is open in edit mode */
+    public activeEntryIndex: number = null;
 
     /** Returns true if account is selected else false */
     public get showPageLeaveConfirmation(): boolean {
@@ -264,6 +266,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public ngOnInit(): void {
         this.getVoucherVersion();
         this.initVoucherForm();
+        this.getDiscountsList();
+        this.getCompanyBranches();
+        this.getCompanyProfile();
+        this.getCompanyTaxes();
+        this.getWarehouses();
 
         this.activatedRoute.params.pipe(delay(0), takeUntil(this.destroyed$)).subscribe(params => {
             if (params) {
@@ -276,6 +283,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 /** Open account dropdown on create */
                 if (!params?.uniqueName) {
                     this.openAccountDropdown = true;
+                    this.activeEntryIndex = 0;
                 } else {
                     this.invoiceForm.get('uniqueName').patchValue(params?.uniqueName);
                 }
@@ -285,13 +293,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.getIsTcsTdsApplicable();
                 this.getActiveCompany();
                 this.getInvoiceSettings();
-                this.getCompanyBranches();
-                this.getCompanyProfile();
                 this.getCreatedTemplates();
                 this.getOnboardingFormData();
-                this.getDiscountsList();
-                this.getCompanyTaxes();
-                this.getWarehouses();
                 this.getBriefAccounts();
                 this.getParentGroupForCreateAccount();
                 this.searchStock();
@@ -1652,6 +1655,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     public addNewLineEntry(): void {
         this.invoiceForm.get('entries')['controls'].push(this.getEntriesFormGroup());
+        const entries = this.invoiceForm.get('entries') as FormArray;
+        this.activeEntryIndex = entries?.length;
     }
 
     /**
@@ -1663,6 +1668,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public deleteLineEntry(entryIndex: number): void {
         const entries = this.invoiceForm.get('entries') as FormArray;
         entries.removeAt(entryIndex);
+    }
+
+    public handleOutsideClick(event: any): void {
+        if ((typeof event?.target?.className === "string" && event?.target?.className?.indexOf("option") === -1) && event?.currentTarget?.activeElement?.className?.indexOf("select-field-input") === -1) {
+            this.activeEntryIndex = null;
+        }
     }
 
     /**

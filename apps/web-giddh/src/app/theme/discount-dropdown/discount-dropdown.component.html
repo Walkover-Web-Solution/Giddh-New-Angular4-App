@@ -1,8 +1,8 @@
 <div class="multi-select">
     <input type="number" class="form-control text-right" [matMenuTriggerFor]="discountControlMenu" placeholder="₹0"
-        readonly value="0">
+        readonly [value]="totalDiscountAmount">
     <mat-menu #discountControlMenu="matMenu">
-        <div class="d-flex flex-column px-3 pt-2 discount-wrapper" (click)="$event.stopPropagation()">
+        <div class="d-flex flex-column px-3 pt-2 discount-wrapper" [formGroup]="discountForm" (click)="$event.stopPropagation()">
             <div>
                 <input-field [type]="'number'" [label]="'Percent'" [placeholder]="''"
                     [matSuffix]="'%'" class="d-block" [cssClass]="'text-right'">
@@ -17,14 +17,11 @@
                 <div class="discount-separator-line"></div>
             </div>
             <div class="discount-checkbox-wrapper d-flex flex-column">
-                <mat-checkbox type="checkbox" color="primary"><span class="font-15">Tax 1</span></mat-checkbox>
-                <mat-checkbox type="checkbox" color="primary"><span class="font-15">Tax 13</span></mat-checkbox>
-                <mat-checkbox type="checkbox" color="primary"><span class="font-15">Tax 13d</span></mat-checkbox>
-                <mat-checkbox type="checkbox" color="primary"><span class="font-15">Tax 31</span></mat-checkbox>
-                <mat-checkbox type="checkbox" color="primary"><span class="font-15">Tax 31</span></mat-checkbox>
-                <mat-checkbox type="checkbox" color="primary"><span class="font-15">Tax 331</span></mat-checkbox>
-                <mat-checkbox type="checkbox" color="primary"><span class="font-15">Tax 13</span></mat-checkbox>
-                <mat-checkbox type="checkbox" color="primary"><span class="font-15">Tax 2</span></mat-checkbox>
+                <ng-container *ngFor="let discount of discountForm.get('discounts')['controls']; let i = index" formArrayName="discounts">
+                    <ng-container [formGroupName]="i">
+                        <mat-checkbox formControlName="isActive" type="checkbox" color="primary"><span class="font-15">{{ discount?.get('name')?.value }}</span></mat-checkbox>
+                    </ng-container>
+                </ng-container>
             </div>
             <div class="create-new pt-2 mt-2 text-center cursor-pointer" (click)="createNewDiscount()">
                 <span class="text-blue">Create New</span>
