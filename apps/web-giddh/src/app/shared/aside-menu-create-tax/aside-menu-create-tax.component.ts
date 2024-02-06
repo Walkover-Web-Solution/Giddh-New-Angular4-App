@@ -45,6 +45,10 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** This holds giddh date format */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
+    /** This holds dialog open from other tax or create voucher */
+    @Input() public otherTax: boolean;
+    /** Observable for tax created successfully */
+    public isTaxCreatedSuccessfully : boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -84,7 +88,18 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
 
         this.store
             .pipe(select(p => p.company && p.company.isTaxCreationInProcess), takeUntil(this.destroyed$))
-            .subscribe(result => this.isTaxCreateInProcess = result);
+            .subscribe(result => {
+                this.isTaxCreateInProcess = result;
+            });
+
+            this.store
+            .pipe(select(p => p.company && p.company.isTaxCreatedSuccessfully), takeUntil(this.destroyed$))
+            .subscribe(result => {
+                console.log(result)
+                if(result && this.otherTax){
+                    this.closeEvent.emit();
+                }
+            });
         this.store
             .pipe(select(p => p.company && p.company.isTaxUpdatingInProcess), takeUntil(this.destroyed$))
             .subscribe(result => this.isUpdateTaxInProcess = result);

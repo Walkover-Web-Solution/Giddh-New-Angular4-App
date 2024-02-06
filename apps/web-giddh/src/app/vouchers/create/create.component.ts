@@ -66,6 +66,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
     @ViewChild('asideMenuProductService') asideMenuProductService: TemplateRef<any>;
     /** Template Reference for Create Tax aside menu */
     @ViewChild("createTax") public createTax: TemplateRef<any>;
+    /* Selector for send email  modal */
+    @ViewChild('sendEmailModal', { static: true }) public sendEmailModal: any;
+    /* Selector for print  modal */
+    @ViewChild('printVoucherModal', { static: true }) public printVoucherModal: any;
     /** Date change confirmation modal */
     @ViewChild('dateChangeConfirmationModel', { static: true }) public dateChangeConfirmationModel: any;
     /**  This will use for dayjs */
@@ -1199,13 +1203,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
         });
     }
 
-    public openPrintPreviewDialog(): void {
-        this.dialog.open(PrintVoucherComponent, {
-            width: '60vw',
-            height: '80vh'
-        });
-    }
-
     /**
      * Finds parent group for new account create modal by voucher type
      *
@@ -1551,11 +1548,41 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Callback for entry date change
+     * This will be use for create and send voucher
      *
-     * @param {FormGroup} entry
-     * @memberof VoucherComponent
+     * @memberof VoucherCreateComponent
      */
+    public createSendVoucher(): void {
+        this.dialog.open(this.sendEmailModal, {
+            width: '650px'
+        });
+    }
+    /**
+     * This will be use for create and print voucher
+     *
+     * @memberof VoucherCreateComponent
+     */
+    public createPrintVoucher(): void {
+        this.dialog.open(this.printVoucherModal, {
+            width: '60vw',
+            height: '80vh'
+        });
+    }
+
+    /**
+    * This will use for cancel email modal
+    *
+    * @memberof VoucherCreateComponent
+    */
+    public cancelEmailModal(): void {
+        this.dialog.closeAll();
+    }
+
+    /* Callback for entry date change
+    *
+    * @param {FormGroup} entry
+    * @memberof VoucherComponent
+    */
     public onBlurEntryDate(entryFormGroup: FormGroup): void {
         if (typeof (entryFormGroup.get('date')?.value) === "object") {
             entryFormGroup.get('date')?.patchValue(dayjs(entryFormGroup.get('date')?.value).format(GIDDH_DATE_FORMAT));
@@ -1591,8 +1618,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
                 }
             }
         }
-
-        this.dialog.closeAll();
     }
 
     /**

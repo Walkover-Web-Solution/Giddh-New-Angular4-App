@@ -26,8 +26,12 @@ export class OtherTaxComponent implements OnInit, OnDestroy {
     public isFormSubmitted: boolean = false;
     /** Create tax dialog ref  */
     public taxAsideMenuRef: MatDialogRef<any>;
-        /** Hold aside menu state for other tax  */
-        public asideMenuStateForOtherTaxes: string = 'out';
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
+    /** True if create tax dialog is open  */
+    public otherTax: boolean = false;
 
     constructor(
         private componentStore: OtherTaxComponentStore,
@@ -39,29 +43,36 @@ export class OtherTaxComponent implements OnInit, OnDestroy {
 
     }
 
+    /**
+     * Hook cycle for component initialization
+     *
+     * @memberof OtherTaxComponent
+     */
     public ngOnInit(): void {
         this.initOtherTaxForm();
         this.getCompanyTaxes();
     }
 
     /**
-     * Initializes voucher form
+     * Initializes other tax form
      *
      * @private
-     * @memberof CreateDiscountComponent
+     * @memberof OtherTaxComponent
      */
     private initOtherTaxForm(): void {
         this.otherTaxForm = this.formBuilder.group({
-            type: ['', Validators.required],
-            name: ['', Validators.required],
-            discountValue: ['', Validators.required],
-            accountUniqueName: ['', Validators.required],
+            taxType: ['', Validators.required],
+            taxValue: ['', Validators.required],
         });
     }
 
+    /**
+     * This will be use for get company taxes
+     *
+     * @memberof OtherTaxComponent
+     */
     public getCompanyTaxes(): void {
         this.companyTaxes$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            console.log(response)
             if (!response) {
                 this.store.dispatch(this.companyActions.getTax());
             } else {
@@ -70,41 +81,71 @@ export class OtherTaxComponent implements OnInit, OnDestroy {
                     .map(m => {
                         return { label: m.name, value: m?.uniqueName };
                     })
-                console.log(taxResponse)
-                this.companyTaxes$ = observableOf(taxResponse)
+                this.companyTaxes$ = observableOf(taxResponse);
             }
         });
     }
 
+    /**
+     * This will be use for save tax
+     *
+     * @return {*}  {void}
+     * @memberof OtherTaxComponent
+     */
     public saveTax(): void {
-        console.log(this.otherTaxForm)
         this.isFormSubmitted = false;
         if (this.otherTaxForm.invalid) {
             this.isFormSubmitted = true;
             return;
         }
-        // this.componentStore.saveDiscount(this.createDiscountForm.value);
     }
 
-    public createTaxDialog():void {
-        if (this.asideMenuStateForOtherTaxes === 'in') {
-            this.toggleOtherTaxesAsidePane(true);
-        }
+    /**
+     * This will be use for open create tax dialog 
+     *
+     * @memberof OtherTaxComponent
+     */
+    public createTaxDialog(): void {
+        this.taxAsideMenuRef = this.dialog.open(this.createTax, {
+            position: {
+                right: '0',
+                top: '0'
+            }
+        });
+        this.otherTax = true;
     }
 
-    public toggleOtherTaxesAsidePane(event?: any): void {
-        this.asideMenuStateForOtherTaxes = this.asideMenuStateForOtherTaxes === 'out' ? 'in' : 'out';
+    /**
+     * This will be use for close create tax dialog 
+     *
+     * @memberof OtherTaxComponent
+     */
+    public closeCreateTaxDialog(): void {
+        this.taxAsideMenuRef.close();
+        this.otherTax = false;
+        this.componentStore.companyTaxes$;
     }
 
+    /**
+     * This will be use for select tax
+     *
+     * @param {*} event
+     * @param {*} isClear
+     * @memberof OtherTaxComponent
+     */
     public selectTax(event: any, isClear: any): void {
         if (isClear) {
             this.otherTaxForm.reset();
         } else {
-            this.otherTaxForm.get("linkedAccount")?.patchValue(event?.label);
+            this.otherTaxForm.get("taxType")?.patchValue(event?.label);
         }
     }
 
-
+    /**
+     * Lifecycle hook for component destroy
+     *
+     * @memberof OtherTaxComponent
+     */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();

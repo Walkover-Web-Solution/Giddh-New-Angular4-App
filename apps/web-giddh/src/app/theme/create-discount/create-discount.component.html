@@ -31,7 +31,7 @@
                 <div class="col-6">
                     <reactive-dropdown-field [label]="'Linked Accounts'" [placeholder]="'Select discount'"
                         formControlName="accountUniqueName" [name]="'accountUniqueName'"
-                        [options]="discountsAccountList$ | async" [enableDynamicSearch]="true" [required]="true"
+                        [options]="discountsAccountList$ | async" [required]="true"
                         [showError]="isFormSubmitted && !createDiscountForm.get('linkedAccount')?.value"
                         (onClear)="selectAccount($event, true)">
                     </reactive-dropdown-field>

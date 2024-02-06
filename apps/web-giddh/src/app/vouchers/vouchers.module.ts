@@ -60,6 +60,7 @@ import { AsideMenuCreateTaxModule } from "../shared/aside-menu-create-tax/aside-
 import { ConvertBillDialogComponent } from "./convert-bill-dialog/convert-bill-dialog.component";
 import { MatDividerModule } from "@angular/material/divider";
 import { AsideMenuProductServiceModule } from "../shared/aside-menu-product-service/aside-menu-product-service.module";
+import { SendEmailInvoiceModule } from "../shared/send-email-invoice/send-email-invoice.module";
 import { FullAddressComponent } from "./full-address/full-address.component";
 
 @NgModule({
@@ -128,7 +129,8 @@ import { FullAddressComponent } from "./full-address/full-address.component";
         CreateDiscountModule,
         AsideMenuCreateTaxModule,
         MatDividerModule,
-        AsideMenuProductServiceModule
+        AsideMenuProductServiceModule,
+        SendEmailInvoiceModule
     ],
     exports: [
 
