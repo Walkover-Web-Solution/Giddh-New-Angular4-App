@@ -1,14 +1,3 @@
 <div class="bg-dark text-info text-center h-100 p-5">
-    <div class="invoice-image-section">
-        <!-- <giddh-page-loader *ngIf="isVoucherDownloading"></giddh-page-loader> -->
-        <!-- *ngIf="isVoucherDownloadError && !isVoucherDownloading"  -->
-        <div class="error">
-            <span>
-                {{ localeData?.invoice_preview_unavailable }}
-            </span>
-        </div>
-        <!-- *ngIf="sanitizedPdfFileUrl && !isVoucherDownloading" -->
-        <iframe #pdfContainer  width="100%" height="100%"
-            [src]="sanitizedPdfFileUrl"></iframe>
-    </div>
+    Print Preview PDF
 </div>

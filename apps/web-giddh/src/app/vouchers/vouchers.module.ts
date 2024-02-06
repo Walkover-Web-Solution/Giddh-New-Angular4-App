@@ -61,6 +61,7 @@ import { ConvertBillDialogComponent } from "./convert-bill-dialog/convert-bill-d
 import { MatDividerModule } from "@angular/material/divider";
 import { AsideMenuProductServiceModule } from "../shared/aside-menu-product-service/aside-menu-product-service.module";
 import { SendEmailInvoiceModule } from "../shared/send-email-invoice/send-email-invoice.module";
+import { FullAddressComponent } from "./full-address/full-address.component";
 
 @NgModule({
     declarations: [
@@ -82,7 +83,8 @@ import { SendEmailInvoiceModule } from "../shared/send-email-invoice/send-email-
         TemplateEditFilterComponent,
         DesignFilterComponent,
         ContentFilterComponent,
-        ConvertBillDialogComponent
+        ConvertBillDialogComponent,
+        FullAddressComponent
     ],
     imports: [
         CommonModule,
