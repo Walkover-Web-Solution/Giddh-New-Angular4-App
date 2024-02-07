@@ -6,7 +6,7 @@ import { SearchService } from "../../services/search.service";
 import { Observable, ReplaySubject, debounceTime, of, takeUntil } from "rxjs";
 import { OptionInterface } from "../../models/api-models/Voucher";
 import { SearchType } from "../../vouchers/utility/vouchers.const";
-import { FormBuilder, FormGroup } from "@angular/forms";
+import { FormArray, FormBuilder, FormGroup } from "@angular/forms";
 import { SalesAddBulkStockItems } from "../../models/api-models/Sales";
 import { ToasterService } from "../../services/toaster.service";
 
@@ -46,7 +46,7 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
      * @memberof AddBulkItemsComponent
      */
     public ngOnInit(): void {
-        this.initDiscountForm();
+        this.initAddBulkForm();
         this.searchStock();
 
         this.addBulkForm.get('stock').valueChanges.pipe(debounceTime(100), takeUntil(this.destroyed$)).subscribe(response => {
@@ -67,10 +67,28 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
      * @private
      * @memberof AddBulkItemsComponent
      */
-    private initDiscountForm(): void {
+    private initAddBulkForm(): void {
         this.addBulkForm = this.formBuilder.group({
             stock: [''],
-            quantity: ['']
+            data: this.formBuilder.array([
+                this.getStockFormGroup()
+            ]),
+        })
+    }
+
+    /**
+     * This will be use for return item
+     *
+     * @private
+     * @return {*}  {FormGroup}
+     * @memberof AddBulkItemsComponent
+     */
+    private getStockFormGroup(): FormGroup {
+        return this.formBuilder.group({
+            quantity: [1],
+            rate: [''],
+            additional: ['']
+
         });
     }
 
@@ -124,6 +142,7 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
      * @memberof AddBulkItemsComponent
      */
     public addItem(item: SalesAddBulkStockItems, index: number): void {
+        console.log(item, index);
         let selectedIndex;
         if (!item.additional.stock) {
             selectedIndex = this.selectedItems?.findIndex(f => f?.uniqueName === item?.uniqueName);
@@ -144,6 +163,7 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
         if (item?.additional?.stock?.uniqueName) {
             this.componentStore.getStockVariants({ q: item?.additional?.stock?.uniqueName, index: index });
         } else {
+            // this.addBulkForm.get('data')['controls'].push(this.getStockFormGroup());
             this.loadDetails(item, requestObject);
         }
     }
@@ -157,12 +177,14 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
      */
     public loadDetails(item: SalesAddBulkStockItems, requestObject: any): void {
         this.searchService.loadDetails(item.additional?.uniqueName, requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+            console.log(data);
             if (data && data.body) {
                 // Take taxes of parent group and stock's own taxes
                 const taxes = data.body.taxes || [];
                 if (data.body.stock) {
                     taxes.push(...data.body.stock.taxes);
                 }
+
                 // directly assign additional property
                 item.additional = {
                     ...item.additional,
@@ -188,6 +210,20 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
                 if (!data.body.stock || item.variants?.length === 1 || item.variant?.uniqueName) {
                     this.selectedItems = [...this.selectedItems, item];
                 }
+                // Patch values directly to the form controls
+                const dataControl = this.addBulkForm.get('data') as FormArray;
+                for (let i = 0; i < dataControl.length; i++) {
+                    const itemFormGroup = dataControl.at(i) as FormGroup;
+                    if (itemFormGroup.get('additional').value?.uniqueName === item.uniqueName) {
+                        itemFormGroup.get('additional')?.patchValue(item.additional);
+                        itemFormGroup.get('rate')?.patchValue(item.rate);
+                        itemFormGroup.get('quantity')?.patchValue(item.quantity);
+                        break;
+                    }
+                }
+
+                console.log(this.addBulkForm.value);
+
             }
         });
     }
