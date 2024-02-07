@@ -140,57 +140,64 @@
             }
 
             .vouchers-entry-table {
+                table {
+                    tr {
 
-                tr {
-                    td {
-                        &:not(:last-child) {
-                            vertical-align: top !important;
+                        th,
+                        td {
+                            padding: 12px 8px;
+                            border-bottom: 1px solid var(--color-common-secondary-border);
+
+                            &.total-column {
+                                min-width: 120px;
+                            }
+
+                            &.product-column {
+                                @media screen and (max-width: 1280px) {
+                                    max-width: 120px;   
+                                }
+                            }
+                        }
+
+                        th {
+                            border-top: 1px solid var(--color-common-secondary-border);
+                            color: var(--color-giddh-blue);
+
+                            &:first-child {
+                                border-left: 1px solid var(--color-common-secondary-border);
+                            }
+
+                            &:last-child {
+                                border-right: 1px solid var(--color-common-secondary-border);
+                            }
+                        }
+
+                        td {
+                            vertical-align: top;
+                            border-left: 1px solid var(--color-common-secondary-border);
+                            border-right: 1px solid var(--color-common-secondary-border);
+
+                            .delete-btn {
+                                right: -24px;
+                                top: 50%;
+                                transform: translateY(-50%);
+                                visibility: hidden;
+                            }
+
+                            .select-account-label {
+                                color: var(--color-gray);
+                            }
+                        }
+
+                        &:hover{
+                            td{
+                                .delete-btn {
+                                    visibility: visible;
+                                }
+                            }
                         }
                     }
                 }
-
-
-                // &>div {
-                //     padding: 15px 12px;
-                //     border-bottom: 1px solid var(--color-common-secondary-border);
-                //     border-left: 1px solid var(--color-common-secondary-border);
-                //     text-align: right;
-                // }
-
-                // div {
-                // &.head-item {
-                //     border-top: 1px solid var(--color-common-secondary-border);
-                //     color: var(--color-giddh-blue);
-                //     display: inline-flex;
-                //     align-items: center;
-                //     justify-content: flex-end;
-
-                //     &:first-child,
-                //     &:nth-child(2) {
-                //         justify-content: flex-start;
-                //     }
-            }
-
-            // &.body-item {
-
-            .delete-btn {
-                background: var(--color-transparent-background) !important;
-                border: none !important;
-
-                .icon-trash {
-                    border: 1px solid var(--color-grey-bootstrap-border);
-                    border-radius: 50%;
-                    padding: 4px;
-                }
-
-                // }
-                // }
-                // }
-
-                .select-account-label {
-                    color: var(--color-gray);
-                }
-
             }
 
             .vouchers-other-detail {

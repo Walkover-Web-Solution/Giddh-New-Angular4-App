@@ -477,20 +477,18 @@
 
                                 <!-- Voucher Table for Multiple Entries-->
                                 <div class="vouchers-entry-table">
-                                    <table class="table table-custom-invoice basic giddh-table" formArrayName="entries">
+                                    <table formArrayName="entries" class="w-100">
                                         <thead>
-                                            <!-- Grid Head | Row 1 -->
-                                            <th class=" text-left">#</th>
-                                            <th class=" text-left">Product/Service Description</th>
-                                            <th class="">Qty/Unit</th>
-                                            <th class="">Rate</th>
-                                            <th class="">Amount</th>
-                                            <th class="">Discount</th>
-                                            <th class="">Tax</th>
-                                            <th class="">Total</th>
-                                            <th class="delete-btn border-end-0 border-bottom-0 p-0">
-                                                <!-- Don't Delete this element it is working as column(<th> tag like) for delete icon -->
-                                            </th>
+                                            <tr>
+                                                <th class="text-left">#</th>
+                                                <th class="text-left product-column">Product/Service Description</th>
+                                                <th width="12%">Qty/Unit</th>
+                                                <th width="12%">Rate</th>
+                                                <th width="12%">Amount</th>
+                                                <th width="12%">Discount</th>
+                                                <th width="12%">Tax</th>
+                                                <th width="14%" class="total-column">Total</th>
+                                            </tr>
                                         </thead>
                                         <tbody (clickOutside)="handleOutsideClick($event)">
                                             <ng-container
@@ -500,7 +498,7 @@
                                                         <td class=" text-left">{{ entryIndex + 1 }}</td>
     
                                                         <!-- Product/Service Description -->
-                                                        <td class=" text-left">
+                                                        <td class="text-left product-column">
                                                             <ng-container
                                                                 *ngFor="let transaction of entry?.get('transactions')['controls']; let transactionIndex = index"
                                                                 formArrayName="transactions">
@@ -607,20 +605,21 @@
                                                                         <div class="mt-1" *ngIf="activeEntryIndex !== entryIndex">
                                                                             {{ entry.get('date')?.value }}
                                                                         </div>
-                                                                        <div class="mt-1" *ngIf="activeEntryIndex === entryIndex">
+                                                                        <div class="mt-1 d-flex align-items-baseline" *ngIf="activeEntryIndex === entryIndex">
                                                                             <ng-container *ngIf="isUpdateMode">
                                                                                 {{ entry.get('date')?.value }}
                                                                             </ng-container>
                                                                             <ng-container *ngIf="!isUpdateMode">
                                                                                 <giddh-datepicker
                                                                                     class="date-border"
-                                                                                    [showToggleIcon]="true"
+                                                                                    [showToggleIcon]="false"
+                                                                                    [hideLabel]="true"
                                                                                     #dp
                                                                                     (keydown.enter)="$event.preventDefault()"
                                                                                     (dateSelected)="onBlurEntryDate(entry, true)"
                                                                                     id="transaction_date_{{ entryIndex }}"
                                                                                     [disabled]="isUpdateMode"
-                                                                                    [cssClass]="'entry-custom-date'"
+                                                                                    [cssClass]="'entry-custom-date width-80 border-0'"
                                                                                     name="transaction_date_{{ entryIndex }}"
                                                                                     formControlName="date"
                                                                                     [appearance]="'fill'"
@@ -673,7 +672,7 @@
                                                             <ng-container [formGroupName]="transactionIndex">
                                                                 <ng-container formGroupName="stock">
                                                                     <!-- Qty/Unit -->
-                                                                    <td class="">
+                                                                    <td width="12%">
                                                                         <ng-container *ngIf="activeEntryIndex !== entryIndex">{{ transaction.get('stock.quantity')?.value }}</ng-container>
                                                                         <text-field *ngIf="activeEntryIndex === entryIndex" [placeholder]="'Enter Qty'" formControlName="quantity" [cssClass]="'form-control text-right'" [type]="'text'"></text-field>
                                                                         <ng-container formGroupName="stockUnit">
@@ -685,13 +684,13 @@
                                                                     </td>
     
                                                                     <!-- Rate -->
-                                                                    <td class="" formGroupName="rate">
+                                                                    <td width="12%" formGroupName="rate">
                                                                         <ng-container *ngIf="activeEntryIndex !== entryIndex">{{ transaction.get('stock.rate.rateForAccount')?.value }}</ng-container>
                                                                         <text-field *ngIf="activeEntryIndex === entryIndex" [placeholder]="'Enter'" [cssClass]="'form-control text-right'" [type]="'text'" formControlName="rateForAccount"></text-field>
                                                                     </td>
                                                                 </ng-container>
                                                                 <!-- Amount -->
-                                                                <td class="" formGroupName="amount">
+                                                                <td width="12%" formGroupName="amount">
                                                                     <ng-container *ngIf="activeEntryIndex !== entryIndex">{{ transaction.get('amount.amountForAccount')?.value }}</ng-container>
                                                                     <text-field *ngIf="activeEntryIndex === entryIndex" [placeholder]="'Enter'" [cssClass]="'form-control text-right'" [type]="'text'" formControlName="amountForAccount"></text-field>
                                                                 </td>
@@ -699,7 +698,7 @@
                                                         </ng-container>
     
                                                         <!-- Discount -->
-                                                        <td class="">
+                                                        <td width="12%">
                                                             <ng-container *ngFor="let transaction of entry.get('transactions')['controls']; let transactionIndex = index" formArrayName="transactions">
                                                                 <ng-container [formGroupName]="transactionIndex">
                                                                     <discount-dropdown [amount]="transaction.get('amount.amountForAccount')?.value" [discountsList]="discountsList$ | async" [selectedDiscountsList]="entry.get('discounts')?.value" [currency]="account.baseCurrencySymbol" (createNewDiscount)="showCreateDiscountDialog()" (selectedDiscounts)="getSelectedDiscounts($event)"></discount-dropdown>
@@ -708,12 +707,12 @@
                                                         </td>
     
                                                         <!-- Tax -->
-                                                        <td class="">
+                                                        <td width="12%">
                                                             <tax-dropdown (createOption)="showCreateTaxDialog()"></tax-dropdown>
                                                         </td>
     
                                                         <!-- Total -->
-                                                        <td class="">
+                                                        <td width="14%" class="total-column position-relative">
                                                             <ng-container formGroupName="total">
                                                                 <ng-container *ngIf="activeEntryIndex !== entryIndex">{{ entry.get('total.amountForAccount')?.value }}</ng-container>
                                                                 <text-field *ngIf="activeEntryIndex === entryIndex" [placeholder]="'Enter'" [cssClass]="'form-control text-right'" [type]="'text'" formControlName="amountForAccount"></text-field>
@@ -723,18 +722,17 @@
                                                                 </mat-checkbox>
                                                                 Other Tax?
                                                             </div>
-                                                        </td>
-                                                        <!-- Delete -->
-                                                        <td class=" delete-btn">
-                                                            <i class="icon-trash cursor-pointer" (click)="deleteLineEntry(entryIndex)"></i>
-                                                        </td>
+
+                                                            <!-- Delete Row Button -->
+                                                            <i class="icon-trash font-16 cursor-pointer delete-btn position-absolute" (click)="deleteLineEntry(entryIndex)"></i>
+                                                        </td>         
                                                     </tr>
                                                 </ng-container>
                                             </ng-container>
                                         </tbody>
                                     </table>
                                 </div>
-                                <!-- Add new grid row/line -->
+                                <!-- Add new row/line -->
                                 <div class="text-blue mt-2 px-0">
                                     <span class="cursor-pointer" (click)="addNewLineEntry()">+ Add New Line</span> <span
                                         class="grey-color px-2">|</span>
@@ -1031,9 +1029,9 @@
     ></confirmation-modal>
 </ng-template>
 
-    <!-- region bulk items -->
-    <ng-template #bulkItemsModal>
-        <add-bulk-items
-            (closeEvent)="cancelBulkItemsModal()"
-        ></add-bulk-items>
-    </ng-template>
+<!-- region bulk items -->
+<ng-template #bulkItemsModal>
+    <add-bulk-items
+        (closeEvent)="cancelBulkItemsModal()"
+    ></add-bulk-items>
+</ng-template>
