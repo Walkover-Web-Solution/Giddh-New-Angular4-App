@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { VoucherComponentStore } from "../utility/vouchers.store";
 import { AppState } from "../../store";
@@ -22,10 +22,8 @@ import { GIDDH_DATE_FORMAT } from "../../shared/helpers/defaultDateFormat";
 import { BriedAccountsGroup, SearchType, TaxType, VoucherTypeEnum } from "../utility/vouchers.const";
 import { SearchService } from "../../services/search.service";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
-import { AddBulkItemsComponent } from "../../theme/add-bulk-items/add-bulk-items.component";
 import { OtherTaxComponent } from "../../theme/other-tax/other-tax.component";
 import { LastInvoices, OptionInterface, VoucherForm } from "../../models/api-models/Voucher";
-import { PrintVoucherComponent } from "../print-voucher/print-voucher.component";
 import { PageLeaveUtilityService } from "../../services/page-leave-utility.service";
 import { AddAccountRequest, UpdateAccountRequest } from "../../models/api-models/Account";
 import { SalesActions } from "../../actions/sales/sales.action";
@@ -38,6 +36,7 @@ import { CommonService } from "../../services/common.service";
 import { PURCHASE_ORDER_STATUS } from "../../shared/helpers/purchaseOrderStatus";
 import { cloneDeep } from "../../lodash-optimized";
 import { ENTRY_DESCRIPTION_LENGTH } from "../../app.constant";
+import { IntlPhoneLib } from "../../theme/mobile-number-field/intl-phone-lib.class";
 
 @Component({
     selector: "create",
@@ -57,7 +56,7 @@ import { ENTRY_DESCRIPTION_LENGTH } from "../../app.constant";
         ]),
     ]
 })
-export class VoucherCreateComponent implements OnInit, OnDestroy {
+export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit {
     /** Instance of RCM checkbox */
     @ViewChild("rcmCheckbox") public rcmCheckbox: ElementRef;
     /** Template Reference for Generic aside menu account */
@@ -72,6 +71,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
     @ViewChild('printVoucherModal', { static: true }) public printVoucherModal: any;
     /** Date change confirmation modal */
     @ViewChild('dateChangeConfirmationModel', { static: true }) public dateChangeConfirmationModel: any;
+    /* Selector for bulk items  modal */
+    @ViewChild('bulkItemsModal', { static: true }) public bulkItemsModal: any;
     /**  This will use for dayjs */
     public dayjs = dayjs;
     /** Holds current voucher type */
@@ -232,6 +233,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
     public get showPageLeaveConfirmation(): boolean {
         return (!this.isUpdateMode && (this.invoiceForm?.controls['account']?.get('customerName')?.value)) ? true : false;
     }
+    public intlClass: any;
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -1174,7 +1176,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
      * @memberof VoucherCreateComponent
      */
     public openBulkEntryDialog(): void {
-        const dialogRef = this.dialog.open(AddBulkItemsComponent);
+        let dialogRef = this.dialog.open(this.bulkItemsModal);
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response) {
                 console.log("Close with true");
@@ -1672,6 +1674,56 @@ export class VoucherCreateComponent implements OnInit, OnDestroy {
         if ((typeof event?.target?.className === "string" && event?.target?.className?.indexOf("option") === -1) && event?.currentTarget?.activeElement?.className?.indexOf("select-field-input") === -1) {
             this.activeEntryIndex = null;
         }
+    }
+
+    /**
+     * This will use for cancel bulk item modal
+     *
+     * @memberof VoucherCreateComponent
+     */
+    public cancelBulkItemsModal(): void {
+        this.dialog.closeAll();
+    }
+
+    /**
+     * Lifecycle hook for load component after view initialization
+     *
+     * @memberof VoucherCreateComponent
+     */
+    public ngAfterViewInit(): void {
+        this.initIntl();
+    }
+
+    /**
+     * Initializes the int-tel input
+     *
+     * @memberof VoucherCreateComponent
+     */
+    public initIntl() {
+        const parentDom = document.querySelector('create');
+        const input = document.getElementById('init-contact');
+        if (input) {
+            this.intlClass = new IntlPhoneLib(
+                input,
+                parentDom,
+                false
+            );
+        }
+    }
+
+    /**
+     * Validate the mobile number 
+     *
+     * @memberof VoucherCreateComponent
+     */
+    public validateMobileField(): void {
+        setTimeout(() => {
+            if (!this.intlClass?.isRequiredValidNumber) {
+                this.invoiceForm.controls["account"].get("mobileNumber")?.setErrors({ invalidNumber: true });
+            } else {
+                this.invoiceForm.controls["account"].get("mobileNumber")?.setErrors(null);
+            }
+        }, 100);
     }
 
     /**
