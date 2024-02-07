@@ -18,14 +18,17 @@
                 [enableDynamicSearch]="enableDynamicSearch" (optionsScroll)="onScroll()" autoActiveFirstOption
                 [displayWith]="displayLabel" #auto="matAutocomplete">
                 <span class="position-relative">
-                    <mat-option *ngFor="let option of fieldFilteredOptions$ | async" [value]="option"
-                        [matTooltip]="option?.label" matTooltipPosition="right">
-                        <ng-template [ngTemplateOutletContext]="{ option: option }"
-                            [ngTemplateOutlet]="optionTemplate"></ng-template>
-                        <ng-container *ngIf="!optionTemplate">
-                            {{ option?.label }}
-                        </ng-container>
-                    </mat-option>
+                    <ng-container *ngFor="let option of fieldFilteredOptions$ | async">
+                        <mat-option [value]="option"
+                            [matTooltip]="option?.label" matTooltipPosition="right">
+                            <ng-template [ngTemplateOutletContext]="{ option: option }"
+                                [ngTemplateOutlet]="optionTemplate"></ng-template>
+                            <ng-container *ngIf="!optionTemplate">
+                                {{ option?.label }}
+                            </ng-container>
+                        </mat-option>
+                        <mat-divider *ngIf="showOptionDivider"></mat-divider>
+                    </ng-container>
                     <a href="javascript:;" *ngIf="createNewText" (click)="createNewRecord()"
                         class="position-sticky create-new-wrapper d-flex justify-content-between px-3 py-2">
                         <div class="item create-new">{{ createNewText }}</div>
