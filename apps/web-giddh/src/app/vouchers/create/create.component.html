@@ -122,16 +122,17 @@
                                             </div>
                                             <mat-menu #billingAddress="matMenu">
                                                 <div class="mat-menu-width-large vouchers-address-menu">
-                                                    <button mat-menu-item
-                                                        *ngFor="let address of account?.addresses; let i = index"
-                                                        (click)="fillBillingShippingAddress('account', 'billingAddress', address, i)">
-                                                        <div class="d-flex justify-content-between align-items-center">
-                                                            <full-address [address]="address" [localeData]="localeData" [commonLocaleData]="commonLocaleData" [addressNo]="i + 1" [company]="company"></full-address>
-                                                            <i class="icon-tick"
-                                                                *ngIf="invoiceForm.controls['account'].get('billingAddress').get('index')?.value === i"></i>
-                                                        </div>
-                                                    </button>
-                                                    <mat-divider></mat-divider>
+                                                    <ng-container *ngFor="let address of account?.addresses; let i = index">
+                                                        <button mat-menu-item
+                                                            (click)="fillBillingShippingAddress('account', 'billingAddress', address, i)">
+                                                            <div class="d-flex justify-content-between align-items-center">
+                                                                <full-address [address]="address" [localeData]="localeData" [commonLocaleData]="commonLocaleData" [addressNo]="i + 1" [company]="company"></full-address>
+                                                                <i class="icon-tick"
+                                                                    *ngIf="invoiceForm.controls['account'].get('billingAddress').get('index')?.value === i"></i>
+                                                            </div>
+                                                        </button>
+                                                        <mat-divider></mat-divider>
+                                                    </ng-container>
                                                     <button mat-menu-item class="vouchers-add-new"
                                                         (click)="toggleAccountAsidePane()">+ Add new address</button>
                                                 </div>
@@ -181,17 +182,18 @@
 
                                                 <mat-menu #shippingAddress="matMenu">
                                                     <div class="mat-menu-width-large vouchers-address-menu">
-                                                        <button mat-menu-item
-                                                            *ngFor="let address of account?.addresses; let i = index"
-                                                            (click)="fillBillingShippingAddress('account','shippingAddress', address, i)">
-                                                            <div
-                                                                class="d-flex justify-content-between align-items-center">
-                                                                <full-address [address]="address" [localeData]="localeData" [commonLocaleData]="commonLocaleData" [addressNo]="i + 1" [company]="company"></full-address>
-                                                                <i class="icon-tick"
-                                                                    *ngIf="invoiceForm.controls['account'].get('shippingAddress').get('index')?.value === i"></i>
-                                                            </div>
-                                                        </button>
-                                                        <mat-divider></mat-divider>
+                                                        <ng-container *ngFor="let address of account?.addresses; let i = index">
+                                                            <button mat-menu-item
+                                                                (click)="fillBillingShippingAddress('account','shippingAddress', address, i)">
+                                                                <div
+                                                                    class="d-flex justify-content-between align-items-center">
+                                                                    <full-address [address]="address" [localeData]="localeData" [commonLocaleData]="commonLocaleData" [addressNo]="i + 1" [company]="company"></full-address>
+                                                                    <i class="icon-tick"
+                                                                        *ngIf="invoiceForm.controls['account'].get('shippingAddress').get('index')?.value === i"></i>
+                                                                </div>
+                                                            </button>
+                                                            <mat-divider></mat-divider>
+                                                        </ng-container>
                                                         <button mat-menu-item class="vouchers-add-new"
                                                             (click)="toggleAccountAsidePane()">+ Add new
                                                             address</button>
@@ -305,16 +307,17 @@
 
                                         <mat-menu #companyBillingAddress="matMenu">
                                             <div class="mat-menu-width-large vouchers-address-menu">
-                                                <button mat-menu-item
-                                                    *ngFor="let address of company?.addresses; let i = index"
-                                                    (click)="fillBillingShippingAddress('company', 'billingAddress', address, i)">
-                                                    <div class="d-flex justify-content-between align-items-center">
-                                                        <full-address [address]="address" [localeData]="localeData" [commonLocaleData]="commonLocaleData" [addressNo]="i + 1" [company]="company"></full-address>
-                                                        <i class="icon-tick"
-                                                            *ngIf="invoiceForm.controls['company'].get('billingAddress').get('index')?.value === i"></i>
-                                                    </div>
-                                                </button>
-                                                <mat-divider></mat-divider>
+                                                <ng-container *ngFor="let address of company?.addresses; let i = index">
+                                                    <button mat-menu-item
+                                                        (click)="fillBillingShippingAddress('company', 'billingAddress', address, i)">
+                                                        <div class="d-flex justify-content-between align-items-center">
+                                                            <full-address [address]="address" [localeData]="localeData" [commonLocaleData]="commonLocaleData" [addressNo]="i + 1" [company]="company"></full-address>
+                                                            <i class="icon-tick"
+                                                                *ngIf="invoiceForm.controls['company'].get('billingAddress').get('index')?.value === i"></i>
+                                                        </div>
+                                                    </button>
+                                                    <mat-divider></mat-divider>
+                                                </ng-container>
                                                 <button mat-menu-item class="vouchers-add-new">+ Add new
                                                     address</button>
                                             </div>
@@ -333,16 +336,17 @@
 
                                         <mat-menu #companyShippingAddress="matMenu">
                                             <div class="mat-menu-width-large  vouchers-address-menu">
-                                                <button mat-menu-item
-                                                    *ngFor="let address of company?.addresses; let i = index"
-                                                    (click)="fillBillingShippingAddress('company', 'shippingAddress', address, i)">
-                                                    <div class="d-flex justify-content-between align-items-center">
-                                                        <full-address [address]="address" [localeData]="localeData" [commonLocaleData]="commonLocaleData" [addressNo]="i + 1" [company]="company"></full-address>
-                                                        <i class="icon-tick"
-                                                            *ngIf="invoiceForm.controls['company'].get('shippingAddress').get('index')?.value === i"></i>
-                                                    </div>
-                                                </button>
-                                                <mat-divider></mat-divider>
+                                                <ng-container *ngFor="let address of company?.addresses; let i = index">
+                                                    <button mat-menu-item
+                                                        (click)="fillBillingShippingAddress('company', 'shippingAddress', address, i)">
+                                                        <div class="d-flex justify-content-between align-items-center">
+                                                            <full-address [address]="address" [localeData]="localeData" [commonLocaleData]="commonLocaleData" [addressNo]="i + 1" [company]="company"></full-address>
+                                                            <i class="icon-tick"
+                                                                *ngIf="invoiceForm.controls['company'].get('shippingAddress').get('index')?.value === i"></i>
+                                                        </div>
+                                                    </button>
+                                                    <mat-divider></mat-divider>
+                                                </ng-container>
                                                 <button mat-menu-item class="vouchers-add-new">+ Add new
                                                     address</button>
                                             </div>
