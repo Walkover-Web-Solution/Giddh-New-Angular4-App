@@ -67,7 +67,8 @@
                 height: 40px;
                 padding: 11px 0;
             }
-            .billing-deliver-label{
+
+            .billing-deliver-label {
                 font-size: var(--font-size-16);
                 font-weight: 600;
                 color: var(--color-giddh-blue);
@@ -132,13 +133,22 @@
                 }
             }
 
-            #init-contact-wrapper{
-                input{
+            #init-contact-wrapper {
+                input {
                     height: 48px;
                 }
             }
 
             .vouchers-entry-table {
+
+                tr {
+                    td {
+                        &:not(:last-child) {
+                            vertical-align: top !important;
+                        }
+                    }
+                }
+
 
                 // &>div {
                 //     padding: 15px 12px;
@@ -147,39 +157,35 @@
                 //     text-align: right;
                 // }
 
-                div {
-                    // &.head-item {
-                    //     border-top: 1px solid var(--color-common-secondary-border);
-                    //     color: var(--color-giddh-blue);
-                    //     display: inline-flex;
-                    //     align-items: center;
-                    //     justify-content: flex-end;
+                // div {
+                // &.head-item {
+                //     border-top: 1px solid var(--color-common-secondary-border);
+                //     color: var(--color-giddh-blue);
+                //     display: inline-flex;
+                //     align-items: center;
+                //     justify-content: flex-end;
 
-                    //     &:first-child,
-                    //     &:nth-child(2) {
-                    //         justify-content: flex-start;
-                    //     }
-                    }
+                //     &:first-child,
+                //     &:nth-child(2) {
+                //         justify-content: flex-start;
+                //     }
+            }
 
-                    // &.body-item {
+            // &.body-item {
 
-                        .delete-btn {
-                            padding: 0 0 0 10px;
-                            border-top: none;
-                            border-right: none;
-                            border-bottom: none;
-                            display: inline-flex;
-                            align-items: center;
-                            justify-content: center;
+            .delete-btn {
+                background: var(--color-transparent-background) !important;
+                border: none !important;
 
-                            .icon-trash {
-                                border: 1px solid var(--color-grey-bootstrap-border);
-                                border-radius: 50%;
-                                padding: 4px;
-                            }
-                        // }
-                    // }
+                .icon-trash {
+                    border: 1px solid var(--color-grey-bootstrap-border);
+                    border-radius: 50%;
+                    padding: 4px;
                 }
+
+                // }
+                // }
+                // }
 
                 .select-account-label {
                     color: var(--color-gray);
@@ -257,9 +263,10 @@
     }
 }
 
-.option-label{
+.option-label {
     color: var(--color-common-primary-text);
 }
-.option-value{
+
+.option-value {
     color: var(--color-gray);
 }

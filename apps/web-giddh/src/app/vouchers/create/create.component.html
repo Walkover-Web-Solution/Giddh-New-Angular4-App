@@ -470,7 +470,7 @@
                                             <th class="">Discount</th>
                                             <th class="">Tax</th>
                                             <th class="">Total</th>
-                                            <th class="border-end-0 border-bottom-0 p-0">
+                                            <th class="delete-btn border-end-0 border-bottom-0 p-0">
                                                 <!-- Don't Delete this element it is working as column(<th> tag like) for delete icon -->
                                             </th>
                                         </thead>
@@ -522,8 +522,8 @@
                                                                             <ng-template #optionTemplate let-option="option">
                                                                                 <ng-container *ngIf="!option.additional?.stock">
                                                                                     <a href="javascript:;" class="flex-column">
-                                                                                        <div class="option-label">{{ option?.label | titlecase }}</div>
-                                                                                        <div class="option-value">
+                                                                                        <div class="option-label pt-2">{{ option?.label | titlecase }}</div>
+                                                                                        <div class="option-value pb-2">
                                                                                             {{ option.additional?.uniqueName }}
                                                                                         </div>
                                                                                     </a>
