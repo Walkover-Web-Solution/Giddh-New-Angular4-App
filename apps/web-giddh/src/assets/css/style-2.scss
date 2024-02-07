@@ -4172,6 +4172,11 @@ a.btn.btn-xs.btn-link.pull-right {
     height: 65px;
     display: flex;
     align-items: center;
+    border-color: var(--color-primary-popup-list-header-bottom-border);
+
+    .icon-cross{
+        color: var(--color-toast-primary-text);
+    }
 }
 
 .modal-body,
