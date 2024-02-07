@@ -1110,6 +1110,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             attachedFile: [''],
             attachedFileName: [''],
             totalDiscount: [''],
+            totalTax: [''],
             discounts: this.formBuilder.array([
                 this.getTransactionDiscountFormGroup()
             ]),
@@ -1123,7 +1124,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         uniqueName: ['']
                     }),
                     amount: this.formBuilder.group({
-                        amountForAccount: [''],
+                        amountForAccount: [0],
                         type: ['DEBIT']
                     }),
                     stock: this.formBuilder.group({
@@ -1147,8 +1148,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 })
             ]),
             total: this.formBuilder.group({
-                amountForAccount: [''],
-                amountForCompany: ['']
+                amountForAccount: [0],
+                amountForCompany: [0]
             })
         });
     }
