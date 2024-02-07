@@ -7,12 +7,14 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatDialogModule } from "@angular/material/dialog";
 import { MatExpansionModule } from "@angular/material/expansion";
 import { MatTooltipModule } from "@angular/material/tooltip";
+import { CommonModule } from "@angular/common";
 
 @NgModule({
     declarations: [
         AddBulkItemsComponent
     ],
     imports: [
+        CommonModule,
         FormFieldsModule,
         MatListModule,
         ScrollingModule,
