@@ -1354,7 +1354,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         });
 
         discountDialogRef.afterClosed().pipe(take(1)).subscribe(response => {
-
+            if (response) {
+                this.componentStore.getDiscountsList();
+            }
         });
     }
 
