@@ -4,9 +4,7 @@ import { GeneralService } from "../../services/general.service";
 import { VoucherForm } from "../../models/api-models/Voucher";
 import { GIDDH_VOUCHER_FORM } from "../../app.constant";
 
-@Injectable({
-    providedIn: 'any'
-})
+@Injectable()
 export class VouchersUtilityService {
 
     public voucherTypes: any[] = [VoucherTypeEnum.cashCreditNote, VoucherTypeEnum.cash, VoucherTypeEnum.cashDebitNote, VoucherTypeEnum.cashBill];
