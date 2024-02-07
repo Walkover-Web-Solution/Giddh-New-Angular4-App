@@ -7,6 +7,7 @@ import { MatSelectModule } from "@angular/material/select";
 import { CommonModule } from "@angular/common";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { AsideMenuCreateTaxModule } from "../../shared/aside-menu-create-tax/aside-menu-create-tax.module";
+import { TranslateDirectiveModule } from "../translate/translate.directive.module";
 
 @NgModule({
     declarations: [
@@ -20,7 +21,8 @@ import { AsideMenuCreateTaxModule } from "../../shared/aside-menu-create-tax/asi
         MatButtonModule,
         MatDialogModule,
         MatSelectModule,
-        AsideMenuCreateTaxModule
+        AsideMenuCreateTaxModule,
+        TranslateDirectiveModule
     ],
     exports: [
         OtherTaxComponent

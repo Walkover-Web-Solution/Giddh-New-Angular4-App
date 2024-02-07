@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
-import { Observable, ReplaySubject, takeUntil, of as observableOf, take } from "rxjs";
+import { Observable, ReplaySubject, takeUntil, of as observableOf, take, of } from "rxjs";
 import { OtherTaxComponentStore } from "./utility/other-tax.store";
 import { AppState } from "../../store";
 import { Store } from "@ngrx/store";
@@ -18,6 +18,8 @@ export class OtherTaxComponent implements OnInit, OnDestroy {
     @ViewChild("createTax") public createTax: TemplateRef<any>;
     /** Company taxes Observable */
     public companyTaxes$: Observable<any> = this.componentStore.companyTaxes$;
+    /** Tax list observable */
+    public taxesList$: Observable<any> = of(null);
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Form Group for tax form */
@@ -39,6 +41,7 @@ export class OtherTaxComponent implements OnInit, OnDestroy {
         private formBuilder: UntypedFormBuilder,
         private dialog: MatDialog,
         private store: Store<AppState>,
+        public dialogRef: MatDialogRef<any>
     ) {
 
     }
@@ -61,8 +64,8 @@ export class OtherTaxComponent implements OnInit, OnDestroy {
      */
     private initOtherTaxForm(): void {
         this.otherTaxForm = this.formBuilder.group({
-            taxType: ['', Validators.required],
-            taxValue: ['', Validators.required],
+            tax: ['', Validators.required],
+            calculationMethod: ['', Validators.required],
         });
     }
 
@@ -76,12 +79,10 @@ export class OtherTaxComponent implements OnInit, OnDestroy {
             if (!response) {
                 this.store.dispatch(this.companyActions.getTax());
             } else {
-                let taxResponse = response
-                    ?.filter(f => ['tcsrc', 'tcspay', 'tdsrc', 'tdspay'].includes(f.taxType))
-                    .map(m => {
-                        return { label: m.name, value: m?.uniqueName };
-                    })
-                this.companyTaxes$ = observableOf(taxResponse);
+                let taxResponse = response?.filter(tax => ['tcsrc', 'tcspay', 'tdsrc', 'tdspay'].includes(tax.taxType)).map(tax => {
+                    return { label: tax.name, value: tax };
+                });
+                this.taxesList$ = observableOf(taxResponse);
             }
         });
     }
@@ -98,6 +99,8 @@ export class OtherTaxComponent implements OnInit, OnDestroy {
             this.isFormSubmitted = true;
             return;
         }
+
+        this.dialogRef.close(this.otherTaxForm?.value);
     }
 
     /**
@@ -124,21 +127,6 @@ export class OtherTaxComponent implements OnInit, OnDestroy {
         this.taxAsideMenuRef.close();
         this.otherTax = false;
         this.componentStore.companyTaxes$;
-    }
-
-    /**
-     * This will be use for select tax
-     *
-     * @param {*} event
-     * @param {*} isClear
-     * @memberof OtherTaxComponent
-     */
-    public selectTax(event: any, isClear: any): void {
-        if (isClear) {
-            this.otherTaxForm.reset();
-        } else {
-            this.otherTaxForm.get("taxType")?.patchValue(event?.label);
-        }
     }
 
     /**

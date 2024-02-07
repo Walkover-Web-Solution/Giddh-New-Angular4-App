@@ -193,6 +193,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public taxAsideMenuRef: MatDialogRef<any>;
     /** Hold aside menu state for product service  */
     public productServiceAsideMenuRef: MatDialogRef<any>;
+    /** Other tax dialog ref  */
+    public otherTaxAsideMenuRef: MatDialogRef<any>;
+    /** Bulk stock dialog ref  */
+    public bulkStockAsideMenuRef: MatDialogRef<any>;
     /** Stores the current voucher form detail */
     public currentVoucherFormDetails: VoucherForm;
     /** RCM modal configuration */
@@ -1190,8 +1194,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public openBulkEntryDialog(): void {
-        let dialogRef = this.dialog.open(this.bulkItemsModal);
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        this.bulkStockAsideMenuRef = this.dialog.open(this.bulkItemsModal);
+        this.bulkStockAsideMenuRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response) {
                 console.log("Close with true");
             } else {
@@ -1206,16 +1210,16 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public openOtherTaxDialog(): void {
-        let dialogRef = this.dialog.open(OtherTaxComponent, {
+        this.otherTaxAsideMenuRef = this.dialog.open(OtherTaxComponent, {
             position: {
                 top: '0',
                 right: '0'
             }
         });
 
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        this.otherTaxAsideMenuRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response) {
-                console.log("Close with true");
+                console.log(response);
             } else {
                 console.log("Close with false");
             }
@@ -1693,7 +1697,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public handleOutsideClick(event: any): void {
-        if ((typeof event?.target?.className === "string" && event?.target?.className?.indexOf("option") === -1) && event?.currentTarget?.activeElement?.className?.indexOf("select-field-input") === -1) {
+        if ((typeof event?.target?.className === "string" && event?.target?.className?.indexOf("option") === -1) && event?.currentTarget?.activeElement?.className?.indexOf("select-field-input") === -1 && !this.dialog.getDialogById(this.otherTaxAsideMenuRef.id) && !this.dialog.getDialogById(this.bulkStockAsideMenuRef.id) && !this.dialog.getDialogById(this.accountAsideMenuRef.id) && !this.dialog.getDialogById(this.taxAsideMenuRef.id) && !this.dialog.getDialogById(this.productServiceAsideMenuRef.id)) {
             this.activeEntryIndex = null;
         }
     }
