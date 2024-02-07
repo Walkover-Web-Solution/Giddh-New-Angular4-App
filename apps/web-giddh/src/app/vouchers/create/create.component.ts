@@ -383,6 +383,15 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
+     * Lifecycle hook for load component after view initialization
+     *
+     * @memberof VoucherCreateComponent
+     */
+    public ngAfterViewInit(): void {
+        this.initIntl();
+    }
+
+    /**
      * Finds voucher type
      *
      * @private
@@ -1150,6 +1159,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         return this.formBuilder.group({
             amount: this.formBuilder.group({
                 amountForAccount: [''],
+                amountForCompany: [''],
                 type: ['DEBIT']
             }),
             calculationMethod: ['FIX_AMOUNT'],
@@ -1344,7 +1354,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         });
 
         discountDialogRef.afterClosed().pipe(take(1)).subscribe(response => {
-
+            if (response) {
+                this.componentStore.getDiscountsList();
+            }
         });
     }
 
@@ -1670,6 +1682,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         entries.removeAt(entryIndex);
     }
 
+    /**
+     * Handles outside click from entry table
+     *
+     * @param {*} event
+     * @memberof VoucherCreateComponent
+     */
     public handleOutsideClick(event: any): void {
         if ((typeof event?.target?.className === "string" && event?.target?.className?.indexOf("option") === -1) && event?.currentTarget?.activeElement?.className?.indexOf("select-field-input") === -1) {
             this.activeEntryIndex = null;
@@ -1686,20 +1704,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
-     * Lifecycle hook for load component after view initialization
-     *
-     * @memberof VoucherCreateComponent
-     */
-    public ngAfterViewInit(): void {
-        this.initIntl();
-    }
-
-    /**
      * Initializes the int-tel input
      *
      * @memberof VoucherCreateComponent
      */
-    public initIntl() {
+    public initIntl(): void {
         const parentDom = document.querySelector('create');
         const input = document.getElementById('init-contact');
         if (input) {
@@ -1724,6 +1733,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.invoiceForm.controls["account"].get("mobileNumber")?.setErrors(null);
             }
         }, 100);
+    }
+
+    public getSelectedDiscounts(discounts?: any): void {
+        console.log(discounts);
     }
 
     /**

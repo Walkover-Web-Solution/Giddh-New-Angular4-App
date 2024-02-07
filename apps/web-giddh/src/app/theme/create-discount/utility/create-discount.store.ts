@@ -1,8 +1,6 @@
 import { Injectable } from "@angular/core";
 import { ComponentStore, tapResponse } from "@ngrx/component-store";
-import { Store } from "@ngrx/store";
 import { Observable, switchMap, catchError, EMPTY } from "rxjs";
-import { AppState } from "../../../store";
 import { ToasterService } from "../../../services/toaster.service";
 import { BaseResponse } from "../../../models/api-models/BaseResponse";
 import { SalesService } from "../../../services/sales.service";
@@ -11,14 +9,12 @@ import { CreateDiscountRequest } from "../../../models/api-models/SettingsDiscou
 
 export interface CreateDiscountState {
     discountsAccountList: any[];
-    isLoading: boolean;
     createDiscountInProgress: boolean;
     createDiscountSuccess: boolean;
 }
 
 const DEFAULT_STATE: CreateDiscountState = {
     discountsAccountList: null,
-    isLoading: false,
     createDiscountSuccess: null,
     createDiscountInProgress: null
 };
@@ -27,8 +23,7 @@ const DEFAULT_STATE: CreateDiscountState = {
 export class CreateDiscountComponentStore extends ComponentStore<CreateDiscountState> {
 
     constructor(
-        private store: Store<AppState>,
-        private toast: ToasterService,
+        private toaster: ToasterService,
         private salesService: SalesService,
         private settingsDiscountService: SettingsDiscountService,
     ) {
@@ -36,7 +31,6 @@ export class CreateDiscountComponentStore extends ComponentStore<CreateDiscountS
     }
 
     public discountsAccountList$ = this.select((state) => state.discountsAccountList);
-    public isLoading$ = this.select((state) => state.isLoading);
     public createDiscountInProgress$ = this.select((state) => state.createDiscountInProgress);
     public createDiscountSuccess$ = this.select((state) => state.createDiscountSuccess);
 
@@ -51,7 +45,7 @@ export class CreateDiscountComponentStore extends ComponentStore<CreateDiscountS
                             });
                         },
                         (error: any) => {
-                            this.showErrorToast('error',error);
+                            this.toaster.showSnackBar("error", error);
                             return this.patchState({
                                 discountsAccountList: []
                             });
@@ -66,21 +60,19 @@ export class CreateDiscountComponentStore extends ComponentStore<CreateDiscountS
     readonly saveDiscount = this.effect((data: Observable<{ model: CreateDiscountRequest }>) => {
         return data.pipe(
             switchMap((req) => {
-                this.patchState({ isLoading: true, createDiscountSuccess: false, createDiscountInProgress: true });
+                this.patchState({ createDiscountSuccess: false, createDiscountInProgress: true });
                 return this.settingsDiscountService.CreateDiscount(req as any).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
-                            this.showErrorToast('success', res.body);
+                            this.toaster.showSnackBar('success', res.body);
                             return this.patchState({
-                                isLoading: false,
                                 createDiscountInProgress: false,
                                 createDiscountSuccess: true
                             });
                         },
                         (error: any) => {
-                            this.showErrorToast('error', error);
+                            this.toaster.showSnackBar('error', error);
                             return this.patchState({
-                                isLoading: false,
                                 createDiscountInProgress: false,
                                 createDiscountSuccess: false
                             });
@@ -91,13 +83,4 @@ export class CreateDiscountComponentStore extends ComponentStore<CreateDiscountS
             })
         );
     });
-
-    private showErrorToast(type: any, message: any): void {
-        if (type === 'error') {
-            this.toast.showSnackBar("error", message);
-        } else {
-            this.toast.showSnackBar("success", message);
-
-        }
-    }
 }

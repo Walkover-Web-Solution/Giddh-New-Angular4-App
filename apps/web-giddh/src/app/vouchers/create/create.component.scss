@@ -132,41 +132,38 @@
                 }
             }
 
-            .vouchers-entry-grid {
-                display: grid;
-                grid-template-columns: 40px minmax(230px, auto) repeat(5, 1fr) 140px auto;
-
-                @media screen and (max-width: 1359px) {
-                    grid-template-columns: 40px 180px repeat(5, 1fr) 140px auto;
+            #init-contact-wrapper{
+                input{
+                    height: 48px;
                 }
+            }
 
-                grid-template-rows: minmax(40px, auto);
-                // max-width: 1075px;
+            .vouchers-entry-table {
 
-                &>div {
-                    padding: 15px 12px;
-                    border-bottom: 1px solid var(--color-common-secondary-border);
-                    border-left: 1px solid var(--color-common-secondary-border);
-                    text-align: right;
-                }
+                // &>div {
+                //     padding: 15px 12px;
+                //     border-bottom: 1px solid var(--color-common-secondary-border);
+                //     border-left: 1px solid var(--color-common-secondary-border);
+                //     text-align: right;
+                // }
 
                 div {
-                    &.head-item {
-                        border-top: 1px solid var(--color-common-secondary-border);
-                        color: var(--color-giddh-blue);
-                        display: inline-flex;
-                        align-items: center;
-                        justify-content: flex-end;
+                    // &.head-item {
+                    //     border-top: 1px solid var(--color-common-secondary-border);
+                    //     color: var(--color-giddh-blue);
+                    //     display: inline-flex;
+                    //     align-items: center;
+                    //     justify-content: flex-end;
 
-                        &:first-child,
-                        &:nth-child(2) {
-                            justify-content: flex-start;
-                        }
+                    //     &:first-child,
+                    //     &:nth-child(2) {
+                    //         justify-content: flex-start;
+                    //     }
                     }
 
-                    &.body-item {
+                    // &.body-item {
 
-                        &.delete-btn {
+                        .delete-btn {
                             padding: 0 0 0 10px;
                             border-top: none;
                             border-right: none;
@@ -180,8 +177,8 @@
                                 border-radius: 50%;
                                 padding: 4px;
                             }
-                        }
-                    }
+                        // }
+                    // }
                 }
 
                 .select-account-label {
@@ -258,4 +255,11 @@
             }
         }
     }
+}
+
+.option-label{
+    color: var(--color-common-primary-text);
+}
+.option-value{
+    color: var(--color-gray);
 }
