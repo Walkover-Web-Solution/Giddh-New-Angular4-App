@@ -83,6 +83,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public isLoading$: Observable<any> = this.componentStore.isLoading$;
     /** Discounts list Observable */
     public discountsList$: Observable<any> = this.componentStore.discountsList$;
+    /** Discounts list Observable */
+    public companyTaxes$: Observable<any> = this.componentStore.companyTaxes$;
     /** Voucher account results Observable */
     public voucherAccountResults$: Observable<OptionInterface[]> = of(null);
     /** Voucher stock results Observable */
@@ -191,6 +193,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public taxAsideMenuRef: MatDialogRef<any>;
     /** Hold aside menu state for product service  */
     public productServiceAsideMenuRef: MatDialogRef<any>;
+    /** Other tax dialog ref  */
+    public otherTaxAsideMenuRef: MatDialogRef<any>;
+    /** Bulk stock dialog ref  */
+    public bulkStockAsideMenuRef: MatDialogRef<any>;
     /** Stores the current voucher form detail */
     public currentVoucherFormDetails: VoucherForm;
     /** RCM modal configuration */
@@ -1065,6 +1071,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             touristSchemeApplicable: [false],
             passportNumber: ['']
         });
+
+        console.log(this.invoiceForm);
     }
 
     /**
@@ -1105,6 +1113,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             sacNumber: [''],
             attachedFile: [''],
             attachedFileName: [''],
+            totalDiscount: [''],
+            totalTax: [''],
             discounts: this.formBuilder.array([
                 this.getTransactionDiscountFormGroup()
             ]),
@@ -1118,7 +1128,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         uniqueName: ['']
                     }),
                     amount: this.formBuilder.group({
-                        amountForAccount: [''],
+                        amountForAccount: [0],
                         type: ['DEBIT']
                     }),
                     stock: this.formBuilder.group({
@@ -1142,8 +1152,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 })
             ]),
             total: this.formBuilder.group({
-                amountForAccount: [''],
-                amountForCompany: ['']
+                amountForAccount: [0],
+                amountForCompany: [0]
             })
         });
     }
@@ -1173,8 +1183,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
     private getTransactionTaxFormGroup(): FormGroup {
         return this.formBuilder.group({
-            accountName: [''],
-            accountUniqueName: [''],
             calculationMethod: [''],
             uniqueName: ['']
         });
@@ -1186,8 +1194,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public openBulkEntryDialog(): void {
-        let dialogRef = this.dialog.open(this.bulkItemsModal);
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        this.bulkStockAsideMenuRef = this.dialog.open(this.bulkItemsModal);
+        this.bulkStockAsideMenuRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response) {
                 console.log("Close with true");
             } else {
@@ -1202,16 +1210,16 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public openOtherTaxDialog(): void {
-        let dialogRef = this.dialog.open(OtherTaxComponent, {
+        this.otherTaxAsideMenuRef = this.dialog.open(OtherTaxComponent, {
             position: {
                 top: '0',
                 right: '0'
             }
         });
 
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        this.otherTaxAsideMenuRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response) {
-                console.log("Close with true");
+                console.log(response);
             } else {
                 console.log("Close with false");
             }
@@ -1689,7 +1697,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public handleOutsideClick(event: any): void {
-        if ((typeof event?.target?.className === "string" && event?.target?.className?.indexOf("option") === -1) && event?.currentTarget?.activeElement?.className?.indexOf("select-field-input") === -1) {
+        if ((typeof event?.target?.className === "string" && event?.target?.className?.indexOf("option") === -1) && event?.currentTarget?.activeElement?.className?.indexOf("select-field-input") === -1 && !this.dialog.getDialogById(this.otherTaxAsideMenuRef.id) && !this.dialog.getDialogById(this.bulkStockAsideMenuRef.id) && !this.dialog.getDialogById(this.accountAsideMenuRef.id) && !this.dialog.getDialogById(this.taxAsideMenuRef.id) && !this.dialog.getDialogById(this.productServiceAsideMenuRef.id)) {
             this.activeEntryIndex = null;
         }
     }
@@ -1739,6 +1747,18 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         console.log(discounts);
     }
 
+    public updateTotalDiscount(totalDiscount: any, entry: FormGroup): void {
+        entry.get('totalDiscount').patchValue(totalDiscount);
+    }
+
+    public getSelectedTaxes(taxes?: any): void {
+        console.log(taxes);
+    }
+
+    public updateTotalTax(totalTax: any, entry: FormGroup): void {
+        entry.get('totalTax').patchValue(totalTax);
+    }
+
     /**
      * This will be use for copy invoice
      *
@@ -1758,7 +1778,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public getLastInvoiceDetails(obj: { accountUniqueName: string, invoiceNo: string, uniqueName?: string }) {
         // this obj will be directly send to api 
     }
-
 
     /**
      * Lifecycle hook for component destroy
