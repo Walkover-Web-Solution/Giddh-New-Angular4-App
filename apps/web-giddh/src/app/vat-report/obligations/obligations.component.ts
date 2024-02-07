@@ -144,7 +144,7 @@ export class ObligationsComponent implements OnInit, OnDestroy {
 
                     return item;
                 });
-            } else if (response?.body?.message) {
+            } else if (response?.message) {
                 this.toaster.showSnackBar('error', response?.message);
             }
         });
