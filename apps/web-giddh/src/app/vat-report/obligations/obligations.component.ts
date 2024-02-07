@@ -47,12 +47,7 @@ export class ObligationsComponent implements OnInit, OnDestroy {
     /** Holds true if more than 1 tax number exist */
     public isMultipleTaxNumber: boolean;
     /** Holds VAT Obligations Status List */
-    public statusList: ObligationsStatus[] = [
-        { label: 'All', value: '' },
-        { label: 'Open', value: 'O' },
-        { label: 'Fulfilled', value: 'F' }
-    ];
-
+    public statusList: ObligationsStatus[];
     /** This will store selected date ranges */
     public selectedDateRange: any;
     /** This will store available date ranges */
@@ -65,8 +60,6 @@ export class ObligationsComponent implements OnInit, OnDestroy {
     public selectedDateRangeUi: any;
     /** Instance of bootstrap modal */
     public modalRef: BsModalRef;
-    /* Observable to store universal date */
-    public universalDate$: Observable<any>;
     /** Observable to store the branches of current company */
     public currentCompanyBranches$: Observable<any>;
     /** Holds true if multiple branches in the company */
@@ -77,6 +70,8 @@ export class ObligationsComponent implements OnInit, OnDestroy {
     public tableDataSource: any[] = [];
     /** Holds Obligations table columns */
     public displayedColumns = ['periodKey', 'start', 'end', 'due', 'status', 'action'];
+    /** True if API Call is in progress */
+    public isLoading: boolean;
 
 
     constructor(
@@ -90,13 +85,12 @@ export class ObligationsComponent implements OnInit, OnDestroy {
         public dialog: MatDialog
     ) {
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
-
         this.store.pipe(select(state => state.session.activeCompany), take(1)).subscribe(activeCompany => {
-            if (activeCompany) {
+            if (activeCompany && !this.companyUniqueName) {
                 this.companyUniqueName = activeCompany.uniqueName;
             }
         });
-        this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
+        this.getUniversalDatePickerDate();
     }
 
     /**
@@ -106,7 +100,6 @@ export class ObligationsComponent implements OnInit, OnDestroy {
      */
     public ngOnInit() {
         this.iniObligationsForm();
-        this.getUniversalDatePickerDate();
         this.isCompanyMode = this.generalService.currentOrganizationType === OrganizationType.Company;
         this.loadTaxDetails();
 
@@ -139,9 +132,11 @@ export class ObligationsComponent implements OnInit, OnDestroy {
      *
      * @memberof ObligationsComponent
      */
-    public vatObligations(): void {
-        this.vatService.vatObligations(this.companyUniqueName, this.obligationsForm.value).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response?.status === "success") {
+    public getVatObligations(): void {
+        this.isLoading = true;
+        this.vatService.getVatObligations(this.companyUniqueName, this.obligationsForm.value).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            this.isLoading = false;
+            if (response?.status === "success" && response?.body?.obligations) {
                 this.tableDataSource = cloneDeep(response?.body?.obligations).map(item => {
                     item.start = dayjs(item.start).format(GIDDH_DATE_FORMAT);
                     item.end = dayjs(item.end).format(GIDDH_DATE_FORMAT);
@@ -149,10 +144,26 @@ export class ObligationsComponent implements OnInit, OnDestroy {
 
                     return item;
                 });
-            } else if (response?.message) {
+            } else if (response?.body?.message) {
                 this.toaster.showSnackBar('error', response?.message);
             }
         });
+    }
+
+    /**
+     * Translation Complete Callback
+     *
+     * @param {*} event
+     * @memberof ObligationsComponent
+     */
+    public translationComplete(event: any): void {
+        if (event) {
+            this.statusList = [
+                { label: this.commonLocaleData?.app_all, value: '' },
+                { label: this.localeData?.status_open, value: 'O' },
+                { label: this.localeData?.status_fulfilled, value: 'F' }
+            ];
+        }
     }
 
     /**
@@ -163,11 +174,11 @@ export class ObligationsComponent implements OnInit, OnDestroy {
      */
     private iniObligationsForm(): void {
         this.obligationsForm = this.formBuilder.group({
-            branchUniqueName: [null],
-            taxNumber: [null],
+            branchUniqueName: [''],
+            taxNumber: [''],
             status: [''],
-            from: [null],
-            to: [null]
+            from: [''],
+            to: ['']
         });
     }
 
@@ -235,9 +246,11 @@ export class ObligationsComponent implements OnInit, OnDestroy {
 
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response.status === 'success') {
-                this.toaster.showSnackBar('success', response.message);
-                this.vatObligations();
-            } else if(response?.message) {
+                if (response?.body) {
+                    this.toaster.showSnackBar('success', response.body);
+                }
+                this.getVatObligations();
+            } else if (response?.message) {
                 this.toaster.showSnackBar('error', response.message);
             }
         });
@@ -266,10 +279,7 @@ export class ObligationsComponent implements OnInit, OnDestroy {
         });
 
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
-            if (response.status === 'success') {
-                this.toaster.showSnackBar('success', response.message);
-                this.vatObligations();
-            } else if(response?.message) {
+            if (response.status === 'error') {
                 this.toaster.showSnackBar('error', response.message);
             }
         });
@@ -307,9 +317,9 @@ export class ObligationsComponent implements OnInit, OnDestroy {
                         label: tax,
                         value: tax
                     }));
-                } else {
-                    this.getFormControl('taxNumber').setValue(response.body[0]);
                 }
+                this.getFormControl('taxNumber').setValue(response.body[0]);
+                this.getVatObligations();
             }
         });
     }

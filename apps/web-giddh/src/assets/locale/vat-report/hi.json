@@ -20,5 +20,12 @@
     "customer_name": "ग्राहक का नाम",
     "reverse_charge": "उल्टा चार्ज",
     "select_month_label": "महीना चुनिए",
-    "box":"बॉक्स"
+    "box":"बॉक्स",
+    "period_key": "कालकी कुंजी",
+    "view_return": "वापसी देखें",
+    "file_return": "फ़ाइल वापसी",
+    "status_open": "खुला",
+    "status_fulfilled": "पूर्ण",
+    "select_status": "स्थिती निवडा",
+    "select_tax_number": "कर नंबर निवडा"
 }

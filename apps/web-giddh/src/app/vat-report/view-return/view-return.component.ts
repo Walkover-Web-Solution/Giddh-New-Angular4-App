@@ -2,6 +2,8 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { VatService } from '../../services/vat.service';
 import { ReplaySubject, takeUntil } from 'rxjs';
+import { Store, select } from '@ngrx/store';
+import { AppState } from '../../store';
 
 @Component({
     selector: 'view-return',
@@ -17,13 +19,28 @@ export class ViewReturnComponent implements OnInit {
     public commonLocaleData: any = {};
     /** True if API Call is in progress */
     public isLoading: boolean;
+    /** Holds table data for VAT Report */
+    public vatReport: any[] = [];
+    /** Hold table displayed columns */
+    public ukDisplayedColumns: string[] = ['number', 'name', 'aed_amt'];
+    /** Holds Active Company Info from store */
+    public activeCompany: any;
 
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public inputData: any,
         public dialogRef: MatDialogRef<any>,
-        private vatService: VatService
-    ) { }
+        private vatService: VatService,
+        private store: Store<AppState>,
+    ) {
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if (activeCompany && !this.activeCompany) {
+                this.activeCompany = activeCompany;
+            }
+        });
+        this.localeData = inputData.localeData;
+        this.commonLocaleData = inputData.commonLocaleData;
+    }
 
     /**
      * Lifecycle hook for initialization
@@ -51,8 +68,8 @@ export class ViewReturnComponent implements OnInit {
         this.isLoading = true;
         this.vatService.viewVatReturn(this.inputData.companyUniqueName, model).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             this.isLoading = false;
-            if (res?.status === 'success') {
-                // this.dialogRef.close(res);
+            if (res?.status === 'success' && res.body?.sections) {
+                this.vatReport = res.body?.sections;
             }
             else {
                 this.dialogRef.close(res);

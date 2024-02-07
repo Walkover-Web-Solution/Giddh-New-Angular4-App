@@ -5,7 +5,6 @@ import { ReplaySubject, takeUntil } from 'rxjs';
 import { VatReportRequest } from '../../models/api-models/Vat';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store';
-import { ToasterService } from '../../services/toaster.service';
 
 @Component({
     selector: 'file-return',
@@ -33,8 +32,7 @@ export class FileReturnComponent implements OnInit, OnDestroy {
         @Inject(MAT_DIALOG_DATA) public inputData: any,
         public dialogRef: MatDialogRef<any>,
         private vatService: VatService,
-        private store: Store<AppState>,
-        private toaster: ToasterService
+        private store: Store<AppState>
     ) {
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany && !this.activeCompany) {
@@ -70,10 +68,10 @@ export class FileReturnComponent implements OnInit, OnDestroy {
         this.isLoading = true;
         this.vatService.getUKVatReport(vatReportRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             this.isLoading = false;
-            if (res.status === 'success') {
+            if (res.status === 'success' && res.body?.sections) {
                 this.vatReport = res.body?.sections;
             } else {
-                this.toaster.errorToast(res.message);
+                this.dialogRef.close(res);
             }
         });
     }

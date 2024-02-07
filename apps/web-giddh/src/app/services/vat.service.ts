@@ -154,7 +154,7 @@ export class VatService {
      * @returns
      * @memberof VatService
      */
-    public vatObligations(companyUniqueName: string, model: any) {
+    public getVatObligations(companyUniqueName: string, model: any) {
         let url = this.config.apiUrl + VAT_API.VAT_OBLIGATIONS;
         url = url?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName));
         url = url?.replace(':branchUniqueName', encodeURIComponent(model?.branchUniqueName));

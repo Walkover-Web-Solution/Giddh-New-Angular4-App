@@ -11,6 +11,13 @@
     }
 }
 .white-box {
+    .table-heading{
+        color: var(--color-giddh-blue);
+        font-size: var(--font-size-16);
+    }
+    .inner-table-heading{
+        color: var(--color-giddh-blue);
+    }
     table {
         tbody {
             tr {
@@ -56,6 +63,18 @@
         }
         .close-modal {
             right: 38px;
+        }
+    }
+}
+
+.obligations{
+    .mat-mdc-table {
+        .mdc-data-table__content {
+            .mat-mdc-row {
+                .mat-mdc-cell {
+                    background-color: var(--color-body-background) !important;
+                }
+            }
         }
     }
 }

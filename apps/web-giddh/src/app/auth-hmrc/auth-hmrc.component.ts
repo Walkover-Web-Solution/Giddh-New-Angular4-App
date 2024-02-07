@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ReplaySubject, take, takeUntil } from 'rxjs';
 import { VatService } from '../services/vat.service';
 import { Store, select } from '@ngrx/store';
@@ -20,11 +20,12 @@ export class AuthHMRCComponent implements OnInit, OnDestroy {
     private companyUniqueName: string;
 
     constructor(
+        private router: Router,
         private route: ActivatedRoute,
         private vatService: VatService,
         private store: Store<AppState>,
         private toaster: ToasterService
-    ) { 
+    ) {
         this.store.pipe(select(state => state.session.activeCompany), take(1)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.companyUniqueName = activeCompany.uniqueName;
@@ -55,16 +56,11 @@ export class AuthHMRCComponent implements OnInit, OnDestroy {
     private saveAuthorization(authorizationCode: string): void {
         this.vatService.saveAuthorizationCode(this.companyUniqueName, { code: authorizationCode }).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res?.status === 'success' && res?.message) {
-                this.toaster.successToast(res?.message);
-                // setTimeout(() => {
-                //     this.router.navigateByUrl('pages/vat-report/obligations');
-                // }, 3000);========================== Pending to ask 
-                
-            } else {
-                this.toaster.errorToast(res?.message)
-                // setTimeout(() => {
-                //     this.router.navigateByUrl('pages/vat-report');
-                // }, 3000);========================== Pending to ask 
+                this.toaster.showSnackBar('success', res?.message);
+                this.router.navigate(['pages/vat-report/obligations']);
+            } else if (res?.message) {
+                this.toaster.showSnackBar('error', res?.message);
+                this.router.navigate(['pages/vat-report']);
             }
         })
     }
