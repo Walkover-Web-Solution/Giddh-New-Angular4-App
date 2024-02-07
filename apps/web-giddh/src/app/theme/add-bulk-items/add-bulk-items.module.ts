@@ -8,6 +8,7 @@ import { MatDialogModule } from "@angular/material/dialog";
 import { MatExpansionModule } from "@angular/material/expansion";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { CommonModule } from "@angular/common";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
 @NgModule({
     declarations: [
@@ -21,7 +22,9 @@ import { CommonModule } from "@angular/common";
         MatButtonModule,
         MatDialogModule,
         MatExpansionModule,
-        MatTooltipModule
+        MatTooltipModule,
+        FormsModule,
+        ReactiveFormsModule
     ],
     exports: [
         AddBulkItemsComponent
