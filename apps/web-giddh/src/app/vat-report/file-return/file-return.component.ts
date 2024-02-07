@@ -44,20 +44,20 @@ export class FileReturnComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Lifecycle hook for initialization
-     *
-     * @memberof FileReturnComponent
-     */
-    public ngOnInit() {
+    * Lifecycle hook for initialization
+    *
+    * @memberof FileReturnComponent
+    */
+    public ngOnInit(): void {
         this.getReport();
     }
 
     /**
-     * Get Vat Report and store response to 'vatReport' to display
-     *
-     * @private
-     * @memberof FileReturnComponent
-     */
+    * Get Vat Report and store response to 'vatReport' to display
+    *
+    * @private
+    * @memberof FileReturnComponent
+    */
     private getReport(): void {
         let vatReportRequest = new VatReportRequest();
         vatReportRequest.from = this.inputData.start;
@@ -77,10 +77,10 @@ export class FileReturnComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Submit VAT Return API Call
-     *
-     * @memberof FileReturnComponent
-     */
+    * Submit VAT Return API Call
+    *
+    * @memberof FileReturnComponent
+    */
     public submitVatReturn(): void {
         let model = {
             taxNumber: this.inputData.taxNumber,
@@ -98,10 +98,10 @@ export class FileReturnComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Lifecycle hook for destroy
-     *
-     * @memberof FileReturnComponent
-     */
+    * Lifecycle hook for destroy
+    *
+    * @memberof FileReturnComponent
+    */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();

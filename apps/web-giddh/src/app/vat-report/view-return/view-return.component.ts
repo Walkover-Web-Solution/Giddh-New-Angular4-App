@@ -33,30 +33,30 @@ export class ViewReturnComponent implements OnInit {
         private vatService: VatService,
         private store: Store<AppState>,
     ) {
+        this.localeData = inputData.localeData;
+        this.commonLocaleData = inputData.commonLocaleData;
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany && !this.activeCompany) {
                 this.activeCompany = activeCompany;
             }
         });
-        this.localeData = inputData.localeData;
-        this.commonLocaleData = inputData.commonLocaleData;
     }
 
     /**
-     * Lifecycle hook for initialization
-     *
-     * @memberof ViewReturnComponent
-     */
-    public ngOnInit() {
+    * Lifecycle hook for initialization
+    *
+    * @memberof ViewReturnComponent
+    */
+    public ngOnInit(): void {
         this.viewVatReturn();
     }
 
     /**
-     * View VAT Return API Call
-     *
-     * @private
-     * @memberof ViewReturnComponent
-     */
+    * View VAT Return API Call
+    *
+    * @private
+    * @memberof ViewReturnComponent
+    */
     private viewVatReturn(): void {
         let model = {
             taxNumber: this.inputData.taxNumber,

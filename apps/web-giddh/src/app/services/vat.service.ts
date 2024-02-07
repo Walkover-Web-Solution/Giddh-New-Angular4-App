@@ -119,7 +119,7 @@ export class VatService {
      * @memberof VatService
      */
     public getHMRCAuthorization(companyUniqueName: string): Observable<BaseResponse<any, any>> {
-        let url = this.config.apiUrl + VAT_API.CHECK_HRMC_AUTHORIZATION;
+        let url = this.config.apiUrl + VAT_API.CHECK_HMRC_AUTHORIZATION;
         url = url?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName));
         return this.http.get(url).pipe(
             map((res) => {
@@ -193,7 +193,7 @@ export class VatService {
     }
 
     /**
-     * This will get for view VAT return record
+     * This will get for VAT Return record
      *
      * @param {string} companyUniqueName
      * @param {*} model

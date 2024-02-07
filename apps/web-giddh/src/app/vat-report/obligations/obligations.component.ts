@@ -94,11 +94,11 @@ export class ObligationsComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Lifecycle hook for initialization
-     *
-     * @memberof ObligationsComponent
-     */
-    public ngOnInit() {
+    * Lifecycle hook for initialization
+    *
+    * @memberof ObligationsComponent
+    */
+    public ngOnInit(): void {
         this.iniObligationsForm();
         this.isCompanyMode = this.generalService.currentOrganizationType === OrganizationType.Company;
         this.loadTaxDetails();
@@ -128,10 +128,10 @@ export class ObligationsComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * VAT Obligations API Call
-     *
-     * @memberof ObligationsComponent
-     */
+    * VAT Obligations API Call
+    *
+    * @memberof ObligationsComponent
+    */
     public getVatObligations(): void {
         this.isLoading = true;
         this.vatService.getVatObligations(this.companyUniqueName, this.obligationsForm.value).pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -151,11 +151,11 @@ export class ObligationsComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Translation Complete Callback
-     *
-     * @param {*} event
-     * @memberof ObligationsComponent
-     */
+    * Translation Complete Callback
+    *
+    * @param {*} event
+    * @memberof ObligationsComponent
+    */
     public translationComplete(event: any): void {
         if (event) {
             this.statusList = [
@@ -167,11 +167,11 @@ export class ObligationsComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This will use for init main formgroup
-     *
-     * @private
-     * @memberof ObligationsComponent
-     */
+    * This will use for init main formgroup
+    *
+    * @private
+    * @memberof ObligationsComponent
+    */
     private iniObligationsForm(): void {
         this.obligationsForm = this.formBuilder.group({
             branchUniqueName: [''],
@@ -183,11 +183,11 @@ export class ObligationsComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Handle Dropdown callback for Tax Number and save value to form
-     *
-     * @param {*} event
-     * @memberof ObligationsComponent
-     */
+    * Handle Dropdown callback for Tax Number and save value to form
+    *
+    * @param {*} event
+    * @memberof ObligationsComponent
+    */
     public taxNumberSelected(event: any): void {
         if (event?.value) {
             this.getFormControl('taxNumber').setValue(event.value);
@@ -195,11 +195,11 @@ export class ObligationsComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Handle Dropdown callback for Status and save value to form
-     *
-     * @param {*} event
-     * @memberof ObligationsComponent
-     */
+    * Handle Dropdown callback for Status and save value to form
+    *
+    * @param {*} event
+    * @memberof ObligationsComponent
+    */
     public statusSelected(event: any): void {
         if (event?.value || event?.value === '') {
             this.getFormControl('status').setValue(event.value);
@@ -207,11 +207,11 @@ export class ObligationsComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Handle Dropdown callback for Branch and save value to form
-     *
-     * @param {*} event
-     * @memberof ObligationsComponent
-     */
+    * Handle Dropdown callback for Branch and save value to form
+    *
+    * @param {*} event
+    * @memberof ObligationsComponent
+    */
     public branchSelected(event: any): void {
         if (event?.value) {
             this.getFormControl('branchUniqueName').setValue(event.value);
@@ -219,13 +219,13 @@ export class ObligationsComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Open View File VAT Return Dialog
-     *
-     * @param {string} start
-     * @param {string} end
-     * @param {string} periodKey
-     * @memberof ObligationsComponent
-     */
+    * Open View File VAT Return Dialog
+    *
+    * @param {string} start
+    * @param {string} end
+    * @param {string} periodKey
+    * @memberof ObligationsComponent
+    */
     public openFileReturnDialog(start: string, end: string, periodKey: string): void {
         const dataToSend = {
             taxNumber: this.getFormControl('taxNumber').value,
@@ -257,11 +257,11 @@ export class ObligationsComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Open View VAT Return Dialog
-     *
-     * @param {string} periodKey
-     * @memberof ObligationsComponent
-     */
+    * Open View VAT Return Dialog
+    *
+    * @param {string} periodKey
+    * @memberof ObligationsComponent
+    */
     public openViewReturnDialog(start: string, end: string, periodKey: string): void {
         const dataToSend = {
             taxNumber: this.getFormControl('taxNumber').value,
@@ -286,11 +286,11 @@ export class ObligationsComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Get Universal Date Observable from Store and subscribed
-     *
-     * @private
-     * @memberof ObligationsComponent
-     */
+    * Get Universal Date Observable from Store and subscribed
+    *
+    * @private
+    * @memberof ObligationsComponent
+    */
     private getUniversalDatePickerDate(): void {
         this.store.pipe(select(stateStore => stateStore.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj) => {
             if (dateObj) {
@@ -303,11 +303,11 @@ export class ObligationsComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Loads the tax details of a company
-     *
-     * @private
-     * @memberof ObligationsComponent
-     */
+    * Loads the tax details of a company
+    *
+    * @private
+    * @memberof ObligationsComponent
+    */
     private loadTaxDetails(): void {
         this.gstReconcileService.getTaxDetails().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.body?.length) {
@@ -325,11 +325,11 @@ export class ObligationsComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This will be use for show datepicker
-     *
-     * @param {*} element
-     * @memberof ObligationsComponent
-     */
+    * This will be use for show datepicker
+    *
+    * @param {*} element
+    * @memberof ObligationsComponent
+    */
     public showGiddhDatepicker(element: any): void {
         if (element) {
             this.dateFieldPosition = this.generalService.getPosition(element.target);
@@ -341,10 +341,10 @@ export class ObligationsComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This will be use for hide datepicker
-     *
-     * @memberof ObligationsComponent
-     */
+    * This will be use for hide datepicker
+    *
+    * @memberof ObligationsComponent
+    */
     public hideGiddhDatepicker(): void {
         this.modalRef.hide();
     }
@@ -375,12 +375,12 @@ export class ObligationsComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Used to get and set form control value
-     *
-     * @param {string} control
-     * @returns {*}
-     * @memberof ObligationsComponent
-     */
+    * Used to get and set form control value
+    *
+    * @param {string} control
+    * @returns {*}
+    * @memberof ObligationsComponent
+    */
     public getFormControl(control: string): any {
         return this.obligationsForm.get(control)
     }

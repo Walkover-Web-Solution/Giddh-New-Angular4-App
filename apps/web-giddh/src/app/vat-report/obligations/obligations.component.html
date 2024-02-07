@@ -1,5 +1,6 @@
 <ng-container appTranslate [file]="'vat-report'" (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
+    
     <div class="obligations pd-15">
         <div class="container-fluid ml-0">
             <div class="row align-items-center row-gap">
@@ -17,14 +18,17 @@
                 </div>
                 <div class="col flex-grow-0">
                     <dropdown-field [label]="'Status'" [options]="statusList" (selectedOption)="statusSelected($event)"
-                        [placeholder]="localeData?.select_status" [defaultValue]="commonLocaleData?.app_all"></dropdown-field>
+                        [placeholder]="localeData?.select_status"
+                        [defaultValue]="commonLocaleData?.app_all"></dropdown-field>
                 </div>
                 <div class="col flex-grow-0" *ngIf="isCompanyMode && isMultipleBranch">
-                    <dropdown-field [label]="commonLocaleData?.app_branch" [options]="branchList" (selectedOption)="branchSelected($event)"
+                    <dropdown-field [label]="commonLocaleData?.app_branch" [options]="branchList"
+                        (selectedOption)="branchSelected($event)"
                         [placeholder]="commonLocaleData?.app_select_branch"></dropdown-field>
                 </div>
                 <div class="col flex-grow-0">
-                    <button mat-stroked-button color="primary" (click)="getVatObligations()">{{ commonLocaleData?.app_search }}</button>
+                    <button mat-stroked-button color="primary" (click)="getVatObligations()">{{
+                        commonLocaleData?.app_search }}</button>
                 </div>
             </div>
 

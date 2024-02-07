@@ -6,7 +6,6 @@ import { Store, select } from '@ngrx/store';
 import { AppState } from '../store';
 import { ToasterService } from '../services/toaster.service';
 
-
 @Component({
     selector: 'auth-hmrc-component',
     templateUrl: './auth-hmrc.component.html',
@@ -34,11 +33,11 @@ export class AuthHMRCComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This will use for component initialization
-     *
-     * @memberof AuthHMRCComponent
-     */
-    public ngOnInit() {
+    * This will use for component initialization
+    *
+    * @memberof AuthHMRCComponent
+    */
+    public ngOnInit(): void {
         this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(query => {
             if (query?.code) {
                 this.saveAuthorization(query.code);
@@ -47,19 +46,23 @@ export class AuthHMRCComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Call Save Authorization Code API call
-     *
-     * @private
-     * @param {string} authorizationCode
-     * @memberof AuthHMRCComponent
-     */
+    * Call Save Authorization Code API call
+    *
+    * @private
+    * @param {string} authorizationCode
+    * @memberof AuthHMRCComponent
+    */
     private saveAuthorization(authorizationCode: string): void {
         this.vatService.saveAuthorizationCode(this.companyUniqueName, { code: authorizationCode }).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-            if (res?.status === 'success' && res?.message) {
-                this.toaster.showSnackBar('success', res?.message);
+            if (res?.status === 'success') {
+                if (res?.message) {
+                    this.toaster.showSnackBar('success', res?.message);
+                }
                 this.router.navigate(['pages/vat-report/obligations']);
-            } else if (res?.message) {
-                this.toaster.showSnackBar('error', res?.message);
+            } else {
+                if (res?.message) {
+                    this.toaster.showSnackBar('error', res?.message);
+                }
                 this.router.navigate(['pages/vat-report']);
             }
         })
