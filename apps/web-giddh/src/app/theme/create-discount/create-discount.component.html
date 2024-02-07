@@ -33,15 +33,14 @@
                         formControlName="accountUniqueName" [name]="'accountUniqueName'"
                         [options]="discountsAccountList$ | async" [required]="true"
                         [showError]="isFormSubmitted && !createDiscountForm.get('linkedAccount')?.value"
-                        (onClear)="selectAccount($event, true)">
+                        (onClear)="clearAccount()">
                     </reactive-dropdown-field>
                 </div>
             </div>
         </form>
         <div class="row mt-4">
             <div class="col-12 d-flex column-gap1">
-                <button mat-stroked-button color="primary" (click)="saveDiscount()"
-                    [ladda]="isLoading$ | async">Save</button>
+                <button mat-stroked-button color="primary" (click)="saveDiscount()" [ladda]="createDiscountInProgress$ | async">Save</button>
                 <button mat-stroked-button color="primary" (click)="cancelDiscount()">Cancel</button>
                 <button mat-stroked-button color="primary" (click)="clearDiscount()">Clear</button>
             </div>

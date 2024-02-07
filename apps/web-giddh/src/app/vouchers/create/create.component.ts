@@ -14,7 +14,7 @@ import { WarehouseActions } from "../../settings/warehouse/action/warehouse.acti
 import { SettingsUtilityService } from "../../settings/services/settings-utility.service";
 import { SettingsBranchActions } from "../../actions/settings/branch/settings.branch.action";
 import { OrganizationType } from "../../models/user-login-state";
-import { ProformaFilter, ProformaResponse } from "../../models/api-models/proforma";
+import { PreviousInvoicesVm, ProformaFilter, ProformaResponse } from "../../models/api-models/proforma";
 import { InvoiceReceiptFilter, ReciptResponse } from "../../models/api-models/recipt";
 import { VouchersUtilityService } from "../utility/vouchers.utility.service";
 import { FormBuilder, FormArray, FormGroup, Validators } from "@angular/forms";
@@ -1354,7 +1354,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         });
 
         discountDialogRef.afterClosed().pipe(take(1)).subscribe(response => {
-
+            if (response) {
+                this.componentStore.getDiscountsList();
+            }
         });
     }
 
@@ -1736,6 +1738,27 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public getSelectedDiscounts(discounts?: any): void {
         console.log(discounts);
     }
+
+    /**
+     * This will be use for copy invoice
+     *
+     * @param {PreviousInvoicesVm} item
+     * @memberof VoucherCreateComponent
+     */
+    public copyInvoice(item: PreviousInvoicesVm): void {
+        this.getLastInvoiceDetails({ accountUniqueName: item.account?.uniqueName, invoiceNo: item.versionNumber, uniqueName: item?.uniqueName });
+    }
+
+    /**
+     * This will be use for get last invoice details
+     *
+     * @param {{ accountUniqueName: string, invoiceNo: string, uniqueName?: string }} obj
+     * @memberof VoucherCreateComponent
+     */
+    public getLastInvoiceDetails(obj: { accountUniqueName: string, invoiceNo: string, uniqueName?: string }) {
+        // this obj will be directly send to api 
+    }
+
 
     /**
      * Lifecycle hook for component destroy

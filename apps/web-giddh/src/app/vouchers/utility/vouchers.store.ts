@@ -66,7 +66,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
 
     constructor(
         private store: Store<AppState>,
-        private toast: ToasterService,
+        private toaster: ToasterService,
         private settingsDiscountService: SettingsDiscountService,
         private voucherService: VoucherService,
         private ledgerService: LedgerService,
@@ -116,7 +116,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             });
                         },
                         (error: any) => {
-                            this.showErrorToast(error);
+                            this.toaster.showSnackBar("error", error);
                             return this.patchState({
                                 discountsList: []
                             });
@@ -141,7 +141,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             });
                         },
                         (error: any) => {
-                            this.showErrorToast(error);
+                            this.toaster.showSnackBar("error", error);
                             return this.patchState({
                                 isLoading: false,
                                 invoiceSettings: null
@@ -167,7 +167,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             });
                         },
                         (error: any) => {
-                            this.showErrorToast(error);
+                            this.toaster.showSnackBar("error", error);
                             return this.patchState({
                                 getLastVouchersInProgress: false,
                                 lastVouchers: null
@@ -193,7 +193,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             });
                         },
                         (error: any) => {
-                            this.showErrorToast(error);
+                            this.toaster.showSnackBar("error", error);
                             return this.patchState({
                                 getLastVouchersInProgress: false,
                                 lastVouchers: {}
@@ -217,7 +217,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             });
                         },
                         (error: any) => {
-                            this.showErrorToast(error);
+                            this.toaster.showSnackBar("error", error);
                             return this.patchState({
                                 createdTemplates: []
                             });
@@ -240,7 +240,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             });
                         },
                         (error: any) => {
-                            this.showErrorToast(error);
+                            this.toaster.showSnackBar("error", error);
                             return this.patchState({
                                 stockVariants: { results: [], entryIndex: req.index }
                             });
@@ -263,7 +263,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             });
                         },
                         (error: any) => {
-                            this.showErrorToast(error);
+                            this.toaster.showSnackBar("error", error);
                             return this.patchState({
                                 barcodeData: {}
                             });
@@ -288,7 +288,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             });
                         },
                         (error: any) => {
-                            this.showErrorToast(error);
+                            this.toaster.showSnackBar("error", error);
                             return this.patchState({
                                 deleteAttachmentInProgress: false,
                                 deleteAttachmentIsSuccess: false
@@ -312,7 +312,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             });
                         },
                         (error: any) => {
-                            this.showErrorToast(error);
+                            this.toaster.showSnackBar("error", error);
                             return this.patchState({
                                 exchangeRate: 1
                             });
@@ -335,7 +335,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             });
                         },
                         (error: any) => {
-                            this.showErrorToast(error);
+                            this.toaster.showSnackBar("error", error);
                             return this.patchState({
                                 briefAccounts: []
                             });
@@ -358,7 +358,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             });
                         },
                         (error: any) => {
-                            this.showErrorToast(error);
+                            this.toaster.showSnackBar("error", error);
                             return this.patchState({
                                 accountDetails: {}
                             });
@@ -381,7 +381,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             });
                         },
                         (error: any) => {
-                            this.showErrorToast(error);
+                            this.toaster.showSnackBar("error", error);
                             return this.patchState({
                                 countryData: {}
                             });
@@ -428,7 +428,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             });
                         },
                         (error: any) => {
-                            this.showErrorToast(error);
+                            this.toaster.showSnackBar("error", error);
                             return this.patchState({
                                 vendorPurchaseOrders: [],
                                 linkedPoOrders: []
@@ -452,7 +452,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             });
                         },
                         (error: any) => {
-                            this.showErrorToast(error);
+                            this.toaster.showSnackBar("error", error);
                             return this.patchState({
                                 particularDetails: { body: {}, entryIndex: req.entryIndex }
                             });
@@ -463,8 +463,4 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
             })
         );
     });
-
-    private showErrorToast(error: any): void {
-        this.toast.showSnackBar("error", error);
-    }
 }
