@@ -1697,7 +1697,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public handleOutsideClick(event: any): void {
-        if ((typeof event?.target?.className === "string" && event?.target?.className?.indexOf("option") === -1) && event?.currentTarget?.activeElement?.className?.indexOf("select-field-input") === -1 && !this.dialog.getDialogById(this.otherTaxAsideMenuRef.id) && !this.dialog.getDialogById(this.bulkStockAsideMenuRef.id) && !this.dialog.getDialogById(this.accountAsideMenuRef.id) && !this.dialog.getDialogById(this.taxAsideMenuRef.id) && !this.dialog.getDialogById(this.productServiceAsideMenuRef.id)) {
+        if ((typeof event?.target?.className === "string" && event?.target?.className?.indexOf("option") === -1) && event?.currentTarget?.activeElement?.className?.indexOf("select-field-input") === -1 && !this.dialog.getDialogById(this.otherTaxAsideMenuRef?.id) && !this.dialog.getDialogById(this.bulkStockAsideMenuRef?.id) && !this.dialog.getDialogById(this.accountAsideMenuRef?.id) && !this.dialog.getDialogById(this.taxAsideMenuRef?.id) && !this.dialog.getDialogById(this.productServiceAsideMenuRef?.id)) {
             this.activeEntryIndex = null;
         }
     }
