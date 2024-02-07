@@ -83,6 +83,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public isLoading$: Observable<any> = this.componentStore.isLoading$;
     /** Discounts list Observable */
     public discountsList$: Observable<any> = this.componentStore.discountsList$;
+    /** Discounts list Observable */
+    public companyTaxes$: Observable<any> = this.componentStore.companyTaxes$;
     /** Voucher account results Observable */
     public voucherAccountResults$: Observable<OptionInterface[]> = of(null);
     /** Voucher stock results Observable */
@@ -1065,6 +1067,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             touristSchemeApplicable: [false],
             passportNumber: ['']
         });
+
+        console.log(this.invoiceForm);
     }
 
     /**
@@ -1105,6 +1109,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             sacNumber: [''],
             attachedFile: [''],
             attachedFileName: [''],
+            totalDiscount: [''],
             discounts: this.formBuilder.array([
                 this.getTransactionDiscountFormGroup()
             ]),
@@ -1173,8 +1178,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
     private getTransactionTaxFormGroup(): FormGroup {
         return this.formBuilder.group({
-            accountName: [''],
-            accountUniqueName: [''],
             calculationMethod: [''],
             uniqueName: ['']
         });
@@ -1739,6 +1742,18 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         console.log(discounts);
     }
 
+    public updateTotalDiscount(totalDiscount: any, entry: FormGroup): void {
+        entry.get('totalDiscount').patchValue(totalDiscount);
+    }
+
+    public getSelectedTaxes(taxes?: any): void {
+        console.log(taxes);
+    }
+
+    public updateTotalTax(totalTax: any, entry: FormGroup): void {
+        entry.get('totalTax').patchValue(totalTax);
+    }
+
     /**
      * This will be use for copy invoice
      *
@@ -1758,7 +1773,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public getLastInvoiceDetails(obj: { accountUniqueName: string, invoiceNo: string, uniqueName?: string }) {
         // this obj will be directly send to api 
     }
-
 
     /**
      * Lifecycle hook for component destroy

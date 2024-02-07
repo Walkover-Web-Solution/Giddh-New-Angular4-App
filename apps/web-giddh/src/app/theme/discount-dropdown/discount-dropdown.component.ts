@@ -10,17 +10,19 @@ import { ReplaySubject, takeUntil } from "rxjs";
 export class DiscountDropdownComponent implements OnInit, OnChanges, OnDestroy {
     /** List of discounsts */
     @Input() public discountsList: any[] = [];
-    /** List of discounsts */
+    /** List of selected discounts */
     @Input() public selectedDiscountsList: any[] = [];
     /** Amount for discount */
     @Input() public amount: any;
     /** Account currency */
     @Input() public currency: any;
-    /** Callback for create new discount */
+    /** Emitter for create new discount */
     @Output() public createNewDiscount: EventEmitter<boolean> = new EventEmitter<boolean>();
-    /** Callback for create new discount */
-    @Output() public selectedDiscounts: EventEmitter<boolean> = new EventEmitter<boolean>();
-    /** Form Group for invoice form */
+    /** Emitter for selected discounts */
+    @Output() public selectedDiscounts: EventEmitter<any> = new EventEmitter<any>();
+    /** Emitter for discount total */
+    @Output() public totalDiscount: EventEmitter<any> = new EventEmitter<any>();
+    /** Form Group for discount form */
     public discountForm: FormGroup;
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -173,6 +175,7 @@ export class DiscountDropdownComponent implements OnInit, OnChanges, OnDestroy {
         }
 
         this.selectedDiscounts.emit(selectedDiscounts);
+        this.totalDiscount.emit(this.totalDiscountAmount);
     }
 
     /**

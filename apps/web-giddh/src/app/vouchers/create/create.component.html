@@ -702,14 +702,25 @@
                                                         <td class="">
                                                             <ng-container *ngFor="let transaction of entry.get('transactions')['controls']; let transactionIndex = index" formArrayName="transactions">
                                                                 <ng-container [formGroupName]="transactionIndex">
-                                                                    <discount-dropdown [amount]="transaction.get('amount.amountForAccount')?.value" [discountsList]="discountsList$ | async" [selectedDiscountsList]="entry.get('discounts')?.value" [currency]="account.baseCurrencySymbol" (createNewDiscount)="showCreateDiscountDialog()" (selectedDiscounts)="getSelectedDiscounts($event)"></discount-dropdown>
+                                                                    <ng-container *ngIf="activeEntryIndex !== entryIndex">
+                                                                        <amount-field
+                                                                            [amount]="entry.get('totalDiscount')?.value"
+                                                                            [currencySymbol]="isMultiCurrencyVoucher ? account.baseCurrencySymbol : false"
+                                                                            [currencyCode]="isMultiCurrencyVoucher ? account.baseCurrency : false">
+                                                                        </amount-field>
+                                                                    </ng-container>
+                                                                    <discount-dropdown *ngIf="activeEntryIndex === entryIndex" [amount]="transaction.get('amount.amountForAccount')?.value" [discountsList]="discountsList$ | async" [selectedDiscountsList]="entry.get('discounts')?.value" [currency]="account.baseCurrencySymbol" (createNewDiscount)="showCreateDiscountDialog()" (selectedDiscounts)="getSelectedDiscounts($event)" (totalDiscount)="updateTotalDiscount($event, entry)"></discount-dropdown>
                                                                 </ng-container>
                                                             </ng-container>        
                                                         </td>
     
                                                         <!-- Tax -->
                                                         <td class="">
-                                                            <tax-dropdown (createOption)="showCreateTaxDialog()"></tax-dropdown>
+                                                            <ng-container *ngFor="let transaction of entry.get('transactions')['controls']; let transactionIndex = index" formArrayName="transactions">
+                                                                <ng-container [formGroupName]="transactionIndex">
+                                                                    <tax-dropdown [date]="invoiceForm.get('date')?.value" [amount]="transaction.get('amount.amountForAccount')?.value - entry.get('totalDiscount')?.value" [selectedTaxesList]="entry.get('taxes')?.value" [taxesList]="companyTaxes$ | async" [currency]="account.baseCurrencySymbol" (createNewTax)="showCreateTaxDialog()" (selectedTaxes)="getSelectedTaxes($event)" (totalTax)="updateTotalTax($event, entry)"></tax-dropdown>
+                                                                </ng-container>
+                                                            </ng-container>
                                                         </td>
     
                                                         <!-- Total -->

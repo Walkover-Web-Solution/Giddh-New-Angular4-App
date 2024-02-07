@@ -63,6 +63,7 @@ import { AsideMenuProductServiceModule } from "../shared/aside-menu-product-serv
 import { SendEmailInvoiceModule } from "../shared/send-email-invoice/send-email-invoice.module";
 import { FullAddressComponent } from "./full-address/full-address.component";
 import { ClickOutsideModule } from "ng-click-outside";
+import { AmountFieldComponentModule } from "../shared/amount-field/amount-field.module";
 
 @NgModule({
     declarations: [
@@ -132,7 +133,8 @@ import { ClickOutsideModule } from "ng-click-outside";
         MatDividerModule,
         AsideMenuProductServiceModule,
         SendEmailInvoiceModule,
-        ClickOutsideModule
+        ClickOutsideModule,
+        AmountFieldComponentModule
     ],
     exports: [
 
