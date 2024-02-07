@@ -681,7 +681,7 @@
                                                     <td class="body-item">
                                                         <ng-container *ngFor="let transaction of entry.get('transactions')['controls']; let transactionIndex = index" formArrayName="transactions">
                                                             <ng-container [formGroupName]="transactionIndex">
-                                                                <discount-dropdown [amount]="transaction.get('amount.amountForAccount')?.value" [discountsList]="discountsList$ | async" (createOption)="showCreateDiscountDialog()"></discount-dropdown>
+                                                                <discount-dropdown [amount]="transaction.get('amount.amountForAccount')?.value" [discountsList]="discountsList$ | async" [selectedDiscountsList]="entry.get('discounts')?.value" [currency]="account.baseCurrencySymbol" (createNewDiscount)="showCreateDiscountDialog()" (selectedDiscounts)="getSelectedDiscounts($event)"></discount-dropdown>
                                                             </ng-container>
                                                         </ng-container>        
                                                     </td>
