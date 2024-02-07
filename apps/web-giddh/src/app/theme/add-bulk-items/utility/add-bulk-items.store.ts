@@ -4,10 +4,11 @@ import { Observable, switchMap, catchError, EMPTY } from "rxjs";
 import { ToasterService } from "../../../services/toaster.service";
 import { LedgerService } from "../../../services/ledger.service";
 import { IVariant } from "../../../models/api-models/Ledger";
+import { SearchService } from "../../../services/search.service";
 
 export interface AddBulkItemsState {
     voucherStockResults: any[];
-    stockVariants: any
+    stockVariants: { results: { label: string; value: string }[]; entryIndex: number } | null;
     addBulkItemsInProgress: boolean;
     addBulkItemsSuccess: boolean;
 }
@@ -34,7 +35,6 @@ export class AddBulkItemsComponentStore extends ComponentStore<AddBulkItemsState
     public addBulkItemsInProgress$ = this.select((state) => state.addBulkItemsInProgress);
     public addBulkItemsSuccess$ = this.select((state) => state.addBulkItemsSuccess);
 
-
     readonly getStockVariants = this.effect((data: Observable<{ q: any, index: number }>) => {
         return data.pipe(
             switchMap((req) => {
@@ -46,7 +46,7 @@ export class AddBulkItemsComponentStore extends ComponentStore<AddBulkItemsState
                             });
                         },
                         (error: any) => {
-                            this.toaster.showSnackBar('error',error );
+                            this.toaster.showSnackBar("error", error);
                             return this.patchState({
                                 stockVariants: { results: [], entryIndex: req.index }
                             });
