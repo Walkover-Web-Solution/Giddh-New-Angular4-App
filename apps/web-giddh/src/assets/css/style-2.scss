@@ -14571,3 +14571,11 @@ aside-menu-product-service {
 .strong {
     font-weight: bold;
 }
+
+// outline-card
+.mat-mdc-card {
+    &.outline-card {
+        border: 1px solid var(--color-iron);
+        box-shadow: none;
+    }
+}

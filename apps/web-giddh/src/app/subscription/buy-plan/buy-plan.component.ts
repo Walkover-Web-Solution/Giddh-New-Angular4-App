@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import { ActivateDialogComponent } from '../activate-dialog/activate-dialog.component';
 
 @Component({
   selector: 'app-buy-plan',
@@ -11,9 +13,25 @@ export class BuyPlanComponent implements OnInit {
   secondStepForm: FormGroup;
   thirdStepForm: FormGroup;
 
-  constructor() { }
+  @ViewChild('stepper') stepperIcon: any;
+
+  constructor(
+    public dialog: MatDialog
+  ) { }
 
   ngOnInit() {
   }
+  // for disable stepper icon
+  public ngAfterViewInit(): void {
+    this.stepperIcon._getIndicatorType = () => 'number';
+  }
 
+  public activateDialog():void {
+    this.dialog.open(ActivateDialogComponent, {
+      width: '600px'
+    })
+  }
+  public onSelectedTab(){
+
+  }
 }

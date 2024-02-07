@@ -132,6 +132,10 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
     public viewSubscription(): void {
     }
     public buyPlan(): void {
+        this.router.navigate(['/pages/subscription/buy-plan']);
+    }
+    public subscriptionAdd():void {
+        this.router.navigate(['/pages/new-company'])
     }
     public changePlan(): void {
     }

@@ -26,6 +26,8 @@ import { MatCardModule } from '@angular/material/card';
 import { ViewSubscriptionComponent } from './view-subscription/view-subscription.component';
 import { BuyPlanComponent } from './buy-plan/buy-plan.component';
 import { MatStepperModule } from '@angular/material/stepper';
+import { MatRadioModule } from '@angular/material/radio';
+import { ActivateDialogComponent } from './activate-dialog/activate-dialog.component';
 
 @NgModule({
     imports: [
@@ -51,10 +53,11 @@ import { MatStepperModule } from '@angular/material/stepper';
         MatTooltipModule,
         NewConfirmationModalModule,
         MatCardModule,
-        MatStepperModule
+        MatStepperModule,
+        MatRadioModule
     ],
     exports: [
     ],
-    declarations: [SubscriptionComponent, CompanyListComponent, TransferComponent, ChangeBillingComponent, ViewSubscriptionComponent, BuyPlanComponent]
+    declarations: [SubscriptionComponent, CompanyListComponent, TransferComponent, ChangeBillingComponent, ViewSubscriptionComponent, BuyPlanComponent, ActivateDialogComponent]
 })
 export class SubscriptionModule { }

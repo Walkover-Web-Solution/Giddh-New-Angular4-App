@@ -10,13 +10,13 @@
         <i class="icon-left back-left"></i>
         Back
     </button>
-    <div class="welcome-msg">
-        <p class="user-title font-16 my-3">Hello Dilpreet Sing Dang !</p>
-    </div>
-    <div class="billing-details">
-        <h3 class="billing-name mb-3 light-gray my-3">Billing Details</h3>
-        <div class="row display-line">
-            <div class="col-md-3 left-side">
+    <mat-card class="outline-card change-billing-wrap">
+        <mat-card-content>
+            <div class="welcome-msg">
+                <p class="strong font-16 my-3">Hello Dilpreet Sing Dang !</p>
+            </div>
+            <div class="billing-details">
+                <h3 class="strong mb-3 light-gray my-3">Billing Details</h3>
                 <form [formGroup]="changeBillingForm">
                     <div class="form-group">
                         <input-field
@@ -108,7 +108,7 @@
                     </div>
                 </form>
             </div>
-        </div>
-    </div>
+        </mat-card-content>
+    </mat-card>
 </div>
 <!-- </ng-container> -->

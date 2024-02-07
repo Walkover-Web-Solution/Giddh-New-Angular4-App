@@ -1,39 +1,58 @@
 <ng-container>
+  <hamburger-menu></hamburger-menu>
   <div class="buy-plan-wrapper pd-15 w-100">
     <mat-stepper linear #stepper>
       <mat-step [stepControl]="firstStepForm">
-        <form name="firstStepForm" autocomplete="off">
+        <form name="firstStepForm" autocomplete="off" class="mt-5" novalidate>
           <div class="plan-summary d-flex">
             <div class="plan-width">
               <ng-template matStepLabel>Plans</ng-template>
-              <h4 class="font-16 mb-3 strong">Choose Your Plan</h4>
-              <div class="new-plan table-responsive">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4 class="font-16 strong">Choose Your Plan</h4>
+                <div class="d-flex column-gap15">
+                  <button mat-stroked-button color="primary" class="w-100" (click)="activateDialog()">Activate Via
+                    Key</button>
+                  <div class="custom-tab w-100 d-flex">
+                    <button mat-button class="active">
+                      Monthly
+                    </button>
+                    <button mat-button>
+                      Yearly
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="new-plan">
                 <table class="w-100">
-                  <tr class="table-header-fix">
+                  <tr class="">
                     <th></th>
-                    <th class="active">
+                    <th>
                       <div class="new-plan-wrapper">
                         <div class="popular-txt">
                         </div>
                         <div class="plan-content">
                           <h2 class="font-20 strong">Premium</h2>
-                          <p class="font-12 my-3 feature-txt">Streamlined accounting tools plus <br /> multi-currency for employing <br />
+                          <p class="font-12 my-3 feature-txt">Streamlined accounting tools plus <br /> multi-currency
+                            for employing <br />
                             businesses</p>
                           <p class="mb-3"><span class="strong">$62</span> /month</p>
                           <button mat-stroked-button color="primary" class="w-100">Select Plan</button>
+                          <!-- <button mat-stroked-button color="primary" class="w-100">Selected</button> -->
                         </div>
                       </div>
                     </th>
-                    <th>
+                    <th class="active">
                       <div class="new-plan-wrapper">
                         <div class="popular-txt">
                           <span class="text-center d-block font-12">Most Popular</span>
                         </div>
                         <div class="plan-content">
                           <h2 class="font-20 strong">Standard</h2>
-                          <p class="font-12 my-3 feature-txt">Streamlined accounting tools to <br /> help automate admin</p>
+                          <p class="font-12 my-3 feature-txt">Streamlined accounting tools to <br /> help automate admin
+                          </p>
                           <p class="mb-3"><span class="strong">$62</span> /month</p>
                           <button mat-stroked-button color="primary" class="w-100">Select Plan</button>
+                          <!-- <button mat-stroked-button color="primary" class="w-100">Selected</button> -->
                         </div>
                       </div>
                     </th>
@@ -43,9 +62,11 @@
                         </div>
                         <div class="plan-content">
                           <h2 class="font-20 strong">Starter</h2>
-                          <p class="font-12 my-3 feature-txt">Basic accounting tools for the self-<br />employed to help simplify admin</p>
+                          <p class="font-12 my-3 feature-txt">Basic accounting tools for the self-<br />employed to help
+                            simplify admin</p>
                           <p class="mb-3"><span class="strong">$62</span> /month</p>
                           <button mat-stroked-button color="primary" class="w-100">Select Plan</button>
+                          <!-- <button mat-stroked-button color="primary" class="w-100">Selected</button> -->
                         </div>
                       </div>
                     </th>
@@ -54,17 +75,132 @@
                     <td>
                       <span>Send invoices and quotes</span>
                     </td>
+                    <td class="text-center ">
+                      <i class="icon-tick icon-font-11 text"></i>
+                    </td>
                     <td class="text-center active">
-                      <i class="icon-tick"></i>
+                      <i class="icon-tick icon-font-11"></i>
                     </td>
                     <td class="text-center">
-                      <i class="icon-tick"></i>
-                    </td>
-                    <td class="text-center">
-                      <div class="d-flex column-gap15">
+                      <div class="d-flex column-gap15 align-items-center justify-content-center">
                         <span>20 invoices</span>
-                        <i class="icon-info cp" [matTooltip]="'Upgrade your plan at any time to send more than 20 invoices'" [matTooltipPosition]="'above'"></i>
+                        <i class="icon-info cp"
+                          [matTooltip]="'Upgrade your plan at any time to send more than 20 invoices'"
+                          [matTooltipPosition]="'above'"></i>
                       </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <span>Enter bills</span>
+                    </td>
+                    <td class="text-center ">
+                      <i class="icon-tick icon-font-11 text"></i>
+                    </td>
+                    <td class="text-center active">
+                      <i class="icon-tick icon-font-11"></i>
+                    </td>
+                    <td class="text-center ">
+                      <div class="d-flex column-gap15 align-items-center justify-content-center">
+                        <span>5 bills</span>
+                        <i class="icon-info cp"
+                          [matTooltip]="'Upgrade your plan at any time to enter more than 5 bills and/or purchase orders'"
+                          [matTooltipPosition]="'above'"></i>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="d-flex align-items-center justify-content-between">
+                        <span>Reconcile bank <br /> transactions</span>
+                        <i class="icon-info cp"
+                          [matTooltip]="'Reconcile transactions to keep them in sync using Xero software or the app.'"
+                          [matTooltipPosition]="'above'"></i>
+                      </div>
+                    </td>
+                    <td class="text-center ">
+                      <i class="icon-tick icon-font-11 text"></i>
+                    </td>
+                    <td class="text-center active">
+                      <i class="icon-tick icon-font-11"></i>
+                    </td>
+                    <td class="text-center ">
+                      <i class="icon-tick icon-font-11"></i>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="d-flex align-items-center justify-content-between">
+                        <span>Hubdoc - capture bills <br /> and receipts</span>
+                        <i class="icon-info cp"
+                          [matTooltip]="'Manage bills, receipts and documents to automate and simplify daily admin.'"
+                          [matTooltipPosition]="'above'"></i>
+                      </div>
+                    </td>
+                    <td class="text-center ">
+                      <i class="icon-tick icon-font-11 text"></i>
+                    </td>
+                    <td class="text-center active">
+                      <i class="icon-tick icon-font-11"></i>
+                    </td>
+                    <td class="text-center ">
+                      <i class="icon-tick icon-font-11"></i>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="d-flex align-items-center justify-content-between">
+                        <span>Analytics - track cash <br /> flow</span>
+                        <i class="icon-info cp" [matTooltip]="'Business insights that help you make better decisions.'"
+                          [matTooltipPosition]="'above'"></i>
+                      </div>
+                    </td>
+                    <td class="text-center ">
+                      <i class="icon-tick icon-font-11 text"></i>
+                    </td>
+                    <td class="text-center active">
+                      <i class="icon-tick icon-font-11"></i>
+                    </td>
+                    <td class="text-center ">
+                      <i class="icon-tick icon-font-11"></i>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="d-flex align-items-center justify-content-between">
+                        <span>Add as many invited <br /> users as you need</span>
+                        <i class="icon-info cp"
+                          [matTooltip]="'Invite as many advisors, administrators, etc., as you need to work with you on your Xero organisation.'"
+                          [matTooltipPosition]="'above'"></i>
+                      </div>
+                    </td>
+                    <td class="text-center ">
+                      <i class="icon-tick icon-font-11 text"></i>
+                    </td>
+                    <td class="text-center active">
+                      <i class="icon-tick icon-font-11"></i>
+                    </td>
+                    <td class="text-center ">
+                      <i class="icon-tick icon-font-11"></i>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="d-flex align-items-center justify-content-between">
+                        <span>Add as many invited <br /> users as you need</span>
+                        <i class="icon-info cp"
+                          [matTooltip]="'Invite as many advisors, administrators, etc., as you need to work with you on your Xero organisation.'"
+                          [matTooltipPosition]="'above'"></i>
+                      </div>
+                    </td>
+                    <td class="text-center ">
+                      <i class="icon-tick icon-font-11 text"></i>
+                    </td>
+                    <td class="text-center active">
+                      -
+                    </td>
+                    <td class="text-center ">
+                      -
                     </td>
                   </tr>
                 </table>
@@ -75,16 +211,40 @@
         </form>
       </mat-step>
       <mat-step [stepControl]="secondStepForm" name="secondStepForm">
-        <form autocomplete="off" novalidate>
-          <ng-template matStepLabel>Select billing account</ng-template>
-
+        <form autocomplete="off" class="mt-5" novalidate>
+          <div class="plan-summary d-flex">
+            <div class="plan-width">
+              <ng-template matStepLabel>Select billing account</ng-template>
+              <h4 class="font-16 strong d-flex align-items-center mb-3">Create a new billing account</h4>
+              <!-- remove back btn & max-width padding from change-billing component -->
+              <change-billing></change-billing>
+            </div>
+            <ng-container *ngTemplateOutlet="planSummary"></ng-container>
+          </div>
         </form>
       </mat-step>
 
       <mat-step [stepControl]="thirdStepForm">
-        <form name="thirdStepForm" autocomplete="off">
-          <ng-template matStepLabel>Review and pay</ng-template>
-
+        <form name="thirdStepForm" autocomplete="off" class="mt-5" novalidate>
+          <div class="plan-summary d-flex">
+            <div class="plan-width">
+              <ng-template matStepLabel>Review and pay</ng-template>
+              <h4 class="font-16 mb-3 strong d-flex align-items-center">Payment details</h4>
+              <div class="new-plan">
+                <mat-card class="outline-card">
+                  <mat-card-content>
+                    <h5 class="font-16 strong mb-3">Bill to</h5>
+                    <div class="payment-header border-bottom pb-3">
+                      <span class="light-gray font-14 strong d-block">trial</span>
+                      <p class="light-gray font-14">nisha@walkover.in</p>
+                      <p class="light-gray font-14">7225908084</p>
+                    </div>
+                  </mat-card-content>
+                </mat-card>
+              </div>
+            </div>
+            <ng-container *ngTemplateOutlet="planSummary"></ng-container>
+          </div>
         </form>
       </mat-step>
     </mat-stepper>
@@ -93,7 +253,34 @@
   <!-- plan-summary -->
   <ng-template #planSummary>
     <div class="summary-wrapper">
-      <p>Plan Summary</p>
+      <h4 class="font-16 mb-3 strong d-flex align-items-center">Plan Summary</h4>
+      <mat-card class="outline-card">
+        <mat-card-content>
+          <div class="d-flex justify-content-between border-bottom pb-3">
+            <span class="strong">Premium</span>
+            <span>62.00</span>
+          </div>
+          <div class="d-flex justify-content-between border-bottom py-3">
+            <p>Subtotal</p>
+            <span>62.00</span>
+          </div>
+          <div class="d-flex justify-content-between py-3">
+            <span class="strong">Monthly total</span>
+            <span class="strong">USD 62.00</span>
+          </div>
+          <div class="position-relative">
+            <input-field [name]="'code'" [placeholder]="'Promo code'"></input-field>
+            <button mat-button color="primary" class="apply-btn position-absolute">Apply</button>
+          </div>
+          <div class="mt-3">
+            <button mat-stroked-button color="primary" class="w-100">Continue to billing account</button>
+            <button mat-stroked-button color="primary" class="w-100">Continue to review & pay account</button>
+            <button mat-stroked-button color="primary" class="w-100">Confirm Purchase</button>
+            <button mat-stroked-button class="w-100 mt-2">Back to Plan</button>
+            <button mat-stroked-button class="w-100 mt-2">Back to billing account</button>
+          </div>
+        </mat-card-content>
+      </mat-card>
     </div>
   </ng-template>
 </ng-container>
