@@ -1,6 +1,14 @@
 <ng-container appTranslate [file]="'vat-report'" (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
-    
+    <hamburger-menu></hamburger-menu>
+    <div class="relative w-100">
+        <div class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper"
+        *ngIf="asideGstSidebarMenuState === 'in'">
+        <tax-sidebar (navigateEvent)="handleNavigation()"
+            (clickOutside)="isMobileScreen ? (asideGstSidebarMenuState = 'out') : ''"
+            [exclude]="'#primary-new-header'" class="gst-sidebar"></tax-sidebar>
+        </div>
+    </div>
     <div class="obligations pd-15">
         <div class="container-fluid ml-0">
             <div class="row align-items-center row-gap">
