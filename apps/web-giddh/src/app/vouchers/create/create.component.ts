@@ -1223,7 +1223,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public openOtherTaxDialog(entry: FormGroup, entryIndex: number): void {
-        if (!entry.get('otherTax.isChecked')) {
+        if (!entry.get('otherTax.isChecked')?.value) {
             const entryFormGroup = this.getEntryFormGroup(entryIndex);
             entryFormGroup.get('otherTax').reset();
             return;
@@ -1266,6 +1266,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
                 entryFormGroup.get('otherTax.name').patchValue(tax.name);
                 entryFormGroup.get('otherTax.amount').patchValue(giddhRoundOff(((taxableValue * tax?.taxDetail[0]?.taxValue) / 100), this.highPrecisionRate));
+            } else {
+                const entryFormGroup = this.getEntryFormGroup(entryIndex);
+                entryFormGroup.get('otherTax').reset();
             }
         });
     }
@@ -1741,7 +1744,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public handleOutsideClick(event: any): void {
-        if ((typeof event?.target?.className === "string" && event?.target?.className?.indexOf("option") === -1) && event?.currentTarget?.activeElement?.className?.indexOf("select-field-input") === -1 && !this.dialog.getDialogById(this.otherTaxAsideMenuRef?.id) && !this.dialog.getDialogById(this.bulkStockAsideMenuRef?.id) && !this.dialog.getDialogById(this.accountAsideMenuRef?.id) && !this.dialog.getDialogById(this.taxAsideMenuRef?.id) && !this.dialog.getDialogById(this.productServiceAsideMenuRef?.id)) {
+        if ((typeof event?.target?.className === "string" && event?.target?.className?.indexOf("option") === -1 && event?.target?.className?.indexOf("cdk-overlay-backdrop") === -1) && event?.currentTarget?.activeElement?.className?.indexOf("select-field-input") === -1 && !this.dialog.getDialogById(this.otherTaxAsideMenuRef?.id) && !this.dialog.getDialogById(this.bulkStockAsideMenuRef?.id) && !this.dialog.getDialogById(this.accountAsideMenuRef?.id) && !this.dialog.getDialogById(this.taxAsideMenuRef?.id) && !this.dialog.getDialogById(this.productServiceAsideMenuRef?.id)) {
             this.activeEntryIndex = null;
         }
     }
@@ -1918,6 +1921,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     public updateTransactionAmount(transactionFormGroup: FormGroup, amount: any): void {
         transactionFormGroup.get('amount.amountForAccount').patchValue(amount);
+    }
+
+    public updateEntryTotal(entryFormGroup: FormGroup, amount: any): void {
+        entryFormGroup.get('total.amountForAccount').patchValue(amount);
     }
 
     /**
