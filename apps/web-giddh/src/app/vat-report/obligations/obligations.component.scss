@@ -1,0 +1,19 @@
+.obligations {
+    .custom-datepicker {
+        input {
+            height: 48px;
+            width: 100% !important;
+            min-width: 230px;
+            max-width: unset !important;
+        }
+    }
+
+    dropdown-field {
+        width: 230px;
+        display: block;
+    }
+
+    .action-btn {
+        min-width: 125px;
+    }
+}
