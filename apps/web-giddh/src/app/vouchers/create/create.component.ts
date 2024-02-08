@@ -1114,16 +1114,16 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             description: [''],
             voucherType: [''],
             uniqueName: [''],
-            showCodeType: ['sac'],
+            showCodeType: ['sac'], //temp
             hsnNumber: [''],
             sacNumber: [''],
             attachedFile: [''],
             attachedFileName: [''],
-            totalDiscount: [''],
-            totalTax: [''],
-            totalTaxWithoutCess: [''],
-            totalCess: [''],
-            otherTax: this.formBuilder.group({
+            totalDiscount: [''], // temp
+            totalTax: [''], // temp
+            totalTaxWithoutCess: [''], //temp
+            totalCess: [''], //temp
+            otherTax: this.formBuilder.group({ //temp
                 name: [''],
                 amount: [''],
                 type: [''],
@@ -1165,7 +1165,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     })
                 })
             ]),
-            total: this.formBuilder.group({
+            total: this.formBuilder.group({ //temp
                 amountForAccount: [0],
                 amountForCompany: [0]
             })
