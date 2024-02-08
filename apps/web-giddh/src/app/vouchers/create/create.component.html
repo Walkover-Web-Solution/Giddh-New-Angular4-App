@@ -749,7 +749,7 @@
                                                                         </amount-field>
                                                                     </ng-container>
                                                                     <div class="text-field-container">
-                                                                        <input *ngIf="activeEntryIndex === entryIndex" matInput [placeholder]="'Enter'" class="form-control text-right" type="text" entryAmount [rate]="transaction.get('stock.rate.rateForAccount')?.value" [quantity]="transaction.get('stock.quantity')?.value" name="transactionAmount{{entryIndex}}" formControlName="amountForAccount" />
+                                                                        <input *ngIf="activeEntryIndex === entryIndex" matInput [placeholder]="'Enter'" class="form-control text-right" type="text" entryAmount [rate]="transaction.get('stock.rate.rateForAccount')?.value" [quantity]="transaction.get('stock.quantity')?.value" name="transactionAmount{{entryIndex}}" formControlName="amountForAccount" (calculatedAmount)="updateTransactionAmount(transaction, $event)" />
                                                                     </div>
                                                                 </td>
                                                             </ng-container>

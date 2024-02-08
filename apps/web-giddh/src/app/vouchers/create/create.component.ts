@@ -284,7 +284,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.getCompanyProfile();
         this.getCompanyTaxes();
         this.getWarehouses();
-        this.updateDueDate(); // Remove from this and please call this method on voucher date change
+
         this.activatedRoute.params.pipe(delay(0), takeUntil(this.destroyed$)).subscribe(params => {
             if (params) {
                 this.voucherType = this.vouchersUtilityService.parseVoucherType(params.voucherType);
@@ -410,9 +410,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     private getVoucherType(): void {
-        console.log(this.voucherType)
         this.invoiceType = this.vouchersUtilityService.getVoucherType(this.voucherType);
-        console.log(this.invoiceType)
         this.currentVoucherFormDetails = this.vouchersUtilityService.prepareVoucherForm(this.voucherType);
     }
 
@@ -461,6 +459,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 } else if (this.voucherType === VoucherTypeEnum.estimate || this.voucherType === VoucherTypeEnum.generateEstimate || this.voucherType === VoucherTypeEnum.proforma || this.voucherType === VoucherTypeEnum.generateProforma) {
                     this.applyRoundOff = true;
                 }
+                this.updateDueDate();
             }
         });
     }
@@ -1226,7 +1225,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         if (!entry.get('otherTax.isChecked')) {
             const entryFormGroup = this.getEntryFormGroup(entryIndex);
             entryFormGroup.get('otherTax').reset();
-
             return;
         }
 
@@ -1884,36 +1882,41 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         // this obj will be directly send to api 
     }
 
-
     /**
      * This will update due date based on voucher date
      *
      * @memberof VoucherCreateComponent
      */
     public updateDueDate(): void {
-        this.componentStore.invoiceSettings$.pipe(takeUntil(this.destroyed$)).subscribe(invoiceSettings => {
-            if (invoiceSettings) {
-                let duePeriod: number;
-                if (this.invoiceType.isEstimateInvoice) {
-                    duePeriod = invoiceSettings.estimateSettings ? invoiceSettings.estimateSettings.duePeriod : 0;
-                } else if (this.invoiceType.isProformaInvoice) {
-                    duePeriod = invoiceSettings.proformaSettings ? invoiceSettings.proformaSettings.duePeriod : 0;
-                } else if (this.invoiceType.isPurchaseOrder) {
-                    duePeriod = invoiceSettings.purchaseBillSettings ? invoiceSettings.purchaseBillSettings.poDuePeriod : 0;
-                } else {
-                    duePeriod = invoiceSettings.invoiceSettings ? invoiceSettings.invoiceSettings.duePeriod : 0;
-                    // this.useCustomInvoiceNumber = invoiceSettings.invoiceSettings ? invoiceSettings.invoiceSettings.useCustomInvoiceNumber : false;
-                }
+        let duePeriod: number;
+        if (this.invoiceType.isEstimateInvoice) {
+            duePeriod = this.invoiceSettings.estimateSettings ? this.invoiceSettings.estimateSettings.duePeriod : 0;
+        } else if (this.invoiceType.isProformaInvoice) {
+            duePeriod = this.invoiceSettings.proformaSettings ? this.invoiceSettings.proformaSettings.duePeriod : 0;
+        } else if (this.invoiceType.isPurchaseOrder) {
+            duePeriod = this.invoiceSettings.purchaseBillSettings ? this.invoiceSettings.purchaseBillSettings.poDuePeriod : 0;
+        } else {
+            duePeriod = this.invoiceSettings.invoiceSettings ? this.invoiceSettings.invoiceSettings.duePeriod : 0;
+        }
 
-                if (this.invoiceForm.get("date").value) {
-                    if (typeof (this.invoiceForm.get("date").value) === "object") {
-                        this.invoiceForm.get("date").setValue(duePeriod > 0 ? dayjs(this.invoiceForm.get("date").value).add(duePeriod, 'day').toDate() : dayjs(this.invoiceForm.get("date").value).toDate());
-                    } else {
-                        this.invoiceForm.get("dueDate").setValue(duePeriod > 0 ? dayjs(this.invoiceForm.get("date").value, GIDDH_DATE_FORMAT).add(duePeriod, 'day').toDate() : dayjs(this.invoiceForm.get("date").value, GIDDH_DATE_FORMAT).toDate());
-                    }
-                }
+        if (this.invoiceForm.get("date").value) {
+            if (typeof (this.invoiceForm.get("date").value) === "object") {
+                this.invoiceForm.get("date").setValue(duePeriod > 0 ? dayjs(this.invoiceForm.get("date").value).add(duePeriod, 'day').toDate() : dayjs(this.invoiceForm.get("date").value).toDate());
+            } else {
+                this.invoiceForm.get("dueDate").setValue(duePeriod > 0 ? dayjs(this.invoiceForm.get("date").value, GIDDH_DATE_FORMAT).add(duePeriod, 'day').toDate() : dayjs(this.invoiceForm.get("date").value, GIDDH_DATE_FORMAT).toDate());
             }
-        });
+        }
+    }
+
+    /**
+     * Callback to update transaction amount
+     *
+     * @param {FormGroup} transactionFormGroup
+     * @param {*} amount
+     * @memberof VoucherCreateComponent
+     */
+    public updateTransactionAmount(transactionFormGroup: FormGroup, amount: any): void {
+        transactionFormGroup.get('amount.amountForAccount').patchValue(amount);
     }
 
     /**
