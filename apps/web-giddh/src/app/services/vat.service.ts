@@ -187,7 +187,7 @@ export class VatService {
         url = url?.replace(':to', encodeURIComponent(model?.to));
         return this.http.post(url, {}).pipe(
             map((res) => {
-                let data: BaseResponse<any, any> = res;
+                let data: any = res;
                 return data;
             }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
     }
