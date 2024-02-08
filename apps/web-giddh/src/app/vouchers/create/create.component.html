@@ -376,16 +376,16 @@
                                         </div>
                                     </div>
                                 </div>
-                                {{invoiceType.isPurchaseInvoice }}
                                 <!-- Row 3 -->
                                 <div class="row row-gap mr-t15 mr-b15"
                                     *ngIf="invoiceType.isPurchaseInvoice && (vendorPurchaseOrders$ | async)?.length">
                                     <!-- Purchase Order -->
                                     <div class="col-6">
+                                         <!-- Add 'value-filled' class to prevent larger height when item selected -->
                                         <select-multiple-fields [placeholder]="localeData?.select_order_placeholder"
                                             [appearance]="'outline'" [isPurchaseOrder]="true" [localeData]="localeData"
                                             [options]="vendorPurchaseOrders$ | async" [selectedValues]="null"
-                                            [name]="'purchase-orders'"
+                                            [name]="'purchase-orders'" [ngClass]="{ 'value-filled' : false }"
                                             class="select-multiple-chiplist"></select-multiple-fields>
                                     </div>
                                 </div>
