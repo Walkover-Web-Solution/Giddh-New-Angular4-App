@@ -500,9 +500,9 @@
                                                         <!-- Product/Service Description -->
                                                         <td class="text-left product-column">
                                                             <ng-container
-                                                                *ngFor="let transaction of entry?.get('transactions')['controls']; let transactionIndex = index"
+                                                                *ngFor="let transaction of entry?.get('transactions')['controls']"
                                                                 formArrayName="transactions">
-                                                                <ng-container [formGroupName]="transactionIndex">
+                                                                <ng-container formGroupName="0">
                                                                     <ng-container formGroupName="account">
                                                                         <ng-container *ngIf="activeEntryIndex !== entryIndex">
                                                                             <span class="select-account-label">{{ transaction.get('account.name')?.value ? transaction.get('stock.name')?.value
@@ -583,15 +583,15 @@
                                                             </ng-container>
     
                                                             <ng-container *ngIf="activeEntryIndex === entryIndex">
-                                                                <textarea rows="2" matInput class="form-control mt-2" placeholder="Add Description" formControlName="description" [maxlength]="entryDescriptionLength"></textarea>
+                                                                <textarea rows="2" matInput class="form-control mt-2" placeholder="Add Description" name="transactionDescription{{entryIndex}}" formControlName="description" [maxlength]="entryDescriptionLength"></textarea>
                                                                 <span class="mt-2 font-12">{{ commonLocaleData?.app_characters_left }}: {{ entryDescriptionLength - entry.get("description")?.value?.length }}</span>
                                                             </ng-container>
                                                             <ng-container *ngIf="activeEntryIndex !== entryIndex">
                                                                 {{ entry.get('description')?.value }}
                                                             </ng-container>
     
-                                                            <ng-container *ngFor="let transaction of entry.get('transactions')['controls']; let transactionIndex = index" formArrayName="transactions">
-                                                                <ng-container [formGroupName]="transactionIndex">
+                                                            <ng-container *ngFor="let transaction of entry.get('transactions')['controls']" formArrayName="transactions">
+                                                                <ng-container formGroupName="0">
                                                                     <ng-container *ngIf="transaction.get('stock.skuCode')?.value">
                                                                         <span class="mt-2 font-12">{{ transaction.get('stock.skuCodeHeading')?.value }}: {{ transaction.get('stock.skuCode')?.value }}</span>
                                                                     </ng-container>
@@ -617,10 +617,10 @@
                                                                                     #dp
                                                                                     (keydown.enter)="$event.preventDefault()"
                                                                                     (dateSelected)="onBlurEntryDate(entry, true)"
-                                                                                    id="transaction_date_{{ entryIndex }}"
+                                                                                    id="transactionDate{{ entryIndex }}"
                                                                                     [disabled]="isUpdateMode"
                                                                                     [cssClass]="'entry-custom-date width-80 border-0'"
-                                                                                    name="transaction_date_{{ entryIndex }}"
+                                                                                    name="transactionDate{{ entryIndex }}"
                                                                                     formControlName="date"
                                                                                     [appearance]="'fill'"
                                                                                     (datepickerState)="openEntryDatepicker = $event"
@@ -641,7 +641,7 @@
                                                                         <!-- Update Menu  -->
                                                                         <mat-menu #update="matMenu">
                                                                             <div class="p-3" (click)="$event.stopPropagation()">
-                                                                                <mat-radio-group formControlName="showCodeType" [disabled]="isEinvoiceGenerated">
+                                                                                <mat-radio-group formControlName="showCodeType" name="transactionShowCodeType{{entryIndex}}" [disabled]="isEinvoiceGenerated">
                                                                                     <mat-radio-button color="primary" value="hsn">HSN
                                                                                         Code</mat-radio-button>
                                                                                     <mat-radio-button color="primary" value="sac">SAC
@@ -650,10 +650,10 @@
     
                                                                                 <div class="mt-3">
                                                                                     <text-field *ngIf="entry.get('showCodeType')?.value === 'hsn'" [placeholder]="commonLocaleData?.app_hsn_code"
-                                                                                        [cssClass]="'form-control text-right'" [type]="'number'" formControlName="hsnNumber" [maxlength]="10" [allowDecimalDigitsOnly]="true" [placeholder]="localeData?.hsn_number" [readonly]="isEinvoiceGenerated"[name]="'hsnNumber_' + entryIndex">
+                                                                                        [cssClass]="'form-control text-right'" [type]="'number'" formControlName="hsnNumber" [maxlength]="10" [allowDecimalDigitsOnly]="true" [placeholder]="localeData?.hsn_number" [readonly]="isEinvoiceGenerated" [name]="'hsnNumber' + entryIndex">
                                                                                     </text-field>
                                                                                     <text-field *ngIf="entry.get('showCodeType')?.value === 'sac'" [placeholder]="commonLocaleData?.app_sac_code"
-                                                                                        [cssClass]="'form-control text-right'" [type]="'number'" formControlName="sacNumber" [maxlength]="10" [allowDecimalDigitsOnly]="true" [placeholder]="localeData?.sac_number" [readonly]="isEinvoiceGenerated" [name]="'sacNumber_' + entryIndex">
+                                                                                        [cssClass]="'form-control text-right'" [type]="'number'" formControlName="sacNumber" [maxlength]="10" [allowDecimalDigitsOnly]="true" [placeholder]="localeData?.sac_number" [readonly]="isEinvoiceGenerated" [name]="'sacNumber' + entryIndex">
                                                                                     </text-field>
                                                                                 </div>
     
@@ -668,16 +668,16 @@
                                                             </div>
                                                         </td>
     
-                                                        <ng-container *ngFor="let transaction of entry.get('transactions')['controls']; let transactionIndex = index" formArrayName="transactions">
-                                                            <ng-container [formGroupName]="transactionIndex">
+                                                        <ng-container *ngFor="let transaction of entry.get('transactions')['controls']" formArrayName="transactions">
+                                                            <ng-container formGroupName="0">
                                                                 <ng-container formGroupName="stock">
                                                                     <!-- Qty/Unit -->
                                                                     <td width="12%">
                                                                         <ng-container *ngIf="activeEntryIndex !== entryIndex">{{ transaction.get('stock.quantity')?.value }}</ng-container>
-                                                                        <text-field *ngIf="activeEntryIndex === entryIndex" [placeholder]="'Enter Qty'" formControlName="quantity" [cssClass]="'form-control text-right'" [type]="'text'"></text-field>
+                                                                        <text-field *ngIf="activeEntryIndex === entryIndex" [placeholder]="'Enter Qty'" formControlName="quantity" [cssClass]="'form-control text-right'" [name]="'transactionQuantity' + entryIndex" [type]="'text'"></text-field>
                                                                         <ng-container formGroupName="stockUnit">
                                                                             <ng-container *ngIf="activeEntryIndex !== entryIndex">{{ transaction.get('stock.stockUnit.code')?.value }}</ng-container>
-                                                                            <mat-select *ngIf="activeEntryIndex === entryIndex" formControlName="code" [placeholder]="'Select'" class="form-control mt-2">
+                                                                            <mat-select *ngIf="activeEntryIndex === entryIndex" formControlName="code" [placeholder]="'Select'" class="form-control mt-2" name="transactionUnit{{entryIndex}}">
                                                                                 <mat-option *ngFor="let unit of stockUnits[entryIndex] | async" [value]="unit.stockUnitUniqueName">{{ unit.stockUnitCode }}</mat-option>
                                                                             </mat-select>
                                                                         </ng-container>
@@ -686,7 +686,7 @@
                                                                     <!-- Rate -->
                                                                     <td width="12%" formGroupName="rate">
                                                                         <ng-container *ngIf="activeEntryIndex !== entryIndex">{{ transaction.get('stock.rate.rateForAccount')?.value }}</ng-container>
-                                                                        <text-field *ngIf="activeEntryIndex === entryIndex" [placeholder]="'Enter'" [cssClass]="'form-control text-right'" [type]="'text'" formControlName="rateForAccount"></text-field>
+                                                                        <text-field *ngIf="activeEntryIndex === entryIndex" [placeholder]="'Enter'" [cssClass]="'form-control text-right'" [type]="'text'" [name]="'transactionRate' + entryIndex" formControlName="rateForAccount"></text-field>
                                                                     </td>
                                                                 </ng-container>
                                                                 <!-- Amount -->
@@ -698,15 +698,17 @@
                                                                             [currencyCode]="isMultiCurrencyVoucher ? account.baseCurrency : false">
                                                                         </amount-field>
                                                                     </ng-container>
-                                                                    <text-field *ngIf="activeEntryIndex === entryIndex" [placeholder]="'Enter'" [cssClass]="'form-control text-right'" [type]="'text'" formControlName="amountForAccount"></text-field>
+                                                                    <div class="text-field-container">
+                                                                        <input *ngIf="activeEntryIndex === entryIndex" matInput [placeholder]="'Enter'" class="form-control text-right" type="text" entryAmount [rate]="transaction.get('stock.rate.rateForAccount')?.value" [quantity]="transaction.get('stock.quantity')?.value" name="transactionAmount{{entryIndex}}" formControlName="amountForAccount" />
+                                                                    </div>
                                                                 </td>
                                                             </ng-container>
                                                         </ng-container>
     
                                                         <!-- Discount -->
                                                         <td width="12%">
-                                                            <ng-container *ngFor="let transaction of entry.get('transactions')['controls']; let transactionIndex = index" formArrayName="transactions">
-                                                                <ng-container [formGroupName]="transactionIndex">
+                                                            <ng-container *ngFor="let transaction of entry.get('transactions')['controls']" formArrayName="transactions">
+                                                                <ng-container formGroupName="0">
                                                                     <ng-container *ngIf="activeEntryIndex !== entryIndex">
                                                                         <amount-field
                                                                             [amount]="entry.get('totalDiscount')?.value"
@@ -721,8 +723,8 @@
     
                                                         <!-- Tax -->
                                                         <td width="12%">
-                                                            <ng-container *ngFor="let transaction of entry.get('transactions')['controls']; let transactionIndex = index" formArrayName="transactions">
-                                                                <ng-container [formGroupName]="transactionIndex">
+                                                            <ng-container *ngFor="let transaction of entry.get('transactions')['controls']" formArrayName="transactions">
+                                                                <ng-container formGroupName="0">
                                                                     <ng-container *ngIf="activeEntryIndex !== entryIndex">
                                                                         <amount-field
                                                                             [amount]="entry.get('totalTax')?.value"
@@ -744,6 +746,15 @@
                                                                         [currencySymbol]="isMultiCurrencyVoucher ? account.baseCurrencySymbol : false"
                                                                         [currencyCode]="isMultiCurrencyVoucher ? account.baseCurrency : false">
                                                                     </amount-field>
+
+                                                                    <ng-container *ngIf="entry.get('otherTax.name')?.value">
+                                                                        {{ entry.get('otherTax.name')?.value }} : 
+                                                                        <amount-field
+                                                                            [amount]="entry.get('otherTax.amount')?.value"
+                                                                            [currencySymbol]="isMultiCurrencyVoucher ? account.baseCurrencySymbol : false"
+                                                                            [currencyCode]="isMultiCurrencyVoucher ? account.baseCurrency : false">
+                                                                        </amount-field>
+                                                                    </ng-container>
                                                                 </ng-container>
                                                                 <text-field *ngIf="activeEntryIndex === entryIndex" [placeholder]="'Enter'" [cssClass]="'form-control text-right'" [type]="'text'" formControlName="amountForAccount"></text-field>
                                                             </ng-container>

@@ -64,6 +64,7 @@ import { SendEmailInvoiceModule } from "../shared/send-email-invoice/send-email-
 import { FullAddressComponent } from "./full-address/full-address.component";
 import { ClickOutsideModule } from "ng-click-outside";
 import { AmountFieldComponentModule } from "../shared/amount-field/amount-field.module";
+import { EntryAmountModule } from "./utility/directives/entry-amount/entry-amount.module";
 
 @NgModule({
     declarations: [
@@ -134,7 +135,8 @@ import { AmountFieldComponentModule } from "../shared/amount-field/amount-field.
         AsideMenuProductServiceModule,
         SendEmailInvoiceModule,
         ClickOutsideModule,
-        AmountFieldComponentModule
+        AmountFieldComponentModule,
+        EntryAmountModule
     ],
     exports: [
 
