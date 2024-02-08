@@ -8,73 +8,48 @@
             <form autocomplete="off" novalidate name="createDiscountForm" [formGroup]="addBulkForm">
                 <div class="d-flex">
                     <div class="bulk-entry-list">
-                        <input-field
-                            [name]="'search'"
-                            [type]="'text'"
-                            formControlName="stock"
-                            [placeholder]="'Search stock'"
-                            [label]="'Search'"
-                        >
+                        <input-field [name]="'search'" [type]="'text'" formControlName="stock"
+                            [placeholder]="'Search stock'" [label]="'Search'">
                         </input-field>
 
                         <div class="list-wrapper mt-2">
                             <mat-list class="p-0">
                                 <cdk-virtual-scroll-viewport [itemSize]="40" class="list-viewport" [appendOnly]="true">
                                     <ng-container
-                                        *cdkVirtualFor="let item of voucherStockResults$ | async; let i = index"
-                                    >
+                                        *cdkVirtualFor="let item of voucherStockResults$ | async; let i = index">
                                         {{ item?.hasVariants }}
                                         <ng-container *ngIf="item?.additional?.hasVariants">
                                             <mat-accordion>
                                                 <mat-expansion-panel>
                                                     <mat-expansion-panel-header>
                                                         <mat-panel-title>
-                                                            <mat-list-item
-                                                                class="list-item px-2"
-                                                                [matTooltip]="item.name"
-                                                                (click)="addItem(item, i)"
-                                                                matTooltipPosition="left"
-                                                            >
-                                                                <img
-                                                                    src="assets/images/item-wise.svg"
-                                                                    width="18"
-                                                                    height="18"
-                                                                    class="stock-icon"
-                                                                />
+                                                            <mat-list-item class="list-item px-2"
+                                                                [matTooltip]="item.name" (click)="addItem(item, i)"
+                                                                matTooltipPosition="left">
+                                                                <img src="assets/images/item-wise.svg" width="18"
+                                                                    height="18" class="stock-icon" />
                                                                 {{ item.name }}
                                                             </mat-list-item>
                                                         </mat-panel-title>
                                                     </mat-expansion-panel-header>
-                                                    <div
-                                                        *ngIf="(stockVariants[i] | async)?.length > 1"
-                                                        class="variants-wrapper"
-                                                    >
+                                                    <div *ngIf="(stockVariants[i] | async)?.length > 1"
+                                                        class="variants-wrapper">
                                                         <ng-container *ngFor="let variant of stockVariants[i] | async">
-                                                            <mat-list-item
-                                                                (click)="variantChanged(item, variant)"
+                                                            <mat-list-item (click)="variantChanged(item, variant)"
                                                                 class="list-item pr-2 pl-4"
                                                                 [matTooltip]="variant?.label"
-                                                                matTooltipPosition="left"
-                                                                >{{ variant?.label }}</mat-list-item
-                                                            >
+                                                                matTooltipPosition="left">{{ variant?.label
+                                                                }}</mat-list-item>
                                                         </ng-container>
                                                     </div>
                                                 </mat-expansion-panel>
                                             </mat-accordion>
                                         </ng-container>
                                         <ng-container *ngIf="!item?.additional?.hasVariants">
-                                            <mat-list-item
-                                                class="list-item px-2"
-                                                (click)="addItem(item, i)"
-                                                [matTooltip]="item.name"
-                                                matTooltipPosition="left"
-                                            >
-                                                <img
-                                                    src="assets/images/item-wise.svg"
-                                                    width="18"
-                                                    height="18"
-                                                    class="stock-icon"
-                                                />
+                                            <mat-list-item class="list-item px-2" (click)="addItem(item, i)"
+                                                [matTooltip]="item.name" matTooltipPosition="left">
+                                                <img src="assets/images/item-wise.svg" width="18" height="18"
+                                                    class="stock-icon" />
                                                 {{ item.name }}
                                             </mat-list-item>
                                         </ng-container>
@@ -84,9 +59,11 @@
                         </div>
                     </div>
                     <div class="bulk-entry-selected-items d-flex flex-column">
-                        <div class="selected-item-title">Selected Stocks ({{ selectedItems?.length }})</div>
+                        <div class="selected-item-title">Selected Stocks ({{ dataControls.length }})</div>
                         <div class="selected-item-wrapper">
-                            <ng-container *ngFor="let item of addBulkForm?.get('data')['controls']; let bulkIndex = index" formArrayName="data">
+                            <ng-container
+                                *ngFor="let item of addBulkForm?.get('data')['controls']; let bulkIndex = index"
+                                formArrayName="data">
                                 <ng-container [formGroupName]="bulkIndex">
                                     <mat-list class="p-0">
                                         <mat-list-item class="px-0 mb-3">
@@ -94,45 +71,37 @@
                                                 <div class="w-75">
                                                     <p>
                                                         {{
-                                                            item.get('name')?.value }} - {{ (item.get('variantName')?.value ? item.get('variantName')?.value : '')
+                                                        item.get('name')?.value }} {{
+                                                        ('-'+item.get('variantName')?.value ?
+                                                        item.get('variantName')?.value : '')
                                                         }}
                                                     </p>
                                                     <p>
-                                                        <span *ngIf="item.get('additional.skuCode')?.value" class="stockSku mb-1"
-                                                            ><label>SKU: </label>{{ item.get('additional.skuCode')?.value }}</span
-                                                        >
-                                                        <span [class.rate-stock]="item.get('name')?.value"
-                                                            ><label>Rate:&nbsp;</label> </span
-                                                        >{{  item.get('rate')?.value  }}
+                                                        <span *ngIf="item.get('additional.skuCode')?.value"
+                                                            class="stockSku mb-1"><label>SKU: </label>{{
+                                                            item.get('additional.skuCode')?.value }}</span>
+                                                        <span
+                                                            [class.rate-stock]="item.get('name')?.value"><label>Rate:&nbsp;</label>
+                                                        </span>{{ item.get('rate')?.value }}
                                                     </p>
                                                 </div>
 
                                                 <div
-                                                    class="d-flex align-items-center justify-content-between column-gap1"
-                                                >
+                                                    class="d-flex align-items-center justify-content-between column-gap1">
                                                     <button mat-stroked-button (click)="alterQuantity(item, 'minus')">
                                                         <i class="icon-minus"></i>
                                                     </button>
-                                                    <text-field
-                                                        [type]="'text'"
-                                                        value="1"
-                                                        min="1"
-                                                        [name]="'quantity'"
-                                                        formControlName="item.quantity"
-                                                        [minlength]="1"
-                                                        [cssClass]="'form-control rounded-0 text-center width-60'"
-                                                    ></text-field>
+                                                    <text-field [type]="'text'" value="1" min="1" [name]="'quantity'"
+                                                        formControlName="quantity" [minlength]="1"
+                                                        [cssClass]="'form-control rounded-0 text-center width-60'"></text-field>
                                                     <button mat-stroked-button (click)="alterQuantity(item)">
                                                         <i class="icon-add font-16 fw-bold"></i>
                                                     </button>
-                                                    <button
-                                                        mat-button
-                                                        (click)="
-                                                            removeSelectedItem(
-                                                                item.get('uniqueName').value
+                                                    <button mat-button (click)="
+                                                            deleteSelectedItem(
+                                                                bulkIndex
                                                             )
-                                                        "
-                                                    >
+                                                        ">
                                                         <i class="icon-cross font-16"></i>
                                                     </button>
                                                 </div>
