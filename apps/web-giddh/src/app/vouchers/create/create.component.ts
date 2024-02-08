@@ -277,7 +277,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.getCompanyProfile();
         this.getCompanyTaxes();
         this.getWarehouses();
-
+        this.updateDueDate(); // Remove from this and please call this method on voucher date change
         this.activatedRoute.params.pipe(delay(0), takeUntil(this.destroyed$)).subscribe(params => {
             if (params) {
                 this.voucherType = this.vouchersUtilityService.parseVoucherType(params.voucherType);
@@ -1071,8 +1071,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             touristSchemeApplicable: [false],
             passportNumber: ['']
         });
-
-        console.log(this.invoiceForm);
     }
 
     /**
@@ -1777,6 +1775,36 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     public getLastInvoiceDetails(obj: { accountUniqueName: string, invoiceNo: string, uniqueName?: string }) {
         // this obj will be directly send to api 
+    }
+
+
+    /**
+     * This will update due date based on invoice date
+     *
+     * @memberof VoucherCreateComponent
+     */
+    public updateDueDate(): void {
+        this.componentStore.invoiceSettings$.pipe(takeUntil(this.destroyed$)).subscribe(invoiceSettings => {
+            if (invoiceSettings) {
+                let duePeriod: number;
+                if (this.invoiceType.isEstimateInvoice) {
+                    duePeriod = invoiceSettings.estimateSettings ? invoiceSettings.estimateSettings.duePeriod : 0;
+                } else if (this.invoiceType.isProformaInvoice) {
+                    duePeriod = invoiceSettings.proformaSettings ? invoiceSettings.proformaSettings.duePeriod : 0;
+                } else {
+                    duePeriod = invoiceSettings.invoiceSettings ? invoiceSettings.invoiceSettings.duePeriod : 0;
+                    // this.useCustomInvoiceNumber = invoiceSettings.invoiceSettings ? invoiceSettings.invoiceSettings.useCustomInvoiceNumber : false;
+                }
+
+                if (this.invoiceForm.get("date").value) {
+                    if (typeof (this.invoiceForm.get("date").value) === "object") {
+                        this.invoiceForm.get("date").setValue(duePeriod > 0 ? dayjs(this.invoiceForm.get("date").value).add(duePeriod, 'day').toDate() : dayjs(this.invoiceForm.get("date").value).toDate());
+                    } else {
+                        this.invoiceForm.get("dueDate").setValue(duePeriod > 0 ? dayjs(this.invoiceForm.get("date").value, GIDDH_DATE_FORMAT).add(duePeriod, 'day').toDate() : dayjs(this.invoiceForm.get("date").value, GIDDH_DATE_FORMAT).toDate());
+                    }
+                }
+            }
+        });
     }
 
     /**
