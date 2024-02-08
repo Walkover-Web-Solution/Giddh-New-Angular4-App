@@ -128,14 +128,6 @@
         .vouchers-large-container {
             border-top: 1px solid var(--color-common-secondary-border);
 
-            .change-currency {
-                max-width: calc(100% - 36px);
-
-                .currency-input-wrapper {
-                    width: 80px;
-                }
-            }
-
             #init-contact-wrapper {
                 input {
                     height: 48px;
