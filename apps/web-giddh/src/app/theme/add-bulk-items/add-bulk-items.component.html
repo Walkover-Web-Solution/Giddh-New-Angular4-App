@@ -86,10 +86,7 @@
                     <div class="bulk-entry-selected-items d-flex flex-column">
                         <div class="selected-item-title">Selected Stocks ({{ selectedItems?.length }})</div>
                         <div class="selected-item-wrapper">
-                            <ng-container
-                                *ngFor="let item of addBulkForm?.get('data')['controls']; let bulkIndex = index"
-                                formArrayName="data"
-                            >
+                            <ng-container *ngFor="let item of addBulkForm?.get('data')['controls']; let bulkIndex = index" formArrayName="data">
                                 <ng-container [formGroupName]="bulkIndex">
                                     <mat-list class="p-0">
                                         <mat-list-item class="px-0 mb-3">
@@ -97,19 +94,16 @@
                                                 <div class="w-75">
                                                     <p>
                                                         {{
-                                                            item?.name +
-                                                                (item.variants?.length > 1 && item.variant?.name
-                                                                    ? " - " + item.variant?.name
-                                                                    : "")
+                                                            item.get('name')?.value }} - {{ (item.get('variantName')?.value ? item.get('variantName')?.value : '')
                                                         }}
                                                     </p>
                                                     <p>
-                                                        <span *ngIf="item?.additional?.skuCode" class="stockSku mb-1"
-                                                            ><label>SKU: </label>{{ item?.additional?.skuCode }}</span
+                                                        <span *ngIf="item.get('additional.skuCode')?.value" class="stockSku mb-1"
+                                                            ><label>SKU: </label>{{ item.get('additional.skuCode')?.value }}</span
                                                         >
-                                                        <span [class.rate-stock]="item?.additional?.skuCode"
+                                                        <span [class.rate-stock]="item.get('name')?.value"
                                                             ><label>Rate:&nbsp;</label> </span
-                                                        >{{ item?.rate }}
+                                                        >{{  item.get('rate')?.value  }}
                                                     </p>
                                                 </div>
 
@@ -124,7 +118,7 @@
                                                         value="1"
                                                         min="1"
                                                         [name]="'quantity'"
-                                                        formControlName="quantity"
+                                                        formControlName="item.quantity"
                                                         [minlength]="1"
                                                         [cssClass]="'form-control rounded-0 text-center width-60'"
                                                     ></text-field>
@@ -135,9 +129,7 @@
                                                         mat-button
                                                         (click)="
                                                             removeSelectedItem(
-                                                                item?.variants?.length > 1
-                                                                    ? item.additional?.combinedUniqueName
-                                                                    : item?.uniqueName
+                                                                item.get('uniqueName').value
                                                             )
                                                         "
                                                     >

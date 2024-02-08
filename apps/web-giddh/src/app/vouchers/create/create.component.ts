@@ -410,9 +410,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     private getVoucherType(): void {
-        console.log(this.voucherType)
         this.invoiceType = this.vouchersUtilityService.getVoucherType(this.voucherType);
-        console.log(this.invoiceType)
         this.currentVoucherFormDetails = this.vouchersUtilityService.prepareVoucherForm(this.voucherType);
     }
 

@@ -70,9 +70,7 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
     private initAddBulkForm(): void {
         this.addBulkForm = this.formBuilder.group({
             stock: [''],
-            data: this.formBuilder.array([
-                this.getStockFormGroup()
-            ]),
+            data: this.formBuilder.array([]),
         })
     }
 
@@ -83,13 +81,28 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
      * @return {*}  {FormGroup}
      * @memberof AddBulkItemsComponent
      */
-    private getStockFormGroup(): FormGroup {
+    private getStockFormGroup(item: SalesAddBulkStockItems): FormGroup {
         return this.formBuilder.group({
             quantity: [1],
-            rate: [''],
-            additional: ['']
-
+            rate: [item?.rate || ""],
+            name: [item?.name || ""],
+            stockUniqueName: [item.additional?.stock?.uniqueName || ""],
+            variantUniqueName: [item?.variant?.uniqueName || ""],
+            customerUniqueName: ["sales"],
+            additional: [item.additional || ""],
+            variantName: [item?.variant?.name || ""],
         });
+    }
+
+    /**
+     * This will be use for getter of bulk form
+     *
+     * @readonly
+     * @type {FormArray}
+     * @memberof AddBulkItemsComponent
+     */
+    public get dataControls(): FormArray {
+        return this.addBulkForm.get("data") as FormArray;
     }
 
     /**
@@ -142,7 +155,6 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
      * @memberof AddBulkItemsComponent
      */
     public addItem(item: SalesAddBulkStockItems, index: number): void {
-        console.log(item, index);
         let selectedIndex;
         if (!item.additional.stock) {
             selectedIndex = this.selectedItems?.findIndex(f => f?.uniqueName === item?.uniqueName);
@@ -163,7 +175,6 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
         if (item?.additional?.stock?.uniqueName) {
             this.componentStore.getStockVariants({ q: item?.additional?.stock?.uniqueName, index: index });
         } else {
-            // this.addBulkForm.get('data')['controls'].push(this.getStockFormGroup());
             this.loadDetails(item, requestObject);
         }
     }
@@ -177,7 +188,6 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
      */
     public loadDetails(item: SalesAddBulkStockItems, requestObject: any): void {
         this.searchService.loadDetails(item.additional?.uniqueName, requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
-            console.log(data);
             if (data && data.body) {
                 // Take taxes of parent group and stock's own taxes
                 const taxes = data.body.taxes || [];
@@ -211,19 +221,9 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
                     this.selectedItems = [...this.selectedItems, item];
                 }
                 // Patch values directly to the form controls
-                const dataControl = this.addBulkForm.get('data') as FormArray;
-                for (let i = 0; i < dataControl.length; i++) {
-                    const itemFormGroup = dataControl.at(i) as FormGroup;
-                    if (itemFormGroup.get('additional').value?.uniqueName === item.uniqueName) {
-                        itemFormGroup.get('additional')?.patchValue(item.additional);
-                        itemFormGroup.get('rate')?.patchValue(item.rate);
-                        itemFormGroup.get('quantity')?.patchValue(item.quantity);
-                        break;
-                    }
-                }
-
-                console.log(this.addBulkForm.value);
-
+                const itemFormGroup = this.getStockFormGroup(item);
+                console.log(itemFormGroup.value);
+                this.dataControls.push(itemFormGroup);
             }
         });
     }
@@ -239,11 +239,11 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
     public variantChanged(item: SalesAddBulkStockItems, event: any): void {
         let selectedItem = cloneDeep(item);
         selectedItem.variant = { name: event.label, uniqueName: event.value };
-        const index = this.selectedItems?.findIndex(f => f.additional.combinedUniqueName === `${selectedItem.uniqueName}#${event.value}`);
-        if (index > -1) {
-            this.toaster.warningToast("Variant is already selected");
-            return;
-        }
+        // const index = this.selectedItems?.findIndex(f => f.additional.combinedUniqueName === `${selectedItem.uniqueName}#${event.value}`);
+        // if (index > -1) {
+        //     this.toaster.warningToast("Variant is already selected");
+        //     return;
+        // }
         const requestObj = {
             stockUniqueName: selectedItem.additional?.stock?.uniqueName ?? '',
             variantUniqueName: event.value,
@@ -252,14 +252,16 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
         this.loadDetails(selectedItem, requestObj);
     }
 
+
     /**
-     * This will be use for remove selected item
+     * Removes selected line
      *
-     * @param {string} uniqueName
+     * @param {number} index
      * @memberof AddBulkItemsComponent
      */
-    public removeSelectedItem(uniqueName: string): void {
-        this.selectedItems = this.selectedItems?.filter(f => f?.uniqueName !== uniqueName && f?.additional.combinedUniqueName !== uniqueName);
+    public deleteLineEntry(index: number): void {
+        const selectedItem = this.dataControls;
+        selectedItem.removeAt(index);
     }
 
     /**

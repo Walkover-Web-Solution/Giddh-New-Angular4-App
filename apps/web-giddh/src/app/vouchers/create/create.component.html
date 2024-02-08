@@ -1152,5 +1152,5 @@
 
 <!-- region bulk items -->
 <ng-template #bulkItemsModal>
-    <add-bulk-items (closeEvent)="cancelBulkItemsModal()"></add-bulk-items>
+    <add-bulk-items (closeEvent)="cancelBulkItemsModal()" [voucherType]="voucherType"></add-bulk-items>
 </ng-template>
