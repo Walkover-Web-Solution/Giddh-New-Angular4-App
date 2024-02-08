@@ -723,7 +723,7 @@
                                                                             [currencyCode]="isMultiCurrencyVoucher ? account.baseCurrency : false">
                                                                         </amount-field>
                                                                     </ng-container>
-                                                                    <discount-dropdown *ngIf="activeEntryIndex === entryIndex" [amount]="transaction.get('amount.amountForAccount')?.value" [discountsList]="discountsList$ | async" [selectedDiscountsList]="entry.get('discounts')?.value" [currency]="account.baseCurrencySymbol" (createNewDiscount)="showCreateDiscountDialog()" (selectedDiscounts)="getSelectedDiscounts($event)" (totalDiscount)="updateTotalDiscount($event, entry)"></discount-dropdown>
+                                                                    <discount-dropdown *ngIf="activeEntryIndex === entryIndex" [amount]="transaction.get('amount.amountForAccount')?.value" [discountsList]="discountsList$ | async" [selectedDiscountsList]="entry.get('discounts')?.value" [currency]="account.baseCurrencySymbol" (createNewDiscount)="showCreateDiscountDialog()" (selectedDiscounts)="getSelectedDiscounts(entryIndex, $event)" (totalDiscount)="updateTotalDiscount($event, entry)"></discount-dropdown>
                                                                 </ng-container>
                                                             </ng-container>        
                                                         </td>
@@ -739,7 +739,7 @@
                                                                             [currencyCode]="isMultiCurrencyVoucher ? account.baseCurrency : false">
                                                                         </amount-field>
                                                                     </ng-container>
-                                                                    <tax-dropdown *ngIf="activeEntryIndex === entryIndex" [date]="invoiceForm.get('date')?.value" [amount]="transaction.get('amount.amountForAccount')?.value - entry.get('totalDiscount')?.value" [selectedTaxesList]="entry.get('taxes')?.value" [taxesList]="companyTaxes$ | async" [currency]="account.baseCurrencySymbol" (createNewTax)="showCreateTaxDialog()" (selectedTaxes)="getSelectedTaxes($event)" (totalTax)="updateTotalTax($event, entry)"></tax-dropdown>
+                                                                    <tax-dropdown *ngIf="activeEntryIndex === entryIndex" [date]="invoiceForm.get('date')?.value" [amount]="transaction.get('amount.amountForAccount')?.value - entry.get('totalDiscount')?.value" [selectedTaxesList]="entry.get('taxes')?.value" [taxesList]="companyTaxes$ | async" [currency]="account.baseCurrencySymbol" (createNewTax)="showCreateTaxDialog()" (selectedTaxes)="getSelectedTaxes(entryIndex, $event)" (totalTax)="updateTotalTax($event, entry)"></tax-dropdown>
                                                                 </ng-container>
                                                             </ng-container>
                                                         </td>
@@ -756,8 +756,8 @@
                                                                 </ng-container>
                                                                 <text-field *ngIf="activeEntryIndex === entryIndex" [placeholder]="'Enter'" [cssClass]="'form-control text-right'" [type]="'text'" formControlName="amountForAccount"></text-field>
                                                             </ng-container>
-                                                            <div class="d-flex align-items-center" *ngIf="activeEntryIndex === entryIndex">
-                                                                <mat-checkbox type="checkbox" color="primary" (change)="openOtherTaxDialog()">
+                                                            <div class="d-flex align-items-center" *ngIf="activeEntryIndex === entryIndex" formGroupName="otherTax">
+                                                                <mat-checkbox type="checkbox" color="primary" formControlName="isChecked" (change)="openOtherTaxDialog(entry, entryIndex)">
                                                                 </mat-checkbox>
                                                                 Other Tax?
                                                             </div>

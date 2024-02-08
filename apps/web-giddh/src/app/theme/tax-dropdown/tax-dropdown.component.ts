@@ -80,7 +80,8 @@ export class TaxDropdownComponent implements OnChanges {
             taxType: [tax?.taxType],
             taxDetail: [tax?.taxDetail?.length ? tax?.taxDetail[0] : null],
             isChecked: [tax?.isChecked ?? false],
-            disableForDate: [false]
+            disableForDate: [false],
+            calculationMethod: ['OnTaxableAmount']
         });
     }
 
@@ -139,7 +140,7 @@ export class TaxDropdownComponent implements OnChanges {
      */
     private emitSelectedTaxes(): void {
         const taxes = this.taxForm.get('taxes') as FormArray;
-        let selectedTaxes = taxes.value?.filter(discount => discount.isChecked);
+        let selectedTaxes = taxes.value?.filter(tax => tax.isChecked);
 
         this.selectedTaxes.emit(selectedTaxes);
         this.totalTax.emit(this.totalTaxAmount);
