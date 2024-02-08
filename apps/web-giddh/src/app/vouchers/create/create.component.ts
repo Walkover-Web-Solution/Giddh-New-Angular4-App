@@ -1142,6 +1142,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     }),
                     amount: this.formBuilder.group({
                         amountForAccount: [0],
+                        amountForCompany: [0],
                         type: ['DEBIT']
                     }),
                     stock: this.formBuilder.group({

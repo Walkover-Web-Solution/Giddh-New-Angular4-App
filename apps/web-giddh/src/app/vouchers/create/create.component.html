@@ -738,11 +738,11 @@
                                                                         <ng-container *ngIf="activeEntryIndex !== entryIndex">{{ transaction.get('stock.rate.rateForAccount')?.value }}</ng-container>
                                                                         <div>
                                                                             <text-field *ngIf="activeEntryIndex === entryIndex" [placeholder]="'Enter'" [cssClass]="'form-control text-right'" [type]="'text'" [name]="'transactionRate' + entryIndex" formControlName="rateForAccount"></text-field>
-                                                                            <span class="font-14 text-gray mt-1 d-inline-block">
+                                                                            <span class="font-14 text-gray mt-1 d-inline-block" *ngIf="isMultiCurrencyVoucher">
                                                                                 <amount-field
-                                                                                    [amount]="200"
-                                                                                    [currencySymbol]="'₹'"
-                                                                                    [currencyCode]="''">
+                                                                                    [amount]="transaction.get('stock.rate.rateForAccount')?.value * invoiceForm.get('exchangeRate')?.value"
+                                                                                    [currencySymbol]="company.baseCurrencySymbol"
+                                                                                    [currencyCode]="company.baseCurrency">
                                                                                 </amount-field>
                                                                             </span>
                                                                         </div>
@@ -762,11 +762,11 @@
                                                                         <div class="text-field-container">
                                                                             <input *ngIf="activeEntryIndex === entryIndex" matInput [placeholder]="'Enter'" class="form-control text-right" type="text" entryAmount [rate]="transaction.get('stock.rate.rateForAccount')?.value" [quantity]="transaction.get('stock.quantity')?.value" name="transactionAmount{{entryIndex}}" formControlName="amountForAccount" (calculatedAmount)="updateTransactionAmount(transaction, $event)" />
                                                                         </div>
-                                                                        <span class="font-14 text-gray mt-1 d-inline-block">
+                                                                        <span class="font-14 text-gray mt-1 d-inline-block" *ngIf="isMultiCurrencyVoucher">
                                                                             <amount-field
-                                                                                [amount]="200"
-                                                                                [currencySymbol]="'₹'"
-                                                                                [currencyCode]="''">
+                                                                                [amount]="transaction.get('amount.amountForAccount')?.value * invoiceForm.get('exchangeRate')?.value"
+                                                                                [currencySymbol]="company.baseCurrencySymbol"
+                                                                                [currencyCode]="company.baseCurrency">
                                                                             </amount-field>
                                                                         </span>
                                                                     </div>
@@ -795,11 +795,11 @@
                                                                             (createNewDiscount)="showCreateDiscountDialog()"
                                                                             (selectedDiscounts)="getSelectedDiscounts(entryIndex, $event)"
                                                                             (totalDiscount)="updateTotalDiscount($event, entry)"></discount-dropdown>
-                                                                        <span class="font-14 text-gray mt-1 d-inline-block">
+                                                                        <span class="font-14 text-gray mt-1 d-inline-block" *ngIf="isMultiCurrencyVoucher">
                                                                             <amount-field
-                                                                                [amount]="200"
-                                                                                [currencySymbol]="'₹'"
-                                                                                [currencyCode]="''">
+                                                                                [amount]="entry.get('totalDiscount')?.value * invoiceForm.get('exchangeRate')?.value"
+                                                                                [currencySymbol]="company.baseCurrencySymbol"
+                                                                                [currencyCode]="company.baseCurrency">
                                                                             </amount-field>
                                                                         </span>
                                                                     </div>
@@ -829,11 +829,11 @@
                                                                             (createNewTax)="showCreateTaxDialog()"
                                                                             (selectedTaxes)="getSelectedTaxes(entryIndex, $event)"
                                                                             (totalTax)="updateTotalTax($event, entry)"></tax-dropdown>
-                                                                        <span class="font-14 text-gray mt-1 d-inline-block">
+                                                                        <span class="font-14 text-gray mt-1 d-inline-block" *ngIf="isMultiCurrencyVoucher">
                                                                             <amount-field
-                                                                                [amount]="200"
-                                                                                [currencySymbol]="'₹'"
-                                                                                [currencyCode]="''">
+                                                                                [amount]="entry.get('totalTax')?.value * invoiceForm.get('exchangeRate')?.value"
+                                                                                [currencySymbol]="company.baseCurrencySymbol"
+                                                                                [currencyCode]="company.baseCurrency">
                                                                             </amount-field>
                                                                         </span>
                                                                     </div>
@@ -850,15 +850,6 @@
                                                                         [currencySymbol]="isMultiCurrencyVoucher ? account.baseCurrencySymbol : false"
                                                                         [currencyCode]="isMultiCurrencyVoucher ? account.baseCurrency : false">
                                                                     </amount-field>
-
-                                                                    <ng-container *ngIf="entry.get('otherTax.name')?.value">
-                                                                        {{ entry.get('otherTax.name')?.value }} : 
-                                                                        <amount-field
-                                                                            [amount]="entry.get('otherTax.amount')?.value"
-                                                                            [currencySymbol]="isMultiCurrencyVoucher ? account.baseCurrencySymbol : false"
-                                                                            [currencyCode]="isMultiCurrencyVoucher ? account.baseCurrency : false">
-                                                                        </amount-field>
-                                                                    </ng-container>
                                                                 </ng-container>
                                                                 <text-field *ngIf="activeEntryIndex === entryIndex"
                                                                     [placeholder]="'Enter'"
@@ -866,6 +857,13 @@
                                                                     [type]="'text'"
                                                                     formControlName="amountForAccount">
                                                                 </text-field>
+                                                                <span class="font-14 text-gray mt-1 d-inline-block" *ngIf="isMultiCurrencyVoucher">
+                                                                    <amount-field
+                                                                        [amount]="entry.get('total.amountForAccount')?.value * invoiceForm.get('exchangeRate')?.value"
+                                                                        [currencySymbol]="company.baseCurrencySymbol"
+                                                                        [currencyCode]="company.baseCurrency">
+                                                                    </amount-field>
+                                                                </span>
                                                             </ng-container>
                                                             <div class="d-flex align-items-center"
                                                                 *ngIf="activeEntryIndex === entryIndex"
@@ -877,11 +875,19 @@
                                                                 Other Tax?
                                                             </div>
                                                             <div>
-                                                                <span class="font-14 text-gray mt-1 d-inline-block">
+                                                                <ng-container *ngIf="entry.get('otherTax.name')?.value">
+                                                                    {{ entry.get('otherTax.name')?.value }} : 
                                                                     <amount-field
-                                                                        [amount]="200"
-                                                                        [currencySymbol]="'₹'"
-                                                                        [currencyCode]="''">
+                                                                        [amount]="entry.get('otherTax.amount')?.value"
+                                                                        [currencySymbol]="isMultiCurrencyVoucher ? account.baseCurrencySymbol : false"
+                                                                        [currencyCode]="isMultiCurrencyVoucher ? account.baseCurrency : false">
+                                                                    </amount-field>
+                                                                </ng-container>
+                                                                <span class="font-14 text-gray mt-1 d-inline-block" *ngIf="entry.get('otherTax.name')?.value && isMultiCurrencyVoucher">
+                                                                    <amount-field
+                                                                        [amount]="entry.get('otherTax.amount')?.value * invoiceForm.get('exchangeRate')?.value"
+                                                                        [currencySymbol]="company.baseCurrencySymbol"
+                                                                        [currencyCode]="company.baseCurrency">
                                                                     </amount-field>
                                                                 </span>
                                                             </div>
