@@ -85,7 +85,7 @@ export class ObligationsComponent implements OnInit, OnDestroy {
         public dialog: MatDialog
     ) {
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
-        this.store.pipe(select(state => state.session.activeCompany), take(1)).subscribe(activeCompany => {
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany && !this.companyUniqueName) {
                 this.companyUniqueName = activeCompany.uniqueName;
             }
@@ -137,7 +137,7 @@ export class ObligationsComponent implements OnInit, OnDestroy {
         this.vatService.getVatObligations(this.companyUniqueName, this.obligationsForm.value).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.isLoading = false;
             if (response?.status === "success" && response?.body?.obligations) {
-                this.tableDataSource = cloneDeep(response?.body?.obligations).map(item => {
+                this.tableDataSource = response?.body?.obligations.map(item => {
                     item.start = dayjs(item.start).format(GIDDH_DATE_FORMAT);
                     item.end = dayjs(item.end).format(GIDDH_DATE_FORMAT);
                     item.due = dayjs(item.due).format(GIDDH_DATE_FORMAT);
@@ -246,12 +246,7 @@ export class ObligationsComponent implements OnInit, OnDestroy {
 
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response.status === 'success') {
-                if (response?.body) {
-                    this.toaster.showSnackBar('success', response.body);
-                }
                 this.getVatObligations();
-            } else if (response?.message) {
-                this.toaster.showSnackBar('error', response.message);
             }
         });
     }
@@ -272,16 +267,10 @@ export class ObligationsComponent implements OnInit, OnDestroy {
             localeData: this.localeData,
             commonLocaleData: this.commonLocaleData
         }
-        let dialogRef = this.dialog.open(ViewReturnComponent, {
+        this.dialog.open(ViewReturnComponent, {
             data: dataToSend,
             width: '60vw',
             height: '80vh'
-        });
-
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
-            if (response.status === 'error') {
-                this.toaster.showSnackBar('error', response.message);
-            }
         });
     }
 

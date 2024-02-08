@@ -5,6 +5,7 @@ import { ReplaySubject, takeUntil } from 'rxjs';
 import { VatReportRequest } from '../../models/api-models/Vat';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store';
+import { ToasterService } from '../../services/toaster.service';
 
 @Component({
     selector: 'file-return',
@@ -32,7 +33,8 @@ export class FileReturnComponent implements OnInit, OnDestroy {
         @Inject(MAT_DIALOG_DATA) public inputData: any,
         public dialogRef: MatDialogRef<any>,
         private vatService: VatService,
-        private store: Store<AppState>
+        private store: Store<AppState>,
+        private toaster: ToasterService
     ) {
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany && !this.activeCompany) {
@@ -71,6 +73,9 @@ export class FileReturnComponent implements OnInit, OnDestroy {
             if (res.status === 'success' && res.body?.sections) {
                 this.vatReport = res.body?.sections;
             } else {
+                if(res?.message){
+                    this.toaster.showSnackBar('error',res.message);
+                }
                 this.dialogRef.close(res);
             }
         });
@@ -91,9 +96,16 @@ export class FileReturnComponent implements OnInit, OnDestroy {
         };
 
         this.vatService.fileVatReturn(this.inputData.companyUniqueName, model).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-            if (res) {
-                this.dialogRef.close(res);
+            if (res.status === 'success') {
+                if (res?.body) {
+                    this.toaster.showSnackBar('success', res.body);
+                }
+            }else{
+                if (res?.message) {
+                    this.toaster.showSnackBar('error', res.message);
+                }
             }
+            this.dialogRef.close(res);
         });
     }
 

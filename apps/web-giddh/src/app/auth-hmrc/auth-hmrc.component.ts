@@ -25,7 +25,7 @@ export class AuthHMRCComponent implements OnInit, OnDestroy {
         private store: Store<AppState>,
         private toaster: ToasterService
     ) {
-        this.store.pipe(select(state => state.session.activeCompany), take(1)).subscribe(activeCompany => {
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.companyUniqueName = activeCompany.uniqueName;
             }
@@ -58,12 +58,12 @@ export class AuthHMRCComponent implements OnInit, OnDestroy {
                 if (res?.message) {
                     this.toaster.showSnackBar('success', res?.message);
                 }
-                this.router.navigate(['pages/vat-report/obligations']);
+                this.router.navigate(['/pages/vat-report/obligations']);
             } else {
                 if (res?.message) {
                     this.toaster.showSnackBar('error', res?.message);
                 }
-                this.router.navigate(['pages/vat-report']);
+                this.router.navigate(['/pages/vat-report']);
             }
         })
     }
