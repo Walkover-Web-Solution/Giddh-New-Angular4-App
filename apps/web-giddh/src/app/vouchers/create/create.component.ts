@@ -288,7 +288,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.activatedRoute.params.pipe(delay(0), takeUntil(this.destroyed$)).subscribe(params => {
             if (params) {
                 this.voucherType = this.vouchersUtilityService.parseVoucherType(params.voucherType);
-
                 if (this.voucherApiVersion !== 2) {
                     this.router.navigate(["/pages/proforma-invoice/invoice/" + this.voucherType]);
                 }
@@ -411,7 +410,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     private getVoucherType(): void {
+        console.log(this.voucherType)
         this.invoiceType = this.vouchersUtilityService.getVoucherType(this.voucherType);
+        console.log(this.invoiceType)
         this.currentVoucherFormDetails = this.vouchersUtilityService.prepareVoucherForm(this.voucherType);
     }
 
@@ -1885,7 +1886,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
 
     /**
-     * This will update due date based on invoice date
+     * This will update due date based on voucher date
      *
      * @memberof VoucherCreateComponent
      */
@@ -1897,6 +1898,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     duePeriod = invoiceSettings.estimateSettings ? invoiceSettings.estimateSettings.duePeriod : 0;
                 } else if (this.invoiceType.isProformaInvoice) {
                     duePeriod = invoiceSettings.proformaSettings ? invoiceSettings.proformaSettings.duePeriod : 0;
+                } else if (this.invoiceType.isPurchaseOrder) {
+                    duePeriod = invoiceSettings.purchaseBillSettings ? invoiceSettings.purchaseBillSettings.poDuePeriod : 0;
                 } else {
                     duePeriod = invoiceSettings.invoiceSettings ? invoiceSettings.invoiceSettings.duePeriod : 0;
                     // this.useCustomInvoiceNumber = invoiceSettings.invoiceSettings ? invoiceSettings.invoiceSettings.useCustomInvoiceNumber : false;

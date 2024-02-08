@@ -57,27 +57,22 @@
                                                         <mat-spinner [diameter]="30"></mat-spinner>
                                                     </ng-container>
                                                     <ng-container *ngIf="(lastVouchersList$ | async)?.length">
-                                                        <button
-                                                        mat-menu-item
-                                                        *ngFor="let voucher of lastVouchersList$ | async"
-                                                        (click)="copyInvoice(voucher)"
-                                                        class="line-height-initial"
-                                                    >
-                                                        <div class="pd">
-                                                            <div class="d-flex flex-column">
-                                                                <div class="d-flex justify-content-between">
-                                                                    <span>{{ voucher?.voucherNumber }}</span>
-                                                                    <span>{{
-                                                                        voucher?.grandTotal?.amountForAccount
-                                                                    }}</span>
+                                                        <button mat-menu-item
+                                                            *ngFor="let voucher of lastVouchersList$ | async"
+                                                            (click)="copyInvoice(voucher)" class="line-height-initial">
+                                                            <div class="pd">
+                                                                <div class="d-flex flex-column">
+                                                                    <div class="d-flex justify-content-between">
+                                                                        <span>{{ voucher?.voucherNumber }}</span>
+                                                                        <span>{{
+                                                                            voucher?.grandTotal?.amountForAccount
+                                                                            }}</span>
+                                                                    </div>
+                                                                    <span>{{ voucher?.date }} (
+                                                                        {{ voucher?.account?.name }} )</span>
                                                                 </div>
-                                                                <span
-                                                                    >{{ voucher?.date }} (
-                                                                    {{ voucher?.account?.name }} )</span
-                                                                >
                                                             </div>
-                                                        </div>
-                                                    </button>
+                                                        </button>
                                                     </ng-container>
                                                     <ng-container
                                                         *ngIf="!(lastVouchersList$ | async)?.length && !getLastVouchersInProgress$ | async">
@@ -140,11 +135,17 @@
                                             </div>
                                             <mat-menu #billingAddress="matMenu">
                                                 <div class="mat-menu-width-large vouchers-address-menu">
-                                                    <ng-container *ngFor="let address of account?.addresses; let i = index">
+                                                    <ng-container
+                                                        *ngFor="let address of account?.addresses; let i = index">
                                                         <button mat-menu-item
                                                             (click)="fillBillingShippingAddress('account', 'billingAddress', address, i)">
-                                                            <div class="d-flex justify-content-between align-items-center">
-                                                                <full-address [address]="address" [localeData]="localeData" [commonLocaleData]="commonLocaleData" [addressNo]="i + 1" [company]="company"></full-address>
+                                                            <div
+                                                                class="d-flex justify-content-between align-items-center">
+                                                                <full-address [address]="address"
+                                                                    [localeData]="localeData"
+                                                                    [commonLocaleData]="commonLocaleData"
+                                                                    [addressNo]="i + 1"
+                                                                    [company]="company"></full-address>
                                                                 <i class="icon-tick"
                                                                     *ngIf="invoiceForm.controls['account'].get('billingAddress').get('index')?.value === i"></i>
                                                             </div>
@@ -200,12 +201,17 @@
 
                                                 <mat-menu #shippingAddress="matMenu">
                                                     <div class="mat-menu-width-large vouchers-address-menu">
-                                                        <ng-container *ngFor="let address of account?.addresses; let i = index">
+                                                        <ng-container
+                                                            *ngFor="let address of account?.addresses; let i = index">
                                                             <button mat-menu-item
                                                                 (click)="fillBillingShippingAddress('account','shippingAddress', address, i)">
                                                                 <div
                                                                     class="d-flex justify-content-between align-items-center">
-                                                                    <full-address [address]="address" [localeData]="localeData" [commonLocaleData]="commonLocaleData" [addressNo]="i + 1" [company]="company"></full-address>
+                                                                    <full-address [address]="address"
+                                                                        [localeData]="localeData"
+                                                                        [commonLocaleData]="commonLocaleData"
+                                                                        [addressNo]="i + 1"
+                                                                        [company]="company"></full-address>
                                                                     <i class="icon-tick"
                                                                         *ngIf="invoiceForm.controls['account'].get('shippingAddress').get('index')?.value === i"></i>
                                                                 </div>
@@ -273,32 +279,22 @@
                                         <!-- Mobile Number -->
                                         <div class="col-6 mr-t15">
                                             <div id="init-contact-wrapper" class="position-relative w-100">
-                                        
-                                                <input
-                                                    type="tel"
-                                                    class="mat-form-field-border mat-form-field-height"
-                                                    #initContact
-                                                    aria-autocomplete="none"
-                                                    autocomplete="off"
+
+                                                <input type="tel" class="mat-form-field-border mat-form-field-height"
+                                                    #initContact aria-autocomplete="none" autocomplete="off"
                                                     (keypress)="intlClass?.onlyPhoneNumber($event); validateMobileField()"
-                                                    id="init-contact"
-                                                    placeholder="Mobile Number"
-                                                    formControlName="mobileNumber"
-                                                    [ngClass]="{
+                                                    id="init-contact" placeholder="Mobile Number"
+                                                    formControlName="mobileNumber" [ngClass]="{
                                                         'invalid-input':
                                                             (invoiceForm.controls['account'].get('mobileNumber')?.touched ||
                                                             invoiceForm.controls['account'].get('mobileNumber')?.touched) &&
                                                             !intlClass?.isRequiredValidNumber
-                                                    }"
-                                                />
-                                                <mat-error
-                                                    *ngIf="
+                                                    }" />
+                                                <mat-error *ngIf="
                                                         (invoiceForm.controls['account'].get('mobileNumber')?.touched ||
                                                         invoiceForm.controls['account'].get('mobileNumber')?.touched) &&
                                                         !intlClass?.isRequiredValidNumber
-                                                    "
-                                                    >Please enter valid mobile number</mat-error
-                                                >
+                                                    ">Please enter valid mobile number</mat-error>
                                             </div>
                                         </div>
                                     </ng-container>
@@ -330,7 +326,9 @@
                                                     <button mat-menu-item
                                                         (click)="fillBillingShippingAddress('company', 'billingAddress', address, i)">
                                                         <div class="d-flex justify-content-between align-items-center">
-                                                            <full-address [address]="address" [localeData]="localeData" [commonLocaleData]="commonLocaleData" [addressNo]="i + 1" [company]="company"></full-address>
+                                                            <full-address [address]="address" [localeData]="localeData"
+                                                                [commonLocaleData]="commonLocaleData"
+                                                                [addressNo]="i + 1" [company]="company"></full-address>
                                                             <i class="icon-tick"
                                                                 *ngIf="invoiceForm.controls['company'].get('billingAddress').get('index')?.value === i"></i>
                                                         </div>
@@ -359,7 +357,9 @@
                                                     <button mat-menu-item
                                                         (click)="fillBillingShippingAddress('company', 'shippingAddress', address, i)">
                                                         <div class="d-flex justify-content-between align-items-center">
-                                                            <full-address [address]="address" [localeData]="localeData" [commonLocaleData]="commonLocaleData" [addressNo]="i + 1" [company]="company"></full-address>
+                                                            <full-address [address]="address" [localeData]="localeData"
+                                                                [commonLocaleData]="commonLocaleData"
+                                                                [addressNo]="i + 1" [company]="company"></full-address>
                                                             <i class="icon-tick"
                                                                 *ngIf="invoiceForm.controls['company'].get('shippingAddress').get('index')?.value === i"></i>
                                                         </div>
@@ -376,7 +376,7 @@
                                         </div>
                                     </div>
                                 </div>
-
+                                {{invoiceType.isPurchaseInvoice }}
                                 <!-- Row 3 -->
                                 <div class="row row-gap mr-t15 mr-b15"
                                     *ngIf="invoiceType.isPurchaseInvoice && (vendorPurchaseOrders$ | async)?.length">
@@ -395,23 +395,24 @@
 
                                     <!-- Voucher Number -->
                                     <div class="col-6">
-                                        <input-field [name]="'vouchers-number'" [label]="'Voucher Number'"
-                                            [placeholder]="'Enter voucher number'" [type]="'text'"
-                                            formControlName="number">
+                                        <input-field [name]="'vouchers-number'"
+                                            [label]="!invoiceType.isPurchaseOrder? 'Voucher Number' : 'Order Number'"
+                                            [placeholder]="!invoiceType.isPurchaseOrder? 'Enter voucher number' : 'Enter Order Number'"
+                                            [type]="'text'" formControlName="number">
                                         </input-field>
                                     </div>
 
                                     <!-- Voucher Date -->
                                     <div class="col-3 pr-2">
                                         <giddh-datepicker type="text" (keydown.enter)="$event.preventDefault()"
-                                            [label]="'Invoice Date'" [placeholder]="'DDMMYYYY'" name="voucherDate"
-                                            [showToggleIcon]="false" [appearance]="'outline'" formControlName="date">
+                                            [label]="invoiceType.isSalesInvoice  ?'Invoice Date': invoiceType.isPurchaseInvoice ? 'Bill Date': invoiceType.isCreditNote?'Credit Note Date': invoiceType.isDebitNote ?'Debit Note Date':invoiceType.isEstimateInvoice?'Estimate Date':invoiceType.isProformaInvoice?'Proforma Date':invoiceType.isPurchaseOrder ?'Order Date':'' "
+                                            [placeholder]="'DDMMYYYY'" name="voucherDate" [showToggleIcon]="false"
+                                            [appearance]="'outline'" formControlName="date">
                                         </giddh-datepicker>
                                     </div>
 
                                     <!-- Due Date -->
-                                    <div class="col-3 pl-2"
-                                    *ngIf="
+                                    <div class="col-3 pl-2" *ngIf="
                                     (currentVoucherFormDetails?.dueDate ||
                                     invoiceType.isSalesInvoice ||
                                     invoiceType.isPurchaseInvoice ||
@@ -419,11 +420,11 @@
                                     invoiceType.isProformaInvoice ||
                                     invoiceType.isEstimateInvoice) &&
                                     !invoiceType.isCashInvoice
-                                "
-                                       >
+                                ">
                                         <giddh-datepicker type="text" (keydown.enter)="$event.preventDefault()"
-                                            [label]="'Due Date'" [placeholder]="'DDMMYYYY'" name="voucherDueDate"
-                                            [showToggleIcon]="false" [appearance]="'outline'" formControlName="dueDate">
+                                            [label]="(invoiceType.isSalesInvoice || invoiceType.isProformaInvoice || invoiceType.isPurchaseInvoice) ?'Due Date': invoiceType.isPurchaseOrder ? 'Expected Delivery': invoiceType.isEstimateInvoice?'Expiry Date':''"
+                                            [placeholder]="'DDMMYYYY'" name="voucherDueDate" [showToggleIcon]="false"
+                                            [appearance]="'outline'" formControlName="dueDate">
                                         </giddh-datepicker>
                                     </div>
 
@@ -505,7 +506,7 @@
                                                 <ng-container formGroupName="0">
                                                     <tr (click)="activeEntryIndex = entryIndex">
                                                         <td class=" text-left">{{ entryIndex + 1 }}</td>
-    
+
                                                         <!-- Product/Service Description -->
                                                         <td class="text-left product-column">
                                                             <ng-container
@@ -513,13 +514,18 @@
                                                                 formArrayName="transactions">
                                                                 <ng-container [formGroupName]="transactionIndex">
                                                                     <ng-container formGroupName="account">
-                                                                        <ng-container *ngIf="activeEntryIndex !== entryIndex">
-                                                                            <span class="select-account-label">{{ transaction.get('account.name')?.value ? transaction.get('stock.name')?.value
-                                                                                ? transaction.get('account.name')?.value +
+                                                                        <ng-container
+                                                                            *ngIf="activeEntryIndex !== entryIndex">
+                                                                            <span class="select-account-label">{{
+                                                                                transaction.get('account.name')?.value ?
+                                                                                transaction.get('stock.name')?.value
+                                                                                ? transaction.get('account.name')?.value
+                                                                                +
                                                                                 ' (' +
                                                                                 transaction.get('stock.name')?.value +
                                                                                 ')'
-                                                                                : transaction.get('account.name')?.value : localeData?.select_account }}</span>
+                                                                                : transaction.get('account.name')?.value
+                                                                                : localeData?.select_account }}</span>
                                                                         </ng-container>
                                                                         <reactive-dropdown-field
                                                                             *ngIf="activeEntryIndex === entryIndex"
@@ -534,7 +540,8 @@
                                                                             ')'
                                                                             : transaction.get('account.name')?.value"
                                                                             [options]="voucherStockResults$ | async"
-                                                                            [showCreateNew]="true" [enableDynamicSearch]="true"
+                                                                            [showCreateNew]="true"
+                                                                            [enableDynamicSearch]="true"
                                                                             [isPaginationEnabled]="true"
                                                                             [createNewText]="commonLocaleData?.app_create_new"
                                                                             (scrollEnd)="handleSearchStockScrollEnd()"
@@ -542,26 +549,40 @@
                                                                             (dynamicSearchedQuery)="searchStock($event, 1)"
                                                                             (onClear)="selectStock($event, entryIndex, true)"
                                                                             (createOption)="toggleStockAsidePane()"
-                                                                            [showOptionDivider]="true"
-                                                                            >
-                                                                            <ng-template #optionTemplate let-option="option">
-                                                                                <ng-container *ngIf="!option.additional?.stock">
-                                                                                    <a href="javascript:;" class="flex-column">
-                                                                                        <div class="option-label pt-2">{{ option?.label | titlecase }}</div>
+                                                                            [showOptionDivider]="true">
+                                                                            <ng-template #optionTemplate
+                                                                                let-option="option">
+                                                                                <ng-container
+                                                                                    *ngIf="!option.additional?.stock">
+                                                                                    <a href="javascript:;"
+                                                                                        class="flex-column">
+                                                                                        <div class="option-label pt-2">
+                                                                                            {{ option?.label | titlecase
+                                                                                            }}</div>
                                                                                         <div class="option-value pb-2">
-                                                                                            {{ option.additional?.uniqueName }}
+                                                                                            {{
+                                                                                            option.additional?.uniqueName
+                                                                                            }}
                                                                                         </div>
                                                                                     </a>
                                                                                 </ng-container>
-                                                                                <ng-container *ngIf="option.additional?.stock">
-                                                                                    <a href="javascript:;" class="flex-column">
-                                                                                        <div class="option-label">{{ option?.label }}</div>
+                                                                                <ng-container
+                                                                                    *ngIf="option.additional?.stock">
+                                                                                    <a href="javascript:;"
+                                                                                        class="flex-column">
+                                                                                        <div class="option-label">{{
+                                                                                            option?.label }}</div>
                                                                                         <div class="option-value">
-                                                                                            {{ option.additional?.uniqueName }}
+                                                                                            {{
+                                                                                            option.additional?.uniqueName
+                                                                                            }}
                                                                                         </div>
                                                                                         <div class="option-value-stock">
-                                                                                            {{ commonLocaleData?.app_stock }}:
-                                                                                            {{ option.additional?.stock?.uniqueName
+                                                                                            {{
+                                                                                            commonLocaleData?.app_stock
+                                                                                            }}:
+                                                                                            {{
+                                                                                            option.additional?.stock?.uniqueName
                                                                                             }}
                                                                                         </div>
                                                                                     </a>
@@ -573,8 +594,12 @@
                                                                         *ngIf="(stockVariants[entryIndex] | async)?.length > 1"
                                                                         formGroupName="stock">
                                                                         <ng-container formGroupName="variant">
-                                                                            <ng-container *ngIf="activeEntryIndex !== entryIndex">
-                                                                                <span class="select-account-label">{{ localeData?.variant + ": " + transaction.get('stock.variant.name')?.value }}</span>
+                                                                            <ng-container
+                                                                                *ngIf="activeEntryIndex !== entryIndex">
+                                                                                <span class="select-account-label">{{
+                                                                                    localeData?.variant + ": " +
+                                                                                    transaction.get('stock.variant.name')?.value
+                                                                                    }}</span>
                                                                             </ng-container>
                                                                             <reactive-dropdown-field
                                                                                 *ngIf="activeEntryIndex === entryIndex"
@@ -590,40 +615,53 @@
                                                                     </ng-container>
                                                                 </ng-container>
                                                             </ng-container>
-    
+
                                                             <ng-container *ngIf="activeEntryIndex === entryIndex">
-                                                                <textarea rows="2" matInput class="form-control mt-2" placeholder="Add Description" formControlName="description" [maxlength]="entryDescriptionLength"></textarea>
-                                                                <span class="mt-2 font-12">{{ commonLocaleData?.app_characters_left }}: {{ entryDescriptionLength - entry.get("description")?.value?.length }}</span>
+                                                                <textarea rows="2" matInput class="form-control mt-2"
+                                                                    placeholder="Add Description"
+                                                                    formControlName="description"
+                                                                    [maxlength]="entryDescriptionLength"></textarea>
+                                                                <span class="mt-2 font-12">{{
+                                                                    commonLocaleData?.app_characters_left }}: {{
+                                                                    entryDescriptionLength -
+                                                                    entry.get("description")?.value?.length }}</span>
                                                             </ng-container>
                                                             <ng-container *ngIf="activeEntryIndex !== entryIndex">
                                                                 {{ entry.get('description')?.value }}
                                                             </ng-container>
-    
-                                                            <ng-container *ngFor="let transaction of entry.get('transactions')['controls']; let transactionIndex = index" formArrayName="transactions">
+
+                                                            <ng-container
+                                                                *ngFor="let transaction of entry.get('transactions')['controls']; let transactionIndex = index"
+                                                                formArrayName="transactions">
                                                                 <ng-container [formGroupName]="transactionIndex">
-                                                                    <ng-container *ngIf="transaction.get('stock.skuCode')?.value">
-                                                                        <span class="mt-2 font-12">{{ transaction.get('stock.skuCodeHeading')?.value }}: {{ transaction.get('stock.skuCode')?.value }}</span>
+                                                                    <ng-container
+                                                                        *ngIf="transaction.get('stock.skuCode')?.value">
+                                                                        <span class="mt-2 font-12">{{
+                                                                            transaction.get('stock.skuCodeHeading')?.value
+                                                                            }}: {{
+                                                                            transaction.get('stock.skuCode')?.value
+                                                                            }}</span>
                                                                     </ng-container>
                                                                 </ng-container>
                                                             </ng-container>
-    
+
                                                             <div class="d-flex justify-content-between">
                                                                 <div class="w-50">
                                                                     <div class="mt-2 font-12">
                                                                         <span>Entry Date</span>
-                                                                        <div class="mt-1" *ngIf="activeEntryIndex !== entryIndex">
+                                                                        <div class="mt-1"
+                                                                            *ngIf="activeEntryIndex !== entryIndex">
                                                                             {{ entry.get('date')?.value }}
                                                                         </div>
-                                                                        <div class="mt-1 d-flex align-items-baseline" *ngIf="activeEntryIndex === entryIndex">
+                                                                        <div class="mt-1 d-flex align-items-baseline"
+                                                                            *ngIf="activeEntryIndex === entryIndex">
                                                                             <ng-container *ngIf="isUpdateMode">
                                                                                 {{ entry.get('date')?.value }}
                                                                             </ng-container>
                                                                             <ng-container *ngIf="!isUpdateMode">
-                                                                                <giddh-datepicker
-                                                                                    class="date-border"
+                                                                                <giddh-datepicker class="date-border"
                                                                                     [showToggleIcon]="false"
-                                                                                    [hideLabel]="true"
-                                                                                    #dp
+                                                                                    [hideLabel]="true" #dp
                                                                                     (keydown.enter)="$event.preventDefault()"
                                                                                     (dateSelected)="onBlurEntryDate(entry, true)"
                                                                                     id="transaction_date_{{ entryIndex }}"
@@ -633,42 +671,79 @@
                                                                                     formControlName="date"
                                                                                     [appearance]="'fill'"
                                                                                     (datepickerState)="openEntryDatepicker = $event"
-                                                                                    [isOpened]="openEntryDatepicker"
-                                                                                >
+                                                                                    [isOpened]="openEntryDatepicker">
                                                                                 </giddh-datepicker>
                                                                             </ng-container>
-                                                                            <i class="icon-edit text-blue cursor-pointer" (click)="openEntryDatepicker = true"></i>
+                                                                            <i class="icon-edit text-blue cursor-pointer"
+                                                                                (click)="openEntryDatepicker = true"></i>
                                                                         </div>
                                                                     </div>
                                                                 </div>
-    
+
                                                                 <div class="w-50 text-right">
                                                                     <div class="mt-2 font-12">
-                                                                        <span>{{ entry.get('showCodeType')?.value === 'hsn' ? commonLocaleData?.app_hsn_code : commonLocaleData?.app_sac_code }}: {{ entry.get('showCodeType')?.value === 'hsn' ? entry.get('hsnNumber')?.value : entry.get('sacNumber')?.value }}</span>
-                                                                        <div class="mt-1" [hidden]="activeEntryIndex !== entryIndex">Update <i class="icon-edit text-blue cursor-pointer" (click)="updateCurrentHsnSac(entry)" #menuTrigger="matMenuTrigger" [matMenuTriggerFor]="update"></i></div>
-    
+                                                                        <span>{{ entry.get('showCodeType')?.value ===
+                                                                            'hsn' ? commonLocaleData?.app_hsn_code :
+                                                                            commonLocaleData?.app_sac_code }}: {{
+                                                                            entry.get('showCodeType')?.value === 'hsn' ?
+                                                                            entry.get('hsnNumber')?.value :
+                                                                            entry.get('sacNumber')?.value }}</span>
+                                                                        <div class="mt-1"
+                                                                            [hidden]="activeEntryIndex !== entryIndex">
+                                                                            Update <i
+                                                                                class="icon-edit text-blue cursor-pointer"
+                                                                                (click)="updateCurrentHsnSac(entry)"
+                                                                                #menuTrigger="matMenuTrigger"
+                                                                                [matMenuTriggerFor]="update"></i></div>
+
                                                                         <!-- Update Menu  -->
                                                                         <mat-menu #update="matMenu">
-                                                                            <div class="p-3" (click)="$event.stopPropagation()">
-                                                                                <mat-radio-group formControlName="showCodeType" [disabled]="isEinvoiceGenerated">
-                                                                                    <mat-radio-button color="primary" value="hsn">HSN
+                                                                            <div class="p-3"
+                                                                                (click)="$event.stopPropagation()">
+                                                                                <mat-radio-group
+                                                                                    formControlName="showCodeType"
+                                                                                    [disabled]="isEinvoiceGenerated">
+                                                                                    <mat-radio-button color="primary"
+                                                                                        value="hsn">HSN
                                                                                         Code</mat-radio-button>
-                                                                                    <mat-radio-button color="primary" value="sac">SAC
+                                                                                    <mat-radio-button color="primary"
+                                                                                        value="sac">SAC
                                                                                         Code</mat-radio-button>
                                                                                 </mat-radio-group>
-    
+
                                                                                 <div class="mt-3">
-                                                                                    <text-field *ngIf="entry.get('showCodeType')?.value === 'hsn'" [placeholder]="commonLocaleData?.app_hsn_code"
-                                                                                        [cssClass]="'form-control text-right'" [type]="'number'" formControlName="hsnNumber" [maxlength]="10" [allowDecimalDigitsOnly]="true" [placeholder]="localeData?.hsn_number" [readonly]="isEinvoiceGenerated"[name]="'hsnNumber_' + entryIndex">
+                                                                                    <text-field
+                                                                                        *ngIf="entry.get('showCodeType')?.value === 'hsn'"
+                                                                                        [placeholder]="commonLocaleData?.app_hsn_code"
+                                                                                        [cssClass]="'form-control text-right'"
+                                                                                        [type]="'number'"
+                                                                                        formControlName="hsnNumber"
+                                                                                        [maxlength]="10"
+                                                                                        [allowDecimalDigitsOnly]="true"
+                                                                                        [placeholder]="localeData?.hsn_number"
+                                                                                        [readonly]="isEinvoiceGenerated"
+                                                                                        [name]="'hsnNumber_' + entryIndex">
                                                                                     </text-field>
-                                                                                    <text-field *ngIf="entry.get('showCodeType')?.value === 'sac'" [placeholder]="commonLocaleData?.app_sac_code"
-                                                                                        [cssClass]="'form-control text-right'" [type]="'number'" formControlName="sacNumber" [maxlength]="10" [allowDecimalDigitsOnly]="true" [placeholder]="localeData?.sac_number" [readonly]="isEinvoiceGenerated" [name]="'sacNumber_' + entryIndex">
+                                                                                    <text-field
+                                                                                        *ngIf="entry.get('showCodeType')?.value === 'sac'"
+                                                                                        [placeholder]="commonLocaleData?.app_sac_code"
+                                                                                        [cssClass]="'form-control text-right'"
+                                                                                        [type]="'number'"
+                                                                                        formControlName="sacNumber"
+                                                                                        [maxlength]="10"
+                                                                                        [allowDecimalDigitsOnly]="true"
+                                                                                        [placeholder]="localeData?.sac_number"
+                                                                                        [readonly]="isEinvoiceGenerated"
+                                                                                        [name]="'sacNumber_' + entryIndex">
                                                                                     </text-field>
                                                                                 </div>
-    
+
                                                                                 <div class="mt-3">
-                                                                                    <button mat-stroked-button color="primary" class="mr-2" (click)="menuTrigger?.closeMenu()">Save</button>
-                                                                                    <button mat-stroked-button (click)="cancelHsnSacEdit(entry); menuTrigger?.closeMenu()">Cancel</button>
+                                                                                    <button mat-stroked-button
+                                                                                        color="primary" class="mr-2"
+                                                                                        (click)="menuTrigger?.closeMenu()">Save</button>
+                                                                                    <button mat-stroked-button
+                                                                                        (click)="cancelHsnSacEdit(entry); menuTrigger?.closeMenu()">Cancel</button>
                                                                                 </div>
                                                                             </div>
                                                                         </mat-menu>
@@ -676,74 +751,130 @@
                                                                 </div>
                                                             </div>
                                                         </td>
-    
-                                                        <ng-container *ngFor="let transaction of entry.get('transactions')['controls']; let transactionIndex = index" formArrayName="transactions">
+
+                                                        <ng-container
+                                                            *ngFor="let transaction of entry.get('transactions')['controls']; let transactionIndex = index"
+                                                            formArrayName="transactions">
                                                             <ng-container [formGroupName]="transactionIndex">
                                                                 <ng-container formGroupName="stock">
                                                                     <!-- Qty/Unit -->
                                                                     <td width="12%">
-                                                                        <ng-container *ngIf="activeEntryIndex !== entryIndex">{{ transaction.get('stock.quantity')?.value }}</ng-container>
-                                                                        <text-field *ngIf="activeEntryIndex === entryIndex" [placeholder]="'Enter Qty'" formControlName="quantity" [cssClass]="'form-control text-right'" [type]="'text'"></text-field>
+                                                                        <ng-container
+                                                                            *ngIf="activeEntryIndex !== entryIndex">{{
+                                                                            transaction.get('stock.quantity')?.value
+                                                                            }}</ng-container>
+                                                                        <text-field
+                                                                            *ngIf="activeEntryIndex === entryIndex"
+                                                                            [placeholder]="'Enter Qty'"
+                                                                            formControlName="quantity"
+                                                                            [cssClass]="'form-control text-right'"
+                                                                            [type]="'text'"></text-field>
                                                                         <ng-container formGroupName="stockUnit">
-                                                                            <ng-container *ngIf="activeEntryIndex !== entryIndex">{{ transaction.get('stock.stockUnit.code')?.value }}</ng-container>
-                                                                            <mat-select *ngIf="activeEntryIndex === entryIndex" formControlName="code" [placeholder]="'Select'" class="form-control mt-2">
-                                                                                <mat-option *ngFor="let unit of stockUnits[entryIndex] | async" [value]="unit.stockUnitUniqueName">{{ unit.stockUnitCode }}</mat-option>
+                                                                            <ng-container
+                                                                                *ngIf="activeEntryIndex !== entryIndex">{{
+                                                                                transaction.get('stock.stockUnit.code')?.value
+                                                                                }}</ng-container>
+                                                                            <mat-select
+                                                                                *ngIf="activeEntryIndex === entryIndex"
+                                                                                formControlName="code"
+                                                                                [placeholder]="'Select'"
+                                                                                class="form-control mt-2">
+                                                                                <mat-option
+                                                                                    *ngFor="let unit of stockUnits[entryIndex] | async"
+                                                                                    [value]="unit.stockUnitUniqueName">{{
+                                                                                    unit.stockUnitCode }}</mat-option>
                                                                             </mat-select>
                                                                         </ng-container>
                                                                     </td>
-    
+
                                                                     <!-- Rate -->
                                                                     <td width="12%" formGroupName="rate">
-                                                                        <ng-container *ngIf="activeEntryIndex !== entryIndex">{{ transaction.get('stock.rate.rateForAccount')?.value }}</ng-container>
-                                                                        <text-field *ngIf="activeEntryIndex === entryIndex" [placeholder]="'Enter'" [cssClass]="'form-control text-right'" [type]="'text'" formControlName="rateForAccount"></text-field>
+                                                                        <ng-container
+                                                                            *ngIf="activeEntryIndex !== entryIndex">{{
+                                                                            transaction.get('stock.rate.rateForAccount')?.value
+                                                                            }}</ng-container>
+                                                                        <text-field
+                                                                            *ngIf="activeEntryIndex === entryIndex"
+                                                                            [placeholder]="'Enter'"
+                                                                            [cssClass]="'form-control text-right'"
+                                                                            [type]="'text'"
+                                                                            formControlName="rateForAccount"></text-field>
                                                                     </td>
                                                                 </ng-container>
                                                                 <!-- Amount -->
                                                                 <td width="12%" formGroupName="amount">
-                                                                    <ng-container *ngIf="activeEntryIndex !== entryIndex">
+                                                                    <ng-container
+                                                                        *ngIf="activeEntryIndex !== entryIndex">
                                                                         <amount-field
                                                                             [amount]="transaction.get('amount.amountForAccount')?.value"
                                                                             [currencySymbol]="isMultiCurrencyVoucher ? account.baseCurrencySymbol : false"
                                                                             [currencyCode]="isMultiCurrencyVoucher ? account.baseCurrency : false">
                                                                         </amount-field>
                                                                     </ng-container>
-                                                                    <text-field *ngIf="activeEntryIndex === entryIndex" [placeholder]="'Enter'" [cssClass]="'form-control text-right'" [type]="'text'" formControlName="amountForAccount"></text-field>
+                                                                    <text-field *ngIf="activeEntryIndex === entryIndex"
+                                                                        [placeholder]="'Enter'"
+                                                                        [cssClass]="'form-control text-right'"
+                                                                        [type]="'text'"
+                                                                        formControlName="amountForAccount"></text-field>
                                                                 </td>
                                                             </ng-container>
                                                         </ng-container>
-    
+
                                                         <!-- Discount -->
                                                         <td width="12%">
-                                                            <ng-container *ngFor="let transaction of entry.get('transactions')['controls']; let transactionIndex = index" formArrayName="transactions">
+                                                            <ng-container
+                                                                *ngFor="let transaction of entry.get('transactions')['controls']; let transactionIndex = index"
+                                                                formArrayName="transactions">
                                                                 <ng-container [formGroupName]="transactionIndex">
-                                                                    <ng-container *ngIf="activeEntryIndex !== entryIndex">
+                                                                    <ng-container
+                                                                        *ngIf="activeEntryIndex !== entryIndex">
                                                                         <amount-field
                                                                             [amount]="entry.get('totalDiscount')?.value"
                                                                             [currencySymbol]="isMultiCurrencyVoucher ? account.baseCurrencySymbol : false"
                                                                             [currencyCode]="isMultiCurrencyVoucher ? account.baseCurrency : false">
                                                                         </amount-field>
                                                                     </ng-container>
-                                                                    <discount-dropdown *ngIf="activeEntryIndex === entryIndex" [amount]="transaction.get('amount.amountForAccount')?.value" [discountsList]="discountsList$ | async" [selectedDiscountsList]="entry.get('discounts')?.value" [currency]="account.baseCurrencySymbol" (createNewDiscount)="showCreateDiscountDialog()" (selectedDiscounts)="getSelectedDiscounts(entryIndex, $event)" (totalDiscount)="updateTotalDiscount($event, entry)"></discount-dropdown>
+                                                                    <discount-dropdown
+                                                                        *ngIf="activeEntryIndex === entryIndex"
+                                                                        [amount]="transaction.get('amount.amountForAccount')?.value"
+                                                                        [discountsList]="discountsList$ | async"
+                                                                        [selectedDiscountsList]="entry.get('discounts')?.value"
+                                                                        [currency]="account.baseCurrencySymbol"
+                                                                        (createNewDiscount)="showCreateDiscountDialog()"
+                                                                        (selectedDiscounts)="getSelectedDiscounts(entryIndex, $event)"
+                                                                        (totalDiscount)="updateTotalDiscount($event, entry)"></discount-dropdown>
                                                                 </ng-container>
-                                                            </ng-container>        
+                                                            </ng-container>
                                                         </td>
-    
+
                                                         <!-- Tax -->
                                                         <td width="12%">
-                                                            <ng-container *ngFor="let transaction of entry.get('transactions')['controls']; let transactionIndex = index" formArrayName="transactions">
+                                                            <ng-container
+                                                                *ngFor="let transaction of entry.get('transactions')['controls']; let transactionIndex = index"
+                                                                formArrayName="transactions">
                                                                 <ng-container [formGroupName]="transactionIndex">
-                                                                    <ng-container *ngIf="activeEntryIndex !== entryIndex">
+                                                                    <ng-container
+                                                                        *ngIf="activeEntryIndex !== entryIndex">
                                                                         <amount-field
                                                                             [amount]="entry.get('totalTax')?.value"
                                                                             [currencySymbol]="isMultiCurrencyVoucher ? account.baseCurrencySymbol : false"
                                                                             [currencyCode]="isMultiCurrencyVoucher ? account.baseCurrency : false">
                                                                         </amount-field>
                                                                     </ng-container>
-                                                                    <tax-dropdown *ngIf="activeEntryIndex === entryIndex" [date]="invoiceForm.get('date')?.value" [amount]="transaction.get('amount.amountForAccount')?.value - entry.get('totalDiscount')?.value" [selectedTaxesList]="entry.get('taxes')?.value" [taxesList]="companyTaxes$ | async" [currency]="account.baseCurrencySymbol" (createNewTax)="showCreateTaxDialog()" (selectedTaxes)="getSelectedTaxes(entryIndex, $event)" (totalTax)="updateTotalTax($event, entry)"></tax-dropdown>
+                                                                    <tax-dropdown
+                                                                        *ngIf="activeEntryIndex === entryIndex"
+                                                                        [date]="invoiceForm.get('date')?.value"
+                                                                        [amount]="transaction.get('amount.amountForAccount')?.value - entry.get('totalDiscount')?.value"
+                                                                        [selectedTaxesList]="entry.get('taxes')?.value"
+                                                                        [taxesList]="companyTaxes$ | async"
+                                                                        [currency]="account.baseCurrencySymbol"
+                                                                        (createNewTax)="showCreateTaxDialog()"
+                                                                        (selectedTaxes)="getSelectedTaxes(entryIndex, $event)"
+                                                                        (totalTax)="updateTotalTax($event, entry)"></tax-dropdown>
                                                                 </ng-container>
                                                             </ng-container>
                                                         </td>
-    
+
                                                         <!-- Total -->
                                                         <td width="14%" class="total-column position-relative">
                                                             <ng-container formGroupName="total">
@@ -754,17 +885,26 @@
                                                                         [currencyCode]="isMultiCurrencyVoucher ? account.baseCurrency : false">
                                                                     </amount-field>
                                                                 </ng-container>
-                                                                <text-field *ngIf="activeEntryIndex === entryIndex" [placeholder]="'Enter'" [cssClass]="'form-control text-right'" [type]="'text'" formControlName="amountForAccount"></text-field>
+                                                                <text-field *ngIf="activeEntryIndex === entryIndex"
+                                                                    [placeholder]="'Enter'"
+                                                                    [cssClass]="'form-control text-right'"
+                                                                    [type]="'text'"
+                                                                    formControlName="amountForAccount"></text-field>
                                                             </ng-container>
-                                                            <div class="d-flex align-items-center" *ngIf="activeEntryIndex === entryIndex" formGroupName="otherTax">
-                                                                <mat-checkbox type="checkbox" color="primary" formControlName="isChecked" (change)="openOtherTaxDialog(entry, entryIndex)">
+                                                            <div class="d-flex align-items-center"
+                                                                *ngIf="activeEntryIndex === entryIndex"
+                                                                formGroupName="otherTax">
+                                                                <mat-checkbox type="checkbox" color="primary"
+                                                                    formControlName="isChecked"
+                                                                    (change)="openOtherTaxDialog(entry, entryIndex)">
                                                                 </mat-checkbox>
                                                                 Other Tax?
                                                             </div>
 
                                                             <!-- Delete Row Button -->
-                                                            <i class="icon-trash font-16 cursor-pointer delete-btn position-absolute" (click)="deleteLineEntry(entryIndex)"></i>
-                                                        </td>         
+                                                            <i class="icon-trash font-16 cursor-pointer delete-btn position-absolute"
+                                                                (click)="deleteLineEntry(entryIndex)"></i>
+                                                        </td>
                                                     </tr>
                                                 </ng-container>
                                             </ng-container>
@@ -995,16 +1135,22 @@
 
                                 <div class="vouchers-actions d-flex justify-content-end column-gap1 pd-t2 pd-b2 mt-4">
                                     <button mat-stroked-button *ngIf="!isUpdateMode">Clear</button>
-                                    <button mat-stroked-button color="primary" *ngIf="invoiceType.isSalesInvoice">Generate Sales & Update A/c</button>
-                                    <button mat-stroked-button color="primary" *ngIf="invoiceType.isSalesInvoice">Generate Sales</button>
+                                    <button mat-stroked-button color="primary"
+                                        *ngIf="invoiceType.isSalesInvoice">Generate Sales & Update A/c</button>
+                                    <button mat-stroked-button color="primary"
+                                        *ngIf="invoiceType.isSalesInvoice">Generate Sales</button>
 
-                                    <button mat-stroked-button color="primary" *ngIf="invoiceType.isCreditNote"> Generate Credit Note & Update A/c
+                                    <button mat-stroked-button color="primary" *ngIf="invoiceType.isCreditNote">
+                                        Generate Credit Note & Update A/c
                                     </button>
-                                    <button mat-stroked-button color="primary" *ngIf="invoiceType.isCreditNote"> Generate Credit Note </button>
+                                    <button mat-stroked-button color="primary" *ngIf="invoiceType.isCreditNote">
+                                        Generate Credit Note </button>
 
-                                    <button mat-stroked-button color="primary" *ngIf="invoiceType.isPurchaseInvoice"> Save </button>
+                                    <button mat-stroked-button color="primary" *ngIf="invoiceType.isPurchaseInvoice">
+                                        Save </button>
                                     <button mat-stroked-button [matMenuTriggerFor]="moreOptions"
-                                        class="vouchers-more-option-btn" *ngIf="invoiceType.isSalesInvoice"> <i class="caret"></i>
+                                        class="vouchers-more-option-btn" *ngIf="invoiceType.isSalesInvoice"> <i
+                                            class="caret"></i>
                                     </button>
                                     <mat-menu #moreOptions="matMenu">
                                         <button mat-menu-item (click)="
@@ -1048,29 +1194,25 @@
 
 <!-- region print voucher popup -->
 <ng-template #printVoucherModal>
-    <ng-container >
+    <ng-container>
         <print-voucher (cancelEvent)="cancelPrintModal()"></print-voucher>
     </ng-container>
 </ng-template>
 
 <!-- region send email popup -->
 <ng-template #sendEmailModal>
-    <ng-container >
+    <ng-container>
         <app-email-send-dialog (cancelEvent)="cancelEmailModal()"></app-email-send-dialog>
     </ng-container>
 </ng-template>
 <!-- endregion -->
 
 <ng-template #dateChangeConfirmationModel>
-    <confirmation-modal
-        [configuration]="dateChangeConfiguration"
-        (buttonClicked)="handleDateChangeConfirmation($event)"
-    ></confirmation-modal>
+    <confirmation-modal [configuration]="dateChangeConfiguration"
+        (buttonClicked)="handleDateChangeConfirmation($event)"></confirmation-modal>
 </ng-template>
 
 <!-- region bulk items -->
 <ng-template #bulkItemsModal>
-    <add-bulk-items
-        (closeEvent)="cancelBulkItemsModal()"
-    ></add-bulk-items>
+    <add-bulk-items (closeEvent)="cancelBulkItemsModal()"></add-bulk-items>
 </ng-template>
