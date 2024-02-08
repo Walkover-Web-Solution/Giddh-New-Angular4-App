@@ -504,7 +504,7 @@
                                             <ng-container
                                                 *ngFor="let entry of invoiceForm?.get('entries')['controls']; let entryIndex = index">
                                                 <ng-container formGroupName="0">
-                                                    <tr (click)="activeEntryIndex = entryIndex">
+                                                    <tr (click)="activeEntryIndex = entryIndex; $event.stopPropagation()">
                                                         <td class=" text-left">{{ entryIndex + 1 }}</td>
 
                                                         <!-- Product/Service Description -->
@@ -759,8 +759,8 @@
                                                                         </amount-field>
                                                                     </ng-container>
                                                                     <div>
-                                                                        <div class="text-field-container">
-                                                                            <input *ngIf="activeEntryIndex === entryIndex" matInput [placeholder]="'Enter'" class="form-control text-right" type="text" entryAmount [rate]="transaction.get('stock.rate.rateForAccount')?.value" [quantity]="transaction.get('stock.quantity')?.value" name="transactionAmount{{entryIndex}}" formControlName="amountForAccount" (calculatedAmount)="updateTransactionAmount(transaction, $event)" />
+                                                                        <div class="text-field-container" *ngIf="activeEntryIndex === entryIndex">
+                                                                            <input matInput [placeholder]="'Enter'" class="form-control text-right" type="text" entryAmount [rate]="transaction.get('stock.rate.rateForAccount')?.value" [quantity]="transaction.get('stock.quantity')?.value" name="transactionAmount{{entryIndex}}" formControlName="amountForAccount" (calculatedAmount)="updateTransactionAmount(transaction, $event)" />
                                                                         </div>
                                                                         <span class="font-14 text-gray mt-1 d-inline-block" *ngIf="isMultiCurrencyVoucher">
                                                                             <amount-field
@@ -852,12 +852,9 @@
                                                                     </amount-field>
                                                                 </ng-container>
                                                                 <div>
-                                                                    <text-field *ngIf="activeEntryIndex === entryIndex"
-                                                                        [placeholder]="'Enter'"
-                                                                        [cssClass]="'form-control text-right'"
-                                                                        [type]="'text'"
-                                                                        formControlName="amountForAccount">
-                                                                    </text-field>
+                                                                    <div class="text-field-container" *ngIf="activeEntryIndex === entryIndex">
+                                                                        <input matInput [placeholder]="'Enter'" class="form-control text-right" type="text" entryTotal [entry]="entry?.value" name="transactionTotal{{entryIndex}}" formControlName="amountForAccount" (calculatedAmount)="updateEntryTotal(entry, $event)" />
+                                                                    </div>
                                                                     <span class="font-14 text-gray mt-1 d-inline-block" *ngIf="isMultiCurrencyVoucher">
                                                                         <amount-field
                                                                             [amount]="entry.get('total.amountForAccount')?.value * invoiceForm.get('exchangeRate')?.value"

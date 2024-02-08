@@ -5,13 +5,11 @@ import { AppState } from "../../../../store";
 import { giddhRoundOff } from "../../../../shared/helpers/helperFunctions";
 
 @Directive({
-    selector: '[entryAmount]'
+    selector: '[entryTotal]'
 })
-export class EntryAmountDirective implements OnChanges, OnDestroy {
-    /** Default rate */
-    @Input() public rate: number = 0;
-    /** Default quantity */
-    @Input() public quantity: number = 0;
+export class EntryTotalDirective implements OnChanges, OnDestroy {
+    /** Entry */
+    @Input() public entry: any;
     /** Callback to emit calculated amount */
     @Output() public calculatedAmount: EventEmitter<any> = new EventEmitter<any>();
     /** Default decimal places */
@@ -37,8 +35,7 @@ export class EntryAmountDirective implements OnChanges, OnDestroy {
      * @memberof EntryAmountDirective
      */
     public ngOnChanges(): void {
-        const qtyRate = Number(this.quantity) * Number(this.rate);
-        const amount = giddhRoundOff(qtyRate, this.balanceDecimalPlaces);
+        const amount = giddhRoundOff((Number(this.entry.transactions[0].amount?.amountForAccount) - Number(this.entry.totalDiscount)) + (Number(this.entry.totalTax) + Number(this.entry.otherTax?.amount)), this.balanceDecimalPlaces);
         this.calculatedAmount.emit(amount);
     }
 
