@@ -1,33 +1,26 @@
-import { Directive, ElementRef, Input, OnChanges, OnDestroy, forwardRef } from "@angular/core";
+import { Directive, EventEmitter, Input, OnChanges, OnDestroy, Output } from "@angular/core";
 import { Store, select } from "@ngrx/store";
 import { ReplaySubject, takeUntil } from "rxjs";
 import { AppState } from "../../../../store";
 import { giddhRoundOff } from "../../../../shared/helpers/helperFunctions";
-import { NG_VALUE_ACCESSOR } from "@angular/forms";
 
 @Directive({
-    selector: '[entryAmount]',
-    providers: [
-        {
-            provide: NG_VALUE_ACCESSOR,
-            useExisting: forwardRef(() => EntryAmountDirective),
-            multi: true
-        }
-    ]
+    selector: '[entryAmount]'
 })
 export class EntryAmountDirective implements OnChanges, OnDestroy {
     /** Default rate */
     @Input() public rate: number = 1;
     /** Default quantity */
     @Input() public quantity: number = 1;
+    /** Callback to emit calculated amount */
+    @Output() public calculatedAmount: EventEmitter<any> = new EventEmitter<any>();
     /** Default decimal places */
     private balanceDecimalPlaces: number = 2;
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(
-        private store: Store<AppState>,
-        private elementRef: ElementRef
+        private store: Store<AppState>
     ) {
         this.store.pipe(select(state => state.settings.profile), takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.balanceDecimalPlaces) {
@@ -45,7 +38,8 @@ export class EntryAmountDirective implements OnChanges, OnDestroy {
      */
     public ngOnChanges(): void {
         const qtyRate = Number(this.quantity) * Number(this.rate);
-        this.elementRef.nativeElement.value = giddhRoundOff(qtyRate, this.balanceDecimalPlaces);
+        const amount = giddhRoundOff(qtyRate, this.balanceDecimalPlaces);
+        this.calculatedAmount.emit(amount);
     }
 
     /**

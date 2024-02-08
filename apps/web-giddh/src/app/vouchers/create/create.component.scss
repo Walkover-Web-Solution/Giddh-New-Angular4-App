@@ -1,5 +1,8 @@
 .vouchers {
     padding: 5px 0;
+    .container-lg{
+        max-width: 1240px !important;
+    }
 
     .row-gap {
         row-gap: 15px;
@@ -125,14 +128,6 @@
         .vouchers-large-container {
             border-top: 1px solid var(--color-common-secondary-border);
 
-            .change-currency {
-                max-width: calc(100% - 36px);
-
-                .currency-input-wrapper {
-                    width: 80px;
-                }
-            }
-
             #init-contact-wrapper {
                 input {
                     height: 48px;
@@ -147,6 +142,11 @@
                         td {
                             padding: 12px 8px;
                             border-bottom: 1px solid var(--color-common-secondary-border);
+                            &:not(:first-child, :nth-child(2)){
+                                text-align: right;
+                            }
+
+                            
 
                             &.total-column {
                                 min-width: 120px;
@@ -174,26 +174,32 @@
 
                         td {
                             vertical-align: top;
-                            border-left: 1px solid var(--color-common-secondary-border);
-                            border-right: 1px solid var(--color-common-secondary-border);
+
+                            // ##########   TABLE WITH BORDER CODE
+                            // border-left: 1px solid var(--color-common-secondary-border);
+                            // border-right: 1px solid var(--color-common-secondary-border);
 
                             .delete-btn {
-                                right: -24px;
-                                top: 50%;
-                                transform: translateY(-50%);
-                                visibility: hidden;
+                                // ##########   TABLE WITH BORDER CODE
+                                // right: -24px;
+                                // top: 50%;
+                                // transform: translateY(-50%);
+                                // visibility: hidden;
+                                
+                                right: 5px;
+                                bottom: 8px;
+                                transition: all 200ms;
+
+                                &:hover{
+                                    transform: scale(1.2);
+                                }
                             }
 
                             .select-account-label {
                                 color: var(--color-gray);
                             }
-                        }
-
-                        &:hover{
-                            td{
-                                .delete-btn {
-                                    visibility: visible;
-                                }
+                            amount-field{
+                                display: inline-block;
                             }
                         }
                     }

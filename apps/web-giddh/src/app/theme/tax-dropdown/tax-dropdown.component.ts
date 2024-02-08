@@ -2,6 +2,10 @@ import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from
 import { FormArray, FormBuilder, FormGroup } from "@angular/forms";
 import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT } from "../../shared/helpers/defaultDateFormat";
+import { ReplaySubject, takeUntil } from "rxjs";
+import { AppState } from "../../store";
+import { Store, select } from "@ngrx/store";
+import { giddhRoundOff } from "../../shared/helpers/helperFunctions";
 
 @Component({
     selector: "tax-dropdown",
@@ -28,12 +32,25 @@ export class TaxDropdownComponent implements OnChanges {
     public taxForm: FormGroup;
     /** Total tax amount */
     public totalTaxAmount: number = 0;
+    /** Default decimal places */
+    private balanceDecimalPlaces: number = 2;
+    /** Observable to unsubscribe all the store listeners to avoid memory leaks */
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(
-        private formBuilder: FormBuilder
+        private formBuilder: FormBuilder,
+        private store: Store<AppState>
     ) {
         this.taxForm = this.formBuilder.group({
             taxes: this.formBuilder.array([])
+        });
+
+        this.store.pipe(select(state => state.settings.profile), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.balanceDecimalPlaces) {
+                this.balanceDecimalPlaces = response.balanceDecimalPlaces;
+            } else {
+                this.balanceDecimalPlaces = 2;
+            }
         });
     }
 
@@ -125,7 +142,7 @@ export class TaxDropdownComponent implements OnChanges {
         const taxes = this.taxForm.get('taxes') as FormArray;
         for (let i = 0; i <= taxes.length; i++) {
             if (taxes.controls[i]?.get('isChecked')?.value) {
-                this.totalTaxAmount += ((Number(taxes.controls[i].get('taxDetail')?.value?.taxValue) / Number(this.amount)) * 100);
+                this.totalTaxAmount += ((Number(this.amount) * Number(taxes.controls[i].get('taxDetail')?.value?.taxValue)) / 100);
             }
         }
 
@@ -143,7 +160,7 @@ export class TaxDropdownComponent implements OnChanges {
         let selectedTaxes = taxes.value?.filter(tax => tax.isChecked);
 
         this.selectedTaxes.emit(selectedTaxes);
-        this.totalTax.emit(this.totalTaxAmount);
+        this.totalTax.emit(giddhRoundOff(this.totalTaxAmount, this.balanceDecimalPlaces));
     }
 
     /**

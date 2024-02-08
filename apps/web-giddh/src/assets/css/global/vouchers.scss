@@ -88,6 +88,21 @@
         }
     }
 
+    .vouchers-large-container{
+        .change-currency {
+            .currency-input-wrapper {
+                .text-field-container{
+                    display: flex;
+                    align-items: center;
+                    column-gap: 8px;
+                    input{
+                        width: 80px;
+                    }
+                }
+            }
+        }
+    }
+
     .vouchers-actions {
         .vouchers-more-option-btn {
             .caret {
