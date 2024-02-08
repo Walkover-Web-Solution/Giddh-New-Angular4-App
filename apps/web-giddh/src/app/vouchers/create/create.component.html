@@ -24,13 +24,13 @@
                                         <div class="vouchers-form-fields w-100" [keyboardShortcut]="'alt+c'"
                                             (onShortcutPress)="toggleAccountAsidePane()">
                                             <reactive-dropdown-field *ngIf="!invoiceType.isCashInvoice"
-                                                [label]="invoiceType.isPurchaseInvoice || invoiceType.isDebitNote ? localeData?.vendor_name : localeData?.customer_name"
-                                                [placeholder]="invoiceType.isPurchaseInvoice || invoiceType.isDebitNote ? localeData?.select_vendor : localeData?.select_customer"
+                                                [label]="invoiceType.isPurchaseOrder || invoiceType.isDebitNote ? localeData?.vendor_name : localeData?.customer_name"
+                                                [placeholder]="invoiceType.isPurchaseOrder || invoiceType.isDebitNote ? localeData?.select_vendor : localeData?.select_customer"
                                                 formControlName="uniqueName" [name]="'account'"
                                                 [options]="voucherAccountResults$ | async" [showCreateNew]="true"
                                                 [enableDynamicSearch]="true" [isPaginationEnabled]="true"
                                                 [openDropdown]="openAccountDropdown"
-                                                [createNewText]="!invoiceType.isPurchaseInvoice && !invoiceType.isDebitNote ? localeData?.add_customer : localeData?.add_vendor"
+                                                [createNewText]="!invoiceType.isPurchaseOrder && !invoiceType.isDebitNote ? localeData?.add_customer : localeData?.add_vendor"
                                                 [labelValue]="invoiceForm.controls['account'].get('customerName')?.value"
                                                 [showKeyboardCommand]="commonLocaleData?.app_alt_c"
                                                 (scrollEnd)="handleSearchAccountScrollEnd()"
@@ -97,7 +97,7 @@
                                         *ngIf="!invoiceType.isCashInvoice && invoiceForm.controls['account'].get('uniqueName')?.value"
                                         class="vouchers-form-fields-detail cursor-pointer"
                                         (click)="toggleAccountAsidePane()">
-                                        {{ !invoiceType.isPurchaseInvoice ? localeData?.customer_details :
+                                        {{ !invoiceType.isPurchaseOrder ? localeData?.customer_details :
                                         localeData?.vendor_details }}</span>
 
                                     <ng-container *ngIf="invoiceType.isSalesInvoice && !invoiceType.isCashInvoice">
@@ -411,7 +411,16 @@
 
                                     <!-- Due Date -->
                                     <div class="col-3 pl-2"
-                                        *ngIf="invoiceType.isSalesInvoice || invoiceType.isPurchaseInvoice">
+                                    *ngIf="
+                                    (currentVoucherFormDetails?.dueDate ||
+                                    invoiceType.isSalesInvoice ||
+                                    invoiceType.isPurchaseInvoice ||
+                                    invoiceType.isPurchaseOrder ||
+                                    invoiceType.isProformaInvoice ||
+                                    invoiceType.isEstimateInvoice) &&
+                                    !invoiceType.isCashInvoice
+                                "
+                                       >
                                         <giddh-datepicker type="text" (keydown.enter)="$event.preventDefault()"
                                             [label]="'Due Date'" [placeholder]="'DDMMYYYY'" name="voucherDueDate"
                                             [showToggleIcon]="false" [appearance]="'outline'" formControlName="dueDate">
