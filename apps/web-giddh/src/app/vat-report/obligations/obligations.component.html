@@ -17,7 +17,7 @@
                     </dropdown-field>
                 </div>
                 <div class="col flex-grow-0">
-                    <dropdown-field [label]="'Status'" [options]="statusList" (selectedOption)="statusSelected($event)"
+                    <dropdown-field [label]="commonLocaleData?.app_status" [options]="statusList" (selectedOption)="statusSelected($event)"
                         [placeholder]="localeData?.select_status"
                         [defaultValue]="commonLocaleData?.app_all"></dropdown-field>
                 </div>

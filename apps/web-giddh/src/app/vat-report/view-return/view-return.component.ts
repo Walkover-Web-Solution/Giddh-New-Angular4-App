@@ -4,6 +4,7 @@ import { VatService } from '../../services/vat.service';
 import { ReplaySubject, takeUntil } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store';
+import { ToasterService } from '../../services/toaster.service';
 
 @Component({
     selector: 'view-return',
@@ -32,6 +33,7 @@ export class ViewReturnComponent implements OnInit {
         public dialogRef: MatDialogRef<any>,
         private vatService: VatService,
         private store: Store<AppState>,
+        private toaster: ToasterService
     ) {
         this.localeData = inputData.localeData;
         this.commonLocaleData = inputData.commonLocaleData;
@@ -72,7 +74,10 @@ export class ViewReturnComponent implements OnInit {
                 this.vatReport = res.body?.sections;
             }
             else {
-                this.dialogRef.close(res);
+                if (res.message) {
+                    this.toaster.showSnackBar('error', res.message);
+                }
+                this.dialogRef.close();
             }
         });
     }
