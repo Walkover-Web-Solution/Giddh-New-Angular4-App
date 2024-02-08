@@ -73,8 +73,8 @@ export class FileReturnComponent implements OnInit, OnDestroy {
             if (res.status === 'success' && res.body?.sections) {
                 this.vatReport = res.body?.sections;
             } else {
-                if(res?.message){
-                    this.toaster.showSnackBar('error',res.message);
+                if (res?.message) {
+                    this.toaster.showSnackBar('error', res.message);
                 }
                 this.dialogRef.close(res);
             }
@@ -100,8 +100,12 @@ export class FileReturnComponent implements OnInit, OnDestroy {
                 if (res?.body) {
                     this.toaster.showSnackBar('success', res.body);
                 }
-            }else{
-                if (res?.message) {
+            } else {
+                if (res?.errors) {
+                    let errorMessage = '';
+                    res.errors.forEach(error => errorMessage += error.message + '\n');
+                    this.toaster.showSnackBar('error', errorMessage);
+                } else if (res?.message) {
                     this.toaster.showSnackBar('error', res.message);
                 }
             }
