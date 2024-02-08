@@ -177,7 +177,7 @@ export class VatService {
      * @returns
      * @memberof VatService
      */
-    public fileVatReturn(companyUniqueName: string, model: any): Observable<BaseResponse<any, any>> {
+    public fileVatReturn(companyUniqueName: string, model: any): any {
         let url = this.config.apiUrl + VAT_API.SUBMIT_VAT_RETURN;
         url = url?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName));
         url = url?.replace(':branchUniqueName', encodeURIComponent(model?.branchUniqueName));

@@ -101,7 +101,11 @@ export class FileReturnComponent implements OnInit, OnDestroy {
                     this.toaster.showSnackBar('success', res.body);
                 }
             }else{
-                if (res?.message) {
+                if (res?.errors) {
+                    let errorMessage = '';
+                    res.errors.forEach( error => errorMessage += error.message + '\n' );
+                    this.toaster.showSnackBar('error', errorMessage);
+                }else if(res?.message){
                     this.toaster.showSnackBar('error', res.message);
                 }
             }

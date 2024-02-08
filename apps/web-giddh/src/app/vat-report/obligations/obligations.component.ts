@@ -129,6 +129,8 @@ export class ObligationsComponent implements OnInit, OnDestroy {
                     }
                 }
             });
+        } else {
+            this.getFormControl('branchUniqueName').setValue(this.generalService.currentBranchUniqueName);
         }
     }
 
