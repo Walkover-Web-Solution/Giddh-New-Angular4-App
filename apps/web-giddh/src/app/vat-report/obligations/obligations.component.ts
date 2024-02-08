@@ -16,6 +16,7 @@ import { cloneDeep } from '../../lodash-optimized';
 import { FileReturnComponent } from '../file-return/file-return.component';
 import { ViewReturnComponent } from '../view-return/view-return.component';
 import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 
 export interface ObligationsStatus {
     label: string;
@@ -72,6 +73,8 @@ export class ObligationsComponent implements OnInit, OnDestroy {
     public displayedColumns = ['periodKey', 'start', 'end', 'due', 'status', 'action'];
     /** True if API Call is in progress */
     public isLoading: boolean;
+    /** This will hold the value out/in to open/close setting sidebar popup */
+    public asideGstSidebarMenuState: string = 'in';
 
 
     constructor(
@@ -82,7 +85,8 @@ export class ObligationsComponent implements OnInit, OnDestroy {
         private vatService: VatService,
         private toaster: ToasterService,
         private modalService: BsModalService,
-        public dialog: MatDialog
+        public dialog: MatDialog,
+        private route: Router
     ) {
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
@@ -90,7 +94,7 @@ export class ObligationsComponent implements OnInit, OnDestroy {
                 this.companyUniqueName = activeCompany.uniqueName;
             }
         });
-        this.getUniversalDatePickerDate();
+        this.iniObligationsForm();
     }
 
     /**
@@ -99,7 +103,8 @@ export class ObligationsComponent implements OnInit, OnDestroy {
     * @memberof ObligationsComponent
     */
     public ngOnInit(): void {
-        this.iniObligationsForm();
+        document.querySelector('body').classList.add('gst-sidebar-open');
+        this.getUniversalDatePickerDate();
         this.isCompanyMode = this.generalService.currentOrganizationType === OrganizationType.Company;
         this.loadTaxDetails();
 
@@ -374,6 +379,15 @@ export class ObligationsComponent implements OnInit, OnDestroy {
         return this.obligationsForm.get(control)
     }
 
+    /**
+    * Handles GST Sidebar Navigation
+    *
+    * @memberof ObligationsComponent
+    */
+    public handleNavigation(): void {
+        this.route.navigate(['pages', 'gstfiling']);
+    }
+
 
     /**
     * Lifecycle hook for destroy
@@ -383,5 +397,7 @@ export class ObligationsComponent implements OnInit, OnDestroy {
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+        document.querySelector('body').classList.remove('gst-sidebar-open');
+        this.asideGstSidebarMenuState === 'out'
     }
 }
