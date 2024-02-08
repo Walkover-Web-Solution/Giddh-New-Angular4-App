@@ -35,8 +35,10 @@ import { ToasterService } from "../../services/toaster.service";
 import { CommonService } from "../../services/common.service";
 import { PURCHASE_ORDER_STATUS } from "../../shared/helpers/purchaseOrderStatus";
 import { cloneDeep } from "../../lodash-optimized";
-import { ENTRY_DESCRIPTION_LENGTH } from "../../app.constant";
+import { ENTRY_DESCRIPTION_LENGTH, HIGH_RATE_FIELD_PRECISION, RATE_FIELD_PRECISION } from "../../app.constant";
 import { IntlPhoneLib } from "../../theme/mobile-number-field/intl-phone-lib.class";
+import { SalesOtherTaxesCalculationMethodEnum } from "../../models/api-models/Sales";
+import { giddhRoundOff } from "../../shared/helpers/helperFunctions";
 
 @Component({
     selector: "create",
@@ -118,7 +120,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         isTcsTdsApplicable: false,
         isActive: false,
         branch: null,
-        addresses: null
+        addresses: null,
+        giddhBalanceDecimalPlaces: 2
     };
     /** Holds account specific data */
     public account: any = {
@@ -234,6 +237,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     };
     /** Entry index which is open in edit mode */
     public activeEntryIndex: number = null;
+    /** Rate precision value that will be visible on UI */
+    public ratePrecision = RATE_FIELD_PRECISION;
+    /** Rate precision value that will be sent to API */
+    public highPrecisionRate = HIGH_RATE_FIELD_PRECISION;
 
     /** Returns true if account is selected else false */
     public get showPageLeaveConfirmation(): boolean {
@@ -487,7 +494,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.company.baseCurrency = profile.baseCurrency;
                 this.company.baseCurrencySymbol = profile.baseCurrencySymbol;
                 this.company.inputMaskFormat = profile.balanceDisplayFormat?.toLowerCase() || '';
-
+                this.company.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
                 this.showTaxTypeByCountry(this.company.countryCode);
 
                 if (this.invoiceType.isCashInvoice) {
@@ -1115,6 +1122,14 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             attachedFileName: [''],
             totalDiscount: [''],
             totalTax: [''],
+            totalTaxWithoutCess: [''],
+            totalCess: [''],
+            otherTax: this.formBuilder.group({
+                name: [''],
+                amount: [''],
+                type: [''],
+                isChecked: [false]
+            }),
             discounts: this.formBuilder.array([
                 this.getTransactionDiscountFormGroup()
             ]),
@@ -1165,26 +1180,25 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @return {*}  {FormGroup}
      * @memberof VoucherCreateComponent
      */
-    private getTransactionDiscountFormGroup(): FormGroup {
+    private getTransactionDiscountFormGroup(discount?: any): FormGroup {
         return this.formBuilder.group({
             amount: this.formBuilder.group({
                 amountForAccount: [''],
                 amountForCompany: [''],
                 type: ['DEBIT']
             }),
-            calculationMethod: ['FIX_AMOUNT'],
-            discountValue: [''],
-            name: [''],
+            calculationMethod: [discount?.discountType || 'FIX_AMOUNT'],
+            discountValue: [discount?.discountValue],
+            name: [discount?.name],
             particular: [''],
-            uniqueName: ['']
+            uniqueName: [discount?.uniqueName]
         });
     }
 
-
-    private getTransactionTaxFormGroup(): FormGroup {
+    private getTransactionTaxFormGroup(tax?: any): FormGroup {
         return this.formBuilder.group({
-            calculationMethod: [''],
-            uniqueName: ['']
+            calculationMethod: [tax?.calculationMethod],
+            uniqueName: [tax?.uniqueName]
         });
     }
 
@@ -1209,8 +1223,18 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      *
      * @memberof VoucherCreateComponent
      */
-    public openOtherTaxDialog(): void {
+    public openOtherTaxDialog(entry: FormGroup, entryIndex: number): void {
+        if (!entry.get('otherTax.isChecked')) {
+            const entryFormGroup = this.getEntryFormGroup(entryIndex);
+            entryFormGroup.get('otherTax').reset();
+
+            return;
+        }
+
         this.otherTaxAsideMenuRef = this.dialog.open(OtherTaxComponent, {
+            data: {
+                entryIndex: entryIndex
+            },
             position: {
                 top: '0',
                 right: '0'
@@ -1219,9 +1243,31 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         this.otherTaxAsideMenuRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response) {
-                console.log(response);
-            } else {
-                console.log("Close with false");
+                const entryFormGroup = this.getEntryFormGroup(response.entryIndex);
+                const transactionFormGroup = this.getTransactionFormGroup(entryFormGroup);
+                const tax = response.tax;
+                let taxableValue = 0;
+
+                if (['tcsrc', 'tcspay'].includes(tax?.taxType)) {
+                    if (response.calculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount) {
+                        taxableValue = Number(transactionFormGroup.get('amount.amountForAccount')?.value) - entryFormGroup.get('totalDiscount')?.value;
+                    } else if (response.calculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTotalAmount) {
+                        let rawAmount = Number(transactionFormGroup.get('amount.amountForAccount')?.value) - entryFormGroup.get('totalDiscount')?.value;
+                        taxableValue = (rawAmount + entryFormGroup.get('totalTaxWithoutCess')?.value + entryFormGroup.get('totalCess')?.value);
+                    }
+                    entryFormGroup.get('otherTax.type').patchValue('tcs');
+                } else {
+                    if (response.calculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount) {
+                        taxableValue = Number(transactionFormGroup.get('amount.amountForAccount')?.value) - entryFormGroup.get('totalDiscount')?.value;
+                    } else if (response.calculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTotalAmount) {
+                        let rawAmount = Number(transactionFormGroup.get('amount.amountForAccount')?.value) - entryFormGroup.get('totalDiscount')?.value;
+                        taxableValue = (rawAmount + entryFormGroup.get('totalTaxWithoutCess')?.value + entryFormGroup.get('totalCess')?.value);
+                    }
+                    entryFormGroup.get('otherTax.type').patchValue('tds');
+                }
+
+                entryFormGroup.get('otherTax.name').patchValue(tax.name);
+                entryFormGroup.get('otherTax.amount').patchValue(giddhRoundOff(((taxableValue * tax?.taxDetail[0]?.taxValue) / 100), this.highPrecisionRate));
             }
         });
     }
@@ -1743,18 +1789,78 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         }, 100);
     }
 
-    public getSelectedDiscounts(discounts?: any): void {
-        console.log(discounts);
+    /**
+     * Selected discount callback
+     *
+     * @param {number} entryIndex
+     * @param {*} [discounts]
+     * @memberof VoucherCreateComponent
+     */
+    public getSelectedDiscounts(entryIndex: number, discounts?: any): void {
+        if (discounts?.length) {
+            const entryFormGroup = this.getEntryFormGroup(entryIndex);
+            const discountsFormArray = entryFormGroup.get('discounts') as FormArray;
+            discountsFormArray.clear();
+            discounts?.forEach(discount => {
+                discountsFormArray.push(this.getTransactionDiscountFormGroup(discount));
+            });
+        }
     }
 
+    /**
+     * Discount total amount callback
+     *
+     * @param {*} totalDiscount
+     * @param {FormGroup} entry
+     * @memberof VoucherCreateComponent
+     */
     public updateTotalDiscount(totalDiscount: any, entry: FormGroup): void {
         entry.get('totalDiscount').patchValue(totalDiscount);
     }
 
-    public getSelectedTaxes(taxes?: any): void {
-        console.log(taxes);
+    /**
+     * Selected taxes callback
+     *
+     * @param {number} entryIndex
+     * @param {*} [taxes]
+     * @memberof VoucherCreateComponent
+     */
+    public getSelectedTaxes(entryIndex: number, taxes?: any): void {
+        let taxPercentage: number = 0;
+        let cessPercentage: number = 0;
+        const entryFormGroup = this.getEntryFormGroup(entryIndex);
+        const transactionFormGroup = this.getTransactionFormGroup(entryFormGroup);
+        const taxesFormArray = entryFormGroup.get('taxes') as FormArray;
+        taxesFormArray.clear();
+        taxes?.forEach(tax => {
+            taxesFormArray.push(this.getTransactionTaxFormGroup(tax));
+
+            if (tax.taxType === 'gstcess') {
+                cessPercentage += tax.amount;
+            } else {
+                taxPercentage += tax.amount;
+            }
+        });
+
+        entryFormGroup.get("totalTaxWithoutCess")?.patchValue(giddhRoundOff(((taxPercentage * (transactionFormGroup.get('amount.amountForAccount')?.value - entryFormGroup.get('totalDiscount')?.value)) / 100), this.company.giddhBalanceDecimalPlaces));
+        entryFormGroup.get("totalCess")?.patchValue(giddhRoundOff(((cessPercentage * (transactionFormGroup.get('amount.amountForAccount')?.value - entryFormGroup.get('totalDiscount')?.value)) / 100), this.company.giddhBalanceDecimalPlaces));
+
+        if (isNaN(entryFormGroup.get("totalTaxWithoutCess")?.value)) {
+            entryFormGroup.get("totalTaxWithoutCess")?.patchValue(0);
+        }
+
+        if (isNaN(entryFormGroup.get("totalCess")?.value)) {
+            entryFormGroup.get("totalCess")?.patchValue(0);
+        }
     }
 
+    /**
+     * Tax total amount callback
+     *
+     * @param {*} totalTax
+     * @param {FormGroup} entry
+     * @memberof VoucherCreateComponent
+     */
     public updateTotalTax(totalTax: any, entry: FormGroup): void {
         entry.get('totalTax').patchValue(totalTax);
     }

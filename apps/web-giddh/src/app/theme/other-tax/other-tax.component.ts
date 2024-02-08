@@ -1,11 +1,11 @@
-import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
+import { Component, Inject, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
 import { Observable, ReplaySubject, takeUntil, of as observableOf, take, of } from "rxjs";
 import { OtherTaxComponentStore } from "./utility/other-tax.store";
 import { AppState } from "../../store";
 import { Store } from "@ngrx/store";
 import { CompanyActions } from "../../actions/company.actions";
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
-import { MatDialog, MatDialogRef } from "@angular/material/dialog";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from "@angular/material/dialog";
 
 @Component({
     selector: "other-tax",
@@ -23,7 +23,7 @@ export class OtherTaxComponent implements OnInit, OnDestroy {
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Form Group for tax form */
-    public otherTaxForm: UntypedFormGroup;
+    public otherTaxForm: FormGroup;
     /** True if form is submitted to show error if available */
     public isFormSubmitted: boolean = false;
     /** Create tax dialog ref  */
@@ -38,10 +38,11 @@ export class OtherTaxComponent implements OnInit, OnDestroy {
     constructor(
         private componentStore: OtherTaxComponentStore,
         private companyActions: CompanyActions,
-        private formBuilder: UntypedFormBuilder,
+        private formBuilder: FormBuilder,
         private dialog: MatDialog,
         private store: Store<AppState>,
-        public dialogRef: MatDialogRef<any>
+        public dialogRef: MatDialogRef<any>,
+        @Inject(MAT_DIALOG_DATA) public inputData
     ) {
 
     }
@@ -66,6 +67,7 @@ export class OtherTaxComponent implements OnInit, OnDestroy {
         this.otherTaxForm = this.formBuilder.group({
             tax: ['', Validators.required],
             calculationMethod: ['', Validators.required],
+            entryIndex: [this.inputData?.entryIndex]
         });
     }
 

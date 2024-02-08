@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Observable, ReplaySubject, takeUntil, of as observableOf } from "rxjs";
 import { CreateDiscountComponentStore } from "./utility/create-discount.store";
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
+import { UntypedFormBuilder, FormGroup, Validators } from "@angular/forms";
 import { MatDialogRef } from "@angular/material/dialog";
 
 @Component({
@@ -14,7 +14,7 @@ export class CreateDiscountComponent implements OnInit, OnDestroy {
     /** Discounts list Observable */
     public discountsAccountList$: Observable<any> = this.componentStore.discountsAccountList$;
     /** Form Group for invoice form */
-    public createDiscountForm: UntypedFormGroup;
+    public createDiscountForm: FormGroup;
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Hold selected country */
