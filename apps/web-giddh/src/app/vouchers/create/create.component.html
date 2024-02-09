@@ -726,7 +726,7 @@
                                                                             <text-field *ngIf="activeEntryIndex === entryIndex" [placeholder]="'Enter Qty'" formControlName="quantity" [cssClass]="'form-control text-right'" [name]="'transactionQuantity' + entryIndex" [type]="'text'"></text-field>
                                                                           
                                                                         <ng-container formGroupName="stockUnit">
-                                                                            <ng-container *ngIf="activeEntryIndex !== entryIndex">{{ transaction.get('stock.stockUnit.code')?.value }}</ng-container>
+                                                                            <ng-container *ngIf="activeEntryIndex !== entryIndex"> {{ transaction.get('stock.stockUnit.code')?.value }}</ng-container>
                                                                             <mat-select *ngIf="activeEntryIndex === entryIndex" formControlName="code" [placeholder]="'Select'" class="form-control mt-2" name="transactionUnit{{entryIndex}}">
                                                                                 <mat-option *ngFor="let unit of stockUnits[entryIndex] | async" [value]="unit.stockUnitUniqueName">{{ unit.stockUnitCode }}</mat-option>
                                                                             </mat-select>
@@ -930,6 +930,8 @@
                                                                                     [label]="'Account'"
                                                                                     [placeholder]="'Select Account'"
                                                                                     [options]="briefAccounts$ | async"
+                                                                                    (onClear)="selectedDepositAccount($event, true)"
+                                                                                    (selectedOption)="selectedDepositAccount($event)"
                                                                                     formControlName="accountUniqueName">
                                                                                 </reactive-dropdown-field>
                                                                             </div>
@@ -1080,43 +1082,85 @@
                                                     Total Amount
                                                 </div>
                                                 <div class="col-3">
-                                                    750.00
+                                                    <amount-field
+                                                        [amount]="voucherTotals.totalAmount"
+                                                        [currencySymbol]="isMultiCurrencyVoucher ? account.baseCurrencySymbol : false"
+                                                        [currencyCode]="isMultiCurrencyVoucher ? account.baseCurrency : false">
+                                                    </amount-field>
                                                 </div>
                                                 <div class="col-9">
                                                     Discount
                                                 </div>
                                                 <div class="col-3">
-                                                    0.00
+                                                    <amount-field
+                                                        [amount]="voucherTotals.totalDiscount"
+                                                        [currencySymbol]="isMultiCurrencyVoucher ? account.baseCurrencySymbol : false"
+                                                        [currencyCode]="isMultiCurrencyVoucher ? account.baseCurrency : false">
+                                                    </amount-field>
                                                 </div>
                                                 <div class="col-9">
                                                     Taxable Value
                                                 </div>
                                                 <div class="col-3">
-                                                    750.00
+                                                    <amount-field
+                                                        [amount]="voucherTotals.totalTaxableValue"
+                                                        [currencySymbol]="isMultiCurrencyVoucher ? account.baseCurrencySymbol : false"
+                                                        [currencyCode]="isMultiCurrencyVoucher ? account.baseCurrency : false">
+                                                    </amount-field>
                                                 </div>
                                                 <div class="col-9">
                                                     Tax
                                                 </div>
                                                 <div class="col-3">
-                                                    90.00
+                                                    <amount-field
+                                                        [amount]="voucherTotals.totalTaxWithoutCess"
+                                                        [currencySymbol]="isMultiCurrencyVoucher ? account.baseCurrencySymbol : false"
+                                                        [currencyCode]="isMultiCurrencyVoucher ? account.baseCurrency : false">
+                                                    </amount-field>
                                                 </div>
-                                                <div class="col-9">
-                                                    CESS
-                                                </div>
-                                                <div class="col-3">
-                                                    0.00
-                                                </div>
+                                                <ng-container *ngIf="voucherTotals.totalCess">
+                                                    <div class="col-9">
+                                                        CESS
+                                                    </div>
+                                                    <div class="col-3">
+                                                        <amount-field
+                                                            [amount]="voucherTotals.totalCess"
+                                                            [currencySymbol]="isMultiCurrencyVoucher ? account.baseCurrencySymbol : false"
+                                                            [currencyCode]="isMultiCurrencyVoucher ? account.baseCurrency : false">
+                                                        </amount-field>
+                                                    </div>
+                                                </ng-container>
+                                                <ng-container *ngIf="voucherTotals.roundOff">
+                                                    <div class="col-9">
+                                                        Round Off
+                                                    </div>
+                                                    <div class="col-3">
+                                                        <amount-field
+                                                            [amount]="voucherTotals.roundOff"
+                                                            [currencySymbol]="isMultiCurrencyVoucher ? account.baseCurrencySymbol : false"
+                                                            [currencyCode]="isMultiCurrencyVoucher ? account.baseCurrency : false">
+                                                        </amount-field>
+                                                    </div>
+                                                </ng-container>
                                                 <div class="col-9">
                                                     Total
                                                 </div>
                                                 <div class="col-3">
-                                                    840.00
+                                                    <amount-field
+                                                        [amount]="voucherTotals.grandTotal"
+                                                        [currencySymbol]="isMultiCurrencyVoucher ? account.baseCurrencySymbol : false"
+                                                        [currencyCode]="isMultiCurrencyVoucher ? account.baseCurrency : false">
+                                                    </amount-field>
                                                 </div>
                                                 <div class="col-9">
                                                     Balance Due
                                                 </div>
                                                 <div class="col-3">
-                                                    0.00
+                                                    <amount-field
+                                                        [amount]="0"
+                                                        [currencySymbol]="isMultiCurrencyVoucher ? account.baseCurrencySymbol : false"
+                                                        [currencyCode]="isMultiCurrencyVoucher ? account.baseCurrency : false">
+                                                    </amount-field>
                                                 </div>
                                             </div>
                                         </div>
@@ -1143,19 +1187,14 @@
                                             class="caret"></i>
                                     </button>
                                     <mat-menu #moreOptions="matMenu">
-                                        <button mat-menu-item (click)="
-                                      createSendVoucher()
-                                    ">Create & Send</button>
-                                        <button mat-menu-item (click)="
-                                        createPrintVoucher()">Create & Print</button>
+                                        <button mat-menu-item (click)="createSendVoucher()">Create & Send</button>
+                                        <button mat-menu-item (click)="createPrintVoucher()">Create & Print</button>
                                     </mat-menu>
                                 </div>
                             </div>
-
                         </div>
                     </form>
                 </div>
-
             </mat-card-content>
         </mat-card>
     </div>
