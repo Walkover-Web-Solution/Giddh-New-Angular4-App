@@ -87,7 +87,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
         { label: 'January', value: 1 },
         { label: 'Febuary', value: 2 },
         { label: 'March', value: 3 },
-        { label: ' April', value: 4 },
+        { label: 'April', value: 4 },
         { label: 'May', value: 5 },
         { label: 'June', value: 61 },
         { label: 'July', value: 7 },
@@ -115,9 +115,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
         private settingsBranchAction: SettingsBranchActions,
         private breakpointObserver: BreakpointObserver,
         private modalService: BsModalService
-    ) {
-
-    }
+    ) { }
 
     public ngOnInit() {
         document.querySelector('body').classList.add('gst-sidebar-open');
@@ -197,8 +195,8 @@ export class VatReportComponent implements OnInit, OnDestroy {
                 this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                 this.fromDate = dayjs(dateObj[0]).format(GIDDH_DATE_FORMAT);
                 this.toDate = dayjs(dateObj[1]).format(GIDDH_DATE_FORMAT);
-                this.selectedMonth = "";
                 this.loadTaxDetails();
+                this.getMonthStartAndEndDate(this.months[dateObj[1].getMonth()]);
             }
         });
     }
@@ -283,8 +281,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
     public getMonthStartAndEndDate(selectedMonth: any) {
         if (selectedMonth) {
             this.selectedMonth = selectedMonth.label;
-            const currentDate = new Date();
-            const year = currentDate.getFullYear();
+            const year = this.getMonthWithInFinancialYear(selectedMonth);
 
             // Month is zero-based, so subtract 1 from the selected month
             const startDate = new Date(year, selectedMonth.value - 1, 1);
@@ -294,15 +291,35 @@ export class VatReportComponent implements OnInit, OnDestroy {
             this.fromDate = dayjs(startDate).format(GIDDH_DATE_FORMAT);
             this.toDate = dayjs(endDate).format(GIDDH_DATE_FORMAT);
             this.getVatReport();
+
         }
     }
 
     /**
-     * This will redirect to vat report detail page
-     *
-     * @param {*} section
-     * @memberof VatReportComponent
-     */
+    * Return correct year for the selected month based on current financial year 
+    *
+    * @private
+    * @param {*} selectedMonth
+    * @returns {number}
+    * @memberof VatReportComponent
+    */
+    private getMonthWithInFinancialYear(selectedMonth: any): number {
+        let year = new Date().getFullYear();
+        this.months.slice(3, 12).forEach(item => {
+            if (item.label == selectedMonth.label) {
+                year = year - 1;
+                return;
+            }
+        });
+        return year;
+    }
+
+    /**
+    * This will redirect to vat report detail page
+    *
+    * @param {*} section
+    * @memberof VatReportComponent
+    */
     public viewVatReportTransactions(section) {
         this.route.navigate(['pages', 'vat-report', 'transactions', 'section', section], { queryParams: { from: this.fromDate, to: this.toDate, taxNumber: this.taxNumber } });
     }
