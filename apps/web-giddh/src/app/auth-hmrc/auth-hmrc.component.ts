@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ReplaySubject, take, takeUntil } from 'rxjs';
+import { ReplaySubject, takeUntil } from 'rxjs';
 import { VatService } from '../services/vat.service';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../store';
@@ -17,6 +17,8 @@ export class AuthHMRCComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* Hold Company Uniquename */
     private companyUniqueName: string;
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(
         private router: Router,
@@ -55,9 +57,7 @@ export class AuthHMRCComponent implements OnInit, OnDestroy {
     private saveAuthorization(authorizationCode: string): void {
         this.vatService.saveAuthorizationCode(this.companyUniqueName, { code: authorizationCode }).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res?.status === 'success') {
-                if (res?.message) {
-                    this.toaster.showSnackBar('success', res?.message);
-                }
+                this.toaster.showSnackBar('success', this.commonLocaleData?.app_messages.auth_hmrc_success_message);
                 this.router.navigate(['/pages/vat-report/obligations']);
             } else {
                 if (res?.message) {

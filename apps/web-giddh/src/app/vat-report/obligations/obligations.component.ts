@@ -12,7 +12,6 @@ import { GstReconcileService } from '../../services/gst-reconcile.service';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { VatService } from '../../services/vat.service';
 import { ToasterService } from '../../services/toaster.service';
-import { cloneDeep } from '../../lodash-optimized';
 import { FileReturnComponent } from '../file-return/file-return.component';
 import { ViewReturnComponent } from '../view-return/view-return.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -45,8 +44,6 @@ export class ObligationsComponent implements OnInit, OnDestroy {
     public branchList: any;
     /** Holds Tax Number List */
     public taxesList: any;
-    /** Holds true if more than 1 tax number exist */
-    public isMultipleTaxNumber: boolean;
     /** Holds VAT Obligations Status List */
     public statusList: ObligationsStatus[];
     /** This will store selected date ranges */
@@ -307,15 +304,10 @@ export class ObligationsComponent implements OnInit, OnDestroy {
     private loadTaxDetails(): void {
         this.gstReconcileService.getTaxDetails().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.body?.length) {
-                this.isMultipleTaxNumber = response?.body?.length > 1;
-                if (this.isMultipleTaxNumber) {
-                    this.taxesList = response.body.map(tax => ({
-                        label: tax,
-                        value: tax
-                    }));
-                }
-                this.getFormControl('taxNumber').setValue(response.body[0]);
-                this.getVatObligations();
+                this.taxesList = response.body.map(tax => ({
+                    label: tax,
+                    value: tax
+                }));
             }
         });
     }

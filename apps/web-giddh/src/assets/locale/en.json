@@ -655,7 +655,8 @@
         "warehouse_created": "New warehouse created successfully.",
         "warehouse_updated": "Warehouse updated successfully.",
         "voucher_saved": "Voucher generated successfully",
-        "file_uploaded": "File uploaded successfully"
+        "file_uploaded": "File uploaded successfully",
+        "auth_hmrc_success_message": "Access token generated and saved successfully. You are now Connected to HMRC Portal."
     },
     "app_supported_languages": {
         "english": "English",
