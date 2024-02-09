@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { VoucherComponentStore } from "../utility/vouchers.store";
 import { AppState } from "../../store";
 import { Store } from "@ngrx/store";
-import { Observable, ReplaySubject, delay, distinctUntilChanged, of, take, takeUntil } from "rxjs";
+import { Observable, ReplaySubject, debounceTime, delay, distinctUntilChanged, of as observableOf, take, takeUntil } from "rxjs";
 import * as dayjs from "dayjs";
 import { GeneralService } from "../../services/general.service";
 import { OnboardingFormRequest } from "../../models/api-models/Common";
@@ -88,11 +88,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     /** Discounts list Observable */
     public companyTaxes$: Observable<any> = this.componentStore.companyTaxes$;
     /** Voucher account results Observable */
-    public voucherAccountResults$: Observable<OptionInterface[]> = of(null);
+    public voucherAccountResults$: Observable<OptionInterface[]> = observableOf(null);
     /** Voucher stock results Observable */
-    public voucherStockResults$: Observable<OptionInterface[]> = of(null);
+    public voucherStockResults$: Observable<OptionInterface[]> = observableOf(null);
     /** Brief accounts Observable */
-    public briefAccounts$: Observable<OptionInterface[]> = of(null);
+    public briefAccounts$: Observable<OptionInterface[]> = observableOf(null);
     /** Last vouchers get in progress Observable */
     public getLastVouchersInProgress$: Observable<any> = this.componentStore.getLastVouchersInProgress$;
     /** Vendor purchase orders Observable */
@@ -169,7 +169,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         showNotesAtLastPage: false
     };
     /** Holds list of last vouchers */
-    public lastVouchersList$: Observable<LastInvoices[]> = of(null);
+    public lastVouchersList$: Observable<LastInvoices[]> = observableOf(null);
     /** Form Group for invoice form */
     public invoiceForm: FormGroup;
     /** This will open account dropdown by default */
@@ -181,7 +181,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     /** True if warehouse field will be visible */
     public showWarehouse: boolean = false;
     /** Holds account state list */
-    public accountStateList$: Observable<OptionInterface[]> = of(null);
+    public accountStateList$: Observable<OptionInterface[]> = observableOf(null);
     /** Hold account aside menu reference  */
     public accountAsideMenuRef: MatDialogRef<any>;
     /** True if it's voucher update mode */
@@ -258,6 +258,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public get showPageLeaveConfirmation(): boolean {
         return (!this.isUpdateMode && (this.invoiceForm?.controls['account']?.get('customerName')?.value)) ? true : false;
     }
+    /** Commpany Billing Gstin Validation Observable */
+    public billingGstValid$: Observable<boolean> = observableOf(false);
+    /** Commpany Shipping Gstin Validation Observable */
+    public shippingGstValid$: Observable<boolean> = observableOf(false);
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -352,7 +356,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         /** Country details */
         this.componentStore.countryData$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                this.accountStateList$ = of(response?.stateList?.map(res => { return { label: res.name, value: res.code } }));
+                this.accountStateList$ = observableOf(response?.stateList?.map(res => { return { label: res.name, value: res.code } }));
             }
         });
 
@@ -383,7 +387,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         /** Stock Variants */
         this.componentStore.stockVariants$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                this.stockVariants[response.entryIndex] = of(response.results);
+                this.stockVariants[response.entryIndex] = observableOf(response.results);
 
                 if (response?.results?.length === 1) {
                     this.selectVariant(response.results[0], response.entryIndex);
@@ -400,8 +404,24 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 transactionFormGroup.get('stock').get('skuCode')?.patchValue(response.body.stock.skuCode);
                 transactionFormGroup.get('stock').get('skuCodeHeading')?.patchValue(response.body.stock.skuCodeHeading);
 
-                this.stockUnits[response.entryIndex] = of(response.body.stock.variant.unitRates);
+                this.stockUnits[response.entryIndex] = observableOf(response.body.stock.variant.unitRates);
             }
+        });
+
+        this.invoiceForm.controls['account'].get("billingAddress").get("taxNumber")?.valueChanges.pipe(
+            debounceTime(700),
+            distinctUntilChanged(),
+            takeUntil(this.destroyed$),
+        ).subscribe(searchedText => {
+            this.checkGstNumValidation(searchedText);
+        });
+
+        this.invoiceForm.controls['account'].get("shippingAddress").get("taxNumber")?.valueChanges.pipe(
+            debounceTime(700),
+            distinctUntilChanged(),
+            takeUntil(this.destroyed$),
+        ).subscribe(searchedText => {
+            this.checkGstNumValidation(searchedText);
         });
     }
 
@@ -677,7 +697,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         }
                     }
                 }
-                this.lastVouchersList$ = of([...lastVouchers]);
+                this.lastVouchersList$ = observableOf([...lastVouchers]);
             } else {
                 if (this.invoiceType.isProformaInvoice || this.invoiceType.isEstimateInvoice) {
                     let filterRequest: ProformaFilter = new ProformaFilter();
@@ -766,7 +786,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     this.voucherAccountResults$.subscribe(res => voucherAccountResults = res);
                 }
                 const newResults = response?.body?.results?.map(res => { return { label: res.name, value: res.uniqueName, additional: res } });
-                this.voucherAccountResults$ = of(voucherAccountResults.concat(...newResults));
+                this.voucherAccountResults$ = observableOf(voucherAccountResults.concat(...newResults));
             } else {
                 this.accountSearchRequest.loadMore = false;
             }
@@ -799,7 +819,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     this.voucherStockResults$.subscribe(res => voucherStockResults = res);
                 }
                 const newResults = response?.body?.results?.map(res => { return { label: res.name, value: res.uniqueName, additional: res } });
-                this.voucherStockResults$ = of(voucherStockResults.concat(...newResults));
+                this.voucherStockResults$ = observableOf(voucherStockResults.concat(...newResults));
             } else {
                 this.stockSearchRequest.loadMore = false;
             }
@@ -838,7 +858,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             if (!response) {
                 this.componentStore.getBriefAccounts({ group: BriedAccountsGroup });
             } else {
-                this.briefAccounts$ = of(response);
+                this.briefAccounts$ = observableOf(response);
             }
         });
     }
@@ -1049,7 +1069,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 attentionTo: [''],
                 contactNumber: [''],
                 mobileNumber: [''],
-                email: [''],
+                email: ['', Validators.email],
                 billingAddress: this.getAddressFormGroup(),
                 shippingAddress: this.getAddressFormGroup()
             }),
@@ -1449,6 +1469,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.fillBillingShippingAddress(entityType, "shippingAddress", defaultAddress, defaultAddress.index);
         }
     }
+
+
 
     /**
      * Callback for state
@@ -1992,6 +2014,51 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.invoiceForm.get("deposit.currencySymbol")?.patchValue("");
         } else {
             this.invoiceForm.get("deposit.currencySymbol")?.patchValue(event?.additional?.currency?.symbol);
+        }
+    }
+
+    /**
+     *To check Tax number validation using regex get by API
+     *
+     * @param {*} value
+     * @memberof VoucherCreateComponent
+     */
+    public checkGstNumValidation(value: any): void {
+        if (this.company.taxType === TaxType.GST) {
+            let isValid: boolean = false;
+            if (value?.trim()) {
+                if (this.formFields['taxName']['regex'] !== "" && this.formFields['taxName']['regex']?.length > 0) {
+                    for (let key = 0; key < this.formFields['taxName']['regex'].length; key++) {
+                        let regex = new RegExp(this.formFields['taxName']['regex'][key]);
+                        if (regex.test(value)) {
+                            isValid = true;
+                            break;
+                        }
+                    }
+                } else {
+                    isValid = true;
+                }
+                if (!isValid) {
+                    this.toasterService.showSnackBar('error', 'Invalid ' + this.formFields['taxName']?.label);
+                    if (this.invoiceForm.controls['account'].get("billingAddress").get("taxNumber")?.value) {
+                        this.billingGstValid$ = observableOf(true);
+                    } else {
+                        this.shippingGstValid$ = observableOf(true);
+                    }
+                } else {
+                    if (this.invoiceForm.controls['account'].get("billingAddress").get("taxNumber")?.value) {
+                        this.billingGstValid$ = observableOf(false);
+                    } else {
+                        this.shippingGstValid$ = observableOf(false);
+                    }
+                }
+            } else {
+                if (this.invoiceForm.controls['account'].get("billingAddress").get("taxNumber")?.value) {
+                    this.billingGstValid$ = observableOf(false);
+                } else {
+                    this.shippingGstValid$ = observableOf(false);
+                }
+            }
         }
     }
 
