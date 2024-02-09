@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { VoucherComponentStore } from "../utility/vouchers.store";
 import { AppState } from "../../store";
 import { Store } from "@ngrx/store";
-import { Observable, ReplaySubject, delay, of, take, takeUntil } from "rxjs";
+import { Observable, ReplaySubject, debounceTime, delay, distinctUntilChanged, of as observableOf, take, takeUntil } from "rxjs";
 import * as dayjs from "dayjs";
 import { GeneralService } from "../../services/general.service";
 import { OnboardingFormRequest } from "../../models/api-models/Common";
@@ -88,11 +88,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     /** Discounts list Observable */
     public companyTaxes$: Observable<any> = this.componentStore.companyTaxes$;
     /** Voucher account results Observable */
-    public voucherAccountResults$: Observable<OptionInterface[]> = of(null);
+    public voucherAccountResults$: Observable<OptionInterface[]> = observableOf(null);
     /** Voucher stock results Observable */
-    public voucherStockResults$: Observable<OptionInterface[]> = of(null);
+    public voucherStockResults$: Observable<OptionInterface[]> = observableOf(null);
     /** Brief accounts Observable */
-    public briefAccounts$: Observable<OptionInterface[]> = of(null);
+    public briefAccounts$: Observable<OptionInterface[]> = observableOf(null);
     /** Last vouchers get in progress Observable */
     public getLastVouchersInProgress$: Observable<any> = this.componentStore.getLastVouchersInProgress$;
     /** Vendor purchase orders Observable */
@@ -169,7 +169,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         showNotesAtLastPage: false
     };
     /** Holds list of last vouchers */
-    public lastVouchersList$: Observable<LastInvoices[]> = of(null);
+    public lastVouchersList$: Observable<LastInvoices[]> = observableOf(null);
     /** Form Group for invoice form */
     public invoiceForm: FormGroup;
     /** This will open account dropdown by default */
@@ -181,7 +181,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     /** True if warehouse field will be visible */
     public showWarehouse: boolean = false;
     /** Holds account state list */
-    public accountStateList$: Observable<OptionInterface[]> = of(null);
+    public accountStateList$: Observable<OptionInterface[]> = observableOf(null);
     /** Hold account aside menu reference  */
     public accountAsideMenuRef: MatDialogRef<any>;
     /** True if it's voucher update mode */
@@ -241,12 +241,27 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public ratePrecision = RATE_FIELD_PRECISION;
     /** Rate precision value that will be sent to API */
     public highPrecisionRate = HIGH_RATE_FIELD_PRECISION;
+    /** Mobile number library instance */
+    public intlClass: any;
+    /** Holds voucher totals */
+    public voucherTotals: any = {
+        totalAmount: 0,
+        totalDiscount: 0,
+        totalTaxableValue: 0,
+        totalTaxWithoutCess: 0,
+        totalCess: 0,
+        grandTotal: 0,
+        roundOff: 0
+    };
 
     /** Returns true if account is selected else false */
     public get showPageLeaveConfirmation(): boolean {
         return (!this.isUpdateMode && (this.invoiceForm?.controls['account']?.get('customerName')?.value)) ? true : false;
     }
-    public intlClass: any;
+    /** Commpany Billing Gstin Validation Observable */
+    public billingGstValid$: Observable<boolean> = observableOf(false);
+    /** Commpany Shipping Gstin Validation Observable */
+    public shippingGstValid$: Observable<boolean> = observableOf(false);
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -341,7 +356,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         /** Country details */
         this.componentStore.countryData$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                this.accountStateList$ = of(response?.stateList?.map(res => { return { label: res.name, value: res.code } }));
+                this.accountStateList$ = observableOf(response?.stateList?.map(res => { return { label: res.name, value: res.code } }));
             }
         });
 
@@ -366,13 +381,15 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         /** Exchange rate */
         this.componentStore.exchangeRate$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            this.invoiceForm.get('exchangeRate')?.patchValue(response);
+            if (response) {
+                this.invoiceForm.get('exchangeRate')?.patchValue(response);
+            }
         });
 
         /** Stock Variants */
         this.componentStore.stockVariants$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                this.stockVariants[response.entryIndex] = of(response.results);
+                this.stockVariants[response.entryIndex] = observableOf(response.results);
 
                 if (response?.results?.length === 1) {
                     this.selectVariant(response.results[0], response.entryIndex);
@@ -389,8 +406,24 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 transactionFormGroup.get('stock').get('skuCode')?.patchValue(response.body.stock.skuCode);
                 transactionFormGroup.get('stock').get('skuCodeHeading')?.patchValue(response.body.stock.skuCodeHeading);
 
-                this.stockUnits[response.entryIndex] = of(response.body.stock.variant.unitRates);
+                this.stockUnits[response.entryIndex] = observableOf(response.body.stock.variant.unitRates);
             }
+        });
+
+        this.invoiceForm.controls['account'].get("billingAddress").get("taxNumber")?.valueChanges.pipe(
+            debounceTime(700),
+            distinctUntilChanged(),
+            takeUntil(this.destroyed$),
+        ).subscribe(searchedText => {
+            this.checkGstNumValidation(searchedText);
+        });
+
+        this.invoiceForm.controls['account'].get("shippingAddress").get("taxNumber")?.valueChanges.pipe(
+            debounceTime(700),
+            distinctUntilChanged(),
+            takeUntil(this.destroyed$),
+        ).subscribe(searchedText => {
+            this.checkGstNumValidation(searchedText);
         });
     }
 
@@ -666,7 +699,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         }
                     }
                 }
-                this.lastVouchersList$ = of([...lastVouchers]);
+                this.lastVouchersList$ = observableOf([...lastVouchers]);
             } else {
                 if (this.invoiceType.isProformaInvoice || this.invoiceType.isEstimateInvoice) {
                     let filterRequest: ProformaFilter = new ProformaFilter();
@@ -755,7 +788,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     this.voucherAccountResults$.subscribe(res => voucherAccountResults = res);
                 }
                 const newResults = response?.body?.results?.map(res => { return { label: res.name, value: res.uniqueName, additional: res } });
-                this.voucherAccountResults$ = of(voucherAccountResults.concat(...newResults));
+                this.voucherAccountResults$ = observableOf(voucherAccountResults.concat(...newResults));
             } else {
                 this.accountSearchRequest.loadMore = false;
             }
@@ -788,7 +821,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     this.voucherStockResults$.subscribe(res => voucherStockResults = res);
                 }
                 const newResults = response?.body?.results?.map(res => { return { label: res.name, value: res.uniqueName, additional: res } });
-                this.voucherStockResults$ = of(voucherStockResults.concat(...newResults));
+                this.voucherStockResults$ = observableOf(voucherStockResults.concat(...newResults));
             } else {
                 this.stockSearchRequest.loadMore = false;
             }
@@ -826,6 +859,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.componentStore.briefAccounts$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (!response) {
                 this.componentStore.getBriefAccounts({ group: BriedAccountsGroup });
+            } else {
+                this.briefAccounts$ = observableOf(response);
             }
         });
     }
@@ -1034,9 +1069,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 customerName: [''],
                 uniqueName: ['', Validators.required],
                 attentionTo: [''],
-                contactNumber: [''],
                 mobileNumber: [''],
-                email: [''],
+                email: ['', Validators.email],
                 billingAddress: this.getAddressFormGroup(),
                 shippingAddress: this.getAddressFormGroup()
             }),
@@ -1055,6 +1089,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             deposit: this.formBuilder.group({
                 accountUniqueName: [''],
                 amountForCompany: [''],
+                currencySymbol: [''], //temp
                 type: ['DEBIT']
             }),
             warehouse: this.formBuilder.group({
@@ -1089,7 +1124,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     private getAddressFormGroup(): FormGroup {
         return this.formBuilder.group({
-            index: [''],
+            index: [''], //temp
             address: [''],
             pincode: [''],
             taxNumber: [''],
@@ -1147,9 +1182,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     }),
                     stock: this.formBuilder.group({
                         name: [''],
-                        quantity: [1],
+                        quantity: [0],
                         rate: this.formBuilder.group({
-                            rateForAccount: [1]
+                            rateForAccount: [0]
                         }),
                         stockUnit: this.formBuilder.group({
                             code: [''],
@@ -1197,7 +1232,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     private getTransactionTaxFormGroup(tax?: any): FormGroup {
         return this.formBuilder.group({
             calculationMethod: [tax?.calculationMethod],
-            uniqueName: [tax?.uniqueName]
+            uniqueName: [tax?.uniqueName],
+            taxType: [tax?.taxType],
+            taxDetail: [tax?.taxDetail]
         });
     }
 
@@ -1434,6 +1471,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         }
     }
 
+
+
     /**
      * Callback for state
      *
@@ -1625,19 +1664,32 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public createSendVoucher(): void {
-        this.dialog.open(this.sendEmailModal, {
-            width: '650px'
+        this.saveVoucher(() => {
+            let dialogRef = this.dialog.open(this.sendEmailModal, {
+                width: '650px'
+            });
+
+            dialogRef.afterClosed().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+
+            });
         });
     }
+
     /**
      * This will be use for create and print voucher
      *
      * @memberof VoucherCreateComponent
      */
     public createPrintVoucher(): void {
-        this.dialog.open(this.printVoucherModal, {
-            width: '60vw',
-            height: '80vh'
+        this.saveVoucher(() => {
+            let dialogRef = this.dialog.open(this.printVoucherModal, {
+                width: '60vw',
+                height: '80vh'
+            });
+
+            dialogRef.afterClosed().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+
+            });
         });
     }
 
@@ -1827,31 +1879,48 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public getSelectedTaxes(entryIndex: number, taxes?: any): void {
-        let taxPercentage: number = 0;
-        let cessPercentage: number = 0;
         const entryFormGroup = this.getEntryFormGroup(entryIndex);
-        const transactionFormGroup = this.getTransactionFormGroup(entryFormGroup);
         const taxesFormArray = entryFormGroup.get('taxes') as FormArray;
+
         taxesFormArray.clear();
+
         taxes?.forEach(tax => {
             taxesFormArray.push(this.getTransactionTaxFormGroup(tax));
-
-            if (tax.taxType === 'gstcess') {
-                cessPercentage += tax.amount;
-            } else {
-                taxPercentage += tax.amount;
-            }
         });
 
-        entryFormGroup.get("totalTaxWithoutCess")?.patchValue(giddhRoundOff(((taxPercentage * (transactionFormGroup.get('amount.amountForAccount')?.value - entryFormGroup.get('totalDiscount')?.value)) / 100), this.company.giddhBalanceDecimalPlaces));
-        entryFormGroup.get("totalCess")?.patchValue(giddhRoundOff(((cessPercentage * (transactionFormGroup.get('amount.amountForAccount')?.value - entryFormGroup.get('totalDiscount')?.value)) / 100), this.company.giddhBalanceDecimalPlaces));
+        this.calculateTotalTax();
+    }
 
-        if (isNaN(entryFormGroup.get("totalTaxWithoutCess")?.value)) {
-            entryFormGroup.get("totalTaxWithoutCess")?.patchValue(0);
-        }
+    private calculateTotalTax(): void {
+        let taxPercentage: number = 0;
+        let cessPercentage: number = 0;
 
-        if (isNaN(entryFormGroup.get("totalCess")?.value)) {
-            entryFormGroup.get("totalCess")?.patchValue(0);
+        const entriesArray = this.invoiceForm.get('entries') as FormArray;
+        for (let entryIndex = 0; entryIndex < entriesArray.length; entryIndex++) {
+            const entryFormGroup = this.getEntryFormGroup(entryIndex);
+            const transactionFormGroup = this.getTransactionFormGroup(entryFormGroup);
+            const taxesFormArray = entryFormGroup.get('taxes') as FormArray;
+
+            for (let taxIndex = 0; taxIndex < taxesFormArray.length; taxIndex++) {
+                const taxFormGroup = taxesFormArray.at(taxIndex) as FormGroup;
+
+                if (taxFormGroup.get('taxType')?.value === 'gstcess') {
+                    cessPercentage += taxFormGroup.get('taxDetail')?.value?.taxValue;
+                } else {
+                    taxPercentage += taxFormGroup.get('taxDetail')?.value?.taxValue;
+                }
+            }
+
+            entryFormGroup.get("totalTaxWithoutCess")?.patchValue(giddhRoundOff(((taxPercentage * (transactionFormGroup.get('amount.amountForAccount')?.value - entryFormGroup.get('totalDiscount')?.value)) / 100), this.company.giddhBalanceDecimalPlaces));
+            entryFormGroup.get("totalCess")?.patchValue(giddhRoundOff(((cessPercentage * (transactionFormGroup.get('amount.amountForAccount')?.value - entryFormGroup.get('totalDiscount')?.value)) / 100), this.company.giddhBalanceDecimalPlaces));
+
+            if (isNaN(entryFormGroup.get("totalTaxWithoutCess")?.value)) {
+                entryFormGroup.get("totalTaxWithoutCess")?.patchValue(0);
+            }
+
+            if (isNaN(entryFormGroup.get("totalCess")?.value)) {
+                entryFormGroup.get("totalCess")?.patchValue(0);
+            }
         }
     }
 
@@ -1892,18 +1961,18 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public updateDueDate(): void {
-        let duePeriod: number;
-        if (this.invoiceType.isEstimateInvoice) {
-            duePeriod = this.invoiceSettings.estimateSettings ? this.invoiceSettings.estimateSettings.duePeriod : 0;
-        } else if (this.invoiceType.isProformaInvoice) {
-            duePeriod = this.invoiceSettings.proformaSettings ? this.invoiceSettings.proformaSettings.duePeriod : 0;
-        } else if (this.invoiceType.isPurchaseOrder) {
-            duePeriod = this.invoiceSettings.purchaseBillSettings ? this.invoiceSettings.purchaseBillSettings.poDuePeriod : 0;
-        } else {
-            duePeriod = this.invoiceSettings.invoiceSettings ? this.invoiceSettings.invoiceSettings.duePeriod : 0;
-        }
-
         if (this.invoiceForm.get("date").value) {
+            let duePeriod: number;
+            if (this.invoiceType.isEstimateInvoice) {
+                duePeriod = this.invoiceSettings.estimateSettings ? this.invoiceSettings.estimateSettings.duePeriod : 0;
+            } else if (this.invoiceType.isProformaInvoice) {
+                duePeriod = this.invoiceSettings.proformaSettings ? this.invoiceSettings.proformaSettings.duePeriod : 0;
+            } else if (this.invoiceType.isPurchaseOrder) {
+                duePeriod = this.invoiceSettings.purchaseBillSettings ? this.invoiceSettings.purchaseBillSettings.poDuePeriod : 0;
+            } else {
+                duePeriod = this.invoiceSettings.invoiceSettings ? this.invoiceSettings.invoiceSettings.duePeriod : 0;
+            }
+
             if (typeof (this.invoiceForm.get("date").value) === "object") {
                 this.invoiceForm.get("date").setValue(duePeriod > 0 ? dayjs(this.invoiceForm.get("date").value).add(duePeriod, 'day').toDate() : dayjs(this.invoiceForm.get("date").value).toDate());
             } else {
@@ -1923,8 +1992,136 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         transactionFormGroup.get('amount.amountForAccount').patchValue(amount);
     }
 
+    /**
+     * Calculates voucher totals
+     *
+     * @private
+     * @memberof VoucherCreateComponent
+     */
+    private calculateVoucherTotals(): void {
+        this.voucherTotals = this.vouchersUtilityService.getVoucherTotals(this.invoiceForm.get('entries')?.value, this.company.giddhBalanceDecimalPlaces, this.applyRoundOff);
+    }
+
+    /**
+     * Updates entry total amount
+     *
+     * @param {FormGroup} entryFormGroup
+     * @param {*} amount
+     * @memberof VoucherCreateComponent
+     */
     public updateEntryTotal(entryFormGroup: FormGroup, amount: any): void {
         entryFormGroup.get('total.amountForAccount').patchValue(amount);
+
+        this.calculateTotalTax();
+        this.calculateVoucherTotals();
+    }
+
+    /**
+     * Callback for deposit account selection
+     *
+     * @param {*} event
+     * @param {boolean} [isClear=false]
+     * @memberof VoucherCreateComponent
+     */
+    public selectedDepositAccount(event: any, isClear: boolean = false): void {
+        if (isClear) {
+            this.invoiceForm.get("deposit.currencySymbol")?.patchValue("");
+        } else {
+            this.invoiceForm.get("deposit.currencySymbol")?.patchValue(event?.additional?.currency?.symbol);
+        }
+    }
+
+    /**
+     *To check Tax number validation using regex get by API
+     *
+     * @param {*} value
+     * @memberof VoucherCreateComponent
+     */
+    public checkGstNumValidation(value: any): void {
+        if (this.company.taxType === TaxType.GST) {
+            let isValid: boolean = false;
+            if (value?.trim()) {
+                if (this.formFields['taxName']['regex'] !== "" && this.formFields['taxName']['regex']?.length > 0) {
+                    for (let key = 0; key < this.formFields['taxName']['regex'].length; key++) {
+                        let regex = new RegExp(this.formFields['taxName']['regex'][key]);
+                        if (regex.test(value)) {
+                            isValid = true;
+                            break;
+                        }
+                    }
+                } else {
+                    isValid = true;
+                }
+                if (!isValid) {
+                    this.toasterService.showSnackBar('error', 'Invalid ' + this.formFields['taxName']?.label);
+                    if (this.invoiceForm.controls['account'].get("billingAddress").get("taxNumber")?.value) {
+                        this.billingGstValid$ = observableOf(true);
+                    } else {
+                        this.shippingGstValid$ = observableOf(true);
+                    }
+                } else {
+                    if (this.invoiceForm.controls['account'].get("billingAddress").get("taxNumber")?.value) {
+                        this.billingGstValid$ = observableOf(false);
+                    } else {
+                        this.shippingGstValid$ = observableOf(false);
+                    }
+                }
+            } else {
+                if (this.invoiceForm.controls['account'].get("billingAddress").get("taxNumber")?.value) {
+                    this.billingGstValid$ = observableOf(false);
+                } else {
+                    this.shippingGstValid$ = observableOf(false);
+                }
+            }
+        }
+    }
+    
+    /* Updates account and generate voucher
+    *
+    * @memberof VoucherCreateComponent
+    */
+    public updateAccountAndGenerateVoucher(): void {
+        this.invoiceForm.get('updateAccountDetails')?.patchValue(true);
+        this.saveVoucher();
+    }
+
+    /**
+     * Generate voucher
+     *
+     * @memberof VoucherCreateComponent
+     */
+    public generateVoucher(): void {
+        this.invoiceForm.get('updateAccountDetails')?.patchValue(false);
+        this.saveVoucher();
+    }
+
+    /**
+     * Validates form
+     *
+     * @private
+     * @memberof VoucherCreateComponent
+     */
+    private isFormValid(): boolean {
+        return !this.invoiceForm.invalid;
+    }
+
+    /**
+     * Saves voucher
+     *
+     * @param {Function} [callback]
+     * @memberof VoucherCreateComponent
+     */
+    public saveVoucher(callback?: Function): void {
+        if (!this.isFormValid()) {
+            return;
+        }
+
+        let invoiceForm = this.vouchersUtilityService.formatAndCleanData(this.invoiceForm.value);
+        console.log(invoiceForm);
+
+        if (callback) {
+            callback();
+        }
     }
 
     /**

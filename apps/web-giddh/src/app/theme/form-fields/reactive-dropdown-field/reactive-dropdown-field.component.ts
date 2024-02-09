@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, ContentChild, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, TemplateRef, ViewChild, forwardRef } from "@angular/core";
 import { IOption } from "../../ng-virtual-select/sh-options.interface";
-import { BehaviorSubject, Observable, ReplaySubject, Subject, debounceTime, exhaustMap, of, scan, skip, startWith, switchMap, takeUntil, tap } from "rxjs";
+import { BehaviorSubject, Observable, ReplaySubject, Subject, debounceTime, of, skip, takeUntil } from "rxjs";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { MatAutocompleteTrigger } from "@angular/material/autocomplete";
 
@@ -49,16 +49,10 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     @Input() public isPaginationEnabled: boolean;
     /** True if the compoonent should be used as dynamic search component instead of static search */
     @Input() public enableDynamicSearch: boolean;
-    /** True if selected value can be reset */
-    @Input() public allowValueReset: boolean = false;
     /** True if we need to show value also with label */
     @Input() public showValueInLabel: boolean = false;
     /** True if we need to show create new label */
     @Input() public showCreateNew: boolean = false;
-    /** Holds text to show to create new data */
-    @Input() public createNewOptionsText: any = "";
-    /** True if we need to show more value also with label */
-    @Input() public hasMoreValue: boolean = false;
     /** Holds Mat Input Label */
     @Input() public label: string;
     /** Adds red border around field if true */
@@ -106,6 +100,11 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
 
     }
 
+    /**
+     * Lifecycle hook for component initialization
+     *
+     * @memberof ReactiveDropdownFieldComponent
+     */
     public ngOnInit(): void {
         if (this.enableDynamicSearch) {
             this.searchFormControl.pipe(debounceTime(700), skip(1), takeUntil(this.destroyed$)).subscribe(search => {
@@ -115,31 +114,20 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
                 }
             });
         } else {
-            this.fieldFilteredOptions$ = this.searchFormControl.pipe(
-                startWith(''),
-                debounceTime(700),
-                switchMap(search => {
-                    let currentPage = 1;
-
-                    if (!search) {
-                        this.onClear.emit({ label: "", value: "" });
-                    }
-
-                    return this.next$.pipe(
-                        startWith(currentPage),
-                        exhaustMap(_ => this.filterOptions(String(search))),
-                        tap(() => currentPage++),
-                        scan(
-                            (allOptions: any, newOptions: any) =>
-                                allOptions.concat(newOptions),
-                            []
-                        )
-                    );
-                })
-            );
+            this.searchFormControl.pipe(debounceTime(700), skip(1), takeUntil(this.destroyed$)).subscribe(search => {
+                if (!search) {
+                    this.onClear.emit({ label: "", value: "" });
+                }
+                this.fieldFilteredOptions$ = this.filterOptions(String(search));
+            });
         }
     }
 
+    /**
+     * Lifecycle hook for component after view initialization
+     *
+     * @memberof ReactiveDropdownFieldComponent
+     */
     public ngAfterViewInit(): void {
         setTimeout(() => {
             if (this.openDropdown) {
@@ -148,6 +136,14 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
         }, 500);
     }
 
+    /**
+     * Filters option values
+     *
+     * @private
+     * @param {string} search
+     * @return {*}  {*}
+     * @memberof ReactiveDropdownFieldComponent
+     */
     private filterOptions(search: string): any {
         let filteredOptions = [];
         this.options?.forEach(option => {
@@ -158,41 +154,88 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
         return of(filteredOptions);
     }
 
+    /**
+     * Lifecycle hook for input changes
+     *
+     * @param {SimpleChanges} changes
+     * @memberof ReactiveDropdownFieldComponent
+     */
     public ngOnChanges(changes: SimpleChanges): void {
         if (changes?.options) {
             this.fieldFilteredOptions$ = of(this.options);
         }
     }
 
+    /**
+     * Lifecycle hook for component destroy
+     *
+     * @memberof ReactiveDropdownFieldComponent
+     */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
 
+    /**
+     * Callback for onscroll in dropdown
+     *
+     * @memberof ReactiveDropdownFieldComponent
+     */
     public onScroll(): void {
         this.next$.next();
         this.scrollEnd.emit();
     }
 
+    /**
+     * Displays label after mat option selection
+     *
+     * @param {*} option
+     * @return {*}  {string}
+     * @memberof ReactiveDropdownFieldComponent
+     */
     public displayLabel(option: any): string {
         return option?.label;
     }
 
+    /**
+     * Writes value in ng value accessor
+     *
+     * @param {*} value
+     * @memberof ReactiveDropdownFieldComponent
+     */
     public writeValue(value: any): void {
         this.value = value;
         this.onChange(value);
     }
 
+    /**
+     * Callback for option selection
+     *
+     * @param {*} event
+     * @memberof ReactiveDropdownFieldComponent
+     */
     public optionSelected(event: any): void {
         this.writeValue(event?.option?.value?.value);
         this.onTouched();
         this.selectedOption.emit(event?.option?.value);
     }
 
+    /**
+     * On change method
+     *
+     * @param {*} fn
+     * @memberof ReactiveDropdownFieldComponent
+     */
     public registerOnChange(fn: any): void {
         this.onChange = fn;
     }
 
+    /**
+     * On touch method
+     *
+     * @param {*} fn
+     * @memberof ReactiveDropdownFieldComponent
+     */
     public registerOnTouched(fn: any): void {
         this.onTouched = fn;
     }

@@ -3,6 +3,9 @@ import { SearchType, TaxSupportedCountries, TaxType, VoucherTypeEnum } from "./v
 import { GeneralService } from "../../services/general.service";
 import { VoucherForm } from "../../models/api-models/Voucher";
 import { GIDDH_VOUCHER_FORM } from "../../app.constant";
+import { giddhRoundOff } from "../../shared/helpers/helperFunctions";
+import { GIDDH_DATE_FORMAT } from "../../shared/helpers/defaultDateFormat";
+import * as dayjs from "dayjs";
 
 @Injectable()
 export class VouchersUtilityService {
@@ -209,5 +212,66 @@ export class VouchersUtilityService {
         } else {
             return GIDDH_VOUCHER_FORM.find(form => form.type === voucherType);
         }
+    }
+
+    public getVoucherTotals(entries: any[], balanceDecimalPlaces: number, applyRoundOff: boolean): any {
+        let voucherTotals = {
+            totalAmount: 0,
+            totalDiscount: 0,
+            totalTaxableValue: 0,
+            totalTaxWithoutCess: 0,
+            totalCess: 0,
+            grandTotal: 0,
+            roundOff: 0
+        };
+
+        entries?.forEach(entry => {
+            voucherTotals.totalAmount += (Number(entry.transactions[0]?.amount?.amountForAccount));
+            voucherTotals.totalDiscount += (Number(entry.totalDiscount));
+            voucherTotals.totalTaxableValue += ((Number(entry.transactions[0]?.amount?.amountForAccount)) - (Number(entry.totalDiscount)));
+            voucherTotals.totalTaxWithoutCess += (Number(entry.totalTaxWithoutCess));
+            voucherTotals.totalCess += (Number(entry.totalCess));
+            voucherTotals.grandTotal += (Number(entry.total?.amountForAccount));
+        });
+
+        voucherTotals.totalAmount = giddhRoundOff(voucherTotals.totalAmount, balanceDecimalPlaces);
+        voucherTotals.totalDiscount = giddhRoundOff(voucherTotals.totalDiscount, balanceDecimalPlaces);
+        voucherTotals.totalTaxableValue = giddhRoundOff(voucherTotals.totalTaxableValue, balanceDecimalPlaces);
+        voucherTotals.totalTaxWithoutCess = giddhRoundOff(voucherTotals.totalTaxWithoutCess, balanceDecimalPlaces);
+        voucherTotals.totalCess = giddhRoundOff(voucherTotals.totalCess, balanceDecimalPlaces);
+        voucherTotals.grandTotal = giddhRoundOff(voucherTotals.grandTotal, balanceDecimalPlaces);
+        voucherTotals.roundOff = (applyRoundOff) ? Number((Math.round(voucherTotals.grandTotal) - voucherTotals.grandTotal).toFixed(balanceDecimalPlaces)) : Number((0).toFixed(balanceDecimalPlaces));
+
+        return voucherTotals;
+    }
+
+    public convertDateToString(value: any): string {
+        if (value) {
+            // To check val is DD-MM-YY format already so it will be string then return val
+            if (typeof value === 'string') {
+                if (value.includes('-')) {
+                    return value;
+                } else {
+                    return '';
+                }
+            } else {
+                try {
+                    return dayjs(value).format(GIDDH_DATE_FORMAT);
+                } catch (error) {
+                    return '';
+                }
+            }
+        } else {
+            return '';
+        }
+    }
+
+    public formatAndCleanData(invoiceForm: any): any {
+        invoiceForm.dueDate = this.convertDateToString(invoiceForm.dueDate);
+
+        delete invoiceForm.deposit.currencySymbol;
+        
+
+        return invoiceForm;
     }
 }
