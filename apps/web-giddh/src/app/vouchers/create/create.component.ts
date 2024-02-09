@@ -381,7 +381,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         /** Exchange rate */
         this.componentStore.exchangeRate$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            this.invoiceForm.get('exchangeRate')?.patchValue(response);
+            if (response) {
+                this.invoiceForm.get('exchangeRate')?.patchValue(response);
+            }
         });
 
         /** Stock Variants */
@@ -1067,7 +1069,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 customerName: [''],
                 uniqueName: ['', Validators.required],
                 attentionTo: [''],
-                contactNumber: [''],
                 mobileNumber: [''],
                 email: ['', Validators.email],
                 billingAddress: this.getAddressFormGroup(),
@@ -1123,7 +1124,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     private getAddressFormGroup(): FormGroup {
         return this.formBuilder.group({
-            index: [''],
+            index: [''], //temp
             address: [''],
             pincode: [''],
             taxNumber: [''],
@@ -1663,19 +1664,32 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public createSendVoucher(): void {
-        this.dialog.open(this.sendEmailModal, {
-            width: '650px'
+        this.saveVoucher(() => {
+            let dialogRef = this.dialog.open(this.sendEmailModal, {
+                width: '650px'
+            });
+
+            dialogRef.afterClosed().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+
+            });
         });
     }
+
     /**
      * This will be use for create and print voucher
      *
      * @memberof VoucherCreateComponent
      */
     public createPrintVoucher(): void {
-        this.dialog.open(this.printVoucherModal, {
-            width: '60vw',
-            height: '80vh'
+        this.saveVoucher(() => {
+            let dialogRef = this.dialog.open(this.printVoucherModal, {
+                width: '60vw',
+                height: '80vh'
+            });
+
+            dialogRef.afterClosed().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+
+            });
         });
     }
 
@@ -1947,18 +1961,18 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public updateDueDate(): void {
-        let duePeriod: number;
-        if (this.invoiceType.isEstimateInvoice) {
-            duePeriod = this.invoiceSettings.estimateSettings ? this.invoiceSettings.estimateSettings.duePeriod : 0;
-        } else if (this.invoiceType.isProformaInvoice) {
-            duePeriod = this.invoiceSettings.proformaSettings ? this.invoiceSettings.proformaSettings.duePeriod : 0;
-        } else if (this.invoiceType.isPurchaseOrder) {
-            duePeriod = this.invoiceSettings.purchaseBillSettings ? this.invoiceSettings.purchaseBillSettings.poDuePeriod : 0;
-        } else {
-            duePeriod = this.invoiceSettings.invoiceSettings ? this.invoiceSettings.invoiceSettings.duePeriod : 0;
-        }
-
         if (this.invoiceForm.get("date").value) {
+            let duePeriod: number;
+            if (this.invoiceType.isEstimateInvoice) {
+                duePeriod = this.invoiceSettings.estimateSettings ? this.invoiceSettings.estimateSettings.duePeriod : 0;
+            } else if (this.invoiceType.isProformaInvoice) {
+                duePeriod = this.invoiceSettings.proformaSettings ? this.invoiceSettings.proformaSettings.duePeriod : 0;
+            } else if (this.invoiceType.isPurchaseOrder) {
+                duePeriod = this.invoiceSettings.purchaseBillSettings ? this.invoiceSettings.purchaseBillSettings.poDuePeriod : 0;
+            } else {
+                duePeriod = this.invoiceSettings.invoiceSettings ? this.invoiceSettings.invoiceSettings.duePeriod : 0;
+            }
+
             if (typeof (this.invoiceForm.get("date").value) === "object") {
                 this.invoiceForm.get("date").setValue(duePeriod > 0 ? dayjs(this.invoiceForm.get("date").value).add(duePeriod, 'day').toDate() : dayjs(this.invoiceForm.get("date").value).toDate());
             } else {
@@ -2059,6 +2073,54 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     this.shippingGstValid$ = observableOf(false);
                 }
             }
+        }
+    }
+    
+    /* Updates account and generate voucher
+    *
+    * @memberof VoucherCreateComponent
+    */
+    public updateAccountAndGenerateVoucher(): void {
+        this.invoiceForm.get('updateAccountDetails')?.patchValue(true);
+        this.saveVoucher();
+    }
+
+    /**
+     * Generate voucher
+     *
+     * @memberof VoucherCreateComponent
+     */
+    public generateVoucher(): void {
+        this.invoiceForm.get('updateAccountDetails')?.patchValue(false);
+        this.saveVoucher();
+    }
+
+    /**
+     * Validates form
+     *
+     * @private
+     * @memberof VoucherCreateComponent
+     */
+    private isFormValid(): boolean {
+        return !this.invoiceForm.invalid;
+    }
+
+    /**
+     * Saves voucher
+     *
+     * @param {Function} [callback]
+     * @memberof VoucherCreateComponent
+     */
+    public saveVoucher(callback?: Function): void {
+        if (!this.isFormValid()) {
+            return;
+        }
+
+        let invoiceForm = this.vouchersUtilityService.formatAndCleanData(this.invoiceForm.value);
+        console.log(invoiceForm);
+
+        if (callback) {
+            callback();
         }
     }
 

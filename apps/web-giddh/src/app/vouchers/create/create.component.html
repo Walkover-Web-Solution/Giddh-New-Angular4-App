@@ -400,7 +400,7 @@
                                         <input-field [name]="'vouchers-number'"
                                             [label]="!invoiceType.isPurchaseOrder? 'Voucher Number' : 'Order Number'"
                                             [placeholder]="!invoiceType.isPurchaseOrder? 'Enter voucher number' : 'Enter Order Number'"
-                                            [type]="'text'" formControlName="number">
+                                            [type]="'text'" formControlName="number" [readonly]="!invoiceSettings?.invoiceSettings?.useCustomInvoiceNumber" [disabled]="!invoiceSettings?.invoiceSettings?.useCustomInvoiceNumber">
                                         </input-field>
                                     </div>
 
@@ -1265,9 +1265,9 @@
                                 <div class="vouchers-actions d-flex justify-content-end column-gap1 pd-t2 pd-b2 mt-4">
                                     <button mat-stroked-button *ngIf="!isUpdateMode">Clear</button>
                                     <button mat-stroked-button color="primary"
-                                        *ngIf="invoiceType.isSalesInvoice">Generate Sales & Update A/c</button>
+                                        *ngIf="invoiceType.isSalesInvoice" (click)="updateAccountAndGenerateVoucher()">Generate Sales & Update A/c</button>
                                     <button mat-stroked-button color="primary"
-                                        *ngIf="invoiceType.isSalesInvoice">Generate Sales</button>
+                                        *ngIf="invoiceType.isSalesInvoice" (click)="generateVoucher()">Generate Sales</button>
 
                                     <button mat-stroked-button color="primary" *ngIf="invoiceType.isCreditNote">
                                         Generate Credit Note & Update A/c
