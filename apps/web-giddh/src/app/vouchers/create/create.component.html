@@ -601,16 +601,18 @@
                                                                                     transaction.get('stock.variant.name')?.value
                                                                                     }}</span>
                                                                             </ng-container>
-                                                                            <reactive-dropdown-field
-                                                                                *ngIf="activeEntryIndex === entryIndex"
-                                                                                [label]="localeData?.select_variant"
-                                                                                [placeholder]="localeData?.select_variant"
-                                                                                formControlName="uniqueName"
-                                                                                [name]="'transactionStockVariantUniqueName' + entryIndex"
-                                                                                [options]="stockVariants[entryIndex] | async"
-                                                                                (selectedOption)="selectVariant($event, entryIndex)"
-                                                                                (onClear)="selectVariant($event, entryIndex, true)">
-                                                                            </reactive-dropdown-field>
+                                                                            <div class="mr-t1">
+                                                                                <reactive-dropdown-field
+                                                                                    *ngIf="activeEntryIndex === entryIndex"
+                                                                                    [label]="localeData?.select_variant"
+                                                                                    [placeholder]="localeData?.select_variant"
+                                                                                    formControlName="uniqueName"
+                                                                                    [name]="'transactionStockVariantUniqueName' + entryIndex"
+                                                                                    [options]="stockVariants[entryIndex] | async"
+                                                                                    (selectedOption)="selectVariant($event, entryIndex)"
+                                                                                    (onClear)="selectVariant($event, entryIndex, true)">
+                                                                                </reactive-dropdown-field>
+                                                                            </div>
                                                                         </ng-container>
                                                                     </ng-container>
                                                                 </ng-container>
@@ -618,19 +620,21 @@
 
                                                             <ng-container *ngIf="activeEntryIndex === entryIndex">
                                                                 <textarea rows="2" matInput class="form-control mt-2" placeholder="Add Description" name="transactionDescription{{entryIndex}}" formControlName="description" [maxlength]="entryDescriptionLength"></textarea>
-                                                                <span class="mt-2 font-12">{{ commonLocaleData?.app_characters_left }}: {{ entryDescriptionLength - entry.get("description")?.value?.length }}</span>
+                                                               
                                                             </ng-container>
                                                             <ng-container *ngIf="activeEntryIndex !== entryIndex">
                                                                 {{ entry.get('description')?.value }}
                                                             </ng-container>
-    
-                                                            <ng-container *ngFor="let transaction of entry.get('transactions')['controls']" formArrayName="transactions">
-                                                                <ng-container formGroupName="0">
-                                                                    <ng-container *ngIf="transaction.get('stock.skuCode')?.value">
-                                                                        <span class="mt-2 font-12">{{ transaction.get('stock.skuCodeHeading')?.value }}: {{ transaction.get('stock.skuCode')?.value }}</span>
+                                                            <div class="mt-2 d-flex justify-content-between">
+                                                                <span *ngIf="activeEntryIndex === entryIndex" class="font-12">{{ commonLocaleData?.app_characters_left }}: {{ entryDescriptionLength - entry.get("description")?.value?.length }}</span>
+                                                                <ng-container *ngFor="let transaction of entry.get('transactions')['controls']" formArrayName="transactions">
+                                                                    <ng-container formGroupName="0">
+                                                                        <ng-container *ngIf="transaction.get('stock.skuCode')?.value">
+                                                                            <span class="font-12">{{ transaction.get('stock.skuCodeHeading')?.value }}: {{ transaction.get('stock.skuCode')?.value }}</span>
+                                                                        </ng-container>
                                                                     </ng-container>
                                                                 </ng-container>
-                                                            </ng-container>
+                                                            </div>
 
                                                             <div class="d-flex justify-content-between">
                                                                 <div class="w-50">
