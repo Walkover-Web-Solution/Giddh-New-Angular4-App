@@ -152,8 +152,8 @@
                                                         </button>
                                                         <mat-divider></mat-divider>
                                                     </ng-container>
-                                                    <button mat-menu-item class="vouchers-add-new"
-                                                        (click)="toggleAccountAsidePane()">+ Add new address</button>
+                                                    <!-- <button mat-menu-item class="vouchers-add-new"
+                                                        >+ Add new address</button> -->
                                                 </div>
                                             </mat-menu>
                                             <div class="vouchers-address-form" *ngIf="invoiceType.isCashInvoice">
@@ -218,9 +218,9 @@
                                                             </button>
                                                             <mat-divider></mat-divider>
                                                         </ng-container>
-                                                        <button mat-menu-item class="vouchers-add-new"
-                                                            (click)="toggleAccountAsidePane()">+ Add new
-                                                            address</button>
+                                                        <!-- <button mat-menu-item class="vouchers-add-new"
+                                                          >+ Add new
+                                                            address</button> -->
                                                     </div>
                                                 </mat-menu>
                                             </ng-container>
@@ -1245,3 +1245,4 @@
 <ng-template #bulkItemsModal>
     <add-bulk-items (closeEvent)="cancelBulkItemsModal()" [voucherType]="voucherType"></add-bulk-items>
 </ng-template>
+
