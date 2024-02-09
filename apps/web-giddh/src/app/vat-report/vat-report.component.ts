@@ -1,5 +1,5 @@
 import { Observable, ReplaySubject } from 'rxjs';
-import { take, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { ChangeDetectorRef, Component, TemplateRef, OnDestroy, OnInit, ViewChild, } from '@angular/core';
 import { Router } from '@angular/router';
 import { VatReportRequest } from '../models/api-models/Vat';
@@ -19,6 +19,8 @@ import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { cloneDeep } from '../lodash-optimized';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../app.constant';
+import { SettingsFinancialYearActions } from '../actions/settings/financial-year/financial-year.action';
+import { SettingsFinancialYearService } from '../services/settings.financial-year.service';
 @Component({
     selector: 'app-vat-report',
     styleUrls: ['./vat-report.component.scss'],
@@ -32,6 +34,8 @@ export class VatReportComponent implements OnInit, OnDestroy {
     public dayjs = dayjs;
     public fromDate: string = '';
     public toDate: string = '';
+    /** Hold selected year */
+    public year: number = null;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     @ViewChild('periodDropdown', { static: true }) public periodDropdown;
     /** directive to get reference of element */
@@ -97,10 +101,14 @@ export class VatReportComponent implements OnInit, OnDestroy {
         { label: 'November', value: 11 },
         { label: 'December', value: 12 },
     ];
+    /** Hold financial year list */
+    public financialYears: any = [];
     /** True if api call in progress */
     public isLoading: boolean = false;
     /** Hold selected month value */
     public selectedMonth: any = "";
+    /** Hold selected year value */
+    public selectedYear: any = "";
     /** Hold HMRC portal url */
     public connectToHMRCUrl: string = null;
 
@@ -114,8 +122,13 @@ export class VatReportComponent implements OnInit, OnDestroy {
         private route: Router,
         private settingsBranchAction: SettingsBranchActions,
         private breakpointObserver: BreakpointObserver,
-        private modalService: BsModalService
-    ) { }
+        private modalService: BsModalService,
+        private settingsFinancialYearActions: SettingsFinancialYearActions,
+        public settingsFinancialYearService: SettingsFinancialYearService
+    ) {
+        this.store.dispatch(this.settingsFinancialYearActions.getFinancialYearLimits());
+        this.getFinancialYears();
+    }
 
     public ngOnInit() {
         document.querySelector('body').classList.add('gst-sidebar-open');
@@ -195,8 +208,10 @@ export class VatReportComponent implements OnInit, OnDestroy {
                 this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                 this.fromDate = dayjs(dateObj[0]).format(GIDDH_DATE_FORMAT);
                 this.toDate = dayjs(dateObj[1]).format(GIDDH_DATE_FORMAT);
+                this.selectedMonth = "";
+                this.selectedYear = "";
+                this.year = null;
                 this.loadTaxDetails();
-                this.getMonthStartAndEndDate(this.months[dateObj[1].getMonth()]);
             }
         });
     }
@@ -280,12 +295,11 @@ export class VatReportComponent implements OnInit, OnDestroy {
      */
     public getMonthStartAndEndDate(selectedMonth: any) {
         if (selectedMonth) {
-            this.selectedMonth = selectedMonth.label;
-            const year = this.getMonthWithInFinancialYear(selectedMonth);
+            this.selectedMonth = selectedMonth;
 
             // Month is zero-based, so subtract 1 from the selected month
-            const startDate = new Date(year, selectedMonth.value - 1, 1);
-            const endDate = new Date(year, selectedMonth.value, 0);
+            const startDate = new Date(this.year, selectedMonth.value - 1, 1);
+            const endDate = new Date(this.year, selectedMonth.value, 0);
             this.selectedDateRange = { startDate: dayjs(startDate), endDate: dayjs(endDate) };
             this.selectedDateRangeUi = dayjs(startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
             this.fromDate = dayjs(startDate).format(GIDDH_DATE_FORMAT);
@@ -296,22 +310,20 @@ export class VatReportComponent implements OnInit, OnDestroy {
     }
 
     /**
-    * Return correct year for the selected month based on current financial year 
+    * This will use for get year selected
     *
-    * @private
-    * @param {*} selectedMonth
-    * @returns {number}
+    * @param {*} selectedYear
     * @memberof VatReportComponent
     */
-    private getMonthWithInFinancialYear(selectedMonth: any): number {
-        let year = new Date().getFullYear();
-        this.months.slice(3, 12).forEach(item => {
-            if (item.label == selectedMonth.label) {
-                year = year - 1;
-                return;
+    public getYearStartAndEndDate(selectedYear: any) {
+        if (selectedYear?.value && selectedYear?.label !== this.selectedYear) {
+            this.year = Number(selectedYear?.value);
+            this.selectedYear = selectedYear.label;
+
+            if(this.selectedMonth){
+                this.getMonthStartAndEndDate(this.selectedMonth);
             }
-        });
-        return year;
+        }
     }
 
     /**
@@ -388,11 +400,11 @@ export class VatReportComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Call back function for date/range selection in datepicker
-     *
-     * @param {*} value
-     * @memberof VatReportComponent
-     */
+    * Call back function for date/range selection in datepicker
+    *
+    * @param {*} value
+    * @memberof VatReportComponent
+    */
     public dateSelectedCallback(value?: any): void {
         if (value && value.event === "cancel") {
             this.hideGiddhDatepicker();
@@ -400,6 +412,8 @@ export class VatReportComponent implements OnInit, OnDestroy {
         }
         this.selectedRangeLabel = "";
         this.selectedMonth = "";
+        this.selectedYear = "";
+        this.year = null;
 
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
@@ -425,5 +439,45 @@ export class VatReportComponent implements OnInit, OnDestroy {
                 this.connectToHMRCUrl = res?.body;
             }
         })
+    }
+
+    /**
+     * This will get all the financial years of the company
+     *
+     * @memberof VatReportComponent
+     */
+    private getFinancialYears(): void {
+        this.settingsFinancialYearService.getFinancialYearLimits().pipe(takeUntil(this.destroyed$)).subscribe(res => {
+            if (res.body.startDate && res.body.endDate) {
+                this.createFinancialYearsList(res.body.startDate, res.body.endDate)
+            }
+        });
+    }
+
+    /**
+    * Create financial years list for dropdown
+    *
+    * @private
+    * @param {*} startDate
+    * @param {*} endDate
+    * @memberof VatReportComponent
+    */
+    private createFinancialYearsList(startDate: any, endDate: any, initList: boolean = true): any {
+        if (startDate && endDate) {
+            let startYear = startDate.split('-');
+            startYear = startYear[startYear?.length - 1];
+
+            let endYear = endDate.split('-');
+            endYear = endYear[endYear?.length - 1];
+
+            if (initList){
+                this.financialYears = [
+                    { label: startYear, value: startYear },
+                    { label: endYear, value: endYear }
+                ];
+            }
+
+            return { startYear: startYear, endYear: endYear };
+        }
     }
 }
