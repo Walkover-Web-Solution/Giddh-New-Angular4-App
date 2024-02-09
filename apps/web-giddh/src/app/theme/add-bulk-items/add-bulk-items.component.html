@@ -35,7 +35,7 @@
                                                     <div *ngIf="(stockVariants[i] | async)?.length > 1"
                                                         class="variants-wrapper">
                                                         <ng-container *ngFor="let variant of stockVariants[i] | async">
-                                                            <mat-list-item (click)="variantChanged(item, variant)"
+                                                            <mat-list-item (click)="variantChanged(item, variant, i)"
                                                                 class="list-item pr-2 pl-4"
                                                                 [matTooltip]="variant?.label"
                                                                 matTooltipPosition="left">{{ variant?.label
@@ -59,7 +59,7 @@
                         </div>
                     </div>
                     <div class="bulk-entry-selected-items d-flex flex-column">
-                        <div class="selected-item-title">Selected Stocks ({{ dataControls.length }})</div>
+                        <div class="selected-item-title">Selected Stocks ({{ getDataControls?.length }})</div>
                         <div class="selected-item-wrapper">
                             <ng-container
                                 *ngFor="let item of addBulkForm?.get('data')['controls']; let bulkIndex = index"
