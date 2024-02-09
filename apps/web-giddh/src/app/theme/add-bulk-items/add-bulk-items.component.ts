@@ -27,8 +27,6 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
     public voucherStockResults$: Observable<OptionInterface[]> = of(null);
     /** Form Group for invoice form */
     public addBulkForm: FormGroup;
-    /** Hold selected items */
-    public selectedItems: SalesAddBulkStockItems[] = [];
     /** List of stock variants */
     public stockVariants: any[] = [];
 
@@ -53,7 +51,6 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
             this.searchStock(response, 1);
         });
 
-        /** Stock Variants */
         this.componentStore.stockVariants$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.stockVariants[response.entryIndex] = of(response.results);
@@ -75,7 +72,7 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This will be use for return item
+     * This will be use for return stock form group
      *
      * @private
      * @return {*}  {FormGroup}
@@ -101,7 +98,7 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
      * @type {FormArray}
      * @memberof AddBulkItemsComponent
      */
-    public get dataControls(): FormArray {
+    public get getDataControls(): FormArray {
         return this.addBulkForm.get("data") as FormArray;
     }
 
@@ -157,16 +154,15 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
     public addItem(item: SalesAddBulkStockItems, index: number): void {
         const dataArray = this.addBulkForm.get('data') as FormArray;
         const isAlreadySelected = dataArray.controls.some((control, i) => {
-            return i !== index && control.get('name').value === item.name && control.get('variantName').value === item.variant.name;
+            return i === index && (control.get('name').value === item.name);
         });
-    
         if (isAlreadySelected) {
-            this.toaster.warningToast('Stock is already selected in the form array');
+            this.toaster.warningToast('Stock is already selected');
             return;
         }
         let requestObject = {
             stockUniqueName: item.additional?.stock?.uniqueName ?? '',
-            customerUniqueName: 'sales'
+            customerUniqueName: 'sales' // send dynamic customer unique name from voucher
         };
         if (item?.additional?.stock?.uniqueName) {
             this.componentStore.getStockVariants({ q: item?.additional?.stock?.uniqueName, index: index });
@@ -213,13 +209,9 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
                 const unitRates = data.body?.stock?.variant?.unitRates ?? [];
                 item.rate = unitRates[0]?.rate ?? 0;
                 item.quantity = 1;
-                if (!data.body.stock || item.variants?.length === 1 || item.variant?.uniqueName) {
-                    this.selectedItems = [...this.selectedItems, item];
-                }
-                // Patch values directly to the form controls
-                const itemFormGroup = this.getStockFormGroup(item);
-                console.log(itemFormGroup.value);
-                this.dataControls.push(itemFormGroup);
+                let itemFormGroup;;
+                itemFormGroup = this.getStockFormGroup(item);
+                this.getDataControls.push(itemFormGroup);
             }
         });
     }
@@ -232,18 +224,22 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
      * @return {*}  {void}
      * @memberof AddBulkItemsComponent
      */
-    public variantChanged(item: SalesAddBulkStockItems, event: any): void {
+    public variantChanged(item: SalesAddBulkStockItems, event: any, i: number): void {
         let selectedItem = cloneDeep(item);
         selectedItem.variant = { name: event.label, uniqueName: event.value };
-        const index = this.selectedItems?.findIndex(f => f.additional.combinedUniqueName === `${selectedItem.uniqueName}#${event.value}`);
-        if (index > -1) {
-            this.toaster.warningToast("Variant is already selected");
+        const dataArray = this.addBulkForm.get('data') as FormArray;
+        const isAlreadySelected = dataArray.controls.some((control, i) => {
+            return i === i && control.get('variantName').value === event.label;
+        });
+
+        if (isAlreadySelected) {
+            this.toaster.warningToast('Variant is already selected');
             return;
         }
         const requestObj = {
-            stockUniqueName: selectedItem.additional?.stock?.uniqueName ?? '',
+            stockUniqueName: item.additional?.stock?.uniqueName ?? '',
             variantUniqueName: event.value,
-            customerUniqueName: 'sales'
+            customerUniqueName: 'sales' // send dynamic customer unique name from voucher
         };
         this.loadDetails(selectedItem, requestObj);
     }
@@ -256,7 +252,7 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
      * @memberof AddBulkItemsComponent
      */
     public deleteSelectedItem(index: number): void {
-        const selectedItem = this.dataControls;
+        const selectedItem = this.getDataControls;
         selectedItem.removeAt(index);
     }
 
@@ -267,7 +263,7 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
      * @param {string} [action='add']
      * @memberof AddBulkItemsComponent
      */
-    public alterQuantity(item, action: string = 'add') {
+    public alterQuantity(item, action: string = 'add'): void {
         const quantityControl = item.get('quantity');
 
         let currentQuantity = +quantityControl.value;
@@ -277,7 +273,6 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
         } else if (action === 'minus' && currentQuantity > 1) {
             currentQuantity--;
         }
-
         quantityControl.setValue(currentQuantity);
     }
 
