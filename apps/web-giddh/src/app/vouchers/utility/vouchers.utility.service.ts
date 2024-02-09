@@ -4,6 +4,8 @@ import { GeneralService } from "../../services/general.service";
 import { VoucherForm } from "../../models/api-models/Voucher";
 import { GIDDH_VOUCHER_FORM } from "../../app.constant";
 import { giddhRoundOff } from "../../shared/helpers/helperFunctions";
+import { GIDDH_DATE_FORMAT } from "../../shared/helpers/defaultDateFormat";
+import * as dayjs from "dayjs";
 
 @Injectable()
 export class VouchersUtilityService {
@@ -241,5 +243,35 @@ export class VouchersUtilityService {
         voucherTotals.roundOff = (applyRoundOff) ? Number((Math.round(voucherTotals.grandTotal) - voucherTotals.grandTotal).toFixed(balanceDecimalPlaces)) : Number((0).toFixed(balanceDecimalPlaces));
 
         return voucherTotals;
+    }
+
+    public convertDateToString(value: any): string {
+        if (value) {
+            // To check val is DD-MM-YY format already so it will be string then return val
+            if (typeof value === 'string') {
+                if (value.includes('-')) {
+                    return value;
+                } else {
+                    return '';
+                }
+            } else {
+                try {
+                    return dayjs(value).format(GIDDH_DATE_FORMAT);
+                } catch (error) {
+                    return '';
+                }
+            }
+        } else {
+            return '';
+        }
+    }
+
+    public formatAndCleanData(invoiceForm: any): any {
+        invoiceForm.dueDate = this.convertDateToString(invoiceForm.dueDate);
+
+        delete invoiceForm.deposit.currencySymbol;
+        
+
+        return invoiceForm;
     }
 }
