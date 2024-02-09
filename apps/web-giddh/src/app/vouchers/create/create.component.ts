@@ -246,6 +246,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public get showPageLeaveConfirmation(): boolean {
         return (!this.isUpdateMode && (this.invoiceForm?.controls['account']?.get('customerName')?.value)) ? true : false;
     }
+    /** Instance of intl mobile number  */
     public intlClass: any;
 
     constructor(
