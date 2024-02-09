@@ -155,17 +155,13 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
      * @memberof AddBulkItemsComponent
      */
     public addItem(item: SalesAddBulkStockItems, index: number): void {
-        let selectedIndex;
-        if (!item.additional.stock) {
-            selectedIndex = this.selectedItems?.findIndex(f => f?.uniqueName === item?.uniqueName);
-        } else {
-            if (item.variants?.length === 1) {
-                const variant = item.variants[0];
-                selectedIndex = this.selectedItems?.findIndex(f => f.additional.combinedUniqueName === `${item.uniqueName}#${variant.value}`);
-            }
-        }
-        if (selectedIndex > -1) {
-            this.toaster.warningToast('Stock is already selected');
+        const dataArray = this.addBulkForm.get('data') as FormArray;
+        const isAlreadySelected = dataArray.controls.some((control, i) => {
+            return i !== index && control.get('name').value === item.name && control.get('variantName').value === item.variant.name;
+        });
+    
+        if (isAlreadySelected) {
+            this.toaster.warningToast('Stock is already selected in the form array');
             return;
         }
         let requestObject = {
@@ -239,11 +235,11 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
     public variantChanged(item: SalesAddBulkStockItems, event: any): void {
         let selectedItem = cloneDeep(item);
         selectedItem.variant = { name: event.label, uniqueName: event.value };
-        // const index = this.selectedItems?.findIndex(f => f.additional.combinedUniqueName === `${selectedItem.uniqueName}#${event.value}`);
-        // if (index > -1) {
-        //     this.toaster.warningToast("Variant is already selected");
-        //     return;
-        // }
+        const index = this.selectedItems?.findIndex(f => f.additional.combinedUniqueName === `${selectedItem.uniqueName}#${event.value}`);
+        if (index > -1) {
+            this.toaster.warningToast("Variant is already selected");
+            return;
+        }
         const requestObj = {
             stockUniqueName: selectedItem.additional?.stock?.uniqueName ?? '',
             variantUniqueName: event.value,
@@ -259,7 +255,7 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
      * @param {number} index
      * @memberof AddBulkItemsComponent
      */
-    public deleteLineEntry(index: number): void {
+    public deleteSelectedItem(index: number): void {
         const selectedItem = this.dataControls;
         selectedItem.removeAt(index);
     }
@@ -267,20 +263,22 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
     /**
      * This will be use for alter quantity
      *
-     * @param {SalesAddBulkStockItems} item
-     * @param {('plus' | 'minus')} [mode='plus']
-     * @return {*}  {void}
+     * @param {*} item
+     * @param {string} [action='add']
      * @memberof AddBulkItemsComponent
      */
-    public alterQuantity(item: SalesAddBulkStockItems, mode: 'plus' | 'minus' = 'plus'): void {
-        if (mode === 'plus') {
-            item.quantity++;
-        } else {
-            if (item.quantity === 1) {
-                return;
-            }
-            item.quantity--;
+    public alterQuantity(item, action: string = 'add') {
+        const quantityControl = item.get('quantity');
+
+        let currentQuantity = +quantityControl.value;
+
+        if (action === 'add') {
+            currentQuantity++;
+        } else if (action === 'minus' && currentQuantity > 1) {
+            currentQuantity--;
         }
+
+        quantityControl.setValue(currentQuantity);
     }
 
     /**
