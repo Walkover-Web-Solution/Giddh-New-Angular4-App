@@ -177,7 +177,7 @@
                                                 <div class="gstin-field">
                                                     <text-field [type]="'text'" [name]="'billingTaxNumber'"
                                                         [placeholder]="'GSTIN'" [cssClass]="'border-0'"
-                                                        [showError]="billingGstValid$ | async"
+                                                        [showError]="taxNumberValidations['account']['billingAddress'] | async"
                                                         formControlName="taxNumber"></text-field>
                                                 </div>
                                                 <div class="pin-code-field">
@@ -253,7 +253,7 @@
                                                 <div class="gstin-field">
                                                     <text-field [type]="'text'" [name]="'shippingTaxNumber'"
                                                         [placeholder]="'GSTIN'" [cssClass]="'border-0'"
-                                                        [showError]="shippingGstValid$ | async"
+                                                        [showError]="taxNumberValidations['account']['shippingAddress'] | async"
                                                         formControlName="taxNumber"></text-field>
                                                 </div>
                                                 <div class="pin-code-field">
@@ -406,7 +406,7 @@
 
                                     <!-- Voucher Date -->
                                     <div class="col-3 pr-2">
-                                        <giddh-datepicker type="text" (keydown.enter)="$event.preventDefault()"
+                                        <giddh-datepicker (keydown.enter)="$event.preventDefault()"
                                             [label]="invoiceType.isSalesInvoice  ?'Invoice Date': invoiceType.isPurchaseInvoice ? 'Bill Date': invoiceType.isCreditNote?'Credit Note Date': invoiceType.isDebitNote ?'Debit Note Date':invoiceType.isEstimateInvoice?'Estimate Date':invoiceType.isProformaInvoice?'Proforma Date':invoiceType.isPurchaseOrder ?'Order Date':'' "
                                             [placeholder]="'DDMMYYYY'" name="voucherDate" [showToggleIcon]="false"
                                             [appearance]="'outline'" formControlName="date">
@@ -423,8 +423,8 @@
                                     invoiceType.isEstimateInvoice) &&
                                     !invoiceType.isCashInvoice
                                 ">
-                                        <giddh-datepicker type="text" (keydown.enter)="$event.preventDefault()"
-                                            [label]="(invoiceType.isSalesInvoice || invoiceType.isProformaInvoice || invoiceType.isPurchaseInvoice) ?'Due Date': invoiceType.isPurchaseOrder ? 'Expected Delivery': invoiceType.isEstimateInvoice?'Expiry Date':''"
+                                        <giddh-datepicker (keydown.enter)="$event.preventDefault()"
+                                            [label]="(invoiceType.isSalesInvoice || invoiceType.isProformaInvoice || invoiceType.isPurchaseInvoice) ? 'Due Date': invoiceType.isPurchaseOrder ? 'Expected Delivery': invoiceType.isEstimateInvoice ? 'Expiry Date' : ''"
                                             [placeholder]="'DDMMYYYY'" name="voucherDueDate" [showToggleIcon]="false"
                                             [appearance]="'outline'" formControlName="dueDate">
                                         </giddh-datepicker>

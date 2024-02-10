@@ -35,10 +35,12 @@ import { ToasterService } from "../../services/toaster.service";
 import { CommonService } from "../../services/common.service";
 import { PURCHASE_ORDER_STATUS } from "../../shared/helpers/purchaseOrderStatus";
 import { cloneDeep } from "../../lodash-optimized";
-import { ENTRY_DESCRIPTION_LENGTH, HIGH_RATE_FIELD_PRECISION, RATE_FIELD_PRECISION } from "../../app.constant";
+import { ENTRY_DESCRIPTION_LENGTH, HIGH_RATE_FIELD_PRECISION, RATE_FIELD_PRECISION, SubVoucher } from "../../app.constant";
 import { IntlPhoneLib } from "../../theme/mobile-number-field/intl-phone-lib.class";
 import { SalesOtherTaxesCalculationMethodEnum } from "../../models/api-models/Sales";
 import { giddhRoundOff } from "../../shared/helpers/helperFunctions";
+import { VoucherService } from "../../services/voucher.service";
+import { ConfirmModalComponent } from "../../theme/new-confirm-modal/confirm-modal.component";
 
 @Component({
     selector: "create",
@@ -258,10 +260,17 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public get showPageLeaveConfirmation(): boolean {
         return (!this.isUpdateMode && (this.invoiceForm?.controls['account']?.get('customerName')?.value)) ? true : false;
     }
-    /** Commpany Billing Gstin Validation Observable */
-    public billingGstValid$: Observable<boolean> = observableOf(false);
-    /** Commpany Shipping Gstin Validation Observable */
-    public shippingGstValid$: Observable<boolean> = observableOf(false);
+    /** Tax validations */
+    public taxNumberValidations: any = {
+        account: {
+            billingAddress: null,
+            shippingAddress: null
+        },
+        company: {
+            billingAddress: null,
+            shippingAddress: null
+        }
+    };
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -281,7 +290,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         private pageLeaveUtilityService: PageLeaveUtilityService,
         private salesAction: SalesActions,
         private toasterService: ToasterService,
-        private commonService: CommonService
+        private commonService: CommonService,
+        private voucherService: VoucherService
     ) {
 
     }
@@ -325,6 +335,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.getBriefAccounts();
                 this.getParentGroupForCreateAccount();
                 this.searchStock();
+
+                this.invoiceForm.get('type').patchValue(this.voucherType);
             }
         });
 
@@ -415,7 +427,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             distinctUntilChanged(),
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
-            this.checkGstNumValidation(searchedText);
+            this.checkGstNumValidation(searchedText, "account", "billingAddress");
         });
 
         this.invoiceForm.controls['account'].get("shippingAddress").get("taxNumber")?.valueChanges.pipe(
@@ -423,7 +435,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             distinctUntilChanged(),
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
-            this.checkGstNumValidation(searchedText);
+            this.checkGstNumValidation(searchedText, "account", "shippingAddress");
         });
     }
 
@@ -1111,7 +1123,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             uniqueName: [''],
             isRcmEntry: [false],
             touristSchemeApplicable: [false],
-            passportNumber: ['']
+            passportNumber: [''],
+            generateEInvoice: [null]
         });
     }
 
@@ -1161,8 +1174,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 name: [''],
                 amount: [''],
                 type: [''],
+                calculationMethod: [''],
                 isChecked: [false]
             }),
+            requiredTax: [false], //temp
             discounts: this.formBuilder.array([
                 this.getTransactionDiscountFormGroup()
             ]),
@@ -1233,8 +1248,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         return this.formBuilder.group({
             calculationMethod: [tax?.calculationMethod],
             uniqueName: [tax?.uniqueName],
-            taxType: [tax?.taxType],
-            taxDetail: [tax?.taxDetail]
+            taxType: [tax?.taxType], //temp
+            taxDetail: [tax?.taxDetail] //temp
         });
     }
 
@@ -1303,6 +1318,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
                 entryFormGroup.get('otherTax.name').patchValue(tax.name);
                 entryFormGroup.get('otherTax.amount').patchValue(giddhRoundOff(((taxableValue * tax?.taxDetail[0]?.taxValue) / 100), this.highPrecisionRate));
+                entryFormGroup.get('otherTax.calculationMethod').patchValue(response.calculationMethod);
             } else {
                 const entryFormGroup = this.getEntryFormGroup(entryIndex);
                 entryFormGroup.get('otherTax').reset();
@@ -1525,6 +1541,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             // Toggle the state of RCM as user accepted the terms of RCM modal
             this.invoiceForm.get('isRcmEntry').patchValue(!this.invoiceForm.get('isRcmEntry')?.value);
             this.rcmCheckbox['checked'] = this.invoiceForm.get('isRcmEntry')?.value;
+
+            if (this.invoiceForm.get('isRcmEntry')?.value) {
+                this.invoiceForm.get('subVoucher')?.patchValue(SubVoucher.ReverseCharge);
+            } else {
+                this.invoiceForm.get('subVoucher')?.patchValue('');
+            }
         }
     }
 
@@ -2037,7 +2059,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @param {*} value
      * @memberof VoucherCreateComponent
      */
-    public checkGstNumValidation(value: any): void {
+    public checkGstNumValidation(value: any, entity: string, type: string): void {
         if (this.company.taxType === TaxType.GST) {
             let isValid: boolean = false;
             if (value?.trim()) {
@@ -2054,28 +2076,16 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 }
                 if (!isValid) {
                     this.toasterService.showSnackBar('error', 'Invalid ' + this.formFields['taxName']?.label);
-                    if (this.invoiceForm.controls['account'].get("billingAddress").get("taxNumber")?.value) {
-                        this.billingGstValid$ = observableOf(true);
-                    } else {
-                        this.shippingGstValid$ = observableOf(true);
-                    }
+                    this.taxNumberValidations[entity][type] = observableOf(true);
                 } else {
-                    if (this.invoiceForm.controls['account'].get("billingAddress").get("taxNumber")?.value) {
-                        this.billingGstValid$ = observableOf(false);
-                    } else {
-                        this.shippingGstValid$ = observableOf(false);
-                    }
+                    this.taxNumberValidations[entity][type] = null;
                 }
             } else {
-                if (this.invoiceForm.controls['account'].get("billingAddress").get("taxNumber")?.value) {
-                    this.billingGstValid$ = observableOf(false);
-                } else {
-                    this.shippingGstValid$ = observableOf(false);
-                }
+                this.taxNumberValidations[entity][type] = null;
             }
         }
     }
-    
+
     /* Updates account and generate voucher
     *
     * @memberof VoucherCreateComponent
@@ -2101,8 +2111,65 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @private
      * @memberof VoucherCreateComponent
      */
-    private isFormValid(): boolean {
-        return !this.invoiceForm.invalid;
+    private isFormValid(invoiceForm: any): boolean {
+        if (this.invoiceForm.invalid || this.taxNumberValidations.account.billingAddress !== null || this.taxNumberValidations.account.shippingAddress !== null || this.taxNumberValidations.company.billingAddress !== null || this.taxNumberValidations.company.shippingAddress !== null) {
+            return false;
+        }
+
+        if (dayjs(invoiceForm.dueDate, GIDDH_DATE_FORMAT).isBefore(dayjs(invoiceForm.date, GIDDH_DATE_FORMAT), 'd')) {
+            let dateText = this.commonLocaleData?.app_invoice;
+
+            if (this.invoiceType.isProformaInvoice) {
+                dateText = this.localeData?.invoice_types?.proforma;
+            }
+
+            if (this.invoiceType.isEstimateInvoice) {
+                dateText = this.localeData?.invoice_types?.estimate;
+            }
+
+            let dueDateError = this.localeData?.due_date_error;
+            dueDateError = dueDateError?.replace("[INVOICE_TYPE]", dateText);
+            this.toasterService.showSnackBar("error", dueDateError);
+
+            return false;
+        }
+
+        let hasTransactions = false;
+        const entriesArray = this.invoiceForm.get('entries') as FormArray;
+        for (let entryIndex = 0; entryIndex < entriesArray.length; entryIndex++) {
+            const entryFormGroup = this.getEntryFormGroup(entryIndex);
+            const transactionFormGroup = this.getTransactionFormGroup(entryFormGroup);
+
+            if (transactionFormGroup.get('account.uniqueName')?.value) {
+                hasTransactions = true;
+            }
+        }
+
+        if (!hasTransactions) {
+            this.toasterService.showSnackBar("warning", this.localeData?.no_product_error);
+        }
+
+        if (invoiceForm.isRcmEntry) {
+            let hasTaxes = true;
+            const entriesArray = this.invoiceForm.get('entries') as FormArray;
+            for (let entryIndex = 0; entryIndex < entriesArray.length; entryIndex++) {
+                const entryFormGroup = this.getEntryFormGroup(entryIndex);
+                const transactionFormGroup = this.getTransactionFormGroup(entryFormGroup);
+                const taxesFormArray = entryFormGroup.get('taxes') as FormArray;
+                if (transactionFormGroup.get('account.uniqueName')?.value && !taxesFormArray?.length) {
+                    entryFormGroup.get('requiredTax')?.patchValue(true);
+                    hasTaxes = false;
+                } else {
+                    entryFormGroup.get('requiredTax')?.patchValue(false);
+                }
+            }
+
+            if (!hasTaxes) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -2112,16 +2179,49 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public saveVoucher(callback?: Function): void {
-        if (!this.isFormValid()) {
-            return;
-        }
-
         let invoiceForm = this.vouchersUtilityService.formatAndCleanData(this.invoiceForm.value);
         console.log(invoiceForm);
 
-        if (callback) {
-            callback();
+        if (!this.isFormValid(invoiceForm)) {
+            return;
         }
+
+        invoiceForm.date = this.vouchersUtilityService.convertDateToString(invoiceForm.date);
+        invoiceForm.dueDate = this.vouchersUtilityService.convertDateToString(invoiceForm.dueDate);
+        invoiceForm.templateDetails.other.shippingDate = this.vouchersUtilityService.convertDateToString(invoiceForm.templateDetails.other.shippingDate);
+
+        invoiceForm = this.vouchersUtilityService.formatBillingShippingAddress(invoiceForm);
+
+        this.voucherService.generateVoucher(invoiceForm.account.uniqueName, invoiceForm).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success") {
+                let message = (invoiceForm.number) ? `${this.localeData?.entry_created}: ${invoiceForm.number}` : this.commonLocaleData?.app_messages?.voucher_saved;
+                this.toasterService.showSnackBar("success", message);
+                if (callback) {
+                    callback(response);
+                }
+            } else if (response?.status === "einvoice-confirm") {
+                let dialogRef = this.dialog.open(ConfirmModalComponent, {
+                    data: {
+                        title: this.commonLocaleData?.app_confirm,
+                        body: response?.message,
+                        ok: this.commonLocaleData?.app_yes,
+                        cancel: this.commonLocaleData?.app_no,
+                        permanentlyDeleteMessage: ' '
+                    }
+                });
+    
+                dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+                    if (response) {
+                        this.invoiceForm.get('generateEInvoice')?.patchValue(true);
+                    } else {
+                        this.invoiceForm.get('generateEInvoice')?.patchValue(false);
+                    }
+                    this.saveVoucher(callback);
+                });
+            } else {
+                this.toasterService.showSnackBar("error", response?.message, response?.code);
+            }
+        });
     }
 
     /**

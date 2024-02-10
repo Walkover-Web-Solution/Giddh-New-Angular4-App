@@ -15,7 +15,7 @@ import { RECEIPT_API } from "./apiurls/receipt.api";
 import { PURCHASE_RECORD_DATE_OPERATION, PURCHASE_RECORD_DUE_DATE_OPERATION, PURCHASE_RECORD_GRAND_TOTAL_OPERATION, PurchaseRecordAdvanceSearch } from "../purchase/purchase-record/constants/purchase-record.interface";
 import { CustomTemplateResponse } from "../models/api-models/Invoice";
 import { VouchersUtilityService } from "../vouchers/utility/vouchers.utility.service";
-import { SALES_API_V2 } from "./apiurls/sales.api";
+import { SALES_API_V2, SALES_API_V4 } from "./apiurls/sales.api";
 import { PURCHASE_ORDER_API } from "./apiurls/purchase-order.api";
 
 
@@ -178,5 +178,22 @@ export class VoucherService {
         url = url?.replace(':sortBy', getRequestObject.sortBy);
 
         return this.http.post(url, postRequestObject).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, getRequestObject)));
+    }
+
+    public generateVoucher(accountUniqueName: string, model: any): Observable<BaseResponse<any, any>> {
+        const companyUniqueName = this.generalService.companyUniqueName;
+        let url = this.config.apiUrl + SALES_API_V4.GENERATE_GENERIC_ITEMS;
+
+        return this.http.post(url
+            ?.replace(':companyUniqueName', companyUniqueName)
+            ?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName))
+            , model)
+            .pipe(
+                map((res) => {
+                    let data: BaseResponse<any, any> = res;
+                    data.request = model;
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
     }
 }
