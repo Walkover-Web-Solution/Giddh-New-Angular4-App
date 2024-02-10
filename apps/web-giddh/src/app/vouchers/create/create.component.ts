@@ -422,6 +422,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             }
         });
 
+        /** Account billing address tax number observable */
         this.invoiceForm.controls['account'].get("billingAddress").get("taxNumber")?.valueChanges.pipe(
             debounceTime(700),
             distinctUntilChanged(),
@@ -430,12 +431,20 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.checkGstNumValidation(searchedText, "account", "billingAddress");
         });
 
+        /** Account shipping address tax number observable */
         this.invoiceForm.controls['account'].get("shippingAddress").get("taxNumber")?.valueChanges.pipe(
             debounceTime(700),
             distinctUntilChanged(),
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
             this.checkGstNumValidation(searchedText, "account", "shippingAddress");
+        });
+
+        /** Voucher details observable */
+        this.componentStore.voucherDetails$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                console.log(response);
+            }
         });
     }
 
@@ -1964,17 +1973,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public copyInvoice(item: PreviousInvoicesVm): void {
-        this.getLastInvoiceDetails({ accountUniqueName: item.account?.uniqueName, invoiceNo: item.versionNumber, uniqueName: item?.uniqueName });
-    }
-
-    /**
-     * This will be use for get last invoice details
-     *
-     * @param {{ accountUniqueName: string, invoiceNo: string, uniqueName?: string }} obj
-     * @memberof VoucherCreateComponent
-     */
-    public getLastInvoiceDetails(obj: { accountUniqueName: string, invoiceNo: string, uniqueName?: string }) {
-        // this obj will be directly send to api 
+        this.componentStore.getVoucherDetails({accountUniqueName: item.account?.uniqueName, payload: { invoiceNo: item.versionNumber, uniqueName: item?.uniqueName, voucherType: this.voucherType } });
     }
 
     /**

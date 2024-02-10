@@ -9,7 +9,7 @@ import { InvoiceSetting } from "../models/interfaces/invoice.setting.interface";
 import { INVOICE_API } from "./apiurls/invoice.api";
 import { ProformaFilter, ProformaResponse } from "../models/api-models/proforma";
 import { PROFORMA_API } from "./apiurls/proforma.api";
-import { InvoiceReceiptFilter, ReciptResponse } from "../models/api-models/recipt";
+import { InvoiceReceiptFilter, ReceiptVoucherDetailsRequest, ReciptResponse, Voucher, VoucherRequest } from "../models/api-models/recipt";
 import { VoucherTypeEnum } from "../models/api-models/Sales";
 import { RECEIPT_API } from "./apiurls/receipt.api";
 import { PURCHASE_RECORD_DATE_OPERATION, PURCHASE_RECORD_DUE_DATE_OPERATION, PURCHASE_RECORD_GRAND_TOTAL_OPERATION, PurchaseRecordAdvanceSearch } from "../purchase/purchase-record/constants/purchase-record.interface";
@@ -196,5 +196,25 @@ export class VoucherService {
                     return data;
                 }),
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
+    }
+
+    public getVoucherDetails(accountUniqueName: string, model: ReceiptVoucherDetailsRequest): Observable<BaseResponse<Voucher, ReceiptVoucherDetailsRequest>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        let url = this.config.apiUrl + RECEIPT_API.GET_DETAILS_V4
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName));
+        let requestObj: VoucherRequest | ReceiptVoucherDetailsRequest = Object.assign({}, model);
+        requestObj = new VoucherRequest(model.invoiceNumber, model.voucherType, model?.uniqueName);
+
+        url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
+        return this.http.post(url, requestObj
+        ).pipe(
+            map((res) => {
+                let data: BaseResponse<Voucher, ReceiptVoucherDetailsRequest> = res;
+                data.queryString = accountUniqueName;
+                data.request = model;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<Voucher, ReceiptVoucherDetailsRequest>(e, model, { accountUniqueName })));
     }
 }
