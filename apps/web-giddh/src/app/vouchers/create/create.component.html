@@ -275,7 +275,7 @@
                                         <div class="col-6 mr-t15">
                                             <input-field [name]="'email'" [label]="'Email Id'"
                                                 [placeholder]="'Enter email'" [type]="'text'"
-                                                formControlName="email"></input-field>
+                                                formControlName="email" [showError]="(invoiceForm.controls['account'].get('email')?.touched && invoiceForm.controls['account'].get('email')?.invalid)"></input-field>
                                         </div>
 
                                         <!-- Mobile Number -->
@@ -288,13 +288,11 @@
                                                     id="init-contact" placeholder="Mobile Number"
                                                     formControlName="mobileNumber" [ngClass]="{
                                                         'invalid-input':
-                                                            (invoiceForm.controls['account'].get('mobileNumber')?.touched ||
-                                                            invoiceForm.controls['account'].get('mobileNumber')?.touched) &&
+                                                            (invoiceForm.controls['account'].get('mobileNumber')?.touched) &&
                                                             !intlClass?.isRequiredValidNumber
                                                     }" />
                                                 <mat-error *ngIf="
-                                                        (invoiceForm.controls['account'].get('mobileNumber')?.touched ||
-                                                        invoiceForm.controls['account'].get('mobileNumber')?.touched) &&
+                                                        (invoiceForm.controls['account'].get('mobileNumber')?.touched) &&
                                                         !intlClass?.isRequiredValidNumber
                                                     ">Please enter valid mobile number</mat-error>
                                             </div>
@@ -623,7 +621,6 @@
 
                                                             <ng-container *ngIf="activeEntryIndex === entryIndex">
                                                                 <textarea rows="2" matInput class="form-control mt-2" placeholder="Add Description" name="transactionDescription{{entryIndex}}" formControlName="description" [maxlength]="entryDescriptionLength"></textarea>
-                                                               
                                                             </ng-container>
                                                             <ng-container *ngIf="activeEntryIndex !== entryIndex">
                                                                 {{ entry.get('description')?.value }}
@@ -764,6 +761,7 @@
                                                                             formControlName="quantity"
                                                                             [cssClass]="'form-control text-right'"
                                                                             [name]="'transactionQuantity' + entryIndex"
+                                                                            [readonly]="!transaction.get('stock.uniqueName')?.value"
                                                                             [type]="'text'"></text-field>
 
                                                                         <ng-container formGroupName="stockUnit">
@@ -777,6 +775,7 @@
                                                                                 formControlName="code"
                                                                                 [placeholder]="'Select'"
                                                                                 class="form-control mt-2"
+                                                                                [readonly]="!transaction.get('stock.uniqueName')?.value"
                                                                                 name="transactionUnit{{entryIndex}}">
                                                                                 <mat-option
                                                                                     *ngFor="let unit of stockUnits[entryIndex] | async"
@@ -1029,11 +1028,11 @@
                                                                                 </reactive-dropdown-field>
                                                                             </div>
                                                                             <div class="col-6">
-                                                                                <input-field [name]="'amountForCompany'"
+                                                                                <input-field [name]="'amountForAccount'"
                                                                                     [label]="'Amount'"
                                                                                     [placeholder]="'Enter amount'"
                                                                                     [type]="'number'"
-                                                                                    formControlName="amountForCompany">
+                                                                                    formControlName="amountForAccount">
                                                                                 </input-field>
                                                                             </div>
                                                                         </ng-container>

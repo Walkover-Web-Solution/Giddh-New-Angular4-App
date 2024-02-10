@@ -1100,7 +1100,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             subVoucher: [''],
             deposit: this.formBuilder.group({
                 accountUniqueName: [''],
-                amountForCompany: [''],
+                amountForAccount: [''],
                 currencySymbol: [''], //temp
                 type: ['DEBIT']
             }),
@@ -1197,9 +1197,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     }),
                     stock: this.formBuilder.group({
                         name: [''],
-                        quantity: [0],
+                        quantity: [1],
                         rate: this.formBuilder.group({
-                            rateForAccount: [0]
+                            rateForAccount: [1]
                         }),
                         stockUnit: this.formBuilder.group({
                             code: [''],
@@ -1232,7 +1232,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     private getTransactionDiscountFormGroup(discount?: any): FormGroup {
         return this.formBuilder.group({
             amount: this.formBuilder.group({
-                amountForAccount: [''],
+                amountForAccount: [discount?.discountValue],
                 amountForCompany: [''],
                 type: ['DEBIT']
             }),
@@ -2179,18 +2179,13 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public saveVoucher(callback?: Function): void {
-        let invoiceForm = this.vouchersUtilityService.formatAndCleanData(this.invoiceForm.value);
-        console.log(invoiceForm);
+        let invoiceForm = this.vouchersUtilityService.cleanVoucherObject(this.invoiceForm.value);
 
         if (!this.isFormValid(invoiceForm)) {
             return;
         }
 
-        invoiceForm.date = this.vouchersUtilityService.convertDateToString(invoiceForm.date);
-        invoiceForm.dueDate = this.vouchersUtilityService.convertDateToString(invoiceForm.dueDate);
-        invoiceForm.templateDetails.other.shippingDate = this.vouchersUtilityService.convertDateToString(invoiceForm.templateDetails.other.shippingDate);
-
-        invoiceForm = this.vouchersUtilityService.formatBillingShippingAddress(invoiceForm);
+        invoiceForm = this.vouchersUtilityService.formatVoucherObject(invoiceForm);
 
         this.voucherService.generateVoucher(invoiceForm.account.uniqueName, invoiceForm).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {

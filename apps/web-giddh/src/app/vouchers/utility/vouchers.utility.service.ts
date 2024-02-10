@@ -266,9 +266,7 @@ export class VouchersUtilityService {
         }
     }
 
-    public formatAndCleanData(invoiceForm: any): any {
-        invoiceForm.dueDate = this.convertDateToString(invoiceForm.dueDate);
-
+    public cleanVoucherObject(invoiceForm: any): any {
         delete invoiceForm.deposit.currencySymbol;
         delete invoiceForm.account.billingAddress.index;
         delete invoiceForm.account.shippingAddress.index;
@@ -294,6 +292,10 @@ export class VouchersUtilityService {
                     uniqueName: entry.otherTax?.uniqueName,
                     calculationMethod: entry.otherTax?.calculationMethod
                 });
+            }
+
+            if (!entry.transactions[0]?.stock?.uniqueName) {
+                delete entry.transactions[0].stock;
             }
 
             delete entry.otherTax;
@@ -325,6 +327,15 @@ export class VouchersUtilityService {
             invoiceForm.company.billingDetails.address = invoiceForm.company.billingDetails.address[0]?.split('<br />');
         }
 
+        return invoiceForm;
+    }
+
+    public formatVoucherObject(invoiceForm: any): any {
+        invoiceForm.date = this.convertDateToString(invoiceForm.date);
+        invoiceForm.dueDate = this.convertDateToString(invoiceForm.dueDate);
+        invoiceForm.templateDetails.other.shippingDate = this.convertDateToString(invoiceForm.templateDetails.other.shippingDate);
+
+        invoiceForm = this.formatBillingShippingAddress(invoiceForm);
         return invoiceForm;
     }
 }

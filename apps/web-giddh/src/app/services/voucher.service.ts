@@ -183,6 +183,7 @@ export class VoucherService {
     public generateVoucher(accountUniqueName: string, model: any): Observable<BaseResponse<any, any>> {
         const companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + SALES_API_V4.GENERATE_GENERIC_ITEMS;
+        url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
 
         return this.http.post(url
             ?.replace(':companyUniqueName', companyUniqueName)
