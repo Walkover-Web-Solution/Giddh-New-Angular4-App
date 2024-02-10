@@ -126,7 +126,6 @@ export class VatReportComponent implements OnInit, OnDestroy {
         private settingsFinancialYearActions: SettingsFinancialYearActions,
         public settingsFinancialYearService: SettingsFinancialYearService
     ) {
-        this.store.dispatch(this.settingsFinancialYearActions.getFinancialYearLimits());
         this.getFinancialYears();
     }
 
@@ -315,7 +314,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
     * @param {*} selectedYear
     * @memberof VatReportComponent
     */
-    public getYearStartAndEndDate(selectedYear: any) {
+    public getYearStartAndEndDate(selectedYear: any): void {
         if (selectedYear?.value && selectedYear?.label !== this.selectedYear) {
             this.year = Number(selectedYear?.value);
             this.selectedYear = selectedYear.label;
