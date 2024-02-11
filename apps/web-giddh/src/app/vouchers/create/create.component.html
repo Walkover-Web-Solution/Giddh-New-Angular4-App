@@ -158,7 +158,7 @@
                                             </mat-menu>
                                             <div class="vouchers-address-form" *ngIf="invoiceType.isCashInvoice">
                                                 <div class="address-field">
-                                                    <textarea rows="2" matInput class="w-100" name="billingAddress"
+                                                    <textarea rows="2" matInput  (keyup)="setBillingAddressToShippingAddress()" class="w-100" name="billingAddress"
                                                         formControlName="address"></textarea>
                                                 </div>
                                                 <div class="country-field">
@@ -172,16 +172,18 @@
                                                         [options]="accountStateList$ | async"
                                                         [labelValue]="invoiceForm.controls['account'].get('billingAddress').get('state').get('name')?.value"
                                                         [appearance]="'fill'" [showLabel]="false"
-                                                        (selectedOption)="selectState('billingAddress', $event)"></reactive-dropdown-field>
+                                                        (selectedOption)="selectState('billingAddress', $event);setBillingAddressToShippingAddress()"></reactive-dropdown-field>
                                                 </div>
                                                 <div class="gstin-field">
                                                     <text-field [type]="'text'" [name]="'billingTaxNumber'"
+                                                    (keyup)="setBillingAddressToShippingAddress()"
                                                         [placeholder]="'GSTIN'" [cssClass]="'border-0'"
                                                         [showError]="taxNumberValidations['account']['billingAddress'] | async"
                                                         formControlName="taxNumber"></text-field>
                                                 </div>
                                                 <div class="pin-code-field">
                                                     <text-field [type]="'text'" [name]="'billingPinCode'"
+                                                    (keyup)="setBillingAddressToShippingAddress()"
                                                         [placeholder]="'PIN Code'" [cssClass]="'border-0'"
                                                         formControlName="pincode"></text-field>
                                                 </div>
@@ -191,7 +193,7 @@
                                         <div class="col-6" formGroupName="shippingAddress">
                                             <mat-checkbox type="checkbox" color="primary"
                                                 *ngIf="invoiceType.isCashInvoice"
-                                                (change)="copyBillingInShipping($event)">
+                                                (change)="copyBillingInShipping('account',$event)">
                                                 Shipping Address Same as Billing Address
                                             </mat-checkbox>
                                             <ng-container *ngIf="!invoiceType.isCashInvoice">
@@ -1308,7 +1310,16 @@
 <!-- region print voucher popup -->
 <ng-template #printVoucherModal>
     <ng-container>
-        <print-voucher (cancelEvent)="cancelPrintModal()"></print-voucher>
+        <print-voucher 
+        [voucherType]="'sales'"
+        [localeData]="localeData"
+        [commonLocaleData]="commonLocaleData"
+        [selectedItem]="{
+            voucherNumber: '240211-2',
+            uniqueName: '002',
+            voucherUniqueName: 'ibxoo1707645693722'
+        }"
+        (cancelEvent)="cancelPrintModal()"></print-voucher>
     </ng-container>
 </ng-template>
 

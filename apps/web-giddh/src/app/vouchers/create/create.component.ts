@@ -271,6 +271,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             shippingAddress: null
         }
     };
+    /** True if we need to same billing to shipping address */
+    public getActiveSameBillingAddress: boolean = false;
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -443,6 +445,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         /** Voucher details observable */
         this.componentStore.voucherDetails$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
+                // this.invoiceForm.controls["account"].get("customerName")?.patchValue(this.invoiceForm.controls['account'].get('customerName')?.value);
+                this.getAccountDetails(response?.account.uniqueName);
                 console.log(response);
             }
         });
@@ -694,7 +698,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 if (!this.invoiceType.isProformaInvoice && !this.invoiceType.isEstimateInvoice) {
                     if (response) {
                         response = response as ReciptResponse;
-                        response?.items.forEach(item => {
+                        response?.items?.forEach(item => {
                             lastVouchers.push({
                                 voucherNumber: item.voucherNumber,
                                 date: item.voucherDate,
@@ -946,6 +950,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public selectAccount(event: any, isClear: boolean = false): void {
+        console.log(event);
         if (isClear) {
             this.invoiceForm.reset();
         } else {
@@ -1485,6 +1490,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     public copyBillingInShipping(entityType: string, event: any): void {
         if (event?.checked) {
+            this.getActiveSameBillingAddress = true;
             let defaultAddress = {
                 index: this.invoiceForm.controls['account'].get("billingAddress").get("index")?.value || 0,
                 address: this.invoiceForm.controls['account'].get("billingAddress").get("address")?.value,
@@ -1493,6 +1499,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 state: { name: this.invoiceForm.controls['account'].get("billingAddress").get("state").get("name")?.value, code: this.invoiceForm.controls['account'].get("billingAddress").get("state").get("code")?.value }
             };
             this.fillBillingShippingAddress(entityType, "shippingAddress", defaultAddress, defaultAddress.index);
+        } else {
+            this.getActiveSameBillingAddress = false;
         }
     }
 
@@ -1973,7 +1981,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public copyInvoice(item: PreviousInvoicesVm): void {
-        this.componentStore.getVoucherDetails({accountUniqueName: item.account?.uniqueName, payload: { invoiceNo: item.versionNumber, uniqueName: item?.uniqueName, voucherType: this.voucherType } });
+        this.componentStore.getVoucherDetails({ accountUniqueName: item.account?.uniqueName, payload: { invoiceNo: item.versionNumber, uniqueName: item?.uniqueName, voucherType: this.voucherType } });
     }
 
     /**
@@ -2203,7 +2211,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         permanentlyDeleteMessage: ' '
                     }
                 });
-    
+
                 dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
                     if (response) {
                         this.invoiceForm.get('generateEInvoice')?.patchValue(true);
@@ -2216,6 +2224,18 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.toasterService.showSnackBar("error", response?.message, response?.code);
             }
         });
+    }
+
+    /**
+     * This will be use for set billing address to shipping address
+     *
+     * @memberof VoucherCreateComponent
+     */
+    public setBillingAddressToShippingAddress() {
+        if (this.getActiveSameBillingAddress) {
+            const billingAddress = this.invoiceForm.get('account.billingAddress').value;
+            this.invoiceForm.get('account.shippingAddress').patchValue(billingAddress);
+        }
     }
 
     /**
