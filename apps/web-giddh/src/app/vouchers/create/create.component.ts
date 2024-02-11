@@ -19,7 +19,7 @@ import { InvoiceReceiptFilter, ReciptResponse } from "../../models/api-models/re
 import { VouchersUtilityService } from "../utility/vouchers.utility.service";
 import { FormBuilder, FormArray, FormGroup, Validators } from "@angular/forms";
 import { GIDDH_DATE_FORMAT } from "../../shared/helpers/defaultDateFormat";
-import { BriedAccountsGroup, SearchType, TaxType, VoucherTypeEnum } from "../utility/vouchers.const";
+import { AccountType, BriedAccountsGroup, SearchType, TaxType, VoucherTypeEnum } from "../utility/vouchers.const";
 import { SearchService } from "../../services/search.service";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { OtherTaxComponent } from "../../theme/other-tax/other-tax.component";
@@ -41,6 +41,7 @@ import { SalesOtherTaxesCalculationMethodEnum } from "../../models/api-models/Sa
 import { giddhRoundOff } from "../../shared/helpers/helperFunctions";
 import { VoucherService } from "../../services/voucher.service";
 import { ConfirmModalComponent } from "../../theme/new-confirm-modal/confirm-modal.component";
+import { AddBulkItemsComponent } from "../../theme/add-bulk-items/add-bulk-items.component";
 
 @Component({
     selector: "create",
@@ -75,8 +76,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     @ViewChild('printVoucherModal', { static: true }) public printVoucherModal: any;
     /** Date change confirmation modal */
     @ViewChild('dateChangeConfirmationModel', { static: true }) public dateChangeConfirmationModel: any;
-    /* Selector for bulk items  modal */
-    @ViewChild('bulkItemsModal', { static: true }) public bulkItemsModal: any;
     /**  This will use for dayjs */
     public dayjs = dayjs;
     /** Holds current voucher type */
@@ -255,6 +254,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         grandTotal: 0,
         roundOff: 0
     };
+    /** Holds account types */
+    public accountType: any = AccountType;
 
     /** Returns true if account is selected else false */
     public get showPageLeaveConfirmation(): boolean {
@@ -333,9 +334,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.getCreatedTemplates();
                 this.getOnboardingFormData();
                 this.getBriefAccounts();
-                this.getParentGroupForCreateAccount();
                 this.searchStock();
 
+                if (this.invoiceType.isCashInvoice) {
+                    this.invoiceForm.get('account.uniqueName')?.patchValue("cash");
+                }
                 this.invoiceForm.get('type').patchValue(this.voucherType);
             }
         });
@@ -438,6 +441,24 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
             this.checkGstNumValidation(searchedText, "account", "shippingAddress");
+        });
+
+        /** Company billing address tax number observable */
+        this.invoiceForm.controls['company'].get("billingAddress").get("taxNumber")?.valueChanges.pipe(
+            debounceTime(700),
+            distinctUntilChanged(),
+            takeUntil(this.destroyed$),
+        ).subscribe(searchedText => {
+            this.checkGstNumValidation(searchedText, "company", "billingAddress");
+        });
+
+        /** Company shipping address tax number observable */
+        this.invoiceForm.controls['company'].get("shippingAddress").get("taxNumber")?.valueChanges.pipe(
+            debounceTime(700),
+            distinctUntilChanged(),
+            takeUntil(this.destroyed$),
+        ).subscribe(searchedText => {
+            this.checkGstNumValidation(searchedText, "company", "shippingAddress");
         });
 
         /** Voucher details observable */
@@ -1268,12 +1289,16 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public openBulkEntryDialog(): void {
-        this.bulkStockAsideMenuRef = this.dialog.open(this.bulkItemsModal);
+        this.bulkStockAsideMenuRef = this.dialog.open(AddBulkItemsComponent, {
+            data: {
+                voucherType: this.voucherType,
+                customerUniqueName: this.invoiceForm.get('account.uniqueName')
+            }
+        });
+
         this.bulkStockAsideMenuRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response) {
-                console.log("Close with true");
-            } else {
-                console.log("Close with false");
+                console.log(response);
             }
         });
     }
@@ -1341,7 +1366,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @private
      * @memberof VoucherCreateComponent
      */
-    private getParentGroupForCreateAccount(): void {
+    public getParentGroupForCreateAccount(): void {
         this.accountParentGroup = this.vouchersUtilityService.getParentGroupForAccountCreate(this.voucherType);
     }
 
@@ -1351,9 +1376,15 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @param {*} [event]
      * @memberof VoucherCreateComponent
      */
-    public toggleAccountAsidePane(event?: any): void {
+    public toggleAccountAsidePane(accountType: AccountType, event?: any): void {
         if (event) {
             event.preventDefault();
+        }
+
+        if (accountType === this.accountType.customer) {
+            this.getParentGroupForCreateAccount();
+        } else {
+            this.accountParentGroup = "bankaccounts";
         }
 
         this.accountAsideMenuRef = this.dialog.open(this.accountAsideMenu, {
@@ -1362,9 +1393,13 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 top: '0'
             }
         })
-        this.accountAsideMenuRef.afterClosed().pipe(take(1)).subscribe(response => {
+        this.accountAsideMenuRef.afterClosed().pipe(take(1)).subscribe(() => {
             if (this.showPageLeaveConfirmation) {
                 this.pageLeaveUtilityService.addBrowserConfirmationDialog();
+            }
+
+            if (this.accountParentGroup === "bankaccounts") {
+                this.getBriefAccounts();
             }
         });
     }
@@ -1436,7 +1471,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     private createUpdateAccountCallback(response: any): void {
-        this.toggleAccountAsidePane();
         this.searchAccount();
         this.invoiceForm.controls["account"].get("uniqueName")?.patchValue(response?.uniqueName);
         this.invoiceForm.controls["account"].get("customerName")?.patchValue(response?.name);
@@ -1833,15 +1867,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
-     * This will use for cancel bulk item modal
-     *
-     * @memberof VoucherCreateComponent
-     */
-    public cancelBulkItemsModal(): void {
-        this.dialog.closeAll();
-    }
-
-    /**
      * Initializes the int-tel input
      *
      * @memberof VoucherCreateComponent
@@ -1973,7 +1998,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public copyInvoice(item: PreviousInvoicesVm): void {
-        this.componentStore.getVoucherDetails({accountUniqueName: item.account?.uniqueName, payload: { invoiceNo: item.versionNumber, uniqueName: item?.uniqueName, voucherType: this.voucherType } });
+        this.componentStore.getVoucherDetails({ accountUniqueName: item.account?.uniqueName, payload: { invoiceNo: item.versionNumber, uniqueName: item?.uniqueName, voucherType: this.voucherType } });
     }
 
     /**
@@ -2203,7 +2228,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         permanentlyDeleteMessage: ' '
                     }
                 });
-    
+
                 dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
                     if (response) {
                         this.invoiceForm.get('generateEInvoice')?.patchValue(true);

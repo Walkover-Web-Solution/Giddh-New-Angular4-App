@@ -16,8 +16,7 @@
                             <mat-list class="p-0">
                                 <cdk-virtual-scroll-viewport [itemSize]="40" class="list-viewport" [appendOnly]="true">
                                     <ng-container
-                                        *cdkVirtualFor="let item of voucherStockResults$ | async; let i = index">
-                                        {{ item?.hasVariants }}
+                                        *cdkVirtualFor="let item of stockResults$ | async; let i = index">
                                         <ng-container *ngIf="item?.additional?.hasVariants">
                                             <mat-accordion>
                                                 <mat-expansion-panel>
@@ -112,8 +111,8 @@
                             </ng-container>
                         </div>
                         <div class="selected-item-action d-flex column-gap1">
-                            <button mat-stroked-button color="primary">Add</button>
-                            <button mat-stroked-button>Cancel</button>
+                            <button mat-stroked-button color="primary" (click)="saveBulkItems()">Add</button>
+                            <button mat-stroked-button mat-dialog-close>Cancel</button>
                         </div>
                     </div>
                 </div>

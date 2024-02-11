@@ -22,7 +22,7 @@
                                 <div class="col-10">
                                     <div class="d-flex align-items-center">
                                         <div class="vouchers-form-fields w-100" [keyboardShortcut]="'alt+c'"
-                                            (onShortcutPress)="toggleAccountAsidePane()">
+                                            (onShortcutPress)="toggleAccountAsidePane(accountType.customer)">
                                             <reactive-dropdown-field *ngIf="!invoiceType.isCashInvoice"
                                                 [label]="invoiceType.isPurchaseOrder || invoiceType.isDebitNote ? localeData?.vendor_name : localeData?.customer_name"
                                                 [placeholder]="invoiceType.isPurchaseOrder || invoiceType.isDebitNote ? localeData?.select_vendor : localeData?.select_customer"
@@ -37,7 +37,7 @@
                                                 (selectedOption)="selectAccount($event)"
                                                 (dynamicSearchedQuery)="searchAccount($event, 1)"
                                                 (onClear)="selectAccount($event, true)"
-                                                (createOption)="toggleAccountAsidePane()">
+                                                (createOption)="toggleAccountAsidePane(accountType.customer)">
                                             </reactive-dropdown-field>
                                             <input-field *ngIf="invoiceType.isCashInvoice" [name]="'account'"
                                                 [label]="localeData?.customer_name"
@@ -91,7 +91,7 @@
                                     <span
                                         *ngIf="!invoiceType.isCashInvoice && invoiceForm.controls['account'].get('uniqueName')?.value"
                                         class="vouchers-form-fields-detail cursor-pointer"
-                                        (click)="toggleAccountAsidePane()">
+                                        (click)="toggleAccountAsidePane(accountType.customer)">
                                         {{ !invoiceType.isPurchaseOrder ? localeData?.customer_details :
                                         localeData?.vendor_details }}</span>
 
@@ -1024,6 +1024,7 @@
                                                                                     [options]="briefAccounts$ | async"
                                                                                     (onClear)="selectedDepositAccount($event, true)"
                                                                                     (selectedOption)="selectedDepositAccount($event)"
+                                                                                    (createOption)="toggleAccountAsidePane(accountType.bank)"
                                                                                     formControlName="accountUniqueName">
                                                                                 </reactive-dropdown-field>
                                                                             </div>
@@ -1323,9 +1324,4 @@
 <ng-template #dateChangeConfirmationModel>
     <confirmation-modal [configuration]="dateChangeConfiguration"
         (buttonClicked)="handleDateChangeConfirmation($event)"></confirmation-modal>
-</ng-template>
-
-<!-- region bulk items -->
-<ng-template #bulkItemsModal>
-    <add-bulk-items (closeEvent)="cancelBulkItemsModal()" [voucherType]="voucherType"></add-bulk-items>
 </ng-template>
