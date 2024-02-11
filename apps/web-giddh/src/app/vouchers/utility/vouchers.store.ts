@@ -489,4 +489,20 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
             })
         );
     });
+
+    readonly printVoucher = this.effect((pdfContainer$: Observable<any>) => {
+        return pdfContainer$.pipe(
+            switchMap((pdfContainer) => {
+                const window = pdfContainer?.nativeElement?.contentWindow;
+                if (window) {
+                    window.focus();
+                    setTimeout(() => {
+                        window.print();
+                    }, 200);
+                }
+                return EMPTY;
+            })
+        );
+    });
+
 }
