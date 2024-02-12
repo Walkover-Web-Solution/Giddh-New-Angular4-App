@@ -424,19 +424,6 @@
             </div>
         </ng-container>
 
-        <div class="clearfix">
-            <textarea
-                matInput
-                [disabled]="isReadOnly"
-                id="ledger-description"
-                rows="3"
-                name="des"
-                class="form-control mat-field-border"
-                [placeholder]="commonLocaleData?.app_description"
-                [(ngModel)]="blankLedger.description"
-            ></textarea>
-        </div>
-
         <mat-accordion multi>
             <mat-expansion-panel class="mr-t1 overflow-visible">
                 <mat-expansion-panel-header (click)="toggleMoreDetail()">
@@ -894,37 +881,7 @@
 
         <div class="row">
             <div class="col-12 col-md-12 clearfix mr-t1">
-                <div class="mr-r1 form-group pull-left cp">
-                    <label class="pull-left cp font-15">
-                        <mat-checkbox
-                            color="primary"
-                            id="ledger-generate-voucher"
-                            class="pull-left"
-                            name="generateInvoice"
-                            [disabled]="
-                                (voucherApiVersion === 2 && isAdvanceReceipt) ||
-                                autoGenerateVoucherFromEntry ||
-                                currentTxn?.voucherAdjustments?.adjustments?.length ||
-                                currentTxn?.invoiceLinkingRequest?.linkedInvoices?.length ||
-                                currentTxn?.referenceVoucher?.uniqueName ||
-                                isReadOnly
-                                    ? 'disabled'
-                                    : null
-                            "
-                            [(ngModel)]="blankLedger.generateInvoice"
-                            (change)="manualGenerateVoucherChecked = $event?.checked"
-                            >{{ commonLocaleData?.app_generate_voucher }}</mat-checkbox
-                        >
-                        <span class="pd-l05" *ngIf="autoGenerateVoucherFromEntry">
-                            <span class="icon-info text-dark p-1" [matMenuTriggerFor]="toolTip" #trigger="matMenuTrigger" (mouseenter)="showAutoPaidTooltip()" (mouseleave)="hideAutoPaidTooltip()"></span>
-                            <mat-menu #toolTip="matMenu" class="custom-tooltip" [disableRipple]="true" hasBackdrop="false" xPosition="after" yPosition="above">
-                            <div (mouseenter)="tooltipHoveredStatus = true" (mouseleave)="tooltipHoveredStatus = false; hideAutoPaidTooltipOnMouseLeaveFromTooltip()" (click)="$event.stopPropagation()">
-                                <div class="tooltip-text" [innerHTML]="localeData?.uncheck_auto_generate_tooltip_message"></div>
-                            </div>
-                            </mat-menu>
-                        </span>
-                    </label>
-                </div>
+                
                 <div class="pull-right">
                     <div class="clearfix">
                         <p class="primary-color" *ngIf="isLedgerAccountAllowsMultiCurrency">
@@ -999,80 +956,132 @@
                         </li>
                     </ul>
                 </div>
-                <div class="pull-right">
-                    <input
-                        [disabled]="isReadOnly"
-                        type="file"
-                        [hidden]="true"
-                        name="invoiceFile"
-                        id="invoiceFile"
-                        #webFileInput
-                        (change)="uploadFile()"
-                    />
-                    <label
-                        class="upload-div pd-r15"
-                        [ngClass]="{ hide: blankLedger?.generateInvoice || blankLedger?.attachedFile }"
-                    >
-                        <label for="invoiceFile" class="cp font-15">
-                            <i [ngClass]="!isFileUploading ? 'icon-file-path' : 'fa fa-spinner rotate'"></i>
-                            {{ localeData?.attach_file }}</label
-                        >
-                    </label>
-                    <div
-                        class="file_attached clearfix text-right pd-r15 d-inline-block"
-                        *ngIf="blankLedger?.attachedFile?.length > 0"
-                    >
-                        <span>{{ blankLedger.attachedFileName }}</span>
-                        <span class="delete-attachment">
-                            <a class="cursor-pointer" (click)="showDeleteAttachedFileModal()">
-                                <i class="icon-trash"></i>
-                            </a>
-                        </span>
-                    </div>
-                </div>
             </div>
-            <div class="col-12 col-md-12 pd-t1">
-                <button
-                    mat-stroked-button
-                    id="ledger-reset-button"
-                    [hidden]="isBankTransaction"
-                    class="float-left"
-                    (click)="resetPanel()"
-                >
-                    {{ commonLocaleData?.app_reset }}
-                </button>
+            <div class="col-12 pd-t1 pd-b1">
+                <div class="row align-items-end">
+                    <div class="col-6">
+                        <div class="clearfix">
+                            <textarea
+                                matInput
+                                [disabled]="isReadOnly"
+                                id="ledger-description"
+                                rows="3"
+                                name="des"
+                                class="form-control mat-field-border"
+                                [placeholder]="commonLocaleData?.app_description"
+                                [(ngModel)]="blankLedger.description"
+                            ></textarea>
+                        </div>
 
-                <div class="pull-right xs-d-block d-flex column-gap15">
-                    <button
-                        mat-stroked-button
-                        id="ledger-add-button-dr"
-                        [hidden]="isBankTransaction"
-                        class="btn-sm"
-                        (click)="addToDrOrCr('DEBIT', $event)"
-                    >
-                        {{ localeData?.add_to_dr }}
-                    </button>
+                        <div class="d-flex column-gap2">
+                            <div>
+                                <input
+                                    [disabled]="isReadOnly"
+                                    type="file"
+                                    [hidden]="true"
+                                    name="invoiceFile"
+                                    id="invoiceFile"
+                                    #webFileInput
+                                    (change)="uploadFile()"
+                                />
+                                <label
+                                    class="upload-div pd-r15"
+                                    [ngClass]="{ hide: blankLedger?.generateInvoice || blankLedger?.attachedFile }"
+                                >
+                                    <label for="invoiceFile" class="cp font-15">
+                                        <i [ngClass]="!isFileUploading ? 'icon-file-path' : 'fa fa-spinner rotate'"></i>
+                                        {{ localeData?.attach_file }}</label
+                                    >
+                                </label>
+                                <div
+                                    class="file_attached clearfix text-right pd-r15 d-inline-block"
+                                    *ngIf="blankLedger?.attachedFile?.length > 0"
+                                >
+                                    <span>{{ blankLedger.attachedFileName }}</span>
+                                    <span class="delete-attachment">
+                                        <a class="cursor-pointer" (click)="showDeleteAttachedFileModal()">
+                                            <i class="icon-trash"></i>
+                                        </a>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="mr-r1 form-group cursor-pointer">
+                                <label class="pull-left cp font-15">
+                                    <mat-checkbox
+                                        color="primary"
+                                        id="ledger-generate-voucher"
+                                        class="pull-left"
+                                        name="generateInvoice"
+                                        [disabled]="
+                                            (voucherApiVersion === 2 && isAdvanceReceipt) ||
+                                            autoGenerateVoucherFromEntry ||
+                                            currentTxn?.voucherAdjustments?.adjustments?.length ||
+                                            currentTxn?.invoiceLinkingRequest?.linkedInvoices?.length ||
+                                            currentTxn?.referenceVoucher?.uniqueName ||
+                                            isReadOnly
+                                                ? 'disabled'
+                                                : null
+                                        "
+                                        [(ngModel)]="blankLedger.generateInvoice"
+                                        (change)="manualGenerateVoucherChecked = $event?.checked"
+                                        >{{ commonLocaleData?.app_generate_voucher }}</mat-checkbox
+                                    >
+                                    <span class="pd-l05" *ngIf="autoGenerateVoucherFromEntry">
+                                        <span class="icon-info text-dark p-1" [matMenuTriggerFor]="toolTip" #trigger="matMenuTrigger" (mouseenter)="showAutoPaidTooltip()" (mouseleave)="hideAutoPaidTooltip()"></span>
+                                        <mat-menu #toolTip="matMenu" class="custom-tooltip" [disableRipple]="true" hasBackdrop="false" xPosition="after" yPosition="above">
+                                        <div (mouseenter)="tooltipHoveredStatus = true" (mouseleave)="tooltipHoveredStatus = false; hideAutoPaidTooltipOnMouseLeaveFromTooltip()" (click)="$event.stopPropagation()">
+                                            <div class="tooltip-text" [innerHTML]="localeData?.uncheck_auto_generate_tooltip_message"></div>
+                                        </div>
+                                        </mat-menu>
+                                    </span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                       
+                    <div class="xs-d-block d-flex column-gap15">
+                        <button
+                            mat-button
+                            id="ledger-reset-button"
+                            [hidden]="isBankTransaction"
+                            (click)="resetPanel()"
+                         >
+                            {{ commonLocaleData?.app_reset }}
+                        </button>
 
-                    <button
-                        mat-stroked-button
-                        id="ledger-add-button-cr"
-                        [hidden]="isBankTransaction"
-                        class="btn-sm"
-                        (click)="addToDrOrCr('CREDIT', $event)"
-                    >
-                        {{ localeData?.add_to_cr }}
-                    </button>
-
-                    <button
-                        mat-stroked-button
-                        color="primary"
-                        id="saveLedger"
-                        [disabled]="isFileUploading || isReadOnly"
-                        [ladda]="isLedgerCreateInProcess$ | async"
-                        (click)="saveLedger()"
-                    >
-                        {{ commonLocaleData?.app_save }}
-                    </button>
+                        <button
+                            mat-stroked-button
+                            id="ledger-add-button-dr"
+                            [hidden]="isBankTransaction"
+                            class="btn-sm"
+                            (click)="addToDrOrCr('DEBIT', $event)"
+                        >
+                            {{ localeData?.add_to_dr }}
+                        </button>
+    
+                        <button
+                            mat-stroked-button
+                            id="ledger-add-button-cr"
+                            [hidden]="isBankTransaction"
+                            class="btn-sm"
+                            (click)="addToDrOrCr('CREDIT', $event)"
+                        >
+                            {{ localeData?.add_to_cr }}
+                        </button>
+    
+                        <button
+                            mat-stroked-button
+                            color="primary"
+                            id="saveLedger"
+                            [disabled]="isFileUploading || isReadOnly"
+                            [ladda]="isLedgerCreateInProcess$ | async"
+                            (click)="saveLedger()"
+                        >
+                            {{ commonLocaleData?.app_save }}
+                        </button>
+                    </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1166,7 +1175,7 @@
     </advance-receipt-adjustment-component>
 </ng-template>
 <ng-template #variantAndWarehouseDropdown>
-    <div class="d-flex justify-content-between mb-2">
+    <div class="d-flex column-gap1 mb-2">
         <ng-container *ngIf="currentTxn?.isStock && stockVariants | async as variants">
             <div *ngIf="variants?.length > 1" class="col-md-3 mb-2 p-0 pr-2">
                 <div>
