@@ -130,7 +130,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         countryCode: '',
         baseCurrency: '',
         baseCurrencySymbol: '',
-        addresses: null
+        addresses: null,
+        otherApplicableTaxes: null,
+        applicableDiscounts: null,
+        applicableTaxes: null,
+        excludeTax: false
     };
     /** Invoice Settings */
     public activeCompany: any;
@@ -420,10 +424,27 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 const entryFormGroup = this.getEntryFormGroup(response.entryIndex);
                 const transactionFormGroup = this.getTransactionFormGroup(entryFormGroup);
 
-                transactionFormGroup.get('stock').get('skuCode')?.patchValue(response.body.stock.skuCode);
-                transactionFormGroup.get('stock').get('skuCodeHeading')?.patchValue(response.body.stock.skuCodeHeading);
+                if (response.body.stock) {
+                    transactionFormGroup.get('stock').get('skuCode')?.patchValue(response.body.stock.skuCode);
+                    transactionFormGroup.get('stock').get('skuCodeHeading')?.patchValue(response.body.stock.skuCodeHeading);
 
-                this.stockUnits[response.entryIndex] = observableOf(response.body.stock.variant.unitRates);
+                    this.stockUnits[response.entryIndex] = observableOf(response.body.stock.variant.unitRates);
+                } else {
+                    this.stockUnits[response.entryIndex] = observableOf([]);
+                }
+
+                const taxes = this.generalService.fetchTaxesOnPriority(
+                    response.body.stock?.taxes ?? [],
+                    response.body.stock?.groupTaxes ?? [],
+                    response.body.taxes ?? [],
+                    response.body.groupTaxes ?? []);
+
+                const taxesFormArray = entryFormGroup.get('taxes') as FormArray;
+                taxesFormArray.clear();
+        
+                taxes?.forEach(tax => {
+                    taxesFormArray.push(this.getTransactionTaxFormGroup(tax));
+                });
             }
         });
 
@@ -971,7 +992,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public selectAccount(event: any, isClear: boolean = false): void {
-        console.log(event);
         if (isClear) {
             this.invoiceForm.reset();
         } else {
@@ -1005,12 +1025,23 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 if (event?.additional?.stock?.uniqueName) {
                     keysToUpdate.stockName = event?.additional?.stock?.name;
                     keysToUpdate.stockUniqueName = event?.additional?.stock?.uniqueName;
-                    this.componentStore.getStockVariants({ q: event?.additional?.stock?.uniqueName, index: entryIndex });
                 }
 
                 transactionFormGroup.get('account').get('name')?.patchValue(keysToUpdate.accountName);
                 transactionFormGroup.get('stock').get('name')?.patchValue(keysToUpdate.stockName);
                 transactionFormGroup.get('stock').get('uniqueName')?.patchValue(keysToUpdate.stockUniqueName);
+
+                if (event?.additional?.hasVariants) {
+                    this.componentStore.getStockVariants({ q: event?.additional?.stock?.uniqueName, index: entryIndex });
+                } else {
+                    let payload = {};
+
+                    if (keysToUpdate.stockUniqueName) {
+                        payload = { stockUniqueName: keysToUpdate.stockUniqueName, customerUniqueName: this.invoiceForm.get('account.uniqueName')?.value };
+                    }
+
+                    this.componentStore.getParticularDetails({ accountUniqueName: transactionFormGroup.get("account.uniqueName")?.value, payload: payload, entryIndex: entryIndex });
+                }
             }
         }
     }
@@ -1050,12 +1081,25 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     private updateAccountDataInForm(accountData: any): void {
         this.showTaxTypeByCountry(accountData.country?.countryCode);
 
+        let isPartyTypeSez = false;
+        if (accountData?.addresses?.length > 0) {
+            accountData.addresses.forEach(address => {
+                if (address.partyType && address.partyType.toLowerCase() === "sez") {
+                    isPartyTypeSez = true;
+                }
+            });
+        }
+
         this.account = {
             countryName: accountData.country?.countryName,
             countryCode: accountData.country?.countryCode,
             baseCurrency: accountData.currency,
             baseCurrencySymbol: accountData.currencySymbol,
-            addresses: accountData.addresses
+            addresses: accountData.addresses,
+            otherApplicableTaxes: accountData.otherApplicableTaxes,
+            applicableDiscounts: accountData.applicableDiscounts || accountData.inheritedDiscounts,
+            applicableTaxes: accountData.applicableTaxes,
+            excludeTax: (this.company.countryName === "India" && accountData.country?.countryName !== "India") || isPartyTypeSez
         };
 
         let defaultAddress = null;
@@ -1848,7 +1892,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public addNewLineEntry(): void {
         this.invoiceForm.get('entries')['controls'].push(this.getEntriesFormGroup());
         const entries = this.invoiceForm.get('entries') as FormArray;
-        this.activeEntryIndex = entries?.length;
+        this.activeEntryIndex = entries?.length - 1;
     }
 
     /**
