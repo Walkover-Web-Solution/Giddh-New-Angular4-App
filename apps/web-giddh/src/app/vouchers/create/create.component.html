@@ -776,7 +776,7 @@
                                                                             *ngIf="activeEntryIndex === entryIndex"
                                                                             formControlName="code"
                                                                             [placeholder]="'Select'"
-                                                                            class="form-control mt-2"
+                                                                            class="form-control mt-2 bg"
                                                                             [disabled]="!transaction.get('stock.uniqueName')?.value"
                                                                             name="transactionUnit{{entryIndex}}">
                                                                             <mat-option
@@ -957,7 +957,7 @@
                                                                 </span>
                                                             </div>
                                                         </ng-container>
-                                                        <div class="d-flex align-items-center"
+                                                        <div class="d-flex align-items-center justify-content-end"
                                                             *ngIf="activeEntryIndex === entryIndex"
                                                             formGroupName="otherTax">
                                                             <mat-checkbox type="checkbox" color="primary"
@@ -976,14 +976,14 @@
                                                                     [currencyCode]="isMultiCurrencyVoucher ? account.baseCurrency : false">
                                                                 </amount-field>
                                                             </ng-container>
-                                                            <span class="font-14 text-gray mt-1 d-inline-block"
+                                                            <div class="font-14 text-gray mt-1"
                                                                 *ngIf="entry.get('otherTax.name')?.value && isMultiCurrencyVoucher">
                                                                 <amount-field
                                                                     [amount]="entry.get('otherTax.amount')?.value * invoiceForm.get('exchangeRate')?.value"
                                                                     [currencySymbol]="company.baseCurrencySymbol"
                                                                     [currencyCode]="company.baseCurrency">
                                                                 </amount-field>
-                                                            </span>
+                                                            </div>
                                                         </div>
 
                                                         <!-- Delete Row Button -->
