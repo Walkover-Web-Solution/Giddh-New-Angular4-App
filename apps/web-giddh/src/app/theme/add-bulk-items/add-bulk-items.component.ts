@@ -167,7 +167,7 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
             customerUniqueName: this.inputData.customerUniqueName
         };
 
-        if (item?.additional?.stock?.uniqueName) {
+        if (item?.additional?.hasVariants) {
             this.componentStore.getStockVariants({ q: item?.additional?.stock?.uniqueName, index: index });
         } else {
             this.loadDetails(item, requestObject);
@@ -289,6 +289,6 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
      * @memberof AddBulkItemsComponent
      */
     public saveBulkItems(): void {
-        this.dialogRef.close(this.addBulkForm.value);
+        this.dialogRef.close(this.addBulkForm.value?.data);
     }
 }

@@ -1035,7 +1035,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 transactionStockVariantFormGroup.get('name')?.patchValue(event?.label);
                 transactionStockVariantFormGroup.get('uniqueName')?.patchValue(event?.value);
 
-                this.componentStore.getParticularDetails({ accountUniqueName: transactionFormGroup.get("account").get('uniqueName')?.value, payload: { variantUniqueName: event?.value, customerUniqueName: this.invoiceForm.controls['account'].get('uniqueName')?.value }, entryIndex: entryIndex });
+                this.componentStore.getParticularDetails({ accountUniqueName: transactionFormGroup.get("account.uniqueName")?.value, payload: { variantUniqueName: event?.value, customerUniqueName: this.invoiceForm.get('account.uniqueName')?.value }, entryIndex: entryIndex });
             }
         }
     }
@@ -1297,7 +1297,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.bulkStockAsideMenuRef = this.dialog.open(AddBulkItemsComponent, {
             data: {
                 voucherType: this.voucherType,
-                customerUniqueName: this.invoiceForm.get('account.uniqueName')
+                customerUniqueName: this.invoiceForm.get('account.uniqueName')?.value
             }
         });
 
