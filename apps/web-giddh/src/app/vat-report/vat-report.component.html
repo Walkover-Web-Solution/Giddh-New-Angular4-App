@@ -15,10 +15,15 @@
                         <div class="row mb-3 mt-3">
                             <div class="col-lg-10">
                                 <div class="advance-search-by-date date-advance-search">
-                                    <dropdown-field [options]="months"
+                                    <dropdown-field [options]="financialYears"
+                                    (selectedOption)="getYearStartAndEndDate($event)"
+                                    [placeholder]="localeData?.select_year_label"
+                                    [defaultValue]="selectedYear"></dropdown-field>
+
+                                    <dropdown-field [options]="months" *ngIf="year && selectedYear"
                                         (selectedOption)="getMonthStartAndEndDate($event)"
                                         [placeholder]="localeData?.select_month_label"
-                                        [defaultValue]="selectedMonth"></dropdown-field>
+                                        [defaultValue]="selectedMonth?.label"></dropdown-field>
                                     <div>
                                         <div class="input-group custom-datepicker custom-new-datepicker"
                                             (click)="showGiddhDatepicker($event)">
