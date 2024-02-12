@@ -672,7 +672,7 @@ span.edit-icon {
 }
 
 .update-text {
-    color: var(--color-blue);
+    color: var(--color-giddh-blue);
     padding: 0 5px;
 }
 
@@ -684,7 +684,7 @@ span.edit-icon {
 
 .btn-group .dropdown-toggle {
     margin-right: 0;
-    color: var(--color-blue);
+    color: var(--color-giddh-blue);
 }
 
 .form-group input[type="checkbox"] {
@@ -909,7 +909,7 @@ section.static-invoice-table {
 }
 
 .aqua-color a {
-    color: var(--color-blue);
+    color: var(--color-giddh-blue);
     font-size: var(--font-size-12);
 }
 
@@ -947,7 +947,6 @@ section.static-invoice-table {
 
 table.table.table-custom-invoice.basic,
 .other-details-section {
-    max-width: 1025px;
     width: 100%;
 
     .other-details-section-list {
@@ -1045,7 +1044,6 @@ table.table.table-custom-invoice.basic,
 .switch-currency {
     font-size: var(--font-size-15);
     color: var(--color-nero);
-    max-width: 1020px;
     text-align: right;
     margin-bottom: 10px;
     width: 100%;
@@ -1154,7 +1152,7 @@ strong {
 }
 
 .item-total input.other-taxes-checkbox[type="checkbox"]:focus:after {
-    border-color: var(--color-blue) !important;
+    border-color: var(--color-giddh-blue) !important;
 }
 
 .add-line-bulk-item a:focus {
@@ -1676,5 +1674,14 @@ label.checkbox-custom-label {
         width: 100%;
         border-radius: 8px !important;
         border: 1px solid var(--color-iron);
+    }
+}
+
+
+.voucher {
+    background-color: var(--color-common-quinary-background-for-all-components);
+    padding: 5px 0;
+    .container-lg{
+        max-width: 1240px !important;
     }
 }
