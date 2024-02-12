@@ -1327,7 +1327,16 @@
 <!-- region send email popup -->
 <ng-template #sendEmailModal>
     <ng-container>
-        <app-email-send-dialog (cancelEvent)="cancelEmailModal()"></app-email-send-dialog>
+        <app-email-send-dialog
+        [voucherType]="'sales'"
+        (successEvent)="sendEmail($event)"
+        [selectedItem]="{
+            voucherNumber: '240211-2',
+            uniqueName: '002',
+            account: invoiceForm.controls['account'].get('customerName').value,
+            voucherUniqueName: 'ibxoo1707645693722'
+        }"
+        (cancelEvent)="cancelEmailModal()"></app-email-send-dialog>
     </ng-container>
 </ng-template>
 <!-- endregion -->
