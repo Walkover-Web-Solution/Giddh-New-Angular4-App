@@ -1,49 +1,36 @@
 <div class="modal-header">
-  <h4 mat-dialog-title class="font-16">Send Mail</h4>
-  <button mat-icon-button mat-dialog-close type="button" class="close d-flex justify-content-center align-items-center">
-    <i class="icon-cross icon-font-16"></i>
-  </button>
+    <h4 mat-dialog-title class="font-16">Send Mail</h4>
+    <button mat-icon-button mat-dialog-close type="button"
+        class="close d-flex justify-content-center align-items-center">
+        <i class="icon-cross icon-font-16"></i>
+    </button>
 </div>
-<mat-dialog-content [formGroup]="sendEmailForm">
-  <div class="modal-body">
-    <div class="w-100 option-value-field">
-      <text-field 
-        [name]="'name'" 
-        [cssClass]="'w-100'" 
-        formControlName="uniqueName"
-        [type]="'text'">
-      </text-field>
-    </div>
-    <div class="my-3">
-      <h3 class="mr-b05">Invoice Copy</h3>
-      <mat-checkbox
-        color="primary"
-        class="d-block font-15"
-        formControlName="copyTypes"
-        [value]="'Original'"
-      >
-        Original
-      </mat-checkbox>
-      <mat-checkbox
-        color="primary"
-        class="d-block font-15"
-        formControlName="copyTypes"
-        [value]="'Transport'"
-      >
-        Transport
-      </mat-checkbox>
-      <mat-checkbox
-        color="primary"
-        class="d-block font-15"
-        formControlName="copyTypes"
-        [value]="'Customer'"
-      >
-        Customer
-      </mat-checkbox>
-    </div>
-    <div class="d-flex column-gap1" formGroupName="email">
-      <button mat-stroked-button color="primary" type="submit">Send</button>
-      <button mat-stroked-button mat-dialog-close>Cancel</button>
-    </div>
-  </div>
+<mat-dialog-content>
+    <form autocomplete="off" novalidate name="sendEmailForm" [formGroup]="sendEmailForm" (ngSubmit)="sendEmail()">
+        <div class="modal-body">
+            <div class="w-100 option-value-field">
+                <text-field [name]="'name'" [cssClass]="'w-100'" formControlName="email.to" [type]="'text'">
+                </text-field>
+            </div>
+            <div class="my-3">
+                <h3 class="mr-b05">Invoice Copy</h3>
+                <mat-checkbox color="primary" class="d-block font-15" (change)="onCopyTypeChange($event, 'Original')"
+                    formControlName="copyTypes">
+                    Original
+                </mat-checkbox>
+                <mat-checkbox color="primary" class="d-block font-15" (change)="onCopyTypeChange($event, 'Transport')"
+                    formControlName="copyTypes">
+                    Transport
+                </mat-checkbox>
+                <mat-checkbox color="primary" class="d-block font-15" (change)="onCopyTypeChange($event, 'Customer')"
+                    formControlName="copyTypes">
+                    Customer
+                </mat-checkbox>
+            </div>
+            <div class="d-flex column-gap1">
+                <button mat-stroked-button color="primary" type="submit">Send</button>
+                <button mat-stroked-button mat-dialog-close>Cancel</button>
+            </div>
+        </div>
+    </form>
 </mat-dialog-content>

@@ -2264,6 +2264,16 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
+     * This will be use for send email after create voucher 
+     *
+     * @param {(string | { email: string, invoiceType: string[] })} request
+     * @memberof VoucherCreateComponent
+     */
+    public sendEmail(request: string | { email: string, invoiceType: string[] }) {
+        console.log(request);
+    }
+
+    /**
      * Lifecycle hook for component destroy
      *
      * @memberof VoucherCreateComponent
