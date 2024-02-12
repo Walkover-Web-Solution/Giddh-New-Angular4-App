@@ -66,6 +66,7 @@ import { ClickOutsideModule } from "ng-click-outside";
 import { AmountFieldComponentModule } from "../shared/amount-field/amount-field.module";
 import { EntryAmountModule } from "./utility/directives/entry-amount/entry-amount.module";
 import { EntryTotalModule } from "./utility/directives/entry-total/entry-total.module";
+import { GiddhPageLoaderModule } from "../shared/giddh-page-loader/giddh-page-loader.module";
 
 @NgModule({
     declarations: [
@@ -138,7 +139,8 @@ import { EntryTotalModule } from "./utility/directives/entry-total/entry-total.m
         ClickOutsideModule,
         AmountFieldComponentModule,
         EntryAmountModule,
-        EntryTotalModule
+        EntryTotalModule,
+        GiddhPageLoaderModule
     ],
     exports: [
 

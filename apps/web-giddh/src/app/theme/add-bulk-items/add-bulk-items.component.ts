@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from "@angular/core";
+import { Component, Inject, OnDestroy, OnInit } from "@angular/core";
 import { AddBulkItemsComponentStore } from "./utility/add-bulk-items.store";
 import { VouchersUtilityService } from "../../vouchers/utility/vouchers.utility.service";
 import { cloneDeep } from "../../lodash-optimized";
@@ -9,6 +9,7 @@ import { SearchType } from "../../vouchers/utility/vouchers.const";
 import { FormArray, FormBuilder, FormGroup } from "@angular/forms";
 import { SalesAddBulkStockItems } from "../../models/api-models/Sales";
 import { ToasterService } from "../../services/toaster.service";
+import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 
 @Component({
     selector: "add-bulk-items",
@@ -17,14 +18,12 @@ import { ToasterService } from "../../services/toaster.service";
     providers: [AddBulkItemsComponentStore]
 })
 export class AddBulkItemsComponent implements OnInit, OnDestroy {
-    /** Holds current voucher type */
-    @Input() public voucherType: string;
-    /** Account search request */
-    @Input() public stockSearchRequest: any;
+    /** Stock search request */
+    public stockSearchRequest: any;
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    /** Voucher account results Observable */
-    public voucherStockResults$: Observable<OptionInterface[]> = of(null);
+    /** Stock results Observable */
+    public stockResults$: Observable<OptionInterface[]> = of(null);
     /** Form Group for invoice form */
     public addBulkForm: FormGroup;
     /** List of stock variants */
@@ -36,6 +35,8 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
         private formBuilder: FormBuilder,
         private toaster: ToasterService,
         private componentStore: AddBulkItemsComponentStore,
+        @Inject(MAT_DIALOG_DATA) public inputData,
+        public dialogRef: MatDialogRef<any>
     ) { }
 
     /**
@@ -115,16 +116,16 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
             return;
         }
 
-        let stockSearchRequest = this.vouchersUtilityService.getSearchRequestObject(this.voucherType, query, page, SearchType.ITEM);
+        let stockSearchRequest = this.vouchersUtilityService.getSearchRequestObject(this.inputData.voucherType, query, page, SearchType.ITEM);
         this.stockSearchRequest = cloneDeep(stockSearchRequest);
         this.stockSearchRequest.isLoading = true;
 
         this.searchService.searchAccountV3(stockSearchRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.body?.results?.length) {
                 this.stockSearchRequest.loadMore = true;
-                let voucherStockResults = [];
+                let stockResults = [];
                 if (page > 1) {
-                    this.voucherStockResults$.subscribe(res => voucherStockResults = res);
+                    this.stockResults$.subscribe(res => stockResults = res);
                 }
                 const newResults = response?.body?.results?.map(result => {
                     return {
@@ -135,7 +136,7 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
                         additional: result
                     };
                 }) || [];;
-                this.voucherStockResults$ = of(voucherStockResults.concat(...newResults));
+                this.stockResults$ = of(stockResults.concat(...newResults));
             } else {
                 this.stockSearchRequest.loadMore = false;
             }
@@ -153,17 +154,19 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
      */
     public addItem(item: SalesAddBulkStockItems, index: number): void {
         const dataArray = this.addBulkForm.get('data') as FormArray;
-        const isAlreadySelected = dataArray.controls.some((control, i) => {
+        const isAlreadySelected = dataArray.controls.some((control: any, i: number) => {
             return i === index && (control.get('name').value === item.name);
         });
         if (isAlreadySelected) {
-            this.toaster.warningToast('Stock is already selected');
+            this.toaster.showSnackBar('error', 'Stock is already selected');
             return;
         }
+
         let requestObject = {
             stockUniqueName: item.additional?.stock?.uniqueName ?? '',
-            customerUniqueName: 'sales' // send dynamic customer unique name from voucher
+            customerUniqueName: this.inputData.customerUniqueName
         };
+
         if (item?.additional?.stock?.uniqueName) {
             this.componentStore.getStockVariants({ q: item?.additional?.stock?.uniqueName, index: index });
         } else {
@@ -195,21 +198,16 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
                     applicableTaxes: taxes,
                     currency: data.body.currency,
                     currencySymbol: data.body.currencySymbol,
-                    email: data.body.emails,
-                    isFixed: data.body.isFixed,
-                    mergedAccounts: data.body.mergedAccounts,
-                    mobileNo: data.body.mobileNo,
-                    nameStr: item.additional && item.additional.parentGroups ? item.additional.parentGroups.map(parent => parent.name).join(', ') : '',
                     stock: data.body.stock,
-                    uNameStr: item.additional && item.additional.parentGroups ? item.additional.parentGroups.map(parent => parent?.uniqueName).join(', ') : '',
-                    category: data.body.category,
                     combinedUniqueName: data.body.stock?.variant ? `${item.uniqueName}#${data.body.stock.variant?.uniqueName}` : '',
                     skuCode: data.body.stock?.skuCode,
                 };
+
                 const unitRates = data.body?.stock?.variant?.unitRates ?? [];
                 item.rate = unitRates[0]?.rate ?? 0;
                 item.quantity = 1;
-                let itemFormGroup;;
+
+                let itemFormGroup;
                 itemFormGroup = this.getStockFormGroup(item);
                 this.getDataControls.push(itemFormGroup);
             }
@@ -224,26 +222,26 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
      * @return {*}  {void}
      * @memberof AddBulkItemsComponent
      */
-    public variantChanged(item: SalesAddBulkStockItems, event: any, i: number): void {
+    public variantChanged(item: SalesAddBulkStockItems, event: any, index: number): void {
         let selectedItem = cloneDeep(item);
         selectedItem.variant = { name: event.label, uniqueName: event.value };
         const dataArray = this.addBulkForm.get('data') as FormArray;
-        const isAlreadySelected = dataArray.controls.some((control, i) => {
-            return i === i && control.get('variantName').value === event.label;
+        const isAlreadySelected = dataArray.controls.some((control: any, i: number) => {
+            return i === index && control.get('variantName').value === event.label;
         });
 
         if (isAlreadySelected) {
             this.toaster.warningToast('Variant is already selected');
             return;
         }
+
         const requestObj = {
             stockUniqueName: item.additional?.stock?.uniqueName ?? '',
             variantUniqueName: event.value,
-            customerUniqueName: 'sales' // send dynamic customer unique name from voucher
+            customerUniqueName: this.inputData.customerUniqueName
         };
         this.loadDetails(selectedItem, requestObj);
     }
-
 
     /**
      * Removes selected line
@@ -265,8 +263,7 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
      */
     public alterQuantity(item, action: string = 'add'): void {
         const quantityControl = item.get('quantity');
-
-        let currentQuantity = +quantityControl.value;
+        let currentQuantity = quantityControl.value;
 
         if (action === 'add') {
             currentQuantity++;
@@ -286,4 +283,12 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
         this.destroyed$.complete();
     }
 
+    /**
+     * Sends selected items to the parent module
+     *
+     * @memberof AddBulkItemsComponent
+     */
+    public saveBulkItems(): void {
+        this.dialogRef.close(this.addBulkForm.value);
+    }
 }

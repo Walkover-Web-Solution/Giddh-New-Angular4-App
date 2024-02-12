@@ -22,7 +22,7 @@
                                 <div class="col-10">
                                     <div class="d-flex align-items-center">
                                         <div class="vouchers-form-fields w-100" [keyboardShortcut]="'alt+c'"
-                                            (onShortcutPress)="toggleAccountAsidePane()">
+                                            (onShortcutPress)="toggleAccountAsidePane(accountType.customer)">
                                             <reactive-dropdown-field *ngIf="!invoiceType.isCashInvoice"
                                                 [label]="invoiceType.isPurchaseOrder || invoiceType.isDebitNote ? localeData?.vendor_name : localeData?.customer_name"
                                                 [placeholder]="invoiceType.isPurchaseOrder || invoiceType.isDebitNote ? localeData?.select_vendor : localeData?.select_customer"
@@ -37,7 +37,7 @@
                                                 (selectedOption)="selectAccount($event)"
                                                 (dynamicSearchedQuery)="searchAccount($event, 1)"
                                                 (onClear)="selectAccount($event, true)"
-                                                (createOption)="toggleAccountAsidePane()">
+                                                (createOption)="toggleAccountAsidePane(accountType.customer)">
                                             </reactive-dropdown-field>
                                             <input-field *ngIf="invoiceType.isCashInvoice" [name]="'account'"
                                                 [label]="localeData?.customer_name"
@@ -91,7 +91,7 @@
                                     <span
                                         *ngIf="!invoiceType.isCashInvoice && invoiceForm.controls['account'].get('uniqueName')?.value"
                                         class="vouchers-form-fields-detail cursor-pointer"
-                                        (click)="toggleAccountAsidePane()">
+                                        (click)="toggleAccountAsidePane(accountType.customer)">
                                         {{ !invoiceType.isPurchaseOrder ? localeData?.customer_details :
                                         localeData?.vendor_details }}</span>
 
@@ -158,7 +158,7 @@
                                             </mat-menu>
                                             <div class="vouchers-address-form" *ngIf="invoiceType.isCashInvoice">
                                                 <div class="address-field">
-                                                    <textarea rows="2" matInput class="w-100" name="billingAddress"
+                                                    <textarea rows="2" matInput  (keyup)="setBillingAddressToShippingAddress()" class="w-100" name="billingAddress"
                                                         formControlName="address"></textarea>
                                                 </div>
                                                 <div class="country-field">
@@ -172,16 +172,18 @@
                                                         [options]="accountStateList$ | async"
                                                         [labelValue]="invoiceForm.controls['account'].get('billingAddress').get('state').get('name')?.value"
                                                         [appearance]="'fill'" [showLabel]="false"
-                                                        (selectedOption)="selectState('billingAddress', $event)"></reactive-dropdown-field>
+                                                        (selectedOption)="selectState('billingAddress', $event);setBillingAddressToShippingAddress()"></reactive-dropdown-field>
                                                 </div>
                                                 <div class="gstin-field">
                                                     <text-field [type]="'text'" [name]="'billingTaxNumber'"
+                                                    (keyup)="setBillingAddressToShippingAddress()"
                                                         [placeholder]="'GSTIN'" [cssClass]="'border-0'"
-                                                        [showError]="billingGstValid$ | async"
+                                                        [showError]="taxNumberValidations['account']['billingAddress'] | async"
                                                         formControlName="taxNumber"></text-field>
                                                 </div>
                                                 <div class="pin-code-field">
                                                     <text-field [type]="'text'" [name]="'billingPinCode'"
+                                                    (keyup)="setBillingAddressToShippingAddress()"
                                                         [placeholder]="'PIN Code'" [cssClass]="'border-0'"
                                                         formControlName="pincode"></text-field>
                                                 </div>
@@ -191,7 +193,7 @@
                                         <div class="col-6" formGroupName="shippingAddress">
                                             <mat-checkbox type="checkbox" color="primary"
                                                 *ngIf="invoiceType.isCashInvoice"
-                                                (change)="copyBillingInShipping($event)">
+                                                (change)="copyBillingInShipping('account',$event)">
                                                 Shipping Address Same as Billing Address
                                             </mat-checkbox>
                                             <ng-container *ngIf="!invoiceType.isCashInvoice">
@@ -253,7 +255,7 @@
                                                 <div class="gstin-field">
                                                     <text-field [type]="'text'" [name]="'shippingTaxNumber'"
                                                         [placeholder]="'GSTIN'" [cssClass]="'border-0'"
-                                                        [showError]="shippingGstValid$ | async"
+                                                        [showError]="taxNumberValidations['account']['shippingAddress'] | async"
                                                         formControlName="taxNumber"></text-field>
                                                 </div>
                                                 <div class="pin-code-field">
@@ -275,7 +277,7 @@
                                         <div class="col-6 mr-t15">
                                             <input-field [name]="'email'" [label]="'Email Id'"
                                                 [placeholder]="'Enter email'" [type]="'text'"
-                                                formControlName="email"></input-field>
+                                                formControlName="email" [showError]="(invoiceForm.controls['account'].get('email')?.touched && invoiceForm.controls['account'].get('email')?.invalid)"></input-field>
                                         </div>
 
                                         <!-- Mobile Number -->
@@ -288,13 +290,11 @@
                                                     id="init-contact" placeholder="Mobile Number"
                                                     formControlName="mobileNumber" [ngClass]="{
                                                         'invalid-input':
-                                                            (invoiceForm.controls['account'].get('mobileNumber')?.touched ||
-                                                            invoiceForm.controls['account'].get('mobileNumber')?.touched) &&
+                                                            (invoiceForm.controls['account'].get('mobileNumber')?.touched) &&
                                                             !intlClass?.isRequiredValidNumber
                                                     }" />
                                                 <mat-error *ngIf="
-                                                        (invoiceForm.controls['account'].get('mobileNumber')?.touched ||
-                                                        invoiceForm.controls['account'].get('mobileNumber')?.touched) &&
+                                                        (invoiceForm.controls['account'].get('mobileNumber')?.touched) &&
                                                         !intlClass?.isRequiredValidNumber
                                                     ">Please enter valid mobile number</mat-error>
                                             </div>
@@ -406,7 +406,7 @@
 
                                     <!-- Voucher Date -->
                                     <div class="col-3 pr-2">
-                                        <giddh-datepicker type="text" (keydown.enter)="$event.preventDefault()"
+                                        <giddh-datepicker (keydown.enter)="$event.preventDefault()"
                                             [label]="invoiceType.isSalesInvoice  ?'Invoice Date': invoiceType.isPurchaseInvoice ? 'Bill Date': invoiceType.isCreditNote?'Credit Note Date': invoiceType.isDebitNote ?'Debit Note Date':invoiceType.isEstimateInvoice?'Estimate Date':invoiceType.isProformaInvoice?'Proforma Date':invoiceType.isPurchaseOrder ?'Order Date':'' "
                                             [placeholder]="'DDMMYYYY'" name="voucherDate" [showToggleIcon]="false"
                                             [appearance]="'outline'" formControlName="date">
@@ -423,8 +423,8 @@
                                     invoiceType.isEstimateInvoice) &&
                                     !invoiceType.isCashInvoice
                                 ">
-                                        <giddh-datepicker type="text" (keydown.enter)="$event.preventDefault()"
-                                            [label]="(invoiceType.isSalesInvoice || invoiceType.isProformaInvoice || invoiceType.isPurchaseInvoice) ?'Due Date': invoiceType.isPurchaseOrder ? 'Expected Delivery': invoiceType.isEstimateInvoice?'Expiry Date':''"
+                                        <giddh-datepicker (keydown.enter)="$event.preventDefault()"
+                                            [label]="(invoiceType.isSalesInvoice || invoiceType.isProformaInvoice || invoiceType.isPurchaseInvoice) ? 'Due Date': invoiceType.isPurchaseOrder ? 'Expected Delivery': invoiceType.isEstimateInvoice ? 'Expiry Date' : ''"
                                             [placeholder]="'DDMMYYYY'" name="voucherDueDate" [showToggleIcon]="false"
                                             [appearance]="'outline'" formControlName="dueDate">
                                         </giddh-datepicker>
@@ -604,50 +604,39 @@
                                                                                     transaction.get('stock.variant.name')?.value
                                                                                     }}</span>
                                                                             </ng-container>
-                                                                            <reactive-dropdown-field
-                                                                                *ngIf="activeEntryIndex === entryIndex"
-                                                                                [label]="localeData?.select_variant"
-                                                                                [placeholder]="localeData?.select_variant"
-                                                                                formControlName="uniqueName"
-                                                                                [name]="'transactionStockVariantUniqueName' + entryIndex"
-                                                                                [options]="stockVariants[entryIndex] | async"
-                                                                                (selectedOption)="selectVariant($event, entryIndex)"
-                                                                                (onClear)="selectVariant($event, entryIndex, true)">
-                                                                            </reactive-dropdown-field>
+                                                                            <div class="mr-t1">
+                                                                                <reactive-dropdown-field
+                                                                                    *ngIf="activeEntryIndex === entryIndex"
+                                                                                    [label]="localeData?.select_variant"
+                                                                                    [placeholder]="localeData?.select_variant"
+                                                                                    formControlName="uniqueName"
+                                                                                    [name]="'transactionStockVariantUniqueName' + entryIndex"
+                                                                                    [options]="stockVariants[entryIndex] | async"
+                                                                                    (selectedOption)="selectVariant($event, entryIndex)"
+                                                                                    (onClear)="selectVariant($event, entryIndex, true)">
+                                                                                </reactive-dropdown-field>
+                                                                            </div>
                                                                         </ng-container>
                                                                     </ng-container>
                                                                 </ng-container>
                                                             </ng-container>
 
                                                             <ng-container *ngIf="activeEntryIndex === entryIndex">
-                                                                <textarea rows="2" matInput class="form-control mt-2"
-                                                                    placeholder="Add Description"
-                                                                    name="transactionDescription{{entryIndex}}"
-                                                                    formControlName="description"
-                                                                    [maxlength]="entryDescriptionLength"></textarea>
-                                                                <span class="mt-2 font-12">{{
-                                                                    commonLocaleData?.app_characters_left }}: {{
-                                                                    entryDescriptionLength -
-                                                                    entry.get("description")?.value?.length }}</span>
+                                                                <textarea rows="2" matInput class="form-control mt-2" placeholder="Add Description" name="transactionDescription{{entryIndex}}" formControlName="description" [maxlength]="entryDescriptionLength"></textarea>
                                                             </ng-container>
                                                             <ng-container *ngIf="activeEntryIndex !== entryIndex">
                                                                 {{ entry.get('description')?.value }}
                                                             </ng-container>
-
-                                                            <ng-container
-                                                                *ngFor="let transaction of entry.get('transactions')['controls']"
-                                                                formArrayName="transactions">
-                                                                <ng-container formGroupName="0">
-                                                                    <ng-container
-                                                                        *ngIf="transaction.get('stock.skuCode')?.value">
-                                                                        <span class="mt-2 font-12">{{
-                                                                            transaction.get('stock.skuCodeHeading')?.value
-                                                                            }}: {{
-                                                                            transaction.get('stock.skuCode')?.value
-                                                                            }}</span>
+                                                            <div class="mt-2 d-flex justify-content-between">
+                                                                <span *ngIf="activeEntryIndex === entryIndex" class="font-12">{{ commonLocaleData?.app_characters_left }}: {{ entryDescriptionLength - entry.get("description")?.value?.length }}</span>
+                                                                <ng-container *ngFor="let transaction of entry.get('transactions')['controls']" formArrayName="transactions">
+                                                                    <ng-container formGroupName="0">
+                                                                        <ng-container *ngIf="transaction.get('stock.skuCode')?.value">
+                                                                            <span class="font-12">{{ transaction.get('stock.skuCodeHeading')?.value }}: {{ transaction.get('stock.skuCode')?.value }}</span>
+                                                                        </ng-container>
                                                                     </ng-container>
                                                                 </ng-container>
-                                                            </ng-container>
+                                                            </div>
 
                                                             <div class="d-flex justify-content-between">
                                                                 <div class="w-50">
@@ -774,6 +763,7 @@
                                                                             formControlName="quantity"
                                                                             [cssClass]="'form-control text-right'"
                                                                             [name]="'transactionQuantity' + entryIndex"
+                                                                            [readonly]="!transaction.get('stock.uniqueName')?.value"
                                                                             [type]="'text'"></text-field>
 
                                                                         <ng-container formGroupName="stockUnit">
@@ -787,6 +777,7 @@
                                                                                 formControlName="code"
                                                                                 [placeholder]="'Select'"
                                                                                 class="form-control mt-2"
+                                                                                [readonly]="!transaction.get('stock.uniqueName')?.value"
                                                                                 name="transactionUnit{{entryIndex}}">
                                                                                 <mat-option
                                                                                     *ngFor="let unit of stockUnits[entryIndex] | async"
@@ -1035,15 +1026,16 @@
                                                                                     [options]="briefAccounts$ | async"
                                                                                     (onClear)="selectedDepositAccount($event, true)"
                                                                                     (selectedOption)="selectedDepositAccount($event)"
+                                                                                    (createOption)="toggleAccountAsidePane(accountType.bank)"
                                                                                     formControlName="accountUniqueName">
                                                                                 </reactive-dropdown-field>
                                                                             </div>
                                                                             <div class="col-6">
-                                                                                <input-field [name]="'amountForCompany'"
+                                                                                <input-field [name]="'amountForAccount'"
                                                                                     [label]="'Amount'"
                                                                                     [placeholder]="'Enter amount'"
                                                                                     [type]="'number'"
-                                                                                    formControlName="amountForCompany">
+                                                                                    formControlName="amountForAccount">
                                                                                 </input-field>
                                                                             </div>
                                                                         </ng-container>
@@ -1319,7 +1311,16 @@
 <!-- region print voucher popup -->
 <ng-template #printVoucherModal>
     <ng-container>
-        <print-voucher (cancelEvent)="cancelPrintModal()"></print-voucher>
+        <print-voucher 
+        [voucherType]="'sales'"
+        [localeData]="localeData"
+        [commonLocaleData]="commonLocaleData"
+        [selectedItem]="{
+            voucherNumber: '240211-2',
+            uniqueName: '002',
+            voucherUniqueName: 'ibxoo1707645693722'
+        }"
+        (cancelEvent)="cancelPrintModal()"></print-voucher>
     </ng-container>
 </ng-template>
 
@@ -1334,9 +1335,4 @@
 <ng-template #dateChangeConfirmationModel>
     <confirmation-modal [configuration]="dateChangeConfiguration"
         (buttonClicked)="handleDateChangeConfirmation($event)"></confirmation-modal>
-</ng-template>
-
-<!-- region bulk items -->
-<ng-template #bulkItemsModal>
-    <add-bulk-items (closeEvent)="cancelBulkItemsModal()" [voucherType]="voucherType"></add-bulk-items>
 </ng-template>

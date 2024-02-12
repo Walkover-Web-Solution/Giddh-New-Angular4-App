@@ -35,3 +35,8 @@ export const SearchType = {
 };
 
 export const BriedAccountsGroup = 'cash, bankaccounts, loanandoverdraft';
+
+export enum AccountType {
+    'customer' = 'customer',
+    'bank' = 'bank'
+};

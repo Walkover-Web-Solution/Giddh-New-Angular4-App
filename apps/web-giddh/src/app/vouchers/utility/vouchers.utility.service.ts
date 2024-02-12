@@ -266,12 +266,76 @@ export class VouchersUtilityService {
         }
     }
 
-    public formatAndCleanData(invoiceForm: any): any {
-        invoiceForm.dueDate = this.convertDateToString(invoiceForm.dueDate);
-
+    public cleanVoucherObject(invoiceForm: any): any {
         delete invoiceForm.deposit.currencySymbol;
-        
+        delete invoiceForm.account.billingAddress.index;
+        delete invoiceForm.account.shippingAddress.index;
+        delete invoiceForm.company.billingAddress.index;
+        delete invoiceForm.company.shippingAddress.index;
 
+        invoiceForm?.entries?.forEach(entry => {
+            delete entry.showCodeType;
+            delete entry.totalDiscount;
+            delete entry.totalTax;
+            delete entry.totalTaxWithoutCess;
+            delete entry.totalCess;
+            delete entry.total;
+            delete entry.requiredTax;
+
+            entry.taxes?.forEach(tax => {
+                delete tax.taxType;
+                delete tax.taxDetail;
+            });
+
+            if (entry.otherTax?.uniqueName && entry.otherTax?.calculationMethod) {
+                entry.taxes.push({
+                    uniqueName: entry.otherTax?.uniqueName,
+                    calculationMethod: entry.otherTax?.calculationMethod
+                });
+            }
+
+            if (!entry.transactions[0]?.stock?.uniqueName) {
+                delete entry.transactions[0].stock;
+            }
+
+            delete entry.otherTax;
+        });
+
+        return invoiceForm;
+    }
+
+    public formatBillingShippingAddress(invoiceForm: any): any {
+        if (invoiceForm?.account?.shippingDetails?.address?.length && invoiceForm?.account?.shippingDetails?.address[0]?.length > 0) {
+            invoiceForm.account.shippingDetails.address[0] = invoiceForm.account.shippingDetails.address[0]?.trim();
+            invoiceForm.account.shippingDetails.address[0] = invoiceForm.account.shippingDetails.address[0]?.replace(/\n/g, '<br />');
+            invoiceForm.account.shippingDetails.address = invoiceForm.account.shippingDetails.address[0]?.split('<br />');
+        }
+        if (invoiceForm?.account?.billingDetails?.address?.length && invoiceForm?.account?.billingDetails?.address[0]?.length > 0) {
+            invoiceForm.account.billingDetails.address[0] = invoiceForm.account.billingDetails.address[0]?.trim();
+            invoiceForm.account.billingDetails.address[0] = invoiceForm.account.billingDetails.address[0]?.replace(/\n/g, '<br />');
+            invoiceForm.account.billingDetails.address = invoiceForm.account.billingDetails.address[0]?.split('<br />');
+        }
+
+        if (invoiceForm?.company?.shippingDetails?.address?.length && invoiceForm?.company?.shippingDetails?.address[0]?.length > 0) {
+            invoiceForm.company.shippingDetails.address[0] = invoiceForm.company.shippingDetails.address[0]?.trim();
+            invoiceForm.company.shippingDetails.address[0] = invoiceForm.company.shippingDetails.address[0]?.replace(/\n/g, '<br />');
+            invoiceForm.company.shippingDetails.address = invoiceForm.company.shippingDetails.address[0]?.split('<br />');
+        }
+        if (invoiceForm?.company?.billingDetails?.address?.length && invoiceForm?.company?.billingDetails?.address[0]?.length > 0) {
+            invoiceForm.company.billingDetails.address[0] = invoiceForm.company.billingDetails.address[0]?.trim();
+            invoiceForm.company.billingDetails.address[0] = invoiceForm.company.billingDetails.address[0]?.replace(/\n/g, '<br />');
+            invoiceForm.company.billingDetails.address = invoiceForm.company.billingDetails.address[0]?.split('<br />');
+        }
+
+        return invoiceForm;
+    }
+
+    public formatVoucherObject(invoiceForm: any): any {
+        invoiceForm.date = this.convertDateToString(invoiceForm.date);
+        invoiceForm.dueDate = this.convertDateToString(invoiceForm.dueDate);
+        invoiceForm.templateDetails.other.shippingDate = this.convertDateToString(invoiceForm.templateDetails.other.shippingDate);
+
+        invoiceForm = this.formatBillingShippingAddress(invoiceForm);
         return invoiceForm;
     }
 }

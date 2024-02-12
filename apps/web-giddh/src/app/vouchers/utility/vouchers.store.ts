@@ -38,6 +38,7 @@ export interface VoucherState {
     vendorPurchaseOrders: any[];
     linkedPoOrders: any[];
     particularDetails: any;
+    voucherDetails: any;
 }
 
 const DEFAULT_STATE: VoucherState = {
@@ -58,7 +59,8 @@ const DEFAULT_STATE: VoucherState = {
     countryData: null,
     vendorPurchaseOrders: null,
     linkedPoOrders: null,
-    particularDetails: null
+    particularDetails: null,
+    voucherDetails: null
 };
 
 @Injectable()
@@ -92,6 +94,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
     public vendorPurchaseOrders$ = this.select((state) => state.vendorPurchaseOrders);
     public linkedPoOrders$ = this.select((state) => state.linkedPoOrders);
     public particularDetails$ = this.select((state) => state.particularDetails);
+    public voucherDetails$ = this.select((state) => state.voucherDetails);
 
     public companyProfile$: Observable<any> = this.select(this.store.select(state => state.settings.profile), (response) => response);
     public activeCompany$: Observable<any> = this.select(this.store.select(state => state.session.activeCompany), (response) => response);
@@ -463,4 +466,43 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
             })
         );
     });
+
+    readonly getVoucherDetails = this.effect((data: Observable<{ accountUniqueName: string, payload: any }>) => {
+        return data.pipe(
+            switchMap((req) => {
+                return this.voucherService.getVoucherDetails(req.accountUniqueName, req.payload).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            return this.patchState({
+                                voucherDetails: res?.body ?? {}
+                            });
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            return this.patchState({
+                                voucherDetails: {}
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    readonly printVoucher = this.effect((pdfContainer$: Observable<any>) => {
+        return pdfContainer$.pipe(
+            switchMap((pdfContainer) => {
+                const window = pdfContainer?.nativeElement?.contentWindow;
+                if (window) {
+                    window.focus();
+                    setTimeout(() => {
+                        window.print();
+                    }, 200);
+                }
+                return EMPTY;
+            })
+        );
+    });
+
 }
