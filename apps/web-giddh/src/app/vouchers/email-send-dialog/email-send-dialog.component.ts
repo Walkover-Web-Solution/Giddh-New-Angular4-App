@@ -63,7 +63,7 @@ export class EmailSendDialogComponent implements OnInit {
       const toControl = this.sendEmailForm.get('email.to') as FormArray;
       toControl.push(value);
     } else {
-      this.invoiceType = this.invoiceType?.filter(response => response !== value);
+      //this.invoiceType = this.invoiceType?.filter(response => response !== value);
     }
   }
 
