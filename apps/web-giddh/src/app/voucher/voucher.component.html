@@ -1835,6 +1835,7 @@
                                                         showCurrencyValue = !showCurrencyValue;
                                                         exchangeRateChanged();
                                                         calculateGrandTotal()
+<<<<<<< HEAD
                                                     " *ngIf="autoSaveIcon && !isEinvoiceGenerated" />
                                                 </span>
                                             </div>
@@ -1913,6 +1914,115 @@
                                                             commonLocaleData?.app_number }}
                                                         </div>
                                                         <p *ngIf="
+=======
+                                                    "
+                                                    *ngIf="autoSaveIcon && !isEinvoiceGenerated"
+                                                />
+                                            </span>
+                                        </div>
+                                        <!-- switch currency on click, remaining functional work , UI is completed -->
+                                        <div class="switch-currency" *ngIf="isMulticurrencyAccount && showSwitchedCurr">
+                                            <span class="left-currency"
+                                                >{{ commonLocaleData?.app_numbers?.one }} {{ companyCurrency }}</span
+                                            >
+                                            <img
+                                                class="switch-icon"
+                                                src="{{ imgPath }}switch-icon.svg"
+                                                alt="switch-icon"
+                                                (click)="switchCurrencyImg(false)"
+                                            />
+                                            <span class="right-currency">
+                                                <span class="currency-digits" *ngIf="!showCurrencyValue">{{
+                                                    originalReverseExchangeRate | giddhCurrency
+                                                }}</span>
+                                                <text-field
+                                                    [type]="'number'"
+                                                    [name]="'exchangeRate'"
+                                                    class="exchange-rate-original"
+                                                    [(ngModel)]="reverseExchangeRate"
+                                                    [cssClass]="'form-control edit-currency'"
+                                                    *ngIf="showCurrencyValue"
+                                                    [readonly]="isEinvoiceGenerated"
+                                                ></text-field>
+                                                {{ companyCurrencyName }}
+                                            </span>
+                                            <span class="edit-icon cp">
+                                                <img
+                                                    *ngIf="!autoSaveIcon && !isEinvoiceGenerated"
+                                                    src="{{ imgPath }}edit-pencilicon.svg"
+                                                    class="edit-pencil"
+                                                    (click)="saveCancelExcRate(false)"
+                                                />
+                                                <img
+                                                    src="{{ imgPath }}autosave.svg"
+                                                    class="edit-pencil"
+                                                    (click)="saveCancelExcRate(true)"
+                                                    *ngIf="autoSaveIcon && !isEinvoiceGenerated"
+                                                />
+                                            </span>
+                                        </div>
+                                    </ng-container>
+                                    <table class="vouchers-entry-table">
+                                        <thead>
+                                            <tr>
+                                                <th
+                                                    *ngFor="let item of theadArrReadOnly; let i = index;"
+                                                    [hidden]="!item.display"
+                                                    [ngClass]="item?.label"
+                                                    [width]="item?.width"
+                                                    [ngClass]="{ 'text-left' : i === 0, 'product-column text-left' : i === 1, 'total-column' : i === 7}"
+                                                >
+                                                    {{ item?.label }}
+                                                    <span *ngIf="item.label === 'Tax' && isRcmEntry"
+                                                        >({{ commonLocaleData?.app_rcm }})<sup class="mandatory-asterisk"
+                                                            >*</sup
+                                                        ></span
+                                                    >
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody
+                                            [hidden]="showBulkLoader"
+                                            (clickOutside)="handleOutsideClick($event)"
+                                            [exclude]="'.entries-tr, .add-line-bulk-item, .mat-option'"
+                                        >
+                                            <ng-container #itemsContainer></ng-container>
+                                        </tbody>
+                                        <tbody *ngIf="showBulkLoader">
+                                            <tr>
+                                                <td colspan="8">
+                                                    <giddh-page-loader></giddh-page-loader>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                        <ng-template #entry let-entry let-entryIdx="entryIdx" let-transaction="transaction">
+                                            <!-- <ng-container *ngFor="let transaction of entry.transactions;"> -->
+                                            <!-- added new element in td which is content amount element class is 'differ-currency' (multicurrency feature) -->
+                                            <!-- region static entries-->
+                                            <tr
+                                                (click)="setActiveIndx(entryIdx); $event.stopPropagation()"
+                                                *ngIf="activeIndx !== entryIdx"
+                                                class="entries-tr set-active"
+                                                [ngClass]="{ 'is-other-tax': entry.isOtherTaxApplicable && isMulticurrencyAccount }"
+                                            >
+                                                <td width="30px">{{ entryIdx + 1 }}</td>
+                                                <td class="product-column">
+                                                    <div class="product-name">
+                                                        <label *ngIf="!transaction.accountName" class="select-account-label">{{
+                                                            localeData?.select_account
+                                                        }}</label>
+                                                        {{ transaction.accountName }}
+                                                        <span *ngIf="transaction.stockDetails?.uniqueName"
+                                                            >({{ transaction.stockDetails?.name }})</span
+                                                        >
+                                                    </div>
+                                                    <div class="sku-number">
+                                                        <label>{{ commonLocaleData?.app_sku }}:</label
+                                                        >{{ commonLocaleData?.app_number }}
+                                                    </div>
+                                                    <p
+                                                        *ngIf="
+>>>>>>> d40adaa81f6819ba4f0a3bfb6d8aa9e84d12d1e3
                                                             transaction.variant?.name &&
                                                             ((stockVariants | async)[entryIdx] | async)?.length > 1
                                                         " class="variant">
@@ -1962,6 +2072,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
+<<<<<<< HEAD
                                                     </td>
                                                     <td class="text-right stock-unit"
                                                         *ngIf="!currentVoucherFormDetails || currentVoucherFormDetails?.quantityAllowed">
@@ -2008,8 +2119,28 @@
                                                     </td>
                                                     <td class="text-right item-amount height-rate">
                                                         <div class="td-wrapper">
+=======
+                                                    </div>
+                                                </td>
+                                                <td
+                                                    width="12%"
+                                                    class="stock-unit"
+                                                    *ngIf="!currentVoucherFormDetails || currentVoucherFormDetails?.quantityAllowed"
+                                                >
+                                                    <div>
+                                                        {{ transaction.quantity | giddhCurrency }} {{ transaction.stockUnitCode }}
+                                                    </div>
+                                                </td>
+                                                <td
+                                                    width="12%"
+                                                    class="trans-rate item-rate height-rate"
+                                                    *ngIf="!currentVoucherFormDetails || currentVoucherFormDetails?.rateAllowed"
+                                                >
+                                                    <div *ngIf="transaction.rate > 0 || transaction.isStockTxn">
+                                                        <div class="td-wrapper flex-grow-1">
+>>>>>>> d40adaa81f6819ba4f0a3bfb6d8aa9e84d12d1e3
                                                             <div class="flex-grow-1">
-                                                                <div class="wrap-td-data">
+                                                                <div>
                                                                     <span class="d-flex justify-content-end">
                                                                         <amount-field
                                                                             [amount]="transaction.amount ? transaction.amount : '0'"
@@ -2035,6 +2166,7 @@
                                                                 </amount-field>
                                                             </span>
                                                         </div>
+<<<<<<< HEAD
                                                     </td>
                                                     <td class="item-discount"
                                                         *ngIf="!currentVoucherFormDetails || currentVoucherFormDetails?.discountAllowed">
@@ -2044,6 +2176,18 @@
                                                                     <span class="d-flex justify-content-end">
                                                                         <amount-field [amount]="entry.discountSum"
                                                                             [currencySymbol]="
+=======
+                                                    </div>
+                                                </td>
+                                                <td  width="12%" class="item-amount height-rate">
+                                                    <div class="td-wrapper">
+                                                        <div class="flex-grow-1">
+                                                            <div>
+                                                                <span class="d-flex justify-content-end">
+                                                                    <amount-field
+                                                                        [amount]="transaction.amount ? transaction.amount : '0'"
+                                                                        [currencySymbol]="
+>>>>>>> d40adaa81f6819ba4f0a3bfb6d8aa9e84d12d1e3
                                                                             isMulticurrencyAccount
                                                                                 ? invFormData.accountDetails?.currencySymbol
                                                                                 : false
@@ -2057,6 +2201,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
+<<<<<<< HEAD
                                                         <div class="differ-currency d-flex justify-content-end"
                                                             *ngIf="isMulticurrencyAccount">
                                                             <span>
@@ -2077,6 +2222,74 @@
                                                                 <div class="wrap-td-data">
                                                                     <span class="d-flex justify-content-end">
                                                                         <amount-field [amount]="
+=======
+                                                    </div>
+                                                    <div class="differ-currency d-flex justify-content-end">
+                                                        <span *ngIf="isMulticurrencyAccount">
+                                                            <amount-field
+                                                                [amount]="transaction.convertedAmount"
+                                                                [currencySymbol]="baseCurrencySymbol"
+                                                                [currencyCode]="companyCurrency"
+                                                            >
+                                                            </amount-field>
+                                                        </span>
+                                                    </div>
+                                                </td>
+                                                <td
+                                                    width="12%"
+                                                    class="item-discount"
+                                                    *ngIf="!currentVoucherFormDetails || currentVoucherFormDetails?.discountAllowed"
+                                                >
+                                                    <div class="text-right td-wrapper">
+                                                        <div class="flex-grow-1">
+                                                            <div>
+                                                                <span class="d-flex justify-content-end">
+                                                                    <amount-field
+                                                                        [amount]="entry.discountSum"
+                                                                        [currencySymbol]="
+                                                                            isMulticurrencyAccount
+                                                                                ? invFormData.accountDetails?.currencySymbol
+                                                                                : false
+                                                                        "
+                                                                        [currencyCode]="
+                                                                            isMulticurrencyAccount
+                                                                                ? invFormData.accountDetails?.currency?.code
+                                                                                : false
+                                                                        "
+                                                                    >
+                                                                    </amount-field>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div
+                                                        class="differ-currency d-flex justify-content-end"
+                                                        *ngIf="isMulticurrencyAccount"
+                                                    >
+                                                        <span>
+                                                            <amount-field
+                                                                [amount]="entry.discountSum * exchangeRate"
+                                                                [currencySymbol]="baseCurrencySymbol"
+                                                                [currencyCode]="companyCurrency"
+                                                            >
+                                                            </amount-field>
+                                                        </span>
+                                                    </div>
+                                                </td>
+                                                <td
+                                                    width="12%"
+                                                    [class.error-box]="transaction.requiredTax"
+                                                    class="item-tax"
+                                                    (focus)="transaction.requiredTax = false"
+                                                    *ngIf="!currentVoucherFormDetails || currentVoucherFormDetails?.taxesAllowed"
+                                                >
+                                                    <div class="td-wrapper">
+                                                        <div class="flex-grow-1">
+                                                            <div>
+                                                                <span class="d-flex justify-content-end">
+                                                                    <amount-field
+                                                                        [amount]="
+>>>>>>> d40adaa81f6819ba4f0a3bfb6d8aa9e84d12d1e3
                                                                             giddhRoundOff(
                                                                                 entry.taxSum + entry.cessSum,
                                                                                 giddhBalanceDecimalPlaces
@@ -2095,8 +2308,104 @@
                                                                 </div>
                                                             </div>
                                                         </div>
+<<<<<<< HEAD
                                                         <div class="differ-currency d-flex justify-content-end"
                                                             *ngIf="isMulticurrencyAccount">
+=======
+                                                    </div>
+                                                    <div
+                                                        class="differ-currency d-flex justify-content-end"
+                                                        *ngIf="isMulticurrencyAccount"
+                                                    >
+                                                        <span>
+                                                            <amount-field
+                                                                [amount]="(entry.taxSum + entry.cessSum) * exchangeRate"
+                                                                [currencySymbol]="baseCurrencySymbol"
+                                                                [currencyCode]="companyCurrency"
+                                                            >
+                                                            </amount-field>
+                                                        </span>
+                                                    </div>
+                                                </td>
+                                                <td  width="14%" class="total-column item-tax position-relative pb-5">
+                                                    <div class="td-wrapper">
+                                                        <div class="flex-fill">
+                                                            <div>
+                                                                <span class="d-flex justify-content-end">
+                                                                    <amount-field
+                                                                        [amount]="transaction.total"
+                                                                        [currencySymbol]="
+                                                                            isMulticurrencyAccount
+                                                                                ? invFormData.accountDetails?.currencySymbol
+                                                                                : false
+                                                                        "
+                                                                        [currencyCode]="
+                                                                            isMulticurrencyAccount
+                                                                                ? invFormData.accountDetails?.currency?.code
+                                                                                : false
+                                                                        "
+                                                                    >
+                                                                    </amount-field>
+                                                                    <br />
+                                                                </span>
+                                                                <span
+                                                                    class="d-flex column-gap1"
+                                                                    *ngIf="
+                                                                        entry.isOtherTaxApplicable &&
+                                                                        entry.otherTaxModal?.appliedOtherTax?.name
+                                                                    "
+                                                                >
+                                                                    {{ entry.otherTaxModal?.appliedOtherTax?.name }} :
+                                                                    <amount-field
+                                                                        *ngIf="isMulticurrencyAccount"
+                                                                        [amount]="entry.otherTaxSum"
+                                                                        [currencySymbol]="
+                                                                            isMulticurrencyAccount
+                                                                                ? invFormData.accountDetails?.currencySymbol
+                                                                                : false
+                                                                        "
+                                                                        [currencyCode]="
+                                                                            isMulticurrencyAccount
+                                                                                ? invFormData.accountDetails?.currency?.code
+                                                                                : false
+                                                                        "
+                                                                    >
+                                                                    </amount-field>
+                                                                    <amount-field
+                                                                        *ngIf="!isMulticurrencyAccount"
+                                                                        [amount]="entry.otherTaxSum"
+                                                                        [currencySymbol]="false"
+                                                                        [currencyCode]="false"
+                                                                    >
+                                                                    </amount-field>
+                                                                </span>
+                                                            </div>
+                                                            <div
+                                                                class="tax-in-currency"
+                                                                *ngIf="
+                                                                    entry.isOtherTaxApplicable &&
+                                                                    isMulticurrencyAccount &&
+                                                                    entry.otherTaxModal?.appliedOtherTax?.name
+                                                                "
+                                                            >
+                                                                <span
+                                                                    class="differ-currency d-flex justify-content-end"
+                                                                    *ngIf="isMulticurrencyAccount"
+                                                                >
+                                                                    <amount-field
+                                                                        [amount]="entry.otherTaxSum * exchangeRate"
+                                                                        [currencySymbol]="baseCurrencySymbol"
+                                                                        [currencyCode]="companyCurrency"
+                                                                    >
+                                                                    </amount-field>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        <div
+                                                            class="differ-currency d-flex justify-content-end"
+                                                            *ngIf="isMulticurrencyAccount"
+                                                        >
+>>>>>>> d40adaa81f6819ba4f0a3bfb6d8aa9e84d12d1e3
                                                             <span>
                                                                 <amount-field
                                                                     [amount]="(entry.taxSum + entry.cessSum) * exchangeRate"
@@ -2105,6 +2414,7 @@
                                                                 </amount-field>
                                                             </span>
                                                         </div>
+<<<<<<< HEAD
                                                     </td>
                                                     <td class="text-right item-tax delete-btn-absolute">
                                                         <div class="td-wrapper">
@@ -2206,6 +2516,44 @@
                                                                     [name]="'transaction.fakeAccForSelect2_' + entryIdx"
                                                                     [placeholder]="localeData?.select_acc"
                                                                     [options]="salesAccounts$ | async" (selectedOption)="
+=======
+                                                    </div>
+                                                    <div
+                                                        class="icon-trash delete-btn position-absolute cursor-pointer"
+                                                        aria-hidden="true"
+                                                        *ngIf="!isEinvoiceGenerated"
+                                                        (click)="
+                                                            removeTransaction(entryIdx);
+                                                            $event.preventDefault();
+                                                            $event.stopPropagation()
+                                                        "
+                                                    >
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <!-- endregion -->
+                                            <!-- region dynamic entries-->
+                                            <!-- added new element in td which is content amount element class is 'differ-currency' (multicurrency feature)-->
+                                            <tr
+                                                *ngIf="activeIndx === entryIdx"
+                                                class="entries-tr default-active"
+                                                (click)="$event.stopPropagation()"
+                                            >
+                                                <td width="30px" (click)="closeDiscountPopup(); closeTaxControlPopup()">{{ entryIdx + 1 }}</td>
+                                                <td (click)="closeDiscountPopup(); closeTaxControlPopup()" class="product-column">
+                                                    <div class="product-name">
+                                                        <div class="ng-select-wrap" (click)="setUserManuallyClicked()">
+                                                            <select-field
+                                                                #selectAccount
+                                                                [isPaginationEnabled]="true"
+                                                                (scrollEnd)="handleScrollEnd('item')"
+                                                                [scrollableElementId]="'selectAccount'"
+                                                                [cssClass]="'form-control mat-field-border'"
+                                                                [name]="'transaction.fakeAccForSelect2_' + entryIdx"
+                                                                [placeholder]="localeData?.select_acc"
+                                                                [options]="salesAccounts$ | async"
+                                                                (selectedOption)="
+>>>>>>> d40adaa81f6819ba4f0a3bfb6d8aa9e84d12d1e3
                                                                     transaction.fakeAccForSelect2 = $event?.value;
                                                                     entry['initiallyCall'] = undefined;
                                                                     onSelectSalesAccount(
@@ -2435,6 +2783,7 @@
                                                             </div>
                                                             <!-- endregion -->
                                                         </div>
+<<<<<<< HEAD
                                                     </td>
                                                     <td (click)="closeDiscountPopup(); closeTaxControlPopup()"
                                                         *ngIf="!currentVoucherFormDetails || currentVoucherFormDetails?.quantityAllowed"
@@ -2477,6 +2826,66 @@
                                                                     [readonly]="!transaction.isStockTxn || isEinvoiceGenerated"
                                                                     [placeholder]="commonLocaleData?.app_rate"
                                                                     [type]="'text'" [cssClass]="
+=======
+                                                        <!-- endregion -->
+                                                    </div>
+                                                </td>
+                                                <td
+                                                    (click)="closeDiscountPopup(); closeTaxControlPopup()"
+                                                    *ngIf="!currentVoucherFormDetails || currentVoucherFormDetails?.quantityAllowed"
+                                                    class="stock-unit"
+                                                    width="13%"
+                                                >
+                                                    <text-field
+                                                        [placeholder]="commonLocaleData?.app_quantity"
+                                                        [readonly]="!transaction.isStockTxn || isEinvoiceGenerated"
+                                                        [type]="'text'"
+                                                        [cssClass]="'form-control mat-field-border text-right stock1'"
+                                                        [name]="'transaction.quantity_' + entryIdx"
+                                                        [mask]="inputMaskFormat"
+                                                        [useMask]="true"
+                                                        [(ngModel)]="transaction.quantity"
+                                                        (change)="handleQuantityBlur(entry, transaction)"
+                                                        [allowDecimalDigitsOnly]="true"
+                                                    >
+                                                    </text-field>
+                                                    <div class="select-quantity">
+                                                        <mat-select
+                                                            class="form-control"
+                                                            [disabled]="!transaction.isStockTxn || isEinvoiceGenerated"
+                                                            (selectionChange)="
+                                                                onChangeUnit(entry, transaction, $event);
+                                                                handlePriceCalculationOnUnitChange(entry, transaction)
+                                                            "
+                                                            [value]="transaction.stockUnit"
+                                                            [(ngModel)]="transaction.stockUnit"
+                                                            [name]="'transaction.stockUnit_' + entryIdx"
+                                                        >
+                                                            <div class="select-quantity-option">
+                                                                <mat-option
+                                                                    *ngFor="let stock of transaction.stockList"
+                                                                    [value]="stock.id"
+                                                                >
+                                                                    {{ stock.text }}
+                                                                </mat-option>
+                                                            </div>
+                                                        </mat-select>
+                                                    </div>
+                                                </td>
+                                                <td
+                                                    (click)="closeDiscountPopup(); closeTaxControlPopup()"
+                                                    class="item-rate"
+                                                    width="13%"
+                                                    *ngIf="!currentVoucherFormDetails || currentVoucherFormDetails?.rateAllowed"
+                                                >
+                                                    <div class="td-wrapper">
+                                                        <div class="flex-fill">
+                                                            <text-field
+                                                                [readonly]="!transaction.isStockTxn || isEinvoiceGenerated"
+                                                                [placeholder]="commonLocaleData?.app_rate"
+                                                                [type]="'text'"
+                                                                [cssClass]="
+>>>>>>> d40adaa81f6819ba4f0a3bfb6d8aa9e84d12d1e3
                                                                     'form-control mat-field-border transaction-rate text-right '
                                                                 " [name]="'transaction.rate_' + entryIdx"
                                                                     [prefix]="invFormData.accountDetails.currencySymbol"
@@ -2502,6 +2911,7 @@
                                                                 </span>
                                                             </div>
                                                         </div>
+<<<<<<< HEAD
                                                     </td>
                                                     <td (click)="closeDiscountPopup(); closeTaxControlPopup()"
                                                         class="text-right item-amount">
@@ -2545,6 +2955,64 @@
                                                                     [showHeaderText]="false"
                                                                     (hideOtherPopups)="closeTaxControlPopup()"
                                                                     (discountTotalUpdated)="
+=======
+                                                    </div>
+                                                </td>
+                                                <td
+                                                    (click)="closeDiscountPopup(); closeTaxControlPopup()"
+                                                    class="item-amount"
+                                                    width="13%"
+                                                >
+                                                    <div class="td-wrapper">
+                                                        <div class="flex-fill">
+                                                            <text-field
+                                                                (click)="transactionAmountClicked(transaction)"
+                                                                [placeholder]="commonLocaleData?.app_amount"
+                                                                [type]="'text'"
+                                                                [cssClass]="'form-control mat-field-border text-right '"
+                                                                [name]="'transaction.amount_' + entryIdx"
+                                                                [prefix]="invFormData.accountDetails.currencySymbol"
+                                                                [suffix]="selectedSuffixForCurrency"
+                                                                [mask]="inputMaskFormat"
+                                                                [useMask]="true"
+                                                                [(ngModel)]="transaction.amount"
+                                                                (change)="calculateWhenTrxAltered(entry, transaction, true, $event)"
+                                                                [readonly]="isEinvoiceGenerated"
+                                                            >
+                                                            </text-field>
+                                                        </div>
+                                                        <div class="differ-currency" *ngIf="isMulticurrencyAccount">
+                                                            <span>
+                                                                <amount-field
+                                                                    [amount]="transaction.convertedAmount"
+                                                                    [currencySymbol]="baseCurrencySymbol"
+                                                                    [currencyCode]="companyCurrency"
+                                                                >
+                                                                </amount-field>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td
+                                                    (click)="closeTaxControlPopup()"
+                                                    class="item-discount"
+                                                    width="13%"
+                                                    *ngIf="!currentVoucherFormDetails || currentVoucherFormDetails?.discountAllowed"
+                                                >
+                                                    <div class="td-wrapper">
+                                                        <div class="text-right flex-fill">
+                                                            <discount-control-component
+                                                                #discountComponent
+                                                                [discountMenu]="false"
+                                                                [discountsList]="discountsList"
+                                                                [discountPercentageModal]="entry.discountPercentageModal"
+                                                                [discountFixedValueModal]="entry.discountFixedValueModal"
+                                                                [discountAccountsDetails]="entry.discounts"
+                                                                [discountSum]="entry.discountSum"
+                                                                [showHeaderText]="false"
+                                                                (hideOtherPopups)="closeTaxControlPopup()"
+                                                                (discountTotalUpdated)="
+>>>>>>> d40adaa81f6819ba4f0a3bfb6d8aa9e84d12d1e3
                                                                     calculateWhenTrxAltered(entry, transaction, false, $event)
                                                                 " [maskInput]="inputMaskFormat"
                                                                     [prefixInput]="invFormData.accountDetails.currencySymbol"
@@ -2597,6 +3065,7 @@
                                                                 </span>
                                                             </div>
                                                         </div>
+<<<<<<< HEAD
                                                     </td>
                                                     <td (click)="closeDiscountPopup(); closeTaxControlPopup()"
                                                         class="text-right item-total delete-btn-absolute">
@@ -2622,10 +3091,86 @@
                                                                         id="entry.isOtherTaxApplicable_{{ entryIdx }}"
                                                                         [(ngModel)]="entry.isOtherTaxApplicable"
                                                                         (change)="
+=======
+                                                    </div>
+                                                </td>
+                                                <td
+                                                    (click)="closeDiscountPopup()"
+                                                    *ngIf="!currentVoucherFormDetails || currentVoucherFormDetails?.taxesAllowed"
+                                                    class="position-relative dropdown-container item-tax"
+                                                    width="13%"
+                                                >
+                                                    <div class="td-wrapper">
+                                                        <div class="text-right flex-fill">
+                                                            <tax-control
+                                                                #taxControlComponent
+                                                                [taxes]="companyTaxesList"
+                                                                [date]="entry?.entryDate"
+                                                                [taxRenderData]="entry.taxes"
+                                                                [totalForTax]="transaction.taxableValue"
+                                                                [applicableTaxes]="transaction.applicableTaxes"
+                                                                [exceptTaxTypes]="exceptTaxTypes"
+                                                                [allowedSelectionOfAType]="allowedSelectionOfAType"
+                                                                [showHeading]="false"
+                                                                [rootClass]="'sales-invoice-table'"
+                                                                (selectedTaxEvent)="transaction.applicableTaxes = $event"
+                                                                (taxAmountSumEvent)="calculateWhenTrxAltered(entry, transaction)"
+                                                                (hideOtherPopups)="closeDiscountPopup()"
+                                                                [maskInput]="inputMaskFormat"
+                                                                [prefixInput]="invFormData.accountDetails.currencySymbol"
+                                                                [suffixInput]="selectedSuffixForCurrency"
+                                                                [readonly]="isEinvoiceGenerated"
+                                                            >
+                                                            </tax-control>
+                                                        </div>
+                                                        <div class="differ-currency" *ngIf="isMulticurrencyAccount">
+                                                            <span>
+                                                                <amount-field
+                                                                    [amount]="(entry.taxSum + entry.cessSum) * exchangeRate"
+                                                                    [currencySymbol]="baseCurrencySymbol"
+                                                                    [currencyCode]="companyCurrency"
+                                                                >
+                                                                </amount-field>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td
+                                                    width="14%"
+                                                    (click)="closeDiscountPopup(); closeTaxControlPopup()"
+                                                    class="total-column position-relative pb-5"
+                                                >
+                                                    <div class="td-wrapper">
+                                                        <div class="flex-fill">
+                                                            <text-field
+                                                                [type]="'text'"
+                                                                [cssClass]="'form-control mat-field-border text-right '"
+                                                                [name]="'transaction.total_' + entryIdx"
+                                                                [prefix]="invFormData.accountDetails.currencySymbol"
+                                                                [suffix]="selectedSuffixForCurrency"
+                                                                [mask]="inputMaskFormat"
+                                                                [useMask]="true"
+                                                                [allowDecimalDigitsOnly]="true"
+                                                                [(ngModel)]="transaction.total"
+                                                                (change)="calculateTransactionValueInclusively(entry, transaction)"
+                                                                [readonly]="isEinvoiceGenerated"
+                                                            >
+                                                            </text-field>
+                                                            <div *ngIf="isTcsTdsApplicable" class="wrap-other-tax">
+                                                                <mat-checkbox
+                                                                    (keydown.enter)="$event.preventDefault()"
+                                                                    *ngIf="!entry.isOtherTaxApplicable"
+                                                                    [checked]="entry.isOtherTaxApplicable"
+                                                                    color="primary"
+                                                                    id="entry.isOtherTaxApplicable_{{ entryIdx }}"
+                                                                    [(ngModel)]="entry.isOtherTaxApplicable"
+                                                                    (change)="
+>>>>>>> d40adaa81f6819ba4f0a3bfb6d8aa9e84d12d1e3
                                                                         toggleOtherTaxesAsidePane(
                                                                             entry.isOtherTaxApplicable,
                                                                             entryIdx
                                                                         )
+<<<<<<< HEAD
                                                                     " class="other-taxes-checkbox"
                                                                         name="entry.isOtherTaxApplicable_'+entryIdx"
                                                                         [disabled]="isEinvoiceGenerated">
@@ -2664,6 +3209,19 @@
                                                                         </p>
                                                                     </span>
                                                                 </div>
+=======
+                                                                    "
+                                                                    name="entry.isOtherTaxApplicable_'+entryIdx"
+                                                                    [disabled]="isEinvoiceGenerated"
+                                                                >
+                                                                </mat-checkbox>
+                                                                <label
+                                                                    for="entry.isOtherTaxApplicable_{{ entryIdx }}"
+                                                                    *ngIf="!entry.isOtherTaxApplicable"
+                                                                    class="other-tax-label font-15 align-middle"
+                                                                    (click)="tcsTdsIndex = entryIdx"
+                                                                    >{{ localeData?.other_tax }}</label>
+>>>>>>> d40adaa81f6819ba4f0a3bfb6d8aa9e84d12d1e3
                                                             </div>
                                                             <div *ngIf="
                                                                 entry.isOtherTaxApplicable &&
@@ -2687,6 +3245,7 @@
                                                                 </span>
                                                             </div>
                                                         </div>
+<<<<<<< HEAD
                                                         <div class="trash-icon-delete" *ngIf="!isEinvoiceGenerated"
                                                             (click)="
                                                             removeTransaction(entryIdx);
@@ -2696,6 +3255,60 @@
                                                             <span class="cp">
                                                                 <i class="icon-trash" aria-hidden="true"></i>
                                                             </span>
+=======
+                                                        <div class="differ-currency" *ngIf="isMulticurrencyAccount">
+                                                            <span>
+                                                                <amount-field
+                                                                    [amount]="transaction.convertedTotal"
+                                                                    [currencySymbol]="baseCurrencySymbol"
+                                                                    [currencyCode]="companyCurrency"
+                                                                >
+                                                                </amount-field>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <span
+                                                        class="icon-trash delete-btn position-absolute cursor-pointer"
+                                                        *ngIf="!isEinvoiceGenerated"
+                                                        (click)="
+                                                            removeTransaction(entryIdx);
+                                                            $event.preventDefault();
+                                                            $event.stopPropagation()
+                                                        "
+                                                    ></span>
+                                                </td>
+                                            </tr>
+                                            <!-- endregion -->
+                                            <!-- </ng-container> -->
+                                        </ng-template>
+
+                                        <!-- region add bulk items -->
+                                        <div class="p-1 aqua-color add-line-bulk-item width-100" *ngIf="!isEinvoiceGenerated">
+                                            <a href="javascript:;" (click)="$event?.stopPropagation(); addBlankRow(null)">{{
+                                                localeData?.add_new_line
+                                            }}</a>
+                                            <span class="font-15 add-bulk-button"> | </span>
+                                            <a (click)="addBulkItems()" href="javascript:;">{{ localeData?.add_bulk_entries }}</a>
+                                        </div>
+                                        <!-- endregion -->
+                                    </table>
+                                    <div class="row mr-0 ml-0 other-details-section">
+                                        <div class="col-md-6 pl-0">
+                                            <!-- region other details-->
+                                            <div *ngIf="!currentVoucherFormDetails || currentVoucherFormDetails?.otherDetails">
+                                                <div class="collapse-pane clearfix">
+                                                    <div
+                                                        class="collapse-pane-heading"
+                                                        (click)="isOthrDtlCollapsed = !isOthrDtlCollapsed"
+                                                    >
+                                                        <div class="ico-box-wrap">
+                                                            <div class="ico-box">
+                                                                <span
+                                                                    [ngClass]="isOthrDtlCollapsed ? 'icon-add' : 'icon-minus'"
+                                                                    aria-hidden="true"
+                                                                ></span>
+                                                            </div>
+>>>>>>> d40adaa81f6819ba4f0a3bfb6d8aa9e84d12d1e3
                                                         </div>
                                                     </td>
                                                 </tr>

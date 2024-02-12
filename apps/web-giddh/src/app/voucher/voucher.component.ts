@@ -8372,39 +8372,48 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.theadArrReadOnly = [
             {
                 display: true,
-                label: '#'
+                label: '#',
+                width: '30px'
             },
             {
                 display: true,
-                label: this.localeData?.product_service_description
+                label: this.commonLocaleData?.app_item,
+                width: 'auto'
             },
             {
                 display: !this.currentVoucherFormDetails || this.currentVoucherFormDetails?.quantityAllowed,
-                label: this.commonLocaleData?.app_quantity_unit
+                label: this.commonLocaleData?.app_quantity_unit,
+                width: '13%'
             },
             {
                 display: !this.currentVoucherFormDetails || this.currentVoucherFormDetails?.rateAllowed,
-                label: this.commonLocaleData?.app_rate
+                label: this.commonLocaleData?.app_rate,
+                width: '13%'
             },
             {
                 display: true,
-                label: this.commonLocaleData?.app_amount
+                label: this.commonLocaleData?.app_amount,
+                width: '13%'
             },
             {
                 display: !this.currentVoucherFormDetails || this.currentVoucherFormDetails?.discountAllowed,
-                label: this.commonLocaleData?.app_discount
+                label: this.commonLocaleData?.app_discount,
+                width: '13%'
             },
             {
                 display: !this.currentVoucherFormDetails || this.currentVoucherFormDetails?.taxesAllowed,
-                label: this.commonLocaleData?.app_tax
+                label: this.commonLocaleData?.app_tax,
+                width: '13%'
             },
             {
                 display: true,
-                label: this.commonLocaleData?.app_total
+                label: this.commonLocaleData?.app_total,
+                width: '14%'
             },
             {
                 display: true,
-                label: ''
+                label: '',
+                width: 'auto'
             }
         ];
     }

@@ -717,5 +717,6 @@
     "app_hostname": "होस्टनेम",
     "domain_verification": "बाह्यिक मेलसाठी डोमेन सत्यापन",
     "app_renew_bank_connection": "बँक कनेक्शनचे नूतनीकरण करा",
-    "app_select_printer": "प्रिंटर निवडा"
+    "app_select_printer": "प्रिंटर निवडा",
+    "app_item": "आयटम"
 }
