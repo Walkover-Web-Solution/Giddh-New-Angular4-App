@@ -290,8 +290,6 @@ textarea:focus {
     display: block;
     color: var(--color-abbey);
     line-height: 1.2rem;
-    font-size: var(--font-size-15);
-    font-weight: 500;
 }
 
 .sp-rupees {
@@ -723,10 +721,6 @@ section.static-invoice-table {
     margin-top: 10px;
 }
 
-.customer-invoice-table {
-    padding-left: 15px;
-}
-
 .wrap-billing-address {
     &.clearfix {
         margin-top: 15px;
@@ -751,7 +745,6 @@ section.static-invoice-table {
 }
 
 .inner-container {
-    max-width: 1120px;
     width: 100%;
     &.fields-container {
         max-width: 835px;
@@ -967,7 +960,7 @@ table.table.table-custom-invoice.basic,
     width: 100%;
     height: 100%;
     bottom: 0;
-    top: 132px;
+    top: 150px;
     opacity: 0.6;
     z-index: 98;
     background-color: var(--color-primary-performa-invoice-dissabled-background) !important;
@@ -1300,6 +1293,11 @@ label.checkbox-custom-label {
 .row-gap {
     row-gap: 10px;
 }
+
+.voucher-form-fields {
+    max-width: 415px;
+    min-width: 230px;
+}
 /* resposnvie */
 @media (max-width: 1199px) {
     .inner-container {
@@ -1402,7 +1400,7 @@ label.checkbox-custom-label {
     }
 
     .customer-invoice-form::before {
-        top: 130px;
+        top: 180px;
     }
 
     .customer-invoice-form-purchase::before {
