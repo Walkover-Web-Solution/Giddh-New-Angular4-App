@@ -4,12 +4,13 @@
     <i class="icon-cross icon-font-16"></i>
   </button>
 </div>
-<mat-dialog-content>
+<mat-dialog-content [formGroup]="sendEmailForm">
   <div class="modal-body">
     <div class="w-100 option-value-field">
       <text-field 
         [name]="'name'" 
         [cssClass]="'w-100'" 
+        formControlName="uniqueName"
         [type]="'text'">
       </text-field>
     </div>
@@ -18,27 +19,30 @@
       <mat-checkbox
         color="primary"
         class="d-block font-15"
-        type="checkbox"
+        formControlName="copyTypes"
+        [value]="'Original'"
       >
         Original
       </mat-checkbox>
       <mat-checkbox
         color="primary"
         class="d-block font-15"
-        type="checkbox"
+        formControlName="copyTypes"
+        [value]="'Transport'"
       >
         Transport
       </mat-checkbox>
       <mat-checkbox
         color="primary"
         class="d-block font-15"
-        type="checkbox"
+        formControlName="copyTypes"
+        [value]="'Customer'"
       >
         Customer
       </mat-checkbox>
     </div>
-    <div class="d-flex column-gap1">
-      <button mat-stroked-button color="primary">Send</button>
+    <div class="d-flex column-gap1" formGroupName="email">
+      <button mat-stroked-button color="primary" type="submit">Send</button>
       <button mat-stroked-button mat-dialog-close>Cancel</button>
     </div>
   </div>
