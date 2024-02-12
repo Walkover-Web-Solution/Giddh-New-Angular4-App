@@ -320,7 +320,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
             this.year = Number(selectedYear?.value);
             this.selectedYear = selectedYear.label;
 
-            if(this.selectedMonth){
+            if (this.selectedMonth) {
                 this.getMonthStartAndEndDate(this.selectedMonth);
             }
         }
@@ -462,7 +462,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
     * @param {*} endDate
     * @memberof VatReportComponent
     */
-    private createFinancialYearsList(startDate: any, endDate: any, initList: boolean = true): any {
+    private createFinancialYearsList(startDate: any, endDate: any): any {
         if (startDate && endDate) {
             let startYear = startDate.split('-');
             startYear = startYear[startYear?.length - 1];
@@ -470,12 +470,10 @@ export class VatReportComponent implements OnInit, OnDestroy {
             let endYear = endDate.split('-');
             endYear = endYear[endYear?.length - 1];
 
-            if (initList){
-                this.financialYears = [
-                    { label: startYear, value: startYear },
-                    { label: endYear, value: endYear }
-                ];
-            }
+            this.financialYears = [
+                { label: startYear, value: startYear },
+                { label: endYear, value: endYear }
+            ];
 
             return { startYear: startYear, endYear: endYear };
         }
