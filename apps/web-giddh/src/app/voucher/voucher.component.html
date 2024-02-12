@@ -2212,14 +2212,15 @@
                                             </span>
                                         </div>
                                     </ng-container>
-                                    <table class="table table-custom-invoice basic">
+                                    <table class="vouchers-entry-table">
                                         <thead>
                                             <tr>
                                                 <th
-                                                    *ngFor="let item of theadArrReadOnly"
+                                                    *ngFor="let item of theadArrReadOnly; let i = index;"
                                                     [hidden]="!item.display"
-                                                    class="thead-sales-invoice"
                                                     [ngClass]="item?.label"
+                                                    [width]="item?.width"
+                                                    [ngClass]="{ 'text-left' : i === 0, 'product-column text-left' : i === 1, 'total-column' : i === 7}"
                                                 >
                                                     {{ item?.label }}
                                                     <span *ngIf="item.label === 'Tax' && isRcmEntry"
@@ -2254,8 +2255,8 @@
                                                 class="entries-tr set-active"
                                                 [ngClass]="{ 'is-other-tax': entry.isOtherTaxApplicable && isMulticurrencyAccount }"
                                             >
-                                                <td>{{ entryIdx + 1 }}</td>
-                                                <td>
+                                                <td width="30px">{{ entryIdx + 1 }}</td>
+                                                <td class="product-column">
                                                     <div class="product-name">
                                                         <label *ngIf="!transaction.accountName" class="select-account-label">{{
                                                             localeData?.select_account
@@ -2326,21 +2327,23 @@
                                                     </div>
                                                 </td>
                                                 <td
-                                                    class="text-right stock-unit"
+                                                    width="12%"
+                                                    class="stock-unit"
                                                     *ngIf="!currentVoucherFormDetails || currentVoucherFormDetails?.quantityAllowed"
                                                 >
-                                                    <div class="wrap-td-data">
+                                                    <div>
                                                         {{ transaction.quantity | giddhCurrency }} {{ transaction.stockUnitCode }}
                                                     </div>
                                                 </td>
                                                 <td
-                                                    class="text-right trans-rate item-rate height-rate"
+                                                    width="12%"
+                                                    class="trans-rate item-rate height-rate"
                                                     *ngIf="!currentVoucherFormDetails || currentVoucherFormDetails?.rateAllowed"
                                                 >
                                                     <div *ngIf="transaction.rate > 0 || transaction.isStockTxn">
                                                         <div class="td-wrapper flex-grow-1">
                                                             <div class="flex-grow-1">
-                                                                <div class="wrap-td-data">
+                                                                <div>
                                                                     <span class="d-flex justify-content-end">
                                                                         <amount-field
                                                                             [amount]="transaction.rate"
@@ -2378,10 +2381,10 @@
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <td class="text-right item-amount height-rate">
+                                                <td  width="12%" class="item-amount height-rate">
                                                     <div class="td-wrapper">
                                                         <div class="flex-grow-1">
-                                                            <div class="wrap-td-data">
+                                                            <div>
                                                                 <span class="d-flex justify-content-end">
                                                                     <amount-field
                                                                         [amount]="transaction.amount ? transaction.amount : '0'"
@@ -2413,12 +2416,13 @@
                                                     </div>
                                                 </td>
                                                 <td
+                                                    width="12%"
                                                     class="item-discount"
                                                     *ngIf="!currentVoucherFormDetails || currentVoucherFormDetails?.discountAllowed"
                                                 >
                                                     <div class="text-right td-wrapper">
                                                         <div class="flex-grow-1">
-                                                            <div class="wrap-td-data">
+                                                            <div>
                                                                 <span class="d-flex justify-content-end">
                                                                     <amount-field
                                                                         [amount]="entry.discountSum"
@@ -2453,14 +2457,15 @@
                                                     </div>
                                                 </td>
                                                 <td
+                                                    width="12%"
                                                     [class.error-box]="transaction.requiredTax"
-                                                    class="text-right item-tax"
+                                                    class="item-tax"
                                                     (focus)="transaction.requiredTax = false"
                                                     *ngIf="!currentVoucherFormDetails || currentVoucherFormDetails?.taxesAllowed"
                                                 >
                                                     <div class="td-wrapper">
                                                         <div class="flex-grow-1">
-                                                            <div class="wrap-td-data">
+                                                            <div>
                                                                 <span class="d-flex justify-content-end">
                                                                     <amount-field
                                                                         [amount]="
@@ -2499,10 +2504,10 @@
                                                         </span>
                                                     </div>
                                                 </td>
-                                                <td class="text-right item-tax delete-btn-absolute">
+                                                <td  width="14%" class="total-column item-tax position-relative pb-5">
                                                     <div class="td-wrapper">
                                                         <div class="flex-fill">
-                                                            <div class="wrap-td-data">
+                                                            <div>
                                                                 <span class="d-flex justify-content-end">
                                                                     <amount-field
                                                                         [amount]="transaction.total"
@@ -2521,7 +2526,7 @@
                                                                     <br />
                                                                 </span>
                                                                 <span
-                                                                    class="d-flex justify-content-end"
+                                                                    class="d-flex column-gap1"
                                                                     *ngIf="
                                                                         entry.isOtherTaxApplicable &&
                                                                         entry.otherTaxModal?.appliedOtherTax?.name
@@ -2588,7 +2593,8 @@
                                                         </div>
                                                     </div>
                                                     <div
-                                                        class="trash-icon-delete"
+                                                        class="icon-trash delete-btn position-absolute cursor-pointer"
+                                                        aria-hidden="true"
                                                         *ngIf="!isEinvoiceGenerated"
                                                         (click)="
                                                             removeTransaction(entryIdx);
@@ -2596,9 +2602,6 @@
                                                             $event.stopPropagation()
                                                         "
                                                     >
-                                                        <span class="cp">
-                                                            <i class="icon-trash" aria-hidden="true"></i>
-                                                        </span>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -2610,8 +2613,8 @@
                                                 class="entries-tr default-active"
                                                 (click)="$event.stopPropagation()"
                                             >
-                                                <td (click)="closeDiscountPopup(); closeTaxControlPopup()">{{ entryIdx + 1 }}</td>
-                                                <td (click)="closeDiscountPopup(); closeTaxControlPopup()">
+                                                <td width="30px" (click)="closeDiscountPopup(); closeTaxControlPopup()">{{ entryIdx + 1 }}</td>
+                                                <td (click)="closeDiscountPopup(); closeTaxControlPopup()" class="product-column">
                                                     <div class="product-name">
                                                         <div class="ng-select-wrap" (click)="setUserManuallyClicked()">
                                                             <select-field
@@ -2879,7 +2882,8 @@
                                                 <td
                                                     (click)="closeDiscountPopup(); closeTaxControlPopup()"
                                                     *ngIf="!currentVoucherFormDetails || currentVoucherFormDetails?.quantityAllowed"
-                                                    class="text-right stock-unit"
+                                                    class="stock-unit"
+                                                    width="13%"
                                                 >
                                                     <text-field
                                                         [placeholder]="commonLocaleData?.app_quantity"
@@ -2919,7 +2923,8 @@
                                                 </td>
                                                 <td
                                                     (click)="closeDiscountPopup(); closeTaxControlPopup()"
-                                                    class="text-right item-rate"
+                                                    class="item-rate"
+                                                    width="13%"
                                                     *ngIf="!currentVoucherFormDetails || currentVoucherFormDetails?.rateAllowed"
                                                 >
                                                     <div class="td-wrapper">
@@ -2964,7 +2969,8 @@
                                                 </td>
                                                 <td
                                                     (click)="closeDiscountPopup(); closeTaxControlPopup()"
-                                                    class="text-right item-amount"
+                                                    class="item-amount"
+                                                    width="13%"
                                                 >
                                                     <div class="td-wrapper">
                                                         <div class="flex-fill">
@@ -2999,6 +3005,7 @@
                                                 <td
                                                     (click)="closeTaxControlPopup()"
                                                     class="item-discount"
+                                                    width="13%"
                                                     *ngIf="!currentVoucherFormDetails || currentVoucherFormDetails?.discountAllowed"
                                                 >
                                                     <div class="td-wrapper">
@@ -3040,6 +3047,7 @@
                                                     (click)="closeDiscountPopup()"
                                                     *ngIf="!currentVoucherFormDetails || currentVoucherFormDetails?.taxesAllowed"
                                                     class="position-relative dropdown-container item-tax"
+                                                    width="13%"
                                                 >
                                                     <div class="td-wrapper">
                                                         <div class="text-right flex-fill">
@@ -3077,8 +3085,9 @@
                                                     </div>
                                                 </td>
                                                 <td
+                                                    width="14%"
                                                     (click)="closeDiscountPopup(); closeTaxControlPopup()"
-                                                    class="text-right item-total delete-btn-absolute"
+                                                    class="total-column position-relative pb-5"
                                                 >
                                                     <div class="td-wrapper">
                                                         <div class="flex-fill">
@@ -3110,7 +3119,6 @@
                                                                             entryIdx
                                                                         )
                                                                     "
-                                                                    class="other-taxes-checkbox"
                                                                     name="entry.isOtherTaxApplicable_'+entryIdx"
                                                                     [disabled]="isEinvoiceGenerated"
                                                                 >
@@ -3120,8 +3128,7 @@
                                                                     *ngIf="!entry.isOtherTaxApplicable"
                                                                     class="other-tax-label font-15 align-middle"
                                                                     (click)="tcsTdsIndex = entryIdx"
-                                                                    >{{ localeData?.other_tax }}</label
-                                                                >
+                                                                    >{{ localeData?.other_tax }}</label>
                                                             </div>
                                                             <div *ngIf="entry.isOtherTaxApplicable" class="mr-t1">
                                                                 <span>
@@ -3180,19 +3187,15 @@
                                                             </span>
                                                         </div>
                                                     </div>
-                                                    <div
-                                                        class="trash-icon-delete"
+                                                    <span
+                                                        class="icon-trash delete-btn position-absolute cursor-pointer"
                                                         *ngIf="!isEinvoiceGenerated"
                                                         (click)="
                                                             removeTransaction(entryIdx);
                                                             $event.preventDefault();
                                                             $event.stopPropagation()
                                                         "
-                                                    >
-                                                        <span class="cp">
-                                                            <i class="icon-trash" aria-hidden="true"></i>
-                                                        </span>
-                                                    </div>
+                                                    ></span>
                                                 </td>
                                             </tr>
                                             <!-- endregion -->

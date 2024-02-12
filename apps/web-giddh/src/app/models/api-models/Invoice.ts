@@ -422,6 +422,7 @@ export interface ISection {
 export interface IContentCommon {
     display: boolean;
     label: string;
+    width?: string;
 }
 
 export interface IContent extends IContentCommon {
