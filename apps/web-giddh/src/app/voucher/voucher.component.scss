@@ -1,336 +1,48 @@
-// mixins
-
-/**
-# margin mixin pass direction and number
-*/
-
-@mixin marg($d, $num) {
-    @if $d== "B" {
-        margin-bottom: $num;
+.vouchers {
+    padding: 5px 0;
+    .container-lg{
+        max-width: 1240px !important;
     }
 
-    @if $d== "T" {
-        margin-top: $num;
+    .row-gap {
+        row-gap: 15px;
     }
 
-    @if $d== "L" {
-        margin-left: $num;
-    }
+    .vouchers-title {
+        height: 50px;
+        border-bottom: 1px solid var(--color-grey-bootstrap-border);
 
-    @if $d== "R" {
-        margin-right: $num;
-    }
-
-    @if $d== "A" {
-        margin: $num;
-    }
-}
-
-/**
-# padding mixin pass direction and number
-*/
-
-@mixin pad($d, $num) {
-    @if $d== "B" {
-        padding-bottom: $num;
-    }
-
-    @if $d== "T" {
-        padding-top: $num;
-    }
-
-    @if $d== "L" {
-        padding-left: $num;
-    }
-
-    @if $d== "R" {
-        padding-right: $num;
-    }
-
-    @if $d== "A" {
-        padding: $num;
-    }
-}
-
-@mixin padBth($num1, $num2) {
-    padding: $num1 $num2;
-}
-
-@mixin bgClr($clr) {
-    background-color: $clr;
-}
-
-@mixin bdr($size, $type, $number) {
-    border: $size $type $number;
-}
-
-@mixin box($width, $height) {
-    width: $width;
-    height: $height;
-}
-
-@mixin radius($size) {
-    border-radius: $size;
-}
-
-// common class for extend
-.white-bg {
-    background-color: var(--color-white);
-}
-
-.cp {
-    cursor: pointer;
-}
-
-.mrT27 {
-    @include marg(T, 27px);
-}
-
-.wid90p {
-    width: 91.66666667%;
-}
-
-.flex-row {
-    display: flex;
-    justify-content: space-between;
-
-    .flex-row-child {
-        align-self: center;
-        flex-grow: 0;
-    }
-}
-
-.item-unique {
-    font-size: var(--font-size-12);
-}
-
-// styles
-.other-taxes-input {
-    width: 85% !important;
-}
-
-.form-group {
-    .form-control {
-        @include radius(3px);
-    }
-
-    textarea.form-control {
-        resize: none;
-        padding-left: 7px !important;
-        overflow-y: auto;
-    }
-
-    label {
-        display: block;
-        font-weight: 400;
-        @include marg(B, 0px);
-    }
-}
-
-.form-inline {
-    .form-group {
-        vertical-align: top;
-    }
-
-    .form-control {
-        width: 100%;
-    }
-}
-
-#actionPane {
-    width: 100%;
-    position: relative;
-    float: left;
-    padding: 20px 0;
-    border-top: 1px solid var(--color-generate-invoice-secondary-background);
-
-    .min-width-auto {
-        min-width: auto !important;
-    }
-    .mat-stroked-button {
-        margin-right: 0 !important;
-        margin-left: 15px !important;
-    }
-}
-
-a[type="button"] {
-    -webkit-appearance: initial;
-    cursor: pointer;
-}
-
-// collapse
-.collapse-pane {
-    padding: 0 0;
-
-    .collapse-pane-heading {
-        @extend .cp;
-        @include marg(B, 0px);
-        color: var(--color-nero);
-        display: flex;
-        align-items: center;
-        height: 30px;
-
-        .ico-box-wrap,
-        .ico-head {
-            align-self: stretch;
-            display: flex;
-            align-items: center;
+        h1 {
+            font-size: var(--font-size-24);
+            color: var(--color-giddh-blue);
         }
+    }
 
-        .ico-box {
-            @include bdr(1px, solid, var(--color-common-secondary-border));
-            @include box(20px, 20px);
-            @include marg(R, 10px);
-            @include radius(3px);
-            align-self: center;
-            display: flex;
-            justify-content: center;
+    .vouchers-content-wrapper {
+        padding: 15px 0;
 
-            span {
-                align-self: center;
-                font-size: 12px;
+        .vouchers-primary-form {
+            .balance-due-label {
+                font-size: var(--font-size-15);
+            }
+
+            h2 {
+                font-size: var(--font-size-24);
             }
         }
-    }
-}
 
-.font-12 {
-    font-size: var(--font-size-12);
-}
+        .vouchers-form-fields {
+            max-width: 415px;
+            min-width: 230px;
 
-.table-sec {
-    display: table;
-    width: 100%;
-
-    .table-row {
-        display: table-row;
-        vertical-align: top;
-
-        .table-cell {
-            vertical-align: middle;
-            text-align: right;
-            padding-bottom: 7px;
-            display: table-cell;
         }
 
-        .figure-cell {
-            width: 140px;
-            padding-right: 0;
-            padding-left: 15px;
-
-            input {
-                max-width: 130px;
-                float: right;
-                text-align: right;
-            }
+        .vouchers-form-fields-detail {
+            color: var(--color-giddh-blue);
         }
-    }
-}
 
-.table {
-    tbody + tbody {
-        border: 0;
-    }
-}
-
-ng-select.splSales {
-    width: 100%;
-}
-
-[data-field="HSN/SAC"],
-[data-field="Quanity/Unit"],
-[data-field="Unit"],
-[data-field="Rate"],
-[data-field="Amount"],
-[data-field="Discount"],
-[data-field="Taxable"],
-[data-field="Tax"],
-[data-field="Total"],
-[data-field="S.No"] {
-    text-align: right;
-}
-
-[data-field="Action"] {
-    text-align: center;
-}
-
-.table > thead > tr th {
-    font-weight: 100;
-}
-
-.billing-address {
-    background: var(--color-common-primary-background-for-all-components);
-    border: 1px solid var(--color-common-secondary-border);
-    padding: 5px;
-    padding-bottom: 15px;
-
-    &.disabled {
-        background: var(--color-dark-fog);
-    }
-
-    textarea {
-        border: none;
-        width: 100%;
-        line-height: 18px;
-        height: auto !important;
-        overflow: hidden;
-    }
-
-    :focus {
-        outline: none !important;
-    }
-}
-
-textarea:focus {
-    outline: none;
-    box-shadow: none;
-}
-
-.balance-due {
-    display: block;
-    color: var(--color-abbey);
-    line-height: 1.2rem;
-    font-size: var(--font-size-15);
-    font-weight: 500;
-}
-
-.sp-rupees {
-    display: block;
-    font-size: var(--font-size-24);
-    line-height: 1.2;
-    font-family: var(--font-semibold);
-}
-
-.table-custom-invoice {
-    > thead {
-        > tr {
-            > th {
-                border: 1px solid var(--color-table-primary-header-bar-border) !important;
-                padding: 10px 8px;
-                white-space: nowrap;
-                text-align: right;
-
-                &:first-child {
-                    text-align: left;
-                }
-
-                &:nth-child(2) {
-                    text-align: left;
-                    white-space: normal;
-                    width: 350px;
-                }
-
-                &:nth-child(3) {
-                    white-space: normal;
-                    width: 100px;
-                    min-width: 100px;
-                }
-
-                &:last-child {
-                    vertical-align: middle !important;
-                    display: none;
-                }
-            }
+        .vouchers-copy-sales {
+            color: var(--color-giddh-blue);
         }
     }
 
@@ -1391,294 +1103,234 @@ label.checkbox-custom-label {
         .voucher-preview-edit {
             .custom-date-entries giddh-datepicker .mat-datepicker-toggle {
                 position: absolute;
-                right: 35%;
-                top: -3px;
-                opacity: 0;
-                z-index: 99;
+                top: 0;
+                left: 0;
+                z-index: 2;
+                width: 100%;
+                height: 100%;
+                background-color: var(--color-primary-performa-invoice-dissabled-background);
+                opacity: 0.7;
             }
-            .multicurrency-grandtotal {
-                width: 100% !important;
+        }
+
+
+        .vouchers-small-container {
+            max-width: 860px;
+
+            .billing-label {
+                height: 40px;
+                padding: 11px 0;
             }
+
+            .billing-deliver-label {
+                font-size: var(--font-size-16);
+                font-weight: 600;
+                color: var(--color-giddh-blue);
+            }
+
+            .vouchers-address-form {
+                display: grid;
+                grid-template-areas:
+                    'address address'
+                    'country state'
+                    'gstin pincode';
+                gap: 15px;
+                padding: 15px;
+                border: 1px solid var(--color-fields-border);
+                border-radius: 4px;
+
+                .address-field {
+                    grid-area: address;
+
+                    textarea {
+                        border: none;
+                    }
+                }
+
+                .country-field {
+                    grid-area: country;
+                    border-bottom: 1px solid var(--color-fields-border);
+                }
+
+                .state-field {
+                    grid-area: state;
+                    border-bottom: 1px solid var(--color-fields-border);
+                }
+
+                .gstin-field {
+                    grid-area: gstin;
+                    border-bottom: 1px solid var(--color-fields-border);
+                }
+
+                .pin-code-field {
+                    grid-area: pincode;
+                    border-bottom: 1px solid var(--color-fields-border);
+                }
+
+                &.form-disabled {
+                    background: var(--color-dark-fog);
+                    opacity: 0.7;
+                    pointer-events: none;
+                }
+            }
+
         }
-    }
 
-    .pending-sales-balance-due {
-        position: relative;
-        right: 35px;
-    }
+        .vouchers-large-container {
+            border-top: 1px solid var(--color-common-secondary-border);
 
-    .customer-invoice-form::before {
-        top: 130px;
-    }
+            #init-contact-wrapper {
+                input {
+                    height: 48px;
+                }
+            }
 
-    .customer-invoice-form-purchase::before {
-        top: 132px;
-    }
+            .vouchers-entry-table {
+                table {
+                    tr {
 
-    .hsn-code-dropdown {
-        left: 0px;
-    }
+                        th,
+                        td {
+                            padding: 12px 8px;
+                            border-bottom: 1px solid var(--color-common-secondary-border);
+                            &:not(:first-child, :nth-child(2)){
+                                text-align: right;
+                            }
 
-    .show-on-small-screen {
-        padding: 0 15px;
-        display: block;
-    }
+                            
 
-    .balance-due-absolute {
-        display: none;
-    }
+                            &.total-column {
+                                min-width: 120px;
+                            }
 
-    .collapse-pane {
-        .form-group {
-            margin-bottom: 15px !important;
-        }
-    }
+                            &.product-column {
+                                @media screen and (max-width: 1280px) {
+                                    max-width: 120px;   
+                                }
+                            }
+                        }
 
-    .customer-invoice-table.bg-white {
-        margin-top: 10px;
-        border-bottom: none;
-        margin-bottom: 0;
-    }
+                        th {
+                            border-top: 1px solid var(--color-common-secondary-border);
+                            color: var(--color-giddh-blue);
 
-    .show-in-mobile {
-        background: var(--color-white);
-        border-top: 1px solid var(--color-iron);
-        padding-right: 15px;
-        padding-left: 15px;
-    }
+                            &:first-child {
+                                border-left: 1px solid var(--color-common-secondary-border);
+                            }
 
-    .other-taxes-input {
-        width: 99px;
-        background-color: var(--color-dark-fog);
-        border: 1px solid var(--color-iron);
-        padding: 3px;
-        font-size: var(--font-size-15);
-    }
+                            &:last-child {
+                                border-right: 1px solid var(--color-common-secondary-border);
+                            }
+                        }
 
-    .other-taxes div {
-        align-items: flex-end !important;
-        justify-content: flex-end !important;
-    }
+                        td {
+                            vertical-align: top;
 
-    .other-taxes {
-        text-align: right;
-    }
+                            // ##########   TABLE WITH BORDER CODE
+                            // border-left: 1px solid var(--color-common-secondary-border);
+                            // border-right: 1px solid var(--color-common-secondary-border);
 
-    .billing-address .col-sm-6.pd {
-        width: 100%;
-    }
-}
+                            .delete-btn {
+                                // ##########   TABLE WITH BORDER CODE
+                                // right: -24px;
+                                // top: 50%;
+                                // transform: translateY(-50%);
+                                // visibility: hidden;
+                                
+                                right: 5px;
+                                bottom: 8px;
+                                transition: all 200ms;
 
-@media (max-width: 768px) {
-    .wrapper-customer-table {
-        padding-top: 0 !important;
-    }
-    .custom-date-entries {
-        width: 54% !important;
+                                &:hover{
+                                    transform: scale(1.2);
+                                }
+                            }
 
-        .edit-icon-custom-entry-date {
-            right: 70% !important;
-            margin-top: 5px !important;
-            top: 28px;
-        }
-    }
-    .search-arrow-image {
-        left: 143px;
-    }
+                            .select-account-label {
+                                color: var(--color-gray);
+                            }
+                            amount-field{
+                                display: inline-block;
+                            }
+                        }
+                    }
+                }
+            }
 
-    .for-mobile-screen {
-        display: flex !important;
-        position: absolute;
-        right: 0;
-        float: none;
-    }
-}
+            .vouchers-other-detail {
+                margin: 0;
+                max-width: calc(100% - 36px);
 
-.blnc-due {
-    display: flex;
-    justify-content: space-between;
-    .blnc-due-num {
-        width: 50%;
-        text-align: left;
-    }
-}
-@media (max-width: 767px) {
-    .mobile-view-padding {
-        padding: 0 15px;
-        margin-bottom: 10px;
-    }
+                .vouchers-attachment {
+                    height: 48px;
 
-    .more-btn-dropdown {
-        padding-top: 0 !important;
-    }
+                    .attachment-add-icon {
+                        width: 36px;
+                        height: 36px;
+                        text-align: center;
+                        line-height: 36px;
+                        border-radius: 50%;
+                        border: 1px solid var(--color-grey-bootstrap-border);
+                    }
 
-    .sales-proforma-estimate.customer-invoice-form::before {
-        top: 135px;
-    }
+                    &.text-success {
+                        .attachment-add-icon {
+                            border-color: var(--color-success-enable);
+                            font-size: var(--font-size-12);
+                        }
 
-    .search-arrow-image {
-        left: 15px;
-        top: 80px;
-    }
+                        .attachment-placeholder {
+                            color: var(--color-success-enable);
+                            width: 80%;
+                            white-space: nowrap;
+                            text-overflow: ellipsis;
+                            overflow: hidden;
+                        }
+                    }
 
-    .sales-proforma-estimate .search-arrow-image {
-        left: 15px;
-        top: 130px;
-    }
+                    .attachment-placeholder {
+                        color: var(--color-giddh-blue);
+                    }
 
-    .for-multi-currency.sales-proforma-estimate .search-arrow-image {
-        top: 160px;
-    }
+                    input {
+                        width: 100%;
+                        height: 100%;
+                        left: 0;
+                        border-radius: 5px;
+                        z-index: 1;
+                        opacity: 0;
+                        cursor: pointer;
 
-    .wrap-billing-address .bill-add {
-        width: 100%;
-        max-width: 100%;
-        padding-right: 30px !important;
-    }
+                        //  This will hide "Default Choose file" button
+                        &::-webkit-file-upload-button {
+                            display: none;
+                        }
+                    }
 
-    .sp-rupees {
-        font-size: var(--font-size-16);
-    }
+                    .remove-attachment {
+                        height: 25px;
+                        width: 25px;
+                        padding: 2px;
+                        color: black;
+                    }
+                }
+            }
 
-    .wrap-other-tax {
-        padding-top: 2px;
-    }
+            .vouchers-actions {
+                border-top: 1px solid var(--color-common-secondary-border);
 
-    .cash-invoice-input {
-        max-width: 100% !important;
-        width: 100% !important;
-        margin-right: 15px;
-    }
-}
-
-@media (max-width: 575px) {
-    .change-address-dropdown {
-        ul {
-            left: auto !important;
-            right: 0 !important;
-
-            li {
-                a {
-                    white-space: normal;
-                    word-break: break-word;
+                .vouchers-more-option-btn {
+                    min-width: unset;
                 }
             }
         }
     }
-
-    #actionPane .btn-group.dropup {
-        display: block;
-        margin-top: 5px;
-    }
-
-    #actionPane .d-inline-block {
-        display: block !important;
-    }
-
-    #actionPane .btn-danger {
-        margin-bottom: 5px;
-    }
-
-    #actionPane .update-mode {
-        display: flex;
-        flex-direction: column;
-    }
-
-    #actionPane .generate-invoice {
-        min-width: 189px;
-    }
 }
 
-@media (max-width: 414px) {
-    .search-arrow-image {
-        max-width: 270px;
-    }
-
-    .qty-unit .col-xs-6:first-child {
-        padding-right: 10px !important;
-        margin-bottom: 10px;
-    }
-
-    .deposit-section {
-        transform: translateX(100px);
-    }
+.option-label {
+    color: var(--color-common-primary-text);
 }
 
-@media (max-width: 375px) {
-    .deposit-section {
-        transform: translateX(30px);
-    }
-
-    #actionPane .update-mode {
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-    }
-
-    label.checkbox-custom-label {
-        line-height: initial !important;
-        left: 0;
-        align-items: end;
-        vertical-align: middle;
-    }
-}
-
-.due-amount-field {
-    width: 50% !important;
-}
-
-.create-send-menu {
-    min-width: 160px !important;
-
-    a {
-        color: var(--color-dropdown-list);
-        background-color: var(--color-dropdown-primary-background);
-        font-size: var(--font-size-15);
-
-        &:hover {
-            color: var(--color-dropdown-list-hover-text) !important;
-            background: var(--color-dropdown-list-hover-background) !important;
-        }
-    }
-}
-
-@media (max-width: 320px) {
-    .deposit-section {
-        transform: translateX(20px);
-    }
-}
-
-/* Rotate animation for spinner in uploading file */
-
-.rotate {
-    -webkit-animation: spin 4s linear infinite;
-    -moz-animation: spin 4s linear infinite;
-    animation: spin 4s linear infinite;
-}
-
-@-moz-keyframes spin {
-    100% {
-        -moz-transform: rotate(360deg);
-    }
-}
-
-@-webkit-keyframes spin {
-    100% {
-        -webkit-transform: rotate(360deg);
-    }
-}
-
-@keyframes spin {
-    100% {
-        -webkit-transform: rotate(360deg);
-        transform: rotate(360deg);
-    }
-}
-.mobile-number-wrapper {
-    input {
-        height: 46px;
-        width: 100%;
-        border-radius: 8px !important;
-        border: 1px solid var(--color-iron);
-    }
+.option-value {
+    color: var(--color-gray);
 }
