@@ -2,7 +2,7 @@
     overflow: visible;
     .more-details {
         background-color: var(--color-white);
-        padding: 15px;
+        padding: 0 15px 15px;
         .cheq {
             table {
                 td.remove-invoice {
@@ -19,6 +19,12 @@
                 }
             }
         }
+    }
+    #ledger-description {
+        background-color: var(--color-transparent-background) !important;
+    }
+    .multi-currency-wrapper {
+        width: fit-content;
     }
 }
 
@@ -107,16 +113,18 @@
     margin-right: 0 !important;
 }
 .delete-attachment {
-    margin-right: 14px;
-    margin-left: 7px;
-    float: right;
-    margin-top: -6px;
     a {
         color: var(--color-dark-gray);
         i {
             font-size: var(--font-size-15);
         }
     }
+}
+.attachment-file-name {
+    width: 190px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 }
 @media only screen and (max-width: 767px) {
     .ledger-panel .btn {
