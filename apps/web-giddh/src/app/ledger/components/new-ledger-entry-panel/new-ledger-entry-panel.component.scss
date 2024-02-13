@@ -20,8 +20,11 @@
             }
         }
     }
-    #ledger-description {
-        background-color: var(--color-transparent-background);
+    // #ledger-description {
+    //     background-color: var(--color-transparent-background) !important;
+    // }
+    .multi-currency-wrapper {
+        width: fit-content;
     }
 }
 
