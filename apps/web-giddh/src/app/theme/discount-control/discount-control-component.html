@@ -23,17 +23,17 @@
     </a>
 
     <div
-        class="my-dropdown-menu pd-1"
+        class="my-dropdown-menu custom-discount-menu pd-1"
         [ngClass]="{'display-block': discountMenu, 'display-none' : !discountMenu}"
         (click)="$event.stopPropagation()"
         #disInptEle
     >
-        <div class="value-wrapper">
-            <div class="d-flex align-items-center mr-b1">
-                <label>{{commonLocaleData?.app_percent}}</label>
+        <div class="value-wrapper mr-b15">
+            <!-- <div class="d-flex align-items-center mr-b1">
+                <label>{{commonLocaleData?.app_percent}}</label> -->
 
-                <div class="position-relative percent-wrapper">
-                    <input
+                <!-- <div class="position-relative percent-wrapper"> -->
+                    <!-- <input
                         (keydown.enter)="$event.preventDefault()"
                         matInput
                         type="text"
@@ -45,11 +45,15 @@
                         (input)="discountFromInput('PERCENTAGE', $event)"
                         [mask]="inputMaskFormat"
                     />
-                    <i class="fa fa-percent position-absolute"></i>
-                </div>
-            </div>
+                    <i class="fa fa-percent position-absolute"></i> -->
+                    <input-field [type]="'number'" [min]="0" [allowDecimalDigitsOnly]="true" [label]="'Percent'" [placeholder]="''" [matSuffix]="'%'" 
+                    class="d-block" [cssClass]="'text-right'" [(ngModel)]="discountPercentageModal" [readonly]="!discountFromPer"></input-field>
 
-            <div class="d-flex align-items-center mr-b1">
+                    <input-field [type]="'number'" [min]="0" [allowDecimalDigitsOnly]="true" [label]="commonLocaleData?.app_value" [placeholder]="''" class="d-block mt-3" [cssClass]="'text-right'" [(ngModel)]="discountFixedValueModal" [readonly]="!discountFromVal"></input-field>
+                <!-- </div> -->
+            <!-- </div> -->
+
+            <!-- <div class="d-flex align-items-center mr-b1">
                 <label>{{commonLocaleData?.app_value}}</label>
                 <input
                     (keydown.enter)="$event.preventDefault()"
@@ -61,8 +65,8 @@
                     [(ngModel)]="discountFixedValueModal"
                     (input)="discountFromInput('FIX_AMOUNT', $event)"
                     [mask]="inputMaskFormat"
-                />
-            </div>
+                /> -->
+            <!-- </div> -->
         </div>
 
         <div class="d-flex flex-col justify-content-center" *ngIf="discountAccountsDetails?.length > 1">
