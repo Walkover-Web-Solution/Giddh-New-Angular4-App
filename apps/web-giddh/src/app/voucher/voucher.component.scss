@@ -1106,7 +1106,8 @@ label.checkbox-custom-label {
                 top: 0;
                 left: 0;
                 z-index: 2;
-                width: 100%;
+                width: 102%;
+                transform: translateX(-1%);
                 height: 100%;
                 background-color: var(--color-primary-performa-invoice-dissabled-background);
                 opacity: 0.7;
@@ -1314,6 +1315,10 @@ label.checkbox-custom-label {
                         color: black;
                     }
                 }
+
+                .adjustment-height{
+                    height: 48px;
+                }
             }
 
             .vouchers-actions {
@@ -1333,4 +1338,10 @@ label.checkbox-custom-label {
 
 .option-value {
     color: var(--color-gray);
+}
+.balance-due {
+    text-align:left;
+}
+.entries-giddh-datepicker {
+    height: 0 !important;
 }
