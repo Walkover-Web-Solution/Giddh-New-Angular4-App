@@ -1,5 +1,5 @@
 <div
-    class="ledger-panel giddh-overlap-block"
+    class="ledger-panel giddh-overlap-block new-ledger-panel"
     (click)="hideDiscountTax()"
     #entryContent
     (keyup)="saveCtrlEnter($event)"
@@ -27,12 +27,11 @@
                         </li>
                         <li>
                             <a
-                                mat-button
-                                class="text-light mr-0 min-width-auto"
+                                class="text-light mr-0 min-width-auto px-1"
                                 href="javascript:void(0)"
                                 (click)="currencyChange()"
                             >
-                                <i class="icon-switch-icon font-15"></i>
+                                <img src="assets/icon/swap_horiz.svg" height="24" width="30" />
                             </a>
                         </li>
                         <li>
@@ -40,7 +39,7 @@
                                 matInput
                                 [disabled]="isReadOnly"
                                 id="ledger-price-input"
-                                class="price-input"
+                                class="price-input form-control mr-1"
                                 [(ngModel)]="blankLedger.exchangeRate"
                                 type="text"
                                 (blur)="exchangeRateChanged()"
@@ -61,7 +60,7 @@
         <!--  tourist scheme template start      -->
         <ng-container *ngTemplateOutlet="touristSchemeTemplate"></ng-container>
         <!--        tourist scheme template end-->
-        <div class="basic-detail mr-b1" *ngIf="showTaxationDiscountBox || shouldShowAdvanceReceiptMandatoryFields">
+        <div class="basic-detail mr-b05" *ngIf="showTaxationDiscountBox || shouldShowAdvanceReceiptMandatoryFields">
             <table class="width-100 total-detail-table">
                 <tbody>
                     <tr *ngIf="currentTxn?.selectedAccount || shouldShowAdvanceReceiptMandatoryFields">
@@ -388,9 +387,9 @@
                 </tbody>
             </table>
         </div>
-        <div class="row warehouse-field">
+        <div class="row warehouse-field mr-b05">
             <div class="col-md-12">
-                <div class="text-right mr-b1" *ngIf="currentTxn?.selectedAccount && showOtherTax">
+                <div class="text-right" *ngIf="currentTxn?.selectedAccount && showOtherTax">
                     <ng-container *ngIf="isTcsTdsApplicable">
                         <mat-checkbox
                             [checked]="blankLedger.isOtherTaxesApplicable"
@@ -403,9 +402,9 @@
                             >{{ localeData?.other_tax }}</mat-checkbox
                         >
                         <div class="clearfix">
-                            <div *ngIf="blankLedger.isOtherTaxesApplicable" class="mr-t1 pull-right">
+                            <div *ngIf="blankLedger.isOtherTaxesApplicable" class="pull-right">
                                 <label>{{ commonLocaleData?.app_other_tax }}</label>
-                                <span class="d-flex">
+                                <span class="d-flex mr-b05">
                                     <span class="d-flex align-item-center">
                                         <a
                                             href="javascript:void(0)"
@@ -466,7 +465,7 @@
         </ng-container>
 
         <mat-accordion multi>
-            <mat-expansion-panel class="mr-t1 overflow-visible">
+            <mat-expansion-panel class="overflow-visible">
                 <mat-expansion-panel-header (click)="toggleMoreDetail()">
                     <mat-panel-title>{{ localeData?.more_details }}</mat-panel-title>
                 </mat-expansion-panel-header>
@@ -656,6 +655,7 @@
                                                 blankLedger.voucherType === 'debit note') &&
                                             (voucherApiVersion === 2 || selectedInvoiceForCreditNote)
                                         "
+                                        [style.width.px]="selectedInvoiceForCreditNote ? 236 : 200"
                                         class="cp remove-invoice hidden-xs d-flex align-items-center"
                                     >
                                         <div
@@ -683,6 +683,7 @@
                                                         : commonLocaleData?.app_invoice_no
                                                 "
                                                 class="form-control mat-field-border"
+                                                [style.width.px]="190"
                                                 [(ngModel)]="blankLedger.invoiceNumberAgainstVoucher"
                                             />
                                         </div>
@@ -694,7 +695,7 @@
                                             blankLedger.voucherType !== 'rcpt' &&
                                             blankLedger.voucherType !== 'advance-receipt'
                                         "
-                                        class="pt-2 hidden-xs"
+                                        class="pt-2 hidden-xs adjust-label pr-0"
                                     >
                                         <mat-checkbox
                                             color="primary"
@@ -886,7 +887,9 @@
                                     [ngClass]="{ hide: blankLedger?.generateInvoice || blankLedger?.attachedFile }"
                                 >
                                     <label for="invoiceFile" class="cp font-15">
-                                        <i [ngClass]="!isFileUploading ? ( blankLedger?.attachedFile?.length ? 'icon-file' : 'icon-file-path') : 'fa fa-spinner rotate'"></i>
+                                        <i class="icon-file" *ngIf="!isFileUploading && blankLedger?.attachedFile?.length"></i>
+                                        <i class="fa fa-spinner rotate" *ngIf="isFileUploading"></i>
+                                        <img src="assets/icon/attach_file.svg" height="20" width="20" *ngIf="!isFileUploading && !blankLedger?.attachedFile?.length" />
                                         <ng-container *ngIf="!blankLedger?.attachedFile?.length">
                                             {{ localeData?.attach_file }}
                                         </ng-container>
@@ -894,7 +897,7 @@
                                     >
                                 </label>
                                 <div
-                                    class="file_attached d-flex align-items-center text-right column-gap1"
+                                    class="file_attached d-flex align-items-center column-gap1"
                                     *ngIf="blankLedger?.attachedFile?.length > 0"
                                 >
                                     <div class="attachment-file-name" [matTooltip]="blankLedger.attachedFileName" matTooltipPosition="left">{{ blankLedger.attachedFileName }}</div>
@@ -924,7 +927,7 @@
                                         "
                                         [(ngModel)]="blankLedger.generateInvoice"
                                         (change)="manualGenerateVoucherChecked = $event?.checked"
-                                        >{{ commonLocaleData?.app_generate_voucher }}</mat-checkbox
+                                        ><span class="font-16">{{ commonLocaleData?.app_generate_voucher }}</span></mat-checkbox
                                     >
                                     <span class="pd-l05" *ngIf="autoGenerateVoucherFromEntry">
                                         <span class="icon-info text-dark p-1" [matMenuTriggerFor]="toolTip" #trigger="matMenuTrigger" (mouseenter)="showAutoPaidTooltip()" (mouseleave)="hideAutoPaidTooltip()"></span>
@@ -1193,7 +1196,7 @@
                 </div>
             </div>
         </ng-container>
-        <div class="col-md-4 px-0">
+        <div class="col-md-3 mb-2 p-0 pr-2">
             <div class="source-warehouse" *ngIf="currentTxn?.selectedAccount?.stock && warehouses?.length > 1">
                 <label>{{ localeData?.select_warehouse }}</label>
                 <sh-select

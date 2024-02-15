@@ -1,4 +1,5 @@
 .ledger-panel {
+    background-color: var(--color-body-background);
     overflow: visible;
     .more-details {
         background-color: var(--color-white);
@@ -25,6 +26,10 @@
     }
     .multi-currency-wrapper {
         width: fit-content;
+    }
+
+    .adjust-label {
+        width: 158px !important;
     }
 }
 
@@ -53,7 +58,6 @@
     line-height: 23px;
 }
 .warehouse-field {
-    margin-bottom: 10px;
     display: flex;
     align-items: center;
 }
@@ -101,6 +105,7 @@
 .icon-box {
     display: flex;
     align-items: center;
+    justify-content: center;
     padding: 10px 10px 0 10px;
     font-size: 12px;
     height: 60px;
@@ -121,7 +126,7 @@
     }
 }
 .attachment-file-name {
-    width: 190px;
+    max-width: 190px;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
