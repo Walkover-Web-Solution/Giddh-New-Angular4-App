@@ -878,6 +878,18 @@ textarea {
     margin-bottom: 0 !important;
     margin-right: 15px !important;
 }
+.voucher-preview-edit {
+    .flag-input {
+        .mdc-floating-label {
+            padding-left: 40px !important;
+        }
+    }
+}
+
+.align-items-baseline {
+    align-items: baseline;
+}
+
 @media screen and (max-width: 1366px) and (orientation: portrait) {
     .subscription-form-select {
         float: left !important;

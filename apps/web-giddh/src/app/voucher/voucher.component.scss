@@ -17,6 +17,10 @@
             color: var(--color-giddh-blue);
         }
     }
+    .differ-currency {
+        color: var(--color-gray);
+        font-size: var(--font-size-15);
+    }
 
     .vouchers-content-wrapper {
         padding: 15px 0;
@@ -1139,6 +1143,14 @@ label.checkbox-custom-label {
                 padding: 15px;
                 border: 1px solid var(--color-fields-border);
                 border-radius: 4px;
+                line-height: 2;
+
+                &.without-gsting {
+                    grid-template-areas:
+                    'address address'
+                    'country state'
+                    'pincode pincode' !important;
+                }
 
                 .address-field {
                     grid-area: address;
@@ -1192,7 +1204,7 @@ label.checkbox-custom-label {
 
                         th,
                         td {
-                            padding: 12px 8px;
+                            padding: 22px 8px;
                             border-bottom: 1px solid var(--color-common-secondary-border);
                             &:not(:first-child, :nth-child(2)){
                                 text-align: right;
