@@ -31,6 +31,7 @@ $custom-typography: mat-typography-config(
 @import "../css/global/table.scss";
 @import "../css/global/custom-price.scss";
 @import "../css/global/inventory-adjustment.scss";
+@import "../css/global/dialog.scss";
 
 /* table css need to removed at last  (start)Don't touch this table css (If any body work on that contact shalinee..)
 */
@@ -878,6 +879,18 @@ textarea {
     margin-bottom: 0 !important;
     margin-right: 15px !important;
 }
+.voucher-preview-edit {
+    .flag-input {
+        .mdc-floating-label {
+            padding-left: 40px !important;
+        }
+    }
+}
+
+.align-items-baseline {
+    align-items: baseline;
+}
+
 @media screen and (max-width: 1366px) and (orientation: portrait) {
     .subscription-form-select {
         float: left !important;
