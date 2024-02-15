@@ -1,6 +1,6 @@
 :host.gst-sidebar {
     position: fixed;
-    top: 57px;
+    top: var(var(--top-distance) + 57px);
     bottom: 0;
     min-height: 100vh;
     background: var(--color-white);

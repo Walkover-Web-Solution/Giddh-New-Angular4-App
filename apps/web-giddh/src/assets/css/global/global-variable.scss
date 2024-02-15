@@ -1,0 +1,22 @@
+body {
+    --top-distance: 0;
+    --header-height: 60px;
+    --top-sidebar: 60px;
+
+    &.depriciation-message {
+        --top-distance: 40px;
+
+        .fixed-padding {
+            padding-top: 95px !important;
+        }
+
+        .nav-left-bar,
+        .inventory-sidebar {
+            top: calc(var(--top-distance) + var(--header-height)) !important;
+        }
+
+        .modal {
+            top: var(--top-distance);
+        }
+    }
+}

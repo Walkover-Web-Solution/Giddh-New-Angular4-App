@@ -1,7 +1,7 @@
 :host {
     position: fixed;
     left: auto;
-    top: 60px;
+    top: calc(var(--top-distance) + 60px);
     right: -5px;
     bottom: 0;
     max-width: 330px;
@@ -27,7 +27,7 @@
     display: block;
     position: fixed;
     left: -41px;
-    top: 0;
+    top: var(--top-distance);
     z-index: 5;
     border: 0;
     cursor: pointer;
@@ -207,7 +207,7 @@
     :host {
         position: fixed;
         left: auto;
-        top: 90px;
+        top: calc(var(--top-distance) + 90px);
     }
 }
 @media (max-width: 575px) {

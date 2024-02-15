@@ -324,7 +324,7 @@ h6 {
 
 .modal-backdrop {
     position: fixed;
-    top: 0;
+    top: var(--top-distance);
     z-index: 991;
     background-color: var(--color-white);
     transition: all 0.3s;

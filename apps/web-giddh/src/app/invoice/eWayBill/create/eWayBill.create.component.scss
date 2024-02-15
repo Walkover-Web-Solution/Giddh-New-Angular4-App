@@ -3,7 +3,7 @@
     position: fixed;
     right: 0;
     bottom: 0;
-    top: 54px;
+    top: calc(var(--top-distance) + 54px);
     width: 280px;
     padding: 15px;
     overflow: auto;
@@ -95,7 +95,7 @@
     overflow: auto;
     width: 475px;
     position: fixed;
-    top: 0;
+    top: var(--top-distance);
     right: 0;
     padding: 0px;
 }
