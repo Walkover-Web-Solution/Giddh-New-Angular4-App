@@ -15,7 +15,7 @@
         [ngClass]="{'display-block': discountMenu, 'display-none' : !discountMenu}" (click)="$event.stopPropagation()"
         #disInptEle>
         <div class="value-wrapper mr-b15">
-            <input-field [type]="'number'" [min]="0" [allowDecimalDigitsOnly]="true" [label]="'Percent'"
+            <input-field [type]="'number'" [min]="0" [allowDecimalDigitsOnly]="true" [label]="commonLocaleData?.app_percent"
                 [placeholder]="''" (blur)="discountInputBlur($event)" [matSuffix]="'%'" class="d-block"
                 [cssClass]="'text-right'" [(ngModel)]="discountPercentageModal"
                 (ngModelChange)="discountFromInput('PERCENTAGE', $event)" [readonly]="!discountFromPer"></input-field>
@@ -37,7 +37,7 @@
                         class="discount-item cursor-pointer">
                         <label class="checkbox overflow-hidden width-100 p-0 m-0" (click)="$event.stopPropagation()">
                             <mat-checkbox color="primary" class="pull-left" id="{{'discount-control-' + idx}}"
-                                name="tax_{{idx}}" [(ngModel)]="discount.isActive" (change)="change(discount, $event)"
+                                name="discount_{{idx}}" [(ngModel)]="discount.isActive" (change)="change(discount, $event)"
                                 (click)="$event.stopPropagation()">
                                 <div class="checkbox-label">
                                     {{discount.name}}
