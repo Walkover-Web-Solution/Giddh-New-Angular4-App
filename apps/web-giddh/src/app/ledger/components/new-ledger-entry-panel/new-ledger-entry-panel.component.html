@@ -1,5 +1,5 @@
 <div
-    class="ledger-panel giddh-overlap-block"
+    class="ledger-panel giddh-overlap-block new-ledger-panel"
     (click)="hideDiscountTax()"
     #entryContent
     (keyup)="saveCtrlEnter($event)"
@@ -27,12 +27,11 @@
                         </li>
                         <li>
                             <a
-                                mat-button
-                                class="text-light mr-0 min-width-auto"
+                                class="text-light mr-0 min-width-auto px-1"
                                 href="javascript:void(0)"
                                 (click)="currencyChange()"
                             >
-                                <i class="icon-switch-icon font-15"></i>
+                                <img src="assets/icon/swap_horiz.svg" height="24" width="30" />
                             </a>
                         </li>
                         <li>
@@ -40,7 +39,7 @@
                                 matInput
                                 [disabled]="isReadOnly"
                                 id="ledger-price-input"
-                                class="price-input"
+                                class="price-input form-control mr-1"
                                 [(ngModel)]="blankLedger.exchangeRate"
                                 type="text"
                                 (blur)="exchangeRateChanged()"
@@ -403,9 +402,9 @@
                             >{{ localeData?.other_tax }}</mat-checkbox
                         >
                         <div class="clearfix">
-                            <div *ngIf="blankLedger.isOtherTaxesApplicable" class="mr-t1 pull-right">
+                            <div *ngIf="blankLedger.isOtherTaxesApplicable" class="pull-right">
                                 <label>{{ commonLocaleData?.app_other_tax }}</label>
-                                <span class="d-flex">
+                                <span class="d-flex mr-b05">
                                     <span class="d-flex align-item-center">
                                         <a
                                             href="javascript:void(0)"
@@ -888,7 +887,9 @@
                                     [ngClass]="{ hide: blankLedger?.generateInvoice || blankLedger?.attachedFile }"
                                 >
                                     <label for="invoiceFile" class="cp font-15">
-                                        <i [ngClass]="!isFileUploading ? ( blankLedger?.attachedFile?.length ? 'icon-file' : 'icon-file-path') : 'fa fa-spinner rotate'"></i>
+                                        <i class="icon-file" *ngIf="!isFileUploading && blankLedger?.attachedFile?.length"></i>
+                                        <i class="fa fa-spinner rotate" *ngIf="isFileUploading"></i>
+                                        <img src="assets/icon/attach_file.svg" height="20" width="20" *ngIf="!isFileUploading && !blankLedger?.attachedFile?.length" />
                                         <ng-container *ngIf="!blankLedger?.attachedFile?.length">
                                             {{ localeData?.attach_file }}
                                         </ng-container>
@@ -926,7 +927,7 @@
                                         "
                                         [(ngModel)]="blankLedger.generateInvoice"
                                         (change)="manualGenerateVoucherChecked = $event?.checked"
-                                        >{{ commonLocaleData?.app_generate_voucher }}</mat-checkbox
+                                        ><span class="font-16">{{ commonLocaleData?.app_generate_voucher }}</span></mat-checkbox
                                     >
                                     <span class="pd-l05" *ngIf="autoGenerateVoucherFromEntry">
                                         <span class="icon-info text-dark p-1" [matMenuTriggerFor]="toolTip" #trigger="matMenuTrigger" (mouseenter)="showAutoPaidTooltip()" (mouseleave)="hideAutoPaidTooltip()"></span>

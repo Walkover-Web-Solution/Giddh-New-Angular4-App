@@ -14541,3 +14541,19 @@ aside-menu-product-service {
         }
     }
 }
+
+// Ledger Create Panel text color
+.new-ledger-panel{
+    color: var(--color-default-button) !important;
+
+    label, strong {
+        color: var(--color-default-button) !important;
+    }
+    .mat-expansion-panel {
+        .mat-expansion-panel-header {
+            .mat-expansion-panel-header-title{
+                color: var(--color-default-button) !important;
+             }
+        }
+    }
+}
