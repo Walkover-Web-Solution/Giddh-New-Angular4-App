@@ -155,8 +155,8 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
      * @return {*}
      * @memberof DiscountControlComponent
      */
-    public discountFromInput(type: 'FIX_AMOUNT' | 'PERCENTAGE', event: any) {
-        this.assignDiscount(type, event.target?.value, false, true);
+    public discountFromInput(type: 'FIX_AMOUNT' | 'PERCENTAGE', value: any) {
+        this.assignDiscount(type, value, false, true);
     }
 
     public assignDiscount(type: any, value: any, isFirstChange: boolean = false, isActive?: boolean): void {

@@ -844,6 +844,18 @@ textarea {
         min-height: 500px;
     }
 }
+.voucher-preview-edit {
+    .flag-input {
+        .mdc-floating-label {
+            padding-left: 40px !important;
+        }
+    }
+}
+
+.align-items-baseline {
+    align-items: baseline;
+}
+
 @media screen and (max-width: 1366px) and (orientation: portrait) {
     .subscription-form-select {
         float: left !important;
