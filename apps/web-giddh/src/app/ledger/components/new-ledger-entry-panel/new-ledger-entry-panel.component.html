@@ -6,16 +6,15 @@
     (clickOutside)="clickedOutside($event)"
 >
     <div class="wrapper">
-        <div class="row">
-            <div class="col-8">
+        <div class="row" *ngIf="currentTxn?.shouldShowRcmEntry || isLedgerAccountAllowsMultiCurrency">
+            <div class="col-8" *ngIf="currentTxn?.shouldShowRcmEntry">
                 <!-- reverse charge transction start (make it functional by developer end) -->
                 <ng-container *ngTemplateOutlet="rcmEntryCheckbox"></ng-container>
             </div>
-            <div class="col-4">
+            <div class="col-4" *ngIf="isLedgerAccountAllowsMultiCurrency">
                 <div class="multi-currency-wrapper ml-auto">
                     <ul
                         class="list-inline font-15 d-flex align-items-center"
-                        *ngIf="isLedgerAccountAllowsMultiCurrency"
                     >
                         <li>
                             {{ commonLocaleData?.app_numbers?.one }}
@@ -655,12 +654,12 @@
                                                 blankLedger.voucherType === 'debit note') &&
                                             (voucherApiVersion === 2 || selectedInvoiceForCreditNote)
                                         "
-                                        [style.width.px]="selectedInvoiceForCreditNote ? 236 : 200"
+                                        [style.width.px]="selectedInvoiceForCreditNote ? 216 : 180"
                                         class="cp remove-invoice hidden-xs d-flex align-items-center"
                                     >
                                         <div
                                             [ngClass]="{
-                                                'mb-0 mr-r1 mr-t2': voucherApiVersion === 2
+                                                'mb-0 mr-t2': voucherApiVersion === 2
                                             }"
                                             *ngIf="selectedInvoiceForCreditNote"
                                             (click)="removeSelectedInvoice()"
@@ -683,7 +682,6 @@
                                                         : commonLocaleData?.app_invoice_no
                                                 "
                                                 class="form-control mat-field-border"
-                                                [style.width.px]="190"
                                                 [(ngModel)]="blankLedger.invoiceNumberAgainstVoucher"
                                             />
                                         </div>
@@ -695,12 +693,13 @@
                                             blankLedger.voucherType !== 'rcpt' &&
                                             blankLedger.voucherType !== 'advance-receipt'
                                         "
-                                        class="pt-2 hidden-xs adjust-label pr-0"
+                                        class="pt-3 hidden-xs adjust-label pr-0"
                                     >
                                         <mat-checkbox
                                             color="primary"
                                             [disabled]="isReadOnly"
                                             id="ledger-adjust-sale"
+                                            class="pl-0"
                                             name="adjustSales"
                                             (change)="handleVoucherAdjustment()"
                                             [(ngModel)]="isAdjustVoucherSelected"
@@ -737,21 +736,25 @@
                                     </td>
                                     <td
                                         (click)="isReadOnly ? '' : handleVoucherAdjustment()"
-                                        class="cursor-pointer pt-2"
+                                        class="cursor-pointer pt-2 pr-0 w-auto"
+                                        [ngClass]="{ 'pt-3' : currentTxn?.voucherAdjustments?.totalAdjustmentAmount < 1000000000 }"
                                         *ngIf="currentTxn?.voucherAdjustments?.totalAdjustmentAmount"
                                     >
-                                        <span class="text-gray advance-receipt-edit mr-l05">
-                                            <i class="icon-edit-pencil"></i>
-                                            {{ localeData?.adjusted_amount }}:
-                                            <span class="d-inline-flex">
-                                                <amount-field
-                                                    [amount]="currentTxn?.voucherAdjustments?.totalAdjustmentAmount"
-                                                    [currencySymbol]="false"
-                                                    [currencyCode]="false"
-                                                >
-                                                </amount-field>
-                                            </span>
-                                        </span>
+                                        <div class="text-gray advance-receipt-edit mr-l1 d-flex align-items-baseline ">
+                                            <i class="icon-edit-pencil pr-1"></i>
+
+                                            <div class="d-flex" [ngClass]="{ 'flex-column' : currentTxn?.voucherAdjustments?.totalAdjustmentAmount > 999999999 }">
+                                                <span class="pr-1">{{ localeData?.adjusted_amount }}:</span>
+                                                <span class="d-inline-flex">
+                                                    <amount-field
+                                                        [amount]="currentTxn?.voucherAdjustments?.totalAdjustmentAmount"
+                                                        [currencySymbol]="false"
+                                                        [currencyCode]="false"
+                                                    >
+                                                    </amount-field>
+                                                </span>
+                                            </div>
+                                        </div>
                                     </td>
                                 </tr>
                             </table>
@@ -1109,7 +1112,7 @@
     </span>
 </ng-template>
 <ng-template #rcmEntryCheckbox>
-    <div *ngIf="currentTxn?.shouldShowRcmEntry" class="rcm-entry w-100">
+    <div class="rcm-entry w-100">
         <mat-checkbox
             #rcmCheckbox
             color="primary"
@@ -1177,7 +1180,7 @@
     </advance-receipt-adjustment-component>
 </ng-template>
 <ng-template #variantAndWarehouseDropdown>
-    <div class="d-flex column-gap1 my-2">
+    <div class="d-flex column-gap1 my-2"  *ngIf="(currentTxn?.isStock && stockVariants | async) || (currentTxn?.selectedAccount?.stock && warehouses?.length > 1)">
         <ng-container *ngIf="currentTxn?.isStock && stockVariants | async as variants">
             <div *ngIf="variants?.length > 1" class="col-md-3 mb-2 p-0 pr-2">
                 <div>
@@ -1196,8 +1199,8 @@
                 </div>
             </div>
         </ng-container>
-        <div class="col-md-3 mb-2 p-0 pr-2">
-            <div class="source-warehouse" *ngIf="currentTxn?.selectedAccount?.stock && warehouses?.length > 1">
+        <div class="col-md-3 mb-2 p-0 pr-2" *ngIf="currentTxn?.selectedAccount?.stock && warehouses?.length > 1">
+            <div class="source-warehouse">
                 <label>{{ localeData?.select_warehouse }}</label>
                 <sh-select
                     [disabled]="isReadOnly"
