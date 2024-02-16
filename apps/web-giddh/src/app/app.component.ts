@@ -144,8 +144,6 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-
-        document.querySelector("body")?.classList?.add("depriciation-message");
         this.breakpointObserver.observe([
             '(max-width: 1023px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
