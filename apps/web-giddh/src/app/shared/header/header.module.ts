@@ -25,6 +25,8 @@ import { ScrollingModule } from "@angular/cdk/scrolling";
 import { ConnectPlaidComponent } from "../../theme/connect-plaid/connect-plaid.component";
 import { CommandKModule } from "../../theme/command-k/command.k.module";
 import { MatDividerModule } from "@angular/material/divider";
+import { GenericAsideMenuAccountModule } from "../generic-aside-menu-account/generic.aside.menu.account.module";
+import { MatToolbarModule } from "@angular/material/toolbar";
 
 @NgModule({
     declarations: [
@@ -59,8 +61,9 @@ import { MatDividerModule } from "@angular/material/divider";
         MatMenuModule,
         MatTreeModule,
         CommandKModule,
-        MatMenuModule,
-        MatDividerModule
+        MatDividerModule,
+        GenericAsideMenuAccountModule,
+        MatToolbarModule
     ],
     exports: [
         HeaderComponent,

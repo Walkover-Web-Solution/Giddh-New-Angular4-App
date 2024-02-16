@@ -47,11 +47,24 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { AuthService } from '../../theme/ng-social-login-module';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 
 @Component({
     selector: 'app-header',
     templateUrl: './header.component.html',
-    styleUrls: ['./header.component.scss']
+    styleUrls: ['./header.component.scss'],
+    animations: [
+        trigger('slideInOut', [
+            state('in', style({
+                transform: 'translate3d(0, 0, 0)'
+            })),
+            state('out', style({
+                transform: 'translate3d(100%, 0, 0)'
+            })),
+            transition('in => out', animate('400ms ease-in-out')),
+            transition('out => in', animate('400ms ease-in-out'))
+        ]),
+    ]
 })
 
 export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterViewChecked {
@@ -236,8 +249,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public isGoToBranch: boolean = false;
     /** Stores the voucher API version of current company */
     public voucherApiVersion: 1 | 2;
-    /** This will show/hide account sidepan */
-    public accountAsideMenuState: string = 'out';
+     /** This will show/hide account sidepan */
+     public accountAsideMenuState: string = 'out'
     /** This will hold group unique name from CMD+k for creating account */
     public selectedGroupForCreateAccount: any = '';
     /** Cmd + k Dailog Reference */
@@ -994,9 +1007,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         }
     }
 
-    public showManageGroupsModal() {
+    public showManageGroupsModal(search: any = "") {
         this.toggleHelpSupportPane(false);
-        this.store.dispatch(this.groupWithAccountsAction.OpenAddAndManageFromOutside(''));
+        this.store.dispatch(this.groupWithAccountsAction.OpenAddAndManageFromOutside(search));
     }
 
     public hideManageGroupsModal() {
@@ -1958,5 +1971,66 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             details: branchDetails
         };
         this.store.dispatch(this.companyActions.setCompanyBranch(organization));
+    }
+
+    /**
+     * New group creation handler for CMD+K
+     *
+     * @param {*} e Create new group event
+     * @memberof PrimarySidebarComponent
+     */
+    public handleNewTeamCreationEmitter(e: any): void {
+        this.modelRef?.hide();
+        if (e[0] === "group") {
+            if (this.accountAsideMenuState === "in") {
+                this.toggleAccountAsidePane();
+            }
+            this.showManageGroupsModal(e[1]?.name);
+        } else if (e[0] === "account") {
+            this.selectedGroupForCreateAccount = e[1]?.uniqueName;
+            if (this.accountAsideMenuState === "out") {
+                this.toggleAccountAsidePane();
+            } else {
+                this.toggleAccountAsidePane();
+                setTimeout(() => {
+                    this.toggleAccountAsidePane();
+                    this.changeDetection.detectChanges();
+                }, 50);
+            }
+        }
+    }
+
+    /**
+     * This will toggle create account sidepan
+     *
+     * @param {*} [event]
+     * @memberof PrimarySidebarComponent
+     */
+    public toggleAccountAsidePane(event?: any): void {
+        if (event) {
+            event.preventDefault();
+        }
+        this.accountAsideMenuState = this.accountAsideMenuState === 'out' ? 'in' : 'out';
+
+        this.toggleBodyClass();
+    }
+
+    /**
+     * This will toggle fixed class on body
+     *
+     * @memberof PrimarySidebarComponent
+     */
+    public toggleBodyClass() {
+        if (this.accountAsideMenuState === 'in') {
+            document.querySelector('body')?.classList?.add('fixed');
+            if (document.getElementsByClassName("gst-sidebar-open")?.length > 0) {
+                document.querySelector(".nav-left-bar").classList.add("create-account");
+            }
+            document.querySelector(".sidebar-slide-right")?.classList?.add("z-index-990");
+        } else {
+            document.querySelector('body')?.classList?.remove('fixed');
+            document.querySelector(".nav-left-bar").classList.remove("create-account");
+            document.querySelector(".sidebar-slide-right")?.classList?.remove("z-index-990");
+        }
     }
 }

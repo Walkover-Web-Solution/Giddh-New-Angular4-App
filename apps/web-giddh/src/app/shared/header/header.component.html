@@ -40,7 +40,7 @@
                         [alt]="localeData?.giddh_logo"
                     />
                 </div>
-                <ul class="nav universal-date mr-r1 h-100" *ngIf="selectedCompany | async">
+                <ul class="nav universal-date h-100" *ngIf="selectedCompany | async">
                     <li>
                         <button mat-icon-button (click)="showNavigationModal()">
                             <i class="icon-search"></i>
@@ -367,7 +367,7 @@
                     </li>
                     <li>
                         <div class="profile-wrapper" [matMenuTriggerFor]="profileMenu">
-                            <div class="profile-picture text-center">
+                            <div class="profile-picture text-center cursor-pointer">
                                 <span>{{ companyInitials }}</span>
                             </div>
                         </div>
@@ -375,7 +375,7 @@
                             <div class="user-profile-menu">
                                 <div class="user-info p-3" (click)="$event.stopPropagation()">
                                     <span class="font-16">{{ userName }}</span> 
-                                    <p class="font-14 text-gray">{{ userEmail }}</p>
+                                    <p class="font-14 text-gray" [matTooltip]="userEmail?.length > 26 ? userEmail : null" matTooltipPosition="left">{{ userEmail }}</p>
                                 </div>
                                 <mat-divider></mat-divider>
                                 <button mat-menu-item class="font-16" [routerLink]="['/pages/user-details/mobile-number']">{{ localeData?.my_profile }}</button>
@@ -630,3 +630,18 @@
         {{ commonLocaleData?.app_to_dismiss }}
     </div>
 </ng-template>
+<div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'"></div>
+<div *ngIf="accountAsideMenuState === 'in'">
+    <generic-aside-menu-account
+        [class]="accountAsideMenuState"
+        [@slideInOut]="accountAsideMenuState"
+        (closeAsideEvent)="toggleAccountAsidePane($event)"
+        (closeAccountModal)="closeAccountModal($event)"
+        [selectedGrpUniqueName]="selectedGroupForCreateAccount"
+        [createAccountFromCommandK]="true"
+        [keyboardShortcut]="{ 'esc': accountAsideMenuState === 'in' && !hasUnsavedChanges }"
+        (addEvent)="addNewAccount($event)"
+        *ngIf="accountAsideMenuState === 'in'"
+    >
+    </generic-aside-menu-account>
+</div>
