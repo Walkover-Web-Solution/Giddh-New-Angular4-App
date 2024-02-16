@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnDestroy, Output, ViewChild } from '@angular/core';
-import { fromEvent, ReplaySubject, Observable } from 'rxjs';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { ReplaySubject, Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map, takeUntil } from 'rxjs/operators';
 import { SalesAddBulkStockItems, VoucherTypeEnum } from '../../models/api-models/Sales';
 import { SearchService } from '../../services/search.service';
@@ -10,6 +10,7 @@ import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 import { GeneralService } from '../../services/general.service';
 import { cloneDeep } from '../../lodash-optimized';
 import { PAGINATION_LIMIT } from '../../app.constant';
+import { FormControl } from '@angular/forms';
 
 @Component({
     selector: 'voucher-add-bulk-items-component',
@@ -18,7 +19,7 @@ import { PAGINATION_LIMIT } from '../../app.constant';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class VoucherAddBulkItemsComponent implements OnDestroy {
+export class VoucherAddBulkItemsComponent implements OnInit, OnDestroy {
     @Input() public invoiceType: string;
     @Input() public accountUniqueName?: string;
     @ViewChild('searchElement', { static: false }) public searchElement: ElementRef;
@@ -45,6 +46,8 @@ export class VoucherAddBulkItemsComponent implements OnDestroy {
     public commonLocaleData: any = {};
     /** False if there is no data in account search */
     public isAccountSearchData: boolean = true;
+    /** Form Control of bulk stock searching  */
+    public stock: FormControl = new FormControl('');
 
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
@@ -53,6 +56,18 @@ export class VoucherAddBulkItemsComponent implements OnDestroy {
         private ledgerService: LedgerService,
         private generalService: GeneralService
     ) {
+    }
+
+    public ngOnInit(): void {
+        this.stock.valueChanges.pipe(
+            debounceTime(700),
+            distinctUntilChanged(),
+            takeUntil(this.destroyed$)
+        ).subscribe((res) => {
+            this.isAccountSearchData = true;
+            this.onSearchQueryChanged(res, 1);
+          });
+      
     }
 
     /**
@@ -200,18 +215,14 @@ export class VoucherAddBulkItemsComponent implements OnDestroy {
     public translationComplete(event: any): void {
         if (event) {
             this.onSearchQueryChanged('');
-
-            setTimeout(() => {
-                fromEvent(this.searchElement?.nativeElement, 'input').pipe(
-                    debounceTime(700),
-                    distinctUntilChanged(),
-                    map((e: any) => e.target?.value),
-                    takeUntil(this.destroyed$)
-                ).subscribe((res: string) => {
-                    this.isAccountSearchData = true;
-                    this.onSearchQueryChanged(res, 1);
-                });
-            }, 100);
+            this.stock.valueChanges.pipe(
+                debounceTime(700),
+                distinctUntilChanged(),
+                takeUntil(this.destroyed$)
+            ).subscribe((res) => {
+                this.isAccountSearchData = true;
+                this.onSearchQueryChanged(res, 1);
+              });
         }
     }
 
@@ -259,7 +270,6 @@ export class VoucherAddBulkItemsComponent implements OnDestroy {
                         this.selectedItems = [...this.selectedItems, item];
                     }
                     this.isLoading = false;
-                    this.changeDetectorRef.detectChanges();
                 }
             }, () => {
                 this.isLoading = false;

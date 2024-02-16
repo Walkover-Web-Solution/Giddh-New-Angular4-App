@@ -6,6 +6,7 @@ import { FormFieldsModule } from "../../theme/form-fields/form-fields.module";
 import { ShSelectModule } from "../../theme/ng-virtual-select/sh-select.module";
 import { KeyboardShortutModule } from "../helpers/directives/keyboardShortcut/keyboardShortut.module";
 import { AsideMenuOtherTaxes } from "./aside-menu-other-taxes";
+import { MatButtonModule } from "@angular/material/button";
 
 @NgModule({
     declarations: [
@@ -18,7 +19,8 @@ import { AsideMenuOtherTaxes } from "./aside-menu-other-taxes";
         ShSelectModule,
         ReactiveFormsModule,
         FormsModule,
-        FormFieldsModule
+        FormFieldsModule,
+        MatButtonModule
     ],
     exports: [
         AsideMenuOtherTaxes

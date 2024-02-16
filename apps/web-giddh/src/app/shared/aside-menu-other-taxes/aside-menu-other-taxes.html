@@ -1,9 +1,5 @@
-<div
-    class="aside-pane aside-pane-other-tax text-left"
-    (clickOutside)="closeTaxesModal($event)"
-    [keyboardShortcut]="'esc'"
-    (onShortcutPress)="closeTaxesModal($event)"
->
+<div class="aside-pane aside-pane-other-tax text-left" (clickOutside)="closeTaxesModal($event)"
+    [keyboardShortcut]="'esc'" (onShortcutPress)="closeTaxesModal($event)">
     <button id="close" type="button" (click)="closeTaxesModal($event)">
         <i class="icon-cross"></i>
     </button>
@@ -17,50 +13,30 @@
             <div class="row">
                 <div class="col-sm-6">
                     <div class="select-tax-dropdown d-flex flex-column">
-                        <label>{{commonLocaleData?.app_select_tax}}<span class="text-danger">*</span></label>
                         <div class="mr-b2">
-                            <select-field
-                                [name]="'selectTax'"
-                                [cssClass]="'form-control mat-field-border'"
-                                [placeholder]="commonLocaleData?.app_select_tax"
-                                [options]="taxesOptions"
-                                (selectedOption)="applyTax($event);"
-                                [required]="true"
-                                [defaultValue]="selectedTaxUniqueName"
-                                (onClear)="onClear()"
-                                [allowValueReset]="true"
-                            >
-                            </select-field>
-                            <label class="label-tax" *ngIf="defaultOtherTaxesModal?.appliedOtherTax?.name">
-                                {{ defaultOtherTaxesModal?.appliedOtherTax?.name | uppercase}}
-                            </label>
+                            <dropdown-field [name]="'selectTax'" [cssClass]="'form-control mat-field-border'"
+                                [label]="commonLocaleData?.app_select_tax"
+                                [placeholder]="commonLocaleData?.app_select_tax" [options]="taxesOptions"
+                                (selectedOption)="applyTax($event);" [required]="true"
+                                [defaultValue]="selectedTaxUniqueName" (onClear)="onClear()" [allowValueReset]="true">
+                            </dropdown-field>
                         </div>
                     </div>
                 </div>
                 <div class="col-sm-6">
-                    <div>
-                        <label>{{commonLocaleData?.app_calculation_method}}<span class="text-danger">*</span></label>
-                    </div>
                     <div class="mb-2">
-                        <select-field
+                        <dropdown-field [label]="commonLocaleData?.app_calculation_method"
                             [cssClass]="'form-control mat-field-border'"
-                            [placeholder]="commonLocaleData?.app_select_method"
-                            [options]="calculationMethodOptions"
+                            [placeholder]="commonLocaleData?.app_select_method" [options]="calculationMethodOptions"
                             [defaultValue]="selectedCalculationMethod ? selectedCalculationMethod[0]?.label : calculationMethodOptions[0]?.label"
-                            [name]="'tcsCalculationMethod'"
-                            (selectedOption)="onCalculateTax($event);"
-                        >
-                        </select-field>
+                            [name]="'tcsCalculationMethod'" (selectedOption)="onCalculateTax($event);">
+                        </dropdown-field>
                     </div>
                 </div>
             </div>
             <div>
-                <button
-                    class="btn btn-success"
-                    type="button"
-                    [disabled]="!defaultOtherTaxesModal?.tcsCalculationMethod"
-                    (click)="saveTaxes()"
-                >
+                <button mat-stroked-button color="primary" type="button" [disabled]="!defaultOtherTaxesModal?.tcsCalculationMethod"
+                    (click)="saveTaxes()">
                     {{commonLocaleData?.app_apply}}
                 </button>
             </div>

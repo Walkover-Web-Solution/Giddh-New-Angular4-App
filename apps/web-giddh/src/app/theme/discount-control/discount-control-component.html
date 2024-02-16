@@ -3,66 +3,27 @@
 
     <a id="discount">
         <div class="multi-select adjust">
-            <input
-                (keydown.enter)="$event.preventDefault()"
-                matInput
-                type="text"
-                decimalDigitsDirective
-                name="discountSum"
-                [ngClass]="{'field-disabled': readonly}"
-                class="form-control text-right cursor-pointer pd-r2"
-                (focus)="!readonly ? showDiscountMenu() : ''"
-                [(ngModel)]="discountSum"
-                [mask]="inputMaskFormat"
-                [prefix]="prefixInput"
-                [suffix]="suffixInput"
-                readonly
-                (blur)="discountInputBlur($event)"
-            />
+            <input (keydown.enter)="$event.preventDefault()" matInput type="text" decimalDigitsDirective
+                name="discountSum" [ngClass]="{'field-disabled': readonly}"
+                class="form-control text-right cursor-pointer pd-r2" (focus)="!readonly ? showDiscountMenu() : ''"
+                [(ngModel)]="discountSum" [mask]="inputMaskFormat" [prefix]="prefixInput" [suffix]="suffixInput"
+                readonly (blur)="discountInputBlur($event)" />
         </div>
     </a>
 
-    <div
-        class="my-dropdown-menu pd-1"
-        [ngClass]="{'display-block': discountMenu, 'display-none' : !discountMenu}"
-        (click)="$event.stopPropagation()"
-        #disInptEle
-    >
-        <div class="value-wrapper">
-            <div class="d-flex align-items-center mr-b1">
-                <label>{{commonLocaleData?.app_percent}}</label>
+    <div class="my-dropdown-menu custom-discount-menu pd-1"
+        [ngClass]="{'display-block': discountMenu, 'display-none' : !discountMenu}" (click)="$event.stopPropagation()"
+        #disInptEle>
+        <div class="value-wrapper mr-b15">
+            <input-field [type]="'number'" [min]="0" [allowDecimalDigitsOnly]="true" [label]="commonLocaleData?.app_percent"
+                [placeholder]="''" (blur)="discountInputBlur($event)" [matSuffix]="'%'" class="d-block"
+                [cssClass]="'text-right'" [(ngModel)]="discountPercentageModal"
+                (ngModelChange)="discountFromInput('PERCENTAGE', $event)" [readonly]="!discountFromPer"></input-field>
 
-                <div class="position-relative percent-wrapper">
-                    <input
-                        (keydown.enter)="$event.preventDefault()"
-                        matInput
-                        type="text"
-                        class="form-control text-right cursor-pointer w-100"
-                        [disabled]="!discountFromPer"
-                        decimalDigitsDirective
-                        [(ngModel)]="discountPercentageModal"
-                        (blur)="discountInputBlur($event)"
-                        (input)="discountFromInput('PERCENTAGE', $event)"
-                        [mask]="inputMaskFormat"
-                    />
-                    <i class="fa fa-percent position-absolute"></i>
-                </div>
-            </div>
-
-            <div class="d-flex align-items-center mr-b1">
-                <label>{{commonLocaleData?.app_value}}</label>
-                <input
-                    (keydown.enter)="$event.preventDefault()"
-                    matInput
-                    type="text"
-                    class="form-control text-right cursor-pointer value-width"
-                    [disabled]="!discountFromVal"
-                    decimalDigitsDirective
-                    [(ngModel)]="discountFixedValueModal"
-                    (input)="discountFromInput('FIX_AMOUNT', $event)"
-                    [mask]="inputMaskFormat"
-                />
-            </div>
+            <input-field [type]="'number'" [min]="0" [allowDecimalDigitsOnly]="true"
+                (ngModelChange)="discountFromInput('FIX_AMOUNT', $event)" [label]="commonLocaleData?.app_value"
+                [placeholder]="''" class="d-block mt-3" [cssClass]="'text-right'" [(ngModel)]="discountFixedValueModal"
+                [readonly]="!discountFromVal"></input-field>
         </div>
 
         <div class="d-flex flex-col justify-content-center" *ngIf="discountAccountsDetails?.length > 1">
@@ -72,23 +33,15 @@
         <div *ngIf="discountAccountsDetails?.length > 1">
             <ul class="discount-list">
                 <ng-container *ngFor="let discount of discountAccountsDetails;trackBy: trackByFn; let idx = index">
-                    <li *ngIf="discount && discount.discountUniqueName && discount.name" class="discount-item cursor-pointer">
-                        <label
-                            class="checkbox overflow-hidden width-100 p-0 m-0"
-                            (click)="$event.stopPropagation()"
-                        >
-                            <mat-checkbox
-                                color="primary"
-                                class="pull-left"
-                                id="{{'discount-control-' + idx}}"
-                                name="tax_{{idx}}"
-                                [(ngModel)]="discount.isActive"
-                                (change)="change(discount, $event)"
-                                (click)="$event.stopPropagation()"
-                            >
-                            <div class="checkbox-label">
-                                {{discount.name}}
-                            </div>
+                    <li *ngIf="discount && discount.discountUniqueName && discount.name"
+                        class="discount-item cursor-pointer">
+                        <label class="checkbox overflow-hidden width-100 p-0 m-0" (click)="$event.stopPropagation()">
+                            <mat-checkbox color="primary" class="pull-left" id="{{'discount-control-' + idx}}"
+                                name="discount_{{idx}}" [(ngModel)]="discount.isActive" (change)="change(discount, $event)"
+                                (click)="$event.stopPropagation()">
+                                <div class="checkbox-label">
+                                    {{discount.name}}
+                                </div>
                             </mat-checkbox>
                         </label>
                     </li>
