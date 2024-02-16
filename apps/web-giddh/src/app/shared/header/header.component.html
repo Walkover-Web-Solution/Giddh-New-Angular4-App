@@ -368,13 +368,13 @@
                     <li>
                         <div class="profile-wrapper" [matMenuTriggerFor]="profileMenu">
                             <div class="profile-picture text-center cursor-pointer">
-                                <span>{{ companyInitials }}</span>
+                                <span>{{ userName }}</span>
                             </div>
                         </div>
                         <mat-menu #profileMenu="matMenu">
                             <div class="user-profile-menu">
                                 <div class="user-info p-3" (click)="$event.stopPropagation()">
-                                    <span class="font-16">{{ userName }}</span> 
+                                    <span class="font-16">{{ userFullName }}</span> 
                                     <p class="font-14 text-gray" [matTooltip]="userEmail?.length > 26 ? userEmail : null" matTooltipPosition="left">{{ userEmail }}</p>
                                 </div>
                                 <mat-divider></mat-divider>

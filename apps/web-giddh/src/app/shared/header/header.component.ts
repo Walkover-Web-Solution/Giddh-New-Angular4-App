@@ -248,8 +248,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public commandkDialogRef: MatDialogRef<any>;
     /** True, if login is made with social account */
     public isLoggedInWithSocialAccount$: Observable<boolean>;
-    /** Company name initials (upto 2 characters) */
-    public companyInitials: any = '';
 
     /**
      * Returns whether the back button in header should be displayed or not
@@ -442,7 +440,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(selectedCmp => {
             if (selectedCmp) {
-                this.companyInitials = this.generalService.getInitialsFromString(selectedCmp.name);
                 this.selectedCompany = observableOf(selectedCmp);
                 this.selectedCompanyDetails = selectedCmp;
                 this.generalService.voucherApiVersion = selectedCmp.voucherVersion;
