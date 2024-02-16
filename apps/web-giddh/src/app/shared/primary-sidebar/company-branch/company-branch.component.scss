@@ -131,7 +131,7 @@
         }
     }
     .company-list {
-        height: calc(100vh - 345px) !important;
+        height: calc(100vh - 285px) !important;
         overflow: auto;
         margin: 0;
         padding: 0;
@@ -279,6 +279,7 @@
             }
         }
         &.branch-list {
+            height: calc(100vh - 250px) !important;
             ul {
                 margin: 0;
                 li {
@@ -323,49 +324,7 @@
             }
         }
     }
-    .profile-user {
-        position: fixed;
-        bottom: 0;
-        width: 240px;
-        left: 0;
-        border-top: 1px solid var(--color-common-secondary-border);
-        z-index: 991;
-        background-color: var(--color-sidebar-footer-logout-section-background);
-        .profile-name {
-            cursor: pointer;
-            .profile-alice {
-                display: inline-flex;
-                width: 24px;
-                height: 24px;
-                background-color: var(--color-secondary-button-background);
-                border-radius: 30px;
-                font-size: var(--font-size-12);
-                justify-content: center;
-                align-items: center;
-                color: var(--color-secondary-button-text);
-                letter-spacing: -1px;
-            }
-        }
-        .profile-logout {
-            display: flex;
-            align-items: center;
-            button {
-                border: 1px solid var(--color-secondary-button-border);
-                background: var(--color-tertiary-button-background);
-                color: var(--color-tertiary-button-text);
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                font-size: var(--font-size-12);
-                padding: 5px 10px;
-                border-radius: 5px !important;
-                font-size: var(--font-size-12);
-                &:hover {
-                    background-color: var(--color-tertiary-button-background-hover);
-                }
-            }
-        }
-    }
+   
     .custom-tabs {
         .icon-company-branch-connect {
             position: absolute;

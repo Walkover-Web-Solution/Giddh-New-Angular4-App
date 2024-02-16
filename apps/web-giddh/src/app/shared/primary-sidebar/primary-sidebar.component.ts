@@ -180,11 +180,11 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             event.preventDefault();
             event.stopPropagation();
             if (this.companyList?.length > 0) {
-                if(this.commandkDialogRef && this.dialog.getDialogById(this.commandkDialogRef.id)){
+                if (this.commandkDialogRef && this.dialog.getDialogById(this.commandkDialogRef.id)) {
                     this.commandkDialogRef.close()
                 }
                 this.commandkDialogRef = this.dialog.open(this.navigationModal, {
-                    width:'630px',
+                    width: '630px',
                     height: '600'
                 });
             }
@@ -360,13 +360,13 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
-     * Displays the CMD+K modal
-     *
-     * @memberof PrimarySidebarComponent
-     */
+    * Displays the CMD+K modal
+    *
+    * @memberof PrimarySidebarComponent
+    */
     public showNavigationModal(): void {
         this.commandkDialogRef = this.dialog.open(this.navigationModal, {
-            width:'630px',
+            width: '630px',
             height: '600'
         });
     }
@@ -704,14 +704,14 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
         }
     }
 
-     /**
-     * Close the Cmd + K Dialog on close Event
-     *
-     * @memberof PrimarySidebarComponent
-     */
+    /**
+    * Close the Cmd + K Dialog on close Event
+    *
+    * @memberof PrimarySidebarComponent
+    */
     public closeEvent(): void {
-        setTimeout(()=>{
+        setTimeout(() => {
             this.commandkDialogRef.close();
-        },600);
+        }, 600);
     }
 }
