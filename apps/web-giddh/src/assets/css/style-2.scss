@@ -14538,5 +14538,17 @@ aside-menu-product-service {
         top: 0;
         width: 100%;
         z-index: 999;
+        p{
+            font-size: 16px;
+        }
+    }
+}
+@media screen and (max-width: 992px) {
+    .depreciation-message {
+        .message-wrapper {
+            p{
+                font-size: 14px;
+            }
+        }
     }
 }
