@@ -359,18 +359,18 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
         this.destroyed$.complete();
     }
 
-    /**
+     /**
      * Displays the CMD+K modal
      *
      * @memberof PrimarySidebarComponent
      */
-    public showNavigationModal(): void {
+     public showNavigationModal(): void {
         this.commandkDialogRef = this.dialog.open(this.navigationModal, {
             width:'630px',
             height: '600'
         });
     }
-
+    
     /**
      * New group creation handler for CMD+K
      *

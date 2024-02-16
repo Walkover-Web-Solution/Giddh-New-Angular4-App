@@ -720,5 +720,6 @@
     "app_copied":"Copied...",
     "domain_verification":"Domain verification for outbound mail",
     "app_renew_bank_connection": "Renew Bank Connection",
-    "app_select_printer": "Select Printer"
+    "app_select_printer": "Select Printer",
+    "app_help": "Help"
 }
