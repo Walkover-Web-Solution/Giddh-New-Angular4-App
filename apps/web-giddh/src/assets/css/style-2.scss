@@ -12101,7 +12101,7 @@ inventory-master {
     .custom-tabs .nav.nav-tabs {
         position: fixed;
         width: 100%;
-        top: var(var(--top-distance) + 90px);
+        top: calc(var(--top-distance) + 90px);
     }
 
     .ledg-head.entry-popup .custom-tabs .nav.nav-tabs {
@@ -12151,7 +12151,7 @@ inventory-master {
 
     .ledg-head .custom-tabs .nav.nav-tabs {
         left: 0;
-        top: var(var(--top-distance) + 95px);
+        top: calc(var(--top-distance) + 95px);
         padding-top: 0 !important;
         position: fixed;
     }
@@ -14530,7 +14530,7 @@ aside-menu-product-service {
 }
 
 // show voucher message
-.depriciation-message {
+.depreciation-message {
     .message-wrapper {
         background-color: var(--color-danger);
         color: var(--color-white);
