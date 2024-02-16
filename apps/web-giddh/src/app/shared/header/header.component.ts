@@ -25,7 +25,7 @@ import { ICompAidata, IUlist } from '../../models/interfaces/ulist.interface';
 import { clone, cloneDeep, slice, find } from '../../lodash-optimized';
 import { DbService } from '../../services/db.service';
 import { CompAidataModel } from '../../models/db';
-import { AccountResponse } from 'apps/web-giddh/src/app/models/api-models/Account';
+import { AccountResponse, AddAccountRequest } from 'apps/web-giddh/src/app/models/api-models/Account';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { DEFAULT_AC, NAVIGATION_ITEM_LIST, reassignNavigationalArray } from '../../models/default-menus';
@@ -48,6 +48,7 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { AuthService } from '../../theme/ng-social-login-module';
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { SalesActions } from '../../actions/sales/sales.action';
 
 @Component({
     selector: 'app-header',
@@ -239,8 +240,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public isGoToBranch: boolean = false;
     /** Stores the voucher API version of current company */
     public voucherApiVersion: 1 | 2;
-     /** This will show/hide account sidepan */
-     public accountAsideMenuState: string = 'out'
+    /** This will show/hide account sidepan */
+    public accountAsideMenuState: string = 'out'
     /** This will hold group unique name from CMD+k for creating account */
     public selectedGroupForCreateAccount: any = '';
     /** Cmd + k Dailog Reference */
@@ -289,7 +290,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         private settingsFinancialYearActions: SettingsFinancialYearActions,
         private sanitizer: DomSanitizer,
         public dialog: MatDialog,
-        private socialAuthService: AuthService
+        private socialAuthService: AuthService,
+        private salesAction: SalesActions
     ) {
         this.calendlyUrl = this.sanitizer.bypassSecurityTrustResourceUrl(CALENDLY_URL);
         // Reset old stored application date
@@ -1950,15 +1952,15 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         }
     }
 
-     /**
-    * Sets the organization details
-    *
-    * @private
-    * @param {OrganizationType} type Type of the organization
-    * @param {OrganizationDetails} branchDetails Branch details of an organization
-    * @memberof HeaderComponent
-    */
-     private setOrganizationDetails(type: OrganizationType, branchDetails: OrganizationDetails): void {
+    /**
+   * Sets the organization details
+   *
+   * @private
+   * @param {OrganizationType} type Type of the organization
+   * @param {OrganizationDetails} branchDetails Branch details of an organization
+   * @memberof HeaderComponent
+   */
+    private setOrganizationDetails(type: OrganizationType, branchDetails: OrganizationDetails): void {
         const organization: Organization = {
             type, // Mode to which user is switched to
             uniqueName: this.activeCompany ? this.activeCompany.uniqueName : '',
@@ -1971,7 +1973,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * New group creation handler for CMD+K
      *
      * @param {*} e Create new group event
-     * @memberof PrimarySidebarComponent
+     * @memberof HeaderComponent
      */
     public handleNewTeamCreationEmitter(e: any): void {
         this.modelRef?.hide();
@@ -1998,7 +2000,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * This will toggle create account sidepan
      *
      * @param {*} [event]
-     * @memberof PrimarySidebarComponent
+     * @memberof HeaderComponent
      */
     public toggleAccountAsidePane(event?: any): void {
         if (event) {
@@ -2012,7 +2014,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     /**
      * This will toggle fixed class on body
      *
-     * @memberof PrimarySidebarComponent
+     * @memberof HeaderComponent
      */
     public toggleBodyClass() {
         if (this.accountAsideMenuState === 'in') {
@@ -2026,5 +2028,28 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             document.querySelector(".nav-left-bar").classList.remove("create-account");
             document.querySelector(".sidebar-slide-right")?.classList?.remove("z-index-990");
         }
+    }
+
+    /**
+     * Closes account modal
+     *
+     * @param {*} event
+     * @memberof HeaderComponent
+     */
+    public closeAccountModal(event: any): void {
+        if (event) {
+            this.accountAsideMenuState = 'out';
+            this.toggleBodyClass();
+        }
+    }
+
+    /**
+     * This will save new account
+     *
+     * @param {AddAccountRequest} item
+     * @memberof HeaderComponent
+     */
+    public addNewAccount(item: AddAccountRequest) {
+        this.store.dispatch(this.salesAction.addAccountDetailsForSales(item));
     }
 }
