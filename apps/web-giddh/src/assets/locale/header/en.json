@@ -38,5 +38,9 @@
     "cash_information":"Generate instant paid voucher without managing separate account/ledger.",
     "credit_information":"Generate invoice and manage accounts/ledger separately.",
     "go_to_branch_information":"To access other create options go to branch mode",
-    "go_to_branch":" Go to branch"
+    "go_to_branch":" Go to branch",
+    "logout": "Logout",
+    "my_profile": "My Profile",
+    "to_select": "to select",
+    "to_navigate": "to navigate"
 }

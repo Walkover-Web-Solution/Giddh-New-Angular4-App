@@ -12,7 +12,7 @@ import { AppState } from '../../store';
 import { LoginActions } from '../../actions/login.action';
 import { CompanyActions } from '../../actions/company.actions';
 import { CommonActions } from '../../actions/common.actions';
-import { CompanyCountry, CompanyCreateRequest, CompanyResponse, StatesRequest, Organization, StateDetailsRequest } from '../../models/api-models/Company';
+import { CompanyCountry, CompanyCreateRequest, CompanyResponse, StatesRequest, Organization, StateDetailsRequest, OrganizationDetails } from '../../models/api-models/Company';
 import { UserDetails } from '../../models/api-models/loginModels';
 import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
 import { NavigationEnd, NavigationError, NavigationStart, RouteConfigLoadEnd, Router } from '@angular/router';
@@ -46,6 +46,7 @@ import { SettingsFinancialYearActions } from '../../actions/settings/financial-y
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatMenuTrigger } from '@angular/material/menu';
+import { AuthService } from '../../theme/ng-social-login-module';
 
 @Component({
     selector: 'app-header',
@@ -225,6 +226,16 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public isGoToBranch: boolean = false;
     /** Stores the voucher API version of current company */
     public voucherApiVersion: 1 | 2;
+    /** This will show/hide account sidepan */
+    public accountAsideMenuState: string = 'out';
+    /** This will hold group unique name from CMD+k for creating account */
+    public selectedGroupForCreateAccount: any = '';
+    /** Cmd + k Dailog Reference */
+    public commandkDialogRef: MatDialogRef<any>;
+    /** True, if login is made with social account */
+    public isLoggedInWithSocialAccount$: Observable<boolean>;
+    /** Company name initials (upto 2 characters) */
+    public companyInitials: any = '';
 
     /**
      * Returns whether the back button in header should be displayed or not
@@ -264,7 +275,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         private localeService: LocaleService,
         private settingsFinancialYearActions: SettingsFinancialYearActions,
         private sanitizer: DomSanitizer,
-        public dialog: MatDialog
+        public dialog: MatDialog,
+        private socialAuthService: AuthService
     ) {
         this.calendlyUrl = this.sanitizer.bypassSecurityTrustResourceUrl(CALENDLY_URL);
         // Reset old stored application date
@@ -415,6 +427,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(selectedCmp => {
             if (selectedCmp) {
+                this.companyInitials = this.generalService.getInitialsFromString(selectedCmp.name);
                 this.selectedCompany = observableOf(selectedCmp);
                 this.selectedCompanyDetails = selectedCmp;
                 this.generalService.voucherApiVersion = selectedCmp.voucherVersion;
@@ -475,6 +488,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     public ngOnInit() {
         this.store.dispatch(this.settingsFinancialYearActions.GetAllFinancialYears());
+        this.isLoggedInWithSocialAccount$ = this.store.pipe(select(state => state.login.isLoggedInWithSocialAccount), takeUntil(this.destroyed$));
         this.store.pipe(select(appStore => appStore.general.menuItems), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 let branches = [];
@@ -1807,5 +1821,136 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         if (lastState !== 'pages/new-company') {
             this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
         }
+    }
+
+    /**
+    * Displays the CMD+K modal
+    *
+    * @memberof HeaderComponent
+    */
+    public showNavigationModal(): void {
+        this.commandkDialogRef = this.dialog.open(this.navigationModal, {
+            width: '630px',
+            height: '600'
+        });
+    }
+
+    /**
+    * Close the Cmd + K Dialog on close Event
+    *
+    * @memberof HeaderComponent
+    */
+    public closeEvent(): void {
+        setTimeout(() => {
+            this.commandkDialogRef.close();
+        }, 600);
+    }
+
+    /**
+     * Item selection handler for CMD+K
+     *
+     * @param {IUlist} item Selected item
+     * @param {{ next: IUlist, previous: IUlist }} [fromInvalidState=null] Current and previous states
+     * @param {boolean} [isCtrlClicked] True, if CTRL is clicked
+     * @memberof HeaderComponent
+     */
+    public onItemSelected(item: IUlist, fromInvalidState: { next: IUlist, previous: IUlist } = null, isCtrlClicked?: boolean): void {
+        if (this.modelRef) {
+            this.modelRef.hide();
+        }
+
+        setTimeout(() => {
+            if (item && item.type === 'MENU') {
+                if (item.additional && item.additional.tab) {
+                    if (item.uniqueName.includes('?')) {
+                        item.uniqueName = item.uniqueName?.split('?')[0];
+                    }
+                    this.router.navigate([item.uniqueName], {
+                        queryParams: {
+                            tab: item.additional.tab,
+                            tabIndex: item.additional.tabIndex
+                        }
+                    });
+                } else {
+                    this.router.navigate([item.uniqueName]);
+                }
+            } else {
+                // direct account scenario
+                let url = `ledger/${item.uniqueName}`;
+                if (!isCtrlClicked) {
+                    this.router.navigate([url]); // added link in routerLink
+                }
+            }
+            // save data to db
+            item.time = +new Date();
+            let entity = (item.type) === 'MENU' ? 'menus' : 'accounts';
+            this.doEntryInDb(entity, item, fromInvalidState);
+        }, 200);
+    }
+
+    /**
+    * Creates a new group entry
+    *
+    * @param {IUlist} item
+    * @memberof HeaderComponent
+    */
+    public makeGroupEntryInDB(item: IUlist): void {
+        // save data to db
+        item.time = +new Date();
+        this.doEntryInDb('groups', item);
+    }
+
+    /**
+     * Logs out the user
+     *
+     * @memberof HeaderComponent
+     */
+    public logout(): void {
+        /** Reset the current organization type on logout as we
+         * don't know receive switched branch from API in last state (state API)
+        */
+        const details = {
+            branchDetails: {
+                uniqueName: ''
+            }
+        };
+        this.setOrganizationDetails(OrganizationType.Company, details);
+        localStorage.removeItem('isNewArchitecture');
+        if (isElectron) {
+            this.store.dispatch(this.loginAction.ClearSession());
+        } else {
+            // check if logged in via social accounts
+            this.isLoggedInWithSocialAccount$.subscribe((val) => {
+                if (val) {
+                    this.socialAuthService.signOut().then(() => {
+                        this.store.dispatch(this.loginAction.ClearSession());
+                        this.store.dispatch(this.loginAction.socialLogoutAttempt());
+                    }).catch((err) => {
+                        this.store.dispatch(this.loginAction.ClearSession());
+                        this.store.dispatch(this.loginAction.socialLogoutAttempt());
+                    });
+
+                } else {
+                    this.store.dispatch(this.loginAction.ClearSession());
+                }
+            });
+        }
+    }
+
+     /**
+    * Sets the organization details
+    *
+    * @private
+    * @param {OrganizationType} type Type of the organization
+    * @param {OrganizationDetails} branchDetails Branch details of an organization
+    * @memberof HeaderComponent
+    */
+     private setOrganizationDetails(type: OrganizationType, branchDetails: OrganizationDetails): void {
+        const organization: Organization = {
+            type, // Mode to which user is switched to
+            uniqueName: this.activeCompany ? this.activeCompany.uniqueName : '',
+            details: branchDetails
+        };
+        this.store.dispatch(this.companyActions.setCompanyBranch(organization));
     }
 }

@@ -487,7 +487,7 @@ ul.sub-list {
 
 /*new header css starts*/
 .fixed-padding {
-    padding-top: 55px;
+    padding-top: 60px;
 }
 
 #primary-new-header.primary-main-header {
@@ -498,14 +498,16 @@ ul.sub-list {
     top: 0;
     background-color: var(--color-primary-header-background);
     z-index: 990 !important;
-    padding-top: 12px;
-    padding-bottom: 12px;
+    height: 60px;
 
     .universal-date {
         color: var(--color-primary-header-universal-date) !important;
         display: flex;
         align-items: center;
         column-gap: 15px;
+        @media screen and (max-width: 992px) {
+            column-gap: 10px;
+        }
 
         li {
             border: none;
@@ -568,9 +570,14 @@ ul.sub-list {
         }
 
         .header-utility-icons {
-            i {
-                padding: 3px 3px 5px 3px !important;
-                font-size: 22px;
+            a {
+                i {
+                    padding: 3px !important;
+                    font-size: 22px;
+                }
+                span {
+                    color: var(--color-tertiary-login-box-body-text);
+                }
             }
 
             &.disable-icon {
@@ -620,6 +627,32 @@ aside-setting {
         color: var(--color-table-secondary-heading);
         text-decoration: underline;
         position: relative;
+    }
+}
+.profile-wrapper{
+    padding: 9px 0;
+    .profile-picture{
+        color: var(--color-tertiary-login-box-body-text);
+        width: 40px;
+        height: 40px;
+        border: 2px solid;
+        border-radius: 50%;
+    
+        span{
+            line-height: 36px;
+        }
+    }
+}
+.user-profile-menu {
+    width: 270px;
+    .user-info{
+        span{
+            font-weight: 600;
+        }
+        p {
+            text-overflow: ellipsis;
+            overflow: hidden;
+        }
     }
 }
 
