@@ -1,52 +1,205 @@
-<div class="relative">
-    <hamburger-menu [pageHeading]="'Adjust inventory'"></hamburger-menu>
-</div>
+<ng-container
+    appTranslate
+    [file]="'inventory/adjustment'"
+    (commonLocaleData)="commonLocaleData = $event"
+    (localeData)="localeData = $event"
+>
+    <div class="relative">
+        <hamburger-menu [pageHeading]="'Adjust inventory'"></hamburger-menu>
+    </div>
+    <div class="container-fluid mr-t15 adjust-inventory-list-page">
+        <div class="d-flex justify-content-between adjust-inventory-header">
+            <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
+                <input
+                    type="text"
+                    id="select-date"
+                    name="selectedDateRange"
+                    [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                    class="giddh-datepicker date-range-picker"
+                />
+            </div>
+            <button id="add-adjustment-btn" mat-stroked-button color="primary" class="mr-0" (click)="adjustInventory()">
+                + Add Adjustment
+            </button>
+        </div>
+        <div class="custom-field-list mr-t15">
+            <div class="table-responsive">
+                <table
+                    matSort
+                    mat-table
+                    (matSortChange)="sortChange($event)"
+                    [matSortActive]="inventoryAdjusmentGetRequestParams?.sortBy"
+                    [matSortDirection]="inventoryAdjusmentGetRequestParams?.sort"
+                    [dataSource]="dataSource"
+                    class="giddh-table w-100"
+                >
+                    <!-- Date Column -->
+                    <ng-container matColumnDef="date">
+                        <th class="date-column-width" width="18%" mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
+                        <td class="date-column-width" mat-cell *matCellDef="let element">{{ element.date }}</td>
+                    </ng-container>
 
-<div class="container-fluid mr-t15 adjust-inventory-list-page">
-    <div class="d-flex justify-content-between adjust-inventory-header">
-        <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
-            <input
-                type="text"
-                id="select-date"
-                name="selectedDateRange"
-                [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
-                class="giddh-datepicker date-range-picker bdr-radius-50"
-                placeholder="Enter Date"
-            />
+                    <!-- Reference No. Column -->
+                    <ng-container matColumnDef="reference-no">
+                        <th
+                            width="12%"
+                            mat-header-cell
+                            *matHeaderCellDef
+                            #searchReferenceNoContainer
+                            class="td-search-box"
+                            (clickOutside)="handleClickOutside($event, searchReferenceNoContainer, 'reference-no')"
+                        >
+                            <ng-container
+                                *ngTemplateOutlet="
+                                    searchTemplate;
+                                    context: {
+                                        $implicit: referenceNo,
+                                        fieldName: 'reference-no',
+                                        title: 'Reference No.'
+                                    }
+                                "
+                            ></ng-container>
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                            {{ element.referenceNo }}
+                        </td>
+                    </ng-container>
+
+                   <!-- Type Column -->
+                    <ng-container matColumnDef="type">
+                        <th width="10%" mat-header-cell *matHeaderCellDef [matMenuTriggerFor]="inventoryTypeMenu">
+                            Type
+                            <i class="fa fa-ellipsis-v ml-1 text-light-2 mt-1 cursor-pointer" aria-hidden="true"></i>
+                            <mat-menu #inventoryTypeMenu="matMenu" (closed)="selectedInventoryType()">
+                                <button mat-menu-item (click)="inventoryType = 'stock'">
+                                    <span>Stock</span>
+                                </button>     
+                                <button mat-menu-item (click)="inventoryType = 'group'" >
+                                    <span>Group</span>
+                                </button>                                  
+                            </mat-menu>
+                        </th>
+                        <td mat-cell *matCellDef="let element">{{ element.type }}</td>
+                    </ng-container>
+
+                    <!-- Name Column -->
+                    <ng-container matColumnDef="name">
+                        <th
+                            width="20%"
+                            mat-header-cell
+                            *matHeaderCellDef
+                            #searchNameContainer
+                            class="td-search-box"
+                            (clickOutside)="handleClickOutside($event, searchNameContainer, 'name')"
+                        >
+                            <ng-container
+                                *ngTemplateOutlet="
+                                    searchTemplate;
+                                    context: {
+                                        $implicit: name,
+                                        fieldName: 'name',
+                                        title: 'Name'
+                                    }
+                                "
+                            ></ng-container>
+                        </th>
+                        <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+                    </ng-container> 
+                    
+                    <!-- Reason Column -->
+                    <ng-container matColumnDef="reason">
+                        <th
+                            width="20%"
+                            mat-header-cell
+                            *matHeaderCellDef
+                            #searchReasonContainer
+                            class="td-search-box"
+                            (clickOutside)="handleClickOutside($event, searchReasonContainer, 'reason')"
+                        >
+                            <ng-container
+                                *ngTemplateOutlet="
+                                    searchTemplate;
+                                    context: {
+                                        $implicit: reason,
+                                        fieldName: 'reason',
+                                        title: 'Reason'
+                                    }
+                                "
+                            ></ng-container>
+                        </th>
+                        <td mat-cell *matCellDef="let element">{{ element.reason }}</td>
+                    </ng-container>
+
+                    <!-- Adjusted By Column -->
+                    <ng-container matColumnDef="adjusted-by">
+                        <th
+                            width="20%"
+                            mat-header-cell
+                            *matHeaderCellDef
+                            #searchAdjustedByContainer
+                            class="td-search-box"
+                            (clickOutside)="handleClickOutside($event, searchAdjustedByContainer, 'adjusted-by')"
+                        >
+                            <ng-container
+                                *ngTemplateOutlet="
+                                    searchTemplate;
+                                    context: {
+                                        $implicit: adjustedBy,
+                                        fieldName: 'adjusted-by',
+                                        title: 'Adjusted By'
+                                    }
+                                "
+                            ></ng-container>
+                        </th>
+                        <td mat-cell *matCellDef="let element">{{ element.adjustedBy }}</td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                </table>
+            </div>
+
+            <div class="pagination-wrapper mt-4" *ngIf="true">
+                <pagination
+                    [totalItems]="200"
+                    [(ngModel)]="inventoryAdjusmentGetRequestParams.page"
+                    [maxSize]="5"
+                    class="pagination-sm"
+                    [boundaryLinks]="true"
+                    [itemsPerPage]="inventoryAdjusmentGetRequestParams.count"
+                    [rotate]="false"
+                    (pageChanged)="pageChanged($event)"
+                    [firstText]="commonLocaleData?.app_first"
+                    [previousText]="commonLocaleData?.app_previous"
+                    [nextText]="commonLocaleData?.app_next"
+                    [lastText]="commonLocaleData?.app_last"
+                ></pagination>
+            </div>
         </div>
-        <button id="add-adjustment-btn" class="btn btn-sky-blue mr-0 bdr-radius-50" (click)="adjustInventory()">
-            + Add Adjustment
-        </button>
     </div>
-    <div class="custom-field-list mr-t15">
-        <div class="table-responsive">
-            <table class="table giddh-table on-mobile-view">
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Reference No.</th>
-                        <th>Reason</th>
-                        <th>Type</th>
-                        <th>Adjusted</th>
-                        <th>Adjusted By</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td data-title="Date">15/10/2020</td>
-                        <td data-title="Reference No.">234423</td>
-                        <td data-title="Reason">Stock on fire</td>
-                        <td data-title="Type">Quantity</td>
-                        <td data-title="Adjusted">Product Name</td>
-                        <td data-title="Adjusted By">Shubhendra Agarawal</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+</ng-container>
+
+
+<ng-template #addAdjustmentAsidepan>
+    <aside-create-new-inventory (closeAsideEvent)="closeAsideMenu()" [class]="asideMenuState" [moduleType]="moduleType">
+    </aside-create-new-inventory>
+</ng-template>
+
+<ng-template #searchTemplate let-show let-title="title" let-fieldName="fieldName" let-formControl="formControl">
+    <div [hidden]="show">
+        <i class="icon-search" (click)="toggleSearch(fieldName)"></i>
+        <span> {{ title }}</span>
     </div>
-</div>
-<div class="aside-overlay" *ngIf="asideMenuState === 'in'"></div>
-<aside-adjust-inventory *ngIf="asideMenuState === 'in'" (closeAsideEvent)="adjustInventory()"></aside-adjust-inventory>
+    <div class="input-container" [hidden]="!show">
+        <text-field
+            [type]="'text'"
+            [placeholder]="getSearchFieldText(title)"
+            [cssClass]="'form-control search-table mat-field-border'"
+            [autoFocus]="show"
+        ></text-field>
+    </div>
+</ng-template>
+
 <!-- Datepicker template -->
 <ng-template #datepickerTemplate>
     <div class="datepicker-modal">

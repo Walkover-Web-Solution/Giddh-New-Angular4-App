@@ -1,234 +1,290 @@
-<div class="relative adjust-group-page">
-    <hamburger-menu [pageHeading]="'Adjust Product/Service - Dummy Product Name Furniture'"></hamburger-menu>
-    <!-- <i class="icon-cross pull-right pd cursor-pointer" [routerLink]="['/pages/inventory/v2/adjust-inventory']"></i> -->
-    <span class="pull-right pd cursor-pointer back-to-page" [routerLink]="['/pages/inventory/v2/adjust-inventory']"
-        >Back</span
-    >
-    <div class="adjust-field-wrapper mt-2 relative">
-        <div>
-            <form>
-                <div class="col-md-8 col-lg-8 col-xl-6 col-12">
-                    <div class="row mr-b15">
-                        <div class="col-sm-4 col-lg-4">
-                            <label>Mode of Adjustment <span class="red-text">*</span></label>
-                        </div>
-                        <div class="col-sm-8 col-lg-6">
-                            <span class="p-0 mr-3">
-                                <input
-                                    id="mode-of-quantity"
-                                    class="radio-custom cp ml-0"
-                                    type="radio"
-                                    name="modeOfadjustment"
-                                    [value]=""
-                                />
-                                <label for="mode-of-quantity" class="radio-custom-label">Quantity</label>
-                            </span>
-                            <span class="p-0 mr-3">
-                                <input
-                                    id="mode-of-value"
-                                    class="radio-custom cp ml-0"
-                                    type="radio"
-                                    name="modeOfadjustment"
-                                    [value]=""
-                                />
-                                <label for="mode-of-value" class="radio-custom-label">Value</label>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="row mr-b15">
-                        <div class="col-sm-4 col-lg-4">
-                            <label>Reference No. <span class="red-text">*</span></label>
-                        </div>
-                        <div class="col-sm-8 col-lg-6">
-                            <input
-                                type="text"
-                                id="reference-no"
-                                class="form-control"
-                                placeholder="Enter Reference Number"
-                            />
-                        </div>
-                    </div>
-                    <div class="row mr-b15">
-                        <div class="col-sm-4 col-lg-4">
-                            <label>Date <span class="red-text">*</span></label>
-                        </div>
-                        <div class="col-sm-8 col-lg-6">
-                            <giddh-datepicker name="adjustGroupDate"></giddh-datepicker>
-                        </div>
-                    </div>
-                    <div class="row mr-b15">
-                        <div class="col-sm-4 col-lg-4">
-                            <label>Account <span class="red-text">*</span></label>
-                        </div>
-                        <div class="col-sm-8 col-lg-6">
-                            <sh-select id="account-no" placeholder="Select Account"></sh-select>
-                        </div>
-                    </div>
-                    <div class="row mr-b15">
-                        <div class="col-sm-4 col-lg-4">
-                            <label>Reason <span class="red-text">*</span></label>
-                        </div>
-                        <div class="col-sm-8 col-lg-6">
-                            <sh-select id="reason" placeholder="Select Reason"></sh-select>
-                        </div>
-                    </div>
-                </div>
-            </form>
-        </div>
-        <div class="bg-white px-3 py-3 mt-4 mb-4">
-            <div class="table-responsive">
-                <!-- table if quantity option selected -->
-                <table class="table giddh-table">
-                    <thead>
-                        <tr>
-                            <th width="20px">#</th>
-                            <th width="220px">Product/Service/Group</th>
-                            <th width="120px">Method</th>
-                            <th width="120px">Qty in Hand</th>
-                            <th width="120px">Change Qty</th>
-                            <th width="120px">New Qty</th>
-                            <th width="100px">New Value</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>
-                                <div class="d-flex mb-2">
-                                    <span>
-                                        <img src="{{ imgPath }}Login-Page-Image.png" width="36" height="36" />
-                                    </span>
-                                    <sh-select
-                                        id="select-group-product-service"
-                                        placeholder="Select Name"
-                                        class="mr-l15 w-100"
-                                    ></sh-select>
-                                </div>
-                                <textarea placeholder="Add Description" class="form-control"></textarea>
-                            </td>
-                            <td>
-                                <input
-                                    type="text"
-                                    id="percentage"
-                                    class="form-control mb-2"
-                                    value="Percentage"
-                                    disabled
-                                />
-                                <input type="text" id="percent-value" value="0%" class="form-control" />
-                            </td>
-                            <td>
-                                <input type="text" id="qty-in-hand" value="12,020" class="form-control" />
-                            </td>
-                            <td>
-                                <input type="text" id="change-qty" placeholder="Ex: +10, -10" class="form-control" />
-                            </td>
-                            <td>
-                                <input type="text" id="new-qty" value="12,020" class="form-control" />
-                            </td>
-                            <td>2000</td>
-                        </tr>
-                    </tbody>
-                </table>
+<ng-container appTranslate [file]="'inventory/adjustment'" (commonLocaleData)="commonLocaleData = $event"
+    (localeData)="localeData = $event">
+    <div class="relative adjust-group-page pd-l15 pd-r15 pd-t1 mt-1">
+        <hamburger-menu [pageHeading]="'Adjust Product/Service - Dummy Product Name Furniture'"></hamburger-menu>
 
-                <!-- table if value option selected -->
-                <table class="table giddh-table" hidden>
-                    <thead>
-                        <tr>
-                            <th width="20px">#</th>
-                            <th width="220px">Product/Service/Group</th>
-                            <th width="120px">Method</th>
-                            <th width="120px">Current Value</th>
-                            <th width="120px">Changed Value</th>
-                            <th width="120px">New Qty</th>
-                            <th width="100px">New Value</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>
-                                <div class="d-flex mb-2">
-                                    <span>
-                                        <img src="{{ imgPath }}Login-Page-Image.png" width="36" height="36" />
-                                    </span>
-                                    <sh-select
-                                        id="select-group-product-service"
-                                        placeholder="Select Name"
-                                        class="mr-l15 w-100"
-                                    >
-                                    </sh-select>
-                                </div>
-                                <textarea placeholder="Add Description" class="form-control"></textarea>
-                            </td>
-                            <td>
-                                <input
-                                    type="text"
-                                    id="percentage"
-                                    class="form-control mb-2"
-                                    value="Percentage"
-                                    disabled
-                                />
-                                <input type="text" id="percent-value" value="0%" class="form-control" />
-                            </td>
-                            <td>
-                                <input type="text" id="qty-in-hand" value="12,020" class="form-control" />
-                            </td>
-                            <td>
-                                <input type="text" id="change-qty" placeholder="Ex: +10, -10" class="form-control" />
-                            </td>
-                            <td>
-                                <input type="text" id="new-qty" value="12,020" class="form-control" />
-                            </td>
-                            <td>2000</td>
-                        </tr>
-                    </tbody>
-                </table>
+        <div class="page-heading mb-4">
+            <h2>Inventory Adjustment</h2>
+        </div>
+
+        <button mat-stroked-button class="pull-right pd cursor-pointer back-to-page mr-t05 mr-r1"
+            [routerLink]="['/pages/inventory/v2/adjust-inventory']">
+            Back
+        </button>
+        <div class="adjust-field-wrapper">
+            <div class="form-wrapper">
+                <form>
+                    <div class="row">
+                        <div class="col-md-6 col-12 mr-b15">
+                            <!-- <dropdown-field [name]="'mode'" [label]="'Mode of Adjustment'" [placeholder]="'Select Mode'"
+                                [options]="[{ label : 'Quantity', value: true}, { label : 'Value', value: false}]"
+                                (selectedOption)="mode = $event.value" [defaultValue]="'Quantity'" [required]="true">
+                            </dropdown-field> -->
+                            <div>
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>Quantity Wise*</mat-label>
+                                    <mat-select class="px-0" name="mode" [(ngModel)]="mode" placeholder="Select Quantity">
+                                        <mat-option value="true">Quantity</mat-option>
+                                        <mat-option value="false">Value</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-12 mr-b15">
+                            <div class="direct-mat-datepicker">
+                                <giddh-datepicker (dateSelected)="selectDate($event)" [minDate]="''" name="date"
+                                    [cssClass]="'w-100'" [showToggleIcon]="false" [appearance]="'outline'"
+                                    [placeholder]="'Date'" [required]="true">
+                                </giddh-datepicker>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-12 mr-b15">
+                            <input-field [name]="'reference-no'" [label]="'Reference Number'"
+                                [placeholder]="'Enter Reference Number'" [type]="'text'" [required]="true">
+                            </input-field>
+                        </div>
+                        <div class="col-md-6 col-12 mr-b15">
+                            <dropdown-field [name]="'account'" [label]="'Expense Account'"
+                                [placeholder]="'Select Expense Account'" [options]="dummyOptions"
+                                (selectedOption)="selectAccount($event)" [defaultValue]="''" [required]="true">
+                            </dropdown-field>
+                        </div>
+                        <div class="col-md-6 col-12 mr-b15">
+                            <dropdown-field [name]="'reason'" [label]="'Reason'" [placeholder]="'Select Reason'"
+                                (createOption)="openCreateReasonAsidepan()" [options]="dummyOptions"
+                                (selectedOption)="selectAccount($event)" [defaultValue]="''" [required]="true"
+                                [showCreateNew]="true">
+                            </dropdown-field>
+                        </div>
+                        <div class="col-md-6 col-12 mr-b15">
+                            <dropdown-field [name]="'warehouse'" [label]="'Warehouse'"
+                                [placeholder]="'Select Warehouse'" [options]="dummyOptions"
+                                (selectedOption)="selectAccount($event)" [defaultValue]="''" [required]="true">
+                            </dropdown-field>
+                        </div>
+                        <div class="col-md-12 col-12">
+                            <mat-form-field appearance="outline" class="w-100">
+                                <mat-label>Description</mat-label>
+                                <textarea matInput rows="2"></textarea>
+                            </mat-form-field>
+                        </div>
+                        <!-- <div class="col-md-6 col-12 mr-b15">
+                            <dropdown-field [name]="'stock'" [label]="'Stock'" [placeholder]="'Select Stock'"
+                                [options]="dummyOptions" (selectedOption)="selectAccount($event)" [defaultValue]="''"
+                                [required]="true">
+                            </dropdown-field>
+                        </div>
+                        <div class="col-md-6 col-12 mr-b15"><mat-form-field appearance="outline" class="w-100">
+                                <mat-label>Method*</mat-label>
+                                <mat-select class="px-0">
+                                    <mat-option value="p">Percentage</mat-option>
+                                    <mat-option value="s">Value</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-6 col-12 mr-b15">
+                            <input-field [name]="'value'" [label]="'Value'" [placeholder]="'Enter Value'"
+                                [type]="'text'" [required]="true">
+                            </input-field>
+                        </div>
+                        <div class="col-md-6 col-12 mr-b15">
+                            <input-field [name]="'closing-stock'" [label]="'Closing Stock Qty'" [type]="'text'" [(ngModel)]="closingQty" [readonly]="true"
+                                [required]="true">
+                            </input-field>
+                        </div>
+                        <div class="col-md-6 col-12 mr-b15">
+                            <input-field [name]="'changed-qty'" [label]="'Change in Qty'" [placeholder]="'Enter Qty'"
+                                [type]="'text'" [required]="true">
+                            </input-field>
+                        </div>
+                        <div class="col-md-6 col-12 mr-b15">
+                            <input-field [name]="'new-qty'" [label]="'New Qty'" [placeholder]="'Enter new Qty'"
+                                [type]="'text'" [required]="true">
+                            </input-field>
+                        </div>
+                        <div class="col-md-6 col-12 mr-b15">
+                            <mat-form-field appearance="outline" class="w-100">
+                                <mat-label>Description</mat-label>
+                                <textarea matInput rows="3"></textarea>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-12 mt-4">
+                            <div class="d-flex justify-content-end column-gap1">
+                                <button mat-stroked-button class="min-width-100">Clear</button>
+                                <button mat-stroked-button color="primary" class="min-width-100" disabled>
+                                    Convert to Adjust
+                                </button>
+                            </div>
+                        </div> -->
+                    </div>
+                </form>
             </div>
-            <div class="add-line-bulk-item font-15">
-                <a href="javascript:void(0)">+ Add New Line</a> |
-                <a href="javascript:void(0)" (click)="openModal(template)">+ Add Bulk Entries</a>
+            <div class="bg-white py-3 mt-4 mb-4">
+                <div class="table-responsive">
+                    <!-- Table For Stock -->
+                    <table class="table giddh-table">
+                        <thead>
+                            <tr>
+                                <th width="auto">Stock</th>
+                                <th width="20%">Method</th>
+                                <th width="12%" class="small-width" *ngIf="mode">Closing Qty</th>
+                                <th width="12%" class="small-width" *ngIf="!mode">Closing Value</th>
+                                <th width="20%" *ngIf="mode">Change in Qty</th>
+                                <th width="20%" *ngIf="!mode">Change in Value</th>
+                                <th width="20%" *ngIf="mode">New Qty</th>
+                                <th width="20%" *ngIf="!mode">New Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="d-flex mb-2 w-100">
+                                        <select-field class="w-100" [cssClass]="'form-control mat-field-border'"
+                                            [name]="'fields'" [placeholder]="'Select Stock'" [options]="dummyOptions"
+                                            (selectedOption)="selectAccount($event)" [defaultValue]="''">
+                                        </select-field>
+                                    </div>
+                                    <!-- <textarea placeholder="Add Description" matInput class="form-control"></textarea> -->
+                                </td>
+                                <td>
+                                    <div class="mb-2 w-100">
+                                        <mat-select
+                                            [placeholder]="'Select Method'"
+                                            class="form-control"
+                                            (selectionChange)="selectAccount($event)"
+                                        >
+                                            <div class="select-quantity-option">
+                                                <mat-option [value]="'percentage'">Percentage</mat-option>
+                                                <mat-option [value]="'value'">Value</mat-option>
+                                            </div>
+                                        </mat-select>
+                                    </div>
+                                    <text-field [type]="'text'" [cssClass]="'form-control'" [placeholder]="'Enter value'">
+                                    </text-field>
+                                </td>
+                                <td class="small-width" *ngIf="mode">
+                                    <text-field [type]="'text'" [cssClass]="'form-control text-right'" [(ngModel)]="closingQty" [readonly]="true">
+                                    </text-field>
+                                </td>
+                                <td class="small-width" *ngIf="!mode">
+                                    <text-field [type]="'text'" [cssClass]="'form-control text-right'" [(ngModel)]="closingQty" [readonly]="true">
+                                    </text-field>
+                                </td>
+                                <td *ngIf="mode">
+                                    <text-field [type]="'text'" [cssClass]="'form-control'"
+                                        [placeholder]="'Change in Qty'">
+                                    </text-field>
+                                </td>
+                                <td *ngIf="!mode">
+                                    <text-field [type]="'text'" [cssClass]="'form-control'"
+                                        [placeholder]="'Change in Value'">
+                                    </text-field>
+                                </td>
+                                <td *ngIf="mode">
+                                    <text-field [type]="'text'" [cssClass]="'form-control'" [placeholder]="'New Qty'">
+                                    </text-field>
+                                </td>
+                                <td *ngIf="!mode">
+                                    <text-field [type]="'text'" [cssClass]="'form-control'" [placeholder]="'New Value'">
+                                    </text-field>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <!-- Table For Group -->
+                    <table class="table giddh-table">
+                        <thead>
+                            <tr>
+                                <th width="auto">Group</th>
+                                <th width="20%">Method</th>
+                                <th width="12%" class="small-width" *ngIf="mode">Closing Qty</th>
+                                <th width="12%" class="small-width" *ngIf="!mode">Closing Value</th>
+                                <th width="20%" *ngIf="mode">Change in Qty</th>
+                                <th width="20%" *ngIf="!mode">Change in Value</th>
+                                <th width="20%" *ngIf="mode">New Qty</th>
+                                <th width="20%" *ngIf="!mode">New Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="d-flex mb-2">
+                                        <select-field class="w-100" [cssClass]="'form-control mat-field-border'"
+                                            [name]="'fields'" [placeholder]="'Select Group'" [options]="dummyOptions"
+                                            (selectedOption)="selectAccount($event)" [defaultValue]="''">
+                                        </select-field>
+                                    </div>
+                                    <!-- <textarea placeholder="Add Description" matInput class="form-control"></textarea> -->
+                                </td>
+                                <td>
+                                    <div class="mb-2 w-100">
+                                        <mat-select
+                                            [placeholder]="'Select Method'"
+                                            class="form-control"
+                                            (selectionChange)="selectAccount($event)"
+                                        >
+                                            <div class="select-quantity-option">
+                                                <mat-option [value]="'percentage'">Percentage</mat-option>
+                                                <mat-option [value]="'value'">Value</mat-option>
+                                            </div>
+                                        </mat-select>
+                                    </div>
+                                    <text-field [type]="'text'" [cssClass]="'form-control'" [placeholder]="'Enter value'">
+                                    </text-field>                  
+                                </td>
+                                <td class="small-width" *ngIf="mode">
+                                    <text-field [type]="'text'" [cssClass]="'form-control text-right'" [(ngModel)]="closingQty" [readonly]="true">
+                                    </text-field>
+                                </td>
+                                <td class="small-width" *ngIf="!mode">
+                                    <text-field [type]="'text'" [cssClass]="'form-control text-right'" [(ngModel)]="closingQty" [readonly]="true">
+                                    </text-field>
+                                </td>
+                                <td *ngIf="mode">
+                                    <text-field [type]="'text'" [cssClass]="'form-control'"
+                                        [placeholder]="'Change in Qty'">
+                                    </text-field>
+                                </td>
+                                <td *ngIf="!mode">
+                                    <text-field [type]="'text'" [cssClass]="'form-control'"
+                                        [placeholder]="'Change in Value'">
+                                    </text-field>
+                                </td>
+                                <td *ngIf="mode">
+                                    <text-field [type]="'text'" [cssClass]="'form-control'" [placeholder]="'New Qty'">
+                                    </text-field>
+                                </td>
+                                <td *ngIf="!mode">
+                                    <text-field [type]="'text'" [cssClass]="'form-control'" [placeholder]="'New Value'">
+                                    </text-field>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="action-button-wrapper">
+            <div class="d-flex justify-content-end column-gap1">
+                <button mat-stroked-button class="min-width-100">Clear</button>
+                <button mat-stroked-button color="primary" class="min-width-100" disabled>Convert to Adjust</button>
             </div>
         </div>
     </div>
-</div>
-<div class="inventory-footer sticky-footer">
-    <div class="inner-content-footer">
-        <div class="d-flex">
-            <div class="button-group">
-                <button id="adjust-clear-btn" class="btn btn-primary min-width-100 bdr-radius-50">Clear</button>
-                <button id="convert-btn" class="btn btn-success min-width-100 bdr-radius-50" disabled>
-                    Convert to Adjust
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- adjust bulk entry modal -->
-<ng-template #template>
-    <inventory-adjust-bulk-entry></inventory-adjust-bulk-entry>
-</ng-template>
+</ng-container>
 
 <!-- Datepicker template -->
 <ng-template #datepickerTemplate>
     <div class="datepicker-modal">
         <div class="modal-body">
-            <app-datepicker-wrapper
-                [inputStartDate]="selectedDateRange?.startDate"
-                [inputEndDate]="selectedDateRange?.endDate"
-                [alwaysShowCalendars]="true"
-                [ranges]="datePickerOption"
-                [selectedRangeLabel]="selectedRangeLabel"
-                [showCustomRangeLabel]="true"
-                [showClearButton]="false"
-                [showCancel]="true"
-                [linkedCalendars]="true"
-                [showDropdowns]="true"
-                (rangeClicked)="dateSelectedCallback($event)"
-                (datesUpdated)="dateSelectedCallback($event)"
-                [keepCalendarOpeningWithRange]="false"
-                [showRangeLabelOnInput]="false"
-                [dateFieldPosition]="dateFieldPosition"
-            ></app-datepicker-wrapper>
+            <app-datepicker-wrapper [inputStartDate]="selectedDateRange?.startDate"
+                [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true" [ranges]="datePickerOption"
+                [selectedRangeLabel]="selectedRangeLabel" [showCustomRangeLabel]="true" [showClearButton]="false"
+                [showCancel]="true" [linkedCalendars]="true" [showDropdowns]="true"
+                (rangeClicked)="dateSelectedCallback($event)" (datesUpdated)="dateSelectedCallback($event)"
+                [keepCalendarOpeningWithRange]="false" [showRangeLabelOnInput]="false"
+                [dateFieldPosition]="dateFieldPosition"></app-datepicker-wrapper>
         </div>
     </div>
 </ng-template>
