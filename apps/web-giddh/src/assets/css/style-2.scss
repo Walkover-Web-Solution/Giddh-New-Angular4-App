@@ -4171,8 +4171,22 @@ a.btn.btn-xs.btn-link.pull-right {
     cursor: pointer;
 }
 
-.ledger-panel .bd-rb {
-    border-bottom: 1px solid var(--color-iron);
+.ledger-panel {
+    .bd-rb {
+        border-bottom: 1px solid var(--color-iron);
+    }
+    .more-details {
+        .cheq {
+            table {
+                tr {
+                    td {
+                        width: 180px;
+                        padding-right: 10px;
+                    }
+                }
+            }
+        }
+    }
 }
 
 .pop-panel .ui-select-toggle {
@@ -7595,6 +7609,12 @@ app-header {
 .ledger-book .right-col-new .entry-modal {
     width: 165%;
     left: -65%;
+    
+    @media screen and (max-width: 1140px) {
+        left: -113%;
+        width: 80vw;
+        z-index: 991;
+    }
 }
 
 .ledger-book .left-col-new .entry-modal {
@@ -14518,6 +14538,22 @@ aside-menu-product-service {
         a {
             color: var(--color-toast-primary-text) !important;
             text-decoration: underline;
+        }
+    }
+}
+
+// Ledger Create Panel text color
+.new-ledger-panel{
+    color: var(--color-default-button) !important;
+
+    label, strong {
+        color: var(--color-default-button) !important;
+    }
+    .mat-expansion-panel {
+        .mat-expansion-panel-header {
+            .mat-expansion-panel-header-title{
+                color: var(--color-default-button) !important;
+             }
         }
     }
 }
