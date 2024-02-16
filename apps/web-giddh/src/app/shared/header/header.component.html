@@ -1,9 +1,8 @@
 <!-- for voucher v1 company message -->
 <div class="message-wrapper" *ngIf="voucherApiVersion === 1">
-    <p class="text-center py-2">
-        This version of Giddh is deprecated, please contact <a href="javascript:;"
-            class="text-underline">support@giddh.com</a> to migrate your data to the latest version before 31st March,
-        2024. <a href="javascript:;" class="text-underline">Dismiss</a></p>
+    <p class="text-center py-2">{{localeData?.depreciation_message}}
+         <a href="javascript:;"
+            class="text-underline">support@giddh.com</a> {{localeData?.depreciation_data_message}} &nbsp; <a href="javascript:;" class="text-underline">{{localeData?.depreciation_dismiss}}</a></p>
 </div>
 <ng-container
     appTranslate
