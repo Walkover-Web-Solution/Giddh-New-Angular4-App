@@ -6,7 +6,8 @@
         <mat-card class="container-lg">
             <mat-card-content>
                 <!-- Voucher Page Heading -->
-                <div class="vouchers-title d-flex align-items-center">
+                <div class="vouchers-title d-flex align-items-center"
+                    [hidden]="(!showLoader && !isUpdateMode) || !isShowLoader">
                     <h1>{{ invoiceTypeLabel }}</h1>
                     <small *ngIf="invoiceType === 'estimates'"> ({{ commonLocaleData?.app_beta }}) </small>
                     <div class="ml-auto" *ngIf="invoiceTypeLabel !== '' && (isCashInvoice || isSalesInvoice)">
@@ -248,11 +249,11 @@
                                                                 .billingDetails,
                                                             address
                                                         )">
-                                                        <div class="d-flex justify-content-between align-items-center">
+                                                        <div class="justify-content-between align-items-center">
                                                             <p>
                                                                 {{ address.address }}
                                                             </p>
-                                                            <p>
+                                                            <p class="text-gray">
                                                                 {{ address.state?.name }}
                                                             </p>
                                                             <p *ngIf="address.gstNumber">
@@ -278,7 +279,8 @@
                                                 </ng-container>
                                             </div>
                                         </mat-menu>
-                                        <div class="vouchers-address-form address-container" [ngClass]="{'without-gsting':!(shouldShowTrnGstVatField && showGSTINNo) || 
+                                        <div class="vouchers-address-form address-container"
+                                            [ngClass]="{'without-gsting':!(shouldShowTrnGstVatField && showGSTINNo) || 
                                         !(shouldShowTrnGstVatField && showGSTINNo) || !(shouldShowTrnGstVatField && showGSTINNo)}">
                                             <div class="address-field">
                                                 <textarea matInput name="billingDetails.address" class="w-100"
@@ -434,11 +436,11 @@
                                                                 address
                                                             )">
                                                             <div
-                                                                class="d-flex justify-content-between align-items-center">
+                                                                class="justify-content-between align-items-center">
                                                                 <p>
                                                                     {{ address.address }}
                                                                 </p>
-                                                                <p>
+                                                                <p class="text-gray">
                                                                     {{ address.state?.name }}
                                                                 </p>
                                                                 <p *ngIf="address.gstNumber">
@@ -465,7 +467,7 @@
                                                 </div>
                                             </mat-menu>
                                         </ng-container>
-                                        <div class="vouchers-address-form address-container" 
+                                        <div class="vouchers-address-form address-container"
                                             [ngClass]="{'form-disabled':autoFillShipping,'without-gsting':!(shouldShowTrnGstVatField && showGSTINNo) || 
                                             !(shouldShowTrnGstVatField && showGSTINNo) || !(shouldShowTrnGstVatField && showGSTINNo)}">
                                             <div class="address-field">
@@ -1321,6 +1323,7 @@
                                         </tbody>
                                         <ng-template #entry let-entry let-entryIdx="entryIdx"
                                             let-transaction="transaction">
+
                                             <tr (click)="setActiveIndx(entryIdx); $event.stopPropagation()"
                                                 *ngIf="activeIndx !== entryIdx" class="entries-tr set-active"
                                                 [ngClass]="{ 'is-other-tax': entry.isOtherTaxApplicable && isMulticurrencyAccount }">
@@ -1526,7 +1529,7 @@
                                                     </div>
                                                 </td>
                                                 <td width="14%"
-                                                    class="text-right item-tax  position-relative delete-btn-absolute">
+                                                    class="text-right item-tax position-relative delete-btn-absolute">
                                                     <div class="td-wrapper">
                                                         <div class="flex-fill">
                                                             <div class="wrap-td-data">
