@@ -6,7 +6,8 @@ import { FormsModule } from '@angular/forms';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { NgxMaskModule } from "../../shared/helpers/directives/ngx-mask";
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { FormFieldsModule } from '../form-fields/form-fields.module';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 @NgModule({
     imports: [
@@ -16,7 +17,8 @@ import { FormFieldsModule } from '../form-fields/form-fields.module';
         ClickOutsideModule,
         NgxMaskModule.forRoot(),
         MatCheckboxModule,
-        FormFieldsModule
+        MatFormFieldModule,
+        MatInputModule
     ],
     exports: [
         DiscountControlComponent

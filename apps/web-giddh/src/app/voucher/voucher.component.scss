@@ -2,6 +2,7 @@
     padding: 5px 0;
     .container-lg{
         max-width: 1240px !important;
+        min-height: calc(100vh - 120px);
     }
 
     .row-gap {
@@ -20,6 +21,12 @@
     .differ-currency {
         color: var(--color-gray);
         font-size: var(--font-size-15);
+    }
+
+    #button-dropup {
+        .caret {
+            transform: rotate(180deg);
+        }
     }
 
     .vouchers-content-wrapper {
