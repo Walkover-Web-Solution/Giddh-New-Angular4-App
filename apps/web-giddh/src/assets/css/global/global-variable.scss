@@ -20,3 +20,11 @@ body {
         }
     }
 }
+
+@media screen and (max-width: 992px) {
+    body {    
+        &.depreciation-message {
+            --top-distance: 58px;
+        }
+    }
+}
