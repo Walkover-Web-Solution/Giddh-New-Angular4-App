@@ -41,5 +41,9 @@
     "go_to_branch":"शाखा पर जाएँ",
 	"depreciation_message": "गिद्ध का यह संस्करण अप्रचलित है, कृपया संपर्क करें",
 	"depreciation_data_message": "31 मार्च, 2024 से पहले अपने डेटा को नवीनतम संस्करण में स्थानांतरित करने के लिए।",
-    "depreciation_dismiss": "नकार देना"
+    "depreciation_dismiss": "नकार देना",
+    "logout": "लॉग आउट",
+    "my_profile": "मेरी प्रोफाइल",
+    "to_select": "चयन करना",
+    "to_navigate": "नेविगेट करने के लिए"
 }
