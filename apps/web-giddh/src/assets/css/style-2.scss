@@ -9278,6 +9278,23 @@ span#HW_badge_cont:nth-child(3) {
     display: none;
 }
 
+ul{
+    &.universal-date{
+        li{
+            &:hover {
+                .icon-circle {
+                    background-color: var(--color-body-background) !important;
+                    
+                    i[class^='icon-'],
+                    i[class*=' icon-'] {
+                        color: var(--color-giddh-blue) !important;
+                    }
+                } 
+            }
+        }
+    }
+}
+
 /*notofication css end*/
 .setting-data,
 .setting-sidebar-open .white-row {
