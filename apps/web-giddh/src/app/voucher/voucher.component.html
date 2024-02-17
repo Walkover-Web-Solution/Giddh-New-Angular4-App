@@ -285,7 +285,7 @@
                                             </div>
                                         </mat-menu>
                                         <div class="vouchers-address-form address-container"
-                                            [ngClass]="{'without-gsting': !showGSTINNo && !showTRNNo && !showVATNo}">
+                                            [ngClass]="{'without-gstin': !showGSTINNo && !showTRNNo && !showVATNo}">
                                             <div class="address-field">
                                                 <textarea matInput name="billingDetails.address" class="w-100"
                                                     (keyup)="autoFillShippingDetails()" rows="2" autocomplete="off"
@@ -471,7 +471,7 @@
                                             </mat-menu>
                                         </ng-container>
                                         <div class="vouchers-address-form address-container"
-                                            [ngClass]="{'form-disabled':autoFillShipping,'without-gsting': !showGSTINNo && !showTRNNo && !showVATNo}">
+                                            [ngClass]="{'form-disabled':autoFillShipping,'without-gstin': !showGSTINNo && !showTRNNo && !showVATNo}">
                                             <div class="address-field">
                                                 <textarea matInput [readonly]="autoFillShipping"
                                                     name="shippingDetails.address" class="w-100" [(ngModel)]="
@@ -766,7 +766,7 @@
                                                         purchaseBillCompany.billingDetails
                                                             .gstNumber
                                                     " [cssClass]="
-                                                        'border-0'" 4(change)="
+                                                        'border-0'" (change)="
                                                         !showVATNo
                                                             ? getStateCodeCompany(
                                                                 'billingDetails'
