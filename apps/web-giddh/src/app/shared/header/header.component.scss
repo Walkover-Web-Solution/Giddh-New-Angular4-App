@@ -142,16 +142,40 @@
     padding: 0 25px !important;
 }
 
-.icon-circle {
-    background-color: var(--color-transparent-background);
-    width: 35px;
-    height: 35px;
-    align-items: center;
-    justify-content: center;
-    display: flex !important;
-
-    &:hover {
-        background-color: var(--color-header-icon-background);
+ul{
+    &.universal-date{
+        li{
+            .icon-circle {
+                background-color: var(--color-transparent-background);
+                width: 35px;
+                height: 35px;
+                align-items: center;
+                justify-content: center;
+                display: flex !important;
+            }
+            &.header-utility-icons {
+                a{
+                    &:hover {
+                        .icon-circle{
+                            background-color: var(--color-body-background);
+                          
+                            i[class^='icon-'],
+                            i[class*=' icon-'] {
+                              color: var(--color-giddh-blue) !important;
+                            }
+                        }
+                      }
+                }
+            }
+            &.select-today {
+                &:hover{
+                    button {
+                        background-color: var(--color-body-background) !important;
+                        color: var(--color-giddh-blue) !important;
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -505,7 +529,7 @@ ul.sub-list {
         color: var(--color-primary-header-universal-date) !important;
         display: flex;
         align-items: center;
-        column-gap: 15px;
+        column-gap: 20px;
         @media screen and (max-width: 992px) {
             column-gap: 10px;
         }
@@ -529,7 +553,7 @@ ul.sub-list {
         .icon-plus,
         i,
         .btn-link {
-            color: var(--color-primary-header-icons) !important;
+            color: var(--color-primary-header-icons);
             position: static !important;
         }
 
@@ -636,12 +660,13 @@ aside-setting {
         color: var(--color-tertiary-login-box-body-text);
         width: 40px;
         height: 40px;
-        border: 2px solid;
+        border: 1px solid var(--color-deep-saffron);
         border-radius: 50%;
+        background-color: var(--color-deep-saffron);
+        // background-color:  #ff00ff;
     
         span{
-            line-height: 36px;
-            letter-spacing: -2px;
+            line-height: 38px;
         }
     }
 }
@@ -1009,7 +1034,17 @@ aside-setting {
         max-width: 100% !important;
     }
 }
-
+@media screen and (max-width: 1024px) {
+    ul{
+        &.universal-date{
+            li{
+                &.select-today, &.notification, .help-text{
+                    display: none !important;
+                }
+            }
+        }
+    }
+}
 .schedule-now-link {
     width: 1px;
     height: 1px;
