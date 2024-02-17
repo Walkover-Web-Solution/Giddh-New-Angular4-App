@@ -1331,6 +1331,14 @@ table:focus {
         }
     }
 }
+.bulk-entry-list {
+    .mat-expansion-panel {
+        .mat-expansion-panel-header {
+            padding: 0px !important;
+        }
+    }
+}
+
 @media only screen and (max-width: 1440px) {
     body.unresponsive {
         width: 100%;

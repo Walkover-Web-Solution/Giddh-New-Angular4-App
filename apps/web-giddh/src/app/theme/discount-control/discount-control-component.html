@@ -34,6 +34,7 @@
                         (keydown.enter)="$event.preventDefault()"
                         matInput
                         type="text"
+                        [ngClass]="{'read-only': !discountFromPer}"
                         [disabled]="!discountFromPer"
                         decimalDigitsDirective
                         [(ngModel)]="discountPercentageModal"
@@ -53,6 +54,7 @@
                     (keydown.enter)="$event.preventDefault()"
                     matInput
                     type="text"
+                    [ngClass]="{'read-only': !discountFromVal}"
                     [disabled]="!discountFromVal"
                     decimalDigitsDirective
                     [(ngModel)]="discountFixedValueModal"
