@@ -7357,7 +7357,7 @@ perfect-scrollbar > .ps > .ps-overlay {
     padding: 8px;
     line-height: 1.42857143;
     vertical-align: top;
-    border-top: 1px solid var(--color-dark-fog);
+    border-top: none;
     color: var(--color-gst-primary-table-text);
 }
 
@@ -7415,11 +7415,6 @@ perfect-scrollbar > .ps > .ps-overlay {
 
 .tax-engine .sub-filter-nav-band > ul > li.active > a .count {
     color: var(--color-abbey);
-}
-
-.tax-engine .table-striped > tbody > tr:nth-child(odd) > td,
-.tax-engine .table-striped > tbody > tr:nth-child(odd) > th {
-    background-color: var(--color-gst-primary-table-background);
 }
 
 .tax-engine .table-striped > tbody > tr:nth-child(even) > td,
