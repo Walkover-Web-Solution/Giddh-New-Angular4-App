@@ -270,6 +270,7 @@ export class VoucherAddBulkItemsComponent implements OnInit, OnDestroy {
                         this.selectedItems = [...this.selectedItems, item];
                     }
                     this.isLoading = false;
+                    this.changeDetectorRef.detectChanges();
                 }
             }, () => {
                 this.isLoading = false;

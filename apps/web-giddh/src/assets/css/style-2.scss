@@ -883,6 +883,9 @@ textarea {
     .flag-input {
         .mdc-floating-label {
             padding-left: 40px !important;
+            &.mdc-floating-label--float-above {
+                padding-left: 0px !important;
+            }
         }
     }
 }
