@@ -129,7 +129,7 @@ export const initialState: CustomTemplateState = {
                         display: true,
                         width: null
                     },
-                    showIrnNumber: {
+                    showEInvoiceDetails: {
                         label: '',
                         display: false,
                         width: null
