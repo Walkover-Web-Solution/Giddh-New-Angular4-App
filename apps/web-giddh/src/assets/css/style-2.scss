@@ -884,6 +884,9 @@ textarea {
     .flag-input {
         .mdc-floating-label {
             padding-left: 40px !important;
+            &.mdc-floating-label--float-above {
+                padding-left: 0px !important;
+            }
         }
     }
 }
@@ -891,6 +894,19 @@ textarea {
 .align-items-baseline {
     align-items: baseline;
 }
+
+.custom-discount-menu {
+    min-width: 260px !important;
+    max-width: 260px !important;
+    max-height: 340px;
+
+    ul {
+        .discount-list {
+            max-height: 164px !important;
+        }
+    }
+}
+
 
 @media screen and (max-width: 1366px) and (orientation: portrait) {
     .subscription-form-select {
@@ -7433,7 +7449,7 @@ perfect-scrollbar > .ps > .ps-overlay {
     padding: 8px;
     line-height: 1.42857143;
     vertical-align: top;
-    border-top: 1px solid var(--color-dark-fog);
+    border-top: none;
     color: var(--color-gst-primary-table-text);
 }
 
@@ -7491,11 +7507,6 @@ perfect-scrollbar > .ps > .ps-overlay {
 
 .tax-engine .sub-filter-nav-band > ul > li.active > a .count {
     color: var(--color-abbey);
-}
-
-.tax-engine .table-striped > tbody > tr:nth-child(odd) > td,
-.tax-engine .table-striped > tbody > tr:nth-child(odd) > th {
-    background-color: var(--color-gst-primary-table-background);
 }
 
 .tax-engine .table-striped > tbody > tr:nth-child(even) > td,
@@ -9409,6 +9420,23 @@ ngx-daterangepicker-material {
 
 span#HW_badge_cont:nth-child(3) {
     display: none;
+}
+
+ul{
+    &.universal-date{
+        li{
+            &:hover {
+                .icon-circle {
+                    background-color: var(--color-body-background) !important;
+                    
+                    i[class^='icon-'],
+                    i[class*=' icon-'] {
+                        color: var(--color-giddh-blue) !important;
+                    }
+                } 
+            }
+        }
+    }
 }
 
 /*notofication css end*/
@@ -14793,5 +14821,14 @@ aside-menu-product-service {
                 font-size: 14px;
             }
         }
+    }
+}
+// hsn description
+.tax-engine {
+    .description-overlap {
+        width: 175px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
 }

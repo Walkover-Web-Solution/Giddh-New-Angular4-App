@@ -48,7 +48,8 @@
                 </div>
                 <ul class="nav universal-date h-100" *ngIf="selectedCompany | async">
                     <li>
-                        <button mat-icon-button (click)="showNavigationModal()">
+                        <button mat-icon-button  class="icon-circle" (click)="showNavigationModal()" [matTooltip]="commonLocaleData?.app_search"
+                        [matTooltipPosition]="'below'">
                             <i class="icon-search"></i>
                         </button>
                     </li>
@@ -59,6 +60,8 @@
                             #menuTrigger="matMenuTrigger"
                             [matMenuTriggerFor]="menu"
                             class="icon-circle"
+                            [matTooltip]="localeData?.quick_create"
+                            [matTooltipPosition]="'below'"
                         >
                             <i class="icon-plus"></i>
                         </button>
@@ -335,13 +338,14 @@
                         </mat-menu>
                     </li>
                     <li
-                        class="border-none pd-r15 notification icon-circle"
-                        [ngClass]="{ 'mr-0': isTodaysDateSelected }"
+                        class="border-none pd-r15 notification"  [ngClass]="{ 'mr-0': isTodaysDateSelected }"
                     >
-                        <i class="icon-bell-new"></i>
+                        <button mat-icon-button [matTooltip]="localeData?.notifications" [matTooltipPosition]="'below'" class="icon-circle">
+                            <i class="icon-bell-new"></i>
+                        </button>
                     </li>
-                    <li class="border-none pl-0 select-today">
-                        <button class="btn btn-link" *ngIf="!isTodaysDateSelected" (click)="dateSelectedCallback()">
+                    <li class="border-none pl-0 select-today" *ngIf="!isTodaysDateSelected">
+                        <button class="btn btn-link p-1" (click)="dateSelectedCallback()">
                             {{ commonLocaleData?.app_today }}
                         </button>
                     </li>
@@ -362,14 +366,19 @@
                             ><i class="icon-master-new1"></i> {{ commonLocaleData?.app_master }}</a
                         >
                     </li>
-                    <li class="header-utility-icons" (click)="toggleSidebar(false)">
-                        <a href="javascript:void(0);"><i class="icon-settings-cog"></i></a>
+                    <li class="header-utility-icons">
+                        <button mat-icon-button [matTooltip]="commonLocaleData?.app_settings" [matTooltipPosition]="'below'" (click)="toggleSidebar(false)" class="icon-circle">
+                            <i class="icon-settings-cog"></i>
+                        </button>
                     </li>
                     <li class="header-utility-icons">
                         <a href="javascript:void(0);" (click)="toggleHelpSupportPane(true)"
-                            ><i class="icon-question-new"></i>
-                            <span class="pl-1"> {{ commonLocaleData?.app_help }}</span>
-                    </a>
+                            >
+                            <button mat-icon-button [matTooltip]="commonLocaleData?.app_help" [matTooltipPosition]="'below'" class="icon-circle">
+                                <i class="icon-question-new"></i>
+                            </button>
+                            <span class="pl-1 help-text"> {{ commonLocaleData?.app_help }}</span>
+                        </a>
                     </li>
                     <li>
                         <div class="profile-wrapper" [matMenuTriggerFor]="profileMenu">

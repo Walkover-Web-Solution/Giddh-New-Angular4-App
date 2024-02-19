@@ -1,5 +1,6 @@
 .vouchers {
     background-color: var(--color-common-quinary-background-for-all-components);
+
     .vouchers-address-form {
 
         input,
@@ -23,7 +24,7 @@
             }
         }
     }
-
+    
     .po-mat-select {
         padding: 10px 0;
         height: 48px;
@@ -87,14 +88,15 @@
         }
     }
 
-    .vouchers-large-container{
+    .vouchers-large-container {
         .change-currency {
             .currency-input-wrapper {
-                .text-field-container{
+                .text-field-container {
                     display: flex;
                     align-items: center;
                     column-gap: 8px;
-                    input{
+
+                    input {
                         width: 80px;
                     }
                 }
@@ -161,7 +163,8 @@
     padding-right: 15px;
     max-height: calc(100vh - 245px);
 }
-.width-80{
+
+.width-80 {
     width: 80px;
 }
 

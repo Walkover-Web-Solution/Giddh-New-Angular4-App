@@ -48,6 +48,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
     declarations: [FileGstR3Component,
@@ -89,7 +90,8 @@ import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
         MatInputModule,
         MatDatepickerModule,
         MatNativeDateModule,
-        WatchVideoModule
+        WatchVideoModule,
+        MatTooltipModule
     ],
     providers: [],
     exports: [ViewTransactionsComponent]

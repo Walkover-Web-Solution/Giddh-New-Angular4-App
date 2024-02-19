@@ -45,5 +45,7 @@
     "logout": "Logout",
     "my_profile": "My Profile",
     "to_select": "to select",
-    "to_navigate": "to navigate"
+    "to_navigate": "to navigate",
+    "notifications": "Notifications",
+    "quick_create": "Quick Create"
 }
