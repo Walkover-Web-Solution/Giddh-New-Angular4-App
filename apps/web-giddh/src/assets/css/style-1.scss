@@ -1973,7 +1973,7 @@ ul.pills li {
 .modal-liquid.modal-dialog .modal-content {
     position: fixed;
     z-index: 1099;
-    top: 0;
+    top: var(--top-distance);
     left: 0;
     right: 0;
     bottom: 0;
@@ -2514,7 +2514,7 @@ form#groupDetailForm {
 }
 .aside-overlay {
     position: fixed;
-    top: 0;
+    top: var(--top-distance);
     right: 0;
     bottom: 0;
     left: 0;

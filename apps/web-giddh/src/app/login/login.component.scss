@@ -525,7 +525,7 @@ small {
     height: 100%;
     z-index: 9999999;
     background: var(--color-white);
-    top: 0;
+    top: var(--top-distance);
     right: 0;
     left: 0;
     margin: 0px;

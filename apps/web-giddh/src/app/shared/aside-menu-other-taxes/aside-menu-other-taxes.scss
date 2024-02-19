@@ -1,7 +1,7 @@
 :host {
     position: fixed;
     left: auto;
-    top: 60px;
+    top: calc(var(--top-distance) + 60px);
     right: 0;
     bottom: 0;
     width: 100%;
