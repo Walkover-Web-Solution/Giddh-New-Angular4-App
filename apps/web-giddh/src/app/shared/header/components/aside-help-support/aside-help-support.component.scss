@@ -15,7 +15,13 @@
         height: 12px;
         background-color: var(--color-primary-aside-host-after-background);
         top: -6px;
-        right: 18px;
+        right: 128px;
+        @media screen and (max-width: 1024px) {
+            right: 92px;
+        }
+        @media screen and (max-width: 992px) {
+            right: 82px;
+        }
         z-index: 1;
         transform: rotate(45deg);
     }

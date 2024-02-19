@@ -524,6 +524,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     public ngOnInit() {
         this.store.dispatch(this.settingsFinancialYearActions.GetAllFinancialYears());
+        this.isLoggedInWithSocialAccount$ = this.store.pipe(select(state => state.login.isLoggedInWithSocialAccount), takeUntil(this.destroyed$));
         this.store.pipe(select(appStore => appStore.general.menuItems), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 let branches = [];
