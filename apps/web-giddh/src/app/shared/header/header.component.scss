@@ -533,6 +533,9 @@ ul.sub-list {
         @media screen and (max-width: 992px) {
             column-gap: 10px;
         }
+        @media screen and (max-width: 800px) {
+            column-gap: 8px;
+        }
 
         li {
             border: none;
@@ -611,6 +614,11 @@ ul.sub-list {
                     cursor: no-drop;
                 }
             }
+        }
+    }
+    .logo-wrapper {
+        @media screen and (max-width: 800px) {
+            padding-left: 30px !important;
         }
     }
 }
@@ -710,12 +718,6 @@ aside-setting {
             i {
                 font-size: 22px !important;
             }
-        }
-    }
-
-    .fixed-padding {
-        #primary-new-header {
-            z-index: 99999 !important;
         }
     }
 }
