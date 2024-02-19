@@ -1820,4 +1820,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
         }
     }
+    // remove voucher message
+    public removeMessage() {
+        document.body?.classList?.remove("depreciation-message");
+    }
 }
