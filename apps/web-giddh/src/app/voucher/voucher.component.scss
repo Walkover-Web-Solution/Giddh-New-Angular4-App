@@ -19,6 +19,9 @@
     .row-gap {
         row-gap: 15px;
     }
+    .row-gap-25 {
+        row-gap: 25px;
+    }
 
     .vouchers-title {
         height: 50px;
@@ -182,14 +185,11 @@
 
                         th,
                         td {
-                            padding: 22px 8px;
+                            padding: 16px 8px;
                             border-bottom: 1px solid var(--color-common-secondary-border);
                             &:not(:first-child, :nth-child(2)){
                                 text-align: right;
                             }
-
-                            
-
                             &.total-column {
                                 min-width: 120px;
                             }
@@ -204,28 +204,22 @@
                         th {
                             border-top: 1px solid var(--color-common-secondary-border);
                             color: var(--color-giddh-blue);
-
-                            &:first-child {
-                                border-left: 1px solid var(--color-common-secondary-border);
-                            }
-
-                            &:last-child {
-                                border-right: 1px solid var(--color-common-secondary-border);
-                            }
                         }
 
                         td {
                             vertical-align: top;
 
                             .delete-btn {
-                                
                                 right: 5px;
-                                bottom: 8px;
+                                bottom: 18px;
                                 transition: all 200ms;
 
                                 &:hover{
                                     transform: scale(1.2);
                                 }
+                            }
+                            &.item-tax {
+                                padding-bottom: 36px !important;
                             }
 
                             .select-account-label {
@@ -303,6 +297,11 @@
                 .adjustment-height{
                     height: 48px;
                 }
+                .total-amount-wrapper{
+                    amount-field {
+                        display: inline-block;
+                    }
+                }
             }
 
             .vouchers-actions {
@@ -322,9 +321,6 @@
 
 .option-value {
     color: var(--color-gray);
-}
-.balance-due {
-    text-align:left;
 }
 .entries-giddh-datepicker {
     height: 0 !important;

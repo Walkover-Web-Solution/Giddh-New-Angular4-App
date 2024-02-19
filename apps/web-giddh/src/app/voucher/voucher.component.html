@@ -485,14 +485,12 @@
                                                                 <i class="icon-tick" *ngIf="invFormData.accountDetails
                                                                 .shippingDetails.index === i"></i>
                                                             </div>
-                             
                                                         </button>
                                                         <mat-divider></mat-divider>
-
-                                                        <button mat-menu-item class="vouchers-add-new"
-                                                            (click)="getCustomerDetails()">+ Add new
-                                                            address</button>
                                                     </ng-container>
+                                                    <button mat-menu-item class="vouchers-add-new"
+                                                        (click)="getCustomerDetails()">+ Add new
+                                                        address</button>
                                                 </div>
                                             </mat-menu>
                                         </ng-container>
@@ -648,7 +646,7 @@
                                                 (keydown.enter)="$event.preventDefault()"
                                                 [label]="commonLocaleData?.app_mobile_number"
                                                 [placeholder]="'98XXXXXXXX'"
-                                                [floatLabel]="intl?.getNumber() ? 'always' : 'auto'">
+                                                [floatLabel]="'always'">
                                             </input-field>
                                             <span id="init-contact-proforma-valid-msg" class="d-none"></span>
                                             <span id="init-contact-proforma-error-msg" class="d-none"></span>
@@ -1126,9 +1124,9 @@
                                     </div>
                                 </div>
                                 <div class="row mr-t15">
-                                    <div class="col-6">
-                                        <div class="d-flex column-gap5 align-items-baseline">
-                                            <div class="w-100" *ngIf="isCreditNote || isDebitNote">
+                                    <div class="col-12">
+                                        <div class="d-flex column-gap5 align-items-baseline" *ngIf="isCreditNote || isDebitNote">
+                                            <div class="w-100">
                                                 <dropdown-field #linkingDropdown *ngIf="voucherApiVersion === 2"
                                                     [cssClass]="'linking-dropdown'" [name]="'invoiceLinking'"
                                                     [placeholder]="commonLocaleData?.app_select_voucher"
@@ -1191,16 +1189,17 @@
                                                     </ng-template>
                                                 </dropdown-field>
                                             </div>
-                                            <div *ngIf="
-                                                (isCreditNote || isDebitNote) && selectedInvoice && !isEinvoiceGenerated
+                                            <div *ngIf=" selectedInvoice && !isEinvoiceGenerated
                                             " class="cp for-mobile-screen remove-invoice"
                                                 (click)="removeSelectedInvoice()">
                                                 <span class="remove-invoice-icon mr-r05"><i
                                                         class="icon-trash"></i></span>
                                             </div>
                                         </div>
+                                    </div>
+                                    <ng-container *ngIf="companyCountryCode === 'AE'">
+                                        <div class="col-12">
                                         <!-- For Tourist Scheme start -->
-                                        <ng-container *ngIf="companyCountryCode === 'AE'">
                                             <div *ngIf="isSalesInvoice || isCashInvoice">
                                                 <mat-checkbox color="primary" (keydown.enter)="$event.preventDefault()"
                                                     id="tourist-scheme" name="touristSchemeApplicable"
@@ -1210,19 +1209,21 @@
                                                     {{ localeData?.transaction_tourist_scheme }}
                                                 </mat-checkbox>
                                             </div>
+                                        </div>
+                                        <div class="col-6 mt-3">
                                             <div
-                                                *ngIf="(isSalesInvoice || isCashInvoice) && invFormData.touristSchemeApplicable">
-                                                <input-field [type]="'text'" [name]="'passportNumber'"
-                                                    [placeholder]="localeData?.passport_number"
-                                                    [cssClass]="'attention-to'" [(ngModel)]="invFormData.passportNumber"
-                                                    (keypress)="allowAlphanumericChar()"
-                                                    (blur)="allowAlphanumericChar()"></input-field>
+                                            *ngIf="(isSalesInvoice || isCashInvoice) && invFormData.touristSchemeApplicable">
+                                            <input-field [type]="'text'" [name]="'passportNumber'"
+                                                [placeholder]="localeData?.passport_number"
+                                                [cssClass]="'attention-to'" [(ngModel)]="invFormData.passportNumber"
+                                                (keypress)="allowAlphanumericChar()"
+                                                (blur)="allowAlphanumericChar()"></input-field>
                                             </div>
-                                        </ng-container>
-                                        <!-- For Tourist Scheme end -->
-                                    </div>
-                                    <div class="col-6"
-                                        *ngIf="!isCreditNote && !isDebitNote || companyCountryCode === 'AE'"></div>
+                                        </div>
+                                    </ng-container>
+                                    <!-- For Tourist Scheme end -->
+                                    <!-- <div class="col-12"
+                                        *ngIf="!isCreditNote && !isDebitNote || companyCountryCode === 'AE'"></div> -->
                                 </div>
                                 <div class="row mr-t15">
                                     <!-- Reverse Charge Checkbox -->
@@ -1550,11 +1551,11 @@
                                                                     </amount-field>
                                                                     <br />
                                                                 </span>
-                                                                <span class="d-flex justify-content-end" *ngIf="
+                                                                <span class="d-flex flex-wrap justify-content-end" *ngIf="
                                                                         entry.isOtherTaxApplicable &&
                                                                         entry.otherTaxModal?.appliedOtherTax?.name
                                                                     ">
-                                                                    {{ entry.otherTaxModal?.appliedOtherTax?.name }} :
+                                                                    <p>{{ entry.otherTaxModal?.appliedOtherTax?.name }} :</p>
                                                                     <amount-field *ngIf="isMulticurrencyAccount"
                                                                         [amount]="entry.otherTaxSum" [currencySymbol]="
                                                                             isMulticurrencyAccount
@@ -1986,7 +1987,7 @@
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <td class="position-relative"
+                                                <td class="position-relative item-tax"
                                                     (click)="closeDiscountPopup(); closeTaxControlPopup()" width="20%">
                                                     <div class="td-wrapper">
                                                         <div class="flex-fill">
@@ -2095,10 +2096,10 @@
                                 </div>
 
                                 <div class="vouchers-other-detail container-lg mt-4 px-0">
-                                    <div class="row mx-0">
-                                        <div class="col-8 px-0">
-                                            <div class="container px-0">
-                                                <div class="row">
+                                    <div class="row mx-0 row-gap-25">
+                                        <div class="col-lg-8  col-md-7 col-12 px-0">
+                                            <div class="container-md px-0">
+                                                <div class="row row-gap">
                                                     <div class="col-12" *ngIf="
                                                     !hideDepositSection &&
                                                     (isSalesInvoice ||
@@ -2413,12 +2414,12 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-4 px-0">
-                                            <div class="row text-right row-gap">
-                                                <div class="col-8">
+                                        <div class="col-lg-4 col-md-5 col-12 px-0">
+                                            <div class="row text-right row-gap total-amount-wrapper">
+                                                <div class="col-7 pr-0">
                                                     {{ commonLocaleData?.app_total_amount }}
                                                 </div>
-                                                <div class="col-4">
+                                                <div class="col-5">
                                                     <amount-field [amount]="invFormData?.voucherDetails?.subTotal"
                                                         [currencySymbol]="
                                                             isMulticurrencyAccount
@@ -2431,10 +2432,10 @@
                                                         ">
                                                     </amount-field>
                                                 </div>
-                                                <div class="col-8">
+                                                <div class="col-7 pr-0">
                                                     {{ commonLocaleData?.app_discount }}
                                                 </div>
-                                                <div class="col-4">
+                                                <div class="col-5">
                                                     <amount-field
                                                         [amount]="invFormData?.voucherDetails.totalDiscount * -1"
                                                         [currencySymbol]="
@@ -2448,10 +2449,10 @@
                                                         ">
                                                     </amount-field>
                                                 </div>
-                                                <div class="col-8">
+                                                <div class="col-7 pr-0">
                                                     {{ commonLocaleData?.app_taxable_value }}
                                                 </div>
-                                                <div class="col-4">
+                                                <div class="col-5">
                                                     <amount-field
                                                         [amount]="invFormData?.voucherDetails.totalTaxableValue"
                                                         [currencySymbol]="
@@ -2466,10 +2467,10 @@
                                                     </amount-field>
                                                 </div>
                                                 <ng-container *ngIf="!excludeTax">
-                                                    <div class="col-8">
+                                                    <div class="col-7 pr-0">
                                                         {{ commonLocaleData?.app_tax }}
                                                     </div>
-                                                    <div class="col-4">
+                                                    <div class="col-5">
                                                         <amount-field
                                                             [amount]="invFormData?.voucherDetails.gstTaxesTotal"
                                                             [currencySymbol]="
@@ -2483,10 +2484,10 @@
                                                             ">
                                                         </amount-field>
                                                     </div>
-                                                    <div class="col-8">
+                                                    <div class="col-7 pr-0">
                                                         {{ commonLocaleData?.app_cess }}
                                                     </div>
-                                                    <div class="col-4">
+                                                    <div class="col-5">
                                                         <amount-field [amount]="invFormData?.voucherDetails.cessTotal"
                                                             [currencySymbol]="
                                                                 isMulticurrencyAccount
@@ -2501,10 +2502,10 @@
                                                     </div>
                                                 </ng-container>
                                                 <ng-container *ngIf="calculatedRoundOff !== 0">
-                                                    <div class="col-8">
+                                                    <div class="col-7 pr-0">
                                                         {{ commonLocaleData?.app_round_off }}
                                                     </div>
-                                                    <div class="col-4">
+                                                    <div class="col-5">
                                                         <amount-field [amount]="calculatedRoundOff" [currencySymbol]="
                                                                 isMulticurrencyAccount
                                                                     ? invFormData?.accountDetails?.currencySymbol
@@ -2517,12 +2518,12 @@
                                                         </amount-field>
                                                     </div>
                                                 </ng-container>
-                                                <div class="col-8">
+                                                <div class="col-7 pr-0">
                                                     {{ commonLocaleData?.app_total }} <span
                                                         *ngIf="isMulticurrencyAccount">{{
                                                         invFormData.accountDetails.currencySymbol }}</span>
                                                 </div>
-                                                <div class="col-4">
+                                                <div class="col-5">
                                                     <amount-field [amount]="invFormData.voucherDetails.grandTotal"
                                                         [currencySymbol]="
                                                             isMulticurrencyAccount
@@ -2535,7 +2536,7 @@
                                                         ">
                                                     </amount-field>
                                                 </div>
-                                                <div class="col-8 bigger-dollar blnc-due">
+                                                <div class="col-7 pr-0 bigger-dollar blnc-due">
                                                     <ng-container *ngIf="
                                                     isSalesInvoice ||
                                                     (voucherApiVersion === 2 &&
@@ -2547,7 +2548,7 @@
                                                         <strong>{{ localeData?.balance_due }}</strong>
                                                     </ng-container>
                                                 </div>
-                                                <div class="col-4 balance-due">
+                                                <div class="col-5">
                                                     <ng-container *ngIf="
                                                     isSalesInvoice ||
                                                     (voucherApiVersion === 2 &&
@@ -2577,11 +2578,11 @@
                                                     </ng-container>
                                                 </div>
                                                 <ng-container *ngIf="isMulticurrencyAccount">
-                                                    <div class="col-8">
+                                                    <div class="col-7 pr-0">
                                                         {{ commonLocaleData?.app_total }}
                                                         <span>{{ baseCurrencySymbol }}</span>
                                                     </div>
-                                                    <div class="col-4">
+                                                    <div class="col-5">
                                                         <text-field #grandTotalInr [type]="'text'"
                                                             [cssClass]="'form-control mat-field-border multicurrency-grandtotal'"
                                                             [name]="'grandTotalMulDum'" [prefix]="baseCurrencySymbol"
@@ -2594,10 +2595,10 @@
                                                     </div>
                                                 </ng-container>
                                                 <ng-container *ngIf="isTcsPresent">
-                                                    <div class="col-8">
+                                                    <div class="col-7 pr-0">
                                                         {{ commonLocaleData?.app_tcs }}
                                                     </div>
-                                                    <div class="col-4">
+                                                    <div class="col-5">
                                                         <amount-field [amount]="invFormData.voucherDetails.tcsTotal"
                                                             [currencySymbol]="
                                                                 isMulticurrencyAccount
@@ -2612,10 +2613,10 @@
                                                     </div>
                                                 </ng-container>
                                                 <ng-container *ngIf="isTdsPresent">
-                                                    <div class="col-8">
+                                                    <div class="col-7 pr-0">
                                                         {{ commonLocaleData?.app_tds }}
                                                     </div>
-                                                    <div class="col-4">
+                                                    <div class="col-5">
                                                         <amount-field [amount]="invFormData.voucherDetails.tdsTotal"
                                                             [currencySymbol]="
                                                                 isMulticurrencyAccount
@@ -2630,13 +2631,13 @@
                                                     </div>
                                                 </ng-container>
                                                 <ng-container *ngIf="isPurchaseInvoice && voucherApiVersion !== 2">
-                                                    <div class="col-8">
+                                                    <div class="col-7 pr-0">
                                                         {{ localeData?.balance_due }} <span
                                                             *ngIf="isMulticurrencyAccount">{{
                                                             invFormData.accountDetails.currencySymbol
                                                             }}</span>
                                                     </div>
-                                                    <div class="col-4">
+                                                    <div class="col-5">
                                                         {{ invFormData.voucherDetails.balanceDue | giddhCurrency }}
                                                     </div>
                                                 </ng-container>
