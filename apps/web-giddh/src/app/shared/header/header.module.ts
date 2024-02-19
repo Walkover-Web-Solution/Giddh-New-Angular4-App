@@ -23,6 +23,9 @@ import { AsideSettingComponent } from "./components/aside-setting/aside-setting.
 import { HeaderComponent } from "./header.component";
 import { ScrollingModule } from "@angular/cdk/scrolling";
 import { ConnectPlaidComponent } from "../../theme/connect-plaid/connect-plaid.component";
+import { CommandKModule } from "../../theme/command-k/command.k.module";
+import { MatDividerModule } from "@angular/material/divider";
+import { GenericAsideMenuAccountModule } from "../generic-aside-menu-account/generic.aside.menu.account.module";
 
 @NgModule({
     declarations: [
@@ -55,7 +58,11 @@ import { ConnectPlaidComponent } from "../../theme/connect-plaid/connect-plaid.c
         MatListModule,
         MatButtonModule,
         MatMenuModule,
-        MatTreeModule
+        MatTreeModule,
+        CommandKModule,
+        MatDividerModule,
+        GenericAsideMenuAccountModule,
+        MatTooltipModule
     ],
     exports: [
         HeaderComponent,

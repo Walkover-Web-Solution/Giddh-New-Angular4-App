@@ -14,7 +14,7 @@
             width: 40px;
             height: 40px;
             position: fixed;
-            top: 0;
+            top: var(--top-distance);
             left: 0;
             i {
                 color: var(--color-primary-header-icons);

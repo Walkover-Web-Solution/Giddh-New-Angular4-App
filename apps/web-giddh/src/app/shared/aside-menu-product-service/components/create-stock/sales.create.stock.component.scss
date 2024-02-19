@@ -110,5 +110,5 @@ input.focusBorder[type="checkbox"]:focus:after {
     width: 760px;
     padding: 0 15px;
     right: 0;
-    top: 0;
+    top: var(--top-distance);
 }
