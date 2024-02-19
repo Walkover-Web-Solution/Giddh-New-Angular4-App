@@ -91,16 +91,16 @@
                             (customTemplate?.templateType === 'gst_template_a' ||
                                 customTemplate?.templateType === 'gst_template_e') &&
                             showGstComposition &&
-                            customTemplate.sections['header'].data['showIrnNumber']
+                            customTemplate.sections['header'].data['showEInvoiceDetails']
                         "
                     >
                         <input
                             type="checkbox"
                             name="irnCheckbox"
-                            [(ngModel)]="customTemplate.sections['header'].data['showIrnNumber'].display"
+                            [(ngModel)]="customTemplate.sections['header'].data['showEInvoiceDetails'].display"
                             (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                         />
-                        Show IRN number
+                        Show IRN and Ack number of E-Invoice
                     </div>
                     <div
                         *ngIf="
