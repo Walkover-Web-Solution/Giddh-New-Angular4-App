@@ -279,24 +279,12 @@
                         </ng-container>
                     </ng-container>
                 </header>
-                <ng-container *ngIf="fieldsAndVisibility?.header?.showEInvoiceDetails?.display && showGstComposition">
-                    <table class="warehouse-table" cellspacing="0" cellpadding="0">
-                        <tbody>
-                            <tr>
-                                <td colspan="2">
-                                    <p class="mb-2"><strong>IRN:&nbsp;</strong>def01b2b4b08ba07e92556896bb0e5a6c5b80428f756ae902ab57db0b60781c3</p>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <p><strong>Ack No:&nbsp;</strong>152410022936999</p>
-                                </td>
-                                <td align="right">
-                                    <p><strong>Ack Date:&nbsp;</strong>2024-01-01 10:08:00</p>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <ng-container *ngIf="fieldsAndVisibility?.header?.showIrnNumber?.display && showGstComposition">
+                    <div class="meta">
+                        <strong>IRN:</strong>&nbsp;<span
+                            >def01b2b4b08ba07e92556896bb0e5a6c5b80428f756ae902ab57db0b60781c3</span
+                        >
+                    </div>
                 </ng-container>
                 <table
                     class="warehouse-table"
