@@ -207,10 +207,10 @@ export class InvoiceUiDataService {
                             width: null
                         };
                 }
-                if (!selectedTemplate.sections['header'].data['showIrnNumber']) {
+                if (!selectedTemplate.sections['header'].data['showEInvoiceDetails']) {
                     // Assign the default value based on value of warehouseAddress
-                    selectedTemplate.sections['header'].data['showIrnNumber'] = defaultTemplate ?
-                        defaultTemplate.sections['header'].data['showIrnNumber'] : {
+                    selectedTemplate.sections['header'].data['showEInvoiceDetails'] = defaultTemplate ?
+                        defaultTemplate.sections['header'].data['showEInvoiceDetails'] : {
                             label: '',
                             display: false,
                             width: null
