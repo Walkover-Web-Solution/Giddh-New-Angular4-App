@@ -4,7 +4,7 @@
     <hamburger-menu></hamburger-menu>
     <div class="vouchers" [ngStyle]="{ 'display': (!isUpdateMode || !showLoader) && !isShowLoader ? 'block' : 'none' }">
         <mat-card class="container-lg">
-            <mat-card-content>
+            <mat-card-content class="vouchers-content w-100 h-100">
                 <!-- Voucher Page Heading -->
                 <!-- [hidden]="(!showLoader && !isUpdateMode) || !isShowLoader" -->
                 <div class="vouchers-title d-flex align-items-center">
@@ -1259,19 +1259,21 @@
                                 </div>
                                 <div class="row mr-t15">
                                     <!-- Reverse Charge Checkbox -->
-                                    <div class="col-6"
+                                    <div class="col-12"
                                         *ngIf="isPurchaseInvoice ||
                                         (currentVoucherFormDetails?.rcmAllowed &&
                                             (companyCountryName === 'India' || companyCountryName === 'United Kingdom'))">
-                                        <mat-checkbox (keydown.enter)="$event.preventDefault()" #rcmCheckbox
-                                            id="reverse-charge" [(ngModel)]="isRcmEntry"
-                                            (change)="changeRcmCheckboxState($event)" class="mr-r1" name="rcmEntry"
-                                            [disabled]="isEinvoiceGenerated" color="primary">
-                                        </mat-checkbox>
-                                        <label class="checkbox-custom-label" for="reverse-charge" (click)="
-                                                !isEinvoiceGenerated ? toggleRcmCheckbox(rcmCheckbox, 'label') : ''
-                                            " [innerHTML]="localeData?.transaction_reverse_charge">
-                                        </label>
+                                            <div class="d-flex">
+                                                <mat-checkbox (keydown.enter)="$event.preventDefault()" #rcmCheckbox
+                                                    id="reverse-charge" [(ngModel)]="isRcmEntry"
+                                                    (change)="changeRcmCheckboxState($event)" class="mr-r1" name="rcmEntry"
+                                                    [disabled]="isEinvoiceGenerated" color="primary">
+                                                </mat-checkbox>
+                                                <label class="checkbox-custom-label" for="reverse-charge" (click)="
+                                                        !isEinvoiceGenerated ? toggleRcmCheckbox(rcmCheckbox, 'label') : ''
+                                                    " [innerHTML]="localeData?.transaction_reverse_charge">
+                                                </label>
+                                            </div>
                                     </div>
                                 </div>
                             </div>

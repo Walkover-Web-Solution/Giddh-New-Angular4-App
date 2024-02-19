@@ -24,6 +24,9 @@
                     .stock-icon {
                         margin-bottom: 2px;
                     }
+                    .mdc-list-item__primary-text{
+                        color: red !important;
+                    }
                 }
 
                 .variants-wrapper {
@@ -58,6 +61,7 @@
 
             .selected-item-title {
                 line-height: 52px;
+                color: var(--color-common-primary-text);
             }
 
             .selected-item-action {
