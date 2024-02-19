@@ -14554,15 +14554,15 @@ aside-menu-product-service {
         width: 100%;
         z-index: 999;
         p{
-            font-size: 16px;
+            font-size: var(--font-size-16);
         }
     }
 }
-@media screen and (max-width: 992px) {
+@media screen and (max-width: 1099px) {
     .depreciation-message {
         .message-wrapper {
             p{
-                font-size: 14px;
+                font-size: var(--font-15);
             }
         }
     }
