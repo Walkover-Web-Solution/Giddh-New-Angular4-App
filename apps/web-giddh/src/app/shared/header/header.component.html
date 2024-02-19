@@ -368,12 +368,14 @@
                         >
                     </li>
                     <li class="header-utility-icons">
-                        <button mat-icon-button [matTooltip]="commonLocaleData?.app_settings" [matTooltipPosition]="'below'" (click)="toggleSidebar(false)" class="icon-circle">
-                            <i class="icon-settings-cog"></i>
-                        </button>
+                        <a href="javascript:;">
+                            <button mat-icon-button [matTooltip]="commonLocaleData?.app_settings" [matTooltipPosition]="'below'" (click)="toggleSidebar(false)" class="icon-circle">
+                                <i class="icon-settings-cog"></i>
+                            </button>
+                        </a>
                     </li>
                     <li class="header-utility-icons">
-                        <a href="javascript:void(0);" (click)="toggleHelpSupportPane(true)"
+                        <a href="javascript:;" (click)="toggleHelpSupportPane(true)" class="pr-2"
                             >
                             <button mat-icon-button [matTooltip]="commonLocaleData?.app_help" [matTooltipPosition]="'below'" class="icon-circle">
                                 <i class="icon-question-new"></i>
