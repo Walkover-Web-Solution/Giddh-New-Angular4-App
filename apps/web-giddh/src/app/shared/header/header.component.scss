@@ -387,6 +387,9 @@ ul.sub-list {
         @media screen and (max-width: 992px) {
             column-gap: 10px;
         }
+        @media screen and (max-width: 800px) {
+            column-gap: 8px;
+        }
 
         li {
             border: none;
@@ -465,6 +468,11 @@ ul.sub-list {
                     cursor: no-drop;
                 }
             }
+        }
+    }
+    .logo-wrapper {
+        @media screen and (max-width: 800px) {
+            padding-left: 30px !important;
         }
     }
 }
@@ -566,12 +574,6 @@ aside-setting {
             }
         }
     }
-
-    .fixed-padding {
-        #primary-new-header {
-            z-index: 99999 !important;
-        }
-    }
 }
 
 @media (max-width: 767px) {
@@ -610,6 +612,9 @@ aside-setting {
 
             .logo-wrapper {
                 display: none;
+                @media screen and (max-width: 800px) {
+                    padding-left: 30px !important;
+                }
             }
 
             .hamburger-menu {

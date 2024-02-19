@@ -333,8 +333,9 @@
                     </li>
                     <li
                         class="border-none pd-r15 notification"  [ngClass]="{ 'mr-0': isTodaysDateSelected }"
+                        [matTooltip]="localeData?.notifications" [matTooltipPosition]="'below'"
                     >
-                        <button mat-icon-button [matTooltip]="localeData?.notifications" [matTooltipPosition]="'below'" class="icon-circle">
+                        <button mat-icon-button class="icon-circle">
                             <i class="icon-bell-new"></i>
                         </button>
                     </li>
