@@ -28,6 +28,7 @@ $custom-typography: mat-typography-config(
 @import "../css/global/tabs.scss";
 @import "../css/global/table.scss";
 @import "../css/global/custom-price.scss";
+@import "../css/global/global-variable.scss";
 
 /* table css need to removed at last  (start)Don't touch this table css (If any body work on that contact shalinee..)
 */
@@ -956,7 +957,7 @@ aside-create-unit,
 aside-create-group {
     position: fixed;
     left: auto;
-    top: 0;
+    top: var(--top-distance);
     right: 0;
     bottom: 0;
     width: 100%;
@@ -4171,8 +4172,22 @@ a.btn.btn-xs.btn-link.pull-right {
     cursor: pointer;
 }
 
-.ledger-panel .bd-rb {
-    border-bottom: 1px solid var(--color-iron);
+.ledger-panel {
+    .bd-rb {
+        border-bottom: 1px solid var(--color-iron);
+    }
+    .more-details {
+        .cheq {
+            table {
+                tr {
+                    td {
+                        width: 180px;
+                        padding-right: 10px;
+                    }
+                }
+            }
+        }
+    }
 }
 
 .pop-panel .ui-select-toggle {
@@ -6438,7 +6453,6 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     padding-top: 0px;
     padding-left: 0px;
     padding-right: 0px;
-    border-bottom: 1px solid var(--color-wild-sand);
     padding-bottom: 0;
     border-radius: 0;
     margin-right: 0;
@@ -7343,7 +7357,7 @@ perfect-scrollbar > .ps > .ps-overlay {
     padding: 8px;
     line-height: 1.42857143;
     vertical-align: top;
-    border-top: 1px solid var(--color-dark-fog);
+    border-top: none;
     color: var(--color-gst-primary-table-text);
 }
 
@@ -7401,11 +7415,6 @@ perfect-scrollbar > .ps > .ps-overlay {
 
 .tax-engine .sub-filter-nav-band > ul > li.active > a .count {
     color: var(--color-abbey);
-}
-
-.tax-engine .table-striped > tbody > tr:nth-child(odd) > td,
-.tax-engine .table-striped > tbody > tr:nth-child(odd) > th {
-    background-color: var(--color-gst-primary-table-background);
 }
 
 .tax-engine .table-striped > tbody > tr:nth-child(even) > td,
@@ -7595,6 +7604,12 @@ app-header {
 .ledger-book .right-col-new .entry-modal {
     width: 165%;
     left: -65%;
+    
+    @media screen and (max-width: 1140px) {
+        left: -113%;
+        width: 80vw;
+        z-index: 991;
+    }
 }
 
 .ledger-book .left-col-new .entry-modal {
@@ -7611,7 +7626,7 @@ app-header {
     display: block;
     position: fixed;
     left: -41px;
-    top: 0;
+    top: var(--top-distance);
     z-index: 5;
     border: 0;
     border-radius: 0;
@@ -7621,7 +7636,7 @@ app-header {
     display: block;
     position: fixed;
     right: 472px;
-    top: 0;
+    top: var(--top-distance);
     z-index: 5;
     border: 0;
     border-radius: 0;
@@ -9276,6 +9291,23 @@ ngx-daterangepicker-material {
 
 span#HW_badge_cont:nth-child(3) {
     display: none;
+}
+
+ul{
+    &.universal-date{
+        li{
+            &:hover {
+                .icon-circle {
+                    background-color: var(--color-white-tertiary) !important;
+                    
+                    i[class^='icon-'],
+                    i[class*=' icon-'] {
+                        color: var(--color-giddh-blue) !important;
+                    }
+                } 
+            }
+        }
+    }
 }
 
 /*notofication css end*/
@@ -11489,7 +11521,7 @@ inventory-master {
         width: 100%;
         height: 100%;
         background-color: var(--color-gray);
-        top: 0;
+        top: var(--top-distance);
         z-index: 4;
     }
 
@@ -12100,7 +12132,7 @@ inventory-master {
     .custom-tabs .nav.nav-tabs {
         position: fixed;
         width: 100%;
-        top: 90px;
+        top: calc(var(--top-distance) + 90px);
     }
 
     .ledg-head.entry-popup .custom-tabs .nav.nav-tabs {
@@ -12150,7 +12182,7 @@ inventory-master {
 
     .ledg-head .custom-tabs .nav.nav-tabs {
         left: 0;
-        top: 95px;
+        top: calc(var(--top-distance) + 95px);
         padding-top: 0 !important;
         position: fixed;
     }
@@ -12299,7 +12331,7 @@ inventory-master {
 
     ngx-daterangepicker-material {
         position: fixed;
-        top: 0 !important;
+        top: var(--top-distance) !important;
         left: 0 !important;
         z-index: 999;
         width: 100%;
@@ -12311,7 +12343,7 @@ inventory-master {
         position: fixed;
         width: 100%;
         left: 0;
-        top: 0;
+        top: var(--top-distance);
         margin: 0;
     }
 
@@ -14519,5 +14551,61 @@ aside-menu-product-service {
             color: var(--color-toast-primary-text) !important;
             text-decoration: underline;
         }
+    }
+}
+.text-underline {
+    text-decoration: underline;
+    &:hover{
+        text-decoration: underline;
+    }
+}
+
+// show voucher message
+.depreciation-message {
+    .message-wrapper {
+        background-color: var(--color-danger);
+        color: var(--color-white);
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 999;
+        p{
+            font-size: var(--font-size-16);
+        }
+    }
+}
+@media screen and (max-width: 1099px) {
+    .depreciation-message {
+        .message-wrapper {
+            p{
+                font-size: var(--font-15);
+            }
+        }
+    }
+}
+
+// Ledger Create Panel text color
+.new-ledger-panel{
+    color: var(--color-default-button) !important;
+
+    label, strong {
+        color: var(--color-default-button) !important;
+    }
+    .mat-expansion-panel {
+        .mat-expansion-panel-header {
+            .mat-expansion-panel-header-title{
+                color: var(--color-default-button) !important;
+             }
+        }
+    }
+}
+
+// hsn description
+.tax-engine {
+    .description-overlap {
+        width: 175px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
 }
