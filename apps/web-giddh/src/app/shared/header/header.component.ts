@@ -248,6 +248,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public commandkDialogRef: MatDialogRef<any>;
     /** True, if login is made with social account */
     public isLoggedInWithSocialAccount$: Observable<boolean>;
+    /* True if we need to show Depreciation Message */
+    public showDepreciationMessage: boolean = false;
 
     /**
      * Returns whether the back button in header should be displayed or not
@@ -445,9 +447,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.generalService.voucherApiVersion = selectedCmp.voucherVersion;
                 // for voucher company message
                 this.voucherApiVersion = this.generalService.voucherApiVersion;
-                if(this.voucherApiVersion === 1) {
+                if (this.voucherApiVersion === 1) {
+                    this.showDepreciationMessage = true;
                     document.querySelector("body")?.classList?.add("depreciation-message");
                 } else {
+                    this.showDepreciationMessage = false;
                     document.querySelector("body")?.classList?.remove("depreciation-message");
                 }
                 this.activeCompanyForDb = new CompAidataModel();
@@ -2056,9 +2060,14 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.store.dispatch(this.salesAction.addAccountDetailsForSales(item));
     }
 
-    
-    // remove voucher message
-    public removeMessage() {
+
+    /**
+     *
+     *
+     * @memberof HeaderComponent
+     */
+    public removeDepreciationMessage(): void {
         document.body?.classList?.remove("depreciation-message");
+        this.showDepreciationMessage = false;
     }
 }
