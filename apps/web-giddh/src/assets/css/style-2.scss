@@ -29,6 +29,7 @@ $custom-typography: mat-typography-config(
 @import "../css/global/table.scss";
 @import "../css/global/custom-price.scss";
 @import "../css/global/dialog.scss";
+@import "../css/global/add-bulk-entry.scss";
 
 /* table css need to removed at last  (start)Don't touch this table css (If any body work on that contact shalinee..)
 */
@@ -14549,5 +14550,17 @@ aside-menu-product-service {
             color: var(--color-toast-primary-text) !important;
             text-decoration: underline;
         }
+    }
+}
+
+
+//  Material checkbox color 
+.mat-mdc-checkbox {
+    .mdc-form-field{
+       .mdc-checkbox{
+           .mdc-checkbox__background{
+               border-color: var(--color-common-primary-text) !important;
+           }
+       }   
     }
 }
