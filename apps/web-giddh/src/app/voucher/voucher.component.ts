@@ -531,6 +531,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     /* Object for billing/shipping of company */
     public purchaseBillCompany: any = {
         billingDetails: {
+            index: 0,
             address: [],
             state: { code: '', name: '' },
             county: { code: '', name: '' },
@@ -540,6 +541,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             pincode: ''
         },
         shippingDetails: {
+            index: 0,
             address: [],
             state: { code: '', name: '' },
             county: { code: '', name: '' },
@@ -892,6 +894,10 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.selectedCompany = activeCompany;
+                activeCompany.addresses = activeCompany.addresses.map((item, i) => {
+                    item['index'] = i;
+                    return item;
+                });
                 this.companyAddressList = activeCompany.addresses;
                 this.initializeCurrentVoucherForm();
             }
@@ -1135,7 +1141,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.updatedAccountDetails$.subscribe(accountDetails => {
             if (accountDetails) {
                 this.hideDepositSectionForCashBankGroups(accountDetails);
-                console.log(accountDetails.addresses)
                 this.accountAddressList = accountDetails.addresses;
                 this.updateAccountDetails(accountDetails, true);
             }
@@ -1526,7 +1531,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         this.getUpdatedStateCodes(tempSelectedAcc.country?.countryCode).then(() => {
                             this.invFormData.accountDetails = new AccountDetailsClass(tempSelectedAcc);
                         });
-                        console.log(tempSelectedAcc.addresses);
                         this.accountAddressList = tempSelectedAcc.addresses;
                         this.showGstAndTrnUsingCountryName(this.customerCountryName);
                         if (this.isMulticurrencyAccount) {
@@ -2204,7 +2208,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             return item;
         });
         this.accountAddressList = data.addresses;
-        console.log(this.accountAddressList)
 
         this.customerCountryName = data.country.countryName;
         this.customerCountryCode = data?.country?.countryCode || 'IN';
@@ -2414,6 +2417,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.purchaseOrders = [];
         this.purchaseBillCompany = {
             billingDetails: {
+                index: 0,
                 address: [],
                 state: { code: '', name: '' },
                 county: { code: '', name: '' },
@@ -2422,6 +2426,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 stateCode: ''
             },
             shippingDetails: {
+                index: 0,
                 address: [],
                 state: { code: '', name: '' },
                 county: { code: '', name: '' },
@@ -7623,12 +7628,15 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      *
      * @memberof VoucherComponent
      */
-    public autoFillCompanyShippingDetails(): void {
+    public autoFillCompanyShippingDetails(index?: number): void {
         if (this.autoFillCompanyShipping) {
             this.purchaseBillCompany.shippingDetails = cloneDeep(this.purchaseBillCompany.billingDetails);
             if (this.shippingStateCompany && this.shippingStateCompany.nativeElement) {
                 this.shippingStateCompany.nativeElement.classList.remove('error-box');
             }
+        } else {
+            this.purchaseBillCompany.shippingDetails.index = index;
+            this.changeDetectorRef.detectChanges();
         }
     }
 
@@ -8097,7 +8105,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             data.gstNumber = (isCompanyAddress) ? (address.gstNumber ?? address.taxNumber) : address.gstNumber;
             data.pincode = address.pincode;
             if (isCompanyAddress) {
-                this.autoFillCompanyShippingDetails();
+                this.autoFillCompanyShippingDetails(index);
             } else {
                 this.autoFillShippingDetails(index);
             }
