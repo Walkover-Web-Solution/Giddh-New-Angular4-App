@@ -554,3 +554,4 @@ export enum SUPPORTED_OPERATING_SYSTEMS {
     MacOS = 'MacOS',
     Windows = 'Windows'
 };
+

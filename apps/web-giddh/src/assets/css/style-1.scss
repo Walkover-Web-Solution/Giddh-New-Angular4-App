@@ -3357,6 +3357,17 @@ td.mat-footer-cell {
         }
     }
 }
+.tax-control-cmp {
+    ul {
+        li {
+            .mat-mdc-checkbox.mat-mdc-checkbox-disabled {
+                label {
+                    color: var(--color-common-primary-text);
+                }
+            }
+        }
+    }
+}
 .mat-option {
     font-size: var(--font-size-15) !important;
     color: var(--color-dropdown-list) !important;

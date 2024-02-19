@@ -33,6 +33,7 @@ $custom-typography: mat-typography-config(
 @import "../css/global/inventory-adjustment.scss";
 @import "../css/global/global-variable.scss";
 @import "../css/global/dialog.scss";
+@import "../css/global/add-bulk-entry.scss";
 
 /* table css need to removed at last  (start)Don't touch this table css (If any body work on that contact shalinee..)
 */
@@ -899,6 +900,7 @@ textarea {
     min-width: 260px !important;
     max-width: 260px !important;
     max-height: 340px;
+    padding: 15px;
 
     ul {
         .discount-list {
@@ -14822,6 +14824,7 @@ aside-menu-product-service {
         }
     }
 }
+
 // hsn description
 .tax-engine {
     .description-overlap {
@@ -14829,5 +14832,16 @@ aside-menu-product-service {
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+    }
+}
+
+//  Material checkbox color 
+.mat-mdc-checkbox {
+    .mdc-form-field{
+       .mdc-checkbox{
+           .mdc-checkbox__background{
+               border-color: var(--color-common-primary-text) !important;
+           }
+       }   
     }
 }
