@@ -1198,7 +1198,7 @@ input#ledger-search {
         }
     }
     .ledger-ellipse {
-        top: 50px;
+        top: calc(var(--top-distance) + 50px);
         right: 10px;
         position: fixed;
         .btn {

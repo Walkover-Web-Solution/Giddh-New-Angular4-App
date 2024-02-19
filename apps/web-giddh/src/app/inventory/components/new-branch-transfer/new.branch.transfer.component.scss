@@ -324,7 +324,7 @@ tfoot td .table-sec.form-group {
     overflow: auto;
     width: 475px;
     position: fixed;
-    top: 0;
+    top: var(--top-distance);
     right: 0;
     padding: 0px;
 }
