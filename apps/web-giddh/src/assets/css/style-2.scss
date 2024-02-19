@@ -6452,7 +6452,6 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     padding-top: 0px;
     padding-left: 0px;
     padding-right: 0px;
-    border-bottom: 1px solid var(--color-wild-sand);
     padding-bottom: 0;
     border-radius: 0;
     margin-right: 0;
@@ -9291,6 +9290,23 @@ ngx-daterangepicker-material {
 
 span#HW_badge_cont:nth-child(3) {
     display: none;
+}
+
+ul{
+    &.universal-date{
+        li{
+            &:hover {
+                .icon-circle {
+                    background-color: var(--color-body-background) !important;
+                    
+                    i[class^='icon-'],
+                    i[class*=' icon-'] {
+                        color: var(--color-giddh-blue) !important;
+                    }
+                } 
+            }
+        }
+    }
 }
 
 /*notofication css end*/
