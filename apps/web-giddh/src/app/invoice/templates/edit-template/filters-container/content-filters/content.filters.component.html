@@ -2024,26 +2024,6 @@
                             }}</span>
                         </div>
                     </div>
-                    <div *ngIf="customTemplate.templateType === 'thermal_template'" class="form-group">
-                        <input
-                            type="checkbox"
-                            name="totalDueCheckbox"
-                            [(ngModel)]="customTemplate.sections['footer'].data['totalDue'].display"
-                            (ngModelChange)="onChangeFieldVisibility(null, null, null)"
-                            checked
-                        />
-                        Invoice Total
-                        <div class="ml-3">
-                            <ng-container
-                                *ngIf="totalDue?.isFocused || contentForm?.controls['totalDue']?.errors?.maxlength"
-                            >
-                                <span class="max-character-label">Characters left:&nbsp;</span
-                                ><span class="max-character-value">{{
-                                    15 - customTemplate.sections["footer"].data["totalDue"].label?.length
-                                }}</span>
-                            </ng-container>
-                        </div>
-                    </div>
                     <div
                         *ngIf="
                             fieldsAndVisibility.table.discount && customTemplate?.templateType === 'thermal_template'
