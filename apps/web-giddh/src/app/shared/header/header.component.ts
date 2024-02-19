@@ -2055,4 +2055,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public addNewAccount(item: AddAccountRequest) {
         this.store.dispatch(this.salesAction.addAccountDetailsForSales(item));
     }
+
+    
+    // remove voucher message
+    public removeMessage() {
+        document.body?.classList?.remove("depreciation-message");
+    }
 }

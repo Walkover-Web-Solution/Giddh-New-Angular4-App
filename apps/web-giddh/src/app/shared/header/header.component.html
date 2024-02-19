@@ -2,7 +2,7 @@
 <div class="message-wrapper" *ngIf="voucherApiVersion === 1">
     <p class="text-center py-2">{{localeData?.depreciation_message}}
          <a href="mailto:support@giddh.com"
-            class="text-underline">support@giddh.com</a> {{localeData?.depreciation_data_message}} &nbsp; <a href="javascript:;" class="text-underline">{{localeData?.depreciation_dismiss}}</a></p>
+            class="text-underline">support@giddh.com</a> {{localeData?.depreciation_data_message}} &nbsp; <a href="javascript:;" class="text-underline" (click)="removeMessage()">{{localeData?.depreciation_dismiss}}</a></p>
 </div>
 <ng-container
     appTranslate
