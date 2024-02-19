@@ -157,7 +157,7 @@ ul{
                 a{
                     &:hover {
                         .icon-circle{
-                            background-color: var(--color-body-background);
+                            background-color: var(--color-white-tertiary);
                           
                             i[class^='icon-'],
                             i[class*=' icon-'] {
@@ -170,7 +170,7 @@ ul{
             &.select-today {
                 &:hover{
                     button {
-                        background-color: var(--color-body-background) !important;
+                        background-color: var(--color-white-tertiary) !important;
                         color: var(--color-giddh-blue) !important;
                     }
                 }

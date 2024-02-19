@@ -48,3 +48,10 @@
         }
     }
 }
+
+// Header Profile Menu options color
+.user-profile-menu{
+    button {
+        color: var(--color-common-primary-text) !important;
+    }
+}
