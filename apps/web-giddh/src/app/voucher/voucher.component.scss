@@ -7,6 +7,11 @@
     .container-lg{
         max-width: 1240px !important;
         min-height: calc(100vh - 120px);
+
+        @media screen and (max-width: 768px){
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+        }        
     }
 
     .row-gap {
@@ -58,7 +63,7 @@
 
         .vouchers-copy-sales {
             color: var(--color-giddh-blue);
-        }
+        }  
     }
 
     .vouchers-secondary-form {
@@ -148,6 +153,15 @@
                 }
             }
 
+            @media screen and (max-width: 768px){
+                .row{
+                    .col-6{
+                            padding-left: 10 !important;
+                            padding-right: 10 !important;
+                    }
+                }
+            } 
+
         }
 
         .vouchers-large-container {
@@ -216,6 +230,9 @@
                             }
                             amount-field{
                                 display: inline-block;
+                            }
+                            .description {
+                                word-wrap: break-word;
                             }
                         }
                     }
