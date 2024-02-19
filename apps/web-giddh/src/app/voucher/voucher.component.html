@@ -289,10 +289,11 @@
                                                             <i class="icon-tick" *ngIf="invFormData.accountDetails
                                                             .billingDetails.index === i"></i>
                                                         </div>
-                                                        <button mat-menu-item class="vouchers-add-new"
-                                                            (click)="getCustomerDetails()">+ Add new address</button>
+                                                   
                                                     </button>
                                                     <mat-divider></mat-divider>
+                                                    <button mat-menu-item class="vouchers-add-new"
+                                                    (click)="getCustomerDetails()">+ Add new address</button>
                                                 </ng-container>
                                             </div>
                                         </mat-menu>
@@ -484,11 +485,13 @@
                                                                 <i class="icon-tick" *ngIf="invFormData.accountDetails
                                                                 .shippingDetails.index === i"></i>
                                                             </div>
-                                                            <button mat-menu-item class="vouchers-add-new"
-                                                                (click)="getCustomerDetails()">+ Add new
-                                                                address</button>
+                             
                                                         </button>
                                                         <mat-divider></mat-divider>
+
+                                                        <button mat-menu-item class="vouchers-add-new"
+                                                            (click)="getCustomerDetails()">+ Add new
+                                                            address</button>
                                                     </ng-container>
                                                 </div>
                                             </mat-menu>
