@@ -2123,7 +2123,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 this.commonService.uploadFile({ file: blob, fileName: file.name }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     this.loaderService.hide();
                     this.isFileUploading = false;
-                    this.cdRef.detectChanges();
                     if (response?.status === 'success') {
                         this.blankLedger.attachedFile = response.body?.uniqueName;
                         this.blankLedger.attachedFileName = response.body?.name;
@@ -2133,6 +2132,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                         this.blankLedger.attachedFileName = '';
                         this.toaster.showSnackBar("error", response.message);
                     }
+                    this.cdRef.detectChanges();
                 });
             });
         }
