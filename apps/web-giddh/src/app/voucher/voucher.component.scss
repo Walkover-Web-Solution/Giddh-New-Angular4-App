@@ -5,7 +5,7 @@
         margin-left: 2px;   
     }
     .container-lg{
-        max-width: 1240px !important;
+        max-width: 1540px !important;
         .vouchers-content{
             min-height: 80vh;
         }
@@ -186,7 +186,7 @@
                         th,
                         td {
                             padding: 16px 8px;
-                            border-bottom: 1px solid var(--color-common-secondary-border);
+                            border: 1px solid var(--color-common-secondary-border);
                             &:not(:first-child, :nth-child(2)){
                                 text-align: right;
                             }
@@ -202,7 +202,7 @@
                         }
 
                         th {
-                            border-top: 1px solid var(--color-common-secondary-border);
+                            // border-top: 1px solid var(--color-common-secondary-border);
                             color: var(--color-giddh-blue);
                         }
 
