@@ -41,6 +41,7 @@ import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { WatchVideoModule } from "../theme/watch-video/watch-video.module";
 import { MatCardModule } from "@angular/material/card";
 import { MatExpansionModule } from "@angular/material/expansion";
+import { MatDividerModule } from "@angular/material/divider";
 
 @NgModule({
     imports: [
@@ -87,7 +88,8 @@ import { MatExpansionModule } from "@angular/material/expansion";
         NgxMatSelectSearchModule,
         WatchVideoModule,
         MatCardModule,
-        MatExpansionModule
+        MatExpansionModule,
+        MatDividerModule
     ],
     exports: [VoucherComponent],
     declarations: [

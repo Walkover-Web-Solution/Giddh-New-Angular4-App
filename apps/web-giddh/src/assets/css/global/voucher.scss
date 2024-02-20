@@ -111,11 +111,25 @@
             }
         }
     }
+
+    .custom-date-entries {
+            giddh-datepicker {
+                width: 80px;
+                padding-top: 2px;
+                input {
+                    width: 80px;
+            }
+         }
+     }
 }
 
 .mat-menu-width-large {
     min-width: 400px;
     max-height: 50vh;
+
+    button {
+        color: var(--color-common-primary-text);
+    }
 }
 
 .vouchers-address-menu {

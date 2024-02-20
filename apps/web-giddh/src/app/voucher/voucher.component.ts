@@ -531,6 +531,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     /* Object for billing/shipping of company */
     public purchaseBillCompany: any = {
         billingDetails: {
+            index: 0,
             address: [],
             state: { code: '', name: '' },
             county: { code: '', name: '' },
@@ -540,6 +541,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             pincode: ''
         },
         shippingDetails: {
+            index: 0,
             address: [],
             state: { code: '', name: '' },
             county: { code: '', name: '' },
@@ -892,6 +894,10 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.selectedCompany = activeCompany;
+                activeCompany.addresses = activeCompany.addresses.map((item, i) => {
+                    item['index'] = i;
+                    return item;
+                });
                 this.companyAddressList = activeCompany.addresses;
                 this.initializeCurrentVoucherForm();
             }
@@ -2197,8 +2203,12 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 this.isCashBankAccount = true;
             }
         });
-
+        data.addresses = data.addresses.map((item, i) => {
+            item['index'] = i;
+            return item;
+        });
         this.accountAddressList = data.addresses;
+
         this.customerCountryName = data.country.countryName;
         this.customerCountryCode = data?.country?.countryCode || 'IN';
         this.initializeAccountCurrencyDetails(data);
@@ -2407,6 +2417,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.purchaseOrders = [];
         this.purchaseBillCompany = {
             billingDetails: {
+                index: 0,
                 address: [],
                 state: { code: '', name: '' },
                 county: { code: '', name: '' },
@@ -2415,6 +2426,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 stateCode: ''
             },
             shippingDetails: {
+                index: 0,
                 address: [],
                 state: { code: '', name: '' },
                 county: { code: '', name: '' },
@@ -2458,13 +2470,15 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         }
     }
 
-    public autoFillShippingDetails() {
-        // auto fill shipping address
+    public autoFillShippingDetails(index?: number) {
         if (this.autoFillShipping) {
             this.invFormData.accountDetails.shippingDetails = cloneDeep(this.invFormData.accountDetails.billingDetails);
             if (this.shippingState && this.shippingState.nativeElement) {
                 this.shippingState.nativeElement.classList.remove('error-box');
             }
+        } else {
+            this.invFormData.accountDetails.shippingDetails.index = index;
+            this.changeDetectorRef.detectChanges();
         }
     }
 
@@ -7022,8 +7036,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                             } else {
                                 if (searchType === SEARCH_TYPE.CUSTOMER) {
                                     this.defaultCustomerResultsPaginationData.page = data.body.page;
-                                    } else if (searchType === SEARCH_TYPE.ITEM) {
-                                        this.defaultItemResultsPaginationData.page = data.body.page;
+                                } else if (searchType === SEARCH_TYPE.ITEM) {
+                                    this.defaultItemResultsPaginationData.page = data.body.page;
                                 }
                             }
                         }
@@ -7614,12 +7628,15 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      *
      * @memberof VoucherComponent
      */
-    public autoFillCompanyShippingDetails(): void {
+    public autoFillCompanyShippingDetails(index?: number): void {
         if (this.autoFillCompanyShipping) {
             this.purchaseBillCompany.shippingDetails = cloneDeep(this.purchaseBillCompany.billingDetails);
             if (this.shippingStateCompany && this.shippingStateCompany.nativeElement) {
                 this.shippingStateCompany.nativeElement.classList.remove('error-box');
             }
+        } else {
+            this.purchaseBillCompany.shippingDetails.index = index;
+            this.changeDetectorRef.detectChanges();
         }
     }
 
@@ -8061,6 +8078,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.voucherDateBeforeUpdate = this.invFormData.voucherDetails.voucherDate;
     }
 
+
     /**
      * This will fill the selected address
      *
@@ -8069,9 +8087,10 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @param {boolean} isCompanyAddress
      * @memberof VoucherComponent
      */
-    public selectAddress(data: any, address: any, isCompanyAddress: boolean = false): void {
+    public selectAddress(data: any, address: any, isCompanyAddress: boolean = false, index: number): void {
         if (data && address) {
             data.address[0] = address.address;
+            data.index = index;
             if (!data.state) {
                 data.state = {};
             }
@@ -8086,11 +8105,12 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             data.gstNumber = (isCompanyAddress) ? (address.gstNumber ?? address.taxNumber) : address.gstNumber;
             data.pincode = address.pincode;
             if (isCompanyAddress) {
-                this.autoFillCompanyShippingDetails();
+                this.autoFillCompanyShippingDetails(index);
             } else {
-                this.autoFillShippingDetails();
+                this.autoFillShippingDetails(index);
             }
         }
+        this.changeDetectorRef.detectChanges();
     }
 
     /**
@@ -8403,7 +8423,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 label: this.commonLocaleData?.app_total
             },
             {
-                display: true,
+                display: false,
                 label: ''
             }
         ];
