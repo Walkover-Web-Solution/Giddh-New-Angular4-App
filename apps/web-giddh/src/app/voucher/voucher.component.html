@@ -361,11 +361,14 @@
                                 <div class="row">
                                     <div class="col-6">
                                         <label for="billingAddress" class="billing-label p-0"
-                                            >{{ localeData?.billing_address }} (Address
+                                            >{{ localeData?.billing_address }} 
+                                            <span *ngIf="!isCashInvoice">
+                                            (Address
                                             {{ invFormData.accountDetails.billingDetails.index + 1 }})
+                                        </span>
                                         </label>
                                         <i
-                                            *ngIf="!isEinvoiceGenerated"
+                                            *ngIf="!isEinvoiceGenerated && !isCashInvoice"
                                             [matMenuTriggerFor]="billingAddress"
                                             class="icon-edit text-blue cursor-pointer pl-2 font-12"
                                         ></i>
@@ -589,8 +592,9 @@
                                     </div>
                                     <!-- Shipping Address -->
                                     <div class="col-6">
-                                        <ng-container *ngIf="isCashInvoice">
+                                        <ng-container >
                                             <mat-checkbox
+                                                 *ngIf="isCashInvoice"
                                                 (keydown.enter)="$event.preventDefault()"
                                                 (change)="autoFillShippingDetails()"
                                                 name="autoFillShipping"
@@ -600,17 +604,17 @@
                                                 [(ngModel)]="autoFillShipping"
                                                 [disabled]="isEinvoiceGenerated"
                                             >
+                                            <span *ngIf="isCashInvoice"> {{ localeData?.shipping_billing_same }}</span>
+                                     
+                                            </mat-checkbox>
+                                            <span *ngIf="!isCashInvoice">
                                                 Shipping Address (Address
                                                 {{ invFormData.accountDetails.shippingDetails.index + 1 }})
-                                            </mat-checkbox>
-                                        </ng-container>
-                                        <ng-container *ngIf="!isCashInvoice">
-                                            Shipping Address (Address
-                                            {{ invFormData.accountDetails.shippingDetails.index + 1 }})
+                                                </span>
                                         </ng-container>
                                         <ng-container>
                                             <i
-                                                *ngIf="!isEinvoiceGenerated"
+                                                *ngIf="!isEinvoiceGenerated && !isCashInvoice"
                                                 [matMenuTriggerFor]="shippingAddress"
                                                 class="icon-edit text-blue cursor-pointer pl-2 font-12"
                                             ></i>
