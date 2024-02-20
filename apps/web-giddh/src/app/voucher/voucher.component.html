@@ -1827,7 +1827,6 @@
                                                 <td class="position-relative item-tax"
                                                     (click)="closeDiscountPopup(); closeTaxControlPopup()" width="20%">
                                                     <div class="td-wrapper">
-                                                        {{isEinvoiceGenerated}}
                                                         <div class="flex-fill">
                                                             <text-field [type]="'text'"
                                                                 [cssClass]="'form-control mat-field-border text-right '"
@@ -1881,7 +1880,7 @@
                                                                             </a>
                                                                         </span>
                                                                         <text-field [readonly]="'disabled'" [cssClass]="
-                                                                                'text-right form-control ther-taxes-input w100'
+                                                                                'text-right form-control other-taxes-input w100'
                                                                             "
                                                                             [name]="'entry.otherTaxesSum_' + entryIdx"
                                                                             [prefix]="
