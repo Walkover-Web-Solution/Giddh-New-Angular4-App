@@ -883,7 +883,7 @@
                                         </p>
                                     </div>
                                 </div>
-                                <div class="row mr-t15">
+                                <div class="row mr-t15" *ngIf="(isCreditNote || isDebitNote) || companyCountryCode === 'AE'">
                                     <div class="col-12">
                                         <div class="d-flex column-gap5 align-items-baseline"
                                             *ngIf="isCreditNote || isDebitNote">
@@ -971,11 +971,11 @@
                                                 </mat-checkbox>
                                             </div>
                                         </div>
-                                        <div class="col-6 mt-3">
-                                            <div *ngIf="
-                                                    (isSalesInvoice || isCashInvoice) &&
-                                                    invFormData.touristSchemeApplicable
-                                                ">
+                                        <div class="col-6 mt-3 mb-1" *ngIf="
+                                        (isSalesInvoice || isCashInvoice) &&
+                                        invFormData.touristSchemeApplicable
+                                    ">
+                                            <div>
                                                 <input-field [type]="'text'" [name]="'passportNumber'"
                                                     [placeholder]="localeData?.passport_number"
                                                     [cssClass]="'attention-to'" [(ngModel)]="invFormData.passportNumber"
@@ -988,14 +988,14 @@
                                     <!-- <div class="col-12"
                                         *ngIf="!isCreditNote && !isDebitNote || companyCountryCode === 'AE'"></div> -->
                                 </div>
-                                <div class="row mr-t15">
+                                <div class="row mr-t15 pb-1" *ngIf="
+                                isPurchaseInvoice ||
+                                (currentVoucherFormDetails?.rcmAllowed &&
+                                    (companyCountryName === 'India' ||
+                                        companyCountryName === 'United Kingdom'))
+                            ">
                                     <!-- Reverse Charge Checkbox -->
-                                    <div class="col-12" *ngIf="
-                                            isPurchaseInvoice ||
-                                            (currentVoucherFormDetails?.rcmAllowed &&
-                                                (companyCountryName === 'India' ||
-                                                    companyCountryName === 'United Kingdom'))
-                                        ">
+                                    <div class="col-12">
                                         <div class="d-flex">
                                             <mat-checkbox (keydown.enter)="$event.preventDefault()" #rcmCheckbox
                                                 id="reverse-charge" [(ngModel)]="isRcmEntry"
@@ -1011,7 +1011,7 @@
                                 </div>
                             </div>
 
-                            <div class="vouchers-large-container mt-4 pt-4">
+                            <div class="vouchers-large-container mt-3 pt-4">
                                 <div class="change-currency d-flex justify-content-end align-items-center column-gap1 text-uppercase pb-2"
                                     *ngIf="isMulticurrencyAccount && !showSwitchedCurr">
                                     <span>{{ commonLocaleData?.app_numbers?.one }} {{ companyCurrencyName }}</span>
@@ -1600,7 +1600,7 @@
                                                                                 </mat-radio-button>
                                                                             </mat-radio-group>
                                                                             <text-field [type]="'text'"
-                                                                                [cssClass]="'form-control'"
+                                                                            [cssClass]="'form-control'"
                                                                                 maxLength="10"
                                                                                 [allowDecimalDigitsOnly]="true"
                                                                                 [placeholder]="localeData?.hsn_number"
@@ -1611,7 +1611,7 @@
                                                                                 " [(ngModel)]="transaction.hsnNumber"
                                                                                 [readonly]="isEinvoiceGenerated"></text-field>
                                                                             <text-field [type]="'text'"
-                                                                                [cssClass]="'form-control'"
+                                                                            [cssClass]="'form-control'"
                                                                                 maxLength="10"
                                                                                 [allowDecimalDigitsOnly]="true"
                                                                                 [placeholder]="localeData?.sac_number"
@@ -1825,6 +1825,7 @@
                                                 <td class="position-relative item-tax"
                                                     (click)="closeDiscountPopup(); closeTaxControlPopup()" width="20%">
                                                     <div class="td-wrapper">
+                                                        {{isEinvoiceGenerated}}
                                                         <div class="flex-fill">
                                                             <text-field [type]="'text'"
                                                                 [cssClass]="'form-control mat-field-border text-right '"
@@ -1863,7 +1864,7 @@
                                                             </div>
                                                             <div *ngIf="entry.isOtherTaxApplicable" class="mr-t1">
                                                                 <span>
-                                                                    <div class="d-flex align-items-center">
+                                                                    <div class="d-flex align-items-center justify-content-end">
                                                                         <span class="mr-r05">
                                                                             <a href="javascript:;"
                                                                                 *ngIf="!isEinvoiceGenerated" (click)="
@@ -1878,7 +1879,7 @@
                                                                             </a>
                                                                         </span>
                                                                         <text-field [readonly]="'disabled'" [cssClass]="
-                                                                                'text-right form-control other-taxes-input'
+                                                                                'text-right form-control ther-taxes-input w100'
                                                                             "
                                                                             [name]="'entry.otherTaxesSum_' + entryIdx"
                                                                             [prefix]="
