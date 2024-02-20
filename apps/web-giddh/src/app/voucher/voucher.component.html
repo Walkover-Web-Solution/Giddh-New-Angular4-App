@@ -634,15 +634,21 @@
                                     <!-- Billing Address -->
                                     <div class="col-6">
                                         <label for="billingAddress" class="billing-label p-0">
-                                            {{ localeData?.billing_address }} (Address
-                                            {{ purchaseBillCompany.billingDetails.index + 1 }})</label>
+                                            {{ localeData?.billing_address }}
+                                            <span
+                                            *ngIf="purchaseBillCompany.billingDetails.gstNumber || purchaseBillCompany.billingDetails.taxNumber || purchaseBillCompany.billingDetails.stateName || purchaseBillCompany.billingDetails.stateCode">  (Address
+                                            {{ purchaseBillCompany.billingDetails.index + 1 }})
+                                        </span>
+                                       </label>
                                         <i *ngIf="companyAddressList?.length > 1"
                                             [matMenuTriggerFor]="companyBillingAddress"
                                             class="icon-edit text-blue cursor-pointer pl-2 font-12"></i>
                                         <mat-menu #companyBillingAddress="matMenu">
                                             <div class="mat-menu-width-large vouchers-address-menu">
                                                 <ng-container *ngFor="let address of companyAddressList; let i = index">
-                                                    <button mat-menu-item (click)="
+                                                    <button 
+                                                    *ngIf="address.gstNumber || address.taxNumber||address.stateName || address.stateCode"
+                                                    mat-menu-item (click)="
                                                             autoFillCompanyShipping = true;
                                                             selectAddress(
                                                                 purchaseBillCompany.billingDetails,
@@ -686,128 +692,14 @@
                                                 </button>
                                             </div>
                                         </mat-menu>
-                                        <!-- <div class="vouchers-address-form">
-                                            <div class="address-field">
-                                                <textarea
-                                                    name="companyBillingDetailsAddress"
-                                                    (keyup)="autoFillCompanyShippingDetails()"
-                                                    [(ngModel)]="purchaseBillCompany.billingDetails.address[0]"
-                                                    class="w-100"
-                                                    rows="2"
-                                                    autocomplete="off"
-                                                    autofocus="off"
-                                                    aria-autocomplete="none"
-                                                ></textarea>
-                                            </div>
-                                            <div class="country-field">
-                                                <span>{{ companyCountryName }}</span>
-                                            </div>
-                                            <div class="state-field" *ngIf="companyStatesSource?.length">
-                                                <select-field
-                                                    #companyBillingState
-                                                    [placeholder]="commonLocaleData?.app_state"
-                                                    [cssClass]="'border-0'"
-                                                    (selectedOption)="
-                                                        fillShippingBillingCompanyDetails($event, true);
-                                                        autoFillCompanyShippingDetails()
-                                                    "
-                                                    [allowValueReset]="true"
-                                                    (onClear)="
-                                                        fillShippingBillingCompanyDetails($event, true);
-                                                        autoFillCompanyShippingDetails()
-                                                    "
-                                                    [options]="companyStatesSource"
-                                                    [name]="'companyBillingDetailsStateCode'"
-                                                    [readonly]="
-                                                        purchaseBillCompany.billingDetails.gstNumber &&
-                                                        purchaseBillCompany.billingDetails.gstNumber.length >= 2
-                                                            ? true
-                                                            : null
-                                                    "
-                                                    [defaultValue]="purchaseBillCompany?.billingDetails?.state?.name"
-                                                >
-                                                </select-field>
-                                            </div>
-                                            <div class="state-field" *ngIf="companyRegionsSource?.length">
-                                                <select-field
-                                                    #companyBillingState
-                                                    [placeholder]="commonLocaleData?.app_region"
-                                                    [cssClass]="'border-0'"
-                                                    (selectedOption)="
-                                                        fillShippingBillingCompanyDetails($event, true);
-                                                        autoFillCompanyShippingDetails()
-                                                    "
-                                                    [allowValueReset]="true"
-                                                    (onClear)="
-                                                        fillShippingBillingCompanyDetails($event, true);
-                                                        autoFillCompanyShippingDetails()
-                                                    "
-                                                    [options]="companyRegionsSource"
-                                                    [name]="'companyBillingDetailsStateCode'"
-                                                    [readonly]="
-                                                        purchaseBillCompany.billingDetails.gstNumber &&
-                                                        purchaseBillCompany.billingDetails.gstNumber.length >= 2
-                                                            ? true
-                                                            : null
-                                                    "
-                                                    [defaultValue]="purchaseBillCompany?.billingDetails?.county?.name"
-                                                >
-                                                </select-field>
-                                            </div>
-                                            <div
-                                                class="gstin-field"
-                                                *ngIf="
-                                                    shouldShowTrnGstVatField && (showGSTINNo || showTRNNo || showVATNo)
-                                                "
-                                            >
-                                                <text-field
-                                                    [maxlength]="'15'"
-                                                    autocomplete="none"
-                                                    [type]="'text'"
-                                                    [name]="'companyBillingDetailsTax'"
-                                                    [(ngModel)]="purchaseBillCompany.billingDetails.gstNumber"
-                                                    [cssClass]="'border-0'"
-                                                    (change)="
-                                                        !showVATNo ? getStateCodeCompany('billingDetails') : null;
-                                                        autoFillCompanyShippingDetails()
-                                                    "
-                                                    [placeholder]="
-                                                        showGSTINNo
-                                                            ? commonLocaleData?.app_gstin
-                                                            : showTRNNo
-                                                            ? commonLocaleData?.app_trn
-                                                            : showVATNo
-                                                            ? commonLocaleData?.app_enter_vat
-                                                            : ''
-                                                    "
-                                                ></text-field>
-                                            </div>
-                                            <div class="pin-code-field">
-                                                <text-field
-                                                    [type]="'number'"
-                                                    [cssClass]="'border-0'"
-                                                    autocomplete="false"
-                                                    [name]="'purchaseBillBillingPinCode'"
-                                                    [placeholder]="commonLocaleData?.app_pin_code"
-                                                    [(ngModel)]="purchaseBillCompany.billingDetails.pincode"
-                                                    (input)="autoFillCompanyShippingDetails()"
-                                                    [allowDecimalDigitsOnly]="true"
-                                                >
-                                                </text-field>
-                                            </div>
-                                        </div> -->
                                     </div>
                                     <!-- Shipping Address -->
                                     <div class="col-6">
-                                        <!-- <mat-checkbox (keydown.enter)="$event.preventDefault()" autocomplete="None"
-                                            color="primary" name="autoFillCompanyShipping"
-                                            class="auto-fill-shipping-address" [(ngModel)]="autoFillCompanyShipping"
-                                            [ngModelOptions]="{ standalone: true }"
-                                            (change)="autoFillCompanyShippingDetails()">
-                                            {{ localeData?.shipping_billing_same }}
-        
-                                        </mat-checkbox> -->
-                                        Shipping Address (Address {{ purchaseBillCompany.shippingDetails.index + 1 }})
+                                        Shipping Address
+                                        <span
+                                        *ngIf="purchaseBillCompany.shippingDetails.gstNumber || purchaseBillCompany.shippingDetails.taxNumber || purchaseBillCompany.shippingDetails.stateName || purchaseBillCompany.shippingDetails.stateCode">(Address
+                                        {{ purchaseBillCompany.shippingDetails.index + 1 }})
+                                    </span>
                                         <ng-container>
                                             <i *ngIf="companyAddressList?.length > 1"
                                                 [matMenuTriggerFor]="shippingAddress"
@@ -816,7 +708,9 @@
                                                 <div class="mat-menu-width-large vouchers-address-menu">
                                                     <ng-container
                                                         *ngFor="let address of companyAddressList; let i = index">
-                                                        <button mat-menu-item (click)="
+                                                        <button 
+                                                        *ngIf="address.gstNumber || address.taxNumber ||address.stateName || address.stateCode" 
+                                                        mat-menu-item (click)="
                                                                 selectAddress(
                                                                     purchaseBillCompany.shippingDetails,
                                                                     address,
@@ -864,123 +758,7 @@
                                                 </div>
                                             </mat-menu>
                                         </ng-container>
-                                        <!-- <div class="vouchers-address-form"
-                                            [ngClass]="{'form-disabled':autoFillCompanyShipping}">
-                                            <div class="address-field">
-                                                <textarea name="companyShippingDetailsAddress" [(ngModel)]="
-                                                        purchaseBillCompany.shippingDetails.address[0]
-                                                    " class="w-100" rows="2" autocomplete="off" autofocus="off"
-                                                    aria-autocomplete="none"></textarea>
-                                            </div>
-                                            <div class="country-field">
-                                                <span>{{ companyCountryName }}</span>
-                                            </div>
-                                            <div class="state-field" *ngIf="companyStatesSource?.length">
-                                                <select-field #companyShippingState [placeholder]="
-                                                    commonLocaleData?.app_state
-                                                " [cssClass]="
-                                                    'border-0'
-                                                " [ngClass]="{
-                                                    'disabled': autoFillCompanyShipping
-                                                }" (selectedOption)="
-                                                    fillShippingBillingCompanyDetails(
-                                                        $event,
-                                                        false
-                                                    )
-                                                " [allowValueReset]="true" (onClear)="
-                                                    fillShippingBillingCompanyDetails(
-                                                        $event,
-                                                        false
-                                                    )
-                                                " [options]="companyStatesSource" [name]="
-                                                    'companyShippingDetailsStateCode'
-                                                " [readonly]="
-                                                    autoFillCompanyShipping ||
-                                                    (purchaseBillCompany.shippingDetails
-                                                        .gstNumber &&
-                                                        purchaseBillCompany
-                                                            .shippingDetails.gstNumber
-                                                            .length >= 2)
-                                                        ? true
-                                                        : null
-                                                " [defaultValue]="
-                                                    purchaseBillCompany.shippingDetails
-                                                        .state?.name
-                                                ">
-                                                </select-field>
-                                            </div>
-                                            <div class="state-field" *ngIf="companyRegionsSource?.length"> <select-field
-                                                    #companyShippingState [placeholder]="
-                                                    commonLocaleData?.app_region
-                                                " [cssClass]="
-                                                    'border-0'
-                                                " [ngClass]="{
-                                                    'disabled': autoFillCompanyShipping
-                                                }" (selectedOption)="
-                                                    fillShippingBillingCompanyDetails(
-                                                        $event,
-                                                        false
-                                                    )
-                                                " [allowValueReset]="true" (onClear)="
-                                                    fillShippingBillingCompanyDetails(
-                                                        $event,
-                                                        false
-                                                    )
-                                                " [options]="companyRegionsSource" [name]="
-                                                    'companyShippingDetailsCountyCode'
-                                                " [readonly]="
-                                                    autoFillCompanyShipping ||
-                                                    (purchaseBillCompany.shippingDetails
-                                                        .gstNumber &&
-                                                        purchaseBillCompany
-                                                            .shippingDetails.gstNumber
-                                                            .length >= 2)
-                                                        ? true
-                                                        : null
-                                                " [defaultValue]="
-                                                    purchaseBillCompany.shippingDetails
-                                                        .county?.name
-                                                ">
-                                                </select-field>
-                                            </div>
-                                            <div class="gstin-field" *ngIf="shouldShowTrnGstVatField &&
-                                            (showGSTINNo || showTRNNo || showVATNo)">
-                                                <text-field [maxlength]="'15'" autocomplete="none" [type]="'text'"
-                                                    [name]="'companyShippingDetailsTax'" [(ngModel)]="
-                                                        purchaseBillCompany.shippingDetails
-                                                            .gstNumber
-                                                    " [cssClass]="
-                                                        'border-0'
-                                                    " (change)="
-                                                        !showVATNo
-                                                            ? getStateCodeCompany(
-                                                                'shippingDetails'
-                                                            )
-                                                            : null
-                                                    " [placeholder]="
-                                                        showGSTINNo
-                                                            ? commonLocaleData?.app_gstin
-                                                            : showTRNNo
-                                                            ? commonLocaleData?.app_trn
-                                                            : showVATNo
-                                                            ? commonLocaleData?.app_enter_vat
-                                                            : ''
-                                                    "></text-field>
-                                            </div>
-                                            <div class="pin-code-field">
-                                                <text-field [type]="'number'" [cssClass]="
-                                                        'border-0'
-                                                    " autocomplete="false" [name]="
-                                                        'purchaseBillShippingPinCode'
-                                                    " [placeholder]="
-                                                        commonLocaleData?.app_pin_code
-                                                    " [(ngModel)]="
-                                                        purchaseBillCompany
-                                                            .shippingDetails.pincode
-                                                    " [allowDecimalDigitsOnly]="true">
-                                                </text-field>
-                                            </div>
-                                        </div> -->
+                            
                                     </div>
                                 </div>
                                 <!-- Row 3 -->
