@@ -444,6 +444,7 @@
                                             </mat-checkbox>
                                             <span *ngIf="!isCashInvoice">
                                                 {{ localeData?.shipping_address }}
+
                                                 <span
                                                     *ngIf="invFormData.accountDetails.shippingDetails.gstNumber || invFormData.accountDetails.shippingDetails.taxNumber || invFormData.accountDetails.shippingDetails.stateName || invFormData.accountDetails.shippingDetails.state?.name|| invFormData.accountDetails.shippingDetails.state?.code || invFormData.accountDetails.shippingDetails.stateCode">({{ commonLocaleData?.app_address }}
                                                     {{ invFormData.accountDetails.shippingDetails.index + 1 }})
@@ -720,6 +721,7 @@
                                                         <button 
                                                         *ngIf="address.gstNumber || address.taxNumber ||address.stateName || address.stateCode" 
                                                         mat-menu-item (click)="
+                                                         autoFillCompanyShipping = false;
                                                                 selectAddress(
                                                                     purchaseBillCompany.shippingDetails,
                                                                     address,
