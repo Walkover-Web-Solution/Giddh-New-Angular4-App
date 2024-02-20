@@ -361,8 +361,11 @@
                                 <div class="row">
                                     <div class="col-6">
                                         <label for="billingAddress" class="billing-label p-0"
-                                            >{{ localeData?.billing_address }} (Address
+                                            >{{ localeData?.billing_address }} 
+                                            <span *ngIf="!isCashInvoice">
+                                            ( {{ commonLocaleData?.app_address }}
                                             {{ invFormData.accountDetails.billingDetails.index + 1 }})
+                                            </span>
                                         </label>
                                         <i
                                             *ngIf="!isEinvoiceGenerated"
@@ -386,7 +389,7 @@
                                                     >
                                                         <div class="justify-content-between align-items-center d-flex">
                                                             <div>
-                                                                <p>Address {{ address.index + 1 }}</p>
+                                                                <p> {{ commonLocaleData?.app_address }} {{ address.index + 1 }}</p>
                                                                 <p>
                                                                     {{ address.address }}
                                                                 </p>
@@ -423,7 +426,7 @@
                                                     class="vouchers-add-new"
                                                     (click)="getCustomerDetails()"
                                                 >
-                                                    + Add new address
+                                                {{ localeData?.add_new_address }}
                                                 </button>
                                             </div>
                                         </mat-menu>
@@ -600,9 +603,13 @@
                                                 [(ngModel)]="autoFillShipping"
                                                 [disabled]="isEinvoiceGenerated"
                                             >
-                                                Shipping Address (Address
-                                                {{ invFormData.accountDetails.shippingDetails.index + 1 }})
+                                            <span *ngIf="isCashInvoice"> {{ localeData?.shipping_billing_same }}</span>
+                                     
                                             </mat-checkbox>
+                                            <span *ngIf="!isCashInvoice">
+                                               {{ localeData?.shipping_address }} ({{ commonLocaleData?.app_address }}
+                                                {{ invFormData.accountDetails.shippingDetails.index + 1 }})
+                                                </span>
                                         </ng-container>
                                         <ng-container *ngIf="!isCashInvoice">
                                             Shipping Address (Address
@@ -635,7 +642,7 @@
                                                                 class="justify-content-between align-items-center d-flex"
                                                             >
                                                                 <div>
-                                                                    <p>Address {{ i + 1 }}</p>
+                                                                    <p> {{ commonLocaleData?.app_address }} {{ i + 1 }}</p>
                                                                     <p>
                                                                         {{ address.address }}
                                                                     </p>
@@ -674,7 +681,7 @@
                                                         class="vouchers-add-new"
                                                         (click)="getCustomerDetails()"
                                                     >
-                                                        + Add new address
+                                                        {{ localeData?.add_new_address }}
                                                     </button>
                                                 </div>
                                             </mat-menu>
@@ -874,7 +881,7 @@
                                     <!-- Billing Address -->
                                     <div class="col-6">
                                         <label for="billingAddress" class="billing-label p-0">
-                                            {{ localeData?.billing_address }} (Address
+                                            {{ localeData?.billing_address }} ( {{ commonLocaleData?.app_address }}
                                             {{ purchaseBillCompany.billingDetails.index + 1 }})</label
                                         >
                                         <i
@@ -899,7 +906,7 @@
                                                     >
                                                         <div class="justify-content-between align-items-center d-flex">
                                                             <div>
-                                                                <p>Address {{ address.index + 1 }}</p>
+                                                                <p> {{ commonLocaleData?.app_address }} {{ address.index + 1 }}</p>
                                                                 <p>
                                                                     {{ address.address }}
                                                                 </p>
@@ -933,7 +940,7 @@
                                                     class="vouchers-add-new"
                                                     (click)="getCustomerDetails()"
                                                 >
-                                                    + Add new address
+                                                    {{ localeData?.add_new_address }}
                                                 </button>
                                             </div>
                                         </mat-menu>
@@ -1058,7 +1065,7 @@
                                             {{ localeData?.shipping_billing_same }}
         
                                         </mat-checkbox> -->
-                                        Shipping Address (Address {{ purchaseBillCompany.shippingDetails.index + 1 }})
+                                        {{ localeData?.shipping_address  }} ( {{ commonLocaleData?.app_address }} {{ purchaseBillCompany.shippingDetails.index + 1 }})
                                         <ng-container>
                                             <i
                                                 *ngIf="companyAddressList?.length > 1"
@@ -1085,7 +1092,7 @@
                                                                 class="justify-content-between align-items-center d-flex"
                                                             >
                                                                 <div>
-                                                                    <p>Address {{ address.index + 1 }}</p>
+                                                                    <p> {{ commonLocaleData?.app_address }} {{ address.index + 1 }}</p>
                                                                     <p>
                                                                         {{ address.address }}
                                                                     </p>
@@ -1123,7 +1130,7 @@
                                                         class="vouchers-add-new"
                                                         (click)="getCustomerDetails()"
                                                     >
-                                                        + Add new address
+                                                        {{ localeData?.add_new_address }}
                                                     </button>
                                                 </div>
                                             </mat-menu>
@@ -2265,7 +2272,7 @@
                                                                             class="custom-date-entries custom-input-field d-flex"
                                                                         >
                                                                             <giddh-datepicker
-                                                                                class="date-border w100 entries-giddh-datepicker"
+                                                                                class="date-border entries-giddh-datepicker"
                                                                                 [showToggleIcon]="true"
                                                                                 #dp="ngModel"
                                                                                 (keydown.enter)="

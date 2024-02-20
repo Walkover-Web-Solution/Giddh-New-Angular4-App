@@ -8423,7 +8423,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 label: this.commonLocaleData?.app_total
             },
             {
-                display: true,
+                display: false,
                 label: ''
             }
         ];

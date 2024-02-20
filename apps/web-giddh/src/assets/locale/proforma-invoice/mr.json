@@ -115,5 +115,6 @@
     "account": "खाते",
     "select_variant": "प्रकार निवडा",
     "variant": "प्रकार",
-    "account_missing_in_stock": "खाते स्टॉकशी जोडलेले नाही"
+    "account_missing_in_stock": "खाते स्टॉकशी जोडलेले नाही",
+    "add_new_address": "+ नवीन पत्ता जोडा"
 }
