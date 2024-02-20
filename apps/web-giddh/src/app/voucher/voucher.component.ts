@@ -1141,6 +1141,10 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.updatedAccountDetails$.subscribe(accountDetails => {
             if (accountDetails) {
                 this.hideDepositSectionForCashBankGroups(accountDetails);
+                accountDetails.addresses = accountDetails.addresses.map((item, i) => {
+                    item['index'] = i;
+                    return item;
+                });
                 this.accountAddressList = accountDetails.addresses;
                 this.updateAccountDetails(accountDetails, true);
             }
@@ -1530,6 +1534,10 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         this.checkIfNeedToExcludeTax(tempSelectedAcc);
                         this.getUpdatedStateCodes(tempSelectedAcc.country?.countryCode).then(() => {
                             this.invFormData.accountDetails = new AccountDetailsClass(tempSelectedAcc);
+                        });
+                        tempSelectedAcc.addresses = tempSelectedAcc.addresses.map((item, i) => {
+                            item['index'] = i;
+                            return item;
                         });
                         this.accountAddressList = tempSelectedAcc.addresses;
                         this.showGstAndTrnUsingCountryName(this.customerCountryName);
@@ -2470,7 +2478,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         }
     }
 
-    public autoFillShippingDetails(index?: number) {
+    public autoFillShippingDetails(index: number = 0) {
         if (this.autoFillShipping) {
             this.invFormData.accountDetails.shippingDetails = cloneDeep(this.invFormData.accountDetails.billingDetails);
             if (this.shippingState && this.shippingState.nativeElement) {
@@ -7628,7 +7636,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      *
      * @memberof VoucherComponent
      */
-    public autoFillCompanyShippingDetails(index?: number): void {
+    public autoFillCompanyShippingDetails(index: number = 0): void {
         if (this.autoFillCompanyShipping) {
             this.purchaseBillCompany.shippingDetails = cloneDeep(this.purchaseBillCompany.billingDetails);
             if (this.shippingStateCompany && this.shippingStateCompany.nativeElement) {
@@ -7721,6 +7729,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         if (company.billingDetails && company.shippingDetails) {
             this.purchaseBillCompany = {
                 billingDetails: {
+                    index:0,
                     address: company?.billingDetails?.address,
                     state: { code: company?.billingDetails?.state?.code, name: company?.billingDetails?.state?.name },
                     county: { code: company?.billingDetails?.county?.code, name: company?.billingDetails?.county?.name },
@@ -7730,6 +7739,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     pincode: company?.billingDetails?.pincode
                 },
                 shippingDetails: {
+                    index:0,
                     address: company?.shippingDetails?.address,
                     state: { code: company?.shippingDetails?.state?.code, name: company?.shippingDetails?.state?.name },
                     county: { code: company?.shippingDetails?.county?.code, name: company?.shippingDetails?.county?.name },
@@ -7766,6 +7776,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 if (currentBranch && currentBranch.addresses) {
                     const defaultAddress = currentBranch.addresses.find(address => (address && address.isDefault));
                     if (defaultAddress) {
+                        this.purchaseBillCompany.billingDetails.index = 0;
                         this.purchaseBillCompany.billingDetails.address = [];
                         this.purchaseBillCompany.billingDetails.address.push(defaultAddress.address);
                         this.purchaseBillCompany.billingDetails.state.code = defaultAddress.stateCode;
