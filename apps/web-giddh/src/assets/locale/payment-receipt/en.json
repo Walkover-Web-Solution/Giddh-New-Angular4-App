@@ -1,7 +1,7 @@
 {
     "customer_name": "Customer Name",
     "add_customer": "Add Customer",
-    "customer_details": "Customer Details",
+    "customer_details": "Edit Customer",
     "billing_address": "Billing address",
     "change": "Change",
     "shipping_billing_same": "Shipping Address Same as Billing Address",
