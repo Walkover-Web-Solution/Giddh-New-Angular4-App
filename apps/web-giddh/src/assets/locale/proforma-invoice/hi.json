@@ -115,5 +115,6 @@
     "account": "अकाउंट",
     "select_variant": "वेरिएंट चुनें",
     "variant": "वेरिएंट",
-    "account_missing_in_stock": "खाता स्टॉक से लिंक नहीं है।"
+    "account_missing_in_stock": "खाता स्टॉक से लिंक नहीं है।",
+    "add_new_address": "+ नया पता जोड़ें"
 }

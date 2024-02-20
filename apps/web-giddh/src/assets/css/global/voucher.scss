@@ -111,6 +111,16 @@
             }
         }
     }
+
+    .custom-date-entries {
+            giddh-datepicker {
+                width: 80px;
+                padding-top: 2px;
+                input {
+                    width: 80px;
+            }
+         }
+     }
 }
 
 .mat-menu-width-large {
