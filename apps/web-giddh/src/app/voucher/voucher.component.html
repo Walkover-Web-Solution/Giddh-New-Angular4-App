@@ -268,7 +268,7 @@
                                             localeData?.billing_address }}
                                             <span *ngIf="!isCashInvoice">
                                                 <span
-                                                    *ngIf="invFormData.accountDetails.billingDetails.gstNumber || invFormData.accountDetails.billingDetails.taxNumber || invFormData.accountDetails.billingDetails.state.name || invFormData.accountDetails.billingDetails.state.code">( {{ commonLocaleData?.app_address }}
+                                                    *ngIf="invFormData.accountDetails.billingDetails.gstNumber || invFormData.accountDetails.billingDetails.taxNumber || invFormData.accountDetails.billingDetails.stateName || invFormData.accountDetails.billingDetails.state?.name || invFormData.accountDetails.billingDetails.state?.code || invFormData.accountDetails.billingDetails.stateCode">( {{ commonLocaleData?.app_address }}
                                                     {{ invFormData.accountDetails.billingDetails.index + 1 }})
                                                 </span>
                                             </span>
@@ -280,7 +280,7 @@
                                             <div class="mat-menu-width-large vouchers-address-menu">
                                                 <ng-container *ngFor="let address of accountAddressList; let i = index">
                                                     <button
-                                                        *ngIf="address.gstNumber || address.taxNumber || address.state.name || address.state.code"
+                                                        *ngIf="address.gstNumber || address.taxNumber || address.state?.name || address.state?.code"
                                                         mat-menu-item (click)="
                                                             autoFillShipping = true;
                                                             selectAddress(
@@ -445,7 +445,7 @@
                                             <span *ngIf="!isCashInvoice">
                                                 {{ localeData?.shipping_address }}
                                                 <span
-                                                    *ngIf="invFormData.accountDetails.shippingDetails.gstNumber || invFormData.accountDetails.shippingDetails.taxNumber || invFormData.accountDetails.shippingDetails.state.name || invFormData.accountDetails.shippingDetails.state.code">({{ commonLocaleData?.app_address }}
+                                                    *ngIf="invFormData.accountDetails.shippingDetails.gstNumber || invFormData.accountDetails.shippingDetails.taxNumber || invFormData.accountDetails.shippingDetails.stateName || invFormData.accountDetails.shippingDetails.state?.name|| invFormData.accountDetails.shippingDetails.state?.code || invFormData.accountDetails.shippingDetails.stateCode">({{ commonLocaleData?.app_address }}
                                                     {{ invFormData.accountDetails.shippingDetails.index + 1 }})
                                                 </span>
                                             </span>
@@ -458,7 +458,7 @@
                                                 <div class="mat-menu-width-large vouchers-address-menu">
                                                     <ng-container
                                                         *ngFor="let address of accountAddressList; let i = index">
-                                                        <button   *ngIf="address.gstNumber || address.taxNumber || address.state.name || address.state.code" 
+                                                        <button   *ngIf="address.gstNumber || address.taxNumber || address.state?.name || address.state?.code" 
                                                         mat-menu-item (click)="
                                                                 autoFillShipping = false;
                                                                 selectAddress(
@@ -642,7 +642,7 @@
                                         <label for="billingAddress" class="billing-label p-0">
                                             {{ localeData?.billing_address }}
                                             <span
-                                            *ngIf="purchaseBillCompany.billingDetails.gstNumber || purchaseBillCompany.billingDetails.taxNumber || purchaseBillCompany.billingDetails.stateName || purchaseBillCompany.billingDetails.stateCode">  ({{ commonLocaleData?.app_address }}
+                                            *ngIf="purchaseBillCompany.billingDetails.gstNumber || purchaseBillCompany.billingDetails.taxNumber || purchaseBillCompany.billingDetails.stateName || purchaseBillCompany.billingDetails.state?.name || purchaseBillCompany.billingDetails.state?.code || purchaseBillCompany.billingDetails.stateCode">  ({{ commonLocaleData?.app_address }}
                                             {{ purchaseBillCompany.billingDetails.index + 1 }})
                                         </span>
                                        </label>
@@ -706,7 +706,7 @@
                                     <div class="col-6">
                                         {{ localeData?.shipping_address  }}
                                         <span
-                                        *ngIf="purchaseBillCompany.shippingDetails.gstNumber || purchaseBillCompany.shippingDetails.taxNumber || purchaseBillCompany.shippingDetails.stateName || purchaseBillCompany.shippingDetails.stateCode">({{ commonLocaleData?.app_address }}
+                                        *ngIf="purchaseBillCompany.shippingDetails.gstNumber || purchaseBillCompany.shippingDetails.taxNumber || purchaseBillCompany.shippingDetails.stateName  || purchaseBillCompany.shippingDetails.state?.name  || purchaseBillCompany.shippingDetails.state?.code || purchaseBillCompany.shippingDetails.stateCode">({{ commonLocaleData?.app_address }}
                                         {{ purchaseBillCompany.shippingDetails.index + 1 }})
                                     </span>
                                         <ng-container>
