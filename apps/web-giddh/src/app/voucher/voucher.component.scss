@@ -203,8 +203,8 @@
                         }
 
                         th {
-                            // border-top: 1px solid var(--color-common-secondary-border);
                             color: var(--color-giddh-blue);
+                            padding-right: 14px !important;
                         }
 
                         td {
@@ -234,6 +234,9 @@
                             }
                             .description {
                                 word-wrap: break-word;
+                            }
+                            .wrap-td-data{
+                                padding-right: 6px;
                             }
                         }
                     }
