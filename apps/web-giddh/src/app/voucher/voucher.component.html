@@ -268,7 +268,8 @@
                                             localeData?.billing_address }}
                                             <span *ngIf="!isCashInvoice">
                                                 <span
-                                                    *ngIf="invFormData.accountDetails.billingDetails.gstNumber || invFormData.accountDetails.billingDetails.taxNumber || invFormData.accountDetails.billingDetails.stateName || invFormData.accountDetails.billingDetails.state?.name || invFormData.accountDetails.billingDetails.state?.code || invFormData.accountDetails.billingDetails.stateCode">( {{ commonLocaleData?.app_address }}
+                                                    *ngIf="invFormData.accountDetails.billingDetails.gstNumber || invFormData.accountDetails.billingDetails.taxNumber || invFormData.accountDetails.billingDetails.stateName || invFormData.accountDetails.billingDetails.state?.name || invFormData.accountDetails.billingDetails.state?.code || invFormData.accountDetails.billingDetails.stateCode">(
+                                                    {{ commonLocaleData?.app_address }}
                                                     {{ invFormData.accountDetails.billingDetails.index + 1 }})
                                                 </span>
                                             </span>
@@ -279,10 +280,7 @@
                                         <mat-menu #billingAddress="matMenu">
                                             <div class="mat-menu-width-large vouchers-address-menu">
                                                 <ng-container *ngFor="let address of accountAddressList; let i = index">
-                                                    <button matchAddress
-                                                    [address]="address"
-                                                    [selectedAddres]="invFormData.accountDetails.billingDetails"
-                                                    (matchedAddress)="onAddressMatched('account',$event, i)"
+                                                    <button
                                                         *ngIf="address.gstNumber || address.taxNumber || address.state?.name || address.state?.code"
                                                         mat-menu-item (click)="
                                                             autoFillShipping = true;
@@ -295,7 +293,8 @@
                                                         ">
                                                         <div class="justify-content-between align-items-center d-flex">
                                                             <div>
-                                                                <p> {{ commonLocaleData?.app_address }} {{ address.index + 1 }}</p>
+                                                                <p> {{ commonLocaleData?.app_address }} {{ address.index
+                                                                    + 1 }}</p>
                                                                 <p>
                                                                     {{ address.address }}
                                                                 </p>
@@ -316,17 +315,15 @@
                                                                     }}
                                                                 </p>
                                                             </div>
-                                                            <i class="icon-tick"  *ngIf="accountAddressMatches[i]"></i>
+                                                            <i class="icon-tick"
+                                                                *ngIf="invFormData.accountDetails.billingDetails.state?.name ===address.state?.name && invFormData.accountDetails.billingDetails.gstNumber ===address.gstNumber && invFormData.accountDetails.billingDetails.taxNumber ===address.taxNumber && invFormData.accountDetails.billingDetails.address === address.address"></i>
                                                         </div>
                                                     </button>
                                                     <mat-divider></mat-divider>
                                                 </ng-container>
-                                                <button
-                                                    mat-menu-item
-                                                    class="vouchers-add-new"
-                                                    (click)="getCustomerDetails()"
-                                                >
-                                                {{ localeData?.add_new_address }}
+                                                <button mat-menu-item class="vouchers-add-new"
+                                                    (click)="getCustomerDetails()">
+                                                    {{ localeData?.add_new_address }}
                                                 </button>
                                             </div>
                                         </mat-menu>
@@ -446,7 +443,8 @@
                                                 {{ localeData?.shipping_address }}
 
                                                 <span
-                                                    *ngIf="invFormData.accountDetails.shippingDetails?.gstNumber || invFormData.accountDetails.shippingDetails.taxNumber || invFormData.accountDetails.shippingDetails.stateName || invFormData.accountDetails.shippingDetails.state?.name|| invFormData.accountDetails.shippingDetails.state?.code || invFormData.accountDetails.shippingDetails.stateCode">({{ commonLocaleData?.app_address }}
+                                                    *ngIf="invFormData.accountDetails.shippingDetails.gstNumber || invFormData.accountDetails.shippingDetails.taxNumber || invFormData.accountDetails.shippingDetails.stateName || invFormData.accountDetails.shippingDetails.state?.name|| invFormData.accountDetails.shippingDetails.state?.code || invFormData.accountDetails.shippingDetails.stateCode">({{
+                                                    commonLocaleData?.app_address }}
                                                     {{ invFormData.accountDetails.shippingDetails.index + 1 }})
                                                 </span>
                                             </span>
@@ -460,11 +458,8 @@
                                                     <ng-container
                                                         *ngFor="let address of accountAddressList; let i = index">
                                                         <button
-                                                        [address]="address"
-                                                        [selectedAddres]="invFormData.accountDetails.shippingDetails"
-                                                        (matchedAddress)="onAddressMatched('account',$event, i)"
-                                                        *ngIf="address.gstNumber || address.taxNumber || address.state?.name || address.state?.code" 
-                                                        mat-menu-item (click)="
+                                                            *ngIf="address.gstNumber || address.taxNumber || address.state?.name || address.state?.code"
+                                                            mat-menu-item (click)="
                                                                 autoFillShipping = false;
                                                                 selectAddress(
                                                                     invFormData.accountDetails.shippingDetails,
@@ -476,7 +471,8 @@
                                                             <div
                                                                 class="justify-content-between align-items-center d-flex">
                                                                 <div>
-                                                                    <p> {{ commonLocaleData?.app_address }} {{ i + 1 }}</p>
+                                                                    <p> {{ commonLocaleData?.app_address }} {{ i + 1 }}
+                                                                    </p>
                                                                     <p>
                                                                         {{ address.address }}
                                                                     </p>
@@ -499,16 +495,18 @@
                                                                         }}
                                                                     </p>
                                                                 </div>
-                                                                <i class="icon-tick"  *ngIf="accountAddressMatches[i]"></i>
+                                                                <i class="icon-tick"
+                                                                    *ngIf="invFormData.accountDetails.shippingDetails.state?.name === address.state?.name &&
+                                                                invFormData.accountDetails.shippingDetails.gstNumber === address.gstNumber &&
+                                                                invFormData.accountDetails.shippingDetails.taxNumber === address.taxNumber && 
+                                                                invFormData.accountDetails.shippingDetails.address === address.address"></i>
+
                                                             </div>
                                                         </button>
                                                         <mat-divider></mat-divider>
                                                     </ng-container>
-                                                    <button
-                                                        mat-menu-item
-                                                        class="vouchers-add-new"
-                                                        (click)="getCustomerDetails()"
-                                                    >
+                                                    <button mat-menu-item class="vouchers-add-new"
+                                                        (click)="getCustomerDetails()">
                                                         {{ localeData?.add_new_address }}
                                                     </button>
                                                 </div>
@@ -644,10 +642,11 @@
                                         <label for="billingAddress" class="billing-label p-0">
                                             {{ localeData?.billing_address }}
                                             <span
-                                            *ngIf="purchaseBillCompany.billingDetails.gstNumber || purchaseBillCompany.billingDetails.taxNumber || purchaseBillCompany.billingDetails.stateName || purchaseBillCompany.billingDetails.state?.name || purchaseBillCompany.billingDetails.state?.code || purchaseBillCompany.billingDetails.stateCode">  ({{ commonLocaleData?.app_address }}
-                                            {{ purchaseBillCompany.billingDetails.index + 1 }})
-                                        </span>
-                                       </label>
+                                                *ngIf="purchaseBillCompany.billingDetails.gstNumber || purchaseBillCompany.billingDetails.taxNumber || purchaseBillCompany.billingDetails.stateName || purchaseBillCompany.billingDetails.state?.name || purchaseBillCompany.billingDetails.state?.code || purchaseBillCompany.billingDetails.stateCode">
+                                                ({{ commonLocaleData?.app_address }}
+                                                {{ purchaseBillCompany.billingDetails.index + 1 }})
+                                            </span>
+                                        </label>
                                         <i *ngIf="companyAddressList?.length > 1"
                                             [matMenuTriggerFor]="companyBillingAddress"
                                             class="icon-edit text-blue cursor-pointer pl-2 font-12"></i>
@@ -655,11 +654,8 @@
                                             <div class="mat-menu-width-large vouchers-address-menu">
                                                 <ng-container *ngFor="let address of companyAddressList; let i = index">
                                                     <button 
-                                                    [address]="address"
-                                                    [selectedAddres]="purchaseBillCompany.billingDetails"
-                                                    (matchedAddress)="onAddressMatched('company',$event, i)"
-                                                    *ngIf="address.gstNumber || address.taxNumber||address.stateName || address.stateCode"
-                                                    mat-menu-item (click)="
+                                                        *ngIf="address.gstNumber || address.taxNumber||address.stateName || address.stateCode"
+                                                        mat-menu-item (click)="
                                                             autoFillCompanyShipping = true;
                                                             selectAddress(
                                                                 purchaseBillCompany.billingDetails,
@@ -670,7 +666,8 @@
                                                         ">
                                                         <div class="justify-content-between align-items-center d-flex">
                                                             <div>
-                                                                <p> {{ commonLocaleData?.app_address }} {{ address.index + 1 }}</p>
+                                                                <p> {{ commonLocaleData?.app_address }} {{ address.index
+                                                                    + 1 }}</p>
                                                                 <p>
                                                                     {{ address.address }}
                                                                 </p>
@@ -691,16 +688,17 @@
                                                                     }}
                                                                 </p>
                                                             </div>
-                                                            <i class="icon-tick"  *ngIf="companyAddressMatches[i]"></i>
+                                                            <i class="icon-tick"
+                                                                    *ngIf="purchaseBillCompany.billingDetails.state?.name === address.state?.name &&
+                                                                purchaseBillCompany.billingDetails.gstNumber === address.gstNumber &&
+                                                                purchaseBillCompany.billingDetails.taxNumber === address.taxNumber && 
+                                                                purchaseBillCompany.billingDetails.address === address.address"></i>
                                                         </div>
                                                     </button>
                                                     <mat-divider></mat-divider>
                                                 </ng-container>
-                                                <button
-                                                    mat-menu-item
-                                                    class="vouchers-add-new"
-                                                    (click)="getCustomerDetails()"
-                                                >
+                                                <button mat-menu-item class="vouchers-add-new"
+                                                    (click)="getCustomerDetails()">
                                                     {{ localeData?.add_new_address }}
                                                 </button>
                                             </div>
@@ -708,11 +706,12 @@
                                     </div>
                                     <!-- Shipping Address -->
                                     <div class="col-6">
-                                        {{ localeData?.shipping_address  }}
+                                        {{ localeData?.shipping_address }}
                                         <span
-                                        *ngIf="purchaseBillCompany.shippingDetails.gstNumber || purchaseBillCompany.shippingDetails.taxNumber || purchaseBillCompany.shippingDetails.stateName  || purchaseBillCompany.shippingDetails.state?.name  || purchaseBillCompany.shippingDetails.state?.code || purchaseBillCompany.shippingDetails.stateCode">({{ commonLocaleData?.app_address }}
-                                        {{ purchaseBillCompany.shippingDetails.index + 1 }})
-                                    </span>
+                                            *ngIf="purchaseBillCompany.shippingDetails.gstNumber || purchaseBillCompany.shippingDetails.taxNumber || purchaseBillCompany.shippingDetails.stateName  || purchaseBillCompany.shippingDetails.state?.name  || purchaseBillCompany.shippingDetails.state?.code || purchaseBillCompany.shippingDetails.stateCode">({{
+                                            commonLocaleData?.app_address }}
+                                            {{ purchaseBillCompany.shippingDetails.index + 1 }})
+                                        </span>
                                         <ng-container>
                                             <i *ngIf="companyAddressList?.length > 1"
                                                 [matMenuTriggerFor]="shippingAddress"
@@ -722,11 +721,8 @@
                                                     <ng-container
                                                         *ngFor="let address of companyAddressList; let i = index">
                                                         <button 
-                                                        [address]="address"
-                                                        [selectedAddres]="purchaseBillCompany.shippingDetails"
-                                                        (matchedAddress)="onAddressMatched('company',$event, i)"
-                                                        *ngIf="address.gstNumber || address.taxNumber ||address.stateName || address.stateCode" 
-                                                        mat-menu-item (click)="
+                                                            *ngIf="address.gstNumber || address.taxNumber ||address.stateName || address.stateCode"
+                                                            mat-menu-item (click)="
                                                          autoFillCompanyShipping = false;
                                                                 selectAddress(
                                                                     purchaseBillCompany.shippingDetails,
@@ -738,7 +734,8 @@
                                                             <div
                                                                 class="justify-content-between align-items-center d-flex">
                                                                 <div>
-                                                                    <p> {{ commonLocaleData?.app_address }} {{ address.index + 1 }}</p>
+                                                                    <p> {{ commonLocaleData?.app_address }} {{
+                                                                        address.index + 1 }}</p>
                                                                     <p>
                                                                         {{ address.address }}
                                                                     </p>
@@ -761,22 +758,23 @@
                                                                         }}
                                                                     </p>
                                                                 </div>
-                                                                <i class="icon-tick"  *ngIf="companyAddressMatches[i]"></i>
+                                                                <i class="icon-tick"
+                                                                *ngIf="purchaseBillCompany.shippingDetails.state?.name === address.state?.name &&
+                                                            purchaseBillCompany.shippingDetails.gstNumber === address.gstNumber &&
+                                                            purchaseBillCompany.shippingDetails.taxNumber === address.taxNumber && 
+                                                            purchaseBillCompany.shippingDetails.address === address.address"></i>
                                                             </div>
                                                         </button>
                                                         <mat-divider></mat-divider>
                                                     </ng-container>
-                                                    <button
-                                                        mat-menu-item
-                                                        class="vouchers-add-new"
-                                                        (click)="getCustomerDetails()"
-                                                    >
+                                                    <button mat-menu-item class="vouchers-add-new"
+                                                        (click)="getCustomerDetails()">
                                                         {{ localeData?.add_new_address }}
                                                     </button>
                                                 </div>
                                             </mat-menu>
                                         </ng-container>
-                            
+
                                     </div>
                                 </div>
                                 <!-- Row 3 -->
@@ -889,7 +887,8 @@
                                         </p>
                                     </div>
                                 </div>
-                                <div class="row mr-t15" *ngIf="(isCreditNote || isDebitNote) || companyCountryCode === 'AE'">
+                                <div class="row mr-t15"
+                                    *ngIf="(isCreditNote || isDebitNote) || companyCountryCode === 'AE'">
                                     <div class="col-12">
                                         <div class="d-flex column-gap5 align-items-baseline"
                                             *ngIf="isCreditNote || isDebitNote">
@@ -1531,8 +1530,7 @@
                                                                             class="custom-date-entries custom-input-field d-flex">
                                                                             <giddh-datepicker
                                                                                 class="date-border entries-giddh-datepicker"
-                                                                                [showToggleIcon]="true"
-                                                                                #dp="ngModel"
+                                                                                [showToggleIcon]="true" #dp="ngModel"
                                                                                 (keydown.enter)="
                                                                                     $event.preventDefault()
                                                                                 " (dateSelected)="
@@ -1609,7 +1607,7 @@
                                                                                 </mat-radio-button>
                                                                             </mat-radio-group>
                                                                             <text-field [type]="'text'"
-                                                                            [cssClass]="'form-control'"
+                                                                                [cssClass]="'form-control'"
                                                                                 maxLength="10"
                                                                                 [allowDecimalDigitsOnly]="true"
                                                                                 [placeholder]="localeData?.hsn_number"
@@ -1620,7 +1618,7 @@
                                                                                 " [(ngModel)]="transaction.hsnNumber"
                                                                                 [readonly]="isEinvoiceGenerated"></text-field>
                                                                             <text-field [type]="'text'"
-                                                                            [cssClass]="'form-control'"
+                                                                                [cssClass]="'form-control'"
                                                                                 maxLength="10"
                                                                                 [allowDecimalDigitsOnly]="true"
                                                                                 [placeholder]="localeData?.sac_number"
@@ -1877,7 +1875,8 @@
                                                             </div>
                                                             <div *ngIf="entry.isOtherTaxApplicable" class="mr-t1">
                                                                 <span>
-                                                                    <div class="d-flex align-items-center justify-content-end">
+                                                                    <div
+                                                                        class="d-flex align-items-center justify-content-end">
                                                                         <span class="mr-r05">
                                                                             <a href="javascript:;"
                                                                                 *ngIf="!isEinvoiceGenerated" (click)="
