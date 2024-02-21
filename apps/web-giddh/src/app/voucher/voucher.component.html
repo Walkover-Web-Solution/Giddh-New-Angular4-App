@@ -315,8 +315,11 @@
                                                                     }}
                                                                 </p>
                                                             </div>
-                                                            <i class="icon-tick"
-                                                                *ngIf="invFormData.accountDetails.billingDetails.state?.name ===address.state?.name && invFormData.accountDetails.billingDetails.gstNumber ===address.gstNumber && invFormData.accountDetails.billingDetails.taxNumber ===address.taxNumber && invFormData.accountDetails.billingDetails.address === address.address"></i>
+                                                            <i 
+                                                                class="icon-tick" 
+                                                                onLoad
+                                                                (elementLoaded)="invFormData.accountDetails.billingDetails.index = i"
+                                                                *ngIf="(!invFormData.accountDetails.billingDetails.state?.name || (invFormData.accountDetails.billingDetails.state?.name && (invFormData.accountDetails.billingDetails.state?.name === address.state?.name || invFormData.accountDetails.billingDetails.stateName === address.state?.name))) && (!invFormData.accountDetails.billingDetails.gstNumber || (invFormData.accountDetails.billingDetails.gstNumber && invFormData.accountDetails.billingDetails.gstNumber === address.gstNumber)) && (!invFormData.accountDetails.billingDetails.taxNumber || (invFormData.accountDetails.billingDetails.taxNumber && invFormData.accountDetails.billingDetails.taxNumber === address.gstNumber)) && (!invFormData.accountDetails.billingDetails.address[0]?.trim() || (invFormData.accountDetails.billingDetails.address[0]?.trim() && (invFormData.accountDetails.billingDetails.address[0]?.trim() === address.address?.trim())))"></i>
                                                         </div>
                                                     </button>
                                                     <mat-divider></mat-divider>
@@ -653,7 +656,7 @@
                                         <mat-menu #companyBillingAddress="matMenu">
                                             <div class="mat-menu-width-large vouchers-address-menu">
                                                 <ng-container *ngFor="let address of companyAddressList; let i = index">
-                                                    <button 
+                                                    <button
                                                         *ngIf="address.gstNumber || address.taxNumber||address.stateName || address.stateCode"
                                                         mat-menu-item (click)="
                                                             autoFillCompanyShipping = true;
@@ -689,7 +692,7 @@
                                                                 </p>
                                                             </div>
                                                             <i class="icon-tick"
-                                                                    *ngIf="purchaseBillCompany.billingDetails.state?.name === address.state?.name &&
+                                                                *ngIf="purchaseBillCompany.billingDetails.state?.name === address.state?.name &&
                                                                 purchaseBillCompany.billingDetails.gstNumber === address.gstNumber &&
                                                                 purchaseBillCompany.billingDetails.taxNumber === address.taxNumber && 
                                                                 purchaseBillCompany.billingDetails.address === address.address"></i>
@@ -720,7 +723,7 @@
                                                 <div class="mat-menu-width-large vouchers-address-menu">
                                                     <ng-container
                                                         *ngFor="let address of companyAddressList; let i = index">
-                                                        <button 
+                                                        <button
                                                             *ngIf="address.gstNumber || address.taxNumber ||address.stateName || address.stateCode"
                                                             mat-menu-item (click)="
                                                          autoFillCompanyShipping = false;
@@ -759,7 +762,7 @@
                                                                     </p>
                                                                 </div>
                                                                 <i class="icon-tick"
-                                                                *ngIf="purchaseBillCompany.shippingDetails.state?.name === address.state?.name &&
+                                                                    *ngIf="purchaseBillCompany.shippingDetails.state?.name === address.state?.name &&
                                                             purchaseBillCompany.shippingDetails.gstNumber === address.gstNumber &&
                                                             purchaseBillCompany.shippingDetails.taxNumber === address.taxNumber && 
                                                             purchaseBillCompany.shippingDetails.address === address.address"></i>
