@@ -204,7 +204,9 @@
 
                         th {
                             color: var(--color-giddh-blue);
-                            padding-right: 14px !important;
+                            &:not(:first-child, :nth-child(2)){
+                                padding-right: 14px !important;
+                            }
                         }
 
                         td {
