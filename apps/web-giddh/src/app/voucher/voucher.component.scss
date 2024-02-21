@@ -35,6 +35,7 @@
     .differ-currency {
         color: var(--color-gray);
         font-size: var(--font-size-15);
+        padding-right: 6px;
     }
 
     #button-dropup {
@@ -210,7 +211,7 @@
                             vertical-align: top;
 
                             .delete-btn {
-                                right: 5px;
+                                right: 6px;
                                 bottom: 18px;
                                 transition: all 200ms;
 
@@ -220,6 +221,9 @@
                             }
                             &.item-tax {
                                 padding-bottom: 36px !important;
+                                .wrap-other-tax {
+                                    padding-right: 6px;
+                                }
                             }
 
                             .select-account-label {

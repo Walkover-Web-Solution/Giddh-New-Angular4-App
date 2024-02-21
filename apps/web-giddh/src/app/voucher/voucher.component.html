@@ -445,7 +445,7 @@
                                             <span *ngIf="!isCashInvoice">
                                                 {{ localeData?.shipping_address }}
                                                 <span
-                                                    *ngIf="invFormData.accountDetails.shippingDetails.gstNumber || invFormData.accountDetails.shippingDetails.taxNumber || invFormData.accountDetails.shippingDetails.stateName || invFormData.accountDetails.shippingDetails.state?.name|| invFormData.accountDetails.shippingDetails.state?.code || invFormData.accountDetails.shippingDetails.stateCode">({{ commonLocaleData?.app_address }}
+                                                    *ngIf="invFormData.accountDetails.shippingDetails?.gstNumber || invFormData.accountDetails.shippingDetails.taxNumber || invFormData.accountDetails.shippingDetails.stateName || invFormData.accountDetails.shippingDetails.state?.name|| invFormData.accountDetails.shippingDetails.state?.code || invFormData.accountDetails.shippingDetails.stateCode">({{ commonLocaleData?.app_address }}
                                                     {{ invFormData.accountDetails.shippingDetails.index + 1 }})
                                                 </span>
                                             </span>
@@ -1071,7 +1071,10 @@
                                         <thead>
                                             <tr>
                                                 <th *ngFor="let item of theadArrReadOnly" [hidden]="!item.display"
-                                                    class="thead-sales-invoice" [ngClass]="item?.label">
+                                                    class="thead-sales-invoice" [ngClass]="{ 'd-none' : 
+                                                        ((commonLocaleData?.app_quantity_unit === item?.label) || (commonLocaleData?.app_rate === item?.label)) 
+                                                        && !hasStock,  }"
+                                                    >
                                                     {{ item?.label }}
                                                     <span *ngIf="item.label === 'Tax' && isRcmEntry">({{
                                                         commonLocaleData?.app_rcm }})<sup
@@ -1157,19 +1160,19 @@
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <td width="12%" *ngIf="
+                                                <td [width]="hasStock ? '12%' : '16%'" *ngIf="
                                                         !currentVoucherFormDetails ||
                                                         currentVoucherFormDetails?.quantityAllowed
-                                                    ">
+                                                    " [ngClass]="{ 'd-none' : !hasStock}">
                                                     <div class="wrap-td-data">
                                                         {{ transaction.quantity | giddhCurrency }}
                                                         {{ transaction.stockUnitCode }}
                                                     </div>
                                                 </td>
-                                                <td width="12%" *ngIf="
+                                                <td [width]="hasStock ? '12%' : '16%'" *ngIf="
                                                         !currentVoucherFormDetails ||
                                                         currentVoucherFormDetails?.rateAllowed
-                                                    ">
+                                                    " [ngClass]="{ 'd-none' : !hasStock}">
                                                     <div *ngIf="transaction.rate > 0 || transaction.isStockTxn">
                                                         <div class="td-wrapper flex-grow-1">
                                                             <div class="flex-grow-1">
@@ -1205,7 +1208,7 @@
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <td width="12%">
+                                                <td [width]="hasStock ? '12%' : '16%'">
                                                     <div class="td-wrapper">
                                                         <div class="flex-grow-1">
                                                             <div class="wrap-td-data">
@@ -1239,7 +1242,7 @@
                                                         </span>
                                                     </div>
                                                 </td>
-                                                <td width="9%" *ngIf="
+                                                <td [width]="hasStock ? '9%' : '16%'" *ngIf="
                                                         !currentVoucherFormDetails ||
                                                         currentVoucherFormDetails?.discountAllowed
                                                     ">
@@ -1274,7 +1277,7 @@
                                                         </span>
                                                     </div>
                                                 </td>
-                                                <td [class.error-box]="transaction.requiredTax" width="12%"
+                                                <td [class.error-box]="transaction.requiredTax" [width]="hasStock ? '12%' : '16%'"
                                                     (focus)="transaction.requiredTax = false" *ngIf="
                                                         !currentVoucherFormDetails ||
                                                         currentVoucherFormDetails?.taxesAllowed
@@ -1647,43 +1650,46 @@
                                                     </div>
                                                 </td>
                                                 <td (click)="closeDiscountPopup(); closeTaxControlPopup()" *ngIf="
-                                                        !currentVoucherFormDetails ||
-                                                        currentVoucherFormDetails?.quantityAllowed
-                                                    " width="12%">
-                                                    <text-field [placeholder]="commonLocaleData?.app_quantity"
-                                                        [readonly]="!transaction.isStockTxn || isEinvoiceGenerated"
-                                                        [type]="'text'"
-                                                        [cssClass]="'form-control mat-field-border text-right stock1'"
-                                                        [name]="'transaction.quantity_' + entryIdx"
-                                                        [mask]="inputMaskFormat" [useMask]="true"
-                                                        [(ngModel)]="transaction.quantity"
-                                                        (change)="handleQuantityBlur(entry, transaction)"
-                                                        [allowDecimalDigitsOnly]="true">
-                                                    </text-field>
-                                                    <div class="select-quantity">
-                                                        <mat-select class="form-control mt-2"
-                                                            [disabled]="!transaction.isStockTxn || isEinvoiceGenerated"
-                                                            (selectionChange)="
-                                                                onChangeUnit(entry, transaction, $event);
-                                                                handlePriceCalculationOnUnitChange(entry, transaction)
-                                                            " [value]="transaction.stockUnit"
-                                                            [(ngModel)]="transaction.stockUnit"
-                                                            [name]="'transaction.stockUnit_' + entryIdx">
-                                                            <div class="select-quantity-option">
-                                                                <mat-option *ngFor="let stock of transaction.stockList"
-                                                                    [value]="stock.id">
-                                                                    {{ stock.text }}
-                                                                </mat-option>
-                                                            </div>
-                                                        </mat-select>
-                                                    </div>
+                                                        (!currentVoucherFormDetails ||
+                                                        currentVoucherFormDetails?.quantityAllowed)
+                                                    " [width]="hasStock ? '12%' : '16%'" [ngClass]="{ 'd-none' : !hasStock}">
+                                                    <ng-container *ngIf="!(!transaction.isStockTxn || isEinvoiceGenerated)">
+                                                        <text-field [placeholder]="commonLocaleData?.app_quantity"
+                                                            [readonly]="!transaction.isStockTxn || isEinvoiceGenerated"
+                                                            [type]="'text'"
+                                                            [cssClass]="'form-control mat-field-border text-right stock1'"
+                                                            [name]="'transaction.quantity_' + entryIdx"
+                                                            [mask]="inputMaskFormat" [useMask]="true"
+                                                            [(ngModel)]="transaction.quantity"
+                                                            (change)="handleQuantityBlur(entry, transaction)"
+                                                            [allowDecimalDigitsOnly]="true">
+                                                        </text-field>
+                                                        <div class="select-quantity">
+                                                            <mat-select class="form-control mt-2"
+                                                                [placeholder]="commonLocaleData?.app_select"
+                                                                [disabled]="!transaction.isStockTxn || isEinvoiceGenerated"
+                                                                (selectionChange)="
+                                                                    onChangeUnit(entry, transaction, $event);
+                                                                    handlePriceCalculationOnUnitChange(entry, transaction)
+                                                                " [value]="transaction.stockUnit"
+                                                                [(ngModel)]="transaction.stockUnit"
+                                                                [name]="'transaction.stockUnit_' + entryIdx">
+                                                                <div class="select-quantity-option">
+                                                                    <mat-option *ngFor="let stock of transaction.stockList"
+                                                                        [value]="stock.id">
+                                                                        {{ stock.text }}
+                                                                    </mat-option>
+                                                                </div>
+                                                            </mat-select>
+                                                        </div>
+                                                </ng-container>
                                                 </td>
-                                                <td (click)="closeDiscountPopup(); closeTaxControlPopup()" width="12%"
+                                                <td (click)="closeDiscountPopup(); closeTaxControlPopup()" [width]="hasStock ? '12%' : '16%'" [ngClass]="{ 'd-none' : !hasStock}"
                                                     *ngIf="
-                                                        !currentVoucherFormDetails ||
-                                                        currentVoucherFormDetails?.rateAllowed
+                                                        (!currentVoucherFormDetails ||
+                                                        currentVoucherFormDetails?.rateAllowed)
                                                     ">
-                                                    <div class="td-wrapper">
+                                                    <div class="td-wrapper" *ngIf="!(!transaction.isStockTxn || isEinvoiceGenerated)">
                                                         <div class="flex-fill">
                                                             <text-field [readonly]="
                                                                     !transaction.isStockTxn || isEinvoiceGenerated
@@ -1691,8 +1697,8 @@
                                                                 [type]="'text'" [cssClass]="
                                                                     'form-control mat-field-border transaction-rate text-right '
                                                                 " [name]="'transaction.rate_' + entryIdx"
-                                                                [prefix]="invFormData.accountDetails.currencySymbol"
-                                                                [suffix]="selectedSuffixForCurrency"
+                                                                [prefix]="invFormData.accountDetails.currencySymbol + ' '"
+                                                                [suffix]="transaction.rate == 0 ? '.00' + selectedSuffixForCurrency : selectedSuffixForCurrency"
                                                                 [mask]="inputMaskFormat" [useMask]="true"
                                                                 [(ngModel)]="transaction.rate" (change)="
                                                                     calculateStockEntryAmount(transaction);
@@ -1715,7 +1721,7 @@
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <td (click)="closeDiscountPopup(); closeTaxControlPopup()" width="12%">
+                                                <td (click)="closeDiscountPopup(); closeTaxControlPopup()" [width]="hasStock ? '12%' : '16%'"> 
                                                     <div class="td-wrapper">
                                                         <div class="flex-fill">
                                                             <text-field (click)="transactionAmountClicked(transaction)"
@@ -1723,10 +1729,12 @@
                                                                 [type]="'text'"
                                                                 [cssClass]="'form-control mat-field-border text-right '"
                                                                 [name]="'transaction.amount_' + entryIdx"
-                                                                [prefix]="invFormData.accountDetails.currencySymbol"
-                                                                [suffix]="selectedSuffixForCurrency"
-                                                                [mask]="inputMaskFormat" [useMask]="true"
-                                                                [(ngModel)]="transaction.amount" (change)="
+                                                                [prefix]="invFormData.accountDetails.currencySymbol + ' '"
+                                                                [suffix]="transaction.amount == 0 ? '.00' + selectedSuffixForCurrency : selectedSuffixForCurrency"
+                                                                [mask]="inputMaskFormat" 
+                                                                [useMask]="true"
+                                                                [(ngModel)]="transaction.amount"
+                                                                (change)="
                                                                     calculateWhenTrxAltered(
                                                                         entry,
                                                                         transaction,
@@ -1746,7 +1754,7 @@
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <td (click)="closeTaxControlPopup()" width="9%" *ngIf="
+                                                <td (click)="closeTaxControlPopup()" [width]="hasStock ? '9%' : '16%'" *ngIf="
                                                         !currentVoucherFormDetails ||
                                                         currentVoucherFormDetails?.discountAllowed
                                                     ">
@@ -1770,8 +1778,8 @@
                                                                         $event
                                                                     )
                                                                 " [maskInput]="inputMaskFormat" [prefixInput]="
-                                                                    invFormData.accountDetails.currencySymbol
-                                                                " [suffixInput]="selectedSuffixForCurrency"
+                                                                    invFormData.accountDetails.currencySymbol + ' '
+                                                                " [suffixInput]="entry.discountSum == 0 ? '.00' + selectedSuffixForCurrency : selectedSuffixForCurrency"
                                                                 [commonLocaleData]="commonLocaleData"
                                                                 [readonly]="isEinvoiceGenerated">
                                                             </discount-control-component>
@@ -1790,7 +1798,7 @@
                                                 <td (click)="closeDiscountPopup()" *ngIf="
                                                         !currentVoucherFormDetails ||
                                                         currentVoucherFormDetails?.taxesAllowed
-                                                    " width="12%">
+                                                    " [width]="hasStock ? '12%' : '16%'">
                                                     <div class="td-wrapper">
                                                         <div class="text-right flex-fill">
                                                             <tax-control #taxControlComponent [taxes]="companyTaxesList"
@@ -1806,8 +1814,8 @@
                                                                     calculateWhenTrxAltered(entry, transaction)
                                                                 " (hideOtherPopups)="closeDiscountPopup()"
                                                                 [maskInput]="inputMaskFormat" [prefixInput]="
-                                                                    invFormData.accountDetails.currencySymbol
-                                                                " [suffixInput]="selectedSuffixForCurrency"
+                                                                    invFormData.accountDetails.currencySymbol + ' '
+                                                                " [suffixInput]="transaction.taxableValue == 0 ? '.00' + selectedSuffixForCurrency : selectedSuffixForCurrency"
                                                                 [readonly]="isEinvoiceGenerated">
                                                             </tax-control>
                                                         </div>
@@ -1825,13 +1833,12 @@
                                                 <td class="position-relative item-tax"
                                                     (click)="closeDiscountPopup(); closeTaxControlPopup()" width="20%">
                                                     <div class="td-wrapper">
-                                                        {{isEinvoiceGenerated}}
                                                         <div class="flex-fill">
                                                             <text-field [type]="'text'"
                                                                 [cssClass]="'form-control mat-field-border text-right '"
                                                                 [name]="'transaction.total_' + entryIdx"
-                                                                [prefix]="invFormData.accountDetails.currencySymbol"
-                                                                [suffix]="selectedSuffixForCurrency"
+                                                                [prefix]="invFormData.accountDetails.currencySymbol + ' '"
+                                                                [suffix]="transaction.total == 0 ? '.00' + selectedSuffixForCurrency : selectedSuffixForCurrency"
                                                                 [mask]="inputMaskFormat" [useMask]="true"
                                                                 [allowDecimalDigitsOnly]="true"
                                                                 [(ngModel)]="transaction.total" (change)="
