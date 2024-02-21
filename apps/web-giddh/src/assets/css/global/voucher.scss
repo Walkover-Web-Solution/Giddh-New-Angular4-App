@@ -102,6 +102,32 @@
                 }
             }
         }
+
+        .vouchers-entry-table {
+            table {
+                tr {
+                    td { 
+                        input,
+                        textarea,
+                        mat-select {
+                            border: none !important;
+                            background-color: var(--color-transparent-background) !important;
+                            &.form-control {
+                                &:disabled, &:read-only {
+                                    cursor: not-allowed;
+                                }
+                            }
+                            
+                            &.mat-mdc-select-disabled {
+                                .mat-mdc-select-trigger{
+                                    cursor: not-allowed;
+                                }
+                            }
+                        }
+                    } 
+                } 
+            }
+        }
     }
 
     .vouchers-actions {
