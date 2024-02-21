@@ -283,7 +283,6 @@
                                                     <button
                                                         *ngIf="address.gstNumber || address.taxNumber || address.state?.name || address.state?.code"
                                                         mat-menu-item (click)="
-                                                            autoFillShipping = true;
                                                             selectAddress(
                                                                 invFormData.accountDetails.billingDetails,
                                                                 address,
@@ -315,9 +314,7 @@
                                                                     }}
                                                                 </p>
                                                             </div>
-                                                            <i 
-                                                                class="icon-tick" 
-                                                                onLoad
+                                                            <i class="icon-tick" onLoad
                                                                 (elementLoaded)="invFormData.accountDetails.billingDetails.index = i"
                                                                 *ngIf="(!invFormData.accountDetails.billingDetails.state?.name || (invFormData.accountDetails.billingDetails.state?.name && (invFormData.accountDetails.billingDetails.state?.name === address.state?.name || invFormData.accountDetails.billingDetails.stateName === address.state?.name))) && (!invFormData.accountDetails.billingDetails.gstNumber || (invFormData.accountDetails.billingDetails.gstNumber && invFormData.accountDetails.billingDetails.gstNumber === address.gstNumber)) && (!invFormData.accountDetails.billingDetails.taxNumber || (invFormData.accountDetails.billingDetails.taxNumber && invFormData.accountDetails.billingDetails.taxNumber === address.gstNumber)) && (!invFormData.accountDetails.billingDetails.address[0]?.trim() || (invFormData.accountDetails.billingDetails.address[0]?.trim() && (invFormData.accountDetails.billingDetails.address[0]?.trim() === address.address?.trim())))"></i>
                                                         </div>
@@ -498,11 +495,9 @@
                                                                         }}
                                                                     </p>
                                                                 </div>
-                                                                <i 
-                                                                class="icon-tick" 
-                                                                onLoad
-                                                                (elementLoaded)="invFormData.accountDetails.shippingDetails.index = i"
-                                                                *ngIf="(!invFormData.accountDetails.shippingDetails.state?.name || (invFormData.accountDetails.shippingDetails.state?.name && (invFormData.accountDetails.shippingDetails.state?.name === address.state?.name || invFormData.accountDetails.shippingDetails.stateName === address.state?.name))) && (!invFormData.accountDetails.shippingDetails.gstNumber || (invFormData.accountDetails.shippingDetails.gstNumber && invFormData.accountDetails.shippingDetails.gstNumber === address.gstNumber)) && (!invFormData.accountDetails.shippingDetails.taxNumber || (invFormData.accountDetails.shippingDetails.taxNumber && invFormData.accountDetails.shippingDetails.taxNumber === address.gstNumber)) && (!invFormData.accountDetails.shippingDetails.address[0]?.trim() || (invFormData.accountDetails.shippingDetails.address[0]?.trim() && (invFormData.accountDetails.shippingDetails.address[0]?.trim() === address.address?.trim())))"></i>
+                                                                <i class="icon-tick" onLoad
+                                                                    (elementLoaded)="invFormData.accountDetails.shippingDetails.index = i"
+                                                                    *ngIf="(!invFormData.accountDetails.shippingDetails.state?.name || (invFormData.accountDetails.shippingDetails.state?.name && (invFormData.accountDetails.shippingDetails.state?.name === address.state?.name || invFormData.accountDetails.shippingDetails.stateName === address.state?.name))) && (!invFormData.accountDetails.shippingDetails.gstNumber || (invFormData.accountDetails.shippingDetails.gstNumber && invFormData.accountDetails.shippingDetails.gstNumber === address.gstNumber)) && (!invFormData.accountDetails.shippingDetails.taxNumber || (invFormData.accountDetails.shippingDetails.taxNumber && invFormData.accountDetails.shippingDetails.taxNumber === address.gstNumber)) && (!invFormData.accountDetails.shippingDetails.address[0]?.trim() || (invFormData.accountDetails.shippingDetails.address[0]?.trim() && (invFormData.accountDetails.shippingDetails.address[0]?.trim() === address.address?.trim())))"></i>
                                                             </div>
                                                         </button>
                                                         <mat-divider></mat-divider>
@@ -658,7 +653,6 @@
                                                     <button
                                                         *ngIf="address.gstNumber || address.taxNumber||address.stateName || address.stateCode"
                                                         mat-menu-item (click)="
-                                                            autoFillCompanyShipping = true;
                                                             selectAddress(
                                                                 purchaseBillCompany.billingDetails,
                                                                 address,
@@ -690,11 +684,9 @@
                                                                     }}
                                                                 </p>
                                                             </div>
-                                                            <i 
-                                                            class="icon-tick" 
-                                                            onLoad
-                                                            (elementLoaded)="purchaseBillCompany.billingDetails.index = i"
-                                                            *ngIf="(!purchaseBillCompany.billingDetails.state?.name || (purchaseBillCompany.billingDetails.state?.name && (purchaseBillCompany.billingDetails.state?.name === address.state?.name || purchaseBillCompany.billingDetails.stateName === address.stateName))  || (purchaseBillCompany.billingDetails.county?.name && (purchaseBillCompany.billingDetails.county?.name === address.county?.name))) && (!purchaseBillCompany.billingDetails.gstNumber || (purchaseBillCompany.billingDetails.gstNumber && purchaseBillCompany.billingDetails.gstNumber === address.gstNumber)) && (!purchaseBillCompany.billingDetails.gstNumber || (purchaseBillCompany.billingDetails.gstNumber && purchaseBillCompany.billingDetails.gstNumber === address.taxNumber)) && (!purchaseBillCompany.billingDetails.address[0]?.trim() || (purchaseBillCompany.billingDetails.address[0]?.trim() && (purchaseBillCompany.billingDetails.address[0]?.trim() === address.address?.trim())))"></i>
+                                                            <i class="icon-tick" onLoad
+                                                                (elementLoaded)="purchaseBillCompany.billingDetails.index = i"
+                                                                *ngIf="(!purchaseBillCompany.billingDetails.state?.name || (purchaseBillCompany.billingDetails.state?.name && (purchaseBillCompany.billingDetails.state?.name === address.state?.name || purchaseBillCompany.billingDetails.stateName === address.stateName))  || (purchaseBillCompany.billingDetails.county?.name && (purchaseBillCompany.billingDetails.county?.name === address.county?.name))) && (!purchaseBillCompany.billingDetails.gstNumber || (purchaseBillCompany.billingDetails.gstNumber && purchaseBillCompany.billingDetails.gstNumber === address.gstNumber)) && (!purchaseBillCompany.billingDetails.gstNumber || (purchaseBillCompany.billingDetails.gstNumber && purchaseBillCompany.billingDetails.gstNumber === address.taxNumber)) && (!purchaseBillCompany.billingDetails.address[0]?.trim() || (purchaseBillCompany.billingDetails.address[0]?.trim() && (purchaseBillCompany.billingDetails.address[0]?.trim() === address.address?.trim())))"></i>
                                                         </div>
                                                     </button>
                                                     <mat-divider></mat-divider>
@@ -760,11 +752,9 @@
                                                                         }}
                                                                     </p>
                                                                 </div>
-                                                                <i 
-                                                                class="icon-tick" 
-                                                                onLoad
-                                                                (elementLoaded)="purchaseBillCompany.shippingDetails.index = i"
-                                                                *ngIf="(!purchaseBillCompany.shippingDetails.state?.name || (purchaseBillCompany.shippingDetails.state?.name && (purchaseBillCompany.shippingDetails.state?.name === address.state?.name || purchaseBillCompany.shippingDetails.stateName === address.stateName))  || (purchaseBillCompany.shippingDetails.county?.name && (purchaseBillCompany.shippingDetails.county?.name === address.county?.name))) && (!purchaseBillCompany.shippingDetails.gstNumber || (purchaseBillCompany.shippingDetails.gstNumber && purchaseBillCompany.shippingDetails.gstNumber === address.gstNumber)) && (!purchaseBillCompany.shippingDetails.gstNumber || (purchaseBillCompany.shippingDetails.gstNumber && purchaseBillCompany.shippingDetails.gstNumber === address.taxNumber)) && (!purchaseBillCompany.shippingDetails.address[0]?.trim() || (purchaseBillCompany.shippingDetails.address[0]?.trim() && (purchaseBillCompany.shippingDetails.address[0]?.trim() === address.address?.trim())))"></i>
+                                                                <i class="icon-tick" onLoad
+                                                                    (elementLoaded)="purchaseBillCompany.shippingDetails.index = i"
+                                                                    *ngIf="(!purchaseBillCompany.shippingDetails.state?.name || (purchaseBillCompany.shippingDetails.state?.name && (purchaseBillCompany.shippingDetails.state?.name === address.state?.name || purchaseBillCompany.shippingDetails.stateName === address.stateName))  || (purchaseBillCompany.shippingDetails.county?.name && (purchaseBillCompany.shippingDetails.county?.name === address.county?.name))) && (!purchaseBillCompany.shippingDetails.gstNumber || (purchaseBillCompany.shippingDetails.gstNumber && purchaseBillCompany.shippingDetails.gstNumber === address.gstNumber)) && (!purchaseBillCompany.shippingDetails.gstNumber || (purchaseBillCompany.shippingDetails.gstNumber && purchaseBillCompany.shippingDetails.gstNumber === address.taxNumber)) && (!purchaseBillCompany.shippingDetails.address[0]?.trim() || (purchaseBillCompany.shippingDetails.address[0]?.trim() && (purchaseBillCompany.shippingDetails.address[0]?.trim() === address.address?.trim())))"></i>
                                                             </div>
                                                         </button>
                                                         <mat-divider></mat-divider>
