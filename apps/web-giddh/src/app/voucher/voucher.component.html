@@ -279,7 +279,10 @@
                                         <mat-menu #billingAddress="matMenu">
                                             <div class="mat-menu-width-large vouchers-address-menu">
                                                 <ng-container *ngFor="let address of accountAddressList; let i = index">
-                                                    <button
+                                                    <button matchAddress
+                                                    [address]="address"
+                                                    [selectedAddres]="invFormData.accountDetails.billingDetails"
+                                                    (matchedAddress)="onAddressMatched('account',$event, i)"
                                                         *ngIf="address.gstNumber || address.taxNumber || address.state?.name || address.state?.code"
                                                         mat-menu-item (click)="
                                                             autoFillShipping = true;
@@ -313,10 +316,7 @@
                                                                     }}
                                                                 </p>
                                                             </div>
-                                                            <i class="icon-tick" *ngIf="
-                                                                    invFormData.accountDetails.billingDetails.index ===
-                                                                    i
-                                                                "></i>
+                                                            <i class="icon-tick"  *ngIf="accountAddressMatches[i]"></i>
                                                         </div>
                                                     </button>
                                                     <mat-divider></mat-divider>
@@ -459,7 +459,11 @@
                                                 <div class="mat-menu-width-large vouchers-address-menu">
                                                     <ng-container
                                                         *ngFor="let address of accountAddressList; let i = index">
-                                                        <button   *ngIf="address.gstNumber || address.taxNumber || address.state?.name || address.state?.code" 
+                                                        <button
+                                                        [address]="address"
+                                                        [selectedAddres]="invFormData.accountDetails.shippingDetails"
+                                                        (matchedAddress)="onAddressMatched('account',$event, i)"
+                                                        *ngIf="address.gstNumber || address.taxNumber || address.state?.name || address.state?.code" 
                                                         mat-menu-item (click)="
                                                                 autoFillShipping = false;
                                                                 selectAddress(
@@ -495,10 +499,7 @@
                                                                         }}
                                                                     </p>
                                                                 </div>
-                                                                <i class="icon-tick" *ngIf="
-                                                                        invFormData.accountDetails.shippingDetails
-                                                                            .index === i
-                                                                    "></i>
+                                                                <i class="icon-tick"  *ngIf="accountAddressMatches[i]"></i>
                                                             </div>
                                                         </button>
                                                         <mat-divider></mat-divider>
@@ -654,6 +655,9 @@
                                             <div class="mat-menu-width-large vouchers-address-menu">
                                                 <ng-container *ngFor="let address of companyAddressList; let i = index">
                                                     <button 
+                                                    [address]="address"
+                                                    [selectedAddres]="purchaseBillCompany.billingDetails"
+                                                    (matchedAddress)="onAddressMatched('company',$event, i)"
                                                     *ngIf="address.gstNumber || address.taxNumber||address.stateName || address.stateCode"
                                                     mat-menu-item (click)="
                                                             autoFillCompanyShipping = true;
@@ -687,8 +691,7 @@
                                                                     }}
                                                                 </p>
                                                             </div>
-                                                            <i class="icon-tick"
-                                                                *ngIf="purchaseBillCompany.billingDetails.index === i"></i>
+                                                            <i class="icon-tick"  *ngIf="companyAddressMatches[i]"></i>
                                                         </div>
                                                     </button>
                                                     <mat-divider></mat-divider>
@@ -719,6 +722,9 @@
                                                     <ng-container
                                                         *ngFor="let address of companyAddressList; let i = index">
                                                         <button 
+                                                        [address]="address"
+                                                        [selectedAddres]="purchaseBillCompany.shippingDetails"
+                                                        (matchedAddress)="onAddressMatched('company',$event, i)"
                                                         *ngIf="address.gstNumber || address.taxNumber ||address.stateName || address.stateCode" 
                                                         mat-menu-item (click)="
                                                          autoFillCompanyShipping = false;
@@ -755,9 +761,7 @@
                                                                         }}
                                                                     </p>
                                                                 </div>
-                                                                <i class="icon-tick" *ngIf="
-                                                                        purchaseBillCompany.shippingDetails.index === i
-                                                                    "></i>
+                                                                <i class="icon-tick"  *ngIf="companyAddressMatches[i]"></i>
                                                             </div>
                                                         </button>
                                                         <mat-divider></mat-divider>

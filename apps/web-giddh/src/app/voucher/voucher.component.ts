@@ -1143,6 +1143,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.updatedAccountDetails$.subscribe(accountDetails => {
             if (accountDetails) {
                 this.hideDepositSectionForCashBankGroups(accountDetails);
+                console.log('tempSelectedAcc accountDetails', accountDetails.addresses)
                 accountDetails.addresses = accountDetails.addresses.map((item, i) => {
                     item['index'] = i;
                     return item;
@@ -1217,6 +1218,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 /** results[1] :- get voucher details response */
                 if (results[0]) {
                     let obj;
+                    console.log('results', results[0].account?.shippingDetails, results[0].account?.billingDetails)
                     this.invFormData.accountDetails.billingDetails = results[0].account?.billingDetails;
                     this.invFormData.accountDetails.shippingDetails = results[0].account?.shippingDetails;
                     if (this.voucherApiVersion === 2) {
@@ -1537,6 +1539,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         this.getUpdatedStateCodes(tempSelectedAcc.country?.countryCode).then(() => {
                             this.invFormData.accountDetails = new AccountDetailsClass(tempSelectedAcc);
                         });
+                        console.log('tempSelectedAcc', tempSelectedAcc.addresses)
                         tempSelectedAcc.addresses = tempSelectedAcc.addresses.map((item, i) => {
                             item['index'] = i;
                             return item;
@@ -2213,6 +2216,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 this.isCashBankAccount = true;
             }
         });
+        console.log('tempSelectedAcc data', data.addresses)
         data.addresses = data.addresses.map((item, i) => {
             item['index'] = i;
             return item;
@@ -7737,7 +7741,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         if (company.billingDetails && company.shippingDetails) {
             this.purchaseBillCompany = {
                 billingDetails: {
-                    index:0,
+                    index: 0,
                     address: company?.billingDetails?.address,
                     state: { code: company?.billingDetails?.state?.code, name: company?.billingDetails?.state?.name },
                     county: { code: company?.billingDetails?.county?.code, name: company?.billingDetails?.county?.name },
@@ -7747,7 +7751,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     pincode: company?.billingDetails?.pincode
                 },
                 shippingDetails: {
-                    index:0,
+                    index: 0,
                     address: company?.shippingDetails?.address,
                     state: { code: company?.shippingDetails?.state?.code, name: company?.shippingDetails?.state?.name },
                     county: { code: company?.shippingDetails?.county?.code, name: company?.shippingDetails?.county?.name },
@@ -9558,8 +9562,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public checkIfEntryHasStock(): void {
         this.hasStock = false;
 
-        this.invFormData.entries.forEach( entry => {
-            if(entry.transactions[0]?.isStockTxn){
+        this.invFormData.entries.forEach(entry => {
+            if (entry.transactions[0]?.isStockTxn) {
                 this.hasStock = true;
             }
         })
