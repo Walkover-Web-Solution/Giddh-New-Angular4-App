@@ -42,7 +42,6 @@ import { WatchVideoModule } from "../theme/watch-video/watch-video.module";
 import { MatCardModule } from "@angular/material/card";
 import { MatExpansionModule } from "@angular/material/expansion";
 import { MatDividerModule } from "@angular/material/divider";
-import { MatchAddressModule } from "./directives/match-address/match-address.module";
 
 @NgModule({
     imports: [
@@ -90,8 +89,7 @@ import { MatchAddressModule } from "./directives/match-address/match-address.mod
         WatchVideoModule,
         MatCardModule,
         MatExpansionModule,
-        MatDividerModule,
-        MatchAddressModule
+        MatDividerModule
     ],
     exports: [VoucherComponent],
     declarations: [
