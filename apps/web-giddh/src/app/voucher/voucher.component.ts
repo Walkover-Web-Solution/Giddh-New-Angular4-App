@@ -552,7 +552,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         }
     };
     /* This will hold autofill state of company billing/shipping */
-    public autoFillCompanyShipping: boolean = false;
+    public autoFillCompanyShipping: boolean = true;
     /* This will hold company's country states */
     public companyStatesSource: IOption[] = [];
     /* This will hold if copy purchase bill is done */
@@ -2454,7 +2454,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             this.toggleBodyClass();
         }
         this.clickAdjustAmount(false);
-        this.autoFillCompanyShipping = false;
+        this.autoFillCompanyShipping = true;
         this.userDeposit = null;
         this.fillDeliverToAddress();
         this.createEmbeddedViewAtIndex(0);
@@ -2478,16 +2478,14 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         }
     }
 
-    public autoFillShippingDetails(index: number = 0) {
+    public autoFillShippingDetails() {
         if (this.autoFillShipping) {
             this.invFormData.accountDetails.shippingDetails = cloneDeep(this.invFormData.accountDetails.billingDetails);
             if (this.shippingState && this.shippingState.nativeElement) {
                 this.shippingState.nativeElement.classList.remove('error-box');
             }
-        } else {
-            this.invFormData.accountDetails.shippingDetails.index = index;
-            this.changeDetectorRef.detectChanges();
         }
+        this.changeDetectorRef.detectChanges();
     }
 
     public convertDateForAPI(val: any): string {
@@ -7636,16 +7634,14 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      *
      * @memberof VoucherComponent
      */
-    public autoFillCompanyShippingDetails(index: number = 0): void {
+    public autoFillCompanyShippingDetails(): void {
         if (this.autoFillCompanyShipping) {
             this.purchaseBillCompany.shippingDetails = cloneDeep(this.purchaseBillCompany.billingDetails);
             if (this.shippingStateCompany && this.shippingStateCompany.nativeElement) {
                 this.shippingStateCompany.nativeElement.classList.remove('error-box');
-            }
-        } else {
-            this.purchaseBillCompany.shippingDetails.index = index;
-            this.changeDetectorRef.detectChanges();
+            }    
         }
+        this.changeDetectorRef.detectChanges();
     }
 
     /**
@@ -8116,9 +8112,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             data.gstNumber = (isCompanyAddress) ? (address.gstNumber ?? address.taxNumber) : address.gstNumber;
             data.pincode = address.pincode;
             if (isCompanyAddress) {
-                this.autoFillCompanyShippingDetails(index);
+                this.autoFillCompanyShippingDetails();
             } else {
-                this.autoFillShippingDetails(index);
+                this.autoFillShippingDetails();
             }
         }
         this.changeDetectorRef.detectChanges();
