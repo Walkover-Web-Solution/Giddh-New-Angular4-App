@@ -9545,7 +9545,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @memberof VoucherComponent
      */
     public checkIfEntryHasStock(): void {
-            this.hasStock = false;
+        this.hasStock = false;
 
         this.invFormData.entries.forEach( entry => {
             if(entry.transactions[0]?.isStockTxn){

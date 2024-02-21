@@ -1073,7 +1073,7 @@
                                                 <th *ngFor="let item of theadArrReadOnly" [hidden]="!item.display"
                                                     class="thead-sales-invoice" [ngClass]="{ 'd-none' : 
                                                         ((commonLocaleData?.app_quantity_unit === item?.label) || (commonLocaleData?.app_rate === item?.label)) 
-                                                        && !hasStock,  }"
+                                                        && !hasStock }"
                                                     >
                                                     {{ item?.label }}
                                                     <span *ngIf="item.label === 'Tax' && isRcmEntry">({{
@@ -1160,7 +1160,7 @@
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <td [width]="hasStock ? '12%' : '16%'" *ngIf="
+                                                <td width="12%" *ngIf="
                                                         !currentVoucherFormDetails ||
                                                         currentVoucherFormDetails?.quantityAllowed
                                                     " [ngClass]="{ 'd-none' : !hasStock}">
@@ -1169,7 +1169,7 @@
                                                         {{ transaction.stockUnitCode }}
                                                     </div>
                                                 </td>
-                                                <td [width]="hasStock ? '12%' : '16%'" *ngIf="
+                                                <td width="12%" *ngIf="
                                                         !currentVoucherFormDetails ||
                                                         currentVoucherFormDetails?.rateAllowed
                                                     " [ngClass]="{ 'd-none' : !hasStock}">
@@ -1652,7 +1652,7 @@
                                                 <td (click)="closeDiscountPopup(); closeTaxControlPopup()" *ngIf="
                                                         (!currentVoucherFormDetails ||
                                                         currentVoucherFormDetails?.quantityAllowed)
-                                                    " [width]="hasStock ? '12%' : '16%'" [ngClass]="{ 'd-none' : !hasStock}">
+                                                    " width="12%" [ngClass]="{ 'd-none' : !hasStock}">
                                                     <ng-container *ngIf="!(!transaction.isStockTxn || isEinvoiceGenerated)">
                                                         <text-field [placeholder]="commonLocaleData?.app_quantity"
                                                             [readonly]="!transaction.isStockTxn || isEinvoiceGenerated"
@@ -1684,7 +1684,7 @@
                                                         </div>
                                                 </ng-container>
                                                 </td>
-                                                <td (click)="closeDiscountPopup(); closeTaxControlPopup()" [width]="hasStock ? '12%' : '16%'" [ngClass]="{ 'd-none' : !hasStock}"
+                                                <td (click)="closeDiscountPopup(); closeTaxControlPopup()" width="12%" [ngClass]="{ 'd-none' : !hasStock}"
                                                     *ngIf="
                                                         (!currentVoucherFormDetails ||
                                                         currentVoucherFormDetails?.rateAllowed)
@@ -1698,7 +1698,7 @@
                                                                     'form-control mat-field-border transaction-rate text-right '
                                                                 " [name]="'transaction.rate_' + entryIdx"
                                                                 [prefix]="invFormData.accountDetails.currencySymbol + ' '"
-                                                                [suffix]="transaction.rate == 0 ? '.00' + selectedSuffixForCurrency : selectedSuffixForCurrency"
+                                                                [suffix]="transaction.rate === 0 ? '.00' + selectedSuffixForCurrency : selectedSuffixForCurrency"
                                                                 [mask]="inputMaskFormat" [useMask]="true"
                                                                 [(ngModel)]="transaction.rate" (change)="
                                                                     calculateStockEntryAmount(transaction);
@@ -1730,7 +1730,7 @@
                                                                 [cssClass]="'form-control mat-field-border text-right '"
                                                                 [name]="'transaction.amount_' + entryIdx"
                                                                 [prefix]="invFormData.accountDetails.currencySymbol + ' '"
-                                                                [suffix]="transaction.amount == 0 ? '.00' + selectedSuffixForCurrency : selectedSuffixForCurrency"
+                                                                [suffix]="transaction.amount === 0 ? '.00' + selectedSuffixForCurrency : selectedSuffixForCurrency"
                                                                 [mask]="inputMaskFormat" 
                                                                 [useMask]="true"
                                                                 [(ngModel)]="transaction.amount"
@@ -1779,7 +1779,7 @@
                                                                     )
                                                                 " [maskInput]="inputMaskFormat" [prefixInput]="
                                                                     invFormData.accountDetails.currencySymbol + ' '
-                                                                " [suffixInput]="entry.discountSum == 0 ? '.00' + selectedSuffixForCurrency : selectedSuffixForCurrency"
+                                                                " [suffixInput]="entry.discountSum === 0 ? '.00' + selectedSuffixForCurrency : selectedSuffixForCurrency"
                                                                 [commonLocaleData]="commonLocaleData"
                                                                 [readonly]="isEinvoiceGenerated">
                                                             </discount-control-component>
@@ -1815,7 +1815,7 @@
                                                                 " (hideOtherPopups)="closeDiscountPopup()"
                                                                 [maskInput]="inputMaskFormat" [prefixInput]="
                                                                     invFormData.accountDetails.currencySymbol + ' '
-                                                                " [suffixInput]="transaction.taxableValue == 0 ? '.00' + selectedSuffixForCurrency : selectedSuffixForCurrency"
+                                                                " [suffixInput]="transaction.taxableValue === 0 ? '.00' + selectedSuffixForCurrency : selectedSuffixForCurrency"
                                                                 [readonly]="isEinvoiceGenerated">
                                                             </tax-control>
                                                         </div>
@@ -1838,7 +1838,7 @@
                                                                 [cssClass]="'form-control mat-field-border text-right '"
                                                                 [name]="'transaction.total_' + entryIdx"
                                                                 [prefix]="invFormData.accountDetails.currencySymbol + ' '"
-                                                                [suffix]="transaction.total == 0 ? '.00' + selectedSuffixForCurrency : selectedSuffixForCurrency"
+                                                                [suffix]="transaction.total === 0 ? '.00' + selectedSuffixForCurrency : selectedSuffixForCurrency"
                                                                 [mask]="inputMaskFormat" [useMask]="true"
                                                                 [allowDecimalDigitsOnly]="true"
                                                                 [(ngModel)]="transaction.total" (change)="
