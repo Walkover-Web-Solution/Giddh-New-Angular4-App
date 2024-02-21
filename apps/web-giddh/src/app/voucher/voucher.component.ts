@@ -747,11 +747,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public isAccountSearchData: boolean = true;
     /** True if there is initial call */
     public initialApiCall: boolean = false;
-    /** True if there is account address matches */
-    public accountAddressMatches: boolean[] = [];
-    /** True if there is company address matches */
-    public companyAddressMatches: boolean[] = [];
-
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
