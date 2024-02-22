@@ -748,7 +748,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     /** True if there is initial call */
     public initialApiCall: boolean = false;
     /** Holds true if table entry has at least single stock is selected  */
-    public hasStock: boolean = true;
+    public hasStock: boolean = false;
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -8401,11 +8401,11 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.theadArrReadOnly = [
             {
                 display: true,
-                label: '#'
+                label: this.localeData?.product_service
             },
             {
                 display: true,
-                label: this.localeData?.product_service_description
+                label: this.commonLocaleData?.app_description
             },
             {
                 display: !this.currentVoucherFormDetails || this.currentVoucherFormDetails?.quantityAllowed,
@@ -9553,6 +9553,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 this.hasStock = true;
             }
         });
-        console.log("checkIfEntryHasStock",this.hasStock);
     }
+    
 }

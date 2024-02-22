@@ -188,7 +188,6 @@
             .vouchers-entry-table {
                 table {
                     tr {
-
                         th,
                         td {
                             padding: 16px 8px;
@@ -251,6 +250,14 @@
 
                             .wrap-td-data {
                                 padding-right: 6px;
+                            }
+                        }
+
+                        &.default-active {
+                            td {
+                                &.active {
+                                    box-shadow:  0 0 0 2px var(--color-common-secondary-border) inset;
+                                }
                             }
                         }
                     }
