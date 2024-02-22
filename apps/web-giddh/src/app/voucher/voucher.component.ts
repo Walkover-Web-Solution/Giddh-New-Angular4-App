@@ -1590,7 +1590,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 if (this.invFormData.voucherDetails.customerUniquename && this.invFormData.voucherDetails.voucherDate && !this.isLastInvoiceCopied && !(this.isProformaInvoice || this.isEstimateInvoice)) {
                     this.getAllAdvanceReceipts(this.invFormData.voucherDetails.customerUniquename, this.invFormData.voucherDetails.voucherDate)
                 }
-
+                
+                this.checkIfEntryHasStock();
                 this.calculateBalanceDue();
                 this.calculateTotalDiscount();
                 this.calculateTotalTaxSum();
@@ -9551,6 +9552,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             if(entry.transactions[0]?.isStockTxn){
                 this.hasStock = true;
             }
-        })
+        });
+        console.log("checkIfEntryHasStock",this.hasStock);
     }
 }

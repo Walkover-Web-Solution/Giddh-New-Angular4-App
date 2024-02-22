@@ -445,8 +445,8 @@
                                             <span *ngIf="!isCashInvoice">
                                                 {{ localeData?.shipping_address }}
                                                 <span
-                                                    *ngIf="invFormData.accountDetails.shippingDetails?.gstNumber || invFormData.accountDetails.shippingDetails.taxNumber || invFormData.accountDetails.shippingDetails.stateName || invFormData.accountDetails.shippingDetails.state?.name|| invFormData.accountDetails.shippingDetails.state?.code || invFormData.accountDetails.shippingDetails.stateCode">({{ commonLocaleData?.app_address }}
-                                                    {{ invFormData.accountDetails.shippingDetails.index + 1 }})
+                                                    *ngIf="invFormData.accountDetails.shippingDetails?.gstNumber || invFormData.accountDetails.shippingDetails?.taxNumber || invFormData.accountDetails.shippingDetails?.stateName || invFormData.accountDetails.shippingDetails?.state?.name|| invFormData.accountDetails.shippingDetails?.state?.code || invFormData.accountDetails.shippingDetails?.stateCode">({{ commonLocaleData?.app_address }}
+                                                    {{ invFormData.accountDetails.shippingDetails?.index + 1 }})
                                                 </span>
                                             </span>
                                         </ng-container>
@@ -496,7 +496,7 @@
                                                                 </div>
                                                                 <i class="icon-tick" *ngIf="
                                                                         invFormData.accountDetails.shippingDetails
-                                                                            .index === i
+                                                                            ?.index === i
                                                                     "></i>
                                                             </div>
                                                         </button>
@@ -1698,7 +1698,7 @@
                                                                     'form-control mat-field-border transaction-rate text-right '
                                                                 " [name]="'transaction.rate_' + entryIdx"
                                                                 [prefix]="invFormData.accountDetails.currencySymbol + ' '"
-                                                                [suffix]="transaction.rate === 0 ? '.00' + selectedSuffixForCurrency : selectedSuffixForCurrency"
+                                                                [suffix]="selectedSuffixForCurrency"
                                                                 [mask]="inputMaskFormat" [useMask]="true"
                                                                 [(ngModel)]="transaction.rate" (change)="
                                                                     calculateStockEntryAmount(transaction);
@@ -1730,7 +1730,7 @@
                                                                 [cssClass]="'form-control mat-field-border text-right '"
                                                                 [name]="'transaction.amount_' + entryIdx"
                                                                 [prefix]="invFormData.accountDetails.currencySymbol + ' '"
-                                                                [suffix]="transaction.amount === 0 ? '.00' + selectedSuffixForCurrency : selectedSuffixForCurrency"
+                                                                [suffix]="selectedSuffixForCurrency"
                                                                 [mask]="inputMaskFormat" 
                                                                 [useMask]="true"
                                                                 [(ngModel)]="transaction.amount"
@@ -1779,7 +1779,7 @@
                                                                     )
                                                                 " [maskInput]="inputMaskFormat" [prefixInput]="
                                                                     invFormData.accountDetails.currencySymbol + ' '
-                                                                " [suffixInput]="entry.discountSum === 0 ? '.00' + selectedSuffixForCurrency : selectedSuffixForCurrency"
+                                                                " [suffixInput]="selectedSuffixForCurrency"
                                                                 [commonLocaleData]="commonLocaleData"
                                                                 [readonly]="isEinvoiceGenerated">
                                                             </discount-control-component>
@@ -1815,7 +1815,7 @@
                                                                 " (hideOtherPopups)="closeDiscountPopup()"
                                                                 [maskInput]="inputMaskFormat" [prefixInput]="
                                                                     invFormData.accountDetails.currencySymbol + ' '
-                                                                " [suffixInput]="transaction.taxableValue === 0 ? '.00' + selectedSuffixForCurrency : selectedSuffixForCurrency"
+                                                                " [suffixInput]="selectedSuffixForCurrency"
                                                                 [readonly]="isEinvoiceGenerated">
                                                             </tax-control>
                                                         </div>
@@ -1838,7 +1838,7 @@
                                                                 [cssClass]="'form-control mat-field-border text-right '"
                                                                 [name]="'transaction.total_' + entryIdx"
                                                                 [prefix]="invFormData.accountDetails.currencySymbol + ' '"
-                                                                [suffix]="transaction.total === 0 ? '.00' + selectedSuffixForCurrency : selectedSuffixForCurrency"
+                                                                [suffix]="selectedSuffixForCurrency"
                                                                 [mask]="inputMaskFormat" [useMask]="true"
                                                                 [allowDecimalDigitsOnly]="true"
                                                                 [(ngModel)]="transaction.total" (change)="
