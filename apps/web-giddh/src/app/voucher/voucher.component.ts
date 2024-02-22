@@ -1282,14 +1282,11 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         if (this.isMultiCurrencyModule()) {
                             // parse normal response to multi currency response
                             let convertedRes1 = await this.modifyMulticurrencyRes(results[0]);
-                            console.log(convertedRes1);
                             this.initializeWarehouse(results[0].warehouse);
                             if (results[0].account?.currency) {
                                 this.companyCurrencyName = results[0].account.currency.code;
                             }
                             obj = cloneDeep(convertedRes1) as VoucherClass;
-
-                            console.log(obj);
 
                             if (this.isPendingVoucherType) {
                                 obj.accountDetails.currency = results[0].account?.currency;
