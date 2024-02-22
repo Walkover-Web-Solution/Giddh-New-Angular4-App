@@ -531,7 +531,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     /* Object for billing/shipping of company */
     public purchaseBillCompany: any = {
         billingDetails: {
-            index: 0,
+            index: '',
             address: [],
             state: { code: '', name: '' },
             county: { code: '', name: '' },
@@ -541,7 +541,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             pincode: ''
         },
         shippingDetails: {
-            index: 0,
+            index: '',
             address: [],
             state: { code: '', name: '' },
             county: { code: '', name: '' },
@@ -747,6 +747,14 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public isAccountSearchData: boolean = true;
     /** True if there is initial call */
     public initialApiCall: boolean = false;
+    /** Hold account billing index  */
+    public accountBillingIndex: number = 0;
+    /** Hold account shipping index  */
+    public accountShippingIndex: number = 0;
+    /** Hold purchase billing index  */
+    public purchaseBillingIndex: number = 0;
+    /** Hold purchase shipping index  */
+    public purchaseShippingIndex: number = 0;
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -7761,7 +7769,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 if (currentBranch && currentBranch.addresses) {
                     const defaultAddress = currentBranch.addresses.find(address => (address && address.isDefault));
                     if (defaultAddress) {
-                        this.purchaseBillCompany.billingDetails.index = 0;
                         this.purchaseBillCompany.billingDetails.address = [];
                         this.purchaseBillCompany.billingDetails.address.push(defaultAddress.address);
                         this.purchaseBillCompany.billingDetails.state.code = defaultAddress.stateCode;
@@ -8074,6 +8081,28 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.voucherDateBeforeUpdate = this.invFormData.voucherDetails.voucherDate;
     }
 
+    /**
+     * This will be use for set index according billing shipping for account and company
+     *
+     * @param {*} type
+     * @param {number} index
+     * @memberof VoucherComponent
+     */
+    public setIndex(type: any, index: number) {
+        if (type === 'accountBilling') {
+            this.accountBillingIndex = index + 1;
+        }
+        if (type === 'accountShipping') {
+            this.accountShippingIndex = index + 1;
+        }
+        if (type === 'purchaseBilling') {
+            this.purchaseBillingIndex = index + 1;
+        }
+        if (type === 'purchaseShipping') {
+            this.purchaseShippingIndex = index + 1;
+        }
+        this.changeDetectorRef.detectChanges();
+    }
 
     /**
      * This will fill the selected address
@@ -8083,10 +8112,23 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @param {boolean} isCompanyAddress
      * @memberof VoucherComponent
      */
-    public selectAddress(data: any, address: any, isCompanyAddress: boolean = false, index: number): void {
+    public selectAddress(type: any, data: any, address: any, isCompanyAddress: boolean = false, index: number): void {
         if (data && address) {
             data.address[0] = address.address;
-            data.index = index;
+            let indexNumber = index;
+
+            if (type === 'accountBilling') {
+                this.accountBillingIndex = indexNumber + 1;
+            }
+            if (type === 'accountShipping') {
+                this.accountShippingIndex = indexNumber + 1;
+            }
+            if (type === 'purchaseBilling') {
+                this.purchaseBillingIndex = indexNumber + 1;
+            }
+            if (type === 'purchaseShipping') {
+                this.purchaseShippingIndex = indexNumber + 1;
+            }
             if (!data.state) {
                 data.state = {};
             }
