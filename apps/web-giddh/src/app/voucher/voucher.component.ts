@@ -8088,7 +8088,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @param {number} index
      * @memberof VoucherComponent
      */
-    public setIndex(type: any, index: number) {
+    public setIndex(type: any, index: number): void {
         if (type === 'accountBilling') {
             this.accountBillingIndex = index + 1;
         }
@@ -8115,20 +8115,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public selectAddress(type: any, data: any, address: any, isCompanyAddress: boolean = false, index: number): void {
         if (data && address) {
             data.address[0] = address.address;
-            let indexNumber = index;
-
-            if (type === 'accountBilling') {
-                this.accountBillingIndex = indexNumber + 1;
-            }
-            if (type === 'accountShipping') {
-                this.accountShippingIndex = indexNumber + 1;
-            }
-            if (type === 'purchaseBilling') {
-                this.purchaseBillingIndex = indexNumber + 1;
-            }
-            if (type === 'purchaseShipping') {
-                this.purchaseShippingIndex = indexNumber + 1;
-            }
+            this.setIndex(type, index);
             if (!data.state) {
                 data.state = {};
             }
