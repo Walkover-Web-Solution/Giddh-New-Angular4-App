@@ -896,10 +896,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.selectedCompany = activeCompany;
-                activeCompany.addresses = activeCompany.addresses.map((item, i) => {
-                    item['index'] = i;
-                    return item;
-                });
                 this.companyAddressList = activeCompany.addresses;
                 this.initializeCurrentVoucherForm();
             }
@@ -1143,10 +1139,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.updatedAccountDetails$.subscribe(accountDetails => {
             if (accountDetails) {
                 this.hideDepositSectionForCashBankGroups(accountDetails);
-                accountDetails.addresses = accountDetails.addresses.map((item, i) => {
-                    item['index'] = i;
-                    return item;
-                });
                 this.accountAddressList = accountDetails.addresses;
                 this.updateAccountDetails(accountDetails, true);
             }
@@ -1537,10 +1529,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         this.getUpdatedStateCodes(tempSelectedAcc.country?.countryCode).then(() => {
                             this.invFormData.accountDetails = new AccountDetailsClass(tempSelectedAcc);
                         });
-                        tempSelectedAcc.addresses = tempSelectedAcc.addresses.map((item, i) => {
-                            item['index'] = i;
-                            return item;
-                        });
                         this.accountAddressList = tempSelectedAcc.addresses;
                         this.showGstAndTrnUsingCountryName(this.customerCountryName);
                         if (this.isMulticurrencyAccount) {
@@ -1929,8 +1917,12 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @memberof VoucherComponent
      */
     private getNewStateCode(oldStatusCode: string): string {
-        const currentState = this.statesSource.find((st: any) => (oldStatusCode === st?.value || oldStatusCode === st.stateGstCode));
-        return (currentState) ? currentState?.value : '';
+        if (this.statesSource?.length) {
+            const currentState = this.statesSource.find((st: any) => (oldStatusCode === st?.value || oldStatusCode === st.stateGstCode));
+            return (currentState) ? currentState?.value : '';
+        } else {
+            return oldStatusCode;
+        }
     }
 
     public makeCustomerList() {
@@ -2213,10 +2205,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 this.isCashBankAccount = true;
             }
         });
-        data.addresses = data.addresses.map((item, i) => {
-            item['index'] = i;
-            return item;
-        });
+
         this.accountAddressList = data.addresses;
 
         this.customerCountryName = data.country.countryName;
@@ -7647,7 +7636,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             this.purchaseBillCompany.shippingDetails = cloneDeep(this.purchaseBillCompany.billingDetails);
             if (this.shippingStateCompany && this.shippingStateCompany.nativeElement) {
                 this.shippingStateCompany.nativeElement.classList.remove('error-box');
-            }    
+            }
         }
         this.changeDetectorRef.detectChanges();
     }

@@ -268,8 +268,7 @@
                                             localeData?.billing_address }}
                                             <span *ngIf="!isCashInvoice">
                                                 <span
-                                                    *ngIf="invFormData.accountDetails.billingDetails.gstNumber || invFormData.accountDetails.billingDetails.taxNumber || invFormData.accountDetails.billingDetails.stateName || invFormData.accountDetails.billingDetails.state?.name || invFormData.accountDetails.billingDetails.state?.code || invFormData.accountDetails.billingDetails.stateCode">(
-                                                    {{ commonLocaleData?.app_address }}
+                                                    *ngIf="invFormData.accountDetails.billingDetails.gstNumber || invFormData.accountDetails.billingDetails.taxNumber || invFormData.accountDetails.billingDetails.stateName || invFormData.accountDetails.billingDetails.state?.name || invFormData.accountDetails.billingDetails.state?.code || invFormData.accountDetails.billingDetails.stateCode">({{ commonLocaleData?.app_address }}
                                                     {{ invFormData.accountDetails.billingDetails.index + 1 }})
                                                 </span>
                                             </span>
@@ -292,8 +291,7 @@
                                                         ">
                                                         <div class="justify-content-between align-items-center d-flex">
                                                             <div>
-                                                                <p> {{ commonLocaleData?.app_address }} {{ address.index
-                                                                    + 1 }}</p>
+                                                                <p> {{ commonLocaleData?.app_address }} {{ i + 1 }}</p>
                                                                 <p>
                                                                     {{ address.address }}
                                                                 </p>
@@ -316,7 +314,7 @@
                                                             </div>
                                                             <i class="icon-tick" onLoad
                                                                 (elementLoaded)="invFormData.accountDetails.billingDetails.index = i"
-                                                                *ngIf="(!invFormData.accountDetails.billingDetails.state?.name || (invFormData.accountDetails.billingDetails.state?.name && (invFormData.accountDetails.billingDetails.state?.name === address.state?.name || invFormData.accountDetails.billingDetails.stateName === address.state?.name))) && (!invFormData.accountDetails.billingDetails.gstNumber || (invFormData.accountDetails.billingDetails.gstNumber && invFormData.accountDetails.billingDetails.gstNumber === address.gstNumber)) && (!invFormData.accountDetails.billingDetails.taxNumber || (invFormData.accountDetails.billingDetails.taxNumber && invFormData.accountDetails.billingDetails.taxNumber === address.gstNumber)) && (!invFormData.accountDetails.billingDetails.address[0]?.trim() || (invFormData.accountDetails.billingDetails.address[0]?.trim() && (invFormData.accountDetails.billingDetails.address[0]?.trim() === address.address?.trim())))"></i>
+                                                                *ngIf="(invFormData.accountDetails.billingDetails.state?.name || invFormData.accountDetails.billingDetails.stateName || invFormData.accountDetails.billingDetails.county?.name || invFormData.accountDetails.billingDetails.gstNumber || invFormData.accountDetails.billingDetails.taxNumber || invFormData.accountDetails.billingDetails.address[0]?.trim()) && (!invFormData.accountDetails.billingDetails.state?.name || (invFormData.accountDetails.billingDetails.state?.name && (invFormData.accountDetails.billingDetails.state?.name === address.state?.name || invFormData.accountDetails.billingDetails.stateName === address.state?.name))) && (!invFormData.accountDetails.billingDetails.county?.name || (invFormData.accountDetails.billingDetails.county?.name && (invFormData.accountDetails.billingDetails.county?.name === address.county?.name))) && (!invFormData.accountDetails.billingDetails.gstNumber || (invFormData.accountDetails.billingDetails.gstNumber && invFormData.accountDetails.billingDetails.gstNumber === address.gstNumber)) && (!invFormData.accountDetails.billingDetails.taxNumber || (invFormData.accountDetails.billingDetails.taxNumber && invFormData.accountDetails.billingDetails.taxNumber === address.gstNumber)) && (!invFormData.accountDetails.billingDetails.address[0]?.trim() || (invFormData.accountDetails.billingDetails.address[0]?.trim() && (invFormData.accountDetails.billingDetails.address[0]?.trim() === address.address?.trim())))"></i>
                                                         </div>
                                                     </button>
                                                     <mat-divider></mat-divider>
@@ -497,7 +495,7 @@
                                                                 </div>
                                                                 <i class="icon-tick" onLoad
                                                                     (elementLoaded)="invFormData.accountDetails.shippingDetails.index = i"
-                                                                    *ngIf="(!invFormData.accountDetails.shippingDetails.state?.name || (invFormData.accountDetails.shippingDetails.state?.name && (invFormData.accountDetails.shippingDetails.state?.name === address.state?.name || invFormData.accountDetails.shippingDetails.stateName === address.state?.name))) && (!invFormData.accountDetails.shippingDetails.gstNumber || (invFormData.accountDetails.shippingDetails.gstNumber && invFormData.accountDetails.shippingDetails.gstNumber === address.gstNumber)) && (!invFormData.accountDetails.shippingDetails.taxNumber || (invFormData.accountDetails.shippingDetails.taxNumber && invFormData.accountDetails.shippingDetails.taxNumber === address.gstNumber)) && (!invFormData.accountDetails.shippingDetails.address[0]?.trim() || (invFormData.accountDetails.shippingDetails.address[0]?.trim() && (invFormData.accountDetails.shippingDetails.address[0]?.trim() === address.address?.trim())))"></i>
+                                                                    *ngIf="(invFormData.accountDetails.shippingDetails.state?.name || invFormData.accountDetails.shippingDetails.stateName || invFormData.accountDetails.shippingDetails.county?.name || invFormData.accountDetails.shippingDetails.gstNumber || invFormData.accountDetails.shippingDetails.taxNumber || invFormData.accountDetails.shippingDetails.address[0]?.trim()) && (!invFormData.accountDetails.shippingDetails.state?.name || (invFormData.accountDetails.shippingDetails.state?.name && (invFormData.accountDetails.shippingDetails.state?.name === address.state?.name || invFormData.accountDetails.shippingDetails.stateName === address.state?.name))) && (!invFormData.accountDetails.shippingDetails.county?.name || (invFormData.accountDetails.shippingDetails.county?.name && (invFormData.accountDetails.shippingDetails.county?.name === address.county?.name))) && (!invFormData.accountDetails.shippingDetails.gstNumber || (invFormData.accountDetails.shippingDetails.gstNumber && invFormData.accountDetails.shippingDetails.gstNumber === address.gstNumber)) && (!invFormData.accountDetails.shippingDetails.taxNumber || (invFormData.accountDetails.shippingDetails.taxNumber && invFormData.accountDetails.shippingDetails.taxNumber === address.gstNumber)) && (!invFormData.accountDetails.shippingDetails.address[0]?.trim() || (invFormData.accountDetails.shippingDetails.address[0]?.trim() && (invFormData.accountDetails.shippingDetails.address[0]?.trim() === address.address?.trim())))"></i>
                                                             </div>
                                                         </button>
                                                         <mat-divider></mat-divider>
@@ -662,8 +660,7 @@
                                                         ">
                                                         <div class="justify-content-between align-items-center d-flex">
                                                             <div>
-                                                                <p> {{ commonLocaleData?.app_address }} {{ address.index
-                                                                    + 1 }}</p>
+                                                                <p> {{ commonLocaleData?.app_address }} {{ i + 1 }}</p>
                                                                 <p>
                                                                     {{ address.address }}
                                                                 </p>
@@ -672,7 +669,7 @@
                                                                 </p>
                                                                 <p *ngIf="address.gstNumber">
                                                                     {{
-                                                                    address.taxNumber
+                                                                    address.gstNumber
                                                                     ? (showGSTINNo
                                                                     ? commonLocaleData?.app_gstin + ":"
                                                                     : showTRNNo
@@ -683,10 +680,23 @@
                                                                     : ""
                                                                     }}
                                                                 </p>
+                                                                <p *ngIf="address.taxNumber">
+                                                                    {{
+                                                                    address.taxNumber
+                                                                    ? (showGSTINNo
+                                                                    ? commonLocaleData?.app_gstin + ":"
+                                                                    : showTRNNo
+                                                                    ? commonLocaleData?.app_trn + ":"
+                                                                    : showVATNo
+                                                                    ? commonLocaleData?.enter_vat_no + ":"
+                                                                    : "") + address.taxNumber
+                                                                    : ""
+                                                                    }}
+                                                                </p>
                                                             </div>
                                                             <i class="icon-tick" onLoad
                                                                 (elementLoaded)="purchaseBillCompany.billingDetails.index = i"
-                                                                *ngIf="(!purchaseBillCompany.billingDetails.state?.name || (purchaseBillCompany.billingDetails.state?.name && (purchaseBillCompany.billingDetails.state?.name === address.state?.name || purchaseBillCompany.billingDetails.stateName === address.stateName))  || (purchaseBillCompany.billingDetails.county?.name && (purchaseBillCompany.billingDetails.county?.name === address.county?.name))) && (!purchaseBillCompany.billingDetails.gstNumber || (purchaseBillCompany.billingDetails.gstNumber && purchaseBillCompany.billingDetails.gstNumber === address.gstNumber)) && (!purchaseBillCompany.billingDetails.gstNumber || (purchaseBillCompany.billingDetails.gstNumber && purchaseBillCompany.billingDetails.gstNumber === address.taxNumber)) && (!purchaseBillCompany.billingDetails.address[0]?.trim() || (purchaseBillCompany.billingDetails.address[0]?.trim() && (purchaseBillCompany.billingDetails.address[0]?.trim() === address.address?.trim())))"></i>
+                                                                *ngIf="(purchaseBillCompany.billingDetails.state?.name || purchaseBillCompany.billingDetails.stateName || purchaseBillCompany.billingDetails.county?.name || purchaseBillCompany.billingDetails.gstNumber || purchaseBillCompany.billingDetails.taxNumber || purchaseBillCompany.billingDetails.address[0]?.trim()) && (!purchaseBillCompany.billingDetails.state?.name || (purchaseBillCompany.billingDetails.state?.name && (purchaseBillCompany.billingDetails.state?.name === address.stateName || purchaseBillCompany.billingDetails.stateName === address.stateName))) && (!purchaseBillCompany.billingDetails.county?.name || (purchaseBillCompany.billingDetails.county?.name && (purchaseBillCompany.billingDetails.county?.name === address.county?.name))) && (!purchaseBillCompany.billingDetails.gstNumber || (purchaseBillCompany.billingDetails.gstNumber && (purchaseBillCompany.billingDetails.gstNumber === address.gstNumber || purchaseBillCompany.billingDetails.gstNumber === address.taxNumber))) && (!purchaseBillCompany.billingDetails.taxNumber || (purchaseBillCompany.billingDetails.taxNumber && (purchaseBillCompany.billingDetails.taxNumber === address.gstNumber || purchaseBillCompany.billingDetails.taxNumber === address.taxNumber))) && (!purchaseBillCompany.billingDetails.address[0]?.trim() || (purchaseBillCompany.billingDetails.address[0]?.trim() && (purchaseBillCompany.billingDetails.address[0]?.trim() === address.address?.trim())))"></i>
                                                         </div>
                                                     </button>
                                                     <mat-divider></mat-divider>
@@ -715,7 +725,7 @@
                                                     <ng-container
                                                         *ngFor="let address of companyAddressList; let i = index">
                                                         <button
-                                                            *ngIf="address.gstNumber || address.taxNumber ||address.stateName || address.stateCode"
+                                                            *ngIf="address.gstNumber || address.taxNumber || address.stateName || address.stateCode"
                                                             mat-menu-item (click)="
                                                          autoFillCompanyShipping = false;
                                                                 selectAddress(
@@ -728,8 +738,7 @@
                                                             <div
                                                                 class="justify-content-between align-items-center d-flex">
                                                                 <div>
-                                                                    <p> {{ commonLocaleData?.app_address }} {{
-                                                                        address.index + 1 }}</p>
+                                                                    <p> {{ commonLocaleData?.app_address }} {{ i + 1 }}</p>
                                                                     <p>
                                                                         {{ address.address }}
                                                                     </p>
@@ -738,7 +747,7 @@
                                                                     </p>
                                                                     <p *ngIf="address.gstNumber">
                                                                         {{
-                                                                        address.taxNumber
+                                                                        address.gstNumber
                                                                         ? (showGSTINNo
                                                                         ? commonLocaleData?.app_gstin +
                                                                         ":"
@@ -751,10 +760,25 @@
                                                                         : ""
                                                                         }}
                                                                     </p>
+                                                                    <p *ngIf="address.taxNumber">
+                                                                        {{
+                                                                        address.taxNumber
+                                                                        ? (showGSTINNo
+                                                                        ? commonLocaleData?.app_gstin +
+                                                                        ":"
+                                                                        : showTRNNo
+                                                                        ? commonLocaleData?.app_trn + ":"
+                                                                        : showVATNo
+                                                                        ? commonLocaleData?.enter_vat_no +
+                                                                        ":"
+                                                                        : "") + address.taxNumber
+                                                                        : ""
+                                                                        }}
+                                                                    </p>
                                                                 </div>
                                                                 <i class="icon-tick" onLoad
                                                                     (elementLoaded)="purchaseBillCompany.shippingDetails.index = i"
-                                                                    *ngIf="(!purchaseBillCompany.shippingDetails.state?.name || (purchaseBillCompany.shippingDetails.state?.name && (purchaseBillCompany.shippingDetails.state?.name === address.state?.name || purchaseBillCompany.shippingDetails.stateName === address.stateName))  || (purchaseBillCompany.shippingDetails.county?.name && (purchaseBillCompany.shippingDetails.county?.name === address.county?.name))) && (!purchaseBillCompany.shippingDetails.gstNumber || (purchaseBillCompany.shippingDetails.gstNumber && purchaseBillCompany.shippingDetails.gstNumber === address.gstNumber)) && (!purchaseBillCompany.shippingDetails.gstNumber || (purchaseBillCompany.shippingDetails.gstNumber && purchaseBillCompany.shippingDetails.gstNumber === address.taxNumber)) && (!purchaseBillCompany.shippingDetails.address[0]?.trim() || (purchaseBillCompany.shippingDetails.address[0]?.trim() && (purchaseBillCompany.shippingDetails.address[0]?.trim() === address.address?.trim())))"></i>
+                                                                    *ngIf="(purchaseBillCompany.shippingDetails.state?.name || purchaseBillCompany.shippingDetails.stateName || purchaseBillCompany.shippingDetails.county?.name || purchaseBillCompany.shippingDetails.gstNumber || purchaseBillCompany.shippingDetails.taxNumber || purchaseBillCompany.shippingDetails.address[0]?.trim()) && (!purchaseBillCompany.shippingDetails.state?.name || (purchaseBillCompany.shippingDetails.state?.name && (purchaseBillCompany.shippingDetails.state?.name === address.stateName || purchaseBillCompany.shippingDetails.stateName === address.stateName))) && (!purchaseBillCompany.shippingDetails.county?.name || (purchaseBillCompany.shippingDetails.county?.name && (purchaseBillCompany.shippingDetails.county?.name === address.county?.name))) && (!purchaseBillCompany.shippingDetails.gstNumber || (purchaseBillCompany.shippingDetails.gstNumber && (purchaseBillCompany.shippingDetails.gstNumber === address.gstNumber || purchaseBillCompany.shippingDetails.gstNumber === address.taxNumber))) && (!purchaseBillCompany.shippingDetails.taxNumber || (purchaseBillCompany.shippingDetails.taxNumber && (purchaseBillCompany.shippingDetails.taxNumber === address.gstNumber || purchaseBillCompany.shippingDetails.taxNumber === address.taxNumber))) && (!purchaseBillCompany.shippingDetails.address[0]?.trim() || (purchaseBillCompany.shippingDetails.address[0]?.trim() && (purchaseBillCompany.shippingDetails.address[0]?.trim() === address.address?.trim())))"></i>
                                                             </div>
                                                         </button>
                                                         <mat-divider></mat-divider>
