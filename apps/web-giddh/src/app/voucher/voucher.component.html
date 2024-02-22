@@ -268,9 +268,10 @@
                                             localeData?.billing_address }}
                                             <span *ngIf="!isCashInvoice">
                                                 <span
-                                                    *ngIf="invFormData.accountDetails.billingDetails.gstNumber || invFormData.accountDetails.billingDetails.taxNumber || invFormData.accountDetails.billingDetails.stateName || invFormData.accountDetails.billingDetails.state?.name || invFormData.accountDetails.billingDetails.state?.code || invFormData.accountDetails.billingDetails.stateCode">({{
+                                                    *ngIf="invFormData.accountDetails.billingDetails.gstNumber || invFormData.accountDetails.billingDetails.taxNumber || invFormData.accountDetails.billingDetails.stateName || invFormData.accountDetails.billingDetails.state?.name || invFormData.accountDetails.billingDetails.state?.code || invFormData.accountDetails.billingDetails.stateCode">(
+                                                    {{
                                                     commonLocaleData?.app_address }}
-                                                    {{ accountBillingIndex }})
+                                                    {{ accountBillingIndex }} )
                                                 </span>
                                             </span>
                                         </label>
@@ -442,9 +443,10 @@
                                                 {{ localeData?.shipping_address }}
 
                                                 <span
-                                                    *ngIf="invFormData.accountDetails.shippingDetails.gstNumber || invFormData.accountDetails.shippingDetails.taxNumber || invFormData.accountDetails.shippingDetails.stateName || invFormData.accountDetails.shippingDetails.state?.name|| invFormData.accountDetails.shippingDetails.state?.code || invFormData.accountDetails.shippingDetails.stateCode">({{
+                                                    *ngIf="invFormData.accountDetails.shippingDetails.gstNumber || invFormData.accountDetails.shippingDetails.taxNumber || invFormData.accountDetails.shippingDetails.stateName || invFormData.accountDetails.shippingDetails.state?.name|| invFormData.accountDetails.shippingDetails.state?.code || invFormData.accountDetails.shippingDetails.stateCode">(
+                                                    {{
                                                     commonLocaleData?.app_address }}
-                                                      {{ accountShippingIndex }})
+                                                    {{ accountShippingIndex }} )
                                                 </span>
                                             </span>
                                         </ng-container>
@@ -639,8 +641,8 @@
                                             {{ localeData?.billing_address }}
                                             <span
                                                 *ngIf="purchaseBillCompany.billingDetails.gstNumber || purchaseBillCompany.billingDetails.taxNumber || purchaseBillCompany.billingDetails.stateName || purchaseBillCompany.billingDetails.state?.name || purchaseBillCompany.billingDetails.state?.code || purchaseBillCompany.billingDetails.stateCode">
-                                                ({{ commonLocaleData?.app_address }}
-                                                {{ purchaseBillingIndex }})
+                                                ( {{ commonLocaleData?.app_address }}
+                                                {{ purchaseBillingIndex }} )
                                             </span>
                                         </label>
                                         <i *ngIf="companyAddressList?.length > 1"
@@ -713,9 +715,10 @@
                                     <div class="col-6">
                                         {{ localeData?.shipping_address }}
                                         <span
-                                            *ngIf="purchaseBillCompany.shippingDetails.gstNumber || purchaseBillCompany.shippingDetails.taxNumber || purchaseBillCompany.shippingDetails.stateName  || purchaseBillCompany.shippingDetails.state?.name  || purchaseBillCompany.shippingDetails.state?.code || purchaseBillCompany.shippingDetails.stateCode">({{
+                                            *ngIf="purchaseBillCompany.shippingDetails.gstNumber || purchaseBillCompany.shippingDetails.taxNumber || purchaseBillCompany.shippingDetails.stateName  || purchaseBillCompany.shippingDetails.state?.name  || purchaseBillCompany.shippingDetails.state?.code || purchaseBillCompany.shippingDetails.stateCode">(
+                                            {{
                                             commonLocaleData?.app_address }}
-                                             {{ purchaseShippingIndex }})
+                                            {{ purchaseShippingIndex }} )
                                         </span>
                                         <ng-container>
                                             <i *ngIf="companyAddressList?.length > 1"
