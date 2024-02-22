@@ -531,6 +531,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     /* Object for billing/shipping of company */
     public purchaseBillCompany: any = {
         billingDetails: {
+            index: '',
             address: [],
             state: { code: '', name: '' },
             county: { code: '', name: '' },
@@ -540,6 +541,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             pincode: ''
         },
         shippingDetails: {
+            index: '',
             address: [],
             state: { code: '', name: '' },
             county: { code: '', name: '' },
@@ -550,7 +552,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         }
     };
     /* This will hold autofill state of company billing/shipping */
-    public autoFillCompanyShipping: boolean = false;
+    public autoFillCompanyShipping: boolean = true;
     /* This will hold company's country states */
     public companyStatesSource: IOption[] = [];
     /* This will hold if copy purchase bill is done */
@@ -745,6 +747,14 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public isAccountSearchData: boolean = true;
     /** True if there is initial call */
     public initialApiCall: boolean = false;
+    /** Hold account billing index  */
+    public accountBillingIndex: number = 0;
+    /** Hold account shipping index  */
+    public accountShippingIndex: number = 0;
+    /** Hold purchase billing index  */
+    public purchaseBillingIndex: number = 0;
+    /** Hold purchase shipping index  */
+    public purchaseShippingIndex: number = 0;
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -1913,8 +1923,12 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @memberof VoucherComponent
      */
     private getNewStateCode(oldStatusCode: string): string {
-        const currentState = this.statesSource.find((st: any) => (oldStatusCode === st?.value || oldStatusCode === st.stateGstCode));
-        return (currentState) ? currentState?.value : '';
+        if (this.statesSource?.length) {
+            const currentState = this.statesSource.find((st: any) => (oldStatusCode === st?.value || oldStatusCode === st.stateGstCode));
+            return (currentState) ? currentState?.value : '';
+        } else {
+            return oldStatusCode;
+        }
     }
 
     public makeCustomerList() {
@@ -2199,6 +2213,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         });
 
         this.accountAddressList = data.addresses;
+
         this.customerCountryName = data.country.countryName;
         this.customerCountryCode = data?.country?.countryCode || 'IN';
         this.initializeAccountCurrencyDetails(data);
@@ -2407,6 +2422,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.purchaseOrders = [];
         this.purchaseBillCompany = {
             billingDetails: {
+                index: 0,
                 address: [],
                 state: { code: '', name: '' },
                 county: { code: '', name: '' },
@@ -2415,6 +2431,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 stateCode: ''
             },
             shippingDetails: {
+                index: 0,
                 address: [],
                 state: { code: '', name: '' },
                 county: { code: '', name: '' },
@@ -2434,7 +2451,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             this.toggleBodyClass();
         }
         this.clickAdjustAmount(false);
-        this.autoFillCompanyShipping = false;
+        this.autoFillCompanyShipping = true;
         this.userDeposit = null;
         this.fillDeliverToAddress();
         this.createEmbeddedViewAtIndex(0);
@@ -2459,13 +2476,13 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     }
 
     public autoFillShippingDetails() {
-        // auto fill shipping address
         if (this.autoFillShipping) {
             this.invFormData.accountDetails.shippingDetails = cloneDeep(this.invFormData.accountDetails.billingDetails);
             if (this.shippingState && this.shippingState.nativeElement) {
                 this.shippingState.nativeElement.classList.remove('error-box');
             }
         }
+        this.changeDetectorRef.detectChanges();
     }
 
     public convertDateForAPI(val: any): string {
@@ -7022,8 +7039,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                             } else {
                                 if (searchType === SEARCH_TYPE.CUSTOMER) {
                                     this.defaultCustomerResultsPaginationData.page = data.body.page;
-                                    } else if (searchType === SEARCH_TYPE.ITEM) {
-                                        this.defaultItemResultsPaginationData.page = data.body.page;
+                                } else if (searchType === SEARCH_TYPE.ITEM) {
+                                    this.defaultItemResultsPaginationData.page = data.body.page;
                                 }
                             }
                         }
@@ -7621,6 +7638,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 this.shippingStateCompany.nativeElement.classList.remove('error-box');
             }
         }
+        this.changeDetectorRef.detectChanges();
     }
 
     /**
@@ -7704,6 +7722,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         if (company.billingDetails && company.shippingDetails) {
             this.purchaseBillCompany = {
                 billingDetails: {
+                    index: 0,
                     address: company?.billingDetails?.address,
                     state: { code: company?.billingDetails?.state?.code, name: company?.billingDetails?.state?.name },
                     county: { code: company?.billingDetails?.county?.code, name: company?.billingDetails?.county?.name },
@@ -7713,6 +7732,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     pincode: company?.billingDetails?.pincode
                 },
                 shippingDetails: {
+                    index: 0,
                     address: company?.shippingDetails?.address,
                     state: { code: company?.shippingDetails?.state?.code, name: company?.shippingDetails?.state?.name },
                     county: { code: company?.shippingDetails?.county?.code, name: company?.shippingDetails?.county?.name },
@@ -8062,6 +8082,29 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     }
 
     /**
+     * This will be use for set index according billing shipping for account and company
+     *
+     * @param {*} type
+     * @param {number} index
+     * @memberof VoucherComponent
+     */
+    public setIndex(type: any, index: number): void {
+        if (type === 'accountBilling') {
+            this.accountBillingIndex = index + 1;
+        }
+        if (type === 'accountShipping') {
+            this.accountShippingIndex = index + 1;
+        }
+        if (type === 'purchaseBilling') {
+            this.purchaseBillingIndex = index + 1;
+        }
+        if (type === 'purchaseShipping') {
+            this.purchaseShippingIndex = index + 1;
+        }
+        this.changeDetectorRef.detectChanges();
+    }
+
+    /**
      * This will fill the selected address
      *
      * @param {*} data
@@ -8069,9 +8112,10 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @param {boolean} isCompanyAddress
      * @memberof VoucherComponent
      */
-    public selectAddress(data: any, address: any, isCompanyAddress: boolean = false): void {
+    public selectAddress(type: any, data: any, address: any, isCompanyAddress: boolean = false, index: number): void {
         if (data && address) {
             data.address[0] = address.address;
+            this.setIndex(type, index);
             if (!data.state) {
                 data.state = {};
             }
@@ -8091,6 +8135,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 this.autoFillShippingDetails();
             }
         }
+        this.changeDetectorRef.detectChanges();
     }
 
     /**
@@ -8372,7 +8417,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.theadArrReadOnly = [
             {
                 display: true,
-                label: '#'
+                label: ''
             },
             {
                 display: true,
@@ -8403,7 +8448,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 label: this.commonLocaleData?.app_total
             },
             {
-                display: true,
+                display: false,
                 label: ''
             }
         ];
@@ -8864,10 +8909,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      */
     public addBulkItems(): void {
         this.dialog.open(this.bulkItemsModal, {
-            width: '1000px',
-            height: 'auto',
-            maxHeight: '90vh',
-            maxWidth: '80vw'
         });
     }
     /**

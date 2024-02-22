@@ -1331,6 +1331,14 @@ table:focus {
         }
     }
 }
+.bulk-entry-list {
+    .mat-expansion-panel {
+        .mat-expansion-panel-header {
+            padding: 0px !important;
+        }
+    }
+}
+
 @media only screen and (max-width: 1440px) {
     body.unresponsive {
         width: 100%;
@@ -1869,6 +1877,7 @@ ul.pills li {
 .advanced label {
     font-size: var(--font-size-15);
 }
+
 .my-dropdown-menu {
     position: absolute;
     z-index: 99;
@@ -3298,6 +3307,17 @@ td.mat-footer-cell {
             #tax-control-multi-select {
                 .tax-input {
                     border: 2px solid var(--color-red) !important;
+                }
+            }
+        }
+    }
+}
+.tax-control-cmp {
+    ul {
+        li {
+            .mat-mdc-checkbox.mat-mdc-checkbox-disabled {
+                label {
+                    color: var(--color-common-primary-text);
                 }
             }
         }
