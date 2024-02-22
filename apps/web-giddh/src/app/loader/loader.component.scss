@@ -1,6 +1,6 @@
 .load-bar-wrap {
     position: fixed;
-    top: 0;
+    top: var(--top-distance);
     left: 0;
     right: 0;
     width: 100%;

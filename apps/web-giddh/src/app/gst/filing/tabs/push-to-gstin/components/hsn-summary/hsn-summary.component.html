@@ -3,7 +3,7 @@
     <p class="text-muted half pd-t05">{{ localeData?.filing?.hsn_summary_description }}</p>
 
     <div>
-        <div *ngIf="hsnSummary">
+        <div *ngIf="hsnSummary" class="table-responsive">
             <table class="transactions-table table-striped table zi-table on-mobile-view">
                 <thead>
                     <tr>
@@ -67,7 +67,7 @@
                 <tbody>
                     <tr *ngFor="let item of hsnSummary.data">
                         <td [attr.data-title]="commonLocaleData?.app_hsn_sac">{{ item.hsn_sc ? item.hsn_sc : "-" }}</td>
-                        <td [attr.data-title]="localeData?.filing?.description">{{ item.desc ? item.desc : "-" }}</td>
+                        <td [attr.data-title]="localeData?.filing?.description" class="description-overlap d-inline-block" [matTooltip]="item.desc ? item.desc : '-'" matTooltipPosition="above">{{ item.desc ? item.desc : "-" }}</td>
                         <td [attr.data-title]="commonLocaleData?.app_quantity">{{ item.qty ? item.qty : "-" }}</td>
                         <td [attr.data-title]="commonLocaleData?.app_unit">{{ item.uqc ? item.uqc : "-" }}</td>
                         <td [attr.data-title]="localeData?.filing?.taxable_amount" class="text-right">
