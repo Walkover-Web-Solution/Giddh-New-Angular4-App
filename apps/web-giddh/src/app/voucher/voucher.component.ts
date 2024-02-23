@@ -748,7 +748,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     /** True if there is initial call */
     public initialApiCall: boolean = false;
     /** Holds true if table entry has at least single stock is selected  */
-    public hasStock: boolean = true;
+    public hasStock: boolean = false;
     /** Hold account billing index  */
     public accountBillingIndex: number = 0;
     /** Hold account shipping index  */
@@ -1594,7 +1594,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 if (this.invFormData.voucherDetails.customerUniquename && this.invFormData.voucherDetails.voucherDate && !this.isLastInvoiceCopied && !(this.isProformaInvoice || this.isEstimateInvoice)) {
                     this.getAllAdvanceReceipts(this.invFormData.voucherDetails.customerUniquename, this.invFormData.voucherDetails.voucherDate)
                 }
-
+                
+                this.checkIfEntryHasStock();
                 this.calculateBalanceDue();
                 this.calculateTotalDiscount();
                 this.calculateTotalTaxSum();
@@ -8425,11 +8426,11 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.theadArrReadOnly = [
             {
                 display: true,
-                label: '#'
+                label: this.localeData?.product_service
             },
             {
                 display: true,
-                label: this.localeData?.product_service_description
+                label: this.commonLocaleData?.app_description
             },
             {
                 display: !this.currentVoucherFormDetails || this.currentVoucherFormDetails?.quantityAllowed,
@@ -9572,10 +9573,11 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public checkIfEntryHasStock(): void {
         this.hasStock = false;
 
-        this.invFormData.entries.forEach(entry => {
-            if (entry.transactions[0]?.isStockTxn) {
+        this.invFormData.entries.forEach( entry => {
+            if(entry.transactions[0]?.isStockTxn){
                 this.hasStock = true;
             }
-        })
+        });
     }
+    
 }

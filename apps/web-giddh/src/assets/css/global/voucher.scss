@@ -110,17 +110,19 @@
                         input,
                         textarea,
                         mat-select {
-                            border: none !important;
-                            background-color: var(--color-transparent-background) !important;
-                            &.form-control {
-                                &:disabled, &:read-only {
-                                    cursor: not-allowed;
+                            &:not(.hsn-sac-code){
+                                border: none !important;
+                                background-color: var(--color-transparent-background) !important;
+                                &.form-control {
+                                    &:disabled, &:read-only {
+                                        cursor: not-allowed;
+                                    }
                                 }
-                            }
-                            
-                            &.mat-mdc-select-disabled {
-                                .mat-mdc-select-trigger{
-                                    cursor: not-allowed;
+                                
+                                &.mat-mdc-select-disabled {
+                                    .mat-mdc-select-trigger{
+                                        cursor: not-allowed;
+                                    }
                                 }
                             }
                         }
