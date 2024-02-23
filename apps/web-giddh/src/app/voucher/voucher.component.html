@@ -651,10 +651,16 @@
                                         <mat-menu #companyBillingAddress="matMenu">
                                             <div class="mat-menu-width-large vouchers-address-menu">
                                                 <ng-container *ngFor="let address of companyAddressList; let i = index">
-                                                    <button
-                                                        *ngIf="address.gstNumber || address.taxNumber||address.stateName || address.stateCode"
-                                                        mat-menu-item (click)="
-                                                            selectAddress('purchaseBilling',
+                                                    <button *ngIf="
+                                                               address.gstNumber ||
+                                                                address.taxNumber ||
+                                                                address.state?.name ||
+                                                                address.state?.code ||
+                                                                address.county?.name ||
+                                                                address.county?.code
+                                                        " mat-menu-item (click)="
+                                                            selectAddress(
+                                                                'purchaseBilling',
                                                                 purchaseBillCompany.billingDetails,
                                                                 address,
                                                                 true,
@@ -728,11 +734,17 @@
                                                 <div class="mat-menu-width-large vouchers-address-menu">
                                                     <ng-container
                                                         *ngFor="let address of companyAddressList; let i = index">
-                                                        <button
-                                                            *ngIf="address.gstNumber || address.taxNumber || address.stateName || address.stateCode"
-                                                            mat-menu-item (click)="
-                                                         autoFillCompanyShipping = false;
-                                                                selectAddress('purchaseShipping',
+                                                        <button *ngIf="
+                                                                    address.gstNumber ||
+                                                                address.taxNumber ||
+                                                                address.state?.name ||
+                                                                address.state?.code ||
+                                                                address.county?.name ||
+                                                                address.county?.code
+                                                            " mat-menu-item (click)="
+                                                                autoFillCompanyShipping = false;
+                                                                selectAddress(
+                                                                    'purchaseShipping',
                                                                     purchaseBillCompany.shippingDetails,
                                                                     address,
                                                                     true,
@@ -1099,8 +1111,7 @@
                                                 <th *ngFor="let item of theadArrReadOnly" [hidden]="!item.display"
                                                     class="thead-sales-invoice" [ngClass]="{ 'd-none' : 
                                                         ((commonLocaleData?.app_quantity_unit === item?.label) || (commonLocaleData?.app_rate === item?.label)) 
-                                                        && !hasStock }"
-                                                    >
+                                                        && !hasStock }">
                                                     {{ item?.label }}
                                                     <span *ngIf="item.label === 'Tax' && isRcmEntry">({{
                                                         commonLocaleData?.app_rcm }})<sup
@@ -1303,7 +1314,8 @@
                                                         </span>
                                                     </div>
                                                 </td>
-                                                <td [class.error-box]="transaction.requiredTax" [width]="hasStock ? '12%' : '16%'"
+                                                <td [class.error-box]="transaction.requiredTax"
+                                                    [width]="hasStock ? '12%' : '16%'"
                                                     (focus)="transaction.requiredTax = false" *ngIf="
                                                         !currentVoucherFormDetails ||
                                                         currentVoucherFormDetails?.taxesAllowed
@@ -1678,7 +1690,8 @@
                                                         (!currentVoucherFormDetails ||
                                                         currentVoucherFormDetails?.quantityAllowed)
                                                     " width="12%" [ngClass]="{ 'd-none' : !hasStock}">
-                                                    <ng-container *ngIf="!(!transaction.isStockTxn || isEinvoiceGenerated)">
+                                                    <ng-container
+                                                        *ngIf="!(!transaction.isStockTxn || isEinvoiceGenerated)">
                                                         <text-field [placeholder]="commonLocaleData?.app_quantity"
                                                             [readonly]="!transaction.isStockTxn || isEinvoiceGenerated"
                                                             [type]="'text'"
@@ -1700,21 +1713,23 @@
                                                                 [(ngModel)]="transaction.stockUnit"
                                                                 [name]="'transaction.stockUnit_' + entryIdx">
                                                                 <div class="select-quantity-option">
-                                                                    <mat-option *ngFor="let stock of transaction.stockList"
+                                                                    <mat-option
+                                                                        *ngFor="let stock of transaction.stockList"
                                                                         [value]="stock.id">
                                                                         {{ stock.text }}
                                                                     </mat-option>
                                                                 </div>
                                                             </mat-select>
                                                         </div>
-                                                </ng-container>
+                                                    </ng-container>
                                                 </td>
-                                                <td (click)="closeDiscountPopup(); closeTaxControlPopup()" width="12%" [ngClass]="{ 'd-none' : !hasStock}"
-                                                    *ngIf="
+                                                <td (click)="closeDiscountPopup(); closeTaxControlPopup()" width="12%"
+                                                    [ngClass]="{ 'd-none' : !hasStock}" *ngIf="
                                                         (!currentVoucherFormDetails ||
                                                         currentVoucherFormDetails?.rateAllowed)
                                                     ">
-                                                    <div class="td-wrapper" *ngIf="!(!transaction.isStockTxn || isEinvoiceGenerated)">
+                                                    <div class="td-wrapper"
+                                                        *ngIf="!(!transaction.isStockTxn || isEinvoiceGenerated)">
                                                         <div class="flex-fill">
                                                             <text-field [readonly]="
                                                                     !transaction.isStockTxn || isEinvoiceGenerated
@@ -1746,7 +1761,8 @@
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <td (click)="closeDiscountPopup(); closeTaxControlPopup()" [width]="hasStock ? '12%' : '16%'"> 
+                                                <td (click)="closeDiscountPopup(); closeTaxControlPopup()"
+                                                    [width]="hasStock ? '12%' : '16%'">
                                                     <div class="td-wrapper">
                                                         <div class="flex-fill">
                                                             <text-field (click)="transactionAmountClicked(transaction)"
@@ -1756,10 +1772,8 @@
                                                                 [name]="'transaction.amount_' + entryIdx"
                                                                 [prefix]="invFormData.accountDetails.currencySymbol + ' '"
                                                                 [suffix]="transaction.amount === 0 ? '.00' + selectedSuffixForCurrency : selectedSuffixForCurrency"
-                                                                [mask]="inputMaskFormat" 
-                                                                [useMask]="true"
-                                                                [(ngModel)]="transaction.amount"
-                                                                (change)="
+                                                                [mask]="inputMaskFormat" [useMask]="true"
+                                                                [(ngModel)]="transaction.amount" (change)="
                                                                     calculateWhenTrxAltered(
                                                                         entry,
                                                                         transaction,
@@ -1779,7 +1793,8 @@
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <td (click)="closeTaxControlPopup()" [width]="hasStock ? '9%' : '16%'" *ngIf="
+                                                <td (click)="closeTaxControlPopup()" [width]="hasStock ? '9%' : '16%'"
+                                                    *ngIf="
                                                         !currentVoucherFormDetails ||
                                                         currentVoucherFormDetails?.discountAllowed
                                                     ">
@@ -1804,7 +1819,8 @@
                                                                     )
                                                                 " [maskInput]="inputMaskFormat" [prefixInput]="
                                                                     invFormData.accountDetails.currencySymbol + ' '
-                                                                " [suffixInput]="entry.discountSum === 0 ? '.00' + selectedSuffixForCurrency : selectedSuffixForCurrency"
+                                                                "
+                                                                [suffixInput]="entry.discountSum === 0 ? '.00' + selectedSuffixForCurrency : selectedSuffixForCurrency"
                                                                 [commonLocaleData]="commonLocaleData"
                                                                 [readonly]="isEinvoiceGenerated">
                                                             </discount-control-component>
@@ -1840,7 +1856,8 @@
                                                                 " (hideOtherPopups)="closeDiscountPopup()"
                                                                 [maskInput]="inputMaskFormat" [prefixInput]="
                                                                     invFormData.accountDetails.currencySymbol + ' '
-                                                                " [suffixInput]="transaction.taxableValue === 0 ? '.00' + selectedSuffixForCurrency : selectedSuffixForCurrency"
+                                                                "
+                                                                [suffixInput]="transaction.taxableValue === 0 ? '.00' + selectedSuffixForCurrency : selectedSuffixForCurrency"
                                                                 [readonly]="isEinvoiceGenerated">
                                                             </tax-control>
                                                         </div>
