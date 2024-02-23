@@ -1,67 +1,68 @@
 <div (clickOutside)="hideDiscountMenu()" (click)="$event.stopPropagation()" class="position-relative">
     <label *ngIf="showHeaderText">{{commonLocaleData?.app_discount}}</label>
-
-    <a id="discount">
-        <div class="multi-select adjust">
-            <input
-                (keydown.enter)="$event.preventDefault()"
-                matInput
-                type="text"
-                decimalDigitsDirective
-                name="discountSum"
-                [ngClass]="{'field-disabled': readonly}"
-                class="form-control text-right cursor-pointer pd-r2"
-                (focus)="!readonly ? showDiscountMenu() : ''"
-                [(ngModel)]="discountSum"
-                [mask]="inputMaskFormat"
-                [prefix]="prefixInput"
-                [suffix]="suffixInput"
-                readonly
-                (blur)="discountInputBlur($event)"
-            />
-        </div>
-    </a>
-
+        <a id="discount">
+            <div class="multi-select adjust">
+                <input
+                    (keydown.enter)="$event.preventDefault()"
+                    matInput
+                    type="text"
+                    decimalDigitsDirective
+                    name="discountSum"
+                    [ngClass]="{'field-disabled': readonly}"
+                    class="form-control text-right cursor-pointer pd-r2"
+                    (focus)="!readonly ? showDiscountMenu() : ''"
+                    [(ngModel)]="discountSum"
+                    [mask]="inputMaskFormat"
+                    [prefix]="prefixInput"
+                    [suffix]="suffixInput"
+                    readonly
+                    (blur)="discountInputBlur($event)"
+                />
+            </div>
+        </a>
     <div
-        class="my-dropdown-menu pd-1"
+        class="my-dropdown-menu custom-discount-menu"
         [ngClass]="{'display-block': discountMenu, 'display-none' : !discountMenu}"
         (click)="$event.stopPropagation()"
         #disInptEle
     >
         <div class="value-wrapper">
-            <div class="d-flex align-items-center mr-b1">
-                <label>{{commonLocaleData?.app_percent}}</label>
-
-                <div class="position-relative percent-wrapper">
+            <div class="custom-mat-form-field mr-b1">
+                <mat-form-field  class="w-100" appearance="outline">
+                    <mat-label>{{ commonLocaleData?.app_percent }}</mat-label>
                     <input
                         (keydown.enter)="$event.preventDefault()"
                         matInput
                         type="text"
-                        class="form-control text-right cursor-pointer w-100"
+                        [ngClass]="{'read-only': !discountFromPer}"
                         [disabled]="!discountFromPer"
                         decimalDigitsDirective
                         [(ngModel)]="discountPercentageModal"
                         (blur)="discountInputBlur($event)"
                         (input)="discountFromInput('PERCENTAGE', $event)"
                         [mask]="inputMaskFormat"
+                        class="text-right"
                     />
-                    <i class="fa fa-percent position-absolute"></i>
-                </div>
+                    <span  matSuffix>%</span>
+                    </mat-form-field>
             </div>
 
-            <div class="d-flex align-items-center mr-b1">
-                <label>{{commonLocaleData?.app_value}}</label>
+            <div class="custom-mat-form-field mr-b1">
+                <mat-form-field  class="w-100" appearance="outline">
+                    <mat-label>{{ commonLocaleData?.app_value }}</mat-label>
                 <input
                     (keydown.enter)="$event.preventDefault()"
                     matInput
                     type="text"
-                    class="form-control text-right cursor-pointer value-width"
+                    [ngClass]="{'read-only': !discountFromVal}"
                     [disabled]="!discountFromVal"
                     decimalDigitsDirective
                     [(ngModel)]="discountFixedValueModal"
                     (input)="discountFromInput('FIX_AMOUNT', $event)"
                     [mask]="inputMaskFormat"
+                    class="text-right"
                 />
+            </mat-form-field>
             </div>
         </div>
 

@@ -15,8 +15,8 @@
     "balance_due": "शिल्लक बाकी",
     "copy_previous_invoices": "मागील [INVOICE_TYPE] पावत्या कॉपी करा",
     "copy_previous_dr_cr": "मागील [INVOICE_TYPE] कॉपी करा",
-    "customer_details": "ग्राहक तपशील",
-    "vendor_details": "विक्रेता तपशील",
+    "customer_details": "ग्राहक संपादित करा",
+    "vendor_details": "विक्रेता संपादित करा",
     "billing_address": "बिलाचा पत्ता",
     "shipping_address": "शिपिंग पत्ता",
     "change": "बदला",
@@ -115,5 +115,6 @@
     "account": "खाते",
     "select_variant": "प्रकार निवडा",
     "variant": "प्रकार",
-    "account_missing_in_stock": "खाते स्टॉकशी जोडलेले नाही"
+    "account_missing_in_stock": "खाते स्टॉकशी जोडलेले नाही",
+    "add_new_address": "+ नवीन पत्ता जोडा"
 }
