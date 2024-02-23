@@ -7,6 +7,12 @@ import { TranslateDirectiveModule } from "../../theme/translate/translate.direct
 import { VoucherAddBulkItemsComponent } from "./voucher-add-bulk-items.component";
 import { ShSelectModule } from "../../theme/ng-virtual-select/sh-select.module";
 import { ScrollingModule } from "@angular/cdk/scrolling";
+import { MatInputModule } from "@angular/material/input";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatDialogModule } from "@angular/material/dialog";
+import { MatExpansionModule } from "@angular/material/expansion";
+import { MatListModule } from "@angular/material/list";
+import { MatTooltipModule } from "@angular/material/tooltip";
 
 @NgModule({
     declarations: [
@@ -14,12 +20,16 @@ import { ScrollingModule } from "@angular/cdk/scrolling";
     ],
     imports: [
         CommonModule,
-        ReactiveFormsModule,
-        FormsModule,
-        TranslateDirectiveModule,
+        FormFieldsModule,
+        MatListModule,
         ScrollingModule,
         MatButtonModule,
-        FormFieldsModule,
+        MatDialogModule,
+        MatExpansionModule,
+        MatTooltipModule,
+        FormsModule,
+        ReactiveFormsModule,
+        TranslateDirectiveModule,
         ShSelectModule
     ],
     exports: [
