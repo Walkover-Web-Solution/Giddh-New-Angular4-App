@@ -145,52 +145,7 @@
             display: block;
         }
     }
-    .search-box {
-        .input-group-text {
-            padding: 8px !important;
-            color: var(--color-sidebar-search-bar-text);
-            background-color: var(--color-sidebar-primary-search-bar-background);
-            border: none;
-        }
-        input {
-            border-left: none;
-            padding-left: 0 !important;
-            border-right: none !important;
-            background-color: var(--color-sidebar-primary-search-bar-background) !important;
-            border-top-left-radius: 0px !important;
-            border-bottom-left-radius: 0px !important;
-            border-top-right-radius: 0px !important;
-            border-bottom-right-radius: 0px !important;
-            border: none;
-            position: relative;
-            left: 1px;
-            &:focus {
-                border-color: var(--color-iron) !important;
-            }
-            &::placeholder {
-                color: var(--color-sidebar-search-bar-text);
-            }
-        }
-        .input-group-append {
-            font-size: var(--font-size-12);
-            color: var(--color-sidebar-search-bar-text);
-            right: 10px;
-            top: 0;
-            padding: 0 5px;
-            height: 36px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: var(--color-sidebar-primary-search-bar-background);
-            border-radius: 5px;
-            border-left: none;
-            border-top-left-radius: 0px !important;
-            border-bottom-left-radius: 0px !important;
-            border: none;
-            position: relative;
-            left: 2px;
-        }
-    }
+
     .wrap-menus {
         min-height: calc(100vh - 200px);
         max-height: calc(100vh - 200px);
@@ -514,32 +469,7 @@
                 }
             }
         }
-        .search-block {
-            padding: 0 10px !important;
-            .search-box {
-                .input-group {
-                    display: flex;
-                    justify-content: center;
-                    .input-group-prepend {
-                        .input-group-text {
-                            border-radius: 50%;
-                            width: 36px;
-                            height: 36px;
-                            display: flex;
-                            justify-content: center;
-                            align-items: center;
-                        }
-                    }
-                    input,
-                    .input-group-append {
-                        display: none;
-                    }
-                }
-                &:after {
-                    display: none;
-                }
-            }
-        }
+        
         .wrap-menus {
             overflow: initial !important;
             .menu-block {
@@ -715,8 +645,8 @@
     .primary-sidebar {
         .wrap-menus {
             height: 100vh;
-            max-height: calc(100vh - 240px);
-            min-height: calc(100vh - 240px);
+            max-height: calc(100vh - 152px);
+            min-height: calc(100vh - 152px);
             overflow-y: auto;
             overflow-x: hidden;
         }

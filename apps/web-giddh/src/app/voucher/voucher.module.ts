@@ -42,6 +42,7 @@ import { WatchVideoModule } from "../theme/watch-video/watch-video.module";
 import { MatCardModule } from "@angular/material/card";
 import { MatExpansionModule } from "@angular/material/expansion";
 import { MatDividerModule } from "@angular/material/divider";
+import { OnloadDirectiveModule } from "./directive/onload.module";
 
 @NgModule({
     imports: [
@@ -89,7 +90,8 @@ import { MatDividerModule } from "@angular/material/divider";
         WatchVideoModule,
         MatCardModule,
         MatExpansionModule,
-        MatDividerModule
+        MatDividerModule,
+        OnloadDirectiveModule
     ],
     exports: [VoucherComponent],
     declarations: [
