@@ -1464,8 +1464,7 @@
                                                                     isAccountSearchData = true;
                                                                     onSearchQueryChanged($event, 1, 'item')
                                                                 " (onClear)="onClearSalesAccount(transaction)"
-                                                                [hasMoreValue]="true" [readonly]="isEinvoiceGenerated"
-                                                                [openDropdown]="activeIndx === entryIdx">
+                                                                [hasMoreValue]="true" [readonly]="isEinvoiceGenerated">
                                                                 <ng-template #optionTemplate let-option="option">
                                                                     <ng-container *ngIf="!option.additional?.stock">
                                                                         <a href="javascript:void(0)"
