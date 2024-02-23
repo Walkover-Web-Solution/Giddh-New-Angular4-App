@@ -25,9 +25,9 @@
                 <!--endregion-->
                 <div class="vouchers-content-wrapper"
                     [hidden]="(isUpdateMode && isUpdateDataInProcess) || (isLastInvoiceCopied && isUpdateDataInProcess)">
-                    <span class="font-15 mr-l1" *ngIf="isEinvoiceGenerated">{{
+                    <div class="font-15 mr-l1 mb-4" *ngIf="isEinvoiceGenerated">{{
                         commonLocaleData?.app_special_note
-                        }}</span>
+                        }}</div>
                     <form autocomplete="off" novalidate name="invoiceForm">
                         <!-- Voucher Form Top Section -->
                         <div class="vouchers-primary-form">
@@ -268,7 +268,7 @@
                                             localeData?.billing_address }}
                                             <span *ngIf="!isCashInvoice">
                                                 <span
-                                                    *ngIf="invFormData.accountDetails.billingDetails.gstNumber || invFormData.accountDetails.billingDetails.taxNumber || invFormData.accountDetails.billingDetails.stateName || invFormData.accountDetails.billingDetails.state?.name || invFormData.accountDetails.billingDetails.state?.code || invFormData.accountDetails.billingDetails.stateCode">(
+                                                    *ngIf="invFormData.accountDetails.billingDetails.gstNumber || invFormData.accountDetails.billingDetails.taxNumber || invFormData.accountDetails.billingDetails.stateName || invFormData.accountDetails.billingDetails.state?.name || invFormData.accountDetails.billingDetails.state?.code || invFormData.accountDetails.billingDetails.county?.name || invFormData.accountDetails.billingDetails.county?.code || invFormData.accountDetails.billingDetails.stateCode">(
                                                     {{
                                                     commonLocaleData?.app_address }}
                                                     {{ accountBillingIndex }} )
@@ -282,7 +282,7 @@
                                             <div class="mat-menu-width-large vouchers-address-menu">
                                                 <ng-container *ngFor="let address of accountAddressList; let i = index">
                                                     <button
-                                                        *ngIf="address.gstNumber || address.taxNumber || address.state?.name || address.state?.code"
+                                                        *ngIf="address.gstNumber || address.taxNumber || address.state?.name || address.state?.code || address.county?.name || address.county?.code"
                                                         mat-menu-item (click)="
                                                             selectAddress('accountBilling',
                                                                 invFormData.accountDetails.billingDetails,
@@ -298,7 +298,7 @@
                                                                     {{ address.address }}
                                                                 </p>
                                                                 <p class="text-gray">
-                                                                    {{ address.state?.name }}
+                                                                    {{ address.state?.name ??address.county?.name }}
                                                                 </p>
                                                                 <p *ngIf="address.gstNumber">
                                                                     {{
@@ -443,7 +443,7 @@
                                                 {{ localeData?.shipping_address }}
 
                                                 <span
-                                                    *ngIf="invFormData.accountDetails.shippingDetails.gstNumber || invFormData.accountDetails.shippingDetails.taxNumber || invFormData.accountDetails.shippingDetails.stateName || invFormData.accountDetails.shippingDetails.state?.name|| invFormData.accountDetails.shippingDetails.state?.code || invFormData.accountDetails.shippingDetails.stateCode">(
+                                                    *ngIf="invFormData.accountDetails.shippingDetails.gstNumber || invFormData.accountDetails.shippingDetails.taxNumber || invFormData.accountDetails.shippingDetails.stateName || invFormData.accountDetails.shippingDetails.state?.name|| invFormData.accountDetails.shippingDetails.state?.code || invFormData.accountDetails.shippingDetails.county?.name|| invFormData.accountDetails.shippingDetails.county?.code|| invFormData.accountDetails.shippingDetails.stateCode">(
                                                     {{
                                                     commonLocaleData?.app_address }}
                                                     {{ accountShippingIndex }} )
@@ -459,7 +459,7 @@
                                                     <ng-container
                                                         *ngFor="let address of accountAddressList; let i = index">
                                                         <button
-                                                            *ngIf="address.gstNumber || address.taxNumber || address.state?.name || address.state?.code"
+                                                            *ngIf="address.gstNumber || address.taxNumber || address.state?.name || address.state?.code || address.county?.name || address.county?.code "
                                                             mat-menu-item (click)="
                                                                 autoFillShipping = false;
                                                                 selectAddress('accountShipping',
@@ -478,7 +478,7 @@
                                                                         {{ address.address }}
                                                                     </p>
                                                                     <p class="text-gray">
-                                                                        {{ address.state?.name }}
+                                                                        {{ address.state?.name ??address.county?.name }}
                                                                     </p>
                                                                     <p *ngIf="address.gstNumber">
                                                                         {{
@@ -640,7 +640,7 @@
                                         <label for="billingAddress" class="billing-label p-0">
                                             {{ localeData?.billing_address }}
                                             <span
-                                                *ngIf="purchaseBillCompany.billingDetails.gstNumber || purchaseBillCompany.billingDetails.taxNumber || purchaseBillCompany.billingDetails.stateName || purchaseBillCompany.billingDetails.state?.name || purchaseBillCompany.billingDetails.state?.code || purchaseBillCompany.billingDetails.stateCode">
+                                                *ngIf="purchaseBillCompany.billingDetails.gstNumber || purchaseBillCompany.billingDetails.taxNumber || purchaseBillCompany.billingDetails.stateName || purchaseBillCompany.billingDetails.state?.name || purchaseBillCompany.billingDetails.state?.code || purchaseBillCompany.billingDetails.county?.name || purchaseBillCompany.billingDetails.county?.code || purchaseBillCompany.billingDetails.stateCode">
                                                 ( {{ commonLocaleData?.app_address }}
                                                 {{ purchaseBillingIndex }} )
                                             </span>
@@ -715,7 +715,7 @@
                                     <div class="col-6">
                                         {{ localeData?.shipping_address }}
                                         <span
-                                            *ngIf="purchaseBillCompany.shippingDetails.gstNumber || purchaseBillCompany.shippingDetails.taxNumber || purchaseBillCompany.shippingDetails.stateName  || purchaseBillCompany.shippingDetails.state?.name  || purchaseBillCompany.shippingDetails.state?.code || purchaseBillCompany.shippingDetails.stateCode">(
+                                            *ngIf="purchaseBillCompany.shippingDetails.gstNumber || purchaseBillCompany.shippingDetails.taxNumber || purchaseBillCompany.shippingDetails.stateName  || purchaseBillCompany.shippingDetails.state?.name  || purchaseBillCompany.shippingDetails.state?.code  || purchaseBillCompany.shippingDetails.county?.name  || purchaseBillCompany.shippingDetails.county?.code|| purchaseBillCompany.shippingDetails.stateCode">(
                                             {{
                                             commonLocaleData?.app_address }}
                                             {{ purchaseShippingIndex }} )
@@ -910,10 +910,10 @@
                                 </div>
                                 <div class="row mr-t15"
                                     *ngIf="(isCreditNote || isDebitNote) || companyCountryCode === 'AE'">
-                                    <div class="col-6">
-                                        <div class="d-flex column-gap5 align-items-baseline"
-                                            *ngIf="isCreditNote || isDebitNote">
-                                            <div class="w-100">
+                                    <div class="col-6"  *ngIf="isCreditNote || isDebitNote">
+                                        <div 
+                                           >
+                                            <div class="w-100 position-relative">
                                                 <dropdown-field #linkingDropdown *ngIf="voucherApiVersion === 2"
                                                     [cssClass]="'linking-dropdown'" [name]="'invoiceLinking'"
                                                     [placeholder]="commonLocaleData?.app_select_voucher"
