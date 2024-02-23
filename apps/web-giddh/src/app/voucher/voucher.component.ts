@@ -904,6 +904,10 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.selectedCompany = activeCompany;
+                activeCompany.addresses = activeCompany.addresses.map((item, i) => {
+                    item['index'] = i;
+                    return item;
+                });
                 this.companyAddressList = activeCompany.addresses;
                 this.initializeCurrentVoucherForm();
             }
@@ -1594,7 +1598,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 if (this.invFormData.voucherDetails.customerUniquename && this.invFormData.voucherDetails.voucherDate && !this.isLastInvoiceCopied && !(this.isProformaInvoice || this.isEstimateInvoice)) {
                     this.getAllAdvanceReceipts(this.invFormData.voucherDetails.customerUniquename, this.invFormData.voucherDetails.voucherDate)
                 }
-
+                
+                this.checkIfEntryHasStock();
                 this.calculateBalanceDue();
                 this.calculateTotalDiscount();
                 this.calculateTotalTaxSum();
@@ -7639,12 +7644,15 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      *
      * @memberof VoucherComponent
      */
-    public autoFillCompanyShippingDetails(): void {
+    public autoFillCompanyShippingDetails(index?: number): void {
         if (this.autoFillCompanyShipping) {
             this.purchaseBillCompany.shippingDetails = cloneDeep(this.purchaseBillCompany.billingDetails);
             if (this.shippingStateCompany && this.shippingStateCompany.nativeElement) {
                 this.shippingStateCompany.nativeElement.classList.remove('error-box');
             }
+        } else {
+            this.purchaseBillCompany.shippingDetails.index = index;
+            this.changeDetectorRef.detectChanges();
         }
         this.changeDetectorRef.detectChanges();
     }
@@ -8138,7 +8146,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             data.gstNumber = (isCompanyAddress) ? (address.gstNumber ?? address.taxNumber) : address.gstNumber;
             data.pincode = address.pincode;
             if (isCompanyAddress) {
-                this.autoFillCompanyShippingDetails();
+                this.autoFillCompanyShippingDetails(index);
             } else {
                 this.autoFillShippingDetails();
             }
@@ -8425,11 +8433,11 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.theadArrReadOnly = [
             {
                 display: true,
-                label: '#'
+                label: this.localeData?.product_service
             },
             {
                 display: true,
-                label: this.localeData?.product_service_description
+                label: this.commonLocaleData?.app_description
             },
             {
                 display: !this.currentVoucherFormDetails || this.currentVoucherFormDetails?.quantityAllowed,
@@ -9572,10 +9580,11 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public checkIfEntryHasStock(): void {
         this.hasStock = false;
 
-        this.invFormData.entries.forEach(entry => {
-            if (entry.transactions[0]?.isStockTxn) {
+        this.invFormData.entries.forEach( entry => {
+            if(entry.transactions[0]?.isStockTxn){
                 this.hasStock = true;
             }
-        })
+        });
     }
+    
 }

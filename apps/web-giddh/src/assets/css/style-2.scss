@@ -334,7 +334,6 @@ textarea {
     .exchange-rate-original {
         display: inline-block;
         width: 80px;
-        height: 26px !important;
         text-align: center;
         border-radius: 5px;
     }
@@ -901,6 +900,7 @@ textarea {
     max-width: 260px !important;
     max-height: 340px;
     padding: 15px;
+    right: 0;
 
     ul {
         .discount-list {
