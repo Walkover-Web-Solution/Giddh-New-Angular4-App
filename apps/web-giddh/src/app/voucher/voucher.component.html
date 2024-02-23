@@ -503,11 +503,8 @@
                                                         </button>
                                                         <mat-divider></mat-divider>
                                                     </ng-container>
-                                                    <button
-                                                        mat-menu-item
-                                                        class="vouchers-add-new"
-                                                        (click)="getCustomerDetails()"
-                                                    >
+                                                    <button mat-menu-item class="vouchers-add-new"
+                                                        (click)="getCustomerDetails()">
                                                         {{ localeData?.add_new_address }}
                                                     </button>
                                                 </div>
@@ -707,11 +704,8 @@
                                                     </button>
                                                     <mat-divider></mat-divider>
                                                 </ng-container>
-                                                <button
-                                                    mat-menu-item
-                                                    class="vouchers-add-new"
-                                                    (click)="getCustomerDetails()"
-                                                >
+                                                <button mat-menu-item class="vouchers-add-new"
+                                                    (click)="getCustomerDetails()">
                                                     {{ localeData?.add_new_address }}
                                                 </button>
                                             </div>
@@ -794,16 +788,17 @@
                                                         </button>
                                                         <mat-divider></mat-divider>
                                                     </ng-container>
-                                                    <button
-                                                        mat-menu-item
-                                                        class="vouchers-add-new"
-                                                        (click)="getCustomerDetails()"
-                                                    >
+                                                    <button mat-menu-item class="vouchers-add-new"
+                                                        (click)="getCustomerDetails()">
                                                         {{ localeData?.add_new_address }}
                                                     </button>
                                                 </div>
                                             </mat-menu>
                                         </ng-container>
+<<<<<<< HEAD
+=======
+
+>>>>>>> 8366423d661b8645bbc8f94d9158ba3f5bae1c30
                                     </div>
                                 </div>
                                 <!-- Row 3 -->
@@ -1532,8 +1527,7 @@
                                                                             class="custom-date-entries custom-input-field d-flex">
                                                                             <giddh-datepicker
                                                                                 class="date-border entries-giddh-datepicker"
-                                                                                [showToggleIcon]="true"
-                                                                                #dp="ngModel"
+                                                                                [showToggleIcon]="true" #dp="ngModel"
                                                                                 (keydown.enter)="
                                                                                     $event.preventDefault()
                                                                                 " (dateSelected)="
@@ -1909,7 +1903,8 @@
                                                             </div>
                                                             <div *ngIf="entry.isOtherTaxApplicable" class="mr-t1">
                                                                 <span>
-                                                                    <div class="d-flex align-items-center justify-content-end">
+                                                                    <div
+                                                                        class="d-flex align-items-center justify-content-end">
                                                                         <span class="mr-r05">
                                                                             <a href="javascript:;"
                                                                                 *ngIf="!isEinvoiceGenerated" (click)="

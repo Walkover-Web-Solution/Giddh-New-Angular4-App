@@ -748,7 +748,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     /** True if there is initial call */
     public initialApiCall: boolean = false;
     /** Holds true if table entry has at least single stock is selected  */
-    public hasStock: boolean = true;
+    public hasStock: boolean = false;
     /** Hold account billing index  */
     public accountBillingIndex: number = 0;
     /** Hold account shipping index  */
@@ -904,10 +904,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.selectedCompany = activeCompany;
-                activeCompany.addresses = activeCompany.addresses.map((item, i) => {
-                    item['index'] = i;
-                    return item;
-                });
                 this.companyAddressList = activeCompany.addresses;
                 this.initializeCurrentVoucherForm();
             }
@@ -7644,15 +7640,12 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      *
      * @memberof VoucherComponent
      */
-    public autoFillCompanyShippingDetails(index?: number): void {
+    public autoFillCompanyShippingDetails(): void {
         if (this.autoFillCompanyShipping) {
             this.purchaseBillCompany.shippingDetails = cloneDeep(this.purchaseBillCompany.billingDetails);
             if (this.shippingStateCompany && this.shippingStateCompany.nativeElement) {
                 this.shippingStateCompany.nativeElement.classList.remove('error-box');
             }
-        } else {
-            this.purchaseBillCompany.shippingDetails.index = index;
-            this.changeDetectorRef.detectChanges();
         }
         this.changeDetectorRef.detectChanges();
     }
@@ -8146,7 +8139,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             data.gstNumber = (isCompanyAddress) ? (address.gstNumber ?? address.taxNumber) : address.gstNumber;
             data.pincode = address.pincode;
             if (isCompanyAddress) {
-                this.autoFillCompanyShippingDetails(index);
+                this.autoFillCompanyShippingDetails();
             } else {
                 this.autoFillShippingDetails();
             }
