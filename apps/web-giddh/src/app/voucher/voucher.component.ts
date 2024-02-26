@@ -422,7 +422,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      */
     public allowedSelectionOfAType: any = { type: [], count: 1 };
     /** Type of invoice status (pending ,invoice, CN/DN) */
-    public isPendingVoucherType: boolean = false;
+    public isPendingVoucherType = false;
     // private members
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private selectedAccountDetails$: Observable<AccountResponseV2>;
@@ -1054,8 +1054,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     this.getDefaultTemplateData();
                 } else {
                     // for edit mode direct from @Input
-                    if (params['voucherType'] && params['voucherType'] === 'pending' && params['selectedType']) {
+                    if (params.voucherType && params.selectedType && params.voucherType === 'pending') {
                         this.isPendingVoucherType = true;
+                        this.getAccountDetails(this.accountUniqueName);
                     } else {
                         this.store.dispatch(this.invoiceReceiptActions.ResetVoucherDetails());
                         if (this.accountUniqueName && this.invoiceType && this.invoiceNo) {
@@ -1300,7 +1301,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                                 obj.accountDetails.currencyCode = results[0].account?.currency?.code;
                             }
 
-                            this.selectedAccountDetails$.pipe(take(1)).subscribe(acc => {
+                            this.selectedAccountDetails$.pipe(takeUntil(this.destroyed$)).subscribe(acc => {
                                 if (acc) {
                                     obj.accountDetails.currencySymbol = acc.currencySymbol ?? this.baseCurrencySymbol;
                                     obj.accountDetails.currencyCode = acc.currency ?? this.companyCurrency;
@@ -2211,7 +2212,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 this.isCashBankAccount = true;
             }
         });
-
         this.accountAddressList = data.addresses;
 
         this.customerCountryName = data.country.countryName;
@@ -8127,7 +8127,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             data.stateCode = data.state.code;
             data.state.name = (isCompanyAddress) ? address.stateName : (address.state) ? address.state.name : "";
             data.stateName = data.state.name;
-            data.gstNumber = (isCompanyAddress) ? (address.gstNumber ?? address.taxNumber) : address.gstNumber;
+            data.gstNumber = (isCompanyAddress) ? ((address.gstNumber ? address.gstNumber : "") ?? (address.taxNumber ? address.taxNumber : "")) : ((address.gstNumber ? address.gstNumber : "") ?? (address.taxNumber ? address.taxNumber : ""));
+            data.taxNumber = (isCompanyAddress) ? ((address.gstNumber ? address.gstNumber : "") ?? (address.taxNumber ? address.taxNumber : "")) : ((address.gstNumber ? address.gstNumber : "") ?? (address.taxNumber ? address.taxNumber : ""));
             data.pincode = address.pincode;
             if (isCompanyAddress) {
                 this.autoFillCompanyShippingDetails();
