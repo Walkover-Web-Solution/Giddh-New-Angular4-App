@@ -206,6 +206,9 @@
                                     max-width: 120px;
                                 }
                             }
+                            @media screen and (max-width: 992px) {
+                                min-width: 200px !important;
+                            }
                         }
 
                         th {
@@ -246,6 +249,9 @@
 
                             .description {
                                 word-wrap: break-word;
+                                p {
+                                    padding-left: 6px;
+                                }
                             }
 
                             .wrap-td-data {
@@ -257,6 +263,10 @@
                             td {
                                 &.active {
                                     box-shadow:  0 0 0 2px var(--color-common-secondary-border) inset;
+                                }
+                                .date-hsn-code{
+                                    padding-left: 7px;
+                                    padding-right: 7px;
                                 }
                             }
                         }
