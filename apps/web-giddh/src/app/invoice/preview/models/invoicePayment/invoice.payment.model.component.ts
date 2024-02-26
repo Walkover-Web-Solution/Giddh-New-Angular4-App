@@ -137,6 +137,7 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
     public onConfirmation(formObj) {
         let newFormObj = cloneDeep(formObj);
         newFormObj.paymentDate = dayjs(newFormObj.paymentDate).format(GIDDH_DATE_FORMAT);
+        newFormObj.chequeClearanceDate = dayjs(newFormObj.chequeClearanceDate).format(GIDDH_DATE_FORMAT);
         newFormObj.exchangeRate = this.exchangeRate;
 
         if (this.generalService.voucherApiVersion === 2) {
