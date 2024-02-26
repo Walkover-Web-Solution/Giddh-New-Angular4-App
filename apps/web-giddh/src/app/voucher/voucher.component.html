@@ -365,14 +365,15 @@
                                             <span *ngIf="!isCashInvoice">
                                                 <span
                                                     *ngIf="
-                                                        invFormData.accountDetails.billingDetails.gstNumber ||
-                                                        invFormData.accountDetails.billingDetails.taxNumber ||
-                                                        invFormData.accountDetails.billingDetails.stateName ||
-                                                        invFormData.accountDetails.billingDetails.state?.name ||
-                                                        invFormData.accountDetails.billingDetails.state?.code ||
-                                                        invFormData.accountDetails.billingDetails.county?.name ||
-                                                        invFormData.accountDetails.billingDetails.county?.code ||
-                                                        invFormData.accountDetails.billingDetails.stateCode
+                                                        (invFormData.accountDetails.billingDetails.gstNumber ||
+                                                            invFormData.accountDetails.billingDetails.taxNumber ||
+                                                            invFormData.accountDetails.billingDetails.stateName ||
+                                                            invFormData.accountDetails.billingDetails.state?.name ||
+                                                            invFormData.accountDetails.billingDetails.state?.code ||
+                                                            invFormData.accountDetails.billingDetails.county?.name ||
+                                                            invFormData.accountDetails.billingDetails.county?.code ||
+                                                            invFormData.accountDetails.billingDetails.stateCode) &&
+                                                        accountAddressList?.length
                                                     "
                                                     >(
                                                     {{ commonLocaleData?.app_address }}
@@ -677,14 +678,15 @@
 
                                                 <span
                                                     *ngIf="
-                                                        invFormData.accountDetails.shippingDetails.gstNumber ||
-                                                        invFormData.accountDetails.shippingDetails.taxNumber ||
-                                                        invFormData.accountDetails.shippingDetails.stateName ||
-                                                        invFormData.accountDetails.shippingDetails.state?.name ||
-                                                        invFormData.accountDetails.shippingDetails.state?.code ||
-                                                        invFormData.accountDetails.shippingDetails.county?.name ||
-                                                        invFormData.accountDetails.shippingDetails.county?.code ||
-                                                        invFormData.accountDetails.shippingDetails.stateCode
+                                                        (invFormData.accountDetails.shippingDetails.gstNumber ||
+                                                            invFormData.accountDetails.shippingDetails.taxNumber ||
+                                                            invFormData.accountDetails.shippingDetails.stateName ||
+                                                            invFormData.accountDetails.shippingDetails.state?.name ||
+                                                            invFormData.accountDetails.shippingDetails.state?.code ||
+                                                            invFormData.accountDetails.shippingDetails.county?.name ||
+                                                            invFormData.accountDetails.shippingDetails.county?.code ||
+                                                            invFormData.accountDetails.shippingDetails.stateCode) &&
+                                                        accountAddressList?.length
                                                     "
                                                     >(
                                                     {{ commonLocaleData?.app_address }}
@@ -1020,14 +1022,15 @@
                                             {{ localeData?.billing_address }}
                                             <span
                                                 *ngIf="
-                                                    purchaseBillCompany.billingDetails.gstNumber ||
-                                                    purchaseBillCompany.billingDetails.taxNumber ||
-                                                    purchaseBillCompany.billingDetails.stateName ||
-                                                    purchaseBillCompany.billingDetails.state?.name ||
-                                                    purchaseBillCompany.billingDetails.state?.code ||
-                                                    purchaseBillCompany.billingDetails.county?.name ||
-                                                    purchaseBillCompany.billingDetails.county?.code ||
-                                                    purchaseBillCompany.billingDetails.stateCode
+                                                    (purchaseBillCompany.billingDetails.gstNumber ||
+                                                        purchaseBillCompany.billingDetails.taxNumber ||
+                                                        purchaseBillCompany.billingDetails.stateName ||
+                                                        purchaseBillCompany.billingDetails.state?.name ||
+                                                        purchaseBillCompany.billingDetails.state?.code ||
+                                                        purchaseBillCompany.billingDetails.county?.name ||
+                                                        purchaseBillCompany.billingDetails.county?.code ||
+                                                        purchaseBillCompany.billingDetails.stateCode) &&
+                                                    companyAddressList?.length
                                                 "
                                             >
                                                 ( {{ commonLocaleData?.app_address }} {{ purchaseBillingIndex }} )
@@ -1043,12 +1046,12 @@
                                                 <ng-container *ngFor="let address of companyAddressList; let i = index">
                                                     <button
                                                         *ngIf="
-                                                               address.gstNumber ||
-                                                                address.taxNumber ||
-                                                                address.state?.name ||
-                                                                address.state?.code ||
-                                                                address.county?.name ||
-                                                                address.county?.code
+                                                            address.gstNumber ||
+                                                            address.taxNumber ||
+                                                            address.state?.name ||
+                                                            address.state?.code ||
+                                                            address.county?.name ||
+                                                            address.county?.code
                                                         "
                                                         mat-menu-item
                                                         (click)="
@@ -1161,14 +1164,15 @@
                                         {{ localeData?.shipping_address }}
                                         <span
                                             *ngIf="
-                                                purchaseBillCompany.shippingDetails.gstNumber ||
-                                                purchaseBillCompany.shippingDetails.taxNumber ||
-                                                purchaseBillCompany.shippingDetails.stateName ||
-                                                purchaseBillCompany.shippingDetails.state?.name ||
-                                                purchaseBillCompany.shippingDetails.state?.code ||
-                                                purchaseBillCompany.shippingDetails.county?.name ||
-                                                purchaseBillCompany.shippingDetails.county?.code ||
-                                                purchaseBillCompany.shippingDetails.stateCode
+                                                (purchaseBillCompany.shippingDetails.gstNumber ||
+                                                    purchaseBillCompany.shippingDetails.taxNumber ||
+                                                    purchaseBillCompany.shippingDetails.stateName ||
+                                                    purchaseBillCompany.shippingDetails.state?.name ||
+                                                    purchaseBillCompany.shippingDetails.state?.code ||
+                                                    purchaseBillCompany.shippingDetails.county?.name ||
+                                                    purchaseBillCompany.shippingDetails.county?.code ||
+                                                    purchaseBillCompany.shippingDetails.stateCode) &&
+                                                companyAddressList?.length
                                             "
                                             >(
                                             {{ commonLocaleData?.app_address }}
@@ -1187,7 +1191,7 @@
                                                     >
                                                         <button
                                                             *ngIf="
-                                                                    address.gstNumber ||
+                                                                address.gstNumber ||
                                                                 address.taxNumber ||
                                                                 address.state?.name ||
                                                                 address.state?.code ||
