@@ -422,7 +422,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      */
     public allowedSelectionOfAType: any = { type: [], count: 1 };
     /** Type of invoice status (pending ,invoice, CN/DN) */
-    public isPendingVoucherType = false;
+    public isPendingVoucherType: boolean = false;
     // private members
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private selectedAccountDetails$: Observable<AccountResponseV2>;
@@ -1056,7 +1056,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     this.getDefaultTemplateData();
                 } else {
                     // for edit mode direct from @Input
-                    if (params.voucherType && params.selectedType && params.voucherType === 'pending') {
+                    if (params['voucherType'] && params['voucherType'] === 'pending' && params['selectedType']) {
                         this.isPendingVoucherType = true;
                         this.getAccountDetails(this.accountUniqueName);
                     } else {
@@ -1303,7 +1303,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                                 obj.accountDetails.currencyCode = results[0].account?.currency?.code;
                             }
 
-                            this.selectedAccountDetails$.pipe(takeUntil(this.destroyed$)).subscribe(acc => {
+                            this.selectedAccountDetails$.pipe(take(1)).subscribe(acc => {
                                 if (acc) {
                                     obj.accountDetails.currencySymbol = acc.currencySymbol ?? this.baseCurrencySymbol;
                                     obj.accountDetails.currencyCode = acc.currency ?? this.companyCurrency;
