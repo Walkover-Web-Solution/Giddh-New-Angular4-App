@@ -712,7 +712,8 @@
                                                                 address.state?.name ||
                                                                 address.state?.code ||
                                                                 address.county?.name ||
-                                                                address.county?.code
+                                                                address.county?.code ||
+                                                                address.address
                                                             "
                                                             mat-menu-item
                                                             (click)="
@@ -1037,7 +1038,7 @@
                                             </span>
                                         </label>
                                         <i
-                                            *ngIf="companyAddressList?.length > 1"
+                                            *ngIf="companyAddressList?.length"
                                             [matMenuTriggerFor]="companyBillingAddress"
                                             class="icon-edit text-blue cursor-pointer pl-2 font-12"
                                         ></i>
@@ -1049,9 +1050,12 @@
                                                             address.gstNumber ||
                                                             address.taxNumber ||
                                                             address.state?.name ||
+                                                            address?.stateName ||
+                                                            address?.stateCode ||
                                                             address.state?.code ||
                                                             address.county?.name ||
-                                                            address.county?.code
+                                                            address.county?.code ||
+                                                            address.address
                                                         "
                                                         mat-menu-item
                                                         (click)="
@@ -1071,7 +1075,7 @@
                                                                     {{ address.address }}
                                                                 </p>
                                                                 <p class="text-gray">
-                                                                    {{ address.stateName }}
+                                                                    {{ address.stateName ?? address?.county?.name }}
                                                                 </p>
                                                                 <p *ngIf="address.gstNumber">
                                                                     {{
@@ -1180,7 +1184,7 @@
                                         </span>
                                         <ng-container>
                                             <i
-                                                *ngIf="companyAddressList?.length > 1"
+                                                *ngIf="companyAddressList?.length"
                                                 [matMenuTriggerFor]="shippingAddress"
                                                 class="icon-edit text-blue cursor-pointer pl-2 font-12"
                                             ></i>
@@ -1196,7 +1200,10 @@
                                                                 address.state?.name ||
                                                                 address.state?.code ||
                                                                 address.county?.name ||
-                                                                address.county?.code
+                                                                address.county?.code ||
+                                                                address?.stateName ||
+                                                                address?.stateCode ||
+                                                                address.address
                                                             "
                                                             mat-menu-item
                                                             (click)="
@@ -1221,11 +1228,11 @@
                                                                         {{ address.address }}
                                                                     </p>
                                                                     <p class="text-gray">
-                                                                        {{ address.stateName }}
+                                                                        {{ address.stateName ?? address?.county?.name }}
                                                                     </p>
                                                                     <p *ngIf="address.gstNumber">
                                                                         {{
-                                                                            address.gstNumber
+                                                                            address.taxNumber
                                                                                 ? (showGSTINNo
                                                                                       ? commonLocaleData?.app_gstin +
                                                                                         ":"
