@@ -368,7 +368,8 @@
                                                             invFormData.accountDetails.billingDetails.state?.code ||
                                                             invFormData.accountDetails.billingDetails.county?.name ||
                                                             invFormData.accountDetails.billingDetails.county?.code ||
-                                                            invFormData.accountDetails.billingDetails.stateCode) &&
+                                                            invFormData.accountDetails.billingDetails.stateCode ||
+                                                            invFormData.accountDetails.billingDetails.address[0]) &&
                                                         accountAddressList?.length
                                                     "
                                                     >(
@@ -392,7 +393,8 @@
                                                             address.state?.name ||
                                                             address.state?.code ||
                                                             address.county?.name ||
-                                                            address.county?.code
+                                                            address.county?.code ||
+                                                            address.address
                                                         "
                                                         mat-menu-item
                                                         (click)="
@@ -414,15 +416,15 @@
                                                                 <p class="text-gray">
                                                                     {{ address.state?.name ?? address.county?.name }}
                                                                 </p>
-                                                                <p *ngIf="address.gstNumber">
+                                                                <p *ngIf="address.gstNumber || address.taxNumber">
                                                                     {{
-                                                                        address.taxNumber
+                                                                        address.gstNumber
                                                                             ? (showGSTINNo
                                                                                   ? commonLocaleData?.app_gstin + ":"
                                                                                   : showTRNNo
                                                                                   ? commonLocaleData?.app_trn + ":"
                                                                                   : showVATNo
-                                                                                  ? commonLocaleData?.enter_vat_no + ":"
+                                                                                  ? commonLocaleData?.app_vat + ":"
                                                                                   : "") + address.gstNumber
                                                                             : ""
                                                                     }}
@@ -680,7 +682,8 @@
                                                             invFormData.accountDetails.shippingDetails.state?.code ||
                                                             invFormData.accountDetails.shippingDetails.county?.name ||
                                                             invFormData.accountDetails.shippingDetails.county?.code ||
-                                                            invFormData.accountDetails.shippingDetails.stateCode) &&
+                                                            invFormData.accountDetails.shippingDetails.stateCode ||
+                                                            invFormData.accountDetails.shippingDetails.address[0]) &&
                                                         accountAddressList?.length
                                                     "
                                                     >(
@@ -737,16 +740,16 @@
                                                                             address.state?.name ?? address.county?.name
                                                                         }}
                                                                     </p>
-                                                                    <p *ngIf="address.gstNumber">
+                                                                    <p *ngIf="address.gstNumber || address.taxNumber">
                                                                         {{
-                                                                            address.taxNumber
+                                                                            address.gstNumber
                                                                                 ? (showGSTINNo
                                                                                       ? commonLocaleData?.app_gstin +
                                                                                         ":"
                                                                                       : showTRNNo
                                                                                       ? commonLocaleData?.app_trn + ":"
                                                                                       : showVATNo
-                                                                                      ? commonLocaleData?.enter_vat_no +
+                                                                                      ? commonLocaleData?.app_vat +
                                                                                         ":"
                                                                                       : "") + address.gstNumber
                                                                                 : ""
@@ -1019,7 +1022,7 @@
                                                         purchaseBillCompany.billingDetails.state?.code ||
                                                         purchaseBillCompany.billingDetails.county?.name ||
                                                         purchaseBillCompany.billingDetails.county?.code ||
-                                                        purchaseBillCompany.billingDetails.stateCode) &&
+                                                        purchaseBillCompany.billingDetails.stateCode || purchaseBillCompany.billingDetails.address[0]) &&
                                                     companyAddressList?.length
                                                 "
                                             >
@@ -1074,7 +1077,7 @@
                                                                                   : showTRNNo
                                                                                   ? commonLocaleData?.app_trn + ":"
                                                                                   : showVATNo
-                                                                                  ? commonLocaleData?.enter_vat_no + ":"
+                                                                                  ? commonLocaleData?.app_vat + ":"
                                                                                   : "") + address.gstNumber
                                                                             : ""
                                                                     }}
@@ -1087,13 +1090,13 @@
                                                                                   : showTRNNo
                                                                                   ? commonLocaleData?.app_trn + ":"
                                                                                   : showVATNo
-                                                                                  ? commonLocaleData?.enter_vat_no + ":"
+                                                                                  ? commonLocaleData?.app_vat + ":"
                                                                                   : "") + address.taxNumber
                                                                             : ""
                                                                     }}
                                                                 </p>
                                                             </div>
-                                                            <i
+                                                              <i
                                                                 class="icon-tick"
                                                                 onLoad
                                                                 (elementLoaded)="setIndex('purchaseBilling', i)"
@@ -1142,13 +1145,6 @@
                                                     </button>
                                                     <mat-divider></mat-divider>
                                                 </ng-container>
-                                                <button
-                                                    mat-menu-item
-                                                    class="vouchers-add-new"
-                                                    (click)="getCustomerDetails()"
-                                                >
-                                                    {{ localeData?.add_new_address }}
-                                                </button>
                                             </div>
                                         </mat-menu>
                                     </div>
@@ -1164,7 +1160,7 @@
                                                     purchaseBillCompany.shippingDetails.state?.code ||
                                                     purchaseBillCompany.shippingDetails.county?.name ||
                                                     purchaseBillCompany.shippingDetails.county?.code ||
-                                                    purchaseBillCompany.shippingDetails.stateCode) &&
+                                                    purchaseBillCompany.shippingDetails.stateCode|| purchaseBillCompany.shippingDetails.address[0]) &&
                                                 companyAddressList?.length
                                             "
                                             >(
@@ -1228,7 +1224,7 @@
                                                                                       : showTRNNo
                                                                                       ? commonLocaleData?.app_trn + ":"
                                                                                       : showVATNo
-                                                                                      ? commonLocaleData?.enter_vat_no +
+                                                                                      ? commonLocaleData?.app_vat +
                                                                                         ":"
                                                                                       : "") + address.gstNumber
                                                                                 : ""
@@ -1243,7 +1239,7 @@
                                                                                       : showTRNNo
                                                                                       ? commonLocaleData?.app_trn + ":"
                                                                                       : showVATNo
-                                                                                      ? commonLocaleData?.enter_vat_no +
+                                                                                      ? commonLocaleData?.app_vat +
                                                                                         ":"
                                                                                       : "") + address.taxNumber
                                                                                 : ""
@@ -1311,13 +1307,6 @@
                                                         </button>
                                                         <mat-divider></mat-divider>
                                                     </ng-container>
-                                                    <button
-                                                        mat-menu-item
-                                                        class="vouchers-add-new"
-                                                        (click)="getCustomerDetails()"
-                                                    >
-                                                        {{ localeData?.add_new_address }}
-                                                    </button>
                                                 </div>
                                             </mat-menu>
                                         </ng-container>
