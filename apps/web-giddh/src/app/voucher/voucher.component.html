@@ -1720,7 +1720,7 @@
                                                                 [type]="'text'" [cssClass]="
                                                                     'form-control mat-field-border transaction-rate text-right '
                                                                 " [name]="'transaction.rate_' + entryIdx"
-                                                                [prefix]="invFormData.accountDetails.currencySymbol + ' '"
+                                                                [prefix]="invFormData.accountDetails.currencySymbol"
                                                                 [suffix]="selectedSuffixForCurrency"
                                                                 [mask]="inputMaskFormat" [useMask]="true"
                                                                 [(ngModel)]="transaction.rate" (change)="
@@ -1748,25 +1748,28 @@
                                                    > 
                                                     <div class="td-wrapper">
                                                         <div class="flex-fill">
-                                                            <text-field (click)="transactionAmountClicked(transaction)"
-                                                                [placeholder]="commonLocaleData?.app_amount"
-                                                                [type]="'text'"
-                                                                [cssClass]="'form-control mat-field-border text-right '"
-                                                                [name]="'transaction.amount_' + entryIdx"
-                                                                [prefix]="invFormData.accountDetails.currencySymbol + ' '"
-                                                                [suffix]="selectedSuffixForCurrency"
-                                                                [mask]="inputMaskFormat" 
-                                                                [useMask]="true"
-                                                                [(ngModel)]="transaction.amount"
-                                                                (change)="
-                                                                    calculateWhenTrxAltered(
-                                                                        entry,
-                                                                        transaction,
-                                                                        true,
-                                                                        $event
-                                                                    )
-                                                                " [readonly]="isEinvoiceGenerated">
-                                                            </text-field>
+                                                            <text-field
+                                                            (click)="transactionAmountClicked(transaction)"
+                                                            [placeholder]="commonLocaleData?.app_amount"
+                                                            [type]="'text'"
+                                                            [cssClass]="'form-control mat-field-border text-right '"
+                                                            [name]="'transaction.amount_' + entryIdx"
+                                                            [prefix]="invFormData.accountDetails.currencySymbo"
+                                                            [suffix]="selectedSuffixForCurrency"
+                                                            [mask]="inputMaskFormat"
+                                                            [useMask]="true"
+                                                            [(ngModel)]="transaction.amount"
+                                                            (change)="
+                                                                calculateWhenTrxAltered(
+                                                                    entry,
+                                                                    transaction,
+                                                                    true,
+                                                                    $event
+                                                                )
+                                                            "
+                                                            [readonly]="isEinvoiceGenerated"
+                                                        >
+                                                        </text-field>
                                                         </div>
                                                         <div class="differ-currency" *ngIf="isMulticurrencyAccount">
                                                             <span>
@@ -1803,7 +1806,7 @@
                                                                         $event
                                                                     )
                                                                 " [maskInput]="inputMaskFormat" [prefixInput]="
-                                                                    invFormData.accountDetails.currencySymbol + ' '
+                                                                    invFormData.accountDetails.currencySymbol
                                                                 " [suffixInput]="selectedSuffixForCurrency"
                                                                 [commonLocaleData]="commonLocaleData"
                                                                 [readonly]="isEinvoiceGenerated">
@@ -1839,7 +1842,7 @@
                                                                     calculateWhenTrxAltered(entry, transaction)
                                                                 " (hideOtherPopups)="closeDiscountPopup()"
                                                                 [maskInput]="inputMaskFormat" [prefixInput]="
-                                                                    invFormData.accountDetails.currencySymbol + ' '
+                                                                    invFormData.accountDetails.currencySymbol
                                                                 " [suffixInput]="selectedSuffixForCurrency"
                                                                 [readonly]="isEinvoiceGenerated">
                                                             </tax-control>
@@ -1860,19 +1863,24 @@
                                                     (click)="closeDiscountPopup(); closeTaxControlPopup()" width="16%">
                                                     <div class="td-wrapper">
                                                         <div class="flex-fill">
-                                                            <text-field [type]="'text'"
+                                                            <text-field
+                                                                [type]="'text'"
                                                                 [cssClass]="'form-control mat-field-border text-right '"
                                                                 [name]="'transaction.total_' + entryIdx"
-                                                                [prefix]="invFormData.accountDetails.currencySymbol + ' '"
+                                                                [prefix]="invFormData.accountDetails.currencySymbol"
                                                                 [suffix]="selectedSuffixForCurrency"
-                                                                [mask]="inputMaskFormat" [useMask]="true"
+                                                                [mask]="inputMaskFormat"
+                                                                [useMask]="true"
                                                                 [allowDecimalDigitsOnly]="true"
-                                                                [(ngModel)]="transaction.total" (change)="
+                                                                [(ngModel)]="transaction.total"
+                                                                (change)="
                                                                     calculateTransactionValueInclusively(
                                                                         entry,
                                                                         transaction
                                                                     )
-                                                                " [readonly]="isEinvoiceGenerated">
+                                                                "
+                                                                [readonly]="isEinvoiceGenerated"
+                                                            >
                                                             </text-field>
                                                             <div *ngIf="isTcsTdsApplicable" class="wrap-other-tax">
                                                                 <mat-checkbox (keydown.enter)="$event.preventDefault()"
