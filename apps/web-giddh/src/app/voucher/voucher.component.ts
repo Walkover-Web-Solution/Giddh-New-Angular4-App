@@ -3966,6 +3966,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             this.toggleAccountSelectionDropdown(false);
         }
         if (this.isPurchaseInvoice) {
+            this.autoFillCompanyShippingDetails();
             this.fieldFilteredOptions = [];
             this.linkedPo = [];
             this.removePoItem();
