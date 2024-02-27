@@ -443,7 +443,18 @@
                                                 {{ localeData?.shipping_address }}
 
                                                 <span
-                                                    *ngIf="invFormData.accountDetails.shippingDetails?.gstNumber || invFormData.accountDetails.shippingDetails?.taxNumber || invFormData.accountDetails.shippingDetails?.stateName || invFormData.accountDetails.shippingDetails?.state?.name|| invFormData.accountDetails.shippingDetails?.state?.code || invFormData.accountDetails.shippingDetails?.stateCode">(
+                                                *ngIf="
+                                                (invFormData.accountDetails.shippingDetails?.gstNumber ||
+                                                    invFormData.accountDetails.shippingDetails?.taxNumber ||
+                                                    invFormData.accountDetails.shippingDetails?.stateName ||
+                                                    invFormData.accountDetails.shippingDetails?.state?.name ||
+                                                    invFormData.accountDetails.shippingDetails?.state?.code ||
+                                                    invFormData.accountDetails.shippingDetails?.county?.name ||
+                                                    invFormData.accountDetails.shippingDetails?.county?.code ||
+                                                    invFormData.accountDetails.shippingDetails?.stateCode ||
+                                                    invFormData.accountDetails.shippingDetails?.address[0]) &&
+                                                accountAddressList?.length
+                                            ">(
                                                     {{
                                                     commonLocaleData?.app_address }}
                                                     {{ accountShippingIndex }} )

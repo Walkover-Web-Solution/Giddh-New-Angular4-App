@@ -8,7 +8,6 @@ import { NgxMaskModule } from "../../shared/helpers/directives/ngx-mask";
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatMenuModule } from '@angular/material/menu';
 
 @NgModule({
     imports: [
@@ -19,8 +18,7 @@ import { MatMenuModule } from '@angular/material/menu';
         NgxMaskModule.forRoot(),
         MatCheckboxModule,
         MatFormFieldModule,
-        MatInputModule,
-        MatMenuModule
+        MatInputModule
     ],
     exports: [
         DiscountControlComponent
