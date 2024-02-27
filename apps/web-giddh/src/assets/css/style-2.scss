@@ -14845,12 +14845,3 @@ aside-menu-product-service {
         white-space: nowrap;
     }
 }
-
-
-text-field {
-    input{
-        &::part(div){
-            background-color: red !important;
-        }
-    }
-}
