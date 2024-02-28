@@ -212,7 +212,7 @@
                                     max-width: 120px;
                                 }
                             }
-                            @media screen and (max-width: 768px) {
+                            @media screen and (max-width: 1140px) {
                                 min-width: 200px !important;
                             }
                         }
@@ -279,7 +279,7 @@
                 }
 
 
-                @media screen and (max-width: 768px) {
+                @media screen and (max-width: 1140px) {
                     overflow-x: auto;
                 }
             }

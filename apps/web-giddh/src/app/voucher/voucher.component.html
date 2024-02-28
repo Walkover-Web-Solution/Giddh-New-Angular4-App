@@ -1688,10 +1688,6 @@
                                                     >
                                                         {{ localeData?.variant + ": " + transaction.variant?.name }}
                                                     </p>
-                                                    <p class="small text-muted sku-and-custom-fields"
-                                                        *ngIf="transaction.sku_and_customfields">
-                                                        {{ transaction.sku_and_customfields }}
-                                                    </p>
                                                     <div class="date-hsn-code">
                                                         <div class="row mr-0 ml-0 mt-1">
                                                             <div class="col-6 col-sm-6 pl-0" *ngIf="entry?.entryDate">
@@ -1728,6 +1724,10 @@
                                                     <div class="description">
                                                         {{ transaction.description }}
                                                     </div>
+                                                     <p class="font-14 text-muted sku-and-custom-fields"
+                                                        *ngIf="transaction.sku_and_customfields">
+                                                        {{ transaction.sku_and_customfields }}
+                                                    </p>
                                                 </td>
                                                 <td width="10%" *ngIf="
                                                         !currentVoucherFormDetails ||
@@ -2332,7 +2332,7 @@
                                                             transaction.description?.length
                                                             }}
                                                         </p>
-                                                        <p class="small text-muted sku-and-custom-fields"
+                                                        <p class="font-14 text-muted sku-and-custom-fields"
                                                             *ngIf="transaction.sku_and_customfields">
                                                             {{ transaction.sku_and_customfields }}
                                                         </p>
