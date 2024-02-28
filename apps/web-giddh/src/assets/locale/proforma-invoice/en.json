@@ -52,7 +52,7 @@
     "drag_drop_file": "Drag/Drop file or click here",
     "deposit": "Deposit",
     "adjust_amount": "Adjust Amount",
-    "product_service_description": "Product/Service Description",
+    "product_service": "Product/Service",
     "qty": "Qty",
     "generate_invoice": "Generate [INVOICE_TYPE]",
     "update_invoice": "Update [INVOICE_TYPE]",
