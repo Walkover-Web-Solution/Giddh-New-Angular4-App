@@ -747,6 +747,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public isAccountSearchData: boolean = true;
     /** True if there is initial call */
     public initialApiCall: boolean = false;
+    /** Holds true if table entry has at least single stock is selected  */
+    public hasStock: boolean = false;
     /** Hold account billing index  */
     public accountBillingIndex: number = 0;
     /** Hold account shipping index  */
@@ -1593,7 +1595,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 if (this.invFormData.voucherDetails.customerUniquename && this.invFormData.voucherDetails.voucherDate && !this.isLastInvoiceCopied && !(this.isProformaInvoice || this.isEstimateInvoice)) {
                     this.getAllAdvanceReceipts(this.invFormData.voucherDetails.customerUniquename, this.invFormData.voucherDetails.voucherDate)
                 }
-
+                
+                this.checkIfEntryHasStock();
                 this.calculateBalanceDue();
                 this.calculateTotalDiscount();
                 this.calculateTotalTaxSum();
@@ -3635,11 +3638,13 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 if (selectedAcc.additional.stock) {
                     txn.isStockTxn = true;
                     this.loadStockVariants(selectedAcc.additional.stock.uniqueName, isLinkedPoItem ? entryIndex : undefined);
+                    this.hasStock = true;
                 } else {
                     this.loadDetails(this.currentTxnRequestObject[this.activeIndx]);
                 }
             }
         } else {
+            this.checkIfEntryHasStock();
             txn.isStockTxn = false;
             txn.amount = 0;
             txn.highPrecisionAmount = txn.amount;
@@ -3905,6 +3910,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 this.calculateWhenTrxAltered(entry, transaction);
             }
         }
+
+        this.checkIfEntryHasStock();
+
         if (!isBulkItem) {
             this.changeDetectorRef.detectChanges();
         }
@@ -4092,6 +4100,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         const stockVariants = this.stockVariants.getValue();
         stockVariants.splice(entryIdx, 1);
         this.stockVariants.next(stockVariants);
+        this.checkIfEntryHasStock();
     }
 
     public taxAmountEvent(txn: SalesTransactionItemClass, entry: SalesEntryClass) {
@@ -8419,11 +8428,11 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.theadArrReadOnly = [
             {
                 display: true,
-                label: ''
+                label: this.localeData?.product_service
             },
             {
                 display: true,
-                label: this.localeData?.product_service_description
+                label: this.commonLocaleData?.app_description
             },
             {
                 display: !this.currentVoucherFormDetails || this.currentVoucherFormDetails?.quantityAllowed,
@@ -9557,4 +9566,20 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             }
         }, 300);
     }
+
+    /**
+     * Check table entry has any stock and assign status to 'hasStock' variable
+     *
+     * @memberof VoucherComponent
+     */
+    public checkIfEntryHasStock(): void {
+        this.hasStock = false;
+
+        this.invFormData.entries.forEach( entry => {
+            if(entry.transactions[0]?.isStockTxn){
+                this.hasStock = true;
+            }
+        });
+    }
+    
 }
