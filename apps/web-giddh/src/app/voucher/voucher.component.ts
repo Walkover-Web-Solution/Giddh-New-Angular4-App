@@ -1058,6 +1058,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     // for edit mode direct from @Input
                     if (params['voucherType'] && params['voucherType'] === 'pending' && params['selectedType']) {
                         this.isPendingVoucherType = true;
+                        this.getAccountDetails(this.accountUniqueName);
                     } else {
                         this.store.dispatch(this.invoiceReceiptActions.ResetVoucherDetails());
                         if (this.accountUniqueName && this.invoiceType && this.invoiceNo) {
@@ -2214,7 +2215,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 this.isCashBankAccount = true;
             }
         });
-
         this.accountAddressList = data.addresses;
 
         this.customerCountryName = data.country.countryName;
@@ -3974,6 +3974,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             this.toggleAccountSelectionDropdown(false);
         }
         if (this.isPurchaseInvoice) {
+            this.autoFillCompanyShippingDetails();
             this.fieldFilteredOptions = [];
             this.linkedPo = [];
             this.removePoItem();
@@ -8136,7 +8137,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             data.stateCode = data.state.code;
             data.state.name = (isCompanyAddress) ? address.stateName : (address.state) ? address.state.name : "";
             data.stateName = data.state.name;
-            data.gstNumber = (isCompanyAddress) ? (address.gstNumber ?? address.taxNumber) : address.gstNumber;
+            data.gstNumber = (isCompanyAddress) ? ((address.gstNumber ? address.gstNumber : "") ?? (address.taxNumber ? address.taxNumber : "")) : ((address.gstNumber ? address.gstNumber : "") ?? (address.taxNumber ? address.taxNumber : ""));
+            data.taxNumber = (isCompanyAddress) ? ((address.gstNumber ? address.gstNumber : "") ?? (address.taxNumber ? address.taxNumber : "")) : ((address.gstNumber ? address.gstNumber : "") ?? (address.taxNumber ? address.taxNumber : ""));
             data.pincode = address.pincode;
             if (isCompanyAddress) {
                 this.autoFillCompanyShippingDetails();
