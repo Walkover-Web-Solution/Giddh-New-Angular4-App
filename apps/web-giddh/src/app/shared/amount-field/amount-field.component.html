@@ -1,6 +1,7 @@
 <bdo>
     <p class="d-flex" [dir]="direction">
         <span *ngIf="currencySymbol">{{ currencySymbol }}</span>
+        &nbsp;
         <span dir="ltr" *ngIf="useGiddhCurrencyPipe">{{ amount | giddhCurrency }} </span>
         <span dir="ltr" *ngIf="!useGiddhCurrencyPipe">{{ amount }} </span>
     </p>

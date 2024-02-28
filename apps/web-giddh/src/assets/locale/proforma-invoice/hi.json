@@ -52,7 +52,7 @@
     "drag_drop_file": "फ़ाइल को ड्रैग / ड्रॉप करें या यहाँ क्लिक करें",
     "deposit": "जमा",
     "adjust_amount": "राशि समायोजित करें",
-    "product_service_description": "उत्पाद / सेवा विवरण",
+    "product_service": "उत्पाद / सेवा",
     "qty": "मात्रा",
     "generate_invoice": "उत्पन्न [INVOICE_TYPE]",
     "update_invoice": "अपडेट करें [INVOICE_TYPE]",
