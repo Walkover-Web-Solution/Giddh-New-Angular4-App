@@ -61,7 +61,7 @@ export const PAGE_SHORTCUT_MAPPING = [
         keyCode: 117, // 'F6',
         inputForFn: {
             page: 'Receipt',
-            uniqueName: 'null',
+            uniqueName: 'purchases',
             gridType: 'voucher'
         }
     },
@@ -99,6 +99,7 @@ export class AccountingComponent implements OnInit, OnDestroy {
         private _tallyModuleService: TallyModuleService,
         private sidebarAction: SidebarAction) {
         this._tallyModuleService.selectedPageInfo.pipe(takeUntil(this.destroyed$)).subscribe((d) => {
+            console.log('d', d);
             if (d) {
                 this.gridType = d.gridType;
                 this.selectedPage = d.page;

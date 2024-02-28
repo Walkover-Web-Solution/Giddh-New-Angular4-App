@@ -44,15 +44,15 @@ export const PAGE_SHORTCUT_MAPPING = [
             gridType: 'voucher'
         }
     },
-    // {
-    //     keyCode: 116, // 'F5',
-    //     key: FUNCTIONAL_KEYS.F5,
-    //     inputForFn: {
-    //         page: 'Payment',
-    //         uniqueName: 'purchases',
-    //         gridType: 'voucher'
-    //     }
-    // },
+    {
+        keyCode: 116, // 'F5',
+        key: FUNCTIONAL_KEYS.F5,
+        inputForFn: {
+            page: 'Payment',
+            uniqueName: 'purchases',
+            gridType: 'voucher'
+        }
+    },
     {
         keyCode: 117, // 'F6',
         key: FUNCTIONAL_KEYS.F6,
@@ -210,6 +210,7 @@ export class JournalVoucherComponent implements OnInit, OnDestroy {
             // }, 100);
         } else {
             let selectedPageIndx = PAGE_SHORTCUT_MAPPING.findIndex((page: any) => {
+                console.log('page', page);
                 if (event.altKey) {
                     return page.key === event.key && page.altKey;
                 } else {

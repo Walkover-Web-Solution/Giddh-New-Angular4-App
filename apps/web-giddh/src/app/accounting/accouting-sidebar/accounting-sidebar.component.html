@@ -8,9 +8,14 @@
         </a>
     </li>
 
-    <!--
-    <li><a class="cp" (click)="setSelectedPage('Payment', 'voucher', 'purchases')"
-            [ngClass]="{ 'active-parent': selectedVoucher === 'Payment'}">F5: Payment</a></li> -->
+    <li>
+        <a
+            class="cp"
+            (click)="setSelectedPage(accountingVouchers.PAYMENT, 'voucher', 'purchases')"
+            [ngClass]="{ 'active-parent': (selectedVoucher | lowercase) === accountingVouchers.PAYMENT }"
+            >{{ commonLocaleData?.app_keys?.f5 }}: {{ commonLocaleData?.app_voucher_types?.payment }}</a
+        >
+    </li>
 
     <li>
         <a

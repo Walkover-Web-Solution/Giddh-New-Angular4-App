@@ -298,7 +298,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             return true;
         }), takeUntil(this.destroyed$)).subscribe((data) => {
             if (data) {
-                this.currentVoucher = data.page;
+                this.currentVoucher = data.page.toLowerCase();
+                console.log('data', data, this.currentVoucher);
                 switch (this.currentVoucher) {
                     case VOUCHERS.CONTRA:
                         // Contra allows cash or bank so selecting default category as currentassets
@@ -308,11 +309,16 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                         // Receipt allows cash/bank/sundry debtors/sundry creditors so selecting default category as currentassets
                         this.categoryOfAccounts = 'currentassets';
                         break;
+                    case VOUCHERS.PAYMENT:
+                        // Receipt allows cash/bank/sundry debtors/sundry creditors so selecting default category as currentassets
+                        this.categoryOfAccounts = 'currentassets';
+                        break;
                     default:
                         // TODO: Add other category cases as they are developed
                         break;
                 }
                 if (data.gridType === 'voucher') {
+                    console.log('currect voucher'), this.currentVoucher;
                     this.requestObj.voucherType = this.currentVoucher;
                     this.resetEntriesIfVoucherChanged();
                     setTimeout(() => {
@@ -330,6 +336,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
     public ngOnInit() {
         this.requestObj.voucherType = this.currentVoucher;
+        console.log('ngOnInit', this.requestObj.voucherType);
         this.universalDate$.subscribe(dateObj => {
             if (dateObj) {
                 this.universalDate = cloneDeep(dateObj);
@@ -364,8 +371,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             }
         });
 
-        this.store.pipe(select(state => state?.ledger?.ledgerCreateInProcess), takeUntil(this.destroyed$)).subscribe((response:boolean) => {
-                this.isLoading = (response) ? true : false;
+        this.store.pipe(select(state => state?.ledger?.ledgerCreateInProcess), takeUntil(this.destroyed$)).subscribe((response: boolean) => {
+            this.isLoading = (response) ? true : false;
         });
 
         this.store.pipe(select(p => p?.ledger?.ledgerCreateSuccess), takeUntil(this.destroyed$)).subscribe((s: boolean) => {
@@ -384,7 +391,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             if (yesOrNo) {
                 this.asideMenuStateForProductService = 'out';
                 this.autoFocusStockGroupField = false;
-                this.getStock(null, null, true);
+                // this.getStock(null, null, true);
                 setTimeout(() => {
                     this.dateField?.nativeElement?.focus();
                 }, 1000);
@@ -406,7 +413,12 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         });
 
         this.searchedAccountQuery.pipe(debounceTime(700), takeUntil(this.destroyed$)).subscribe((event: any) => {
-            this.searchAccount(event, event.target?.value);
+            console.log('search', event);
+            if (event?.code === 'Enter') {
+                return;
+            } else {
+                this.searchAccount(event, event.target?.value);
+            }
         });
 
         this.amountErrorMessage = this.localeData?.total_amount_error;
@@ -417,6 +429,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     }
 
     public ngOnChanges(c: SimpleChanges) {
+        // console.log('changes', c);
         if ('openDatePicker' in c && c.openDatePicker.currentValue !== c.openDatePicker.previousValue) {
             this.showFromDatePicker = c.openDatePicker.currentValue;
             if (this.bsDatePickers) {
@@ -505,6 +518,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * onAccountFocus() to show accountList
      */
     public onAccountFocus(ev, elem, trxnType, indx) {
+        console.log(ev, elem, trxnType, indx);
         this.selectedAccountInputField = ev.target;
         this.selectedField = 'account';
         this.showConfirmationBox = false;
@@ -513,19 +527,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this.selectRow(true, indx);
         this.filterAccount(trxnType);
         this.inputForList = cloneDeep(this.flattenAccounts);
-    }
-
-    public onStockFocus(ev, stockIndx: number, indx: number) {
-        this.selectedStockInputField = ev.target;
-        this.showConfirmationBox = false;
-        this.selectedStockIdx = stockIndx;
-        this.selectedIdx = indx;
-        this.getStock(this.groupUniqueName);
-        this.getStock();
-        this.showLedgerAccountList = true;
-        setTimeout(() => {
-            this.selectedField = 'stock';
-        }, 100);
     }
 
     /**
@@ -546,11 +547,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         // this.showAccountList.emit(false);
     }
 
-    public openCreateAccountPopupIfRequired(e) {
-        if (e && this.isNoAccFound) {
-            // this.showQuickAccountModal();
-        }
-    }
+
 
     public onDateFieldFocus() {
         setTimeout(() => {
@@ -675,6 +672,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * searchAccount in accountList
      */
     public searchAccount(event: KeyboardEvent, accountName: string) {
+        console.log(event, accountName);
         if (event && !(event.shiftKey || event.key === 'Shift') && accountName) {
             this.filterByText = accountName;
             this.showLedgerAccountList = true;
@@ -746,6 +744,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             if (this.totalCreditAmount < this.totalDebitAmount || (this.totalCreditAmount === 0 && this.totalDebitAmount === 0)) {
                 if (this.requestObj.voucherType !== VOUCHERS.RECEIPT) {
                     this.newEntryObj('to');
+                } else if (this.requestObj.voucherType !== VOUCHERS.PAYMENT) {
+                    this.newEntryObj('by');
                 } else {
                     if (this.requestObj.transactions?.length === 1) {
                         this.newEntryObj('by');
@@ -894,7 +894,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 data = this.tallyModuleService.prepareRequestForAPI(data);
                 this.store.dispatch(this._ledgerActions.CreateBlankLedger(data, accUniqueName));
             } else {
-                const byOrTo = data.voucherType === 'Payment' ? 'to' : 'by';
+                const byOrTo = data.voucherType === 'Payment' ? 'by' : 'to';
                 let message = this.localeData?.blank_account_error;
                 message = message?.replace("[BY_TO]", byOrTo.toUpperCase());
                 this._toaster.errorToast(message, this.commonLocaleData?.app_error);
@@ -928,19 +928,92 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         }
     }
 
-    public validatePaymentAndReceipt(data) {
-        if (data.voucherType === VOUCHERS.PAYMENT || data.voucherType === VOUCHERS.RECEIPT) {
-            const byOrTo = data.voucherType === VOUCHERS.PAYMENT ? 'to' : 'by';
-            const toAccounts = data.transactions?.filter((acc) => acc.type === byOrTo);
-            const AccountOfCashOrBank = toAccounts?.filter((acc) => {
-                const indexOfCashOrBank = acc.selectedAccount?.parentGroups?.findIndex((pg) => pg?.uniqueName === 'cash' || pg?.uniqueName === 'bankaccounts' || (this.generalService.voucherApiVersion === 2 && pg?.uniqueName === 'loanandoverdraft'));
-                return indexOfCashOrBank !== -1 ? true : false;
-            });
-            return (AccountOfCashOrBank && AccountOfCashOrBank.length) ? true : false;
+    public validatePaymentAndReceipt(data): boolean {
+        if (data.voucherType === 'payment' || data.voucherType === 'receipt') {
+            const byAccounts = data.transactions?.filter(acc => acc.type === 'by');
+            const toAccounts = data.transactions?.filter(acc => acc.type === 'to');
+
+            let isValid = false;
+
+            if (data.voucherType === 'payment') {
+                isValid = byAccounts?.some(acc => {
+                    const indexOfAccountParentGroups = acc.selectedAccount?.parentGroups?.findIndex(pg => ['sundrydebtors', 'sundrycreditors', 'tdsreceivable'].includes(pg?.uniqueName));
+                    return indexOfAccountParentGroups !== -1;
+                });
+
+                if (!isValid) {
+                    isValid = toAccounts?.some(acc => {
+                        const indexOfAccountParentGroups = acc.selectedAccount?.parentGroups?.findIndex(pg => ['cash', 'bankaccounts', 'loanandoverdraft', 'tdspayable'].includes(pg?.uniqueName));
+                        return indexOfAccountParentGroups !== -1;
+                    });
+                }
+            }
+
+            if (data.voucherType === 'receipt') {
+                isValid = byAccounts?.some(acc => {
+                    const indexOfAccountParentGroups = acc.selectedAccount?.parentGroups?.findIndex(pg => ['bankaccounts', 'cash', 'loanandoverdraft', 'tdsreceivable'].includes(pg?.uniqueName));
+                    return indexOfAccountParentGroups !== -1;
+                });
+
+                if (!isValid) {
+                    isValid = toAccounts?.some(acc => {
+                        const indexOfAccountParentGroups = acc.selectedAccount?.parentGroups?.findIndex(pg => ['tcspayable', 'sundrycreditors', 'sundrydebtors'].includes(pg?.uniqueName));
+                        return indexOfAccountParentGroups !== -1;
+                    });
+                }
+            }
+
+            return isValid;
         } else {
-            return true; // By pass all other
+            return true; // Bypass all other cases
         }
     }
+
+    // public validatePaymentAndReceipt(data): boolean {
+    //     if (data.voucherType === 'payment' || data.voucherType === 'receipt') {
+    //         const byAccounts = data.transactions?.filter(acc => acc.type === 'by');
+    //         const toAccounts = data.transactions?.filter(acc => acc.type === 'to');
+
+    //         if (data.voucherType === 'payment') {
+    //             if (byAccounts && byAccounts.length > 0) {
+    //                 const checkByAccountParentGroups = byAccounts.filter(acc => {
+    //                     const indexOfAccountParentGroups = acc.selectedAccount?.parentGroups?.findIndex(pg => ['sundrydebtors', 'sundrycreditors', 'tdsreceivable'].includes(pg?.uniqueName));
+    //                     return indexOfAccountParentGroups !== -1;
+    //                 });
+    //                 return checkByAccountParentGroups.length > 0;
+    //             }
+    //             if (toAccounts && toAccounts.length > 0) {
+    //                 const checkAccountParentGroups = toAccounts.filter(acc => {
+    //                     const indexOfAccountParentGroups = acc.selectedAccount?.parentGroups?.findIndex(pg => ['cash', 'bankaccounts', 'loanandoverdraft', 'tdspayable'].includes(pg?.uniqueName));
+    //                     return indexOfAccountParentGroups !== -1;
+    //                 });
+    //                 return checkAccountParentGroups.length > 0;
+    //             }
+    //         }
+
+    //         if (data.voucherType === 'receipt') {
+    //             if (byAccounts && byAccounts.length > 0) {
+    //                 const checkAccountParentGroups = byAccounts.filter(acc => {
+    //                     const indexOfAccountParentGroups = acc.selectedAccount?.parentGroups?.findIndex(pg => ['bankaccounts', 'cash', 'loanandoverdraft', 'tdsreceivable'].includes(pg?.uniqueName));
+    //                     return indexOfAccountParentGroups !== -1;
+    //                 });
+    //                 return checkAccountParentGroups.length > 0;
+    //             }
+    //             if (toAccounts && toAccounts.length > 0) {
+    //                 const checkAccountParentGroups = toAccounts.filter(acc => {
+    //                     const indexOfAccountParentGroups = acc.selectedAccount?.parentGroups?.findIndex(pg => ['tcspayable', 'sundrycreditors', 'sundrydebtors'].includes(pg?.uniqueName));
+    //                     return indexOfAccountParentGroups !== -1;
+    //                 });
+    //                 return checkAccountParentGroups.length > 0;
+    //             }
+    //         }
+    //     } else {
+    //         return true; // Bypass all other cases
+    //     }
+    //     return false; // Default return
+    // }
+
+
 
     /**
      * refreshEntry
@@ -963,14 +1036,18 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this.requestObj.description = '';
         setTimeout(() => {
             this.newEntryObj();
-
-            switch (this.currentVoucher) {
+            console.log('this.currentVoucher', this.currentVoucher);
+            switch (this.currentVoucher.toLowerCase()) {
                 case VOUCHERS.CONTRA:
                     this.requestObj.transactions[0].type = 'by';
                     break;
 
                 case VOUCHERS.RECEIPT:
                     this.requestObj.transactions[0].type = 'to';
+                    break;
+
+                case VOUCHERS.PAYMENT:
+                    this.requestObj.transactions[0].type = 'by';
                     break;
 
                 default:
@@ -1061,108 +1138,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
     }
 
-    /**
-     * openStockList
-     */
-    public openStockList() {
-        this.showLedgerAccountList = false;
-        this.showStockList = true;
-        // this.showStockList.next(true);
-    }
-
-    /**
-     * onSelectStock
-     */
-    public onSelectStock(item) {
-        if (item) {
-            let idx = this.selectedStockIdx;
-            let entryItem = cloneDeep(item);
-            this.prepareEntry(entryItem, this.selectedIdx);
-            // setTimeout(() => {
-            //   this.selectedStk.focus();
-            //   this.showStockList = false;
-            // }, 50);
-        } else {
-            this.requestObj.transactions[this.selectedIdx].inventory.splice(this.selectedStockIdx, 1);
-        }
-    }
-
-    /**
-     * prepareEntry
-     */
-    public prepareEntry(item, idx) {
-        let i = this.selectedStockIdx;
-        if (item && item.stockUnit) {
-            let defaultUnit = {
-                stockUnitCode: item.stockUnit.name,
-                code: item.stockUnit.code,
-                rate: 0
-            };
-
-            // this.requestObj.transactions[idx].inventory[i].unit.rate = item.rate;
-
-            //Check if the Unit is initialized
-
-            if (this.requestObj.transactions[idx].inventory[i].unit) {
-                this.requestObj.transactions[idx].inventory[i].unit.rate = item.amount / item.openingQuantity; // Kunal
-                this.requestObj.transactions[idx].inventory[i].unit.code = item.stockUnit.code;
-                this.requestObj.transactions[idx].inventory[i].unit.stockUnitCode = item.stockUnit.name;
-            }
-
-            // this.requestObj.transactions[idx].particular = item.accountStockDetails.accountUniqueName;
-            this.requestObj.transactions[idx].inventory[i].stock = { name: item.name, uniqueName: item?.uniqueName };
-            // this.requestObj.transactions[idx].selectedAccount?.uniqueName = item.accountStockDetails.accountUniqueName;
-            this.changePrice(i, this.requestObj.transactions[idx].inventory[i].unit.rate);
-        }
-
-    }
-
-    /**
-     * changePrice
-     */
-    public changePrice(idx, val) {
-        let i = this.selectedIdx;
-        this.requestObj.transactions[i].inventory[idx].unit.rate = !Number.isNaN(val) ? Number(cloneDeep(val)) : 0;
-        this.requestObj.transactions[i].inventory[idx].amount = Number((this.requestObj.transactions[i].inventory[idx].unit.rate * this.requestObj.transactions[i].inventory[idx].quantity).toFixed(this.giddhBalanceDecimalPlaces));
-        this.amountChanged(idx);
-    }
-
-    public amountChanged(invIdx) {
-        let i = this.selectedIdx;
-        if (this.requestObj.transactions && this.requestObj.transactions[i].inventory[invIdx].stock && this.requestObj.transactions[i].inventory[invIdx].quantity) {
-            this.requestObj.transactions[i].inventory[invIdx].unit.rate = Number((this.requestObj.transactions[i].inventory[invIdx].amount / this.requestObj.transactions[i].inventory[invIdx].quantity).toFixed(this.giddhBalanceDecimalPlaces));
-        }
-        let total = this.calculateTransactionTotal(this.requestObj.transactions[i].inventory);
-        this.requestObj.transactions[i].total = total;
-        this.requestObj.transactions[i].amount = total;
-    }
-
-    /**
-     * calculateTransactionTotal
-     */
-    public calculateTransactionTotal(inventory) {
-        let total = 0;
-        inventory.forEach((inv) => {
-            total = total + Number(inv.amount);
-        });
-        return total;
-    }
-
-    public changeQuantity(idx, val) {
-        let i = this.selectedIdx;
-        this.requestObj.transactions[i].inventory[idx].quantity = Number(val);
-        this.requestObj.transactions[i].inventory[idx].amount = Number((this.requestObj.transactions[i].inventory[idx].unit.rate * this.requestObj.transactions[i].inventory[idx].quantity).toFixed(this.giddhBalanceDecimalPlaces));
-        this.amountChanged(idx);
-    }
-
-    public validateAndAddNewStock(idx) {
-        let i = this.selectedIdx;
-        if (this.requestObj.transactions[i]?.inventory?.length - 1 === idx) {
-            this.requestObj.transactions[i].inventory.push(this.initInventory());
-        }
-    }
-
     public filterAccount(byOrTo: string) {
+        console.log('byOrTo,', byOrTo);
         if (byOrTo) {
             this.tallyModuleService.selectedFieldType.next(byOrTo);
         }
@@ -1215,6 +1192,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     }
 
     public onItemSelected(ev: IOption) {
+        console.log(ev, this.currentSelectedValue, this.showLedgerAccountList);
         setTimeout(() => {
             this.currentSelectedValue = '';
             this.showLedgerAccountList = false;
@@ -1224,100 +1202,13 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         }
         if (this.selectedField === 'account') {
             this.setAccount(ev.additional);
-        } else if (this.selectedField === 'stock') {
-            this.onSelectStock(ev.additional);
         }
+        //else if (this.selectedField === 'stock') {
+        //     this.onSelectStock(ev.additional);
+        // }
     }
 
-    /**
-     * getStock
-     */
-    public getStock(parentGrpUnqName?, q?: string, forceRefresh: boolean = false, needToFocusStockInputField: boolean = false) {
-        if (this.allStocks && this.allStocks.length && !forceRefresh) {
-            // this.inputForList = cloneDeep(this.allStocks);
-            this.sortStockItems(cloneDeep(this.allStocks));
-        } else {
-            this.inventoryService.GetStocks().pipe(takeUntil(this.destroyed$)).subscribe(data => {
-                if (data?.status === 'success') {
-                    this.allStocks = cloneDeep(data?.body?.results);
-                    this.sortStockItems(this.allStocks);
-                    if (needToFocusStockInputField) {
-                        this.selectedStockInputField.value = '';
-                        this.selectedStockInputField.focus();
-                    }
-                    // this.inputForList = cloneDeep(this.allStocks);
-                } else {
-                    // this.noResult = true;
-                }
-            });
-        }
-    }
 
-    /**
-     * sortStockItems
-     */
-    public sortStockItems(ItemArr) {
-        let stockAccountArr: IOption[] = [];
-        forEach(ItemArr, (obj: any) => {
-            stockAccountArr.push({
-                label: `${obj.name} (${obj?.uniqueName})`,
-                value: obj?.uniqueName,
-                additional: obj
-            });
-        });
-        this.stockList = stockAccountArr;
-        this.inputForList = cloneDeep(this.stockList);
-    }
-
-    public loadQuickAccountComponent() {
-        if (this.quickAccountModal && this.quickAccountModal.config) {
-            this.quickAccountModal.config.backdrop = false;
-        }
-        let componentFactory = this.componentFactoryResolver.resolveComponentFactory(QuickAccountComponent);
-        let viewContainerRef = this.quickAccountComponent.viewContainerRef;
-        viewContainerRef.remove();
-        let componentRef = viewContainerRef.createComponent(componentFactory);
-        let componentInstance = componentRef.instance as QuickAccountComponent;
-        componentInstance.needAutoFocus = true;
-        componentInstance.closeQuickAccountModal.pipe(takeUntil(this.destroyed$)).subscribe((a) => {
-            this.hideQuickAccountModal();
-            componentInstance.newAccountForm.reset();
-            componentInstance.destroyed$.next(true);
-            componentInstance.destroyed$.complete();
-            this.isNoAccFound = false;
-            this.dateField?.nativeElement?.focus();
-        });
-    }
-
-    public showQuickAccountModal() {
-        // let selectedField = window.document.querySelector('input[onReturn][type="text"][data-changed="true"]');
-        // this.selectedAccountInputField = selectedField;
-        if (this.selectedField === 'account') {
-            this.loadQuickAccountComponent();
-            this.quickAccountModal?.show();
-        } else if (this.selectedField === 'stock') {
-            this.asideMenuStateForProductService = 'in';
-            this.autoFocusStockGroupField = true;
-        }
-    }
-
-    public hideQuickAccountModal() {
-        this.quickAccountModal.hide();
-        this.dateField?.nativeElement?.focus();
-        return setTimeout(() => {
-            this.selectedAccountInputField.value = '';
-            this.selectedAccountInputField.focus();
-        }, 200);
-    }
-
-    public closeCreateStock() {
-        this.asideMenuStateForProductService = 'out';
-        this.autoFocusStockGroupField = false;
-        // after creating stock, get all stocks again
-        this.filterByText = '';
-        this.dateField?.nativeElement?.focus();
-        this.getStock(null, null, true, true);
-    }
 
     public onCheckNumberFieldKeyDown(event, fieldType: string, datePickerField: BsDatepickerDirective) {
         if (event && (event.key === KEYS.ENTER || event.key === KEYS.TAB || event.key === KEYS.ESC)) {
@@ -1401,48 +1292,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this.showConfirmationBox = false;
     }
 
-    /**
-     * This will create list of accounts depending on voucher type
-     *
-     * @memberof AccountAsVoucherComponent
-     */
-    public createAccountsList(): void {
-        if (this.allAccounts) {
-            let accList: IOption[] = [];
-            let accountList = [];
-            this.allAccounts.forEach((acc: IFlattenAccountsResultItem) => {
-                if (!accountList[acc?.uniqueName] && this.activeCompany && acc.currency === this.activeCompany?.baseCurrency) {
-                    if (this.requestObj.voucherType === VOUCHERS.CONTRA) {
-                        const isContraAccount = acc?.parentGroups.find((pg) => (pg?.uniqueName === 'bankaccounts' || pg?.uniqueName === 'cash' || pg?.uniqueName === 'currentliabilities' || (this.generalService.voucherApiVersion === 2 && pg?.uniqueName === 'loanandoverdraft')));
-                        const isDisallowedAccount = acc?.parentGroups.find((pg) => (pg?.uniqueName === 'sundrycreditors' || pg?.uniqueName === 'dutiestaxes'));
-                        if (isContraAccount && !isDisallowedAccount) {
-                            accList.push({ label: `${acc.name} (${acc?.uniqueName})`, value: acc?.uniqueName, additional: acc });
-                            accountList[acc?.uniqueName] = true;
-                        }
-                    } else if (this.requestObj.voucherType === VOUCHERS.RECEIPT) {
-                        let isReceiptAccount;
 
-                        if (this.selectedTransactionType === 'to') {
-                            isReceiptAccount = acc?.parentGroups.find((pg) => (pg?.uniqueName === 'currentliabilities' || pg?.uniqueName === 'sundrycreditors' || pg?.uniqueName === 'sundrydebtors'));
-                        } else {
-                            isReceiptAccount = acc?.parentGroups.find((pg) => (pg?.uniqueName === 'bankaccounts' || pg?.uniqueName === 'cash' || (this.generalService.voucherApiVersion === 2 && pg?.uniqueName === 'loanandoverdraft') || pg?.uniqueName === 'currentliabilities' || pg?.uniqueName === 'sundrycreditors' || pg?.uniqueName === 'sundrydebtors'));
-                        }
-
-                        const isDisallowedAccount = acc?.parentGroups.find((pg) => (pg?.uniqueName === 'dutiestaxes'));
-                        if (isReceiptAccount && !isDisallowedAccount) {
-                            accList.push({ label: `${acc.name} (${acc?.uniqueName})`, value: acc?.uniqueName, additional: acc });
-                            accountList[acc?.uniqueName] = true;
-                        }
-                    } else {
-                        accList.push({ label: `${acc.name} (${acc?.uniqueName})`, value: acc?.uniqueName, additional: acc });
-                        accountList[acc?.uniqueName] = true;
-                    }
-                }
-            });
-            this.flattenAccounts = accList;
-            this.inputForList = cloneDeep(this.flattenAccounts);
-        }
-    }
 
     /**
      * This will reset the entries if voucher type changed
@@ -1550,67 +1400,297 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         }
     }
 
+
+    /**
+     * Scroll end handler for expense account
+     *
+     * @returns null
+     * @memberof AccountAsVoucherComponent
+     */
+    public handleScrollEnd(): void {
+        if (this.accountsSearchResultsPaginationData.page < this.accountsSearchResultsPaginationData.totalPages) {
+            this.onAccountSearchQueryChanged(
+                this.accountsSearchResultsPaginationData.query,
+                this.accountsSearchResultsPaginationData.page + 1,
+                (response) => {
+                    if (!this.accountsSearchResultsPaginationData.query) {
+                        const results = response.map(result => {
+                            return {
+                                value: result?.uniqueName,
+                                label: `${result.name} (${result?.uniqueName})`,
+                                additional: result
+                            }
+                        }) || [];
+                        this.defaultAccountSuggestions = this.defaultAccountSuggestions.concat(...results);
+                        this.defaultAccountPaginationData.page = this.accountsSearchResultsPaginationData.page;
+                        this.defaultAccountPaginationData.totalPages = this.accountsSearchResultsPaginationData.totalPages;
+                    }
+                });
+        }
+    }
+
+    /**
+     * Search query change handler for expense account
+     *
+     * @param {string} query Search query
+     * @param {number} [page=1] Page to request
+     * @param {Function} successCallback Callback to carry out further operation
+     * @memberof AccountAsVoucherComponent
+     */
+    public onAccountSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
+        console.log('q', query, this.requestObj.voucherType);
+        this.accountsSearchResultsPaginationData.query = query;
+        if (!this.preventDefaultScrollApiCall &&
+            (query || (this.defaultAccountSuggestions && this.defaultAccountSuggestions.length === 0) || successCallback)) {
+            const { group, exceptGroups } = this.tallyModuleService.getGroupByVoucher(this.requestObj.voucherType, this.selectedTransactionType);
+            console.log(group, exceptGroups);
+            // Call the API when either query is provided, default suggestions are not present or success callback is provided
+            const requestObject: any = {
+                q: encodeURIComponent(query),
+                page,
+                group,
+                exceptGroups,
+                count: PAGINATION_LIMIT
+            };
+            // Loaded accounts will be of groups -> (Groups - Except Groups)
+            this.searchService.searchAccountV2(requestObject).subscribe(data => {
+                if (data && data.body && data.body.results) {
+                    const searchResults = data.body.results.map(result => {
+                        return {
+                            value: result?.uniqueName,
+                            label: `${result.name} (${result?.uniqueName})`,
+                            additional: result
+                        }
+                    }) || [];
+                    if (page === 1) {
+                        this.inputForList = searchResults;
+                    } else {
+                        this.inputForList = [
+                            ...this.inputForList,
+                            ...searchResults
+                        ];
+                    }
+                    this.accountsSearchResultsPaginationData.page = data.body.page;
+                    this.accountsSearchResultsPaginationData.totalPages = data.body.totalPages;
+                    if (successCallback) {
+                        successCallback(data.body.results);
+                    } else {
+                        this.defaultAccountPaginationData.page = this.accountsSearchResultsPaginationData.page;
+                        this.defaultAccountPaginationData.totalPages = this.accountsSearchResultsPaginationData.totalPages;
+                    }
+                }
+            });
+        } else {
+            this.inputForList = [...this.defaultAccountSuggestions];
+            this.accountsSearchResultsPaginationData.page = this.defaultAccountPaginationData.page;
+            this.accountsSearchResultsPaginationData.totalPages = this.defaultAccountPaginationData.totalPages;
+            this.preventDefaultScrollApiCall = true;
+            setTimeout(() => {
+                this.preventDefaultScrollApiCall = false;
+            }, 500);
+        }
+    }
+
+    // public openCreateAccountPopupIfRequired(e) {
+    //     if (e && this.isNoAccFound) {
+    //         // this.showQuickAccountModal();
+    //     }
+    // }
+
+    /**
+    * getStock
+    */
+    // public getStock(parentGrpUnqName?, q?: string, forceRefresh: boolean = false, needToFocusStockInputField: boolean = false) {
+    //     if (this.allStocks && this.allStocks.length && !forceRefresh) {
+    //         // this.inputForList = cloneDeep(this.allStocks);
+    //         this.sortStockItems(cloneDeep(this.allStocks));
+    //     } else {
+    //         this.inventoryService.GetStocks().pipe(takeUntil(this.destroyed$)).subscribe(data => {
+    //             if (data?.status === 'success') {
+    //                 this.allStocks = cloneDeep(data?.body?.results);
+    //                 this.sortStockItems(this.allStocks);
+    //                 if (needToFocusStockInputField) {
+    //                     this.selectedStockInputField.value = '';
+    //                     this.selectedStockInputField.focus();
+    //                 }
+    //                 // this.inputForList = cloneDeep(this.allStocks);
+    //             } else {
+    //                 // this.noResult = true;
+    //             }
+    //         });
+    //     }
+    // }
+
+    /**
+     * sortStockItems
+     */
+    // public sortStockItems(ItemArr) {
+    //     let stockAccountArr: IOption[] = [];
+    //     forEach(ItemArr, (obj: any) => {
+    //         stockAccountArr.push({
+    //             label: `${obj.name} (${obj?.uniqueName})`,
+    //             value: obj?.uniqueName,
+    //             additional: obj
+    //         });
+    //     });
+    //     this.stockList = stockAccountArr;
+    //     this.inputForList = cloneDeep(this.stockList);
+    // }
+
+    // public loadQuickAccountComponent() {
+    //     if (this.quickAccountModal && this.quickAccountModal.config) {
+    //         this.quickAccountModal.config.backdrop = false;
+    //     }
+    //     let componentFactory = this.componentFactoryResolver.resolveComponentFactory(QuickAccountComponent);
+    //     let viewContainerRef = this.quickAccountComponent.viewContainerRef;
+    //     viewContainerRef.remove();
+    //     let componentRef = viewContainerRef.createComponent(componentFactory);
+    //     let componentInstance = componentRef.instance as QuickAccountComponent;
+    //     componentInstance.needAutoFocus = true;
+    //     componentInstance.closeQuickAccountModal.pipe(takeUntil(this.destroyed$)).subscribe((a) => {
+    //         this.hideQuickAccountModal();
+    //         componentInstance.newAccountForm.reset();
+    //         componentInstance.destroyed$.next(true);
+    //         componentInstance.destroyed$.complete();
+    //         this.isNoAccFound = false;
+    //         this.dateField?.nativeElement?.focus();
+    //     });
+    // }
+
+    // public showQuickAccountModal() {
+    //     // let selectedField = window.document.querySelector('input[onReturn][type="text"][data-changed="true"]');
+    //     // this.selectedAccountInputField = selectedField;
+    //     if (this.selectedField === 'account') {
+    //         this.loadQuickAccountComponent();
+    //         this.quickAccountModal?.show();
+    //     } else if (this.selectedField === 'stock') {
+    //         this.asideMenuStateForProductService = 'in';
+    //         this.autoFocusStockGroupField = true;
+    //     }
+    // }
+
+    // public hideQuickAccountModal() {
+    //     this.quickAccountModal.hide();
+    //     this.dateField?.nativeElement?.focus();
+    //     return setTimeout(() => {
+    //         this.selectedAccountInputField.value = '';
+    //         this.selectedAccountInputField.focus();
+    //     }, 200);
+    // }
+
+    // public closeCreateStock() {
+    //     this.asideMenuStateForProductService = 'out';
+    //     this.autoFocusStockGroupField = false;
+    //     // after creating stock, get all stocks again
+    //     this.filterByText = '';
+    //     this.dateField?.nativeElement?.focus();
+    //     this.getStock(null, null, true, true);
+    // }
+
+    /**
+ * This will create list of accounts depending on voucher type
+ *
+ * @memberof AccountAsVoucherComponent
+ */
+    // public createAccountsList(): void {
+    //     if (this.allAccounts) {
+    //         let accList: IOption[] = [];
+    //         let accountList = [];
+    //         this.allAccounts.forEach((acc: IFlattenAccountsResultItem) => {
+    //             if (!accountList[acc?.uniqueName] && this.activeCompany && acc.currency === this.activeCompany?.baseCurrency) {
+    //                 if (this.requestObj.voucherType === VOUCHERS.CONTRA) {
+    //                     const isContraAccount = acc?.parentGroups.find((pg) => (pg?.uniqueName === 'bankaccounts' || pg?.uniqueName === 'cash' || pg?.uniqueName === 'currentliabilities' || (this.generalService.voucherApiVersion === 2 && pg?.uniqueName === 'loanandoverdraft')));
+    //                     const isDisallowedAccount = acc?.parentGroups.find((pg) => (pg?.uniqueName === 'sundrycreditors' || pg?.uniqueName === 'dutiestaxes'));
+    //                     if (isContraAccount && !isDisallowedAccount) {
+    //                         accList.push({ label: `${acc.name} (${acc?.uniqueName})`, value: acc?.uniqueName, additional: acc });
+    //                         accountList[acc?.uniqueName] = true;
+    //                     }
+    //                 } else if (this.requestObj.voucherType === VOUCHERS.RECEIPT) {
+    //                     let isReceiptAccount;
+
+    //                     if (this.selectedTransactionType === 'to') {
+    //                         isReceiptAccount = acc?.parentGroups.find((pg) => (pg?.uniqueName === 'currentliabilities' || pg?.uniqueName === 'sundrycreditors' || pg?.uniqueName === 'sundrydebtors'));
+    //                     } else {
+    //                         isReceiptAccount = acc?.parentGroups.find((pg) => (pg?.uniqueName === 'bankaccounts' || pg?.uniqueName === 'cash' || (this.generalService.voucherApiVersion === 2 && pg?.uniqueName === 'loanandoverdraft') || pg?.uniqueName === 'currentliabilities' || pg?.uniqueName === 'sundrycreditors' || pg?.uniqueName === 'sundrydebtors'));
+    //                     }
+
+    //                     const isDisallowedAccount = acc?.parentGroups.find((pg) => (pg?.uniqueName === 'dutiestaxes'));
+    //                     if (isReceiptAccount && !isDisallowedAccount) {
+    //                         accList.push({ label: `${acc.name} (${acc?.uniqueName})`, value: acc?.uniqueName, additional: acc });
+    //                         accountList[acc?.uniqueName] = true;
+    //                     }
+    //                 } else {
+    //                     accList.push({ label: `${acc.name} (${acc?.uniqueName})`, value: acc?.uniqueName, additional: acc });
+    //                     accountList[acc?.uniqueName] = true;
+    //                 }
+    //             }
+    //         });
+    //         this.flattenAccounts = accList;
+    //         this.inputForList = cloneDeep(this.flattenAccounts);
+    //     }
+    // }
+
     /**
      * Callback for adjusment popup close event
      *
      * @param {*} event
      * @memberof AccountAsVoucherComponent
      */
-    public handleEntries(event): void {
-        this.receiptEntries = event.voucherAdjustments;
-        this.totalEntries = (this.receiptEntries) ? this.receiptEntries.length : 0;
-        this.adjustmentTransaction = event;
-        this.getTaxList();
-        this.updateAdjustmentTypes("update");
-        this.modalRef.hide();
-    }
+    // public handleEntries(event): void {
+    //     this.receiptEntries = event.voucherAdjustments;
+    //     this.totalEntries = (this.receiptEntries) ? this.receiptEntries.length : 0;
+    //     this.adjustmentTransaction = event;
+    //     // this.getTaxList();
+    //     this.updateAdjustmentTypes("update");
+    //     this.modalRef.hide();
+    // }
 
     /**
      * This will get tax list
      *
      * @memberof AccountAsVoucherComponent
      */
-    public getTaxList(): void {
-        this.store.pipe(select(companyStore => companyStore.company), takeUntil(this.destroyed$)).subscribe(res => {
-            if (res) {
-                if (res.taxes) {
-                    let taxList: IOption[] = [];
-                    Object.keys(res.taxes).forEach(key => {
-                        taxList.push({ label: res.taxes[key].name, value: res.taxes[key]?.uniqueName });
+    // public getTaxList(): void {
+    //     this.store.pipe(select(companyStore => companyStore.company), takeUntil(this.destroyed$)).subscribe(res => {
+    //         if (res) {
+    //             if (res.taxes) {
+    //                 let taxList: IOption[] = [];
+    //                 Object.keys(res.taxes).forEach(key => {
+    //                     taxList.push({ label: res.taxes[key].name, value: res.taxes[key]?.uniqueName });
 
-                        this.taxList[res.taxes[key]?.uniqueName] = [];
-                        this.taxList[res.taxes[key]?.uniqueName] = res.taxes[key];
-                    });
-                    this.taxListSource$ = observableOf(taxList);
-                }
-            } else {
-                this.store.dispatch(this.companyActions.getTax());
-            }
-        });
-    }
+    //                     this.taxList[res.taxes[key]?.uniqueName] = [];
+    //                     this.taxList[res.taxes[key]?.uniqueName] = res.taxes[key];
+    //                 });
+    //                 this.taxListSource$ = observableOf(taxList);
+    //             }
+    //         } else {
+    //             this.store.dispatch(this.companyActions.getTax());
+    //         }
+    //     });
+    // }
 
     /**
      * This will get list of all pending invoices
      *
      * @memberof AccountAsVoucherComponent
      */
-    public getInvoiceListForReceiptVoucher(): void {
-        let pendingInvoiceList: IOption[] = [];
-        this.pendingInvoiceList = [];
-        this.pendingInvoiceListSource$ = observableOf(pendingInvoiceList);
+    // public getInvoiceListForReceiptVoucher(): void {
+    //     let pendingInvoiceList: IOption[] = [];
+    //     this.pendingInvoiceList = [];
+    //     this.pendingInvoiceListSource$ = observableOf(pendingInvoiceList);
 
-        this.salesService.getInvoiceList(this.pendingInvoicesListParams, dayjs(this.journalDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT)).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response && response.status === "success" && response.body && response.body.results && response.body.results.length > 0) {
-                Object.keys(response.body.results).forEach(key => {
-                    this.pendingInvoiceList[response.body.results[key]?.uniqueName] = [];
-                    this.pendingInvoiceList[response.body.results[key]?.uniqueName] = response.body.results[key];
+    //     this.salesService.getInvoiceList(this.pendingInvoicesListParams, dayjs(this.journalDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT)).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+    //         if (response && response.status === "success" && response.body && response.body.results && response.body.results.length > 0) {
+    //             Object.keys(response.body.results).forEach(key => {
+    //                 this.pendingInvoiceList[response.body.results[key]?.uniqueName] = [];
+    //                 this.pendingInvoiceList[response.body.results[key]?.uniqueName] = response.body.results[key];
 
-                    pendingInvoiceList.push({ label: response.body.results[key].voucherNumber + ", " + response.body.results[key].voucherDate + ", " + response.body.results[key].balanceDue.amountForAccount + " " + this.commonLocaleData?.app_cr, value: response.body.results[key]?.uniqueName });
-                });
-                this.pendingInvoiceListSource$ = observableOf(pendingInvoiceList);
-            }
-        });
-    }
+    //                 pendingInvoiceList.push({ label: response.body.results[key].voucherNumber + ", " + response.body.results[key].voucherDate + ", " + response.body.results[key].balanceDue.amountForAccount + " " + this.commonLocaleData?.app_cr, value: response.body.results[key]?.uniqueName });
+    //             });
+    //             this.pendingInvoiceListSource$ = observableOf(pendingInvoiceList);
+    //         }
+    //     });
+    // }
 
     /**
      * Callback for select tax in adjustment
@@ -1619,25 +1699,25 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @param {*} entry
      * @memberof AccountAsVoucherComponent
      */
-    public onSelectTax(event: any, entry: any): void {
-        if (event && event.value) {
-            entry.tax.name = this.taxList[event.value].name;
-            entry.tax.percent = this.taxList[event.value].taxDetail[0].taxValue;
+    // public onSelectTax(event: any, entry: any): void {
+    //     if (event && event.value) {
+    //         entry.tax.name = this.taxList[event.value].name;
+    //         entry.tax.percent = this.taxList[event.value].taxDetail[0].taxValue;
 
-            if (entry.amount && !isNaN(parseFloat(entry.amount)) && entry.tax.percent) {
-                entry.tax.value = parseFloat(entry.amount) / entry.tax.percent;
-            } else {
-                entry.tax.value = 0;
-            }
-        } else {
-            entry.tax = {
-                name: '',
-                uniqueName: '',
-                percent: 0,
-                value: 0
-            }
-        }
-    }
+    //         if (entry.amount && !isNaN(parseFloat(entry.amount)) && entry.tax.percent) {
+    //             entry.tax.value = parseFloat(entry.amount) / entry.tax.percent;
+    //         } else {
+    //             entry.tax.value = 0;
+    //         }
+    //     } else {
+    //         entry.tax = {
+    //             name: '',
+    //             uniqueName: '',
+    //             percent: 0,
+    //             value: 0
+    //         }
+    //     }
+    // }
 
     /**
      * Callback for select invoice in adjustment
@@ -1646,31 +1726,31 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @param {*} entry
      * @memberof AccountAsVoucherComponent
      */
-    public onSelectInvoice(event: any, entry: any): void {
-        if (event && event.value) {
-            entry.invoice = {
-                number: this.pendingInvoiceList[event.value].voucherNumber,
-                date: this.pendingInvoiceList[event.value].voucherDate,
-                amount: this.pendingInvoiceList[event.value].balanceDue.amountForAccount + " " + this.commonLocaleData?.app_cr,
-                uniqueName: event.value,
-                type: this.pendingInvoiceList[event.value].voucherType
-            };
-            if (this.pendingInvoiceList[event.value].balanceDue.amountForAccount < entry.amount) {
-                this._toaster.clearAllToaster();
-                this._toaster.errorToast(this.invoiceAmountErrorMessage);
-            }
-        } else {
-            entry.invoice = {
-                number: '',
-                date: '',
-                amount: 0,
-                uniqueName: '',
-                type: ''
-            };
-        }
+    // public onSelectInvoice(event: any, entry: any): void {
+    //     if (event && event.value) {
+    //         entry.invoice = {
+    //             number: this.pendingInvoiceList[event.value].voucherNumber,
+    //             date: this.pendingInvoiceList[event.value].voucherDate,
+    //             amount: this.pendingInvoiceList[event.value].balanceDue.amountForAccount + " " + this.commonLocaleData?.app_cr,
+    //             uniqueName: event.value,
+    //             type: this.pendingInvoiceList[event.value].voucherType
+    //         };
+    //         if (this.pendingInvoiceList[event.value].balanceDue.amountForAccount < entry.amount) {
+    //             this._toaster.clearAllToaster();
+    //             this._toaster.errorToast(this.invoiceAmountErrorMessage);
+    //         }
+    //     } else {
+    //         entry.invoice = {
+    //             number: '',
+    //             date: '',
+    //             amount: 0,
+    //             uniqueName: '',
+    //             type: ''
+    //         };
+    //     }
 
-        this.validateEntries(false);
-    }
+    //     this.validateEntries(false);
+    // }
 
     /**
      * This will remove the adjustment entry
@@ -1678,20 +1758,20 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @param {number} index
      * @memberof AccountAsVoucherComponent
      */
-    public removeReceiptEntry(index: number): void {
-        let receiptEntries = [];
-        let loop = 0;
-        this.receiptEntries.forEach(entry => {
-            if (loop !== index) {
-                receiptEntries.push(entry);
-            }
-            loop++;
-        });
+    // public removeReceiptEntry(index: number): void {
+    //     let receiptEntries = [];
+    //     let loop = 0;
+    //     this.receiptEntries.forEach(entry => {
+    //         if (loop !== index) {
+    //             receiptEntries.push(entry);
+    //         }
+    //         loop++;
+    //     });
 
-        this.receiptEntries = receiptEntries;
-        this.totalEntries--;
-        this.validateEntries(false);
-    }
+    //     this.receiptEntries = receiptEntries;
+    //     this.totalEntries--;
+    //     this.validateEntries(false);
+    // }
 
     /**
      * This will validate all the adjustment entries
@@ -1761,32 +1841,32 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      *
      * @memberof AccountAsVoucherComponent
      */
-    public addNewAdjustmentEntry(): void {
-        if (this.totalEntries === 0 || (this.receiptEntries[this.totalEntries - 1] && this.receiptEntries[this.totalEntries - 1] !== undefined && parseFloat(this.receiptEntries[this.totalEntries - 1].amount) > 0)) {
-            let getAdjustmentTypes = this.prepareAdjustmentTypes(this.totalEntries);
+    // public addNewAdjustmentEntry(): void {
+    //     if (this.totalEntries === 0 || (this.receiptEntries[this.totalEntries - 1] && this.receiptEntries[this.totalEntries - 1] !== undefined && parseFloat(this.receiptEntries[this.totalEntries - 1].amount) > 0)) {
+    //         let getAdjustmentTypes = this.prepareAdjustmentTypes(this.totalEntries);
 
-            this.receiptEntries[this.totalEntries] = {
-                allowedTypes: getAdjustmentTypes,
-                type: (this.advanceReceiptExists) ? AdjustmentTypesEnum.advanceReceipt : AdjustmentTypesEnum.receipt,
-                //note: '',
-                tax: {
-                    name: '',
-                    uniqueName: '',
-                    percent: 0,
-                    value: 0
-                },
-                invoice: {
-                    number: '',
-                    date: '',
-                    amount: 0,
-                    uniqueName: '',
-                    type: ''
-                },
-                amount: 0
-            }
-            this.totalEntries++;
-        }
-    }
+    //         this.receiptEntries[this.totalEntries] = {
+    //             allowedTypes: getAdjustmentTypes,
+    //             type: (this.advanceReceiptExists) ? AdjustmentTypesEnum.advanceReceipt : AdjustmentTypesEnum.receipt,
+    //             //note: '',
+    //             tax: {
+    //                 name: '',
+    //                 uniqueName: '',
+    //                 percent: 0,
+    //                 value: 0
+    //             },
+    //             invoice: {
+    //                 number: '',
+    //                 date: '',
+    //                 amount: 0,
+    //                 uniqueName: '',
+    //                 type: ''
+    //             },
+    //             amount: 0
+    //         }
+    //         this.totalEntries++;
+    //     }
+    // }
 
     /**
      * This will get called on enter/tab in adjustment amount field
@@ -1795,11 +1875,11 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @param {*} entry
      * @memberof AccountAsVoucherComponent
      */
-    public validateAmount(event: KeyboardEvent, entry: any): void {
-        if (event && (event.key === KEYS.ENTER || event.key === KEYS.TAB) && this.adjustmentTransaction && this.adjustmentTransaction.amount) {
-            this.validateEntry(entry);
-        }
-    }
+    // public validateAmount(event: KeyboardEvent, entry: any): void {
+    //     if (event && (event.key === KEYS.ENTER || event.key === KEYS.TAB) && this.adjustmentTransaction && this.adjustmentTransaction.amount) {
+    //         this.validateEntry(entry);
+    //     }
+    // }
 
     /**
      * This will validate the adjustment entry
@@ -1808,73 +1888,73 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @returns {*}
      * @memberof AccountAsVoucherComponent
      */
-    public validateEntry(entry: any): any {
-        if (!entry.amount) {
-            this._toaster.clearAllToaster();
-            this._toaster.errorToast(this.invalidAmountErrorMessage);
-            this.isValidForm = false;
-            return;
-        } else if (isNaN(parseFloat(entry.amount)) || entry.amount <= 0) {
-            this._toaster.clearAllToaster();
-            this._toaster.errorToast(this.invalidAmountErrorMessage);
-            this.isValidForm = false;
-            return;
-        }
+    // public validateEntry(entry: any): any {
+    //     if (!entry.amount) {
+    //         this._toaster.clearAllToaster();
+    //         this._toaster.errorToast(this.invalidAmountErrorMessage);
+    //         this.isValidForm = false;
+    //         return;
+    //     } else if (isNaN(parseFloat(entry.amount)) || entry.amount <= 0) {
+    //         this._toaster.clearAllToaster();
+    //         this._toaster.errorToast(this.invalidAmountErrorMessage);
+    //         this.isValidForm = false;
+    //         return;
+    //     }
 
-        if (entry.type === AdjustmentTypesEnum.receipt || entry.type === AdjustmentTypesEnum.advanceReceipt) {
-            if (parseFloat(entry.amount) !== this.adjustmentTransaction.amount) {
-                this._toaster.clearAllToaster();
-                this._toaster.errorToast(this.entryAmountErrorMessage);
-                this.isValidForm = false;
-                return;
-            }
-        }
+    //     if (entry.type === AdjustmentTypesEnum.receipt || entry.type === AdjustmentTypesEnum.advanceReceipt) {
+    //         if (parseFloat(entry.amount) !== this.adjustmentTransaction.amount) {
+    //             this._toaster.clearAllToaster();
+    //             this._toaster.errorToast(this.entryAmountErrorMessage);
+    //             this.isValidForm = false;
+    //             return;
+    //         }
+    //     }
 
-        if (entry.type === AdjustmentTypesEnum.againstReference && !entry.invoice?.uniqueName) {
-            this._toaster.clearAllToaster();
-            this._toaster.errorToast(this.invoiceErrorMessage);
-            this.isValidForm = false;
-            return;
-        }
+    //     if (entry.type === AdjustmentTypesEnum.againstReference && !entry.invoice?.uniqueName) {
+    //         this._toaster.clearAllToaster();
+    //         this._toaster.errorToast(this.invoiceErrorMessage);
+    //         this.isValidForm = false;
+    //         return;
+    //     }
 
-        if (entry.amount && !isNaN(parseFloat(entry.amount)) && entry.tax.percent) {
-            entry.tax.value = parseFloat(entry.amount) / entry.tax.percent;
-        } else {
-            entry.tax.value = 0;
-        }
+    //     if (entry.amount && !isNaN(parseFloat(entry.amount)) && entry.tax.percent) {
+    //         entry.tax.value = parseFloat(entry.amount) / entry.tax.percent;
+    //     } else {
+    //         entry.tax.value = 0;
+    //     }
 
-        let receiptTotal = 0;
+    //     let receiptTotal = 0;
 
-        this.receiptEntries.forEach(receipt => {
-            if (receipt.type === AdjustmentTypesEnum.againstReference) {
-                receiptTotal += parseFloat(receipt.amount);
-            }
-        });
+    //     this.receiptEntries.forEach(receipt => {
+    //         if (receipt.type === AdjustmentTypesEnum.againstReference) {
+    //             receiptTotal += parseFloat(receipt.amount);
+    //         }
+    //     });
 
-        if (receiptTotal < this.adjustmentTransaction.amount) {
-            if (entry.type === AdjustmentTypesEnum.againstReference) {
-                let invoiceBalanceDue = parseFloat(this.pendingInvoiceList[entry.invoice?.uniqueName].balanceDue.amountForAccount);
-                if (invoiceBalanceDue >= entry.amount) {
-                    this.addNewAdjustmentEntry();
-                    this.validateEntries(false);
-                } else if (invoiceBalanceDue < entry.amount) {
-                    this._toaster.clearAllToaster();
-                    this._toaster.errorToast(this.invoiceAmountErrorMessage);
-                    this.isValidForm = false;
-                }
-            } else {
-                this.addNewAdjustmentEntry();
-                this.validateEntries(false);
-            }
-        } else if (receiptTotal > this.adjustmentTransaction.amount) {
-            this._toaster.clearAllToaster();
-            this._toaster.errorToast(this.amountErrorMessage);
-            this.isValidForm = false;
-        } else {
-            entry.amount = parseFloat(entry.amount);
-            this.validateEntries(true);
-        }
-    }
+    //     if (receiptTotal < this.adjustmentTransaction.amount) {
+    //         if (entry.type === AdjustmentTypesEnum.againstReference) {
+    //             let invoiceBalanceDue = parseFloat(this.pendingInvoiceList[entry.invoice?.uniqueName].balanceDue.amountForAccount);
+    //             if (invoiceBalanceDue >= entry.amount) {
+    //                 this.addNewAdjustmentEntry();
+    //                 this.validateEntries(false);
+    //             } else if (invoiceBalanceDue < entry.amount) {
+    //                 this._toaster.clearAllToaster();
+    //                 this._toaster.errorToast(this.invoiceAmountErrorMessage);
+    //                 this.isValidForm = false;
+    //             }
+    //         } else {
+    //             this.addNewAdjustmentEntry();
+    //             this.validateEntries(false);
+    //         }
+    //     } else if (receiptTotal > this.adjustmentTransaction.amount) {
+    //         this._toaster.clearAllToaster();
+    //         this._toaster.errorToast(this.amountErrorMessage);
+    //         this.isValidForm = false;
+    //     } else {
+    //         entry.amount = parseFloat(entry.amount);
+    //         this.validateEntries(true);
+    //     }
+    // }
 
     /**
      * This will open the adjustment popup if voucher is receipt and transaction is To/Cr
@@ -1884,11 +1964,11 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @param {TemplateRef<any>} template
      * @memberof AccountAsVoucherComponent
      */
-    public openAdjustmentModal(event: KeyboardEvent, transaction: any, template: TemplateRef<any>): void {
-        if (event && (event.key === KEYS.ENTER || event.key === KEYS.TAB)) {
-            this.validateAndOpenAdjustmentPopup(transaction, template);
-        }
-    }
+    // public openAdjustmentModal(event: KeyboardEvent, transaction: any, template: TemplateRef<any>): void {
+    //     if (event && (event.key === KEYS.ENTER || event.key === KEYS.TAB)) {
+    //         this.validateAndOpenAdjustmentPopup(transaction, template);
+    //     }
+    // }
 
     /**
      * This will format the amount
@@ -1896,9 +1976,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @param {*} entry
      * @memberof AccountAsVoucherComponent
      */
-    public formatAmount(entry: any): void {
-        entry.amount = Number(entry.amount);
-    }
+    // public formatAmount(entry: any): void {
+    //     entry.amount = Number(entry.amount);
+    // }
 
     /**
      * This will prepare the list of adjusment types
@@ -1906,17 +1986,17 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @returns {IOption[]}
      * @memberof AccountAsVoucherComponent
      */
-    public prepareAdjustmentTypes(index: number, entry?: any): IOption[] {
-        let adjustmentTypesOptions: IOption[] = [];
+    // public prepareAdjustmentTypes(index: number, entry?: any): IOption[] {
+    //     let adjustmentTypesOptions: IOption[] = [];
 
-        adjustmentTypes.map(type => {
-            if ((index === 0 && (type?.value === AdjustmentTypesEnum.receipt || type?.value === AdjustmentTypesEnum.advanceReceipt)) || (index > 0 && type?.value === AdjustmentTypesEnum.againstReference) || (entry && type?.value === entry.type)) {
-                adjustmentTypesOptions.push({ label: type.label, value: type?.value });
-            }
-        });
+    //     adjustmentTypes.map(type => {
+    //         if ((index === 0 && (type?.value === AdjustmentTypesEnum.receipt || type?.value === AdjustmentTypesEnum.advanceReceipt)) || (index > 0 && type?.value === AdjustmentTypesEnum.againstReference) || (entry && type?.value === entry.type)) {
+    //             adjustmentTypesOptions.push({ label: type.label, value: type?.value });
+    //         }
+    //     });
 
-        return adjustmentTypesOptions;
-    }
+    //     return adjustmentTypesOptions;
+    // }
 
     /**
      * This will initiate update of adjustment types of all adjustments
@@ -1924,15 +2004,15 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @param {string} action
      * @memberof AccountAsVoucherComponent
      */
-    public updateAdjustmentTypes(action: string): void {
-        if (this.receiptEntries && this.receiptEntries.length > 0) {
-            let loop = 0;
-            this.receiptEntries.forEach(entry => {
-                entry.allowedTypes = this.prepareAdjustmentTypes(loop, action);
-                loop++;
-            });
-        }
-    }
+    // public updateAdjustmentTypes(action: string): void {
+    //     if (this.receiptEntries && this.receiptEntries.length > 0) {
+    //         let loop = 0;
+    //         this.receiptEntries.forEach(entry => {
+    //             entry.allowedTypes = this.prepareAdjustmentTypes(loop, action);
+    //             loop++;
+    //         });
+    //     }
+    // }
 
     /**
      * Callback for select type in adjustment
@@ -1941,17 +2021,17 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @param {*} entry
      * @memberof AccountAsVoucherComponent
      */
-    public onSelectAdjustmentType(event: any, entry: any): void {
-        if (event && event?.value === AdjustmentTypesEnum.receipt) {
-            entry.tax = {
-                name: '',
-                uniqueName: '',
-                percent: 0,
-                value: 0
-            };
-            this.forceClear$ = observableOf({ status: true });
-        }
-    }
+    // public onSelectAdjustmentType(event: any, entry: any): void {
+    //     if (event && event?.value === AdjustmentTypesEnum.receipt) {
+    //         entry.tax = {
+    //             name: '',
+    //             uniqueName: '',
+    //             percent: 0,
+    //             value: 0
+    //         };
+    //         this.forceClear$ = observableOf({ status: true });
+    //     }
+    // }
 
     /**
      * This will validate the transaction and adjustments and will open popup if required
@@ -1960,109 +2040,136 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @param {TemplateRef<any>} template
      * @memberof AccountAsVoucherComponent
      */
-    public validateAndOpenAdjustmentPopup(transaction: any, template: TemplateRef<any>): void {
-        if (this.requestObj.voucherType === VOUCHERS.RECEIPT && transaction && transaction.type === "to" && !transaction.voucherAdjustments) {
-            if (transaction.amount && Number(transaction.amount) > 0) {
-                if (this.requestObj.voucherType === VOUCHERS.RECEIPT) {
-                    this.pendingInvoicesListParams.accountUniqueNames = [];
-                    this.pendingInvoicesListParams.accountUniqueNames.push(transaction.selectedAccount?.UniqueName);
-                }
+    // public validateAndOpenAdjustmentPopup(transaction: any, template: TemplateRef<any>): void {
+    //     if (this.requestObj.voucherType === VOUCHERS.RECEIPT && transaction && transaction.type === "to" && !transaction.voucherAdjustments) {
+    //         if (transaction.amount && Number(transaction.amount) > 0) {
+    //             if (this.requestObj.voucherType === VOUCHERS.RECEIPT) {
+    //                 this.pendingInvoicesListParams.accountUniqueNames = [];
+    //                 this.pendingInvoicesListParams.accountUniqueNames.push(transaction.selectedAccount?.UniqueName);
+    //             }
 
-                this.getInvoiceListForReceiptVoucher();
-                this.currentTransaction = transaction;
-                this.modalRef = this.modalService.show(
-                    template,
-                    Object.assign({}, { class: 'modal-lg', ignoreBackdropClick: true })
-                );
-            }
-        }
-    }
-
-    /**
-     * Scroll end handler for expense account
-     *
-     * @returns null
-     * @memberof AccountAsVoucherComponent
-     */
-    public handleScrollEnd(): void {
-        if (this.accountsSearchResultsPaginationData.page < this.accountsSearchResultsPaginationData.totalPages) {
-            this.onAccountSearchQueryChanged(
-                this.accountsSearchResultsPaginationData.query,
-                this.accountsSearchResultsPaginationData.page + 1,
-                (response) => {
-                    if (!this.accountsSearchResultsPaginationData.query) {
-                        const results = response.map(result => {
-                            return {
-                                value: result?.uniqueName,
-                                label: `${result.name} (${result?.uniqueName})`,
-                                additional: result
-                            }
-                        }) || [];
-                        this.defaultAccountSuggestions = this.defaultAccountSuggestions.concat(...results);
-                        this.defaultAccountPaginationData.page = this.accountsSearchResultsPaginationData.page;
-                        this.defaultAccountPaginationData.totalPages = this.accountsSearchResultsPaginationData.totalPages;
-                    }
-                });
-        }
-    }
+    //             this.getInvoiceListForReceiptVoucher();
+    //             this.currentTransaction = transaction;
+    //             this.modalRef = this.modalService.show(
+    //                 template,
+    //                 Object.assign({}, { class: 'modal-lg', ignoreBackdropClick: true })
+    //             );
+    //         }
+    //     }
+    // }
 
     /**
-     * Search query change handler for expense account
-     *
-     * @param {string} query Search query
-     * @param {number} [page=1] Page to request
-     * @param {Function} successCallback Callback to carry out further operation
-     * @memberof AccountAsVoucherComponent
+    * openStockList
+    */
+    // public openStockList() {
+    //     this.showLedgerAccountList = false;
+    //     this.showStockList = true;
+    //     // this.showStockList.next(true);
+    // }
+
+    /**
+     * onSelectStock
      */
-    public onAccountSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
-        this.accountsSearchResultsPaginationData.query = query;
-        if (!this.preventDefaultScrollApiCall &&
-            (query || (this.defaultAccountSuggestions && this.defaultAccountSuggestions.length === 0) || successCallback)) {
-            const { group, exceptGroups } = this.tallyModuleService.getGroupByVoucher(this.requestObj.voucherType, this.selectedTransactionType);
-            // Call the API when either query is provided, default suggestions are not present or success callback is provided
-            const requestObject: any = {
-                q: encodeURIComponent(query),
-                page,
-                group,
-                exceptGroups,
-                count: PAGINATION_LIMIT
-            };
-            // Loaded accounts will be of groups -> (Groups - Except Groups)
-            this.searchService.searchAccountV2(requestObject).subscribe(data => {
-                if (data && data.body && data.body.results) {
-                    const searchResults = data.body.results.map(result => {
-                        return {
-                            value: result?.uniqueName,
-                            label: `${result.name} (${result?.uniqueName})`,
-                            additional: result
-                        }
-                    }) || [];
-                    if (page === 1) {
-                        this.inputForList = searchResults;
-                    } else {
-                        this.inputForList = [
-                            ...this.inputForList,
-                            ...searchResults
-                        ];
-                    }
-                    this.accountsSearchResultsPaginationData.page = data.body.page;
-                    this.accountsSearchResultsPaginationData.totalPages = data.body.totalPages;
-                    if (successCallback) {
-                        successCallback(data.body.results);
-                    } else {
-                        this.defaultAccountPaginationData.page = this.accountsSearchResultsPaginationData.page;
-                        this.defaultAccountPaginationData.totalPages = this.accountsSearchResultsPaginationData.totalPages;
-                    }
-                }
-            });
-        } else {
-            this.inputForList = [...this.defaultAccountSuggestions];
-            this.accountsSearchResultsPaginationData.page = this.defaultAccountPaginationData.page;
-            this.accountsSearchResultsPaginationData.totalPages = this.defaultAccountPaginationData.totalPages;
-            this.preventDefaultScrollApiCall = true;
-            setTimeout(() => {
-                this.preventDefaultScrollApiCall = false;
-            }, 500);
-        }
-    }
+    // public onSelectStock(item) {
+    //     if (item) {
+    //         let idx = this.selectedStockIdx;
+    //         let entryItem = cloneDeep(item);
+    //         this.prepareEntry(entryItem, this.selectedIdx);
+    //         // setTimeout(() => {
+    //         //   this.selectedStk.focus();
+    //         //   this.showStockList = false;
+    //         // }, 50);
+    //     } else {
+    //         this.requestObj.transactions[this.selectedIdx].inventory.splice(this.selectedStockIdx, 1);
+    //     }
+    // }
+
+    /**
+     * prepareEntry
+     */
+    // public prepareEntry(item, idx) {
+    //     let i = this.selectedStockIdx;
+    //     if (item && item.stockUnit) {
+    //         let defaultUnit = {
+    //             stockUnitCode: item.stockUnit.name,
+    //             code: item.stockUnit.code,
+    //             rate: 0
+    //         };
+
+    //         // this.requestObj.transactions[idx].inventory[i].unit.rate = item.rate;
+
+    //         //Check if the Unit is initialized
+
+    //         if (this.requestObj.transactions[idx].inventory[i].unit) {
+    //             this.requestObj.transactions[idx].inventory[i].unit.rate = item.amount / item.openingQuantity; // Kunal
+    //             this.requestObj.transactions[idx].inventory[i].unit.code = item.stockUnit.code;
+    //             this.requestObj.transactions[idx].inventory[i].unit.stockUnitCode = item.stockUnit.name;
+    //         }
+
+    //         // this.requestObj.transactions[idx].particular = item.accountStockDetails.accountUniqueName;
+    //         this.requestObj.transactions[idx].inventory[i].stock = { name: item.name, uniqueName: item?.uniqueName };
+    //         // this.requestObj.transactions[idx].selectedAccount?.uniqueName = item.accountStockDetails.accountUniqueName;
+    //         this.changePrice(i, this.requestObj.transactions[idx].inventory[i].unit.rate);
+    //     }
+
+    // }
+
+    /**
+     * changePrice
+     */
+    // public changePrice(idx, val) {
+    //     let i = this.selectedIdx;
+    //     this.requestObj.transactions[i].inventory[idx].unit.rate = !Number.isNaN(val) ? Number(cloneDeep(val)) : 0;
+    //     this.requestObj.transactions[i].inventory[idx].amount = Number((this.requestObj.transactions[i].inventory[idx].unit.rate * this.requestObj.transactions[i].inventory[idx].quantity).toFixed(this.giddhBalanceDecimalPlaces));
+    //     this.amountChanged(idx);
+    // }
+
+    // public amountChanged(invIdx) {
+    //     let i = this.selectedIdx;
+    //     if (this.requestObj.transactions && this.requestObj.transactions[i].inventory[invIdx].stock && this.requestObj.transactions[i].inventory[invIdx].quantity) {
+    //         this.requestObj.transactions[i].inventory[invIdx].unit.rate = Number((this.requestObj.transactions[i].inventory[invIdx].amount / this.requestObj.transactions[i].inventory[invIdx].quantity).toFixed(this.giddhBalanceDecimalPlaces));
+    //     }
+    //     let total = this.calculateTransactionTotal(this.requestObj.transactions[i].inventory);
+    //     this.requestObj.transactions[i].total = total;
+    //     this.requestObj.transactions[i].amount = total;
+    // }
+
+    /**
+     * calculateTransactionTotal
+     */
+    // public calculateTransactionTotal(inventory) {
+    //     let total = 0;
+    //     inventory.forEach((inv) => {
+    //         total = total + Number(inv.amount);
+    //     });
+    //     return total;
+    // }
+
+    // public changeQuantity(idx, val) {
+    //     let i = this.selectedIdx;
+    //     this.requestObj.transactions[i].inventory[idx].quantity = Number(val);
+    //     this.requestObj.transactions[i].inventory[idx].amount = Number((this.requestObj.transactions[i].inventory[idx].unit.rate * this.requestObj.transactions[i].inventory[idx].quantity).toFixed(this.giddhBalanceDecimalPlaces));
+    //     this.amountChanged(idx);
+    // }
+
+    // public validateAndAddNewStock(idx) {
+    //     let i = this.selectedIdx;
+    //     if (this.requestObj.transactions[i]?.inventory?.length - 1 === idx) {
+    //         this.requestObj.transactions[i].inventory.push(this.initInventory());
+    //     }
+    // }
+
+    // public onStockFocus(ev, stockIndx: number, indx: number) {
+    //     this.selectedStockInputField = ev.target;
+    //     this.showConfirmationBox = false;
+    //     this.selectedStockIdx = stockIndx;
+    //     this.selectedIdx = indx;
+    //     this.getStock(this.groupUniqueName);
+    //     this.getStock();
+    //     this.showLedgerAccountList = true;
+    //     setTimeout(() => {
+    //         this.selectedField = 'stock';
+    //     }, 100);
+    // }
+
 }

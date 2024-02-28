@@ -373,7 +373,7 @@ export class GeneralService {
      * @memberof NeedsAuthorization
      */
     public checkIfEmailDomainAllowed(email: string): boolean {
-        let isAllowed = false;
+        let isAllowed = true;
         if (email) {
             let emailSplit = email.split("@");
             if (JOURNAL_VOUCHER_ALLOWED_DOMAINS.includes(emailSplit[1])) {
