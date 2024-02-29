@@ -42,6 +42,7 @@ export interface OrganizationProfile {
     isMultipleCurrency?: boolean;
     manageInventory?: boolean;
     portalDomain?: string;
+    withPay?: any;
 }
 
 /** Form type in setting aside component */
