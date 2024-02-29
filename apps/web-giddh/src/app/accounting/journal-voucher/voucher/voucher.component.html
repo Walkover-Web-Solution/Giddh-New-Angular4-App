@@ -51,199 +51,202 @@
                                     let i = index;
                                     let l = last
                                 "
+                                formArrayName="transactions"
                             >
-                                <tr>
-                                    <td
-                                        [style.width.px]="40"
-                                        [ngClass]="{
-                                            'active-row':
-                                                (isSelectedRow && selectedIdx === i) ||
-                                                (!selectedIdx && !isSelectedRow && i == 0)
-                                        }"
-                                    >
-                                        <text-field
-                                            [id]="'transaction_{{ i }}'"
-                                            [type]="'text'"
-                                            [cssClass]="'form-control text-capitalize byTo'"
-                                            [disabled]="
-                                                (i === 0 && !isFirstRowDeleted) ||
-                                                journalVoucherForm.get('voucherType')?.value === 'receipt'
-                                            "
-                                            formControlName="type"
-                                            (focus)="selectRow(true, i)"
-                                            [ngClass]="{ 'focus': isSelectedRow && selectedIdx === i }"
-                                            [value]="
-                                                journalVoucherForm.get('transactions').at(i).get('type')?.value
-                                                    | lowercase
-                                            "
-                                            [maxlength]="'2'"
-                                        ></text-field>
-                                    </td>
-                                    <td
-                                        [ngClass]="{
-                                            'active-row':
-                                                (isSelectedRow && selectedIdx === i) ||
-                                                (!selectedIdx && !isSelectedRow && i == 0)
-                                        }"
-                                    >
-                                        <text-field
-                                            [id]="'transaction_{{ i }}'"
-                                            [type]="'text'"
-                                            [cssClass]="'form-control from-or-to-acc'"
-                                            #particular
-                                            [required]="
-                                                journalVoucherForm.get('transactions').at(i).get('amount')?.value
-                                            "
-                                            formControlName="selectedAccount.account"
-                                            (keyup)="searchedAccountQuery.next($event)"
-                                            (focus)="
-                                                onAccountFocus(
-                                                    $event,
-                                                    journalVoucherForm.get('transactions').at(i).get('type')?.value ===
-                                                        'by'
-                                                        ? amountField1
-                                                        : amountField2,
-                                                    journalVoucherForm.get('transactions').at(i).get('type')?.value,
-                                                    i
-                                                )
-                                            "
-                                            (blur)="onAccountBlur($event)"
-                                            [ngClass]="{ 'focus': isSelectedRow && selectedIdx === i }"
-                                            (keydown)="detectKey($event)"
-                                            (keydown.Tab)="
-                                                validateAccount(journalVoucherForm.get('transactions').at(i), $event, i)
-                                            "
-                                        ></text-field>
-                                    </td>
-                                    <td
-                                        [ngClass]="{
-                                            'active-row':
-                                                (isSelectedRow && selectedIdx === i) ||
-                                                (!selectedIdx && !isSelectedRow && i == 0)
-                                        }"
-                                    >
-                                        <text-field
-                                            [hidden]="
-                                                journalVoucherForm.get('transactions').at(i).get('type')?.value !== 'by'
-                                            "
-                                            [type]="'text'"
-                                            [cssClass]="'form-control text-right debit-credit'"
-                                            #byAmountField
-                                            decimalDigitsDirective
-                                            #amountField1
-                                            [mask]="inputMaskFormat"
-                                            formControlName="amount"
-                                            (focus)="selectRow(true, i)"
-                                            (keydown.Enter)="
-                                                addNewEntry(
-                                                    journalVoucherForm.get('transactions').at(i).get('amount')?.value,
-                                                    journalVoucherForm.get('transactions').at(i),
-                                                    i
-                                                )
-                                            "
-                                            (blur)="
-                                                addNewEntry(
-                                                    journalVoucherForm.get('transactions').at(i).get('amount')?.value,
-                                                    journalVoucherForm.get('transactions').at(i),
-                                                    i
-                                                )
-                                            "
-                                            [ngClass]="{ 'focus': isSelectedRow && selectedIdx === i }"
-                                            [disabled]="
-                                                (journalVoucherForm.get('transactions').at(i).get('amount')?.value &&
-                                                    !journalVoucherForm
-                                                        .get('transactions')
-                                                        .at(i)
-                                                        .get('selectedAccount.name')?.value) ||
-                                                journalVoucherForm.get('transactions').at(i).get('type')?.value !== 'by'
-                                            "
-                                            (change)="calModAmt(transaction.amount, transaction, i)"
-                                        ></text-field>
-                                    </td>
-                                    <td
-                                        [ngClass]="{
-                                            'active-row':
-                                                (isSelectedRow && selectedIdx === i) ||
-                                                (!selectedIdx && !isSelectedRow && i == 0)
-                                        }"
-                                    >
-                                        <text-field
-                                            [disabled]="
-                                                (journalVoucherForm.get('transactions').at(i).get('amount')?.value &&
-                                                    !journalVoucherForm
-                                                        .get('transactions')
-                                                        .at(i)
-                                                        .get('selectedAccount.name')?.value) ||
-                                                journalVoucherForm.get('transactions').at(i).get('type')?.value !== 'to'
-                                            "
-                                            [hidden]="
-                                                journalVoucherForm.get('transactions').at(i).get('type')?.value !== 'to'
-                                            "
-                                            [type]="'text'"
-                                            [cssClass]="'form-control text-right debit-credit'"
-                                            #toAmountField
-                                            decimalDigitsDirective
-                                            #amountField2
-                                            [mask]="inputMaskFormat"
-                                            formControlName="amount"
-                                            (focus)="selectRow(true, i)"
-                                            (keydown.Enter)="
-                                                addNewEntry(
-                                                    journalVoucherForm.get('transactions').at(i).get('amount')?.value,
-                                                    journalVoucherForm.get('transactions').at(i),
-                                                    i
-                                                )
-                                            "
-                                            (blur)="
-                                                addNewEntry(
-                                                    journalVoucherForm.get('transactions').at(i).get('amount')?.value,
-                                                    journalVoucherForm.get('transactions').at(i),
-                                                    i
-                                                )
-                                            "
-                                            [ngClass]="{ 'focus': isSelectedRow && selectedIdx === i }"
-                                            (change)="
-                                                calModAmt(
-                                                    journalVoucherForm.get('transactions').at(i).get('amount')?.value,
-                                                    journalVoucherForm.get('transactions').at(i),
-                                                    i
-                                                )
-                                            "
-                                        ></text-field>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td colspan="100%">
-                                        <span
+                                <ng-container [formGroupName]="i">
+                                    <tr>
+                                        <td
+                                            [style.width.px]="40"
                                             [ngClass]="{
-                                                'active-row-transparent':
+                                                'active-row':
                                                     (isSelectedRow && selectedIdx === i) ||
                                                     (!selectedIdx && !isSelectedRow && i == 0)
                                             }"
-                                            *ngIf="
-                                                journalVoucherForm
-                                                    .get('transactions')
-                                                    .at(i)
-                                                    .get('selectedAccount.account')?.value &&
-                                                journalVoucherForm.get('transactions').at(i).get('currentBalance')
-                                                    ?.value !== ''
-                                            "
-                                            class="current-balance d-block mr-b05"
                                         >
-                                            Current Balance:
-                                            {{
-                                                journalVoucherForm.get("transactions").at(i).get("currentBalance")
-                                                    ?.value | giddhCurrency
-                                            }}
-                                            {{
-                                                journalVoucherForm.get("transactions").at(i).get("selectedAccount.type")
-                                                    ?.value === "DEBIT"
-                                                    ? localeData?.dr
-                                                    : localeData?.cr
-                                            }}
-                                        </span>
-                                    </td>
-                                </tr>
+                                            <text-field
+                                                [id]="'transaction_' + i"
+                                                [type]="'text'"
+                                                [cssClass]="'form-control text-capitalize byTo'"
+                                                [disabled]="
+                                                    (i === 0 && !isFirstRowDeleted) ||
+                                                    journalVoucherForm.get('voucherType')?.value === 'receipt'
+                                                "
+                                                formControlName="type"
+                                                (focus)="selectRow(true, i)"
+                                                [ngClass]="{ 'focus': isSelectedRow && selectedIdx === i }"
+                                                [value]="
+                                                    transaction.get('type')?.value | lowercase
+                                                "
+                                                [maxlength]="'2'"
+                                            ></text-field>
+                                        </td>
+                                        <td
+                                            [ngClass]="{
+                                                'active-row':
+                                                    (isSelectedRow && selectedIdx === i) ||
+                                                    (!selectedIdx && !isSelectedRow && i == 0)
+                                            }"
+                                            formGroupName="selectedAccount"
+                                        >
+                                            <text-field
+                                                [id]="'transaction_' + i"
+                                                [type]="'text'"
+                                                [cssClass]="'form-control from-or-to-acc'"
+                                                #particular
+                                                [required]="
+                                                    transaction.get('amount')?.value
+                                                "
+                                                formControlName="account"
+                                                (keyup)="searchedAccountQuery.next($event)"
+                                                (focus)="
+                                                    onAccountFocus(
+                                                        $event,
+                                                        transaction.get('type')?.value ===
+                                                            'by'
+                                                            ? amountField1
+                                                            : amountField2,
+                                                            transaction.get('type')?.value,
+                                                        i
+                                                    )
+                                                "
+                                                (blur)="onAccountBlur($event)"
+                                                [ngClass]="{ 'focus': isSelectedRow && selectedIdx === i }"
+                                                (keydown)="detectKey($event)"
+                                                (keydown.Tab)="
+                                                    validateAccount(transaction, $event, i)
+                                                "
+                                            ></text-field>
+                                        </td>
+                                        <td
+                                            [ngClass]="{
+                                                'active-row':
+                                                    (isSelectedRow && selectedIdx === i) ||
+                                                    (!selectedIdx && !isSelectedRow && i == 0)
+                                            }"
+                                        >
+                                            <text-field
+                                                [hidden]="
+                                                    transaction.get('type')?.value !== 'by'
+                                                "
+                                                [type]="'text'"
+                                                [cssClass]="'form-control text-right debit-credit'"
+                                                #byAmountField
+                                                decimalDigitsDirective
+                                                #amountField1
+                                                [mask]="inputMaskFormat"
+                                                formControlName="amount"
+                                                (focus)="selectRow(true, i)"
+                                                (keydown.Enter)="
+                                                    addNewEntry(
+                                                        transaction.get('amount')?.value,
+                                                        transaction,
+                                                        i
+                                                    )
+                                                "
+                                                (blur)="
+                                                    addNewEntry(
+                                                        transaction.get('amount')?.value,
+                                                        transaction,
+                                                        i
+                                                    )
+                                                "
+                                                [ngClass]="{ 'focus': isSelectedRow && selectedIdx === i }"
+                                                [disabled]="
+                                                    (transaction.get('amount')?.value &&
+                                                        !journalVoucherForm
+                                                            .get('transactions')
+                                                            .at(i)
+                                                            .get('selectedAccount.name')?.value) ||
+                                                            transaction.get('type')?.value !== 'by'
+                                                "
+                                                (change)="calModAmt(transaction.amount, transaction, i)"
+                                            ></text-field>
+                                        </td>
+                                        <td
+                                            [ngClass]="{
+                                                'active-row':
+                                                    (isSelectedRow && selectedIdx === i) ||
+                                                    (!selectedIdx && !isSelectedRow && i == 0)
+                                            }"
+                                        >
+                                            <text-field
+                                                [disabled]="
+                                                    (transaction.get('amount')?.value &&
+                                                        !journalVoucherForm
+                                                            .get('transactions')
+                                                            .at(i)
+                                                            .get('selectedAccount.name')?.value) ||
+                                                            transaction.get('type')?.value !== 'to'
+                                                "
+                                                [hidden]="
+                                                    transaction.get('type')?.value !== 'to'
+                                                "
+                                                [type]="'text'"
+                                                [cssClass]="'form-control text-right debit-credit'"
+                                                #toAmountField
+                                                decimalDigitsDirective
+                                                #amountField2
+                                                [mask]="inputMaskFormat"
+                                                formControlName="amount"
+                                                (focus)="selectRow(true, i)"
+                                                (keydown.Enter)="
+                                                    addNewEntry(
+                                                        transaction.get('amount')?.value,
+                                                        transaction,
+                                                        i
+                                                    )
+                                                "
+                                                (blur)="
+                                                    addNewEntry(
+                                                        transaction.get('amount')?.value,
+                                                        transaction,
+                                                        i
+                                                    )
+                                                "
+                                                [ngClass]="{ 'focus': isSelectedRow && selectedIdx === i }"
+                                                (change)="
+                                                    calModAmt(
+                                                        transaction.get('amount')?.value,
+                                                        transaction,
+                                                        i
+                                                    )
+                                                "
+                                            ></text-field>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="100%">
+                                            <span
+                                                [ngClass]="{
+                                                    'active-row-transparent':
+                                                        (isSelectedRow && selectedIdx === i) ||
+                                                        (!selectedIdx && !isSelectedRow && i == 0)
+                                                }"
+                                                *ngIf="
+                                                    journalVoucherForm
+                                                        .get('transactions')
+                                                        .at(i)
+                                                        .get('selectedAccount.account')?.value &&
+                                                        transaction.get('currentBalance')
+                                                        ?.value !== ''
+                                                "
+                                                class="current-balance d-block mr-b05"
+                                            >
+                                                Current Balance:
+                                                {{
+                                                    transaction.get("currentBalance")
+                                                        ?.value | giddhCurrency
+                                                }}
+                                                {{
+                                                    transaction.get("selectedAccount.type")
+                                                        ?.value === "DEBIT"
+                                                        ? localeData?.dr
+                                                        : localeData?.cr
+                                                }}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </ng-container>
                             </ng-container>
                         </tbody>
                     </table>
