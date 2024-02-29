@@ -24,7 +24,8 @@
                         (focus)="onDateFieldFocus()"
                         bsDatepicker
                         (bsValueChange)="handleVoucherDateChange(); dateEntered()"
-                        [bsConfig]="bsConfig"
+                        (keydown.enter)="dateEntered()"
+                        [bsConfig]="{ dateInputFormat: giddhDateFormat }"
                     />
                 </div>
             </div>
@@ -67,7 +68,7 @@
                                                 [id]="'transaction_' + i"
                                                 [type]="'text'"
                                                 [cssClass]="'form-control text-capitalize byTo'"
-                                                [disabled]="
+                                                [readonly]="
                                                     (i === 0 && !isFirstRowDeleted) ||
                                                     journalVoucherForm.get('voucherType')?.value === 'receipt'
                                                 "
@@ -76,6 +77,7 @@
                                                 [ngClass]="{ 'focus': isSelectedRow && selectedIdx === i }"
                                                 [value]="transaction.get('type')?.value | lowercase"
                                                 [maxlength]="'2'"
+                                                [autocomplete]="'off'"
                                             ></text-field>
                                         </td>
                                         <td
@@ -87,6 +89,7 @@
                                             formGroupName="selectedAccount"
                                         >
                                             <text-field
+                                                [autocomplete]="'off'"
                                                 [id]="'transaction_' + i"
                                                 [type]="'text'"
                                                 [cssClass]="'form-control from-or-to-acc'"
@@ -118,6 +121,7 @@
                                             }"
                                         >
                                             <text-field
+                                                [autocomplete]="'off'"
                                                 [hidden]="transaction.get('type')?.value !== 'by'"
                                                 [type]="'text'"
                                                 [cssClass]="'form-control text-right debit-credit'"
@@ -132,7 +136,7 @@
                                                 "
                                                 (blur)="addNewEntry(transaction.get('amount')?.value, transaction, i)"
                                                 [ngClass]="{ 'focus': isSelectedRow && selectedIdx === i }"
-                                                [disabled]="
+                                                [readonly]="
                                                     (transaction.get('amount')?.value &&
                                                         !journalVoucherForm
                                                             .get('transactions')
@@ -140,7 +144,9 @@
                                                             .get('selectedAccount.name')?.value) ||
                                                     transaction.get('type')?.value !== 'by'
                                                 "
-                                                (change)="calModAmt(transaction.get('amount')?.value, transaction, i)"
+                                                (change)="
+                                                    calculateAmount(transaction.get('amount')?.value, transaction, i)
+                                                "
                                             ></text-field>
                                         </td>
                                         <td
@@ -151,7 +157,8 @@
                                             }"
                                         >
                                             <text-field
-                                                [disabled]="
+                                                [autocomplete]="'off'"
+                                                [readonly]="
                                                     (transaction.get('amount')?.value &&
                                                         !journalVoucherForm
                                                             .get('transactions')
@@ -173,7 +180,9 @@
                                                 "
                                                 (blur)="addNewEntry(transaction.get('amount')?.value, transaction, i)"
                                                 [ngClass]="{ 'focus': isSelectedRow && selectedIdx === i }"
-                                                (change)="calModAmt(transaction.get('amount')?.value, transaction, i)"
+                                                (change)="
+                                                    calculateAmount(transaction.get('amount')?.value, transaction, i)
+                                                "
                                             ></text-field>
                                         </td>
                                     </tr>
@@ -339,6 +348,7 @@
         >
             <div class="clearfix mr-t1">
                 <input-field
+                    [autocomplete]="'off'"
                     [name]="'account1'"
                     [placeholder]="localeData?.cheque_number"
                     [type]="'text'"
@@ -348,6 +358,7 @@
                     (keydown.enter)="$event.preventDefault()"
                     #chequeNumberInput
                     [autoFocus]="true"
+                    cdkFocusInitial
                 >
                 </input-field>
             </div>
@@ -388,7 +399,6 @@
     </div>
     <div class="modal-footer">
         <div class="d-flex float-end column-gap15">
-            <!-- [disabled]="chequeDetailForm.invalid" -->
             <button
                 mat-stroked-button
                 color="primary"

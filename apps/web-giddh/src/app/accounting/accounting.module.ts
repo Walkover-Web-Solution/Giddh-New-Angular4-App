@@ -35,6 +35,7 @@ import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
+import { A11yModule } from '@angular/cdk/a11y';
 
 @NgModule({
     declarations: [
@@ -77,7 +78,8 @@ import { MatInputModule } from '@angular/material/input';
         FormFieldsModule,
         MatDialogModule,
         MatButtonModule,
-        MatInputModule
+        MatInputModule,
+        A11yModule
     ],
 })
 export class AccountingModule {
