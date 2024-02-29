@@ -119,6 +119,20 @@
                                     </sh-select>
                                 </div>
                             </div>
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    <label>{{ localeData?.export_type }}</label>
+                                    <sh-select
+                                        [options]="exportTypes"
+                                        [placeholder]="localeData?.select_export_type"
+                                        (selected)="setExportType($event)"
+                                        [isFilterEnabled]="false"
+                                        name="exportType"
+                                        [defaultValue]="exportType ? exportTypes[0]?.label : exportTypes[1]?.label"
+                                    >
+                                    </sh-select>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

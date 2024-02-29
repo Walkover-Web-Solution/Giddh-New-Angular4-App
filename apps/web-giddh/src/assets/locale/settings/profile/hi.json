@@ -73,5 +73,9 @@
     "invalid_email": "[EMAIL] अमान्य ईमेल है!",
     "primary_domain_set": "प्रमुख डोमेन सफलतापूर्वक सेट किया गया",
     "add_domain_succesfully": "डोमेन सफलतापूर्वक जोड़ा गया",
-    "delete_domain": "डोमेन सफलतापूर्वक हटाया गया"
+    "delete_domain": "डोमेन सफलतापूर्वक हटाया गया",
+    "export_type": "निर्यात प्रकार",
+    "select_export_type": "निर्यात प्रकार चुनें",
+    "with_pay": "वेतन के साथ",
+    "without_pay": "बिना वेतन"
 }
