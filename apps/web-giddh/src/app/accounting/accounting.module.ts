@@ -31,6 +31,7 @@ import { OnReturnDirective } from './keyboard.directive';
 import { AVShSelectModule } from './ng-virtual-list/virtual-list.module';
 import { TallyModuleService } from './tally-service';
 import { VoucherGridComponent } from './voucher-grid/voucher-grid.component';
+import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 
 @NgModule({
     declarations: [
@@ -69,6 +70,8 @@ import { VoucherGridComponent } from './voucher-grid/voucher-grid.component';
         QuickAccountModule,
         InventoryModule,
         NgxMaskModule.forRoot(),
+        FormsModule,
+        FormFieldsModule
     ],
 })
 export class AccountingModule {

@@ -210,7 +210,6 @@ export class JournalVoucherComponent implements OnInit, OnDestroy {
             // }, 100);
         } else {
             let selectedPageIndx = PAGE_SHORTCUT_MAPPING.findIndex((page: any) => {
-                console.log('page', page);
                 if (event.altKey) {
                     return page.key === event.key && page.altKey;
                 } else {

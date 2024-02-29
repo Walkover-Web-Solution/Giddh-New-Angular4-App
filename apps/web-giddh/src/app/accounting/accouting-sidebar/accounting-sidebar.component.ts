@@ -47,7 +47,6 @@ export class AccountingSidebarComponent implements OnInit, OnChanges, OnDestroy 
             }
             return true;
         }), takeUntil(this.destroyed$)).subscribe((pageInfo: IPageInfo) => {
-            console.log(pageInfo);
             if (pageInfo) {
                 this.selectedVoucher = pageInfo.page;
                 this.selectedGrid = pageInfo.gridType;
@@ -62,7 +61,6 @@ export class AccountingSidebarComponent implements OnInit, OnChanges, OnDestroy 
     }
 
     public setSelectedPage(pageName: string, grid: string, grpUnqName: string) {
-        console.log('setting selected', pageName, grid, grpUnqName);
         this._tallyModuleService.setVoucher({
             page: pageName,
             uniqueName: grpUnqName,

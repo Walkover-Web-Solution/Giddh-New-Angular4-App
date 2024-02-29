@@ -268,7 +268,6 @@ export class TallyModuleService {
     public getAccounts() {
         let accounts = [];
         if (this.selectedPageInfo?.value) {
-            // console.log('this.selectedPageInfo.value inside service is :', this.selectedPageInfo.value);
             switch (this.selectedPageInfo?.value.page) {
                 case 'Journal':
                     // accounts = this.flattenAccounts.value;
@@ -374,7 +373,6 @@ export class TallyModuleService {
     }
 
     private validateForData(data) {
-        // console.log('the data in validation fn is :', data);
         let isValid = true;
         switch (data.voucherType) {
             // case 'Purchase':
@@ -522,7 +520,7 @@ export class TallyModuleService {
             };
         } else if (voucherType.toLowerCase() === VOUCHERS.PAYMENT) {
             return {
-                group: selectedTransactionType === 'by' ? encodeURIComponent('sundrydebtors, sundrycreditors, tdspayable') :
+                group: selectedTransactionType === 'by' ? encodeURIComponent('sundrydebtors, sundrycreditors, tcspayable') :
                     encodeURIComponent('cash, bankaccounts, loanandoverdraft,tdsreceivable'),
                 exceptGroups: encodeURIComponent('')
             };
