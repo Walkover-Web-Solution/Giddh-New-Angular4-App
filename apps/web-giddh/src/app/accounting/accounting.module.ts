@@ -32,6 +32,9 @@ import { AVShSelectModule } from './ng-virtual-list/virtual-list.module';
 import { TallyModuleService } from './tally-service';
 import { VoucherGridComponent } from './voucher-grid/voucher-grid.component';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
+import { MatInputModule } from '@angular/material/input';
 
 @NgModule({
     declarations: [
@@ -71,7 +74,10 @@ import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
         InventoryModule,
         NgxMaskModule.forRoot(),
         FormsModule,
-        FormFieldsModule
+        FormFieldsModule,
+        MatDialogModule,
+        MatButtonModule,
+        MatInputModule
     ],
 })
 export class AccountingModule {
