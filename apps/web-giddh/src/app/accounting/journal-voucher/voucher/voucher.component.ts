@@ -44,6 +44,7 @@ import { SearchService } from '../../../services/search.service';
 import { VOUCHERS } from '../../constants/accounting.constant';
 import { GeneralService } from '../../../services/general.service';
 import { MatDialog } from '@angular/material/dialog';
+import { clone } from 'chart.js/dist/helpers/helpers.core';
 
 const CustomShortcode = [
     { code: 'F9', route: 'purchase' }
@@ -923,35 +924,18 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     }
 
     /**
-     * Merge two form groups into one
-     *
-     * @param {FormGroup} group1
-     * @param {FormGroup} group2
-     * @return {*}  {FormGroup}
-     * @memberof AccountAsVoucherComponent
-     */
-    public mergeFormGroups(group1: FormGroup, group2: FormGroup): FormGroup {
-        const mergedValues = { ...group1.value, ...group2.value };
-        return this.formBuilder.group(mergedValues);
-    }
-
-
-    /**
      * This will be use for save entry
      *
      * @return {*}
      * @memberof AccountAsVoucherComponent
      */
-    public saveEntry() {
-        this.mergedFormGroup = this.mergeFormGroups(this.journalVoucherForm, this.chequeDetailForm);
-        let data = cloneDeep(this.mergedFormGroup.value);
+    public saveEntry(): any {
+        let data = cloneDeep({ ...this.journalVoucherForm.value, ...this.chequeDetailForm.value });
+
         data.chequeClearanceDate = (typeof this.chequeDetailForm.get('chequeClearanceDate').value === "object") ? dayjs(this.chequeDetailForm.get('chequeClearanceDate').value).format(GIDDH_DATE_FORMAT) : dayjs(this.chequeDetailForm.get('chequeClearanceDate').value, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
         data.entryDate = (typeof this.journalVoucherForm.get('entryDate').value === "object") ? dayjs(this.journalVoucherForm.get('entryDate').value).format(GIDDH_DATE_FORMAT) : dayjs(this.journalVoucherForm.get('entryDate').value, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-        if (typeof data.transactions === "object") {
-            data.transactions = this.validateTransaction([data.transactions]);
-        } else {
-            data.transactions = this.validateTransaction(data.transactions);
-        }
+
+        data.transactions = this.validateTransaction(data.transactions);
 
         if (!data.transactions) {
             return;
