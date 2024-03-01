@@ -5,29 +5,27 @@
     <form autocomplete="off" novalidate [formGroup]="journalVoucherForm">
         <div class="bg-wrap">
             <div class="clearfix pd-t2">
-                <div class="pull-left text-left mr-b1" (clickOutside)="showFromDatePicker = false">
+                <div class="text-left mr-b1" (clickOutside)="showFromDatePicker = false">
                     <span class="voucher-heading">{{ journalVoucherForm.get("voucherType").value | uppercase }}</span>
                 </div>
                 <div
-                    class="day-date pull-right text-right mr-b1 custom-entry-date"
+                    class="d-flex justify-content-end align-items-baseline pull-right text-right mr-b1 custom-entry-date"
                     (clickOutside)="showFromDatePicker = false"
                 >
                     <span>{{ displayDay }},</span>
-                    <input
-                        name="entryDate"
-                        size="10"
-                        type="text"
-                        #dateField
-                        formControlName="entryDate"
-                        readonly
-                        [placeholder]="giddhDateFormat"
-                        class="form-control text-right voucher-date-field"
-                        (focus)="onDateFieldFocus()"
-                        bsDatepicker
-                        (bsValueChange)="handleVoucherDateChange(); dateEntered()"
-                        (keydown.enter)="dateEntered()"
-                        [bsConfig]="{ dateInputFormat: giddhDateFormat }"
-                    />
+                    <div class="entry-date-container">
+                        <giddh-datepicker
+                            [name]="'entryDate'"
+                            [placeholder]="giddhDateFormat"
+                            [cssClass]="'form-control text-right voucher-date-field'"
+                            formControlName="entryDate"
+                            [showToggleIcon]="false"
+                            (datepickerState)="onDateFieldFocus()"
+                            (dateSelected)="handleVoucherDateChange(); dateEntered()"
+                            (keydown.enter)="dateEntered()"
+                        >
+                        </giddh-datepicker>
+                    </div>
                 </div>
             </div>
             <div class="clearfix" [style.min-height]="'calc(-262px + 100vh)'">
@@ -56,7 +54,7 @@
                                 formArrayName="transactions"
                             >
                                 <ng-container [formGroupName]="i">
-                                    <tr>
+                                    <tr (click)="activeRow(true, i)">
                                         <td
                                             class="voucher-type"
                                             [style.width.px]="40"
@@ -75,7 +73,7 @@
                                                     journalVoucherForm.get('voucherType')?.value === 'receipt'
                                                 "
                                                 formControlName="type"
-                                                (blur)="selectRow(true, i)"
+                                                (input)="selectRow(true, i)"
                                                 [ngClass]="{ 'focus': isSelectedRow && selectedIdx === i }"
                                                 [value]="transaction.get('type')?.value | lowercase"
                                                 [maxlength]="'2'"
@@ -134,7 +132,7 @@
                                                 #amountField1
                                                 [mask]="inputMaskFormat"
                                                 formControlName="amount"
-                                                (focus)="selectRow(true, i)"
+                                                (input)="selectRow(true, i)"
                                                 (keydown.Enter)="
                                                     addNewEntry(transaction.get('amount')?.value, transaction, i)
                                                 "
@@ -179,7 +177,7 @@
                                                 #amountField2
                                                 [mask]="inputMaskFormat"
                                                 formControlName="amount"
-                                                (focus)="selectRow(true, i)"
+                                                (input)="selectRow(true, i)"
                                                 (keydown.Enter)="
                                                     addNewEntry(transaction.get('amount')?.value, transaction, i)
                                                 "
@@ -247,25 +245,29 @@
                         <div>
                             <h1>{{ localeData?.accept }}</h1>
                             <div class="pd-t2">
-                                <button
-                                    [hidden]="isCompany"
-                                    class="btn btn-primary"
-                                    #submitButton
-                                    (keyup)="keyUpOnSubmitButton($event)"
-                                    (click)="saveEntry()"
-                                >
-                                    {{ commonLocaleData?.app_yes }}
-                                </button>
-                                <button
-                                    class="btn btn-default"
-                                    #resetButton
-                                    (keyup)="keyUpOnResetButton($event)"
-                                    (click)="acceptCancel()"
-                                >
-                                    {{ commonLocaleData?.app_no }}
-                                </button>
+                                <div class="d-flex column-gap15">
+                                    <button
+                                        mat-stroked-button
+                                        color="primary"
+                                        [hidden]="isCompany"
+                                        #submitButton
+                                        (keyup)="keyUpOnSubmitButton($event)"
+                                        (click)="saveEntry()"
+                                    >
+                                        {{ commonLocaleData?.app_yes }}
+                                    </button>
+                                    <button
+                                        mat-stroked-button
+                                        color="primary"
+                                        #resetButton
+                                        (keyup)="keyUpOnResetButton($event)"
+                                        (click)="acceptCancel()"
+                                    >
+                                        {{ commonLocaleData?.app_no }}
+                                    </button>
+                                </div>
                                 <br />
-                                <button class="btn btn-link mr-t1" (click)="refreshEntry()">
+                                <button mat-stroked-button color="primary" class="mt-1" (click)="refreshEntry()">
                                     {{ commonLocaleData?.app_reset }}
                                 </button>
                             </div>
@@ -368,7 +370,20 @@
                 </input-field>
             </div>
             <div class="clearfix mr-t1 check-clearance-date">
-                <mat-form-field appearance="fill" class="w-100" appearance="outline">
+                <giddh-datepicker
+                    [name]="'entryDate'"
+                    [placeholder]="giddhDateFormat"
+                    [cssClass]="'form-control voucher-date-field'"
+                    formControlName="chequeClearanceDate"
+                    [showToggleIcon]="false"
+                    (keydown.enter)="$event.preventDefault()"
+                   (dateSelected)="selectDate($event)"
+                    [appearance]="'outline'"
+                    [required]="true"
+                    [cssClass]="'w-100'"
+                >
+                </giddh-datepicker>
+                <!-- <mat-form-field appearance="fill" class="w-100" appearance="outline">
                     <mat-label>{{ localeData?.cheque_clearance_date }}</mat-label>
                     <input
                         matInput
@@ -384,7 +399,7 @@
                         [placeholder]="localeData?.cheque_clearance_date"
                         (keydown)="onCheckNumberFieldKeyDown($event, 'chqDate', chequeClearanceDateInput)"
                     />
-                </mat-form-field>
+                </mat-form-field> -->
                 <!-- <input-field
                         [name]="'account2'"
                         [placeholder]="localeData?.cheque_clearance_date"

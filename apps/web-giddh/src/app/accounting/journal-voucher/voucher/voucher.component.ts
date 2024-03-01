@@ -356,6 +356,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             chequeNumber: ['', [Validators.required]]
         });
 
+
         this.tallyModuleService.requestData.pipe(distinctUntilChanged((p, q) => {
             if (p && q) {
                 return (isEqual(p, q));
@@ -567,6 +568,11 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this.isSelectedRow = type;
         this.selectedIdx = index;
         this.showLedgerAccountList = false;
+    }
+
+    public activeRow(type: boolean, index: number): void {
+        this.isSelectedRow = type;
+        this.selectedIdx = index;
     }
 
     /**
@@ -931,8 +937,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      */
     public saveEntry(): any {
         let data = cloneDeep({ ...this.journalVoucherForm.value, ...this.chequeDetailForm.value });
-
-        data.chequeClearanceDate = (typeof this.chequeDetailForm.get('chequeClearanceDate').value === "object") ? dayjs(this.chequeDetailForm.get('chequeClearanceDate').value).format(GIDDH_DATE_FORMAT) : dayjs(this.chequeDetailForm.get('chequeClearanceDate').value, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+        console.log(this.chequeDetailForm.get('chequeClearanceDate').value);
         data.entryDate = (typeof this.journalVoucherForm.get('entryDate').value === "object") ? dayjs(this.journalVoucherForm.get('entryDate').value).format(GIDDH_DATE_FORMAT) : dayjs(this.journalVoucherForm.get('entryDate').value, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
 
         data.transactions = this.validateTransaction(data.transactions);
@@ -1066,24 +1071,28 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @memberof AccountAsVoucherComponent
      */
     public validateForContraEntry(data: any): boolean {
-        const byAccounts = data.transactions?.filter(acc => acc.type === 'by');
-        const toAccounts = data.transactions?.filter(acc => acc.type === 'to');
+        if (data.voucherType === 'contra') {
+            const byAccounts = data.transactions?.filter(acc => acc.type === 'by');
+            const toAccounts = data.transactions?.filter(acc => acc.type === 'to');
 
-        let isValid = false;
+            let isValid = false;
 
-        isValid = byAccounts?.some(acc => {
-            const indexOfAccountParentGroups = acc.selectedAccount?.parentGroups?.findIndex(pg => ['bankaccounts', 'cash', 'loanandoverdraft'].includes(pg?.uniqueName));
-            return indexOfAccountParentGroups !== -1;
-        });
-
-        if (!isValid) {
-            isValid = toAccounts?.some(acc => {
+            isValid = byAccounts?.some(acc => {
                 const indexOfAccountParentGroups = acc.selectedAccount?.parentGroups?.findIndex(pg => ['bankaccounts', 'cash', 'loanandoverdraft'].includes(pg?.uniqueName));
                 return indexOfAccountParentGroups !== -1;
             });
-        }
 
-        return isValid;
+            if (!isValid) {
+                isValid = toAccounts?.some(acc => {
+                    const indexOfAccountParentGroups = acc.selectedAccount?.parentGroups?.findIndex(pg => ['bankaccounts', 'cash', 'loanandoverdraft'].includes(pg?.uniqueName));
+                    return indexOfAccountParentGroups !== -1;
+                });
+            }
+
+            return isValid;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -1340,10 +1349,30 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @memberof AccountAsVoucherComponent
      */
     public dateEntered(): void {
+        console.log(this.journalVoucherForm.get('entryDate').value);
+
         const date = (typeof this.journalVoucherForm.get('entryDate').value === "object") ? dayjs(this.journalVoucherForm.get('entryDate').value).format("dddd")
             : dayjs(this.journalVoucherForm.get('entryDate').value, GIDDH_DATE_FORMAT).format("dddd");
         this.displayDay = (date !== 'Invalid date') ? date : '';
         this.changeDetectionRef.detectChanges();
+    }
+
+
+    /**
+     * This will be use for select date
+     *
+     * @param {*} date
+     * @param {*} dateField
+     * @memberof AccountAsVoucherComponent
+     */
+    public selectDate(date: any, dateField: any): void {
+        console.log(date);
+        if (date) {
+            let formatDate = dayjs(date).format(GIDDH_DATE_FORMAT);
+            if (dateField === 'dateOfSupply') {
+                this.chequeDetailForm.get('chequeClearanceDate').patchValue(formatDate);
+            }
+        }
     }
 
     /**

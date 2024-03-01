@@ -88,7 +88,7 @@
     width: 100%;
     font-size: var(--font-size-15);
     border-color: var(--color-table-primary-content-bar-border);
-    margin-bottom: 5px;
+    margin-bottom: 3px;
 }
 
 .custom-border {
@@ -98,7 +98,7 @@
 .total-box>span {
     margin: 0 8px;
     display: inline-block;
-    min-width: 120px;
+    min-width: 88px;
 }
 
 .appearance-none {
@@ -183,6 +183,7 @@ input[name="entryDate"] {
     .form-control {
         border: none;
         background: transparent !important;
+        width: 50%;
     }
 }
 
