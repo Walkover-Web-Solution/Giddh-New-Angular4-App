@@ -267,6 +267,7 @@ export class TallyModuleService {
 
     public getAccounts() {
         let accounts = [];
+        console.log(this.selectedPageInfo?.value, this.selectedPageInfo?.value.page);
         if (this.selectedPageInfo?.value) {
             switch (this.selectedPageInfo?.value.page) {
                 case 'Journal':
@@ -320,12 +321,12 @@ export class TallyModuleService {
                         accounts = this.expenseAccounts?.value;
                     }
                     break;
-                case 'Payment':
+                case 'payment':
                     accounts = this.flattenAccounts?.value;
                     break;
-                case 'Receipt':
+                case 'receipt':
                     accounts = this.flattenAccounts?.value;
-                case 'Contra':
+                case 'contra':
                     accounts = (this.cashAccounts?.value) ? this.cashAccounts.value.concat(this.bankAccounts?.value) : this.bankAccounts?.value;
                     break;
                 default:

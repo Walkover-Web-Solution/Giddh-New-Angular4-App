@@ -14,6 +14,7 @@
                 >
                     <span>{{ displayDay }},</span>
                     <input
+                        name="entryDate"
                         size="10"
                         type="text"
                         #dateField
@@ -57,6 +58,7 @@
                                 <ng-container [formGroupName]="i">
                                     <tr>
                                         <td
+                                            class="voucher-type"
                                             [style.width.px]="40"
                                             [ngClass]="{
                                                 'active-row':
@@ -81,6 +83,7 @@
                                             ></text-field>
                                         </td>
                                         <td
+                                            class="particular-account"
                                             [ngClass]="{
                                                 'active-row':
                                                     (isSelectedRow && selectedIdx === i) ||
@@ -114,6 +117,7 @@
                                             ></text-field>
                                         </td>
                                         <td
+                                            class="amount1"
                                             [ngClass]="{
                                                 'active-row':
                                                     (isSelectedRow && selectedIdx === i) ||
@@ -150,6 +154,7 @@
                                             ></text-field>
                                         </td>
                                         <td
+                                            class="amount2"
                                             [ngClass]="{
                                                 'active-row':
                                                     (isSelectedRow && selectedIdx === i) ||
@@ -221,7 +226,7 @@
             </div>
 
             <div class="clearfix row">
-                <div class="col-xs-8 col-sm-8">
+                <div class="col-xs-10 col-sm-10">
                     <div class="form-group custom-textarea">
                         <label>{{ localeData?.narration }}:</label>
                         <textarea
@@ -237,7 +242,7 @@
                     </div>
                 </div>
 
-                <div class="col-xs-4 col-sm-4">
+                <div class="col-xs-2 col-sm-2">
                     <div [hidden]="!showConfirmationBox" class="confirmation-box bdr text-center pd-2">
                         <div>
                             <h1>{{ localeData?.accept }}</h1>
@@ -332,7 +337,7 @@
             aria-hidden="true"
             class="close"
             [attr.aria-label]="commonLocaleData?.app_close"
-            (click)="closeAllDialogs()"
+            (click)="closeChequeDetailForm()"
         >
             ×
         </button>
@@ -371,7 +376,7 @@
                         #chequeClearanceInputField
                         #chequeClearanceDateInput="bsDatepicker"
                         bsDatepicker
-                        [bsConfig]="bsConfig"
+                        [bsConfig]="{ dateInputFormat: giddhDateFormat }"
                         class="form-control"
                         formControlName="chequeClearanceDate"
                         name="account"
