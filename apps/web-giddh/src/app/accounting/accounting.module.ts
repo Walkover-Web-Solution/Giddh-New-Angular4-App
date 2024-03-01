@@ -31,6 +31,12 @@ import { OnReturnDirective } from './keyboard.directive';
 import { AVShSelectModule } from './ng-virtual-list/virtual-list.module';
 import { TallyModuleService } from './tally-service';
 import { VoucherGridComponent } from './voucher-grid/voucher-grid.component';
+import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
+import { MatInputModule } from '@angular/material/input';
+import { A11yModule } from '@angular/cdk/a11y';
+import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicker.module';
 
 @NgModule({
     declarations: [
@@ -69,6 +75,13 @@ import { VoucherGridComponent } from './voucher-grid/voucher-grid.component';
         QuickAccountModule,
         InventoryModule,
         NgxMaskModule.forRoot(),
+        FormsModule,
+        FormFieldsModule,
+        MatDialogModule,
+        MatButtonModule,
+        MatInputModule,
+        A11yModule,
+        GiddhDatepickerModule
     ],
 })
 export class AccountingModule {

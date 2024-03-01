@@ -30,11 +30,13 @@
                     </div>
                 </ng-container>
                 <!--endregion-->
-                <div class="vouchers-content-wrapper"
-                    [hidden]="(isUpdateMode && isUpdateDataInProcess) || (isLastInvoiceCopied && isUpdateDataInProcess)">
-                    <div class="font-15 mr-l1 mb-4" *ngIf="isEinvoiceGenerated">{{
-                        commonLocaleData?.app_special_note
-                        }}</div>
+                <div
+                    class="vouchers-content-wrapper"
+                    [hidden]="(isUpdateMode && isUpdateDataInProcess) || (isLastInvoiceCopied && isUpdateDataInProcess)"
+                >
+                    <div class="font-15 mr-l1 mb-4" *ngIf="isEinvoiceGenerated">
+                        {{ commonLocaleData?.app_special_note }}
+                    </div>
                     <form autocomplete="off" novalidate name="invoiceForm">
                         <!-- Voucher Form Top Section -->
                         <div class="vouchers-primary-form">
@@ -674,20 +676,20 @@
                                             <span *ngIf="!isCashInvoice">
                                                 {{ localeData?.shipping_address }}
                                                 <span
-                                                *ngIf="
-                                                (invFormData.accountDetails.shippingDetails?.gstNumber ||
-                                                    invFormData.accountDetails.shippingDetails?.taxNumber ||
-                                                    invFormData.accountDetails.shippingDetails?.stateName ||
-                                                    invFormData.accountDetails.shippingDetails?.state?.name ||
-                                                    invFormData.accountDetails.shippingDetails?.state?.code ||
-                                                    invFormData.accountDetails.shippingDetails?.county?.name ||
-                                                    invFormData.accountDetails.shippingDetails?.county?.code ||
-                                                    invFormData.accountDetails.shippingDetails?.stateCode ||
-                                                    invFormData.accountDetails.shippingDetails?.address[0]) &&
-                                                accountAddressList?.length
-                                            ">(
-                                                    {{
-                                                    commonLocaleData?.app_address }}
+                                                    *ngIf="
+                                                        (invFormData.accountDetails.shippingDetails?.gstNumber ||
+                                                            invFormData.accountDetails.shippingDetails?.taxNumber ||
+                                                            invFormData.accountDetails.shippingDetails?.stateName ||
+                                                            invFormData.accountDetails.shippingDetails?.state?.name ||
+                                                            invFormData.accountDetails.shippingDetails?.state?.code ||
+                                                            invFormData.accountDetails.shippingDetails?.county?.name ||
+                                                            invFormData.accountDetails.shippingDetails?.county?.code ||
+                                                            invFormData.accountDetails.shippingDetails?.stateCode ||
+                                                            invFormData.accountDetails.shippingDetails?.address[0]) &&
+                                                        accountAddressList?.length
+                                                    "
+                                                    >(
+                                                    {{ commonLocaleData?.app_address }}
                                                     {{ accountShippingIndex }} )
                                                 </span>
                                             </span>
@@ -749,16 +751,65 @@
                                                                                       : showTRNNo
                                                                                       ? commonLocaleData?.app_trn + ":"
                                                                                       : showVATNo
-                                                                                      ? commonLocaleData?.app_vat +
-                                                                                        ":"
+                                                                                      ? commonLocaleData?.app_vat + ":"
                                                                                       : "") + address.gstNumber
                                                                                 : ""
                                                                         }}
                                                                     </p>
                                                                 </div>
-                                                                <i class="icon-tick" onLoad
-                                                                    (elementLoaded)="setIndex('accountShipping',i)"
-                                                                    *ngIf="(invFormData.accountDetails.shippingDetails?.state?.name || invFormData.accountDetails.shippingDetails?.stateName || invFormData.accountDetails.shippingDetails?.county?.name || invFormData.accountDetails.shippingDetails?.gstNumber || invFormData.accountDetails.shippingDetails?.taxNumber || invFormData.accountDetails.shippingDetails?.address[0]?.trim()) && (!invFormData.accountDetails.shippingDetails?.state?.name || (invFormData.accountDetails.shippingDetails?.state?.name && (invFormData.accountDetails.shippingDetails?.state?.name === address.state?.name || invFormData.accountDetails.shippingDetails?.stateName === address.state?.name))) && (!invFormData.accountDetails.shippingDetails?.county?.name || (invFormData.accountDetails.shippingDetails?.county?.name && (invFormData.accountDetails.shippingDetails?.county?.name === address.county?.name))) && (!invFormData.accountDetails.shippingDetails?.gstNumber || (invFormData.accountDetails.shippingDetails?.gstNumber && invFormData.accountDetails.shippingDetails?.gstNumber === address.gstNumber)) && (!invFormData.accountDetails.shippingDetails?.taxNumber || (invFormData.accountDetails.shippingDetails?.taxNumber && invFormData.accountDetails.shippingDetails?.taxNumber === address.gstNumber)) && (!invFormData.accountDetails.shippingDetails?.address[0]?.trim() || (invFormData.accountDetails.shippingDetails?.address[0]?.trim() && (invFormData.accountDetails.shippingDetails?.address[0]?.trim() === address.address?.trim())))"></i>
+                                                                <i
+                                                                    class="icon-tick"
+                                                                    onLoad
+                                                                    (elementLoaded)="setIndex('accountShipping', i)"
+                                                                    *ngIf="
+                                                                        (invFormData.accountDetails.shippingDetails
+                                                                            ?.state?.name ||
+                                                                            invFormData.accountDetails.shippingDetails
+                                                                                ?.stateName ||
+                                                                            invFormData.accountDetails.shippingDetails
+                                                                                ?.county?.name ||
+                                                                            invFormData.accountDetails.shippingDetails
+                                                                                ?.gstNumber ||
+                                                                            invFormData.accountDetails.shippingDetails
+                                                                                ?.taxNumber ||
+                                                                            invFormData.accountDetails.shippingDetails?.address[0]?.trim()) &&
+                                                                        (!invFormData.accountDetails.shippingDetails
+                                                                            ?.state?.name ||
+                                                                            (invFormData.accountDetails.shippingDetails
+                                                                                ?.state?.name &&
+                                                                                (invFormData.accountDetails
+                                                                                    .shippingDetails?.state?.name ===
+                                                                                    address.state?.name ||
+                                                                                    invFormData.accountDetails
+                                                                                        .shippingDetails?.stateName ===
+                                                                                        address.state?.name))) &&
+                                                                        (!invFormData.accountDetails.shippingDetails
+                                                                            ?.county?.name ||
+                                                                            (invFormData.accountDetails.shippingDetails
+                                                                                ?.county?.name &&
+                                                                                invFormData.accountDetails
+                                                                                    .shippingDetails?.county?.name ===
+                                                                                    address.county?.name)) &&
+                                                                        (!invFormData.accountDetails.shippingDetails
+                                                                            ?.gstNumber ||
+                                                                            (invFormData.accountDetails.shippingDetails
+                                                                                ?.gstNumber &&
+                                                                                invFormData.accountDetails
+                                                                                    .shippingDetails?.gstNumber ===
+                                                                                    address.gstNumber)) &&
+                                                                        (!invFormData.accountDetails.shippingDetails
+                                                                            ?.taxNumber ||
+                                                                            (invFormData.accountDetails.shippingDetails
+                                                                                ?.taxNumber &&
+                                                                                invFormData.accountDetails
+                                                                                    .shippingDetails?.taxNumber ===
+                                                                                    address.gstNumber)) &&
+                                                                        (!invFormData.accountDetails.shippingDetails?.address[0]?.trim() ||
+                                                                            (invFormData.accountDetails.shippingDetails?.address[0]?.trim() &&
+                                                                                invFormData.accountDetails.shippingDetails?.address[0]?.trim() ===
+                                                                                    address.address?.trim()))
+                                                                    "
+                                                                ></i>
                                                             </div>
                                                         </button>
                                                         <mat-divider></mat-divider>
@@ -972,7 +1023,8 @@
                                                         purchaseBillCompany.billingDetails.state?.code ||
                                                         purchaseBillCompany.billingDetails.county?.name ||
                                                         purchaseBillCompany.billingDetails.county?.code ||
-                                                        purchaseBillCompany.billingDetails.stateCode || purchaseBillCompany.billingDetails.address[0]) &&
+                                                        purchaseBillCompany.billingDetails.stateCode ||
+                                                        purchaseBillCompany.billingDetails.address[0]) &&
                                                     companyAddressList?.length
                                                 "
                                             >
@@ -1046,7 +1098,7 @@
                                                                     }}
                                                                 </p>
                                                             </div>
-                                                              <i
+                                                            <i
                                                                 class="icon-tick"
                                                                 onLoad
                                                                 (elementLoaded)="setIndex('purchaseBilling', i)"
@@ -1102,9 +1154,16 @@
                                     <div class="col-6">
                                         {{ localeData?.shipping_address }}
                                         <span
-                                            *ngIf="purchaseBillCompany.shippingDetails?.gstNumber || purchaseBillCompany.shippingDetails?.taxNumber || purchaseBillCompany.shippingDetails?.stateName  || purchaseBillCompany.shippingDetails?.state?.name  || purchaseBillCompany.shippingDetails?.state?.code || purchaseBillCompany.shippingDetails?.stateCode">(
-                                            {{
-                                            commonLocaleData?.app_address }}
+                                            *ngIf="
+                                                purchaseBillCompany.shippingDetails?.gstNumber ||
+                                                purchaseBillCompany.shippingDetails?.taxNumber ||
+                                                purchaseBillCompany.shippingDetails?.stateName ||
+                                                purchaseBillCompany.shippingDetails?.state?.name ||
+                                                purchaseBillCompany.shippingDetails?.state?.code ||
+                                                purchaseBillCompany.shippingDetails?.stateCode
+                                            "
+                                            >(
+                                            {{ commonLocaleData?.app_address }}
                                             {{ purchaseShippingIndex }} )
                                         </span>
                                         <ng-container>
@@ -1164,8 +1223,7 @@
                                                                                       : showTRNNo
                                                                                       ? commonLocaleData?.app_trn + ":"
                                                                                       : showVATNo
-                                                                                      ? commonLocaleData?.app_vat +
-                                                                                        ":"
+                                                                                      ? commonLocaleData?.app_vat + ":"
                                                                                       : "") + address.gstNumber
                                                                                 : ""
                                                                         }}
@@ -1179,16 +1237,69 @@
                                                                                       : showTRNNo
                                                                                       ? commonLocaleData?.app_trn + ":"
                                                                                       : showVATNo
-                                                                                      ? commonLocaleData?.app_vat +
-                                                                                        ":"
+                                                                                      ? commonLocaleData?.app_vat + ":"
                                                                                       : "") + address.taxNumber
                                                                                 : ""
                                                                         }}
                                                                     </p>
                                                                 </div>
-                                                                <i class="icon-tick" onLoad
-                                                                    (elementLoaded)="setIndex('purchaseShipping',i)"
-                                                                    *ngIf="(purchaseBillCompany.shippingDetails?.state?.name || purchaseBillCompany.shippingDetails?.stateName || purchaseBillCompany.shippingDetails?.county?.name || purchaseBillCompany.shippingDetails?.gstNumber || purchaseBillCompany.shippingDetails?.taxNumber || purchaseBillCompany.shippingDetails?.address[0]?.trim()) && (!purchaseBillCompany.shippingDetails?.state?.name || (purchaseBillCompany.shippingDetails?.state?.name && (purchaseBillCompany.shippingDetails?.state?.name === address.stateName || purchaseBillCompany.shippingDetails?.stateName === address.stateName))) && (!purchaseBillCompany.shippingDetails?.county?.name || (purchaseBillCompany.shippingDetails?.county?.name && (purchaseBillCompany.shippingDetails?.county?.name === address.county?.name))) && (!purchaseBillCompany.shippingDetails?.gstNumber || (purchaseBillCompany.shippingDetails?.gstNumber && (purchaseBillCompany.shippingDetails?.gstNumber === address.gstNumber || purchaseBillCompany.shippingDetails?.gstNumber === address.taxNumber))) && (!purchaseBillCompany.shippingDetails?.taxNumber || (purchaseBillCompany.shippingDetails?.taxNumber && (purchaseBillCompany.shippingDetails?.taxNumber === address.gstNumber || purchaseBillCompany.shippingDetails?.taxNumber === address.taxNumber))) && (!purchaseBillCompany.shippingDetails?.address[0]?.trim() || (purchaseBillCompany.shippingDetails?.address[0]?.trim() && (purchaseBillCompany.shippingDetails?.address[0]?.trim() === address.address?.trim())))"></i>
+                                                                <i
+                                                                    class="icon-tick"
+                                                                    onLoad
+                                                                    (elementLoaded)="setIndex('purchaseShipping', i)"
+                                                                    *ngIf="
+                                                                        (purchaseBillCompany.shippingDetails?.state
+                                                                            ?.name ||
+                                                                            purchaseBillCompany.shippingDetails
+                                                                                ?.stateName ||
+                                                                            purchaseBillCompany.shippingDetails?.county
+                                                                                ?.name ||
+                                                                            purchaseBillCompany.shippingDetails
+                                                                                ?.gstNumber ||
+                                                                            purchaseBillCompany.shippingDetails
+                                                                                ?.taxNumber ||
+                                                                            purchaseBillCompany.shippingDetails?.address[0]?.trim()) &&
+                                                                        (!purchaseBillCompany.shippingDetails?.state
+                                                                            ?.name ||
+                                                                            (purchaseBillCompany.shippingDetails?.state
+                                                                                ?.name &&
+                                                                                (purchaseBillCompany.shippingDetails
+                                                                                    ?.state?.name ===
+                                                                                    address.stateName ||
+                                                                                    purchaseBillCompany.shippingDetails
+                                                                                        ?.stateName ===
+                                                                                        address.stateName))) &&
+                                                                        (!purchaseBillCompany.shippingDetails?.county
+                                                                            ?.name ||
+                                                                            (purchaseBillCompany.shippingDetails?.county
+                                                                                ?.name &&
+                                                                                purchaseBillCompany.shippingDetails
+                                                                                    ?.county?.name ===
+                                                                                    address.county?.name)) &&
+                                                                        (!purchaseBillCompany.shippingDetails
+                                                                            ?.gstNumber ||
+                                                                            (purchaseBillCompany.shippingDetails
+                                                                                ?.gstNumber &&
+                                                                                (purchaseBillCompany.shippingDetails
+                                                                                    ?.gstNumber === address.gstNumber ||
+                                                                                    purchaseBillCompany.shippingDetails
+                                                                                        ?.gstNumber ===
+                                                                                        address.taxNumber))) &&
+                                                                        (!purchaseBillCompany.shippingDetails
+                                                                            ?.taxNumber ||
+                                                                            (purchaseBillCompany.shippingDetails
+                                                                                ?.taxNumber &&
+                                                                                (purchaseBillCompany.shippingDetails
+                                                                                    ?.taxNumber === address.gstNumber ||
+                                                                                    purchaseBillCompany.shippingDetails
+                                                                                        ?.taxNumber ===
+                                                                                        address.taxNumber))) &&
+                                                                        (!purchaseBillCompany.shippingDetails?.address[0]?.trim() ||
+                                                                            (purchaseBillCompany.shippingDetails?.address[0]?.trim() &&
+                                                                                purchaseBillCompany.shippingDetails?.address[0]?.trim() ===
+                                                                                    address.address?.trim()))
+                                                                    "
+                                                                ></i>
                                                             </div>
                                                         </button>
                                                         <mat-divider></mat-divider>
@@ -1620,9 +1731,26 @@
                                         <thead>
                                             <tr>
                                                 <ng-container *ngFor="let item of theadArrReadOnly">
-                                                    <th *ngIf="item.label !== commonLocaleData?.app_tax || (item.label === commonLocaleData?.app_tax && showHideTaxColumn)" [hidden]="!item.display" class="thead-sales-invoice" [ngClass]="{ 'd-none' :  ((commonLocaleData?.app_quantity_unit === item?.label) || (commonLocaleData?.app_rate === item?.label)) && !hasStock }">
+                                                    <th
+                                                        *ngIf="
+                                                            item.label !== commonLocaleData?.app_tax ||
+                                                            (item.label === commonLocaleData?.app_tax &&
+                                                                showHideTaxColumn)
+                                                        "
+                                                        [hidden]="!item.display"
+                                                        class="thead-sales-invoice"
+                                                        [ngClass]="{
+                                                            'd-none':
+                                                                (commonLocaleData?.app_quantity_unit === item?.label ||
+                                                                    commonLocaleData?.app_rate === item?.label) &&
+                                                                !hasStock
+                                                        }"
+                                                    >
                                                         {{ item?.label }}
-                                                        <span *ngIf="item.label === commonLocaleData?.app_tax && isRcmEntry"
+                                                        <span
+                                                            *ngIf="
+                                                                item.label === commonLocaleData?.app_tax && isRcmEntry
+                                                            "
                                                             >({{ commonLocaleData?.app_rcm }})<sup
                                                                 class="mandatory-asterisk"
                                                                 >*</sup
@@ -1658,7 +1786,8 @@
                                                 class="entries-tr set-active"
                                                 [ngClass]="{
                                                     'is-other-tax': entry.isOtherTaxApplicable && isMulticurrencyAccount
-                                                }">
+                                                }"
+                                            >
                                                 <td class="text-left product-column" [width]="hasStock ? '20%' : '25%'">
                                                     <div class="product-name">
                                                         <label
@@ -1690,8 +1819,10 @@
                                                                     {{ entry?.entryDate }}
                                                                 </div>
                                                             </div>
-                                                            <div class="col-6 col-sm-6 px-0"
-                                                                *ngIf="transaction.hsnNumber || transaction.sacNumber">
+                                                            <div
+                                                                class="col-6 col-sm-6 px-0"
+                                                                *ngIf="transaction.hsnNumber || transaction.sacNumber"
+                                                            >
                                                                 <div class="hsn-code text-right">
                                                                     <label class="font-12 w-100 d-block"
                                                                         >{{
@@ -1716,12 +1847,16 @@
                                                     <div class="description">
                                                         {{ transaction.description }}
                                                     </div>
-                                                     <p class="font-14 text-muted sku-and-custom-fields"
-                                                        *ngIf="transaction.sku_and_customfields">
+                                                    <p
+                                                        class="font-14 text-muted sku-and-custom-fields"
+                                                        *ngIf="transaction.sku_and_customfields"
+                                                    >
                                                         {{ transaction.sku_and_customfields }}
                                                     </p>
                                                 </td>
-                                                <td width="10%" *ngIf="
+                                                <td
+                                                    width="10%"
+                                                    *ngIf="
                                                         !currentVoucherFormDetails ||
                                                         currentVoucherFormDetails?.quantityAllowed
                                                     "
@@ -1732,7 +1867,9 @@
                                                         {{ transaction.stockUnitCode }}
                                                     </div>
                                                 </td>
-                                                <td width="10%" *ngIf="
+                                                <td
+                                                    width="10%"
+                                                    *ngIf="
                                                         !currentVoucherFormDetails ||
                                                         currentVoucherFormDetails?.rateAllowed
                                                     "
@@ -1821,7 +1958,9 @@
                                                         </span>
                                                     </div>
                                                 </td>
-                                                <td [width]="hasStock ? '9%' : '14%'" *ngIf="
+                                                <td
+                                                    [width]="hasStock ? '9%' : '14%'"
+                                                    *ngIf="
                                                         !currentVoucherFormDetails ||
                                                         currentVoucherFormDetails?.discountAllowed
                                                     "
@@ -1864,10 +2003,14 @@
                                                         </span>
                                                     </div>
                                                 </td>
-                                                <td [class.error-box]="transaction.requiredTax" [width]="hasStock ? '10%' : '14%'"
-                                                    (focus)="transaction.requiredTax = false" *ngIf="
+                                                <td
+                                                    [class.error-box]="transaction.requiredTax"
+                                                    [width]="hasStock ? '10%' : '14%'"
+                                                    (focus)="transaction.requiredTax = false"
+                                                    *ngIf="
                                                         (!currentVoucherFormDetails ||
-                                                        currentVoucherFormDetails?.taxesAllowed) && this.showHideTaxColumn
+                                                            currentVoucherFormDetails?.taxesAllowed) &&
+                                                        this.showHideTaxColumn
                                                     "
                                                 >
                                                     <div class="td-wrapper">
@@ -1913,8 +2056,10 @@
                                                         </span>
                                                     </div>
                                                 </td>
-                                                <td width="16%"
-                                                    class="text-right item-tax position-relative delete-btn-absolute">
+                                                <td
+                                                    width="16%"
+                                                    class="text-right item-tax position-relative delete-btn-absolute"
+                                                >
                                                     <div class="td-wrapper">
                                                         <div class="flex-fill">
                                                             <div class="wrap-td-data">
@@ -2026,10 +2171,16 @@
                                                 </td>
                                             </tr>
 
-                                            <tr *ngIf="activeIndx === entryIdx" class="entries-tr default-active"
-                                                (click)="$event.stopPropagation()">
-                                                <td class="text-left product-column" [width]="hasStock ? '20%' : '25%'"
-                                                    (click)="closeDiscountPopup(); closeTaxControlPopup()">
+                                            <tr
+                                                *ngIf="activeIndx === entryIdx"
+                                                class="entries-tr default-active"
+                                                (click)="$event.stopPropagation()"
+                                            >
+                                                <td
+                                                    class="text-left product-column"
+                                                    [width]="hasStock ? '20%' : '25%'"
+                                                    (click)="closeDiscountPopup(); closeTaxControlPopup()"
+                                                >
                                                     <div class="product-name">
                                                         <div class="ng-select-wrap" (click)="setUserManuallyClicked()">
                                                             <select-field
@@ -2069,8 +2220,11 @@
                                                                 (dynamicSearchedQuery)="
                                                                     isAccountSearchData = true;
                                                                     onSearchQueryChanged($event, 1, 'item')
-                                                                " (onClear)="onClearSalesAccount(transaction)"
-                                                                [hasMoreValue]="true" [readonly]="isEinvoiceGenerated">
+                                                                "
+                                                                (onClear)="onClearSalesAccount(transaction)"
+                                                                [hasMoreValue]="true"
+                                                                [readonly]="isEinvoiceGenerated"
+                                                            >
                                                                 <ng-template #optionTemplate let-option="option">
                                                                     <ng-container *ngIf="!option.additional?.stock">
                                                                         <a
@@ -2246,8 +2400,9 @@
                                                                                     {{ commonLocaleData?.app_sac_code }}
                                                                                 </mat-radio-button>
                                                                             </mat-radio-group>
-                                                                            <text-field [type]="'text'"
-                                                                            [cssClass]="'form-control hsn-sac-code'"
+                                                                            <text-field
+                                                                                [type]="'text'"
+                                                                                [cssClass]="'form-control hsn-sac-code'"
                                                                                 maxLength="10"
                                                                                 [allowDecimalDigitsOnly]="true"
                                                                                 [placeholder]="localeData?.hsn_number"
@@ -2256,10 +2411,13 @@
                                                                                 "
                                                                                 *ngIf="
                                                                                     transaction.showCodeType === 'hsn'
-                                                                                " [(ngModel)]="transaction.hsnNumber"
-                                                                                [readonly]="isEinvoiceGenerated"></text-field>
-                                                                            <text-field [type]="'text'"
-                                                                            [cssClass]="'form-control hsn-sac-code'"
+                                                                                "
+                                                                                [(ngModel)]="transaction.hsnNumber"
+                                                                                [readonly]="isEinvoiceGenerated"
+                                                                            ></text-field>
+                                                                            <text-field
+                                                                                [type]="'text'"
+                                                                                [cssClass]="'form-control hsn-sac-code'"
                                                                                 maxLength="10"
                                                                                 [allowDecimalDigitsOnly]="true"
                                                                                 [placeholder]="localeData?.sac_number"
@@ -2306,39 +2464,55 @@
                                                         <!-- endregion -->
                                                     </div>
                                                 </td>
-                                                <td class="text-left"  [width]="hasStock ? '15%' : '17%'"
-                                                (click)="closeDiscountPopup(); closeTaxControlPopup()">
-                                                <div *ngIf="transaction.fakeAccForSelect2">
-                                                    <div class="description">
-                                                        <textarea matInput type="text" rows="2"
-                                                            [placeholder]="localeData?.add_description"
-                                                            name="transaction.description_'+entryIdx"
-                                                            class="form-control mt-2"
-                                                            [(ngModel)]="transaction.description"
-                                                            [maxlength]="entryDescriptionLength"
-                                                            #description></textarea>
-                                                        <p class="font-12 mt-1">
-                                                            {{ commonLocaleData?.app_characters_left }}:
-                                                            {{
-                                                            entryDescriptionLength -
-                                                            transaction.description?.length
-                                                            }}
-                                                        </p>
-                                                        <p class="font-14 text-muted sku-and-custom-fields"
-                                                            *ngIf="transaction.sku_and_customfields">
-                                                            {{ transaction.sku_and_customfields }}
-                                                        </p>
+                                                <td
+                                                    class="text-left"
+                                                    [width]="hasStock ? '15%' : '17%'"
+                                                    (click)="closeDiscountPopup(); closeTaxControlPopup()"
+                                                >
+                                                    <div *ngIf="transaction.fakeAccForSelect2">
+                                                        <div class="description">
+                                                            <textarea
+                                                                matInput
+                                                                type="text"
+                                                                rows="2"
+                                                                [placeholder]="localeData?.add_description"
+                                                                name="transaction.description_'+entryIdx"
+                                                                class="form-control mt-2"
+                                                                [(ngModel)]="transaction.description"
+                                                                [maxlength]="entryDescriptionLength"
+                                                                #description
+                                                            ></textarea>
+                                                            <p class="font-12 mt-1">
+                                                                {{ commonLocaleData?.app_characters_left }}:
+                                                                {{
+                                                                    entryDescriptionLength -
+                                                                        transaction.description?.length
+                                                                }}
+                                                            </p>
+                                                            <p
+                                                                class="font-14 text-muted sku-and-custom-fields"
+                                                                *ngIf="transaction.sku_and_customfields"
+                                                            >
+                                                                {{ transaction.sku_and_customfields }}
+                                                            </p>
+                                                        </div>
+                                                        <!-- region entry date/ hsncode -->
                                                     </div>
-                                                    <!-- region entry date/ hsncode -->
-                                                </div>
                                                 </td>
-                                                <td (click)="closeDiscountPopup(); closeTaxControlPopup()" 
+                                                <td
+                                                    (click)="closeDiscountPopup(); closeTaxControlPopup()"
                                                     *ngIf="
-                                                        (!currentVoucherFormDetails ||
-                                                        currentVoucherFormDetails?.quantityAllowed)
-                                                    " width="10%" [ngClass]="{ 'd-none' : !hasStock}">
-                                                    <ng-container *ngIf="!(!transaction.isStockTxn || isEinvoiceGenerated)">
-                                                        <text-field [placeholder]="commonLocaleData?.app_quantity"
+                                                        !currentVoucherFormDetails ||
+                                                        currentVoucherFormDetails?.quantityAllowed
+                                                    "
+                                                    width="10%"
+                                                    [ngClass]="{ 'd-none': !hasStock }"
+                                                >
+                                                    <ng-container
+                                                        *ngIf="!(!transaction.isStockTxn || isEinvoiceGenerated)"
+                                                    >
+                                                        <text-field
+                                                            [placeholder]="commonLocaleData?.app_quantity"
                                                             [readonly]="!transaction.isStockTxn || isEinvoiceGenerated"
                                                             [type]="'text'"
                                                             [cssClass]="
@@ -2382,8 +2556,10 @@
                                                         </div>
                                                     </ng-container>
                                                 </td>
-                                                <td (click)="closeDiscountPopup(); closeTaxControlPopup()" width="10%" [ngClass]="{ 'd-none' : !hasStock}"
-                                                   
+                                                <td
+                                                    (click)="closeDiscountPopup(); closeTaxControlPopup()"
+                                                    width="10%"
+                                                    [ngClass]="{ 'd-none': !hasStock }"
                                                     *ngIf="
                                                         !currentVoucherFormDetails ||
                                                         currentVoucherFormDetails?.rateAllowed
@@ -2402,11 +2578,14 @@
                                                                 [type]="'text'"
                                                                 [cssClass]="
                                                                     'form-control mat-field-border transaction-rate text-right '
-                                                                " [name]="'transaction.rate_' + entryIdx"
+                                                                "
+                                                                [name]="'transaction.rate_' + entryIdx"
                                                                 [prefix]="invFormData.accountDetails.currencySymbol"
                                                                 [suffix]="selectedSuffixForCurrency"
-                                                                [mask]="inputMaskFormat" [useMask]="true"
-                                                                [(ngModel)]="transaction.rate" (change)="
+                                                                [mask]="inputMaskFormat"
+                                                                [useMask]="true"
+                                                                [(ngModel)]="transaction.rate"
+                                                                (change)="
                                                                     calculateStockEntryAmount(transaction);
                                                                     calculateWhenTrxAltered(entry, transaction)
                                                                 "
@@ -2431,32 +2610,34 @@
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <td (click)="closeDiscountPopup(); closeTaxControlPopup()" [width]="hasStock ? '10%' : '14%'"
-                                                   > 
+                                                <td
+                                                    (click)="closeDiscountPopup(); closeTaxControlPopup()"
+                                                    [width]="hasStock ? '10%' : '14%'"
+                                                >
                                                     <div class="td-wrapper">
                                                         <div class="flex-fill">
                                                             <text-field
-                                                            (click)="transactionAmountClicked(transaction)"
-                                                            [placeholder]="commonLocaleData?.app_amount"
-                                                            [type]="'text'"
-                                                            [cssClass]="'form-control mat-field-border text-right '"
-                                                            [name]="'transaction.amount_' + entryIdx"
-                                                            [prefix]="invFormData.accountDetails.currencySymbol"
-                                                            [suffix]="selectedSuffixForCurrency"
-                                                            [mask]="inputMaskFormat"
-                                                            [useMask]="true"
-                                                            [(ngModel)]="transaction.amount"
-                                                            (change)="
-                                                                calculateWhenTrxAltered(
-                                                                    entry,
-                                                                    transaction,
-                                                                    true,
-                                                                    $event
-                                                                )
-                                                            "
-                                                            [readonly]="isEinvoiceGenerated"
-                                                        >
-                                                        </text-field>
+                                                                (click)="transactionAmountClicked(transaction)"
+                                                                [placeholder]="commonLocaleData?.app_amount"
+                                                                [type]="'text'"
+                                                                [cssClass]="'form-control mat-field-border text-right '"
+                                                                [name]="'transaction.amount_' + entryIdx"
+                                                                [prefix]="invFormData.accountDetails.currencySymbol"
+                                                                [suffix]="selectedSuffixForCurrency"
+                                                                [mask]="inputMaskFormat"
+                                                                [useMask]="true"
+                                                                [(ngModel)]="transaction.amount"
+                                                                (change)="
+                                                                    calculateWhenTrxAltered(
+                                                                        entry,
+                                                                        transaction,
+                                                                        true,
+                                                                        $event
+                                                                    )
+                                                                "
+                                                                [readonly]="isEinvoiceGenerated"
+                                                            >
+                                                            </text-field>
                                                         </div>
                                                         <div class="differ-currency" *ngIf="isMulticurrencyAccount">
                                                             <span>
@@ -2470,7 +2651,9 @@
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <td (click)="closeTaxControlPopup()" [width]="hasStock ? '9%' : '14%'"
+                                                <td
+                                                    (click)="closeTaxControlPopup()"
+                                                    [width]="hasStock ? '9%' : '14%'"
                                                     *ngIf="
                                                         !currentVoucherFormDetails ||
                                                         currentVoucherFormDetails?.discountAllowed
@@ -2499,9 +2682,12 @@
                                                                         false,
                                                                         $event
                                                                     )
-                                                                " [maskInput]="inputMaskFormat" [prefixInput]="
+                                                                "
+                                                                [maskInput]="inputMaskFormat"
+                                                                [prefixInput]="
                                                                     invFormData.accountDetails.currencySymbol
-                                                                " [suffixInput]="selectedSuffixForCurrency"
+                                                                "
+                                                                [suffixInput]="selectedSuffixForCurrency"
                                                                 [commonLocaleData]="commonLocaleData"
                                                                 [readonly]="isEinvoiceGenerated"
                                                             >
@@ -2523,8 +2709,11 @@
                                                     (click)="closeDiscountPopup()"
                                                     *ngIf="
                                                         (!currentVoucherFormDetails ||
-                                                        currentVoucherFormDetails?.taxesAllowed) && this.showHideTaxColumn
-                                                    " [width]="hasStock ? '10%' : '14%'">
+                                                            currentVoucherFormDetails?.taxesAllowed) &&
+                                                        this.showHideTaxColumn
+                                                    "
+                                                    [width]="hasStock ? '10%' : '14%'"
+                                                >
                                                     <div class="td-wrapper">
                                                         <div class="text-right flex-fill">
                                                             <tax-control
@@ -2543,11 +2732,15 @@
                                                                 "
                                                                 (taxAmountSumEvent)="
                                                                     calculateWhenTrxAltered(entry, transaction)
-                                                                " (hideOtherPopups)="closeDiscountPopup()"
-                                                                [maskInput]="inputMaskFormat" [prefixInput]="
+                                                                "
+                                                                (hideOtherPopups)="closeDiscountPopup()"
+                                                                [maskInput]="inputMaskFormat"
+                                                                [prefixInput]="
                                                                     invFormData.accountDetails.currencySymbol
-                                                                " [suffixInput]="selectedSuffixForCurrency"
-                                                                [readonly]="isEinvoiceGenerated">
+                                                                "
+                                                                [suffixInput]="selectedSuffixForCurrency"
+                                                                [readonly]="isEinvoiceGenerated"
+                                                            >
                                                             </tax-control>
                                                         </div>
                                                         <div class="differ-currency" *ngIf="isMulticurrencyAccount">
@@ -2564,9 +2757,11 @@
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <td class="position-relative item-tax"
-                                                   
-                                                    (click)="closeDiscountPopup(); closeTaxControlPopup()" width="16%">
+                                                <td
+                                                    class="position-relative item-tax"
+                                                    (click)="closeDiscountPopup(); closeTaxControlPopup()"
+                                                    width="16%"
+                                                >
                                                     <div class="td-wrapper">
                                                         <div class="flex-fill">
                                                             <text-field
