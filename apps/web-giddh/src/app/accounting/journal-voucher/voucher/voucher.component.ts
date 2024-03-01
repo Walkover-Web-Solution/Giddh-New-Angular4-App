@@ -20,10 +20,10 @@ import { AbstractControl, FormArray, FormGroup, UntypedFormBuilder, UntypedFormG
 import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { TallyModuleService } from 'apps/web-giddh/src/app/accounting/tally-service';
-import { cloneDeep, forEach, isEqual, sumBy, filter, find, without, maxBy, findIndex } from 'apps/web-giddh/src/app/lodash-optimized';
+import { cloneDeep, isEqual, find, maxBy, findIndex } from 'apps/web-giddh/src/app/lodash-optimized';
 import * as dayjs from 'dayjs';
 import { BsDatepickerConfig, BsDatepickerDirective } from 'ngx-bootstrap/datepicker';
-import { ModalDirective, BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { ModalDirective, BsModalRef } from 'ngx-bootstrap/modal';
 import { combineLatest, Observable, ReplaySubject, of as observableOf, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { LedgerActions } from '../../../actions/ledger/ledger.actions';
@@ -39,12 +39,11 @@ import { KEYS } from '../journal-voucher.component';
 import { AdjustmentTypesEnum } from "../../../shared/helpers/adjustmentTypes";
 import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
 import { IForceClear } from '../../../models/api-models/Sales';
-import { PAGINATION_LIMIT, SubVoucher } from '../../../app.constant';
+import { PAGINATION_LIMIT } from '../../../app.constant';
 import { SearchService } from '../../../services/search.service';
 import { VOUCHERS } from '../../constants/accounting.constant';
 import { GeneralService } from '../../../services/general.service';
 import { MatDialog } from '@angular/material/dialog';
-import { clone } from 'chart.js/dist/helpers/helpers.core';
 
 const CustomShortcode = [
     { code: 'F9', route: 'purchase' }
@@ -375,8 +374,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             this.isLoading = (response) ? true : false;
         });
 
-        this.store.pipe(select(p => p?.ledger?.ledgerCreateSuccess), takeUntil(this.destroyed$)).subscribe((s: boolean) => {
-            if (s) {
+        this.store.pipe(select(p => p?.ledger?.ledgerCreateSuccess), takeUntil(this.destroyed$)).subscribe((response: boolean) => {
+            if (response) {
+                this.activeRow(true, 0);
                 this._toaster.successToast(this.localeData?.entry_created, this.commonLocaleData?.app_success);
                 this.refreshEntry();
                 this.store.dispatch(this._ledgerActions.ResetLedger());
@@ -568,6 +568,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this.isSelectedRow = type;
         this.selectedIdx = index;
         this.showLedgerAccountList = false;
+        this.changeDetectionRef.detectChanges();
     }
 
     public activeRow(type: boolean, index: number): void {
@@ -858,7 +859,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @param {number} indx
      * @memberof AccountAsVoucherComponent
      */
-    public calculateAmount(amount: any, transactionObj: any, indx: number) {
+    public calculateAmount(amount: any, transactionObj: any, indx: number): any {
         let lastIndx = (this.journalVoucherForm.get('transactions') as FormArray).length - 1;
 
         // Update amount in transaction object
@@ -937,7 +938,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      */
     public saveEntry(): any {
         let data = cloneDeep({ ...this.journalVoucherForm.value, ...this.chequeDetailForm.value });
-        console.log(this.chequeDetailForm.get('chequeClearanceDate').value);
         data.entryDate = (typeof this.journalVoucherForm.get('entryDate').value === "object") ? dayjs(this.journalVoucherForm.get('entryDate').value).format(GIDDH_DATE_FORMAT) : dayjs(this.journalVoucherForm.get('entryDate').value, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
 
         data.transactions = this.validateTransaction(data.transactions);
@@ -1349,8 +1349,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @memberof AccountAsVoucherComponent
      */
     public dateEntered(): void {
-        console.log(this.journalVoucherForm.get('entryDate').value);
-
         const date = (typeof this.journalVoucherForm.get('entryDate').value === "object") ? dayjs(this.journalVoucherForm.get('entryDate').value).format("dddd")
             : dayjs(this.journalVoucherForm.get('entryDate').value, GIDDH_DATE_FORMAT).format("dddd");
         this.displayDay = (date !== 'Invalid date') ? date : '';
@@ -1366,7 +1364,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @memberof AccountAsVoucherComponent
      */
     public selectDate(date: any, dateField: any): void {
-        console.log(date);
         if (date) {
             let formatDate = dayjs(date).format(GIDDH_DATE_FORMAT);
             if (dateField === 'dateOfSupply') {

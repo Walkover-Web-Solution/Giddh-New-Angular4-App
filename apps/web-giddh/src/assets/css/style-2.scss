@@ -886,12 +886,13 @@ textarea {
 
         .entry-date-container {
             float: right;
-            width: 43%;
+        width: 40%;
 
-            .mdc-text-field {
+        .mdc-text-field {
                 padding: 0px !important;
             }
         }
+
     .amount1 {
         .form-control {
             &:focus {
@@ -907,6 +908,7 @@ textarea {
                 }
             }
         }
+
     .voucher-type {
         .form-control {
             &:focus {
@@ -922,6 +924,7 @@ textarea {
                 }
             }
         }
+
     .form-control {
         background-color: transparent !important;
         border: none !important

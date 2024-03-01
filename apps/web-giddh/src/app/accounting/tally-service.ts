@@ -267,7 +267,6 @@ export class TallyModuleService {
 
     public getAccounts() {
         let accounts = [];
-        console.log(this.selectedPageInfo?.value, this.selectedPageInfo?.value.page);
         if (this.selectedPageInfo?.value) {
             switch (this.selectedPageInfo?.value.page) {
                 case 'Journal':
