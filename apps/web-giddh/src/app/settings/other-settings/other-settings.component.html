@@ -122,15 +122,17 @@
                             <div class="col-12 col-sm-6">
                                 <div class="form-group">
                                     <label>{{ localeData?.export_type }}</label>
-                                    <sh-select
-                                        [options]="exportTypes"
-                                        [placeholder]="localeData?.select_export_type"
-                                        (selected)="setExportType($event)"
-                                        [isFilterEnabled]="false"
+                                    <mat-select
+                                        class="form-control"
                                         name="exportType"
-                                        [defaultValue]="exportType ? exportTypes[0]?.label : exportTypes[1]?.label"
+                                        [placeholder]="localeData?.select_export_type"
+                                        (selectionChange)="setExportType($event)"
+                                        [(value)]="exportType"
                                     >
-                                    </sh-select>
+                                        <mat-option *ngFor="let type of exportTypes" [value]="type?.value"
+                                            >{{ type?.label }}
+                                        </mat-option>
+                                    </mat-select>
                                 </div>
                             </div>
                         </div>

@@ -76,7 +76,7 @@ export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
     /** List of available themes */
     public exportTypes: IOption[] = [];
     /** Holds export type */
-    public exportType: boolean;
+    public exportType: string = '';
 
     constructor(private commonActions: CommonActions, private generalService: GeneralService, private store: Store<AppState>, private toasterService: ToasterService) { }
 
@@ -138,12 +138,12 @@ export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
         }
 
         this.exportTypes = [
-            { label: this.localeData?.with_pay, value: 'true' },
-            { label: this.localeData?.without_pay, value: 'false' }
+            { label: this.localeData?.with_pay, value: 'yes' },
+            { label: this.localeData?.without_pay, value: 'no' }
         ];
 
         if (typeof changes?.profileData?.currentValue?.withPay === "boolean") {
-            this.exportType = changes?.profileData?.currentValue?.withPay;
+            this.exportType = (changes?.profileData?.currentValue?.withPay) ? 'yes' : 'no';
         }
     }
 
@@ -224,8 +224,8 @@ export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof OtherSettingsComponent
      */
     public setExportType(event?: any): void {
-        this.exportType = event?.value === 'true' ? true : false;
-        this.updatedData['withPay'] = this.exportType;
+        this.exportType = event?.value;
+        this.updatedData['withPay'] = event?.value === 'yes' ? true : false;
         this.saveProfileSubject.next(true);
     }
 }
