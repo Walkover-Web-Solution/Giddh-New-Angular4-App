@@ -119,7 +119,7 @@
                                     </sh-select>
                                 </div>
                             </div>
-                            <div class="col-12 col-sm-6">
+                            <div class="col-12 col-sm-6" *ngIf="profileData?.country?.countryCode?.toUpperCase() === 'IN'">
                                 <div class="form-group">
                                     <label>{{ localeData?.export_type }}</label>
                                     <mat-select
