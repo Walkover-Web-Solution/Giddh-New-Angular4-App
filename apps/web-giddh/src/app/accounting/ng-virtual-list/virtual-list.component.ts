@@ -458,7 +458,6 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
             let newValues: string[];
             newValues = this._selectedValues.map(p => p?.value);
             this.propagateChange(newValues);
-            console.log(newValues);
             this.selected.emit(this._selectedValues);
         } else {
             let newValue: IOption;
@@ -472,7 +471,6 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
                     additional: null
                 };
             }
-            console.log(newValue);
             this.filter = newValue.label;
             this.propagateChange(newValue?.value);
             this.selected.emit(newValue);
