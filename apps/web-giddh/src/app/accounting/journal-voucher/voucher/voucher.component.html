@@ -6,7 +6,7 @@
         <div class="bg-wrap">
             <div class="clearfix pd-t2">
                 <div class="text-left mr-b1" (clickOutside)="showFromDatePicker = false">
-                    <span class="voucher-heading">{{ journalVoucherForm.get("voucherType").value | uppercase }}</span>
+                    <span class="voucher-heading font-16">{{ journalVoucherForm.get("voucherType").value | uppercase }}</span>
                 </div>
                 <div
                     class="d-flex justify-content-end align-items-baseline pull-right text-right mr-b1 custom-entry-date"
@@ -245,7 +245,7 @@
                         <div>
                             <h1>{{ localeData?.accept }}</h1>
                             <div class="pd-t2">
-                                <div class="d-flex column-gap15">
+                                <div class="d-flex column-gap15 justify-content-center">
                                     <button
                                         mat-stroked-button
                                         color="primary"
