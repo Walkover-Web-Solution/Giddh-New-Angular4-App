@@ -125,7 +125,7 @@
                                             }"
                                         >
                                             <text-field
-                                                [autoFocus]="byAmount"
+                                                [autoFocus]="byAmount === i"
                                                 [autocomplete]="'off'"
                                                 [hidden]="transaction.get('type')?.value !== 'by'"
                                                 [type]="'text'"
@@ -162,7 +162,7 @@
                                             }"
                                         >
                                             <text-field
-                                                [autoFocus]="toAmount"
+                                                [autoFocus]="toAmount === i"
                                                 [autocomplete]="'off'"
                                                 [readonly]="
                                                     (transaction.get('amount')?.value &&

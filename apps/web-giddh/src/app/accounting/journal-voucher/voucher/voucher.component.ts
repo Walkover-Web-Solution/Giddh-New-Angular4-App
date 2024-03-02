@@ -253,10 +253,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     /** From Group for jv */
     public mergedFormGroup: FormGroup;
     /** True if api call in progress */
-    public byAmount: boolean = false;
+    public byAmount: number = null;
     /** True if api call in progress */
-    public toAmount: boolean = false;
-
+    public toAmount: number = null;
 
     constructor(
         private _ledgerActions: LedgerActions,
@@ -689,6 +688,14 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      */
     public closeChequeDetailForm(): void {
         this.dialog.closeAll();
+        let transactionsFormArray = this.journalVoucherForm.get('transactions') as FormArray;
+        let transactionAtIndex = transactionsFormArray.at(this.selectedIdx) as FormGroup;
+
+        if (transactionAtIndex.get('type').value === "to") {
+            this.toAmount = this.selectedIdx;
+        } else {
+            this.byAmount = this.selectedIdx;
+        }
         // this.focusDebitCreditAmount();
     }
     /**
@@ -791,9 +798,13 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
                         //     }
                         // }, 200);
-                        this.focusDebitCreditAmount();
+                        //this.focusDebitCreditAmount();
 
-
+                        if (transactionAtIndex.get('type').value === "to") {
+                            this.toAmount = this.selectedIdx;
+                        } else {
+                            this.byAmount = this.selectedIdx;
+                        }
                     }
                     this.calculateAmount(transactionAtIndex.get('amount').value, transactionAtIndex, idx);
 
@@ -857,8 +868,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      */
     public addNewEntry(amount: any, transactionObj: any, entryIndex: number): void {
         let index = entryIndex;
-        this.byAmount = false;
-        this.toAmount = false;
+        this.byAmount = null;
+        this.toAmount = null;
         // let reqField: any = document.getElementById(`first_element_${entryIndex - 1}`);
         // if (amount === 0 || amount === '0') {
         //     if (entryIndex === 0) {
