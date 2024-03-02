@@ -104,6 +104,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     @ViewChildren('adjustmentTypesField') public adjustmentTypesField: ShSelectComponent;
     /** List of all 'DEBIT' amount fields when 'By' entries are made  */
     @ViewChildren('byAmountField') public byAmountFields: QueryList<ElementRef>;
+
     /** List of all 'CREDIT' amount fields when 'To' entries are made  */
     @ViewChildren('toAmountField') public toAmountFields: QueryList<ElementRef>;
     /** List of both date picker used (one in voucher date and other in check clearance date) */
@@ -251,6 +252,14 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     public config: Partial<BsDatepickerConfig> = { dateInputFormat: GIDDH_DATE_FORMAT };
     /** From Group for jv */
     public mergedFormGroup: FormGroup;
+    /** True if api call in progress */
+    public byAmount: number = null;
+    /** True if api call in progress */
+    public toAmount: number = null;
+    /** True if api call in progress */
+    public particularAccount: number = null;
+    /** True if api call in progress */
+    public typeField: number = null;
 
     constructor(
         private _ledgerActions: LedgerActions,
@@ -264,6 +273,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         private salesAction: SalesActions,
         private searchService: SearchService,
         private changeDetectionRef: ChangeDetectorRef,
+        private elRef: ElementRef,
         public dialog: MatDialog,
         private generalService: GeneralService) {
 
@@ -309,6 +319,10 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                         // Receipt allows cash/bank/sundry debtors/sundry creditors so selecting default category as currentassets
                         this.categoryOfAccounts = 'currentassets';
                         break;
+                    case VOUCHERS.JOURNAL:
+                        // Receipt allows cash/bank/sundry debtors/sundry creditors so selecting default category as currentassets
+                        this.categoryOfAccounts = 'currentassets';
+                        break;
                     default:
                         // TODO: Add other category cases as they are developed
                         break;
@@ -331,6 +345,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     }
 
     public ngOnInit() {
+        this.activeRow(true, 0);
         document.querySelector("body")?.classList?.add('journal-voucher');
         const voucherTypeControl = this.journalVoucherForm.get('voucherType');
         voucherTypeControl.setValue(this.currentVoucher);
@@ -627,11 +642,11 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             this.accountSearch = '';
         }
 
-        // if (ev.type === 'blur') {
-        //   this.showLedgerAccountList = false;
-        //   this.showStockList = false;
-        // }
-        // this.showAccountList.emit(false);
+        if (event.type === 'blur') {
+            this.showLedgerAccountList = false;
+            this.showStockList = false;
+        }
+        this.showAccountList.emit(false);
     }
 
 
@@ -678,6 +693,14 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      */
     public closeChequeDetailForm(): void {
         this.dialog.closeAll();
+        let transactionsFormArray = this.journalVoucherForm.get('transactions') as FormArray;
+        let transactionAtIndex = transactionsFormArray.at(this.selectedIdx) as FormGroup;
+
+        if (transactionAtIndex.get('type').value === "to") {
+            this.toAmount = this.selectedIdx;
+        } else {
+            this.byAmount = this.selectedIdx;
+        }
         // this.focusDebitCreditAmount();
     }
     /**
@@ -713,6 +736,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 transactionsFormArray = this.journalVoucherForm.get('transactions') as FormArray;
                 transactionAtIndex = transactionsFormArray.at(idx) as FormGroup;
 
+
                 if (acc) {
                     const formattedCurrentDate = dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
                     this.tallyModuleService.getCurrentBalance(this.currentCompanyUniqueName, acc?.uniqueName, formattedCurrentDate, formattedCurrentDate).subscribe((data) => {
@@ -729,7 +753,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                     };
 
                     // Update transaction form group with received data
-                    transactionAtIndex.patchValue({
+                    transactionAtIndex?.patchValue({
                         amount: transactionAtIndex.get('amount').value ? transactionAtIndex.get('amount').value : this.calculateDiffAmount(transactionAtIndex.get('type').value),
                         particular: accModel?.UniqueName,
                         currentBalance: '',
@@ -754,13 +778,11 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                     }
 
                     if (openChequePopup === false) {
-                        setTimeout(() => {
-                            if (transactionAtIndex.get('type').value === 'by') {
-                                this.byAmountFields?.last?.nativeElement?.focus();
-                            } else {
-                                this.toAmountFields?.last?.nativeElement?.focus();
-                            }
-                        }, 200);
+                        if (transactionAtIndex.get('type').value === "to") {
+                            this.toAmount = this.selectedIdx;
+                        } else {
+                            this.byAmount = this.selectedIdx;
+                        }
                     }
                     this.calculateAmount(transactionAtIndex.get('amount').value, transactionAtIndex, idx);
 
@@ -824,6 +846,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      */
     public addNewEntry(amount: any, transactionObj: any, entryIndex: number): void {
         let index = entryIndex;
+        this.byAmount = null;
+        this.toAmount = null;
         // let reqField: any = document.getElementById(`first_element_${entryIndex - 1}`);
         // if (amount === 0 || amount === '0') {
         //     if (entryIndex === 0) {
@@ -1425,7 +1449,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         setTimeout(() => {
             this.currentSelectedValue = '';
             this.showLedgerAccountList = false;
-        }, 200);
+        }, 100);
         if (event?.value === 'createnewitem') {
             return this.addNewAccount();
         }
@@ -1663,6 +1687,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         } else {
             this.toAmountFields?.last?.nativeElement?.focus();
         }
+
+
     }
 
 
@@ -1835,6 +1861,30 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 } else {
                     this._toaster.errorToast(this.invalidAmountErrorMessage);
                 }
+            }
+        }
+    }
+
+    /**
+    * This will be use for change tabs to type field
+    *
+    * @memberof AccountAsVoucherComponent
+    */
+    public changeTab(type: any): void {
+        let transactionsFormArray = this.journalVoucherForm.get('transactions') as FormArray;
+        let transactionAtIndex = transactionsFormArray.at(this.selectedIdx) as FormGroup;
+
+        if (type === 'date') {
+            if (transactionAtIndex.get('type')?.value === "to") {
+                this.typeField = this.selectedIdx + 1;
+            } else {
+                this.typeField = this.selectedIdx + 1;
+            }
+        } else if (type === 'account') {
+            if (transactionAtIndex.get('type')?.value === "to") {
+                this.toAmount = this.selectedIdx;
+            } else {
+                this.byAmount = this.selectedIdx;
             }
         }
     }

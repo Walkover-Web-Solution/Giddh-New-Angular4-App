@@ -26,10 +26,15 @@
         </a>
     </li>
 
+    <li>
+        <a
+            class="cp"
+            (click)="setSelectedPage(accountingVouchers.JOURNAL, 'voucher', 'purchases')"
+            [ngClass]="{ 'active-parent': (selectedVoucher | lowercase) === accountingVouchers.JOURNAL }"
+            >F7: Journal</a
+        >
+    </li>
     <!--    "isHidden" class  if user is not able to access the module
-    <li><a class="cp" (click)="setSelectedPage('Journal', 'voucher', null)"
-            [ngClass]="{ 'active-parent': selectedVoucher === 'Journal'}">F7: Journal</a></li>
-
     <li><a class="cp" (click)="setSelectedPage('Sales', 'voucher', 'sales')"
             [ngClass]="{ 'active-parent': selectedVoucher === 'Sales'}">F8: Sales</a></li>
     <li><a class="cp" (click)="setSelectedPage('Sales', 'voucher', 'sales')"

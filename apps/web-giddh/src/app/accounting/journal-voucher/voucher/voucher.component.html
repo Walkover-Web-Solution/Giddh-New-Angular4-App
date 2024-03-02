@@ -4,9 +4,11 @@
 <div *ngIf="!isLoading">
     <form autocomplete="off" novalidate [formGroup]="journalVoucherForm">
         <div class="bg-wrap">
-            <div class="clearfix pd-t2">
+            <div class="d-flex justify-content-between align-items-center w-100 pd-t2">
                 <div class="text-left mr-b1" (clickOutside)="showFromDatePicker = false">
-                    <span class="voucher-heading font-16">{{ journalVoucherForm.get("voucherType").value | uppercase }}</span>
+                    <span class="voucher-heading font-16">{{
+                        journalVoucherForm.get("voucherType").value | uppercase
+                    }}</span>
                 </div>
                 <div
                     class="d-flex justify-content-end align-items-baseline pull-right text-right mr-b1 custom-entry-date"
@@ -65,6 +67,7 @@
                                             }"
                                         >
                                             <text-field
+                                                [autoFocus]="typeField === i"
                                                 [id]="'transaction_' + i"
                                                 [type]="'text'"
                                                 [cssClass]="'form-control text-capitalize byTo'"
@@ -78,6 +81,8 @@
                                                 [value]="transaction.get('type')?.value | lowercase"
                                                 [maxlength]="'2'"
                                                 [autocomplete]="'off'"
+                                                (keydown.Enter)="changeTab('type')"
+                                                (keydown.Tab)="changeTab('type')"
                                             ></text-field>
                                         </td>
                                         <td
@@ -123,18 +128,20 @@
                                             }"
                                         >
                                             <text-field
+                                                (keydown.Tab)="changeTab('date')"
+                                                [autoFocus]="byAmount === i"
                                                 [autocomplete]="'off'"
                                                 [hidden]="transaction.get('type')?.value !== 'by'"
                                                 [type]="'text'"
                                                 [cssClass]="'form-control text-right debit-credit'"
                                                 #byAmountField
                                                 decimalDigitsDirective
-                                                #amountField1
                                                 [mask]="inputMaskFormat"
                                                 formControlName="amount"
                                                 (input)="selectRow(true, i)"
                                                 (keydown.Enter)="
-                                                    addNewEntry(transaction.get('amount')?.value, transaction, i)
+                                                    addNewEntry(transaction.get('amount')?.value, transaction, i);
+                                                    changeTab('date')
                                                 "
                                                 (blur)="addNewEntry(transaction.get('amount')?.value, transaction, i)"
                                                 [ngClass]="{ 'focus': isSelectedRow && selectedIdx === i }"
@@ -160,6 +167,8 @@
                                             }"
                                         >
                                             <text-field
+                                                (keydown.Tab)="changeTab('date')"
+                                                [autoFocus]="toAmount === i"
                                                 [autocomplete]="'off'"
                                                 [readonly]="
                                                     (transaction.get('amount')?.value &&
@@ -174,12 +183,12 @@
                                                 [cssClass]="'form-control text-right debit-credit'"
                                                 #toAmountField
                                                 decimalDigitsDirective
-                                                #amountField2
                                                 [mask]="inputMaskFormat"
                                                 formControlName="amount"
                                                 (input)="selectRow(true, i)"
                                                 (keydown.Enter)="
-                                                    addNewEntry(transaction.get('amount')?.value, transaction, i)
+                                                    addNewEntry(transaction.get('amount')?.value, transaction, i);
+                                                    changeTab('date')
                                                 "
                                                 (blur)="addNewEntry(transaction.get('amount')?.value, transaction, i)"
                                                 [ngClass]="{ 'focus': isSelectedRow && selectedIdx === i }"
@@ -377,43 +386,11 @@
                     formControlName="chequeClearanceDate"
                     [showToggleIcon]="false"
                     (keydown.enter)="$event.preventDefault()"
-                   (dateSelected)="selectDate($event)"
+                    (dateSelected)="selectDate($event)"
                     [appearance]="'outline'"
-                    [required]="true"
                     [cssClass]="'w-100'"
                 >
                 </giddh-datepicker>
-                <!-- <mat-form-field appearance="fill" class="w-100" appearance="outline">
-                    <mat-label>{{ localeData?.cheque_clearance_date }}</mat-label>
-                    <input
-                        matInput
-                        (keydown.enter)="$event.preventDefault()"
-                        #chequeClearanceInputField
-                        #chequeClearanceDateInput="bsDatepicker"
-                        bsDatepicker
-                        [bsConfig]="{ dateInputFormat: giddhDateFormat }"
-                        class="form-control"
-                        formControlName="chequeClearanceDate"
-                        name="account"
-                        type="text"
-                        [placeholder]="localeData?.cheque_clearance_date"
-                        (keydown)="onCheckNumberFieldKeyDown($event, 'chqDate', chequeClearanceDateInput)"
-                    />
-                </mat-form-field> -->
-                <!-- <input-field
-                        [name]="'account2'"
-                        [placeholder]="localeData?.cheque_clearance_date"
-                        [type]="'text'"
-                        formControlName="chequeClearanceDate"
-                        (keydown)="onCheckNumberFieldKeyDown($event, 'chqDate', chequeClearanceDateInput)"
-                        [label]="localeData?.cheque_clearance_date"
-                        (keydown.enter)="$event.preventDefault()"
-                        #chequeClearanceInputField
-                        #chequeClearanceDateInput="bsDatepicker"
-                        bsDatepicker
-                        [bsConfig]="bsConfig"
-                    >
-                    </input-field> -->
             </div>
         </form>
     </div>
