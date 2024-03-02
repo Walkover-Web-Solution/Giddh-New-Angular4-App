@@ -1460,7 +1460,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         setTimeout(() => {
             this.currentSelectedValue = '';
             this.showLedgerAccountList = false;
-        }, 200);
+        }, 100);
         if (event?.value === 'createnewitem') {
             return this.addNewAccount();
         }
