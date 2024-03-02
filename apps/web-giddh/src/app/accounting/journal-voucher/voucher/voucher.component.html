@@ -67,6 +67,7 @@
                                             }"
                                         >
                                             <text-field
+                                                [autoFocus]="typeField === i"
                                                 [id]="'transaction_' + i"
                                                 [type]="'text'"
                                                 [cssClass]="'form-control text-capitalize byTo'"
@@ -80,6 +81,8 @@
                                                 [value]="transaction.get('type')?.value | lowercase"
                                                 [maxlength]="'2'"
                                                 [autocomplete]="'off'"
+                                                (keydown.Enter)="changeTab('type')"
+                                                (keydown.Tab)="changeTab('type')"
                                             ></text-field>
                                         </td>
                                         <td
@@ -125,6 +128,7 @@
                                             }"
                                         >
                                             <text-field
+                                                (keydown.Tab)="changeTab('date')"
                                                 [autoFocus]="byAmount === i"
                                                 [autocomplete]="'off'"
                                                 [hidden]="transaction.get('type')?.value !== 'by'"
@@ -136,7 +140,8 @@
                                                 formControlName="amount"
                                                 (input)="selectRow(true, i)"
                                                 (keydown.Enter)="
-                                                    addNewEntry(transaction.get('amount')?.value, transaction, i)
+                                                    addNewEntry(transaction.get('amount')?.value, transaction, i);
+                                                    changeTab('date')
                                                 "
                                                 (blur)="addNewEntry(transaction.get('amount')?.value, transaction, i)"
                                                 [ngClass]="{ 'focus': isSelectedRow && selectedIdx === i }"
@@ -162,6 +167,7 @@
                                             }"
                                         >
                                             <text-field
+                                                (keydown.Tab)="changeTab('date')"
                                                 [autoFocus]="toAmount === i"
                                                 [autocomplete]="'off'"
                                                 [readonly]="
@@ -181,7 +187,8 @@
                                                 formControlName="amount"
                                                 (input)="selectRow(true, i)"
                                                 (keydown.Enter)="
-                                                    addNewEntry(transaction.get('amount')?.value, transaction, i)
+                                                    addNewEntry(transaction.get('amount')?.value, transaction, i);
+                                                    changeTab('date')
                                                 "
                                                 (blur)="addNewEntry(transaction.get('amount')?.value, transaction, i)"
                                                 [ngClass]="{ 'focus': isSelectedRow && selectedIdx === i }"
