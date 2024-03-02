@@ -104,6 +104,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     @ViewChildren('adjustmentTypesField') public adjustmentTypesField: ShSelectComponent;
     /** List of all 'DEBIT' amount fields when 'By' entries are made  */
     @ViewChildren('byAmountField') public byAmountFields: QueryList<ElementRef>;
+
     /** List of all 'CREDIT' amount fields when 'To' entries are made  */
     @ViewChildren('toAmountField') public toAmountFields: QueryList<ElementRef>;
     /** List of both date picker used (one in voucher date and other in check clearance date) */
@@ -251,6 +252,11 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     public config: Partial<BsDatepickerConfig> = { dateInputFormat: GIDDH_DATE_FORMAT };
     /** From Group for jv */
     public mergedFormGroup: FormGroup;
+    /** True if api call in progress */
+    public byAmount: boolean = false;
+    /** True if api call in progress */
+    public toAmount: boolean = false;
+
 
     constructor(
         private _ledgerActions: LedgerActions,
@@ -264,6 +270,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         private salesAction: SalesActions,
         private searchService: SearchService,
         private changeDetectionRef: ChangeDetectorRef,
+        private elRef: ElementRef,
         public dialog: MatDialog,
         private generalService: GeneralService) {
 
@@ -306,6 +313,10 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                         this.categoryOfAccounts = 'currentassets';
                         break;
                     case VOUCHERS.PAYMENT:
+                        // Receipt allows cash/bank/sundry debtors/sundry creditors so selecting default category as currentassets
+                        this.categoryOfAccounts = 'currentassets';
+                        break;
+                    case VOUCHERS.JOURNAL:
                         // Receipt allows cash/bank/sundry debtors/sundry creditors so selecting default category as currentassets
                         this.categoryOfAccounts = 'currentassets';
                         break;
@@ -713,6 +724,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 transactionsFormArray = this.journalVoucherForm.get('transactions') as FormArray;
                 transactionAtIndex = transactionsFormArray.at(idx) as FormGroup;
 
+
                 if (acc) {
                     const formattedCurrentDate = dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
                     this.tallyModuleService.getCurrentBalance(this.currentCompanyUniqueName, acc?.uniqueName, formattedCurrentDate, formattedCurrentDate).subscribe((data) => {
@@ -729,7 +741,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                     };
 
                     // Update transaction form group with received data
-                    transactionAtIndex.patchValue({
+                    transactionAtIndex?.patchValue({
                         amount: transactionAtIndex.get('amount').value ? transactionAtIndex.get('amount').value : this.calculateDiffAmount(transactionAtIndex.get('type').value),
                         particular: accModel?.UniqueName,
                         currentBalance: '',
@@ -754,13 +766,34 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                     }
 
                     if (openChequePopup === false) {
-                        setTimeout(() => {
-                            if (transactionAtIndex.get('type').value === 'by') {
-                                this.byAmountFields?.last?.nativeElement?.focus();
-                            } else {
-                                this.toAmountFields?.last?.nativeElement?.focus();
-                            }
-                        }, 200);
+                        // setTimeout(() => {
+                        //     if (transactionAtIndex.get('type').value === 'by') {
+                        //         console.log(this.byAmount, this.toAmount);
+
+
+                        //         // const tabEvent = new KeyboardEvent('keydown', {
+                        //         //     key: 'Tab',
+                        //         //     code: 'Tab',
+                        //         //     keyCode: 9,
+                        //         //     which: 9,
+                        //         //     bubbles: true,
+                        //         //     cancelable: true
+                        //         // });
+
+                        //         // this.elRef.nativeElement.dispatchEvent(tabEvent);
+                        //         // this.byAmountFields?.forEach((elementRef: ElementRef) => {
+                        //         //     console.log(elementRef);
+                        //         //     elementRef.nativeElement?.focus();
+                        //         // });
+                        //     } else {
+                        //         this.byAmount = false;
+                        //         this.toAmount = true;
+
+                        //     }
+                        // }, 200);
+                        this.focusDebitCreditAmount();
+
+
                     }
                     this.calculateAmount(transactionAtIndex.get('amount').value, transactionAtIndex, idx);
 
@@ -824,6 +857,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      */
     public addNewEntry(amount: any, transactionObj: any, entryIndex: number): void {
         let index = entryIndex;
+        this.byAmount = false;
+        this.toAmount = false;
         // let reqField: any = document.getElementById(`first_element_${entryIndex - 1}`);
         // if (amount === 0 || amount === '0') {
         //     if (entryIndex === 0) {
@@ -1663,6 +1698,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         } else {
             this.toAmountFields?.last?.nativeElement?.focus();
         }
+
+
     }
 
 
