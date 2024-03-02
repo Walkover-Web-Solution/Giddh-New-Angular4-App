@@ -30,5 +30,6 @@
     "select_tax_number": "Select tax number",
     "connect_to_hmrc": "Connect to HMRC",
     "connected_to_hmrc": "Connected to HMRC",
-    "select_year_label": "Select Year"
+    "select_year_label": "Select Year",
+    "file_return_confirmation":"When you submit this VAT information you are making a legal declaration that the information is true and complete. A false declaration can result in prosecution."
 }
