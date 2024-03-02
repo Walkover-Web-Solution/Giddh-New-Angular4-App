@@ -256,6 +256,10 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     public byAmount: number = null;
     /** True if api call in progress */
     public toAmount: number = null;
+    /** True if api call in progress */
+    public particularAccount: number = null;
+    /** True if api call in progress */
+    public typeField: number = null;
 
     constructor(
         private _ledgerActions: LedgerActions,
@@ -341,6 +345,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     }
 
     public ngOnInit() {
+        this.activeRow(true, 0);
         document.querySelector("body")?.classList?.add('journal-voucher');
         const voucherTypeControl = this.journalVoucherForm.get('voucherType');
         voucherTypeControl.setValue(this.currentVoucher);
@@ -637,11 +642,11 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             this.accountSearch = '';
         }
 
-        // if (ev.type === 'blur') {
-        //   this.showLedgerAccountList = false;
-        //   this.showStockList = false;
-        // }
-        // this.showAccountList.emit(false);
+        if (event.type === 'blur') {
+            this.showLedgerAccountList = false;
+            this.showStockList = false;
+        }
+        this.showAccountList.emit(false);
     }
 
 
@@ -773,33 +778,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                     }
 
                     if (openChequePopup === false) {
-                        // setTimeout(() => {
-                        //     if (transactionAtIndex.get('type').value === 'by') {
-                        //         console.log(this.byAmount, this.toAmount);
-
-
-                        //         // const tabEvent = new KeyboardEvent('keydown', {
-                        //         //     key: 'Tab',
-                        //         //     code: 'Tab',
-                        //         //     keyCode: 9,
-                        //         //     which: 9,
-                        //         //     bubbles: true,
-                        //         //     cancelable: true
-                        //         // });
-
-                        //         // this.elRef.nativeElement.dispatchEvent(tabEvent);
-                        //         // this.byAmountFields?.forEach((elementRef: ElementRef) => {
-                        //         //     console.log(elementRef);
-                        //         //     elementRef.nativeElement?.focus();
-                        //         // });
-                        //     } else {
-                        //         this.byAmount = false;
-                        //         this.toAmount = true;
-
-                        //     }
-                        // }, 200);
-                        //this.focusDebitCreditAmount();
-
                         if (transactionAtIndex.get('type').value === "to") {
                             this.toAmount = this.selectedIdx;
                         } else {
@@ -1883,6 +1861,30 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 } else {
                     this._toaster.errorToast(this.invalidAmountErrorMessage);
                 }
+            }
+        }
+    }
+
+    /**
+    * This will be use for change tabs to type field
+    *
+    * @memberof AccountAsVoucherComponent
+    */
+    public changeTab(type: any): void {
+        let transactionsFormArray = this.journalVoucherForm.get('transactions') as FormArray;
+        let transactionAtIndex = transactionsFormArray.at(this.selectedIdx) as FormGroup;
+
+        if (type === 'date') {
+            if (transactionAtIndex.get('type')?.value === "to") {
+                this.typeField = this.selectedIdx + 1;
+            } else {
+                this.typeField = this.selectedIdx + 1;
+            }
+        } else if (type === 'account') {
+            if (transactionAtIndex.get('type')?.value === "to") {
+                this.toAmount = this.selectedIdx;
+            } else {
+                this.byAmount = this.selectedIdx;
             }
         }
     }
