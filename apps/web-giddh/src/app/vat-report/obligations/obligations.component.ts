@@ -67,7 +67,7 @@ export class ObligationsComponent implements OnInit, OnDestroy {
     /** Holds Obligations table data */
     public tableDataSource: any[] = [];
     /** Holds Obligations table columns */
-    public displayedColumns = ['periodKey', 'start', 'end', 'due', 'status', 'action'];
+    public displayedColumns = ['start', 'end', 'due', 'status', 'action'];
     /** True if API Call is in progress */
     public isLoading: boolean;
     /** This will hold the value out/in to open/close setting sidebar popup */

@@ -687,6 +687,38 @@ export class GeneralService {
     }
 
     /**
+     * Handles the file return modal configuration
+     *
+     * @param {*} localeData
+     * @param {*} commonLocaleData
+     * @return {*}  {ConfirmationModalConfiguration}
+     * @memberof GeneralService
+     */
+    public fileReturnConfiguration(localeData: any, commonLocaleData: any): ConfirmationModalConfiguration {
+
+        const buttons: Array<ConfirmationModalButton> = [{
+            text: commonLocaleData?.app_yes,
+            color: 'primary'
+        },
+        {
+            text: commonLocaleData?.app_no
+        }];
+        const headerText: string = commonLocaleData?.app_confirmation;
+        const headerCssClass: string = 'd-inline-block mr-1';
+        const messageCssClass: string = 'mr-b1 text-light';
+        const footerCssClass: string = 'mr-b1';
+        return {
+            headerText,
+            headerCssClass,
+            messageText: localeData?.file_return_confirmation,
+            messageCssClass,
+            footerText: '',
+            footerCssClass,
+            buttons
+        };
+    }
+
+    /**
      * This will use for confirmation delete attachment in vocher
      *
      * @param {*} localeData
