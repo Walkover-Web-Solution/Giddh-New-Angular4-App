@@ -83,6 +83,7 @@
                             <li *ngFor="let acc of accountItemsFromIndexDB">
                                 <a
                                     [href]="'/pages/ledger/'+ acc?.uniqueName"
+                                    aria-label="account"
                                     [routerLinkActive]="['active']"
                                     [class.active]="isLedgerAccSelected && selectedLedgerName === acc?.uniqueName"
                                     (click)="analyzeAccounts($event, acc); companyDetailsDropDownWeb.hide(); $event.stopPropagation()"
@@ -91,7 +92,8 @@
                             </li>
                             <li>
                                 <a
-                                    href="javascript:;"
+                                    href="javascript:void(0);"
+                                    aria-label="show more"
                                     (click)="showNavigationModal()"
                                     class="show-more cursor-pointer"
                                     >{{ localeData?.show_more }}</a
@@ -107,6 +109,7 @@
                     >
                         <a
                             href="javascript:void(0);"
+                            aria-label="account-icon"
                             id="button-basic-01"
                             dropdownToggle
                             type="button"
@@ -125,13 +128,14 @@
                             <li *ngFor="let acc of accountItemsFromIndexDB">
                                 <a
                                     href="javascript:void(0);"
+                                    aria-label="account item"
                                     routerLink="ledger/{{ acc?.uniqueName }}"
                                     (click)="analyzeAccounts($event, acc); accountDropdown?.hide()"
                                     >{{ acc.name }} {{ commonLocaleData?.app_ac }}</a
                                 >
                             </li>
                             <li>
-                                <a (click)="showNavigationModal()" class="show-more cursor-pointer">{{
+                                <a href="javascript:void(0);" aria-label="Show more" (click)="showNavigationModal()" class="show-more cursor-pointer">{{
                                     localeData?.show_more
                                 }}</a>
                             </li>
@@ -167,6 +171,7 @@
                                     >
                                         <a
                                             href="javascript:void(0);"
+                                            aria-label="menu"
                                             tooltip="{{ menu?.label }}"
                                             *ngIf="menu?.items?.length"
                                             dropdownToggle
@@ -181,6 +186,7 @@
                                         </a>
                                         <a
                                             href="javascript:void(0);"
+                                            aria-label="menu"
                                             *ngIf="menu?.items?.length === 0 && menu?.link"
                                             [routerLink]="[menu?.link]"
                                             [queryParams]="menu?.additional"
@@ -198,6 +204,7 @@
                                                     <a
                                                         *ngIf="item?.link"
                                                         href="javascript:void(0);"
+                                                        aria-label="menu"
                                                         [class.active]="
                                                             rla?.isActive ||
                                                             isRouteWithParamsActive(item?.link) ||
@@ -214,6 +221,7 @@
                                                     <a
                                                         *ngIf="!item?.link"
                                                         href="javascript:void(0);"
+                                                        aria-label="menu"
                                                         (click)="handleItemClick(item)"
                                                         ><i [ngClass]="item.icon"></i>
                                                         {{ item?.label }}

@@ -8,7 +8,7 @@
     <mat-card class="last-card">
         <div class="panel-heading">
             <div class="cursor-pointer">
-                <span [matMenuTriggerFor]="crDrListChartMenu" class="menu-trigger-btn">
+                <span [matMenuTriggerFor]="crDrListChartMenu" class="menu-trigger-btn" role="button" aria-label="top-select">
                     <span>
                         <strong>{{ localeData?.chart_title }} {{ showRecords }}</strong>
                     </span>
@@ -23,10 +23,12 @@
                     </span>
                 </mat-menu>
             </div>
-            <div class="this-week pull-right" (click)="showGiddhDatepicker($event)">
+            <div class="this-week pull-right date-label" (click)="showGiddhDatepicker($event)">
+                <label for="selectedDateRange">date</label>
                 <input
                     type="text"
                     readonly
+                    id="selectedDateRange"
                     name="selectedDateRange"
                     [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
                     class="form-control giddh-datepicker date-range-picker dashboard-datepicker"

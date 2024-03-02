@@ -14652,3 +14652,11 @@ aside-menu-product-service {
         white-space: nowrap;
     }
 }
+
+// datepicker label
+.date-label {
+    label {
+        position: absolute;
+        z-index: -1;
+    }
+}

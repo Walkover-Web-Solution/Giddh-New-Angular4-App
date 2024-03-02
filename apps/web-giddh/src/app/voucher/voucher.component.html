@@ -81,7 +81,7 @@
                                                     [scrollableElementId]="'customerId'"
                                                 >
                                                     <ng-template #optionTemplate let-option="option">
-                                                        <a href="javascript:void(0)">
+                                                        <a href="javascript:void(0);" aria-label="label value">
                                                             <div class="option-label">
                                                                 {{ option?.label }}
                                                             </div>
@@ -129,8 +129,9 @@
                                             <div
                                                 class="vouchers-copy-sales mr-l3 cursor-pointer"
                                                 [matMenuTriggerFor]="copyLastVouchers"
+                                                role="button"
                                             >
-                                                <i class="icon-copy-file"></i>
+                                                <i class="icon-copy-file" aria-label="invoice"></i>
                                                 {{ copyPreviousInvoiceText }}
                                             </div>
                                             <mat-menu #copyLastVouchers="matMenu">
@@ -384,6 +385,8 @@
                                             *ngIf="!isEinvoiceGenerated && !isCashInvoice"
                                             [matMenuTriggerFor]="billingAddress"
                                             class="icon-edit text-blue cursor-pointer pl-2 font-12"
+                                            aria-label="edit"
+                                            role="button"
                                         ></i>
                                         <mat-menu #billingAddress="matMenu">
                                             <div class="mat-menu-width-large vouchers-address-menu">
@@ -699,6 +702,7 @@
                                                 *ngIf="!isEinvoiceGenerated && !isCashInvoice"
                                                 [matMenuTriggerFor]="shippingAddress"
                                                 class="icon-edit text-blue cursor-pointer pl-2 font-12"
+                                                role="button"
                                             ></i>
                                             <mat-menu #shippingAddress="matMenu">
                                                 <div class="mat-menu-width-large vouchers-address-menu">
@@ -1041,6 +1045,8 @@
                                             *ngIf="companyAddressList?.length"
                                             [matMenuTriggerFor]="companyBillingAddress"
                                             class="icon-edit text-blue cursor-pointer pl-2 font-12"
+                                            aria-label="edit"
+                                            role="button"
                                         ></i>
                                         <mat-menu #companyBillingAddress="matMenu">
                                             <div class="mat-menu-width-large vouchers-address-menu">
@@ -1180,6 +1186,7 @@
                                                 *ngIf="companyAddressList?.length"
                                                 [matMenuTriggerFor]="shippingAddress"
                                                 class="icon-edit text-blue cursor-pointer pl-2 font-12"
+                                                role="button"
                                             ></i>
                                             <mat-menu #shippingAddress="matMenu">
                                                 <div class="mat-menu-width-large vouchers-address-menu">
@@ -1510,7 +1517,8 @@
                                                     <ng-template #optionTemplate let-option="option">
                                                         <a
                                                             *ngIf="option"
-                                                            href="javascript:void(0)"
+                                                            href="javascript:void(0);"
+                                                            aria-label="option"
                                                             class="linking-item"
                                                         >
                                                             <div class="option-label">{{ option?.label }}</div>
@@ -1546,7 +1554,8 @@
                                                     <ng-template #optionTemplate let-option="option">
                                                         <a
                                                             *ngIf="option"
-                                                            href="javascript:void(0)"
+                                                            href="javascript:void(0);"
+                                                            aria-label="option"
                                                             class="linking-item"
                                                         >
                                                             <div class="option-label">{{ option?.label }}</div>
@@ -1692,6 +1701,7 @@
                                             calculateGrandTotal()
                                         "
                                         *ngIf="autoSaveIcon && !isEinvoiceGenerated"
+                                        role="button"
                                     ></i>
                                     <i
                                         class="icon-edit text-blue cursor-pointer"
@@ -1701,6 +1711,7 @@
                                             autoSaveIcon = !autoSaveIcon;
                                             newExchangeRate = originalExchangeRate
                                         "
+                                        role="button"
                                     ></i>
                                 </div>
 
@@ -1740,6 +1751,7 @@
                                         class="icon-edit text-blue cursor-pointer"
                                         *ngIf="!autoSaveIcon && !isEinvoiceGenerated"
                                         (click)="saveCancelExcRate(false)"
+                                        role="button"
                                     ></i>
                                 </div>
 
@@ -2204,7 +2216,8 @@
                                                                 <ng-template #optionTemplate let-option="option">
                                                                     <ng-container *ngIf="!option.additional?.stock">
                                                                         <a
-                                                                            href="javascript:void(0)"
+                                                                            href="javascript:void(0);"
+                                                                            aria-label="Unique Name"
                                                                             class="flex-column"
                                                                         >
                                                                             <div class="option-label">
@@ -2217,7 +2230,8 @@
                                                                     </ng-container>
                                                                     <ng-container *ngIf="option.additional?.stock">
                                                                         <a
-                                                                            href="javascript:void(0)"
+                                                                            href="javascript:void(0);"
+                                                                            aria-label="Unique Name"
                                                                             class="flex-column"
                                                                         >
                                                                             <div class="option-label">
@@ -2744,7 +2758,8 @@
                                                                     >
                                                                         <span class="mr-r05">
                                                                             <a
-                                                                                href="javascript:;"
+                                                                                href="javascript:void(0);"
+                                                                                aria-label="edit-icon"
                                                                                 *ngIf="!isEinvoiceGenerated"
                                                                                 (click)="
                                                                                     toggleOtherTaxesAsidePane(
@@ -3094,7 +3109,8 @@
                                                                                             </amount-field
                                                                                         ></span>
                                                                                         <a
-                                                                                            href="javascript:void(0)"
+                                                                                            href="javascript:void(0);"
+                                                                                            aria-label="edit"
                                                                                             (click)="
                                                                                                 clickAdjustAmount(true)
                                                                                             "
@@ -3693,6 +3709,8 @@
                                                     <mat-list>
                                                         <mat-list-item>
                                                             <a
+                                                                href="javascript:void(0);"
+                                                                aria-label="Create Send"
                                                                 class="dropdown-item cp font-14"
                                                                 (click)="
                                                                     doAction(2);
@@ -3703,6 +3721,8 @@
                                                         </mat-list-item>
                                                         <mat-list-item>
                                                             <a
+                                                                href="javascript:void(0);"
+                                                                aria-label="Create Print"
                                                                 class="dropdown-item cp font-14"
                                                                 (click)="
                                                                     doAction(3);
@@ -3713,6 +3733,8 @@
                                                         </mat-list-item>
                                                         <mat-list-item *ngIf="voucherApiVersion !== 2">
                                                             <a
+                                                                href="javascript:void(0);"
+                                                                aria-label="generate recurring"
                                                                 class="dropdown-item cp font-14"
                                                                 (click)="
                                                                     doAction(4);
@@ -3729,6 +3751,7 @@
                                                     *ngIf="invoiceType === 'sales'"
                                                     mat-stroked-button
                                                     class="min-width-auto"
+                                                    aria-label="dropdown"
                                                 >
                                                     <span class="caret"></span>
                                                 </button>
@@ -3775,6 +3798,8 @@
                                                     <mat-list>
                                                         <mat-list-item>
                                                             <a
+                                                                href="javascript:void(0);"
+                                                                aria-label="Create Send"
                                                                 class="dropdown-item cp font-14"
                                                                 (click)="
                                                                     doAction(2);
@@ -3785,6 +3810,8 @@
                                                         >
                                                         <mat-list-item>
                                                             <a
+                                                                href="javascript:void(0);"
+                                                                aria-label="Create Print"
                                                                 class="dropdown-item cp font-14"
                                                                 (click)="
                                                                     doAction(3);

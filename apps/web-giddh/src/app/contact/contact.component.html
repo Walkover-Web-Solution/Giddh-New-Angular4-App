@@ -77,7 +77,7 @@
                                             >
                                                 <ng-template #optionTemplate let-option="option">
                                                     <ng-container>
-                                                        <a href="javascript:void(0)" class="list-item d-flex">
+                                                        <a href="javascript:void(0);" aria-label="branch company" class="list-item d-flex">
                                                             <span class="entity-icon">
                                                                 <i
                                                                     class="icon-branch-icon pull-right"
@@ -238,6 +238,7 @@
                                         class="pos-abs arrow-icon"
                                         [matMenuTriggerFor]="downloadCsvEmail"
                                         id="button-basic"
+                                        aria-label="customer"
                                     >
                                         <span class="icon-arrow-down"></span>
                                     </button>
@@ -1525,7 +1526,7 @@
         let-formControl="formControl"
     >
         <div class="align-items-center d-flex" [hidden]="show">
-            <button mat-icon-button (click)="toggleSearch(fieldName)" class="customer-vendor-name-search-icon">
+            <button mat-icon-button aria-label="search" (click)="toggleSearch(fieldName)" class="customer-vendor-name-search-icon">
                 <span class="icon-search"></span>
             </button>
             <span> {{ title }}</span>

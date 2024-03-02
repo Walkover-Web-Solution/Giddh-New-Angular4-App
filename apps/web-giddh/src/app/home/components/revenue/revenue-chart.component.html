@@ -12,7 +12,7 @@
                         <div class="panel-heading pl-0 pt-0 clearfix">
                             <div class="panel-heading-inner-content w-100">
                                 <div class="cursor-pointer">
-                                    <span [matMenuTriggerFor]="revenueChartMenu" class="menu-trigger-btn">
+                                    <span [matMenuTriggerFor]="revenueChartMenu" class="menu-trigger-btn" role="button" aria-label="invcome-select">
                                         <span *ngIf="activeGraphType !== undefined">
                                             <strong>{{ activeGraphType["uniqueName"] | titlecase }}</strong>
                                         </span>
