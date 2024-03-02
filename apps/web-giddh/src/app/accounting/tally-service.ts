@@ -269,7 +269,7 @@ export class TallyModuleService {
         let accounts = [];
         if (this.selectedPageInfo?.value) {
             switch (this.selectedPageInfo?.value.page) {
-                case 'Journal':
+                case 'journal':
                     // accounts = this.flattenAccounts.value;
                     // As discussed with Manish, Cash and Bank account should not come in Journal entry
                     if (this.purchaseAccounts?.value) {
@@ -522,6 +522,11 @@ export class TallyModuleService {
             return {
                 group: selectedTransactionType === 'by' ? encodeURIComponent('sundrydebtors, sundrycreditors, tcspayable') :
                     encodeURIComponent('cash, bankaccounts, loanandoverdraft,tdsreceivable'),
+                exceptGroups: encodeURIComponent('')
+            };
+        } else if (voucherType.toLowerCase() === VOUCHERS.JOURNAL) {
+            return {
+                group: encodeURIComponent('shareholdersfunds, noncurrentliabilities, currentliabilities,fixedassets,noncurrentassets,currentassets,revenuefromoperations,otherincome,operatingcost,indirectexpenses'),
                 exceptGroups: encodeURIComponent('')
             };
         } else {
