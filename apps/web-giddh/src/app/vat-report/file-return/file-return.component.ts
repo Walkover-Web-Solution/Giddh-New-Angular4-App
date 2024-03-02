@@ -1,11 +1,14 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { VatService } from '../../services/vat.service';
-import { ReplaySubject, takeUntil } from 'rxjs';
+import { ReplaySubject, take, takeUntil } from 'rxjs';
 import { VatReportRequest } from '../../models/api-models/Vat';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store';
 import { ToasterService } from '../../services/toaster.service';
+import { NewConfirmationModalComponent } from '../../theme/new-confirmation-modal/confirmation-modal.component';
+import { ConfirmationModalConfiguration } from '../../theme/confirmation-modal/confirmation-modal.interface';
+import { GeneralService } from '../../services/general.service';
 
 @Component({
     selector: 'file-return',
@@ -27,6 +30,8 @@ export class FileReturnComponent implements OnInit, OnDestroy {
     public ukDisplayedColumns: string[] = ['number', 'name', 'aed_amt'];
     /** Holds Active Company Info from store */
     public activeCompany: any;
+    /** Branch Transfer confirmation popup configuration */
+    public FileReturnConfirmationConfiguration: ConfirmationModalConfiguration;
 
 
     constructor(
@@ -34,7 +39,9 @@ export class FileReturnComponent implements OnInit, OnDestroy {
         public dialogRef: MatDialogRef<any>,
         private vatService: VatService,
         private store: Store<AppState>,
-        private toaster: ToasterService
+        private toaster: ToasterService,
+        public dialog: MatDialog,
+        private generalService: GeneralService
     ) {
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany && !this.activeCompany) {
@@ -95,22 +102,38 @@ export class FileReturnComponent implements OnInit, OnDestroy {
             branchUniqueName: this.inputData.branchUniqueName
         };
 
-        this.vatService.fileVatReturn(this.inputData.companyUniqueName, model).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-            if (res.status === 'success') {
-                if (res?.body) {
-                    this.toaster.showSnackBar('success', res.body);
-                }
-            } else {
-                if (res?.errors) {
-                    let errorMessage = '';
-                    res.errors.forEach(error => errorMessage += error.message + '\n');
-                    this.toaster.showSnackBar('error', errorMessage);
-                } else if (res?.message) {
-                    this.toaster.showSnackBar('error', res.message);
-                }
+        this.FileReturnConfirmationConfiguration = this.generalService.fileReturnConfiguration(this.localeData, this.commonLocaleData,);
+
+        let confirnationDialogRef = this.dialog.open(NewConfirmationModalComponent, {
+            width: '630px',
+            data: {
+                configuration: this.FileReturnConfirmationConfiguration
             }
-            this.dialogRef.close(res);
         });
+
+        confirnationDialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            if (response === "Yes") {
+                this.vatService.fileVatReturn(this.inputData.companyUniqueName, model).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+                    if (res.status === 'success') {
+                        if (res?.body) {
+                            this.toaster.showSnackBar('success', res.body);
+                        }
+                    } else {
+                        if (res?.errors) {
+                            let errorMessage = '';
+                            res.errors.forEach(error => errorMessage += error.message + '\n');
+                            this.toaster.showSnackBar('error', errorMessage);
+                        } else if (res?.message) {
+                            this.toaster.showSnackBar('error', res.message);
+                        }
+                    }
+                    this.dialogRef.close(res);
+                });
+            } else {
+                confirnationDialogRef.close()
+            }
+        });
+
     }
 
     /**
