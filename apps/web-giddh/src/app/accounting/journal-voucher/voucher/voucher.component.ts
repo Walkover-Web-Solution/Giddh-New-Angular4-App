@@ -44,6 +44,7 @@ import { SearchService } from '../../../services/search.service';
 import { VOUCHERS } from '../../constants/accounting.constant';
 import { GeneralService } from '../../../services/general.service';
 import { MatDialog } from '@angular/material/dialog';
+import { TextFieldComponent } from '../../../theme/form-fields/text-field/text-field.component';
 
 const CustomShortcode = [
     { code: 'F9', route: 'purchase' }
@@ -346,7 +347,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
     public ngOnInit() {
         this.activeRow(true, 0);
-        document.querySelector("body")?.classList?.add('journal-voucher');
         const voucherTypeControl = this.journalVoucherForm.get('voucherType');
         voucherTypeControl.setValue(this.currentVoucher);
 
@@ -392,6 +392,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this.store.pipe(select(p => p?.ledger?.ledgerCreateSuccess), takeUntil(this.destroyed$)).subscribe((response: boolean) => {
             if (response) {
                 this.activeRow(true, 0);
+                this.particularAccount = 0;
+                this.byAmount = null;
+                this.toAmount = null;
                 this._toaster.successToast(this.localeData?.entry_created, this.commonLocaleData?.app_success);
                 this.refreshEntry();
                 this.store.dispatch(this._ledgerActions.ResetLedger());
@@ -579,7 +582,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @param {*} idx
      * @memberof AccountAsVoucherComponent
      */
-    public selectRow(type: boolean, index: number): void {
+    public selectRow(type: boolean, index: number, transaction?: FormGroup): void {
+        console.log(transaction);
         this.isSelectedRow = type;
         this.selectedIdx = index;
         this.showLedgerAccountList = false;
@@ -619,6 +623,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @memberof AccountAsVoucherComponent
      */
     public onAccountFocus(event: any, element: any, trxnType: any, index: number): void {
+        console.log(event, element, trxnType, index);
         this.selectedAccountInputField = event.target;
         this.selectedField = 'account';
         this.showConfirmationBox = false;
@@ -1254,6 +1259,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      */
     public ngAfterViewInit(): void {
         this.isComponentLoaded = true;
+        this.particularAccount = 0;
         // this.dialog.afterAllClosed.pipe(takeUntil(this.destroyed$)).subscribe(() => {
         //     this.focusDebitCreditAmount();
         // });
@@ -1268,7 +1274,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @memberof AccountAsVoucherComponent
      */
     public ngOnDestroy(): void {
-        document.querySelector("body")?.classList?.remove("journal-voucher");
         if (this.dialog) {
             this.dialog.closeAll();
         }
