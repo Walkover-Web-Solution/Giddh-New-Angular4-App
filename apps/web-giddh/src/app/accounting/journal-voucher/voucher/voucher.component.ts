@@ -622,12 +622,17 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @memberof AccountAsVoucherComponent
      */
     public onAccountFocus(event: any, element: any, trxnType: any, index: number): void {
+        if(!event?.target.value){
+           this.byAmount = null;
+           this.toAmount = null;
+        }
         this.selectedAccountInputField = event.target;
         this.selectedField = 'account';
         this.showConfirmationBox = false;
         this.selectedTransactionType = trxnType;
         this.selectedParticular = element;
         this.selectRow(true, index);
+
         this.filterAccount(trxnType);
         this.inputForList = cloneDeep(this.flattenAccounts);
     }
@@ -757,7 +762,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
                     // Update transaction form group with received data
                     transactionAtIndex?.patchValue({
-                        amount: transactionAtIndex.get('amount').value ? transactionAtIndex.get('amount').value : this.calculateDiffAmount(transactionAtIndex.get('type').value),
+                        amount: this.calculateDiffAmount(transactionAtIndex.get('type').value.toLowerCase()),
                         particular: accModel?.UniqueName,
                         currentBalance: '',
                         selectedAccount: {
@@ -828,7 +833,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @memberof AccountAsVoucherComponent
      */
     public searchAccount(event: KeyboardEvent, accountName: string): void {
-        if (event && !(event.shiftKey || event.key === 'Shift') && accountName) {
+        if (event && accountName) {
             this.filterByText = accountName;
             this.showLedgerAccountList = true;
             this.onAccountSearchQueryChanged(this.filterByText);
@@ -893,11 +898,22 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         transactionObj.get('amount').setValue(Number(amount));
         transactionObj.get('total').setValue(transactionObj.get('amount').value);
 
-        let debitTransactions = (this.journalVoucherForm.get('transactions') as FormArray).controls.filter((control: AbstractControl) => control.get('type').value === 'by');
-        this.totalDebitAmount = debitTransactions.reduce((acc: number, control: AbstractControl) => acc + Number(control.get('amount').value), 0);
+        const debitTransactions = (this.journalVoucherForm.get('transactions') as FormArray).controls
+            .filter((control: AbstractControl) => control.get('type').value === 'by');
 
-        let creditTransactions = (this.journalVoucherForm.get('transactions') as FormArray).controls.filter((control: AbstractControl) => control.get('type').value === 'to');
-        this.totalCreditAmount = creditTransactions.reduce((acc: number, control: AbstractControl) => acc + Number(control.get('amount').value), 0);
+        this.totalDebitAmount = debitTransactions
+            .map((control: AbstractControl) => Number(control.get('amount').value))
+            .reduce((acc: number, amount: number) => acc + amount, 0);
+
+
+        const creditTransactions = (this.journalVoucherForm.get('transactions') as FormArray).controls
+            .filter((control: AbstractControl) => control.get('type').value === 'by');
+
+        this.totalDebitAmount = creditTransactions
+            .map((control: AbstractControl) => Number(control.get('amount').value))
+            .reduce((acc: number, amount: number) => acc + amount, 0);
+
+
 
         if (indx === lastIndx && transactionObj.get('selectedAccount.name').value) {
             const voucherTypeControl = this.journalVoucherForm.get('voucherType');
@@ -956,6 +972,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             setTimeout(() => this.narrationBox?.nativeElement?.focus(), 500);
         }
     }
+
 
     /**
      * This will be use for save entry
@@ -1208,6 +1225,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this.receiptEntries = [];
         this.totalEntries = 0;
         this.adjustmentTransaction = {};
+        this.chequeDetailForm.reset();
 
         // Set entry date
         this.journalVoucherForm.patchValue({
@@ -1409,7 +1427,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @memberof AccountAsVoucherComponent
      */
     public validateAccount(transactionObj: FormGroup, ev: KeyboardEvent, idx: number): void {
-        if (!ev.shiftKey) {
             const transactionsFormArray = this.journalVoucherForm.get('transactions') as FormArray;
             const lastIndx = transactionsFormArray.length - 1;
 
@@ -1439,7 +1456,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 return;
             }
         }
-    }
 
     /**
      * This will be use for on item selection
@@ -1488,9 +1504,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                     this.chequeClearanceInputField?.nativeElement?.focus();
                 } else if (fieldType === 'chqDate') {
                     datePickerField.hide();
-                    if (!event.shiftKey) {
                         this.chqFormSubmitBtn?.nativeElement?.focus();
-                    }
                 }
             }, 100);
         }
@@ -1883,11 +1897,14 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             } else {
                 this.typeField = this.selectedIdx + 1;
             }
-        } else if (type === 'account') {
-            if (transactionAtIndex.get('type')?.value === "to") {
-                this.toAmount = this.selectedIdx;
-            } else {
-                this.byAmount = this.selectedIdx;
+        }
+
+        if (type === 'type') {
+            this.particularAccount = this.selectedIdx + 1;
+        }
+        if (type === 'amount') {
+            if (this.totalCreditAmount === this.totalDebitAmount) {
+                setTimeout(() => this.narrationBox?.nativeElement?.focus(), 500);
             }
         }
     }
