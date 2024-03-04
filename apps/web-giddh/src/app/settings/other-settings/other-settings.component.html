@@ -119,6 +119,22 @@
                                     </sh-select>
                                 </div>
                             </div>
+                            <div class="col-12 col-sm-6" *ngIf="profileData?.country?.countryCode?.toUpperCase() === 'IN'">
+                                <div class="form-group">
+                                    <label>{{ localeData?.export_type }}</label>
+                                    <mat-select
+                                        class="form-control"
+                                        name="exportType"
+                                        [placeholder]="localeData?.select_export_type"
+                                        (selectionChange)="setExportType($event)"
+                                        [(value)]="exportType"
+                                    >
+                                        <mat-option *ngFor="let type of exportTypes" [value]="type?.value"
+                                            >{{ type?.label }}
+                                        </mat-option>
+                                    </mat-select>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
