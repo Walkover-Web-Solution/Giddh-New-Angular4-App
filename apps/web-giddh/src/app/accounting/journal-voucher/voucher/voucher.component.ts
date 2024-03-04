@@ -254,11 +254,11 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     /** From Group for jv */
     public mergedFormGroup: FormGroup;
     /** True if api call in progress */
-    public byAmount: number = null;
+    public activeByAmountIndex: number = null;
     /** True if api call in progress */
-    public toAmount: number = null;
+    public activeToAmountIndex: number = null;
     /** True if api call in progress */
-    public particularAccount: number = null;
+    public activeParticularAccountIndex: number = null;
     /** True if api call in progress */
     public typeField: number = null;
 
@@ -392,9 +392,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this.store.pipe(select(p => p?.ledger?.ledgerCreateSuccess), takeUntil(this.destroyed$)).subscribe((response: boolean) => {
             if (response) {
                 this.activeRow(true, 0);
-                this.particularAccount = 0;
-                this.byAmount = null;
-                this.toAmount = null;
+                this.activeParticularAccountIndex = 0;
+                this.activeByAmountIndex = null;
+                this.activeToAmountIndex = null;
                 this._toaster.successToast(this.localeData?.entry_created, this.commonLocaleData?.app_success);
                 this.refreshEntry();
                 this.store.dispatch(this._ledgerActions.ResetLedger());
@@ -622,9 +622,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @memberof AccountAsVoucherComponent
      */
     public onAccountFocus(event: any, element: any, trxnType: any, index: number): void {
-        if(!event?.target.value){
-           this.byAmount = null;
-           this.toAmount = null;
+        if (!event?.target.value) {
+            this.activeByAmountIndex = null;
+            this.activeToAmountIndex = null;
         }
         this.selectedAccountInputField = event.target;
         this.selectedField = 'account';
@@ -705,9 +705,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         let transactionAtIndex = transactionsFormArray.at(this.selectedIdx) as FormGroup;
 
         if (transactionAtIndex.get('type').value === "to") {
-            this.toAmount = this.selectedIdx;
+            this.activeToAmountIndex = this.selectedIdx;
         } else {
-            this.byAmount = this.selectedIdx;
+            this.activeByAmountIndex = this.selectedIdx;
         }
         // this.focusDebitCreditAmount();
     }
@@ -762,7 +762,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
                     // Update transaction form group with received data
                     transactionAtIndex?.patchValue({
-                        amount: this.calculateDiffAmount(transactionAtIndex.get('type').value.toLowerCase()),
+                        amount: this.calculateDiffAmount(transactionAtIndex.get('type')?.value?.toLowerCase()),
                         particular: accModel?.UniqueName,
                         currentBalance: '',
                         selectedAccount: {
@@ -787,9 +787,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
                     if (openChequePopup === false) {
                         if (transactionAtIndex.get('type').value === "to") {
-                            this.toAmount = this.selectedIdx;
+                            this.activeToAmountIndex = this.selectedIdx;
                         } else {
-                            this.byAmount = this.selectedIdx;
+                            this.activeByAmountIndex = this.selectedIdx;
                         }
                     }
                     this.calculateAmount(transactionAtIndex.get('amount').value, transactionAtIndex, idx);
@@ -854,8 +854,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      */
     public addNewEntry(amount: any, transactionObj: any, entryIndex: number): void {
         let index = entryIndex;
-        this.byAmount = null;
-        this.toAmount = null;
+        this.activeByAmountIndex = null;
+        this.activeToAmountIndex = null;
         // let reqField: any = document.getElementById(`first_element_${entryIndex - 1}`);
         // if (amount === 0 || amount === '0') {
         //     if (entryIndex === 0) {
@@ -1275,7 +1275,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      */
     public ngAfterViewInit(): void {
         this.isComponentLoaded = true;
-        this.particularAccount = 0;
+        this.activeParticularAccountIndex = 0;
         // this.dialog.afterAllClosed.pipe(takeUntil(this.destroyed$)).subscribe(() => {
         //     this.focusDebitCreditAmount();
         // });
@@ -1427,35 +1427,35 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @memberof AccountAsVoucherComponent
      */
     public validateAccount(transactionObj: FormGroup, ev: KeyboardEvent, idx: number): void {
-            const transactionsFormArray = this.journalVoucherForm.get('transactions') as FormArray;
-            const lastIndx = transactionsFormArray.length - 1;
+        const transactionsFormArray = this.journalVoucherForm.get('transactions') as FormArray;
+        const lastIndx = transactionsFormArray.length - 1;
 
-            if (idx === lastIndx) {
-                return;
-            }
-
-            if (!transactionObj.get('selectedAccount.account').value) {
-                transactionObj.patchValue({
-                    selectedAccount: {},
-                    amount: 0,
-                    inventory: []
-                });
-                if (idx) {
-                    transactionsFormArray.removeAt(idx);
-                } else {
-                    ev.preventDefault();
-                }
-                return;
-            }
-
-            if (transactionObj.get('selectedAccount.account').value !== transactionObj.get('selectedAccount.name').value) {
-                let message = this.localeData?.no_account_found;
-                message = message?.replace("[ACCOUNT]", transactionObj.get('selectedAccount.account').value);
-                this._toaster.errorToast(message);
-                ev.preventDefault();
-                return;
-            }
+        if (idx === lastIndx) {
+            return;
         }
+
+        if (!transactionObj.get('selectedAccount.account').value) {
+            transactionObj.patchValue({
+                selectedAccount: {},
+                amount: 0,
+                inventory: []
+            });
+            if (idx) {
+                transactionsFormArray.removeAt(idx);
+            } else {
+                ev.preventDefault();
+            }
+            return;
+        }
+
+        if (transactionObj.get('selectedAccount.account').value !== transactionObj.get('selectedAccount.name').value) {
+            let message = this.localeData?.no_account_found;
+            message = message?.replace("[ACCOUNT]", transactionObj.get('selectedAccount.account').value);
+            this._toaster.errorToast(message);
+            ev.preventDefault();
+            return;
+        }
+    }
 
     /**
      * This will be use for on item selection
@@ -1504,7 +1504,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                     this.chequeClearanceInputField?.nativeElement?.focus();
                 } else if (fieldType === 'chqDate') {
                     datePickerField.hide();
-                        this.chqFormSubmitBtn?.nativeElement?.focus();
+                    this.chqFormSubmitBtn?.nativeElement?.focus();
                 }
             }, 100);
         }
@@ -1900,7 +1900,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         }
 
         if (type === 'type') {
-            this.particularAccount = this.selectedIdx + 1;
+            this.activeParticularAccountIndex = this.selectedIdx + 1;
         }
         if (type === 'amount') {
             if (this.totalCreditAmount === this.totalDebitAmount) {
