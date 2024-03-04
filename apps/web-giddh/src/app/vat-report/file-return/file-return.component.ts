@@ -30,7 +30,7 @@ export class FileReturnComponent implements OnInit, OnDestroy {
     public ukDisplayedColumns: string[] = ['number', 'name', 'aed_amt'];
     /** Holds Active Company Info from store */
     public activeCompany: any;
-    /** Branch Transfer confirmation popup configuration */
+    /** File Return confirmation popup configuration */
     public fileReturnConfirmationConfiguration: ConfirmationModalConfiguration;
 
 
