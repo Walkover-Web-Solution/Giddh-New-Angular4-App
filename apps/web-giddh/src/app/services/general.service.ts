@@ -641,7 +641,7 @@ export class GeneralService {
         }];
         const headerText: string = localeData?.date_change_confirmation_heading;
         const headerCssClass: string = 'd-inline-block mr-1';
-        const messageCssClass: string = 'mr-b1 text-light';
+        const messageCssClass: string = 'mr-b1';
         const footerCssClass: string = 'mr-b1';
         return (isVoucherDateSelected) ? {
             headerText,
