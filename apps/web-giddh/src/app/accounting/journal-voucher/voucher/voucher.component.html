@@ -8,16 +8,24 @@
                 <div class="text-left mr-b1" (clickOutside)="showFromDatePicker = false">
                     <span class="voucher-heading font-16">{{
                         journalVoucherForm.get("voucherType").value | uppercase
-                        }}</span>
+                    }}</span>
                 </div>
-                <div class="d-flex justify-content-end align-items-baseline pull-right text-right mr-b1 custom-entry-date"
-                    (clickOutside)="showFromDatePicker = false">
+                <div
+                    class="d-flex justify-content-end align-items-baseline pull-right text-right mr-b1 custom-entry-date"
+                    (clickOutside)="showFromDatePicker = false"
+                >
                     <span>{{ displayDay }},</span>
                     <div class="entry-date-container">
-                        <giddh-datepicker [name]="'entryDate'" [placeholder]="giddhDateFormat"
-                            [cssClass]="'form-control text-right voucher-date-field'" formControlName="entryDate"
-                            [showToggleIcon]="false" (datepickerState)="onDateFieldFocus()"
-                            (dateSelected)="handleVoucherDateChange(); dateEntered()" (keydown.enter)="dateEntered()">
+                        <giddh-datepicker
+                            [name]="'entryDate'"
+                            [placeholder]="giddhDateFormat"
+                            [cssClass]="'form-control text-right voucher-date-field'"
+                            formControlName="entryDate"
+                            [showToggleIcon]="false"
+                            (datepickerState)="onDateFieldFocus()"
+                            (dateSelected)="handleVoucherDateChange(); dateEntered()"
+                            (keydown.enter)="dateEntered()"
+                        >
                         </giddh-datepicker>
                     </div>
                 </div>
@@ -39,40 +47,64 @@
                         </thead>
                         <br />
                         <tbody>
-                            <ng-container *ngFor="
+                            <ng-container
+                                *ngFor="
                                     let transaction of journalVoucherForm.get('transactions').controls;
                                     let i = index;
                                     let l = last
-                                " formArrayName="transactions">
+                                "
+                                formArrayName="transactions"
+                            >
                                 <ng-container [formGroupName]="i">
                                     <tr (click)="activeRow(true, i)">
-                                        <td class="voucher-type" [style.width.px]="40" [ngClass]="{
+                                        <td
+                                            class="voucher-type"
+                                            [style.width.px]="40"
+                                            [ngClass]="{
                                                 'active-row':
                                                     (isSelectedRow && selectedIdx === i) ||
                                                     (!selectedIdx && !isSelectedRow && i == 0)
-                                            }">
-                                            <text-field [autoFocus]="typeField === i" [id]="'transaction_' + i"
-                                                [type]="'text'" [cssClass]="'form-control text-capitalize byTo'"
+                                            }"
+                                        >
+                                            <text-field
+                                                [autoFocus]="typeField === i"
+                                                [id]="'transaction_' + i"
+                                                [type]="'text'"
+                                                [cssClass]="'form-control text-capitalize byTo'"
                                                 [readonly]="
                                                     (i === 0 && !isFirstRowDeleted) ||
                                                     journalVoucherForm.get('voucherType')?.value === 'receipt'
-                                                " formControlName="type" (input)="selectRow(true, i, transaction);"
+                                                "
+                                                formControlName="type"
+                                                (input)="selectRow(true, i, transaction)"
                                                 [ngClass]="{ 'focus': isSelectedRow && selectedIdx === i }"
-                                                [value]="transaction.get('type')?.value | lowercase" [maxlength]="'2'"
-                                                [autocomplete]="'off'" (keydown.Enter)="changeTab('type')"
-                                                (keydown.Tab)="changeTab('type')"></text-field>
+                                                [value]="transaction.get('type')?.value | lowercase"
+                                                [maxlength]="'2'"
+                                                [autocomplete]="'off'"
+                                                (keydown.Enter)="changeTab('type')"
+                                                (keydown.Tab)="changeTab('type')"
+                                            ></text-field>
                                         </td>
-                                        <td class="particular-account" [ngClass]="{
+                                        <td
+                                            class="particular-account"
+                                            [ngClass]="{
                                                 'active-row':
                                                     (isSelectedRow && selectedIdx === i) ||
                                                     (!selectedIdx && !isSelectedRow && i == 0)
-                                            }" formGroupName="selectedAccount">
-                                            <text-field [autoFocus]="
-                                                    activeParticularAccountIndex  === i &&
+                                            }"
+                                            formGroupName="selectedAccount"
+                                        >
+                                            <text-field
+                                                [autoFocus]="
+                                                    activeParticularAccountIndex === i &&
                                                     !transaction.get('selectedAccount.name')?.value
-                                                " [autocomplete]="'off'" [id]="'transaction_' + i" [type]="'text'"
+                                                "
+                                                [autocomplete]="'off'"
+                                                [id]="'transaction_' + i"
+                                                [type]="'text'"
                                                 [cssClass]="'form-control from-or-to-acc'"
-                                                [required]="transaction.get('amount')?.value" formControlName="account"
+                                                [required]="transaction.get('amount')?.value"
+                                                formControlName="account"
                                                 (input)="
                                                     onAccountFocus(
                                                         $event,
@@ -81,73 +113,101 @@
                                                             : toAmountField,
                                                         transaction.get('type')?.value,
                                                         i
-                                                    );searchedAccountQuery.next($event)
-                                                " (blur)="onAccountBlur($event)"
+                                                    );
+                                                    searchedAccountQuery.next($event)
+                                                "
+                                                (blur)="onAccountBlur($event)"
                                                 [ngClass]="{ 'focus': isSelectedRow && selectedIdx === i }"
                                                 (keydown)="detectKey($event)"
                                                 (keydown.Tab)="validateAccount(transaction, $event, i)"
-                                                (keydown.Shift)="showLedgerAccountList=false"></text-field>
+                                                (keydown.Shift)="showLedgerAccountList = false"
+                                            ></text-field>
                                         </td>
-                                        <td class="amount1" [ngClass]="{
+                                        <td
+                                            class="amount1"
+                                            [ngClass]="{
                                                 'active-row':
                                                     (isSelectedRow && selectedIdx === i) ||
                                                     (!selectedIdx && !isSelectedRow && i == 0)
-                                            }">
-                                            <text-field *ngIf="
-                                                transaction.get('type')?.value?.toLowerCase() === 'by'
-                                                " (keydown.Tab)="changeTab('date')"
-                                                [autoFocus]="activeByAmountIndex   === i" [autocomplete]="'off'"
-                                                [type]="'text'" [cssClass]="'form-control text-right debit-credit'"
-                                                [allowDecimalDigitsOnly]="true" [mask]="inputMaskFormat"
-                                                formControlName="amount" (input)="selectRow(true, i)" (keydown.Enter)="
+                                            }"
+                                        >
+                                            <text-field
+                                                *ngIf="transaction.get('type')?.value?.toLowerCase() === 'by'"
+                                                (keydown.Tab)="changeTab('date')"
+                                                [autoFocus]="activeByAmountIndex === i"
+                                                [autocomplete]="'off'"
+                                                [type]="'text'"
+                                                [cssClass]="'form-control text-right debit-credit'"
+                                                decimalDigitsDirective
+                                                [mask]="inputMaskFormat"
+                                                formControlName="amount"
+                                                (input)="selectRow(true, i)"
+                                                (keydown.Enter)="
                                                     addNewEntry(transaction.get('amount')?.value, transaction, i);
                                                     changeTab('date')
                                                 "
                                                 (blur)="addNewEntry(transaction.get('amount')?.value, transaction, i)"
-                                                [ngClass]="{ 'focus': isSelectedRow && selectedIdx === i }" (change)="
+                                                [ngClass]="{ 'focus': isSelectedRow && selectedIdx === i }"
+                                                (change)="
                                                     calculateAmount(transaction.get('amount')?.value, transaction, i)
-                                                "></text-field>
+                                                "
+                                            ></text-field>
                                         </td>
-                                        <td class="amount2" [ngClass]="{
+                                        <td
+                                            class="amount2"
+                                            [ngClass]="{
                                                 'active-row':
                                                     (isSelectedRow && selectedIdx === i) ||
                                                     (!selectedIdx && !isSelectedRow && i == 0)
-                                            }">
-                                            <text-field *ngIf="
-                                                transaction.get('type')?.value?.toLowerCase() === 'to'
-                                                " (keydown.Tab)="changeTab('amount')"
-                                                [autoFocus]="activeToAmountIndex  === i" [autocomplete]="'off'"
-                                                [type]="'text'" [cssClass]="'form-control text-right debit-credit'"
-                                                #toAmountField [allowDecimalDigitsOnly]="true" [mask]="inputMaskFormat"
-                                                formControlName="amount" (input)="selectRow(true, i)" (keydown.Enter)="
+                                            }"
+                                        >
+                                            <text-field
+                                                *ngIf="transaction.get('type')?.value?.toLowerCase() === 'to'"
+                                                (keydown.Tab)="changeTab('amount')"
+                                                [autoFocus]="activeToAmountIndex === i"
+                                                [autocomplete]="'off'"
+                                                [type]="'text'"
+                                                [cssClass]="'form-control text-right debit-credit'"
+                                                #toAmountField
+                                                decimalDigitsDirective
+                                                [mask]="inputMaskFormat"
+                                                formControlName="amount"
+                                                (input)="selectRow(true, i)"
+                                                (keydown.Enter)="
                                                     addNewEntry(transaction.get('amount')?.value, transaction, i);
                                                     changeTab('amount')
                                                 "
                                                 (blur)="addNewEntry(transaction.get('amount')?.value, transaction, i)"
-                                                [ngClass]="{ 'focus': isSelectedRow && selectedIdx === i }" (change)="
+                                                [ngClass]="{ 'focus': isSelectedRow && selectedIdx === i }"
+                                                (change)="
                                                     calculateAmount(transaction.get('amount')?.value, transaction, i)
-                                                "></text-field>
+                                                "
+                                            ></text-field>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td colspan="100%" formGroupName="selectedAccount">
-                                            <span [ngClass]="{
+                                            <span
+                                                [ngClass]="{
                                                     'active-row-transparent':
                                                         (isSelectedRow && selectedIdx === i) ||
                                                         (!selectedIdx && !isSelectedRow && i == 0)
-                                                }" *ngIf="
+                                                }"
+                                                *ngIf="
                                                     journalVoucherForm
                                                         .get('transactions')
                                                         .at(i)
                                                         .get('selectedAccount.account')?.value &&
                                                     transaction.get('currentBalance')?.value !== ''
-                                                " class="current-balance d-block mr-b05">
+                                                "
+                                                class="current-balance d-block mr-b05"
+                                            >
                                                 Current Balance:
                                                 {{ transaction.get("currentBalance")?.value | giddhCurrency }}
                                                 {{
-                                                transaction.get("type")?.value === "DEBIT"
-                                                ? localeData?.dr
-                                                : localeData?.cr
+                                                    transaction.get("type")?.value === "DEBIT"
+                                                        ? localeData?.dr
+                                                        : localeData?.cr
                                                 }}
                                             </span>
                                         </td>
@@ -163,9 +223,16 @@
                 <div class="col-xs-10 col-sm-10">
                     <div class="form-group custom-textarea">
                         <label>{{ localeData?.narration }}:</label>
-                        <textarea #narrationBox id="narration" class="form-control" formControlName="description"
-                            (keyup.enter)="openConfirmBox(submitButton)" (keydown.tab)="openConfirmBox(submitButton)"
-                            resize="false" rows="3"></textarea>
+                        <textarea
+                            #narrationBox
+                            id="narration"
+                            class="form-control"
+                            formControlName="description"
+                            (keyup.enter)="openConfirmBox(submitButton)"
+                            (keydown.tab)="openConfirmBox(submitButton)"
+                            resize="false"
+                            rows="3"
+                        ></textarea>
                     </div>
                 </div>
 
@@ -175,12 +242,23 @@
                             <h1>{{ localeData?.accept }}</h1>
                             <div class="pd-t2">
                                 <div class="d-flex column-gap15 justify-content-center">
-                                    <button mat-stroked-button color="primary" [hidden]="isCompany" #submitButton
-                                        (keyup)="keyUpOnSubmitButton($event)" (click)="saveEntry()">
+                                    <button
+                                        mat-stroked-button
+                                        color="primary"
+                                        [hidden]="isCompany"
+                                        #submitButton
+                                        (keyup)="keyUpOnSubmitButton($event)"
+                                        (click)="saveEntry()"
+                                    >
                                         {{ commonLocaleData?.app_yes }}
                                     </button>
-                                    <button mat-stroked-button color="primary" #resetButton
-                                        (keyup)="keyUpOnResetButton($event)" (click)="acceptCancel()">
+                                    <button
+                                        mat-stroked-button
+                                        color="primary"
+                                        #resetButton
+                                        (keyup)="keyUpOnResetButton($event)"
+                                        (click)="acceptCancel()"
+                                    >
                                         {{ commonLocaleData?.app_no }}
                                     </button>
                                 </div>
@@ -192,8 +270,12 @@
                         </div>
                     </div>
                     <div class="total-box text-right pull-right">
-                        <span><strong>{{ totalDebitAmount | giddhCurrency }}</strong></span>
-                        <span><strong>{{ totalCreditAmount | giddhCurrency }}</strong></span>
+                        <span
+                            ><strong>{{ totalDebitAmount | giddhCurrency }}</strong></span
+                        >
+                        <span
+                            ><strong>{{ totalCreditAmount | giddhCurrency }}</strong></span
+                        >
                     </div>
                     <span class="border-bottom custom-border float-right"></span>
                 </div>
@@ -205,57 +287,108 @@
             {{ localeData?.ledger_accounts_list }}
         </h3>
         <h3 class="pd-1 bd-rb primary-color" *ngIf="selectedField === 'stock'">{{ localeData?.stock_items_list }}</h3>
-        <accounting-virtual-list [keydownUpInput]="keyUpDownEvent" [filterText]="filterByText" [options]="inputForList"
-            [showList]="showLedgerAccountList" [isFilterEnabled]="true" (selected)="onItemSelected($event)"
-            [(ngModel)]="currentSelectedValue" [placeholder]="commonLocaleData?.app_select_option"
-            (scrollEnd)="handleScrollEnd()" [notFoundLink]="selectedField === 'account'"
-            (noResultsClicked)="addNewAccount()" [multiple]="false" [ItemHeight]="33"
-            (noOptionsFound)="onNoAccountFound($event)" [isPaginationEnabled]="true" [localeData]="localeData"
-            [commonLocaleData]="commonLocaleData" [notFoundMsg]="commonLocaleData?.app_no_result_found"
-            [notFoundLinkText]="commonLocaleData?.app_create_new"></accounting-virtual-list>
+        <accounting-virtual-list
+            [keydownUpInput]="keyUpDownEvent"
+            [filterText]="filterByText"
+            [options]="inputForList"
+            [showList]="showLedgerAccountList"
+            [isFilterEnabled]="true"
+            (selected)="onItemSelected($event)"
+            [(ngModel)]="currentSelectedValue"
+            [placeholder]="commonLocaleData?.app_select_option"
+            (scrollEnd)="handleScrollEnd()"
+            [notFoundLink]="selectedField === 'account'"
+            (noResultsClicked)="addNewAccount()"
+            [multiple]="false"
+            [ItemHeight]="33"
+            (noOptionsFound)="onNoAccountFound($event)"
+            [isPaginationEnabled]="true"
+            [localeData]="localeData"
+            [commonLocaleData]="commonLocaleData"
+            [notFoundMsg]="commonLocaleData?.app_no_result_found"
+            [notFoundLinkText]="commonLocaleData?.app_create_new"
+        ></accounting-virtual-list>
     </div>
 </div>
 
 <div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'"></div>
-<generic-aside-menu-account [class]="accountAsideMenuState" [@slideInOut]="accountAsideMenuState"
-    (closeAsideEvent)="toggleAccountAsidePane($event)" [keyboardShortcut]="{ 'esc': accountAsideMenuState === 'in' }"
-    [selectedGrpUniqueName]="categoryOfAccounts" *ngIf="accountAsideMenuState === 'in'"
-    [selectedAccountUniqueName]="null" (onShortcutPress)="toggleAccountAsidePane()"
-    (addEvent)="addNewSidebarAccount($event)" (updateEvent)="updateSidebarAccount($event)"></generic-aside-menu-account>
+<generic-aside-menu-account
+    [class]="accountAsideMenuState"
+    [@slideInOut]="accountAsideMenuState"
+    (closeAsideEvent)="toggleAccountAsidePane($event)"
+    [keyboardShortcut]="{ 'esc': accountAsideMenuState === 'in' }"
+    [selectedGrpUniqueName]="categoryOfAccounts"
+    *ngIf="accountAsideMenuState === 'in'"
+    [selectedAccountUniqueName]="null"
+    (onShortcutPress)="toggleAccountAsidePane()"
+    (addEvent)="addNewSidebarAccount($event)"
+    (updateEvent)="updateSidebarAccount($event)"
+></generic-aside-menu-account>
 
 <!--Modal for All Items -->
 <ng-template #chequeEntryModal>
     <div class="modal-header theme-bg pd-l2 pd-r2">
         <h3 class="modal-title bg" id="modal-title">{{ localeData?.cheque_details }}</h3>
-        <button mat-icon-button aria-hidden="true" class="close" [attr.aria-label]="commonLocaleData?.app_close"
-            (click)="closeChequeDetailForm()">
+        <button
+            mat-icon-button
+            aria-hidden="true"
+            class="close"
+            [attr.aria-label]="commonLocaleData?.app_close"
+            (click)="closeChequeDetailForm()"
+        >
             ×
         </button>
     </div>
     <div class="modal-body pd-l2 pd-r2 clearfix d-flex">
-        <form *ngIf="chequeDetailForm" autocomplete="off" novalidate name="chequeDetailForm"
-            [formGroup]="chequeDetailForm" class="new-account-form">
+        <form
+            *ngIf="chequeDetailForm"
+            autocomplete="off"
+            novalidate
+            name="chequeDetailForm"
+            [formGroup]="chequeDetailForm"
+            class="new-account-form"
+        >
             <div class="clearfix mr-t1">
-                <input-field [autocomplete]="'off'" [name]="'account1'" [placeholder]="localeData?.cheque_number"
-                    [type]="'text'" formControlName="chequeNumber"
+                <input-field
+                    [autocomplete]="'off'"
+                    [name]="'account1'"
+                    [placeholder]="localeData?.cheque_number"
+                    [type]="'text'"
+                    formControlName="chequeNumber"
                     (keydown)="onCheckNumberFieldKeyDown($event, 'chqNumber', chequeClearanceDateInput)"
-                    [label]="localeData?.cheque_number" (keydown.enter)="$event.preventDefault()" #chequeNumberInput
-                    [autoFocus]="true" cdkFocusInitial>
+                    [label]="localeData?.cheque_number"
+                    (keydown.enter)="$event.preventDefault()"
+                    #chequeNumberInput
+                    [autoFocus]="true"
+                    cdkFocusInitial
+                >
                 </input-field>
             </div>
             <div class="clearfix mr-t1 check-clearance-date">
-                <giddh-datepicker [name]="'entryDate'" [placeholder]="giddhDateFormat"
-                    [cssClass]="'form-control voucher-date-field'" formControlName="chequeClearanceDate"
-                    [showToggleIcon]="false" (keydown.enter)="$event.preventDefault()"
-                    (dateSelected)="selectDate($event)" [appearance]="'outline'" [cssClass]="'w-100'">
+                <giddh-datepicker
+                    [name]="'entryDate'"
+                    [placeholder]="giddhDateFormat"
+                    [cssClass]="'form-control voucher-date-field'"
+                    formControlName="chequeClearanceDate"
+                    [showToggleIcon]="false"
+                    (keydown.enter)="$event.preventDefault()"
+                    (dateSelected)="selectDate($event)"
+                    [appearance]="'outline'"
+                    [cssClass]="'w-100'"
+                >
                 </giddh-datepicker>
             </div>
         </form>
     </div>
     <div class="modal-footer">
         <div class="d-flex float-end column-gap15">
-            <button mat-stroked-button color="primary" class="w-100"
-                (click)="onSubmitChequeDetail(); focusDebitCreditAmount()" #chqFormSubmitBtn>
+            <button
+                mat-stroked-button
+                color="primary"
+                class="w-100"
+                (click)="onSubmitChequeDetail(); focusDebitCreditAmount()"
+                #chqFormSubmitBtn
+            >
                 {{ commonLocaleData?.app_create }}
             </button>
             <button mat-stroked-button color="primary" class="w-100" (click)="closeChequeDetailForm()">
@@ -266,9 +399,13 @@
 </ng-template>
 
 <div class="aside-overlay" (click)="closeCreateStock($event)" *ngIf="asideMenuStateForProductService === 'in'"></div>
-<aside-inventory-stock-group *ngIf="asideMenuStateForProductService === 'in'" [autoFocus]="autoFocusStockGroupField"
-    (closeAsideEvent)="closeCreateStock()" [class]="asideMenuStateForProductService"
-    [@slideInOut]="asideMenuStateForProductService">
+<aside-inventory-stock-group
+    *ngIf="asideMenuStateForProductService === 'in'"
+    [autoFocus]="autoFocusStockGroupField"
+    (closeAsideEvent)="closeCreateStock()"
+    [class]="asideMenuStateForProductService"
+    [@slideInOut]="asideMenuStateForProductService"
+>
 </aside-inventory-stock-group>
 
 <!-- Recipt entry modal -->

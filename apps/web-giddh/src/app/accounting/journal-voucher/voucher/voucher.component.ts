@@ -790,7 +790,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                             this.activeByAmountIndex = this.selectedIdx;
                         }
                     }
-                    this.calculateAmount(transactionAtIndex.get('amount').value, transactionAtIndex, idx);
+                    this.calculateAmount(Number(transactionAtIndex.get('amount').value), transactionAtIndex, idx);
 
                 } else {
                     this.deleteRow(idx);
@@ -905,9 +905,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
 
         const creditTransactions = (this.journalVoucherForm.get('transactions') as FormArray).controls
-            .filter((control: AbstractControl) => control.get('type').value === 'by');
+            .filter((control: AbstractControl) => control.get('type').value === 'to');
 
-        this.totalDebitAmount = creditTransactions
+        this.totalCreditAmount = creditTransactions
             .map((control: AbstractControl) => Number(control.get('amount').value))
             .reduce((acc: number, amount: number) => acc + amount, 0);
 
@@ -1091,6 +1091,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                     data.transactions.splice(indexOfMaxAmountEntry, 1);
                 }
                 data = this.tallyModuleService.prepareRequestForAPI(data);
+                this.activeByAmountIndex = null;
+                this.activeToAmountIndex = null;
                 this.store.dispatch(this._ledgerActions.CreateBlankLedger(data, accUniqueName));
             } else {
                 const byOrTo = data.voucherType === 'Payment' ? 'by' : 'to';
