@@ -789,6 +789,27 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 (this.purchaseRecordInvoiceNumber !== this.invFormData.voucherDetails.voucherNumber));
     }
 
+    /**
+     * Show/Hide tax column if condition fulfills
+     *
+     * @readonly
+     * @type {boolean}
+     * @memberof VoucherComponent
+     */
+    public get showHideTaxColumn(): boolean {
+        let accountPartyType = '';
+        this.accountAddressList?.forEach(address => {
+            if (address.isDefault) {
+                accountPartyType = address.partyType.toLowerCase();
+            }
+        });
+        if ((this.isSalesInvoice || this.isCreditNote) && !this.selectedCompany?.withPay && (this.selectedCompany?.country !== this.customerCountryName || accountPartyType === 'sez' || accountPartyType === 'deemed export')) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
     constructor(
         private store: Store<AppState>,
         private salesAction: SalesActions,
@@ -1595,7 +1616,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 if (this.invFormData.voucherDetails.customerUniquename && this.invFormData.voucherDetails.voucherDate && !this.isLastInvoiceCopied && !(this.isProformaInvoice || this.isEstimateInvoice)) {
                     this.getAllAdvanceReceipts(this.invFormData.voucherDetails.customerUniquename, this.invFormData.voucherDetails.voucherDate)
                 }
-                
+
                 this.checkIfEntryHasStock();
                 this.calculateBalanceDue();
                 this.calculateTotalDiscount();
@@ -7874,7 +7895,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         this.companyTaxesList = o;
                         this.theadArrReadOnly.forEach((item: IContentCommon) => {
                             // show tax label
-                            if (item.label === 'Tax') {
+                            if (item.label === this.commonLocaleData?.app_tax) {
                                 item.display = true;
                             }
                             return item;
@@ -9575,11 +9596,11 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public checkIfEntryHasStock(): void {
         this.hasStock = false;
 
-        this.invFormData.entries.forEach( entry => {
-            if(entry.transactions[0]?.isStockTxn){
+        this.invFormData.entries.forEach(entry => {
+            if (entry.transactions[0]?.isStockTxn) {
                 this.hasStock = true;
             }
         });
     }
-    
+
 }
