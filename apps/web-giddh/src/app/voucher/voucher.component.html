@@ -1748,19 +1748,17 @@
                                     <table class="w-100">
                                         <thead>
                                             <tr>
-                                                <th *ngFor="let item of theadArrReadOnly" [hidden]="!item.display"
-                                                    class="thead-sales-invoice" [ngClass]="{ 'd-none' : 
-                                                        ((commonLocaleData?.app_quantity_unit === item?.label) || (commonLocaleData?.app_rate === item?.label)) 
-                                                        && !hasStock }"
-                                                    >
-                                                    {{ item?.label }}
-                                                    <span *ngIf="item.label === 'Tax' && isRcmEntry"
-                                                        >({{ commonLocaleData?.app_rcm }})<sup
-                                                            class="mandatory-asterisk"
-                                                            >*</sup
-                                                        ></span
-                                                    >
-                                                </th>
+                                                <ng-container *ngFor="let item of theadArrReadOnly">
+                                                    <th *ngIf="item.label !== commonLocaleData?.app_tax || (item.label === commonLocaleData?.app_tax && showHideTaxColumn)" [hidden]="!item.display" class="thead-sales-invoice" [ngClass]="{ 'd-none' :  ((commonLocaleData?.app_quantity_unit === item?.label) || (commonLocaleData?.app_rate === item?.label)) && !hasStock }">
+                                                        {{ item?.label }}
+                                                        <span *ngIf="item.label === commonLocaleData?.app_tax && isRcmEntry"
+                                                            >({{ commonLocaleData?.app_rcm }})<sup
+                                                                class="mandatory-asterisk"
+                                                                >*</sup
+                                                            ></span
+                                                        >
+                                                    </th>
+                                                </ng-container>
                                             </tr>
                                         </thead>
                                         <tbody
@@ -1993,8 +1991,8 @@
                                                 </td>
                                                 <td [class.error-box]="transaction.requiredTax" [width]="hasStock ? '10%' : '14%'"
                                                     (focus)="transaction.requiredTax = false" *ngIf="
-                                                        !currentVoucherFormDetails ||
-                                                        currentVoucherFormDetails?.taxesAllowed
+                                                        (!currentVoucherFormDetails ||
+                                                        currentVoucherFormDetails?.taxesAllowed) && this.showHideTaxColumn
                                                     "
                                                 >
                                                     <div class="td-wrapper">
@@ -2640,8 +2638,8 @@
                                                 <td
                                                     (click)="closeDiscountPopup()"
                                                     *ngIf="
-                                                        !currentVoucherFormDetails ||
-                                                        currentVoucherFormDetails?.taxesAllowed
+                                                        (!currentVoucherFormDetails ||
+                                                        currentVoucherFormDetails?.taxesAllowed) && this.showHideTaxColumn
                                                     " [width]="hasStock ? '10%' : '14%'">
                                                     <div class="td-wrapper">
                                                         <div class="text-right flex-fill">
