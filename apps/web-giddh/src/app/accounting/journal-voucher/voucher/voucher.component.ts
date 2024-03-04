@@ -622,10 +622,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @memberof AccountAsVoucherComponent
      */
     public onAccountFocus(event: any, element: any, trxnType: any, index: number): void {
-        if (!event?.target.value) {
-            this.activeByAmountIndex = null;
-            this.activeToAmountIndex = null;
-        }
+        this.activeByAmountIndex = null;
+        this.activeToAmountIndex = null;
         this.selectedAccountInputField = event.target;
         this.selectedField = 'account';
         this.showConfirmationBox = false;
