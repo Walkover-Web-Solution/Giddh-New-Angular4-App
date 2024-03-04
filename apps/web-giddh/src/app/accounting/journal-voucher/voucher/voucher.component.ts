@@ -583,7 +583,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @memberof AccountAsVoucherComponent
      */
     public selectRow(type: boolean, index: number, transaction?: FormGroup): void {
-        console.log(transaction);
         this.isSelectedRow = type;
         this.selectedIdx = index;
         this.showLedgerAccountList = false;
@@ -623,7 +622,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @memberof AccountAsVoucherComponent
      */
     public onAccountFocus(event: any, element: any, trxnType: any, index: number): void {
-        console.log(event, element, trxnType, index);
         this.selectedAccountInputField = event.target;
         this.selectedField = 'account';
         this.showConfirmationBox = false;
