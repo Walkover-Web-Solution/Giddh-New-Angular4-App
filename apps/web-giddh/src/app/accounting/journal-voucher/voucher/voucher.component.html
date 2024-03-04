@@ -110,10 +110,7 @@
                                                 (input)="
                                                     onAccountFocus(
                                                         $event,
-                                                        transaction.get('type')?.value === 'by' ||
-                                                            transaction.get('type')?.value === 'By' ||
-                                                            transaction.get('type')?.value === 'bY' ||
-                                                            transaction.get('type')?.value === 'BY'
+                                                        transaction.get('type')?.value.toLowerCase() === 'by'
                                                             ? byAmountField
                                                             : toAmountField,
                                                         transaction.get('type')?.value,
@@ -136,10 +133,7 @@
                                         >
                                             <text-field
                                                 *ngIf="
-                                                    transaction.get('type')?.value === 'by' ||
-                                                    transaction.get('type')?.value === 'By' ||
-                                                    transaction.get('type')?.value === 'bY' ||
-                                                    transaction.get('type')?.value === 'BY'
+                                                transaction.get('type')?.value.toLowerCase() === 'by'
                                                 "
                                                 (keydown.Tab)="changeTab('date')"
                                                 [autoFocus]="byAmount === i"
