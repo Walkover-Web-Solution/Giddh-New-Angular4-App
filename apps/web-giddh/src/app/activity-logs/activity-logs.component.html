@@ -21,8 +21,10 @@
                     </select-field>
                 </div>
                 <div class="custom-datepicker-wrapper" *ngIf="selectedField?.value === 'LOG_DATE'">
-                    <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
+                    <div class="custom-datepicker date-label" (click)="showGiddhDatepicker($event)">
+                        <label for="selectedDateRange">date</label>
                         <input
+                            id="selectedDateRange"
                             type="text"
                             name="selectedDateRange"
                             [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"

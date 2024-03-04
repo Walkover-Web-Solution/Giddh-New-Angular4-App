@@ -65,9 +65,11 @@
                         </sh-select>
                     </div>
                     <div class="input-grp-date-range-picker d-flex">
-                        <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
+                        <div class="custom-datepicker date-label" (click)="showGiddhDatepicker($event)">
+                            <label for="selectedDateRange">date</label>
                             <input
                                 type="text"
+                                id="selectedDateRange"
                                 name="selectedDateRange"
                                 [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
                                 class="giddh-datepicker date-range-picker"

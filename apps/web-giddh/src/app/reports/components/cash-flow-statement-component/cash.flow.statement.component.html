@@ -14,8 +14,10 @@
                         <p class="mr-b15">{{ activeCompany?.name }}</p>
                         <h5 class="bold mb-2">{{ localeData?.cashflow_statement }}</h5>
                     </div>
-                    <div class="custom-datepicker custom-new-datepicker" (click)="showGiddhDatepicker($event)">
+                    <div class="custom-datepicker custom-new-datepicker date-label" (click)="showGiddhDatepicker($event)">
+                        <label for="selectedDateRange">date</label>
                         <input
+                            id="selectedDateRange"
                             type="text"
                             name="selectedDateRange"
                             [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"

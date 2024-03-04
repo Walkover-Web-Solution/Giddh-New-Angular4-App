@@ -8,8 +8,10 @@
     <div class="download-table-container">
         <div class="activity-filter-wrap">
             <div class="mr-t15 mr-b15 custom-datepicker-wrapper">
-                <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
+                <div class="custom-datepicker date-label" (click)="showGiddhDatepicker($event)">
+                    <label for="selectedDateRange"></label>
                     <input
+                        id="selectedDateRange"
                         type="text"
                         name="selectedDateRange"
                         [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
@@ -50,7 +52,7 @@
                 <ng-container matColumnDef="filter">
                     <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_filter }}</th>
                     <td mat-cell *matCellDef="let element">
-                        <button mat-mini-fab class="download-table-btn" (click)="openDialog(element)">
+                        <button mat-mini-fab class="download-table-btn" aria-label="info icon" (click)="openDialog(element)">
                             <i class="icon-info"></i>
                         </button>
                     </td>
