@@ -703,6 +703,7 @@
                                                 [matMenuTriggerFor]="shippingAddress"
                                                 class="icon-edit text-blue cursor-pointer pl-2 font-12"
                                                 role="button"
+                                                aria-label="edit address"
                                             ></i>
                                             <mat-menu #shippingAddress="matMenu">
                                                 <div class="mat-menu-width-large vouchers-address-menu">
@@ -1712,6 +1713,7 @@
                                             newExchangeRate = originalExchangeRate
                                         "
                                         role="button"
+                                        aria-label="edit currency"
                                     ></i>
                                 </div>
 
@@ -2276,9 +2278,9 @@
                                                             <div class="row mr-0 ml-0 mt-1">
                                                                 <div class="col-6 col-sm-6 pl-0">
                                                                     <div class="entry-date">
-                                                                        <label class="font-12 w-100 d-block"
+                                                                        <p class="font-12 w-100 d-block"
                                                                             >{{ localeData?.entry_date }}:
-                                                                        </label>
+                                                                        </p>
                                                                         <span
                                                                             *ngIf="!isUpdateMode"
                                                                             class="custom-date-entries custom-input-field d-flex"
@@ -2314,6 +2316,7 @@
                                                                                     src="{{
                                                                                         imgPath
                                                                                     }}edit-pencilicon.svg"
+                                                                                    alt="edit-icon"
                                                                                 />
                                                                             </span>
                                                                         </span>
@@ -2358,6 +2361,7 @@
                                                                                         src="{{
                                                                                             imgPath
                                                                                         }}edit-pencilicon.svg"
+                                                                                        alt="edit-icon"
                                                                                     />
                                                                                 </span>
                                                                             </span>

@@ -71,6 +71,7 @@
                                                     <ng-template #optionTemplate let-option="option">
                                                         <a
                                                             href="javascript:void(0)"
+                                                            aria-label="label"
                                                             class="list-item flex-column border-none"
                                                         >
                                                             <div class="item">{{ option.label }}</div>
@@ -81,6 +82,7 @@
                                                     <ng-template #notFoundLinkTemplate>
                                                         <a
                                                             href="javascript:void(0)"
+                                                            aria-label="found text"
                                                             class="list-item pd-l05 pd-r05 d-flex justify-content-between w-100 border-none"
                                                             [keyboardShortcut]="'alt+c'"
                                                         >
@@ -95,7 +97,7 @@
                                                     *ngIf="purchaseOrder.voucherDetails.customerName"
                                                 >
                                                     <span class="cp aqua-color" *ngIf="!isUpdateMode">
-                                                        <a href="javascript:void(0)" (click)="getVendorDetails()">{{
+                                                        <a href="javascript:void(0)" aria-label="vendor details" (click)="getVendorDetails()">{{
                                                             localeData?.vendor_details
                                                         }}</a>
                                                     </span>
@@ -108,6 +110,7 @@
                                                     <p class="font-15">
                                                         <a
                                                             href="javascript:;"
+                                                            aria-label="number"
                                                             (click)="
                                                                 openPurchaseOrderPreviewPopup(
                                                                     purchaseOrderPreviewModal,
@@ -156,6 +159,8 @@
                                                                         *ngIf="accountAddressList?.length > 1"
                                                                     >
                                                                         <a
+                                                                            href="javascript:void(0);"
+                                                                            aria-label="change"
                                                                             dropdownToggle
                                                                             type="button"
                                                                             class="dropdown-toggle"
@@ -173,6 +178,8 @@
                                                                                 "
                                                                             >
                                                                                 <a
+                                                                                    href="javascript:void(0);"
+                                                                                    aria-label="address"
                                                                                     class="dropdown-item"
                                                                                     (click)="
                                                                                         selectAddress(
@@ -391,6 +398,8 @@
                                                                     >
                                                                         <a
                                                                             dropdownToggle
+                                                                            href="javascript:void(0);"
+                                                                            aria-label="change"
                                                                             type="button"
                                                                             class="dropdown-toggle"
                                                                             >{{ localeData?.change }}</a
@@ -407,6 +416,8 @@
                                                                                 "
                                                                             >
                                                                                 <a
+                                                                                    href="javascript:void(0);"
+                                                                                    aria-label="address"
                                                                                     class="dropdown-item"
                                                                                     (click)="
                                                                                         selectAddress(
@@ -658,6 +669,8 @@
                                                                 *ngIf="companyAddressList?.length > 1"
                                                             >
                                                                 <a
+                                                                    href="jkavascript:void(0);"
+                                                                    aria-label="change"
                                                                     dropdownToggle
                                                                     type="button"
                                                                     class="dropdown-toggle"
@@ -673,6 +686,8 @@
                                                                         *ngFor="let address of companyAddressList"
                                                                     >
                                                                         <a
+                                                                            href="jkavascript:void(0);"
+                                                                            aria-label="address"
                                                                             class="dropdown-item"
                                                                             (click)="
                                                                                 selectAddress(
@@ -905,6 +920,8 @@
                                                                 "
                                                             >
                                                                 <a
+                                                                    href="jkavascript:void(0);"
+                                                                    aria-label="change"
                                                                     dropdownToggle
                                                                     type="button"
                                                                     class="dropdown-toggle"
@@ -920,6 +937,8 @@
                                                                         *ngFor="let address of companyAddressList"
                                                                     >
                                                                         <a
+                                                                            href="jkavascript:void(0);"
+                                                                            aria-label="address"
                                                                             class="dropdown-item"
                                                                             (click)="
                                                                                 selectAddress(
@@ -1241,7 +1260,7 @@
             </div>
         </div>
         <ng-container *ngIf="!purchaseOrder.account?.uniqueName">
-            <img src="assets/images/new/search-vendor.svg" class="img-responsive search-arrow-image" />
+            <img src="assets/images/new/search-vendor.svg" class="img-responsive search-arrow-image" alt="search vendor" />
         </ng-container>
         <section
             *ngIf="!isMobileScreen"
@@ -1697,7 +1716,7 @@
                                     >
                                         <ng-template #optionTemplate let-option="option">
                                             <ng-container *ngIf="!option.additional?.stock">
-                                                <a href="javascript:void(0)" class="list-item flex-column">
+                                                <a href="javascript:void(0);" aria-label="uniqueName" class="list-item flex-column">
                                                     <div class="item">{{ option.label }}</div>
                                                     <div class="item-unique">
                                                         {{ option.additional?.uniqueName }}
@@ -1705,7 +1724,7 @@
                                                 </a>
                                             </ng-container>
                                             <ng-container *ngIf="option.additional?.stock">
-                                                <a href="javascript:void(0)" class="list-item flex-column">
+                                                <a href="javascript:void(0);" aria-label="uniqueName" class="list-item flex-column">
                                                     <div class="item">{{ option.label }}</div>
                                                     <div class="item-unique">
                                                         {{ option.additional?.uniqueName }}
@@ -2084,9 +2103,10 @@
                                                 <span class="mr-r05">
                                                     <a
                                                         href="javascript:;"
+                                                        aria-label="image"
                                                         (click)="toggleOtherTaxesAsidePane(true, entryIdx)"
                                                     >
-                                                        <img src="assets/images/edit-pencilicon.svg" />
+                                                        <img src="assets/images/edit-pencilicon.svg" alt="edit-icon" />
                                                     </a>
                                                 </span>
                                                 <input
@@ -2149,7 +2169,7 @@
                 <div class="p-1 aqua-color add-line-bulk-item">
                     <a href="javascript:void 0" (click)="addBlankRow(null)">{{ localeData?.add_new_line }}</a>
                     <span class="font-15"> | </span>
-                    <a (click)="addBulkItems()" href="javascript:;">{{ localeData?.add_bulk_entries }}</a>
+                    <a (click)="addBulkItems()" href="javascript:;" aria-label="bulk entries">{{ localeData?.add_bulk_entries }}</a>
                 </div>
                 <!-- endregion -->
                 <tfoot>
@@ -2787,7 +2807,7 @@
                                                 >
                                                     <ng-template #optionTemplate let-option="option">
                                                         <ng-container *ngIf="!option.additional?.stock">
-                                                            <a href="javascript:void(0)" class="list-item flex-column">
+                                                            <a href="javascript:void(0)" aria-label="uniqueName" class="list-item flex-column">
                                                                 <div class="item">{{ option.label }}</div>
                                                                 <div class="item-unique">
                                                                     {{ option.additional?.uniqueName }}
@@ -2795,7 +2815,7 @@
                                                             </a>
                                                         </ng-container>
                                                         <ng-container *ngIf="option.additional?.stock">
-                                                            <a href="javascript:void(0)" class="list-item flex-column">
+                                                            <a href="javascript:void(0)" aria-label="uniqueName" class="list-item flex-column">
                                                                 <div class="item">{{ option.label }}</div>
                                                                 <div class="item-unique">
                                                                     {{ option.additional?.uniqueName }}
@@ -3197,9 +3217,10 @@
                                                         <span class="mr-r05">
                                                             <a
                                                                 href="javascript:;"
+                                                                aria-label="image"
                                                                 (click)="toggleOtherTaxesAsidePane(true, entryIdx)"
                                                             >
-                                                                <img src="assets/images/edit-pencilicon.svg" />
+                                                                <img src="assets/images/edit-pencilicon.svg" alt="edit icon" />
                                                             </a>
                                                         </span>
 
