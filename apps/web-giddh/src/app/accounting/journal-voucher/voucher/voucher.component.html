@@ -67,7 +67,7 @@
                                             }"
                                         >
                                             <text-field
-                                                [autoFocus]="typeField === i"
+                                                [autoFocus]="activeTypeIndex === i"
                                                 [id]="'transaction_' + i"
                                                 [type]="'text'"
                                                 [cssClass]="'form-control text-capitalize byTo'"
@@ -76,7 +76,9 @@
                                                     journalVoucherForm.get('voucherType')?.value === 'receipt'
                                                 "
                                                 formControlName="type"
-                                                (input)="selectRow(true, i, transaction)"
+                                                (input)="
+                                                    selectRow(true, i, transaction); activeParticularAccountIndex = null
+                                                "
                                                 [ngClass]="{ 'focus': isSelectedRow && selectedIdx === i }"
                                                 [value]="transaction.get('type')?.value | lowercase"
                                                 [maxlength]="'2'"
@@ -175,7 +177,7 @@
                                                 (input)="selectRow(true, i)"
                                                 (keydown.Enter)="
                                                     addNewEntry(transaction.get('amount')?.value, transaction, i);
-                                                    changeTab('amount')
+                                                    changeTab('date')
                                                 "
                                                 (blur)="addNewEntry(transaction.get('amount')?.value, transaction, i)"
                                                 [ngClass]="{ 'focus': isSelectedRow && selectedIdx === i }"
@@ -359,7 +361,6 @@
                     [label]="localeData?.cheque_number"
                     (keydown.enter)="$event.preventDefault()"
                     #chequeNumberInput
-                    [autoFocus]="true"
                     cdkFocusInitial
                 >
                 </input-field>
