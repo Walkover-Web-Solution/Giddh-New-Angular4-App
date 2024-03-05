@@ -91,13 +91,13 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     @ViewChild("chequeEntryModal") public dialogBox: TemplateRef<any>;
     @ViewChild('particular', { static: false }) public accountField: ElementRef;
     @ViewChild('dateField', { static: true }) public dateField: ElementRef;
-    @ViewChild('narrationBox', { static: true }) public narrationBox: ElementRef;
     @ViewChild('chequeNumberInput', { static: true }) public chequeNumberInput: ElementRef;
     @ViewChild('chequeClearanceInputField', { static: true }) public chequeClearanceInputField: ElementRef;
     @ViewChild('chqFormSubmitBtn', { static: true }) public chqFormSubmitBtn: ElementRef;
     @ViewChild('submitButton', { static: true }) public submitButton: ElementRef;
     @ViewChild('resetButton', { static: true }) public resetButton: ElementRef;
-
+    /* Instance of narration box */
+    @ViewChild('narrationBox') public narrationBox: any;
     @ViewChild('manageGroupsAccountsModal', { static: true }) public manageGroupsAccountsModal: ModalDirective;
     /* Selector for receipt entry modal */
     @ViewChild('receiptEntry', { static: true }) public receiptEntry: TemplateRef<any>;
@@ -253,14 +253,14 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     public config: Partial<BsDatepickerConfig> = { dateInputFormat: GIDDH_DATE_FORMAT };
     /** From Group for jv */
     public mergedFormGroup: FormGroup;
-    /** True if api call in progress */
+    /** Active index for by amount */
     public activeByAmountIndex: number = null;
-    /** True if api call in progress */
+    /** Active index for to amount  */
     public activeToAmountIndex: number = null;
-    /** True if api call in progress */
+    /** Active index for  particular account*/
     public activeParticularAccountIndex: number = null;
-    /** True if api call in progress */
-    public typeField: number = null;
+    /** Active index for  type */
+    public activeTypeIndex: number = null;
 
     constructor(
         private _ledgerActions: LedgerActions,
@@ -395,6 +395,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 this.activeParticularAccountIndex = 0;
                 this.activeByAmountIndex = null;
                 this.activeToAmountIndex = null;
+                this.activeTypeIndex = null;
                 this._toaster.successToast(this.localeData?.entry_created, this.commonLocaleData?.app_success);
                 this.refreshEntry();
                 this.store.dispatch(this._ledgerActions.ResetLedger());
@@ -586,6 +587,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this.isSelectedRow = type;
         this.selectedIdx = index;
         this.showLedgerAccountList = false;
+        setTimeout(() => {
+            transaction?.get('selectedAccount.name')?.patchValue("");
+        }, 100);
         this.changeDetectionRef.detectChanges();
     }
 
@@ -624,6 +628,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     public onAccountFocus(event: any, element: any, trxnType: any, index: number): void {
         this.activeByAmountIndex = null;
         this.activeToAmountIndex = null;
+        this.activeTypeIndex = null;
         this.selectedAccountInputField = event.target;
         this.selectedField = 'account';
         this.showConfirmationBox = false;
@@ -782,15 +787,14 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                             transactionAtIndex.get('inventory').value.push(this.initInventory());
                         }
                     }
-
-                    if (openChequePopup === false) {
+                    if (!openChequePopup) {
                         if (transactionAtIndex.get('type').value === "to") {
                             this.activeToAmountIndex = this.selectedIdx;
                         } else {
                             this.activeByAmountIndex = this.selectedIdx;
                         }
                     }
-                    this.calculateAmount(transactionAtIndex.get('amount').value, transactionAtIndex, idx);
+                    this.calculateAmount(Number(transactionAtIndex.get('amount').value), transactionAtIndex, idx);
 
                 } else {
                     this.deleteRow(idx);
@@ -798,7 +802,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             } else {
                 this._toaster.infoToast(this.localeData?.foreign_account_error);
                 // Reset transaction data in case of error
-                transactionAtIndex.patchValue({
+                transactionAtIndex?.patchValue({
                     amount: null,
                     particular: '',
                     currentBalance: '',
@@ -905,9 +909,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
 
         const creditTransactions = (this.journalVoucherForm.get('transactions') as FormArray).controls
-            .filter((control: AbstractControl) => control.get('type').value === 'by');
+            .filter((control: AbstractControl) => control.get('type').value === 'to');
 
-        this.totalDebitAmount = creditTransactions
+        this.totalCreditAmount = creditTransactions
             .map((control: AbstractControl) => Number(control.get('amount').value))
             .reduce((acc: number, amount: number) => acc + amount, 0);
 
@@ -1091,6 +1095,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                     data.transactions.splice(indexOfMaxAmountEntry, 1);
                 }
                 data = this.tallyModuleService.prepareRequestForAPI(data);
+                this.activeByAmountIndex = null;
+                this.activeToAmountIndex = null;
+                this.activeTypeIndex = null;
                 this.store.dispatch(this._ledgerActions.CreateBlankLedger(data, accUniqueName));
             } else {
                 const byOrTo = data.voucherType === 'Payment' ? 'by' : 'to';
@@ -1470,9 +1477,12 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         if (event?.value === 'createnewitem') {
             return this.addNewAccount();
         }
+        // this.activeParticularAccountIndex = null;
         if (this.selectedField === 'account') {
             this.setAccount(event.additional);
         }
+
+        this.changeDetectionRef.detectChanges();
         //else if (this.selectedField === 'stock') {
         //     this.onSelectStock(ev.additional);
         // }
@@ -1885,27 +1895,38 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     *
     * @memberof AccountAsVoucherComponent
     */
-    public changeTab(type: any): void {
+    public changeTab(type: any, transaction?: FormGroup): void {
         let transactionsFormArray = this.journalVoucherForm.get('transactions') as FormArray;
         let transactionAtIndex = transactionsFormArray.at(this.selectedIdx) as FormGroup;
 
         if (type === 'date') {
-            if (transactionAtIndex.get('type')?.value === "to") {
-                this.typeField = this.selectedIdx + 1;
+            if (this.totalCreditAmount === this.totalDebitAmount) {
+                this.activeToAmountIndex = null;
+                this.activeByAmountIndex = null;
+                this.activeParticularAccountIndex = null;
+                this.activeTypeIndex = null;
+                this.narrationBox?.nativeElement?.focus();
             } else {
-                this.typeField = this.selectedIdx + 1;
+                if (transactionAtIndex.get('type')?.value === "to") {
+                    this.activeTypeIndex = this.selectedIdx + 1;
+                } else {
+                    this.activeTypeIndex = this.selectedIdx + 1;
+                }
             }
         }
 
         if (type === 'type') {
-            this.activeParticularAccountIndex = this.selectedIdx + 1;
-        }
-        if (type === 'amount') {
-            if (this.totalCreditAmount === this.totalDebitAmount) {
-                setTimeout(() => this.narrationBox?.nativeElement?.focus(), 500);
+            if (this.activeParticularAccountIndex === this.selectedIdx) {
+                this.activeParticularAccountIndex = null;
+                this.activeParticularAccountIndex = this.selectedIdx + 1;
+            } else {
+                this.activeParticularAccountIndex = null;
+                this.activeParticularAccountIndex = this.selectedIdx;
             }
         }
+        this.changeDetectionRef.detectChanges();
     }
+
 
     /**
         * This will add new row for adjusment
