@@ -14,10 +14,12 @@
                         <div class="d-flex flex-wrap gap-between w-100 mb-2">
                             <div>
                                 <div
-                                    class="input-group custom-datepicker custom-new-datepicker"
+                                    class="input-group custom-datepicker custom-new-datepicker date-label"
                                     (click)="showGiddhDatepicker($event)"
                                 >
+                                    <label for="selectedDateRange">date</label>
                                     <input
+                                        id="selectedDateRange"
                                         type="text"
                                         name="selectedDateRange"
                                         [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"

@@ -4353,13 +4353,13 @@ select.form-control {
     background-color: var(--color-master-page-left-sidebar-secondary-background);
 }
 
-.grp-list li,
-.new-btn-ul li {
+.grp-list .master-list,
+.new-btn-ul .new-btn {
     list-style: none;
 }
 
-.grp-list li a,
-.new-btn-ul li a {
+.grp-list .master-list a,
+.new-btn-ul .new-btn a {
     padding: 4px 15px !important;
     display: block;
     font-size: var(--font-size-15);
@@ -4484,7 +4484,7 @@ label {
     margin-left: 255px;
 }
 
-.col-wrapper:nth-child(1) li a {
+.col-wrapper:nth-child(1) .master-list a {
     text-transform: uppercase;
     padding: 8px 15px !important;
 }
@@ -4493,7 +4493,7 @@ label {
     background: var(--color-dark-fog) !important;
 }
 
-.col-wrapper:last-child ul li a.isParent {
+.col-wrapper:last-child .grp-list .master-list a.isParent {
     background: none;
 }
 
@@ -4939,7 +4939,7 @@ label {
     position: relative;
 }
 
-.col-wrapper:nth-child(1) ul li a.btn-add {
+.col-wrapper:nth-child(1) .grp-list .master-list a.btn-add {
     display: none !important;
 }
 
@@ -12783,7 +12783,7 @@ inventory-master {
         padding-top: 0;
     }
 
-    .col-wrapper:nth-child(1) li a {
+    .col-wrapper:nth-child(1) .master-list a {
         text-transform: uppercase;
         padding: 4px 15px !important;
     }
@@ -12842,8 +12842,8 @@ inventory-master {
         overflow-y: auto !important;
     }
 
-    .grp-list li a,
-    .new-btn-ul li a {
+    .grp-list .master-list a,
+    .new-btn-ul .new-btn a {
         display: initial;
     }
 

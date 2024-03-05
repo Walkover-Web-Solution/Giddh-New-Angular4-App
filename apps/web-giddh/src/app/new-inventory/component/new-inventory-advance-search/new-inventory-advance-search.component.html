@@ -17,8 +17,10 @@
                 <div class="row mr-b15">
                     <div class="col-lg-12">
                         <div class="custom-datepicker-wrapper">
-                            <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
+                            <div class="custom-datepicker date-label" (click)="showGiddhDatepicker($event)">
+                                <label for="selectedDateRange">date</label>
                                 <input
+                                    id="selectedDateRange"
                                     type="text"
                                     name="selectedDateRange"
                                     [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
