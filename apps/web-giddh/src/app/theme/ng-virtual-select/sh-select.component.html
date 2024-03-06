@@ -1,7 +1,7 @@
 <div #dd [style.width]="width" class="position-relative">
     <div
         [attr.style]="borderConfiguration?.style"
-        class="header"
+        class="header position-relative"
         #mainContainer
         [class.sh-select-disabled]="disabled"
         [class.inline]="mode === 'inline'"
@@ -29,8 +29,10 @@
             </ng-container>
 
             <!-- removing this ( (blur)="filterInputBlur($event)" ) events because scrolling is not working -->
+            <label for="select-dropdown" class="position-absolute opacity-hidden"></label>
             <input
                 type="text"
+                id="select-dropdown"
                 autocomplete="disabled"
                 class="pd-l1 form-control"
                 [ngClass]="{ 'hasValue': filter?.length }"
@@ -49,8 +51,10 @@
 
         <!--region single-->
         <!-- removing this ( (blur)="filterInputBlur($event)" ) events because scrolling is not working -->
+        <label for="select-dropdown" class="position-absolute opacity-hidden"></label>
         <input
             type="text"
+            id="select-dropdown"
             autocomplete="disabled"
             [attr.readonly]="readonlyInput ? 'readonly' : null"
             class="form-control pd-r15"
@@ -67,11 +71,13 @@
             (change)="!filter ? clear() : ''"
         />
 
-        <div (click)="showSearchSuggestion ? show($event) : ''" *ngIf="(!isOpen || !isFilterEnabled) && !multiple">
+        <div (click)="showSearchSuggestion ? show($event) : ''" *ngIf="(!isOpen || !isFilterEnabled) && !multiple" class="position-relative">
             <ng-container *ngIf="selectedValues?.length">
                 <div *ngIf="!multiple">
+                    <label for="select-dropdown" class="position-absolute opacity-hidden"></label>
                     <input
                         autocomplete="disabled"
+                        id="select-dropdown"
                         type="text"
                         readonly
                         value="{{ selectedValues[0]?.label }}"
@@ -82,8 +88,10 @@
                 </div>
             </ng-container>
             <ng-container *ngIf="!selectedValues?.length">
+                <label for="select-dropdown" class="position-absolute opacity-hidden"></label>
                 <input
                     autocomplete="disabled"
+                    id="select-dropdown"
                     [attr.readonly]="readonlyInput ? 'readonly' : null"
                     class="form-control focused pd-r15"
                     [attr.style]="borderConfiguration?.style"

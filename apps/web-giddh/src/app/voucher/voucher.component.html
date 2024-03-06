@@ -284,6 +284,7 @@
                                     <ng-container *ngIf="isSalesInvoice && !isCashInvoice">
                                         <img
                                             src="{{ imgPath }}new/search_customer.svg"
+                                            alt="customer"
                                             height="70"
                                             class="mb-3"
                                             *ngIf="!invFormData.voucherDetails.customerName"
@@ -292,6 +293,7 @@
                                     <ng-container *ngIf="isPurchaseInvoice">
                                         <img
                                             src="{{ imgPath }}new/search-vendor.svg"
+                                            alt="vendor"
                                             height="70"
                                             class="mb-3"
                                             *ngIf="!invFormData.voucherDetails.customerName"
@@ -300,6 +302,7 @@
                                     <ng-container *ngIf="isCashInvoice">
                                         <img
                                             src="{{ imgPath }}new/search-customer-cash-invoice.svg"
+                                            alt="cash invoice"
                                             height="70"
                                             class="mb-3"
                                             *ngIf="!invFormData.voucherDetails.customerName"
@@ -312,6 +315,7 @@
                         <ng-container *ngIf="isSalesInvoice && !isCashInvoice">
                             <img
                                 src="{{ imgPath }}new/search_customer.svg"
+                                alt="customer"
                                 height="70"
                                 class="mb-3"
                                 *ngIf="!invFormData.voucherDetails.customerName"
@@ -321,6 +325,7 @@
                         <ng-container *ngIf="isPurchaseInvoice">
                             <img
                                 src="{{ imgPath }}new/search-vendor.svg"
+                                alt="search vendor"
                                 height="70"
                                 class="mb-3"
                                 *ngIf="!invFormData.voucherDetails.customerName"
@@ -331,6 +336,7 @@
                         >
                             <img
                                 src="{{ imgPath }}new/search-customer-cash-invoice.svg"
+                                alt="cash invoice"
                                 height="70"
                                 class="mb-3"
                                 *ngIf="!invFormData.voucherDetails.customerName"
@@ -339,6 +345,7 @@
                         <ng-container *ngIf="invoiceType === 'cash bill' || invoiceType === 'cash debit note'">
                             <img
                                 src="{{ imgPath }}search-vendor-cash-invoice.svg"
+                                alt="vendor cash invoice"
                                 height="70"
                                 class="mb-3"
                                 *ngIf="!invFormData.voucherDetails.customerName"
@@ -505,8 +512,10 @@
                                                     'without-gstin': !showGSTINNo && !showTRNNo && !showVATNo
                                                 }"
                                             >
-                                                <div class="address-field">
+                                                <div class="address-field position-relative">
+                                                    <label for="billingDetails" class="position-absolute opacity-hidden">textarea</label>
                                                     <textarea
+                                                        id="billingDetails"
                                                         matInput
                                                         name="billingDetails.address"
                                                         class="w-100"
@@ -576,6 +585,7 @@
                                                     *ngIf="shouldShowTrnGstVatField && showGSTINNo"
                                                 >
                                                     <text-field
+                                                        [id]="'billingDetails'"
                                                         [maxlength]="15"
                                                         autocomplete="None"
                                                         [type]="'text'"
@@ -595,6 +605,7 @@
                                                 </div>
                                                 <div class="gstin-field" *ngIf="shouldShowTrnGstVatField && showTRNNo">
                                                     <text-field
+                                                        [id]="'billingDetails'"
                                                         [maxlength]="12"
                                                         autocomplete="none"
                                                         [type]="'text'"
@@ -612,6 +623,7 @@
                                                     >
                                                     </text-field>
                                                     <text-field
+                                                        [id]="'billingDetails'"
                                                         [maxlength]="12"
                                                         autocomplete="None"
                                                         [type]="'text'"
@@ -628,6 +640,7 @@
                                                 </div>
                                                 <div class="gstin-field" *ngIf="shouldShowTrnGstVatField && showVATNo">
                                                     <text-field
+                                                        [id]="'billingDetails'"
                                                         [maxlength]="12"
                                                         autocomplete="None"
                                                         [type]="'text'"
@@ -643,6 +656,7 @@
                                                 </div>
                                                 <div class="pin-code-field">
                                                     <text-field
+                                                        [id]="'billingPinCode'"
                                                         [type]="'number'"
                                                         [cssClass]="'border-0'"
                                                         autocomplete="false"
@@ -838,8 +852,10 @@
                                                     'without-gstin': !showGSTINNo && !showTRNNo && !showVATNo
                                                 }"
                                             >
-                                                <div class="address-field">
+                                                <div class="address-field position-relative">
+                                                    <label for="shippingDetails" class="position-absolute opacity-hidden">textarea</label>
                                                     <textarea
+                                                        id="shippingDetails"
                                                         matInput
                                                         [readonly]="autoFillShipping"
                                                         name="shippingDetails.address"
@@ -893,6 +909,7 @@
                                                 </div>
                                                 <div class="pin-code-field">
                                                     <text-field
+                                                        [id]="'shippingPinCode'"
                                                         [type]="'number'"
                                                         [cssClass]="'border-0'"
                                                         autocomplete="false"
@@ -909,6 +926,7 @@
                                                     *ngIf="shouldShowTrnGstVatField && showGSTINNo"
                                                 >
                                                     <text-field
+                                                        [id]="'shippingDetails'"
                                                         [readonly]="autoFillShipping || isEinvoiceGenerated"
                                                         autocomplete="None"
                                                         [maxlength]="15"
@@ -924,6 +942,7 @@
                                                 </div>
                                                 <div class="gstin-field" *ngIf="shouldShowTrnGstVatField && showTRNNo">
                                                     <text-field
+                                                        [id]="'shippingDetails'"
                                                         [readonly]="autoFillShipping || isEinvoiceGenerated"
                                                         [maxlength]="15"
                                                         autocomplete="None"
@@ -939,6 +958,7 @@
                                                 </div>
                                                 <div class="gstin-field" *ngIf="shouldShowTrnGstVatField && showVATNo">
                                                     <text-field
+                                                        [id]="'shippingDetails'"
                                                         [readonly]="autoFillShipping || isEinvoiceGenerated"
                                                         [maxlength]="12"
                                                         autocomplete="None"
@@ -1648,16 +1668,16 @@
                                                 [disabled]="isEinvoiceGenerated"
                                                 color="primary"
                                             >
+                                                <label
+                                                    class="checkbox-custom-label"
+                                                    for="reverse-charge"
+                                                    (click)="
+                                                        !isEinvoiceGenerated ? toggleRcmCheckbox(rcmCheckbox, 'label') : ''
+                                                    "
+                                                    [innerHTML]="localeData?.transaction_reverse_charge"
+                                                >
+                                                </label>
                                             </mat-checkbox>
-                                            <label
-                                                class="checkbox-custom-label"
-                                                for="reverse-charge"
-                                                (click)="
-                                                    !isEinvoiceGenerated ? toggleRcmCheckbox(rcmCheckbox, 'label') : ''
-                                                "
-                                                [innerHTML]="localeData?.transaction_reverse_charge"
-                                            >
-                                            </label>
                                         </div>
                                     </div>
                                 </div>
@@ -1681,6 +1701,7 @@
                                     }}</span>
                                     <div class="currency-input-wrapper">
                                         <text-field
+                                            [id]="'exchangeRate'"
                                             [name]="'exchangeRate'"
                                             [(ngModel)]="newExchangeRate"
                                             class="exchange-rate-original"
@@ -1734,6 +1755,7 @@
                                     }}</span>
                                     <div class="currency-input-wrapper">
                                         <text-field
+                                            [id]="'exchangeRate'"
                                             [type]="'number'"
                                             [name]="'exchangeRate'"
                                             class="exchange-rate-original"
@@ -2394,8 +2416,10 @@
                                                                                     {{ commonLocaleData?.app_sac_code }}
                                                                                 </mat-radio-button>
                                                                             </mat-radio-group>
-                                                                            <text-field [type]="'text'"
-                                                                            [cssClass]="'form-control hsn-sac-code'"
+                                                                            <text-field 
+                                                                                [id]="'transaction'"
+                                                                                [type]="'text'"
+                                                                                [cssClass]="'form-control hsn-sac-code'"
                                                                                 maxLength="10"
                                                                                 [allowDecimalDigitsOnly]="true"
                                                                                 [placeholder]="localeData?.hsn_number"
@@ -2406,8 +2430,10 @@
                                                                                     transaction.showCodeType === 'hsn'
                                                                                 " [(ngModel)]="transaction.hsnNumber"
                                                                                 [readonly]="isEinvoiceGenerated"></text-field>
-                                                                            <text-field [type]="'text'"
-                                                                            [cssClass]="'form-control hsn-sac-code'"
+                                                                            <text-field 
+                                                                                [id]="'transaction'"
+                                                                                [type]="'text'"
+                                                                                [cssClass]="'form-control hsn-sac-code'"
                                                                                 maxLength="10"
                                                                                 [allowDecimalDigitsOnly]="true"
                                                                                 [placeholder]="localeData?.sac_number"
@@ -2486,7 +2512,9 @@
                                                         currentVoucherFormDetails?.quantityAllowed)
                                                     " width="10%" [ngClass]="{ 'd-none' : !hasStock}">
                                                     <ng-container *ngIf="!(!transaction.isStockTxn || isEinvoiceGenerated)">
-                                                        <text-field [placeholder]="commonLocaleData?.app_quantity"
+                                                        <text-field 
+                                                            [id]="'transaction'"
+                                                            [placeholder]="commonLocaleData?.app_quantity"
                                                             [readonly]="!transaction.isStockTxn || isEinvoiceGenerated"
                                                             [type]="'text'"
                                                             [cssClass]="'form-control mat-field-border text-right stock1'"
@@ -2525,6 +2553,7 @@
                                                     <div class="td-wrapper" *ngIf="!(!transaction.isStockTxn || isEinvoiceGenerated)">
                                                         <div class="flex-fill">
                                                             <text-field
+                                                                [id]="'transaction'"
                                                                 [readonly]="
                                                                     !transaction.isStockTxn || isEinvoiceGenerated
                                                                 "
@@ -2569,6 +2598,7 @@
                                                     <div class="td-wrapper">
                                                         <div class="flex-fill">
                                                             <text-field
+                                                            [id]="'transaction'"
                                                             (click)="transactionAmountClicked(transaction)"
                                                             [placeholder]="commonLocaleData?.app_amount"
                                                             [type]="'text'"
@@ -2710,6 +2740,7 @@
                                                     <div class="td-wrapper">
                                                         <div class="flex-fill">
                                                             <text-field
+                                                                [id]="'transaction'"
                                                                 [type]="'text'"
                                                                 [cssClass]="'form-control mat-field-border text-right '"
                                                                 [name]="'transaction.total_' + entryIdx"
@@ -2746,14 +2777,14 @@
                                                                     name="entry.isOtherTaxApplicable_'+entryIdx"
                                                                     [disabled]="isEinvoiceGenerated"
                                                                 >
-                                                                </mat-checkbox>
                                                                 <label
                                                                     for="entry.isOtherTaxApplicable_{{ entryIdx }}"
                                                                     *ngIf="!entry.isOtherTaxApplicable"
                                                                     class="other-tax-label font-15 align-middle"
                                                                     (click)="tcsTdsIndex = entryIdx"
-                                                                    >{{ localeData?.other_tax }}</label
-                                                                >
+                                                                    >{{ localeData?.other_tax }}
+                                                                </label>
+                                                                </mat-checkbox>
                                                             </div>
                                                             <div *ngIf="entry.isOtherTaxApplicable" class="mr-t1">
                                                                 <span>
@@ -2776,10 +2807,12 @@
                                                                                     src="{{
                                                                                         imgPath
                                                                                     }}edit-pencilicon.svg"
+                                                                                    alt="edit icon"
                                                                                 />
                                                                             </a>
                                                                         </span>
                                                                         <text-field
+                                                                            [id]="'otherTaxesSum'"
                                                                             [readonly]="'disabled'"
                                                                             [cssClass]="
                                                                                 'text-right form-control other-taxes-input w100'
@@ -3086,7 +3119,7 @@
                                                                                         <span>{{
                                                                                             localeData?.adjust_amount
                                                                                         }}</span>
-                                                                                        <span class="text-gray">
+                                                                                        <span class="text-black">
                                                                                             <amount-field
                                                                                                 [amount]="
                                                                                                     adjustPaymentData.totalAdjustedAmount
@@ -3556,6 +3589,7 @@
                                                     </div>
                                                     <div class="col-5">
                                                         <text-field
+                                                            [id]="'grandTotalMulDum'"
                                                             #grandTotalInr
                                                             [type]="'text'"
                                                             [cssClass]="

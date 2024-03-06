@@ -1,7 +1,9 @@
-<mat-form-field [appearance]="appearance" [floatLabel]="'auto'">
+<mat-form-field [appearance]="appearance" [floatLabel]="'auto'" class="position-relative">
     <mat-label *ngIf="appearance === 'outline'">{{ label ? label : placeholder }}</mat-label>
+    <label *ngIf="!(appearance === 'outline')" for="datepicker" class="position-absolute opacity-hidden"></label>
     <input
         matInput
+        id="datepicker"
         [matDatepicker]="picker"
         [placeholder]="placeholder"
         [value]="calendarDate"

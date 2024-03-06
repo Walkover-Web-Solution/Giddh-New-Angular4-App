@@ -1,8 +1,10 @@
 <div (clickOutside)="hideDiscountMenu()" (click)="$event.stopPropagation()" class="position-relative">
-    <label *ngIf="showHeaderText">{{commonLocaleData?.app_discount}}</label>
+    <label *ngIf="showHeaderText" for="discountSum">{{commonLocaleData?.app_discount}}</label>
         <a id="discount">
-            <div class="multi-select adjust">
+            <div class="multi-select adjust position-relative">
+                <label *ngIf="!showHeaderText" for="discountSum" class="position-absolute opacity-hidden"></label>
                 <input
+                    id="discountSum"
                     (keydown.enter)="$event.preventDefault()"
                     matInput
                     type="text"

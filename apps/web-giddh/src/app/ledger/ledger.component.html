@@ -203,8 +203,9 @@
                                 >
                                     <img (click)="showGiddhDatepicker($event)" src="{{ imgPath }}calender-icon.svg" />
                                 </div>
-                                <span class="input-wrapper ipad-view-datepicker" (click)="showGiddhDatepicker($event)">
+                                <span class="input-wrapper ipad-view-datepicker date-label" (click)="showGiddhDatepicker($event)">
                                     <mat-form-field appearance="fill" class="w-100">
+                                        <label for="giddh-datepicker-ipad-view"></label>
                                         <input
                                             matInput
                                             id="giddh-datepicker-ipad-view"
@@ -368,8 +369,9 @@
                                 <span class="input-wrapper">
                                     <mat-form-field
                                         appearance="fill"
-                                        class="w-100 custom-input-field share-input-width"
+                                        class="w-100 custom-input-field share-input-width date-label"
                                     >
+                                        <label for="giddh-datepicker">date</label>
                                         <input
                                             matInput
                                             id="giddh-datepicker"
@@ -448,6 +450,7 @@
                                     <span class="mr-r15 d-inline-block font-15">{{ baseCurrencyDetails?.code }}</span>
                                     <div class="toggle d-inline-block currency-toggler" data-key="disabled">
                                         <mat-slide-toggle
+                                            aria-label="currency"
                                             color="primary"
                                             [(ngModel)]="currencyTogglerModel"
                                             (change)="toggleCurrency($event)"
@@ -581,6 +584,7 @@
                         <span class="mr-r15 d-inline-block font-15">{{ baseCurrencyDetails?.code }}</span>
                         <div class="toggle d-inline-block currency-toggler" data-key="disabled">
                             <mat-slide-toggle
+                                aria-label="currency"
                                 color="primary"
                                 [(ngModel)]="currencyTogglerModel"
                                 (change)="toggleCurrency($event)"
@@ -2731,7 +2735,7 @@
                             <div class="col-sm-3 col-xs-12 stat-block">
                                 <div class="ledger-state-box">
                                     <h1>{{ localeData?.opening_balance }}</h1>
-                                    <h3 class="digit-blue d-flex">
+                                    <h2 class="digit-blue d-flex">
                                         <amount-field
                                             [amount]="ledgerTxnBalance?.forwardedBalance?.amount"
                                             [currencySymbol]="ledgerTxnBalance?.currencySymbol"
@@ -2746,9 +2750,9 @@
                                                     : localeData?.cr
                                                 : ""
                                         }}
-                                    </h3>
+                                    </h2>
 
-                                    <h3
+                                    <h2
                                         class="digit-blue font-12 sub-total d-inline-flex"
                                         *ngIf="isLedgerAccountAllowsMultiCurrency"
                                     >
@@ -2766,7 +2770,7 @@
                                                     : localeData?.cr
                                                 : ""
                                         }}
-                                    </h3>
+                                    </h2>
                                 </div>
                             </div>
                             <div class="col-sm-3 col-xs-12 stat-block">
@@ -2777,7 +2781,7 @@
                                             class="d-flex flex-column justify-content-between"
                                             *ngIf="ledgerTxnBalance?.creditTotal > ledgerTxnBalance?.debitTotal"
                                         >
-                                            <h3 class="digit-blue d-flex">
+                                            <h2 class="digit-blue d-flex">
                                                 <amount-field
                                                     [amount]="
                                                         ledgerTxnBalance?.creditTotal - ledgerTxnBalance?.debitTotal
@@ -2795,8 +2799,8 @@
                                                     &nbsp;
                                                     <span class="text-capitalize">{{ commonLocaleData?.app_cr }}</span>
                                                 </ng-container>
-                                            </h3>
-                                            <h3
+                                            </h2>
+                                            <h2
                                                 class="digit-blue sub-total font-12 d-flex"
                                                 *ngIf="isLedgerAccountAllowsMultiCurrency"
                                             >
@@ -2819,7 +2823,7 @@
                                                     &nbsp;
                                                     <span class="text-capitalize">{{ commonLocaleData?.app_cr }}</span>
                                                 </ng-container>
-                                            </h3>
+                                            </h2>
                                         </div>
                                     </div>
                                     <div class="d-flex justify-content-between">
@@ -2925,7 +2929,7 @@
                                 <div class="ledger-state-box">
                                     <h1>{{ localeData?.closing_balance }}</h1>
                                     <div class="d-flex flex-column justify-content-between">
-                                        <h3 class="digit-blue d-inline-flex">
+                                        <h2 class="digit-blue d-inline-flex">
                                             <span
                                                 class="d-flex"
                                                 [matTooltip]="
@@ -2949,8 +2953,8 @@
                                                         : ""
                                                 }}
                                             </span>
-                                        </h3>
-                                        <h3
+                                        </h2>
+                                        <h2
                                             class="digit-blue font-12 d-flex"
                                             *ngIf="isLedgerAccountAllowsMultiCurrency"
                                         >
@@ -2978,7 +2982,7 @@
                                                         : ""
                                                 }}
                                             </span>
-                                        </h3>
+                                        </h2>
                                     </div>
                                 </div>
                             </div>

@@ -8,7 +8,9 @@
         <sup class="mandatory-asterisk" *ngIf="isMandatory">*</sup></label
     >
     <a id="tax" class="clearfix">
-        <div class="multi-select adjust" id="tax-control-multi-select">
+        <div class="multi-select adjust position-relative" id="tax-control-multi-select">
+            <label *ngIf="!showHeading" for="tax-control-input" class="position-absolute opacity-hidden">text</label>
+            <label *ngIf="!showHeading" for="tax-control-input-mask" class="position-absolute opacity-hidden">text</label>
             <input
                 (keydown.enter)="$event.preventDefault()"
                 matInput
