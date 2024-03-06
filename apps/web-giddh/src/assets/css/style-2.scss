@@ -347,6 +347,10 @@ textarea {
     text-align: right;
 }
 
+.text-primary {
+    color: var(--color-giddh-blue) !important;
+}
+
 .invoice-date-due-date {
     .mat-datepicker-toggle .mat-button-wrapper .mat-datepicker-toggle-default-icon {
         color: var(--color-datepicker-date-icon);
