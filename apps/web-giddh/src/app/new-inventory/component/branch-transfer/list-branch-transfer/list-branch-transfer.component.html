@@ -29,10 +29,8 @@
                                     [defaultValue]="currentBranch?.alias"
                                 ></dropdown-field>
                             </div>
-                            <div class="custom-datepicker date-label" (click)="showGiddhDatepicker($event)">
-                                <label for="selectedDateRange">date</label>
+                            <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
                                 <input
-                                    id="selectedDateRange"
                                     type="text"
                                     name="selectedDateRange"
                                     [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"

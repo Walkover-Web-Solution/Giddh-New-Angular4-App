@@ -63,12 +63,10 @@
                                 </div>
                             </div>
                             <div class="form-inline align-items-center d-flex flex-nowrap daybook-filter">
-                                <div class="form-group custom-datepicker mr-r15 date-label" (click)="showGiddhDatepicker($event)">
-                                    <label for="selectedDateRange">date</label>
+                                <div class="form-group custom-datepicker mr-r15" (click)="showGiddhDatepicker($event)">
                                     <input
                                         matInput
                                         type="text"
-                                        id="selectedDateRange"
                                         name="selectedDateRange"
                                         [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
                                         class="giddh-datepicker form-control date-range-picker"

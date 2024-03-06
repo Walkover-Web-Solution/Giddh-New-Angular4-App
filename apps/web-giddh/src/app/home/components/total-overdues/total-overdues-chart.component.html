@@ -10,12 +10,10 @@
             <strong>{{ localeData?.chart_title }}</strong>
             <div class="pull-right dashboard-filter">
                 <i class="icon-refresh" (click)="refreshChart()"></i>
-                <div (click)="showGiddhDatepicker($event)" class="date-label">
-                    <label for="selectedDateRange">date</label>
+                <div (click)="showGiddhDatepicker($event)">
                     <input
                         type="text"
                         readonly
-                        id="selectedDateRange"
                         name="selectedDateRange"
                         [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
                         class="giddh-datepicker form-control date-range-picker dashboard-datepicker"

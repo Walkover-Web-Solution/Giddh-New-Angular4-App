@@ -68,10 +68,8 @@
                     </dropdown-field>
                 </div>
                 <div class="form-group mr-r15">
-                    <div class="custom-datepicker custom-new-datepicker date-label" (click)="showGiddhDatepicker($event)">
-                        <label for="selectedDateRange"></label>
+                    <div class="custom-datepicker custom-new-datepicker" (click)="showGiddhDatepicker($event)">
                         <input
-                            id="selectedDateRange"
                             type="text"
                             name="selectedDateRange"
                             [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"

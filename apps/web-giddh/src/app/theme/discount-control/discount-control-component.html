@@ -2,7 +2,6 @@
     <label *ngIf="showHeaderText" for="discountSum">{{commonLocaleData?.app_discount}}</label>
         <a id="discount">
             <div class="multi-select adjust position-relative">
-                <label *ngIf="!showHeaderText" for="discountSum" class="position-absolute opacity-hidden"></label>
                 <input
                     id="discountSum"
                     (keydown.enter)="$event.preventDefault()"

@@ -513,9 +513,7 @@
                                                 }"
                                             >
                                                 <div class="address-field position-relative">
-                                                    <label for="billingDetails" class="position-absolute opacity-hidden">textarea</label>
                                                     <textarea
-                                                        id="billingDetails"
                                                         matInput
                                                         name="billingDetails.address"
                                                         class="w-100"
@@ -853,9 +851,7 @@
                                                 }"
                                             >
                                                 <div class="address-field position-relative">
-                                                    <label for="shippingDetails" class="position-absolute opacity-hidden">textarea</label>
                                                     <textarea
-                                                        id="shippingDetails"
                                                         matInput
                                                         [readonly]="autoFillShipping"
                                                         name="shippingDetails.address"
@@ -2553,7 +2549,6 @@
                                                     <div class="td-wrapper" *ngIf="!(!transaction.isStockTxn || isEinvoiceGenerated)">
                                                         <div class="flex-fill">
                                                             <text-field
-                                                                [id]="'transaction'"
                                                                 [readonly]="
                                                                     !transaction.isStockTxn || isEinvoiceGenerated
                                                                 "
@@ -2598,7 +2593,6 @@
                                                     <div class="td-wrapper">
                                                         <div class="flex-fill">
                                                             <text-field
-                                                            [id]="'transaction'"
                                                             (click)="transactionAmountClicked(transaction)"
                                                             [placeholder]="commonLocaleData?.app_amount"
                                                             [type]="'text'"

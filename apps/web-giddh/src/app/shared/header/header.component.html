@@ -353,11 +353,9 @@
                     </li>
                     <li class="not-today cursor-pointer" [ngClass]="{ 'if-today': isTodaysDateSelected }">
                         <span class="icon-calender-new calendar-addon" (click)="showGiddhDatepicker($event)"></span>
-                        <div class="input-date date-label" [ngClass]="{ 'today-date pl-2': isTodaysDateSelected }">
-                            <label for="selectedDateRange">date</label>
+                        <div class="input-date" [ngClass]="{ 'today-date pl-2': isTodaysDateSelected }">
                             <input
                                 type="text"
-                                id="selectedDateRange"
                                 name="selectedDateRange"
                                 (click)="showGiddhDatepicker($event)"
                                 [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
