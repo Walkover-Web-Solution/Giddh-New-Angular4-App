@@ -261,6 +261,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     public activeParticularAccountIndex: number = null;
     /** Active index for  type */
     public activeTypeIndex: number = null;
+    /** False if you want particular group*/
+    public allGroups: boolean = true;
 
     constructor(
         private _ledgerActions: LedgerActions,
@@ -277,7 +279,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         private elRef: ElementRef,
         public dialog: MatDialog,
         private generalService: GeneralService) {
-
         this.initJournalVoucherForm();
         this.universalDate$ = this.store.pipe(select(sessionStore => sessionStore.session.applicationDate), takeUntil(this.destroyed$));
 
@@ -593,6 +594,13 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this.changeDetectionRef.detectChanges();
     }
 
+    /**
+     * This will be use for active row
+     *
+     * @param {boolean} type
+     * @param {number} index
+     * @memberof AccountAsVoucherComponent
+     */
     public activeRow(type: boolean, index: number): void {
         this.isSelectedRow = type;
         this.selectedIdx = index;
@@ -959,11 +967,10 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         const totalCreditAmount = transactionsFormArray.controls.reduce((acc: number, control: AbstractControl) => {
             return control.get('type').value === 'to' ? acc + Number(control.get('amount').value) : acc;
         }, 0);
-
         if (totalDebitAmount === totalCreditAmount) {
-            this.showConfirmationBox = true;
             const descriptionControl = this.journalVoucherForm.get('description');
             if (descriptionControl?.value?.length > 1) {
+                this.showConfirmationBox = true;
                 descriptionControl.setValue(descriptionControl.value.replace(/(?:\r\n|\r|\n)/g, ''));
                 setTimeout(() => {
                     submitBtnEle.focus();
@@ -1230,7 +1237,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this.receiptEntries = [];
         this.totalEntries = 0;
         this.adjustmentTransaction = {};
-        this.chequeDetailForm.reset();
+        this.chequeDetailForm?.reset();
 
         // Set entry date
         this.journalVoucherForm.patchValue({
@@ -1906,6 +1913,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 this.activeParticularAccountIndex = null;
                 this.activeTypeIndex = null;
                 this.narrationBox?.nativeElement?.focus();
+                this.showConfirmationBox = false;
             } else {
                 if (transactionAtIndex.get('type')?.value === "to") {
                     this.activeTypeIndex = this.selectedIdx + 1;
