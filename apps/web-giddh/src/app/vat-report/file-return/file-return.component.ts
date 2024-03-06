@@ -30,8 +30,8 @@ export class FileReturnComponent implements OnInit, OnDestroy {
     public ukDisplayedColumns: string[] = ['number', 'name', 'aed_amt'];
     /** Holds Active Company Info from store */
     public activeCompany: any;
-    /** Branch Transfer confirmation popup configuration */
-    public FileReturnConfirmationConfiguration: ConfirmationModalConfiguration;
+    /** File Return confirmation popup configuration */
+    public fileReturnConfirmationConfiguration: ConfirmationModalConfiguration;
 
 
     constructor(
@@ -102,12 +102,12 @@ export class FileReturnComponent implements OnInit, OnDestroy {
             branchUniqueName: this.inputData.branchUniqueName
         };
 
-        this.FileReturnConfirmationConfiguration = this.generalService.fileReturnConfiguration(this.localeData, this.commonLocaleData,);
+        this.fileReturnConfirmationConfiguration = this.generalService.fileReturnConfiguration(this.localeData, this.commonLocaleData,);
 
         let confirnationDialogRef = this.dialog.open(NewConfirmationModalComponent, {
             width: '630px',
             data: {
-                configuration: this.FileReturnConfirmationConfiguration
+                configuration: this.fileReturnConfirmationConfiguration
             }
         });
 
