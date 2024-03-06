@@ -795,8 +795,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
                         body: response?.message,
                         ok: this.commonLocaleData?.app_yes,
                         cancel: this.commonLocaleData?.app_no,
-                        permanentlyDeleteMessage: ' '
-                    }
+                        permanentlyDeleteMessage: ' ',
+                    },
+                    role: 'alertdialog',
+                    ariaLabel: 'confirmation'
                 });
 
                 dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
@@ -829,8 +831,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
                         body: response?.message,
                         ok: this.commonLocaleData?.app_yes,
                         cancel: this.commonLocaleData?.app_no,
-                        permanentlyDeleteMessage: ' '
-                    }
+                        permanentlyDeleteMessage: ' ',
+                    },
+                    role: 'alertdialog',
+                    ariaLabel: 'confirmation'
                 });
 
                 dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
@@ -847,8 +851,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
                         body: response?.message,
                         ok: this.commonLocaleData?.app_yes,
                         cancel: this.commonLocaleData?.app_no,
-                        permanentlyDeleteMessage: ' '
-                    }
+                        permanentlyDeleteMessage: ' ',
+                    },
+                    role: 'alertdialog',
+                    ariaLabel: 'confirmation'
                 });
 
                 dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
@@ -1361,8 +1367,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 accountUniqueName: this.lc.accountUnq,
                 advanceSearchRequest: this.advanceSearchRequest,
                 from: this.shareLedgerDates?.from,
-                to: this.shareLedgerDates?.to
-            }
+                to: this.shareLedgerDates?.to,
+            },
+            role: 'alertdialog',
+            ariaLabel: 'share'
         });
     }
 
@@ -1385,8 +1393,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
             width: '630px',
             data: {
                 accountUniqueName: this.lc.accountUnq,
-                advanceSearchRequest: this.advanceSearchRequest
-            }
+                advanceSearchRequest: this.advanceSearchRequest,
+            },
+            role: 'alertdialog',
+            ariaLabel: 'export'
         });
 
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
@@ -1545,7 +1555,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public loadUpdateLedgerComponent() {
         this.updateLedgerModalDialogRef = this.dialog.open(this.updateLedgerModal, {
             width: '70%',
-            height: '650px'
+            height: '650px',
+            role: 'alertdialog',
+            ariaLabel: 'update'
         });
 
         this.updateLedgerModalDialogRef.afterClosed().pipe(take(1)).subscribe(() => {
@@ -1655,7 +1667,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
 
         this.advanceSearchDialogRef = this.dialog.open(this.advanceSearchModal, {
-            width: '980px'
+            width: '980px',
+            role: 'alertdialog',
+            ariaLabel: 'advance'
         });
     }
 
@@ -1823,7 +1837,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 cancel: this.commonLocaleData?.app_no,
                 permanentlyDeleteMessage: this.localeData?.delete_entries_content
             },
-            width: '650px'
+            width: '650px',
+            role: 'alertdialog',
+            ariaLabel: 'confirmation'
         });
 
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
@@ -1848,7 +1864,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 body: this.localeData?.select_voucher_generate,
                 button1Text: this.commonLocaleData?.app_generate_multiple,
                 button2Text: this.commonLocaleData?.app_generate_compound
-            }
+            },
+            role: 'alertdialog',
+            ariaLabel: 'bulk'
         });
 
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
@@ -1919,7 +1937,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 top: '0',
             },
             width: '760px',
-            disableClose: true
+            disableClose: true,
+            role: 'alertdialog',
+            ariaLabel: 'aside'
         });
 
         this.ledgerAsidePaneModal.afterClosed().pipe(take(1)).subscribe(response => {
@@ -1943,7 +1963,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 maxWidth: '760px',
                 width: '100%',
                 height: '100vh',
-                maxHeight: '100vh'
+                maxHeight: '100vh',
+                role: 'alertdialog',
+                ariaLabel: 'aside'
             });
             this.cdRf.detectChanges();
         } else {
@@ -2364,7 +2386,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 accountUniqueName: this.lc.accountUnq,
                 localeData: this.localeData,
                 commonLocaleData: this.commonLocaleData
-            }
+            },
+            role: 'alertdialog',
+            ariaLabel: 'import'
         });
 
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
@@ -2490,7 +2514,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 body: this.localeData?.delete_bank_transactions_title,
                 ok: this.commonLocaleData?.app_yes,
                 cancel: this.commonLocaleData?.app_no
-            }
+            },
+            role: 'alertdialog',
+            ariaLabel: 'confirmation'
         });
 
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
@@ -2655,7 +2681,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.selectedItem = transaction;
         let dialogRef = this.dialog.open(templateRef, {
             width: '70%',
-            height: '790px'
+            height: '790px',
+            role: 'alertdialog',
+            ariaLabel: 'template'
         });
 
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
