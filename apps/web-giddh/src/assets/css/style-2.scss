@@ -1948,7 +1948,7 @@ ul.sub-list {
 
 .customer-footer-box .number-total {
     font-size: var(--font-size-24);
-    color: var(--color-common-primary-text);
+    color: var(--color-blue);
 }
 
 .customer-footer-box h5 {
@@ -2237,7 +2237,7 @@ ul.sub-list {
         line-height: 15px;
 
         small {
-            color: var(--color-gray);
+            color: var(--color-common-primary-text);
         }
     }
 }
@@ -7541,7 +7541,7 @@ app-header {
 }
 
 .text-danger {
-    color: var(--color-danger);
+    color: var(--color-danger) !important;
 }
 
 #ngb-typeahead-1 {

@@ -1298,6 +1298,7 @@
                             autoSaveIcon = !autoSaveIcon;
                             newExchangeRate = originalExchangeRate
                         "
+                        alt="edit"
                     />
                     <img
                         src="assets/images/autosave.svg"
@@ -1312,6 +1313,7 @@
                             calculateGrandTotal()
                         "
                         *ngIf="autoSaveIcon"
+                        alt="edit"
                     />
                 </span>
             </div>
@@ -1322,6 +1324,7 @@
                     src="assets/images/switch-icon.svg"
                     alt="switch-icon"
                     (click)="switchCurrencyImg(false)"
+                    alt="edit"
                 />
                 <span class="right-currency">
                     <span class="currency-digits" *ngIf="!showCurrencyValue">
@@ -1343,12 +1346,14 @@
                         src="assets/images/edit-pencilicon.svg"
                         class="edit-pencil"
                         (click)="saveCancelExcRate(false)"
+                        alt="edit"
                     />
                     <img
                         src="assets/images/autosave.svg"
                         class="edit-pencil"
                         (click)="saveCancelExcRate(true)"
                         *ngIf="autoSaveIcon"
+                        alt="edit"
                     />
                 </span>
             </div>
@@ -1429,7 +1434,7 @@
                                                         : transaction.sacNumber
                                                 }}
                                                 <span class="edit-icon cp">
-                                                    <img src="assets/images/edit-pencilicon.svg" />
+                                                    <img src="assets/images/edit-pencilicon.svg" alt="edit" />
                                                 </span>
                                             </span>
                                         </div>
@@ -1815,7 +1820,7 @@
                                                             >{{ commonLocaleData?.app_update }}
                                                         </span>
                                                         <span class="edit-icon cp">
-                                                            <img src="assets/images/edit-pencilicon.svg" />
+                                                            <img src="assets/images/edit-pencilicon.svg" alt="edit" />
                                                         </span>
                                                     </span>
                                                 </div>
@@ -2762,7 +2767,7 @@
                             </div>
                         </div>
                         <div class="edit-card" (click)="setActiveIndex(entryIdx); $event.stopPropagation()">
-                            <img src="assets/images/edit-pencilicon.svg" />
+                            <img src="assets/images/edit-pencilicon.svg" alt="edit" />
                         </div>
                         <div
                             class="del-card"
@@ -2886,7 +2891,7 @@
                                                                         >{{ commonLocaleData?.app_update }}
                                                                     </span>
                                                                     <span class="edit-icon cp">
-                                                                        <img src="assets/images/edit-pencilicon.svg" />
+                                                                        <img src="assets/images/edit-pencilicon.svg" alt="edit" />
                                                                     </span>
                                                                 </span>
                                                             </div>

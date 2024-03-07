@@ -15,7 +15,7 @@
                     <h3 *ngIf="addressConfiguration.type === 'editBranch'">{{ localeData?.edit_branch }}</h3>
                     <h3 *ngIf="addressConfiguration.type === 'editWarehouse'">{{ localeData?.edit_warehouse }}</h3>
                 </div>
-                <a class="cursor-pointer" id="close" (click)="closeAsidePane($event)"><i class="icon-cross"></i></a>
+                <a class="cursor-pointer" id="closeDialog" (click)="closeAsidePane($event)" href="javascript:void(0);" aria-label="close"><i class="icon-cross"></i></a>
 
                 <div class="aside-body">
                     <div
@@ -464,6 +464,7 @@
                                         [disabled]="addressForm?.invalid"
                                         type="submit"
                                         class="btn btn-success"
+                                        aria-label="save"
                                     >
                                         <ng-container
                                             *ngIf="
@@ -483,7 +484,7 @@
                                             {{ commonLocaleData?.app_update }}</ng-container
                                         >
                                     </button>
-                                    <button type="reset" (click)="clearForm()" class="btn btn-danger">
+                                    <button type="reset" (click)="clearForm()" class="btn btn-danger" aria-label="clear">
                                         {{ commonLocaleData?.app_clear }}
                                     </button>
                                 </div>

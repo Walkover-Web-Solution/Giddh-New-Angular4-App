@@ -1,8 +1,8 @@
 <div class="aside-pane" [keyboardShortcut]="'esc'" (onShortcutPress)="closeEvent.emit()">
     <div class="form-header">
-        <h3 class="aside-title">{{ tax && tax?.uniqueName ? localeData?.update_tax : localeData?.create_new_tax }}</h3>
+        <h2 class="aside-title">{{ tax && tax?.uniqueName ? localeData?.update_tax : localeData?.create_new_tax }}</h2>
     </div>
-    <button id="close" (click)="closeEvent.emit()"    aria-label="cross"><i class="icon-cross"></i></button>
+    <button id="closeDialog" (click)="closeEvent.emit()"    aria-label="cross"><i class="icon-cross"></i></button>
     <div class="aside-body aside-create-tax-component">
         <div class="aside-pane-form">
             <div class="form-group">

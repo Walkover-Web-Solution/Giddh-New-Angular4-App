@@ -116,6 +116,7 @@
                                             name="sendThroughGmail"
                                             color="primary"
                                             [disabled]="!isGmailIntegrated"
+                                            aria-label="sendThroughGmail"
                                         >
                                         </mat-slide-toggle>
                                         <label>{{ localeData?.send_email_gmail }}</label>
@@ -127,6 +128,7 @@
                                             name="sendThroughGmail"
                                             color="primary"
                                             [disabled]="!isGmailIntegrated"
+                                            aria-label="sendThroughGmail"
                                         >
                                         </mat-slide-toggle>
                                         <span class="ml-1 integrated-email" *ngIf="!isGmailIntegrated">
@@ -184,6 +186,7 @@
                                                 class="show-on-mobile"
                                                 name="changePOStatusOnExpiry"
                                                 color="primary"
+                                                aria-label="changePOStatusOnExpiry"
                                             >
                                             </mat-slide-toggle>
                                             <label>{{ localeData?.auto_change_status }}</label>
@@ -196,6 +199,7 @@
                                                 class="hide-on-mobile"
                                                 name="changePOStatusOnExpiry"
                                                 color="primary"
+                                                aria-label="changePOStatusOnExpiry"
                                             >
                                             </mat-slide-toggle>
                                         </div>
@@ -232,6 +236,7 @@
                                                 class="show-on-mobile"
                                                 name="useCustomPONumber"
                                                 color="primary"
+                                                aria-label="useCustomPONumber"
                                             >
                                             </mat-slide-toggle>
                                             <label>{{ localeData?.custom_po_number }}</label>
@@ -243,6 +248,7 @@
                                                     class="hide-on-mobile"
                                                     name="useCustomPONumber"
                                                     color="primary"
+                                                    aria-label="useCustomPONumber"
                                                 >
                                                 </mat-slide-toggle>
                                                 <div
@@ -321,6 +327,7 @@
                                                 class="show-on-mobile"
                                                 name="enableNarration"
                                                 color="primary"
+                                                aria-label="enableNarration"
                                             >
                                             </mat-slide-toggle>
                                             <label>{{ localeData?.show_narration_ledger }}</label>
@@ -331,6 +338,7 @@
                                                 class="hide-on-mobile"
                                                 name="enableNarration"
                                                 color="primary"
+                                                aria-label="enableNarration"
                                             >
                                             </mat-slide-toggle>
                                         </div>
@@ -345,6 +353,7 @@
                                                 class="show-on-mobile"
                                                 name="enableVoucherDownload"
                                                 color="primary"
+                                                aria-label="enableVoucherDownload"
                                             >
                                             </mat-slide-toggle>
                                             <label>{{ localeData?.enable_voucher_download }}</label>
@@ -355,6 +364,7 @@
                                                 class="hide-on-mobile"
                                                 name="enableVoucherDownload"
                                                 color="primary"
+                                                aria-label="enableVoucherDownload"
                                             >
                                             </mat-slide-toggle>
                                         </div>
@@ -369,6 +379,7 @@
                                                 name="purchaseRoundOff"
                                                 class="show-on-mobile"
                                                 color="primary"
+                                                aria-label="purchaseRoundOff"
                                             >
                                             </mat-slide-toggle>
                                             <label>{{ localeData?.apply_purchase_round_off }}</label>
@@ -379,6 +390,7 @@
                                                 name="purchaseRoundOff"
                                                 class="hide-on-mobile"
                                                 color="primary"
+                                                aria-label="purchaseRoundOff"
                                             >
                                             </mat-slide-toggle>
                                         </div>
@@ -392,6 +404,7 @@
                                                 name="generatePurchaseNumber"
                                                 class="show-on-mobile"
                                                 color="primary"
+                                                aria-label="generatePurchaseNumber"
                                             >
                                             </mat-slide-toggle>
                                             <label>{{ localeData?.generate_auto_purchase_number }}</label>
@@ -402,6 +415,7 @@
                                                 name="generatePurchaseNumber"
                                                 class="hide-on-mobile"
                                                 color="primary"
+                                                aria-label="generatePurchaseNumber"
                                             >
                                             </mat-slide-toggle>
                                         </div>

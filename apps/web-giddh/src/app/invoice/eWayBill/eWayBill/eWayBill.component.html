@@ -317,7 +317,7 @@
                                                 <a
                                                     href="javascript:void(0)"
                                                     class="dropdown-toggle"
-                                                    id="button-basic"
+                                                    id="actionButton"
                                                     dropdownToggle
                                                     (click)="showActionsMenu($event)"
                                                     >{{ commonLocaleData?.app_actions }} <i class="caret"></i
@@ -384,7 +384,7 @@
         <ng-template #template>
             <div class="modal-header">
                 <h3 class="modal-title pull-left">{{ localeData?.add_vehicle }}</h3>
-                <button type="button" class="close pull-right" (click)="closeModel()">
+                <button type="button" class="close pull-right" (click)="closeModel()" aria-label="close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -406,7 +406,7 @@
                                     value="1"
                                 />
                                 <label for="transMode1"
-                                    ><img src="assets/icon/4.svg " /> {{ commonLocaleData?.app_road }}</label
+                                    ><img src="assets/icon/4.svg " alt="road img" /> {{ commonLocaleData?.app_road }}</label
                                 >
                             </li>
                             <li>
@@ -418,7 +418,7 @@
                                     value="2"
                                 />
                                 <label for="transMode2"
-                                    ><img src="assets/icon/3.svg " /> {{ commonLocaleData?.app_rail }}</label
+                                    ><img src="assets/icon/3.svg " alt="rail img" /> {{ commonLocaleData?.app_rail }}</label
                                 >
                             </li>
                             <li>
@@ -430,7 +430,7 @@
                                     value="3"
                                 />
                                 <label for="transMode3"
-                                    ><img src="assets/icon/1.svg " /> {{ commonLocaleData?.app_air }}</label
+                                    ><img src="assets/icon/1.svg " alt="air img" /> {{ commonLocaleData?.app_air }}</label
                                 >
                             </li>
                             <li>
@@ -442,7 +442,7 @@
                                     value="4"
                                 />
                                 <label for="transMode4"
-                                    ><img src="assets/icon/2.svg " /> {{ commonLocaleData?.app_ship }}</label
+                                    ><img src="assets/icon/2.svg " alt="ship img" /> {{ commonLocaleData?.app_ship }}</label
                                 >
                             </li>
                         </ul>
@@ -626,10 +626,11 @@
                                 [ladda]="updateEwayvehicleProcess$ | async"
                                 (click)="updateEwayTransport(updateVehicleForm)"
                                 class="btn btn-success mr-2"
+                                aria-label="save"
                             >
                                 {{ commonLocaleData?.app_save }}
                             </button>
-                            <button type="submit" class="btn btn-danger mr-2" (click)="closeModel()">
+                            <button type="submit" class="btn btn-danger mr-2" (click)="closeModel()" aria-label="cancel">
                                 {{ commonLocaleData?.app_cancel }}
                             </button>
                         </div>
@@ -644,7 +645,7 @@
         <ng-template #cancel>
             <div class="modal-header">
                 <h3 class="modal-title pull-left">{{ localeData?.reasons_for_cancellation }}</h3>
-                <button type="button" class="close pull-right" (click)="closeModel()">
+                <button type="button" class="close pull-right" (click)="closeModel()" aria-label="close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -691,10 +692,11 @@
                             [disabled]="cancelEwayForm.invalid"
                             [ladda]="cancelEwayInProcess$ | async"
                             class="btn btn-success mr-2"
+                            aria-label="confirm"
                         >
                             {{ commonLocaleData?.app_confirm }}
                         </button>
-                        <button type="submit" class="btn btn-danger mr-2" (click)="closeModel()">
+                        <button type="submit" class="btn btn-danger mr-2" (click)="closeModel()" aria-label="cancel">
                             {{ commonLocaleData?.app_cancel }}
                         </button>
                     </div>
@@ -711,6 +713,7 @@
                 class="close pull-right"
                 [attr.aria-label]="commonLocaleData?.app_close"
                 (click)="closeModel()"
+                aria-label="close"
             >
                 <span aria-hidden="true">&times;</span>
             </button>
