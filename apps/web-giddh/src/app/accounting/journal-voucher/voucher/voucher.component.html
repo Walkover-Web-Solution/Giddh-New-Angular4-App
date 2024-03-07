@@ -84,7 +84,7 @@
                                                 [maxlength]="'2'"
                                                 [autocomplete]="'off'"
                                                 (keydown.Enter)="changeTab('type')"
-                                                (keydown.Tab)="activeTypeIndex = null;"
+                                                (keydown.Tab)="activeTypeIndex = null"
                                                 (keydown.Shift)="activeByAmountIndex = null; activeToAmountIndex = null"
                                             ></text-field>
                                         </td>
@@ -122,7 +122,10 @@
                                                 (blur)="onAccountBlur($event)"
                                                 [ngClass]="{ 'focus': isSelectedRow && selectedIdx === i }"
                                                 (keydown)="detectKey($event)"
-                                                (keydown.Tab)="validateAccount(transaction, $event, i);activeParticularAccountIndex=null"
+                                                (keydown.Tab)="
+                                                    validateAccount(transaction, $event, i);
+                                                    activeParticularAccountIndex = null
+                                                "
                                                 (keydown.Shift)="showLedgerAccountList = false; activeTypeIndex = null"
                                             ></text-field>
                                         </td>
@@ -134,11 +137,10 @@
                                                     (!selectedIdx && !isSelectedRow && i == 0)
                                             }"
                                         >
-
                                             <text-field
                                                 (keydown.Shift)="activeParticularAccountIndex = null"
                                                 *ngIf="transaction.get('type')?.value?.toLowerCase() === 'by'"
-                                                (keydown.Tab)="activeParticularAccountIndex=null"
+                                                (keydown.Tab)="activeParticularAccountIndex = null"
                                                 [autoFocus]="activeByAmountIndex === i"
                                                 [autocomplete]="'off'"
                                                 [type]="'text'"
@@ -149,7 +151,7 @@
                                                 (input)="selectRow(true, i)"
                                                 (keydown.Enter)="
                                                     addNewEntry(transaction.get('amount')?.value, transaction, i);
-                                                    changeTab('date')
+                                                    changeTab('amount')
                                                 "
                                                 (blur)="addNewEntry(transaction.get('amount')?.value, transaction, i)"
                                                 [ngClass]="{ 'focus': isSelectedRow && selectedIdx === i }"
@@ -180,7 +182,7 @@
                                                 (input)="selectRow(true, i)"
                                                 (keydown.Enter)="
                                                     addNewEntry(transaction.get('amount')?.value, transaction, i);
-                                                    changeTab('date')
+                                                    changeTab('amount')
                                                 "
                                                 (blur)="addNewEntry(transaction.get('amount')?.value, transaction, i)"
                                                 [ngClass]="{ 'focus': isSelectedRow && selectedIdx === i }"
