@@ -124,7 +124,7 @@
                                                 (keydown)="detectKey($event)"
                                                 (keydown.Tab)="
                                                     validateAccount(transaction, $event, i);
-                                                    activeParticularAccountIndex = null
+                                                    activeParticularAccountIndex = null;showLedgerAccountList = false;
                                                 "
                                                 (keydown.Shift)="showLedgerAccountList = false; activeTypeIndex = null"
                                             ></text-field>
@@ -255,6 +255,7 @@
                                         #submitButton
                                         (keyup)="keyUpOnSubmitButton($event)"
                                         (click)="saveEntry()"
+                                          type="button"
                                     >
                                         {{ commonLocaleData?.app_yes }}
                                     </button>
@@ -264,6 +265,7 @@
                                         #resetButton
                                         (keyup)="keyUpOnResetButton($event)"
                                         (click)="acceptCancel()"
+                                          type="button"
                                     >
                                         {{ commonLocaleData?.app_no }}
                                     </button>

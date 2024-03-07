@@ -432,7 +432,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         });
 
         // create account success then hide aside pane
-        this.createdAccountDetails$.subscribe((accountDetails) => {
+        this.createdAccountDetails$.pipe(takeUntil(this.destroyed$)).subscribe(accountDetails => {
             if (accountDetails) {
                 const isAccountSuccessfullyCreated = accountDetails[0];
                 const createdAccountDetails = accountDetails[1];
@@ -722,6 +722,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         setTimeout(() => {
             this.showLedgerAccountList = false;
             this.showStockList = false;
+            this.activeTypeIndex = null;
         }, 100);
     }
 
@@ -1348,6 +1349,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         if (this.dialog) {
             this.dialog.closeAll();
         }
+        this.store.dispatch(this.salesAction.resetAccountDetailsForSales());
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
