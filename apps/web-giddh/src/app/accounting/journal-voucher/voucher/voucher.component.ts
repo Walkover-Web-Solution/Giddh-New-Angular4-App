@@ -1014,12 +1014,12 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         }, 0);
         if (totalDebitAmount === totalCreditAmount) {
             this.showConfirmationBox = true;
+            setTimeout(() => {
+                submitBtnEle.focus();
+            }, 100);
             const descriptionControl = this.journalVoucherForm.get('description');
             if (descriptionControl?.value?.length > 1) {
                 descriptionControl.setValue(descriptionControl.value.replace(/(?:\r\n|\r|\n)/g, ''));
-                setTimeout(() => {
-                    submitBtnEle.focus();
-                }, 100);
             }
         } else {
             this._toaster.errorToast(this.localeData?.credit_debit_equal_error, this.commonLocaleData?.app_error);
