@@ -84,7 +84,8 @@
                                                 [maxlength]="'2'"
                                                 [autocomplete]="'off'"
                                                 (keydown.Enter)="changeTab('type')"
-                                                (keydown.Tab)="changeTab('type')"
+                                                (keydown.Tab)="activeTypeIndex = null"
+                                                (keydown.Shift)="activeByAmountIndex = null; activeToAmountIndex = null"
                                             ></text-field>
                                         </td>
                                         <td
@@ -121,8 +122,11 @@
                                                 (blur)="onAccountBlur($event)"
                                                 [ngClass]="{ 'focus': isSelectedRow && selectedIdx === i }"
                                                 (keydown)="detectKey($event)"
-                                                (keydown.Tab)="validateAccount(transaction, $event, i)"
-                                                (keydown.Shift)="showLedgerAccountList = false"
+                                                (keydown.Tab)="
+                                                    validateAccount(transaction, $event, i);
+                                                    activeParticularAccountIndex = null
+                                                "
+                                                (keydown.Shift)="showLedgerAccountList = false; activeTypeIndex = null"
                                             ></text-field>
                                         </td>
                                         <td
@@ -134,8 +138,9 @@
                                             }"
                                         >
                                             <text-field
+                                                (keydown.Shift)="activeParticularAccountIndex = null"
                                                 *ngIf="transaction.get('type')?.value?.toLowerCase() === 'by'"
-                                                (keydown.Tab)="changeTab('date')"
+                                                (keydown.Tab)="activeParticularAccountIndex = null"
                                                 [autoFocus]="activeByAmountIndex === i"
                                                 [autocomplete]="'off'"
                                                 [type]="'text'"
@@ -146,7 +151,7 @@
                                                 (input)="selectRow(true, i)"
                                                 (keydown.Enter)="
                                                     addNewEntry(transaction.get('amount')?.value, transaction, i);
-                                                    changeTab('date')
+                                                    changeTab('amount')
                                                 "
                                                 (blur)="addNewEntry(transaction.get('amount')?.value, transaction, i)"
                                                 [ngClass]="{ 'focus': isSelectedRow && selectedIdx === i }"
@@ -165,7 +170,7 @@
                                         >
                                             <text-field
                                                 *ngIf="transaction.get('type')?.value?.toLowerCase() === 'to'"
-                                                (keydown.Tab)="changeTab('amount')"
+                                                (keydown.Tab)="cactiveToAmountIndex = null"
                                                 [autoFocus]="activeToAmountIndex === i"
                                                 [autocomplete]="'off'"
                                                 [type]="'text'"
@@ -177,7 +182,7 @@
                                                 (input)="selectRow(true, i)"
                                                 (keydown.Enter)="
                                                     addNewEntry(transaction.get('amount')?.value, transaction, i);
-                                                    changeTab('date')
+                                                    changeTab('amount')
                                                 "
                                                 (blur)="addNewEntry(transaction.get('amount')?.value, transaction, i)"
                                                 [ngClass]="{ 'focus': isSelectedRow && selectedIdx === i }"
@@ -207,7 +212,7 @@
                                                 Current Balance:
                                                 {{ transaction.get("currentBalance")?.value | giddhCurrency }}
                                                 {{
-                                                    transaction.get("type")?.value === "DEBIT"
+                                                    transaction.get("selectedAccount.type")?.value === "DEBIT"
                                                         ? localeData?.dr
                                                         : localeData?.cr
                                                 }}
@@ -237,7 +242,6 @@
                         ></textarea>
                     </div>
                 </div>
-
                 <div class="col-xs-2 col-sm-2">
                     <div [hidden]="!showConfirmationBox" class="confirmation-box bdr text-center pd-2">
                         <div>
@@ -315,6 +319,7 @@
 
 <div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'"></div>
 <generic-aside-menu-account
+    [allGroups]="allGroups"
     [class]="accountAsideMenuState"
     [@slideInOut]="accountAsideMenuState"
     (closeAsideEvent)="toggleAccountAsidePane($event)"

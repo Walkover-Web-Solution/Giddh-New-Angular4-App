@@ -15,6 +15,7 @@ import {
     ViewChild,
     ViewChildren,
     ChangeDetectorRef,
+    HostListener,
 } from '@angular/core';
 import { AbstractControl, FormArray, FormGroup, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -261,6 +262,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     public activeParticularAccountIndex: number = null;
     /** Active index for  type */
     public activeTypeIndex: number = null;
+    /** False if you want particular group*/
+    public allGroups: boolean = true;
 
     constructor(
         private _ledgerActions: LedgerActions,
@@ -277,7 +280,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         private elRef: ElementRef,
         public dialog: MatDialog,
         private generalService: GeneralService) {
-
         this.initJournalVoucherForm();
         this.universalDate$ = this.store.pipe(select(sessionStore => sessionStore.session.applicationDate), takeUntil(this.destroyed$));
 
@@ -330,6 +332,11 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 }
                 if (data.gridType === 'voucher') {
                     const voucherTypeControl = this.journalVoucherForm.get('voucherType');
+                    this.activeByAmountIndex = null;
+                    this.activeToAmountIndex = null;
+                    this.activeTypeIndex = null;
+                    this.activeParticularAccountIndex = 0;
+                    this.showLedgerAccountList = false;
                     voucherTypeControl.setValue(this.currentVoucher);
                     this.resetEntriesIfVoucherChanged();
                     setTimeout(() => {
@@ -345,7 +352,12 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this.createStockSuccess$ = this.store.pipe(select(s => s.inventory.createStockSuccess), takeUntil(this.destroyed$));
     }
 
-    public ngOnInit() {
+    /**
+     * This will be use for component initialization
+     *
+     * @memberof AccountAsVoucherComponent
+     */
+    public ngOnInit(): void {
         this.activeRow(true, 0);
         const voucherTypeControl = this.journalVoucherForm.get('voucherType');
         voucherTypeControl.setValue(this.currentVoucher);
@@ -446,6 +458,39 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this.invalidAmountErrorMessage = this.localeData?.invalid_amount_error;
         this.invoiceErrorMessage = this.localeData?.invoice_error;
         this.entryAmountErrorMessage = this.localeData?.entry_amount_error;
+    }
+
+    @HostListener('window:keydown', ['$event'])
+    handleKeyDown(event: KeyboardEvent) {
+        if (event.key === 'F6') {
+            event.preventDefault(); // Prevent default F6 behavior
+            this.customFunctionForF6();
+        } else if (event.key === 'F7') {
+            event.preventDefault(); // Prevent default F7 behavior
+            this.customFunctionForF7();
+        }
+    }
+
+    /**
+     *This will be use for call custom keys functionality for windows
+     *
+     * @memberof AccountAsVoucherComponent
+     */
+    public customFunctionForF6(): void {
+        // Define your custom functionality for F6 key here
+        const voucherTypeControl = this.journalVoucherForm.get('voucherType');
+        voucherTypeControl.setValue(VOUCHERS.RECEIPT);
+    }
+
+    /**
+    *This will be use for call custom keys functionality for windows
+    *
+    * @memberof AccountAsVoucherComponent
+    */
+    public customFunctionForF7(): void {
+        // Define your custom functionality for F7 key here
+        const voucherTypeControl = this.journalVoucherForm.get('voucherType');
+        voucherTypeControl.setValue(VOUCHERS.JOURNAL);
     }
 
     /**
@@ -593,6 +638,13 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this.changeDetectionRef.detectChanges();
     }
 
+    /**
+     * This will be use for active row
+     *
+     * @param {boolean} type
+     * @param {number} index
+     * @memberof AccountAsVoucherComponent
+     */
     public activeRow(type: boolean, index: number): void {
         this.isSelectedRow = type;
         this.selectedIdx = index;
@@ -901,15 +953,14 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         transactionObj.get('total').setValue(transactionObj.get('amount').value);
 
         const debitTransactions = (this.journalVoucherForm.get('transactions') as FormArray).controls
-            .filter((control: AbstractControl) => control.get('type').value === 'by');
-
+            .filter((control: AbstractControl) => control.get('type').value.toLowerCase() === 'by');
         this.totalDebitAmount = debitTransactions
             .map((control: AbstractControl) => Number(control.get('amount').value))
             .reduce((acc: number, amount: number) => acc + amount, 0);
 
 
         const creditTransactions = (this.journalVoucherForm.get('transactions') as FormArray).controls
-            .filter((control: AbstractControl) => control.get('type').value === 'to');
+            .filter((control: AbstractControl) => control.get('type').value.toLowerCase() === 'to');
 
         this.totalCreditAmount = creditTransactions
             .map((control: AbstractControl) => Number(control.get('amount').value))
@@ -959,11 +1010,10 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         const totalCreditAmount = transactionsFormArray.controls.reduce((acc: number, control: AbstractControl) => {
             return control.get('type').value === 'to' ? acc + Number(control.get('amount').value) : acc;
         }, 0);
-
         if (totalDebitAmount === totalCreditAmount) {
-            this.showConfirmationBox = true;
             const descriptionControl = this.journalVoucherForm.get('description');
             if (descriptionControl?.value?.length > 1) {
+                this.showConfirmationBox = true;
                 descriptionControl.setValue(descriptionControl.value.replace(/(?:\r\n|\r|\n)/g, ''));
                 setTimeout(() => {
                     submitBtnEle.focus();
@@ -1230,7 +1280,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this.receiptEntries = [];
         this.totalEntries = 0;
         this.adjustmentTransaction = {};
-        this.chequeDetailForm.reset();
+        this.chequeDetailForm?.reset();
 
         // Set entry date
         this.journalVoucherForm.patchValue({
@@ -1402,6 +1452,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         const date = (typeof this.journalVoucherForm.get('entryDate').value === "object") ? dayjs(this.journalVoucherForm.get('entryDate').value).format("dddd")
             : dayjs(this.journalVoucherForm.get('entryDate').value, GIDDH_DATE_FORMAT).format("dddd");
         this.displayDay = (date !== 'Invalid date') ? date : '';
+        this.activeTypeIndex = 0;
         this.changeDetectionRef.detectChanges();
     }
 
@@ -1655,6 +1706,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         if (this.accountAsideMenuState === 'in') {
             document.querySelector('body').classList.add('fixed');
         } else {
+            this.showLedgerAccountList = false;
             document.querySelector('body').classList.remove('fixed');
         }
     }
@@ -1899,13 +1951,14 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         let transactionsFormArray = this.journalVoucherForm.get('transactions') as FormArray;
         let transactionAtIndex = transactionsFormArray.at(this.selectedIdx) as FormGroup;
 
-        if (type === 'date') {
+        if (type === 'amount') {
             if (this.totalCreditAmount === this.totalDebitAmount) {
                 this.activeToAmountIndex = null;
                 this.activeByAmountIndex = null;
                 this.activeParticularAccountIndex = null;
                 this.activeTypeIndex = null;
                 this.narrationBox?.nativeElement?.focus();
+                this.showConfirmationBox = false;
             } else {
                 if (transactionAtIndex.get('type')?.value === "to") {
                     this.activeTypeIndex = this.selectedIdx + 1;
