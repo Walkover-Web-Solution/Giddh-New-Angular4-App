@@ -264,6 +264,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     public activeTypeIndex: number = null;
     /** False if you want particular group*/
     public allGroups: boolean = true;
+    /** Skip single event of enter in narration box*/
+    public isFirstEnterKeyPress: boolean = true;
 
     constructor(
         private _ledgerActions: LedgerActions,
@@ -362,7 +364,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         const voucherTypeControl = this.journalVoucherForm.get('voucherType');
         voucherTypeControl.setValue(this.currentVoucher);
 
-        this.universalDate$.subscribe(dateObj => {
+        this.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(dateObj => {
             if (dateObj) {
                 this.universalDate = cloneDeep(dateObj);
                 this.journalVoucherForm.get('entryDate').patchValue(dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT));
@@ -560,7 +562,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         }
         if ('saveEntryOnCtrlA' in changes && changes.saveEntryOnCtrlA.currentValue !== changes.saveEntryOnCtrlA.previousValue) {
             if (changes.saveEntryOnCtrlA.currentValue) {
-                this.saveEntry();
+                this.openConfirmBox();
             }
         }
     }
@@ -999,10 +1001,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @param {HTMLButtonElement} submitBtnEle
      * @memberof AccountAsVoucherComponent
      */
-    public openConfirmBox(submitBtnEle: HTMLButtonElement): void {
+    public openConfirmBox(submitBtnEle?: HTMLButtonElement): void {
         this.showLedgerAccountList = false;
         this.showStockList = false;
-
         const transactionsFormArray = this.journalVoucherForm.get('transactions') as FormArray;
         const totalDebitAmount = transactionsFormArray.controls.reduce((acc: number, control: AbstractControl) => {
             return control.get('type').value === 'by' ? acc + Number(control.get('amount').value) : acc;
@@ -1012,9 +1013,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             return control.get('type').value === 'to' ? acc + Number(control.get('amount').value) : acc;
         }, 0);
         if (totalDebitAmount === totalCreditAmount) {
+            this.showConfirmationBox = true;
             const descriptionControl = this.journalVoucherForm.get('description');
             if (descriptionControl?.value?.length > 1) {
-                this.showConfirmationBox = true;
                 descriptionControl.setValue(descriptionControl.value.replace(/(?:\r\n|\r|\n)/g, ''));
                 setTimeout(() => {
                     submitBtnEle.focus();
@@ -1023,6 +1024,27 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         } else {
             this._toaster.errorToast(this.localeData?.credit_debit_equal_error, this.commonLocaleData?.app_error);
             setTimeout(() => this.narrationBox?.nativeElement?.focus(), 500);
+        }
+    }
+
+    /**
+     * This will handle keyboard events
+     *
+     * @param {KeyboardEvent} event
+     * @param {HTMLButtonElement} submitButton
+     * @memberof AccountAsVoucherComponent
+     */
+    public handleEnterKeyPress(event: KeyboardEvent, submitButton: HTMLButtonElement): void {
+        if (event.key === 'Enter') {
+            const descriptionControl = this.journalVoucherForm.get('description');
+            if (!descriptionControl?.value || descriptionControl.value.trim() === '') {
+                event.preventDefault();
+                this.openConfirmBox(submitButton);
+            } else if (event.shiftKey) {
+                // Handle shift + enter if needed
+            } else {
+                this.openConfirmBox(submitButton);
+            }
         }
     }
 

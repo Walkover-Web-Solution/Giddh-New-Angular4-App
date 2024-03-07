@@ -23,7 +23,7 @@
                             formControlName="entryDate"
                             [showToggleIcon]="false"
                             (datepickerState)="onDateFieldFocus()"
-                            (dateSelected)="handleVoucherDateChange(); dateEntered()"
+                           (dateSelected)="handleVoucherDateChange(); dateEntered()"
                             (keydown.enter)="dateEntered()"
                         >
                         </giddh-datepicker>
@@ -124,7 +124,8 @@
                                                 (keydown)="detectKey($event)"
                                                 (keydown.Tab)="
                                                     validateAccount(transaction, $event, i);
-                                                    activeParticularAccountIndex = null;showLedgerAccountList = false;
+                                                    activeParticularAccountIndex = null;
+                                                    showLedgerAccountList = false
                                                 "
                                                 (keydown.Shift)="showLedgerAccountList = false; activeTypeIndex = null"
                                             ></text-field>
@@ -235,8 +236,7 @@
                             id="narration"
                             class="form-control"
                             formControlName="description"
-                            (keyup.enter)="openConfirmBox(submitButton)"
-                            (keydown.tab)="openConfirmBox(submitButton)"
+                            (keydown)="handleEnterKeyPress($event, submitButton)"
                             resize="false"
                             rows="3"
                         ></textarea>
@@ -271,7 +271,13 @@
                                     </button>
                                 </div>
                                 <br />
-                                <button mat-stroked-button color="primary" class="mt-1" (click)="refreshEntry()">
+                                <button
+                                    type="button"
+                                    mat-stroked-button
+                                    color="primary"
+                                    class="mt-1"
+                                    (click)="refreshEntry()"
+                                >
                                     {{ commonLocaleData?.app_reset }}
                                 </button>
                             </div>
