@@ -722,6 +722,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         setTimeout(() => {
             this.showLedgerAccountList = false;
             this.showStockList = false;
+            this.activeTypeIndex = null;
         }, 100);
     }
 
