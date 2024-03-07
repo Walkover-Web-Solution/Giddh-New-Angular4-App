@@ -124,7 +124,7 @@
                                                 (keydown)="detectKey($event)"
                                                 (keydown.Tab)="
                                                     validateAccount(transaction, $event, i);
-                                                    activeParticularAccountIndex = null
+                                                    activeParticularAccountIndex = null;showLedgerAccountList = false;
                                                 "
                                                 (keydown.Shift)="showLedgerAccountList = false; activeTypeIndex = null"
                                             ></text-field>
