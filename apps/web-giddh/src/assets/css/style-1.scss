@@ -591,7 +591,7 @@ aside-menu-account .container-fluid {
     background: var(--color-opening-box-background);
     h5 {
         .number-total {
-            color: var(--color-success-enable);
+            color: var(--color-common-primary-text);
         }
     }
 }
@@ -599,7 +599,7 @@ aside-menu-account .container-fluid {
     background: var(--color-total-details-secondary-background);
     h5 {
         .number-total {
-            color: var(--color-total-details-secondary-content);
+            color: var(--color-common-primary-text);
         }
     }
 }
@@ -607,7 +607,7 @@ aside-menu-account .container-fluid {
     background: var(--color-total-details-tertiary-background);
     h5 {
         .number-total {
-            color: var(--color-total-details-tertiary-content);
+            color: var(--color-common-primary-text);
         }
     }
 }
@@ -1095,7 +1095,7 @@ aside-menu-account .container-fluid {
     text-align: center;
     margin-top: 150px;
     font-size: var(--font-size-32);
-    color: var(--color-gray);
+    color: var(--color-common-primary-text);
 }
 .no-data > img {
     max-height: 200px;

@@ -698,11 +698,13 @@
                                             src="assets/images/unchecked.png"
                                             *ngIf="!allItemsSelected"
                                             (click)="toggleAllItems(true, true)"
+                                            alt="uncheck"
                                         />
                                         <img
                                             src="assets/images/checked.png"
                                             *ngIf="allItemsSelected"
                                             (click)="toggleAllItems(false, true)"
+                                            alt="check"
                                         />
                                     </div>
                                 </th>
@@ -864,11 +866,13 @@
                                             src="assets/images/unchecked.png"
                                             *ngIf="!allItemsSelected"
                                             (click)="toggleAllItems(true, true)"
+                                            alt="uncheck"
                                         />
                                         <img
                                             src="assets/images/checked.png"
                                             *ngIf="allItemsSelected"
                                             (click)="toggleAllItems(false, true)"
+                                            alt="check"
                                         />
                                     </div>
                                 </th>
@@ -1007,11 +1011,13 @@
                                             *ngIf="!item.isSelected"
                                             src="assets/images/unchecked.png"
                                             (click)="toggleItem(item, true)"
+                                            alt="uncheck"
                                         />
                                         <img
                                             *ngIf="item.isSelected"
                                             src="assets/images/checked.png"
                                             (click)="toggleItem(item, false)"
+                                            alt="check"
                                         />
                                     </div>
                                 </td>
@@ -1314,11 +1320,13 @@
                                             *ngIf="!item.isSelected"
                                             src="assets/images/unchecked.png"
                                             (click)="toggleItem(item, true)"
+                                            alt="uncheck"
                                         />
                                         <img
                                             *ngIf="item.isSelected"
                                             src="assets/images/checked.png"
                                             (click)="toggleItem(item, false)"
+                                            alt="check"
                                         />
                                     </div>
                                 </td>
@@ -1466,7 +1474,7 @@
                                             >
                                                 <a
                                                     href="javascript:void(0);"
-                                                    id="edit-model-basic"
+                                                    id="debitOption"
                                                     dropdownToggle
                                                     class="dropdown-toggle icon-dots-three-vertical pull-right"
                                                     aria-label="dropdown-basic"
@@ -1545,11 +1553,13 @@
                                                     src="assets/images/unchecked.png"
                                                     *ngIf="!item.isSelected"
                                                     (click)="toggleItem(item, true)"
+                                                    alt="uncheck"
                                                 />
                                                 <img
                                                     src="assets/images/checked.png"
                                                     *ngIf="item.isSelected"
                                                     (click)="toggleItem(item, false)"
+                                                    alt="check"
                                                 />
                                             </div>
                                             <div class="d-flex justify-content-start">#{{ i + 1 }}</div>

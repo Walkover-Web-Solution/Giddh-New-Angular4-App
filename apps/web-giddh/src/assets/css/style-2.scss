@@ -1646,7 +1646,7 @@ input {
         .profile-tab-container {
             .account-aside-menu-state {
                 .aside-pane {
-                    #close {
+                    #closeDialog {
                         top: 18px;
                     }
                 }
@@ -1948,7 +1948,7 @@ ul.sub-list {
 
 .customer-footer-box .number-total {
     font-size: var(--font-size-24);
-    color: var(--color-blue);
+    color: var(--color-common-primary-text);
 }
 
 .customer-footer-box h5 {
@@ -3286,6 +3286,7 @@ input[type="checkbox"]:checked:after {
     color: var(--color-danger) !important;
     border-color: var(--color-iron) !important;
     outline: none !important;
+    box-shadow: none !important;
 }
 
 .btn-danger:disabled,
@@ -3300,7 +3301,7 @@ input[type="checkbox"]:checked:after {
 
 .btn-cancel {
     background: var(--color-dark-fog);
-    color: var(--color-octonary-button-text);
+    color: var(--color-common-primary-text);
     border-color: var(--color-dark-fog);
 }
 
@@ -7667,7 +7668,7 @@ app-header {
     border-radius: 0;
 }
 
-.account-aside-menu-state #close {
+.account-aside-menu-state #closeDialog {
     display: block;
     position: fixed;
     right: 472px;
@@ -8559,7 +8560,7 @@ button.ladda-button .ladda-label {
     transition: none !important;
 }
 
-.account-aside-menu-state #close {
+.account-aside-menu-state #closeDialog {
     display: block;
     position: absolute;
     right: 10px;
@@ -14589,17 +14590,6 @@ aside-menu-product-service {
     }
 }
 
-
-//  Material checkbox color 
-.mat-mdc-checkbox {
-    .mdc-form-field{
-       .mdc-checkbox{
-           .mdc-checkbox__background{
-               border-color: var(--color-common-primary-text) !important;
-           }
-       }   
-    }
-}
 .text-underline {
     text-decoration: underline;
     &:hover{

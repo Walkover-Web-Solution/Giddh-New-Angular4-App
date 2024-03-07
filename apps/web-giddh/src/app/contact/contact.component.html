@@ -854,7 +854,7 @@
                         >
                             <ng-container *ngIf="updateCommentIdx != idx">
                                 {{ account.comment }}
-                                <span [class.text-gray]="!account.comment" *ngIf="!account.comment">{{
+                                <span [class.text-black]="!account.comment" *ngIf="!account.comment">{{
                                     localeData?.add_comment
                                 }}</span>
                             </ng-container>

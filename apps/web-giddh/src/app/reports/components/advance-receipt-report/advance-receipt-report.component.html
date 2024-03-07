@@ -269,11 +269,13 @@
                                         src="assets/images/unchecked.png"
                                         *ngIf="!allReceiptsSelected"
                                         (click)="toggleAllReceipts()"
+                                        alt="receipt"
                                     />
                                     <img
                                         src="assets/images/checked.png"
                                         *ngIf="allReceiptsSelected"
                                         (click)="toggleAllReceipts()"
+                                        alt="receipt"
                                     />
                                 </div>
                             </th>
@@ -487,11 +489,13 @@
                                         *ngIf="!receipt.isSelected"
                                         src="assets/images/unchecked.png"
                                         (click)="toggleReceipt(receipt, true)"
+                                        alt="check receipt"
                                     />
                                     <img
                                         *ngIf="receipt.isSelected"
                                         src="assets/images/checked.png"
                                         (click)="toggleReceipt(receipt, false)"
+                                        alt="check receipt"
                                     />
                                 </div>
                             </td>

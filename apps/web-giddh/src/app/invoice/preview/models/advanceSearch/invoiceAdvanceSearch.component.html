@@ -1,10 +1,12 @@
-<div>
-    <div class="modal-header theme-bg pd-2 pd-l2 pd-r2 clearfix">
-        <h3 class="modal-title bg" id="modal-title">{{ commonLocaleData?.app_advance_search }}</h3>
+<div role="alertdialog"
+aria-labelledby="dialog1Title"
+aria-describedby="dialog1Desc">
+    <div class="modal-header theme-bg pd-2 pd-l2 pd-r2 clearfix" role="document" tabindex="0">
+        <h2 class="modal-title bg" id="dialog1Title">{{ commonLocaleData?.app_advance_search }}</h2>
         <i class="icon-cross text-right close-modal" aria-hidden="true" (click)="onCancel()"></i>
     </div>
 
-    <div class="modal-body pd-l2 pd-r2 clearfix" id="export-body">
+    <div class="modal-body pd-l2 pd-r2 clearfix" id="dialog1Desc">
         <form name="newRole" novalidate autocomplete="off">
             <!--region invoice-->
             <div class="modal-wrap mr-b2" *ngIf="type === 'invoice'">
