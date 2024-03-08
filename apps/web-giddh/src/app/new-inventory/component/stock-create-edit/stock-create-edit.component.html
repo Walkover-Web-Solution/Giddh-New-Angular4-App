@@ -21,6 +21,7 @@
                             class="btn-position-left mr-0"
                             mat-stroked-button
                             color="primary"
+                            aria-label="back btn"
                         >
                             <i class="icon-left back-left"></i>
                             {{ commonLocaleData?.app_back }}
@@ -943,6 +944,7 @@
                                                                                             src="{{
                                                                                                 imgPath
                                                                                             }}drag-dots-com.svg"
+                                                                                            alt="drag img"
                                                                                         />
                                                                                     </div>
                                                                                     <div>
@@ -950,7 +952,7 @@
                                                                                             option.name
                                                                                         }}</strong>
                                                                                         <mat-chip-listbox
-                                                                                            [aria-label]="option.name"
+                                                                                            aria-label="variant chip list"
                                                                                         >
                                                                                             <ng-container
                                                                                                 *ngFor="
@@ -1654,6 +1656,7 @@
                                                                             color="primary"
                                                                             name="variantArchive{{ i }}"
                                                                             [(ngModel)]="variant.archive"
+                                                                            aria-label="archive toggle"
                                                                         >
                                                                         </mat-slide-toggle>
                                                                     </td>
@@ -2408,7 +2411,7 @@
                                     <tbody>
                                         <tr>
                                             <td width="3%">
-                                                <img src="{{ imgPath }}add-image.svg" width="60" height="60" />
+                                                <img src="{{ imgPath }}add-image.svg" width="60" height="60" alt="add img" />
                                             </td>
                                             <td width="20%">
                                                 <input-field
@@ -2450,7 +2453,7 @@
                                         </tr>
                                         <tr>
                                             <td width="3%">
-                                                <img src="{{ imgPath }}add-image.svg" width="60" height="60" />
+                                                <img src="{{ imgPath }}add-image.svg" width="60" height="60" alt="add img" />
                                             </td>
                                             <td width="20%">
                                                 <input-field

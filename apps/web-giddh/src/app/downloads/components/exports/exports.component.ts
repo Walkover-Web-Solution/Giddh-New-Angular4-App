@@ -114,7 +114,9 @@ export class ExportsComponent implements OnInit, OnDestroy {
     public openDialog(row: any): void {
         this.dialog.open(ExportsJsonComponent, {
             data: row?.filters,
-            panelClass: 'download-json-panel'
+            panelClass: 'download-json-panel',
+            role: 'alertdialog',
+            ariaLabel: 'Dialog ARIA label'
         });
     }
 
