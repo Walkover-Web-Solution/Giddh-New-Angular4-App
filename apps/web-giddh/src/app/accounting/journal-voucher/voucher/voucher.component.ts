@@ -266,6 +266,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     public allGroups: boolean = true;
     /** Skip single event of enter in narration box*/
     public isFirstEnterKeyPress: boolean = true;
+    public activeRowIndex: number = null;
+    public activeRowType: string = null;
 
     constructor(
         private _ledgerActions: LedgerActions,
@@ -724,7 +726,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         setTimeout(() => {
             this.showLedgerAccountList = false;
             this.showStockList = false;
-            this.activeTypeIndex = null;
+            this.activeRowIndex = null;
+            this.activeRowType = null;
         }, 100);
     }
 
@@ -1353,7 +1356,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      */
     public ngAfterViewInit(): void {
         this.isComponentLoaded = true;
-        this.activeParticularAccountIndex = 0;
+        this.activeRowIndex = 0;
+        this.activeRowType = "account";
         // this.dialog.afterAllClosed.pipe(takeUntil(this.destroyed$)).subscribe(() => {
         //     this.focusDebitCreditAmount();
         // });
@@ -1476,7 +1480,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         const date = (typeof this.journalVoucherForm.get('entryDate').value === "object") ? dayjs(this.journalVoucherForm.get('entryDate').value).format("dddd")
             : dayjs(this.journalVoucherForm.get('entryDate').value, GIDDH_DATE_FORMAT).format("dddd");
         this.displayDay = (date !== 'Invalid date') ? date : '';
-        this.activeTypeIndex = 0;
+        this.activeRowIndex = 0;
+        this.activeRowType = "type";
         this.changeDetectionRef.detectChanges();
     }
 
@@ -1986,47 +1991,35 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     * @memberof AccountAsVoucherComponent
     */
     public changeTab(mode: any, type: any): void {
-        let transactionsFormArray = this.journalVoucherForm.get('transactions') as FormArray;
-        let transactionAtIndex = transactionsFormArray.at(this.selectedIdx) as FormGroup;
+        console.log(mode, type);
         if (mode === 'enter') {
             if (type === 'amount') {
                 if (this.totalCreditAmount === this.totalDebitAmount) {
-                    this.resetActiveIndices();
                     this.narrationBox?.nativeElement?.focus();
                     this.showConfirmationBox = false;
+                    this.activeRowIndex = null;
+                    this.activeRowType = null;
                 } else {
-                    this.activeTypeIndex = null;
-                    if (transactionAtIndex.get('type')?.value === "to") {
-                        this.activeTypeIndex = this.selectedIdx + 1;
-                    } else {
-                        this.activeTypeIndex = this.selectedIdx + 1;
-                    }
+                    this.activeRowIndex = this.activeRowIndex + 1;
+                    this.activeRowType = "type";
                 }
+            } else if (type === 'type') {
+                this.activeRowType = "account";
+            } else if (type === 'account') {
+                this.activeRowType = "amount";
             }
-
+        } else if (mode === "shift") {
             if (type === 'type') {
-                if (this.activeParticularAccountIndex === this.selectedIdx) {
-                    this.activeParticularAccountIndex = this.selectedIdx + 1;
-                } else {
-                    this.activeParticularAccountIndex = this.selectedIdx + 1;
-                }
+                this.activeRowIndex = this.activeRowIndex - 1;
+                this.activeRowType = "amount";
+            } else if (type === 'amount') {
+                this.activeRowType = "account";
+            } else if (type === 'account') {
+                this.activeRowType = "type";
             }
-
-            if (type === 'account') {
-                this.activeByAmountIndex = null;
-                this.activeToAmountIndex = null;
-                this.activeParticularAccountIndex = null;
-                if (transactionAtIndex.get('type')?.value === "to") {
-                    this.activeToAmountIndex = this.selectedIdx;
-                } else {
-                    this.activeByAmountIndex = this.selectedIdx;
-                }
-            }
-        } else if (type === 'shift') {
-            // If any event call on shift
-        } else {
-
         }
+
+        console.log(this.activeRowIndex, mode, type);
 
         this.changeDetectionRef.detectChanges();
     }
