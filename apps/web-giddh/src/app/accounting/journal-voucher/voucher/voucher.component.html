@@ -67,7 +67,7 @@
                                             }"
                                         >
                                             <text-field
-                                                [autoFocus]="activeTypeIndex === i"
+                                                [autoFocus]="activeRowIndex === i && activeRowType === 'type'"
                                                 [id]="'transaction_' + i"
                                                 [type]="'text'"
                                                 [cssClass]="'form-control text-capitalize byTo'"
@@ -84,7 +84,7 @@
                                                 [maxlength]="'2'"
                                                 [autocomplete]="'off'"
                                                 (keydown.Enter)="changeTab('enter', 'type')"
-                                                (keydown.Shift)="changeTab('shift', 'type')"
+                                                (keydown.Shift.Tab)="changeTab('shift', 'type')"
                                                 (keydown.Tab)="changeTab('tab', 'type')"
                                             ></text-field>
                                         </td>
@@ -98,10 +98,7 @@
                                             formGroupName="selectedAccount"
                                         >
                                             <text-field
-                                                [autoFocus]="
-                                                    activeParticularAccountIndex === i &&
-                                                    !transaction.get('selectedAccount.name')?.value
-                                                "
+                                                [autoFocus]="activeRowIndex === i && activeRowType === 'account'"
                                                 [autocomplete]="'off'"
                                                 [id]="'transaction_' + i"
                                                 [type]="'text'"
@@ -129,7 +126,7 @@
                                                     changeTab('tab', 'account')
                                                 "
                                                 (keydown.Enter)="changeTab('enter', 'account')"
-                                                (keydown.Shift)="
+                                                (keydown.Shift.Tab)="
                                                     showLedgerAccountList = false; changeTab('shift', 'account')
                                                 "
                                             ></text-field>
@@ -144,9 +141,9 @@
                                         >
                                             <text-field
                                                 (keydown.Tab)="changeTab('tab', 'amount')"
-                                                (keydown.Shift)="changeTab('shift', 'amount')"
+                                                (keydown.Shift.Tab)="changeTab('shift', 'amount')"
                                                 *ngIf="transaction.get('type')?.value?.toLowerCase() === 'by'"
-                                                [autoFocus]="activeByAmountIndex === i"
+                                                [autoFocus]="activeRowIndex === i && activeRowType === 'amount'"
                                                 [autocomplete]="'off'"
                                                 [type]="'text'"
                                                 [cssClass]="'form-control text-right debit-credit'"
@@ -176,7 +173,7 @@
                                             <text-field
                                                 *ngIf="transaction.get('type')?.value?.toLowerCase() === 'to'"
                                                 (keydown.Tab)="activeToAmountIndex = null"
-                                                [autoFocus]="activeToAmountIndex === i"
+                                                [autoFocus]="activeRowIndex === i && activeRowType === 'amount'"
                                                 [autocomplete]="'off'"
                                                 [type]="'text'"
                                                 [cssClass]="'form-control text-right debit-credit'"
@@ -190,7 +187,7 @@
                                                     changeTab('', 'amount')
                                                 "
                                                 (keydown.Tab)="changeTab('tab', 'amount')"
-                                                (keydown.Shift)="changeTab('shift', 'amount')"
+                                                (keydown.Shift.Tab)="changeTab('shift', 'amount')"
                                                 (blur)="addNewEntry(transaction.get('amount')?.value, transaction, i)"
                                                 [ngClass]="{ 'focus': isSelectedRow && selectedIdx === i }"
                                                 (change)="
