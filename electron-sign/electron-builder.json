@@ -53,10 +53,7 @@
         "icon": "icon.ico",
         "signingHashAlgorithms": [
             "sha256"
-        ],
-        "publisherName": "Walkover Technologies Pvt Ltd",
-        "legalTrademarks": "Walkover Technologies Pvt Ltd",
-        "sign": false
+        ]
     },
     "nsis": {
         "oneClick": true,
