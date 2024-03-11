@@ -623,10 +623,10 @@
     <div id="scheduleCall" class="tab-pane active vertical-center modal-body">
         <div class="calendly-box" #reder>
             <div class="calendly-inline-widget">
-                <button id="close" class="close-2" (click)="hideScheduleCalendlyModel()">
+                <button id="closeDialog" class="close-2" (click)="hideScheduleCalendlyModel()" aria-label="close">
                     <i class="icon-cross"></i>
                 </button>
-                <object [data]="calendlyUrl"></object>
+                <object [data]="calendlyUrl" title="calendar"></object>
             </div>
         </div>
     </div>
