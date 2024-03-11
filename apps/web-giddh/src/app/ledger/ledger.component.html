@@ -201,7 +201,7 @@
                                     container="body"
                                     *ngIf="isMobileScreen"
                                 >
-                                    <img (click)="showGiddhDatepicker($event)" src="{{ imgPath }}calender-icon.svg" />
+                                    <img (click)="showGiddhDatepicker($event)" src="{{ imgPath }}calender-icon.svg" alt="calender-icon" />
                                 </div>
                                 <span class="input-wrapper ipad-view-datepicker" (click)="showGiddhDatepicker($event)">
                                     <mat-form-field appearance="fill" class="w-100">
@@ -531,7 +531,7 @@
                                         matTooltipClass="tooltip-black"
                                         (click)="showAutopaidModal()"
                                     >
-                                        <img class="autopaid-icon" src="{{ imgPath }}autopaid.svg" />
+                                        <img class="autopaid-icon" src="{{ imgPath }}autopaid.svg" alt="autopaid-icon" />
                                     </a>
                                     <span
                                         class="bank-menu"
