@@ -23,7 +23,7 @@
                             formControlName="entryDate"
                             [showToggleIcon]="false"
                             (datepickerState)="onDateFieldFocus()"
-                           (dateSelected)="handleVoucherDateChange(); dateEntered()"
+                            (dateSelected)="handleVoucherDateChange(); dateEntered()"
                             (keydown.enter)="dateEntered()"
                         >
                         </giddh-datepicker>
@@ -83,9 +83,9 @@
                                                 [value]="transaction.get('type')?.value | lowercase"
                                                 [maxlength]="'2'"
                                                 [autocomplete]="'off'"
-                                                (keydown.Enter)="changeTab('type')"
-                                                (keydown.Tab)="activeTypeIndex = null"
-                                                (keydown.Shift)="activeByAmountIndex = null; activeToAmountIndex = null"
+                                                (keydown.Enter)="changeTab('enter', 'type')"
+                                                (keydown.Shift)="changeTab('shift', 'type')"
+                                                (keydown.Tab)="changeTab('tab', 'type')"
                                             ></text-field>
                                         </td>
                                         <td
@@ -124,10 +124,14 @@
                                                 (keydown)="detectKey($event)"
                                                 (keydown.Tab)="
                                                     validateAccount(transaction, $event, i);
-                                                    activeParticularAccountIndex = null;
-                                                    showLedgerAccountList = false
+                                                    showLedgerAccountList = false;
+                                                    (activeParticularAccountIndex === null);
+                                                    changeTab('tab', 'account')
                                                 "
-                                                (keydown.Shift)="showLedgerAccountList = false; activeTypeIndex = null"
+                                                (keydown.Enter)="changeTab('enter', 'account')"
+                                                (keydown.Shift)="
+                                                    showLedgerAccountList = false; changeTab('shift', 'account')
+                                                "
                                             ></text-field>
                                         </td>
                                         <td
@@ -139,9 +143,9 @@
                                             }"
                                         >
                                             <text-field
-                                                (keydown.Shift)="activeParticularAccountIndex = null"
+                                                (keydown.Tab)="changeTab('tab', 'amount')"
+                                                (keydown.Shift)="changeTab('shift', 'amount')"
                                                 *ngIf="transaction.get('type')?.value?.toLowerCase() === 'by'"
-                                                (keydown.Tab)="activeParticularAccountIndex = null"
                                                 [autoFocus]="activeByAmountIndex === i"
                                                 [autocomplete]="'off'"
                                                 [type]="'text'"
@@ -152,7 +156,7 @@
                                                 (input)="selectRow(true, i)"
                                                 (keydown.Enter)="
                                                     addNewEntry(transaction.get('amount')?.value, transaction, i);
-                                                    changeTab('amount')
+                                                    changeTab('enter', 'amount')
                                                 "
                                                 (blur)="addNewEntry(transaction.get('amount')?.value, transaction, i)"
                                                 [ngClass]="{ 'focus': isSelectedRow && selectedIdx === i }"
@@ -171,7 +175,7 @@
                                         >
                                             <text-field
                                                 *ngIf="transaction.get('type')?.value?.toLowerCase() === 'to'"
-                                                (keydown.Tab)="cactiveToAmountIndex = null"
+                                                (keydown.Tab)="activeToAmountIndex = null"
                                                 [autoFocus]="activeToAmountIndex === i"
                                                 [autocomplete]="'off'"
                                                 [type]="'text'"
@@ -183,8 +187,10 @@
                                                 (input)="selectRow(true, i)"
                                                 (keydown.Enter)="
                                                     addNewEntry(transaction.get('amount')?.value, transaction, i);
-                                                    changeTab('amount')
+                                                    changeTab('', 'amount')
                                                 "
+                                                (keydown.Tab)="changeTab('tab', 'amount')"
+                                                (keydown.Shift)="changeTab('shift', 'amount')"
                                                 (blur)="addNewEntry(transaction.get('amount')?.value, transaction, i)"
                                                 [ngClass]="{ 'focus': isSelectedRow && selectedIdx === i }"
                                                 (change)="

@@ -1148,7 +1148,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                     //     }
                     // }
 
-                    data.transactions[1].type = "to"; // changing it to "to" so that it becomes debit in loop below
+                    // data.transactions[1].type = "to"; // changing it to "to" so that it becomes debit in loop below
                 }
 
                 data.transactions.forEach((element: any) => {
@@ -1967,40 +1967,67 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     }
 
     /**
+     * This will be use for reset active indexes
+     *
+     * @private
+     * @memberof AccountAsVoucherComponent
+     */
+    private resetActiveIndices(): void {
+        this.activeByAmountIndex = null;
+        this.activeToAmountIndex = null;
+        this.activeParticularAccountIndex = null;
+        this.activeTypeIndex = null;
+    }
+
+
+    /**
     * This will be use for change tabs to type field
     *
     * @memberof AccountAsVoucherComponent
     */
-    public changeTab(type: any, transaction?: FormGroup): void {
+    public changeTab(mode: any, type: any): void {
         let transactionsFormArray = this.journalVoucherForm.get('transactions') as FormArray;
         let transactionAtIndex = transactionsFormArray.at(this.selectedIdx) as FormGroup;
-
-        if (type === 'amount') {
-            if (this.totalCreditAmount === this.totalDebitAmount) {
-                this.activeToAmountIndex = null;
-                this.activeByAmountIndex = null;
-                this.activeParticularAccountIndex = null;
-                this.activeTypeIndex = null;
-                this.narrationBox?.nativeElement?.focus();
-                this.showConfirmationBox = false;
-            } else {
-                if (transactionAtIndex.get('type')?.value === "to") {
-                    this.activeTypeIndex = this.selectedIdx + 1;
+        if (mode === 'enter') {
+            if (type === 'amount') {
+                if (this.totalCreditAmount === this.totalDebitAmount) {
+                    this.resetActiveIndices();
+                    this.narrationBox?.nativeElement?.focus();
+                    this.showConfirmationBox = false;
                 } else {
-                    this.activeTypeIndex = this.selectedIdx + 1;
+                    this.activeTypeIndex = null;
+                    if (transactionAtIndex.get('type')?.value === "to") {
+                        this.activeTypeIndex = this.selectedIdx + 1;
+                    } else {
+                        this.activeTypeIndex = this.selectedIdx + 1;
+                    }
                 }
             }
+
+            if (type === 'type') {
+                if (this.activeParticularAccountIndex === this.selectedIdx) {
+                    this.activeParticularAccountIndex = this.selectedIdx + 1;
+                } else {
+                    this.activeParticularAccountIndex = this.selectedIdx + 1;
+                }
+            }
+
+            if (type === 'account') {
+                this.activeByAmountIndex = null;
+                this.activeToAmountIndex = null;
+                this.activeParticularAccountIndex = null;
+                if (transactionAtIndex.get('type')?.value === "to") {
+                    this.activeToAmountIndex = this.selectedIdx;
+                } else {
+                    this.activeByAmountIndex = this.selectedIdx;
+                }
+            }
+        } else if (type === 'shift') {
+            // If any event call on shift
+        } else {
+
         }
 
-        if (type === 'type') {
-            if (this.activeParticularAccountIndex === this.selectedIdx) {
-                this.activeParticularAccountIndex = null;
-                this.activeParticularAccountIndex = this.selectedIdx + 1;
-            } else {
-                this.activeParticularAccountIndex = null;
-                this.activeParticularAccountIndex = this.selectedIdx;
-            }
-        }
         this.changeDetectionRef.detectChanges();
     }
 

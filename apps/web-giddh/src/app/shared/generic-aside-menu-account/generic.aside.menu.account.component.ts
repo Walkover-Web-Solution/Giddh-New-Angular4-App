@@ -88,6 +88,7 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
     public ngOnInit() {
         if (this.allGroups) {
             this.activeGroupUniqueName = "";
+            this.isCustomerCreation = undefined;
         }
         this.showBankDetail = this.activeGroupUniqueName === 'sundrycreditors';
 
