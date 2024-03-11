@@ -63,7 +63,8 @@
         "createStartMenuShortcut": true,
         "menuCategory": "Accounting",
         "shortcutName": "Giddh",
-        "perMachine": false
+        "perMachine": true,
+        "sign": false
     },
     "asar": true
 }
