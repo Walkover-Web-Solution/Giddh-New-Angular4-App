@@ -52,7 +52,7 @@ export default class AppUpdaterV1 {
             }
             dialog.showMessageBox(dialogOpts).then((returnValue) => {
                 if (returnValue.response === 0) {
-                    autoUpdater.quitAndInstall();
+                    autoUpdater.quitAndInstall(true, true);
                 }
             });
         });

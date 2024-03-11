@@ -24,14 +24,14 @@ export default class WindowManager {
                 // reopen initial window
                 // this.openWindows();
                 if (this.appUpdater && this.appUpdater.isUpdateDownloaded) {
-                    autoUpdater.quitAndInstall();
+                    autoUpdater.quitAndInstall(true, true);
                 } else {
                     app.quit();
                 }
             } else {
                 if (this.appUpdater && this.appUpdater.isUpdateDownloaded) {
                     setTimeout(() => {
-                        autoUpdater.quitAndInstall();
+                        autoUpdater.quitAndInstall(true, true);
                     }, 60000);
                 } else {
                     app.quit();
