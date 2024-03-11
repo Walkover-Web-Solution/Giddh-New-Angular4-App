@@ -648,11 +648,11 @@
                                         <mat-grid-list cols="2" rowHeight="37px">
                                             <mat-grid-tile>
                                                 {{ commonLocaleData?.app_debit }}
-                                                <span class="pull-right text-gray">{{ localeData?.dr }}</span>
+                                                <span class="pull-right">{{ localeData?.dr }}</span>
                                             </mat-grid-tile>
                                             <mat-grid-tile>
                                                 {{ commonLocaleData?.app_credit }}
-                                                <span class="pull-right text-gray">{{ localeData?.cr }}</span>
+                                                <span class="pull-right">{{ localeData?.cr }}</span>
                                             </mat-grid-tile>
                                         </mat-grid-list>
                                     </div>
@@ -1354,7 +1354,7 @@
                             class="hidden-xs sticky-header pr-0 no-right-border"
                         >
                             <b class="blue-heading font-15"> {{ lc.ledgerUnderStandingObj.text.dr }}</b>
-                            <span class="dr-cr-category font-15 pull-right text-gray">{{ localeData?.dr }}</span>
+                            <span class="dr-cr-category font-15 pull-right">{{ localeData?.dr }}</span>
                         </mat-grid-tile>
                         <mat-grid-tile
                             [ngClass]="
@@ -1366,7 +1366,7 @@
                             class="hidden-xs sticky-header pl-0 no-right-border"
                         >
                             <b class="blue-heading font-15"> {{ lc.ledgerUnderStandingObj.text.cr }}</b>
-                            <span class="dr-cr-category font-15 pull-right text-gray">{{ localeData?.cr }}</span>
+                            <span class="dr-cr-category font-15 pull-right">{{ localeData?.cr }}</span>
                         </mat-grid-tile>
                     </mat-grid-list>
                     <!-- endregion -->
