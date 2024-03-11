@@ -113,6 +113,8 @@ export class CustomFieldsListComponent implements OnInit, OnDestroy {
     public deleteCustomField(customFieldUniqueName: any): void {
         let dialogRef = this.dialog.open(ConfirmModalComponent, {
             width: '500px',
+            role: 'alertdialog',
+            ariaLabel: 'Dialog ARIA label',
             data: {
                 title: this.commonLocaleData?.app_delete,
                 body: this.localeData?.delete_custom_field_title,

@@ -1,8 +1,8 @@
 <!-- for voucher v1 company message -->
 <div class="message-wrapper" *ngIf="showDepreciationMessage">
     <p class="text-center py-2">{{localeData?.depreciation_message}}
-         <a href="mailto:support@giddh.com"
-            class="text-underline">support@giddh.com</a> {{localeData?.depreciation_data_message}} &nbsp; <a href="javascript:;" class="text-underline" (click)="removeDepreciationMessage()">{{localeData?.depreciation_dismiss}}</a></p>
+         <a href="mailto:support@giddh.com" aria-label="email"
+            class="text-underline">support@giddh.com</a> {{localeData?.depreciation_data_message}} &nbsp; <a href="javascript:void(0);" aria-label="dismiss" class="text-underline" (click)="removeDepreciationMessage()">{{localeData?.depreciation_dismiss}}</a></p>
 </div>
 <ng-container
     appTranslate
@@ -48,7 +48,7 @@
                 </div>
                 <ul class="nav universal-date h-100" *ngIf="selectedCompany | async">
                     <li>
-                        <button mat-icon-button  class="icon-circle" (click)="showNavigationModal()" [matTooltip]="commonLocaleData?.app_search"
+                        <button mat-icon-button aria-label="Search" class="icon-circle" (click)="showNavigationModal()" [matTooltip]="commonLocaleData?.app_search"
                         [matTooltipPosition]="'below'">
                             <i class="icon-search"></i>
                         </button>
@@ -57,6 +57,7 @@
                         <button
                             *ngIf="voucherApiVersion === 2"
                             mat-icon-button
+                            aria-label="menu-option"
                             #menuTrigger="matMenuTrigger"
                             [matMenuTriggerFor]="menu"
                             class="icon-circle"
@@ -209,7 +210,7 @@
                                         <ul>
                                             <li>
                                                 <span class="dot d-block"></span>
-                                                <a class="cursor-pointer" (click)="navigateToSubItemLink('receiptnote')">
+                                                <a href="javascript:void(0);" class="cursor-pointer" aria-label="receipt" (click)="navigateToSubItemLink('receiptnote')">
                                                     {{ localeData?.receipt_note }}
                                                 </a>
                                             </li>
@@ -341,7 +342,7 @@
                         class="border-none pd-r15 notification"  [ngClass]="{ 'mr-0': isTodaysDateSelected }"
                         [matTooltip]="localeData?.notifications" [matTooltipPosition]="'below'"
                     >
-                        <button mat-icon-button class="icon-circle">
+                        <button mat-icon-button aria-label="notification" class="icon-circle">
                             <i class="icon-bell-new"></i>
                         </button>
                     </li>
@@ -363,28 +364,26 @@
                         </div>
                     </li>
                     <li>
-                        <a href="javascript:void(0);" id="add-manage" (click)="showManageGroupsModal()"
+                        <a href="javascript:void(0);" aria-label="master" id="add-manage" (click)="showManageGroupsModal()"
                             ><i class="icon-master-new1"></i> {{ commonLocaleData?.app_master }}</a
                         >
                     </li>
                     <li class="header-utility-icons">
-                        <a href="javascript:;">
-                            <button mat-icon-button [matTooltip]="commonLocaleData?.app_settings" [matTooltipPosition]="'below'" (click)="toggleSidebar(false)" class="icon-circle">
-                                <i class="icon-settings-cog"></i>
-                            </button>
-                        </a>
+                        <button mat-icon-button aria-label="settings" [matTooltip]="commonLocaleData?.app_settings" [matTooltipPosition]="'below'" (click)="toggleSidebar(false)" class="icon-circle">
+                            <i class="icon-settings-cog"></i>
+                        </button>
                     </li>
                     <li class="header-utility-icons">
-                        <a href="javascript:;" (click)="toggleHelpSupportPane(true)" class="pr-2"
+                        <a href="javascript:void(0);" aria-label="help-info" (click)="toggleHelpSupportPane(true)"
                             >
-                            <button mat-icon-button [matTooltip]="commonLocaleData?.app_help" [matTooltipPosition]="'below'" class="icon-circle">
+                            <button mat-icon-button aria-label="help" [matTooltip]="commonLocaleData?.app_help" [matTooltipPosition]="'below'" class="icon-circle">
                                 <i class="icon-question-new"></i>
                             </button>
                             <span class="pl-1 help-text"> {{ commonLocaleData?.app_help }}</span>
                         </a>
                     </li>
                     <li>
-                        <div class="profile-wrapper" [matMenuTriggerFor]="profileMenu">
+                        <div class="profile-wrapper" [matMenuTriggerFor]="profileMenu" role="button" aria-label="profile-picture">
                             <div class="profile-picture text-center cursor-pointer">
                                 <span>{{ userName }}</span>
                             </div>
@@ -426,7 +425,7 @@
         <div class="white-row plan-issue">
             <p>
                 <span class="icon-traingle-info"></span> {{ getSubscriptionEndNote() }}
-                <a class="click-here" (click)="goToSelectPlan()">{{ localeData?.click_here }}</a>
+                <a href="javascript:void(0);" class="click-here" aria-label="go to plan" (click)="goToSelectPlan()">{{ localeData?.click_here }}</a>
             </p>
         </div>
     </div>
@@ -439,7 +438,7 @@
         <div class="white-row plan-issue">
             <p>
                 <span class="icon-traingle-info"></span> {{ getSubscriptionEndedNote() }}
-                <a class="click-here" (click)="goToSelectPlan()">{{ localeData?.click_here }}</a>
+                <a href="javascript:void(0);" class="click-here" aria-label="get select " (click)="goToSelectPlan()">{{ localeData?.click_here }}</a>
             </p>
         </div>
     </div>
@@ -452,7 +451,7 @@
         <div class="white-row plan-issue">
             <p>
                 <span class="icon-traingle-info"></span> {{ getSubscriptionTransactionEndedNote() }}
-                <a class="click-here" (click)="goToSelectPlan()">{{ localeData?.click_here }}</a>
+                <a href="javascript:void(0);" class="click-here" aria-label="get plan" (click)="goToSelectPlan()">{{ localeData?.click_here }}</a>
             </p>
         </div>
     </div>
@@ -528,7 +527,7 @@
                     </li>
                     <li>
                         <span class="d-inline-block pr-1">{{ localeData?.or }}</span>
-                        <a class="cursor-pointer" (click)="openScheduleModel(); modelRefExpirePlan.hide()">{{
+                        <a href="javascript:void(0);" class="cursor-pointer" aria-label="contact us" (click)="openScheduleModel(); modelRefExpirePlan.hide()">{{
                             localeData?.contact_us
                         }}</a>
                     </li>
@@ -563,7 +562,7 @@
                     </li>
                     <li>
                         <span class="d-inline-block pr-1">{{ localeData?.or }}</span>
-                        <a class="cursor-pointer" (click)="openScheduleModel(); modelRefCrossLimit.hide()">{{
+                        <a href="javascript:void(0);" class="cursor-pointer" aria-label="schedule" (click)="openScheduleModel(); modelRefCrossLimit.hide()">{{
                             localeData?.contact_us
                         }}</a>
                     </li>

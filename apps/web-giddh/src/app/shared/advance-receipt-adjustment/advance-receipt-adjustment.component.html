@@ -15,14 +15,15 @@
     <div class="modal-body font-15 adjustments-list">
         <div class="row">
             <div class="col-md-12">
-                <span class="text-light" *ngIf="isUpdateMode && isVoucherModule">
+                <span class="text-black" *ngIf="isUpdateMode && isVoucherModule">
                     {{ localeData?.adjusted_amount_error }}
                 </span>
                 <div class="row mb-2" *ngIf="isModal">
                     <div class="col-md-8 mr-t05">
                         <div class="form-group">
-                            <label>{{ localeData?.customer_name }} </label>
+                            <label for="customerName">{{ localeData?.customer_name }} </label>
                             <text-field
+                                id="customerName"
                                 [type]="'text'"
                                 [name]="'customerName'"
                                 [cssClass]="'form-control mat-field-border'"
@@ -72,7 +73,7 @@
                                     ? commonLocaleData?.app_balance
                                     : commonLocaleData?.app_due
                             }}
-                            <span class="text-light">{{ localeData?.post_adj }}</span>
+                            <span class="text-black">{{ localeData?.post_adj }}</span>
                             <span class="nowrap"><i class="icon-font-10"></i> </span>
                             <span class="d-inline-flex justify-content-end">
                                 <amount-field
@@ -180,7 +181,7 @@
                                             [scrollableElementId]="'adjustVoucherOptions'"
                                         >
                                             <ng-template #optionTemplate let-option="option">
-                                                <a href="javascript:void(0)">
+                                                <a href="javascript:void(0)" aria-label="label">
                                                     <div class="option-label">
                                                         {{ option?.label }}
                                                     </div>
@@ -224,7 +225,7 @@
                                             [hasMoreValue]="true"
                                         >
                                             <ng-template #optionTemplate let-option="option">
-                                                <a href="javascript:void(0)">
+                                                <a href="javascript:void(0)" aria-label="date label">
                                                     <div class="option-label">
                                                         {{ option?.label }}
                                                     </div>
@@ -290,7 +291,7 @@
                                         *ngIf="
                                             entry.voucherType === 'receipt' && entry.subVoucher === 'ADVANCE_RECEIPT'
                                         "
-                                        class="text-light inclusive-tax"
+                                        class="text-black inclusive-tax"
                                         >({{ localeData?.inclusive_tax }})</span
                                     >
                                 </div>
@@ -361,8 +362,9 @@
                             >
                                 <a
                                     href="javascript:void(0)"
+                                    aria-label="delete icon"
                                     (click)="deleteAdjustVoucherRow(entryIdx)"
-                                    class="icon-font-22 text-light d-inline-block"
+                                    class="icon-font-22 text-black d-inline-block"
                                     ><i class="icon-trash"></i
                                 ></a>
                             </div>
@@ -370,7 +372,7 @@
                     </ng-container>
 
                     <p>
-                        <a href="javascript:void(0)" (click)="addNewBlankAdjustVoucherRow()" class="font-15"
+                        <a href="javascript:void(0)" aria-label="new linw" (click)="addNewBlankAdjustVoucherRow()" class="font-15"
                             ><span class="font-15">+</span> {{ commonLocaleData?.app_add_new_line }}</a
                         >
                     </p>
@@ -423,12 +425,13 @@
                                     </div>
 
                                     <div class="form-group row clearfix">
-                                        <label class="col-md-2"
+                                        <label for="calculatedTaxAmount" class="col-md-2"
                                             >{{ commonLocaleData?.app_amount }}
                                             <span class="text-danger">* </span></label
                                         >
                                         <div class="col-md-3">
                                             <text-field
+                                                id="calculatedTaxAmount"
                                                 #tdsAmountBox
                                                 [placeholder]="commonLocaleData?.app_amount"
                                                 [type]="'text'"
@@ -464,9 +467,10 @@
                             <div class="row">
                                 <div class="col-md-8">
                                     <div class="form-group">
-                                        <label>{{ commonLocaleData?.app_description }} </label>
+                                        <label for="description">{{ commonLocaleData?.app_description }} </label>
                                         <textarea
                                             type="text"
+                                            id="description"
                                             [placeholder]="commonLocaleData?.app_description"
                                             name="description"
                                             [(ngModel)]="adjustVoucherForm.description"
@@ -476,7 +480,7 @@
                                 </div>
                             </div>
                         </ng-container>
-                        <span class="text-light" *ngIf="exceedDueAmount < 0">
+                        <span class="text-black" *ngIf="exceedDueAmount < 0">
                             {{ localeData?.excess_amount }}:
                             <span class="d-inline-flex">
                                 <amount-field

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--*ngIf="templateId == 'thermal_template'"-->
-<html id="thermal_template">
+<html id="thermal_template" lang="en">
     <head>
         <title></title>
     </head>
@@ -306,13 +306,13 @@
                             <div class="thermal-footer">
                                 <div class="accc left-footer">
                                     <div *ngIf="fieldsAndVisibility.footer.thanks?.display">
-                                        <h4
+                                        <h2
                                             *ngIf="fieldsAndVisibility.footer.thanks?.label"
                                             [innerHTML]="fieldsAndVisibility.footer.thanks?.label"
-                                        ></h4>
-                                        <h4 *ngIf="!fieldsAndVisibility.footer.thanks?.label">
+                                        ></h2>
+                                        <h2 *ngIf="!fieldsAndVisibility.footer.thanks?.label">
                                             Thank You for your business.
-                                        </h4>
+                                        </h2>
                                     </div>
                                 </div>
                                 <div class="right-footer">

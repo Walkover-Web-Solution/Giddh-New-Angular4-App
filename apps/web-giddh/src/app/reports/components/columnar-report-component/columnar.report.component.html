@@ -69,6 +69,7 @@
                         name="showHideOpeningClosingBalance"
                         id="showHideOpeningClosingBalance"
                         color="primary"
+                        aria-label="closing balance"
                     ></mat-slide-toggle>
                     &nbsp;<label class="custom-mat-label" for="showHideOpeningClosingBalance">{{
                         localeData?.opening_closing_balance
@@ -83,6 +84,7 @@
                         id="balanceTypeAsSign"
                         color="primary"
                         (change)="onBalanceTypeAsSignChanged($event)"
+                        aria-label="cr dr"
                     ></mat-slide-toggle>
                     &nbsp;<label class="custom-mat-label" for="balanceTypeAsSign">{{ localeData?.cr_dr }}</label>
                 </div>

@@ -31,7 +31,7 @@
                                     >
                                         <ng-template #optionTemplate let-option="option">
                                             <ng-container>
-                                                <a href="javascript:void(0)" class="list-item d-flex">
+                                                <a href="javascript:void(0);" aria-label="branch" class="list-item d-flex">
                                                     <span class="entity-icon">
                                                         <i
                                                             class="icon-branch-icon pull-right"
@@ -76,6 +76,8 @@
                         </div>
                         <div class="form-group mb-0 expand-collapse-btn">
                             <a
+                                href="javascript:void(0);"
+                                aria-label="expand icon"
                                 class="cp"
                                 (click)="toggleExpand()"
                                 [matTooltip]="commonLocaleData?.app_expand_all"
@@ -86,6 +88,8 @@
                                 <span class="icon-expandIcon"></span>
                             </a>
                             <a
+                                href="javascript:void(0);"
+                                aria-label="icon collapse"
                                 class="cp"
                                 (click)="toggleExpand()"
                                 [matTooltip]="commonLocaleData?.app_collapse_all"
@@ -320,7 +324,7 @@
                             >
                                 {{ commonLocaleData?.app_unit }}
                             </th>
-                            <td mat-cell *matCellDef="let entry" [attr.data-title]="commonLocaleData?.app_unit" class="daybook-w-100" 
+                            <td mat-cell *matCellDef="let entry" [attr.data-title]="commonLocaleData?.app_unit" class="daybook-w-100"
                             ></td>
                         </ng-container>
                         <ng-container *ngIf="isEntryExpanded" matColumnDef="rate">

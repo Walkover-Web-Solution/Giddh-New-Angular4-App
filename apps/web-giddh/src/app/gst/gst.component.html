@@ -112,7 +112,7 @@
                                 </button>
                                 <ul *dropdownMenu class="dropdown-menu month-picker" role="menu" id="monthPicker">
                                     <li role="menuitem">
-                                        <a class="dropdown-item" href="javascript:void(0)">
+                                        <a class="dropdown-item" href="javascript:void(0);" aria-label="datepicker">
                                             <bs-datepicker-inline
                                                 name="fromDate"
                                                 (click)="$event.stopPropagation()"
@@ -172,7 +172,7 @@
                 >
                     <span class="btn-toolbar pull-right"> </span>
                     <div>
-                        <img src="{{ imgPath }}summary.svg" class="icon gstr-icon text-middle" />
+                        <img src="{{ imgPath }}summary.svg" class="icon gstr-icon text-middle" alt="summary img" />
                         <div class="return-top text-middle">
                             <div class="font-xlarge">
                                 <b>{{ localeData?.gstr3b_summary }}</b>
@@ -180,7 +180,8 @@
                         </div>
                         <span class="btn-toolbar view-summary-btn pull-right">
                             <a
-                                href="javascript:void(0)"
+                                href="javascript:void(0);"
+                                aria-label="summary"
                                 class="btn btn-primary"
                                 (click)="navigateTogstR3B(GstReport.Gstr3b)"
                             >
@@ -201,7 +202,7 @@
                     >
                         <div>
                             <div class="return-top text-middle gstr-1-label">
-                                <img src="{{ imgPath }}cart.svg" class="icon gstr-icon text-middle" />
+                                <img src="{{ imgPath }}cart.svg" class="icon gstr-icon text-middle" alt="cart-img" />
                                 <div>
                                     <div class="font-xlarge">
                                         <b class="text-middle"
@@ -222,7 +223,8 @@
                             </div>
                             <span class="btn-toolbar view-summary-btn pull-right mr-t1" *ngIf="gstr1TransactionCounts">
                                 <a
-                                    href="javascript:void(0)"
+                                    href="javascript:void(0);"
+                                    aria-label="summary"
                                     class="btn btn-primary"
                                     (click)="navigateToOverview(GstReport.Gstr1)"
                                 >
@@ -238,7 +240,7 @@
                                 </div>
                                 <div class="line"></div>
                                 <div class="count">
-                                    <a (click)="navigateToOverview(GstReport.Gstr1)"
+                                    <a (click)="navigateToOverview(GstReport.Gstr1)" href="javascript:void(0);" aria-label="transaction"
                                         ><span class="font-xxxlarge"
                                             ><b> {{ gstr1TransactionCounts }} </b></span
                                         >
@@ -344,7 +346,8 @@
                     >
                         <span class="btn-toolbar pull-right mr-t1" *ngIf="gstr2TransactionCounts">
                             <a
-                                href="javascript:void(0)"
+                                href="javascript:void(0);"
+                                aria-label="summary"
                                 class="btn btn-primary"
                                 (click)="navigateToOverview(GstReport.Gstr2)"
                             >
@@ -354,7 +357,7 @@
 
                         <div>
                             <div class="return-top text-middle gstr-2-label">
-                                <img src="{{ imgPath }}bag.svg" class="icon gstr-icon text-middle" />
+                                <img src="{{ imgPath }}bag.svg" class="icon gstr-icon text-middle"  alt="bag img"  />
                                 <div>
                                     <div class="font-xlarge">
                                         <b
@@ -382,7 +385,7 @@
                                 </div>
                                 <div class="line"></div>
                                 <div class="count">
-                                    <a (click)="navigateToOverview(GstReport.Gstr2)"
+                                    <a (click)="navigateToOverview(GstReport.Gstr2)"  href="javascript:void(0);"  aria-label="transaction"
                                         ><span class="font-xxxlarge"
                                             ><b> {{ gstr2TransactionCounts }} </b></span
                                         >
@@ -398,6 +401,7 @@
                                 <div class="line"></div>
                                 <div class="count">
                                     <a
+                                        href="javascript:void(0);"  aria-label="transaction"
                                         ><span class="font-xxxlarge"
                                             ><b>{{ commonLocaleData?.app_numbers?.zero }}</b></span
                                         >

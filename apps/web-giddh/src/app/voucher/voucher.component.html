@@ -30,13 +30,11 @@
                     </div>
                 </ng-container>
                 <!--endregion-->
-                <div
-                    class="vouchers-content-wrapper"
-                    [hidden]="(isUpdateMode && isUpdateDataInProcess) || (isLastInvoiceCopied && isUpdateDataInProcess)"
-                >
-                    <div class="font-15 mr-l1 mb-4" *ngIf="isEinvoiceGenerated">
-                        {{ commonLocaleData?.app_special_note }}
-                    </div>
+                <div class="vouchers-content-wrapper"
+                    [hidden]="(isUpdateMode && isUpdateDataInProcess) || (isLastInvoiceCopied && isUpdateDataInProcess)">
+                    <div class="font-15 mr-l1 mb-4" *ngIf="isEinvoiceGenerated">{{
+                        commonLocaleData?.app_special_note
+                        }}</div>
                     <form autocomplete="off" novalidate name="invoiceForm">
                         <!-- Voucher Form Top Section -->
                         <div class="vouchers-primary-form">
@@ -83,7 +81,7 @@
                                                     [scrollableElementId]="'customerId'"
                                                 >
                                                     <ng-template #optionTemplate let-option="option">
-                                                        <a href="javascript:void(0)">
+                                                        <a href="javascript:void(0);" aria-label="label value">
                                                             <div class="option-label">
                                                                 {{ option?.label }}
                                                             </div>
@@ -131,8 +129,9 @@
                                             <div
                                                 class="vouchers-copy-sales mr-l3 cursor-pointer"
                                                 [matMenuTriggerFor]="copyLastVouchers"
+                                                role="button"
                                             >
-                                                <i class="icon-copy-file"></i>
+                                                <i class="icon-copy-file" aria-label="invoice"></i>
                                                 {{ copyPreviousInvoiceText }}
                                             </div>
                                             <mat-menu #copyLastVouchers="matMenu">
@@ -284,6 +283,7 @@
                                     <ng-container *ngIf="isSalesInvoice && !isCashInvoice">
                                         <img
                                             src="{{ imgPath }}new/search_customer.svg"
+                                            alt="customer"
                                             height="70"
                                             class="mb-3"
                                             *ngIf="!invFormData.voucherDetails.customerName"
@@ -292,6 +292,7 @@
                                     <ng-container *ngIf="isPurchaseInvoice">
                                         <img
                                             src="{{ imgPath }}new/search-vendor.svg"
+                                            alt="vendor"
                                             height="70"
                                             class="mb-3"
                                             *ngIf="!invFormData.voucherDetails.customerName"
@@ -300,6 +301,7 @@
                                     <ng-container *ngIf="isCashInvoice">
                                         <img
                                             src="{{ imgPath }}new/search-customer-cash-invoice.svg"
+                                            alt="cash invoice"
                                             height="70"
                                             class="mb-3"
                                             *ngIf="!invFormData.voucherDetails.customerName"
@@ -312,6 +314,7 @@
                         <ng-container *ngIf="isSalesInvoice && !isCashInvoice">
                             <img
                                 src="{{ imgPath }}new/search_customer.svg"
+                                alt="customer"
                                 height="70"
                                 class="mb-3"
                                 *ngIf="!invFormData.voucherDetails.customerName"
@@ -321,6 +324,7 @@
                         <ng-container *ngIf="isPurchaseInvoice">
                             <img
                                 src="{{ imgPath }}new/search-vendor.svg"
+                                alt="search vendor"
                                 height="70"
                                 class="mb-3"
                                 *ngIf="!invFormData.voucherDetails.customerName"
@@ -331,6 +335,7 @@
                         >
                             <img
                                 src="{{ imgPath }}new/search-customer-cash-invoice.svg"
+                                alt="cash invoice"
                                 height="70"
                                 class="mb-3"
                                 *ngIf="!invFormData.voucherDetails.customerName"
@@ -339,6 +344,7 @@
                         <ng-container *ngIf="invoiceType === 'cash bill' || invoiceType === 'cash debit note'">
                             <img
                                 src="{{ imgPath }}search-vendor-cash-invoice.svg"
+                                alt="vendor cash invoice"
                                 height="70"
                                 class="mb-3"
                                 *ngIf="!invFormData.voucherDetails.customerName"
@@ -363,15 +369,15 @@
                                             <span *ngIf="!isCashInvoice">
                                                 <span
                                                     *ngIf="
-                                                        (invFormData.accountDetails.billingDetails.gstNumber ||
-                                                            invFormData.accountDetails.billingDetails.taxNumber ||
-                                                            invFormData.accountDetails.billingDetails.stateName ||
-                                                            invFormData.accountDetails.billingDetails.state?.name ||
-                                                            invFormData.accountDetails.billingDetails.state?.code ||
-                                                            invFormData.accountDetails.billingDetails.county?.name ||
-                                                            invFormData.accountDetails.billingDetails.county?.code ||
-                                                            invFormData.accountDetails.billingDetails.stateCode ||
-                                                            invFormData.accountDetails.billingDetails.address[0]) &&
+                                                        (invFormData.accountDetails.billingDetails?.gstNumber ||
+                                                            invFormData.accountDetails.billingDetails?.taxNumber ||
+                                                            invFormData.accountDetails.billingDetails?.stateName ||
+                                                            invFormData.accountDetails.billingDetails?.state?.name ||
+                                                            invFormData.accountDetails.billingDetails?.state?.code ||
+                                                            invFormData.accountDetails.billingDetails?.county?.name ||
+                                                            invFormData.accountDetails.billingDetails?.county?.code ||
+                                                            invFormData.accountDetails.billingDetails?.stateCode ||
+                                                            invFormData.accountDetails.billingDetails?.address[0]) &&
                                                         accountAddressList?.length
                                                     "
                                                     >(
@@ -384,6 +390,8 @@
                                             *ngIf="!isEinvoiceGenerated && !isCashInvoice"
                                             [matMenuTriggerFor]="billingAddress"
                                             class="icon-edit text-blue cursor-pointer pl-2 font-12"
+                                            aria-label="edit"
+                                            role="button"
                                         ></i>
                                         <mat-menu #billingAddress="matMenu">
                                             <div class="mat-menu-width-large vouchers-address-menu">
@@ -502,7 +510,7 @@
                                                     'without-gstin': !showGSTINNo && !showTRNNo && !showVATNo
                                                 }"
                                             >
-                                                <div class="address-field">
+                                                <div class="address-field position-relative">
                                                     <textarea
                                                         matInput
                                                         name="billingDetails.address"
@@ -573,6 +581,7 @@
                                                     *ngIf="shouldShowTrnGstVatField && showGSTINNo"
                                                 >
                                                     <text-field
+                                                        [id]="'billingDetails'"
                                                         [maxlength]="15"
                                                         autocomplete="None"
                                                         [type]="'text'"
@@ -592,6 +601,7 @@
                                                 </div>
                                                 <div class="gstin-field" *ngIf="shouldShowTrnGstVatField && showTRNNo">
                                                     <text-field
+                                                        [id]="'billingDetails'"
                                                         [maxlength]="12"
                                                         autocomplete="none"
                                                         [type]="'text'"
@@ -609,6 +619,7 @@
                                                     >
                                                     </text-field>
                                                     <text-field
+                                                        [id]="'billingDetails'"
                                                         [maxlength]="12"
                                                         autocomplete="None"
                                                         [type]="'text'"
@@ -625,6 +636,7 @@
                                                 </div>
                                                 <div class="gstin-field" *ngIf="shouldShowTrnGstVatField && showVATNo">
                                                     <text-field
+                                                        [id]="'billingDetails'"
                                                         [maxlength]="12"
                                                         autocomplete="None"
                                                         [type]="'text'"
@@ -640,6 +652,7 @@
                                                 </div>
                                                 <div class="pin-code-field">
                                                     <text-field
+                                                        [id]="'billingPinCode'"
                                                         [type]="'number'"
                                                         [cssClass]="'border-0'"
                                                         autocomplete="false"
@@ -676,20 +689,20 @@
                                             <span *ngIf="!isCashInvoice">
                                                 {{ localeData?.shipping_address }}
                                                 <span
-                                                    *ngIf="
-                                                        (invFormData.accountDetails.shippingDetails?.gstNumber ||
-                                                            invFormData.accountDetails.shippingDetails?.taxNumber ||
-                                                            invFormData.accountDetails.shippingDetails?.stateName ||
-                                                            invFormData.accountDetails.shippingDetails?.state?.name ||
-                                                            invFormData.accountDetails.shippingDetails?.state?.code ||
-                                                            invFormData.accountDetails.shippingDetails?.county?.name ||
-                                                            invFormData.accountDetails.shippingDetails?.county?.code ||
-                                                            invFormData.accountDetails.shippingDetails?.stateCode ||
-                                                            invFormData.accountDetails.shippingDetails?.address[0]) &&
-                                                        accountAddressList?.length
-                                                    "
-                                                    >(
-                                                    {{ commonLocaleData?.app_address }}
+                                                *ngIf="
+                                                (invFormData.accountDetails.shippingDetails?.gstNumber ||
+                                                    invFormData.accountDetails.shippingDetails?.taxNumber ||
+                                                    invFormData.accountDetails.shippingDetails?.stateName ||
+                                                    invFormData.accountDetails.shippingDetails?.state?.name ||
+                                                    invFormData.accountDetails.shippingDetails?.state?.code ||
+                                                    invFormData.accountDetails.shippingDetails?.county?.name ||
+                                                    invFormData.accountDetails.shippingDetails?.county?.code ||
+                                                    invFormData.accountDetails.shippingDetails?.stateCode ||
+                                                    invFormData.accountDetails.shippingDetails?.address[0]) &&
+                                                accountAddressList?.length
+                                            ">(
+                                                    {{
+                                                    commonLocaleData?.app_address }}
                                                     {{ accountShippingIndex }} )
                                                 </span>
                                             </span>
@@ -699,6 +712,8 @@
                                                 *ngIf="!isEinvoiceGenerated && !isCashInvoice"
                                                 [matMenuTriggerFor]="shippingAddress"
                                                 class="icon-edit text-blue cursor-pointer pl-2 font-12"
+                                                aria-label="edit"
+                                                role="button"
                                             ></i>
                                             <mat-menu #shippingAddress="matMenu">
                                                 <div class="mat-menu-width-large vouchers-address-menu">
@@ -832,7 +847,7 @@
                                                     'without-gstin': !showGSTINNo && !showTRNNo && !showVATNo
                                                 }"
                                             >
-                                                <div class="address-field">
+                                                <div class="address-field position-relative">
                                                     <textarea
                                                         matInput
                                                         [readonly]="autoFillShipping"
@@ -887,6 +902,7 @@
                                                 </div>
                                                 <div class="pin-code-field">
                                                     <text-field
+                                                        [id]="'shippingPinCode'"
                                                         [type]="'number'"
                                                         [cssClass]="'border-0'"
                                                         autocomplete="false"
@@ -903,6 +919,7 @@
                                                     *ngIf="shouldShowTrnGstVatField && showGSTINNo"
                                                 >
                                                     <text-field
+                                                        [id]="'shippingDetails'"
                                                         [readonly]="autoFillShipping || isEinvoiceGenerated"
                                                         autocomplete="None"
                                                         [maxlength]="15"
@@ -918,6 +935,7 @@
                                                 </div>
                                                 <div class="gstin-field" *ngIf="shouldShowTrnGstVatField && showTRNNo">
                                                     <text-field
+                                                        [id]="'shippingDetails'"
                                                         [readonly]="autoFillShipping || isEinvoiceGenerated"
                                                         [maxlength]="15"
                                                         autocomplete="None"
@@ -933,6 +951,7 @@
                                                 </div>
                                                 <div class="gstin-field" *ngIf="shouldShowTrnGstVatField && showVATNo">
                                                     <text-field
+                                                        [id]="'shippingDetails'"
                                                         [readonly]="autoFillShipping || isEinvoiceGenerated"
                                                         [maxlength]="12"
                                                         autocomplete="None"
@@ -1016,15 +1035,14 @@
                                             {{ localeData?.billing_address }}
                                             <span
                                                 *ngIf="
-                                                    (purchaseBillCompany.billingDetails.gstNumber ||
-                                                        purchaseBillCompany.billingDetails.taxNumber ||
-                                                        purchaseBillCompany.billingDetails.stateName ||
-                                                        purchaseBillCompany.billingDetails.state?.name ||
-                                                        purchaseBillCompany.billingDetails.state?.code ||
-                                                        purchaseBillCompany.billingDetails.county?.name ||
-                                                        purchaseBillCompany.billingDetails.county?.code ||
-                                                        purchaseBillCompany.billingDetails.stateCode ||
-                                                        purchaseBillCompany.billingDetails.address[0]) &&
+                                                    (purchaseBillCompany.billingDetails?.gstNumber ||
+                                                        purchaseBillCompany.billingDetails?.taxNumber ||
+                                                        purchaseBillCompany.billingDetails?.stateName ||
+                                                        purchaseBillCompany.billingDetails?.state?.name ||
+                                                        purchaseBillCompany.billingDetails?.state?.code ||
+                                                        purchaseBillCompany.billingDetails?.county?.name ||
+                                                        purchaseBillCompany.billingDetails?.county?.code ||
+                                                        purchaseBillCompany.billingDetails?.stateCode || purchaseBillCompany.billingDetails?.address[0]) &&
                                                     companyAddressList?.length
                                                 "
                                             >
@@ -1035,6 +1053,8 @@
                                             *ngIf="companyAddressList?.length"
                                             [matMenuTriggerFor]="companyBillingAddress"
                                             class="icon-edit text-blue cursor-pointer pl-2 font-12"
+                                            aria-label="edit"
+                                            role="button"
                                         ></i>
                                         <mat-menu #companyBillingAddress="matMenu">
                                             <div class="mat-menu-width-large vouchers-address-menu">
@@ -1099,50 +1119,50 @@
                                                                 </p>
                                                             </div>
                                                             <i
-                                                                class="icon-tick"
-                                                                onLoad
-                                                                (elementLoaded)="setIndex('purchaseBilling', i)"
-                                                                *ngIf="
-                                                                    (purchaseBillCompany.billingDetails.state?.name ||
-                                                                        purchaseBillCompany.billingDetails.stateName ||
-                                                                        purchaseBillCompany.billingDetails.county
-                                                                            ?.name ||
-                                                                        purchaseBillCompany.billingDetails.gstNumber ||
-                                                                        purchaseBillCompany.billingDetails.taxNumber ||
-                                                                        purchaseBillCompany.billingDetails.address[0]?.trim()) &&
-                                                                    (!purchaseBillCompany.billingDetails.state?.name ||
+                                                            class="icon-tick"
+                                                            onLoad
+                                                            (elementLoaded)="setIndex('purchaseBilling', i)"
+                                                            *ngIf="
+                                                                (purchaseBillCompany.billingDetails.state?.name ||
+                                                                    purchaseBillCompany.billingDetails.stateName ||
+                                                                    purchaseBillCompany.billingDetails.county
+                                                                        ?.name ||
+                                                                    purchaseBillCompany.billingDetails.gstNumber ||
+                                                                    purchaseBillCompany.billingDetails.taxNumber ||
+                                                                    purchaseBillCompany.billingDetails.address[0]?.trim()) &&
+                                                                (!purchaseBillCompany.billingDetails.state?.name ||
+                                                                    (purchaseBillCompany.billingDetails.state
+                                                                        ?.name &&
                                                                         (purchaseBillCompany.billingDetails.state
-                                                                            ?.name &&
-                                                                            (purchaseBillCompany.billingDetails.state
-                                                                                ?.name === address.stateName ||
-                                                                                purchaseBillCompany.billingDetails
-                                                                                    .stateName ===
-                                                                                    address.stateName))) &&
-                                                                    (!purchaseBillCompany.billingDetails.county?.name ||
-                                                                        (purchaseBillCompany.billingDetails.county
-                                                                            ?.name &&
-                                                                            purchaseBillCompany.billingDetails.county
-                                                                                ?.name === address.county?.name)) &&
-                                                                    (!purchaseBillCompany.billingDetails.gstNumber ||
-                                                                        (purchaseBillCompany.billingDetails.gstNumber &&
-                                                                            (purchaseBillCompany.billingDetails
-                                                                                .gstNumber === address.gstNumber ||
-                                                                                purchaseBillCompany.billingDetails
-                                                                                    .gstNumber ===
-                                                                                    address.taxNumber))) &&
-                                                                    (!purchaseBillCompany.billingDetails.taxNumber ||
-                                                                        (purchaseBillCompany.billingDetails.taxNumber &&
-                                                                            (purchaseBillCompany.billingDetails
-                                                                                .taxNumber === address.gstNumber ||
-                                                                                purchaseBillCompany.billingDetails
-                                                                                    .taxNumber ===
-                                                                                    address.taxNumber))) &&
-                                                                    (!purchaseBillCompany.billingDetails.address[0]?.trim() ||
-                                                                        (purchaseBillCompany.billingDetails.address[0]?.trim() &&
-                                                                            purchaseBillCompany.billingDetails.address[0]?.trim() ===
-                                                                                address.address?.trim()))
-                                                                "
-                                                            ></i>
+                                                                            ?.name === address.stateName ||
+                                                                            purchaseBillCompany.billingDetails
+                                                                                .stateName ===
+                                                                                address.stateName))) &&
+                                                                (!purchaseBillCompany.billingDetails.county?.name ||
+                                                                    (purchaseBillCompany.billingDetails.county
+                                                                        ?.name &&
+                                                                        purchaseBillCompany.billingDetails.county
+                                                                            ?.name === address.county?.name)) &&
+                                                                (!purchaseBillCompany.billingDetails.gstNumber ||
+                                                                    (purchaseBillCompany.billingDetails.gstNumber &&
+                                                                        (purchaseBillCompany.billingDetails
+                                                                            .gstNumber === address.gstNumber ||
+                                                                            purchaseBillCompany.billingDetails
+                                                                                .gstNumber ===
+                                                                                address.taxNumber))) &&
+                                                                (!purchaseBillCompany.billingDetails.taxNumber ||
+                                                                    (purchaseBillCompany.billingDetails.taxNumber &&
+                                                                        (purchaseBillCompany.billingDetails
+                                                                            .taxNumber === address.gstNumber ||
+                                                                            purchaseBillCompany.billingDetails
+                                                                                .taxNumber ===
+                                                                                address.taxNumber))) &&
+                                                                (!purchaseBillCompany.billingDetails.address[0]?.trim() ||
+                                                                    (purchaseBillCompany.billingDetails.address[0]?.trim() &&
+                                                                        purchaseBillCompany.billingDetails.address[0]?.trim() ===
+                                                                            address.address?.trim()))
+                                                            "
+                                                        ></i>
                                                         </div>
                                                     </button>
                                                     <mat-divider></mat-divider>
@@ -1155,12 +1175,15 @@
                                         {{ localeData?.shipping_address }}
                                         <span
                                             *ngIf="
-                                                purchaseBillCompany.shippingDetails?.gstNumber ||
-                                                purchaseBillCompany.shippingDetails?.taxNumber ||
-                                                purchaseBillCompany.shippingDetails?.stateName ||
-                                                purchaseBillCompany.shippingDetails?.state?.name ||
-                                                purchaseBillCompany.shippingDetails?.state?.code ||
-                                                purchaseBillCompany.shippingDetails?.stateCode
+                                                (purchaseBillCompany.shippingDetails?.gstNumber ||
+                                                    purchaseBillCompany.shippingDetails?.taxNumber ||
+                                                    purchaseBillCompany.shippingDetails?.stateName ||
+                                                    purchaseBillCompany.shippingDetails?.state?.name ||
+                                                    purchaseBillCompany.shippingDetails?.state?.code ||
+                                                    purchaseBillCompany.shippingDetails?.county?.name ||
+                                                    purchaseBillCompany.shippingDetails?.county?.code ||
+                                                    purchaseBillCompany.shippingDetails?.stateCode|| purchaseBillCompany.shippingDetails?.address[0]) &&
+                                                companyAddressList?.length
                                             "
                                             >(
                                             {{ commonLocaleData?.app_address }}
@@ -1171,6 +1194,7 @@
                                                 *ngIf="companyAddressList?.length"
                                                 [matMenuTriggerFor]="shippingAddress"
                                                 class="icon-edit text-blue cursor-pointer pl-2 font-12"
+                                                role="button"
                                             ></i>
                                             <mat-menu #shippingAddress="matMenu">
                                                 <div class="mat-menu-width-large vouchers-address-menu">
@@ -1496,7 +1520,8 @@
                                                     <ng-template #optionTemplate let-option="option">
                                                         <a
                                                             *ngIf="option"
-                                                            href="javascript:void(0)"
+                                                            href="javascript:void(0);"
+                                                            aria-label="option"
                                                             class="linking-item"
                                                         >
                                                             <div class="option-label">{{ option?.label }}</div>
@@ -1531,7 +1556,8 @@
                                                     <ng-template #optionTemplate let-option="option">
                                                         <a
                                                             *ngIf="option"
-                                                            href="javascript:void(0)"
+                                                            href="javascript:void(0);"
+                                                            aria-label="option"
                                                             class="linking-item"
                                                         >
                                                             <div class="option-label">{{ option?.label }}</div>
@@ -1623,16 +1649,16 @@
                                                 [disabled]="isEinvoiceGenerated"
                                                 color="primary"
                                             >
+                                                <label
+                                                    class="checkbox-custom-label"
+                                                    for="reverse-charge"
+                                                    (click)="
+                                                        !isEinvoiceGenerated ? toggleRcmCheckbox(rcmCheckbox, 'label') : ''
+                                                    "
+                                                    [innerHTML]="localeData?.transaction_reverse_charge"
+                                                >
+                                                </label>
                                             </mat-checkbox>
-                                            <label
-                                                class="checkbox-custom-label"
-                                                for="reverse-charge"
-                                                (click)="
-                                                    !isEinvoiceGenerated ? toggleRcmCheckbox(rcmCheckbox, 'label') : ''
-                                                "
-                                                [innerHTML]="localeData?.transaction_reverse_charge"
-                                            >
-                                            </label>
                                         </div>
                                     </div>
                                 </div>
@@ -1655,6 +1681,7 @@
                                     }}</span>
                                     <div class="currency-input-wrapper">
                                         <text-field
+                                            [id]="'exchangeRate'"
                                             [name]="'exchangeRate'"
                                             [(ngModel)]="newExchangeRate"
                                             class="exchange-rate-original"
@@ -1676,6 +1703,7 @@
                                             calculateGrandTotal()
                                         "
                                         *ngIf="autoSaveIcon && !isEinvoiceGenerated"
+                                        role="button"
                                     ></i>
                                     <i
                                         class="icon-edit text-blue cursor-pointer"
@@ -1685,6 +1713,8 @@
                                             autoSaveIcon = !autoSaveIcon;
                                             newExchangeRate = originalExchangeRate
                                         "
+                                        role="button"
+                                        aria-label="edit currency"
                                     ></i>
                                 </div>
                                 <div
@@ -1704,6 +1734,7 @@
                                     }}</span>
                                     <div class="currency-input-wrapper">
                                         <text-field
+                                            [id]="'exchangeRate'"
                                             [type]="'number'"
                                             [name]="'exchangeRate'"
                                             class="exchange-rate-original"
@@ -1723,6 +1754,7 @@
                                         class="icon-edit text-blue cursor-pointer"
                                         *ngIf="!autoSaveIcon && !isEinvoiceGenerated"
                                         (click)="saveCancelExcRate(false)"
+                                        role="button"
                                     ></i>
                                 </div>
                                 <!-- Voucher Table for Multiple Entries-->
@@ -1730,34 +1762,19 @@
                                     <table class="w-100">
                                         <thead>
                                             <tr>
-                                                <ng-container *ngFor="let item of theadArrReadOnly">
-                                                    <th
-                                                        *ngIf="
-                                                            item.label !== commonLocaleData?.app_tax ||
-                                                            (item.label === commonLocaleData?.app_tax &&
-                                                                showHideTaxColumn)
-                                                        "
-                                                        [hidden]="!item.display"
-                                                        class="thead-sales-invoice"
-                                                        [ngClass]="{
-                                                            'd-none':
-                                                                (commonLocaleData?.app_quantity_unit === item?.label ||
-                                                                    commonLocaleData?.app_rate === item?.label) &&
-                                                                !hasStock
-                                                        }"
+                                                <th *ngFor="let item of theadArrReadOnly" [hidden]="!item.display"
+                                                    class="thead-sales-invoice" [ngClass]="{ 'd-none' : 
+                                                        ((commonLocaleData?.app_quantity_unit === item?.label) || (commonLocaleData?.app_rate === item?.label)) 
+                                                        && !hasStock }"
                                                     >
-                                                        {{ item?.label }}
-                                                        <span
-                                                            *ngIf="
-                                                                item.label === commonLocaleData?.app_tax && isRcmEntry
-                                                            "
-                                                            >({{ commonLocaleData?.app_rcm }})<sup
-                                                                class="mandatory-asterisk"
-                                                                >*</sup
-                                                            ></span
-                                                        >
-                                                    </th>
-                                                </ng-container>
+                                                    {{ item?.label }}
+                                                    <span *ngIf="item.label === 'Tax' && isRcmEntry"
+                                                        >({{ commonLocaleData?.app_rcm }})<sup
+                                                            class="mandatory-asterisk"
+                                                            >*</sup
+                                                        ></span
+                                                    >
+                                                </th>
                                             </tr>
                                         </thead>
                                         <tbody
@@ -1786,8 +1803,7 @@
                                                 class="entries-tr set-active"
                                                 [ngClass]="{
                                                     'is-other-tax': entry.isOtherTaxApplicable && isMulticurrencyAccount
-                                                }"
-                                            >
+                                                }">
                                                 <td class="text-left product-column" [width]="hasStock ? '20%' : '25%'">
                                                     <div class="product-name">
                                                         <label
@@ -1819,10 +1835,8 @@
                                                                     {{ entry?.entryDate }}
                                                                 </div>
                                                             </div>
-                                                            <div
-                                                                class="col-6 col-sm-6 px-0"
-                                                                *ngIf="transaction.hsnNumber || transaction.sacNumber"
-                                                            >
+                                                            <div class="col-6 col-sm-6 px-0"
+                                                                *ngIf="transaction.hsnNumber || transaction.sacNumber">
                                                                 <div class="hsn-code text-right">
                                                                     <label class="font-12 w-100 d-block"
                                                                         >{{
@@ -1858,23 +1872,17 @@
                                                     width="10%"
                                                     *ngIf="
                                                         !currentVoucherFormDetails ||
-                                                        currentVoucherFormDetails?.quantityAllowed
-                                                    "
-                                                    [ngClass]="{ 'd-none': !hasStock }"
-                                                >
+                                                        currentVoucherFormDetails?.quantityAllowed" 
+                                                        [ngClass]="{ 'd-none' : !hasStock}">
                                                     <div class="wrap-td-data">
                                                         {{ transaction.quantity | giddhCurrency }}
                                                         {{ transaction.stockUnitCode }}
                                                     </div>
                                                 </td>
-                                                <td
-                                                    width="10%"
-                                                    *ngIf="
+                                                <td width="10%" *ngIf="
                                                         !currentVoucherFormDetails ||
-                                                        currentVoucherFormDetails?.rateAllowed
-                                                    "
-                                                    [ngClass]="{ 'd-none': !hasStock }"
-                                                >
+                                                        currentVoucherFormDetails?.rateAllowed" 
+                                                        [ngClass]="{ 'd-none' : !hasStock}">
                                                     <div *ngIf="transaction.rate > 0 || transaction.isStockTxn">
                                                         <div class="td-wrapper flex-grow-1">
                                                             <div class="flex-grow-1">
@@ -1958,9 +1966,7 @@
                                                         </span>
                                                     </div>
                                                 </td>
-                                                <td
-                                                    [width]="hasStock ? '9%' : '14%'"
-                                                    *ngIf="
+                                                <td [width]="hasStock ? '9%' : '14%'" *ngIf="
                                                         !currentVoucherFormDetails ||
                                                         currentVoucherFormDetails?.discountAllowed
                                                     "
@@ -2003,14 +2009,11 @@
                                                         </span>
                                                     </div>
                                                 </td>
-                                                <td
-                                                    [class.error-box]="transaction.requiredTax"
-                                                    [width]="hasStock ? '10%' : '14%'"
-                                                    (focus)="transaction.requiredTax = false"
+                                                <td [class.error-box]="transaction.requiredTax" [width]="hasStock ? '10%' : '14%'"
+                                                    (focus)="transaction.requiredTax = false" 
                                                     *ngIf="
-                                                        (!currentVoucherFormDetails ||
-                                                            currentVoucherFormDetails?.taxesAllowed) &&
-                                                        this.showHideTaxColumn
+                                                        !currentVoucherFormDetails ||
+                                                        currentVoucherFormDetails?.taxesAllowed
                                                     "
                                                 >
                                                     <div class="td-wrapper">
@@ -2056,10 +2059,8 @@
                                                         </span>
                                                     </div>
                                                 </td>
-                                                <td
-                                                    width="16%"
-                                                    class="text-right item-tax position-relative delete-btn-absolute"
-                                                >
+                                                <td width="16%"
+                                                    class="text-right item-tax position-relative delete-btn-absolute">
                                                     <div class="td-wrapper">
                                                         <div class="flex-fill">
                                                             <div class="wrap-td-data">
@@ -2171,16 +2172,10 @@
                                                 </td>
                                             </tr>
 
-                                            <tr
-                                                *ngIf="activeIndx === entryIdx"
-                                                class="entries-tr default-active"
-                                                (click)="$event.stopPropagation()"
-                                            >
-                                                <td
-                                                    class="text-left product-column"
-                                                    [width]="hasStock ? '20%' : '25%'"
-                                                    (click)="closeDiscountPopup(); closeTaxControlPopup()"
-                                                >
+                                            <tr *ngIf="activeIndx === entryIdx" class="entries-tr default-active"
+                                                (click)="$event.stopPropagation()">
+                                                <td class="text-left product-column" [width]="hasStock ? '20%' : '25%'"
+                                                    (click)="closeDiscountPopup(); closeTaxControlPopup()">
                                                     <div class="product-name">
                                                         <div class="ng-select-wrap" (click)="setUserManuallyClicked()">
                                                             <select-field
@@ -2228,7 +2223,8 @@
                                                                 <ng-template #optionTemplate let-option="option">
                                                                     <ng-container *ngIf="!option.additional?.stock">
                                                                         <a
-                                                                            href="javascript:void(0)"
+                                                                            href="javascript:void(0);"
+                                                                            aria-label="Unique Name"
                                                                             class="flex-column"
                                                                         >
                                                                             <div class="option-label">
@@ -2241,7 +2237,8 @@
                                                                     </ng-container>
                                                                     <ng-container *ngIf="option.additional?.stock">
                                                                         <a
-                                                                            href="javascript:void(0)"
+                                                                            href="javascript:void(0);"
+                                                                            aria-label="Unique Name"
                                                                             class="flex-column"
                                                                         >
                                                                             <div class="option-label">
@@ -2286,9 +2283,9 @@
                                                             <div class="row mr-0 ml-0 mt-1">
                                                                 <div class="col-6 col-sm-6 pl-0">
                                                                     <div class="entry-date">
-                                                                        <label class="font-12 w-100 d-block"
+                                                                        <p class="font-12 w-100 d-block"
                                                                             >{{ localeData?.entry_date }}:
-                                                                        </label>
+                                                                        </p>
                                                                         <span
                                                                             *ngIf="!isUpdateMode"
                                                                             class="custom-date-entries custom-input-field d-flex"
@@ -2324,6 +2321,7 @@
                                                                                     src="{{
                                                                                         imgPath
                                                                                     }}edit-pencilicon.svg"
+                                                                                    alt="edit-icon"
                                                                                 />
                                                                             </span>
                                                                         </span>
@@ -2368,6 +2366,7 @@
                                                                                         src="{{
                                                                                             imgPath
                                                                                         }}edit-pencilicon.svg"
+                                                                                        alt="edit-icon"
                                                                                     />
                                                                                 </span>
                                                                             </span>
@@ -2400,7 +2399,7 @@
                                                                                     {{ commonLocaleData?.app_sac_code }}
                                                                                 </mat-radio-button>
                                                                             </mat-radio-group>
-                                                                            <text-field
+                                                                            <text-field 
                                                                                 [type]="'text'"
                                                                                 [cssClass]="'form-control hsn-sac-code'"
                                                                                 maxLength="10"
@@ -2411,11 +2410,10 @@
                                                                                 "
                                                                                 *ngIf="
                                                                                     transaction.showCodeType === 'hsn'
-                                                                                "
-                                                                                [(ngModel)]="transaction.hsnNumber"
-                                                                                [readonly]="isEinvoiceGenerated"
-                                                                            ></text-field>
-                                                                            <text-field
+                                                                                " [(ngModel)]="transaction.hsnNumber"
+                                                                                [readonly]="isEinvoiceGenerated">
+                                                                            </text-field>
+                                                                            <text-field 
                                                                                 [type]="'text'"
                                                                                 [cssClass]="'form-control hsn-sac-code'"
                                                                                 maxLength="10"
@@ -2464,54 +2462,40 @@
                                                         <!-- endregion -->
                                                     </div>
                                                 </td>
-                                                <td
-                                                    class="text-left"
-                                                    [width]="hasStock ? '15%' : '17%'"
-                                                    (click)="closeDiscountPopup(); closeTaxControlPopup()"
-                                                >
-                                                    <div *ngIf="transaction.fakeAccForSelect2">
-                                                        <div class="description">
-                                                            <textarea
-                                                                matInput
-                                                                type="text"
-                                                                rows="2"
-                                                                [placeholder]="localeData?.add_description"
-                                                                name="transaction.description_'+entryIdx"
-                                                                class="form-control mt-2"
-                                                                [(ngModel)]="transaction.description"
-                                                                [maxlength]="entryDescriptionLength"
-                                                                #description
-                                                            ></textarea>
-                                                            <p class="font-12 mt-1">
-                                                                {{ commonLocaleData?.app_characters_left }}:
-                                                                {{
-                                                                    entryDescriptionLength -
-                                                                        transaction.description?.length
-                                                                }}
-                                                            </p>
-                                                            <p
-                                                                class="font-14 text-muted sku-and-custom-fields"
-                                                                *ngIf="transaction.sku_and_customfields"
-                                                            >
-                                                                {{ transaction.sku_and_customfields }}
-                                                            </p>
-                                                        </div>
-                                                        <!-- region entry date/ hsncode -->
+                                                <td class="text-left"  [width]="hasStock ? '15%' : '17%'"
+                                                (click)="closeDiscountPopup(); closeTaxControlPopup()">
+                                                <div *ngIf="transaction.fakeAccForSelect2">
+                                                    <div class="description">
+                                                        <textarea matInput type="text" rows="2"
+                                                            [placeholder]="localeData?.add_description"
+                                                            name="transaction.description_'+entryIdx"
+                                                            class="form-control mt-2"
+                                                            [(ngModel)]="transaction.description"
+                                                            [maxlength]="entryDescriptionLength"
+                                                            #description></textarea>
+                                                        <p class="font-12 mt-1">
+                                                            {{ commonLocaleData?.app_characters_left }}:
+                                                            {{
+                                                            entryDescriptionLength -
+                                                            transaction.description?.length
+                                                            }}
+                                                        </p>
+                                                        <p class="font-14 text-muted sku-and-custom-fields"
+                                                            *ngIf="transaction.sku_and_customfields">
+                                                            {{ transaction.sku_and_customfields }}
+                                                        </p>
                                                     </div>
+                                                    <!-- region entry date/ hsncode -->
+                                                </div>
                                                 </td>
-                                                <td
-                                                    (click)="closeDiscountPopup(); closeTaxControlPopup()"
+                                                <td (click)="closeDiscountPopup(); closeTaxControlPopup()" 
                                                     *ngIf="
-                                                        !currentVoucherFormDetails ||
-                                                        currentVoucherFormDetails?.quantityAllowed
-                                                    "
-                                                    width="10%"
-                                                    [ngClass]="{ 'd-none': !hasStock }"
-                                                >
-                                                    <ng-container
-                                                        *ngIf="!(!transaction.isStockTxn || isEinvoiceGenerated)"
-                                                    >
-                                                        <text-field
+                                                        (!currentVoucherFormDetails ||
+                                                        currentVoucherFormDetails?.quantityAllowed)
+                                                    " width="10%" [ngClass]="{ 'd-none' : !hasStock}">
+                                                    <ng-container *ngIf="!(!transaction.isStockTxn || isEinvoiceGenerated)">
+                                                        <text-field 
+                                                            [id]="'transaction'"
                                                             [placeholder]="commonLocaleData?.app_quantity"
                                                             [readonly]="!transaction.isStockTxn || isEinvoiceGenerated"
                                                             [type]="'text'"
@@ -2617,27 +2601,27 @@
                                                     <div class="td-wrapper">
                                                         <div class="flex-fill">
                                                             <text-field
-                                                                (click)="transactionAmountClicked(transaction)"
-                                                                [placeholder]="commonLocaleData?.app_amount"
-                                                                [type]="'text'"
-                                                                [cssClass]="'form-control mat-field-border text-right '"
-                                                                [name]="'transaction.amount_' + entryIdx"
-                                                                [prefix]="invFormData.accountDetails.currencySymbol"
-                                                                [suffix]="selectedSuffixForCurrency"
-                                                                [mask]="inputMaskFormat"
-                                                                [useMask]="true"
-                                                                [(ngModel)]="transaction.amount"
-                                                                (change)="
-                                                                    calculateWhenTrxAltered(
-                                                                        entry,
-                                                                        transaction,
-                                                                        true,
-                                                                        $event
-                                                                    )
-                                                                "
-                                                                [readonly]="isEinvoiceGenerated"
-                                                            >
-                                                            </text-field>
+                                                            (click)="transactionAmountClicked(transaction)"
+                                                            [placeholder]="commonLocaleData?.app_amount"
+                                                            [type]="'text'"
+                                                            [cssClass]="'form-control mat-field-border text-right '"
+                                                            [name]="'transaction.amount_' + entryIdx"
+                                                            [prefix]="invFormData.accountDetails.currencySymbol"
+                                                            [suffix]="selectedSuffixForCurrency"
+                                                            [mask]="inputMaskFormat"
+                                                            [useMask]="true"
+                                                            [(ngModel)]="transaction.amount"
+                                                            (change)="
+                                                                calculateWhenTrxAltered(
+                                                                    entry,
+                                                                    transaction,
+                                                                    true,
+                                                                    $event
+                                                                )
+                                                            "
+                                                            [readonly]="isEinvoiceGenerated"
+                                                        >
+                                                        </text-field>
                                                         </div>
                                                         <div class="differ-currency" *ngIf="isMulticurrencyAccount">
                                                             <span>
@@ -2765,6 +2749,7 @@
                                                     <div class="td-wrapper">
                                                         <div class="flex-fill">
                                                             <text-field
+                                                                [id]="'transaction'"
                                                                 [type]="'text'"
                                                                 [cssClass]="'form-control mat-field-border text-right '"
                                                                 [name]="'transaction.total_' + entryIdx"
@@ -2801,14 +2786,14 @@
                                                                     name="entry.isOtherTaxApplicable_'+entryIdx"
                                                                     [disabled]="isEinvoiceGenerated"
                                                                 >
-                                                                </mat-checkbox>
                                                                 <label
                                                                     for="entry.isOtherTaxApplicable_{{ entryIdx }}"
                                                                     *ngIf="!entry.isOtherTaxApplicable"
                                                                     class="other-tax-label font-15 align-middle"
                                                                     (click)="tcsTdsIndex = entryIdx"
-                                                                    >{{ localeData?.other_tax }}</label
-                                                                >
+                                                                    >{{ localeData?.other_tax }}
+                                                                </label>
+                                                                </mat-checkbox>
                                                             </div>
                                                             <div *ngIf="entry.isOtherTaxApplicable" class="mr-t1">
                                                                 <span>
@@ -2817,7 +2802,8 @@
                                                                     >
                                                                         <span class="mr-r05">
                                                                             <a
-                                                                                href="javascript:;"
+                                                                                href="javascript:void(0);"
+                                                                                aria-label="edit-icon"
                                                                                 *ngIf="!isEinvoiceGenerated"
                                                                                 (click)="
                                                                                     toggleOtherTaxesAsidePane(
@@ -2830,10 +2816,12 @@
                                                                                     src="{{
                                                                                         imgPath
                                                                                     }}edit-pencilicon.svg"
+                                                                                    alt="edit icon"
                                                                                 />
                                                                             </a>
                                                                         </span>
                                                                         <text-field
+                                                                            [id]="'otherTaxesSum'"
                                                                             [readonly]="'disabled'"
                                                                             [cssClass]="
                                                                                 'text-right form-control other-taxes-input w100'
@@ -3139,7 +3127,7 @@
                                                                                         <span>{{
                                                                                             localeData?.adjust_amount
                                                                                         }}</span>
-                                                                                        <span class="text-gray">
+                                                                                        <span class="text-black">
                                                                                             <amount-field
                                                                                                 [amount]="
                                                                                                     adjustPaymentData.totalAdjustedAmount
@@ -3166,7 +3154,8 @@
                                                                                             </amount-field
                                                                                         ></span>
                                                                                         <a
-                                                                                            href="javascript:void(0)"
+                                                                                            href="javascript:void(0);"
+                                                                                            aria-label="edit"
                                                                                             (click)="
                                                                                                 clickAdjustAmount(true)
                                                                                             "
@@ -3605,6 +3594,7 @@
                                                     </div>
                                                     <div class="col-5">
                                                         <text-field
+                                                            [id]="'grandTotalMulDum'"
                                                             #grandTotalInr
                                                             [type]="'text'"
                                                             [cssClass]="
@@ -3761,6 +3751,8 @@
                                                     <mat-list>
                                                         <mat-list-item>
                                                             <a
+                                                                href="javascript:void(0);"
+                                                                aria-label="Create Send"
                                                                 class="dropdown-item cp font-14"
                                                                 (click)="
                                                                     doAction(2);
@@ -3771,6 +3763,8 @@
                                                         </mat-list-item>
                                                         <mat-list-item>
                                                             <a
+                                                                href="javascript:void(0);"
+                                                                aria-label="Create Print"
                                                                 class="dropdown-item cp font-14"
                                                                 (click)="
                                                                     doAction(3);
@@ -3781,6 +3775,8 @@
                                                         </mat-list-item>
                                                         <mat-list-item *ngIf="voucherApiVersion !== 2">
                                                             <a
+                                                                href="javascript:void(0);"
+                                                                aria-label="generate recurring"
                                                                 class="dropdown-item cp font-14"
                                                                 (click)="
                                                                     doAction(4);
@@ -3797,6 +3793,7 @@
                                                     *ngIf="invoiceType === 'sales'"
                                                     mat-stroked-button
                                                     class="min-width-auto"
+                                                    aria-label="dropdown"
                                                 >
                                                     <span class="caret"></span>
                                                 </button>
@@ -3843,6 +3840,8 @@
                                                     <mat-list>
                                                         <mat-list-item>
                                                             <a
+                                                                href="javascript:void(0);"
+                                                                aria-label="Create Send"
                                                                 class="dropdown-item cp font-14"
                                                                 (click)="
                                                                     doAction(2);
@@ -3853,6 +3852,8 @@
                                                         >
                                                         <mat-list-item>
                                                             <a
+                                                                href="javascript:void(0);"
+                                                                aria-label="Create Print"
                                                                 class="dropdown-item cp font-14"
                                                                 (click)="
                                                                     doAction(3);

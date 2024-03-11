@@ -357,6 +357,10 @@ textarea {
     text-align: right;
 }
 
+.text-primary {
+    color: var(--color-giddh-blue) !important;
+}
+
 .invoice-date-due-date {
     .mat-datepicker-toggle .mat-button-wrapper .mat-datepicker-toggle-default-icon {
         color: var(--color-datepicker-date-icon);
@@ -1764,7 +1768,7 @@ input {
         .profile-tab-container {
             .account-aside-menu-state {
                 .aside-pane {
-                    #close {
+                    #closeDialog {
                         top: 18px;
                     }
                 }
@@ -2355,7 +2359,7 @@ ul.sub-list {
         line-height: 15px;
 
         small {
-            color: var(--color-gray);
+            color: var(--color-common-primary-text);
         }
     }
 }
@@ -3408,6 +3412,7 @@ input[type="checkbox"]:checked:after {
     color: var(--color-danger) !important;
     border-color: var(--color-iron) !important;
     outline: none !important;
+    box-shadow: none !important;
 }
 
 .btn-danger:disabled,
@@ -3422,7 +3427,7 @@ input[type="checkbox"]:checked:after {
 
 .btn-cancel {
     background: var(--color-dark-fog);
-    color: var(--color-octonary-button-text);
+    color: var(--color-common-primary-text);
     border-color: var(--color-dark-fog);
 }
 
@@ -4480,18 +4485,18 @@ select.form-control {
     background-color: var(--color-master-page-left-sidebar-secondary-background);
 }
 
-.grp-list li,
-.new-btn-ul li {
+.grp-list .master-list,
+.new-btn-ul .new-btn {
     list-style: none;
 }
 
-.grp-list li a,
-.new-btn-ul li a {
+.grp-list .master-list a,
+.new-btn-ul .new-btn a {
     padding: 4px 15px !important;
     display: block;
     font-size: var(--font-size-15);
     font-weight: 500;
-    color: var(--color-master-page-sidebar-primary-group);
+    color: var(--color-common-primary-text);
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
@@ -4611,7 +4616,7 @@ label {
     margin-left: 255px;
 }
 
-.col-wrapper:nth-child(1) li a {
+.col-wrapper:nth-child(1) .master-list a {
     text-transform: uppercase;
     padding: 8px 15px !important;
 }
@@ -4620,7 +4625,7 @@ label {
     background: var(--color-dark-fog) !important;
 }
 
-.col-wrapper:last-child ul li a.isParent {
+.col-wrapper:last-child .grp-list .master-list a.isParent {
     background: none;
 }
 
@@ -5066,7 +5071,7 @@ label {
     position: relative;
 }
 
-.col-wrapper:nth-child(1) ul li a.btn-add {
+.col-wrapper:nth-child(1) .grp-list .master-list a.btn-add {
     display: none !important;
 }
 
@@ -7666,7 +7671,7 @@ app-header {
 }
 
 .text-danger {
-    color: var(--color-danger);
+    color: var(--color-danger) !important;
 }
 
 #ngb-typeahead-1 {
@@ -7793,7 +7798,7 @@ app-header {
     border-radius: 0;
 }
 
-.account-aside-menu-state #close {
+.account-aside-menu-state #closeDialog {
     display: block;
     position: fixed;
     right: 472px;
@@ -8725,7 +8730,7 @@ button.ladda-button .ladda-label {
     transition: none !important;
 }
 
-.account-aside-menu-state #close {
+.account-aside-menu-state #closeDialog {
     display: block;
     position: absolute;
     right: 10px;
@@ -13013,7 +13018,7 @@ inventory-master {
         padding-top: 0;
     }
 
-    .col-wrapper:nth-child(1) li a {
+    .col-wrapper:nth-child(1) .master-list a {
         text-transform: uppercase;
         padding: 4px 15px !important;
     }
@@ -13072,8 +13077,8 @@ inventory-master {
         overflow-y: auto !important;
     }
 
-    .grp-list li a,
-    .new-btn-ul li a {
+    .grp-list .master-list a,
+    .new-btn-ul .new-btn a {
         display: initial;
     }
 
@@ -14846,33 +14851,6 @@ aside-menu-product-service {
     }
 }
 
-// Ledger Create Panel text color
-.new-ledger-panel{
-    color: var(--color-default-button) !important;
-
-    label, strong {
-        color: var(--color-default-button) !important;
-    }
-    .mat-expansion-panel {
-        .mat-expansion-panel-header {
-            .mat-expansion-panel-header-title{
-                color: var(--color-default-button) !important;
-             }
-        }
-    }
-}
-
-
-//  Material checkbox color
-.mat-mdc-checkbox {
-    .mdc-form-field{
-       .mdc-checkbox{
-           .mdc-checkbox__background{
-               border-color: var(--color-common-primary-text) !important;
-           }
-       }
-    }
-}
 .text-underline {
     text-decoration: underline;
     &:hover{
@@ -14912,4 +14890,19 @@ aside-menu-product-service {
         text-overflow: ellipsis;
         white-space: nowrap;
     }
+}
+
+// datepicker label
+.date-label {
+    label {
+        position: absolute;
+        z-index: -1;
+    }
+}
+
+.opacity-hidden {
+    opacity: 0;
+}
+.text-black {
+    color: var(--color-common-primary-text);
 }

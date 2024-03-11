@@ -1,7 +1,7 @@
 <div #dd [style.width]="width" class="position-relative">
     <div
         [attr.style]="borderConfiguration?.style"
-        class="header"
+        class="header position-relative"
         #mainContainer
         [class.sh-select-disabled]="disabled"
         [class.inline]="mode === 'inline'"
@@ -67,7 +67,7 @@
             (change)="!filter ? clear() : ''"
         />
 
-        <div (click)="showSearchSuggestion ? show($event) : ''" *ngIf="(!isOpen || !isFilterEnabled) && !multiple">
+        <div (click)="showSearchSuggestion ? show($event) : ''" *ngIf="(!isOpen || !isFilterEnabled) && !multiple" class="position-relative">
             <ng-container *ngIf="selectedValues?.length">
                 <div *ngIf="!multiple">
                     <input
