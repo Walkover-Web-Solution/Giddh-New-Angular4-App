@@ -50,10 +50,7 @@
             "nsis-web",
             "zip"
         ],
-        "icon": "icon.ico",
-        "signingHashAlgorithms": [
-            "sha256"
-        ]
+        "icon": "icon.ico"
     },
     "nsis": {
         "oneClick": true,
