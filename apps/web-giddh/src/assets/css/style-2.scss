@@ -10790,7 +10790,7 @@ body.update-scroll-hidden {
                     a {
                         min-width: 110px;
                         font-family: var(--font-regular);
-                        color: var(--color-nav-tabs-anchor) !important;
+                        color: var(--color-common-primary-text) !important;
                         padding-top: 5px !important;
                         padding-left: 20px !important;
                         height: 30px;
@@ -14522,7 +14522,7 @@ activity-compare-json {
 .mat-form-field-invalid .mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__leading,
 .mat-form-field-invalid .mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__notch,
 .mat-form-field-invalid .mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__trailing {
-    border-color: var(--color-red) !important;
+    border-color: var(--color-red-border) !important;
 }
 .mat-mdc-dialog-content {
     max-height: 70vh !important;
