@@ -469,7 +469,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
             },
             width: '600px',
             role: 'alertdialog',
-            ariaLabel: 'Dialog ARIA label'
+            ariaLabel: 'Confirm Dialog'
         });
 
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
@@ -814,7 +814,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
         this.dialogRef = this.dialog.open(this.addSearchModal, {
             width: '580px',
             role: 'alertdialog',
-            ariaLabel: 'Dialog ARIA label'
+            ariaLabel: 'Add search Dialog'
         });
     }
 

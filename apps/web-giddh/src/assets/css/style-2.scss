@@ -1768,7 +1768,7 @@ input {
         .profile-tab-container {
             .account-aside-menu-state {
                 .aside-pane {
-                    #closeDialog {
+                    #closedialog {
                         top: 18px;
                     }
                 }
@@ -7798,7 +7798,7 @@ app-header {
     border-radius: 0;
 }
 
-.account-aside-menu-state #closeDialog {
+.account-aside-menu-state #closedialog {
     display: block;
     position: fixed;
     right: 472px;
@@ -8730,7 +8730,7 @@ button.ladda-button .ladda-label {
     transition: none !important;
 }
 
-.account-aside-menu-state #closeDialog {
+.account-aside-menu-state #closedialog {
     display: block;
     position: absolute;
     right: 10px;

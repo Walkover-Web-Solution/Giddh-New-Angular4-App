@@ -573,7 +573,7 @@ export class ListBranchTransferComponent implements OnInit {
             width: '500px',
             autoFocus: false,
             role: 'alertdialog',
-            ariaLabel: 'Dialog ARIA label',
+            ariaLabel: 'Advance filter Dialog',
         })
     }
 
