@@ -521,7 +521,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             taxes: [[]],
             total: [null],
             discounts: [[]],
-            inventory: [[]],
+            inventory: [null],
             selectedAccount: this.formBuilder.group({
                 name: [null],
                 UniqueName: [null],
@@ -576,7 +576,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             taxes: [],
             total: null,
             discounts: [],
-            inventory: [],
+            inventory: null,
             selectedAccount: {
                 name: '',
                 UniqueName: '',
@@ -818,10 +818,10 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                         this.groupUniqueName = accModel?.groupUniqueName;
                         this.selectAccUnqName = acc?.uniqueName;
 
-                        let len = transactionAtIndex.get('inventory').value ? transactionAtIndex.get('inventory').value.length : 0;
-                        if (!len || (transactionAtIndex.get('inventory').value && transactionAtIndex.get('inventory').value[len - 1].stock?.uniqueName)) {
-                            transactionAtIndex.get('inventory').value.push(this.initInventory());
-                        }
+                        // let len = transactionAtIndex.get('inventory').value ? transactionAtIndex.get('inventory').value.length : 0;
+                        // if (!len || (transactionAtIndex.get('inventory').value && transactionAtIndex.get('inventory').value[len - 1].stock?.uniqueName)) {
+                        //     transactionAtIndex.get('inventory').value.push(this.initInventory());
+                        // }
                     }
                     if (!openChequePopup) {
                     }
@@ -843,7 +843,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                     taxes: [],
                     total: null,
                     discounts: [],
-                    inventory: [],
+                    inventory: null,
                     selectedAccount: {
                         name: '',
                         UniqueName: '',
@@ -1500,7 +1500,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             transactionObj.patchValue({
                 selectedAccount: {},
                 amount: 0,
-                inventory: []
+                inventory: null
             });
             if (idx) {
                 transactionsFormArray.removeAt(idx);
