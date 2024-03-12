@@ -15,7 +15,7 @@ import {
     ViewChild,
     ViewChildren,
     ChangeDetectorRef,
-    HostListener,
+    HostListener
 } from '@angular/core';
 import { AbstractControl, FormArray, FormGroup, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -94,7 +94,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     @ViewChild('chequeNumberInput', { static: true }) public chequeNumberInput: ElementRef;
     @ViewChild('chequeClearanceInputField', { static: true }) public chequeClearanceInputField: ElementRef;
     @ViewChild('chqFormSubmitBtn', { static: true }) public chqFormSubmitBtn: ElementRef;
-    @ViewChild('submitButton', { static: true }) public submitButton: ElementRef;
+    @ViewChild('submitButton', { static: false }) public submitButton: ElementRef;
     @ViewChild('resetButton', { static: true }) public resetButton: ElementRef;
     /* Instance of narration box */
     @ViewChild('narrationBox') public narrationBox: any;
@@ -461,11 +461,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         } else if (event.key === 'F7') {
             event.preventDefault(); // Prevent default F7 behavior
             this.customFunctionForF7();
-        } else if (event.ctrlKey && (event.keyCode === 65 || event.key === 'a')) {
-            event.preventDefault(); // Prevent default behavior stop
-            if (this.totalCreditAmount === this.totalDebitAmount) {
-                this.openConfirmBox();
-            }
         }
     }
 
@@ -967,6 +962,15 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         }
     }
 
+    /**
+     *This will be use for open confirmation by shortcuts
+     *
+     * @param {HTMLButtonElement} submitButton
+     * @memberof AccountAsVoucherComponent
+     */
+    public openConfirmBoxFromShortcut(submitButton: HTMLButtonElement) {
+        this.openConfirmBox(submitButton);
+    }
 
 
     /**
@@ -975,7 +979,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @param {HTMLButtonElement} submitBtnEle
      * @memberof AccountAsVoucherComponent
      */
-    public openConfirmBox(submitBtnEle?: HTMLButtonElement): void {
+    public openConfirmBox(submitButton: HTMLButtonElement): void {
         this.showLedgerAccountList = false;
         this.showStockList = false;
         const transactionsFormArray = this.journalVoucherForm.get('transactions') as FormArray;
@@ -988,14 +992,16 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         }, 0);
         if (totalDebitAmount === totalCreditAmount) {
             this.showConfirmationBox = true;
-            setTimeout(() => {
-                submitBtnEle?.focus();
-            }, 100);
             const descriptionControl = this.journalVoucherForm.get('description');
             if (descriptionControl?.value?.length > 1) {
                 descriptionControl.setValue(descriptionControl.value.replace(/(?:\r\n|\r|\n)/g, ''));
             }
-        } else {
+
+            setTimeout(() => {
+                submitButton?.focus();
+            }, 300);
+        }
+        else {
             this._toaster.errorToast(this.localeData?.credit_debit_equal_error, this.commonLocaleData?.app_error);
             this.activeRowIndex = null;
             this.activeRowType = null;

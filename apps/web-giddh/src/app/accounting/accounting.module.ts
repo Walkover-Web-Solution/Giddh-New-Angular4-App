@@ -37,6 +37,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { A11yModule } from '@angular/cdk/a11y';
 import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicker.module';
+import { KeyboardShortutModule } from '../shared/helpers/directives/keyboardShortcut/keyboardShortut.module';
 
 @NgModule({
     declarations: [
@@ -81,7 +82,8 @@ import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicke
         MatButtonModule,
         MatInputModule,
         A11yModule,
-        GiddhDatepickerModule
+        GiddhDatepickerModule,
+        KeyboardShortutModule
     ],
 })
 export class AccountingModule {
