@@ -51,11 +51,9 @@
             "zip"
         ],
         "icon": "icon.ico",
-        "signingHashAlgorithms": [
-            "sha256"
-        ],
-        "publisherName": "Walkover Technologies Pvt Ltd",
-        "legalTrademarks": "Walkover Technologies Pvt Ltd"
+        "publisherName": "",
+        "legalTrademarks": "",
+        "signAndEditExecutable": false
     },
     "nsis": {
         "oneClick": true,
@@ -63,7 +61,9 @@
         "createStartMenuShortcut": true,
         "menuCategory": "Accounting",
         "shortcutName": "Giddh",
-        "perMachine": false
+        "perMachine": true,
+        "runAfterFinish": true,
+        "include": "./../../../electron-sign/installer.nsh"
     },
     "asar": true
 }
