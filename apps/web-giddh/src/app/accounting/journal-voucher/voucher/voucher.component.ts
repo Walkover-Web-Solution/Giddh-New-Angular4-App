@@ -461,6 +461,11 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         } else if (event.key === 'F7') {
             event.preventDefault(); // Prevent default F7 behavior
             this.customFunctionForF7();
+        } else if (event.ctrlKey && (event.keyCode === 65 || event.key === 'a')) {
+            event.preventDefault(); // Prevent default behavior stop
+            if (this.totalCreditAmount === this.totalDebitAmount) {
+                this.openConfirmBox();
+            }
         }
     }
 
@@ -521,7 +526,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             taxes: [[]],
             total: [null],
             discounts: [[]],
-            inventory: [[]],
+            inventory: [null],
             selectedAccount: this.formBuilder.group({
                 name: [null],
                 UniqueName: [null],
@@ -551,11 +556,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 this.addNewAccount();
             }
         }
-        if ('saveEntryOnCtrlA' in changes && changes.saveEntryOnCtrlA.currentValue !== changes.saveEntryOnCtrlA.previousValue) {
-            if (changes.saveEntryOnCtrlA.currentValue) {
-                this.openConfirmBox();
-            }
-        }
     }
 
     /**
@@ -576,7 +576,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             taxes: [],
             total: null,
             discounts: [],
-            inventory: [],
+            inventory: null,
             selectedAccount: {
                 name: '',
                 UniqueName: '',
@@ -818,10 +818,10 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                         this.groupUniqueName = accModel?.groupUniqueName;
                         this.selectAccUnqName = acc?.uniqueName;
 
-                        let len = transactionAtIndex.get('inventory').value ? transactionAtIndex.get('inventory').value.length : 0;
-                        if (!len || (transactionAtIndex.get('inventory').value && transactionAtIndex.get('inventory').value[len - 1].stock?.uniqueName)) {
-                            transactionAtIndex.get('inventory').value.push(this.initInventory());
-                        }
+                        // let len = transactionAtIndex.get('inventory').value ? transactionAtIndex.get('inventory').value.length : 0;
+                        // if (!len || (transactionAtIndex.get('inventory').value && transactionAtIndex.get('inventory').value[len - 1].stock?.uniqueName)) {
+                        //     transactionAtIndex.get('inventory').value.push(this.initInventory());
+                        // }
                     }
                     if (!openChequePopup) {
                     }
@@ -843,7 +843,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                     taxes: [],
                     total: null,
                     discounts: [],
-                    inventory: [],
+                    inventory: null,
                     selectedAccount: {
                         name: '',
                         UniqueName: '',
@@ -989,7 +989,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         if (totalDebitAmount === totalCreditAmount) {
             this.showConfirmationBox = true;
             setTimeout(() => {
-                submitBtnEle.focus();
+                submitBtnEle?.focus();
             }, 100);
             const descriptionControl = this.journalVoucherForm.get('description');
             if (descriptionControl?.value?.length > 1) {
@@ -1500,7 +1500,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             transactionObj.patchValue({
                 selectedAccount: {},
                 amount: 0,
-                inventory: []
+                inventory: null
             });
             if (idx) {
                 transactionsFormArray.removeAt(idx);
