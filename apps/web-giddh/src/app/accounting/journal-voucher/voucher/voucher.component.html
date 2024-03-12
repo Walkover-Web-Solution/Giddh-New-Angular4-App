@@ -24,7 +24,7 @@
                             [showToggleIcon]="false"
                             (datepickerState)="onDateFieldFocus()"
                             (dateSelected)="handleVoucherDateChange(); dateEntered()"
-                            (keydown.enter)="dateEntered();activeRowIndex = 0;activeRowType = 'type'"
+                            (keydown.enter)="dateEntered(); activeRowIndex = 0; activeRowType = 'type'"
                         >
                         </giddh-datepicker>
                     </div>
@@ -76,9 +76,7 @@
                                                     journalVoucherForm.get('voucherType')?.value === 'receipt'
                                                 "
                                                 formControlName="type"
-                                                (input)="
-                                                    selectRow(true, i, transaction)
-                                                "
+                                                (input)="selectRow(true, i, transaction)"
                                                 [ngClass]="{ 'focus': isSelectedRow && selectedIdx === i }"
                                                 [value]="transaction.get('type')?.value | lowercase"
                                                 [maxlength]="'2'"
@@ -257,6 +255,8 @@
                                         (keyup)="keyUpOnSubmitButton($event)"
                                         (click)="saveEntry()"
                                         type="button"
+                                        [keyboardShortcut]="'ctrl+a'"
+                                        (onShortcutPress)="openConfirmBoxFromShortcut(submitButton)"
                                     >
                                         {{ commonLocaleData?.app_yes }}
                                     </button>
