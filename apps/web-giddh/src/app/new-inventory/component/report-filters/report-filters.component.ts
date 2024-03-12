@@ -323,7 +323,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
             },
             width: '500px',
             role: 'alertdialog',
-            ariaLabel: 'Dialog ARIA label'
+            ariaLabel: 'Advance search Dialog'
         });
         dialogRef.afterClosed().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {

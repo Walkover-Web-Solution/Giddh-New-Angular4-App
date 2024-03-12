@@ -116,7 +116,7 @@ export class ExportsComponent implements OnInit, OnDestroy {
             data: row?.filters,
             panelClass: 'download-json-panel',
             role: 'alertdialog',
-            ariaLabel: 'Dialog ARIA label'
+            ariaLabel: 'Export Json Dialog'
         });
     }
 

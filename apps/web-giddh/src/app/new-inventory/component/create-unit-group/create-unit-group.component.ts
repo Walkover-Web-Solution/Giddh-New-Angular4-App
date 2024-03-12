@@ -146,7 +146,7 @@ export class CreateUnitGroupComponent implements OnInit, OnChanges, OnDestroy {
         let dialogRef = this.dialog.open(ConfirmModalComponent, {
             width: '40%',
             role: 'alertdialog',
-            ariaLabel: 'Dialog ARIA label',
+            ariaLabel: 'Confirm Dialog',
             data: {
                 title: this.commonLocaleData?.app_confirmation,
                 body: this.localeData?.delete_unit_group_message,

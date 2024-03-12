@@ -317,7 +317,7 @@
                                                 <a
                                                     href="javascript:void(0)"
                                                     class="dropdown-toggle"
-                                                    id="actionButton"
+                                                    [id]="'actionbutton_'+ i"
                                                     dropdownToggle
                                                     (click)="showActionsMenu($event)"
                                                     >{{ commonLocaleData?.app_actions }} <i class="caret"></i
