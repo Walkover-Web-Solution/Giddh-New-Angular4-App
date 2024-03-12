@@ -62,7 +62,6 @@
         "menuCategory": "Accounting",
         "shortcutName": "Giddh",
         "perMachine": true,
-        "runAfterFinish": true,
         "include": "./../../../electron-sign/installer.nsh"
     },
     "asar": true
