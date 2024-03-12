@@ -3,28 +3,38 @@
         <a
             class="cp"
             (click)="setSelectedPage(accountingVouchers.CONTRA, 'voucher', 'purchases')"
-            [ngClass]="{ 'active-parent': selectedVoucher === accountingVouchers.CONTRA }"
+            [ngClass]="{ 'active-parent': (selectedVoucher | lowercase) === accountingVouchers.CONTRA }"
             >{{ commonLocaleData?.app_keys?.f4 }}: {{ commonLocaleData?.app_voucher_types?.contra }}
         </a>
     </li>
 
-    <!--
-    <li><a class="cp" (click)="setSelectedPage('Payment', 'voucher', 'purchases')"
-            [ngClass]="{ 'active-parent': selectedVoucher === 'Payment'}">F5: Payment</a></li> -->
+    <li>
+        <a
+            class="cp"
+            (click)="setSelectedPage(accountingVouchers.PAYMENT, 'voucher', 'purchases')"
+            [ngClass]="{ 'active-parent': (selectedVoucher | lowercase) === accountingVouchers.PAYMENT }"
+            >{{ commonLocaleData?.app_keys?.f5 }}: {{ commonLocaleData?.app_voucher_types?.payment }}</a
+        >
+    </li>
 
     <li>
         <a
             class="cp"
             (click)="setSelectedPage(accountingVouchers.RECEIPT, 'voucher', 'purchases')"
-            [ngClass]="{ 'active-parent': selectedVoucher === accountingVouchers.RECEIPT }"
+            [ngClass]="{ 'active-parent': (selectedVoucher | lowercase) === accountingVouchers.RECEIPT }"
             >{{ commonLocaleData?.app_keys?.f6 }}: {{ commonLocaleData?.app_voucher_types?.receipt }}
         </a>
     </li>
 
+    <li>
+        <a
+            class="cp"
+            (click)="setSelectedPage(accountingVouchers.JOURNAL, 'voucher', 'purchases')"
+            [ngClass]="{ 'active-parent': (selectedVoucher | lowercase) === accountingVouchers.JOURNAL }"
+            >F7: Journal</a
+        >
+    </li>
     <!--    "isHidden" class  if user is not able to access the module
-    <li><a class="cp" (click)="setSelectedPage('Journal', 'voucher', null)"
-            [ngClass]="{ 'active-parent': selectedVoucher === 'Journal'}">F7: Journal</a></li>
-
     <li><a class="cp" (click)="setSelectedPage('Sales', 'voucher', 'sales')"
             [ngClass]="{ 'active-parent': selectedVoucher === 'Sales'}">F8: Sales</a></li>
     <li><a class="cp" (click)="setSelectedPage('Sales', 'voucher', 'sales')"
