@@ -1,6 +1,4 @@
 import { app, BrowserWindow as BrowserWindowElectron, ipcMain } from 'electron';
-import AppUpdaterV1 from './AppUpdater';
-import { autoUpdater } from 'electron-updater';
 import { WebContentsSignal, WindowEvent } from './electronEventSignals';
 import { DEFAULT_URL, StateManager, WindowItem } from './StateManager';
 import BrowserWindow = Electron.BrowserWindow;
@@ -10,35 +8,10 @@ export const WINDOW_NAVIGATED = 'windowNavigated';
 
 export default class WindowManager {
 
-    private appUpdater: AppUpdaterV1 = null;
     private stateManager = new StateManager();
     private windows: BrowserWindow[] = [];
 
-    constructor() {
-        app.on('window-all-closed', () => {
-            // restore default set of windows
-            this.stateManager.restoreWindows();
-            // On OS X it is common for applications and their menu bar
-            // to stay active until the user quits explicitly with Cmd + Q
-            if (process.platform === 'darwin') {
-                // reopen initial window
-                // this.openWindows();
-                if (this.appUpdater && this.appUpdater.isUpdateDownloaded) {
-                    autoUpdater.quitAndInstall(true, true);
-                } else {
-                    app.quit();
-                }
-            } else {
-                if (this.appUpdater && this.appUpdater.isUpdateDownloaded) {
-                    setTimeout(() => {
-                        autoUpdater.quitAndInstall(true, true);
-                    }, 60000);
-                } else {
-                    app.quit();
-                }
-            }
-        });
-    }
+    constructor() {}
 
     public static saveWindowState(window: BrowserWindow, descriptor: WindowItem): void {
         if (window.isMaximized()) {
@@ -78,7 +51,8 @@ export default class WindowManager {
                 webPreferences: {
                     nodeIntegration: true
                 },
-                tabbingIdentifier: 'giddh'
+                tabbingIdentifier: 'giddh',
+                fullscreen: true
             };
 
             let isMaximized = true;
@@ -104,9 +78,6 @@ export default class WindowManager {
                 this.windows.push(window);
             }, 2 * 1000);
         }
-
-        // tslint:disable-next-line:no-unused-expression
-        this.appUpdater = new AppUpdaterV1();
     }
 
     public focusFirstWindow(): void {

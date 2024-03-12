@@ -1,6 +1,6 @@
 {
     "name": "giddh-workspaces",
-    "version": "8.2.3",
+    "version": "8.2.4",
     "license": "MIT",
     "scripts": {
         "ng": "ng",
@@ -44,7 +44,7 @@
         "package": "npm run build.electron.giddh && cd dist/apps/web-giddh && npx  electron-builder build --config ./../../../electron-sign/electron-builder.json  -mw --x64",
         "package:linux": "npm run build.electron.giddh && cd dist/apps/web-giddh && npx electron-builder  build --config ./../../../electron-sign/electron-builder.json  --linux --x64",
         "package:mac": "npm run build.electron.giddh && cd dist/apps/web-giddh && npx  electron-builder build --config ./../../../electron-sign/electron-builder.json  --macos --x64",
-        "package:windows": "npm run build.electron.giddh && cd dist/apps/web-giddh && npx electron-builder build --config ./../../../electron-sign/electron-builder.json --win=portable --ia32 --x64 ",
+        "package:windows": "npm run build.electron.giddh && cd dist/apps/web-giddh && npx electron-builder build --config ./../../../electron-sign/electron-builder.json --win --ia32 --x64 ",
         "package:windows:test": "npm run build.electron.giddh.test && cd dist/apps/web-giddh && npx electron-builder build --config ./../../../electron-sign/electron-builder-test.json --win=portable --ia32 --x64 --publish always",
         "package:mac:test": "npm run build.electron.giddh.test && cd dist/apps/web-giddh && npx electron-builder build --config ./../../../electron-sign/electron-builder-test.json --macos --x64 --publish always",
         "release:windows:ci": "npm run build.electron.giddh && cd dist/apps/web-giddh && npx electron-builder build --config ./../../../electron-sign/electron-builder-ci.json --win --ia32 --x64 --publish always",
@@ -129,7 +129,6 @@
         "electron-rebuild": "^3.2.9",
         "electron-reload": "1.5.0",
         "electron-store": "^8.1.0",
-        "electron-updater": "^6.1.1",
         "husky": "^8.0.3",
         "js-yaml": "^4.1.0",
         "ngx-build-plus": "16.0.0",
