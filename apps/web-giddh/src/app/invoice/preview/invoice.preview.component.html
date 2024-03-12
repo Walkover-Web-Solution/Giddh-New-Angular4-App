@@ -40,7 +40,8 @@
                                     <li role="menuitem">
                                         <a
                                             class="dropdown-item"
-                                            href="javascript: void 0"
+                                            href="javascript:void(0);"
+                                            aria-label="invoice"
                                             (click)="goToInvoice('cash')"
                                             >{{ localeData?.cash_invoice }}</a
                                         >
@@ -48,7 +49,8 @@
                                     <li role="menuitem">
                                         <a
                                             class="dropdown-item"
-                                            href="javascript: void 0"
+                                            href="javascript:void(0);"
+                                            aria-label="sales invoice"
                                             (click)="goToInvoice('sales')"
                                             >{{ localeData?.sales_invoice }}</a
                                         >
@@ -160,7 +162,8 @@
                                     >
                                         <a
                                             class="dropdown-item cp"
-                                            href="javascript:void(0)"
+                                            href="javascript:void(0);"
+                                            aria-label="bulk update"
                                             (click)="toggleBulkUpdatePopup(false)"
                                             >{{ localeData?.bulk_update }}</a
                                         >
@@ -168,7 +171,8 @@
                                     <li role="menuitem" *ngIf="selectedItems?.length === 1">
                                         <a
                                             class="dropdown-item cp"
-                                            href="javascript:void(0)"
+                                            href="javascript:void(0);"
+                                            aria-label="eway bill"
                                             (click)="toggleEwayBillPopup()"
                                             *ngIf="selectedVoucher === 'sales'"
                                         >
@@ -185,7 +189,8 @@
                                     >
                                         <a
                                             class="dropdown-item cp"
-                                            href="javascript:void(0)"
+                                            href="javascript:void(0);"
+                                            aria-label="e invoice"
                                             (click)="createBulkEInvoice()"
                                         >
                                             {{ localeData?.create_e_invoice }}
@@ -200,7 +205,8 @@
                                     >
                                         <a
                                             class="dropdown-item cp"
-                                            href="javascript:void(0)"
+                                            href="javascript:void(0);"
+                                            aria-label="delete"
                                             (click)="onDeleteBtnClick()"
                                             >{{ commonLocaleData?.app_delete }}</a
                                         >
@@ -252,7 +258,8 @@
                                         >
                                             <a
                                                 class="dropdown-item cp"
-                                                href="javascript:void(0)"
+                                                href="javascript:void(0);"
+                                                aria-label="bulk update"
                                                 (click)="toggleBulkUpdatePopup(false)"
                                                 >{{ localeData?.bulk_update }}</a
                                             >
@@ -260,7 +267,8 @@
                                         <li role="menuitem" *ngIf="selectedItems?.length === 1">
                                             <a
                                                 class="dropdown-item cp"
-                                                href="javascript:void(0)"
+                                                href="javascript:void(0);"
+                                                aria-label="generate bill"
                                                 (click)="toggleEwayBillPopup()"
                                                 *ngIf="selectedVoucher === 'sales'"
                                             >
@@ -277,7 +285,8 @@
                                         >
                                             <a
                                                 class="dropdown-item cp"
-                                                href="javascript:void(0)"
+                                                href="javascript:void(0);"
+                                                aria-label="create invoice"
                                                 (click)="createBulkEInvoice()"
                                             >
                                                 {{ localeData?.create_e_invoice }}
@@ -286,7 +295,8 @@
                                         <li role="menuitem">
                                             <a
                                                 class="dropdown-item cp"
-                                                href="javascript:void(0)"
+                                                href="javascript:void(0);"
+                                                aria-label="delete"
                                                 (click)="onDeleteBtnClick()"
                                                 >{{ commonLocaleData?.app_delete }}</a
                                             >
@@ -358,7 +368,7 @@
                                     >
                                         <button
                                             *ngIf="!isCompany"
-                                            id="ddl-newinv"
+                                            id="ddl-newinv-invoice"
                                             dropdownToggle
                                             type="button"
                                             class="btn btn-sky-blue dropdown-toggle dropdown-btn-new"
@@ -378,6 +388,7 @@
                                                 <a
                                                     class="dropdown-item"
                                                     href="javascript:;"
+                                                    aria-label="cash invoice"
                                                     (click)="goToInvoice('cash')"
                                                     >{{ localeData?.cash_invoice }}</a
                                                 >
@@ -386,6 +397,7 @@
                                                 <a
                                                     class="dropdown-item"
                                                     href="javascript:;"
+                                                    aria-label="sales invoice"
                                                     (click)="goToInvoice('sales')"
                                                     >{{ localeData?.sales_invoice }}</a
                                                 >
@@ -468,6 +480,7 @@
                                                     <a
                                                         class="dropdown-item cp"
                                                         href="javascript:void(0)"
+                                                        aria-label="eway bill"
                                                         (click)="toggleEwayBillPopup()"
                                                         *ngIf="selectedVoucher === 'sales' && !isMobileView"
                                                     >
@@ -478,6 +491,7 @@
                                                     <a
                                                         class="dropdown-item cp"
                                                         href="javascript:void(0)"
+                                                        aria-label="delete"
                                                         (click)="onDeleteBtnClick()"
                                                         >{{ commonLocaleData?.app_delete }}</a
                                                     >
@@ -545,7 +559,8 @@
                                             <li role="menuitem">
                                                 <a
                                                     class="dropdown-item cp"
-                                                    href="javascript:void(0)"
+                                                    href="javascript:void(0);"
+                                                    aria-label="eway bill"
                                                     (click)="toggleEwayBillPopup()"
                                                     *ngIf="selectedVoucher === 'sales' && !isMobileView"
                                                 >
@@ -555,7 +570,8 @@
                                             <li role="menuitem">
                                                 <a
                                                     class="dropdown-item cp"
-                                                    href="javascript:void(0)"
+                                                    href="javascript:void(0);"
+                                                    aria-label="delete"
                                                     (click)="onDeleteBtnClick()"
                                                     >{{ commonLocaleData?.app_delete }}</a
                                                 >
@@ -682,11 +698,13 @@
                                             src="assets/images/unchecked.png"
                                             *ngIf="!allItemsSelected"
                                             (click)="toggleAllItems(true, true)"
+                                            alt="uncheck"
                                         />
                                         <img
                                             src="assets/images/checked.png"
                                             *ngIf="allItemsSelected"
                                             (click)="toggleAllItems(false, true)"
+                                            alt="check"
                                         />
                                     </div>
                                 </th>
@@ -848,11 +866,13 @@
                                             src="assets/images/unchecked.png"
                                             *ngIf="!allItemsSelected"
                                             (click)="toggleAllItems(true, true)"
+                                            alt="uncheck"
                                         />
                                         <img
                                             src="assets/images/checked.png"
                                             *ngIf="allItemsSelected"
                                             (click)="toggleAllItems(false, true)"
+                                            alt="check"
                                         />
                                     </div>
                                 </th>
@@ -991,11 +1011,13 @@
                                             *ngIf="!item.isSelected"
                                             src="assets/images/unchecked.png"
                                             (click)="toggleItem(item, true)"
+                                            alt="uncheck"
                                         />
                                         <img
                                             *ngIf="item.isSelected"
                                             src="assets/images/checked.png"
                                             (click)="toggleItem(item, false)"
+                                            alt="check"
                                         />
                                     </div>
                                 </td>
@@ -1021,7 +1043,7 @@
                                         }"
                                         class="d-flex position-relative remove-capitalize"
                                     >
-                                        <a href="javascript:void(0);" class="btn-link-2">{{
+                                        <a href="javascript:void(0);" aria-label="voucher" class="btn-link-2">{{
                                             item.voucherNumber
                                                 ? item.voucherNumber
                                                 : commonLocaleData?.app_not_available
@@ -1157,7 +1179,9 @@
                                                 class="icon-ellipse select-action"
                                             >
                                                 <a
-                                                    id="edit-model-basic"
+                                                    href="javascript:void(0);"
+                                                    aria-label="menu"
+                                                    id="edit-model"
                                                     dropdownToggle
                                                     class="dropdown-toggle icon-dots-three-vertical pull-right"
                                                     aria-controls="dropdown-basic"
@@ -1168,12 +1192,12 @@
                                                     *dropdownMenu
                                                     class="dropdown-menu dropdown-menu-right width-150"
                                                     role="menu"
-                                                    aria-labelledby="edit-model-basic"
+                                                    aria-label="paid status"
                                                     [ngClass]="{ 'dropup-menu': isDropUp }"
                                                 >
                                                     <ul class="select-action-dropdown">
                                                         <li (click)="onPerformAction(item, 'paid')">
-                                                            <a class="cp" href="javascript:void(0)">{{
+                                                            <a class="cp" href="javascript:void(0);" aria-label="payment paid">{{
                                                                 commonLocaleData?.app_payment_status?.paid
                                                             }}</a>
                                                         </li>
@@ -1181,22 +1205,22 @@
                                                             *ngIf="selectedVoucher === 'sales'"
                                                             (click)="onPerformAdjustPaymentAction(item)"
                                                         >
-                                                            <a class="cp" href="javascript:void(0)">{{
+                                                            <a class="cp" href="javascript:void(0);" aria-label="adjust amount">{{
                                                                 commonLocaleData?.app_payment_status?.adjust_amount
                                                             }}</a>
                                                         </li>
                                                         <li (click)="onPerformAction(item, 'unpaid')">
-                                                            <a class="cp" href="javascript:void(0)">{{
+                                                            <a class="cp" href="javascript:void(0);" aria-label="unpaid">{{
                                                                 commonLocaleData?.app_payment_status?.unpaid
                                                             }}</a>
                                                         </li>
                                                         <li (click)="onPerformAction(item, 'hold')">
-                                                            <a class="cp" href="javascript:void(0)">{{
+                                                            <a class="cp" href="javascript:void(0);" aria-label="hold">{{
                                                                 commonLocaleData?.app_payment_status?.hold
                                                             }}</a>
                                                         </li>
                                                         <li (click)="onPerformAction(item, 'cancel')">
-                                                            <a class="cp" href="javascript:void(0)">{{
+                                                            <a class="cp" href="javascript:void(0);" aria-label="cancel">{{
                                                                 commonLocaleData?.app_payment_status?.cancel
                                                             }}</a>
                                                         </li>
@@ -1230,12 +1254,16 @@
                                             }"
                                         >
                                             <a
+                                                href="javascript:void(0);"
+                                                aria-label="envelope"
                                                 [tooltip]="commonLocaleData?.app_send_email"
                                                 (click)="openSendMailModal(sendEmailModal, item)"
                                             >
                                                 <span class="icon-envelope font-12"></span>
                                             </a>
                                             <a
+                                                href="javascript:void(0);"
+                                                aria-label="copy icon"
                                                 *ngIf="!isCompany"
                                                 [tooltip]="commonLocaleData?.app_copy"
                                                 [routerLink]="[
@@ -1248,7 +1276,9 @@
                                             >
                                                 <span class="icon-copy-small font-15"></span>
                                             </a>
-                                            <a
+                                            <a  
+                                                href="javascript:void(0);"
+                                                aria-label="trash"
                                                 *ngIf="!isCompany"
                                                 [tooltip]="commonLocaleData?.app_delete"
                                                 (click)="deletePurchaseBill(item?.uniqueName)"
@@ -1290,11 +1320,13 @@
                                             *ngIf="!item.isSelected"
                                             src="assets/images/unchecked.png"
                                             (click)="toggleItem(item, true)"
+                                            alt="uncheck"
                                         />
                                         <img
                                             *ngIf="item.isSelected"
                                             src="assets/images/checked.png"
                                             (click)="toggleItem(item, false)"
+                                            alt="check"
                                         />
                                     </div>
                                 </td>
@@ -1320,7 +1352,7 @@
                                     "
                                     class="remove-capitalize"
                                 >
-                                    <a class="cursor-pointer" (click)="onSelectInvoice(item)">
+                                    <a class="cursor-pointer" href="javascript:void(0);" aria-label="available" (click)="onSelectInvoice(item)">
                                         {{ item.voucherNumber || commonLocaleData?.app_not_available }}</a
                                     >
                                 </td>
@@ -1441,10 +1473,11 @@
                                                 class="icon-ellipse select-action"
                                             >
                                                 <a
-                                                    id="edit-model-basic"
+                                                    href="javascript:void(0);"
+                                                    id="debitOption"
                                                     dropdownToggle
                                                     class="dropdown-toggle icon-dots-three-vertical pull-right"
-                                                    aria-controls="dropdown-basic"
+                                                    aria-label="dropdown-basic"
                                                     (click)="showActionsMenu($event)"
                                                 ></a>
                                                 <div
@@ -1452,12 +1485,12 @@
                                                     *dropdownMenu
                                                     class="dropdown-menu dropdown-menu-right width-150"
                                                     role="menu"
-                                                    aria-labelledby="edit-model-basic"
+                                                    aria-label="payment status"
                                                     [ngClass]="{ 'dropup-menu': isDropUp }"
                                                 >
                                                     <ul class="select-action-dropdown">
                                                         <li (click)="onPerformAction(item, 'cancel')">
-                                                            <a class="cp" href="javascript:void(0)">{{
+                                                            <a class="cp" href="javascript:void(0);" aria-label="cancel">{{
                                                                 commonLocaleData?.app_payment_status?.cancel
                                                             }}</a>
                                                         </li>
@@ -1520,11 +1553,13 @@
                                                     src="assets/images/unchecked.png"
                                                     *ngIf="!item.isSelected"
                                                     (click)="toggleItem(item, true)"
+                                                    alt="uncheck"
                                                 />
                                                 <img
                                                     src="assets/images/checked.png"
                                                     *ngIf="item.isSelected"
                                                     (click)="toggleItem(item, false)"
+                                                    alt="check"
                                                 />
                                             </div>
                                             <div class="d-flex justify-content-start">#{{ i + 1 }}</div>
@@ -1546,7 +1581,7 @@
                                         </div>
                                         <div class="col-6 p-0">
                                             <div class="invoice-name-download">
-                                                <a class="invoice-number-a" (click)="onSelectInvoice(item)">
+                                                <a href="javascript:void(0);" aria-label="voucher number" class="invoice-number-a" (click)="onSelectInvoice(item)">
                                                     {{
                                                         item.voucherNumber
                                                             ? item.voucherNumber
@@ -1647,22 +1682,22 @@
                                                             "
                                                         >
                                                             <li (click)="onPerformAction(item, 'paid')">
-                                                                <a class="cp" href="javascript:void(0)">{{
+                                                                <a class="cp" href="javascript:void(0);" aria-label="paid">{{
                                                                     commonLocaleData?.app_payment_status?.paid
                                                                 }}</a>
                                                             </li>
                                                             <li (click)="onPerformAction(item, 'unpaid')">
-                                                                <a class="cp" href="javascript:void(0)">{{
+                                                                <a class="cp" href="javascript:void(0);" aria-label="unpaid">{{
                                                                     commonLocaleData?.app_payment_status?.unpaid
                                                                 }}</a>
                                                             </li>
                                                             <li (click)="onPerformAction(item, 'hold')">
-                                                                <a class="cp" href="javascript:void(0)">{{
+                                                                <a class="cp" href="javascript:void(0);" aria-label="hold">{{
                                                                     commonLocaleData?.app_payment_status?.hold
                                                                 }}</a>
                                                             </li>
                                                             <li (click)="onPerformAction(item, 'cancel')">
-                                                                <a class="cp" href="javascript:void(0)">{{
+                                                                <a class="cp" href="javascript:void(0);" aria-label="cancel">{{
                                                                     commonLocaleData?.app_payment_status?.cancel
                                                                 }}</a>
                                                             </li>

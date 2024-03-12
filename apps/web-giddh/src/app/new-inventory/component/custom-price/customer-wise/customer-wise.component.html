@@ -17,16 +17,16 @@
                                     </span>
                                 </div>
                                 <div class="mr-b1">
-                                    <button mat-stroked-button color="primary" class="w-100" (click)="openSearchModal('users')">
+                                    <button mat-stroked-button aria-label="customer group" color="primary" class="w-100" (click)="openSearchModal('users')">
                                         {{localeData?.add_customer_group }}
                                     </button>
                                 </div>
                                 <div class="mr-b1">
                                     <div class="custom-tab w-100 d-flex">
-                                        <button mat-button (click)="getUsersByType('account')" [ngClass]="{'active': userFilterType === 'account'}">
+                                        <button mat-button aria-label="account" (click)="getUsersByType('account')" [ngClass]="{'active': userFilterType === 'account'}">
                                             {{ commonLocaleData?.app_account }}
                                         </button>
-                                        <button mat-button (click)="getUsersByType('group')" [ngClass]="{'active': userFilterType === 'group'}">
+                                        <button mat-button aria-label="group" (click)="getUsersByType('group')" [ngClass]="{'active': userFilterType === 'group'}">
                                             {{ commonLocaleData?.app_group }}
                                         </button>
                                     </div>
@@ -62,7 +62,7 @@
                         </mat-list>
                         <div class="customer-right-side" #stocksContainer>
                             <div class="right-heading" *ngIf="currentUser?.uniqueName">
-                                <button mat-stroked-button color="primary" (click)="openSearchModal('stocks')"> {{
+                                <button mat-stroked-button aria-label="inventory" color="primary" (click)="openSearchModal('stocks')"> {{
                                     localeData?.add_inventory }} </button>
                                 <div class="search-list position-relative" [formGroup]="searchForm"
                                     *ngIf="!currentUser?.isTempUser">
@@ -83,8 +83,8 @@
                                                     {{ localeData?.unsaved_changes }}
                                                 </span>
                                                 <div>
-                                                    <button mat-stroked-button (click)="discardChanges()" class="mr-3">{{ localeData?.discard }}</button>
-                                                    <button mat-raised-button (click)="saveDiscount()">
+                                                    <button mat-stroked-button aria-label="discard" (click)="discardChanges()" class="mr-3">{{ localeData?.discard }}</button>
+                                                    <button mat-raised-button aria-label="save" (click)="saveDiscount()">
                                                         {{ commonLocaleData?.app_save }}
                                                     </button>
                                                 </div>
@@ -113,6 +113,7 @@
                                                                     <td class="variant-delete text-right">
                                                                         <span>
                                                                             <button mat-stroked-button
+                                                                                aria-label="delete button"
                                                                                 class="delete-icon"
                                                                                 (click)="confirmationPopup( discountCollection?.get('stockUniqueName')?.value, 'stock', discountCollection?.get('isTempStock')?.value, i)"><i
                                                                                     class="icon-trash"></i>
@@ -171,6 +172,7 @@
                                                                         <td class="variant-delete">
                                                                             <div class="delete-show">
                                                                                 <button mat-stroked-button
+                                                                                    aria-label="delete button"
                                                                                     [disabled]="discountCollection?.get('variants')?.value?.length < 2"
                                                                                     class="delete-icon"
                                                                                     (click)="confirmationPopup(variant?.get('variantUniqueName')?.value,  'variant', variant?.get('isTemproraryVariant')?.value, i, j)">
@@ -257,6 +259,7 @@
                                                                         <td class="variant-delete">
                                                                             <div class="delete-show">
                                                                                 <button mat-stroked-button
+                                                                                    aria-label="delete button"
                                                                                     class="delete-icon"
                                                                                     (click)="confirmationPopup( discountCollection?.get('stockUniqueName')?.value, 'stock', discountCollection?.get('isTempStock')?.value, i)">
                                                                                     <i class="icon-trash"></i>

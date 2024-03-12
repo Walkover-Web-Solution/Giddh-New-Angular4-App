@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--*ngIf="templateId == 'common_template_a'"-->
-<html id="default">
+<html id="default" lang="en">
     <head>
         <title></title>
     </head>
@@ -1342,15 +1342,15 @@
                                 <tr *ngIf="fieldsAndVisibility.footer.thanks?.display">
                                     <td [ngStyle]="{ 'font-size': inputTemplate.fontDefault + 'px' }">
                                         <strong>
-                                            <h4
+                                            <h2
                                                 *ngIf="fieldsAndVisibility.footer.thanks?.label"
                                                 [ngStyle]="{
                                                     'color': inputTemplate.templateColor,
                                                     'font-size': inputTemplate.fontDefault + 'px'
                                                 }"
                                                 [innerHTML]="fieldsAndVisibility.footer.thanks?.label"
-                                            ></h4>
-                                            <h4
+                                            ></h2>
+                                            <h2
                                                 *ngIf="!fieldsAndVisibility.footer.thanks?.label"
                                                 [ngStyle]="{
                                                     'color': inputTemplate.templateColor,
@@ -1358,7 +1358,7 @@
                                                 }"
                                             >
                                                 Thank You for your business.
-                                            </h4>
+                                            </h2>
                                         </strong>
                                     </td>
                                 </tr>

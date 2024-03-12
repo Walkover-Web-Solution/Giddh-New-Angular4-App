@@ -4,6 +4,7 @@
     [matTooltipPosition]="matTooltipPosition"
     [matTooltip]="matTooltip"
     [ngClass]="cssClass"
+    aria-label="filter"
 >
     <i [ngClass]="iconClass"> </i> <span class="pl-3">{{ buttonText }}</span>
 </button>
@@ -15,6 +16,7 @@
             mat-menu-item
             (click)="$event?.stopPropagation()"
             (keydown.enter)="$event?.stopPropagation(); onKeydownEnter(item)"
+            aria-label="option check"
         >
             <mat-checkbox
                 class="inventory-checkbox"

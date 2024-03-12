@@ -1,11 +1,11 @@
 <div class="aside-pane aside-pane-other-tax text-left" (clickOutside)="closeTaxesModal($event)"
     [keyboardShortcut]="'esc'" (onShortcutPress)="closeTaxesModal($event)">
-    <button id="close" type="button" (click)="closeTaxesModal($event)">
+    <button id="closedialog" aria-label="close" type="button" (click)="closeTaxesModal($event)">
         <i class="icon-cross"></i>
     </button>
 
     <div class="form-header">
-        <h3 class="aside-title">{{commonLocaleData?.app_tax_applicable}}</h3>
+        <h2 class="aside-title">{{commonLocaleData?.app_tax_applicable}}</h2>
     </div>
 
     <div class="aside-body">
