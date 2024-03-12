@@ -16,11 +16,11 @@
                     </button>
                     <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
                         <li role="menuitem" (click)="voucherTypeChanged('sales')">
-                            <a class="dropdown-item cp" href="javascript:void(0)">Sales</a>
+                            <a class="dropdown-item cp" href="javascript:void(0);" aria-label="sales">Sales</a>
                         </li>
 
                         <li role="menuitem" (click)="voucherTypeChanged('debit note')">
-                            <a class="dropdown-item cp" href="javascript:void(0)">Credit/Debit Note</a>
+                            <a class="dropdown-item cp" href="javascript:void(0);" aria-label="creadit note">Credit/Debit Note</a>
                         </li>
                     </ul>
                 </div>
@@ -32,7 +32,7 @@
                     Click to add a template from our gallery. You can customize the template title, columns,and headers
                     in line item table.
                 </small>
-                <button class="btn pull-left isActive mt-4 add-new-btn" (click)="onOpenTemplateModal()">Add New</button>
+                <button class="btn pull-left isActive mt-4 add-new-btn" (click)="onOpenTemplateModal()" aria-label="add new">Add New</button>
             </div>
 
             <ng-container *ngFor="let template of customCreatedTemplates; let i = index">
@@ -49,15 +49,15 @@
 
                     <div class="template-action">
                         <!-- [hidden]="template.uniqueName === 'gst_template_b' || template.uniqueName === 'gst_template_c' || template.uniqueName === 'gst_template_d' || template.uniqueName === 'gst_template_e'" -->
-                        <button class="btn btn-default" (click)="onPreview(template)">
+                        <button class="btn btn-default" (click)="onPreview(template)" aria-label="preview">
                             <i class="icon-eye" tooltip="Preview" aria-hidden="true"></i>
                         </button>
                         <!-- [hidden]="template.uniqueName === 'gst_template_b' || template.uniqueName === 'gst_template_c' || template.uniqueName === 'gst_template_d' || template.uniqueName === 'gst_template_e'" -->
-                        <button class="btn btn-default" (click)="onUpdateTemplate(template)">
+                        <button class="btn btn-default" (click)="onUpdateTemplate(template)" aria-label="edit">
                             <i class="icon-edit-pencil" tooltip="Edit template" aria-hidden="true"></i>
                         </button>
                         <button [disabled]="template.isDefault" class="btn btn-default mr-0"
-                            (click)="onDeleteTemplate(template)">
+                            (click)="onDeleteTemplate(template)" aria-label="delete">
                             <i class="icon-trash" tooltip="Delete" aria-hidden="true"></i>
                         </button>
 
@@ -83,15 +83,15 @@
 
                         <div class="template-action">
                             <!-- [hidden]="template.uniqueName === 'gst_template_b' || template.uniqueName === 'gst_template_c' || template.uniqueName === 'gst_template_d' || template.uniqueName === 'gst_template_e'" -->
-                            <button class="btn btn-default" (click)="onPreview(template)">
+                            <button class="btn btn-default" (click)="onPreview(template)" aria-label="preview">
                                 <i class="icon-eye" tooltip="Preview" aria-hidden="true"></i>
                             </button>
                             <!-- [hidden]="template.uniqueName === 'gst_template_b' || template.uniqueName === 'gst_template_c' || template.uniqueName === 'gst_template_d' || template.uniqueName === 'gst_template_e'" -->
-                            <button class="btn btn-default" (click)="onUpdateTemplate(template)">
+                            <button class="btn btn-default" (click)="onUpdateTemplate(template)" aria-label="edit icon">
                                 <i class="icon-edit-pencil" tooltip="Edit template" aria-hidden="true"></i>
                             </button>
                             <button [disabled]="template.isDefaultForVoucher" class="btn btn-default mr-0"
-                                (click)="onDeleteTemplate(template)">
+                                (click)="onDeleteTemplate(template)" aria-label="delete">
                                 <i class="icon-trash" tooltip="Delete" aria-hidden="true"></i>
                             </button>
 
@@ -119,23 +119,23 @@
             <!--<button class="btn btn-default">Preview</button>-->
             <div class="pull-right mr-r4" *ngIf="voucherType === 'sales'">
                 <button [attr.disabled]="isFormInValid ? true : null" *ngIf="transactionMode == 'create'"
-                    class="btn btn-success" (click)="createTemplate('invoice')">
+                    class="btn btn-success" (click)="createTemplate('invoice')" aria-label="save">
                     Save
                 </button>
                 <button [attr.disabled]="isFormInValid ? true : null" *ngIf="transactionMode == 'update'"
-                    class="btn btn-success" (click)="updateTemplate('invoice')">
+                    class="btn btn-success" (click)="updateTemplate('invoice')" aria-label="update template">
                     Update Template
                 </button>
-                <button class="btn btn-danger mr-r4" (click)="onCloseTemplateModal()">Close</button>
+                <button class="btn btn-danger mr-r4" (click)="onCloseTemplateModal()" aria-label="close">Close</button>
             </div>
             <div class="pull-right mr-r4" *ngIf="voucherType === 'credit note' || voucherType === 'debit note'">
-                <button *ngIf="transactionMode == 'create'" class="btn btn-success" (click)="createTemplate('voucher')">
+                <button *ngIf="transactionMode == 'create'" class="btn btn-success" (click)="createTemplate('voucher')" aria-label="save">
                     Save
                 </button>
-                <button *ngIf="transactionMode == 'update'" class="btn btn-success" (click)="updateTemplate('voucher')">
+                <button *ngIf="transactionMode == 'update'" class="btn btn-success" (click)="updateTemplate('voucher')" aria-label="update template">
                     Update Template
                 </button>
-                <button class="btn btn-danger mr-r4" (click)="onCloseTemplateModal()">Close</button>
+                <button class="btn btn-danger mr-r4" (click)="onCloseTemplateModal()" aria-label="close">Close</button>
             </div>
         </div>
     </div>

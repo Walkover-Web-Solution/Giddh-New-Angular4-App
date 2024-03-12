@@ -5,7 +5,7 @@
     (commonLocaleData)="commonLocaleData = $event"
 >
     <div class="btn-group" dropdown>
-        <a dropdownToggle class="cp new-icon-img"><img src="{{ imgPath }}" /></a>
+        <a href="javascript:void(0);" aria-label="csv download" dropdownToggle class="cp new-icon-img"><img src="{{ imgPath }}" alt="csv img"  /></a>
         <ul
             id="dropdown-pdf"
             *dropdownMenu
@@ -15,22 +15,22 @@
         >
             <span class="caret"></span>
             <li>
-                <a (click)="downloadCSV('group-wise')" data-report="group-wise">{{
+                <a href="javascript:void(0);" aria-label="group report" (click)="downloadCSV('group-wise')" data-report="group-wise">{{
                     localeData?.csv?.group_wise_report
                 }}</a>
             </li>
             <li>
-                <a (click)="downloadCSV('condensed')" data-report="condensed">{{
+                <a href="javascript:void(0);" aria-label="condensed report" (click)="downloadCSV('condensed')" data-report="condensed">{{
                     localeData?.csv?.condensed_report
                 }}</a>
             </li>
             <li>
-                <a (click)="downloadCSV('account-wise')" data-report="account-wise">{{
+                <a href="javascript:void(0);" aria-label="account report" (click)="downloadCSV('account-wise')" data-report="account-wise">{{
                     localeData?.csv?.account_wise_report
                 }}</a>
             </li>
             <li>
-                <a (click)="exportFlatTrialBalanceReport()" data-report="account-wise">{{
+                <a href="javascript:void(0);" aria-label="flat report" (click)="exportFlatTrialBalanceReport()" data-report="account-wise">{{
                     localeData?.csv?.flat_report
                 }}</a>
             </li>

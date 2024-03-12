@@ -109,16 +109,16 @@
                     </select-field>
                 </div>
                 <span class="delete-row" *ngIf="selectedFields?.length > 1">
-                    <a href="javascript:;" (click)="removeFilter(selectedField, i)" class="remove-filter"
+                    <a href="javascript:;" (click)="removeFilter(selectedField, i)" class="remove-filter" aria-label="delete icon"
                         ><i class="icon-trash"></i
                     ></a>
                 </span>
                 <span class="and-text" *ngIf="i < selectedFields?.length - 1">&</span>
             </div>
-            <button mat-button (click)="addDefaultFilter()" class="add-button">+</button>
+            <button mat-button (click)="addDefaultFilter()" class="add-button" aria-label="add">+</button>
         </div>
         <div class="button-wrapper">
-            <button mat-stroked-button class="min160 mr-l1" (click)="getActivityLogs(true)">
+            <button mat-stroked-button class="min160 mr-l1" (click)="getActivityLogs(true)" aria-label="get logs">
                 {{ localeData?.get_logs }}
             </button>
         </div>
@@ -208,6 +208,7 @@
                             matTooltipPosition="above"
                             (click)="getHistory($event, element)"
                             class="history-icon"
+                            aria-label="history icon"
                         >
                             <i class="icon-history-icon font-16 pr-1 cursor-pointer"></i>
                         </a>
@@ -308,6 +309,7 @@
                                                 class="compare-json cursor-pointer"
                                                 *ngIf="details.isChecked && rowHistory.selectedItems?.length === 2"
                                                 (click)="compareHistoryJson(rowHistory, details, $event)"
+                                                aria-label="compare"
                                                 >{{ localeData?.compare }}</a
                                             >
                                         </td>

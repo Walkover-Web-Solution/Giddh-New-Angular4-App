@@ -126,20 +126,20 @@ mat-form-field,
         .mdc-text-field--outlined {
             &:not(.mdc-text-field--disabled) {
                 .mdc-notched-outline__leading {
-                    border-color: var(--color-red) !important;
+                    border-color: var(--color-red-border) !important;
                 }
 
                 &.mdc-text-field--focused {
                     .mdc-notched-outline__notch {
-                        border-color: var(--color-red) !important;
+                        border-color: var(--color-red-border) !important;
                     }
 
                     .mdc-notched-outline__leading {
-                        border-color: var(--color-red) !important;
+                        border-color: var(--color-red-border) !important;
                     }
 
                     .mdc-notched-outline__trailing {
-                        border-color: var(--color-red) !important;
+                        border-color: var(--color-red-border) !important;
                     }
                 }
 

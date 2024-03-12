@@ -81,7 +81,7 @@
                                                     [scrollableElementId]="'customerId'"
                                                 >
                                                     <ng-template #optionTemplate let-option="option">
-                                                        <a href="javascript:void(0)">
+                                                        <a href="javascript:void(0);" aria-label="label value">
                                                             <div class="option-label">
                                                                 {{ option?.label }}
                                                             </div>
@@ -129,8 +129,9 @@
                                             <div
                                                 class="vouchers-copy-sales mr-l3 cursor-pointer"
                                                 [matMenuTriggerFor]="copyLastVouchers"
+                                                role="button"
                                             >
-                                                <i class="icon-copy-file"></i>
+                                                <i class="icon-copy-file" aria-label="invoice"></i>
                                                 {{ copyPreviousInvoiceText }}
                                             </div>
                                             <mat-menu #copyLastVouchers="matMenu">
@@ -283,6 +284,7 @@
                                     <ng-container *ngIf="isSalesInvoice && !isCashInvoice">
                                         <img
                                             src="{{ imgPath }}new/search_customer.svg"
+                                            alt="customer"
                                             height="70"
                                             class="mb-3"
                                             *ngIf="!invFormData.voucherDetails.customerName"
@@ -291,6 +293,7 @@
                                     <ng-container *ngIf="isPurchaseInvoice">
                                         <img
                                             src="{{ imgPath }}new/search-vendor.svg"
+                                            alt="vendor"
                                             height="70"
                                             class="mb-3"
                                             *ngIf="!invFormData.voucherDetails.customerName"
@@ -299,6 +302,7 @@
                                     <ng-container *ngIf="isCashInvoice">
                                         <img
                                             src="{{ imgPath }}new/search-customer-cash-invoice.svg"
+                                            alt="cash invoice"
                                             height="70"
                                             class="mb-3"
                                             *ngIf="!invFormData.voucherDetails.customerName"
@@ -311,6 +315,7 @@
                         <ng-container *ngIf="isSalesInvoice && !isCashInvoice">
                             <img
                                 src="{{ imgPath }}new/search_customer.svg"
+                                alt="customer"
                                 height="70"
                                 class="mb-3"
                                 *ngIf="!invFormData.voucherDetails.customerName"
@@ -320,6 +325,7 @@
                         <ng-container *ngIf="isPurchaseInvoice">
                             <img
                                 src="{{ imgPath }}new/search-vendor.svg"
+                                alt="search vendor"
                                 height="70"
                                 class="mb-3"
                                 *ngIf="!invFormData.voucherDetails.customerName"
@@ -330,6 +336,7 @@
                         >
                             <img
                                 src="{{ imgPath }}new/search-customer-cash-invoice.svg"
+                                alt="cash invoice"
                                 height="70"
                                 class="mb-3"
                                 *ngIf="!invFormData.voucherDetails.customerName"
@@ -338,6 +345,7 @@
                         <ng-container *ngIf="invoiceType === 'cash bill' || invoiceType === 'cash debit note'">
                             <img
                                 src="{{ imgPath }}search-vendor-cash-invoice.svg"
+                                alt="vendor cash invoice"
                                 height="70"
                                 class="mb-3"
                                 *ngIf="!invFormData.voucherDetails.customerName"
@@ -384,6 +392,8 @@
                                             *ngIf="!isEinvoiceGenerated && !isCashInvoice"
                                             [matMenuTriggerFor]="billingAddress"
                                             class="icon-edit text-blue cursor-pointer pl-2 font-12"
+                                            aria-label="edit"
+                                            role="button"
                                         ></i>
                                         <mat-menu #billingAddress="matMenu">
                                             <div class="mat-menu-width-large vouchers-address-menu">
@@ -502,7 +512,7 @@
                                                     'without-gstin': !showGSTINNo && !showTRNNo && !showVATNo
                                                 }"
                                             >
-                                                <div class="address-field">
+                                                <div class="address-field position-relative">
                                                     <textarea
                                                         matInput
                                                         name="billingDetails.address"
@@ -573,6 +583,7 @@
                                                     *ngIf="shouldShowTrnGstVatField && showGSTINNo"
                                                 >
                                                     <text-field
+                                                        [id]="'billingDetails'"
                                                         [maxlength]="15"
                                                         autocomplete="None"
                                                         [type]="'text'"
@@ -592,6 +603,7 @@
                                                 </div>
                                                 <div class="gstin-field" *ngIf="shouldShowTrnGstVatField && showTRNNo">
                                                     <text-field
+                                                        [id]="'billingDetails'"
                                                         [maxlength]="12"
                                                         autocomplete="none"
                                                         [type]="'text'"
@@ -609,6 +621,7 @@
                                                     >
                                                     </text-field>
                                                     <text-field
+                                                        [id]="'billingDetails'"
                                                         [maxlength]="12"
                                                         autocomplete="None"
                                                         [type]="'text'"
@@ -625,6 +638,7 @@
                                                 </div>
                                                 <div class="gstin-field" *ngIf="shouldShowTrnGstVatField && showVATNo">
                                                     <text-field
+                                                        [id]="'billingDetails'"
                                                         [maxlength]="12"
                                                         autocomplete="None"
                                                         [type]="'text'"
@@ -640,6 +654,7 @@
                                                 </div>
                                                 <div class="pin-code-field">
                                                     <text-field
+                                                        [id]="'billingPinCode'"
                                                         [type]="'number'"
                                                         [cssClass]="'border-0'"
                                                         autocomplete="false"
@@ -699,6 +714,8 @@
                                                 *ngIf="!isEinvoiceGenerated && !isCashInvoice"
                                                 [matMenuTriggerFor]="shippingAddress"
                                                 class="icon-edit text-blue cursor-pointer pl-2 font-12"
+                                                aria-label="edit"
+                                                role="button"
                                             ></i>
                                             <mat-menu #shippingAddress="matMenu">
                                                 <div class="mat-menu-width-large vouchers-address-menu">
@@ -833,7 +850,7 @@
                                                     'without-gstin': !showGSTINNo && !showTRNNo && !showVATNo
                                                 }"
                                             >
-                                                <div class="address-field">
+                                                <div class="address-field position-relative">
                                                     <textarea
                                                         matInput
                                                         [readonly]="autoFillShipping"
@@ -888,6 +905,7 @@
                                                 </div>
                                                 <div class="pin-code-field">
                                                     <text-field
+                                                        [id]="'shippingPinCode'"
                                                         [type]="'number'"
                                                         [cssClass]="'border-0'"
                                                         autocomplete="false"
@@ -904,6 +922,7 @@
                                                     *ngIf="shouldShowTrnGstVatField && showGSTINNo"
                                                 >
                                                     <text-field
+                                                        [id]="'shippingDetails'"
                                                         [readonly]="autoFillShipping || isEinvoiceGenerated"
                                                         autocomplete="None"
                                                         [maxlength]="15"
@@ -919,6 +938,7 @@
                                                 </div>
                                                 <div class="gstin-field" *ngIf="shouldShowTrnGstVatField && showTRNNo">
                                                     <text-field
+                                                        [id]="'shippingDetails'"
                                                         [readonly]="autoFillShipping || isEinvoiceGenerated"
                                                         [maxlength]="15"
                                                         autocomplete="None"
@@ -934,6 +954,7 @@
                                                 </div>
                                                 <div class="gstin-field" *ngIf="shouldShowTrnGstVatField && showVATNo">
                                                     <text-field
+                                                        [id]="'shippingDetails'"
                                                         [readonly]="autoFillShipping || isEinvoiceGenerated"
                                                         [maxlength]="12"
                                                         autocomplete="None"
@@ -1041,6 +1062,8 @@
                                             *ngIf="companyAddressList?.length"
                                             [matMenuTriggerFor]="companyBillingAddress"
                                             class="icon-edit text-blue cursor-pointer pl-2 font-12"
+                                            aria-label="edit"
+                                            role="button"
                                         ></i>
                                         <mat-menu #companyBillingAddress="matMenu">
                                             <div class="mat-menu-width-large vouchers-address-menu">
@@ -1180,6 +1203,7 @@
                                                 *ngIf="companyAddressList?.length"
                                                 [matMenuTriggerFor]="shippingAddress"
                                                 class="icon-edit text-blue cursor-pointer pl-2 font-12"
+                                                role="button"
                                             ></i>
                                             <mat-menu #shippingAddress="matMenu">
                                                 <div class="mat-menu-width-large vouchers-address-menu">
@@ -1510,7 +1534,8 @@
                                                     <ng-template #optionTemplate let-option="option">
                                                         <a
                                                             *ngIf="option"
-                                                            href="javascript:void(0)"
+                                                            href="javascript:void(0);"
+                                                            aria-label="option"
                                                             class="linking-item"
                                                         >
                                                             <div class="option-label">{{ option?.label }}</div>
@@ -1546,7 +1571,8 @@
                                                     <ng-template #optionTemplate let-option="option">
                                                         <a
                                                             *ngIf="option"
-                                                            href="javascript:void(0)"
+                                                            href="javascript:void(0);"
+                                                            aria-label="option"
                                                             class="linking-item"
                                                         >
                                                             <div class="option-label">{{ option?.label }}</div>
@@ -1638,16 +1664,16 @@
                                                 [disabled]="isEinvoiceGenerated"
                                                 color="primary"
                                             >
+                                                <label
+                                                    class="checkbox-custom-label"
+                                                    for="reverse-charge"
+                                                    (click)="
+                                                        !isEinvoiceGenerated ? toggleRcmCheckbox(rcmCheckbox, 'label') : ''
+                                                    "
+                                                    [innerHTML]="localeData?.transaction_reverse_charge"
+                                                >
+                                                </label>
                                             </mat-checkbox>
-                                            <label
-                                                class="checkbox-custom-label"
-                                                for="reverse-charge"
-                                                (click)="
-                                                    !isEinvoiceGenerated ? toggleRcmCheckbox(rcmCheckbox, 'label') : ''
-                                                "
-                                                [innerHTML]="localeData?.transaction_reverse_charge"
-                                            >
-                                            </label>
                                         </div>
                                     </div>
                                 </div>
@@ -1671,6 +1697,7 @@
                                     }}</span>
                                     <div class="currency-input-wrapper">
                                         <text-field
+                                            [id]="'exchangeRate'"
                                             [name]="'exchangeRate'"
                                             [(ngModel)]="newExchangeRate"
                                             class="exchange-rate-original"
@@ -1692,6 +1719,7 @@
                                             calculateGrandTotal()
                                         "
                                         *ngIf="autoSaveIcon && !isEinvoiceGenerated"
+                                        role="button"
                                     ></i>
                                     <i
                                         class="icon-edit text-blue cursor-pointer"
@@ -1701,6 +1729,8 @@
                                             autoSaveIcon = !autoSaveIcon;
                                             newExchangeRate = originalExchangeRate
                                         "
+                                        role="button"
+                                        aria-label="edit currency"
                                     ></i>
                                 </div>
 
@@ -1721,6 +1751,7 @@
                                     }}</span>
                                     <div class="currency-input-wrapper">
                                         <text-field
+                                            [id]="'exchangeRate'"
                                             [type]="'number'"
                                             [name]="'exchangeRate'"
                                             class="exchange-rate-original"
@@ -1740,6 +1771,7 @@
                                         class="icon-edit text-blue cursor-pointer"
                                         *ngIf="!autoSaveIcon && !isEinvoiceGenerated"
                                         (click)="saveCancelExcRate(false)"
+                                        role="button"
                                     ></i>
                                 </div>
 
@@ -2202,7 +2234,8 @@
                                                                 <ng-template #optionTemplate let-option="option">
                                                                     <ng-container *ngIf="!option.additional?.stock">
                                                                         <a
-                                                                            href="javascript:void(0)"
+                                                                            href="javascript:void(0);"
+                                                                            aria-label="Unique Name"
                                                                             class="flex-column"
                                                                         >
                                                                             <div class="option-label">
@@ -2215,7 +2248,8 @@
                                                                     </ng-container>
                                                                     <ng-container *ngIf="option.additional?.stock">
                                                                         <a
-                                                                            href="javascript:void(0)"
+                                                                            href="javascript:void(0);"
+                                                                            aria-label="Unique Name"
                                                                             class="flex-column"
                                                                         >
                                                                             <div class="option-label">
@@ -2260,9 +2294,9 @@
                                                             <div class="row mr-0 ml-0 mt-1">
                                                                 <div class="col-6 col-sm-6 pl-0">
                                                                     <div class="entry-date">
-                                                                        <label class="font-12 w-100 d-block"
+                                                                        <p class="font-12 w-100 d-block"
                                                                             >{{ localeData?.entry_date }}:
-                                                                        </label>
+                                                                        </p>
                                                                         <span
                                                                             *ngIf="!isUpdateMode"
                                                                             class="custom-date-entries custom-input-field d-flex"
@@ -2298,6 +2332,7 @@
                                                                                     src="{{
                                                                                         imgPath
                                                                                     }}edit-pencilicon.svg"
+                                                                                    alt="edit-icon"
                                                                                 />
                                                                             </span>
                                                                         </span>
@@ -2342,6 +2377,7 @@
                                                                                         src="{{
                                                                                             imgPath
                                                                                         }}edit-pencilicon.svg"
+                                                                                        alt="edit-icon"
                                                                                     />
                                                                                 </span>
                                                                             </span>
@@ -2374,8 +2410,10 @@
                                                                                     {{ commonLocaleData?.app_sac_code }}
                                                                                 </mat-radio-button>
                                                                             </mat-radio-group>
-                                                                            <text-field [type]="'text'"
-                                                                            [cssClass]="'form-control hsn-sac-code'"
+                                                                            <text-field 
+                                                                                [id]="'transaction'"
+                                                                                [type]="'text'"
+                                                                                [cssClass]="'form-control hsn-sac-code'"
                                                                                 maxLength="10"
                                                                                 [allowDecimalDigitsOnly]="true"
                                                                                 [placeholder]="localeData?.hsn_number"
@@ -2386,8 +2424,10 @@
                                                                                     transaction.showCodeType === 'hsn'
                                                                                 " [(ngModel)]="transaction.hsnNumber"
                                                                                 [readonly]="isEinvoiceGenerated"></text-field>
-                                                                            <text-field [type]="'text'"
-                                                                            [cssClass]="'form-control hsn-sac-code'"
+                                                                            <text-field 
+                                                                                [id]="'transaction'"
+                                                                                [type]="'text'"
+                                                                                [cssClass]="'form-control hsn-sac-code'"
                                                                                 maxLength="10"
                                                                                 [allowDecimalDigitsOnly]="true"
                                                                                 [placeholder]="localeData?.sac_number"
@@ -2466,7 +2506,9 @@
                                                         currentVoucherFormDetails?.quantityAllowed)
                                                     " width="10%" [ngClass]="{ 'd-none' : !hasStock}">
                                                     <ng-container *ngIf="!(!transaction.isStockTxn || isEinvoiceGenerated)">
-                                                        <text-field [placeholder]="commonLocaleData?.app_quantity"
+                                                        <text-field 
+                                                            [id]="'transaction'"
+                                                            [placeholder]="commonLocaleData?.app_quantity"
                                                             [readonly]="!transaction.isStockTxn || isEinvoiceGenerated"
                                                             [type]="'text'"
                                                             [cssClass]="'form-control mat-field-border text-right stock1'"
@@ -2690,6 +2732,7 @@
                                                     <div class="td-wrapper">
                                                         <div class="flex-fill">
                                                             <text-field
+                                                                [id]="'transaction'"
                                                                 [type]="'text'"
                                                                 [cssClass]="'form-control mat-field-border text-right '"
                                                                 [name]="'transaction.total_' + entryIdx"
@@ -2726,14 +2769,14 @@
                                                                     name="entry.isOtherTaxApplicable_'+entryIdx"
                                                                     [disabled]="isEinvoiceGenerated"
                                                                 >
-                                                                </mat-checkbox>
                                                                 <label
                                                                     for="entry.isOtherTaxApplicable_{{ entryIdx }}"
                                                                     *ngIf="!entry.isOtherTaxApplicable"
                                                                     class="other-tax-label font-15 align-middle"
                                                                     (click)="tcsTdsIndex = entryIdx"
-                                                                    >{{ localeData?.other_tax }}</label
-                                                                >
+                                                                    >{{ localeData?.other_tax }}
+                                                                </label>
+                                                                </mat-checkbox>
                                                             </div>
                                                             <div *ngIf="entry.isOtherTaxApplicable" class="mr-t1">
                                                                 <span>
@@ -2742,7 +2785,8 @@
                                                                     >
                                                                         <span class="mr-r05">
                                                                             <a
-                                                                                href="javascript:;"
+                                                                                href="javascript:void(0);"
+                                                                                aria-label="edit-icon"
                                                                                 *ngIf="!isEinvoiceGenerated"
                                                                                 (click)="
                                                                                     toggleOtherTaxesAsidePane(
@@ -2755,10 +2799,12 @@
                                                                                     src="{{
                                                                                         imgPath
                                                                                     }}edit-pencilicon.svg"
+                                                                                    alt="edit icon"
                                                                                 />
                                                                             </a>
                                                                         </span>
                                                                         <text-field
+                                                                            [id]="'otherTaxesSum'"
                                                                             [readonly]="'disabled'"
                                                                             [cssClass]="
                                                                                 'text-right form-control other-taxes-input w100'
@@ -3065,7 +3111,7 @@
                                                                                         <span>{{
                                                                                             localeData?.adjust_amount
                                                                                         }}</span>
-                                                                                        <span class="text-gray">
+                                                                                        <span class="text-black">
                                                                                             <amount-field
                                                                                                 [amount]="
                                                                                                     adjustPaymentData.totalAdjustedAmount
@@ -3092,7 +3138,8 @@
                                                                                             </amount-field
                                                                                         ></span>
                                                                                         <a
-                                                                                            href="javascript:void(0)"
+                                                                                            href="javascript:void(0);"
+                                                                                            aria-label="edit"
                                                                                             (click)="
                                                                                                 clickAdjustAmount(true)
                                                                                             "
@@ -3534,6 +3581,7 @@
                                                     </div>
                                                     <div class="col-5">
                                                         <text-field
+                                                            [id]="'grandTotalMulDum'"
                                                             #grandTotalInr
                                                             [type]="'text'"
                                                             [cssClass]="
@@ -3691,6 +3739,8 @@
                                                     <mat-list>
                                                         <mat-list-item>
                                                             <a
+                                                                href="javascript:void(0);"
+                                                                aria-label="Create Send"
                                                                 class="dropdown-item cp font-14"
                                                                 (click)="
                                                                     doAction(2);
@@ -3701,6 +3751,8 @@
                                                         </mat-list-item>
                                                         <mat-list-item>
                                                             <a
+                                                                href="javascript:void(0);"
+                                                                aria-label="Create Print"
                                                                 class="dropdown-item cp font-14"
                                                                 (click)="
                                                                     doAction(3);
@@ -3711,6 +3763,8 @@
                                                         </mat-list-item>
                                                         <mat-list-item *ngIf="voucherApiVersion !== 2">
                                                             <a
+                                                                href="javascript:void(0);"
+                                                                aria-label="generate recurring"
                                                                 class="dropdown-item cp font-14"
                                                                 (click)="
                                                                     doAction(4);
@@ -3727,6 +3781,7 @@
                                                     *ngIf="invoiceType === 'sales'"
                                                     mat-stroked-button
                                                     class="min-width-auto"
+                                                    aria-label="dropdown"
                                                 >
                                                     <span class="caret"></span>
                                                 </button>
@@ -3773,6 +3828,8 @@
                                                     <mat-list>
                                                         <mat-list-item>
                                                             <a
+                                                                href="javascript:void(0);"
+                                                                aria-label="Create Send"
                                                                 class="dropdown-item cp font-14"
                                                                 (click)="
                                                                     doAction(2);
@@ -3783,6 +3840,8 @@
                                                         >
                                                         <mat-list-item>
                                                             <a
+                                                                href="javascript:void(0);"
+                                                                aria-label="Create Print"
                                                                 class="dropdown-item cp font-14"
                                                                 (click)="
                                                                     doAction(3);

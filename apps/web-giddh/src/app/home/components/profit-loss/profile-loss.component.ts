@@ -274,7 +274,7 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
                 datasets: [{
                     label: '',
                     data: data,
-                    backgroundColor: ['#FED46A', '#4693F1'],
+                    backgroundColor: ['#A52A2A', '#1a237e'],
                     hoverOffset: 18,
                     hoverBorderColor: '#fff',
                     borderWidth: 1,

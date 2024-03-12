@@ -43,7 +43,7 @@
     }
 
     .differ-currency {
-        color: var(--color-gray);
+        color: var(--color-common-primary-text);
         font-size: var(--font-size-15);
         padding-right: 6px;
     }
@@ -245,7 +245,7 @@
                             }
 
                             .select-account-label {
-                                color: var(--color-gray);
+                                color: var(--color-common-primary-text);
                             }
 
                             amount-field {
