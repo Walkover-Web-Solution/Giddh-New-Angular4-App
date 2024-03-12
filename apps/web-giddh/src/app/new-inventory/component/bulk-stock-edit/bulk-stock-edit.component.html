@@ -23,6 +23,7 @@
                             "
                             mat-stroked-button
                             (click)="resetSearch()"
+                            aria-label="cross icon"
                         >
                             <span class="icon-cross position-relative"></span> {{ commonLocaleData?.app_clear_filter }}
                         </button>
@@ -53,6 +54,7 @@
                                 class="bulk-stock-hide-show-button p-0 ml-2"
                                 (click)="openAdvanceFilter()"
                                 [matTooltip]="commonLocaleData?.app_advanced_filter"
+                                aria-label="filter"
                             >
                                 <i class="icon-advance-filter font-16"></i>
                             </button>
@@ -101,6 +103,7 @@
                                                         mat-icon-button
                                                         class="sort-btn icon-font-22 p-0"
                                                         (click)="sort('variant_name')"
+                                                        aria-label="sort icon"
                                                     >
                                                         <span class="icon-sort-asc text-light-2 d-block"></span>
                                                     </button>
@@ -136,6 +139,7 @@
                                                         mat-icon-button
                                                         class="sort-btn icon-font-22 p-0"
                                                         (click)="sort('variant_unique_name')"
+                                                        aria-label="sort icon"
                                                     >
                                                         <span class="icon-sort-asc text-light-2 d-block"></span>
                                                     </button>
@@ -169,6 +173,7 @@
                                                         mat-icon-button
                                                         class="sort-btn icon-font-22 p-0"
                                                         (click)="sort('stock_name')"
+                                                        aria-label="sort icon"
                                                     >
                                                         <span class="icon-sort-asc text-light-2 d-block"></span>
                                                     </button>
@@ -204,6 +209,7 @@
                                                         mat-icon-button
                                                         class="sort-btn icon-font-22 p-0"
                                                         (click)="sort('stock_unique_name')"
+                                                        aria-label="sort icon"
                                                     >
                                                         <span class="icon-sort-asc text-light-2 d-block"></span>
                                                     </button>
@@ -242,6 +248,7 @@
                                                         mat-icon-button
                                                         class="sort-btn icon-font-22 p-0"
                                                         (click)="sort('stock_group_name')"
+                                                        aria-label="sort icon"
                                                     >
                                                         <span class="icon-sort-asc text-light-2 d-block"></span>
                                                     </button>
@@ -362,6 +369,7 @@
                                                         mat-icon-button
                                                         class="sort-btn icon-font-22 p-0"
                                                         (click)="sort('purchase_rate')"
+                                                        aria-label="sort icon"
                                                     >
                                                         <span class="icon-sort-asc text-light-2 d-block"></span>
                                                     </button>
@@ -407,6 +415,7 @@
                                                         mat-icon-button
                                                         class="sort-btn icon-font-22 p-0"
                                                         (click)="sort('sales_rate')"
+                                                        aria-label="sort icon"
                                                     >
                                                         <span class="icon-sort-asc text-light-2 d-block"></span>
                                                     </button>
@@ -443,6 +452,7 @@
                                                         mat-icon-button
                                                         class="sort-btn icon-font-22 p-0"
                                                         (click)="sort('fixed_asset_rate')"
+                                                        aria-label="sort icon"
                                                     >
                                                         <span class="icon-sort-asc text-light-2 d-block"></span>
                                                     </button>

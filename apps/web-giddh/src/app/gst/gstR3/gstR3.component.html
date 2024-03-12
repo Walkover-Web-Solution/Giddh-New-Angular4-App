@@ -38,6 +38,7 @@
                             [routerLink]="['/gstfiling']"
                             id="ember2007"
                             class="ember-view cursor-pointer"
+                            aria-label="back svg"
                         >
                             <svg
                                 id="Layer_1"
@@ -122,7 +123,7 @@
                                         role="menu"
                                         aria-labelledby="button-triggers-manual"
                                     >
-                                        <div class="pd-l2 pd-r2 pd-1">
+                                        <div class="pd-l2 pd-r2 pd-1" role="menuitem">
                                             <div class="form-group">
                                                 <label
                                                     >{{ commonLocaleData?.app_email_id }}
@@ -146,7 +147,8 @@
                                                 <button
                                                     class="btn btn-default"
                                                     (click)="emailGSTR3bSheet(false)"
-                                                    [disabled]="!userEmail"
+                                                    [ngClass]="userEmail ? 'disabled' : ''"
+                                                    aria-label="emailGST"
                                                 >
                                                     {{ commonLocaleData?.app_email_sheet }}
                                                 </button>
@@ -278,7 +280,7 @@
                                             <b>{{ commonLocaleData?.app_gstin }}</b>
                                         </td>
                                         <td>
-                                            &nbsp;&nbsp;<i class="text-muted">{{ gstr3BData?.gstin }}</i>
+                                            &nbsp;&nbsp;<i>{{ gstr3BData?.gstin }}</i>
                                         </td>
                                     </tr>
                                     <tr>
@@ -289,7 +291,7 @@
                                             <b>{{ localeData?.gstr3b?.gst_username }}</b>
                                         </td>
                                         <td>
-                                            &nbsp;&nbsp;<i class="text-muted">{{ gstr3BData?.ret_period }}</i>
+                                            &nbsp;&nbsp;<i>{{ gstr3BData?.ret_period }}</i>
                                         </td>
                                     </tr>
                                 </tbody>

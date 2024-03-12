@@ -33,9 +33,10 @@
                     </div>
                     <div class="col-sm-8">
                         <div class="form-group">
-                            <label>{{ localeData?.account_name }} <sup class="text-danger">*</sup> </label>
+                            <label for="accountName">{{ localeData?.account_name }} <sup class="text-danger">*</sup> </label>
                             <input
                                 type="text"
+                                id="accountName"
                                 class="form-control"
                                 #autoFocus
                                 formControlName="name"
@@ -74,10 +75,11 @@
                     </div>
 
                     <div class="form-group col-xs-12 col-sm-4">
-                        <label>{{ localeData?.opening_balance }}</label>
+                        <label for="numbertel">{{ localeData?.opening_balance }}</label>
                         <div [ngClass]="{ 'input-group': addAccountForm.get('openingBalance')?.value > 0 }">
                             <input
                                 type="number"
+                                id="numbertel"
                                 min="0"
                                 class="form-control text-right mr-1"
                                 digitsOnlyDirective
@@ -125,10 +127,11 @@
                         *ngIf="addAccountForm.get('currency')?.value !== companyCurrency"
                     >
                         <div>
-                            <label>{{ localeData?.foreign_opening_balance }}</label>
+                            <label for="accountnumber">{{ localeData?.foreign_opening_balance }}</label>
                             <div [ngClass]="{ 'input-group': addAccountForm.get('foreignOpeningBalance')?.value > 0 }">
                                 <input
                                     type="tel"
+                                    id="accountnumber"
                                     min="0"
                                     class="form-control text-right mr-1"
                                     formControlName="foreignOpeningBalance"
@@ -270,6 +273,7 @@
                                                     placement="left"
                                                 >
                                                     <mat-slide-toggle
+                                                        aria-label="address"
                                                         formControlName="isDefault"
                                                         name="defaultGst_{{ i }}"
                                                         color="primary"
@@ -282,8 +286,9 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label>{{ commonLocaleData?.app_street }}</label>
+                                            <label for="gstAddr">{{ commonLocaleData?.app_street }}</label>
                                             <textarea
+                                                id="gstAddr"
                                                 name="gstAddr_{{ i }}"
                                                 formControlName="address"
                                                 rows="4"
@@ -346,6 +351,7 @@
                                             </label>
                                             <input
                                                 type="text"
+                                                id="gstinNum"
                                                 class="form-control"
                                                 autocomplete="false"
                                                 #gstNumberField
@@ -367,6 +373,7 @@
                                             }}</label>
                                             <input
                                                 type="number"
+                                                id="pinCodeNum"
                                                 class="form-control"
                                                 formControlName="pincode"
                                                 autocomplete="false"
@@ -454,9 +461,10 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label>{{ localeData?.attention_to }}</label>
+                                <label for="attention">{{ localeData?.attention_to }}</label>
                                 <input
                                     type="text"
+                                    id="attention"
                                     class="form-control"
                                     formControlName="attentionTo"
                                     name="attention"
@@ -465,10 +473,11 @@
                         </div>
                         <div class="col-sm-6 mobile-number-wrapper">
                             <div class="form-group">
-                                <label>{{ commonLocaleData?.app_mobile_number }}</label>
+                                <label for="accountDetails">{{ commonLocaleData?.app_mobile_number }}</label>
                                 <div class="d-flex">
                                     <input
                                         name="accountDetails.mobileNumber"
+                                        id="accountDetails"
                                         type="tel"
                                         #initContactAdd
                                         class="flag-input"
@@ -486,8 +495,8 @@
                 <div class="row">
                     <div class="col-sm-6">
                         <div class="form-group">
-                            <label>{{ commonLocaleData?.app_email_id }}</label>
-                            <input type="email" class="form-control" formControlName="email" name="emailId" />
+                            <label for="email">{{ commonLocaleData?.app_email_id }}</label>
+                            <input id="email" type="email" class="form-control" formControlName="email" name="emailId" />
                             <span
                                 class="error-msg"
                                 *ngIf="addAccountForm.get('email').dirty && addAccountForm.get('email').errors"
@@ -510,9 +519,10 @@
                     >
                         <div class="col-xl-3 col-lg-5 col-md-5 col-sm-6 unit-equal">
                             <div class="form-group portal-height">
-                                <label>{{ localeData?.portal_attention_to }} </label>
+                                <label for="name">{{ localeData?.portal_attention_to }} </label>
                                 <input
                                     type="text"
+                                    id="name"
                                     (input)="portalIndex = i"
                                     class="form-control"
                                     formControlName="name"
@@ -522,9 +532,10 @@
                         </div>
                         <div class="col-xl-4 col-lg-3 col-md-3 col-sm-2 pr-0">
                             <div class="form-group portal-height">
-                                <label>{{ commonLocaleData?.app_email_id }} <span class="red-text">*</span></label>
+                                <label for="emailid">{{ commonLocaleData?.app_email_id }} <span class="red-text">*</span></label>
                                 <input
                                     type="email"
+                                    id="emailid"
                                     class="form-control"
                                     (input)="portalIndex = i"
                                     formControlName="email"
@@ -550,9 +561,10 @@
                         </div>
                         <div class="col-xl-4 col-lg-3 col-md-3 col-sm-3 pr-0 mobile-number-portal-wrapper">
                             <div class="form-group portal-height">
-                                <label>{{ commonLocaleData?.app_mobile_number }} </label>
+                                <label for="contact">{{ commonLocaleData?.app_mobile_number }} </label>
                                 <div class="d-flex">
                                     <input
+                                        id="contact"
                                         name="contactNo_{{ i }}"
                                         (input)="portalIndex = i"
                                         type="tel"
@@ -570,7 +582,7 @@
                         <div class="col-xl-1 col-lg-1 col-md-2 col-sm-12 pl-0 remove-user">
                             <div class="inc-dec">
                                 <div class="plus-minus w-100">
-                                    <button class="btn mr-0" (click)="removePortalUser(i)">
+                                    <button aria-label="delete icon" class="btn mr-0" (click)="removePortalUser(i)">
                                         <i class="icon-trash delete"></i>
                                     </button>
                                 </div>
@@ -601,9 +613,10 @@
                             [formGroupName]="i"
                         >
                             <div class="form-group col-sm-6" *ngIf="selectedCountryCode === 'AE'">
-                                <label>{{ localeData?.beneficiary_name_label }}</label>
+                                <label for="beneficiaryName">{{ localeData?.beneficiary_name_label }}</label>
                                 <input
                                     type="text"
+                                    id="beneficiaryName"
                                     class="form-control"
                                     [placeholder]="localeData?.beneficiary_name_placeholder"
                                     name="beneficiaryName_{{ i }}"
@@ -617,9 +630,10 @@
                                     'col-sm-6': selectedCountryCode === 'AE'
                                 }"
                             >
-                                <label>{{ localeData?.bank_name_label }}</label>
+                                <label for="bankName">{{ localeData?.bank_name_label }}</label>
                                 <input
                                     type="text"
+                                    id="bankName"
                                     class="form-control"
                                     [placeholder]="localeData?.bank_name_placeholder"
                                     name="bankName_{{ i }}"
@@ -628,9 +642,10 @@
                             </div>
                             <div class="form-group col-sm-4" *ngIf="selectedCountryCode === 'AE'">
                                 <div>
-                                    <label>{{ localeData?.branch_name_label }}</label>
+                                    <label for="branchName">{{ localeData?.branch_name_label }}</label>
                                     <input
                                         type="text"
+                                        id="branchName"
                                         class="form-control"
                                         [placeholder]="localeData?.branch_name_placeholder"
                                         name="branchName_{{ i }}"
@@ -640,12 +655,13 @@
                             </div>
                             <div class="form-group col-sm-4">
                                 <div>
-                                    <label *ngIf="selectedCountryCode === 'IN'">{{
+                                    <label *ngIf="selectedCountryCode === 'IN'" for="accountNum">{{
                                         commonLocaleData?.app_account_number
                                     }}</label>
-                                    <label *ngIf="selectedCountryCode !== 'IN'">{{ commonLocaleData?.app_iban }}</label>
+                                    <label *ngIf="selectedCountryCode !== 'IN'" for="accountNum">{{ commonLocaleData?.app_iban }}</label>
                                     <input
                                         type="text"
+                                        id="accountNum"
                                         class="form-control"
                                         [placeholder]="commonLocaleData?.app_account_number_placeholder"
                                         [maxlength]="bankIbanNumberMaxLength"
@@ -659,9 +675,10 @@
                                 </div>
                             </div>
                             <div class="form-group col-sm-4" *ngIf="selectedCountryCode === 'AE'">
-                                <label>{{ commonLocaleData?.app_swift_code_label }}</label>
+                                <label for="swiftCode">{{ commonLocaleData?.app_swift_code_label }}</label>
                                 <input
                                     type="text"
+                                    id="swiftCode"
                                     class="form-control"
                                     maxlength="11"
                                     minlength="8"
@@ -674,9 +691,10 @@
                                 />
                             </div>
                             <div *ngIf="selectedCountryCode !== 'AE'" class="form-group col-sm-3">
-                                <label>{{ commonLocaleData?.app_ifsc_code_label }}</label>
+                                <label for="ifsc">{{ commonLocaleData?.app_ifsc_code_label }}</label>
                                 <input
                                     type="text"
+                                    id="ifsc"
                                     class="form-control"
                                     [placeholder]="commonLocaleData?.app_ifsc_code_placeholder"
                                     name="ifsc_{{ i }}"
@@ -693,9 +711,10 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label>{{ localeData?.account_uniquename }}</label>
+                                <label for="accUnqname">{{ localeData?.account_uniquename }}</label>
                                 <input
                                     type="text"
+                                    id="accUnqname"
                                     class="form-control"
                                     textCaseChangeDirective
                                     UniqueNameDirective
@@ -706,7 +725,7 @@
                         </div>
 
                         <div class="form-group col-sm-6">
-                            <label>{{ localeData?.balance_for_trigger }}</label>
+                            <label for="number">{{ localeData?.balance_for_trigger }}</label>
                             <div
                                 class="input-group"
                                 [ngClass]="{
@@ -715,6 +734,7 @@
                             >
                                 <input
                                     type="tel"
+                                    id="number"
                                     min="0"
                                     class="form-control text-right"
                                     formControlName="closingBalanceTriggerAmount"
@@ -758,8 +778,9 @@
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="form-group">
-                                <label>{{ localeData?.description_label }}</label>
+                                <label for="description">{{ localeData?.description_label }}</label>
                                 <textarea
+                                    id="description"
                                     rows="3 "
                                     cols="4"
                                     name="description"
@@ -792,6 +813,7 @@
                                 <div class="col-lg-8">
                                     <div class="name-of-field">
                                         <label
+                                            for="values"
                                             >{{ item.fieldName }}
                                             <span class="red-text" *ngIf="item.isMandatory">*</span>
                                         </label>
@@ -801,6 +823,7 @@
                                                 item.fieldType?.type === availableFieldTypes.Barcode
                                             "
                                             type="text"
+                                            id="values"
                                             name="values{{ index }}"
                                             formControlName="value"
                                             class="form-control custom-field"
@@ -812,6 +835,7 @@
                                         <input
                                             *ngIf="item.fieldType?.type === availableFieldTypes.Number"
                                             type="number"
+                                            id="values"
                                             name="values{{ index }}"
                                             formControlName="value"
                                             class="form-control custom-field"
@@ -874,6 +898,7 @@
                 <div class="col-sm-12 mt-5">
                     <div class="button-group">
                         <button
+                            aria-label="save"
                             type="submit"
                             class="btn btn-success"
                             [ladda]="createAccountInProcess$ | async"

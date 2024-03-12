@@ -575,7 +575,7 @@ aside-menu-account .container-fluid {
     padding: 15px;
     width: 100%;
     min-width: 200px;
-    h5 {
+    h2 {
         font-size: var(--font-size-12);
         color: var(--color-total-details-heading);
         .number-total {
@@ -592,7 +592,7 @@ aside-menu-account .container-fluid {
     background: var(--color-opening-box-background);
     h5 {
         .number-total {
-            color: var(--color-success-enable);
+            color: var(--color-common-primary-text);
         }
     }
 }
@@ -600,7 +600,7 @@ aside-menu-account .container-fluid {
     background: var(--color-total-details-secondary-background);
     h5 {
         .number-total {
-            color: var(--color-total-details-secondary-content);
+            color: var(--color-common-primary-text);
         }
     }
 }
@@ -608,7 +608,7 @@ aside-menu-account .container-fluid {
     background: var(--color-total-details-tertiary-background);
     h5 {
         .number-total {
-            color: var(--color-total-details-tertiary-content);
+            color: var(--color-common-primary-text);
         }
     }
 }
@@ -1096,7 +1096,7 @@ aside-menu-account .container-fluid {
     text-align: center;
     margin-top: 150px;
     font-size: var(--font-size-32);
-    color: var(--color-gray);
+    color: var(--color-common-primary-text);
 }
 .no-data > img {
     max-height: 200px;
@@ -2504,7 +2504,7 @@ form#groupDetailForm {
         aside-setting {
             .aside-pane {
                 height: calc(100vh - 60px) !important;
-            } 
+            }
         }
     }
 }

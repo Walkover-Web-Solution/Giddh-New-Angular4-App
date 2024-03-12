@@ -6,10 +6,11 @@
                 [selectable]="true"
                 [removable]="true"
                 (removed)="removeOption(indx)"
+                role="option"
             >
                 {{ chip }}
                 <span matChipRemove>
-                    <i class="icon-cross"></i>
+                    <i aria-label="cross icon" class="icon-cross"></i>
                 </span>
             </mat-chip-row>
             <input

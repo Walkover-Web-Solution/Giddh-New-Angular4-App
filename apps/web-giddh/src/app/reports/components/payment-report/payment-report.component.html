@@ -88,7 +88,7 @@
                     "
                     *ngIf="showClearFilter"
                 >
-                    <button class="btn btn-filter mr-0" (click)="resetAdvanceSearch()">
+                    <button class="btn btn-filter mr-0" (click)="resetAdvanceSearch()" aria-label="filter">
                         <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_filter }}
                     </button>
                 </div>
@@ -210,11 +210,13 @@
                                         src="assets/images/unchecked.png"
                                         *ngIf="!allPaymentsSelected"
                                         (click)="toggleAllPayments()"
+                                        alt="uncheck"
                                     />
                                     <img
                                         src="assets/images/checked.png"
                                         *ngIf="allPaymentsSelected"
                                         (click)="toggleAllPayments()"
+                                        alt="check"
                                     />
                                 </div>
                             </th>
@@ -349,11 +351,13 @@
                                         *ngIf="!payment.isSelected"
                                         src="assets/images/unchecked.png"
                                         (click)="togglePayment(payment, true)"
+                                        alt="uncheck"
                                     />
                                     <img
                                         *ngIf="payment.isSelected"
                                         src="assets/images/checked.png"
                                         (click)="togglePayment(payment, false)"
+                                        alt="check"
                                     />
                                 </div>
                             </td>

@@ -187,6 +187,7 @@
                                                                 class="d-flex justify-content-between align-item-center table-row-delete"
                                                                 *ngIf="recipe.linkedStocks?.length > 1"
                                                                 (click)="removeLinkedStock(i, j)"
+                                                                aria-label="delete icon"
                                                             >
                                                                 <i class="icon-trash"></i>
                                                             </a>
@@ -198,6 +199,7 @@
                                                 <a
                                                     href="javascript:void(0);"
                                                     (click)="addNewLinkedStockInRecipe(recipe)"
+                                                    aria-label="stock"
                                                 >
                                                     {{ localeData?.add_stock }}
                                                 </a>
@@ -330,6 +332,7 @@
                                                                 href="javascript:void(0);"
                                                                 class="d-flex justify-content-between align-item-center table-row-delete"
                                                                 (click)="removeByProductLinkedStock(i, k)"
+                                                                aria-label="delete icon"
                                                             >
                                                                 <i class="icon-trash"></i>
                                                             </a>
@@ -341,6 +344,7 @@
                                                 <a
                                                     href="javascript:void(0);"
                                                     (click)="addNewByProductLinkedStockInRecipe(recipe)"
+                                                    aria-label="add stock"
                                                 >
                                                     {{ localeData?.add_stock }}
                                                 </a>
@@ -352,7 +356,7 @@
                         </div>
                     </div>
                     <div class="col-12 mr-t15" *ngIf="recipe.isEdit">
-                        <button mat-stroked-button class="mb-2" (click)="recipe.isEdit = false">
+                        <button mat-stroked-button class="mb-2" (click)="recipe.isEdit = false" aria-label="done">
                             {{ commonLocaleData?.app_done }}
                         </button>
                     </div>
@@ -453,7 +457,8 @@
                                                 class="icon-remove"
                                                 (click)="recipe.isEdit = true"
                                                 [matTooltip]="commonLocaleData?.app_edit"
-                                                matTooltipPosition="left"
+                                                matTooltipPosition="above"
+                                                aria-label="edit"
                                             >
                                                 <i class="icon-edit-pencil"></i>
                                             </a>
@@ -463,6 +468,7 @@
                                                 [matTooltip]="commonLocaleData?.app_delete"
                                                 matTooltipPosition="left"
                                                 (click)="removeRecipe(i)"
+                                                aria-label="delete icon"
                                             >
                                                 <i class="icon-trash"></i>
                                             </a>
@@ -475,7 +481,7 @@
                 </div>
             </ng-container>
             <div class="row mt-2 add-recipe" *ngIf="recipeObject.manufacturingDetails?.length < variantsList?.length">
-                <button mat-button class="mb-2 ml-2" color="primary" (click)="addNewRecipe()">
+                <button mat-button class="mb-2 ml-2" color="primary" (click)="addNewRecipe()" aria-label="add recipe">
                     <span>+</span> {{ localeData?.add_recipe }}
                 </button>
             </div>

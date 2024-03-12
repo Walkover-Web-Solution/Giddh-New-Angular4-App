@@ -17,20 +17,20 @@
             (ngInit)="onColAdd($event, navigation)"
             *ngFor="let items of masterColumnsData; let i = index"
         >
-            <ul class="new-btn-ul" *ngIf="i !== 0">
-                <li class="new-btn">
+            <div class="new-btn-ul" *ngIf="i !== 0" role="list">
+                <div class="new-btn" role="listitem">
                     <a
                         href="javascript:void(0)"
-                        class="btn-link"
+                        class="btn-link d-block "
                         nav-vr-item
                         *ngIf="showCreateNewButton"
                         (click)="showAddNewForm(items, i)"
                         >{{ localeData?.create_new }}</a
                     >
-                </li>
-            </ul>
+                </div>
+            </div>
             <ng-container *ngIf="items?.results?.length">
-                <ul class="grp-list users-last-list">
+                <div class="grp-list users-last-list" role="list">
                     <cdk-virtual-scroll-viewport
                         class="virtual-group-list overflow-x-hidden"
                         [itemSize]="37"
@@ -38,16 +38,16 @@
                         [maxBufferPx]="800"
                         [id]="i"
                     >
-                        <li
+                        <div
                             *cdkVirtualFor="let item of items?.results; let j = index; trackBy: trackByFn"
-                            class="list-item sidebarTooltip text-overflow-ellipsis"
+                            class="list-item master-list sidebarTooltip text-overflow-ellipsis" role="listitem"
                         >
                             <ng-container *ngIf="item.type === 'GROUP'">
                                 <a
                                     href="javascript:void(0);"
                                     id="subGrp_{{ item.name }}"
                                     nav-vr-item
-                                    class="list-item"
+                                    class="list-item d-block "
                                     (click)="onGroupClick(item, i)"
                                     tooltip="{{ item.synonyms || item.name }}"
                                     placement="bottom"
@@ -80,7 +80,7 @@
                             <ng-container *ngIf="item.type === 'ACCOUNT'">
                                 <a
                                     href="javascript:void(0);"
-                                    class="list-item isAcc"
+                                    class="list-item isAcc d-block"
                                     nav-vr-item
                                     id="acc_{{ item.name }}"
                                     tooltip="{{ item.name }}"
@@ -98,9 +98,9 @@
                                     {{ item?.name }} {{ commonLocaleData?.app_ac }}
                                 </a>
                             </ng-container>
-                        </li>
+                        </div>
                     </cdk-virtual-scroll-viewport>
-                </ul>
+                </div>
             </ng-container>
         </div>
     </div>

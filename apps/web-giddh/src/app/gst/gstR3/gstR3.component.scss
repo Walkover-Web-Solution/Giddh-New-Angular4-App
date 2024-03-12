@@ -288,6 +288,15 @@ table {
     background-color: var(--color-table-body-secondary-background);
 }
 
+.dropdown-menu {
+    .btn-default {
+        &.disabled {
+            cursor: not-allowed;
+            opacity: 1 !important;
+        }
+    }
+}
+
 *,
 :after,
 :before {

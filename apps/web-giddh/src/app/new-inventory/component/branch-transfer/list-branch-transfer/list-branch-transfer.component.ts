@@ -571,7 +571,9 @@ export class ListBranchTransferComponent implements OnInit {
         this.voucherTypeDropdown?.closeDropdownPanel();
         this.dialog.open(this.advanceFilterComponent, {
             width: '500px',
-            autoFocus: false
+            autoFocus: false,
+            role: 'alertdialog',
+            ariaLabel: 'Advance filter Dialog',
         })
     }
 

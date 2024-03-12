@@ -30,7 +30,7 @@
                                 href="javascript:void(0)"
                                 (click)="currencyChange()"
                             >
-                                <img src="assets/icon/swap_horiz.svg" height="24" width="30" />
+                                <img src="assets/icon/swap_horiz.svg" height="24" width="30" alt="swap img" />
                             </a>
                         </li>
                         <li>
@@ -409,7 +409,7 @@
                                             href="javascript:void(0)"
                                             (click)="isReadOnly ? '' : toggleOtherTaxesAsidePane(true)"
                                         >
-                                            <img src="assets/images/edit-pencilicon.svg" />
+                                            <img src="assets/images/edit-pencilicon.svg"  alt="tax"/>
                                         </a>
                                     </span>
                                     <input
@@ -430,7 +430,7 @@
                 </div>
             </div>
         </div>
-        
+
         <ng-container *ngIf="shouldShowRcmTaxableAmount">
             <div class="taxable-amount-section mr-1">
                 <label class="primary-color">{{ localeData?.taxable_amount }}</label>
@@ -892,7 +892,7 @@
                                     <label for="invoiceFile" class="cp font-15">
                                         <i class="icon-file" *ngIf="!isFileUploading && blankLedger?.attachedFile?.length"></i>
                                         <i class="fa fa-spinner rotate" *ngIf="isFileUploading"></i>
-                                        <img src="assets/icon/attach_file.svg" height="20" width="20" *ngIf="!isFileUploading && !blankLedger?.attachedFile?.length" />
+                                        <img src="assets/icon/attach_file.svg" height="20" width="20" *ngIf="!isFileUploading && !blankLedger?.attachedFile?.length" alt="file" />
                                         <ng-container *ngIf="!blankLedger?.attachedFile?.length">
                                             {{ localeData?.attach_file }}
                                         </ng-container>
@@ -1044,7 +1044,7 @@
                                 </tr>
                             </tbody>
                         </table>
-                       
+
                     <div class="d-flex justify-content-end column-gap15 mr-t1">
                         <button
                             mat-stroked-button
@@ -1064,7 +1064,7 @@
                         >
                             {{ localeData?.add_to_dr }}
                         </button>
-    
+
                         <button
                             mat-stroked-button
                             id="ledger-add-button-cr"
@@ -1074,7 +1074,7 @@
                         >
                             {{ localeData?.add_to_cr }}
                         </button>
-    
+
                         <button
                             mat-stroked-button
                             color="primary"
