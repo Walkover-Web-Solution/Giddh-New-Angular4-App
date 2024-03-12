@@ -321,7 +321,9 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
                 advanceSearchResponse: this.advanceSearchModalResponse,
                 reportType: this.searchPage
             },
-            width: '500px'
+            width: '500px',
+            role: 'alertdialog',
+            ariaLabel: 'Advance search Dialog'
         });
         dialogRef.afterClosed().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {

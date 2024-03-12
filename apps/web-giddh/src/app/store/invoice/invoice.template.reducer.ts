@@ -380,7 +380,7 @@ export const initialState: CustomTemplateState = {
         logoSize: 'small/medium/large',
         logoUniqueName: null,
         copyFrom: 'gst_template_a',
-        templateColor: '#f63407',
+        templateColor: '#AB1F00',
         tableColor: '#f2f3f4',
         templateType: 'gst_template_a',
         name: '',
