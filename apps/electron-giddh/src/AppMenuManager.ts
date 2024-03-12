@@ -1,5 +1,4 @@
 import { app, BrowserWindow, Menu, MenuItemConstructorOptions } from 'electron';
-import { checkForUpdates } from './AppUpdater';
 import WindowManager from './WindowManager';
 
 export default function setMenu() {
@@ -24,14 +23,6 @@ export default function setMenu() {
                 label: 'Close',
                 accelerator: 'CmdOrCtrl+W',
                 role: 'close'
-            },
-            {
-                label: 'Check For Update',
-                accelerator: 'CmdOrCtrl+U',
-                click: (item: any, focusedWindow: any, event) => {
-                    //
-                    checkForUpdates(item, focusedWindow, event);
-                }
             },
         ]
     };
