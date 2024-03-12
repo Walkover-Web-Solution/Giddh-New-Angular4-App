@@ -998,7 +998,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         } else {
             this._toaster.errorToast(this.localeData?.credit_debit_equal_error, this.commonLocaleData?.app_error);
             this.activeRowIndex = null;
-            this.activeRowType = "";
+            this.activeRowType = null;
             setTimeout(() => this.narrationBox?.nativeElement?.focus(), 500);
         }
     }
@@ -1049,13 +1049,13 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             message = message?.replace("[VOUCHER_TYPE]", data.voucherType);
             this._toaster.errorToast(message, this.commonLocaleData?.app_error);
             this.activeRowIndex = null;
-            this.activeRowType = "";
+            this.activeRowType = null;
             return setTimeout(() => this.narrationBox?.nativeElement?.focus(), 500);
         }
         if (!foundContraEntry && data.voucherType === VOUCHERS.CONTRA) {
             this._toaster.errorToast(this.localeData?.contra_entry_error, this.commonLocaleData?.app_error);
             this.activeRowIndex = null;
-            this.activeRowType = "";
+            this.activeRowType = null;
             return setTimeout(() => this.narrationBox?.nativeElement?.focus(), 500);
         }
 
@@ -1063,7 +1063,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         if (foundSalesAndBankEntry && data.voucherType === VOUCHERS.JOURNAL) {
             this._toaster.errorToast(this.localeData?.sales_purchase_entry_error, this.commonLocaleData?.app_error);
             this.activeRowIndex = null;
-            this.activeRowType = "";
+            this.activeRowType = null;
             return setTimeout(() => this.narrationBox?.nativeElement?.focus(), 500);
         }
 
@@ -1156,13 +1156,13 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 message = message?.replace("[BY_TO]", byOrTo.toUpperCase());
                 this._toaster.errorToast(message, this.commonLocaleData?.app_error);
                 this.activeRowIndex = null;
-                this.activeRowType = "";
+                this.activeRowType = null;
                 setTimeout(() => this.narrationBox?.nativeElement?.focus(), 500);
             }
         } else {
             this._toaster.errorToast(this.localeData?.credit_debit_equal_error, this.commonLocaleData?.app_error);
             this.activeRowIndex = null;
-            this.activeRowType = "";
+            this.activeRowType = null;
             setTimeout(() => this.narrationBox?.nativeElement?.focus(), 500);
         }
     }
