@@ -135,7 +135,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public userFullName: string;
     public userAvatar: string;
     public navigationModalVisible: boolean = false;
-    public apkVersion: string;
     public accountItemsFromIndexDB: any[] = DEFAULT_AC;
     public selectedPage: any = '';
     public selectedLedgerName: string;
@@ -549,7 +548,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         });
 
         this.sideBarStateChange(true);
-        this.getElectronAppVersion();
         this.getElectronMacAppVersion();
 
         this.store.dispatch(this.companyActions.GetApplicationDate());
@@ -1313,16 +1311,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     private adjustNavigationBar() {
         this.sideBarStateChange(this.isLargeWindow);
-    }
-
-    private getElectronAppVersion() {
-        this.authService.GetElectronAppVersion().pipe(take(1)).subscribe((res: string) => {
-            if (res && typeof res === 'string') {
-                let version = res.split('files')[0];
-                let versNum = version.split(' ')[1];
-                this.apkVersion = versNum;
-            }
-        });
     }
 
     private getReadableNameFromUrl(url) {

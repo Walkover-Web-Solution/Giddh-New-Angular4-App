@@ -1465,7 +1465,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         const date = (typeof this.journalVoucherForm.get('entryDate').value === "object") ? dayjs(this.journalVoucherForm.get('entryDate').value).format("dddd")
             : dayjs(this.journalVoucherForm.get('entryDate').value, GIDDH_DATE_FORMAT).format("dddd");
         this.displayDay = (date !== 'Invalid date') ? date : '';
-        this.changeDetectionRef.detectChanges();
     }
 
 
