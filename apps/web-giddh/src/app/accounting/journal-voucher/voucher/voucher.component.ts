@@ -45,7 +45,6 @@ import { SearchService } from '../../../services/search.service';
 import { VOUCHERS } from '../../constants/accounting.constant';
 import { GeneralService } from '../../../services/general.service';
 import { MatDialog } from '@angular/material/dialog';
-import { TextFieldComponent } from '../../../theme/form-fields/text-field/text-field.component';
 
 const CustomShortcode = [
     { code: 'F9', route: 'purchase' }
@@ -253,20 +252,14 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     /** Config for bs datepicker */
     public config: Partial<BsDatepickerConfig> = { dateInputFormat: GIDDH_DATE_FORMAT };
     /** From Group for jv */
-    public mergedFormGroup: FormGroup;
-    /** Active index for by amount */
-    public activeByAmountIndex: number = null;
-    /** Active index for to amount  */
-    public activeToAmountIndex: number = null;
-    /** Active index for  particular account*/
-    public activeParticularAccountIndex: number = null;
-    /** Active index for  type */
-    public activeTypeIndex: number = null;
+    public mergedFormGroup: FormGroup
     /** False if you want particular group*/
     public allGroups: boolean = true;
     /** Skip single event of enter in narration box*/
     public isFirstEnterKeyPress: boolean = true;
+    /** Active index for current fields*/
     public activeRowIndex: number = null;
+    /** Active row for current fields*/
     public activeRowType: string = null;
 
     constructor(
@@ -336,10 +329,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 }
                 if (data.gridType === 'voucher') {
                     const voucherTypeControl = this.journalVoucherForm.get('voucherType');
-                    this.activeByAmountIndex = null;
-                    this.activeToAmountIndex = null;
-                    this.activeTypeIndex = null;
-                    this.activeParticularAccountIndex = 0;
+                    this.activeRowIndex = 0;
+                    this.activeRowType = "account";
                     this.showLedgerAccountList = false;
                     voucherTypeControl.setValue(this.currentVoucher);
                     this.resetEntriesIfVoucherChanged();
@@ -408,10 +399,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this.store.pipe(select(p => p?.ledger?.ledgerCreateSuccess), takeUntil(this.destroyed$)).subscribe((response: boolean) => {
             if (response) {
                 this.activeRow(true, 0);
-                this.activeParticularAccountIndex = 0;
-                this.activeByAmountIndex = null;
-                this.activeToAmountIndex = null;
-                this.activeTypeIndex = null;
+                this.activeRowIndex = 0;
+                this.activeRowType = "account";
                 this._toaster.successToast(this.localeData?.entry_created, this.commonLocaleData?.app_success);
                 this.refreshEntry();
                 this.store.dispatch(this._ledgerActions.ResetLedger());
@@ -682,9 +671,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @memberof AccountAsVoucherComponent
      */
     public onAccountFocus(event: any, element: any, trxnType: any, index: number): void {
-        this.activeByAmountIndex = null;
-        this.activeToAmountIndex = null;
-        this.activeTypeIndex = null;
         this.selectedAccountInputField = event.target;
         this.selectedField = 'account';
         this.showConfirmationBox = false;
@@ -762,14 +748,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      */
     public closeChequeDetailForm(): void {
         this.dialog.closeAll();
-        let transactionsFormArray = this.journalVoucherForm.get('transactions') as FormArray;
-        let transactionAtIndex = transactionsFormArray.at(this.selectedIdx) as FormGroup;
-
-        if (transactionAtIndex.get('type').value === "to") {
-            this.activeToAmountIndex = this.selectedIdx;
-        } else {
-            this.activeByAmountIndex = this.selectedIdx;
-        }
         // this.focusDebitCreditAmount();
     }
     /**
@@ -846,11 +824,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                         }
                     }
                     if (!openChequePopup) {
-                        if (transactionAtIndex.get('type').value === "to") {
-                            this.activeToAmountIndex = this.selectedIdx;
-                        } else {
-                            this.activeByAmountIndex = this.selectedIdx;
-                        }
                     }
                     this.calculateAmount(Number(transactionAtIndex.get('amount').value), transactionAtIndex, idx);
 
@@ -914,8 +887,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      */
     public addNewEntry(amount: any, transactionObj: any, entryIndex: number): void {
         let index = entryIndex;
-        this.activeByAmountIndex = null;
-        this.activeToAmountIndex = null;
         // let reqField: any = document.getElementById(`first_element_${entryIndex - 1}`);
         // if (amount === 0 || amount === '0') {
         //     if (entryIndex === 0) {
@@ -1026,6 +997,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             }
         } else {
             this._toaster.errorToast(this.localeData?.credit_debit_equal_error, this.commonLocaleData?.app_error);
+            this.activeRowIndex = null;
+            this.activeRowType = "";
             setTimeout(() => this.narrationBox?.nativeElement?.focus(), 500);
         }
     }
@@ -1075,16 +1048,22 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             let message = this.localeData?.contra_entry_notallowed;
             message = message?.replace("[VOUCHER_TYPE]", data.voucherType);
             this._toaster.errorToast(message, this.commonLocaleData?.app_error);
+            this.activeRowIndex = null;
+            this.activeRowType = "";
             return setTimeout(() => this.narrationBox?.nativeElement?.focus(), 500);
         }
         if (!foundContraEntry && data.voucherType === VOUCHERS.CONTRA) {
             this._toaster.errorToast(this.localeData?.contra_entry_error, this.commonLocaleData?.app_error);
+            this.activeRowIndex = null;
+            this.activeRowType = "";
             return setTimeout(() => this.narrationBox?.nativeElement?.focus(), 500);
         }
 
         // This suggestion was given by Sandeep
         if (foundSalesAndBankEntry && data.voucherType === VOUCHERS.JOURNAL) {
             this._toaster.errorToast(this.localeData?.sales_purchase_entry_error, this.commonLocaleData?.app_error);
+            this.activeRowIndex = null;
+            this.activeRowType = "";
             return setTimeout(() => this.narrationBox?.nativeElement?.focus(), 500);
         }
 
@@ -1170,20 +1149,20 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 } else {
                     data.transactions.splice(indexOfMaxAmountEntry, 1);
                 }
-                data = this.tallyModuleService.prepareRequestForAPI(data);
-                this.activeByAmountIndex = null;
-                this.activeToAmountIndex = null;
-                this.activeTypeIndex = null;
                 this.store.dispatch(this._ledgerActions.CreateBlankLedger(data, accUniqueName));
             } else {
                 const byOrTo = data.voucherType === 'Payment' ? 'by' : 'to';
                 let message = this.localeData?.blank_account_error;
                 message = message?.replace("[BY_TO]", byOrTo.toUpperCase());
                 this._toaster.errorToast(message, this.commonLocaleData?.app_error);
+                this.activeRowIndex = null;
+                this.activeRowType = "";
                 setTimeout(() => this.narrationBox?.nativeElement?.focus(), 500);
             }
         } else {
             this._toaster.errorToast(this.localeData?.credit_debit_equal_error, this.commonLocaleData?.app_error);
+            this.activeRowIndex = null;
+            this.activeRowType = "";
             setTimeout(() => this.narrationBox?.nativeElement?.focus(), 500);
         }
     }
@@ -1480,8 +1459,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         const date = (typeof this.journalVoucherForm.get('entryDate').value === "object") ? dayjs(this.journalVoucherForm.get('entryDate').value).format("dddd")
             : dayjs(this.journalVoucherForm.get('entryDate').value, GIDDH_DATE_FORMAT).format("dddd");
         this.displayDay = (date !== 'Invalid date') ? date : '';
-        this.activeRowIndex = 0;
-        this.activeRowType = "type";
         this.changeDetectionRef.detectChanges();
     }
 
@@ -1972,36 +1949,30 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     }
 
     /**
-     * This will be use for reset active indexes
-     *
-     * @private
-     * @memberof AccountAsVoucherComponent
-     */
-    private resetActiveIndices(): void {
-        this.activeByAmountIndex = null;
-        this.activeToAmountIndex = null;
-        this.activeParticularAccountIndex = null;
-        this.activeTypeIndex = null;
-    }
-
-
-    /**
     * This will be use for change tabs to type field
     *
     * @memberof AccountAsVoucherComponent
     */
     public changeTab(mode: any, type: any): void {
-        console.log(mode, type);
+        let transactionsFormArray = this.journalVoucherForm.get('transactions') as FormArray;
         if (mode === 'enter') {
             if (type === 'amount') {
                 if (this.totalCreditAmount === this.totalDebitAmount) {
-                    this.narrationBox?.nativeElement?.focus();
-                    this.showConfirmationBox = false;
-                    this.activeRowIndex = null;
-                    this.activeRowType = null;
+                    if (this.activeRowIndex === transactionsFormArray.length - 1) {
+                        this.narrationBox?.nativeElement?.focus();
+                        this.showConfirmationBox = false;
+                    } else {
+                        this.activeRowIndex = this.activeRowIndex + 1;
+                        this.activeRowType = "type";
+                    }
                 } else {
-                    this.activeRowIndex = this.activeRowIndex + 1;
-                    this.activeRowType = "type";
+                    if (transactionsFormArray.length === this.activeRowIndex) {
+                        this.narrationBox?.nativeElement?.focus();
+                        this.showConfirmationBox = false;
+                    } else {
+                        this.activeRowIndex = this.activeRowIndex + 1;
+                        this.activeRowType = "type";
+                    }
                 }
             } else if (type === 'type') {
                 this.activeRowType = "account";
@@ -2009,6 +1980,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 this.activeRowType = "amount";
             }
         } else if (mode === "shift") {
+
             if (type === 'type') {
                 this.activeRowIndex = this.activeRowIndex - 1;
                 this.activeRowType = "amount";
@@ -2018,8 +1990,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 this.activeRowType = "type";
             }
         }
-
-        console.log(this.activeRowIndex, mode, type);
 
         this.changeDetectionRef.detectChanges();
     }

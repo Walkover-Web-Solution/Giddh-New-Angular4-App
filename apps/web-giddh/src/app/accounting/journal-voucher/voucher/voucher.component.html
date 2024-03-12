@@ -24,7 +24,7 @@
                             [showToggleIcon]="false"
                             (datepickerState)="onDateFieldFocus()"
                             (dateSelected)="handleVoucherDateChange(); dateEntered()"
-                            (keydown.enter)="dateEntered()"
+                            (keydown.enter)="dateEntered();activeRowIndex = 0;activeRowType = 'type'"
                         >
                         </giddh-datepicker>
                     </div>
@@ -77,7 +77,7 @@
                                                 "
                                                 formControlName="type"
                                                 (input)="
-                                                    selectRow(true, i, transaction); activeParticularAccountIndex = null
+                                                    selectRow(true, i, transaction)
                                                 "
                                                 [ngClass]="{ 'focus': isSelectedRow && selectedIdx === i }"
                                                 [value]="transaction.get('type')?.value | lowercase"
@@ -122,7 +122,6 @@
                                                 (keydown.Tab)="
                                                     validateAccount(transaction, $event, i);
                                                     showLedgerAccountList = false;
-                                                    (activeParticularAccountIndex === null);
                                                     changeTab('tab', 'account')
                                                 "
                                                 (keydown.Enter)="changeTab('enter', 'account')"
@@ -172,7 +171,6 @@
                                         >
                                             <text-field
                                                 *ngIf="transaction.get('type')?.value?.toLowerCase() === 'to'"
-                                                (keydown.Tab)="activeToAmountIndex = null"
                                                 [autoFocus]="activeRowIndex === i && activeRowType === 'amount'"
                                                 [autocomplete]="'off'"
                                                 [type]="'text'"
@@ -184,7 +182,7 @@
                                                 (input)="selectRow(true, i)"
                                                 (keydown.Enter)="
                                                     addNewEntry(transaction.get('amount')?.value, transaction, i);
-                                                    changeTab('', 'amount')
+                                                    changeTab('enter', 'amount')
                                                 "
                                                 (keydown.Tab)="changeTab('tab', 'amount')"
                                                 (keydown.Shift.Tab)="changeTab('shift', 'amount')"
