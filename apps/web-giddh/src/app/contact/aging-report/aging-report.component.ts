@@ -568,6 +568,8 @@ export class AgingReportComponent implements OnInit, OnDestroy {
             height: '100vh',
             width: '760px',
             maxWidth: '65vw',
+            role: 'alertdialog',
+            ariaLabel: 'Unpaid Invoice',
             position: {
                 right: '0'
             }
