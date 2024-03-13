@@ -73,7 +73,7 @@ textarea {
 }
 
 .basic > thead > tr > th {
-    color: var(--color-table-secondary-heading) !important;
+    color: var(--color-link) !important;
     border-right: 1px solid var(--color-table-primary-content-bar-border);
     padding: 15px 11px !important;
     font-weight: 400;
@@ -3357,7 +3357,7 @@ input[type="checkbox"]:checked:after {
 
 .btn-success {
     background: var(--color-nonary-button-background) !important;
-    color: var(--color-nonary-button-text) !important;
+    color: var(--color-white-tertiary) !important;
     border: 1px solid var(--color-nonary-button-background) !important;
 }
 
@@ -14905,4 +14905,9 @@ aside-menu-product-service {
 }
 .text-black {
     color: var(--color-common-primary-text);
+}
+
+// color link light-dark theme
+.color-link {
+    color: var(--color-link) !important;
 }
