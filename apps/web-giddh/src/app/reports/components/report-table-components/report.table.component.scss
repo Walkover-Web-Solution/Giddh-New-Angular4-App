@@ -1,8 +1,23 @@
 .flex-fill {
     flex: 1 1 auto;
 }
-.basic > tbody > tr:hover td > a {
-    color: var(--color-giddh-blue);
+.basic {
+    tbody {
+        tr {
+            td {
+                a {
+                    color: var(--color-link);
+                }
+            }
+            &:hover {
+                td {
+                    a {
+                        color: var(--color-link);
+                    }
+                }
+            }
+        }
+    }
 }
 .basic > tbody > tr > td,
 .basic > thead > tr > th,
@@ -41,7 +56,7 @@
 }
 
 .giddh-table thead > .register-table-th > th {
-    color: var(--color-table-secondary-heading) !important;
+    color: var(--color-link) !important;
 }
 
 @media screen and (max-width: 768px) {
@@ -57,3 +72,5 @@
         }
     }
 }
+
+
