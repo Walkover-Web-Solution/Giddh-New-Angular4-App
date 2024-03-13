@@ -1753,6 +1753,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     public deleteStock(): void {
         let dialogRef = this.dialog.open(ConfirmModalComponent, {
             width: '40%',
+            role: 'alertdialog',
+            ariaLabel: 'Confirm Delete Dialog',
             data: {
                 title: this.commonLocaleData?.app_confirmation,
                 body: this.localeData?.delete_stock,
