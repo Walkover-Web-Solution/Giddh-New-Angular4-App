@@ -176,17 +176,4 @@
             </tab>
         </tabset>
     </div>
-    <div class="profile-user font-12 d-flex justify-content-between align-items-center pd-15">
-        <div
-            class="profile-name cursor-pointer d-flex align-items-center"
-            [routerLink]="['/pages/user-details/mobile-number']"
-            [tooltip]="userEmail"
-            placement="top"
-        >
-            <span class="profile-alice">{{ companyInitials }}</span>
-        </div>
-        <div class="profile-logout">
-            <button (click)="logout()">{{ localeData?.logout }}</button>
-        </div>
-    </div>
 </div>

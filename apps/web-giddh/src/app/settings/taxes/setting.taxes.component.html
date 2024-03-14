@@ -197,6 +197,7 @@
                                         <button
                                             (click)="selectedTax = tax; toggleTaxAsidePane()"
                                             type="button"
+                                            aria-label="edit-icon"
                                             class="btn btn-xs"
                                         >
                                             <i
@@ -209,6 +210,7 @@
                                         <button
                                             *ngIf="!taxToEdit[i]"
                                             type="button"
+                                            aria-label="delete-icon"
                                             class="btn btn-xs"
                                             (click)="deleteTax(tax)"
                                         >

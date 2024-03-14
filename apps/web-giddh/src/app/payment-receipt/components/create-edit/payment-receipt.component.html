@@ -71,7 +71,7 @@
                                                     [customFilter]="customMoveGroupFilter"
                                                     [isPaginationEnabled]="true"
                                                     (scrollEnd)="handleScrollEnd('customer')"
-                                                    (dynamicSearchedQuery)="onSearchQueryChanged($event, 1, 'customer')"
+                                                    (dynamicSearchedQuery)="isAccountSearchData = true ; onSearchQueryChanged($event, 1, 'customer')"
                                                     [notFoundMsg]="noResultsFoundLabel"
                                                     [enableDynamicSearch]="true"
                                                     (onHide)="resetPreviousSearchResults(true, 'customer')"

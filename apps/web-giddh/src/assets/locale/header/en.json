@@ -38,5 +38,14 @@
     "cash_information":"Generate instant paid voucher without managing separate account/ledger.",
     "credit_information":"Generate invoice and manage accounts/ledger separately.",
     "go_to_branch_information":"To access other create options go to branch mode",
-    "go_to_branch":" Go to branch"
+    "go_to_branch":" Go to branch",
+    "depreciation_message": "This version of Giddh is deprecated, please contact",
+    "depreciation_data_message": "to migrate your data to the latest version before 31st March, 2024.",
+    "depreciation_dismiss": "Dismiss",
+    "logout": "Logout",
+    "my_profile": "My Profile",
+    "to_select": "to select",
+    "to_navigate": "to navigate",
+    "notifications": "Notifications",
+    "quick_create": "Quick Create"
 }

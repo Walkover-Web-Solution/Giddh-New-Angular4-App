@@ -93,7 +93,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         balanceDisplayFormat: '',
         taxType: '',
         manageInventory: false,
-        portalDomain: ''
+        portalDomain: '',
+        withPay: 'false'
     };
     public stateStream$: Observable<States[]>;
     public statesSource$: Observable<IOption[]> = observableOf([]);
@@ -1148,7 +1149,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 balanceDecimalPlaces: profileObj.balanceDecimalPlaces,
                 balanceDisplayFormat: profileObj.balanceDisplayFormat,
                 isMultipleCurrency: profileObj.isMultipleCurrency,
-                manageInventory: this.CompanySettingsObj && this.CompanySettingsObj.companyInventorySettings ? this.CompanySettingsObj.companyInventorySettings.manageInventory : false
+                manageInventory: this.CompanySettingsObj && this.CompanySettingsObj.companyInventorySettings ? this.CompanySettingsObj.companyInventorySettings.manageInventory : false,
+                withPay: profileObj.withPay
             };
             this.companyProfileObj.balanceDecimalPlaces = String(profileObj.balanceDecimalPlaces);
 

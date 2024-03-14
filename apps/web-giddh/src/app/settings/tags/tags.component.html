@@ -86,6 +86,7 @@
                                     </td>
                                     <td class="icon-btn" [attr.data-title]="commonLocaleData?.app_action">
                                         <button
+                                            aria-label="edit"
                                             *ngIf="updateIndex !== i"
                                             (click)="setUpdateIndex(i)"
                                             type="button"
@@ -98,6 +99,7 @@
                                             ></i>
                                         </button>
                                         <button
+                                            aria-label="delete"
                                             *ngIf="updateIndex !== i"
                                             (click)="deleteTag(tag, i)"
                                             type="button"
@@ -110,6 +112,7 @@
                                             ></i>
                                         </button>
                                         <button
+                                            aria-label="check"
                                             *ngIf="updateIndex === i"
                                             (click)="updateTag(tag, i)"
                                             type="button"
@@ -118,6 +121,7 @@
                                             <i class="fa fa-check" aria-hidden="true"></i>
                                         </button>
                                         <button
+                                            aria-label="cross"
                                             *ngIf="updateIndex === i"
                                             (click)="resetUpdateIndex()"
                                             type="button"
@@ -163,10 +167,10 @@
                 </div>
                 <div class="modal-body" [innerHTML]="confirmationMessage"></div>
                 <div class="modal-footer clearfix">
-                    <button (click)="onUserConfirmation(true)" class="btn btn-sm btn-success">
+                    <button aria-label="yes" (click)="onUserConfirmation(true)" class="btn btn-sm btn-success">
                         {{ commonLocaleData?.app_yes }}
                     </button>
-                    <button (click)="onUserConfirmation(false)" class="btn btn-sm btn-danger">
+                    <button aria-label="no" (click)="onUserConfirmation(false)" class="btn btn-sm btn-danger">
                         {{ commonLocaleData?.app_no }}
                     </button>
                 </div>

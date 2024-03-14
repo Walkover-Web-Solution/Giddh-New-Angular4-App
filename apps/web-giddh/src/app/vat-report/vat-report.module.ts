@@ -27,13 +27,19 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { GiddhDateRangepickerModule } from '../theme/giddh-daterangepicker/giddh-daterangepicker.module';
 import { DatepickerWrapperModule } from '../shared/datepicker-wrapper/datepicker.wrapper.module';
 import { GiddhPageLoaderModule } from '../shared/giddh-page-loader/giddh-page-loader.module';
+import { ObligationsComponent } from './obligations/obligations.component';
+import { ViewReturnComponent } from './view-return/view-return.component';
+import { FileReturnComponent } from './file-return/file-return.component';
+import { NewConfirmationModalModule } from '../theme/new-confirmation-modal/confirmation-modal.module';
 
 @NgModule({
     declarations: [
         VatReportComponent,
-        VatReportTransactionsComponent
+        VatReportTransactionsComponent,
+        ObligationsComponent,
+        ViewReturnComponent,
+        FileReturnComponent
     ],
-    providers: [],
     imports: [
         VatReportRoutingModule,
         TabsModule.forRoot(),
@@ -60,7 +66,8 @@ import { GiddhPageLoaderModule } from '../shared/giddh-page-loader/giddh-page-lo
         MatDialogModule,
         GiddhDateRangepickerModule,
         DatepickerWrapperModule,
-        GiddhPageLoaderModule
+        GiddhPageLoaderModule,
+        NewConfirmationModalModule
     ],
     exports: [
         VatReportRoutingModule

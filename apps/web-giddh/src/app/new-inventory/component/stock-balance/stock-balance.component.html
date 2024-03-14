@@ -11,15 +11,15 @@
         <div class="stock-balance-top-bar">
             <div class="stock-balance-top-bar-left-side column-gap15">
                 <ng-container *ngIf="voucherApiVersion == 2">
-                    <button mat-stroked-button color="primary" [matMenuTriggerFor]="newStock">
+                    <button aria-label="new stock" mat-stroked-button color="primary" [matMenuTriggerFor]="newStock">
                         {{ localeData?.warehouse_opening_balance?.new_stock }}
                         <span class="caret"></span>
                     </button>
                     <mat-menu #newStock="matMenu">
-                        <button mat-menu-item [routerLink]="'/pages/inventory/v2/stock/product/create'">
+                        <button aria-label="product" mat-menu-item [routerLink]="'/pages/inventory/v2/stock/product/create'">
                             {{ commonLocaleData?.app_product }}
                         </button>
-                        <button mat-menu-item [routerLink]="'/pages/inventory/v2/stock/service/create'">
+                        <button aria-label="service" mat-menu-item [routerLink]="'/pages/inventory/v2/stock/service/create'">
                             {{ commonLocaleData?.app_service }}
                         </button>
                     </mat-menu>
@@ -72,7 +72,7 @@
         <div class="searching-stocks">
             <div class="list-head">
                 <div class="custom-material-search-bar stock-searchbar">
-                    <img src="{{ imgPath }}search-new.svg" class="search-icon" />
+                    <img src="{{ imgPath }}search-new.svg" class="search-icon" alt="search icon" />
                     <text-field
                         [placeholder]="commonLocaleData?.app_stock"
                         autocomplete="off"
@@ -85,7 +85,7 @@
                     <h2 class="unique-name font-15">{{ commonLocaleData?.app_unique_name }}</h2>
                 </div>
                 <div class="group-list-head group-searchbar" *ngIf="showGroupName">
-                    <img src="{{ imgPath }}search-new.svg" class="search-icon" />
+                    <img src="{{ imgPath }}search-new.svg" class="search-icon" alt="search icon" />
                     <select-field
                         [cssClass]="'form-control bg-dropdown'"
                         [name]="'stockGroup'"
@@ -255,7 +255,7 @@
                                                     class="unit-value bg-color-hover"
                                                     (click)="warehouseVariant.display = true; setInputFocus(3)"
                                                     >{{ warehouseVariant?.stockUnit?.code ?? "-" }}
-                                                    <img src="{{ imgPath }}caret-light.svg" class="dropdown-icon" />
+                                                    <img src="{{ imgPath }}caret-light.svg" class="dropdown-icon" alt="stock unit" />
                                                 </span>
                                             </p>
                                         </div>
@@ -301,7 +301,7 @@
                                                     [openDropdown]="isOpen"
                                                 >
                                                 </select-field>
-                                                <img src="{{ imgPath }}caret-light.svg" class="dropdown-icon" />
+                                                <img src="{{ imgPath }}caret-light.svg" class="dropdown-icon" alt="dropdown" />
                                             </span>
                                         </div>
                                     </div>
@@ -311,7 +311,7 @@
                     </div>
                 </div>
                 <div class="no-data-found" *ngIf="stocksList?.length <= 0">
-                    <img src="{{ imgPath }}search-data-not-found.svg" /><br />
+                    <img src="{{ imgPath }}search-data-not-found.svg" alt="result not found" /><br />
                     {{ commonLocaleData?.app_no_result_found }}
                 </div>
             </div>

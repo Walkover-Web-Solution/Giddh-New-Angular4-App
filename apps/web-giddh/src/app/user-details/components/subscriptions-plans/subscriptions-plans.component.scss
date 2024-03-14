@@ -220,7 +220,7 @@
 .account-aside-menu-state {
     position: fixed;
     left: auto;
-    top: 0;
+    top: var(--top-distance);
     right: 0;
     bottom: 0;
     max-width: 480px;

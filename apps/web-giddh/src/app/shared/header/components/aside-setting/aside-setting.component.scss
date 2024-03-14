@@ -5,7 +5,7 @@
 :host {
     position: fixed;
     left: auto;
-    top: 60px;
+    top: calc(var(--top-distance) + 60px);
     right: 0;
     bottom: 0;
     max-width: 240px;
@@ -19,14 +19,20 @@
         height: 12px;
         background-color: var(--color-primary-aside-host-after-background);
         top: -6px;
-        right: 65px;
+        right: 178px;
+        @media screen and (max-width: 1024px) {
+            right: 142px;
+        }
+        @media screen and (max-width: 992px) {
+            right: 122px;
+        }
         z-index: 1;
         transform: rotate(45deg);
     }
 }
 :host.setting-sidebar {
     position: fixed;
-    top: 0;
+    top: var(--top-distance);
     bottom: 0;
     min-height: 100vh;
     background: var(--color-white);
@@ -42,7 +48,7 @@
     display: block;
     position: fixed;
     left: -41px;
-    top: 0;
+    top: var(--top-distance);
     z-index: 5;
     border: 0;
     border-radius: 0;
@@ -122,7 +128,7 @@
                 }
             }
             &:hover {
-                background-color: var(--color-sidebar-anchor-text-hover);
+                background-color: var(--color-giddh-blue);
                 a {
                     span {
                         color: var(--color-primary-right-sidebar-list-text-hover) !important;
@@ -218,7 +224,7 @@
 ::ng-deep {
     .back-to-main-slider {
         .ng-star-inserted {
-            color: var(--color-right-sidebar-back);
+            color: var(--color-giddh-blue);
         }
     }
 }
@@ -233,7 +239,7 @@
 @media (max-width: 767px) {
     :host.setting-sidebar {
         position: fixed;
-        top: 0;
+        top: var(--top-distance);
         bottom: 0;
         min-height: 100vh;
         background: var(--color-white);

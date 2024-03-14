@@ -1,193 +1,126 @@
-<ng-container
-    appTranslate
-    [file]="'proforma-invoice/add-bulk-items'"
-    (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event"
-    (translationComplete)="translationComplete($event)"
->
-    <div class="add-bulk-item-modal" *ngIf="localeData?.add_bulk_items">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title pull-left">{{ localeData?.add_bulk_items }}</h4>
-                <button
-                    mat-button
-                    type="button"
-                    class="close pull-right"
-                    aria-label="Close"
-                    (click)="closeEvent.emit()"
-                >
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
+<ng-container appTranslate [file]="'proforma-invoice/add-bulk-items'" (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
+    <div class="bulk-entry" *ngIf="localeData?.add_bulk_items">
+        <div class="dialog-header">
+            <span mat-dialog-title class="font-16">{{ localeData?.add_bulk_items }}</span>
+            <i mat-dialog-close class="icon-cross" (click)="closeEvent.emit()"></i>
+        </div>
+        <div mat-dialog-content class="bulk-entry-body dialog-body d-flex">
+            <div class="w-100">
+                <div class="d-flex">
+                    <div class="bulk-entry-list">
+                        <input-field [name]="'search'" [type]="'text'" [formControl]="stock"
+                            [placeholder]="localeData?.search_stock" [label]="commonLocaleData?.app_search">
+                        </input-field>
 
-            <div class="modal-body">
-                <div class="row">
-                    <!-- region left side -->
-                    <div class="col-md-6 col-sm-6">
-                        <div class="left-content">
-                            <div class="search-box">
-                                <input
-                                    matInput
-                                    type="text"
-                                    [placeholder]="localeData?.search_stock"
-                                    #searchElement
-                                    class="pr-1 pl-1 form-control mat-field-border"
-                                />
-                            </div>
-
-                            <div class="product-list">
-                                <cdk-virtual-scroll-viewport [itemSize]="36" [appendOnly]="true">
+                        <div class="list-wrapper mt-2">
+                            <mat-list class="p-0">
+                                <cdk-virtual-scroll-viewport [itemSize]="40" class="list-viewport" [appendOnly]="true">
                                     <ng-container *cdkVirtualFor="let item of filteredData">
-                                        <button
-                                            mat-button
-                                            class="single-product-wrapper cp w-100"
-                                            [class.mb-20]="!item.variants?.length || item.variants?.length === 1"
-                                            (click)="addItemToSelectedArr(item)"
-                                        >
-                                            <h5>{{ item?.name }}</h5>
-                                        </button>
-                                        <ng-container *ngIf="item.variants?.length > 1">
-                                            <button
-                                                *ngFor="let variant of item.variants"
-                                                mat-button
-                                                class="product-variant text-left cp w-100 pl-4"
-                                                (click)="variantChanged(item, variant)"
-                                            >
-                                                <h5>{{ variant?.label }}</h5>
-                                            </button>
+                                        <ng-container *ngIf="item?.additional?.hasVariants">
+                                            <mat-accordion>
+                                                <mat-expansion-panel>
+                                                    <mat-expansion-panel-header (click)="addItemToSelectedArr(item)">
+                                                        <mat-panel-title>
+                                                            <mat-list-item class="list-item px-2"
+                                                                [matTooltip]="item.name" matTooltipPosition="left">
+                                                                <img src="assets/images/item-wise.svg" width="18"
+                                                                    height="18" class="stock-icon" alt="item img" />
+                                                                {{ item.name }}
+                                                            </mat-list-item>
+                                                        </mat-panel-title>
+                                                    </mat-expansion-panel-header>
+                                                    <div *ngIf="item.variants?.length > 1" class="variants-wrapper">
+                                                        <ng-container *ngFor="let variant of item.variants">
+                                                            <mat-list-item (click)="variantChanged(item, variant)"
+                                                                class="list-item pr-2 pl-4"
+                                                                [matTooltip]="variant?.label"
+                                                                matTooltipPosition="left">{{ variant?.label
+                                                                }}</mat-list-item>
+                                                        </ng-container>
+                                                    </div>
+                                                </mat-expansion-panel>
+                                            </mat-accordion>
+                                        </ng-container>
+                                        <ng-container *ngIf="!item?.additional?.hasVariants">
+                                            <mat-list-item class="list-item px-2" (click)="addItemToSelectedArr(item)"
+                                                [matTooltip]="item.name" matTooltipPosition="left">
+                                                <img src="assets/images/item-wise.svg" width="18" height="18"
+                                                    class="stock-icon" alt="stock icon" />
+                                                {{ item.name }}
+                                            </mat-list-item>
                                         </ng-container>
                                     </ng-container>
                                 </cdk-virtual-scroll-viewport>
-                            </div>
+                            </mat-list>
                         </div>
                     </div>
-                    <!-- endregion-->
-
-                    <!-- region right side -->
-                    <div class="col-md-6 pl-0 col-sm-6">
-                        <div class="right-content">
-                            <h4>
-                                {{ localeData?.selected_stocks }}
-                                <span class="selected-stock-number">({{ selectedItems?.length }})</span>
-                            </h4>
-                            <hr />
-
-                            <div class="right-side-wrapper">
-                                <cdk-virtual-scroll-viewport [itemSize]="36">
-                                    <div
-                                        class="wrap-selected-stocks"
-                                        *cdkVirtualFor="let item of selectedItems; let entryIdx = index"
-                                    >
-                                        <div class="single-selected-stock clearfix d-flex">
-                                            <div class="flex-fill">
-                                                <div class="stock-name">
-                                                    <p class="mb-2">
-                                                        {{
+                    <div class="bulk-entry-selected-items d-flex flex-column">
+                        <div class="selected-item-title"> {{ localeData?.selected_stocks }} {{
+                            localeData?.selected_stocks }}</div>
+                        <div class="selected-item-wrapper">
+                            <cdk-virtual-scroll-viewport [itemSize]="36">
+                                <ng-container *cdkVirtualFor="let item of selectedItems; let entryIdx = index">
+                                    <ng-container>
+                                        <mat-list class="p-0">
+                                            <mat-list-item class="px-0 mb-3">
+                                                <div class="d-flex align-items-center justify-content-between">
+                                                    <div class="w-75">
+                                                        <p>
+                                                            {{
                                                             item?.name +
-                                                                (item.variants?.length > 1 && item.variant?.name
-                                                                    ? " - " + item.variant?.name
-                                                                    : "")
-                                                        }}
-                                                    </p>
-                                                    <p>
-                                                        <span *ngIf="item?.additional?.skuCode" class="stockSku mb-1"
-                                                            ><label>{{ commonLocaleData?.app_sku }}: </label
-                                                            >{{ item?.additional?.skuCode }}</span
-                                                        >
-                                                        <span [class.rate-stock]="item?.additional?.skuCode"
-                                                            ><label
-                                                                >{{ commonLocaleData?.app_rate }}:&nbsp;</label
-                                                            > </span
-                                                        >{{ item?.rate }}
-                                                    </p>
-                                                </div>
-                                            </div>
+                                                            (item.variants?.length > 1 && item.variant?.name
+                                                            ? " - " + item.variant?.name
+                                                            : "")
+                                                            }}
+                                                        </p>
+                                                        <p>
+                                                            <span *ngIf="item?.additional?.skuCode"
+                                                                class="stockSku mb-1"><label>{{
+                                                                    commonLocaleData?.app_sku }}: </label>
+                                                                {{ item?.additional?.skuCode }}</span>
+                                                            <span [class.rate-stock]="item?.additional?.skuCode"><label>{{
+                                                                    commonLocaleData?.app_rate }}:&nbsp;</label>
+                                                            </span>{{ item?.rate }}
+                                                        </p>
+                                                    </div>
 
-                                            <div class="d-flex align-items-center">
-                                                <div class="input-group add-item-btn">
-                                                    <span class="input-group-btn">
-                                                        <button
-                                                            mat-button
-                                                            disableRipple
-                                                            class="
-                                                                btn-number
-                                                                d-flex
-                                                                align-items-center
-                                                                justify-content-center
-                                                            "
-                                                            (click)="alterQuantity(item, 'minus')"
-                                                        >
-                                                            <span class="fa fa-minus"></span>
+                                                    <div
+                                                        class="d-flex align-items-center justify-content-between column-gap1">
+                                                        <button mat-stroked-button
+                                                            (click)="alterQuantity(item, 'minus')">
+                                                            <i class="icon-minus"></i>
                                                         </button>
-                                                    </span>
-
-                                                    <input
-                                                        matInput
-                                                        type="number"
-                                                        name="quantity"
-                                                        class="form-control input-number text-align-center"
-                                                        value="1"
-                                                        min="1"
-                                                        [(ngModel)]="item.quantity"
-                                                    />
-
-                                                    <button
-                                                        mat-button
-                                                        disableRipple
-                                                        class="
-                                                            btn-number
-                                                            d-flex
-                                                            align-items-center
-                                                            justify-content-center
-                                                        "
-                                                        (click)="alterQuantity(item)"
-                                                    >
-                                                        <span class="fa fa-plus"></span>
-                                                    </button>
+                                                        <input matInput type="number" name="quantity"
+                                                            class="form-control input-number text-align-center"
+                                                            value="1" min="1" [(ngModel)]="item.quantity" />
+                                                        <button mat-stroked-button (click)="alterQuantity(item)">
+                                                            <i class="icon-add font-16 fw-bold"></i>
+                                                        </button>
+                                                        <button mat-button (click)="
+                                                    removeSelectedItem(
+                                                        item?.variants?.length > 1
+                                                            ? item.additional?.combinedUniqueName
+                                                            : item?.uniqueName
+                                                    )
+                                                ">
+                                                            <i class="icon-cross font-16"></i>
+                                                        </button>
+                                                    </div>
                                                 </div>
-
-                                                <span
-                                                    disableRipple
-                                                    class="remove-stock-list"
-                                                    (click)="
-                                                        removeSelectedItem(
-                                                            item?.variants?.length > 1
-                                                                ? item.additional?.combinedUniqueName
-                                                                : item?.uniqueName
-                                                        )
-                                                    "
-                                                >
-                                                    <i class="icon-cross"></i>
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </cdk-virtual-scroll-viewport>
-                            </div>
-
-                            <div class="template-footer">
-                                <hr />
-                                <div class="btn-group bulk-item-btn-group column-gap15">
-                                    <button
-                                        mat-stroked-button
-                                        color="primary"
-                                        class="btn-sm align-items-center justify-content-center"
-                                        (click)="saveItemsEvent.emit(selectedItems); closeEvent.emit()"
-                                    >
-                                        {{ commonLocaleData?.app_add }}
-                                    </button>
-                                    <button
-                                        mat-stroked-button
-                                        class="btn-sm align-items-center justify-content-center"
-                                        (click)="closeEvent.emit()"
-                                    >
-                                        {{ commonLocaleData?.app_cancel }}
-                                    </button>
-                                </div>
-                            </div>
+                                            </mat-list-item>
+                                        </mat-list>
+                                    </ng-container>
+                                </ng-container>
+                            </cdk-virtual-scroll-viewport>
+                        </div>
+                        <div class="selected-item-action d-flex column-gap1">
+                            <button mat-stroked-button color="primary"
+                                (click)="saveItemsEvent.emit(selectedItems); closeEvent.emit()"> {{
+                                commonLocaleData?.app_add }}</button>
+                            <button mat-stroked-button mat-dialog-close> {{ commonLocaleData?.app_cancel }}</button>
                         </div>
                     </div>
-                    <!-- endregion-->
                 </div>
             </div>
         </div>

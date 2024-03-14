@@ -15,8 +15,8 @@
     "balance_due": "शेष राशि",
     "copy_previous_invoices": "पिछला चालान [INVOICE_TYPE] कॉपी करें",
     "copy_previous_dr_cr": "पिछला [INVOICE_TYPE] कॉपी करें",
-    "customer_details": "उपभोक्ता विवरण",
-    "vendor_details": "विक्रेता विवरण",
+    "customer_details": "ग्राहक संपादित करें",
+    "vendor_details": "विक्रेता संपादित करें",
     "billing_address": "बिल भेजने का पता",
     "shipping_address": "शिपिंग पता",
     "change": "बदलो",
@@ -52,7 +52,7 @@
     "drag_drop_file": "फ़ाइल को ड्रैग / ड्रॉप करें या यहाँ क्लिक करें",
     "deposit": "जमा",
     "adjust_amount": "राशि समायोजित करें",
-    "product_service_description": "उत्पाद / सेवा विवरण",
+    "product_service": "उत्पाद / सेवा",
     "qty": "मात्रा",
     "generate_invoice": "उत्पन्न [INVOICE_TYPE]",
     "update_invoice": "अपडेट करें [INVOICE_TYPE]",
@@ -115,5 +115,6 @@
     "account": "अकाउंट",
     "select_variant": "वेरिएंट चुनें",
     "variant": "वेरिएंट",
-    "account_missing_in_stock": "खाता स्टॉक से लिंक नहीं है।"
+    "account_missing_in_stock": "खाता स्टॉक से लिंक नहीं है।",
+    "add_new_address": "+ नया पता जोड़ें"
 }

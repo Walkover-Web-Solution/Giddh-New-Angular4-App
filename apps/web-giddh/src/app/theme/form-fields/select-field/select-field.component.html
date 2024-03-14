@@ -27,7 +27,7 @@
         #auto="matAutocomplete"
         [ngClass]="customPanelClass"
     >
-        <a href="javascript:;" *ngIf="createNewText" (click)="createNewRecord()" class="custom-class-create">
+        <a href="javascript:;" role="option" *ngIf="createNewText" (click)="createNewRecord()" class="custom-class-create">
             <div class="item create-new">{{ createNewText }}</div>
             <div class="item create-new-command">
                 {{ commonLocaleData?.app_alt_c }}
@@ -58,7 +58,7 @@
                 [matTooltip]="option?.label"
                 matTooltipPosition="right"
             >
-                <a href="javascript:;" class="options-class-create">
+                <a href="javascript:;" role="option" class="options-class-create">
                     {{ commonLocaleData?.app_create_new }}
                 </a></mat-option
             >
@@ -112,7 +112,7 @@
                         [matTooltip]="option?.label"
                         matTooltipPosition="right"
                     >
-                        <a href="javascript:;" class="options-class-create">
+                        <a href="javascript:;" role="option" class="options-class-create">
                             {{ commonLocaleData?.app_create_new }}
                         </a></mat-option
                     >

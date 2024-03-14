@@ -60,6 +60,8 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
     public getCurrentPeriod$: Observable<any> = of(null);
     /** Holds images folder path */
     public imgPath: string = "";
+    /** True if active country is UK */
+    public isUKCompany: boolean;
 
     constructor(
         private router: Router,
@@ -87,6 +89,7 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
+                this.isUKCompany = activeCompany?.country === "United Kingdom";
                 if (this.vatSupportedCountries.includes(activeCompany.countryV2?.alpha2CountryCode)) {
                     this.showVatMenus = true;
                     this.showGstMenus = false;
