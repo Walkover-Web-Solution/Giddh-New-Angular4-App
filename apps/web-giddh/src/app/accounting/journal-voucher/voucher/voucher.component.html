@@ -72,8 +72,7 @@
                                                 [type]="'text'"
                                                 [cssClass]="'form-control text-capitalize byTo'"
                                                 [readonly]="
-                                                    (i === 0 && !isFirstRowDeleted) ||
-                                                    journalVoucherForm.get('voucherType')?.value === 'receipt'
+                                                    (i === 0 && !isFirstRowDeleted)
                                                 "
                                                 formControlName="type"
                                                 (input)="selectRow(true, i, transaction)"
@@ -412,7 +411,7 @@
         </div>
     </div>
 </ng-template>
-<!-- 
+<!--
 <div class="aside-overlay" (click)="closeCreateStock($event)" *ngIf="asideMenuStateForProductService === 'in'"></div>
 <aside-inventory-stock-group
     *ngIf="asideMenuStateForProductService === 'in'"

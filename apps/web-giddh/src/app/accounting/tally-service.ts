@@ -513,14 +513,14 @@ export class TallyModuleService {
             };
         } else if (voucherType.toLowerCase() === VOUCHERS.RECEIPT) {
             return {
-                group: selectedTransactionType === 'to' ?
+                group: selectedTransactionType?.toLowerCase() === 'to' ?
                     encodeURIComponent('tcspayable, sundrycreditors, sundrydebtors') :
                     encodeURIComponent('bankaccounts, cash, loanandoverdraft, tdsreceivable'),
                 exceptGroups: encodeURIComponent('')
             };
         } else if (voucherType.toLowerCase() === VOUCHERS.PAYMENT) {
             return {
-                group: selectedTransactionType === 'by' ? encodeURIComponent('sundrydebtors, sundrycreditors, tcspayable') :
+                group: selectedTransactionType?.toLowerCase() === 'by' ? encodeURIComponent('sundrydebtors, sundrycreditors, tcspayable') :
                     encodeURIComponent('cash, bankaccounts, loanandoverdraft,tdsreceivable'),
                 exceptGroups: encodeURIComponent('')
             };
