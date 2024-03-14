@@ -23,187 +23,97 @@
                 </div>
               </div>
               <div class="new-plan">
-                <table class="w-100">
-                  <tr class="">
-                    <th></th>
-                    <th>
-                      <div class="new-plan-wrapper">
-                        <div class="popular-txt">
+                <!-- material-table -->
+                <div class="plan-table-wrapper">
+                  <table mat-table [dataSource]="dataSource" class="plan-table">
+
+                    <!-- Name Column -->
+                    <ng-container matColumnDef="name" sticky>
+                      <th mat-header-cell *matHeaderCellDef></th>
+                      <td mat-cell *matCellDef="let element">
+                        <div class="d-flex align-items-center justify-content-between column-gap2 ">
+                          <span>Reconcile bank <br /> transactions</span>
+                          <i class="icon-info cp"
+                            [matTooltip]="'Reconcile transactions to keep them in sync using Giddh software or the app.'"
+                            [matTooltipPosition]="'above'"></i>
                         </div>
-                        <div class="plan-content">
-                          <h2 class="font-20 strong">Premium</h2>
-                          <p class="font-12 my-3 feature-txt">Streamlined accounting tools plus <br /> multi-currency
-                            for employing <br />
-                            businesses</p>
-                          <p class="mb-3"><span class="strong">$62</span> /month</p>
-                          <button mat-stroked-button color="primary" class="w-100">Select Plan</button>
-                          <!-- <button mat-stroked-button color="primary" class="w-100">Selected</button> -->
+                      </td>
+                    </ng-container>
+                
+                    <!-- Premium Column -->
+                    <ng-container matColumnDef="premium">
+                      <th mat-header-cell *matHeaderCellDef> 
+                        <div class="new-plan-wrapper">
+                          <div class="popular-txt">
+                          </div>
+                          <div class="plan-content">
+                            <h2 class="font-20 strong">Premium</h2>
+                            <p class="font-12 my-3 feature-txt">Streamlined accounting tools plus <br /> multi-currency
+                              for employing <br />
+                              businesses</p>
+                            <p class="mb-3"><span class="strong">$62</span> /month</p>
+                            <button mat-stroked-button color="primary" class="w-100">Select Plan</button>
+                            <!-- <button mat-stroked-button color="primary" class="w-100">Selected</button> -->
+                          </div>
                         </div>
-                      </div>
-                    </th>
-                    <th class="active">
-                      <div class="new-plan-wrapper">
-                        <div class="popular-txt">
-                          <span class="text-center d-block font-12">Most Popular</span>
+                      </th>
+                      <td mat-cell *matCellDef="let element" class="text-center">
+                        <i class="icon-tick icon-font-11 text"></i>
+                      </td>
+                    </ng-container>
+                
+                    <!-- Popular Column -->
+                    <ng-container matColumnDef="popular">
+                      <th mat-header-cell *matHeaderCellDef class="active"> 
+                        <div class="new-plan-wrapper">
+                          <div class="popular-txt">
+                            <span class="text-center d-block font-12">Most Popular</span>
+                          </div>
+                          <div class="plan-content">
+                            <h2 class="font-20 strong">Standard</h2>
+                            <p class="font-12 my-3 feature-txt">Streamlined accounting tools to <br /> help automate admin
+                            </p>
+                            <p class="mb-3"><span class="strong">$62</span> /month</p>
+                            <button mat-stroked-button color="primary" class="w-100">Select Plan</button>
+                            <!-- <button mat-stroked-button color="primary" class="w-100">Selected</button> -->
+                          </div>
                         </div>
-                        <div class="plan-content">
-                          <h2 class="font-20 strong">Standard</h2>
-                          <p class="font-12 my-3 feature-txt">Streamlined accounting tools to <br /> help automate admin
-                          </p>
-                          <p class="mb-3"><span class="strong">$62</span> /month</p>
-                          <button mat-stroked-button color="primary" class="w-100">Select Plan</button>
-                          <!-- <button mat-stroked-button color="primary" class="w-100">Selected</button> -->
+                      </th>
+                      <td mat-cell *matCellDef="let element" class="text-center active"> 
+                        <i class="icon-tick icon-font-11 text"></i>
+                      </td>
+                    </ng-container>
+                
+                    <!-- Symbol Column -->
+                    <ng-container matColumnDef="starter">
+                      <th mat-header-cell *matHeaderCellDef> 
+                        <div class="new-plan-wrapper">
+                          <div class="popular-txt">
+                          </div>
+                          <div class="plan-content">
+                            <h2 class="font-20 strong">Starter</h2>
+                            <p class="font-12 my-3 feature-txt">Basic accounting tools for the self-<br />employed to help
+                              simplify admin</p>
+                            <p class="mb-3"><span class="strong">$62</span> /month</p>
+                            <button mat-stroked-button color="primary" class="w-100">Select Plan</button>
+                            <!-- <button mat-stroked-button color="primary" class="w-100">Selected</button> -->
+                          </div>
                         </div>
-                      </div>
-                    </th>
-                    <th>
-                      <div class="new-plan-wrapper">
-                        <div class="popular-txt">
-                        </div>
-                        <div class="plan-content">
-                          <h2 class="font-20 strong">Starter</h2>
-                          <p class="font-12 my-3 feature-txt">Basic accounting tools for the self-<br />employed to help
-                            simplify admin</p>
-                          <p class="mb-3"><span class="strong">$62</span> /month</p>
-                          <button mat-stroked-button color="primary" class="w-100">Select Plan</button>
-                          <!-- <button mat-stroked-button color="primary" class="w-100">Selected</button> -->
-                        </div>
-                      </div>
-                    </th>
-                  </tr>
-                  <tr>
-                    <td>
-                      <span>Send invoices and quotes</span>
-                    </td>
-                    <td class="text-center ">
-                      <i class="icon-tick icon-font-11 text"></i>
-                    </td>
-                    <td class="text-center active">
-                      <i class="icon-tick icon-font-11"></i>
-                    </td>
-                    <td class="text-center">
-                      <div class="d-flex column-gap15 align-items-center justify-content-center">
-                        <span>20 invoices</span>
-                        <i class="icon-info cp"
-                          [matTooltip]="'Upgrade your plan at any time to send more than 20 invoices'"
-                          [matTooltipPosition]="'above'"></i>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <span>Enter bills</span>
-                    </td>
-                    <td class="text-center ">
-                      <i class="icon-tick icon-font-11 text"></i>
-                    </td>
-                    <td class="text-center active">
-                      <i class="icon-tick icon-font-11"></i>
-                    </td>
-                    <td class="text-center ">
-                      <div class="d-flex column-gap15 align-items-center justify-content-center">
-                        <span>5 bills</span>
-                        <i class="icon-info cp"
-                          [matTooltip]="'Upgrade your plan at any time to enter more than 5 bills and/or purchase orders'"
-                          [matTooltipPosition]="'above'"></i>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <div class="d-flex align-items-center justify-content-between">
-                        <span>Reconcile bank <br /> transactions</span>
-                        <i class="icon-info cp"
-                          [matTooltip]="'Reconcile transactions to keep them in sync using Xero software or the app.'"
-                          [matTooltipPosition]="'above'"></i>
-                      </div>
-                    </td>
-                    <td class="text-center ">
-                      <i class="icon-tick icon-font-11 text"></i>
-                    </td>
-                    <td class="text-center active">
-                      <i class="icon-tick icon-font-11"></i>
-                    </td>
-                    <td class="text-center ">
-                      <i class="icon-tick icon-font-11"></i>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <div class="d-flex align-items-center justify-content-between">
-                        <span>Hubdoc - capture bills <br /> and receipts</span>
-                        <i class="icon-info cp"
-                          [matTooltip]="'Manage bills, receipts and documents to automate and simplify daily admin.'"
-                          [matTooltipPosition]="'above'"></i>
-                      </div>
-                    </td>
-                    <td class="text-center ">
-                      <i class="icon-tick icon-font-11 text"></i>
-                    </td>
-                    <td class="text-center active">
-                      <i class="icon-tick icon-font-11"></i>
-                    </td>
-                    <td class="text-center ">
-                      <i class="icon-tick icon-font-11"></i>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <div class="d-flex align-items-center justify-content-between">
-                        <span>Analytics - track cash <br /> flow</span>
-                        <i class="icon-info cp" [matTooltip]="'Business insights that help you make better decisions.'"
-                          [matTooltipPosition]="'above'"></i>
-                      </div>
-                    </td>
-                    <td class="text-center ">
-                      <i class="icon-tick icon-font-11 text"></i>
-                    </td>
-                    <td class="text-center active">
-                      <i class="icon-tick icon-font-11"></i>
-                    </td>
-                    <td class="text-center ">
-                      <i class="icon-tick icon-font-11"></i>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <div class="d-flex align-items-center justify-content-between">
-                        <span>Add as many invited <br /> users as you need</span>
-                        <i class="icon-info cp"
-                          [matTooltip]="'Invite as many advisors, administrators, etc., as you need to work with you on your Xero organisation.'"
-                          [matTooltipPosition]="'above'"></i>
-                      </div>
-                    </td>
-                    <td class="text-center ">
-                      <i class="icon-tick icon-font-11 text"></i>
-                    </td>
-                    <td class="text-center active">
-                      <i class="icon-tick icon-font-11"></i>
-                    </td>
-                    <td class="text-center ">
-                      <i class="icon-tick icon-font-11"></i>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <div class="d-flex align-items-center justify-content-between">
-                        <span>Add as many invited <br /> users as you need</span>
-                        <i class="icon-info cp"
-                          [matTooltip]="'Invite as many advisors, administrators, etc., as you need to work with you on your Xero organisation.'"
-                          [matTooltipPosition]="'above'"></i>
-                      </div>
-                    </td>
-                    <td class="text-center ">
-                      <i class="icon-tick icon-font-11 text"></i>
-                    </td>
-                    <td class="text-center active">
-                      -
-                    </td>
-                    <td class="text-center ">
-                      -
-                    </td>
-                  </tr>
-                </table>
+                      </th>
+                      <td mat-cell *matCellDef="let element" class="text-center"> 
+                        <div class="d-flex column-gap15 align-items-center justify-content-center">
+                          <span>20 invoices</span>
+                          <i class="icon-info cp"
+                            [matTooltip]="'Upgrade your plan at any time to send more than 20 invoices'"
+                            [matTooltipPosition]="'above'"></i>
+                        </div>  
+                      </td>
+                    </ng-container>
+                
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                  </table>
+                </div>
               </div>
             </div>
             <ng-container *ngTemplateOutlet="planSummary"></ng-container>
