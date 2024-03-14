@@ -2788,11 +2788,19 @@ update-ledger-entry-panel .ledger-main .mat-form-field {
     .mdc-snackbar__surface{
         background-color: var(--color-warning-toast) !important;
     }
+
 }
 .mat-mdc-snack-bar-container.info {
     .mdc-snackbar__surface{
         background-color: var(--color-warning-toast) !important;
+        .mdc-snackbar__label{
+            color: var(--color-common-primary-text) !important;
+        }
+        .snack-close-button {
+            color: var(--color-common-primary-text) !important;
+        }
     }
+
 }
 .mat-form-field-appearance-fill .mat-form-field-flex,
 .mat-form-field-ripple,
@@ -2975,7 +2983,7 @@ td.mat-footer-cell {
     }
     &.info {
         .snack-container {
-            background-image: url("../images/info-white.svg");
+            background-image: url("../images/info-black.svg");
             background-position-y: center;
         }
     }
