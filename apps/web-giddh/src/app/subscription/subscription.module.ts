@@ -28,6 +28,7 @@ import { BuyPlanComponent } from './buy-plan/buy-plan.component';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatRadioModule } from '@angular/material/radio';
 import { ActivateDialogComponent } from './activate-dialog/activate-dialog.component';
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
 
 @NgModule({
     imports: [
@@ -54,7 +55,8 @@ import { ActivateDialogComponent } from './activate-dialog/activate-dialog.compo
         NewConfirmationModalModule,
         MatCardModule,
         MatStepperModule,
-        MatRadioModule
+        MatRadioModule,
+        MatButtonToggleModule
     ],
     exports: [
     ],

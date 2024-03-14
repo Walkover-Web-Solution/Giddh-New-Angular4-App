@@ -12,13 +12,11 @@
                 <div class="d-flex column-gap15">
                   <button mat-stroked-button color="primary" class="w-100" (click)="activateDialog()">Activate Via
                     Key</button>
-                  <div class="custom-tab w-100 d-flex">
-                    <button mat-button class="active">
-                      Monthly
-                    </button>
-                    <button mat-button>
-                      Yearly
-                    </button>
+                  <div class="custom-tab w-100">
+                    <mat-button-toggle-group aria-label="Font Style">
+                      <mat-button-toggle value="bold">Monthly</mat-button-toggle>
+                      <mat-button-toggle value="italic">Yearly</mat-button-toggle>
+                    </mat-button-toggle-group>
                   </div>
                 </div>
               </div>
