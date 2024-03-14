@@ -714,7 +714,7 @@
                                                 *ngIf="!isEinvoiceGenerated && !isCashInvoice"
                                                 [matMenuTriggerFor]="shippingAddress"
                                                 class="icon-edit text-blue cursor-pointer pl-2 font-12"
-                                                aria-label="edit"
+                                                aria-label="edit icon"
                                                 role="button"
                                             ></i>
                                             <mat-menu #shippingAddress="matMenu">
@@ -836,6 +836,7 @@
                                                         mat-menu-item
                                                         class="vouchers-add-new"
                                                         (click)="getCustomerDetails()"
+                                                        aria-label="new address"
                                                     >
                                                         {{ localeData?.add_new_address }}
                                                     </button>
@@ -1204,6 +1205,7 @@
                                                 [matMenuTriggerFor]="shippingAddress"
                                                 class="icon-edit text-blue cursor-pointer pl-2 font-12"
                                                 role="button"
+                                                aria-label="edit icon"
                                             ></i>
                                             <mat-menu #shippingAddress="matMenu">
                                                 <div class="mat-menu-width-large vouchers-address-menu">
