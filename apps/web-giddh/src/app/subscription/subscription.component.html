@@ -1,0 +1,125 @@
+<ng-container
+    appTranslate
+    [file]="'subscription'"
+    (commonLocaleData)="commonLocaleData = $event"
+    (localeData)="localeData = $event"
+    (translationComplete)="translationComplete($event)"
+>
+    <hamburger-menu class="hamburger-menu"></hamburger-menu>
+    <div class="subscription-container pd-15">
+        <div class="button-wrapper d-flex justify-content-end w-100 pd-l1 pd-r1 pd-t1">
+            <button mat-stroked-button class="min160 mr-l1" color="primary" (click)="subscriptionAdd()">+ Add Susbcription</button>
+        </div>
+        <div *ngIf="isLoading">
+            <giddh-page-loader></giddh-page-loader>
+        </div>
+        <div *ngIf="!isLoading">
+            <table
+                mat-table
+                [dataSource]="dataSource"
+                multiTemplateDataRows
+                *ngIf="dataSource?.length"
+                class="giddh-table table"
+            >
+                <ng-container matColumnDef="name">
+                    <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_name }}</th>
+                    <td class="subscription-td" mat-cell *matCellDef="let element">
+                         {{ element.name }}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="count">
+                    <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_count }}</th>
+                    <td
+                        class="subscription-td cursor-pointer"
+                        mat-cell
+                        *matCellDef="let element"
+                        (click)="getCompanyList($event, element)"
+                    >
+                        <strong class="subscription-name"> {{ element.count }}</strong>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="billingAccount">
+                    <th mat-header-cell *matHeaderCellDef>Billing Account</th>
+                    <td class="subscription-td" mat-cell *matCellDef="let element">
+                        {{ element.billingAccount }}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="subscriber">
+                    <th mat-header-cell *matHeaderCellDef>Subscriber</th>
+                    <td class="subscription-td" mat-cell *matCellDef="let element">
+                        {{ element.subscriber }}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="country">
+                    <th mat-header-cell *matHeaderCellDef>Country</th>
+                    <td class="subscription-td" mat-cell *matCellDef="let element">
+                        {{ element.country }}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="planSubName">
+                    <th mat-header-cell *matHeaderCellDef>Plan Sub Name</th>
+                    <td
+                        mat-cell
+                        *matCellDef="let element"
+                        class="position-relative"
+                        [matTooltip]="element?.subscriptionId"
+                        [matTooltipPosition]="'above'"
+                        matTooltipClass="tooltip-black"
+                    >
+                        {{ element.planSubName }}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="status">
+                    <th mat-header-cell *matHeaderCellDef>Status</th>
+                    <td mat-cell *matCellDef="let element" class="position-relative">
+                        <span [ngClass]="{ 'text-success': element.status === 'active' }">{{ element.status }}</span>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="monthYearly">
+                    <th mat-header-cell *matHeaderCellDef>Monthly / Yearly</th>
+                    <td mat-cell *matCellDef="let element" class="position-relative">
+                        {{ element.monthYearly }}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="renewalDate">
+                    <th mat-header-cell *matHeaderCellDef>Renewal Date</th>
+                    <td mat-cell *matCellDef="let element" class="position-relative word-wrap">
+                        <div class="d-flex align-items-center">
+                            {{ element.renewalDate }}
+                            <button
+                                mat-icon-button
+                                id="edit-model-basic"
+                                class="table-menu-first-td"
+                                [matMenuTriggerFor]="editModelBasic"
+                                #trigger="matMenuTrigger"
+                            >
+                                <span class="icon-dots-three-vertical"></span>
+                            </button>
+                        </div>
+                        <mat-menu #editModelBasic="matMenu">
+                            <div class="account-detail-custom-header">
+                                    <button mat-menu-item (click)="changePlan()">Change Plan</button>
+                                    <button mat-menu-item (click)="buyPlan()">Buy Plan</button>
+                                    <button mat-menu-item (click)="viewSubscription()">View Subscription</button>
+                                    <button mat-menu-item (click)="changeBilling()">Change Billing</button>
+                                    <button mat-menu-item (click)="transferSubscription()">Request Transfer</button>
+                                    <button mat-menu-item (click)="cancelSubscription()">Cancel</button>
+                                    <button mat-menu-item (click)="moveSubscription()">Move</button>
+                            </div>
+                        </mat-menu>
+                    </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+            </table>
+            <section class="no-logs" *ngIf="!dataSource?.length && !isLoading">
+                <div class="no-data">
+                    <h1>{{ localeData?.no_logs }}</h1>
+                </div>
+            </section>
+        </div>
+        <div class="pagination-wrapper justify-content-end">
+            <mat-paginator [length]="200" [pageSizeOptions]="[10, 50, 100]" aria-label="Select page"> </mat-paginator>
+        </div>
+    </div>
+</ng-container>

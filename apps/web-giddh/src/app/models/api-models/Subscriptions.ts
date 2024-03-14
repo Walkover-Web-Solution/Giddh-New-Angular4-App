@@ -1,3 +1,5 @@
+import { PAGINATION_LIMIT } from "../../app.constant";
+
 export interface SubscriptionPlan {
     amount: number;
     paymentFrequency: string;
@@ -34,7 +36,7 @@ export interface SubscriptionsUser {
     createdAt: string;
     status: string;
     remainingTransactions: number;
-    remainingDays?:number
+    remainingDays?: number
 }
 
 export class PlanDetails {
@@ -63,4 +65,17 @@ export class CompaniesWithTransaction {
     uniqueName: string;
     name: string;
     transactions: number;
+}
+
+export class SubscriptionReportRequest {
+    public totalItems?: number;
+    public totalPages?: number;
+    public count: number;
+    public page: number;
+    public sort: string;
+    public sortBy: string;
+    constructor() {
+        this.count = PAGINATION_LIMIT;
+        this.page = 1;
+    }
 }

@@ -1,0 +1,114 @@
+<!-- <ng-container
+    appTranslate
+    [file]="'subscription'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+> -->
+<hamburger-menu></hamburger-menu>
+<div id="main" class="welcome-outer pd-15">
+    <button mat-stroked-button class="mb-3">
+        <i class="icon-left back-left"></i>
+        Back
+    </button>
+    <mat-card class="outline-card change-billing-wrap">
+        <mat-card-content>
+            <div class="welcome-msg">
+                <p class="strong font-16 my-3">Hello Dilpreet Sing Dang !</p>
+            </div>
+            <div class="billing-details">
+                <h3 class="strong mb-3 light-gray my-3">Billing Details</h3>
+                <form [formGroup]="changeBillingForm">
+                    <div class="form-group">
+                        <input-field
+                            [type]="'text'"
+                            [name]="'billingName'"
+                            [label]="'Billing Name'"
+                            [placeholder]="'Billing Name'"
+                        >
+                        </input-field>
+                    </div>
+                    <div class="form-group">
+                        <input-field
+                            [type]="'text'"
+                            [name]="'companyName'"
+                            [label]="'Company Name'"
+                            formControlName="companyName"
+                            [placeholder]="'Company Name'"
+                        >
+                        </input-field>
+                    </div>
+                    <div class="form-group">
+                        <input-field
+                            [type]="'text'"
+                            [name]="'emailId'"
+                            [label]="'Email Id'"
+                            formControlName="emailId"
+                            [placeholder]="'Email Id'"
+                        >
+                        </input-field>
+                    </div>
+                    <div class="form-group">
+                        <input-field
+                            [type]="'number'"
+                            [name]="'pincode'"
+                            [label]="'Pincode'"
+                            formControlName="pincode"
+                            [placeholder]="'Pincode'"
+                        >
+                        </input-field>
+                    </div>
+                    <div class="form-group">
+                        <input-field
+                            [type]="'number'"
+                            [name]="'mobile'"
+                            [label]="'Mobile No'"
+                            formControlName="mobile"
+                            [placeholder]="'Enter Mobile No'"
+                        >
+                        </input-field>
+                    </div>
+                    <div class="form-group">
+                        <input-field
+                            [type]="'text'"
+                            [name]="'gstin'"
+                            [label]="'GST/TRN No'"
+                            formControlName="gstin"
+                            [placeholder]="'GST/TRN No'"
+                        >
+                        </input-field>
+                    </div>
+                    <div class="form-group">
+                        <div class="width-100">
+                            <dropdown-field
+                                [name]="'county'"
+                                [label]="'County' + '*'"
+                                [placeholder]="'Select County'"
+                                class="mb-3 d-block"
+                            >
+                            </dropdown-field>
+                            <dropdown-field 
+                                [name]="'state'" 
+                                [label]="'State' + '*'" 
+                                [placeholder]="'Select State'"
+                            >
+                            </dropdown-field>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <mat-form-field appearance="outline" class="w-100">
+                            <mat-label>Address</mat-label>
+                            <textarea matInput placeholder="Enter Address..."></textarea>
+                        </mat-form-field>
+                    </div>
+                    <div class="form-group">
+                        <div class="pt-2 d-flex column-gap15">
+                            <button mat-stroked-button color="primary">Submit</button>
+                            <button mat-stroked-button>Cancel</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</div>
+<!-- </ng-container> -->

@@ -1331,6 +1331,20 @@ table:focus {
         }
     }
 }
+
+.column-gap5 {
+    column-gap: 5px;
+}
+.column-gap1 {
+    column-gap: 10px;
+}
+.column-gap15 {
+    column-gap: 15px;
+}
+.column-gap2 {
+    column-gap: 20px;
+}
+
 .bulk-entry-list {
     .mat-expansion-panel {
         .mat-expansion-panel-header {
