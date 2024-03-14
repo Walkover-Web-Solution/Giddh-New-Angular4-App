@@ -330,7 +330,7 @@
                             &:hover {
                                 a {
                                     @include highlight-color(
-                                        var(--color-giddh-common-backgrounde),
+                                        var(--color-giddh-common-background),
                                         var(--color-white-tertiary)
                                     );
                                     &.active {
