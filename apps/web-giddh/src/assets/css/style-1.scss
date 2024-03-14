@@ -2791,7 +2791,7 @@ update-ledger-entry-panel .ledger-main .mat-form-field {
 }
 .mat-mdc-snack-bar-container.info {
     .mdc-snackbar__surface{
-        background-color: var(--color-info-toast) !important;
+        background-color: var(--color-warning-toast) !important;
     }
 }
 .mat-form-field-appearance-fill .mat-form-field-flex,
