@@ -1764,19 +1764,17 @@
                                     <table class="w-100">
                                         <thead>
                                             <tr>
-                                                <th *ngFor="let item of theadArrReadOnly" [hidden]="!item.display"
-                                                    class="thead-sales-invoice" [ngClass]="{ 'd-none' : 
-                                                        ((commonLocaleData?.app_quantity_unit === item?.label) || (commonLocaleData?.app_rate === item?.label)) 
-                                                        && !hasStock }"
-                                                    >
-                                                    {{ item?.label }}
-                                                    <span *ngIf="item.label === 'Tax' && isRcmEntry"
-                                                        >({{ commonLocaleData?.app_rcm }})<sup
-                                                            class="mandatory-asterisk"
-                                                            >*</sup
-                                                        ></span
-                                                    >
-                                                </th>
+                                                <ng-container *ngFor="let item of theadArrReadOnly">
+                                                    <th *ngIf="item.label !== commonLocaleData?.app_tax || (item.label === commonLocaleData?.app_tax && showHideTaxColumn)" [hidden]="!item.display" class="thead-sales-invoice" [ngClass]="{ 'd-none' :  ((commonLocaleData?.app_quantity_unit === item?.label) || (commonLocaleData?.app_rate === item?.label)) && !hasStock }">
+                                                        {{ item?.label }}
+                                                        <span *ngIf="item.label === commonLocaleData?.app_tax && isRcmEntry"
+                                                            >({{ commonLocaleData?.app_rcm }})<sup
+                                                                class="mandatory-asterisk"
+                                                                >*</sup
+                                                            ></span
+                                                        >
+                                                    </th>
+                                                </ng-container>
                                             </tr>
                                         </thead>
                                         <tbody
@@ -1863,19 +1861,15 @@
                                                     <div class="description">
                                                         {{ transaction.description }}
                                                     </div>
-                                                    <p
-                                                        class="font-14 text-muted sku-and-custom-fields"
-                                                        *ngIf="transaction.sku_and_customfields"
-                                                    >
+                                                     <p class="font-14 text-muted sku-and-custom-fields"
+                                                        *ngIf="transaction.sku_and_customfields">
                                                         {{ transaction.sku_and_customfields }}
                                                     </p>
                                                 </td>
-                                                <td
-                                                    width="10%"
-                                                    *ngIf="
+                                                <td width="10%" *ngIf="
                                                         !currentVoucherFormDetails ||
-                                                        currentVoucherFormDetails?.quantityAllowed" 
-                                                        [ngClass]="{ 'd-none' : !hasStock}">
+                                                        currentVoucherFormDetails?.quantityAllowed
+                                                    " [ngClass]="{ 'd-none' : !hasStock}">
                                                     <div class="wrap-td-data">
                                                         {{ transaction.quantity | giddhCurrency }}
                                                         {{ transaction.stockUnitCode }}
@@ -1883,8 +1877,8 @@
                                                 </td>
                                                 <td width="10%" *ngIf="
                                                         !currentVoucherFormDetails ||
-                                                        currentVoucherFormDetails?.rateAllowed" 
-                                                        [ngClass]="{ 'd-none' : !hasStock}">
+                                                        currentVoucherFormDetails?.rateAllowed
+                                                    " [ngClass]="{ 'd-none' : !hasStock}">
                                                     <div *ngIf="transaction.rate > 0 || transaction.isStockTxn">
                                                         <div class="td-wrapper flex-grow-1">
                                                             <div class="flex-grow-1">
@@ -2012,10 +2006,9 @@
                                                     </div>
                                                 </td>
                                                 <td [class.error-box]="transaction.requiredTax" [width]="hasStock ? '10%' : '14%'"
-                                                    (focus)="transaction.requiredTax = false" 
-                                                    *ngIf="
-                                                        !currentVoucherFormDetails ||
-                                                        currentVoucherFormDetails?.taxesAllowed
+                                                    (focus)="transaction.requiredTax = false" *ngIf="
+                                                        (!currentVoucherFormDetails ||
+                                                        currentVoucherFormDetails?.taxesAllowed) && this.showHideTaxColumn
                                                     "
                                                 >
                                                     <div class="td-wrapper">
@@ -2402,6 +2395,7 @@
                                                                                 </mat-radio-button>
                                                                             </mat-radio-group>
                                                                             <text-field 
+                                                                                [id]="'transaction'"
                                                                                 [type]="'text'"
                                                                                 [cssClass]="'form-control hsn-sac-code'"
                                                                                 maxLength="10"
@@ -2413,9 +2407,9 @@
                                                                                 *ngIf="
                                                                                     transaction.showCodeType === 'hsn'
                                                                                 " [(ngModel)]="transaction.hsnNumber"
-                                                                                [readonly]="isEinvoiceGenerated">
-                                                                            </text-field>
+                                                                                [readonly]="isEinvoiceGenerated"></text-field>
                                                                             <text-field 
+                                                                                [id]="'transaction'"
                                                                                 [type]="'text'"
                                                                                 [cssClass]="'form-control hsn-sac-code'"
                                                                                 maxLength="10"
@@ -2501,60 +2495,40 @@
                                                             [placeholder]="commonLocaleData?.app_quantity"
                                                             [readonly]="!transaction.isStockTxn || isEinvoiceGenerated"
                                                             [type]="'text'"
-                                                            [cssClass]="
-                                                                'form-control mat-field-border text-right stock1'
-                                                            "
+                                                            [cssClass]="'form-control mat-field-border text-right stock1'"
                                                             [name]="'transaction.quantity_' + entryIdx"
-                                                            [mask]="inputMaskFormat"
-                                                            [useMask]="true"
+                                                            [mask]="inputMaskFormat" [useMask]="true"
                                                             [(ngModel)]="transaction.quantity"
                                                             (change)="handleQuantityBlur(entry, transaction)"
-                                                            [allowDecimalDigitsOnly]="true"
-                                                        >
+                                                            [allowDecimalDigitsOnly]="true">
                                                         </text-field>
                                                         <div class="select-quantity">
-                                                            <mat-select
-                                                                class="form-control mt-2"
+                                                            <mat-select class="form-control mt-2"
                                                                 [placeholder]="commonLocaleData?.app_select"
-                                                                [disabled]="
-                                                                    !transaction.isStockTxn || isEinvoiceGenerated
-                                                                "
+                                                                [disabled]="!transaction.isStockTxn || isEinvoiceGenerated"
                                                                 (selectionChange)="
                                                                     onChangeUnit(entry, transaction, $event);
-                                                                    handlePriceCalculationOnUnitChange(
-                                                                        entry,
-                                                                        transaction
-                                                                    )
-                                                                "
-                                                                [value]="transaction.stockUnit"
+                                                                    handlePriceCalculationOnUnitChange(entry, transaction)
+                                                                " [value]="transaction.stockUnit"
                                                                 [(ngModel)]="transaction.stockUnit"
-                                                                [name]="'transaction.stockUnit_' + entryIdx"
-                                                            >
+                                                                [name]="'transaction.stockUnit_' + entryIdx">
                                                                 <div class="select-quantity-option">
-                                                                    <mat-option
-                                                                        *ngFor="let stock of transaction.stockList"
-                                                                        [value]="stock.id"
-                                                                    >
+                                                                    <mat-option *ngFor="let stock of transaction.stockList"
+                                                                        [value]="stock.id">
                                                                         {{ stock.text }}
                                                                     </mat-option>
                                                                 </div>
                                                             </mat-select>
                                                         </div>
-                                                    </ng-container>
+                                                </ng-container>
                                                 </td>
-                                                <td
-                                                    (click)="closeDiscountPopup(); closeTaxControlPopup()"
-                                                    width="10%"
-                                                    [ngClass]="{ 'd-none': !hasStock }"
+                                                <td (click)="closeDiscountPopup(); closeTaxControlPopup()" width="10%" [ngClass]="{ 'd-none' : !hasStock}"
+                                                   
                                                     *ngIf="
-                                                        !currentVoucherFormDetails ||
-                                                        currentVoucherFormDetails?.rateAllowed
-                                                    "
-                                                >
-                                                    <div
-                                                        class="td-wrapper"
-                                                        *ngIf="!(!transaction.isStockTxn || isEinvoiceGenerated)"
-                                                    >
+                                                        (!currentVoucherFormDetails ||
+                                                        currentVoucherFormDetails?.rateAllowed)
+                                                    ">
+                                                    <div class="td-wrapper" *ngIf="!(!transaction.isStockTxn || isEinvoiceGenerated)">
                                                         <div class="flex-fill">
                                                             <text-field
                                                                 [readonly]="
@@ -2596,10 +2570,8 @@
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <td
-                                                    (click)="closeDiscountPopup(); closeTaxControlPopup()"
-                                                    [width]="hasStock ? '10%' : '14%'"
-                                                >
+                                                <td (click)="closeDiscountPopup(); closeTaxControlPopup()" [width]="hasStock ? '10%' : '14%'"
+                                                   > 
                                                     <div class="td-wrapper">
                                                         <div class="flex-fill">
                                                             <text-field
@@ -2637,9 +2609,7 @@
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <td
-                                                    (click)="closeTaxControlPopup()"
-                                                    [width]="hasStock ? '9%' : '14%'"
+                                                <td (click)="closeTaxControlPopup()" [width]="hasStock ? '9%' : '14%'"
                                                     *ngIf="
                                                         !currentVoucherFormDetails ||
                                                         currentVoucherFormDetails?.discountAllowed
@@ -2695,11 +2665,8 @@
                                                     (click)="closeDiscountPopup()"
                                                     *ngIf="
                                                         (!currentVoucherFormDetails ||
-                                                            currentVoucherFormDetails?.taxesAllowed) &&
-                                                        this.showHideTaxColumn
-                                                    "
-                                                    [width]="hasStock ? '10%' : '14%'"
-                                                >
+                                                        currentVoucherFormDetails?.taxesAllowed) && this.showHideTaxColumn
+                                                    " [width]="hasStock ? '10%' : '14%'">
                                                     <div class="td-wrapper">
                                                         <div class="text-right flex-fill">
                                                             <tax-control
@@ -2743,11 +2710,9 @@
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <td
-                                                    class="position-relative item-tax"
-                                                    (click)="closeDiscountPopup(); closeTaxControlPopup()"
-                                                    width="16%"
-                                                >
+                                                <td class="position-relative item-tax"
+                                                   
+                                                    (click)="closeDiscountPopup(); closeTaxControlPopup()" width="16%">
                                                     <div class="td-wrapper">
                                                         <div class="flex-fill">
                                                             <text-field
