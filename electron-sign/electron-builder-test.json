@@ -48,6 +48,7 @@
         "target": [
             "nsis",
             "nsis-web",
+            "msiWrapped",
             "zip"
         ],
         "icon": "icon.ico",
@@ -63,6 +64,15 @@
         "shortcutName": "Giddh",
         "perMachine": true,
         "include": "./../../../electron-sign/installer.nsh"
+    },
+    "msiWrapped": {
+        "oneClick": true,
+        "createDesktopShortcut": true,
+        "createStartMenuShortcut": true,
+        "menuCategory": "Accounting",
+        "shortcutName": "Giddh",
+        "perMachine": true,
+        "wrappedInstallerArgs": "./../../../electron-sign/installer.nsh"
     },
     "asar": true
 }
