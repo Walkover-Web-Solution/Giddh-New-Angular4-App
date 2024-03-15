@@ -43,6 +43,9 @@
                                 span i {
                                     color: var(--color-white-tertiary) !important;
                                 }
+                                .unit-mapping-icon {
+                                    filter: var(--color-image-filter-white);
+                                }
                             }
                         }
                         .unit-mapping-icon {

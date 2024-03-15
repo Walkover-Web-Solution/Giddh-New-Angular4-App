@@ -698,6 +698,7 @@ body.dark-theme {
     --color-image-filter-quinary: invert(0.4);
     --color-image-filter-senary: invert(0%) sepia(100%) saturate(0%) hue-rotate(35deg) brightness(102%) contrast(102%);
     --color-caret-image: url("../../images/caret-dark.svg");
+    --color-image-filter-white: brightness(0) invert(1);
 
     /************************ COMMON COLORS USED MORE THAN 12 TIMES ************************/
     --color-blue: #668cff;
