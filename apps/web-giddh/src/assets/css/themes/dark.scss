@@ -698,6 +698,7 @@ body.dark-theme {
         contrast(100%);
     --color-image-filter-senary: invert(0%) sepia(100%) saturate(0%) hue-rotate(35deg) brightness(102%) contrast(102%);
     --color-caret-image: url("../../images/caret-dark.svg");
+    --color-image-filter-white: brightness(0) invert(1);
 
     /************************ COMMON COLORS USED MORE THAN 12 TIMES ************************/
     --color-blue: #668cff;
@@ -714,6 +715,7 @@ body.dark-theme {
     --color-iron: #9b9b9e;
     --color-black-russian: #212528;
     --color-gray: #cbcfd2;
+    --color-gray-dark: #f5f5f5;
     --color-abbey: #9b9b9e;
     --color-nero: #f5f5f5;
     --color-teal: #098757;
