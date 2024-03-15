@@ -1055,7 +1055,7 @@ textarea {
 .mat-calendar-body-cell {
     &.mat-calendar-body-active {
         .mat-calendar-body-selected {
-            color: var(--color-white) !important;
+            color: var(--color-list) !important;
             background-color: var(--color-primary-header-background);
         }
     }
