@@ -51,7 +51,7 @@
             "msiWrapped",
             "zip"
         ],
-        "icon": "icon.ico",
+        "icon": "./resources/icon.ico",
         "publisherName": "",
         "legalTrademarks": "",
         "signAndEditExecutable": false
