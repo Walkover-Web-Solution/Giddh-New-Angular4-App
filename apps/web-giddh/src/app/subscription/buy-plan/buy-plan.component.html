@@ -1,194 +1,391 @@
 <ng-container>
-  <hamburger-menu></hamburger-menu>
-  <div class="buy-plan-wrapper pd-15 w-100">
-    <mat-stepper linear #stepper>
-      <mat-step [stepControl]="firstStepForm">
-        <form name="firstStepForm" autocomplete="off" class="mt-5" novalidate>
-          <div class="plan-summary d-flex">
-            <div class="plan-width">
-              <ng-template matStepLabel>Plans</ng-template>
-              <div class="d-flex justify-content-between align-items-center mb-3">
-                <h4 class="font-16 strong">Choose Your Plan</h4>
-                <div class="d-flex column-gap15">
-                  <button mat-stroked-button color="primary" class="w-100" (click)="activateDialog()">Activate Via
-                    Key</button>
-                  <div class="custom-tab w-100">
-                    <mat-button-toggle-group aria-label="Font Style">
-                      <mat-button-toggle value="bold">Monthly</mat-button-toggle>
-                      <mat-button-toggle value="italic">Yearly</mat-button-toggle>
-                    </mat-button-toggle-group>
-                  </div>
-                </div>
-              </div>
-              <div class="new-plan">
-                <!-- material-table -->
-                <div class="plan-table-wrapper">
-                  <table mat-table [dataSource]="dataSource" class="plan-table">
+    <hamburger-menu></hamburger-menu>
+    <div class="buy-plan-wrapper pd-15 w-100">
+        <mat-stepper
+            linear
+            #stepper
+            [formGroup]="subscriptionForm"
+            name="companyForm"
+            [selectedIndex]="selectedStep"
+            (selectionChange)="onSelectedTab($event)"
+            [disableRipple]="firstStepForm.invalid"
+        >
+            <mat-step [stepControl]="firstStepForm">
+                <form name="firstStepForm" [formGroup]="firstStepForm" autocomplete="off" class="mt-5" novalidate>
+                    <div class="plan-summary d-flex">
+                        <div class="plan-width">
+                            <ng-template matStepLabel>Plans</ng-template>
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h4 class="font-16 strong">Choose Your Plan</h4>
+                                <div class="d-flex column-gap15">
+                                    <!-- <button mat-stroked-button color="primary" class="w-100" (click)="activateDialog()">
+                                        Activate Via Key
+                                    </button> -->
+                                    <div class="custom-tab w-100">
+                                        <mat-button-toggle-group aria-label="Font Style" formControlName="duration">
+                                            <mat-button-toggle value="MONTHLY">Monthly</mat-button-toggle>
+                                            <mat-button-toggle value="YEARLY">Yearly</mat-button-toggle>
+                                        </mat-button-toggle-group>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="new-plan">
+                                <giddh-page-loader *ngIf="planListInProgress$ | async"></giddh-page-loader>
+                                <!-- material-table -->
+                                <div class="plan-table-wrapper" *ngIf="!(planListInProgress$ | async)">
+                                    <table mat-table [dataSource]="dataSource" class="plan-table">
+                                        <ng-container
+                                            *ngFor="let plan of displayedColumns; let i = index"
+                                            [matColumnDef]="plan?.uniqueName"
+                                            [sticky]="plan?.uniqueName === 'content'"
+                                        >
+                                            <ng-container *ngIf="plan?.uniqueName === 'content'">
+                                                <th mat-header-cell *matHeaderCellDef>
+                                                    <div class="new-plan-wrapper">
+                                                        <div class="popular-txt"></div>
+                                                        <div class="plan-content">
+                                                            <h2 class="font-20 strong"></h2>
+                                                            <p class="font-12 my-3 feature-txt"></p>
+                                                        </div>
+                                                    </div>
+                                                </th>
+                                                <td mat-cell *matCellDef="let element; let rowIndex = index">
+                                                    <ng-container *ngIf="rowIndex === 0">
+                                                        <span>Invoices Count </span>
+                                                        <i
+                                                            class="icon-info cp"
+                                                            [matTooltip]="'Invoices'"
+                                                            [matTooltipPosition]="'above'"
+                                                        ></i>
+                                                    </ng-container>
+                                                    <ng-container *ngIf="rowIndex === 1">
+                                                        <span>Bills Count </span>
+                                                        <i
+                                                            class="icon-info cp"
+                                                            [matTooltip]="'Invoices'"
+                                                            [matTooltipPosition]="'above'"
+                                                        ></i>
+                                                    </ng-container>
+                                                    <ng-container *ngIf="rowIndex === 2">
+                                                        Accountant consultant
+                                                    </ng-container>
+                                                    <ng-container *ngIf="rowIndex === 3">
+                                                        Desktop and Mobile App
+                                                    </ng-container>
+                                                    <ng-container *ngIf="rowIndex === 4">
+                                                        Unlimited user access
+                                                    </ng-container>
+                                                    <ng-container *ngIf="rowIndex === 5">
+                                                        Import Previous Data
+                                                    </ng-container>
+                                                    <ng-container *ngIf="rowIndex === 6"> Security </ng-container>
+                                                </td>
+                                                <td mat-cell *matCellDef="let element">
+                                                    <div
+                                                        class="d-flex align-items-center justify-content-between column-gap2"
+                                                    >
+                                                        <span
+                                                            >Reconcile bank <br />
+                                                            transactions</span
+                                                        >
+                                                        <i
+                                                            class="icon-info cp"
+                                                            [matTooltip]="
+                                                                'Reconcile transactions to keep them in sync using Giddh software or the app.'
+                                                            "
+                                                            [matTooltipPosition]="'above'"
+                                                        ></i>
+                                                    </div>
+                                                </td>
+                                            </ng-container>
+                                            <ng-container *ngIf="plan?.uniqueName !== 'content'">
+                                                <th mat-header-cell *matHeaderCellDef>
+                                                    <div class="new-plan-wrapper">
+                                                        <div class="popular-txt"></div>
+                                                        <div class="plan-content">
+                                                            <h2 class="font-20 strong">{{ plan?.additional?.name }}</h2>
+                                                            <p class="font-12 my-3 feature-txt">
+                                                                Streamlined accounting tools plus <br />
+                                                                multi-currency for employing <br />
+                                                                businesses
+                                                            </p>
+                                                            <p
+                                                                *ngIf="
+                                                                    firstStepForm.get('duration')?.value === 'YEARLY'
+                                                                "
+                                                                class="mb-3"
+                                                            >
+                                                                <span class="strong"
+                                                                    >{{ plan?.additional?.currency?.code
+                                                                    }}{{ plan?.additional?.yearlyAmount }}</span
+                                                                >
+                                                                /yearly
+                                                            </p>
+                                                            <p
+                                                                *ngIf="
+                                                                    firstStepForm.get('duration')?.value === 'MONTHLY'
+                                                                "
+                                                                class="mb-3"
+                                                            >
+                                                                <span class="strong"
+                                                                    >{{ plan?.additional?.currency?.code
+                                                                    }}{{ plan?.additional?.monthlyAmount }}</span
+                                                                >
+                                                                /monthly
+                                                            </p>
+                                                            <button
+                                                                mat-stroked-button
+                                                                color="primary"
+                                                                class="w-100"
+                                                                [class.selected]="
+                                                                    firstStepForm.get('planUniqueName').value ===
+                                                                    plan?.uniqueName
+                                                                "
+                                                                (click)="selectPlan(plan, i)"
+                                                            >
+                                                                {{
+                                                                    firstStepForm.get("planUniqueName").value ===
+                                                                    plan.uniqueName
+                                                                        ? "Selected"
+                                                                        : "Select Plan"
+                                                                }}
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </th>
 
-                    <!-- Name Column -->
-                    <ng-container matColumnDef="name" sticky>
-                      <th mat-header-cell *matHeaderCellDef></th>
-                      <td mat-cell *matCellDef="let element">
-                        <div class="d-flex align-items-center justify-content-between column-gap2 ">
-                          <span>Reconcile bank <br /> transactions</span>
-                          <i class="icon-info cp"
-                            [matTooltip]="'Reconcile transactions to keep them in sync using Giddh software or the app.'"
-                            [matTooltipPosition]="'above'"></i>
+                                                <td
+                                                    mat-cell
+                                                    *matCellDef="let element; let rowIndex = index"
+                                                    class="text-center"
+                                                >
+                                                    <ng-container *ngIf="rowIndex === 0">
+                                                        {{ plan?.additional?.invoicesAllowed }}
+                                                    </ng-container>
+                                                    <ng-container *ngIf="rowIndex === 1">
+                                                        {{ plan?.additional?.billsAllowed }}
+                                                    </ng-container>
+                                                    <ng-container *ngIf="rowIndex === 2">
+                                                        <i class="icon-tick"></i>
+                                                    </ng-container>
+                                                    <ng-container *ngIf="rowIndex === 3">
+                                                        <i class="icon-tick"></i>
+                                                    </ng-container>
+                                                    <ng-container *ngIf="rowIndex === 4">
+                                                        <i class="icon-tick"></i>
+                                                    </ng-container>
+                                                    <ng-container *ngIf="rowIndex === 5">
+                                                        <i class="icon-tick"></i>
+                                                    </ng-container>
+                                                    <ng-container *ngIf="rowIndex === 6">
+                                                        <i class="icon-tick"></i>
+                                                    </ng-container>
+                                                </td>
+                                            </ng-container>
+                                        </ng-container>
+                                        <tr mat-header-row *matHeaderRowDef="getColumnNames()"></tr>
+                                        <tr mat-row *matRowDef="let row; columns: getColumnNames()"></tr>
+                                    </table>
+                                    <h2
+                                        class="mt-5 text-center text-gray"
+                                        *ngIf="!(planListInProgress$ | async) && dataSource?.data?.length === 0"
+                                    >
+                                        No data found
+                                    </h2>
+                                </div>
+                            </div>
                         </div>
-                      </td>
-                    </ng-container>
-                
-                    <!-- Premium Column -->
-                    <ng-container matColumnDef="premium">
-                      <th mat-header-cell *matHeaderCellDef> 
-                        <div class="new-plan-wrapper">
-                          <div class="popular-txt">
-                          </div>
-                          <div class="plan-content">
-                            <h2 class="font-20 strong">Premium</h2>
-                            <p class="font-12 my-3 feature-txt">Streamlined accounting tools plus <br /> multi-currency
-                              for employing <br />
-                              businesses</p>
-                            <p class="mb-3"><span class="strong">$62</span> /month</p>
-                            <button mat-stroked-button color="primary" class="w-100">Select Plan</button>
-                            <!-- <button mat-stroked-button color="primary" class="w-100">Selected</button> -->
-                          </div>
-                        </div>
-                      </th>
-                      <td mat-cell *matCellDef="let element" class="text-center">
-                        <i class="icon-tick icon-font-11 text"></i>
-                      </td>
-                    </ng-container>
-                
-                    <!-- Popular Column -->
-                    <ng-container matColumnDef="popular">
-                      <th mat-header-cell *matHeaderCellDef class="active"> 
-                        <div class="new-plan-wrapper">
-                          <div class="popular-txt">
-                            <span class="text-center d-block font-12">Most Popular</span>
-                          </div>
-                          <div class="plan-content">
-                            <h2 class="font-20 strong">Standard</h2>
-                            <p class="font-12 my-3 feature-txt">Streamlined accounting tools to <br /> help automate admin
-                            </p>
-                            <p class="mb-3"><span class="strong">$62</span> /month</p>
-                            <button mat-stroked-button color="primary" class="w-100">Select Plan</button>
-                            <!-- <button mat-stroked-button color="primary" class="w-100">Selected</button> -->
-                          </div>
-                        </div>
-                      </th>
-                      <td mat-cell *matCellDef="let element" class="text-center active"> 
-                        <i class="icon-tick icon-font-11 text"></i>
-                      </td>
-                    </ng-container>
-                
-                    <!-- Symbol Column -->
-                    <ng-container matColumnDef="starter">
-                      <th mat-header-cell *matHeaderCellDef> 
-                        <div class="new-plan-wrapper">
-                          <div class="popular-txt">
-                          </div>
-                          <div class="plan-content">
-                            <h2 class="font-20 strong">Starter</h2>
-                            <p class="font-12 my-3 feature-txt">Basic accounting tools for the self-<br />employed to help
-                              simplify admin</p>
-                            <p class="mb-3"><span class="strong">$62</span> /month</p>
-                            <button mat-stroked-button color="primary" class="w-100">Select Plan</button>
-                            <!-- <button mat-stroked-button color="primary" class="w-100">Selected</button> -->
-                          </div>
-                        </div>
-                      </th>
-                      <td mat-cell *matCellDef="let element" class="text-center"> 
-                        <div class="d-flex column-gap15 align-items-center justify-content-center">
-                          <span>20 invoices</span>
-                          <i class="icon-info cp"
-                            [matTooltip]="'Upgrade your plan at any time to send more than 20 invoices'"
-                            [matTooltipPosition]="'above'"></i>
-                        </div>  
-                      </td>
-                    </ng-container>
-                
-                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-                  </table>
-                </div>
-              </div>
-            </div>
-            <ng-container *ngTemplateOutlet="planSummary"></ng-container>
-          </div>
-        </form>
-      </mat-step>
-      <mat-step [stepControl]="secondStepForm" name="secondStepForm">
-        <form autocomplete="off" class="mt-5" novalidate>
-          <div class="plan-summary d-flex">
-            <div class="plan-width">
-              <ng-template matStepLabel>Select billing account</ng-template>
-              <h4 class="font-16 strong d-flex align-items-center mb-3">Create a new billing account</h4>
-              <!-- remove back btn & max-width padding from change-billing component -->
-              <change-billing></change-billing>
-            </div>
-            <ng-container *ngTemplateOutlet="planSummary"></ng-container>
-          </div>
-        </form>
-      </mat-step>
-
-      <mat-step [stepControl]="thirdStepForm">
-        <form name="thirdStepForm" autocomplete="off" class="mt-5" novalidate>
-          <div class="plan-summary d-flex">
-            <div class="plan-width">
-              <ng-template matStepLabel>Review and pay</ng-template>
-              <h4 class="font-16 mb-3 strong d-flex align-items-center">Payment details</h4>
-              <div class="new-plan">
-                <mat-card class="outline-card">
-                  <mat-card-content>
-                    <h5 class="font-16 strong mb-3">Bill to</h5>
-                    <div class="payment-header border-bottom pb-3">
-                      <span class="light-gray font-14 strong d-block">trial</span>
-                      <p class="light-gray font-14">nisha@walkover.in</p>
-                      <p class="light-gray font-14">7225908084</p>
+                        <ng-container *ngTemplateOutlet="planSummary"></ng-container>
                     </div>
-                  </mat-card-content>
-                </mat-card>
-              </div>
-            </div>
-            <ng-container *ngTemplateOutlet="planSummary"></ng-container>
-          </div>
-        </form>
-      </mat-step>
-    </mat-stepper>
-  </div>
-
-  <!-- plan-summary -->
-  <ng-template #planSummary>
-    <div class="summary-wrapper">
-      <h4 class="font-16 mb-3 strong d-flex align-items-center">Plan Summary</h4>
-      <mat-card class="outline-card">
-        <mat-card-content>
-          <div class="d-flex justify-content-between border-bottom pb-3">
-            <span class="strong">Premium</span>
-            <span>62.00</span>
-          </div>
-          <div class="d-flex justify-content-between border-bottom py-3">
-            <p>Subtotal</p>
-            <span>62.00</span>
-          </div>
-          <div class="d-flex justify-content-between py-3">
-            <span class="strong">Monthly total</span>
-            <span class="strong">USD 62.00</span>
-          </div>
-          <div class="position-relative">
-            <input-field [name]="'code'" [placeholder]="'Promo code'"></input-field>
-            <button mat-button color="primary" class="apply-btn position-absolute">Apply</button>
-          </div>
-          <div class="mt-3">
-            <button mat-stroked-button color="primary" class="w-100">Continue to billing account</button>
-            <button mat-stroked-button color="primary" class="w-100">Continue to review & pay account</button>
-            <button mat-stroked-button color="primary" class="w-100">Confirm Purchase</button>
-            <button mat-stroked-button class="w-100 mt-2">Back to Plan</button>
-            <button mat-stroked-button class="w-100 mt-2">Back to billing account</button>
-          </div>
-        </mat-card-content>
-      </mat-card>
+                </form>
+            </mat-step>
+            <mat-step [stepControl]="secondStepForm" name="secondStepForm">
+                <form autocomplete="off" class="mt-5" novalidate [formGroup]="secondStepForm" name="secondStepForm">
+                    <div class="plan-summary d-flex">
+                        <div class="plan-width">
+                            <ng-template matStepLabel>Select billing account</ng-template>
+                            <h4 class="font-16 strong d-flex align-items-center mb-3">Create a new billing account</h4>
+                            <!-- remove back btn & max-width padding from change-billing component -->
+                            <mat-card class="outline-card change-billing-wrap">
+                                <mat-card-content>
+                                    <div class="billing-details">
+                                        <div class="form-group">
+                                            <input-field
+                                                [type]="'text'"
+                                                [name]="'billingName'"
+                                                [label]="'Billing Name'"
+                                                [placeholder]="'Billing Name'"
+                                                formControlName="billingName"
+                                            >
+                                            </input-field>
+                                        </div>
+                                        <div class="form-group">
+                                            <input-field
+                                                [type]="'text'"
+                                                [name]="'companyName'"
+                                                [label]="'Company Name'"
+                                                formControlName="companyName"
+                                                [placeholder]="'Company Name'"
+                                            >
+                                            </input-field>
+                                        </div>
+                                        <div class="form-group">
+                                            <input-field
+                                                [type]="'text'"
+                                                [name]="'email'"
+                                                [label]="'Email Id'"
+                                                formControlName="email"
+                                                [placeholder]="'Email Id'"
+                                            >
+                                            </input-field>
+                                        </div>
+                                        <div class="form-group">
+                                            <input-field
+                                                [type]="'number'"
+                                                [name]="'pincode'"
+                                                [label]="'Pincode'"
+                                                formControlName="pincode"
+                                                [placeholder]="'Pincode'"
+                                            >
+                                            </input-field>
+                                        </div>
+                                        <div class="form-group">
+                                            <input-field
+                                                [type]="'number'"
+                                                [name]="'mobileNumber'"
+                                                [label]="'Mobile No'"
+                                                formControlName="mobileNumber"
+                                                [placeholder]="'Enter Mobile No'"
+                                            >
+                                            </input-field>
+                                        </div>
+                                        <div class="form-group">
+                                            <input-field
+                                                [type]="'text'"
+                                                [name]="'gstin'"
+                                                [label]="'GST/TRN No'"
+                                                formControlName="taxNumber"
+                                                [placeholder]="'GST/TRN No'"
+                                            >
+                                            </input-field>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="width-100">
+                                                <dropdown-field
+                                                    [name]="'county'"
+                                                    [label]="'County' + '*'"
+                                                    [placeholder]="'Select County'"
+                                                    class="mb-3 d-block"
+                                                    [options]="countries"
+                                                    (selectedOption)="selectCountry($event)"
+                                                    [defaultValue]="selectedCountry"
+                                                    [showError]="
+                                                        isFormSubmitted && !firstStepForm.get('country')?.value
+                                                    "
+                                                >
+                                                </dropdown-field>
+                                                <dropdown-field
+                                                    [name]="'state'"
+                                                    [label]="'State' + '*'"
+                                                    [placeholder]="'Select State'"
+                                                >
+                                                </dropdown-field>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <mat-form-field appearance="outline" class="w-100">
+                                                <mat-label>Address</mat-label>
+                                                <textarea
+                                                    matInput
+                                                    placeholder="Enter Address..."
+                                                    formControlName="address"
+                                                ></textarea>
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="pt-2 d-flex column-gap15">
+                                                <button mat-stroked-button color="primary">Submit</button>
+                                                <button mat-stroked-button>Cancel</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </mat-card-content>
+                            </mat-card>
+                        </div>
+                        <ng-container *ngTemplateOutlet="planSummary"></ng-container>
+                    </div>
+                </form>
+            </mat-step>
+            <mat-step [stepControl]="thirdStepForm">
+                <form
+                    name="thirdStepForm"
+                    autocomplete="off"
+                    class="mt-5"
+                    novalidate
+                    [formGroup]="thirdStepForm"
+                    name="thirdStepForm"
+                >
+                    <div class="plan-summary d-flex">
+                        <div class="plan-width">
+                            <ng-template matStepLabel>Review and pay</ng-template>
+                            <h4 class="font-16 mb-3 strong d-flex align-items-center">Payment details</h4>
+                            <div class="new-plan">
+                                <mat-card class="outline-card">
+                                    <mat-card-content>
+                                        <h5 class="font-16 strong mb-3">Bill to</h5>
+                                        <div class="payment-header border-bottom pb-3">
+                                            <span class="light-gray font-14 strong d-block">trial</span>
+                                            <p class="light-gray font-14">nisha@walkover.in</p>
+                                            <p class="light-gray font-14">7225908084</p>
+                                        </div>
+                                    </mat-card-content>
+                                </mat-card>
+                            </div>
+                        </div>
+                        <ng-container *ngTemplateOutlet="planSummary"></ng-container>
+                    </div>
+                </form>
+            </mat-step>
+        </mat-stepper>
     </div>
-  </ng-template>
+
+    <!-- plan-summary -->
+    <ng-template #planSummary>
+        <div class="summary-wrapper">
+            <h4 class="font-16 mb-3 strong d-flex align-items-center">Plan Summary</h4>
+            <mat-card class="outline-card">
+                <mat-card-content>
+                    <div class="d-flex justify-content-between border-bottom pb-3">
+                        <span class="strong">Premium</span>
+                        <span>62.00</span>
+                    </div>
+                    <div class="d-flex justify-content-between border-bottom py-3">
+                        <p>Subtotal</p>
+                        <span>62.00</span>
+                    </div>
+                    <div class="d-flex justify-content-between py-3">
+                        <span class="strong">Monthly total</span>
+                        <span class="strong">USD 62.00</span>
+                    </div>
+                    <div class="position-relative">
+                        <input-field [name]="'code'" [placeholder]="'Promo code'"></input-field>
+                        <button mat-button color="primary" class="apply-btn position-absolute">Apply</button>
+                    </div>
+                    <div class="mt-3">
+                        <button mat-stroked-button color="primary" class="w-100" (click)="nextStepForm()">
+                            Continue to billing account
+                        </button>
+                        <button mat-stroked-button color="primary" class="w-100" (click)="nextStepForm()">
+                            Continue to review & pay account
+                        </button>
+                        <button mat-stroked-button color="primary" class="w-100">Confirm Purchase</button>
+                        <button mat-stroked-button class="w-100 mt-2" (click)="selectedStep = 0">Back to Plan</button>
+                        <button mat-stroked-button class="w-100 mt-2" (click)="selectedStep = 1">
+                            Back to billing account
+                        </button>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+        </div>
+    </ng-template>
 </ng-container>

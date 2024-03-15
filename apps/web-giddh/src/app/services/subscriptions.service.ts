@@ -5,7 +5,7 @@ import { HttpWrapperService } from './http-wrapper.service';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
-import { SUBSCRIPTIONS_API } from './apiurls/subscriptions.api';
+import { PLAN_API, SUBSCRIPTIONS_API } from './apiurls/subscriptions.api';
 import * as dayjs from 'dayjs';
 import { SubscriptionsUser } from '../models/api-models/Subscriptions';
 import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
@@ -75,4 +75,25 @@ export class SubscriptionsService {
                 return data;
             }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, '')));
     }
+
+    /**
+     * Get All Plans list
+     *
+     * @param {*} model
+     * @param {*} params
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof PlanService
+     */
+    public getAllPlans(params: any): Observable<BaseResponse<any, any>> {
+        return this.http.get(this.config.apiUrl + PLAN_API.GET_ALL_PLANS
+            ?.replace(':countryCode', encodeURIComponent(params.countryCode ?? ''))
+            ).pipe(map((res) => {
+                let data: BaseResponse<any, any> = res;
+                data.request = '';
+                data.queryString = {};
+                return data;
+            }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {})));
+    }
+
+
 }

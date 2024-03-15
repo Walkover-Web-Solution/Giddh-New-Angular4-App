@@ -76,6 +76,10 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         document.body?.classList?.add("subscription-page");
     }
 
+    public createSubscription(): void {
+        this.router.navigate(['/pages/subscription/buy-plan'])
+    }
+
     /**
     * This function will use for get log details
     *
@@ -134,9 +138,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
     public buyPlan(): void {
         this.router.navigate(['/pages/subscription/buy-plan']);
     }
-    public subscriptionAdd():void {
-        this.router.navigate(['/pages/new-company'])
-    }
+
     public changePlan(): void {
     }
 
