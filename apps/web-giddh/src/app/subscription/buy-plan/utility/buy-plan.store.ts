@@ -6,17 +6,27 @@ import { BaseResponse } from "../../../models/api-models/BaseResponse";
 import { SubscriptionsService } from "../../../services/subscriptions.service";
 import { ToasterService } from "../../../services/toaster.service";
 import { CommonService } from "../../../services/common.service";
+import { AppState } from "../../../store";
+import { Store } from "@ngrx/store";
 
 export interface BuyPlanState {
     planListInProgress: boolean;
-    planList: any;
-    countryData: any;
+    planList: any
+    createPlanSuccess: boolean;
+    createPlanInProgress: boolean;
+    applyPromoCodeSuccess: boolean;
+    applyPromoCodeInProgress: boolean;
+    promoCodeResponse: any
 }
 
 export const DEFAULT_PLAN_STATE: BuyPlanState = {
     planListInProgress: null,
     planList: [],
-    countryData: null,
+    createPlanSuccess: false,
+    createPlanInProgress: false,
+    applyPromoCodeSuccess: false,
+    applyPromoCodeInProgress: false,
+    promoCodeResponse: null
 };
 
 @Injectable()
@@ -24,11 +34,16 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
 
     constructor(private toasterService: ToasterService,
         private subscriptionService: SubscriptionsService,
+        private store: Store<AppState>,
         private commonService: CommonService) {
         super(DEFAULT_PLAN_STATE);
     }
 
-    public countryData$ = this.select((state) => state.countryData);
+    public companyProfile$: Observable<any> = this.select(this.store.select(state => state.settings.profile), (response) => response);
+    public activeCompany$: Observable<any> = this.select(this.store.select(state => state.session.activeCompany), (response) => response);
+    public onboardingForm$: Observable<any> = this.select(this.store.select(state => state.common.onboardingform), (response) => response);
+    public commonCountries$: Observable<any> = this.select(this.store.select(state => state.common.countries), (response) => response);
+    public generalState$: Observable<any> = this.select(this.store.select(state => state.general.states), (response) => response);
 
     /**
      * Get All Plans
@@ -49,7 +64,7 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
                                 });
                             } else {
                                 if (res.message) {
-                                    this.toasterService.showSnackBar('success',res.message);
+                                    this.toasterService.showSnackBar('success', res.message);
                                 }
                                 return this.patchState({
                                     planList: [],
@@ -58,7 +73,7 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
                             }
                         },
                         (error: any) => {
-                            this.toasterService.showSnackBar('error','Error');
+                            this.toasterService.showSnackBar('error', 'Error');
                             return this.patchState({
                                 planList: [],
                                 planListInProgress: false
@@ -71,20 +86,84 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
         );
     });
 
-    readonly getCountryStates = this.effect((data: Observable<string>) => {
+    /**
+ * Create Discount
+ *
+ * @memberof DiscountComponentStore
+ */
+    readonly createPlan = this.effect((data: Observable<any>) => {
         return data.pipe(
             switchMap((req) => {
-                return this.commonService.getCou(req).pipe(
+                this.patchState({ createPlanInProgress: true });
+                return this.subscriptionService.createPlan(req).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
-                            return this.patchState({
-                                countryData: res?.body ?? {}
-                            });
+                            if (res?.status === 'success') {
+                                this.toasterService.showSnackBar('success', 'Create Subscription Successfully');
+                                return this.patchState({
+                                    createPlanInProgress: false,
+                                    createPlanSuccess: true
+                                });
+                            } else {
+                                if (res.message) {
+                                    this.toasterService.showSnackBar('error', res.message);
+                                }
+                                return this.patchState({
+                                    createPlanInProgress: false,
+                                    createPlanSuccess: false
+                                });
+                            }
                         },
                         (error: any) => {
-                            this.toasterService.showSnackBar("error", error);
+                            this.toasterService.showSnackBar('error', 'Error');
+
                             return this.patchState({
-                                countryData: {}
+                                createPlanInProgress: false
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+
+    /**
+* Create Discount
+*
+* @memberof DiscountComponentStore
+*/
+    readonly applyPromocode = this.effect((data: Observable<any>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({ applyPromoCodeInProgress: true });
+                return this.subscriptionService.applyPromoCode(req).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res?.status === 'success') {
+                                this.toasterService.showSnackBar('success', 'Apply Promo Code Successfully');
+                                return this.patchState({
+                                    applyPromoCodeInProgress: false,
+                                    promoCodeResponse: res?.body ?? null,
+                                    applyPromoCodeSuccess: true
+                                });
+                            } else {
+                                if (res.message) {
+                                    this.toasterService.showSnackBar('error', res.message);
+                                }
+                                return this.patchState({
+                                    applyPromoCodeInProgress: false,
+                                    applyPromoCodeSuccess: false,
+                                    promoCodeResponse: null,
+                                });
+                            }
+                        },
+                        (error: any) => {
+                            this.toasterService.showSnackBar('error', 'Error');
+
+                            return this.patchState({
+                                applyPromoCodeInProgress: false
                             });
                         }
                     ),

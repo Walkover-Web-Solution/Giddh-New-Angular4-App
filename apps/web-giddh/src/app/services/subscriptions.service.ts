@@ -9,6 +9,7 @@ import { PLAN_API, SUBSCRIPTIONS_API } from './apiurls/subscriptions.api';
 import * as dayjs from 'dayjs';
 import { SubscriptionsUser } from '../models/api-models/Subscriptions';
 import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
+import { TaxSupportedCountries, TaxType } from '../app.constant';
 
 @Injectable()
 export class SubscriptionsService {
@@ -87,12 +88,42 @@ export class SubscriptionsService {
     public getAllPlans(params: any): Observable<BaseResponse<any, any>> {
         return this.http.get(this.config.apiUrl + PLAN_API.GET_ALL_PLANS
             ?.replace(':countryCode', encodeURIComponent(params.countryCode ?? ''))
-            ).pipe(map((res) => {
-                let data: BaseResponse<any, any> = res;
-                data.request = '';
-                data.queryString = {};
-                return data;
-            }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {})));
+        ).pipe(map((res) => {
+            let data: BaseResponse<any, any> = res;
+            data.request = '';
+            data.queryString = {};
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {})));
+    }
+
+    public showTaxTypeByCountry(countryCode: string, companyCountryCode: string): TaxType {
+        if (companyCountryCode === countryCode) {
+            if (countryCode === TaxSupportedCountries.IN) {
+                return TaxType.GST;
+            } else if (countryCode === TaxSupportedCountries.UAE) {
+                return TaxType.TRN;
+            } else if (countryCode === TaxSupportedCountries.UK) {
+                return TaxType.VAT;
+            }
+        } else {
+            return null;
+        }
+    }
+
+    public createPlan(model: any): Observable<BaseResponse<any, any>> {
+        return this.http.post(this.config.apiUrl + PLAN_API.CREATE_PLAN, model).pipe(map((res) => {
+            let data: BaseResponse<any, any> = res;
+            data.request = '';
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {})));
+    }
+
+    public applyPromoCode(model: any): Observable<BaseResponse<any, any>> {
+        return this.http.post(this.config.apiUrl + PLAN_API.APPLY_PROMOCODE, model).pipe(map((res) => {
+            let data: BaseResponse<any, any> = res;
+            data.request = '';
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {})));
     }
 
 

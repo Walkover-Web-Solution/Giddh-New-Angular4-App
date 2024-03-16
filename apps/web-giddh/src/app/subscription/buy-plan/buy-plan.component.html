@@ -1,5 +1,6 @@
 <ng-container>
     <hamburger-menu></hamburger-menu>
+
     <div class="buy-plan-wrapper pd-15 w-100">
         <mat-stepper
             linear
@@ -103,7 +104,9 @@
                                                     <div class="new-plan-wrapper">
                                                         <div class="popular-txt"></div>
                                                         <div class="plan-content">
-                                                            <h2 class="font-20 strong">{{ plan?.additional?.name }}</h2>
+                                                            <h2 class="font-20 strong">
+                                                                {{ plan?.additional?.name }}
+                                                            </h2>
                                                             <p class="font-12 my-3 feature-txt">
                                                                 Streamlined accounting tools plus <br />
                                                                 multi-currency for employing <br />
@@ -141,7 +144,7 @@
                                                                     firstStepForm.get('planUniqueName').value ===
                                                                     plan?.uniqueName
                                                                 "
-                                                                (click)="selectPlan(plan, i)"
+                                                                (click)="selectPlan(plan)"
                                                             >
                                                                 {{
                                                                     firstStepForm.get("planUniqueName").value ===
@@ -216,6 +219,9 @@
                                                 [label]="'Billing Name'"
                                                 [placeholder]="'Billing Name'"
                                                 formControlName="billingName"
+                                                [showError]="
+                                                    isFormSubmitted && !secondStepForm.get('billingName')?.value
+                                                "
                                             >
                                             </input-field>
                                         </div>
@@ -226,6 +232,9 @@
                                                 [label]="'Company Name'"
                                                 formControlName="companyName"
                                                 [placeholder]="'Company Name'"
+                                                [showError]="
+                                                    isFormSubmitted && !secondStepForm.get('companyName')?.value
+                                                "
                                             >
                                             </input-field>
                                         </div>
@@ -236,6 +245,7 @@
                                                 [label]="'Email Id'"
                                                 formControlName="email"
                                                 [placeholder]="'Email Id'"
+                                                [showError]="isFormSubmitted && !secondStepForm.get('email')?.value"
                                             >
                                             </input-field>
                                         </div>
@@ -250,24 +260,35 @@
                                             </input-field>
                                         </div>
                                         <div class="form-group">
-                                            <input-field
-                                                [type]="'number'"
-                                                [name]="'mobileNumber'"
-                                                [label]="'Mobile No'"
-                                                formControlName="mobileNumber"
-                                                [placeholder]="'Enter Mobile No'"
-                                            >
-                                            </input-field>
-                                        </div>
-                                        <div class="form-group">
-                                            <input-field
-                                                [type]="'text'"
-                                                [name]="'gstin'"
-                                                [label]="'GST/TRN No'"
-                                                formControlName="taxNumber"
-                                                [placeholder]="'GST/TRN No'"
-                                            >
-                                            </input-field>
+                                            <!-- Mobile Number -->
+                                            <div id="init-contact-wrapper" class="position-relative w-100">
+                                                <input
+                                                    type="tel"
+                                                    class="mat-form-field-border mat-form-field-height mobile-height"
+                                                    #initContact
+                                                    aria-autocomplete="none"
+                                                    autocomplete="off"
+                                                    (keypress)="
+                                                        intlClass?.onlyPhoneNumber($event); validateMobileField()
+                                                    "
+                                                    id="init-contact"
+                                                    placeholder="Mobile Number"
+                                                    formControlName="mobileNumber"
+                                                    [ngClass]="{
+                                                        'invalid-input':
+                                                            isFormSubmitted ||
+                                                            (secondStepForm.get('mobileNumber')?.touched &&
+                                                                !intlClass?.isRequiredValidNumber)
+                                                    }"
+                                                />
+                                                <mat-error
+                                                    *ngIf="
+                                                        secondStepForm.get('mobileNumber')?.touched &&
+                                                        !intlClass?.isRequiredValidNumber
+                                                    "
+                                                    >Please enter valid mobile number</mat-error
+                                                >
+                                            </div>
                                         </div>
                                         <div class="form-group">
                                             <div class="width-100">
@@ -276,18 +297,62 @@
                                                     [label]="'County' + '*'"
                                                     [placeholder]="'Select County'"
                                                     class="mb-3 d-block"
-                                                    [options]="countries"
+                                                    [options]="countrySource"
                                                     (selectedOption)="selectCountry($event)"
                                                     [defaultValue]="selectedCountry"
                                                     [showError]="
-                                                        isFormSubmitted && !firstStepForm.get('country')?.value
+                                                        isFormSubmitted && !secondStepForm.get('country')?.value
                                                     "
                                                 >
                                                 </dropdown-field>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <input-field
+                                                [name]="'taxNumber'"
+                                                [placeholder]="getEnterTaxText()"
+                                                [type]="'text'"
+                                                formControlName="taxNumber"
+                                                [showError]="
+                                                    (isFormSubmitted && !secondStepForm.get('taxNumber')?.value) ||
+                                                    !isGstinValid
+                                                "
+                                                [label]="
+                                                    formFields['taxName']?.label
+                                                        ? formFields['taxName']?.label
+                                                        : 'Tax Number'
+                                                "
+                                                [maxlength]="15"
+                                                (change)="validateGstNumber()"
+                                            >
+                                            </input-field>
+                                        </div>
+                                        <div class="form-group">
+                                            <div *ngIf="!countyList?.length">
                                                 <dropdown-field
                                                     [name]="'state'"
-                                                    [label]="'State' + '*'"
+                                                    [label]="'State'"
                                                     [placeholder]="'Select State'"
+                                                    [options]="states"
+                                                    [showError]="isFormSubmitted && !secondStepForm.get('state')?.value"
+                                                    [readonly]="disabledState"
+                                                    [defaultValue]="selectedState"
+                                                    (selectedOption)="selectState($event)"
+                                                    [ngClass]="{ 'readonly-field': disabledState }"
+                                                >
+                                                </dropdown-field>
+                                            </div>
+                                            <div *ngIf="countyList?.length">
+                                                <dropdown-field
+                                                    [name]="'county'"
+                                                    [label]="Region"
+                                                    [placeholder]="'Select Region'"
+                                                    [options]="countyList"
+                                                    [showError]="
+                                                        isFormSubmitted && !secondStepForm.get('county')?.value
+                                                    "
+                                                    [defaultValue]="secondStepForm.get('county')?.value?.label"
+                                                    (selectedOption)="secondStepForm.get('county')?.patchValue($event)"
                                                 >
                                                 </dropdown-field>
                                             </div>
@@ -301,12 +366,6 @@
                                                     formControlName="address"
                                                 ></textarea>
                                             </mat-form-field>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="pt-2 d-flex column-gap15">
-                                                <button mat-stroked-button color="primary">Submit</button>
-                                                <button mat-stroked-button>Cancel</button>
-                                            </div>
                                         </div>
                                     </div>
                                 </mat-card-content>
@@ -334,9 +393,15 @@
                                     <mat-card-content>
                                         <h5 class="font-16 strong mb-3">Bill to</h5>
                                         <div class="payment-header border-bottom pb-3">
-                                            <span class="light-gray font-14 strong d-block">trial</span>
-                                            <p class="light-gray font-14">nisha@walkover.in</p>
-                                            <p class="light-gray font-14">7225908084</p>
+                                            <span class="light-gray font-14 strong d-block">{{
+                                                secondStepForm.get("billingName")?.value
+                                            }}</span>
+                                            <p class="light-gray font-14">
+                                                {{ secondStepForm.get("email")?.value }}
+                                            </p>
+                                            <p class="light-gray font-14">
+                                                {{ secondStepForm.get("mobileNumber")?.value }}
+                                            </p>
                                         </div>
                                     </mat-card-content>
                                 </mat-card>
@@ -348,43 +413,144 @@
             </mat-step>
         </mat-stepper>
     </div>
-
     <!-- plan-summary -->
     <ng-template #planSummary>
         <div class="summary-wrapper">
             <h4 class="font-16 mb-3 strong d-flex align-items-center">Plan Summary</h4>
             <mat-card class="outline-card">
-                <mat-card-content>
-                    <div class="d-flex justify-content-between border-bottom pb-3">
-                        <span class="strong">Premium</span>
-                        <span>62.00</span>
-                    </div>
-                    <div class="d-flex justify-content-between border-bottom py-3">
-                        <p>Subtotal</p>
-                        <span>62.00</span>
-                    </div>
-                    <div class="d-flex justify-content-between py-3">
-                        <span class="strong">Monthly total</span>
-                        <span class="strong">USD 62.00</span>
-                    </div>
-                    <div class="position-relative">
-                        <input-field [name]="'code'" [placeholder]="'Promo code'"></input-field>
-                        <button mat-button color="primary" class="apply-btn position-absolute">Apply</button>
-                    </div>
-                    <div class="mt-3">
-                        <button mat-stroked-button color="primary" class="w-100" (click)="nextStepForm()">
-                            Continue to billing account
-                        </button>
-                        <button mat-stroked-button color="primary" class="w-100" (click)="nextStepForm()">
-                            Continue to review & pay account
-                        </button>
-                        <button mat-stroked-button color="primary" class="w-100">Confirm Purchase</button>
-                        <button mat-stroked-button class="w-100 mt-2" (click)="selectedStep = 0">Back to Plan</button>
-                        <button mat-stroked-button class="w-100 mt-2" (click)="selectedStep = 1">
-                            Back to billing account
-                        </button>
-                    </div>
-                </mat-card-content>
+                <form
+                    name="thirdStepForm"
+                    autocomplete="off"
+                    class="mt-5"
+                    novalidate
+                    [formGroup]="thirdStepForm"
+                    name="thirdStepForm"
+                >
+                    <mat-card-content>
+                        <div class="d-flex justify-content-between border-bottom pb-3">
+                            <span class="strong">{{ selectedPlan?.name }}</span>
+                            <span *ngIf="firstStepForm.get('duration')?.value === 'YEARLY'">
+                                <amount-field
+                                    [amount]="selectedPlan?.yearlyAmount"
+                                    [currencySymbol]="selectedPlan?.currency?.symbol"
+                                    [currencyCode]="false"
+                                >
+                                </amount-field>
+                            </span>
+                            <span *ngIf="firstStepForm.get('duration')?.value === 'MONTHLY'">
+                                <amount-field
+                                    [amount]="selectedPlan?.monthlyAmount"
+                                    [currencySymbol]="selectedPlan?.currency?.symbol"
+                                    [currencyCode]="selectedPlan?.currency?.code"
+                                >
+                                </amount-field>
+                            </span>
+                        </div>
+                        <div class="d-flex justify-content-between border-bottom py-3">
+                            <p>Subtotal</p>
+                            <span *ngIf="firstStepForm.get('duration')?.value === 'YEARLY'">
+                                <amount-field
+                                    [amount]="selectedPlan?.yearlyAmount"
+                                    [currencySymbol]="selectedPlan?.currency?.symbol"
+                                    [currencyCode]="selectedPlan?.currency?.code"
+                                >
+                                </amount-field>
+                            </span>
+                            <span *ngIf="firstStepForm.get('duration')?.value === 'MONTHLY'">
+                                <amount-field
+                                    [amount]="selectedPlan?.monthlyAmount"
+                                    [currencySymbol]="selectedPlan?.currency?.symbol"
+                                    [currencyCode]="selectedPlan?.currency?.code"
+                                >
+                                </amount-field>
+                            </span>
+                        </div>
+                        <div class="d-flex justify-content-between py-3">
+                            <span class="strong">
+                                <span *ngIf="firstStepForm.get('duration')?.value === 'YEARLY'">Yearly</span>
+                                <span *ngIf="firstStepForm.get('duration')?.value === 'MONTHLY'">Monthly</span>
+                                total</span
+                            >
+
+                            <span *ngIf="firstStepForm.get('duration')?.value === 'YEARLY'">
+                                <amount-field
+                                    [amount]="selectedPlan?.yearlyAmount"
+                                    [currencySymbol]="selectedPlan?.currency?.symbol"
+                                    [currencyCode]="selectedPlan?.currency?.code"
+                                >
+                                </amount-field>
+                            </span>
+                            <span *ngIf="firstStepForm.get('duration')?.value === 'MONTHLY'">
+                                <amount-field
+                                    [amount]="selectedPlan?.monthlyAmount"
+                                    [currencySymbol]="selectedPlan?.currency?.symbol"
+                                    [currencyCode]="selectedPlan?.currency?.code"
+                                >
+                                </amount-field>
+                            </span>
+                        </div>
+                        <div class="position-relative" *ngIf="firstStepForm.get('planUniqueName').value">
+                            <input-field
+                                [name]="'code'"
+                                formControlName="promoCode"
+                                [placeholder]="'Promo code'"
+                            ></input-field>
+                            <button
+                                mat-button
+                                color="primary"
+                                class="apply-btn position-absolute"
+                                (click)="applyPromoCode()"
+                            >
+                                Apply
+                            </button>
+                        </div>
+                        <div class="mt-3">
+                            <button
+                                mat-stroked-button
+                                color="primary"
+                                class="w-100"
+                                (click)="nextStepForm()"
+                                *ngIf="selectedStep === 0"
+                            >
+                                Continue to billing account
+                            </button>
+                            <button
+                                mat-stroked-button
+                                color="primary"
+                                class="w-100"
+                                (click)="nextStepForm()"
+                                *ngIf="selectedStep === 1"
+                            >
+                                Continue to review & pay account
+                            </button>
+                            <button
+                                mat-stroked-button
+                                color="primary"
+                                class="w-100"
+                                *ngIf="selectedStep === 2"
+                                (click)="onSubmit()"
+                            >
+                                Confirm Purchase
+                            </button>
+                            <button
+                                mat-stroked-button
+                                class="w-100 mt-2"
+                                (click)="selectedStep = 0"
+                                *ngIf="selectedStep === 1"
+                            >
+                                Back to Plan
+                            </button>
+                            <button
+                                mat-stroked-button
+                                class="w-100 mt-2"
+                                (click)="selectedStep = 1"
+                                *ngIf="selectedStep === 2"
+                            >
+                                Back to billing account
+                            </button>
+                        </div>
+                    </mat-card-content>
+                </form>
             </mat-card>
         </div>
     </ng-template>

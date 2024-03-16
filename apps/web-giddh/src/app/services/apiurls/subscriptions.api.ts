@@ -5,5 +5,7 @@ export const SUBSCRIPTIONS_API = {
     SUBSCRIBED_COMPANIES_LIST: 'subscriptions/:subscriptionId/companies',
 };
 export const PLAN_API = {
-    GET_ALL_PLANS: 'v2/subscription/plans/all?countryCode=:countryCode'
+    GET_ALL_PLANS: 'v2/subscription/plans/all?countryCode=:countryCode',
+    CREATE_PLAN: 'v2/subscription',
+    APPLY_PROMOCODE: 'v2/subscription/promocode'
 };

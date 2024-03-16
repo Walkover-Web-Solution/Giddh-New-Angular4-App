@@ -29,6 +29,7 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MatRadioModule } from '@angular/material/radio';
 import { ActivateDialogComponent } from './activate-dialog/activate-dialog.component';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
+import { AmountFieldComponentModule } from '../shared/amount-field/amount-field.module';
 
 @NgModule({
     imports: [
@@ -56,7 +57,8 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
         MatCardModule,
         MatStepperModule,
         MatRadioModule,
-        MatButtonToggleModule
+        MatButtonToggleModule,
+        AmountFieldComponentModule
     ],
     exports: [
     ],
