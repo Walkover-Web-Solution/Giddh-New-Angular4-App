@@ -7,119 +7,281 @@
 >
     <hamburger-menu class="hamburger-menu"></hamburger-menu>
     <div class="subscription-container pd-15">
-        <div class="button-wrapper d-flex justify-content-end w-100 pd-l1 pd-r1 pd-t1">
-            <button mat-stroked-button class="min160 mr-l1" color="primary" (click)="createSubscription()">+ Add Susbcription</button>
+        <div class="button-wrapper d-flex w-100 pd-l1 justify-content-between pd-r1 pd-t1">
+            <button mat-stroked-button class="min160 mr-l1" color="primary" (click)="clearFilter()">
+                + Clear Filter
+            </button>
+            <button mat-stroked-button class="min160 mr-l1" color="primary" (click)="createSubscription()">
+                + Add Susbcription
+            </button>
         </div>
-        <div *ngIf="isLoading">
+        <div *ngIf="subscriptionListInProgress$ | async">
             <giddh-page-loader></giddh-page-loader>
         </div>
-        <div *ngIf="!isLoading">
-            <table
-                mat-table
-                [dataSource]="dataSource"
-                multiTemplateDataRows
-                *ngIf="dataSource?.length"
-                class="giddh-table table"
+        <section *ngIf="shouldShowElement">
+            <form
+                class="table-responsive"
+                name="subscriptionListForm"
+                [formGroup]="subscriptionListForm"
+                novalidate=""
+                autocomplete="off"
             >
-                <ng-container matColumnDef="name">
-                    <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_name }}</th>
-                    <td class="subscription-td" mat-cell *matCellDef="let element">
-                         {{ element.name }}
-                    </td>
-                </ng-container>
-                <ng-container matColumnDef="count">
-                    <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_count }}</th>
-                    <td
-                        class="subscription-td cursor-pointer"
-                        mat-cell
-                        *matCellDef="let element"
-                        (click)="getCompanyList($event, element)"
-                    >
-                        <strong class="subscription-name"> {{ element.count }}</strong>
-                    </td>
-                </ng-container>
-                <ng-container matColumnDef="billingAccount">
-                    <th mat-header-cell *matHeaderCellDef>Billing Account</th>
-                    <td class="subscription-td" mat-cell *matCellDef="let element">
-                        {{ element.billingAccount }}
-                    </td>
-                </ng-container>
-                <ng-container matColumnDef="subscriber">
-                    <th mat-header-cell *matHeaderCellDef>Subscriber</th>
-                    <td class="subscription-td" mat-cell *matCellDef="let element">
-                        {{ element.subscriber }}
-                    </td>
-                </ng-container>
-                <ng-container matColumnDef="country">
-                    <th mat-header-cell *matHeaderCellDef>Country</th>
-                    <td class="subscription-td" mat-cell *matCellDef="let element">
-                        {{ element.country }}
-                    </td>
-                </ng-container>
-                <ng-container matColumnDef="planSubName">
-                    <th mat-header-cell *matHeaderCellDef>Plan Sub Name</th>
-                    <td
-                        mat-cell
-                        *matCellDef="let element"
-                        class="position-relative"
-                        [matTooltip]="element?.subscriptionId"
-                        [matTooltipPosition]="'above'"
-                        matTooltipClass="tooltip-black"
-                    >
-                        {{ element.planSubName }}
-                    </td>
-                </ng-container>
-                <ng-container matColumnDef="status">
-                    <th mat-header-cell *matHeaderCellDef>Status</th>
-                    <td mat-cell *matCellDef="let element" class="position-relative">
-                        <span [ngClass]="{ 'text-success': element.status === 'active' }">{{ element.status }}</span>
-                    </td>
-                </ng-container>
-                <ng-container matColumnDef="monthYearly">
-                    <th mat-header-cell *matHeaderCellDef>Monthly / Yearly</th>
-                    <td mat-cell *matCellDef="let element" class="position-relative">
-                        {{ element.monthYearly }}
-                    </td>
-                </ng-container>
-                <ng-container matColumnDef="renewalDate">
-                    <th mat-header-cell *matHeaderCellDef>Renewal Date</th>
-                    <td mat-cell *matCellDef="let element" class="position-relative word-wrap">
-                        <div class="d-flex align-items-center">
-                            {{ element.renewalDate }}
-                            <button
-                                mat-icon-button
-                                id="edit-model-basic"
-                                class="table-menu-first-td"
-                                [matMenuTriggerFor]="editModelBasic"
-                                #trigger="matMenuTrigger"
+                <table mat-table [dataSource]="dataSource" multiTemplateDataRows class="w-100">
+                    <ng-container matColumnDef="name">
+                        <th
+                            mat-header-cell
+                            *matHeaderCellDef
+                            class="td-search-box"
+                            #searchNameContainer
+                            (clickOutside)="handleClickOutside($event, searchNameContainer, 'Name')"
+                        >
+                            <ng-container
+                                *ngTemplateOutlet="
+                                    searchTemplate;
+                                    context: {
+                                        $implicit: showName,
+                                        fieldName: 'Name',
+                                        formControl: subscriptionListForm.controls['name'],
+                                        title: 'Name'
+                                    }
+                                "
+                            ></ng-container>
+                        </th>
+                        <td class="subscription-td cursor-pointer" mat-cell *matCellDef="let element">
+                            <span
+                                *ngIf="element?.companiesList?.length && element?.companiesList?.length > 1"
+                                (click)="getCompanyList($event, element)"
+                                >{{ element?.companiesList?.length }}</span
                             >
-                                <span class="icon-dots-three-vertical"></span>
-                            </button>
-                        </div>
-                        <mat-menu #editModelBasic="matMenu">
-                            <div class="account-detail-custom-header">
-                                    <button mat-menu-item (click)="changePlan()">Change Plan</button>
-                                    <button mat-menu-item (click)="buyPlan()">Buy Plan</button>
-                                    <button mat-menu-item (click)="viewSubscription()">View Subscription</button>
-                                    <button mat-menu-item (click)="changeBilling()">Change Billing</button>
-                                    <button mat-menu-item (click)="transferSubscription()">Request Transfer</button>
-                                    <button mat-menu-item (click)="cancelSubscription()">Cancel</button>
-                                    <button mat-menu-item (click)="moveSubscription()">Move</button>
+                            <span *ngIf="element?.companiesList?.length && element?.companiesList?.length < 1">{{
+                                element?.companiesList[0]?.name
+                            }}</span>
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="billingAccount">
+                        <th
+                            mat-header-cell
+                            *matHeaderCellDef
+                            class="td-search-box"
+                            #searchBillingAccountContainer
+                            (clickOutside)="
+                                handleClickOutside($event, searchBillingAccountContainer, 'Billing Account')
+                            "
+                        >
+                            <ng-container
+                                *ngTemplateOutlet="
+                                    searchTemplate;
+                                    context: {
+                                        $implicit: showBillingAccount,
+                                        fieldName: 'Billing Account',
+                                        formControl: subscriptionListForm.controls['billingAccount'],
+                                        title: 'Billing Account'
+                                    }
+                                "
+                            ></ng-container>
+                        </th>
+                        <td class="subscription-td" mat-cell *matCellDef="let element">
+                            {{ element.billingAccount }}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="subscriber">
+                        <th
+                            mat-header-cell
+                            *matHeaderCellDef
+                            class="td-search-box"
+                            #searchSubscriberContainer
+                            (clickOutside)="handleClickOutside($event, searchSubscriberContainer, 'Subscriber')"
+                        >
+                            <ng-container
+                                *ngTemplateOutlet="
+                                    searchTemplate;
+                                    context: {
+                                        $implicit: showSubscriber,
+                                        fieldName: 'Subscriber',
+                                        formControl: subscriptionListForm.controls['subscriber'],
+                                        title: 'Subscriber'
+                                    }
+                                "
+                            ></ng-container>
+                        </th>
+                        <td class="subscription-td" mat-cell *matCellDef="let element">
+                            {{ element.subscriber }}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="country">
+                        <th
+                            mat-header-cell
+                            *matHeaderCellDef
+                            class="td-search-box"
+                            #searchCountryContainer
+                            (clickOutside)="handleClickOutside($event, searchCountryContainer, 'Country')"
+                        >
+                            <ng-container
+                                *ngTemplateOutlet="
+                                    searchTemplate;
+                                    context: {
+                                        $implicit: showCountry,
+                                        fieldName: 'Country',
+                                        formControl: subscriptionListForm.controls['country'],
+                                        title: 'Country'
+                                    }
+                                "
+                            ></ng-container>
+                        </th>
+                        <td class="subscription-td" mat-cell *matCellDef="let element">
+                            {{ element.country?.countryName ? element.country?.countryName : "-" }}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="planSubName">
+                        <th
+                            mat-header-cell
+                            *matHeaderCellDef
+                            class="td-search-box"
+                            #searchPlanSubNameContainer
+                            (clickOutside)="handleClickOutside($event, searchPlanSubNameContainer, 'Plan Sub Name')"
+                        >
+                            <ng-container
+                                *ngTemplateOutlet="
+                                    searchTemplate;
+                                    context: {
+                                        $implicit: showPlanSubName,
+                                        fieldName: 'Plan Sub Name',
+                                        formControl: subscriptionListForm.controls['planSubName'],
+                                        title: 'Plan Sub Name'
+                                    }
+                                "
+                            ></ng-container>
+                        </th>
+                        <td
+                            mat-cell
+                            *matCellDef="let element"
+                            class="position-relative"
+                            [matTooltip]="element?.subscriptionId"
+                            [matTooltipPosition]="'above'"
+                            matTooltipClass="tooltip-black"
+                        >
+                            {{ element.planSubName }}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="status">
+                        <th
+                            mat-header-cell
+                            *matHeaderCellDef
+                            class="td-search-box"
+                            #searchStatusContainer
+                            (clickOutside)="handleClickOutside($event, searchStatusContainer, 'Status')"
+                        >
+                            <ng-container
+                                *ngTemplateOutlet="
+                                    searchTemplate;
+                                    context: {
+                                        $implicit: showStatus,
+                                        fieldName: 'Status',
+                                        formControl: subscriptionListForm.controls['status'],
+                                        title: 'Status'
+                                    }
+                                "
+                            ></ng-container>
+                        </th>
+                        <td mat-cell *matCellDef="let element" class="position-relative">
+                            <span [ngClass]="{ 'text-success': element.status === 'active' }">{{
+                                element.status
+                            }}</span>
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="monthYearly">
+                        <th
+                            mat-header-cell
+                            *matHeaderCellDef
+                            class="td-search-box"
+                            #searchDurationContainer
+                            (clickOutside)="handleClickOutside($event, searchDurationContainer, 'Monthly/Yearly')"
+                        >
+                            <ng-container
+                                *ngTemplateOutlet="
+                                    searchTemplate;
+                                    context: {
+                                        $implicit: showMonthlyYearly,
+                                        fieldName: 'Monthly/Yearly',
+                                        formControl: subscriptionListForm.controls['monthYearly'],
+                                        title: 'Monthly/Yearly'
+                                    }
+                                "
+                            ></ng-container>
+                        </th>
+                        <td mat-cell *matCellDef="let element" class="position-relative">
+                            {{ element.monthYearly }}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="renewalDate">
+                        <th mat-header-cell *matHeaderCellDef>Renewal Date</th>
+                        <td mat-cell *matCellDef="let element" class="position-relative word-wrap">
+                            <div class="d-flex align-items-center">
+                                {{ element.renewalDate }}
+                                <button
+                                    mat-icon-button
+                                    id="edit-model-basic"
+                                    class="table-menu-first-td"
+                                    [matMenuTriggerFor]="editModelBasic"
+                                    #trigger="matMenuTrigger"
+                                >
+                                    <span class="icon-dots-three-vertical"></span>
+                                </button>
                             </div>
-                        </mat-menu>
-                    </td>
-                </ng-container>
-                <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-            </table>
-            <section class="no-logs" *ngIf="!dataSource?.length && !isLoading">
-                <div class="no-data">
-                    <h1>{{ localeData?.no_logs }}</h1>
-                </div>
-            </section>
-        </div>
-        <div class="pagination-wrapper justify-content-end">
-            <mat-paginator [length]="200" [pageSizeOptions]="[10, 50, 100]" aria-label="Select page"> </mat-paginator>
-        </div>
+                            <mat-menu #editModelBasic="matMenu">
+                                <div class="account-detail-custom-header">
+                                    <!-- <button mat-menu-item (click)="changePlan()">Change Plan</button> -->
+                                    <button mat-menu-item (click)="buyPlan()">Buy Plan</button>
+                                    <button mat-menu-item (click)="viewSubscription(element)">View Subscription</button>
+                                    <button mat-menu-item (click)="changeBilling()">Change Billing</button>
+                                    <button mat-menu-item (click)="transferSubscription(element?.subscriptionId)">Request Transfer</button>
+                                    <button mat-menu-item (click)="cancelSubscription(element?.subscriptionId)">Cancel</button>
+                                    <button mat-menu-item (click)="moveSubscription()">Move</button>
+                                </div>
+                            </mat-menu>
+                        </td>
+                    </ng-container>
+                    <tr
+                        (clickOutside)="inlineSearch = null"
+                        mat-header-row
+                        *matHeaderRowDef="displayedColumns; sticky: true"
+                    ></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                </table>
+                <section class="no-logs" *ngIf="!dataSource?.length && !isLoading">
+                    <div class="no-data">
+                        <h1>{{ localeData?.no_logs }}</h1>
+                    </div>
+                </section>
+            </form>
+            <div class="pagination-wrapper justify-content-end">
+                <mat-paginator
+                    (page)="handlePageChange($event)"
+                    [length]="subscriptionPaginationObject.totalItems"
+                    [pageSize]="subscriptionPaginationObject.count"
+                    [showFirstLastButtons]="true"
+                    [pageSizeOptions]="pageSizeOptions"
+                    [hidePageSize]="false"
+                    [pageIndex]="pageIndex"
+                    class="mt-15"
+                >
+                </mat-paginator>
+            </div>
+        </section>
     </div>
 </ng-container>
+<ng-template #searchTemplate let-show let-title="title" let-fieldName="fieldName" let-formControl="formControl">
+    <div [hidden]="show">
+        <i class="icon-search" (click)="toggleSearch(fieldName)"></i>
+        <span> {{ title }}</span>
+    </div>
+    <div class="input-container" [hidden]="!show">
+        <text-field
+            [type]="'text'"
+            [placeholder]="getSearchFieldText(fieldName)"
+            [cssClass]="'form-control search-table mat-field-border'"
+            [formControl]="formControl"
+            [autoFocus]="show"
+        ></text-field>
+    </div>
+</ng-template>

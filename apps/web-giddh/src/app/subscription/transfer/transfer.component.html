@@ -10,17 +10,17 @@
             <form [formGroup]="transferForm" (ngSubmit)="onSubmit()">
                 <div class="d-flex column-gap15 ">
                     <div class="form-group w-50">
-                        <input-field [type]="'text'" [name]="'name'" [label]="'Name'" formControlName="name">
+                        <input-field [type]="'text'" [name]="'name'" [label]="'Name'" formControlName="name" [showError]="!transferForm.get('name')?.value">
                         </input-field>
                     </div>
                     <div class="form-group w-50">
                         <input-field [type]="'text'" [name]="'lastname'" [label]="'Last Name'"
-                            formControlName="lastname">
+                            formControlName="lastName">
                         </input-field>
                     </div>
                 </div>
                 <div class="form-group">
-                    <input-field [type]="'text'" [name]="'email'" [label]="'Email'" formControlName="email">
+                    <input-field [type]="'text'" [name]="'email'" [label]="'Email'" formControlName="email"  [showError]="!transferForm.get('email')?.value">
                     </input-field>
                 </div>
                 <div class="d-flex column-gap15 justify-content-end">

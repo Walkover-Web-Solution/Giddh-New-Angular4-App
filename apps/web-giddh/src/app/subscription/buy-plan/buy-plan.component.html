@@ -1,6 +1,13 @@
 <ng-container>
     <hamburger-menu></hamburger-menu>
-
+    <div class="w-100 float-left  pd-15 ">
+        <button mat-stroked-button class="mb-3" (click)="back()">
+            <i class="icon-left back-left"></i>
+            Back
+        </button>
+    </div>
+    <br>
+    <div class="float-left w-100">
     <div class="buy-plan-wrapper pd-15 w-100">
         <mat-stepper
             linear
@@ -101,7 +108,12 @@
                                             </ng-container>
                                             <ng-container *ngIf="plan?.uniqueName !== 'content'">
                                                 <th mat-header-cell *matHeaderCellDef>
-                                                    <div class="new-plan-wrapper">
+                                                    <div
+                                                        class="new-plan-wrapper"
+                                                        [ngClass]="{
+                                                            'active-plan': selectedPlan?.uniqueName === plan?.uniqueName
+                                                        }"
+                                                    >
                                                         <div class="popular-txt"></div>
                                                         <div class="plan-content">
                                                             <h2 class="font-20 strong">
@@ -160,6 +172,12 @@
                                                 <td
                                                     mat-cell
                                                     *matCellDef="let element; let rowIndex = index"
+                                                    [ngClass]="{
+                                                        'active-plan-td': selectedPlan?.uniqueName === plan?.uniqueName,
+                                                        'active-plan-td-bottom':
+                                                            selectedPlan?.uniqueName === plan?.uniqueName &&
+                                                            rowIndex === 4
+                                                    }"
                                                     class="text-center"
                                                 >
                                                     <ng-container *ngIf="rowIndex === 0">
@@ -413,18 +431,19 @@
             </mat-step>
         </mat-stepper>
     </div>
+    </div>
     <!-- plan-summary -->
     <ng-template #planSummary>
         <div class="summary-wrapper">
             <h4 class="font-16 mb-3 strong d-flex align-items-center">Plan Summary</h4>
             <mat-card class="outline-card">
                 <form
-                    name="thirdStepForm"
+                    name="firstStepForm"
                     autocomplete="off"
                     class="mt-5"
                     novalidate
-                    [formGroup]="thirdStepForm"
-                    name="thirdStepForm"
+                    [formGroup]="firstStepForm"
+                    name="firstStepForm"
                 >
                     <mat-card-content>
                         <div class="d-flex justify-content-between border-bottom pb-3">

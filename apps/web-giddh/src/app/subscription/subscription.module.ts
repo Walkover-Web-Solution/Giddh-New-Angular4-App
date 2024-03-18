@@ -28,8 +28,10 @@ import { BuyPlanComponent } from './buy-plan/buy-plan.component';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatRadioModule } from '@angular/material/radio';
 import { ActivateDialogComponent } from './activate-dialog/activate-dialog.component';
-import {MatButtonToggleModule} from '@angular/material/button-toggle';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { AmountFieldComponentModule } from '../shared/amount-field/amount-field.module';
+import { ClickOutsideModule } from 'ng-click-outside';
+import { VerifyOwnershipComponent } from './verify-ownership/verify-ownership.component';
 
 @NgModule({
     imports: [
@@ -58,10 +60,11 @@ import { AmountFieldComponentModule } from '../shared/amount-field/amount-field.
         MatStepperModule,
         MatRadioModule,
         MatButtonToggleModule,
-        AmountFieldComponentModule
+        AmountFieldComponentModule,
+        ClickOutsideModule
     ],
     exports: [
     ],
-    declarations: [SubscriptionComponent, CompanyListComponent, TransferComponent, ChangeBillingComponent, ViewSubscriptionComponent, BuyPlanComponent, ActivateDialogComponent]
+    declarations: [SubscriptionComponent, CompanyListComponent, TransferComponent, ChangeBillingComponent, ViewSubscriptionComponent, BuyPlanComponent, ActivateDialogComponent, VerifyOwnershipComponent]
 })
 export class SubscriptionModule { }

@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivateDialogComponent } from '../activate-dialog/activate-dialog.component';
 import { BuyPlanComponentStore } from './utility/buy-plan.store';
-import { Observable, ReplaySubject, takeUntil, of as observableOf, debounceTime } from 'rxjs';
+import { Observable, ReplaySubject, takeUntil, of as observableOf } from 'rxjs';
 import { MatTableDataSource } from '@angular/material/table';
 import { ToasterService } from '../../services/toaster.service';
 import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
@@ -16,7 +16,7 @@ import { Store } from '@ngrx/store';
 import { StatesRequest } from '../../models/api-models/Company';
 import { GeneralActions } from '../../actions/general/general.actions';
 import { Router } from '@angular/router';
-
+import { Location } from '@angular/common';
 @Component({
     selector: 'buy-plan',
     templateUrl: './buy-plan.component.html',
@@ -25,32 +25,28 @@ import { Router } from '@angular/router';
 })
 
 export class BuyPlanComponent implements OnInit, OnDestroy {
-    /** Step Form instance */
+    /** Stepper Form instance */
     @ViewChild('stepper') stepperIcon: any;
-    /** Mobile number field instance */
-    @ViewChild('mobileNoField', { static: false }) mobileNoField: ElementRef;
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
-    /** Form Group for company form */
+    /** Form Group for subscription form */
     public subscriptionForm: FormGroup;
     /** Subject to unsubscribe from listeners */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    /** Hold selected tab*/
+    /** Hold selected tab */
     public selectedStep: number = 0;
-    /** Form Group for company form */
+    /** Form Group for subscription first step form form */
     public firstStepForm: FormGroup;
-    /** Form Group for company address form */
+    /** Form Group for subscription second step form */
     public secondStepForm: FormGroup;
-    /** Form Group for subscription company form */
+    /** Form Group for subscription third step form */
     public thirdStepForm: FormGroup;
     /** True if gstin number valid */
     public isGstinValid: boolean = false;
     /** Hold selected country */
     public selectedCountry: string = '';
-    /** Hold current flag*/
-    public currentFlag: any;
     /** Hold selected state */
     public selectedState: string = '';
     /** Hold state gst code list */
@@ -69,18 +65,18 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public disabledState: boolean = false;
     /** Holds Store Plan list observable*/
     public readonly planList$ = this.componentStore.select(state => state.planList);
-    /** Holds Store Plan list API succes state as observable*/
-    public readonly planListInProgress$ = this.componentStore.select(state => state.planListInProgress);
-    /** Holds Store Create Discount API in progress state as observable*/
-    public readonly createPlanInProgress$ = this.componentStore.select(state => state.createPlanInProgress);
-    /** Holds Store Create Discount API succes state as observable*/
-    public readonly createPlanSuccess$ = this.componentStore.select(state => state.createPlanSuccess);
-    /** Holds Store Create Discount API in progress state as observable*/
-    public readonly applyPromoCodeInProgress$ = this.componentStore.select(state => state.applyPromoCodeInProgress);
-    /** Holds Store Create Discount API succes state as observable*/
-    public readonly applyPromoCodeSuccess$ = this.componentStore.select(state => state.applyPromoCodeSuccess);
-    /** Holds Store Create Discount API succes state as observable*/
-    public readonly promoCodeResponse$ = this.componentStore.select(state => state.promoCodeResponse);
+    /** Holds Store Plan list API success state as observable*/
+    public planListInProgress$ = this.componentStore.select(state => state.planListInProgress);
+    /** Holds Store Create Plan API in progress state as observable*/
+    public createPlanInProgress$ = this.componentStore.select(state => state.createPlanInProgress);
+    /** Holds Store Create Plan API succes state as observable*/
+    public createPlanSuccess$ = this.componentStore.select(state => state.createPlanSuccess);
+    /** Holds Store Apply Promocode API in progress state as observable*/
+    public applyPromoCodeInProgress$ = this.componentStore.select(state => state.applyPromoCodeInProgress);
+    /** Holds Store Apply Promocode  API success state as observable*/
+    public applyPromoCodeSuccess$ = this.componentStore.select(state => state.applyPromoCodeSuccess);
+    /** Holds Store Apply Promocode API response state as observable*/
+    public promoCodeResponse$ = this.componentStore.select(state => state.promoCodeResponse);
     /** Mobile number library instance */
     public intlClass: any;
     /** This will hold onboarding api form request */
@@ -101,17 +97,19 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     };
     /** True if form is submitted to show error if available */
     public isFormSubmitted: boolean = false;
-    /** True if promo code applied */
-    public appliedPromocode: boolean = false;
     /** Hold selected plan*/
     public selectedPlan: any;
-
+    /** Hold state source observable*/
     public stateSource$: Observable<IOption[]> = observableOf([]);
+    /** Hold country source*/
     public countrySource: IOption[] = [];
+    /** Hold country source observable*/
     public countrySource$: Observable<IOption[]> = observableOf([]);
+    /** Hold displayed columns dynamically*/
     public displayedColumns: any = [];
+    /** Hold plan data source*/
     public dataSource: any;
-
+    /** Getter for column unique names*/
     public getColumnNames(): string[] {
         return this.displayedColumns.map(column => column.uniqueName);
     }
@@ -126,12 +124,18 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         private generalActions: GeneralActions,
         private formBuilder: FormBuilder,
         private subscriptionService: SubscriptionsService,
-        private router : Router
+        private router: Router,
+        private location: Location
 
     ) {
         this.componentStore.getAllPlans({ params: { countryCode: this.company.countryCode } });
     }
 
+    /**
+     * Hook cycle for component initialization
+     *
+     * @memberof BuyPlanComponent
+     */
     public ngOnInit(): void {
         this.initSubscriptionForm();
         this.getAllPlans();
@@ -153,27 +157,69 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 this.getPromoCodeData();
             }
         });
-
-        this.thirdStepForm.get('promoCode').valueChanges.pipe(
-            debounceTime(300), takeUntil(this.destroyed$))
-            .subscribe((newValue) => {
-                if (!newValue) {
-                    this.appliedPromocode = false;
-            }
-            });
     }
 
+    /**
+ * Initializing the company form
+ *
+ * @private
+ * @memberof
+ */
+    private initSubscriptionForm(): void {
+        this.firstStepForm = this.formBuilder.group({
+            duration: ['YEARLY'],
+            planUniqueName: ['', Validators.required],
+            promoCode: [''],
+        });
+
+        this.secondStepForm = this.formBuilder.group({
+            billingName: ['', Validators.required],
+            companyName: ['', Validators.required],
+            email: ['', [Validators.required, Validators.pattern(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/)]],
+            pincode: [''],
+            mobileNumber: ['', Validators.required],
+            taxNumber: null,
+            country: ['', Validators.required],
+            state: ['', Validators.required],
+            address: [''],
+        });
+
+        this.thirdStepForm = this.formBuilder.group({
+            userUniqueName: [''],
+            paymentProvider: ['']
+        });
+
+        this.subscriptionForm = this.formBuilder.group({
+            firstStepForm: this.firstStepForm,
+            secondStepForm: this.secondStepForm,
+            thirdStepForm: this.thirdStepForm,
+        });
+    }
+
+    /**
+     * This will be use for get active company
+     *
+     * @memberof BuyPlanComponent
+     */
     public getPromoCodeData(): void {
         this.promoCodeResponse$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-
         })
+    }
+
+/**
+ * This will be use for back to previous page
+ *
+ * @memberof BuyPlanComponent
+ */
+public back(): void {
+        this.location.back();
     }
 
     /**
      * Gets active company details
      *
      * @private
-     * @memberof VoucherCreateComponent
+     * @memberof BuyPlanComponent
      */
     private getActiveCompany(): void {
         this.componentStore.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -184,28 +230,29 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         })
     }
 
+    /**
+     * This will be use for apply promo code discount on plans
+     *
+     * @memberof BuyPlanComponent
+     */
     public applyPromoCode(): void {
-        console.log(this.thirdStepForm.get('promoCode')?.value);
-        if (this.thirdStepForm.get('promoCode')?.value) {
-            this.appliedPromocode = true;
+        if (this.firstStepForm.get('promoCode')?.value) {
             let request = {
-                promoCode: this.thirdStepForm.get('promoCode')?.value,
+                promoCode: this.firstStepForm.get('promoCode')?.value,
                 planUniqueName: this.firstStepForm.get('planUniqueName').value,
                 duration: this.firstStepForm.get('duration').value
             }
             this.componentStore.applyPromocode(request);
-        } else {
-            this.appliedPromocode = false;
         }
     }
 
 
     /**
-   * Gets company profile
-   *
-   * @private
-   * @memberof VoucherCreateComponent
-   */
+       * Gets company profile
+       *
+       * @private
+       * @memberof BuyPlanComponent
+       */
     private getCompanyProfile(): void {
         this.componentStore.companyProfile$.pipe(takeUntil(this.destroyed$)).subscribe(profile => {
             if (profile && Object.keys(profile).length && !this.company?.countryName) {
@@ -221,12 +268,12 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     }
 
     /**
-  * Finds tax type by country and calls onboarding form api
-  *
-  * @private
-  * @param {string} countryCode
-  * @memberof VoucherCreateComponent
-  */
+      * Finds tax type by country and calls onboarding form api
+      *
+      * @private
+      * @param {string} countryCode
+      * @memberof BuyPlanComponent
+      */
     private showTaxTypeByCountry(countryCode: string): void {
         this.company.taxType = this.subscriptionService.showTaxTypeByCountry(countryCode, this.activeCompany?.countryV2?.alpha2CountryCode);
         if (this.company.taxType) {
@@ -235,12 +282,12 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     }
 
     /**
-       * Calls onboarding form data api
-       *
-       * @private
-       * @param {string} countryCode
-       * @memberof VoucherCreateComponent
-       */
+    * Calls onboarding form data api
+    *
+    * @private
+    * @param {string} countryCode
+    * @memberof BuyPlanComponent
+    */
     private getOnboardingForm(countryCode: string): void {
         if (this.onboardingFormRequest.country !== countryCode) {
             this.onboardingFormRequest.formName = 'onboarding';
@@ -253,7 +300,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      * Gets onboarding form data
      *
      * @private
-     * @memberof VoucherCreateComponent
+     * @memberof BuyPlanComponent
      */
     private getOnboardingFormData(): void {
         this.componentStore.onboardingForm$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -270,53 +317,10 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     }
 
     /**
- * Initializing the company form
- *
- * @private
- * @memberof
- */
-    private initSubscriptionForm(): void {
-        this.firstStepForm = this.formBuilder.group({
-            duration: ['YEARLY'],
-            planUniqueName: ['', Validators.required]
-        });
-
-        this.secondStepForm = this.formBuilder.group({
-            billingName: ['', Validators.required],
-            companyName: ['', Validators.required],
-            email: ["", [Validators.required, Validators.email]],
-            pincode: [''],
-            mobileNumber: ['', Validators.required],
-            taxNumber: null,
-            country: ['', Validators.required],
-            state: ['', Validators.required],
-            address: [''],
-        });
-
-        this.thirdStepForm = this.formBuilder.group({
-            userUniqueName: [''],
-            promoCode: [''],
-            paymentProvider: ['']
-        });
-
-        this.subscriptionForm = this.formBuilder.group({
-            firstStepForm: this.firstStepForm,
-            secondStepForm: this.secondStepForm,
-            thirdStepForm: this.thirdStepForm
-        });
-
-        // this.firstStepForm.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(result => {
-        //     if (this.showPageLeaveConfirmation) {
-        //         this.pageLeaveUtilityService.addBrowserConfirmationDialog();
-        //     }
-        // });
-    }
-
-    /**
- * Initializes the int-tel input
- *
- * @memberof VoucherCreateComponent
- */
+     * Initializes the int-tel input
+     *
+     * @memberof BuyPlanComponent
+     */
     public initIntl(): void {
         const parentDom = document.querySelector('create');
         const input = document.getElementById('init-contact');
@@ -332,7 +336,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     /**
      * Validate the mobile number
      *
-     * @memberof VoucherCreateComponent
+     * @memberof BuyPlanComponent
      */
     public validateMobileField(): void {
         setTimeout(() => {
@@ -344,8 +348,13 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         }, 100);
     }
 
+    /**
+     * This will be use for get countries
+     *
+     * @memberof BuyPlanComponent
+     */
     public getCountry() {
-       this.componentStore.commonCountries$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.componentStore.commonCountries$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.countrySource = [];
                 Object.keys(response).forEach(key => {
@@ -364,10 +373,10 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     }
 
     /**
- * This will use for get states list
- *
- * @memberof AddCompanyComponent
- */
+     * This will use for get states list
+     *
+     * @memberof BuyPlanComponent
+     */
     public getStates() {
         this.componentStore.generalState$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
@@ -400,10 +409,10 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     }
 
     /**
- * This will use validate gst number
- *
- * @memberof AddCompanyComponent
- */
+     * This will use validate gst number
+     *
+     * @memberof BuyPlanComponent
+     */
     public validateGstNumber(): void {
         let isValid: boolean = false;
         if (this.secondStepForm.get('taxNumber')?.value) {
@@ -455,17 +464,23 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     }
 
     /**
-* This will return enter tax text
-*
-* @returns {string}
-* @memberof AddCompanyComponent
-*/
+    * This will return enter tax text
+    *
+    * @returns {string}
+    * @memberof BuyPlanComponent
+    */
     public getEnterTaxText(): string {
         let text = 'Enter Tax';
         text = text?.replace("[TAX_NAME]", this.formFields['taxName']?.label);
         return text;
     }
 
+    /**
+     *  This will be use for selecting plan
+     *
+     * @param {*} plan
+     * @memberof BuyPlanComponent
+     */
     public selectPlan(plan: any): void {
         this.firstStepForm.get('planUniqueName').setValue(plan?.uniqueName);
         this.planList$.pipe(takeUntil(this.destroyed$)).subscribe(result => {
@@ -474,11 +489,11 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     }
 
     /**
- * This will use for next step form
- *
- * @return {*}  {void}
- * @memberof AddCompanyComponent
- */
+     * This will use for next step form
+     *
+     * @return {*}  {void}
+     * @memberof BuyPlanComponent
+     */
     public nextStepForm(): void {
         this.isFormSubmitted = false;
         if (this.selectedStep === 0 && this.firstStepForm.invalid) {
@@ -505,25 +520,24 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
 
 
     /**
- * This will use for selected tab index
- *
- * @param {*} event
- * @memberof
- */
+     * This will use for selected tab index
+     *
+     * @param {*} event
+     * @memberof BuyPlanComponent
+     */
     public onSelectedTab(event: any): void {
         this.selectedStep = event?.selectedIndex;
     }
 
     /**
- * Get All Plan API Call
- *
- * @memberof BuyPlanComponent
- */
+     * Get All Plan API Call
+     *
+     * @memberof BuyPlanComponent
+     */
     public getAllPlans(): void {
-        /** Get Plan List */
         this.planList$.pipe(takeUntil(this.componentStore.destroy$)).subscribe(response => {
             if (response?.length) {
-                this.selectedPlan = response.find(plan => plan.name === 'Oak');
+                this.selectedPlan = response[1];
                 this.firstStepForm.get('planUniqueName').setValue(this.selectedPlan?.uniqueName);
                 let displayedColumns = [{ uniqueName: 'content', additional: "" }];
                 displayedColumns = displayedColumns.concat(response.map(column => ({ uniqueName: column.uniqueName, additional: column })));
@@ -537,11 +551,11 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     }
 
     /**
- * This will use for select country
- *
- * @param {*} event
- * @memberof AddCompanyComponent
- */
+     * This will use for select country
+     *
+     * @param {*} event
+     * @memberof BuyPlanComponent
+     */
     public selectCountry(event: any): void {
         if (event?.value) {
             this.selectedCountry = event.label;
@@ -566,11 +580,11 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     }
 
     /**
- * This will use for on submit company form
- *
- * @return {*}  {void}
- * @memberof AddCompanyComponent
- */
+     * This will use for on submit company form
+     *
+     * @return {*}  {void}
+     * @memberof BuyPlanComponent
+     */
     public onSubmit(): void {
         this.isFormSubmitted = false;
         if (this.subscriptionForm.invalid) {
@@ -599,18 +613,19 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 },
                 address: this.subscriptionForm.value.secondStepForm.address
             },
-            promoCode: this.subscriptionForm.value.thirdStepForm.promoCode,
-            paymentProvider: "CASHFREE"
+            promoCode: this.subscriptionForm.value.firstStepForm.promoCode,
+            paymentProvider: "CASHFREE",
+            returnUrl: "https://test.giddh.com/pages/subscription"
         }
         this.componentStore.createPlan(request);
     }
 
     /**
-* This will use for select country
-*
-* @param {*} event
-* @memberof AddCompanyComponent
-*/
+    * This will use for select country
+    *
+    * @param {*} event
+    * @memberof BuyPlanComponent
+    */
     public selectState(event: any): void {
         if (event?.value) {
             this.selectedState = event.label;
@@ -618,22 +633,31 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     *Hook cycle for afte component initialization
+     *
+     * @memberof BuyPlanComponent
+     */
     public ngAfterViewInit(): void {
         this.stepperIcon._getIndicatorType = () => 'number';
         this.initIntl();
     }
 
+    /**
+     *This will be use for open activate key dialog
+     *
+     * @memberof BuyPlanComponent
+     */
     public activateDialog(): void {
         this.dialog.open(ActivateDialogComponent, {
             width: '600px'
         })
     }
 
-
     /**
      * This will call on component destroy
      *
-     * @memberof
+     * @memberof BuyPlanComponent
      */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);

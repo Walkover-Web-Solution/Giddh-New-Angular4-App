@@ -9,3 +9,14 @@ export const PLAN_API = {
     CREATE_PLAN: 'v2/subscription',
     APPLY_PROMOCODE: 'v2/subscription/promocode'
 };
+
+export const SUBSRIPTION_V2_API = {
+    GET_ALL_SUBSCRIPTIONS: 'v2/subscription/list',
+    SUBSCRIPTION_BY_ID: 'v2/subscription/:subscriptionId',
+    CANCEL_SUBSCRIPTION_BY_ID: 'v2/subscription/:subscriptionId/cancel',
+    TRANSFER: 'v2/subscription/transfer/ownership?subscriptionId=:subscriptionId',
+    VERIFY_OWNERSHIP: 'v2/subscription/verify/ownership?requestId=:requestId',
+    GET_BILLING_DETAILS: 'v2/subscription/billing-account/get?billingAccountUnqiueName=:billingAccountUnqiueName',
+    UPDATE_BILLING_DETAILS: 'v2/subscription/billing-account/:billingAccountUnqiueName'
+
+};

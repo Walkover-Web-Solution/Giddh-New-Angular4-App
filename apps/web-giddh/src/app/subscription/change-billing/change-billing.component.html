@@ -6,24 +6,25 @@
 > -->
 <hamburger-menu></hamburger-menu>
 <div id="main" class="welcome-outer pd-15">
-    <button mat-stroked-button class="mb-3">
+    <button mat-stroked-button class="mb-3" (click)="back()">
         <i class="icon-left back-left"></i>
         Back
     </button>
     <mat-card class="outline-card change-billing-wrap">
-        <mat-card-content>
-            <div class="welcome-msg">
-                <p class="strong font-16 my-3">Hello Dilpreet Sing Dang !</p>
-            </div>
-            <div class="billing-details">
-                <h3 class="strong mb-3 light-gray my-3">Billing Details</h3>
-                <form [formGroup]="changeBillingForm">
+        <form name="changeBillingForm" [formGroup]="changeBillingForm" autocomplete="off" novalidate>
+            <mat-card-content>
+                <div class="welcome-msg">
+                    <p class="strong font-16 my-3">Hello {{ billingDetails?.billingName }} !</p>
+                </div>
+                <div class="billing-details">
                     <div class="form-group">
                         <input-field
                             [type]="'text'"
                             [name]="'billingName'"
                             [label]="'Billing Name'"
                             [placeholder]="'Billing Name'"
+                            formControlName="billingName"
+                            [showError]="isFormSubmitted && !changeBillingForm.get('billingName')?.value"
                         >
                         </input-field>
                     </div>
@@ -34,16 +35,18 @@
                             [label]="'Company Name'"
                             formControlName="companyName"
                             [placeholder]="'Company Name'"
+                            [showError]="isFormSubmitted && !changeBillingForm.get('companyName')?.value"
                         >
                         </input-field>
                     </div>
                     <div class="form-group">
                         <input-field
                             [type]="'text'"
-                            [name]="'emailId'"
+                            [name]="'email'"
                             [label]="'Email Id'"
-                            formControlName="emailId"
+                            formControlName="email"
                             [placeholder]="'Email Id'"
+                            [showError]="isFormSubmitted && !changeBillingForm.get('email')?.value"
                         >
                         </input-field>
                     </div>
@@ -58,24 +61,32 @@
                         </input-field>
                     </div>
                     <div class="form-group">
-                        <input-field
-                            [type]="'number'"
-                            [name]="'mobile'"
-                            [label]="'Mobile No'"
-                            formControlName="mobile"
-                            [placeholder]="'Enter Mobile No'"
-                        >
-                        </input-field>
-                    </div>
-                    <div class="form-group">
-                        <input-field
-                            [type]="'text'"
-                            [name]="'gstin'"
-                            [label]="'GST/TRN No'"
-                            formControlName="gstin"
-                            [placeholder]="'GST/TRN No'"
-                        >
-                        </input-field>
+                        <!-- Mobile Number -->
+                        <div id="init-contact-wrapper" class="position-relative w-100">
+                            <input
+                                type="tel"
+                                class="mat-form-field-border mat-form-field-height mobile-height"
+                                #initContact
+                                aria-autocomplete="none"
+                                autocomplete="off"
+                                (keypress)="intlClass?.onlyPhoneNumber($event); validateMobileField()"
+                                id="init-billing"
+                                placeholder="Mobile Number"
+                                formControlName="mobileNumber"
+                                [ngClass]="{
+                                    'invalid-input':
+                                        isFormSubmitted ||
+                                        (changeBillingForm.get('mobileNumber')?.touched &&
+                                            !intlClass?.isRequiredValidNumber)
+                                }"
+                            />
+                            <mat-error
+                                *ngIf="
+                                    changeBillingForm.get('mobileNumber')?.touched && !intlClass?.isRequiredValidNumber
+                                "
+                                >Please enter valid mobile number</mat-error
+                            >
+                        </div>
                     </div>
                     <div class="form-group">
                         <div class="width-100">
@@ -84,12 +95,53 @@
                                 [label]="'County' + '*'"
                                 [placeholder]="'Select County'"
                                 class="mb-3 d-block"
+                                [options]="countrySource"
+                                (selectedOption)="selectCountry($event)"
+                                [defaultValue]="selectedCountry"
+                                [showError]="isFormSubmitted && !changeBillingForm.get('country')?.value"
                             >
                             </dropdown-field>
-                            <dropdown-field 
-                                [name]="'state'" 
-                                [label]="'State' + '*'" 
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <input-field
+                            [name]="'taxNumber'"
+                            [placeholder]="getEnterTaxText()"
+                            [type]="'text'"
+                            formControlName="taxNumber"
+                            [showError]="
+                                (isFormSubmitted && !changeBillingForm.get('taxNumber')?.value) || !isGstinValid
+                            "
+                            [label]="formFields['taxName']?.label ? formFields['taxName']?.label : 'Tax Number'"
+                            [maxlength]="15"
+                            (change)="validateGstNumber()"
+                        >
+                        </input-field>
+                    </div>
+                    <div class="form-group">
+                        <div *ngIf="!countyList?.length">
+                            <dropdown-field
+                                [name]="'state'"
+                                [label]="'State'"
                                 [placeholder]="'Select State'"
+                                [options]="states"
+                                [showError]="isFormSubmitted && !changeBillingForm.get('state')?.value"
+                                [readonly]="disabledState"
+                                [defaultValue]="selectedState"
+                                (selectedOption)="selectState($event)"
+                                [ngClass]="{ 'readonly-field': disabledState }"
+                            >
+                            </dropdown-field>
+                        </div>
+                        <div *ngIf="countyList?.length">
+                            <dropdown-field
+                                [name]="'county'"
+                                [label]="Region"
+                                [placeholder]="'Select Region'"
+                                [options]="countyList"
+                                [showError]="isFormSubmitted && !changeBillingForm.get('county')?.value"
+                                [defaultValue]="changeBillingForm.get('county')?.value?.label"
+                                (selectedOption)="changeBillingForm.get('county')?.patchValue($event)"
                             >
                             </dropdown-field>
                         </div>
@@ -97,18 +149,19 @@
                     <div class="form-group">
                         <mat-form-field appearance="outline" class="w-100">
                             <mat-label>Address</mat-label>
-                            <textarea matInput placeholder="Enter Address..."></textarea>
+                            <textarea matInput placeholder="Enter Address..." formControlName="address"></textarea>
                         </mat-form-field>
                     </div>
-                    <div class="form-group">
-                        <div class="pt-2 d-flex column-gap15">
-                            <button mat-stroked-button color="primary">Submit</button>
-                            <button mat-stroked-button>Cancel</button>
-                        </div>
+                </div>
+                <div class="form-group">
+                    <div class="pt-2 d-flex column-gap15">
+                        <button mat-stroked-button color="primary" (click)="onSubmit()">Submit</button>
+                        <button mat-stroked-button (click)="back()">Cancel</button>
                     </div>
-                </form>
-            </div>
-        </mat-card-content>
+                </div>
+            </mat-card-content>
+        </form>
     </mat-card>
+    <!-- </ng-container> -->
 </div>
 <!-- </ng-container> -->
