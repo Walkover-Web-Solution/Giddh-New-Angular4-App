@@ -1,6 +1,6 @@
 <div class="aside-pane" role="dialog" aria-labelledby="modal-title" [keyboardShortcut]="'esc'" (onShortcutPress)="closeEvent.emit()">
     <div class="form-header">
-        <h2 class="aside-title" tabIndex="0">{{ tax && tax?.uniqueName ? localeData?.update_tax : localeData?.create_new_tax }}</h2>
+        <h2 class="aside-title" tabindex="0">{{ tax && tax?.uniqueName ? localeData?.update_tax : localeData?.create_new_tax }}</h2>
     </div>
     <button id="closedialog" (click)="closeEvent.emit()" aria-label="cross"><i class="icon-cross"></i></button>
     <div class="aside-body aside-create-tax-component">
