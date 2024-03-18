@@ -22,7 +22,7 @@
                 (selectionChange)="onSelectedTab($event)"
                 [disableRipple]="firstStepForm.invalid"
             >
-                <mat-step [stepControl]="firstStepForm">
+                <mat-step [stepControl]="firstStepForm" role="tabpanel">
                     <form
                         [formGroup]="firstStepForm"
                         name="firstStepForm"
@@ -185,7 +185,7 @@
                         </div>
                     </form>
                 </mat-step>
-                <mat-step [stepControl]="secondStepForm" name="secondStepForm">
+                <mat-step [stepControl]="secondStepForm" name="secondStepForm" role="tabpanel">
                     <form [formGroup]="secondStepForm" autocomplete="off" novalidate>
                         <ng-template matStepLabel>{{ localeData?.company_address }}</ng-template>
                         <div class="row row-gap">
