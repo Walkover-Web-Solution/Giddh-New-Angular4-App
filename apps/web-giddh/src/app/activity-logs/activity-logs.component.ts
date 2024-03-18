@@ -351,7 +351,10 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
     public getLogsDetails(event: any, element: any): void {
         this.dialog.open(ActivityLogsJsonComponent, {
             data: element?.details,
-            panelClass: 'logs-sidebar'
+            panelClass: 'logs-sidebar',
+            role: 'alertdialog',
+            ariaLabel: 'Activity Logs'
+
         });
         this.addZindexCdkOverlay();
     }
