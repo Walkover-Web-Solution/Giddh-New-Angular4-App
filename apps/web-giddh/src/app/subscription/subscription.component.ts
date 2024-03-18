@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { debounceTime, distinctUntilChanged, ReplaySubject, takeUntil } from 'rxjs';
+import { debounceTime, distinctUntilChanged, Observable, ReplaySubject, takeUntil } from 'rxjs';
 import { ToasterService } from '../services/toaster.service';
 import { CompanyListComponent } from './company-list/company-list.component';
 import { TransferComponent } from './transfer/transfer.component';
@@ -12,6 +12,14 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { PAGINATION_LIMIT } from '../app.constant';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { AppState } from '../store';
+import { select, Store } from '@ngrx/store';
+import { SubscriptionsActions } from '../actions/user-subscriptions/subscriptions.action';
+import { SubscriptionsUser } from '../models/api-models/Subscriptions';
+import { cloneDeep, uniqBy } from '../lodash-optimized';
+import * as dayjs from 'dayjs';
+import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
+import { MatMenuTrigger } from '@angular/material/menu';
 @Component({
     selector: 'subscription',
     templateUrl: './subscription.component.html',
@@ -20,8 +28,12 @@ import { FormBuilder, FormGroup } from '@angular/forms';
     providers: [SubscriptionComponentStore]
 })
 export class SubscriptionComponent implements OnInit, OnDestroy {
+    /** Mat menu instance reference */
+    @ViewChild(MatMenuTrigger) menu: MatMenuTrigger;
     /** Holds Paginator Reference */
     @ViewChild(MatPaginator) paginator!: MatPaginator;
+    /** This will use for move company in to another company  */
+    @ViewChild("moveCompany", { static: false }) public moveCompany: any;
     /** This will hold local JSON data */
     public localeData: any = {};
     /** This will hold common JSON data */
@@ -43,7 +55,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         page: 1,
         totalPages: 0,
         totalItems: 0,
-        count: PAGINATION_LIMIT
+        count: 500
     }
     /** Hold table page index number*/
     public pageIndex: number = 0;
@@ -79,7 +91,6 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         if (!hasResponse) {
             return false;
         }
-
         return (
             (hasResponse && this.inlineSearch !== 'name' || this.showClearFilter) ||
             (this.inlineSearch === 'name' && !hasResponse || this.showClearFilter) ||
@@ -106,6 +117,18 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
     }
     /** Holds Store Plan list observable*/
     public cancelSubscription$ = this.componentStore.select(state => state.cancelSubscription);
+    /** Holds Store Plan list API success state as observable*/
+    public subscribedCompanies$ = this.componentStore.select(state => state.subscribedCompanies);
+    /** Holds Store Plan list API success state as observable*/
+    public subscribedCompaniesInProgress$ = this.componentStore.select(state => state.subscribedCompaniesInProgress);
+    /* This will hold list of subscriptions */
+    public subscriptions: SubscriptionsUser[] = [];
+    /** Observable to listen for subscriptions */
+    public subscriptions$: Observable<SubscriptionsUser[]>;
+    /* This will hold the companies to use in selected company */
+    public selectedCompany: any;
+    /** This will use for active company */
+    public activeCompany: any = {};
 
 
     constructor(public dialog: MatDialog,
@@ -113,15 +136,20 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         private changeDetection: ChangeDetectorRef,
         private generalService: GeneralService,
         private readonly componentStore: SubscriptionComponentStore,
+        private store: Store<AppState>,
         private formBuilder: FormBuilder,
+        private subscriptionsActions: SubscriptionsActions,
         private router: Router
     ) {
+        this.subscriptions$ = this.store.pipe(select(state => state.subscriptions.subscriptions), takeUntil(this.destroyed$));
     }
 
     public ngOnInit(): void {
         document.body?.classList?.add("subscription-page");
         this.initAllForms();
         this.getAllSubscriptions(false);
+        this.getCompanies();
+        this.filterSubscriptions();
 
         /** Get Discount List */
         this.subscriptionList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -132,6 +160,12 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
             } else {
                 this.dataSource = new MatTableDataSource<any>([]);
                 this.subscriptionPaginationObject.totalItems = 0;
+            }
+        });
+
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if (activeCompany) {
+                this.activeCompany = activeCompany;
             }
         });
 
@@ -367,6 +401,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
     * @memberof SubscriptionComponent
     */
     public getCompanyList(event: any, element: any): void {
+        this.menu.closeMenu();
         this.dialog.open(CompanyListComponent, {
             data: element,
             panelClass: 'subscription-sidebar'
@@ -379,7 +414,8 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
 * @param {*} element
 * @memberof SubscriptionComponent
 */
-    public transferSubscription(subscriptionId:any): void {
+    public transferSubscription(subscriptionId: any): void {
+        this.menu.closeMenu();
         this.dialog.open(TransferComponent, {
             data: subscriptionId,
             panelClass: 'transfer-popup',
@@ -387,7 +423,8 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         });
     }
 
-    public cancelSubscription(id:any): void {
+    public cancelSubscription(id: any): void {
+        this.menu.closeMenu();
         let cancelDialogRef = this.dialog.open(ConfirmModalComponent, {
             data: {
                 title: 'Cancel Subscription',
@@ -415,7 +452,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         this.router.navigate(['/pages/subscription/change-billing']);
     }
 
-    public viewSubscription(data:any): void {
+    public viewSubscription(data: any): void {
         this.router.navigate(['/pages/subscription/view-subscription/' + data?.subscriptionId]);
     }
 
@@ -467,6 +504,81 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
             // ];
             this.changeDetection.detectChanges();
         }
+    }
+
+    /**
+     *This function will open the move company popup
+     *
+     * @param {*} company
+     * @memberof SubscriptionComponent
+     */
+    public openModalMove(company: any, event: any) {
+        this.menu.closeMenu();
+        this.selectedCompany = company.companiesList[0];
+        this.dialog.open(this.moveCompany, { width: '40%' });
+    }
+
+
+    /**
+   * This function will refresh the subscribed companies if move company was succesful and will close the popup
+   *
+   * @param {*} event
+   * @memberof SubscriptionsComponent
+   */
+    public addOrMoveCompanyCallback(event: boolean): void {
+        if (event === true) {
+            this.getCompanies();
+        }
+    }
+
+    /**
+    * This function will use for get subscribed companies
+    *
+    * @memberof SubscriptionComponent
+    */
+    public getCompanies(): void {
+        this.subscribedCompanies$.pipe(takeUntil(this.destroyed$)).subscribe(res => {
+            console.log(res);
+            this.store.dispatch(this.subscriptionsActions.SubscribedCompaniesResponse(res));
+        });
+    }
+
+    /**
+     *  This function will use for filter plans , withing and expiry in dropdown and searching subscriptions
+     *
+     * @memberof SubscriptionComponent
+     */
+    public filterSubscriptions(): void {
+        this.subscriptions$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            console.log(response);
+            let subscriptions = [];
+            this.subscriptions = [];
+
+            if (response?.length) {
+                response.forEach(subscription => {
+                    let subscriptionDetails = cloneDeep(subscription);
+
+                    subscriptionDetails.remainingDays = Number(dayjs(subscriptionDetails.expiry, GIDDH_DATE_FORMAT).diff(dayjs(), 'day'));
+                    subscriptionDetails.startedAt = dayjs(subscriptionDetails.startedAt, GIDDH_DATE_FORMAT).format("D MMM, YYYY");
+                    subscriptionDetails.expiry = dayjs(subscriptionDetails.expiry, GIDDH_DATE_FORMAT).format("D MMM, YYYY");
+
+                    subscriptions.push(subscriptionDetails);
+                });
+                if (subscriptions?.length > 0) {
+                    this.subscriptions = subscriptions;
+                    let loop = 0;
+                    let activeCompanyIndex = -1;
+                    this.subscriptions.forEach(res => {
+                        if (res.subscriptionId === this.activeCompany?.subscription?.subscriptionId) {
+                            activeCompanyIndex = loop;
+                        }
+                        loop++;
+                    });
+                    this.subscriptions = this.generalService.changeElementPositionInArray(this.subscriptions, activeCompanyIndex, 0);
+                    this.subscriptions = uniqBy(this.subscriptions, "subscriptionId");
+                }
+            }
+        });
     }
 
     public ngOnDestroy(): void {

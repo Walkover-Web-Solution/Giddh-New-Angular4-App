@@ -3,7 +3,7 @@ import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms
 import { Router } from "@angular/router";
 import { select, Store } from "@ngrx/store";
 import { Observable, ReplaySubject } from "rxjs";
-import { take, takeUntil } from "rxjs/operators";
+import { debounceTime, distinctUntilChanged, take, takeUntil } from "rxjs/operators";
 import { CommonActions } from "../actions/common.actions";
 import { CompanyActions } from "../actions/company.actions";
 import { GeneralActions } from "../actions/general/general.actions";
@@ -24,6 +24,7 @@ import { VerifyMobileActions } from "../actions/verify-mobile.actions";
 import { AuthService } from "../theme/ng-social-login-module/index";
 import { ConfirmModalComponent } from 'apps/web-giddh/src/app/theme/new-confirm-modal/confirm-modal.component';
 import { HttpClient } from "@angular/common/http";
+import { AddCompanyComponentStore } from "./utility/add-company.store";
 
 declare var initSendOTP: any;
 declare var window: any;
@@ -32,7 +33,8 @@ declare var window: any;
     selector: 'add-company',
     templateUrl: './add-company.component.html',
     styleUrls: ['./add-company.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [AddCompanyComponentStore]
 })
 
 export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
@@ -100,7 +102,13 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         nameAlias: '',
         paymentId: '',
         amountPaid: '',
-        razorpaySignature: ''
+        razorpaySignature: '',
+        creatorSuperAdmin: false,
+        permission: {
+            emailId: '',
+            entity: 'company',
+            roleUniqueName: ''
+        }
     };
     /** Data for query params */
     public socketCompanyRequest: SocketNewCompanyRequest = new SocketNewCompanyRequest();
@@ -185,6 +193,11 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
     public showFocusInOtpField: boolean = false;
     /** Hold selected country */
     public selectedRole: string = '';
+    /** Holds Store Apply Promocode API response state as observable*/
+    public permissionRoles$ = this.componentStore.select(state => state.permissionRoles);
+    /** List of roles */
+    public permissionRoles: any[] = [];
+
 
     /** Returns true if form is dirty else false */
     public get showPageLeaveConfirmation(): boolean {
@@ -194,6 +207,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
     constructor(
         private formBuilder: UntypedFormBuilder,
         private toaster: ToasterService,
+        private componentStore: AddCompanyComponentStore,
         private http: HttpClient,
         private store: Store<AppState>,
         private generalService: GeneralService,
@@ -210,6 +224,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         private socialAuthService: AuthService
     ) {
         this.isLoggedInWithSocialAccount$ = this.store.pipe(select(state => state.login.isLoggedInWithSocialAccount), takeUntil(this.destroyed$));
+
     }
 
     /**
@@ -224,6 +239,16 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         this.getStates();
         this.getCurrency();
         this.getRoles();
+
+        this.permissionRoles$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.permissionRoles = response?.map(role => ({
+                    label: role.name,
+                    value: role?.uniqueName,
+                    additional: role
+                }));
+            }
+        });
 
         /** Library to separate phone number and calling code */
         if (window['libphonenumber'] === undefined) {
@@ -240,6 +265,23 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
 
         this.store.pipe(select(response => response.session.companies), takeUntil(this.destroyed$)).subscribe(companyList => {
             this.companiesList = companyList;
+        });
+
+        this.thirdStepForm.get('emailId').valueChanges.pipe(
+            debounceTime(700),
+            distinctUntilChanged(),
+            takeUntil(this.destroyed$),
+        ).subscribe(searchedText => {
+            if (searchedText !== null && searchedText !== undefined) {
+                console.log(searchedText, this.thirdStepForm);
+                if (this.thirdStepForm?.controls['emailId'].status === 'VALID') {
+                    this.thirdStepForm?.get('roleUniqueName').setValue('super_admin');
+                    this.selectedRole = 'Super Admin';
+                } else {
+                    this.thirdStepForm?.get('roleUniqueName').setValue('');
+                    this.selectedRole = '';
+                }
+            }
         });
 
         this.store.pipe(select(response => response.common.onboardingform), takeUntil(this.destroyed$)).subscribe(response => {
@@ -506,9 +548,10 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         });
 
         this.thirdStepForm = this.formBuilder.group({
-            emailId: [''],
-            role: ['', Validators.required],
-            ownerPermission: ['']
+            creatorSuperAdmin: [''],
+            emailId: ['', [, Validators.pattern(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/)]],
+            roleUniqueName: ['', Validators.required],
+            entity: ['company']
         });
 
         this.companyForm = this.formBuilder.group({
@@ -1003,6 +1046,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      * @memberof AddCompanyComponent
      */
     public onSubmit(): void {
+        console.log(this.companyForm);
         this.isFormSubmitted = false;
         if (this.companyForm.invalid || (!this.isGstinValid && this.secondStepForm.controls['businessType'].value === BusinessTypes.Registered)) {
             this.isFormSubmitted = true;
@@ -1036,6 +1080,10 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         this.company.address = taxDetails[0]?.address;
         this.company.taxes = this.secondStepForm.value.taxes;
         this.generalService.createNewCompany = this.company;
+        this.company.permission.emailId = this.thirdStepForm.value.emailId;
+        this.company.permission.roleUniqueName = this.thirdStepForm.value.roleUniqueName;
+        this.company.permission.entity = this.thirdStepForm.value.entity;
+        this.company.creatorSuperAdmin = this.thirdStepForm.value.creatorSuperAdmin;
 
         this.isLoading = true;
         this.companyService.CreateNewCompany(this.company).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
@@ -1207,15 +1255,17 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     public getRoles(): void {
-
+        this.componentStore.getPermissionRoles(null);
     }
 
     public selectRole(event: any): void {
-
+        console.log(event);
+        this.thirdStepForm.get('roleUniqueName').setValue(event?.value);
     }
 
     public setOwnerPermission(event: any): void {
-
+        console.log(event);
+        this.thirdStepForm.get('creatorSuperAdmin').setValue(event?.value);
     }
     /**
      * Callback for translation response complete

@@ -400,11 +400,11 @@
                                 <div class="pr-4 pl-0">
                                     <label>Make yourself as a Super Admin : </label>
                                 </div>
-                                <mat-radio-group name="ownerPermission" formControlName="ownerPermission">
-                                    <mat-radio-button color="primary" value="yes" (change)="setOwnerPermission($event)"
+                                <mat-radio-group name="ownerPermission" formControlName="creatorSuperAdmin">
+                                    <mat-radio-button color="primary" value="true" (change)="setOwnerPermission($event)"
                                         >Yes
                                     </mat-radio-button>
-                                    <mat-radio-button color="primary" value="no" (change)="setOwnerPermission($event)"
+                                    <mat-radio-button color="primary" value="false" (change)="setOwnerPermission($event)"
                                         >No
                                     </mat-radio-button>
                                 </mat-radio-group>
@@ -424,7 +424,7 @@
                                     [name]="'roles'"
                                     [label]="'Roles' + '*'"
                                     [placeholder]="'Select Role'"
-                                    [options]="roles"
+                                    [options]="permissionRoles"
                                     (selectedOption)="selectRole($event)"
                                     [defaultValue]="selectedRole"
                                     [showError]="isFormSubmitted && !firstStepForm.get('roles')?.value"

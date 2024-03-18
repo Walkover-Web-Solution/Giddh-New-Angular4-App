@@ -22,6 +22,8 @@ export class TransferComponent implements OnInit {
     public commonLocaleData: any = {};
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** True if form is submitted to show error if available */
+    public isFormSubmitted: boolean = false;
 
     constructor(
         private readonly subscriptionComponentStore: SubscriptionComponentStore,
@@ -64,6 +66,11 @@ export class TransferComponent implements OnInit {
      * @memberof TransferComponent
      */
     public onSubmit(): void {
+        this.isFormSubmitted = false;
+        if (this.transferForm.invalid) {
+            this.isFormSubmitted = true;
+            return;
+        }
         this.subscriptionComponentStore.transferSubscription({ model: this.transferForm.value, params: this.subscriptionId });
     }
 

@@ -236,7 +236,7 @@
                                     <button mat-menu-item (click)="changeBilling()">Change Billing</button>
                                     <button mat-menu-item (click)="transferSubscription(element?.subscriptionId)">Request Transfer</button>
                                     <button mat-menu-item (click)="cancelSubscription(element?.subscriptionId)">Cancel</button>
-                                    <button mat-menu-item (click)="moveSubscription()">Move</button>
+                                    <button mat-menu-item   (click)="openModalMove(element, $event)">Move</button>
                                 </div>
                             </mat-menu>
                         </td>
@@ -284,4 +284,15 @@
             [autoFocus]="show"
         ></text-field>
     </div>
+</ng-template>
+<!-- MoveCompany Modal -->
+<ng-template #moveCompany>
+    <move-company
+        (moveCompany)="addOrMoveCompanyCallback($event)"
+        [subscriptions]="subscriptions"
+        [moveSelectedCompany]="selectedCompany"
+        [localeData]="localeData"
+        [commonLocaleData]="commonLocaleData"
+    >
+    </move-company>
 </ng-template>

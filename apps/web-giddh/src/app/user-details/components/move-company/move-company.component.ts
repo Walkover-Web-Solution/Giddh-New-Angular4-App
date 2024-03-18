@@ -41,7 +41,7 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
     public isLoading: boolean = true;
 
     constructor(private store: Store<AppState>, private settingsProfileActions: SettingsProfileActions, private settingsProfileService: SettingsProfileService) {
-
+        console.log(this.moveCompany, this.subscriptions, this.moveSelectedCompany);
     }
 
     /**

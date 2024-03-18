@@ -17,7 +17,9 @@ export interface SubscriptionState {
     transferSubscriptionInProgress: boolean;
     transferSubscriptionSuccess: boolean;
     verifyOwnershipInProgress: boolean;
-    verifyOwnershipSuccess: any
+    verifyOwnershipSuccess: any;
+    subscribedCompaniesInProgress: boolean;
+    subscribedCompanies: any;
 }
 
 export const DEFAULT_SUBSCRIPTION_STATE: SubscriptionState = {
@@ -28,7 +30,10 @@ export const DEFAULT_SUBSCRIPTION_STATE: SubscriptionState = {
     transferSubscriptionInProgress: null,
     transferSubscriptionSuccess: null,
     verifyOwnershipInProgress: null,
-   verifyOwnershipSuccess: null
+    verifyOwnershipSuccess: null,
+    subscribedCompanies: null,
+    subscribedCompaniesInProgress: null,
+
 };
 
 @Injectable()
@@ -208,6 +213,48 @@ export class SubscriptionComponentStore extends ComponentStore<SubscriptionState
             })
         );
     });
+
+    /**
+ * Get All Subscriptions
+ *
+ * @memberof SubscriptionComponentStore
+ */
+    readonly getSubScribedCompanies = this.effect((data: Observable<any>) => {
+        return data.pipe(
+            switchMap(() => {
+                this.patchState({ subscribedCompaniesInProgress: true });
+                return this.subscriptionService.getSubScribedCompanies().pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res?.status === 'success') {
+                                return this.patchState({
+                                    subscribedCompanies: res?.body ?? null,
+                                    subscribedCompaniesInProgress: false,
+                                });
+                            } else {
+                                if (res.message) {
+                                    this.toasterService.showSnackBar('success', res.message);
+                                }
+                                return this.patchState({
+                                    subscribedCompanies: null,
+                                    subscribedCompaniesInProgress: false,
+                                });
+                            }
+                        },
+                        (error: any) => {
+                            this.toasterService.showSnackBar('error', 'Error');
+                            return this.patchState({
+                                subscribedCompanies: null,
+                                subscribedCompaniesInProgress: false
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
 
 
 

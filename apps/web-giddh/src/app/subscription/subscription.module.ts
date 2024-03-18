@@ -32,6 +32,7 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { AmountFieldComponentModule } from '../shared/amount-field/amount-field.module';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { VerifyOwnershipComponent } from './verify-ownership/verify-ownership.component';
+import { UserDetailsModule } from '../user-details/user-details.module';
 
 @NgModule({
     imports: [
@@ -61,7 +62,8 @@ import { VerifyOwnershipComponent } from './verify-ownership/verify-ownership.co
         MatRadioModule,
         MatButtonToggleModule,
         AmountFieldComponentModule,
-        ClickOutsideModule
+        ClickOutsideModule,
+        UserDetailsModule
     ],
     exports: [
     ],

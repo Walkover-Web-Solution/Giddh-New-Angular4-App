@@ -50,7 +50,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
         SubscriptionComponent,
         AddOnsComponent
     ],
-    exports: [],
+    exports: [MoveCompanyComponent],
     imports: [
         CommonModule,
         FormsModule,
