@@ -65,6 +65,9 @@
                 }
             }
             .save-discount-header {
+                span {
+                    color: var(--color-toast-primary-text);
+                }
                 button {
                     &.mdc-button {
                         .mdc-button__label {
