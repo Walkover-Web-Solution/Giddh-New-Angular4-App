@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivateDialogComponent } from '../activate-dialog/activate-dialog.component';
 import { BuyPlanComponentStore } from './utility/buy-plan.store';
-import { Observable, ReplaySubject, takeUntil, of as observableOf } from 'rxjs';
+import { Observable, ReplaySubject, takeUntil, of as observableOf, distinctUntilChanged, debounceTime } from 'rxjs';
 import { MatTableDataSource } from '@angular/material/table';
 import { ToasterService } from '../../services/toaster.service';
 import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
@@ -15,7 +15,7 @@ import { AppState } from '../../store';
 import { Store } from '@ngrx/store';
 import { StatesRequest } from '../../models/api-models/Company';
 import { GeneralActions } from '../../actions/general/general.actions';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 @Component({
     selector: 'buy-plan',
@@ -99,6 +99,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public isFormSubmitted: boolean = false;
     /** Hold selected plan*/
     public selectedPlan: any;
+    /** Hold popular plan*/
+    public popularPlan: any;
     /** Hold state source observable*/
     public stateSource$: Observable<IOption[]> = observableOf([]);
     /** Hold country source*/
@@ -113,6 +115,10 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public getColumnNames(): string[] {
         return this.displayedColumns.map(column => column.uniqueName);
     }
+    /** Hold plan data source*/
+    public planUniqueName: any;
+    /** Hold plan data source*/
+    public promoCodeResponse: any[]=[];
 
     constructor(
         public dialog: MatDialog,
@@ -125,6 +131,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         private formBuilder: FormBuilder,
         private subscriptionService: SubscriptionsService,
         private router: Router,
+        private route : ActivatedRoute,
         private location: Location
 
     ) {
@@ -137,6 +144,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      * @memberof BuyPlanComponent
      */
     public ngOnInit(): void {
+        document.body?.classList?.add("plan-page");
         this.initSubscriptionForm();
         this.getAllPlans();
         this.getCountry();
@@ -144,6 +152,14 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.getCompanyProfile();
         this.getOnboardingFormData();
         this.getActiveCompany();
+
+
+        this.route.params.pipe(takeUntil(this.destroyed$)).subscribe((params: any) => {
+            if (params) {
+                console.log(params);
+                this.planUniqueName = params.planUniqueName;
+            }
+        });
 
         this.createPlanSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
@@ -155,6 +171,18 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.applyPromoCodeSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.getPromoCodeData();
+            }
+        });
+
+        this.firstStepForm?.get('promoCode').valueChanges.pipe(
+            debounceTime(700),
+            distinctUntilChanged(),
+            takeUntil(this.destroyed$),
+        ).subscribe(searchedText => {
+            console.log(searchedText);
+            if (searchedText === "" || searchedText === undefined) {
+                this.promoCodeResponse = [];
+                this.firstStepForm?.get('promoCode').setValue("");
             }
         });
     }
@@ -203,6 +231,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      */
     public getPromoCodeData(): void {
         this.promoCodeResponse$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            console.log(response);
+            this.promoCodeResponse[0] = response;
         })
     }
 
@@ -538,6 +568,7 @@ public back(): void {
         this.planList$.pipe(takeUntil(this.componentStore.destroy$)).subscribe(response => {
             if (response?.length) {
                 this.selectedPlan = response[1];
+                this.popularPlan = response[1];
                 this.firstStepForm.get('planUniqueName').setValue(this.selectedPlan?.uniqueName);
                 let displayedColumns = [{ uniqueName: 'content', additional: "" }];
                 displayedColumns = displayedColumns.concat(response.map(column => ({ uniqueName: column.uniqueName, additional: column })));
@@ -586,6 +617,7 @@ public back(): void {
      * @memberof BuyPlanComponent
      */
     public onSubmit(): void {
+        console.log(this.subscriptionForm.value.firstStepForm);
         this.isFormSubmitted = false;
         if (this.subscriptionForm.invalid) {
             this.isFormSubmitted = true;
@@ -595,7 +627,7 @@ public back(): void {
         let request = {
             planUniqueName: this.subscriptionForm.value.firstStepForm.planUniqueName,
             duration: this.subscriptionForm.value.firstStepForm.duration,
-            userUniqueName: "dilpreet@walkover.in",
+            userUniqueName: null,
             billingAccount: {
                 billingName: this.subscriptionForm.value.secondStepForm.billingName,
                 companyName: this.subscriptionForm.value.secondStepForm.companyName,
@@ -613,11 +645,15 @@ public back(): void {
                 },
                 address: this.subscriptionForm.value.secondStepForm.address
             },
-            promoCode: this.subscriptionForm.value.firstStepForm.promoCode,
+            promoCode: this.subscriptionForm.value.firstStepForm.promoCode ? this.subscriptionForm.value.firstStepForm.promoCode : null,
             paymentProvider: "CASHFREE",
             returnUrl: "https://test.giddh.com/pages/subscription"
         }
-        this.componentStore.createPlan(request);
+        if (this.planUniqueName) {
+            this.componentStore.updatePlan(request);
+        } else {
+            this.componentStore.createPlan(request);
+        }
     }
 
     /**
@@ -660,6 +696,7 @@ public back(): void {
      * @memberof BuyPlanComponent
      */
     public ngOnDestroy(): void {
+        document.body?.classList?.remove("plan-page");
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }

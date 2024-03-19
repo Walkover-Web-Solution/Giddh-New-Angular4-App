@@ -1,6 +1,6 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { select, Store } from "@ngrx/store";
 import { Observable, ReplaySubject } from "rxjs";
 import { debounceTime, distinctUntilChanged, take, takeUntil } from "rxjs/operators";
@@ -221,7 +221,8 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         private pageLeaveUtilityService: PageLeaveUtilityService,
         public dialog: MatDialog,
         private verifyActions: VerifyMobileActions,
-        private socialAuthService: AuthService
+        private socialAuthService: AuthService,
+        private activateRoute:ActivatedRoute
     ) {
         this.isLoggedInWithSocialAccount$ = this.store.pipe(select(state => state.login.isLoggedInWithSocialAccount), takeUntil(this.destroyed$));
 
@@ -239,6 +240,13 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         this.getStates();
         this.getCurrency();
         this.getRoles();
+
+        this.activateRoute.params.pipe(takeUntil(this.destroyed$)).subscribe(res => {
+            if (res) {
+                console.log(res);
+                this.company.subscriptionRequest.subscriptionId = res?.subscriptionId;
+            }
+        });
 
         this.permissionRoles$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {

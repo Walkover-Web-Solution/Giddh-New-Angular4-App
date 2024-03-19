@@ -10,6 +10,7 @@ import * as dayjs from 'dayjs';
 import { SubscriptionsUser } from '../models/api-models/Subscriptions';
 import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
 import { TaxSupportedCountries, TaxType } from '../app.constant';
+import { GeneralService } from './general.service';
 
 @Injectable()
 export class SubscriptionsService {
@@ -17,6 +18,7 @@ export class SubscriptionsService {
 
     constructor(private errorHandler: GiddhErrorHandler,
         public http: HttpWrapperService,
+        private generalService: GeneralService,
         @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
 
     }
@@ -97,23 +99,6 @@ export class SubscriptionsService {
     }
 
     /**
-     * Get All Subscription list
-     *
-     * @param {*} model
-     * @param {*} params
-     * @returns {Observable<BaseResponse<any, any>>}
-     * @memberof PlanService
-     */
-    public getAllSubscriptions(): Observable<BaseResponse<any, any>> {
-        return this.http.get(this.config.apiUrl + SUBSRIPTION_V2_API.GET_ALL_SUBSCRIPTIONS)
-            .pipe(map((res) => {
-                let data: BaseResponse<any, any> = res;
-                data.request = '';
-                data.queryString = {};
-                return data;
-            }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {})));
-    }
-    /**
      * This will be use for show tax type by country
      *
      * @param {string} countryCode
@@ -135,12 +120,44 @@ export class SubscriptionsService {
         }
     }
 
+
+    /**
+ * Get All Subscription list
+ *
+ * @param {*} model
+ * @param {*} params
+ * @returns {Observable<BaseResponse<any, any>>}
+ * @memberof PlanService
+ */
+    public getAllSubscriptions(pagination: any, model: any): Observable<BaseResponse<any, any>> {
+        return this.http.post(this.config.apiUrl + SUBSRIPTION_V2_API.GET_ALL_SUBSCRIPTIONS
+            ?.replace(':page', encodeURIComponent(pagination?.page ?? ''))
+            ?.replace(':count', encodeURIComponent(pagination?.count ?? ''))
+            , model)
+            .pipe(map((res) => {
+                let data: BaseResponse<any, any> = res;
+                data.request = '';
+                data.queryString = {};
+                return data;
+            }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {})));
+    }
+
     public createPlan(model: any): Observable<BaseResponse<any, any>> {
         return this.http.post(this.config.apiUrl + PLAN_API.CREATE_PLAN, model).pipe(map((res) => {
             let data: BaseResponse<any, any> = res;
             data.request = '';
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {})));
+    }
+
+    public updatePlan(model: any): Observable<BaseResponse<any, any>> {
+        return this.http.post(this.config.apiUrl + PLAN_API.UPDATE_PLAN
+            ?.replace(':company', encodeURIComponent(this.generalService.companyUniqueName ?? '')),
+            model).pipe(map((res) => {
+                let data: BaseResponse<any, any> = res;
+                data.request = '';
+                return data;
+            }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {})));
     }
 
     public applyPromoCode(model: any): Observable<BaseResponse<any, any>> {
@@ -226,14 +243,31 @@ export class SubscriptionsService {
         }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {})));
     }
 
+    public getCompaniesListBySubscriptionID(model: any, subscriptionId: any, params: any): Observable<BaseResponse<any, any>> {
+        return this.http.post(this.config.apiUrl + SUBSRIPTION_V2_API.GET_COMPANIES_LIST_BY_SUBSCRIPTION_ID
+            ?.replace(':subscriptionId', encodeURIComponent(subscriptionId ?? ''))
+            ?.replace(':sort', encodeURIComponent(params.sort ?? ''))
+            ?.replace(':sortBy', encodeURIComponent(params.sortBy ?? ''))
+            ?.replace(':page', encodeURIComponent(params.page ?? ''))
+            ?.replace(':count', encodeURIComponent(params.count ?? ''))
+            ?.replace(':query', encodeURIComponent(params.query ?? ''))
+            , model
+        ).pipe(map((res) => {
+            let data: BaseResponse<any, any> = res;
+            data.request = '';
+            data.queryString = {};
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {})));
+    }
+
 
     public updateBillingDetails(model: any, billingAccountUnqiueName: any): Observable<BaseResponse<any, any>> {
         return this.http.patch(this.config.apiUrl + SUBSRIPTION_V2_API.UPDATE_BILLING_DETAILS
             ?.replace(':billingAccountUnqiueName', encodeURIComponent(billingAccountUnqiueName ?? '')), model).pipe(map((res) => {
-            let data: BaseResponse<any, any> = res;
-            data.request = '';
-            return data;
-        }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {})));
+                let data: BaseResponse<any, any> = res;
+                data.request = '';
+                return data;
+            }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {})));
     }
 
 

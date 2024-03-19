@@ -1,436 +1,460 @@
 <ng-container>
     <hamburger-menu></hamburger-menu>
-    <div class="w-100 float-left  pd-15 ">
+    <div class="w-100 float-left pd-15">
         <button mat-stroked-button class="mb-3" (click)="back()">
             <i class="icon-left back-left"></i>
             Back
         </button>
     </div>
-    <br>
+    <br />
     <div class="float-left w-100">
-    <div class="buy-plan-wrapper pd-15 w-100">
-        <mat-stepper
-            linear
-            #stepper
-            [formGroup]="subscriptionForm"
-            name="companyForm"
-            [selectedIndex]="selectedStep"
-            (selectionChange)="onSelectedTab($event)"
-            [disableRipple]="firstStepForm.invalid"
-        >
-            <mat-step [stepControl]="firstStepForm">
-                <form name="firstStepForm" [formGroup]="firstStepForm" autocomplete="off" class="mt-5" novalidate>
-                    <div class="plan-summary d-flex">
-                        <div class="plan-width">
-                            <ng-template matStepLabel>Plans</ng-template>
-                            <div class="d-flex justify-content-between align-items-center mb-3">
-                                <h4 class="font-16 strong">Choose Your Plan</h4>
-                                <div class="d-flex column-gap15">
-                                    <!-- <button mat-stroked-button color="primary" class="w-100" (click)="activateDialog()">
+        <div class="buy-plan-wrapper pd-15 w-100">
+            <mat-stepper
+                linear
+                #stepper
+                [formGroup]="subscriptionForm"
+                name="companyForm"
+                [selectedIndex]="selectedStep"
+                (selectionChange)="onSelectedTab($event)"
+                [disableRipple]="firstStepForm.invalid"
+            >
+                <mat-step [stepControl]="firstStepForm">
+                    <form name="firstStepForm" [formGroup]="firstStepForm" autocomplete="off" class="mt-5" novalidate>
+                        <div class="plan-summary d-flex">
+                            <div class="plan-width">
+                                <ng-template matStepLabel>Plans</ng-template>
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h4 class="font-16 strong">Choose Your Plan</h4>
+                                    <div class="d-flex column-gap15">
+                                        <!-- <button mat-stroked-button color="primary" class="w-100" (click)="activateDialog()">
                                         Activate Via Key
                                     </button> -->
-                                    <div class="custom-tab w-100">
-                                        <mat-button-toggle-group aria-label="Font Style" formControlName="duration">
-                                            <mat-button-toggle value="MONTHLY">Monthly</mat-button-toggle>
-                                            <mat-button-toggle value="YEARLY">Yearly</mat-button-toggle>
-                                        </mat-button-toggle-group>
+                                        <div class="custom-tab w-100">
+                                            <mat-button-toggle-group aria-label="Font Style" formControlName="duration">
+                                                <mat-button-toggle value="MONTHLY">Monthly</mat-button-toggle>
+                                                <mat-button-toggle value="YEARLY">Yearly</mat-button-toggle>
+                                            </mat-button-toggle-group>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="new-plan">
-                                <giddh-page-loader *ngIf="planListInProgress$ | async"></giddh-page-loader>
-                                <!-- material-table -->
-                                <div class="plan-table-wrapper" *ngIf="!(planListInProgress$ | async)">
-                                    <table mat-table [dataSource]="dataSource" class="plan-table">
-                                        <ng-container
-                                            *ngFor="let plan of displayedColumns; let i = index"
-                                            [matColumnDef]="plan?.uniqueName"
-                                            [sticky]="plan?.uniqueName === 'content'"
-                                        >
-                                            <ng-container *ngIf="plan?.uniqueName === 'content'">
-                                                <th mat-header-cell *matHeaderCellDef>
-                                                    <div class="new-plan-wrapper">
-                                                        <div class="popular-txt"></div>
-                                                        <div class="plan-content">
-                                                            <h2 class="font-20 strong"></h2>
-                                                            <p class="font-12 my-3 feature-txt"></p>
+                                <div class="new-plan">
+                                    <giddh-page-loader *ngIf="planListInProgress$ | async"></giddh-page-loader>
+                                    <!-- material-table -->
+                                    <div class="plan-table-wrapper" *ngIf="!(planListInProgress$ | async)">
+                                        <table mat-table [dataSource]="dataSource" class="plan-table">
+                                            <ng-container
+                                                *ngFor="let plan of displayedColumns; let i = index"
+                                                [matColumnDef]="plan?.uniqueName"
+                                                [sticky]="plan?.uniqueName === 'content'"
+                                            >
+                                                <ng-container *ngIf="plan?.uniqueName === 'content'">
+                                                    <th mat-header-cell *matHeaderCellDef>
+                                                        <div class="new-plan-wrapper">
+                                                            <div class="plan-content">
+                                                                <h2 class="font-20 strong"></h2>
+                                                                <p class="font-12 my-3 feature-txt"></p>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                </th>
-                                                <td mat-cell *matCellDef="let element; let rowIndex = index">
-                                                    <ng-container *ngIf="rowIndex === 0">
-                                                        <span>Invoices Count </span>
-                                                        <i
-                                                            class="icon-info cp"
-                                                            [matTooltip]="'Invoices'"
-                                                            [matTooltipPosition]="'above'"
-                                                        ></i>
-                                                    </ng-container>
-                                                    <ng-container *ngIf="rowIndex === 1">
-                                                        <span>Bills Count </span>
-                                                        <i
-                                                            class="icon-info cp"
-                                                            [matTooltip]="'Invoices'"
-                                                            [matTooltipPosition]="'above'"
-                                                        ></i>
-                                                    </ng-container>
-                                                    <ng-container *ngIf="rowIndex === 2">
-                                                        Accountant consultant
-                                                    </ng-container>
-                                                    <ng-container *ngIf="rowIndex === 3">
-                                                        Desktop and Mobile App
-                                                    </ng-container>
-                                                    <ng-container *ngIf="rowIndex === 4">
-                                                        Unlimited user access
-                                                    </ng-container>
-                                                    <ng-container *ngIf="rowIndex === 5">
-                                                        Import Previous Data
-                                                    </ng-container>
-                                                    <ng-container *ngIf="rowIndex === 6"> Security </ng-container>
-                                                </td>
-                                                <td mat-cell *matCellDef="let element">
-                                                    <div
-                                                        class="d-flex align-items-center justify-content-between column-gap2"
-                                                    >
-                                                        <span
-                                                            >Reconcile bank <br />
-                                                            transactions</span
+                                                    </th>
+                                                    <td mat-cell *matCellDef="let element; let rowIndex = index">
+                                                        <ng-container *ngIf="rowIndex === 0">
+                                                            <span>Invoices Count </span>
+                                                            <i
+                                                                class="icon-info cp"
+                                                                [matTooltip]="'Invoices'"
+                                                                [matTooltipPosition]="'above'"
+                                                            ></i>
+                                                        </ng-container>
+                                                        <ng-container *ngIf="rowIndex === 1">
+                                                            <span>Bills Count </span>
+                                                            <i
+                                                                class="icon-info cp"
+                                                                [matTooltip]="'Invoices'"
+                                                                [matTooltipPosition]="'above'"
+                                                            ></i>
+                                                        </ng-container>
+                                                        <ng-container *ngIf="rowIndex === 2">
+                                                            Accountant consultant
+                                                        </ng-container>
+                                                        <ng-container *ngIf="rowIndex === 3">
+                                                            Desktop and Mobile App
+                                                        </ng-container>
+                                                        <ng-container *ngIf="rowIndex === 4">
+                                                            Unlimited user access
+                                                        </ng-container>
+                                                        <ng-container *ngIf="rowIndex === 5">
+                                                            Import Previous Data
+                                                        </ng-container>
+                                                        <ng-container *ngIf="rowIndex === 6"> Security </ng-container>
+                                                    </td>
+                                                    <td mat-cell *matCellDef="let element">
+                                                        <div
+                                                            class="d-flex align-items-center justify-content-between column-gap2"
                                                         >
-                                                        <i
-                                                            class="icon-info cp"
-                                                            [matTooltip]="
-                                                                'Reconcile transactions to keep them in sync using Giddh software or the app.'
-                                                            "
-                                                            [matTooltipPosition]="'above'"
-                                                        ></i>
-                                                    </div>
-                                                </td>
-                                            </ng-container>
-                                            <ng-container *ngIf="plan?.uniqueName !== 'content'">
-                                                <th mat-header-cell *matHeaderCellDef>
-                                                    <div
-                                                        class="new-plan-wrapper"
-                                                        [ngClass]="{
-                                                            'active-plan': selectedPlan?.uniqueName === plan?.uniqueName
-                                                        }"
-                                                    >
-                                                        <div class="popular-txt"></div>
-                                                        <div class="plan-content">
-                                                            <h2 class="font-20 strong">
-                                                                {{ plan?.additional?.name }}
-                                                            </h2>
-                                                            <p class="font-12 my-3 feature-txt">
-                                                                Streamlined accounting tools plus <br />
-                                                                multi-currency for employing <br />
-                                                                businesses
-                                                            </p>
-                                                            <p
-                                                                *ngIf="
-                                                                    firstStepForm.get('duration')?.value === 'YEARLY'
-                                                                "
-                                                                class="mb-3"
+                                                            <span
+                                                                >Reconcile bank <br />
+                                                                transactions</span
                                                             >
-                                                                <span class="strong"
-                                                                    >{{ plan?.additional?.currency?.code
-                                                                    }}{{ plan?.additional?.yearlyAmount }}</span
-                                                                >
-                                                                /yearly
-                                                            </p>
-                                                            <p
-                                                                *ngIf="
-                                                                    firstStepForm.get('duration')?.value === 'MONTHLY'
+                                                            <i
+                                                                class="icon-info cp"
+                                                                [matTooltip]="
+                                                                    'Reconcile transactions to keep them in sync using Giddh software or the app.'
                                                                 "
-                                                                class="mb-3"
-                                                            >
-                                                                <span class="strong"
-                                                                    >{{ plan?.additional?.currency?.code
-                                                                    }}{{ plan?.additional?.monthlyAmount }}</span
-                                                                >
-                                                                /monthly
-                                                            </p>
-                                                            <button
-                                                                mat-stroked-button
-                                                                color="primary"
-                                                                class="w-100"
-                                                                [class.selected]="
-                                                                    firstStepForm.get('planUniqueName').value ===
-                                                                    plan?.uniqueName
-                                                                "
-                                                                (click)="selectPlan(plan)"
-                                                            >
-                                                                {{
-                                                                    firstStepForm.get("planUniqueName").value ===
-                                                                    plan.uniqueName
-                                                                        ? "Selected"
-                                                                        : "Select Plan"
-                                                                }}
-                                                            </button>
+                                                                [matTooltipPosition]="'above'"
+                                                            ></i>
                                                         </div>
-                                                    </div>
-                                                </th>
+                                                    </td>
+                                                </ng-container>
+                                                <ng-container *ngIf="plan?.uniqueName !== 'content'">
+                                                    <th mat-header-cell *matHeaderCellDef>
+                                                        <div
+                                                            class="new-plan-wrapper"
+                                                            [ngClass]="{
+                                                                'active-plan':
+                                                                    selectedPlan?.uniqueName === plan?.uniqueName
+                                                            }"
+                                                        >
+                                                            <ng-container
+                                                                *ngIf="popularPlan?.uniqueName === plan?.uniqueName"
+                                                            >
+                                                                <div
+                                                                    class="d-flex justify-content-center align-items-center"
+                                                                    [ngClass]="{
+                                                                        'popular-txt':
+                                                                            popularPlan?.uniqueName === plan?.uniqueName
+                                                                    }"
+                                                                >
+                                                                    <span class="font-20">Popular</span>
+                                                                </div>
+                                                            </ng-container>
+                                                            <ng-container
+                                                                *ngIf="!(popularPlan?.uniqueName === plan?.uniqueName)"
+                                                            >
+                                                                <div class="popular-txt-height"></div>
+                                                            </ng-container>
+                                                            <div class="plan-content">
+                                                                <h2 class="font-20 strong">
+                                                                    {{ plan?.additional?.name }}
+                                                                </h2>
+                                                                <p class="font-15 my-3 feature-txt">
+                                                                    {{ plan?.additional?.description }}
+                                                                </p>
+                                                                <p
+                                                                    *ngIf="
+                                                                        firstStepForm.get('duration')?.value ===
+                                                                        'YEARLY'
+                                                                    "
+                                                                    class="mb-3"
+                                                                >
+                                                                    <span class="strong"
+                                                                        >{{ plan?.additional?.currency?.code
+                                                                        }}{{ plan?.additional?.yearlyAmount }}</span
+                                                                    >
+                                                                    /yearly
+                                                                </p>
+                                                                <p
+                                                                    *ngIf="
+                                                                        firstStepForm.get('duration')?.value ===
+                                                                        'MONTHLY'
+                                                                    "
+                                                                    class="mb-3"
+                                                                >
+                                                                    <span class="strong"
+                                                                        >{{ plan?.additional?.currency?.code
+                                                                        }}{{ plan?.additional?.monthlyAmount }}</span
+                                                                    >
+                                                                    /monthly
+                                                                </p>
+                                                                <button
+                                                                    mat-stroked-button
+                                                                    color="primary"
+                                                                    class="w-100"
+                                                                    [class.selected]="
+                                                                        firstStepForm.get('planUniqueName').value ===
+                                                                        plan?.uniqueName
+                                                                    "
+                                                                    (click)="selectPlan(plan)"
+                                                                >
+                                                                    {{
+                                                                        firstStepForm.get("planUniqueName").value ===
+                                                                        plan.uniqueName
+                                                                            ? "Selected"
+                                                                            : "Select Plan"
+                                                                    }}
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </th>
 
-                                                <td
-                                                    mat-cell
-                                                    *matCellDef="let element; let rowIndex = index"
-                                                    [ngClass]="{
-                                                        'active-plan-td': selectedPlan?.uniqueName === plan?.uniqueName,
-                                                        'active-plan-td-bottom':
-                                                            selectedPlan?.uniqueName === plan?.uniqueName &&
-                                                            rowIndex === 4
-                                                    }"
-                                                    class="text-center"
-                                                >
-                                                    <ng-container *ngIf="rowIndex === 0">
-                                                        {{ plan?.additional?.invoicesAllowed }}
-                                                    </ng-container>
-                                                    <ng-container *ngIf="rowIndex === 1">
-                                                        {{ plan?.additional?.billsAllowed }}
-                                                    </ng-container>
-                                                    <ng-container *ngIf="rowIndex === 2">
-                                                        <i class="icon-tick"></i>
-                                                    </ng-container>
-                                                    <ng-container *ngIf="rowIndex === 3">
-                                                        <i class="icon-tick"></i>
-                                                    </ng-container>
-                                                    <ng-container *ngIf="rowIndex === 4">
-                                                        <i class="icon-tick"></i>
-                                                    </ng-container>
-                                                    <ng-container *ngIf="rowIndex === 5">
-                                                        <i class="icon-tick"></i>
-                                                    </ng-container>
-                                                    <ng-container *ngIf="rowIndex === 6">
-                                                        <i class="icon-tick"></i>
-                                                    </ng-container>
-                                                </td>
+                                                    <td
+                                                        mat-cell
+                                                        *matCellDef="let element; let rowIndex = index"
+                                                        [ngClass]="{
+                                                            'active-plan-td':
+                                                                selectedPlan?.uniqueName === plan?.uniqueName,
+                                                            'active-plan-td-bottom':
+                                                                selectedPlan?.uniqueName === plan?.uniqueName &&
+                                                                rowIndex === 4
+                                                        }"
+                                                        class="text-center"
+                                                    >
+                                                        <ng-container *ngIf="rowIndex === 0">
+                                                            {{ plan?.additional?.invoicesAllowed }}
+                                                        </ng-container>
+                                                        <ng-container *ngIf="rowIndex === 1">
+                                                            {{ plan?.additional?.billsAllowed }}
+                                                        </ng-container>
+                                                        <ng-container *ngIf="rowIndex === 2">
+                                                            <i class="icon-tick"></i>
+                                                        </ng-container>
+                                                        <ng-container *ngIf="rowIndex === 3">
+                                                            <i class="icon-tick"></i>
+                                                        </ng-container>
+                                                        <ng-container *ngIf="rowIndex === 4">
+                                                            <i class="icon-tick"></i>
+                                                        </ng-container>
+                                                        <ng-container *ngIf="rowIndex === 5">
+                                                            <i class="icon-tick"></i>
+                                                        </ng-container>
+                                                        <ng-container *ngIf="rowIndex === 6">
+                                                            <i class="icon-tick"></i>
+                                                        </ng-container>
+                                                    </td>
+                                                </ng-container>
                                             </ng-container>
-                                        </ng-container>
-                                        <tr mat-header-row *matHeaderRowDef="getColumnNames()"></tr>
-                                        <tr mat-row *matRowDef="let row; columns: getColumnNames()"></tr>
-                                    </table>
-                                    <h2
-                                        class="mt-5 text-center text-gray"
-                                        *ngIf="!(planListInProgress$ | async) && dataSource?.data?.length === 0"
-                                    >
-                                        No data found
-                                    </h2>
+                                            <tr mat-header-row *matHeaderRowDef="getColumnNames()"></tr>
+                                            <tr mat-row *matRowDef="let row; columns: getColumnNames()"></tr>
+                                        </table>
+                                        <h2
+                                            class="mt-5 text-center text-gray"
+                                            *ngIf="!(planListInProgress$ | async) && dataSource?.data?.length === 0"
+                                        >
+                                            No data found
+                                        </h2>
+                                    </div>
                                 </div>
                             </div>
+                            <ng-container *ngTemplateOutlet="planSummary"></ng-container>
                         </div>
-                        <ng-container *ngTemplateOutlet="planSummary"></ng-container>
-                    </div>
-                </form>
-            </mat-step>
-            <mat-step [stepControl]="secondStepForm" name="secondStepForm">
-                <form autocomplete="off" class="mt-5" novalidate [formGroup]="secondStepForm" name="secondStepForm">
-                    <div class="plan-summary d-flex">
-                        <div class="plan-width">
-                            <ng-template matStepLabel>Select billing account</ng-template>
-                            <h4 class="font-16 strong d-flex align-items-center mb-3">Create a new billing account</h4>
-                            <!-- remove back btn & max-width padding from change-billing component -->
-                            <mat-card class="outline-card change-billing-wrap">
-                                <mat-card-content>
-                                    <div class="billing-details">
-                                        <div class="form-group">
-                                            <input-field
-                                                [type]="'text'"
-                                                [name]="'billingName'"
-                                                [label]="'Billing Name'"
-                                                [placeholder]="'Billing Name'"
-                                                formControlName="billingName"
-                                                [showError]="
-                                                    isFormSubmitted && !secondStepForm.get('billingName')?.value
-                                                "
-                                            >
-                                            </input-field>
-                                        </div>
-                                        <div class="form-group">
-                                            <input-field
-                                                [type]="'text'"
-                                                [name]="'companyName'"
-                                                [label]="'Company Name'"
-                                                formControlName="companyName"
-                                                [placeholder]="'Company Name'"
-                                                [showError]="
-                                                    isFormSubmitted && !secondStepForm.get('companyName')?.value
-                                                "
-                                            >
-                                            </input-field>
-                                        </div>
-                                        <div class="form-group">
-                                            <input-field
-                                                [type]="'text'"
-                                                [name]="'email'"
-                                                [label]="'Email Id'"
-                                                formControlName="email"
-                                                [placeholder]="'Email Id'"
-                                                [showError]="isFormSubmitted && !secondStepForm.get('email')?.value"
-                                            >
-                                            </input-field>
-                                        </div>
-                                        <div class="form-group">
-                                            <input-field
-                                                [type]="'number'"
-                                                [name]="'pincode'"
-                                                [label]="'Pincode'"
-                                                formControlName="pincode"
-                                                [placeholder]="'Pincode'"
-                                            >
-                                            </input-field>
-                                        </div>
-                                        <div class="form-group">
-                                            <!-- Mobile Number -->
-                                            <div id="init-contact-wrapper" class="position-relative w-100">
-                                                <input
-                                                    type="tel"
-                                                    class="mat-form-field-border mat-form-field-height mobile-height"
-                                                    #initContact
-                                                    aria-autocomplete="none"
-                                                    autocomplete="off"
-                                                    (keypress)="
-                                                        intlClass?.onlyPhoneNumber($event); validateMobileField()
-                                                    "
-                                                    id="init-contact"
-                                                    placeholder="Mobile Number"
-                                                    formControlName="mobileNumber"
-                                                    [ngClass]="{
-                                                        'invalid-input':
-                                                            isFormSubmitted ||
-                                                            (secondStepForm.get('mobileNumber')?.touched &&
-                                                                !intlClass?.isRequiredValidNumber)
-                                                    }"
-                                                />
-                                                <mat-error
-                                                    *ngIf="
-                                                        secondStepForm.get('mobileNumber')?.touched &&
-                                                        !intlClass?.isRequiredValidNumber
-                                                    "
-                                                    >Please enter valid mobile number</mat-error
-                                                >
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="width-100">
-                                                <dropdown-field
-                                                    [name]="'county'"
-                                                    [label]="'County' + '*'"
-                                                    [placeholder]="'Select County'"
-                                                    class="mb-3 d-block"
-                                                    [options]="countrySource"
-                                                    (selectedOption)="selectCountry($event)"
-                                                    [defaultValue]="selectedCountry"
-                                                    [showError]="
-                                                        isFormSubmitted && !secondStepForm.get('country')?.value
-                                                    "
-                                                >
-                                                </dropdown-field>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <input-field
-                                                [name]="'taxNumber'"
-                                                [placeholder]="getEnterTaxText()"
-                                                [type]="'text'"
-                                                formControlName="taxNumber"
-                                                [showError]="
-                                                    (isFormSubmitted && !secondStepForm.get('taxNumber')?.value) ||
-                                                    !isGstinValid
-                                                "
-                                                [label]="
-                                                    formFields['taxName']?.label
-                                                        ? formFields['taxName']?.label
-                                                        : 'Tax Number'
-                                                "
-                                                [maxlength]="15"
-                                                (change)="validateGstNumber()"
-                                            >
-                                            </input-field>
-                                        </div>
-                                        <div class="form-group">
-                                            <div *ngIf="!countyList?.length">
-                                                <dropdown-field
-                                                    [name]="'state'"
-                                                    [label]="'State'"
-                                                    [placeholder]="'Select State'"
-                                                    [options]="states"
-                                                    [showError]="isFormSubmitted && !secondStepForm.get('state')?.value"
-                                                    [readonly]="disabledState"
-                                                    [defaultValue]="selectedState"
-                                                    (selectedOption)="selectState($event)"
-                                                    [ngClass]="{ 'readonly-field': disabledState }"
-                                                >
-                                                </dropdown-field>
-                                            </div>
-                                            <div *ngIf="countyList?.length">
-                                                <dropdown-field
-                                                    [name]="'county'"
-                                                    [label]="Region"
-                                                    [placeholder]="'Select Region'"
-                                                    [options]="countyList"
-                                                    [showError]="
-                                                        isFormSubmitted && !secondStepForm.get('county')?.value
-                                                    "
-                                                    [defaultValue]="secondStepForm.get('county')?.value?.label"
-                                                    (selectedOption)="secondStepForm.get('county')?.patchValue($event)"
-                                                >
-                                                </dropdown-field>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <mat-form-field appearance="outline" class="w-100">
-                                                <mat-label>Address</mat-label>
-                                                <textarea
-                                                    matInput
-                                                    placeholder="Enter Address..."
-                                                    formControlName="address"
-                                                ></textarea>
-                                            </mat-form-field>
-                                        </div>
-                                    </div>
-                                </mat-card-content>
-                            </mat-card>
-                        </div>
-                        <ng-container *ngTemplateOutlet="planSummary"></ng-container>
-                    </div>
-                </form>
-            </mat-step>
-            <mat-step [stepControl]="thirdStepForm">
-                <form
-                    name="thirdStepForm"
-                    autocomplete="off"
-                    class="mt-5"
-                    novalidate
-                    [formGroup]="thirdStepForm"
-                    name="thirdStepForm"
-                >
-                    <div class="plan-summary d-flex">
-                        <div class="plan-width">
-                            <ng-template matStepLabel>Review and pay</ng-template>
-                            <h4 class="font-16 mb-3 strong d-flex align-items-center">Payment details</h4>
-                            <div class="new-plan">
-                                <mat-card class="outline-card">
+                    </form>
+                </mat-step>
+                <mat-step [stepControl]="secondStepForm" name="secondStepForm">
+                    <form autocomplete="off" class="mt-5" novalidate [formGroup]="secondStepForm" name="secondStepForm">
+                        <div class="plan-summary d-flex">
+                            <div class="plan-width">
+                                <ng-template matStepLabel>Select billing account</ng-template>
+                                <h4 class="font-16 strong d-flex align-items-center mb-3">
+                                    Create a new billing account
+                                </h4>
+                                <!-- remove back btn & max-width padding from change-billing component -->
+                                <mat-card class="outline-card change-billing-wrap">
                                     <mat-card-content>
-                                        <h5 class="font-16 strong mb-3">Bill to</h5>
-                                        <div class="payment-header border-bottom pb-3">
-                                            <span class="light-gray font-14 strong d-block">{{
-                                                secondStepForm.get("billingName")?.value
-                                            }}</span>
-                                            <p class="light-gray font-14">
-                                                {{ secondStepForm.get("email")?.value }}
-                                            </p>
-                                            <p class="light-gray font-14">
-                                                {{ secondStepForm.get("mobileNumber")?.value }}
-                                            </p>
+                                        <div class="billing-details">
+                                            <div class="form-group">
+                                                <input-field
+                                                    [type]="'text'"
+                                                    [name]="'billingName'"
+                                                    [label]="'Billing Name'"
+                                                    [placeholder]="'Billing Name'"
+                                                    formControlName="billingName"
+                                                    [showError]="
+                                                        isFormSubmitted && !secondStepForm.get('billingName')?.value
+                                                    "
+                                                >
+                                                </input-field>
+                                            </div>
+                                            <div class="form-group">
+                                                <input-field
+                                                    [type]="'text'"
+                                                    [name]="'companyName'"
+                                                    [label]="'Company Name'"
+                                                    formControlName="companyName"
+                                                    [placeholder]="'Company Name'"
+                                                    [showError]="
+                                                        isFormSubmitted && !secondStepForm.get('companyName')?.value
+                                                    "
+                                                >
+                                                </input-field>
+                                            </div>
+                                            <div class="form-group">
+                                                <input-field
+                                                    [type]="'text'"
+                                                    [name]="'email'"
+                                                    [label]="'Email Id'"
+                                                    formControlName="email"
+                                                    [placeholder]="'Email Id'"
+                                                    [showError]="isFormSubmitted && !secondStepForm.get('email')?.value"
+                                                >
+                                                </input-field>
+                                            </div>
+                                            <div class="form-group">
+                                                <input-field
+                                                    [type]="'number'"
+                                                    [name]="'pincode'"
+                                                    [label]="'Pincode'"
+                                                    formControlName="pincode"
+                                                    [placeholder]="'Pincode'"
+                                                >
+                                                </input-field>
+                                            </div>
+                                            <div class="form-group">
+                                                <!-- Mobile Number -->
+                                                <div id="init-contact-wrapper" class="position-relative w-100">
+                                                    <input
+                                                        type="tel"
+                                                        class="mat-form-field-border mat-form-field-height mobile-height"
+                                                        #initContact
+                                                        aria-autocomplete="none"
+                                                        autocomplete="off"
+                                                        (keypress)="
+                                                            intlClass?.onlyPhoneNumber($event); validateMobileField()
+                                                        "
+                                                        id="init-contact"
+                                                        placeholder="Mobile Number"
+                                                        formControlName="mobileNumber"
+                                                        [ngClass]="{
+                                                            'invalid-input':
+                                                                isFormSubmitted ||
+                                                                (secondStepForm.get('mobileNumber')?.touched &&
+                                                                    !intlClass?.isRequiredValidNumber)
+                                                        }"
+                                                    />
+                                                    <mat-error
+                                                        *ngIf="
+                                                            secondStepForm.get('mobileNumber')?.touched &&
+                                                            !intlClass?.isRequiredValidNumber
+                                                        "
+                                                        >Please enter valid mobile number</mat-error
+                                                    >
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="width-100">
+                                                    <dropdown-field
+                                                        [name]="'county'"
+                                                        [label]="'County' + '*'"
+                                                        [placeholder]="'Select County'"
+                                                        class="mb-3 d-block"
+                                                        [options]="countrySource"
+                                                        (selectedOption)="selectCountry($event)"
+                                                        [defaultValue]="selectedCountry"
+                                                        [showError]="
+                                                            isFormSubmitted && !secondStepForm.get('country')?.value
+                                                        "
+                                                    >
+                                                    </dropdown-field>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <input-field
+                                                    [name]="'taxNumber'"
+                                                    [placeholder]="getEnterTaxText()"
+                                                    [type]="'text'"
+                                                    formControlName="taxNumber"
+                                                    [showError]="
+                                                        (isFormSubmitted && !secondStepForm.get('taxNumber')?.value) ||
+                                                        !isGstinValid
+                                                    "
+                                                    [label]="
+                                                        formFields['taxName']?.label
+                                                            ? formFields['taxName']?.label
+                                                            : 'Tax Number'
+                                                    "
+                                                    [maxlength]="15"
+                                                    (change)="validateGstNumber()"
+                                                >
+                                                </input-field>
+                                            </div>
+                                            <div class="form-group">
+                                                <div *ngIf="!countyList?.length">
+                                                    <dropdown-field
+                                                        [name]="'state'"
+                                                        [label]="'State*'"
+                                                        [placeholder]="'Select State'"
+                                                        [options]="states"
+                                                        [showError]="
+                                                            isFormSubmitted && !secondStepForm.get('state')?.value
+                                                        "
+                                                        [readonly]="disabledState"
+                                                        [defaultValue]="selectedState"
+                                                        (selectedOption)="selectState($event)"
+                                                        [ngClass]="{ 'readonly-field': disabledState }"
+                                                    >
+                                                    </dropdown-field>
+                                                </div>
+                                                <div *ngIf="countyList?.length">
+                                                    <dropdown-field
+                                                        [name]="'county'"
+                                                        [label]="Region"
+                                                        [placeholder]="'Select Region'"
+                                                        [options]="countyList"
+                                                        [showError]="
+                                                            isFormSubmitted && !secondStepForm.get('county')?.value
+                                                        "
+                                                        [defaultValue]="secondStepForm.get('county')?.value?.label"
+                                                        (selectedOption)="
+                                                            secondStepForm.get('county')?.patchValue($event)
+                                                        "
+                                                    >
+                                                    </dropdown-field>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <mat-form-field appearance="outline" class="w-100">
+                                                    <mat-label>Address</mat-label>
+                                                    <textarea
+                                                        matInput
+                                                        placeholder="Enter Address..."
+                                                        formControlName="address"
+                                                    ></textarea>
+                                                </mat-form-field>
+                                            </div>
                                         </div>
                                     </mat-card-content>
                                 </mat-card>
                             </div>
+                            <ng-container *ngTemplateOutlet="planSummary"></ng-container>
                         </div>
-                        <ng-container *ngTemplateOutlet="planSummary"></ng-container>
-                    </div>
-                </form>
-            </mat-step>
-        </mat-stepper>
-    </div>
+                    </form>
+                </mat-step>
+                <mat-step [stepControl]="thirdStepForm">
+                    <form
+                        name="thirdStepForm"
+                        autocomplete="off"
+                        class="mt-5"
+                        novalidate
+                        [formGroup]="thirdStepForm"
+                        name="thirdStepForm"
+                    >
+                        <div class="plan-summary d-flex">
+                            <div class="plan-width">
+                                <ng-template matStepLabel>Review and pay</ng-template>
+                                <h4 class="font-16 mb-3 strong d-flex align-items-center">Payment details</h4>
+                                <div class="new-plan">
+                                    <mat-card class="outline-card">
+                                        <mat-card-content>
+                                            <h5 class="font-16 strong mb-3">Bill to</h5>
+                                            <div class="payment-header border-bottom pb-3">
+                                                <span class="light-gray font-14 strong d-block">{{
+                                                    secondStepForm.get("billingName")?.value
+                                                }}</span>
+                                                <p class="light-gray font-14">
+                                                    {{ secondStepForm.get("email")?.value }}
+                                                </p>
+                                                <p class="light-gray font-14">
+                                                    {{ secondStepForm.get("mobileNumber")?.value }}
+                                                </p>
+                                            </div>
+                                        </mat-card-content>
+                                    </mat-card>
+                                </div>
+                            </div>
+                            <ng-container *ngTemplateOutlet="planSummary"></ng-container>
+                        </div>
+                    </form>
+                </mat-step>
+            </mat-stepper>
+        </div>
     </div>
     <!-- plan-summary -->
     <ng-template #planSummary>
@@ -484,11 +508,20 @@
                                 </amount-field>
                             </span>
                         </div>
-                        <div class="d-flex justify-content-between py-3">
+                        {{promoCodeResponse | json}} : {{promoCodeResponse?.length}}
+                        <div
+                            class="d-flex justify-content-between py-3"
+                            [ngClass]="{
+                                ' border-bottom':
+                                    firstStepForm.get('planUniqueName').value &&
+                                    selectedStep === 2 &&
+                                    promoCodeResponse?.length
+                            }"
+                        >
                             <span class="strong">
                                 <span *ngIf="firstStepForm.get('duration')?.value === 'YEARLY'">Yearly</span>
                                 <span *ngIf="firstStepForm.get('duration')?.value === 'MONTHLY'">Monthly</span>
-                                total</span
+                                Amount</span
                             >
 
                             <span *ngIf="firstStepForm.get('duration')?.value === 'YEARLY'">
@@ -508,7 +541,50 @@
                                 </amount-field>
                             </span>
                         </div>
-                        <div class="position-relative" *ngIf="firstStepForm.get('planUniqueName').value">
+                        <div
+                            class="d-flex justify-content-between py-3"
+                            *ngIf="
+                                firstStepForm.get('planUniqueName').value &&
+                                selectedStep === 2 &&
+                                promoCodeResponse?.length
+                            "
+                            [ngClass]="{
+                                ' border-bottom': firstStepForm.get('planUniqueName').value && selectedStep === 2
+                            }"
+                        >
+                            <p>Discount</p>
+                            <span>
+                                <amount-field
+                                    [amount]="promoCodeResponse[0]?.discountValue"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                >
+                                </amount-field
+                            ></span>
+                        </div>
+                        <div
+                            class="d-flex justify-content-between py-3"
+                            *ngIf="
+                                firstStepForm.get('planUniqueName').value &&
+                                selectedStep === 2 &&
+                                promoCodeResponse?.length
+                            "
+                        >
+                            <p>Final Amount</p>
+                            <span>
+                                <amount-field
+                                    [amount]="promoCodeResponse[0]?.finalAmount"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                >
+                                </amount-field
+                            ></span>
+                        </div>
+
+                        <div
+                            class="position-relative"
+                            *ngIf="firstStepForm.get('planUniqueName').value && selectedStep === 2"
+                        >
                             <input-field
                                 [name]="'code'"
                                 formControlName="promoCode"

@@ -41,7 +41,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** This will use for table heading */
-    public displayedColumns: string[] = ['name', 'billingAccount', 'subscriber', 'country', 'planSubName', 'status', 'monthYearly', 'renewalDate'];
+    public displayedColumns: string[] = ['companyName', 'billingAccountName', 'subscriberName', 'countryName', 'planName', 'status', 'period', 'renewalDate'];
     /** Hold the data of activity logs */
     public dataSource: any;
     /** True if translations loaded */
@@ -51,11 +51,11 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
     /** Holds Store Plan list API success state as observable*/
     public subscriptionListInProgress$ = this.componentStore.select(state => state.subscriptionListInProgress);
     /** This will use for branch transer pagination logs object */
-    public subscriptionPaginationObject = {
+    public subscriptionRequestParams = {
         page: 1,
         totalPages: 0,
         totalItems: 0,
-        count: 500
+        count: PAGINATION_LIMIT,
     }
     /** Hold table page index number*/
     public pageIndex: number = 0;
@@ -95,9 +95,9 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
             (hasResponse && this.inlineSearch !== 'name' || this.showClearFilter) ||
             (this.inlineSearch === 'name' && !hasResponse || this.showClearFilter) ||
             (hasResponse && this.inlineSearch === 'name' || this.showClearFilter) ||
-            (hasResponse && this.inlineSearch !== 'billingAccount' || this.showClearFilter) ||
-            (this.inlineSearch === 'billingAccount' && !hasResponse || this.showClearFilter) ||
-            (hasResponse && this.inlineSearch === 'billingAccount' || this.showClearFilter) ||
+            (hasResponse && this.inlineSearch !== 'billingAccountName' || this.showClearFilter) ||
+            (this.inlineSearch === 'billingAccountName' && !hasResponse || this.showClearFilter) ||
+            (hasResponse && this.inlineSearch === 'billingAccountName' || this.showClearFilter) ||
             (hasResponse && this.inlineSearch !== 'subscriber' || this.showClearFilter) ||
             (this.inlineSearch === 'subscriber' && !hasResponse || this.showClearFilter) ||
             (hasResponse && this.inlineSearch === 'subscriber' || this.showClearFilter) ||
@@ -153,13 +153,13 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
 
         /** Get Discount List */
         this.subscriptionList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response?.length) {
-                this.dataSource = new MatTableDataSource<any>(response);
+            if (response) {
+                this.dataSource = new MatTableDataSource<any>(response?.body?.results);
                 this.dataSource.paginator = this.paginator;
-                this.subscriptionPaginationObject.totalItems = response?.totalItems;
+                this.subscriptionRequestParams.totalItems = response?.body?.totalItems;
             } else {
                 this.dataSource = new MatTableDataSource<any>([]);
-                this.subscriptionPaginationObject.totalItems = 0;
+                this.subscriptionRequestParams.totalItems = 0;
             }
         });
 
@@ -175,7 +175,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.subscriptionListForm?.controls['name'].valueChanges.pipe(
+        this.subscriptionListForm?.controls['companyName'].valueChanges.pipe(
             debounceTime(700),
             distinctUntilChanged(),
             takeUntil(this.destroyed$),
@@ -185,7 +185,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
                 this.getAllSubscriptions(true);
             }
         });
-        this.subscriptionListForm?.controls['billingAccount'].valueChanges.pipe(
+        this.subscriptionListForm?.controls['billingAccountName'].valueChanges.pipe(
             debounceTime(700),
             distinctUntilChanged(),
             takeUntil(this.destroyed$),
@@ -195,7 +195,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
                 this.getAllSubscriptions(true);
             }
         });
-        this.subscriptionListForm?.controls['subscriber'].valueChanges.pipe(
+        this.subscriptionListForm?.controls['subscriberName'].valueChanges.pipe(
             debounceTime(700),
             distinctUntilChanged(),
             takeUntil(this.destroyed$),
@@ -205,7 +205,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
                 this.getAllSubscriptions(true);
             }
         });
-        this.subscriptionListForm?.controls['country'].valueChanges.pipe(
+        this.subscriptionListForm?.controls['countryName'].valueChanges.pipe(
             debounceTime(700),
             distinctUntilChanged(),
             takeUntil(this.destroyed$),
@@ -215,7 +215,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
                 this.getAllSubscriptions(true);
             }
         });
-        this.subscriptionListForm?.controls['planSubName'].valueChanges.pipe(
+        this.subscriptionListForm?.controls['planName'].valueChanges.pipe(
             debounceTime(700),
             distinctUntilChanged(),
             takeUntil(this.destroyed$),
@@ -237,7 +237,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.subscriptionListForm?.controls['monthYearly'].valueChanges.pipe(
+        this.subscriptionListForm?.controls['period'].valueChanges.pipe(
             debounceTime(700),
             distinctUntilChanged(),
             takeUntil(this.destroyed$),
@@ -256,13 +256,13 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
  */
     public initAllForms(): void {
         this.subscriptionListForm = this.formBuilder.group({
-            name: null,
-            billingAccount: null,
-            subscriber: null,
-            country: null,
-            planSubName: null,
+            companyName: null,
+            billingAccountName: null,
+            subscriberName: null,
+            countryName: null,
+            planName: null,
             status: null,
-            monthYearly: null
+            period: null
         });
     }
 
@@ -280,24 +280,24 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
     }
 
     public handleClickOutside(event: any, element: any, searchedFieldName: string): void {
-        if (searchedFieldName === 'Name') {
-            if (this.subscriptionListForm?.controls['name'].value !== null && this.subscriptionListForm?.controls['name'].value !== '') {
+        if (searchedFieldName === 'companyName') {
+            if (this.subscriptionListForm?.controls['companyName'].value !== null && this.subscriptionListForm?.controls['companyName'].value !== '') {
                 return;
             }
         } else if (searchedFieldName === 'Billing Account') {
-            if (this.subscriptionListForm?.controls['billingAccount'].value !== null && this.subscriptionListForm?.controls['billingAccount'].value !== '') {
+            if (this.subscriptionListForm?.controls['billingAccountName'].value !== null && this.subscriptionListForm?.controls['billingAccountName'].value !== '') {
                 return;
             }
         } else if (searchedFieldName === 'Subscriber') {
-            if (this.subscriptionListForm?.controls['subscriber'].value !== null && this.subscriptionListForm?.controls['subscriber'].value !== '') {
+            if (this.subscriptionListForm?.controls['subscriberName'].value !== null && this.subscriptionListForm?.controls['subscriberName'].value !== '') {
                 return;
             }
         } else if (searchedFieldName === 'Country') {
-            if (this.subscriptionListForm?.controls['country'].value !== null && this.subscriptionListForm?.controls['country'].value !== '') {
+            if (this.subscriptionListForm?.controls['countryName'].value !== null && this.subscriptionListForm?.controls['countryName'].value !== '') {
                 return;
             }
         } else if (searchedFieldName === 'Plan Sub Name') {
-            if (this.subscriptionListForm?.controls['planSubName'].value !== null && this.subscriptionListForm?.controls['planSubName'].value !== '') {
+            if (this.subscriptionListForm?.controls['planName'].value !== null && this.subscriptionListForm?.controls['planName'].value !== '') {
                 return;
             }
         } else if (searchedFieldName === 'Status') {
@@ -305,7 +305,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
                 return;
             }
         } else if (searchedFieldName === 'Monthly/Yearly') {
-            if (this.subscriptionListForm?.controls['monthYearly'].value !== null && this.subscriptionListForm?.controls['monthYearly'].value !== '') {
+            if (this.subscriptionListForm?.controls['period'].value !== null && this.subscriptionListForm?.controls['period'].value !== '') {
                 return;
             }
         }
@@ -365,6 +365,13 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
 
     public clearFilter(): void {
         this.showClearFilter = false;
+        this.showName = false;
+        this.showBillingAccount = false;
+        this.showSubscriber = false;
+        this.showCountry = false;
+        this.showPlanSubName = false;
+        this.showMonthlyYearly = false;
+        this.showStatus = false;
         this.subscriptionListForm.reset();
         this.inlineSearch = '';
         this.getAllSubscriptions(true);
@@ -372,9 +379,13 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
 
     public getAllSubscriptions(resetPage: boolean): void {
         if (resetPage) {
-            this.subscriptionPaginationObject.page = 1;
+            this.subscriptionRequestParams.page = 1;
         }
-        this.componentStore.getAllSubscriptions(null);
+        let request = {
+            pagination: this.subscriptionRequestParams,
+            model:this.subscriptionListForm.value
+        }
+        this.componentStore.getAllSubscriptions(request);
     }
 
     /**
@@ -385,8 +396,8 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
  */
     public handlePageChange(event: any): void {
         this.pageIndex = event.pageIndex;
-        this.subscriptionPaginationObject.count = event.pageSize;
-        this.subscriptionPaginationObject.page = event.pageIndex + 1;
+        this.subscriptionRequestParams.count = event.pageSize;
+        this.subscriptionRequestParams.page = event.pageIndex + 1;
         this.getAllSubscriptions(false);
     }
 
@@ -402,8 +413,15 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
     */
     public getCompanyList(event: any, element: any): void {
         this.menu.closeMenu();
+        let data = {
+            rowData: element,
+            subscriptions: this.subscriptions,
+            selectedCompany: this.selectedCompany,
+            localData: this.localeData,
+            commonLocaleData: this.commonLocaleData
+        }
         this.dialog.open(CompanyListComponent, {
-            data: element,
+            data: data,
             panelClass: 'subscription-sidebar'
         });
     }
@@ -448,8 +466,9 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
     public moveSubscription(): void {
     }
 
-    public changeBilling(): void {
-        this.router.navigate(['/pages/subscription/change-billing']);
+    public changeBilling(data:any): void {
+        // this.router.navigate(['/pages/subscription/change-billing/' + data?.subscriptionId]);
+        this.router.navigate(['/pages/subscription/change-billing/vwz1709217636400']);
     }
 
     public viewSubscription(data: any): void {
@@ -460,7 +479,9 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         this.router.navigate(['/pages/subscription/buy-plan']);
     }
 
-    public changePlan(): void {
+    public changePlan(data:any): void {
+        // this.router.navigate(['/pages/subscription/buy-plan' + data?.planDetails?.planUniqueName]);
+        this.router.navigate(['/pages/subscription/buy-plan/cdy1710506146367']);
     }
 
     /**
@@ -538,7 +559,6 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
     */
     public getCompanies(): void {
         this.subscribedCompanies$.pipe(takeUntil(this.destroyed$)).subscribe(res => {
-            console.log(res);
             this.store.dispatch(this.subscriptionsActions.SubscribedCompaniesResponse(res));
         });
     }
@@ -550,7 +570,6 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
      */
     public filterSubscriptions(): void {
         this.subscriptions$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            console.log(response);
             let subscriptions = [];
             this.subscriptions = [];
 

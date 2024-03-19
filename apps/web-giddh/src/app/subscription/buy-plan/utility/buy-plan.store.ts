@@ -14,6 +14,8 @@ export interface BuyPlanState {
     planList: any
     createPlanSuccess: boolean;
     createPlanInProgress: boolean;
+    updatePlanSuccess: boolean;
+    updatePlanInProgress: boolean;
     applyPromoCodeSuccess: boolean;
     applyPromoCodeInProgress: boolean;
     promoCodeResponse: any
@@ -26,7 +28,9 @@ export const DEFAULT_PLAN_STATE: BuyPlanState = {
     createPlanInProgress: false,
     applyPromoCodeSuccess: false,
     applyPromoCodeInProgress: false,
-    promoCodeResponse: null
+    promoCodeResponse: null,
+    updatePlanSuccess: false,
+    updatePlanInProgress: false
 };
 
 @Injectable()
@@ -119,6 +123,48 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
 
                             return this.patchState({
                                 createPlanInProgress: false
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    /**
+* Create Discount
+*
+* @memberof DiscountComponentStore
+*/
+    readonly updatePlan = this.effect((data: Observable<any>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({ updatePlanInProgress: true });
+                return this.subscriptionService.updatePlan(req).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res?.status === 'success') {
+                                this.toasterService.showSnackBar('success', 'Create Subscription Successfully');
+                                return this.patchState({
+                                    updatePlanInProgress: false,
+                                    updatePlanSuccess: true
+                                });
+                            } else {
+                                if (res.message) {
+                                    this.toasterService.showSnackBar('error', res.message);
+                                }
+                                return this.patchState({
+                                    updatePlanInProgress: false,
+                                    updatePlanSuccess: false
+                                });
+                            }
+                        },
+                        (error: any) => {
+                            this.toasterService.showSnackBar('error', 'Error');
+
+                            return this.patchState({
+                                updatePlanInProgress: false
                             });
                         }
                     ),

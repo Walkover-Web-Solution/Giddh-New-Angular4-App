@@ -13,8 +13,9 @@ import { VerifyOwnershipComponent } from './verify-ownership/verify-ownership.co
                 path: '', component: SubscriptionComponent
             },
             {
-                path: 'change-billing', component: ChangeBillingComponent
+                path: 'change-billing/:billingAccountUnqiueName', component: ChangeBillingComponent
             },
+
             {
                 path: 'view-subscription/:id', component: ViewSubscriptionComponent
             },
@@ -23,6 +24,9 @@ import { VerifyOwnershipComponent } from './verify-ownership/verify-ownership.co
             },
             {
                 path: 'buy-plan', component: BuyPlanComponent
+            },
+            {
+                path: 'buy-plan/:planUniqueName', component: BuyPlanComponent
             }
         ])
     ],

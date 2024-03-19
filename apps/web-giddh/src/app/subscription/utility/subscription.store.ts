@@ -53,14 +53,14 @@ export class SubscriptionComponentStore extends ComponentStore<SubscriptionState
      */
     readonly getAllSubscriptions = this.effect((data: Observable<any>) => {
         return data.pipe(
-            switchMap(() => {
+            switchMap((req) => {
                 this.patchState({ subscriptionListInProgress: true });
-                return this.subscriptionService.getAllSubscriptions().pipe(
+                return this.subscriptionService.getAllSubscriptions(req?.pagination, req?.model).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 return this.patchState({
-                                    subscriptionList: res?.body ?? [],
+                                    subscriptionList: res ?? [],
                                     subscriptionListInProgress: false,
                                 });
                             } else {

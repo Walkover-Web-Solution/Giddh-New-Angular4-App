@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ChangeBillingComponentStore } from './utility/change-billing.store';
 import { IntlPhoneLib } from '../../theme/mobile-number-field/intl-phone-lib.class';
@@ -13,7 +13,7 @@ import { AppState } from '../../store';
 import { ToasterService } from '../../services/toaster.service';
 import { SubscriptionsService } from '../../services/subscriptions.service';
 import { Location } from '@angular/common';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
     selector: 'change-billing',
@@ -21,7 +21,7 @@ import { Router } from '@angular/router';
     styleUrls: ['./change-billing.component.scss'],
     providers: [ChangeBillingComponentStore]
 })
-export class ChangeBillingComponent implements OnInit, AfterViewInit {
+export class ChangeBillingComponent implements OnInit, AfterViewInit , OnDestroy{
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */
@@ -87,7 +87,8 @@ export class ChangeBillingComponent implements OnInit, AfterViewInit {
     /** Hold billing Details */
     public billingDetails = {
         billingAccountUnqiueName: "",
-        billingName: ""
+        billingName: "",
+        uniqueName: ""
     };
 
     constructor(private formBuilder: FormBuilder,
@@ -98,7 +99,8 @@ export class ChangeBillingComponent implements OnInit, AfterViewInit {
         private store: Store<AppState>,
         private changeDetection: ChangeDetectorRef,
         private location: Location,
-        private router : Router,
+        private router: Router,
+        private route: ActivatedRoute,
         private generalActions: GeneralActions) { }
 
     public ngOnInit(): void {
@@ -108,7 +110,12 @@ export class ChangeBillingComponent implements OnInit, AfterViewInit {
         this.getCompanyProfile();
         this.getOnboardingFormData();
         this.getActiveCompany();
-        this.getBillingDetails();
+        this.route.params.pipe(takeUntil(this.destroyed$)).subscribe((params: any) => {
+            if (params) {
+                this.billingDetails.billingAccountUnqiueName = params?.billingAccountUnqiueName;
+                this.getBillingDetails(this.billingDetails.billingAccountUnqiueName);
+            }
+        });
     }
 
     public back(): void {
@@ -118,17 +125,16 @@ export class ChangeBillingComponent implements OnInit, AfterViewInit {
     public ngAfterViewInit(): void {
         this.initIntl();
         this.getBillingDetails$.pipe(takeUntil(this.destroyed$)).subscribe(data => {
-            console.log(data);
             if (data) {
-                    this.setFormValues(data);
+                this.setFormValues(data);
                 this.selectedCountry = data.country?.name;
                 this.selectedState = data.state?.name;
                 this.billingDetails.billingName = data?.billingName;
+                this.billingDetails.uniqueName = data?.uniqueName;
             }
         });
 
         this.updateBillingDetailsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(data => {
-            console.log(data);
             if (data) {
                 this.router.navigate(['/pages/subscription'])
             }
@@ -178,8 +184,8 @@ export class ChangeBillingComponent implements OnInit, AfterViewInit {
         }
     }
 
-    public getBillingDetails(): void {
-        this.componentStore.getBillingDetails('vwz1709217636400');
+    public getBillingDetails(subscriptionId: any): void {
+        this.componentStore.getBillingDetails(subscriptionId);
     }
 
     /**
@@ -446,31 +452,34 @@ export class ChangeBillingComponent implements OnInit, AfterViewInit {
  */
     public onSubmit(): void {
         this.isFormSubmitted = false;
-        console.log(this.changeBillingForm);
         if (this.changeBillingForm.invalid) {
             this.isFormSubmitted = true;
             return;
         }
 
         let request = {
-                billingName: this.changeBillingForm.value.billingName,
-                companyName: this.changeBillingForm.value.companyName,
-                taxNumber: this.changeBillingForm.value.taxNumber,
-                email: this.changeBillingForm.value.email,
-                pincode: this.changeBillingForm.value.pincode,
-                mobileNumber: this.changeBillingForm.value.mobileNumber,
-                country: {
-                    name: this.changeBillingForm.value.country.name,
-                    code: this.changeBillingForm.value.country.code
-                },
-                state: {
-                    name: this.changeBillingForm.value.state.name,
-                    code: this.changeBillingForm.value.state.code
-                },
-                address: this.changeBillingForm.value.address
+            billingName: this.changeBillingForm.value.billingName,
+            companyName: this.changeBillingForm.value.companyName,
+            taxNumber: this.changeBillingForm.value.taxNumber,
+            email: this.changeBillingForm.value.email,
+            pincode: this.changeBillingForm.value.pincode,
+            mobileNumber: this.changeBillingForm.value.mobileNumber,
+            country: {
+                name: this.changeBillingForm.value.country.name,
+                code: this.changeBillingForm.value.country.code
+            },
+            state: {
+                name: this.changeBillingForm.value.state.name,
+                code: this.changeBillingForm.value.state.code
+            },
+            address: this.changeBillingForm.value.address
         }
-        this.componentStore.updateBillingDetails({ request: request, id: 'pie1710322429370' });
+        this.componentStore.updateBillingDetails({ request: request, id: this.billingDetails.uniqueName });
     }
 
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
+    }
 
 }

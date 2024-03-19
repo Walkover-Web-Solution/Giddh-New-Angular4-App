@@ -14721,7 +14721,15 @@ activity-compare-json {
     z-index: 99999 !important;
     justify-content: center;
 }
-
+.plan-page {
+    .mdc-data-table__row {
+            &:last-child {
+                &>.mdc-data-table__cell {
+                    border-bottom: unset !important;
+                }
+            }
+        }
+}
 // Material 16 Table
 .mdc-data-table__row {
     &:last-child {
