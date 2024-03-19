@@ -555,3 +555,9 @@ export enum SUPPORTED_OPERATING_SYSTEMS {
     Windows = 'Windows'
 };
 
+export const ICICI_ALLOWED_COMPANIES = [
+    'mitti2in16805084405400lx4s8',
+    'walkovin164863366504908yve0',
+    'iciciiin16929619553650svnjv',
+    'aaaain16192663354510ja2o4'
+];
