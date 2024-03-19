@@ -53,23 +53,23 @@
                         class="subscription-report-table giddh-table table"
                     >
                         <ng-container matColumnDef="NAME">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header width="40%">Name</th>
-                            <td mat-cell *matCellDef="let element" width="40%">{{ element.name }}</td>
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header width="25%">Name</th>
+                            <td mat-cell *matCellDef="let element" width="25%">{{ element.name }}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="TOTAL_INVOICES">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header width="40%">Invoice Count</th>
-                            <td mat-cell *matCellDef="let element" width="40%">{{ element.name }}</td>
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header width="25%">Invoice Count</th>
+                            <td mat-cell *matCellDef="let element" width="25%">{{ element.totalInvoices }}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="TOTAL_BILLS">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header width="40%">Bill Count</th>
-                            <td mat-cell *matCellDef="let element" width="40%">{{ element.name }}</td>
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header width="25%">Bill Count</th>
+                            <td mat-cell *matCellDef="let element" width="25%">{{ element.totalBills }}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="STATUS">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header width="60%">Status</th>
-                            <td mat-cell *matCellDef="let element" width="60%" class="position-relative word-wrap">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header width="25%">Status</th>
+                            <td mat-cell *matCellDef="let element" width="25%" class="position-relative word-wrap">
                                 <div class="d-flex align-items-center">
                                     <div class="d-flex align-items-center">
                                         {{ element.status }}
@@ -85,8 +85,9 @@
                                     </div>
                                     <mat-menu #editModelBasic="matMenu">
                                         <div class="account-detail-custom-header">
-                                            <button mat-menu-item>Archive</button>
-                                            <button mat-menu-item>Move</button>
+                                            <button mat-menu-item *ngIf="element?.status ==='UNARCHIVED'"  (click)="archiveCompany(element,'ARCHIVED')">Archive</button>
+                                            <button mat-menu-item *ngIf="element?.status ==='ARCHIVED'"  (click)="archiveCompany(element,'UNARCHIVED')">Unarchive</button>
+                                            <button mat-menu-item (click)="openModalMove(element, $event)">Move</button>
                                         </div>
                                     </mat-menu>
                                 </div>

@@ -1,6 +1,5 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Inject, OnInit, Output, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { SubscriptionReportRequest } from '../../models/api-models/Subscriptions';
 import { ReplaySubject, debounceTime, takeUntil } from 'rxjs';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -8,8 +7,7 @@ import { CompanyListComponentStore } from './utility/company-list.store';
 import { MatTableDataSource } from '@angular/material/table';
 import { PAGINATION_LIMIT } from '../../app.constant';
 import { SubscriptionComponentStore } from '../utility/subscription.store';
-import { AppState } from '../../store';
-import { Store } from '@ngrx/store';
+import { MatMenuTrigger } from '@angular/material/menu';
 export interface CompanyRequest {
     page: number;
     count: number;
@@ -25,8 +23,13 @@ export interface CompanyRequest {
     providers: [CompanyListComponentStore, SubscriptionComponentStore]
 })
 export class CompanyListComponent implements OnInit {
+    @Output() public callBack: EventEmitter<boolean> = new EventEmitter();
     /** Instance of company list */
     @ViewChild('companyList', { static: false }) public companyList: ElementRef;
+    /** Mat menu instance reference */
+    @ViewChild(MatMenuTrigger) menu: MatMenuTrigger;
+    /** This will use for move company in to another company  */
+    @ViewChild("moveCompany", { static: false }) public moveCompany: any;
     /** This will hold local JSON data */
     public localeData: any = {};
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
@@ -35,6 +38,8 @@ export class CompanyListComponent implements OnInit {
     public companyList$ = this.componentStore.select(state => state.companyList);
     /** Holds Store Plan list API success state as observable*/
     public companyListInProgress$ = this.componentStore.select(state => state.companyListInProgress);
+    /** Holds Store Plan list API success state as observable*/
+    public archiveCompanySuccess$ = this.componentStore.select(state => state.archiveCompanySuccess);
     /** Holds Object for Get All Company API Request */
     public companyListRequest: CompanyRequest;
     /** Holds Store Plan list API success state as observable*/
@@ -63,11 +68,18 @@ export class CompanyListComponent implements OnInit {
         this.companyList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             console.log(response);
             if (response) {
-                this.dataSource = new MatTableDataSource<any>(response?.results);;
+                this.dataSource = new MatTableDataSource<any>(response?.results);
             } else {
                 this.dataSource = new MatTableDataSource<any>([]);
             }
             console.log(this.dataSource);
+        });
+
+        this.archiveCompanySuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            console.log(response);
+            if (response) {
+                this.getAllCompaniesList();
+            }
         });
 
         this.companyListForm.get('name').valueChanges.pipe(
@@ -141,6 +153,45 @@ export class CompanyListComponent implements OnInit {
         this.companyListRequest.sortBy = event?.active;
         this.companyListRequest.sort = event?.direction;
         this.getAllCompaniesList();
+    }
+
+    public archiveCompany(data: any, type: string): void {
+        console.log(data);
+        let request = {
+            companyUniqueName: data.uniqueName,
+            status: { archiveStatus: type }
+        }
+        this.componentStore.archhiveCompany(request);
+    }
+
+    /**
+  *This function will open the move company popup
+  *
+  * @param {*} company
+  * @memberof SubscriptionComponent
+  */
+    public openModalMove(company: any, event: any) {
+        console.log(company);
+        this.menu.closeMenu();
+        let companyObj = {
+            name: company.name,
+            uniqueName: company.uniqueName
+        }
+        this.inputData.selectedCompany = companyObj;
+        this.dialog.open(this.moveCompany, { width: '40%' });
+    }
+
+
+    /**
+   * This function will refresh the subscribed companies if move company was succesful and will close the popup
+   *
+   * @param {*} event
+   * @memberof SubscriptionsComponent
+   */
+    public addOrMoveCompanyCallback(event: boolean): void {
+        if (event === true) {
+            this.callBack.emit(true);
+        }
     }
 
 

@@ -54,7 +54,7 @@
                                 "
                             ></ng-container>
                         </th>
-                        <td class="subscription-td" mat-cell *matCellDef="let element">
+                        <td class="subscription-td" mat-cell *matCellDef="let element" width="15%">
                             <a
                                 class="cursor-pointer "
                                 *ngIf="element?.companies?.length > 1"
@@ -218,7 +218,7 @@
                             ></ng-container>
                         </th>
                         <td mat-cell *matCellDef="let element" class="position-relative">
-                            {{ element.monthYearly }}
+                            {{ element.monthYearly ? element.monthYearly : '-' }}
                         </td>
                     </ng-container>
                     <ng-container matColumnDef="renewalDate">

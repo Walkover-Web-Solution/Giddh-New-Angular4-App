@@ -119,6 +119,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public planUniqueName: any;
     /** Hold plan data source*/
     public promoCodeResponse: any[]=[];
+    /** This will use for tax percentage */
+    public taxPercentage: number = 0.18;
 
     constructor(
         public dialog: MatDialog,

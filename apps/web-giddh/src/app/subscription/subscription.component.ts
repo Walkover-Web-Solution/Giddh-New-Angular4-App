@@ -534,8 +534,9 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
      * @memberof SubscriptionComponent
      */
     public openModalMove(company: any, event: any) {
+        console.log(company);
         this.menu.closeMenu();
-        this.selectedCompany = company.companiesList[0];
+        this.selectedCompany = company.companies[0];
         this.dialog.open(this.moveCompany, { width: '40%' });
     }
 

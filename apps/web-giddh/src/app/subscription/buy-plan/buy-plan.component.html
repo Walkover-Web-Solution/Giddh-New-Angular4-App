@@ -508,9 +508,7 @@
                                 </amount-field>
                             </span>
                         </div>
-                        {{promoCodeResponse | json}} : {{promoCodeResponse?.length}}
                         <div
-                            class="d-flex justify-content-between py-3"
                             [ngClass]="{
                                 ' border-bottom':
                                     firstStepForm.get('planUniqueName').value &&
@@ -518,28 +516,44 @@
                                     promoCodeResponse?.length
                             }"
                         >
-                            <span class="strong">
-                                <span *ngIf="firstStepForm.get('duration')?.value === 'YEARLY'">Yearly</span>
-                                <span *ngIf="firstStepForm.get('duration')?.value === 'MONTHLY'">Monthly</span>
-                                Amount</span
-                            >
+                            <div class="d-flex justify-content-between py-3">
+                                <span class="strong">
+                                    <span *ngIf="firstStepForm.get('duration')?.value === 'YEARLY'">Yearly</span>
+                                    <span *ngIf="firstStepForm.get('duration')?.value === 'MONTHLY'">Monthly</span>
+                                    Amount</span
+                                >
 
-                            <span *ngIf="firstStepForm.get('duration')?.value === 'YEARLY'">
-                                <amount-field
-                                    [amount]="selectedPlan?.yearlyAmount"
-                                    [currencySymbol]="selectedPlan?.currency?.symbol"
-                                    [currencyCode]="selectedPlan?.currency?.code"
-                                >
-                                </amount-field>
-                            </span>
-                            <span *ngIf="firstStepForm.get('duration')?.value === 'MONTHLY'">
-                                <amount-field
-                                    [amount]="selectedPlan?.monthlyAmount"
-                                    [currencySymbol]="selectedPlan?.currency?.symbol"
-                                    [currencyCode]="selectedPlan?.currency?.code"
-                                >
-                                </amount-field>
-                            </span>
+                                <span *ngIf="firstStepForm.get('duration')?.value === 'YEARLY'">
+                                    <amount-field
+                                        [amount]="
+                                            selectedPlan?.yearlyAmount +
+                                            (activeCompany?.country === 'India'
+                                                ? selectedPlan?.yearlyAmount * taxPercentage
+                                                : 0)
+                                        "
+                                        [currencySymbol]="selectedPlan?.currency?.symbol"
+                                        [currencyCode]="selectedPlan?.currency?.code"
+                                    >
+                                    </amount-field>
+                                </span>
+                                <span *ngIf="firstStepForm.get('duration')?.value === 'MONTHLY'">
+                                    <amount-field
+                                        [amount]="
+                                            selectedPlan?.monthlyAmount +
+                                            (activeCompany?.country === 'India'
+                                                ? selectedPlan?.monthlyAmount * taxPercentage
+                                                : 0)
+                                        "
+                                        [currencySymbol]="selectedPlan?.currency?.symbol"
+                                        [currencyCode]="selectedPlan?.currency?.code"
+                                    >
+                                    </amount-field>
+                                </span>
+                            </div>
+                            <br />
+                            <span class="including-tax" *ngIf="activeCompany?.country === 'India'"
+                                >(Including Tax (18% GST))</span
+                            >
                         </div>
                         <div
                             class="d-flex justify-content-between py-3"
@@ -563,22 +577,32 @@
                             ></span>
                         </div>
                         <div
-                            class="d-flex justify-content-between py-3"
                             *ngIf="
                                 firstStepForm.get('planUniqueName').value &&
                                 selectedStep === 2 &&
                                 promoCodeResponse?.length
                             "
                         >
-                            <p>Final Amount</p>
-                            <span>
-                                <amount-field
-                                    [amount]="promoCodeResponse[0]?.finalAmount"
-                                    [currencySymbol]="false"
-                                    [currencyCode]="false"
+                            <div class="d-flex justify-content-between py-3">
+                                <p>Final Amount</p>
+                                <span>
+                                    <amount-field
+                                        [amount]="
+                                            promoCodeResponse[0]?.finalAmount +
+                                            (activeCompany?.country === 'India'
+                                                ? promoCodeResponse[0]?.finalAmount * taxPercentage
+                                                : 0)
+                                        "
+                                        [currencySymbol]="false"
+                                        [currencyCode]="false"
+                                    >
+                                    </amount-field>
+                                </span>
+                                <br />
+                                <span class="including-tax" *ngIf="activeCompany?.country === 'India'"
+                                    >Including Tax (18% GST)</span
                                 >
-                                </amount-field
-                            ></span>
+                            </div>
                         </div>
 
                         <div
