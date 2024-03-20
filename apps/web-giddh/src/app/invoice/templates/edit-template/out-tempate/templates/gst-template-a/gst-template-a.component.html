@@ -26,7 +26,7 @@
                 }"
                 (click)="onClickSection('header')"
             >
-                <a href="javascript:void(0);" class="edit-template" *ngIf="!templateUISectionVisibility.header">
+                <a href="javascript:void(0);" class="edit-template" *ngIf="!templateUISectionVisibility.header" aria-label="edit icon">
                     <i class="icon-edit-pencil"></i>
                 </a>
                 <header>
@@ -41,7 +41,7 @@
                                                     [hidden]="!showLogo"
                                                     [src]="logoSrc"
                                                     class="pull-left"
-                                                    alt=""
+                                                    alt="logo"
                                                     [ngStyle]="{ 'height': inputTemplate.logoSize + 'px' }"
                                                 />
                                             </div>
@@ -209,7 +209,7 @@
                                                 >
                                                     <div class="qr-image">
                                                         <img
-                                                            src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/QR_code_for_mobile_English_Wikipedia.svg/1200px-QR_code_for_mobile_English_Wikipedia.svg.png"
+                                                            src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/QR_code_for_mobile_English_Wikipedia.svg/1200px-QR_code_for_mobile_English_Wikipedia.svg.png" alt="qr image"
                                                         />
                                                     </div>
                                                 </td>
@@ -501,10 +501,10 @@
                 }"
                 (click)="onClickSection('table')"
             >
-                <a href="javascript:void(0); " class="edit-template" *ngIf="!templateUISectionVisibility.table">
+                <a href="javascript:void(0); " class="edit-template" *ngIf="!templateUISectionVisibility.table" aria-label="edit icon">
                     <i class="icon-edit-pencil"></i>
                 </a>
-                <article class="table-item">
+                <article class="table-item" tabindex="0">
                     <table id="item " class="item" cellpadding="0 " cellspacing="0 ">
                         <thead>
                             <tr>
@@ -975,10 +975,10 @@
                 (click)="onClickSection('footer')"
             >
                 <div class="clearfix">
-                    <a href="javascript:void(0); " class="edit-template" *ngIf="!templateUISectionVisibility.footer">
+                    <a href="javascript:void(0); " class="edit-template" *ngIf="!templateUISectionVisibility.footer" aria-label="edit icon">
                         <i class="icon-edit-pencil"></i>
                     </a>
-                    <article>
+                    <article tabindex="0">
                         <table class="balance">
                             <tr *ngIf="fieldsAndVisibility.footer.taxableAmount?.display">
                                 <th>
@@ -1218,7 +1218,7 @@
                 </div>
 
                 <div class="clearfix">
-                    <a href="javascript:void(0); " class="edit-template" *ngIf="!templateUISectionVisibility.footer">
+                    <a href="javascript:void(0);" class="edit-template" *ngIf="!templateUISectionVisibility.footer" aria-label="edit icon">
                         <i class="icon-edit-pencil"></i>
                     </a>
                     <aside>
@@ -1323,7 +1323,7 @@
                                                 [hidden]="!showImageSignature || !imageSignatureSrc"
                                                 [src]="imageSignatureSrc"
                                                 class="inner-img-signature"
-                                                alt=" "
+                                                alt="signature img"
                                             />
                                             <hr
                                                 *ngIf="

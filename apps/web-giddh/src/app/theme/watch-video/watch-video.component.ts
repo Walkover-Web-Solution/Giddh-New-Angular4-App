@@ -48,7 +48,9 @@ export class WatchVideoComponent implements OnInit {
     public openVideoTutorialDialog(): void {
         this.dialog.open(this.videoTutorial, {
             width: '800px',
-            height: 'auto'
+            height: 'auto',
+            role: 'alertdialog',
+            ariaLabel: 'Video'
         });
     }
 
