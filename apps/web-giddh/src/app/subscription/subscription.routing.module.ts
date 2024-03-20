@@ -4,13 +4,13 @@ import { SubscriptionComponent } from './subscription.component';
 import { ChangeBillingComponent } from './change-billing/change-billing.component';
 import { ViewSubscriptionComponent } from './view-subscription/view-subscription.component';
 import { BuyPlanComponent } from './buy-plan/buy-plan.component';
-import { VerifyOwnershipComponent } from './verify-ownership/verify-ownership.component';
+import { VerifyOwnershipDialogComponent } from './verify-ownership-dilaog/verify-ownership-dilaog.component';
 
 @NgModule({
     imports: [
         RouterModule.forChild([
             {
-                path: '', component: SubscriptionComponent
+                path: '', component: BuyPlanComponent
             },
             {
                 path: 'change-billing/:billingAccountUnqiueName', component: ChangeBillingComponent
@@ -20,7 +20,7 @@ import { VerifyOwnershipComponent } from './verify-ownership/verify-ownership.co
                 path: 'view-subscription/:id', component: ViewSubscriptionComponent
             },
             {
-                path: 'verify-ownership/:requestId', component: VerifyOwnershipComponent
+                path: 'verify-ownership/:requestId', component: VerifyOwnershipDialogComponent
             },
             {
                 path: 'buy-plan', component: BuyPlanComponent

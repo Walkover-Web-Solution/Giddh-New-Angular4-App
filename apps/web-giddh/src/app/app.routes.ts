@@ -29,6 +29,7 @@ export const ROUTES: Routes = [
     { path: 'ledger', redirectTo: 'pages/ledger' },
     { path: 'dummy', loadChildren: () => import('./dummy/dummy.module').then(module => module.DummyModule) },
     { path: 'new-company', loadChildren: () => import('./add-company/add-company-module').then(module => module.AddcompanyModule), canActivate: [NewUserAuthGuard] },
+    { path: 'subscription/buy-plan', loadChildren: () => import('./subscription/subscription.module').then(module => module.SubscriptionModule) },
     { path: 'new-company/:subscriptionId', loadChildren: () => import('./add-company/add-company-module').then(module => module.AddcompanyModule), canActivate: [NewUserAuthGuard] },
     { path: 'onboarding', redirectTo: 'pages/onboarding', pathMatch: 'full' },
     { path: 'invoice', redirectTo: 'pages/invoice', pathMatch: 'full' },
@@ -94,6 +95,7 @@ export const ROUTES: Routes = [
             { path: 'custom-fields', loadChildren: () => import('./custom-fields/custom-fields.module').then(module => module.CustomFieldsModule), canActivate: [NeedsAuthorization] },
             { path: 'new-company', loadChildren: () => import('./add-company/add-company-module').then(module => module.AddcompanyModule), canActivate: [NeedsAuthorization] },
             { path: 'new-company/:subscriptionId', loadChildren: () => import('./add-company/add-company-module').then(module => module.AddcompanyModule), canActivate: [NeedsAuthorization] },
+            { path: 'subscription/buy-plan', loadChildren: () => import('./subscription/subscription.module').then(module => module.SubscriptionModule) },
             { path: 'auth-hmrc', loadChildren: () => import('./auth-hmrc/auth-hmrc.module').then(module => module.AuthHMRCModule), canActivate: [NeedsAuthorization] },
             { path: '**', redirectTo: 'home', pathMatch: 'full' }
         ]

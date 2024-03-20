@@ -5,7 +5,6 @@ import { Observable, switchMap, catchError, EMPTY } from "rxjs";
 import { BaseResponse } from "../../../models/api-models/BaseResponse";
 import { SubscriptionsService } from "../../../services/subscriptions.service";
 import { ToasterService } from "../../../services/toaster.service";
-import { CommonService } from "../../../services/common.service";
 import { AppState } from "../../../store";
 import { Store } from "@ngrx/store";
 
@@ -14,7 +13,7 @@ export interface ViewSubscriptionState {
     viewSubscription: any
 }
 
-export const DEFAULT_PLAN_STATE: ViewSubscriptionState = {
+export const DEFAULT_VIEW_SUBSCRIPTION_STATE: ViewSubscriptionState = {
     viewSubscriptionInProgress: null,
     viewSubscription: null
 };
@@ -22,19 +21,20 @@ export const DEFAULT_PLAN_STATE: ViewSubscriptionState = {
 @Injectable()
 export class ViewSubscriptionComponentStore extends ComponentStore<ViewSubscriptionState> implements OnDestroy {
 
-    constructor(private toasterService: ToasterService,
+    constructor(
+        private toasterService: ToasterService,
         private subscriptionService: SubscriptionsService,
-        private store: Store<AppState>,
-        private commonService: CommonService) {
-        super(DEFAULT_PLAN_STATE);
+        private store: Store<AppState>
+    ) {
+        super(DEFAULT_VIEW_SUBSCRIPTION_STATE);
     }
 
     /**
-     * Get All Plans
+     * View Subscriptions
      *
-     * @memberof PlanComponentStore
+     * @memberof ViewSubscriptionComponentStore
      */
-    readonly viewSubscriptions = this.effect((data: Observable<any>) => {
+    readonly viewSubscriptionsById = this.effect((data: Observable<any>) => {
         return data.pipe(
             switchMap((req) => {
                 this.patchState({ viewSubscriptionInProgress: true });
@@ -73,7 +73,7 @@ export class ViewSubscriptionComponentStore extends ComponentStore<ViewSubscript
     /**
      * Lifecycle hook for component destroy
      *
-     * @memberof PlanComponentStore
+     * @memberof ViewSubscriptionComponentStore
      */
     public ngOnDestroy(): void {
         super.ngOnDestroy();

@@ -5,9 +5,6 @@ import { Observable, switchMap, catchError, EMPTY } from "rxjs";
 import { BaseResponse } from "../../../models/api-models/BaseResponse";
 import { SubscriptionsService } from "../../../services/subscriptions.service";
 import { ToasterService } from "../../../services/toaster.service";
-import { CommonService } from "../../../services/common.service";
-import { AppState } from "../../../store";
-import { Store } from "@ngrx/store";
 import { SettingsProfileService } from "../../../services/settings.profile.service";
 
 export interface CompanyListState {
@@ -16,27 +13,27 @@ export interface CompanyListState {
     archiveCompanySuccess: boolean;
 }
 
-export const DEFAULT_PLAN_STATE: CompanyListState = {
+export const DEFAULT_COMPANY_LIST_STATE: CompanyListState = {
     companyListInProgress: false,
     companyList: null,
     archiveCompanySuccess: null
 };
 
 @Injectable()
-export class CompanyListComponentStore extends ComponentStore<CompanyListState> implements OnDestroy {
+export class CompanyListDialogComponentStore extends ComponentStore<CompanyListState> implements OnDestroy {
 
-    constructor(private toasterService: ToasterService,
+    constructor(
+        private toasterService: ToasterService,
         private subscriptionService: SubscriptionsService,
-        private store: Store<AppState>,
-        private settingsProfile: SettingsProfileService,
-        private commonService: CommonService) {
-        super(DEFAULT_PLAN_STATE);
+        private settingsProfile: SettingsProfileService
+    ) {
+        super(DEFAULT_COMPANY_LIST_STATE);
     }
 
     /**
-     * Get All Plans
+     * Get company list by subscription id
      *
-     * @memberof PlanComponentStore
+     * @memberof CompanyListDialogComponentStore
      */
     readonly getCompanyListBySubscriptionId = this.effect((data: Observable<any>) => {
         return data.pipe(
@@ -74,21 +71,19 @@ export class CompanyListComponentStore extends ComponentStore<CompanyListState> 
         );
     });
 
-
-
     /**
-* Create Discount
-*
-* @memberof DiscountComponentStore
-*/
-    readonly archhiveCompany = this.effect((data: Observable<any>) => {
+   * Company Archive/Unarchive
+   *
+   * @memberof CompanyListDialogComponentStore
+   */
+    readonly archiveCompany = this.effect((data: Observable<any>) => {
         return data.pipe(
             switchMap((req) => {
                 return this.settingsProfile.PatchProfile('', req.companyUniqueName, req.status).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
-                                this.toasterService.showSnackBar('success', 'Company' + res?.body?.archiveStatus + 'successfully');
+                                this.toasterService.showSnackBar('success', 'Company ' + res?.body?.archiveStatus + ' successfully');
                                 return this.patchState({
                                     archiveCompanySuccess: true
                                 });
@@ -112,11 +107,10 @@ export class CompanyListComponentStore extends ComponentStore<CompanyListState> 
     });
 
 
-
     /**
      * Lifecycle hook for component destroy
      *
-     * @memberof PlanComponentStore
+     * @memberof CompanyListDialogComponentStore
      */
     public ngOnDestroy(): void {
         super.ngOnDestroy();

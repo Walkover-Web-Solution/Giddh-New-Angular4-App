@@ -1,13 +1,14 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Inject, OnInit, Output, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ReplaySubject, debounceTime, takeUntil } from 'rxjs';
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { FormBuilder, UntypedFormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { CompanyListComponentStore } from './utility/company-list.store';
 import { MatTableDataSource } from '@angular/material/table';
 import { PAGINATION_LIMIT } from '../../app.constant';
-import { SubscriptionComponentStore } from '../utility/subscription.store';
 import { MatMenuTrigger } from '@angular/material/menu';
+import { SubscriptionComponentStore } from '../utility/subscription.store';
+import { CompanyListDialogComponentStore } from './utility/company-list-dialog.store';
+
 export interface CompanyRequest {
     page: number;
     count: number;
@@ -15,14 +16,16 @@ export interface CompanyRequest {
     sort: 'asc' | 'desc' | '';
     sortBy: 'NAME' | 'TOTAL_INVOICES' | 'TOTAL_INVOICES' | 'TOTAL_BILLS' | 'STATUS';
 }
+
 @Component({
-    selector: 'company-list',
-    templateUrl: './company-list.component.html',
-    styleUrls: ['./company-list.component.scss'],
+    selector: 'company-list-dialog',
+    templateUrl: './company-list-dialog.component.html',
+    styleUrls: ['./company-list-dialog.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [CompanyListComponentStore, SubscriptionComponentStore]
+    providers: [CompanyListDialogComponentStore, SubscriptionComponentStore]
 })
-export class CompanyListComponent implements OnInit {
+export class CompanyListDialogComponent implements OnInit {
+    /** Emit the call back function for move success response*/
     @Output() public callBack: EventEmitter<boolean> = new EventEmitter();
     /** Instance of company list */
     @ViewChild('companyList', { static: false }) public companyList: ElementRef;
@@ -34,49 +37,58 @@ export class CompanyListComponent implements OnInit {
     public localeData: any = {};
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    /** Holds Store Plan list API success state as observable*/
+    /** Holds Store Company list API success state as observable*/
     public companyList$ = this.componentStore.select(state => state.companyList);
-    /** Holds Store Plan list API success state as observable*/
+    /** Holds Store Company list API success state as observable*/
     public companyListInProgress$ = this.componentStore.select(state => state.companyListInProgress);
-    /** Holds Store Plan list API success state as observable*/
+    /** Holds Store Archive company API success state as observable*/
     public archiveCompanySuccess$ = this.componentStore.select(state => state.archiveCompanySuccess);
     /** Holds Object for Get All Company API Request */
     public companyListRequest: CompanyRequest;
-    /** Holds Store Plan list API success state as observable*/
+    /** Holds Store Subscribe companies API success state as observable*/
     public subscribedCompanies$ = this.subscriptionComponentStore.select(state => state.subscribedCompanies);
-    /** True, if custom date filter is selected or custom searching or sorting is performed */
+    /** True, if  custom searching  is performed */
     public showClearFilter: boolean = false;
+    /** Hold displayed columns */
     public displayedColumns: string[] = ['NAME', 'TOTAL_INVOICES', 'TOTAL_BILLS', 'STATUS'];
+    /** Hold table data source */
     public dataSource: any;
+    /** Instance for company list form */
     public companyListForm: UntypedFormGroup;
 
-
-    constructor(@Inject(MAT_DIALOG_DATA) public inputData, private changeDetection: ChangeDetectorRef, public dialog: MatDialog, private fb: UntypedFormBuilder,
+    constructor(
+        @Inject(MAT_DIALOG_DATA) public inputData,
+        private changeDetection: ChangeDetectorRef,
+        public dialog: MatDialog,
+        private fb: FormBuilder,
         private router: Router,
-        private componentStore: CompanyListComponentStore,
+        private componentStore: CompanyListDialogComponentStore,
         private subscriptionComponentStore: SubscriptionComponentStore,
-        public dialogRef: MatDialogRef<any>) {
+        public dialogRef: MatDialogRef<any>
+    ) {
     }
 
+    /**
+     * Hook cycel for component initialization.
+     *
+     * @memberof CompanyListDialogComponent
+     */
     public ngOnInit(): void {
         this.dialogRef.updatePosition({ top: '0px', right: '0px' });
         document.body?.classList?.add("subscription-sidebar");
-        console.log(this.inputData);
-        this.initFrom();
+        this.initForm();
         this.initCompanyListRequest();
         this.getAllCompaniesList();
+
         this.companyList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            console.log(response);
             if (response) {
                 this.dataSource = new MatTableDataSource<any>(response?.results);
             } else {
                 this.dataSource = new MatTableDataSource<any>([]);
             }
-            console.log(this.dataSource);
         });
 
         this.archiveCompanySuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            console.log(response);
             if (response) {
                 this.getAllCompaniesList();
             }
@@ -90,12 +102,17 @@ export class CompanyListComponent implements OnInit {
                     this.showClearFilter = true;
                     this.getAllCompaniesList();
                 }
-
             });
+
         this.changeDetection.detectChanges();
     }
 
-    public initFrom(): void {
+    /**
+     * This will be use for form intialization
+     *
+     * @memberof CompanyListDialogComponent
+     */
+    public initForm(): void {
         this.companyListForm = this.fb.group({
             name: [''],
             invoiceCount: [''],
@@ -104,6 +121,11 @@ export class CompanyListComponent implements OnInit {
         });
     }
 
+    /**
+     * Clears the filter and resets the form in the CompanyListDialogComponent.
+     *
+     * @memberof CompanyListDialogComponent
+     */
     public clearFilter(): void {
         this.showClearFilter = false;
         this.initCompanyListRequest();
@@ -112,11 +134,12 @@ export class CompanyListComponent implements OnInit {
         this.getAllCompaniesList();
     }
 
+
     /**
- * Initialize get all company API request object
- *
- * @memberof CompanyListComponent
- */
+     * Initialize get all company API request object
+     *
+     * @memberof CompanyListDialogComponent
+     */
     private initCompanyListRequest(): void {
         this.companyListRequest = {
             page: 1,
@@ -127,27 +150,34 @@ export class CompanyListComponent implements OnInit {
         };
     }
 
-
+    /**
+     * Retrieves the list of all companies in the CompanyListDialogComponent.
+     *
+     * @memberof CompanyListDialogComponent
+     */
     public getAllCompaniesList(): void {
         let request = {
             subscriptionId: this.inputData.rowData?.subscriptionId,
             model: this.companyListForm.value,
             params: this.companyListRequest
-        }
-        console.log(request);
+        };
         this.componentStore.getCompanyListBySubscriptionId(request);
     }
 
+    /**
+     * Navigates to the page for creating a new company within the subscription in the CompanyListDialogComponent.
+     *
+     * @memberof CompanyListDialogComponent
+     */
     public createCompanyInSubscription(): void {
         this.router.navigate(['/pages/new-company/' + this.inputData.rowData?.subscriptionId]);
     }
-
 
     /**
      * Callback for sorting change
      *
      * @param {*} event
-     * @memberof CompanyListComponent
+     * @memberof CompanyListDialogComponent
      */
     public sortChange(event: any): void {
         this.companyListRequest.sortBy = event?.active;
@@ -155,23 +185,13 @@ export class CompanyListComponent implements OnInit {
         this.getAllCompaniesList();
     }
 
-    public archiveCompany(data: any, type: string): void {
-        console.log(data);
-        let request = {
-            companyUniqueName: data.uniqueName,
-            status: { archiveStatus: type }
-        }
-        this.componentStore.archhiveCompany(request);
-    }
-
     /**
   *This function will open the move company popup
   *
   * @param {*} company
-  * @memberof SubscriptionComponent
+  * @memberof CompanyListDialogComponent
   */
     public openModalMove(company: any, event: any) {
-        console.log(company);
         this.menu.closeMenu();
         let companyObj = {
             name: company.name,
@@ -180,7 +200,6 @@ export class CompanyListComponent implements OnInit {
         this.inputData.selectedCompany = companyObj;
         this.dialog.open(this.moveCompany, { width: '40%' });
     }
-
 
     /**
    * This function will refresh the subscribed companies if move company was succesful and will close the popup
@@ -194,12 +213,32 @@ export class CompanyListComponent implements OnInit {
         }
     }
 
+    /**
+     * Archives or unarchives a company in the CompanyListDialogComponent.
+     *
+     * @param data - The data of the company to be archived or unarchived.
+     * @param type - The type of action, whether to archive or unarchive.
+     * @memberof CompanyListDialogComponent
+     */
+    public archiveCompany(data: any, type: string): void {
+        let request = {
+            companyUniqueName: data.uniqueName,
+            status: { archiveStatus: type }
+        };
+        this.componentStore.archiveCompany(request);
+    }
 
-
+    /**
+     * Lifecycle hook that is called when the component is destroyed.
+     * Removes "subscription-sidebar" class from body, and completes the subject indicating component destruction.
+     *
+     * @memberof CompanyListDialogComponent
+     */
     public ngOnDestroy(): void {
         document.body?.classList?.remove("subscription-sidebar");
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
+
 
 }

@@ -2,12 +2,9 @@
 import { Injectable, OnDestroy } from "@angular/core";
 import { ComponentStore, tapResponse } from "@ngrx/component-store";
 import { Observable, switchMap, catchError, EMPTY } from "rxjs";
-import { Store } from "@ngrx/store";
 import { BaseResponse } from "../../models/api-models/BaseResponse";
 import { ToasterService } from "../../services/toaster.service";
 import { SubscriptionsService } from "../../services/subscriptions.service";
-import { AppState } from "../../store";
-import { CommonService } from "../../services/common.service";
 
 export interface SubscriptionState {
     subscriptionListInProgress: boolean;
@@ -41,8 +38,7 @@ export class SubscriptionComponentStore extends ComponentStore<SubscriptionState
 
     constructor(private toasterService: ToasterService,
         private subscriptionService: SubscriptionsService,
-        private store: Store<AppState>,
-        private commonService: CommonService) {
+    ) {
         super(DEFAULT_SUBSCRIPTION_STATE);
     }
 
@@ -89,10 +85,10 @@ export class SubscriptionComponentStore extends ComponentStore<SubscriptionState
 
 
     /**
-* Create Discount
-*
-* @memberof DiscountComponentStore
-*/
+    * Cancel Subscription
+    *
+    * @memberof SubscriptionComponentStore
+    */
     readonly cancelSubscription = this.effect((data: Observable<any>) => {
         return data.pipe(
             switchMap((req) => {
@@ -132,10 +128,10 @@ export class SubscriptionComponentStore extends ComponentStore<SubscriptionState
 
 
     /**
- * Change Subscription Plan
- *
- * @memberof SubscriptionComponentStore
- */
+     * Transfer Subscription
+     *
+     * @memberof SubscriptionComponentStore
+     */
     readonly transferSubscription = this.effect((data: Observable<any>) => {
         return data.pipe(
             switchMap((req) => {
@@ -151,7 +147,7 @@ export class SubscriptionComponentStore extends ComponentStore<SubscriptionState
                                 });
                             } else {
                                 if (res.message) {
-                                    this.toasterService.showSnackBar('error',res.message);
+                                    this.toasterService.showSnackBar('error', res.message);
                                 }
                                 return this.patchState({
                                     transferSubscriptionSuccess: false,
@@ -159,7 +155,7 @@ export class SubscriptionComponentStore extends ComponentStore<SubscriptionState
                             }
                         },
                         (error: any) => {
-                            this.toasterService.showSnackBar('error','Error');
+                            this.toasterService.showSnackBar('error', 'Error');
 
                             return this.patchState({
                                 transferSubscriptionSuccess: false
@@ -173,10 +169,10 @@ export class SubscriptionComponentStore extends ComponentStore<SubscriptionState
     });
 
     /**
-* Get All Plans
-*
-* @memberof PlanComponentStore
-*/
+    *  Verify Ownership
+    *
+    * @memberof SubscriptionComponentStore
+    */
     readonly verifyOwnership = this.effect((data: Observable<any>) => {
         return data.pipe(
             switchMap((req) => {
@@ -185,7 +181,7 @@ export class SubscriptionComponentStore extends ComponentStore<SubscriptionState
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
-                                this.toasterService.showSnackBar('success','Verify ownership successfully');
+                                this.toasterService.showSnackBar('success', 'Verify ownership successfully');
                                 return this.patchState({
                                     verifyOwnershipSuccess: res?.body ?? null,
                                     verifyOwnershipInProgress: false,
@@ -215,7 +211,7 @@ export class SubscriptionComponentStore extends ComponentStore<SubscriptionState
     });
 
     /**
- * Get All Subscriptions
+ * Get Subscribed Companies
  *
  * @memberof SubscriptionComponentStore
  */
@@ -254,9 +250,6 @@ export class SubscriptionComponentStore extends ComponentStore<SubscriptionState
             })
         );
     });
-
-
-
 
     /**
      * Lifecycle hook for component destroy

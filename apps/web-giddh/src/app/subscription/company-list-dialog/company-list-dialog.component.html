@@ -85,8 +85,20 @@
                                     </div>
                                     <mat-menu #editModelBasic="matMenu">
                                         <div class="account-detail-custom-header">
-                                            <button mat-menu-item *ngIf="element?.status ==='UNARCHIVED'"  (click)="archiveCompany(element,'ARCHIVED')">Archive</button>
-                                            <button mat-menu-item *ngIf="element?.status ==='ARCHIVED'"  (click)="archiveCompany(element,'UNARCHIVED')">Unarchive</button>
+                                            <button
+                                                mat-menu-item
+                                                *ngIf="element?.status === 'UNARCHIVED'"
+                                                (click)="archiveCompany(element, 'USER_ARCHIVED')"
+                                            >
+                                                Archive
+                                            </button>
+                                            <button
+                                                mat-menu-item
+                                                *ngIf="element?.status === 'USER_ARCHIVED'"
+                                                (click)="archiveCompany(element, 'UNARCHIVED')"
+                                            >
+                                                Unarchive
+                                            </button>
                                             <button mat-menu-item (click)="openModalMove(element, $event)">Move</button>
                                         </div>
                                     </mat-menu>

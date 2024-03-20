@@ -8,52 +8,67 @@ import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-mod
 import { SubscriptionComponentStore } from '../utility/subscription.store';
 
 @Component({
-    selector: 'verify-ownership',
-    templateUrl: './verify-ownership.component.html',
-    styleUrls: ['./verify-ownership.component.scss'],
+    selector: 'verify-ownership-dilaog',
+    templateUrl: './verify-ownership-dilaog.component.html',
+    styleUrls: ['./verify-ownership-dilaog.component.scss'],
     providers: [SubscriptionComponentStore]
 })
-export class VerifyOwnershipComponent implements OnInit {
+export class VerifyOwnershipDialogComponent implements OnInit {
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** True if translations loaded */
     public translationLoaded: boolean = false;
-    /** Holds Store Plan list API success state as observable*/
+    /** Holds Veirfy Ownership In progress API success state as observable*/
     public verifyOwnershipInProgress$ = this.componentStore.select(state => state.verifyOwnershipInProgress);
-    /** Holds Store Plan list API success state as observable*/
+    /** HoldsVeirfy Ownership  API success state as observable*/
     public verifyOwnershipSuccess$ = this.componentStore.select(state => state.verifyOwnershipSuccess);
-    /** Hold the data of activity logs */
-    public viewSubscriptionData: any;
-    /** Hold the data of activity logs */
-    public subscriptionId: any;
 
     constructor(
         public dialog: MatDialog,
         private router: Router,
         private route: ActivatedRoute,
-        private readonly componentStore: SubscriptionComponentStore
+        private componentStore: SubscriptionComponentStore
     ) { }
 
+    /**
+     * Initializes the component by subscribing to route parameters and verifying ownership.
+     * Navigates to the subscription page upon successful ownership verification.
+     *
+     * @memberof VerifyOwnershipDialogComponent
+     */
     public ngOnInit(): void {
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe((params: any) => {
-            console.log(params);
             if (params) {
-                this.subscriptionId = params.requestId;
-                this.verifyOwnerShip(params.requestId);
+                this.verifyOwnership(params.requestId);
             }
         });
 
         this.verifyOwnershipSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            console.log(response);
             if (response) {
                 this.router.navigate(['/pages/subscription']);
             }
         });
     }
 
-    public verifyOwnerShip(id: any): void {
+    /**
+     * Verifies ownership of a resource using the provided ID.
+     *
+     * @param id - The ID used to verify ownership.
+     * @memberof VerifyOwnershipDialogComponent
+     */
+    public verifyOwnership(id: any): void {
         this.componentStore.verifyOwnership(id);
     }
 
+    /**
+     * Lifecycle hook that is called when the component is destroyed.
+     * Completes the subject indicating component destruction.
+     *
+     * @memberof VerifyOwnershipDialogComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
+    }
 
 }

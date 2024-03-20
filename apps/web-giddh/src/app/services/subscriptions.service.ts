@@ -85,7 +85,7 @@ export class SubscriptionsService {
      * @param {*} model
      * @param {*} params
      * @returns {Observable<BaseResponse<any, any>>}
-     * @memberof PlanService
+     * @memberof SubscriptionsService
      */
     public getAllPlans(params: any): Observable<BaseResponse<any, any>> {
         return this.http.get(this.config.apiUrl + PLAN_API.GET_ALL_PLANS
@@ -120,129 +120,203 @@ export class SubscriptionsService {
         }
     }
 
-
     /**
- * Get All Subscription list
- *
- * @param {*} model
- * @param {*} params
- * @returns {Observable<BaseResponse<any, any>>}
- * @memberof PlanService
- */
+     * Retrieves all subscriptions with pagination and provided model from the SubscriptionsService.
+     *
+     * @param pagination - Pagination details.
+     * @param model - Data model for filtering.
+     * @returns Observable<BaseResponse<any, any>> - Observable emitting the response.
+     * @memberof SubscriptionsService
+     */
     public getAllSubscriptions(pagination: any, model: any): Observable<BaseResponse<any, any>> {
         return this.http.post(this.config.apiUrl + SUBSRIPTION_V2_API.GET_ALL_SUBSCRIPTIONS
             ?.replace(':page', encodeURIComponent(pagination?.page ?? ''))
             ?.replace(':count', encodeURIComponent(pagination?.count ?? ''))
             , model)
-            .pipe(map((res) => {
-                let data: BaseResponse<any, any> = res;
-                data.request = '';
-                data.queryString = {};
-                return data;
-            }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {})));
+            .pipe(
+                map((res) => {
+                    let data: BaseResponse<any, any> = res;
+                    data.request = '';
+                    data.queryString = {};
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {}))
+            );
     }
 
+    /**
+     * Creates a new plan using the provided model in the SubscriptionsService.
+     *
+     * @param model - Data model for creating a plan.
+     * @returns Observable<BaseResponse<any, any>> - Observable emitting the response.
+     * @memberof SubscriptionsService
+     */
     public createPlan(model: any): Observable<BaseResponse<any, any>> {
-        return this.http.post(this.config.apiUrl + PLAN_API.CREATE_PLAN, model).pipe(map((res) => {
-            let data: BaseResponse<any, any> = res;
-            data.request = '';
-            return data;
-        }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {})));
+        return this.http.post(this.config.apiUrl + PLAN_API.CREATE_PLAN, model)
+            .pipe(
+                map((res) => {
+                    let data: BaseResponse<any, any> = res;
+                    data.request = '';
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {}))
+            );
     }
 
+    /**
+     * Updates a plan using the provided model in the SubscriptionsService.
+     *
+     * @param model - Data model for updating a plan.
+     * @returns Observable<BaseResponse<any, any>> - Observable emitting the response.
+     * @memberof SubscriptionsService
+     */
     public updatePlan(model: any): Observable<BaseResponse<any, any>> {
         return this.http.post(this.config.apiUrl + PLAN_API.UPDATE_PLAN
             ?.replace(':company', encodeURIComponent(this.generalService.companyUniqueName ?? '')),
-            model).pipe(map((res) => {
-                let data: BaseResponse<any, any> = res;
-                data.request = '';
-                return data;
-            }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {})));
-    }
-
-    public applyPromoCode(model: any): Observable<BaseResponse<any, any>> {
-        return this.http.post(this.config.apiUrl + PLAN_API.APPLY_PROMOCODE, model).pipe(map((res) => {
-            let data: BaseResponse<any, any> = res;
-            data.request = '';
-            return data;
-        }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {})));
+            model)
+            .pipe(
+                map((res) => {
+                    let data: BaseResponse<any, any> = res;
+                    data.request = '';
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {}))
+            );
     }
 
     /**
- * Get All Subscription list
- *
- * @param {*} model
- * @param {*} params
- * @returns {Observable<BaseResponse<any, any>>}
- * @memberof PlanService
- */
+     * Applies a promo code using the provided model in the SubscriptionsService.
+     *
+     * @param model - Data model for applying a promo code.
+     * @returns Observable<BaseResponse<any, any>> - Observable emitting the response.
+     * @memberof SubscriptionsService
+     */
+    public applyPromoCode(model: any): Observable<BaseResponse<any, any>> {
+        return this.http.post(this.config.apiUrl + PLAN_API.APPLY_PROMOCODE, model)
+            .pipe(
+                map((res) => {
+                    let data: BaseResponse<any, any> = res;
+                    data.request = '';
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {}))
+            );
+    }
+
+    /**
+     * Retrieves subscription details by ID from the SubscriptionsService.
+     *
+     * @param id - ID of the subscription to retrieve.
+     * @returns Observable<BaseResponse<any, any>> - Observable emitting the response.
+     * @memberof SubscriptionsService
+     */
     public viewSubscriptionById(id: any): Observable<BaseResponse<any, any>> {
         return this.http.get(this.config.apiUrl + SUBSRIPTION_V2_API.SUBSCRIPTION_BY_ID
             ?.replace(':subscriptionId', encodeURIComponent(id ?? '')))
-            .pipe(map((res) => {
-                let data: BaseResponse<any, any> = res;
-                data.request = '';
-                data.queryString = {};
-                return data;
-            }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {})));
+            .pipe(
+                map((res) => {
+                    let data: BaseResponse<any, any> = res;
+                    data.request = '';
+                    data.queryString = {};
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {}))
+            );
     }
 
+    /**
+     * Cancels a subscription by ID using the SubscriptionsService.
+     *
+     * @param id - ID of the subscription to cancel.
+     * @returns Observable<BaseResponse<any, any>> - Observable emitting the response.
+     * @memberof SubscriptionsService
+     */
     public cancelSubscriptionById(id: any): Observable<BaseResponse<any, any>> {
         return this.http.get(this.config.apiUrl + SUBSRIPTION_V2_API.CANCEL_SUBSCRIPTION_BY_ID
-            ?.replace(':subscriptionId', encodeURIComponent(id ?? ''))).pipe(map((res) => {
-                let data: BaseResponse<any, any> = res;
-                data.request = '';
-                return data;
-            }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {})));
+            ?.replace(':subscriptionId', encodeURIComponent(id ?? '')))
+            .pipe(
+                map((res) => {
+                    let data: BaseResponse<any, any> = res;
+                    data.request = '';
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {}))
+            );
     }
 
     /**
- * Transfer Subscription Details by Id
- *
- * @param {*} model
- * @param {string} subscriptionId
- * @returns {Observable<BaseResponse<any, any>>}
- * @memberof SubscriptionService
- */
+     * Transfers a subscription using the provided model and subscription ID in the SubscriptionsService.
+     *
+     * @param model - Data model for transferring subscription.
+     * @param subscriptionId - ID of the subscription to transfer.
+     * @returns Observable<BaseResponse<any, any>> - Observable emitting the response.
+     * @memberof SubscriptionsService
+     */
     public transferSubscription(model: any, subscriptionId: string): Observable<BaseResponse<any, any>> {
         return this.http.post(this.config.apiUrl + SUBSRIPTION_V2_API.TRANSFER
-            ?.replace(':subscriptionId', encodeURIComponent(subscriptionId ?? ''))
-            , model).pipe(map((res) => {
-                let data: BaseResponse<any, any> = res;
-                data.request = '';
-                data.queryString = {};
-                return data;
-            }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {})));
-    }
-
-    public verifyOwnership(id: any): Observable<BaseResponse<any, any>> {
-        return this.http.get(this.config.apiUrl + SUBSRIPTION_V2_API.VERIFY_OWNERSHIP
-            ?.replace(':requestId', encodeURIComponent(id ?? ''))).pipe(map((res) => {
-                let data: BaseResponse<any, any> = res;
-                data.request = '';
-                return data;
-            }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {})));
+            ?.replace(':subscriptionId', encodeURIComponent(subscriptionId ?? '')),
+            model)
+            .pipe(
+                map((res) => {
+                    let data: BaseResponse<any, any> = res;
+                    data.request = '';
+                    data.queryString = {};
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {}))
+            );
     }
 
     /**
- * Get All Plans list
- *
- * @param {*} model
- * @param {*} params
- * @returns {Observable<BaseResponse<any, any>>}
- * @memberof PlanService
- */
-    public getBillingDetails(billingAccountUnqiueName: any): Observable<BaseResponse<any, any>> {
-        return this.http.get(this.config.apiUrl + SUBSRIPTION_V2_API.GET_BILLING_DETAILS
-            ?.replace(':billingAccountUnqiueName', encodeURIComponent(billingAccountUnqiueName ?? ''))
-        ).pipe(map((res) => {
-            let data: BaseResponse<any, any> = res;
-            data.request = '';
-            data.queryString = {};
-            return data;
-        }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {})));
+     * Verifies ownership using the provided ID in the SubscriptionsService.
+     *
+     * @param id - ID for ownership verification.
+     * @returns Observable<BaseResponse<any, any>> - Observable emitting the response.
+     * @memberof SubscriptionsService
+     */
+    public verifyOwnership(id: any): Observable<BaseResponse<any, any>> {
+        return this.http.get(this.config.apiUrl + SUBSRIPTION_V2_API.VERIFY_OWNERSHIP
+            ?.replace(':requestId', encodeURIComponent(id ?? '')))
+            .pipe(
+                map((res) => {
+                    let data: BaseResponse<any, any> = res;
+                    data.request = '';
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {}))
+            );
     }
 
+    /**
+     * Retrieves billing details by billing account unique name from the SubscriptionsService.
+     *
+     * @param billingAccountUnqiueName - Unique name of the billing account.
+     * @returns Observable<BaseResponse<any, any>> - Observable emitting the response.
+     * @memberof SubscriptionsService
+     */
+    public getBillingDetails(billingAccountUnqiueName: any): Observable<BaseResponse<any, any>> {
+        return this.http.get(this.config.apiUrl + SUBSRIPTION_V2_API.GET_BILLING_DETAILS
+            ?.replace(':billingAccountUnqiueName', encodeURIComponent(billingAccountUnqiueName ?? '')))
+            .pipe(
+                map((res) => {
+                    let data: BaseResponse<any, any> = res;
+                    data.request = '';
+                    data.queryString = {};
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {}))
+            );
+    }
+
+    /**
+  * Retrieves companies list by subscription ID with provided model and parameters from the SubscriptionsService.
+  *
+  * @param model - Data model for filtering.
+  * @param subscriptionId - ID of the subscription.
+  * @param params - Parameters for pagination and sorting.
+  * @returns Observable<BaseResponse<any, any>> - Observable emitting the response.
+  * @memberof SubscriptionsService
+  */
     public getCompaniesListBySubscriptionID(model: any, subscriptionId: any, params: any): Observable<BaseResponse<any, any>> {
         return this.http.post(this.config.apiUrl + SUBSRIPTION_V2_API.GET_COMPANIES_LIST_BY_SUBSCRIPTION_ID
             ?.replace(':subscriptionId', encodeURIComponent(subscriptionId ?? ''))
@@ -252,23 +326,38 @@ export class SubscriptionsService {
             ?.replace(':count', encodeURIComponent(params.count ?? ''))
             ?.replace(':query', encodeURIComponent(params.query ?? ''))
             , model
-        ).pipe(map((res) => {
-            let data: BaseResponse<any, any> = res;
-            data.request = '';
-            data.queryString = {};
-            return data;
-        }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {})));
-    }
-
-
-    public updateBillingDetails(model: any, billingAccountUnqiueName: any): Observable<BaseResponse<any, any>> {
-        return this.http.patch(this.config.apiUrl + SUBSRIPTION_V2_API.UPDATE_BILLING_DETAILS
-            ?.replace(':billingAccountUnqiueName', encodeURIComponent(billingAccountUnqiueName ?? '')), model).pipe(map((res) => {
+        ).pipe(
+            map((res) => {
                 let data: BaseResponse<any, any> = res;
                 data.request = '';
+                data.queryString = {};
                 return data;
-            }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {})));
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {}))
+        );
     }
+
+    /**
+     * Updates billing details using the provided model and billing account unique name in the SubscriptionsService.
+     *
+     * @param model - Data model for updating billing details.
+     * @param billingAccountUnqiueName - Unique name of the billing account.
+     * @returns Observable<BaseResponse<any, any>> - Observable emitting the response.
+     * @memberof SubscriptionsService
+     */
+    public updateBillingDetails(model: any, billingAccountUnqiueName: any): Observable<BaseResponse<any, any>> {
+        return this.http.patch(this.config.apiUrl + SUBSRIPTION_V2_API.UPDATE_BILLING_DETAILS
+            ?.replace(':billingAccountUnqiueName', encodeURIComponent(billingAccountUnqiueName ?? '')), model)
+            .pipe(
+                map((res) => {
+                    let data: BaseResponse<any, any> = res;
+                    data.request = '';
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {}))
+            );
+    }
+
 
 
 }

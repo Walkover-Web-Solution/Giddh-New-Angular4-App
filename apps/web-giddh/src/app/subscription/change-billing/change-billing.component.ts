@@ -1,5 +1,5 @@
 import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ChangeBillingComponentStore } from './utility/change-billing.store';
 import { IntlPhoneLib } from '../../theme/mobile-number-field/intl-phone-lib.class';
 import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
@@ -21,13 +21,11 @@ import { ActivatedRoute, Router } from '@angular/router';
     styleUrls: ['./change-billing.component.scss'],
     providers: [ChangeBillingComponentStore]
 })
-export class ChangeBillingComponent implements OnInit, AfterViewInit , OnDestroy{
+export class ChangeBillingComponent implements OnInit, AfterViewInit, OnDestroy {
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
-    /** True if api call in progress */
-    public showLoader: boolean = true;
     /** Instance of change billing form group*/
     public changeBillingForm: FormGroup;
     /** True if form is submitted to show error if available */
@@ -78,11 +76,11 @@ export class ChangeBillingComponent implements OnInit, AfterViewInit , OnDestroy
     };
     /** Hold active company */
     public activeCompany: any;
-    /** Holds Store Plan list observable*/
+    /** Holds Store Get Billing Details observable*/
     public getBillingDetails$ = this.componentStore.select(state => state.getBillingDetails);
-    /** Holds Store Plan list API success state as observable*/
+    /** Holds Store Update Billiing In Progress API success state as observable*/
     public getBillingDetailsInProgress$ = this.componentStore.select(state => state.getBillingDetailsInProgress);
-    /** Holds Store Plan list observable*/
+    /** Holds Store Update Billiing Success observable*/
     public updateBillingDetailsSuccess$ = this.componentStore.select(state => state.updateBillingDetailsSuccess);
     /** Hold billing Details */
     public billingDetails = {
@@ -91,8 +89,9 @@ export class ChangeBillingComponent implements OnInit, AfterViewInit , OnDestroy
         uniqueName: ""
     };
 
-    constructor(private formBuilder: FormBuilder,
-        private readonly componentStore: ChangeBillingComponentStore,
+    constructor(
+        private formBuilder: FormBuilder,
+        private componentStore: ChangeBillingComponentStore,
         private commonActions: CommonActions,
         private toasterService: ToasterService,
         private subscriptionService: SubscriptionsService,
@@ -101,8 +100,14 @@ export class ChangeBillingComponent implements OnInit, AfterViewInit , OnDestroy
         private location: Location,
         private router: Router,
         private route: ActivatedRoute,
-        private generalActions: GeneralActions) { }
+        private generalActions: GeneralActions
+    ) { }
 
+    /**
+     * Hook for component initialization
+     *
+     * @memberof ChangeBillingComponent
+     */
     public ngOnInit(): void {
         this.initForm();
         this.getCountry();
@@ -110,6 +115,7 @@ export class ChangeBillingComponent implements OnInit, AfterViewInit , OnDestroy
         this.getCompanyProfile();
         this.getOnboardingFormData();
         this.getActiveCompany();
+
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe((params: any) => {
             if (params) {
                 this.billingDetails.billingAccountUnqiueName = params?.billingAccountUnqiueName;
@@ -117,11 +123,20 @@ export class ChangeBillingComponent implements OnInit, AfterViewInit , OnDestroy
             }
         });
     }
-
+    /**
+     *
+     *
+     * @memberof ChangeBillingComponent
+     */
     public back(): void {
         this.location.back();
     }
 
+    /**
+     * Hook cycle for component after view initialization
+     *
+     * @memberof ChangeBillingComponent
+     */
     public ngAfterViewInit(): void {
         this.initIntl();
         this.getBillingDetails$.pipe(takeUntil(this.destroyed$)).subscribe(data => {
@@ -141,6 +156,11 @@ export class ChangeBillingComponent implements OnInit, AfterViewInit , OnDestroy
         });
     }
 
+    /**
+     * This will be use for initialization form
+     *
+     * @memberof ChangeBillingComponent
+     */
     public initForm(): void {
         this.changeBillingForm = this.formBuilder.group({
             billingName: ['', Validators.required],
@@ -155,6 +175,12 @@ export class ChangeBillingComponent implements OnInit, AfterViewInit , OnDestroy
         });
     }
 
+    /**
+     * This will be use for set form values
+     *
+     * @param {*} data
+     * @memberof ChangeBillingComponent
+     */
     public setFormValues(data: any): void {
         this.changeBillingForm.controls['billingName'].setValue(data.billingName);
         this.changeBillingForm.controls['companyName'].setValue(data.companyName);
@@ -170,7 +196,7 @@ export class ChangeBillingComponent implements OnInit, AfterViewInit , OnDestroy
     /**
      * Initializes the int-tel input
      *
-     * @memberof BuyPlanComponent
+     * @memberof ChangeBillingComponent
      */
     public initIntl(): void {
         const parentDom = document.querySelector('create');
@@ -184,6 +210,12 @@ export class ChangeBillingComponent implements OnInit, AfterViewInit , OnDestroy
         }
     }
 
+    /**
+     * This will be use for get billing details
+     *
+     * @param {*} subscriptionId
+     * @memberof ChangeBillingComponent
+     */
     public getBillingDetails(subscriptionId: any): void {
         this.componentStore.getBillingDetails(subscriptionId);
     }
@@ -191,7 +223,7 @@ export class ChangeBillingComponent implements OnInit, AfterViewInit , OnDestroy
     /**
      * Validate the mobile number
      *
-     * @memberof BuyPlanComponent
+     * @memberof ChangeBillingComponent
      */
     public validateMobileField(): void {
         setTimeout(() => {
@@ -206,9 +238,9 @@ export class ChangeBillingComponent implements OnInit, AfterViewInit , OnDestroy
     /**
    * This will be use for get countries
    *
-   * @memberof BuyPlanComponent
+   * @memberof ChangeBillingComponent
    */
-    public getCountry() {
+    public getCountry(): void {
         this.componentStore.commonCountries$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.countrySource = [];
@@ -230,9 +262,9 @@ export class ChangeBillingComponent implements OnInit, AfterViewInit , OnDestroy
     /**
      * This will use for get states list
      *
-     * @memberof BuyPlanComponent
+     * @memberof ChangeBillingComponent
      */
-    public getStates() {
+    public getStates(): void {
         this.componentStore.generalState$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.states = [];
@@ -265,10 +297,10 @@ export class ChangeBillingComponent implements OnInit, AfterViewInit , OnDestroy
 
 
     /**
- * This will use validate gst number
- *
- * @memberof BuyPlanComponent
- */
+     * This will use validate gst number
+     *
+     * @memberof ChangeBillingComponent
+     */
     public validateGstNumber(): void {
         let isValid: boolean = false;
         if (this.changeBillingForm.get('taxNumber')?.value) {
@@ -320,11 +352,11 @@ export class ChangeBillingComponent implements OnInit, AfterViewInit , OnDestroy
     }
 
     /**
-* This will return enter tax text
-*
-* @returns {string}
-* @memberof BuyPlanComponent
-*/
+    * This will return enter tax text
+    *
+    * @returns {string}
+    * @memberof ChangeBillingComponent
+    */
     public getEnterTaxText(): string {
         let text = 'Enter Tax';
         text = text?.replace("[TAX_NAME]", this.formFields['taxName']?.label);
@@ -332,11 +364,11 @@ export class ChangeBillingComponent implements OnInit, AfterViewInit , OnDestroy
     }
 
     /**
- * This will use for select country
- *
- * @param {*} event
- * @memberof BuyPlanComponent
- */
+     * This will use for select country
+     *
+     * @param {*} event
+     * @memberof ChangeBillingComponent
+     */
     public selectCountry(event: any): void {
         if (event?.value) {
             this.selectedCountry = event.label;
@@ -361,11 +393,11 @@ export class ChangeBillingComponent implements OnInit, AfterViewInit , OnDestroy
     }
 
     /**
-      * Gets company profile
-      *
-      * @private
-      * @memberof BuyPlanComponent
-      */
+     * Gets company profile
+     *
+     * @private
+     * @memberof ChangeBillingComponent
+     */
     private getCompanyProfile(): void {
         this.componentStore.companyProfile$.pipe(takeUntil(this.destroyed$)).subscribe(profile => {
             if (profile && Object.keys(profile).length && !this.company?.countryName) {
@@ -385,7 +417,7 @@ export class ChangeBillingComponent implements OnInit, AfterViewInit , OnDestroy
       *
       * @private
       * @param {string} countryCode
-      * @memberof BuyPlanComponent
+      * @memberof ChangeBillingComponent
       */
     private showTaxTypeByCountry(countryCode: string): void {
         this.company.taxType = this.subscriptionService.showTaxTypeByCountry(countryCode, this.activeCompany?.countryV2?.alpha2CountryCode);
@@ -399,7 +431,7 @@ export class ChangeBillingComponent implements OnInit, AfterViewInit , OnDestroy
     *
     * @private
     * @param {string} countryCode
-    * @memberof BuyPlanComponent
+    * @memberof ChangeBillingComponent
     */
     private getOnboardingForm(countryCode: string): void {
         if (this.onboardingFormRequest.country !== countryCode) {
@@ -413,7 +445,7 @@ export class ChangeBillingComponent implements OnInit, AfterViewInit , OnDestroy
      * Gets onboarding form data
      *
      * @private
-     * @memberof BuyPlanComponent
+     * @memberof ChangeBillingComponent
      */
     private getOnboardingFormData(): void {
         this.componentStore.onboardingForm$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -430,11 +462,11 @@ export class ChangeBillingComponent implements OnInit, AfterViewInit , OnDestroy
     }
 
     /**
- * Gets active company details
- *
- * @private
- * @memberof BuyPlanComponent
- */
+     * Gets active company details
+     *
+     * @private
+     * @memberof ChangeBillingComponent
+     */
     private getActiveCompany(): void {
         this.componentStore.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
@@ -445,11 +477,11 @@ export class ChangeBillingComponent implements OnInit, AfterViewInit , OnDestroy
     }
 
     /**
- * This will use for on submit company form
- *
- * @return {*}  {void}
- * @memberof BuyPlanComponent
- */
+    * This will use for on submit change/update billing form
+    *
+    * @return {*}  {void}
+    * @memberof ChangeBillingComponent
+    */
     public onSubmit(): void {
         this.isFormSubmitted = false;
         if (this.changeBillingForm.invalid) {
@@ -477,6 +509,11 @@ export class ChangeBillingComponent implements OnInit, AfterViewInit , OnDestroy
         this.componentStore.updateBillingDetails({ request: request, id: this.billingDetails.uniqueName });
     }
 
+    /**
+     * Hook cycle for component destroyed
+     *
+     * @memberof ChangeBillingComponent
+     */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();

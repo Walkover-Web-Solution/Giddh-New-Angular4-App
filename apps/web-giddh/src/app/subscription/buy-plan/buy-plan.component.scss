@@ -10,11 +10,6 @@
         height: 48px !important;
     }
 
-    .including-tax {
-        float: right;
-        margin-top: -24px;
-    }
-
     .active-plan {
         border-top: 2px solid var(--color-primary-header-background);
         border-left: 2px solid var(--color-primary-header-background);
@@ -24,6 +19,7 @@
     .popular-txt {
         height: 36px;
         background-color: var(--color-giddh-blue);
+
         span {
             color: var(--color-white);
         }

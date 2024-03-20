@@ -5,7 +5,6 @@ import { Observable, switchMap, catchError, EMPTY } from "rxjs";
 import { BaseResponse } from "../../../models/api-models/BaseResponse";
 import { SubscriptionsService } from "../../../services/subscriptions.service";
 import { ToasterService } from "../../../services/toaster.service";
-import { CommonService } from "../../../services/common.service";
 import { AppState } from "../../../store";
 import { Store } from "@ngrx/store";
 
@@ -13,10 +12,10 @@ export interface BillingState {
     getBillingDetailsInProgress: boolean;
     getBillingDetails: any
     updateBillingDetailsSuccess: boolean;
-   updateBillingDetailsInProgress: boolean;
+    updateBillingDetailsInProgress: boolean;
 }
 
-export const DEFAULT_PLAN_STATE: BillingState = {
+export const DEFAULT_CHANGE_BILLING_STATE: BillingState = {
     getBillingDetailsInProgress: null,
     getBillingDetails: [],
     updateBillingDetailsSuccess: null,
@@ -28,9 +27,8 @@ export class ChangeBillingComponentStore extends ComponentStore<BillingState> im
 
     constructor(private toasterService: ToasterService,
         private subscriptionService: SubscriptionsService,
-        private store: Store<AppState>,
-        private commonService: CommonService) {
-        super(DEFAULT_PLAN_STATE);
+        private store: Store<AppState>) {
+        super(DEFAULT_CHANGE_BILLING_STATE);
     }
 
     public companyProfile$: Observable<any> = this.select(this.store.select(state => state.settings.profile), (response) => response);
@@ -40,9 +38,9 @@ export class ChangeBillingComponentStore extends ComponentStore<BillingState> im
     public generalState$: Observable<any> = this.select(this.store.select(state => state.general.states), (response) => response);
 
     /**
-     * Get All Plans
+     * Get Billing Details
      *
-     * @memberof PlanComponentStore
+     * @memberof ChangeBillingComponentStore
      */
     readonly getBillingDetails = this.effect((data: Observable<any>) => {
         return data.pipe(
@@ -81,10 +79,10 @@ export class ChangeBillingComponentStore extends ComponentStore<BillingState> im
     });
 
     /**
- * Create Discount
- *
- * @memberof DiscountComponentStore
- */
+    * Update Billing Details
+    *
+    * @memberof ChangeBillingComponentStore
+    */
     readonly updateBillingDetails = this.effect((data: Observable<any>) => {
         return data.pipe(
             switchMap((req) => {
@@ -125,7 +123,7 @@ export class ChangeBillingComponentStore extends ComponentStore<BillingState> im
     /**
      * Lifecycle hook for component destroy
      *
-     * @memberof PlanComponentStore
+     * @memberof ChangeBillingComponentStore
      */
     public ngOnDestroy(): void {
         super.ngOnDestroy();

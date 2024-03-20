@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnIni
 import { MatDialog } from '@angular/material/dialog';
 import { debounceTime, distinctUntilChanged, Observable, ReplaySubject, takeUntil } from 'rxjs';
 import { ToasterService } from '../services/toaster.service';
-import { CompanyListComponent } from './company-list/company-list.component';
 import { TransferComponent } from './transfer/transfer.component';
 import { GeneralService } from '../services/general.service';
 import { ConfirmModalComponent } from "../theme/new-confirm-modal/confirm-modal.component";
@@ -20,6 +19,8 @@ import { cloneDeep, uniqBy } from '../lodash-optimized';
 import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
 import { MatMenuTrigger } from '@angular/material/menu';
+import { CompanyListDialogComponent } from './company-list-dialog/company-list-dialog.component';
+import { TransferDialogComponent } from './transfer-dialog/transfer-dialog.component';
 @Component({
     selector: 'subscription',
     templateUrl: './subscription.component.html',
@@ -42,15 +43,15 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** This will use for table heading */
     public displayedColumns: string[] = ['companyName', 'billingAccountName', 'subscriberName', 'countryName', 'planName', 'status', 'period', 'renewalDate'];
-    /** Hold the data of activity logs */
+    /** Hold the data of subscriptions */
     public dataSource: any;
     /** True if translations loaded */
     public translationLoaded: boolean = false;
-    /** Holds Store Plan list observable*/
+    /** Holds Store Subscription list observable*/
     public subscriptionList$ = this.componentStore.select(state => state.subscriptionList);
-    /** Holds Store Plan list API success state as observable*/
+    /** Holds Store Subscription list in progress API success state as observable*/
     public subscriptionListInProgress$ = this.componentStore.select(state => state.subscriptionListInProgress);
-    /** This will use for branch transer pagination logs object */
+    /** This will use for subscription pagination logs object */
     public subscriptionRequestParams = {
         page: 1,
         totalPages: 0,
@@ -67,23 +68,23 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
     public totalDiscountCount: number = 0;
     /* Hold list searching value */
     public inlineSearch: any = '';
-    /** Form Group for group form */
+    /** Form Group for subscription form */
     public subscriptionListForm: FormGroup;
     /** True, if custom date filter is selected or custom searching or sorting is performed */
     public showClearFilter: boolean = false;
-    /* True if show sender receiver show */
+    /* True if billing account show */
     public showBillingAccount = false;
-    /* True if show from warehouse show */
+    /* True if  subscriber show */
     public showSubscriber = false;
-    /* True if show to warehouse show */
+    /* True if  country show */
     public showCountry = false;
-    /* True if show sender show */
+    /* True if  name show */
     public showName = false;
-    /* True if show receiver show */
+    /* True if plan sub name show */
     public showPlanSubName = false;
-    /* True if show receiver show */
+    /* True if status show */
     public showStatus = false;
-    /* True if show receiver show */
+    /* True if duration show */
     public showMonthlyYearly = false;
     /** Getter for show search element by type */
     public get shouldShowElement(): boolean {
@@ -115,11 +116,11 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
             (hasResponse && this.inlineSearch === 'monthYearly' || this.showClearFilter)
         );
     }
-    /** Holds Store Plan list observable*/
+    /** Holds Store Cancel Subscription observable*/
     public cancelSubscription$ = this.componentStore.select(state => state.cancelSubscription);
-    /** Holds Store Plan list API success state as observable*/
+    /** Holds Store Subscribed companies API success state as observable*/
     public subscribedCompanies$ = this.componentStore.select(state => state.subscribedCompanies);
-    /** Holds Store Plan list API success state as observable*/
+    /** Holds Store Subscribe companies in progress API success state as observable*/
     public subscribedCompaniesInProgress$ = this.componentStore.select(state => state.subscribedCompaniesInProgress);
     /* This will hold list of subscriptions */
     public subscriptions: SubscriptionsUser[] = [];
@@ -130,9 +131,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
     /** This will use for active company */
     public activeCompany: any = {};
 
-
     constructor(public dialog: MatDialog,
-        private toaster: ToasterService,
         private changeDetection: ChangeDetectorRef,
         private generalService: GeneralService,
         private readonly componentStore: SubscriptionComponentStore,
@@ -144,9 +143,15 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         this.subscriptions$ = this.store.pipe(select(state => state.subscriptions.subscriptions), takeUntil(this.destroyed$));
     }
 
+    /**
+     * Initializes the component by subscribing to route parameters and fetching subscription data.
+     * Navigates to the subscription page upon subscription cancellation.
+     *
+     * @memberof SubscriptionComponent
+     */
     public ngOnInit(): void {
         document.body?.classList?.add("subscription-page");
-        this.initAllForms();
+        this.initForm();
         this.getAllSubscriptions(false);
         this.getCompanies();
         this.filterSubscriptions();
@@ -250,11 +255,11 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
     }
 
     /**
- * This will use for init all forms value
- *
- * @memberof ListBranchTransfer
- */
-    public initAllForms(): void {
+     * This will use for init subscription form
+     *
+     * @memberof SubscriptionComponent
+     */
+    public initForm(): void {
         this.subscriptionListForm = this.formBuilder.group({
             companyName: null,
             billingAccountName: null,
@@ -271,7 +276,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
    *
    * @param {*} title
    * @returns {string}
-   * @memberof ListBranchTransfer
+   * @memberof SubscriptionComponent
    */
     public getSearchFieldText(title: any): string {
         let searchField = "Search [FIELD]";
@@ -279,6 +284,14 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         return searchField;
     }
 
+    /**
+     * Handles clicks outside the specified element for filtering in the SubscriptionComponent.
+     *
+     * @param event - The event triggered by the click.
+     * @param element - The element outside of which the click occurred.
+     * @param searchedFieldName - The name of the field being searched for.
+     * @memberof SubscriptionComponent
+     */
     public handleClickOutside(event: any, element: any, searchedFieldName: string): void {
         if (searchedFieldName === 'companyName') {
             if (this.subscriptionListForm?.controls['companyName'].value !== null && this.subscriptionListForm?.controls['companyName'].value !== '') {
@@ -337,7 +350,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
      *
      * @param {string} fieldName
      * @param {*} el
-     * @memberof ListBranchTransferComponent
+     * @memberof SubscriptionComponent
      */
     public toggleSearch(fieldName: string) {
         if (fieldName === 'Name') {
@@ -363,37 +376,12 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         }
     }
 
-    public clearFilter(): void {
-        this.showClearFilter = false;
-        this.showName = false;
-        this.showBillingAccount = false;
-        this.showSubscriber = false;
-        this.showCountry = false;
-        this.showPlanSubName = false;
-        this.showMonthlyYearly = false;
-        this.showStatus = false;
-        this.subscriptionListForm.reset();
-        this.inlineSearch = '';
-        this.getAllSubscriptions(true);
-    }
-
-    public getAllSubscriptions(resetPage: boolean): void {
-        if (resetPage) {
-            this.subscriptionRequestParams.page = 1;
-        }
-        let request = {
-            pagination: this.subscriptionRequestParams,
-            model:this.subscriptionListForm.value
-        }
-        this.componentStore.getAllSubscriptions(request);
-    }
-
     /**
- * Handle page change
- *
- * @param {*} event
- * @memberof DiscountListComponent
- */
+     * Handle page change
+     *
+     * @param {*} event
+     * @memberof SubscriptionComponent
+     */
     public handlePageChange(event: any): void {
         this.pageIndex = event.pageIndex;
         this.subscriptionRequestParams.count = event.pageSize;
@@ -401,18 +389,15 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         this.getAllSubscriptions(false);
     }
 
-    public createSubscription(): void {
-        this.router.navigate(['/pages/subscription/buy-plan'])
-    }
 
     /**
-    * This function will use for get log details
+    * This function will use for get company details
     *
     * @param {*} element
     * @memberof SubscriptionComponent
     */
     public getCompanyList(event: any, element: any): void {
-        this.menu.closeMenu();
+        this.menu?.closeMenu();
         let data = {
             rowData: element,
             subscriptions: this.subscriptions,
@@ -420,109 +405,37 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
             localData: this.localeData,
             commonLocaleData: this.commonLocaleData
         }
-        this.dialog.open(CompanyListComponent, {
+        this.dialog.open(CompanyListDialogComponent, {
             data: data,
             panelClass: 'subscription-sidebar'
         });
     }
 
     /**
-* This function will use for get log details
-*
-* @param {*} element
-* @memberof SubscriptionComponent
-*/
+    * This function will use for transfer subscription
+    *
+    * @param {*} element
+    * @memberof SubscriptionComponent
+    */
     public transferSubscription(subscriptionId: any): void {
         this.menu.closeMenu();
-        this.dialog.open(TransferComponent, {
+        this.dialog.open(TransferDialogComponent, {
             data: subscriptionId,
             panelClass: 'transfer-popup',
             width: "630px"
         });
     }
 
-    public cancelSubscription(id: any): void {
-        this.menu.closeMenu();
-        let cancelDialogRef = this.dialog.open(ConfirmModalComponent, {
-            data: {
-                title: 'Cancel Subscription',
-                body: 'Subscription will be cancel on Expiry Date',
-                ok: 'Proceed',
-                cancel: 'Cancel'
-            },
-            panelClass: 'cancel-confirmation-modal',
-            width: '585px'
-        });
-
-        cancelDialogRef.afterClosed().subscribe((action) => {
-            if (action) {
-                this.componentStore.cancelSubscription(id);
-            } else {
-                cancelDialogRef.close();
-            }
-        });
-    }
-
-    public moveSubscription(): void {
-    }
-
-    public changeBilling(data:any): void {
-        // this.router.navigate(['/pages/subscription/change-billing/' + data?.subscriptionId]);
-        this.router.navigate(['/pages/subscription/change-billing/vwz1709217636400']);
-    }
-
-    public viewSubscription(data: any): void {
-        this.router.navigate(['/pages/subscription/view-subscription/' + data?.subscriptionId]);
-    }
-
-    public buyPlan(): void {
-        this.router.navigate(['/pages/subscription/buy-plan']);
-    }
-
-    public changePlan(data:any): void {
-        // this.router.navigate(['/pages/subscription/buy-plan' + data?.planDetails?.planUniqueName]);
-        this.router.navigate(['/pages/subscription/buy-plan/cdy1710506146367']);
-    }
 
     /**
- * Callback for translation response complete
- *
- * @param {*} event
- * @memberof ActivityLogsComponent
- */
+     * Callback for translation response complete
+     *
+     * @param {*} event
+     * @memberof SubscriptionComponent
+     */
     public translationComplete(event: any): void {
         if (event) {
             this.translationLoaded = true;
-            // this.menuList = [
-            //     {
-            //         label: this.localeData?.log_date,
-            //         value: "LOG_DATE",
-            //     },
-            //     {
-            //         label: this.localeData?.entity,
-            //         value: "ENTITY"
-            //     },
-            //     {
-            //         label: this.localeData?.operation,
-            //         value: "OPERATION"
-            //     },
-            //     {
-            //         label: this.localeData?.users,
-            //         value: "USERS"
-            //     },
-            //     {
-            //         label: this.localeData?.entry_date,
-            //         value: "ENTRY_DATE"
-            //     },
-            //     {
-            //         label: this.localeData?.voucher_date,
-            //         value: "VOUCHER_DATE"
-            //     },
-            //     {
-            //         label: this.commonLocaleData?.app_import_type?.base_accounts,
-            //         value: "ACCOUNTS"
-            //     },
-            // ];
             this.changeDetection.detectChanges();
         }
     }
@@ -533,8 +446,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
      * @param {*} company
      * @memberof SubscriptionComponent
      */
-    public openModalMove(company: any, event: any) {
-        console.log(company);
+    public openModalMove(company: any) {
         this.menu.closeMenu();
         this.selectedCompany = company.companies[0];
         this.dialog.open(this.moveCompany, { width: '40%' });
@@ -601,6 +513,126 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+ * Clears the filters and resets the form in the SubscriptionComponent.
+ *
+ * @memberof SubscriptionComponent
+ */
+    public clearFilter(): void {
+        this.showClearFilter = false;
+        this.showName = false;
+        this.showBillingAccount = false;
+        this.showSubscriber = false;
+        this.showCountry = false;
+        this.showPlanSubName = false;
+        this.showMonthlyYearly = false;
+        this.showStatus = false;
+        this.subscriptionListForm.reset();
+        this.inlineSearch = '';
+        this.getAllSubscriptions(true);
+    }
+
+    /**
+     * Retrieves all subscriptions in the SubscriptionComponent.
+     *
+     * @param resetPage - Indicates whether to reset the pagination page.
+     * @memberof SubscriptionComponent
+     */
+    public getAllSubscriptions(resetPage: boolean): void {
+        if (resetPage) {
+            this.subscriptionRequestParams.page = 1;
+        }
+        let request = {
+            pagination: this.subscriptionRequestParams,
+            model: this.subscriptionListForm.value
+        };
+        this.componentStore.getAllSubscriptions(request);
+    }
+
+    /**
+     * Navigates to the page for purchasing a new plan in the SubscriptionComponent.
+     *
+     * @memberof SubscriptionComponent
+     */
+    public createSubscription(): void {
+        this.router.navigate(['/pages/subscription/buy-plan']);
+    }
+
+    /**
+     * Cancels a subscription in the SubscriptionComponent.
+     *
+     * @param id - The ID of the subscription to cancel.
+     * @memberof SubscriptionComponent
+     */
+    public cancelSubscription(id: any): void {
+        this.menu.closeMenu();
+        let cancelDialogRef = this.dialog.open(ConfirmModalComponent, {
+            data: {
+                title: 'Cancel Subscription',
+                body: 'Subscription will be cancelled on Expiry Date',
+                ok: 'Proceed',
+                cancel: 'Cancel'
+            },
+            panelClass: 'cancel-confirmation-modal',
+            width: '585px'
+        });
+
+        cancelDialogRef.afterClosed().subscribe((action) => {
+            if (action) {
+                this.componentStore.cancelSubscription(id);
+            } else {
+                cancelDialogRef.close();
+            }
+        });
+    }
+
+    /**
+     * Navigates to the page for changing billing information in the SubscriptionComponent.
+     *
+     * @param data - The subscription data for which billing information is to be changed.
+     * @memberof SubscriptionComponent
+     */
+    public changeBilling(data: any): void {
+        // this.router.navigate(['/pages/subscription/change-billing/' + data?.subscriptionId]);
+        this.router.navigate(['/pages/subscription/change-billing/vwz1709217636400']);
+    }
+
+    /**
+     * Navigates to the page for viewing a subscription in the SubscriptionComponent.
+     *
+     * @param data - The subscription data to view.
+     * @memberof SubscriptionComponent
+     */
+    public viewSubscription(data: any): void {
+        this.router.navigate(['/pages/subscription/view-subscription/' + data?.subscriptionId]);
+    }
+
+    /**
+     * Navigates to the page for purchasing a plan in the SubscriptionComponent.
+     *
+     * @memberof SubscriptionComponent
+     */
+    public buyPlan(): void {
+        this.router.navigate(['/pages/subscription/buy-plan']);
+    }
+
+    /**
+     * Navigates to the page for changing a plan in the SubscriptionComponent.
+     *
+     * @param data - The subscription data for which the plan is to be changed.
+     * @memberof SubscriptionComponent
+     */
+    public changePlan(data: any): void {
+        // this.router.navigate(['/pages/subscription/buy-plan' + data?.planDetails?.planUniqueName]);
+        this.router.navigate(['/pages/subscription/buy-plan/cdy1710506146367']);
+    }
+
+    /**
+     * Lifecycle hook that is called when the component is destroyed.
+     * Removes "subscription-page" class from body, and completes the subject indicating component destruction.
+     *
+     * @memberof SubscriptionComponent
+     */
     public ngOnDestroy(): void {
         document.body?.classList?.remove("subscription-page");
         this.destroyed$.next(true);

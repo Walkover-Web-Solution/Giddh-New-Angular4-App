@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivateDialogComponent } from '../activate-dialog/activate-dialog.component';
@@ -31,7 +31,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
-    /** Form Group for subscription form */
+    /** Form Group for subscription buy plan form */
     public subscriptionForm: FormGroup;
     /** Subject to unsubscribe from listeners */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -64,13 +64,15 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     /** This will hold disable State */
     public disabledState: boolean = false;
     /** Holds Store Plan list observable*/
-    public readonly planList$ = this.componentStore.select(state => state.planList);
+    public planList$ = this.componentStore.select(state => state.planList);
     /** Holds Store Plan list API success state as observable*/
     public planListInProgress$ = this.componentStore.select(state => state.planListInProgress);
     /** Holds Store Create Plan API in progress state as observable*/
     public createPlanInProgress$ = this.componentStore.select(state => state.createPlanInProgress);
     /** Holds Store Create Plan API succes state as observable*/
     public createPlanSuccess$ = this.componentStore.select(state => state.createPlanSuccess);
+    /** Holds Store Create Plan API succes state as observable*/
+    public createPlanResponse$ = this.componentStore.select(state => state.createPlanResponse);
     /** Holds Store Apply Promocode API in progress state as observable*/
     public applyPromoCodeInProgress$ = this.componentStore.select(state => state.applyPromoCodeInProgress);
     /** Holds Store Apply Promocode  API success state as observable*/
@@ -118,7 +120,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     /** Hold plan data source*/
     public planUniqueName: any;
     /** Hold plan data source*/
-    public promoCodeResponse: any[]=[];
+    public promoCodeResponse: any[] = [];
     /** This will use for tax percentage */
     public taxPercentage: number = 0.18;
 
@@ -133,9 +135,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         private formBuilder: FormBuilder,
         private subscriptionService: SubscriptionsService,
         private router: Router,
-        private route : ActivatedRoute,
+        private route: ActivatedRoute,
         private location: Location
-
     ) {
         this.componentStore.getAllPlans({ params: { countryCode: this.company.countryCode } });
     }
@@ -147,6 +148,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         document.body?.classList?.add("plan-page");
+
         this.initSubscriptionForm();
         this.getAllPlans();
         this.getCountry();
@@ -155,17 +157,15 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.getOnboardingFormData();
         this.getActiveCompany();
 
-
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe((params: any) => {
             if (params) {
-                console.log(params);
                 this.planUniqueName = params.planUniqueName;
             }
         });
 
-        this.createPlanSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.createPlanResponse$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                this.router.navigate(['/pages/subscription'])
+                this.router.navigate([response?.redirectLink]);
             } else {
             }
         });
@@ -181,25 +181,35 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             distinctUntilChanged(),
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
-            console.log(searchedText);
             if (searchedText === "" || searchedText === undefined) {
                 this.promoCodeResponse = [];
                 this.firstStepForm?.get('promoCode').setValue("");
             }
         });
+
     }
 
     /**
- * Initializing the company form
- *
- * @private
- * @memberof
- */
+    * Hook cycle for afte component initialization
+    *
+    * @memberof BuyPlanComponent
+    */
+    public ngAfterViewInit(): void {
+        this.stepperIcon._getIndicatorType = () => 'number';
+        this.initIntl();
+    }
+
+    /**
+     * This will be use for initializing the subscription form
+     *
+     * @private
+     * @memberof BuyPlanComponent
+     */
     private initSubscriptionForm(): void {
         this.firstStepForm = this.formBuilder.group({
             duration: ['YEARLY'],
             planUniqueName: ['', Validators.required],
-            promoCode: [''],
+            promoCode: ['']
         });
 
         this.secondStepForm = this.formBuilder.group({
@@ -211,7 +221,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             taxNumber: null,
             country: ['', Validators.required],
             state: ['', Validators.required],
-            address: [''],
+            address: ['']
         });
 
         this.thirdStepForm = this.formBuilder.group({
@@ -222,28 +232,29 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.subscriptionForm = this.formBuilder.group({
             firstStepForm: this.firstStepForm,
             secondStepForm: this.secondStepForm,
-            thirdStepForm: this.thirdStepForm,
+            thirdStepForm: this.thirdStepForm
         });
     }
 
     /**
-     * This will be use for get active company
+     * This will be use for get promocode data
      *
      * @memberof BuyPlanComponent
      */
     public getPromoCodeData(): void {
         this.promoCodeResponse$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            console.log(response);
-            this.promoCodeResponse[0] = response;
-        })
+            if (response) {
+                this.promoCodeResponse[0] = response;
+            }
+        });
     }
 
-/**
- * This will be use for back to previous page
- *
- * @memberof BuyPlanComponent
- */
-public back(): void {
+    /**
+     * This will be use for back to previous page
+     *
+     * @memberof BuyPlanComponent
+     */
+    public back(): void {
         this.location.back();
     }
 
@@ -259,7 +270,7 @@ public back(): void {
                 this.activeCompany = response;
                 this.company.addresses = response.addresses;
             }
-        })
+        });
     }
 
     /**
@@ -271,8 +282,8 @@ public back(): void {
         if (this.firstStepForm.get('promoCode')?.value) {
             let request = {
                 promoCode: this.firstStepForm.get('promoCode')?.value,
-                planUniqueName: this.firstStepForm.get('planUniqueName').value,
-                duration: this.firstStepForm.get('duration').value
+                planUniqueName: this.firstStepForm.get('planUniqueName')?.value,
+                duration: this.firstStepForm.get('duration')?.value
             }
             this.componentStore.applyPromocode(request);
         }
@@ -280,11 +291,11 @@ public back(): void {
 
 
     /**
-       * Gets company profile
-       *
-       * @private
-       * @memberof BuyPlanComponent
-       */
+    * Gets company profile
+    *
+    * @private
+    * @memberof BuyPlanComponent
+    */
     private getCompanyProfile(): void {
         this.componentStore.companyProfile$.pipe(takeUntil(this.destroyed$)).subscribe(profile => {
             if (profile && Object.keys(profile).length && !this.company?.countryName) {
@@ -300,12 +311,12 @@ public back(): void {
     }
 
     /**
-      * Finds tax type by country and calls onboarding form api
-      *
-      * @private
-      * @param {string} countryCode
-      * @memberof BuyPlanComponent
-      */
+     * Finds tax type by country and calls onboarding form api
+     *
+     * @private
+     * @param {string} countryCode
+     * @memberof BuyPlanComponent
+     */
     private showTaxTypeByCountry(countryCode: string): void {
         this.company.taxType = this.subscriptionService.showTaxTypeByCountry(countryCode, this.activeCompany?.countryV2?.alpha2CountryCode);
         if (this.company.taxType) {
@@ -385,7 +396,7 @@ public back(): void {
      *
      * @memberof BuyPlanComponent
      */
-    public getCountry() {
+    public getCountry(): void {
         this.componentStore.commonCountries$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.countrySource = [];
@@ -409,7 +420,7 @@ public back(): void {
      *
      * @memberof BuyPlanComponent
      */
-    public getStates() {
+    public getStates(): void {
         this.componentStore.generalState$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.states = [];
@@ -516,8 +527,10 @@ public back(): void {
     public selectPlan(plan: any): void {
         this.firstStepForm.get('planUniqueName').setValue(plan?.uniqueName);
         this.planList$.pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            this.selectedPlan = result.find(plan => plan.uniqueName === this.firstStepForm.get('planUniqueName').value);
-        })
+            if (result) {
+                this.selectedPlan = result.find(plan => plan?.uniqueName === this.firstStepForm.get('planUniqueName').value);
+            }
+        });
     }
 
     /**
@@ -538,14 +551,15 @@ public back(): void {
             return;
         }
 
-        // Assuming the third step form validation
         if (this.selectedStep === 2 && this.thirdStepForm.invalid) {
             this.isFormSubmitted = true;
             return;
         }
 
         this.planList$.pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            this.selectedPlan = result.find(plan => plan.uniqueName === this.firstStepForm.get('planUniqueName').value);
+            if (result) {
+                this.selectedPlan = result.find(plan => plan.uniqueName === this.firstStepForm.get('planUniqueName').value);
+            }
         });
         this.selectedStep++;
     }
@@ -567,7 +581,7 @@ public back(): void {
      * @memberof BuyPlanComponent
      */
     public getAllPlans(): void {
-        this.planList$.pipe(takeUntil(this.componentStore.destroy$)).subscribe(response => {
+        this.planList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.length) {
                 this.selectedPlan = response[1];
                 this.popularPlan = response[1];
@@ -619,7 +633,6 @@ public back(): void {
      * @memberof BuyPlanComponent
      */
     public onSubmit(): void {
-        console.log(this.subscriptionForm.value.firstStepForm);
         this.isFormSubmitted = false;
         if (this.subscriptionForm.invalid) {
             this.isFormSubmitted = true;
@@ -649,13 +662,15 @@ public back(): void {
             },
             promoCode: this.subscriptionForm.value.firstStepForm.promoCode ? this.subscriptionForm.value.firstStepForm.promoCode : null,
             paymentProvider: "CASHFREE",
-            returnUrl: "https://test.giddh.com/pages/subscription"
+            returnUrl: "https://localhost:3000/pages/subscription/"
         }
         if (this.planUniqueName) {
             this.componentStore.updatePlan(request);
         } else {
             this.componentStore.createPlan(request);
         }
+        // returnUrl: "https://test.giddh.com/pages/subscription"
+
     }
 
     /**
@@ -669,16 +684,6 @@ public back(): void {
             this.selectedState = event.label;
             this.secondStepForm.controls['state'].setValue(event);
         }
-    }
-
-    /**
-     *Hook cycle for afte component initialization
-     *
-     * @memberof BuyPlanComponent
-     */
-    public ngAfterViewInit(): void {
-        this.stepperIcon._getIndicatorType = () => 'number';
-        this.initIntl();
     }
 
     /**

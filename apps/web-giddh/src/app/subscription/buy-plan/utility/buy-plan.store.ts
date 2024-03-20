@@ -1,11 +1,9 @@
-
 import { Injectable, OnDestroy } from "@angular/core";
 import { ComponentStore, tapResponse } from "@ngrx/component-store";
 import { Observable, switchMap, catchError, EMPTY } from "rxjs";
 import { BaseResponse } from "../../../models/api-models/BaseResponse";
 import { SubscriptionsService } from "../../../services/subscriptions.service";
 import { ToasterService } from "../../../services/toaster.service";
-import { CommonService } from "../../../services/common.service";
 import { AppState } from "../../../store";
 import { Store } from "@ngrx/store";
 
@@ -13,6 +11,7 @@ export interface BuyPlanState {
     planListInProgress: boolean;
     planList: any
     createPlanSuccess: boolean;
+    createPlanResponse: any;
     createPlanInProgress: boolean;
     updatePlanSuccess: boolean;
     updatePlanInProgress: boolean;
@@ -21,10 +20,11 @@ export interface BuyPlanState {
     promoCodeResponse: any
 }
 
-export const DEFAULT_PLAN_STATE: BuyPlanState = {
+export const DEFAULT_BUY_PLAN_STATE: BuyPlanState = {
     planListInProgress: null,
     planList: [],
     createPlanSuccess: false,
+    createPlanResponse: null,
     createPlanInProgress: false,
     applyPromoCodeSuccess: false,
     applyPromoCodeInProgress: false,
@@ -38,9 +38,8 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
 
     constructor(private toasterService: ToasterService,
         private subscriptionService: SubscriptionsService,
-        private store: Store<AppState>,
-        private commonService: CommonService) {
-        super(DEFAULT_PLAN_STATE);
+        private store: Store<AppState>) {
+        super(DEFAULT_BUY_PLAN_STATE);
     }
 
     public companyProfile$: Observable<any> = this.select(this.store.select(state => state.settings.profile), (response) => response);
@@ -52,7 +51,7 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
     /**
      * Get All Plans
      *
-     * @memberof PlanComponentStore
+     * @memberof BuyPlanComponentStore
      */
     readonly getAllPlans = this.effect((data: Observable<any>) => {
         return data.pipe(
@@ -91,10 +90,10 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
     });
 
     /**
- * Create Discount
- *
- * @memberof DiscountComponentStore
- */
+     * Create Plan
+     *
+     * @memberof BuyPlanComponentStore
+     */
     readonly createPlan = this.effect((data: Observable<any>) => {
         return data.pipe(
             switchMap((req) => {
@@ -103,9 +102,10 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
-                                this.toasterService.showSnackBar('success', 'Create Subscription Successfully');
+                                this.toasterService.showSnackBar('success', 'Create Plan Successfully');
                                 return this.patchState({
                                     createPlanInProgress: false,
+                                    createPlanResponse: res?.body ?? null,
                                     createPlanSuccess: true
                                 });
                             } else {
@@ -113,6 +113,7 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
                                     this.toasterService.showSnackBar('error', res.message);
                                 }
                                 return this.patchState({
+                                    createPlanResponse: null,
                                     createPlanInProgress: false,
                                     createPlanSuccess: false
                                 });
@@ -133,10 +134,10 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
     });
 
     /**
-* Create Discount
-*
-* @memberof DiscountComponentStore
-*/
+    * Update Plan
+    *
+    * @memberof BuyPlanComponentStore
+    */
     readonly updatePlan = this.effect((data: Observable<any>) => {
         return data.pipe(
             switchMap((req) => {
@@ -145,7 +146,7 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
-                                this.toasterService.showSnackBar('success', 'Create Subscription Successfully');
+                                this.toasterService.showSnackBar('success', 'Update Plan Successfully');
                                 return this.patchState({
                                     updatePlanInProgress: false,
                                     updatePlanSuccess: true
@@ -176,10 +177,10 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
 
 
     /**
-* Create Discount
-*
-* @memberof DiscountComponentStore
-*/
+    * Apply Promocode
+    *
+    * @memberof BuyPlanComponentStore
+    */
     readonly applyPromocode = this.effect((data: Observable<any>) => {
         return data.pipe(
             switchMap((req) => {
@@ -222,7 +223,7 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
     /**
      * Lifecycle hook for component destroy
      *
-     * @memberof PlanComponentStore
+     * @memberof BuyPlanComponentStore
      */
     public ngOnDestroy(): void {
         super.ngOnDestroy();

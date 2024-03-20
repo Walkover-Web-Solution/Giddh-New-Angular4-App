@@ -13,9 +13,7 @@ import { NoDataModule } from '../shared/no-data/no-data.module';
 import { HamburgerMenuModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatMenuModule } from '@angular/material/menu';
-import { CompanyListComponent } from './company-list/company-list.component';
 import { MatSortModule } from '@angular/material/sort';
-import { TransferComponent } from './transfer/transfer.component';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NewConfirmationModalModule } from '../theme/new-confirmation-modal/confirmation-modal.module';
@@ -31,8 +29,10 @@ import { ActivateDialogComponent } from './activate-dialog/activate-dialog.compo
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { AmountFieldComponentModule } from '../shared/amount-field/amount-field.module';
 import { ClickOutsideModule } from 'ng-click-outside';
-import { VerifyOwnershipComponent } from './verify-ownership/verify-ownership.component';
 import { UserDetailsModule } from '../user-details/user-details.module';
+import { CompanyListDialogComponent } from './company-list-dialog/company-list-dialog.component';
+import { TransferDialogComponent } from './transfer-dialog/transfer-dialog.component';
+import { VerifyOwnershipDialogComponent } from './verify-ownership-dilaog/verify-ownership-dilaog.component';
 
 @NgModule({
     imports: [
@@ -67,6 +67,6 @@ import { UserDetailsModule } from '../user-details/user-details.module';
     ],
     exports: [
     ],
-    declarations: [SubscriptionComponent, CompanyListComponent, TransferComponent, ChangeBillingComponent, ViewSubscriptionComponent, BuyPlanComponent, ActivateDialogComponent, VerifyOwnershipComponent]
+    declarations: [SubscriptionComponent, CompanyListDialogComponent, TransferDialogComponent, ChangeBillingComponent, ViewSubscriptionComponent, BuyPlanComponent, ActivateDialogComponent, VerifyOwnershipDialogComponent]
 })
 export class SubscriptionModule { }
