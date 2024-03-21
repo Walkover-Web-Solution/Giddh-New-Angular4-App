@@ -7,7 +7,6 @@
 >
     <span *ngIf="translatedText" >
         <button 
-            
             class="toggle-btn" 
             (click)="openVideoTutorialDialog()" 
             [ngClass]="cssClass"
@@ -20,6 +19,7 @@
 <ng-template #videoTutorial>
     <div class="video-wrapper">
         <iframe
+            title="Video Link"
             width="100%"
             height="100%"
             [src]="videoLink"
