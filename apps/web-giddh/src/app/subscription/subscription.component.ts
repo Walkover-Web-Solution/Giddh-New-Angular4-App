@@ -182,7 +182,6 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
             distinctUntilChanged(),
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
-            console.log(searchedText);
             if (searchedText !== null && searchedText !== undefined) {
                 this.showClearFilter = true;
                 this.getAllSubscriptions(true);
@@ -429,7 +428,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
             rowData: element,
             subscriptions: this.subscriptions,
             selectedCompany: this.selectedCompany,
-            localData: this.localeData,
+            localeData: this.localeData,
             commonLocaleData: this.commonLocaleData,
             subscriptionMove: this.subscriptionMove
         }
@@ -478,8 +477,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
      * @param {*} company
      * @memberof SubscriptionComponent
      */
-    public openModalMove(company: any) {
-        console.log(company);
+    public openModalMove(company: any): void {
         this.menu.closeMenu();
         this.subscriptionMove = true;
         this.selectedCompany = company;

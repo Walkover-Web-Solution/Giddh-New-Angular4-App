@@ -138,11 +138,10 @@
 <ng-template #moveCompany>
     <move-company
         (moveCompany)="addOrMoveCompanyCallback($event)"
-        [subscriptions]="inputData.subscriptions"
-        [moveSelectedCompany]="inputData.selectedCompany"
-        [localeData]="inputData.localeData"
-        [subscriptionMove]="inputData?.subscriptionMove"
-        [commonLocaleData]="inputData.commonLocaleData"
+        [moveSelectedCompany]="selectedCompany"
+        [localeData]="localeData"
+        [subscriptionMove]="subscriptionMove"
+        [commonLocaleData]="commonLocaleData"
     >
     </move-company>
 </ng-template>

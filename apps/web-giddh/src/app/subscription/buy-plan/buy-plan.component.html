@@ -35,7 +35,7 @@
                                         Activate Via Key
                                     </button> -->
                                         <div class="custom-tab w-100">
-                                            <mat-button-toggle-group aria-label="Font Style" formControlName="duration">
+                                            <mat-button-toggle-group aria-label="Font Style" (change)="toggleDuration($event)" formControlName="duration">
                                                 <mat-button-toggle value="MONTHLY">{{
                                                     commonLocaleData?.app_duration?.monthly
                                                 }}</mat-button-toggle>
@@ -380,7 +380,7 @@
                                                 <div *ngIf="!countyList?.length">
                                                     <dropdown-field
                                                         [name]="'state'"
-                                                        [label]="commonLocaleData?.app_state"
+                                                        [label]="commonLocaleData?.app_state+'*'"
                                                         [placeholder]="commonLocaleData?.app_state"
                                                         [options]="states"
                                                         [showError]="
@@ -521,14 +521,7 @@
                                 </amount-field>
                             </span>
                         </div>
-                        <div
-                            [ngClass]="{
-                                ' border-bottom':
-                                    firstStepForm.get('planUniqueName').value &&
-                                    selectedStep === 2 &&
-                                    promoCodeResponse?.length
-                            }"
-                        >
+                        <div class="border-bottom">
                             <div class="d-flex justify-content-between py-3">
                                 <span class="strong">
                                     <span *ngIf="firstStepForm.get('duration')?.value === 'YEARLY'">{{
@@ -557,27 +550,14 @@
                                     </amount-field>
                                 </span>
                             </div>
-                            <p
-                                class="text-right"
-                                *ngIf="
-                                    selectedPlan?.currency?.code?.toLowerCase() === 'inr' &&
-                                    secondStepForm.get('country')?.value?.value === 'IN' &&
-                                    !promoCodeResponse[0]?.discountValue
-                                "
-                            >
-                                {{ localeData?.including_tax }}
-                            </p>
                         </div>
                         <div
-                            class="d-flex justify-content-between py-3"
+                            class="d-flex justify-content-between py-3 border-bottom"
                             *ngIf="
                                 firstStepForm.get('planUniqueName').value &&
                                 selectedStep === 2 &&
                                 promoCodeResponse?.length
                             "
-                            [ngClass]="{
-                                ' border-bottom': firstStepForm.get('planUniqueName').value && selectedStep === 2
-                            }"
                         >
                             <p>{{ commonLocaleData?.app_discount }}</p>
                             <span>
@@ -591,9 +571,7 @@
                         </div>
                         <div
                             *ngIf="
-                                firstStepForm.get('planUniqueName').value &&
-                                selectedStep === 2 &&
-                                promoCodeResponse?.length
+                                firstStepForm.get('planUniqueName').value
                             "
                         >
                             <div class="d-flex justify-content-between py-3">
@@ -601,23 +579,7 @@
                                 <span>
                                     <amount-field
                                         [amount]="
-                                            promoCodeResponse[0]?.finalAmount +
-                                            (selectedPlan?.currency?.code?.toLowerCase() === 'inr' &&
-                                            secondStepForm.get('country')?.value?.value === 'IN'
-                                                ? promoCodeResponse[0]?.finalAmount * taxPercentage
-                                                : 0)
-                                        "
-                                        [currencySymbol]="selectedPlan?.currency?.symbol"
-                                        [currencyCode]="selectedPlan?.currency?.code"
-                                    >
-                                    </amount-field>
-                                    <amount-field
-                                        [amount]="
-                                            promoCodeResponse[0]?.finalAmount +
-                                            (selectedPlan?.currency?.code?.toLowerCase() !== 'inr' &&
-                                            secondStepForm.get('country')?.value?.value !== 'IN'
-                                                ? promoCodeResponse[0]?.finalAmount * taxPercentage
-                                                : 0)
+                                           finalPlanAmount
                                         "
                                         [currencySymbol]="selectedPlan?.currency?.symbol"
                                         [currencyCode]="selectedPlan?.currency?.code"
@@ -628,13 +590,23 @@
                             <p
                                 class="text-right"
                                 *ngIf="
-                                    selectedPlan?.currency?.code?.toLowerCase() === 'inr' &&
-                                    secondStepForm.get('country')?.value?.value === 'IN' &&
-                                    promoCodeResponse[0]?.discountValue
+                                    (selectedPlan?.currency?.code?.toLowerCase() === 'inr' &&
+                                    secondStepForm.get('country')?.value?.value?.toLowerCase()== 'in') &&
+                                    !promoCodeResponse[0]?.discountValue
                                 "
                             >
                                 {{ localeData?.including_tax }}
                             </p>
+                            <p
+                            class="text-right"
+                            *ngIf="
+                                (selectedPlan?.currency?.code?.toLowerCase() === 'inr' &&
+                                secondStepForm.get('country')?.value?.value?.toLowerCase()== 'in') &&
+                                promoCodeResponse[0]?.discountValue
+                            "
+                        >
+                            {{ localeData?.including_tax }}
+                        </p>
                         </div>
                         <div
                             class="position-relative mt-3"

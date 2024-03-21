@@ -116,30 +116,30 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
      * @memberof MoveCompanyComponent
      */
     public getCompanyDetails(): void {
-        this.settingsProfileService.getCompanyDetails(this.moveSelectedCompany?.uniqueName ? this.moveSelectedCompany?.uniqueName : this.moveSelectedCompany.companies[0]?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
+        this.settingsProfileService.getCompanyDetails(this.moveSelectedCompany?.uniqueName ? this.moveSelectedCompany?.uniqueName : (this.moveSelectedCompany.companies[0]?.uniqueName)).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
             if (response && response.status === "success" && response.body) {
                 this.moveSelectedCompany = response.body;
                 if (this.subscriptions && this.subscriptions.length > 0) {
-                    this.subscriptions.forEach(plan => {
+                    this.subscriptions.forEach(subscription => {
                         if (this.subscriptionMove) {
-                            if (plan.subscriptionId && this.moveSelectedCompany?.subscriptionId !== plan.subscriptionId && plan.companies?.length > plan?.totalCompanies && this.availablePlans[plan?.plan?.uniqueName] === undefined &&
-                                plan.planCountries?.find(country => country?.countryName === this.moveSelectedCompany.country)
+                            if (subscription.subscriptionId && this.moveSelectedCompany?.subscriptionId !== subscription.subscriptionId && subscription.companies?.length > subscription?.totalCompanies && this.availablePlans[subscription?.subscription?.uniqueName] === undefined &&
+                                subscription.planCountries?.find(country => country?.countryName === this.moveSelectedCompany.country ? this.moveSelectedCompany.country : this.moveSelectedCompany.country?.countryName)
                             ) {
                                 console.log('called');
-                                this.availablePlansOption.push({ label: plan.plan?.name, value: plan.plan?.uniqueName });
-                                if (this.availablePlans[plan.plan?.uniqueName] === undefined) {
-                                    this.availablePlans[plan.plan?.uniqueName] = [];
+                                this.availablePlansOption.push({ label: subscription.plan?.name, value: subscription.plan?.uniqueName });
+                                if (this.availablePlans[subscription.plan?.uniqueName] === undefined) {
+                                    this.availablePlans[subscription.plan?.uniqueName] = [];
                                 }
-                                this.availablePlans[plan.plan?.uniqueName] = plan;
-                                console.log(this.availablePlans, plan);
+                                this.availablePlans[subscription.plan?.uniqueName] = subscription;
+                                console.log(this.availablePlans, subscription);
                             }
                         } else {
-                            if (plan.subscriptionId && plan.planDetails?.companiesLimit > plan.totalCompanies && this.moveSelectedCompany?.subscription?.subscriptionId !== plan.subscriptionId && this.availablePlans[plan.planDetails?.uniqueName] === undefined && plan.planDetails.countries.includes(this.moveSelectedCompany.country)) {
-                                this.availablePlansOption.push({ label: plan.planDetails?.name, value: plan.planDetails?.uniqueName });
-                                if (this.availablePlans[plan.planDetails?.uniqueName] === undefined) {
-                                    this.availablePlans[plan.planDetails?.uniqueName] = [];
+                            if (subscription.subscriptionId && subscription.planDetails?.companiesLimit > subscription.totalCompanies && this.moveSelectedCompany?.subscription?.subscriptionId !== subscription.subscriptionId && this.availablePlans[subscription.planDetails?.uniqueName] === undefined && subscription.planDetails.countries.includes(this.moveSelectedCompany.country)) {
+                                this.availablePlansOption.push({ label: subscription.planDetails?.name, value: subscription.planDetails?.uniqueName });
+                                if (this.availablePlans[subscription.planDetails?.uniqueName] === undefined) {
+                                    this.availablePlans[subscription.planDetails?.uniqueName] = [];
                                 }
-                                this.availablePlans[plan.planDetails?.uniqueName] = plan;
+                                this.availablePlans[subscription.planDetails?.uniqueName] = subscription;
                             }
                         }
                     });

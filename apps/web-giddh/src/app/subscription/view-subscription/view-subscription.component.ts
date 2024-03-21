@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TransferComponent } from '../transfer/transfer.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -8,6 +8,7 @@ import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-mod
 import { Location } from '@angular/common';
 import { SubscriptionComponentStore } from '../utility/subscription.store';
 import { TransferDialogComponent } from '../transfer-dialog/transfer-dialog.component';
+import { MatMenuTrigger } from '@angular/material/menu';
 
 @Component({
     selector: 'view-subscription',
@@ -16,6 +17,12 @@ import { TransferDialogComponent } from '../transfer-dialog/transfer-dialog.comp
     providers: [ViewSubscriptionComponentStore, SubscriptionComponentStore]
 })
 export class ViewSubscriptionComponent implements OnInit, OnDestroy {
+    /** Emit the call back function for move success response*/
+    @Output() public callBack: EventEmitter<boolean> = new EventEmitter();
+    /** Mat menu instance reference */
+    @ViewChild(MatMenuTrigger) menu: MatMenuTrigger;
+    /** This will use for move company in to another company  */
+    @ViewChild("moveCompany", { static: false }) public moveCompany: any;
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** True if translations loaded */
@@ -34,6 +41,10 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
+    /* This will hold the companies to use in selected company */
+    public selectedCompany: any;
+    /** True if subscription will move */
+    public subscriptionMove: boolean = false;
 
     constructor(
         public dialog: MatDialog,
@@ -108,6 +119,24 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
     public getSubscriptionData(id: any): void {
         this.componentStore.viewSubscriptionsById(id);
     }
+
+    /**
+  *This function will open the move company popup
+  *
+  * @param {*} company
+  * @memberof CompanyListDialogComponent
+  */
+    public openModalMove(): void {
+        this.menu.closeMenu();
+        this.selectedCompany = this.viewSubscriptionData;
+        this.subscriptionMove = true;
+        this.dialog.open(this.moveCompany, {
+            width: '40%',
+            role: 'alertdialog',
+            ariaLabel: 'moveDialog'
+        });
+    }
+
 
     /**
      * Opens a dialog for confirming subscription cancellation.

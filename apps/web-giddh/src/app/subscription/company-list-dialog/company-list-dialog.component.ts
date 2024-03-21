@@ -57,6 +57,10 @@ export class CompanyListDialogComponent implements OnInit {
     public dataSource: any;
     /** Instance for company list form */
     public companyListForm: UntypedFormGroup;
+    /* This will hold the companies to use in selected company */
+    public selectedCompany: any;
+    /** True if subscription will move */
+    public subscriptionMove: boolean = false;
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public inputData,
@@ -76,7 +80,6 @@ export class CompanyListDialogComponent implements OnInit {
      * @memberof CompanyListDialogComponent
      */
     public ngOnInit(): void {
-        console.log('companyl ist ', this.inputData);
         this.localeData = this.inputData?.localeData;
         this.commonLocaleData = this.inputData?.commonLocaleData;
         this.dialogRef.updatePosition({ top: '0px', right: '0px' });
@@ -191,19 +194,20 @@ export class CompanyListDialogComponent implements OnInit {
     }
 
     /**
-  *This function will open the move company popup
-  *
-  * @param {*} company
-  * @memberof CompanyListDialogComponent
-  */
-    public openModalMove(company: any, event: any) {
+      *This function will open the move company popup
+      *
+      * @param {*} company
+      * @memberof CompanyListDialogComponent
+      */
+    public openModalMove(company: any, event: any): void {
         this.menu.closeMenu();
-        let companyObj = {
-            name: company.name,
-            uniqueName: company.uniqueName
-        }
-        this.inputData.selectedCompany = companyObj;
-        this.dialog.open(this.moveCompany, { width: '40%' });
+        this.selectedCompany = company;
+        this.subscriptionMove = true;
+        this.dialog.open(this.moveCompany, {
+            width: '40%',
+            role: 'alertdialog',
+            ariaLabel: 'moveDialog'
+        });
     }
 
     /**

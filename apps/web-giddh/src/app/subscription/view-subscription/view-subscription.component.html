@@ -57,7 +57,7 @@
                             <button aria-label="cancel" mat-menu-item (click)="cancelSubscription()">
                                 {{ commonLocaleData?.app_cancel }}
                             </button>
-                            <button aria-label="move" mat-menu-item (click)="moveSubscription()">
+                            <button aria-label="move" mat-menu-item (click)="openModalMove()">
                                 {{ localeData?.move }}
                             </button>
                         </mat-menu>
@@ -138,12 +138,23 @@
             <mat-card class="outline-card">
                 <mat-card-content>
                     <h4 class="font-16 strong border-bottom pb-2">{{ localeData?.billing_account }}</h4>
-                    <p class="strong my-3 light-gray">Payment by direct debit</p>
-                    <p class="mr-b15">Account holder: <span class="strong light-gray">Giddh</span></p>
-                    <p class="mr-b15">Sort Code: <span class="strong light-gray">40-24-17</span></p>
-                    <p>Account number: <span class="strong light-gray">******4236</span></p>
+                    <p class="strong my-3 light-gray">Payment by : {{viewSubscriptionData?.cashfreeBillingInfo?.mode}}</p>
+                    <p class="mr-b15">Account holder: <span class="strong light-gray">{{viewSubscriptionData?.cashfreeBillingInfo?.bankAccountHolder}}</span></p>
+                    <p class="mr-b15">Sort Code: <span class="strong light-gray">{{viewSubscriptionData?.cashfreeBillingInfo?.subReferenceId}}</span></p>
+                    <p>Account number: <span class="strong light-gray">{{viewSubscriptionData?.cashfreeBillingInfo?.bankAccountNumber}}</span></p>
                 </mat-card-content>
             </mat-card>
         </div>
     </div>
 </ng-container>
+<!-- MoveCompany Modal -->
+<ng-template #moveCompany>
+    <move-company
+        (moveCompany)="addOrMoveCompanyCallback($event)"
+        [moveSelectedCompany]="selectedCompany"
+        [localeData]="localeData"
+        [subscriptionMove]="subscriptionMove"
+        [commonLocaleData]="commonLocaleData"
+    >
+    </move-company>
+</ng-template>
