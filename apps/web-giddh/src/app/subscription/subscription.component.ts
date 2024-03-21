@@ -1,8 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { debounceTime, distinctUntilChanged, Observable, ReplaySubject, takeUntil } from 'rxjs';
-import { ToasterService } from '../services/toaster.service';
-import { TransferComponent } from './transfer/transfer.component';
 import { GeneralService } from '../services/general.service';
 import { ConfirmModalComponent } from "../theme/new-confirm-modal/confirm-modal.component";
 import { Router } from '@angular/router';
@@ -15,9 +13,6 @@ import { AppState } from '../store';
 import { select, Store } from '@ngrx/store';
 import { SubscriptionsActions } from '../actions/user-subscriptions/subscriptions.action';
 import { SubscriptionsUser } from '../models/api-models/Subscriptions';
-import { cloneDeep, uniqBy } from '../lodash-optimized';
-import * as dayjs from 'dayjs';
-import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { CompanyListDialogComponent } from './company-list-dialog/company-list-dialog.component';
 import { TransferDialogComponent } from './transfer-dialog/transfer-dialog.component';
@@ -130,11 +125,13 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
     public selectedCompany: any;
     /** This will use for active company */
     public activeCompany: any = {};
+    /** True if subscription will move */
+    public subscriptionMove: boolean = false;
 
     constructor(public dialog: MatDialog,
         private changeDetection: ChangeDetectorRef,
         private generalService: GeneralService,
-        private readonly componentStore: SubscriptionComponentStore,
+        private componentStore: SubscriptionComponentStore,
         private store: Store<AppState>,
         private formBuilder: FormBuilder,
         private subscriptionsActions: SubscriptionsActions,
@@ -153,17 +150,17 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         document.body?.classList?.add("subscription-page");
         this.initForm();
         this.getAllSubscriptions(false);
-        this.getCompanies();
-        this.filterSubscriptions();
 
         /** Get Discount List */
         this.subscriptionList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
+                this.subscriptions = response?.body?.results;
                 this.dataSource = new MatTableDataSource<any>(response?.body?.results);
                 this.dataSource.paginator = this.paginator;
                 this.subscriptionRequestParams.totalItems = response?.body?.totalItems;
             } else {
                 this.dataSource = new MatTableDataSource<any>([]);
+                this.subscriptions = [];
                 this.subscriptionRequestParams.totalItems = 0;
             }
         });
@@ -185,9 +182,14 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
             distinctUntilChanged(),
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
+            console.log(searchedText);
             if (searchedText !== null && searchedText !== undefined) {
                 this.showClearFilter = true;
                 this.getAllSubscriptions(true);
+            }
+            if (searchedText === null || searchedText === "") {
+                this.showClearFilter = false;
+                this.showName = false;
             }
         });
         this.subscriptionListForm?.controls['billingAccountName'].valueChanges.pipe(
@@ -199,6 +201,10 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
                 this.showClearFilter = true;
                 this.getAllSubscriptions(true);
             }
+            if (searchedText === null || searchedText === "") {
+                this.showClearFilter = false;
+                this.showBillingAccount = false;
+            }
         });
         this.subscriptionListForm?.controls['subscriberName'].valueChanges.pipe(
             debounceTime(700),
@@ -208,6 +214,10 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
             if (searchedText !== null && searchedText !== undefined) {
                 this.showClearFilter = true;
                 this.getAllSubscriptions(true);
+            }
+            if (searchedText === null || searchedText === "") {
+                this.showClearFilter = false;
+                this.showSubscriber = false;
             }
         });
         this.subscriptionListForm?.controls['countryName'].valueChanges.pipe(
@@ -219,6 +229,10 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
                 this.showClearFilter = true;
                 this.getAllSubscriptions(true);
             }
+            if (searchedText === null || searchedText === "") {
+                this.showClearFilter = false;
+                this.showCountry = false;
+            }
         });
         this.subscriptionListForm?.controls['planName'].valueChanges.pipe(
             debounceTime(700),
@@ -228,6 +242,10 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
             if (searchedText !== null && searchedText !== undefined) {
                 this.showClearFilter = true;
                 this.getAllSubscriptions(true);
+            }
+            if (searchedText === null || searchedText === "") {
+                this.showClearFilter = false;
+                this.showPlanSubName = false;
             }
         });
 
@@ -240,6 +258,10 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
                 this.showClearFilter = true;
                 this.getAllSubscriptions(true);
             }
+            if (searchedText === null || searchedText === "") {
+                this.showClearFilter = false;
+                this.showStatus = false;
+            }
         });
 
         this.subscriptionListForm?.controls['period'].valueChanges.pipe(
@@ -250,6 +272,10 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
             if (searchedText !== null && searchedText !== undefined) {
                 this.showClearFilter = true;
                 this.getAllSubscriptions(true);
+            }
+            if (searchedText === null || searchedText === "") {
+                this.showClearFilter = false;
+                this.showMonthlyYearly = false;
             }
         });
     }
@@ -396,18 +422,22 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
     * @param {*} element
     * @memberof SubscriptionComponent
     */
-    public getCompanyList(event: any, element: any): void {
+    public openCompanyDialog(element: any): void {
         this.menu?.closeMenu();
+        this.subscriptionMove = true;
         let data = {
             rowData: element,
             subscriptions: this.subscriptions,
             selectedCompany: this.selectedCompany,
             localData: this.localeData,
-            commonLocaleData: this.commonLocaleData
+            commonLocaleData: this.commonLocaleData,
+            subscriptionMove: this.subscriptionMove
         }
         this.dialog.open(CompanyListDialogComponent, {
             data: data,
-            panelClass: 'subscription-sidebar'
+            panelClass: 'subscription-sidebar',
+            role: 'alertdialog',
+            ariaLabel:'companyDialog'
         });
     }
 
@@ -422,7 +452,9 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         this.dialog.open(TransferDialogComponent, {
             data: subscriptionId,
             panelClass: 'transfer-popup',
-            width: "630px"
+            width: "630px",
+            role: 'alertdialog',
+            ariaLabel: 'transferDialog'
         });
     }
 
@@ -447,9 +479,15 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
      * @memberof SubscriptionComponent
      */
     public openModalMove(company: any) {
+        console.log(company);
         this.menu.closeMenu();
-        this.selectedCompany = company.companies[0];
-        this.dialog.open(this.moveCompany, { width: '40%' });
+        this.subscriptionMove = true;
+        this.selectedCompany = company;
+            this.dialog.open(this.moveCompany, {
+                width: '40%',
+                role: 'alertdialog',
+                ariaLabel: 'moveDialog'
+            });
     }
 
 
@@ -461,56 +499,8 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
    */
     public addOrMoveCompanyCallback(event: boolean): void {
         if (event === true) {
-            this.getCompanies();
+            this.getAllSubscriptions(null);
         }
-    }
-
-    /**
-    * This function will use for get subscribed companies
-    *
-    * @memberof SubscriptionComponent
-    */
-    public getCompanies(): void {
-        this.subscribedCompanies$.pipe(takeUntil(this.destroyed$)).subscribe(res => {
-            this.store.dispatch(this.subscriptionsActions.SubscribedCompaniesResponse(res));
-        });
-    }
-
-    /**
-     *  This function will use for filter plans , withing and expiry in dropdown and searching subscriptions
-     *
-     * @memberof SubscriptionComponent
-     */
-    public filterSubscriptions(): void {
-        this.subscriptions$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            let subscriptions = [];
-            this.subscriptions = [];
-
-            if (response?.length) {
-                response.forEach(subscription => {
-                    let subscriptionDetails = cloneDeep(subscription);
-
-                    subscriptionDetails.remainingDays = Number(dayjs(subscriptionDetails.expiry, GIDDH_DATE_FORMAT).diff(dayjs(), 'day'));
-                    subscriptionDetails.startedAt = dayjs(subscriptionDetails.startedAt, GIDDH_DATE_FORMAT).format("D MMM, YYYY");
-                    subscriptionDetails.expiry = dayjs(subscriptionDetails.expiry, GIDDH_DATE_FORMAT).format("D MMM, YYYY");
-
-                    subscriptions.push(subscriptionDetails);
-                });
-                if (subscriptions?.length > 0) {
-                    this.subscriptions = subscriptions;
-                    let loop = 0;
-                    let activeCompanyIndex = -1;
-                    this.subscriptions.forEach(res => {
-                        if (res.subscriptionId === this.activeCompany?.subscription?.subscriptionId) {
-                            activeCompanyIndex = loop;
-                        }
-                        loop++;
-                    });
-                    this.subscriptions = this.generalService.changeElementPositionInArray(this.subscriptions, activeCompanyIndex, 0);
-                    this.subscriptions = uniqBy(this.subscriptions, "subscriptionId");
-                }
-            }
-        });
     }
 
     /**
@@ -574,7 +564,9 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
                 cancel: 'Cancel'
             },
             panelClass: 'cancel-confirmation-modal',
-            width: '585px'
+            width: '585px',
+            role: 'alertdialog',
+            ariaLabel: 'confirmDialog'
         });
 
         cancelDialogRef.afterClosed().subscribe((action) => {

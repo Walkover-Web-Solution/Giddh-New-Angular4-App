@@ -1,9 +1,14 @@
-<ng-container>
+<ng-container
+    appTranslate
+    [file]="'subscription'"
+    (commonLocaleData)="commonLocaleData = $event"
+    (localeData)="localeData = $event"
+>
     <hamburger-menu></hamburger-menu>
     <div class="w-100 float-left pd-15">
-        <button mat-stroked-button class="mb-3" (click)="back()">
+        <button aria-label="back" mat-stroked-button class="mb-3" (click)="back()">
             <i class="icon-left back-left"></i>
-            Back
+            {{ commonLocaleData?.app_back }}
         </button>
     </div>
     <div class="view-subscription-wrap pd-15 d-flex w-100 column-gap15">
@@ -15,14 +20,19 @@
                 <mat-card-content *ngIf="!(viewSubscriptionDataInProgress$ | async)">
                     <div class="d-flex justify-content-between column-gap1 align-items-center border-bottom pb-2">
                         <div class="d-flex column-gap1">
-                            <h4 class="font-16 strong">View Subscription</h4>
+                            <h4 class="font-16 strong">
+                                {{ commonLocaleData?.app_view }} {{ localeData?.tab_heading }}
+                            </h4>
                             <span class="badge btn-success cp font-12">{{
                                 viewSubscriptionData?.status | uppercase
                             }}</span>
                         </div>
                         <div class="d-flex align-items-center column-gap1">
-                            <button mat-stroked-button color="primary" (click)="buyPlan()">Buy Now</button>
+                            <button aria-label="buy" mat-stroked-button color="primary" (click)="buyPlan()">
+                                {{ commonLocaleData?.app_buy_plan }}
+                            </button>
                             <button
+                               aria-label="threedots"
                                 mat-icon-button
                                 [matMenuTriggerFor]="menu"
                                 class="d-flex align-items-center justify-content-center"
@@ -31,13 +41,25 @@
                             </button>
                         </div>
                         <mat-menu #menu="matMenu">
-                            <button mat-menu-item (click)="buyPlan()">Buy Plan</button>
-                            <button mat-menu-item (click)="changeBilling()">Change Billing</button>
-                            <button mat-menu-item (click)="transferSubscription(viewSubscriptionData?.subscriptionId)">
-                                Request Transfer
+                            <button aria-label="plan" mat-menu-item (click)="buyPlan()">
+                                {{ commonLocaleData?.app_buy_plan }}
                             </button>
-                            <button mat-menu-item (click)="cancelSubscription()">Cancel</button>
-                            <button mat-menu-item (click)="moveSubscription()">Move</button>
+                            <button aria-label="change" mat-menu-item (click)="changeBilling()">
+                                {{ localeData?.change_billing }}
+                            </button>
+                            <button
+                                aria-label="subscriptionid"
+                                mat-menu-item
+                                (click)="transferSubscription(viewSubscriptionData?.subscriptionId)"
+                            >
+                                {{ localeData?.request_transfer }}
+                            </button>
+                            <button aria-label="cancel" mat-menu-item (click)="cancelSubscription()">
+                                {{ commonLocaleData?.app_cancel }}
+                            </button>
+                            <button aria-label="move" mat-menu-item (click)="moveSubscription()">
+                                {{ localeData?.move }}
+                            </button>
                         </mat-menu>
                     </div>
                     <div class="view-subscription">
@@ -52,7 +74,7 @@
                         </div>
                         <div class="d-flex justify-content-between mr-b2">
                             <div>
-                                <p class="light-gray mb-1">Invoice Count</p>
+                                <p class="light-gray mb-1">{{ localeData?.invoice_count }}</p>
                                 <span class="font-24">
                                     <amount-field
                                         [amount]="viewSubscriptionData?.planDetails?.invoicesAllowed"
@@ -63,7 +85,7 @@
                                 </span>
                             </div>
                             <div class="view-right d-flex align-items-end">
-                                <p class="light-gray mb-1">Bill Count</p>
+                                <p class="light-gray mb-1">{{ localeData?.bill_count }}</p>
                                 <span class="font-24">
                                     <amount-field
                                         [amount]="viewSubscriptionData?.planDetails?.billsAllowed"
@@ -75,10 +97,10 @@
                             </div>
                         </div>
                         <!-- usage -->
-                        <h4 class="strong border-bottom pb-3 font-16 mr-t3">Usage</h4>
+                        <h4 class="strong border-bottom pb-3 font-16 mr-t3">{{ localeData?.usage }}</h4>
                         <div class="d-flex justify-content-between pt-3">
                             <div>
-                                <p class="light-gray mb-1">Company Count</p>
+                                <p class="light-gray mb-1">{{ localeData?.company_count }}</p>
                                 <span class="font-24">
                                     <amount-field
                                         [amount]="viewSubscriptionData?.planDetails?.companiesLimit"
@@ -89,7 +111,7 @@
                                 </span>
                             </div>
                             <div class="view-right d-flex align-items-end">
-                                <p class="light-gray mb-1">Transaction Count</p>
+                                <p class="light-gray mb-1">{{ localeData?.transaction_count }}</p>
                                 <span class="font-24">
                                     <amount-field
                                         [amount]="viewSubscriptionData?.planDetails?.transactionLimit"
@@ -101,8 +123,12 @@
                             </div>
                         </div>
                         <div class="d-flex column-gap1 mt-3">
-                            <button mat-stroked-button color="primary" (click)="buyPlan()">Change Subscription</button>
-                            <button mat-stroked-button (click)="cancelSubscription()">Cancel Subscription</button>
+                            <button aria-label="buyplan" mat-stroked-button color="primary" (click)="buyPlan()">
+                                {{ localeData?.change_subscription }}
+                            </button>
+                            <button aria-label="cacnelsubscription" mat-stroked-button (click)="cancelSubscription()">
+                                {{ localeData?.cancel_subscription }}
+                            </button>
                         </div>
                     </div>
                 </mat-card-content>
@@ -111,7 +137,7 @@
         <div class="billing-account">
             <mat-card class="outline-card">
                 <mat-card-content>
-                    <h4 class="font-16 strong border-bottom pb-2">Billing account</h4>
+                    <h4 class="font-16 strong border-bottom pb-2">{{ localeData?.billing_account }}</h4>
                     <p class="strong my-3 light-gray">Payment by direct debit</p>
                     <p class="mr-b15">Account holder: <span class="strong light-gray">Giddh</span></p>
                     <p class="mr-b15">Sort Code: <span class="strong light-gray">40-24-17</span></p>

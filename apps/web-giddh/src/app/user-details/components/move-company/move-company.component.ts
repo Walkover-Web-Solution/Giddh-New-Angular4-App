@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
-import { SubscriptionsUser } from '../../../models/api-models/Subscriptions';
 import { IOption } from '../../../theme/ng-select/ng-select';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store';
@@ -9,16 +8,18 @@ import { SettingsProfileService } from '../../../services/settings.profile.servi
 import { takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
 import { UntypedFormControl } from '@angular/forms';
+import { SubscriptionComponentStore } from '../../../subscription/utility/subscription.store';
 
 @Component({
     selector: 'move-company',
     styleUrls: ['./move-company.component.scss'],
-    templateUrl: './move-company.component.html'
+    templateUrl: './move-company.component.html',
+    providers: [SubscriptionComponentStore]
 })
 
 export class MoveCompanyComponent implements OnInit, OnDestroy {
     @Output() public moveCompany = new EventEmitter<boolean>();
-    @Input() public subscriptions: SubscriptionsUser[] = [];
+    @Input() public subscriptions: any[] = [];
     @Input() public moveSelectedCompany: any;
     /* This will hold local JSON data */
     @Input() public localeData: any = {};
@@ -39,9 +40,14 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
     public searchPlan: UntypedFormControl = new UntypedFormControl();
     /** True if api call in progress */
     public isLoading: boolean = true;
+    /** True if api call in progress */
+    @Input() public subscriptionMove: boolean;
+    /** Holds Store Subscription list observable*/
+    public subscriptionList$ = this.componentStore.select(state => state.subscriptionList);
 
-    constructor(private store: Store<AppState>, private settingsProfileActions: SettingsProfileActions, private settingsProfileService: SettingsProfileService) {
-        console.log(this.moveCompany, this.subscriptions, this.moveSelectedCompany);
+    constructor(private store: Store<AppState>, private settingsProfileActions: SettingsProfileActions,
+        private componentStore: SubscriptionComponentStore,
+        private settingsProfileService: SettingsProfileService) {
     }
 
     /**
@@ -50,10 +56,24 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
      * @memberof MoveCompanyComponent
      */
     public ngOnInit(): void {
+        console.log(this.subscriptions, this.moveSelectedCompany);
         if (this.moveSelectedCompany) {
             this.getCompanyDetails();
         }
+        if (this.subscriptionMove) {
+            this.componentStore.getAllSubscriptions(null);
+            this.subscriptionList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                console.log(response);
+                if (response) {
+                    this.subscriptions = response?.body?.results;
+                } else {
+                    this.subscriptions = [];
+                }
+            });
+        }
     }
+
+
 
     /**
      * This will initiate the update plan
@@ -96,18 +116,31 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
      * @memberof MoveCompanyComponent
      */
     public getCompanyDetails(): void {
-        this.settingsProfileService.getCompanyDetails(this.moveSelectedCompany?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
+        this.settingsProfileService.getCompanyDetails(this.moveSelectedCompany?.uniqueName ? this.moveSelectedCompany?.uniqueName : this.moveSelectedCompany.companies[0]?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
             if (response && response.status === "success" && response.body) {
                 this.moveSelectedCompany = response.body;
-
                 if (this.subscriptions && this.subscriptions.length > 0) {
                     this.subscriptions.forEach(plan => {
-                        if (plan.subscriptionId && plan.planDetails?.companiesLimit > plan.totalCompanies && this.moveSelectedCompany?.subscription?.subscriptionId !== plan.subscriptionId && this.availablePlans[plan.planDetails?.uniqueName] === undefined && plan.planDetails.countries.includes(this.moveSelectedCompany.country)) {
-                            this.availablePlansOption.push({ label: plan.planDetails?.name, value: plan.planDetails?.uniqueName });
-                            if (this.availablePlans[plan.planDetails?.uniqueName] === undefined) {
-                                this.availablePlans[plan.planDetails?.uniqueName] = [];
+                        if (this.subscriptionMove) {
+                            if (plan.subscriptionId && this.moveSelectedCompany?.subscriptionId !== plan.subscriptionId && plan.companies?.length > plan?.totalCompanies && this.availablePlans[plan?.plan?.uniqueName] === undefined &&
+                                plan.planCountries?.find(country => country?.countryName === this.moveSelectedCompany.country)
+                            ) {
+                                console.log('called');
+                                this.availablePlansOption.push({ label: plan.plan?.name, value: plan.plan?.uniqueName });
+                                if (this.availablePlans[plan.plan?.uniqueName] === undefined) {
+                                    this.availablePlans[plan.plan?.uniqueName] = [];
+                                }
+                                this.availablePlans[plan.plan?.uniqueName] = plan;
+                                console.log(this.availablePlans, plan);
                             }
-                            this.availablePlans[plan.planDetails?.uniqueName] = plan;
+                        } else {
+                            if (plan.subscriptionId && plan.planDetails?.companiesLimit > plan.totalCompanies && this.moveSelectedCompany?.subscription?.subscriptionId !== plan.subscriptionId && this.availablePlans[plan.planDetails?.uniqueName] === undefined && plan.planDetails.countries.includes(this.moveSelectedCompany.country)) {
+                                this.availablePlansOption.push({ label: plan.planDetails?.name, value: plan.planDetails?.uniqueName });
+                                if (this.availablePlans[plan.planDetails?.uniqueName] === undefined) {
+                                    this.availablePlans[plan.planDetails?.uniqueName] = [];
+                                }
+                                this.availablePlans[plan.planDetails?.uniqueName] = plan;
+                            }
                         }
                     });
                 }
@@ -115,6 +148,8 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
             this.isLoading = false;
         });
     }
+
+
 
     /**
      * Releases memory
@@ -133,8 +168,8 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
      * @memberof MoveCompanyComponent
      */
     public getMovePlanText(): string {
-        let text = this.localeData?.subscription?.move_plan_note;
-        text = text?.replace("[COMPANY_NAME]", this.moveSelectedCompany?.name)?.replace("[PLAN_NAME]", this.moveSelectedCompany?.subscription?.planDetails?.name);
+        let text = this.localeData?.subscription?.move_plan_note ? this.localeData?.subscription?.move_plan_note : this.localeData?.move_plan_note;
+        text = text?.replace("[COMPANY_NAME]", this.moveSelectedCompany?.name ? this.moveSelectedCompany?.name : this.moveSelectedCompany?.companies[0].name)?.replace("[PLAN_NAME]", this.moveSelectedCompany?.subscription?.planDetails?.name ? this.moveSelectedCompany?.subscription?.planDetails?.name : this.moveSelectedCompany?.plan?.name);
         return text;
     }
 }

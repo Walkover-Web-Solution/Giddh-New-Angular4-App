@@ -30,6 +30,10 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
     public subscriptionId: any;
     /** Holds cancel subscription observable*/
     public cancelSubscription$ = this.subscriptionComponentStore.select(state => state.cancelSubscription);
+    /** This will hold local JSON data */
+    public localeData: any = {};
+    /** This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(
         public dialog: MatDialog,

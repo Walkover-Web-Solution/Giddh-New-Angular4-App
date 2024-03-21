@@ -123,6 +123,10 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public promoCodeResponse: any[] = [];
     /** This will use for tax percentage */
     public taxPercentage: number = 0.18;
+    /** Hold api response subscription id*/
+    public responseSubscriptionId: any;
+    /** Hold api response redirect link*/
+    public redirectLink: any;
 
     constructor(
         public dialog: MatDialog,
@@ -158,6 +162,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.getActiveCompany();
 
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe((params: any) => {
+            console.log(params);
             if (params) {
                 this.planUniqueName = params.planUniqueName;
             }
@@ -165,8 +170,22 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
 
         this.createPlanResponse$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                this.router.navigate([response?.redirectLink]);
+                this.responseSubscriptionId = response?.subscriptionId;
+                this.openCashfreeDialog(response?.redirectLink);
             } else {
+            }
+        });
+
+        window.addEventListener('message', event => {
+            if (event?.data && typeof event?.data === "string") {
+                const data: any = event?.data?.split("&").reduce(function (prev, curr, i, arr) {
+                    var params = curr.split("=");
+                    prev[decodeURIComponent(params[0])] = decodeURIComponent(params[1]);
+                    return prev;
+                }, {});
+                if (data) {
+                    this.router.navigate(['/pages/new-company/' + this.responseSubscriptionId]);
+                }
             }
         });
 
@@ -529,6 +548,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.planList$.pipe(takeUntil(this.destroyed$)).subscribe(result => {
             if (result) {
                 this.selectedPlan = result.find(plan => plan?.uniqueName === this.firstStepForm.get('planUniqueName').value);
+
             }
         });
     }
@@ -661,15 +681,13 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 address: this.subscriptionForm.value.secondStepForm.address
             },
             promoCode: this.subscriptionForm.value.firstStepForm.promoCode ? this.subscriptionForm.value.firstStepForm.promoCode : null,
-            paymentProvider: "CASHFREE",
-            returnUrl: "https://localhost:3000/pages/subscription/"
+            paymentProvider: "CASHFREE"
         }
         if (this.planUniqueName) {
             this.componentStore.updatePlan(request);
         } else {
             this.componentStore.createPlan(request);
         }
-        // returnUrl: "https://test.giddh.com/pages/subscription"
 
     }
 
@@ -695,6 +713,16 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.dialog.open(ActivateDialogComponent, {
             width: '600px'
         })
+    }
+
+    /**
+     * Shows cashfree dialog
+     *
+     * @memberof LoginComponent
+     */
+    public openCashfreeDialog(redirectLink: any): void {
+        console.log(redirectLink);
+        window.open(redirectLink, '_blank');
     }
 
     /**

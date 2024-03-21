@@ -357,7 +357,4 @@ export class SubscriptionsService {
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {}))
             );
     }
-
-
-
 }

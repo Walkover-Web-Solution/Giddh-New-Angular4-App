@@ -13,7 +13,7 @@ export interface PermissionListState {
     permissionRoles: any
 }
 
-export const DEFAULT_PLAN_STATE: PermissionListState = {
+export const DEFAULT_PERMISSION_STATE: PermissionListState = {
     permissionRolesInProgress: null,
     permissionRoles: null
 
@@ -24,13 +24,13 @@ export class AddCompanyComponentStore extends ComponentStore<PermissionListState
 
     constructor(private toasterService: ToasterService, private permissionService: PermissionService,
         private store: Store<AppState>) {
-        super(DEFAULT_PLAN_STATE);
+        super(DEFAULT_PERMISSION_STATE);
     }
 
     /**
-     * Get All Plans
+     * Get Permissions Roles
      *
-     * @memberof PlanComponentStore
+     * @memberof AddCompanyComponentStore
      */
     readonly getPermissionRoles = this.effect((data: Observable<any>) => {
         return data.pipe(
@@ -70,12 +70,10 @@ export class AddCompanyComponentStore extends ComponentStore<PermissionListState
     });
 
 
-
-
     /**
      * Lifecycle hook for component destroy
      *
-     * @memberof PlanComponentStore
+     * @memberof AddCompanyComponentStore
      */
     public ngOnDestroy(): void {
         super.ngOnDestroy();

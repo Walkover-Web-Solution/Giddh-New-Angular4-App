@@ -191,11 +191,11 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
     public verifyOtpInProgress: boolean = false;
     /** True if need to focus in otp field */
     public showFocusInOtpField: boolean = false;
-    /** Hold selected country */
+    /** Hold selected role */
     public selectedRole: string = '';
-    /** Holds Store Apply Promocode API response state as observable*/
+    /** Holds Store permission roles API response state as observable*/
     public permissionRoles$ = this.componentStore.select(state => state.permissionRoles);
-    /** List of roles */
+    /** List of permission  roles */
     public permissionRoles: any[] = [];
 
 
@@ -243,7 +243,6 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
 
         this.activateRoute.params.pipe(takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
-                console.log(res);
                 this.company.subscriptionRequest.subscriptionId = res?.subscriptionId;
             }
         });
@@ -281,7 +280,6 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
             if (searchedText !== null && searchedText !== undefined) {
-                console.log(searchedText, this.thirdStepForm);
                 if (this.thirdStepForm?.controls['emailId'].status === 'VALID') {
                     this.thirdStepForm?.get('roleUniqueName').setValue('super_admin');
                     this.selectedRole = 'Super Admin';
@@ -745,7 +743,6 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      * @memberof AddCompanyComponent
      */
     public onSelectedTab(event: any): void {
-        console.log(event);
         this.selectedStep = event?.selectedIndex;
         if (this.showMobileField) {
             setTimeout(() => {
@@ -926,16 +923,26 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      */
     public nextStepForm(): void {
         this.isFormSubmitted = false;
-        if (this.firstStepForm.invalid || (this.showMobileField && !this.isMobileNumberVerified)) {
+        if (this.selectedStep === 0 && this.firstStepForm.invalid || (this.showMobileField && !this.isMobileNumberVerified)) {
             this.isFormSubmitted = true;
-            this.selectedStep = 0;
             if (!this.firstStepForm.invalid && this.showMobileField && !this.isMobileNumberVerified) {
                 this.toaster.showSnackBar("error", this.localeData?.verify_number);
             }
             return;
         }
+
+        if (this.selectedStep === 1 && this.secondStepForm.invalid) {
+            this.isFormSubmitted = true;
+            return;
+        }
+
+        if (this.selectedStep === 2 && this.thirdStepForm.invalid) {
+            this.isFormSubmitted = true;
+            return;
+        }
+
         this.firstStepForm.controls['mobile'].setValue(this.showMobileField ? this.intl?.getNumber() : this.mobileNo);
-        this.selectedStep = 1;
+        this.selectedStep ++;
         this.company.name = this.firstStepForm.controls['name'].value;
         this.company.country = this.firstStepForm.controls['country'].value.value;
         this.company.baseCurrency = this.firstStepForm.controls['currency'].value.value;
@@ -1054,7 +1061,6 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      * @memberof AddCompanyComponent
      */
     public onSubmit(): void {
-        console.log(this.companyForm);
         this.isFormSubmitted = false;
         if (this.companyForm.invalid || (!this.isGstinValid && this.secondStepForm.controls['businessType'].value === BusinessTypes.Registered)) {
             this.isFormSubmitted = true;
@@ -1262,19 +1268,36 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         }
     }
 
+    /**
+     * Retrieves the roles for permissions and updates the component's state.
+     * Invokes the `getPermissionRoles` method of `componentStore`.
+     *
+     * @memberof AddCompanyComponent
+     */
     public getRoles(): void {
         this.componentStore.getPermissionRoles(null);
     }
 
+    /**
+     * Updates the selected role in the third step form.
+     *
+     * @param {*} event - The event containing the selected role.
+     * @memberof AddCompanyComponent
+     */
     public selectRole(event: any): void {
-        console.log(event);
         this.thirdStepForm.get('roleUniqueName').setValue(event?.value);
     }
 
+    /**
+     * Sets the owner permission in the third step form.
+     *
+     * @param {*} event - The event containing the owner permission.
+     * @memberof AddCompanyComponent
+     */
     public setOwnerPermission(event: any): void {
-        console.log(event);
         this.thirdStepForm.get('creatorSuperAdmin').setValue(event?.value);
     }
+
     /**
      * Callback for translation response complete
      *

@@ -35,6 +35,8 @@ export class CompanyListDialogComponent implements OnInit {
     @ViewChild("moveCompany", { static: false }) public moveCompany: any;
     /** This will hold local JSON data */
     public localeData: any = {};
+    /** This will hold common JSON data */
+    public commonLocaleData: any = {};
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Holds Store Company list API success state as observable*/
@@ -74,6 +76,9 @@ export class CompanyListDialogComponent implements OnInit {
      * @memberof CompanyListDialogComponent
      */
     public ngOnInit(): void {
+        console.log('companyl ist ', this.inputData);
+        this.localeData = this.inputData?.localeData;
+        this.commonLocaleData = this.inputData?.commonLocaleData;
         this.dialogRef.updatePosition({ top: '0px', right: '0px' });
         document.body?.classList?.add("subscription-sidebar");
         this.initForm();

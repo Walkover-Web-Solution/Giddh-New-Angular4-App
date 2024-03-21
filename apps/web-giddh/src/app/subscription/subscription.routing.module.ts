@@ -10,7 +10,7 @@ import { VerifyOwnershipDialogComponent } from './verify-ownership-dilaog/verify
     imports: [
         RouterModule.forChild([
             {
-                path: '', component: BuyPlanComponent
+                path: '', component: SubscriptionComponent
             },
             {
                 path: 'change-billing/:billingAccountUnqiueName', component: ChangeBillingComponent

@@ -1,9 +1,14 @@
-<ng-container>
+<ng-container
+    appTranslate
+    [file]="'subscription'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
     <hamburger-menu></hamburger-menu>
     <div class="w-100 float-left pd-15">
         <button mat-stroked-button class="mb-3" (click)="back()">
             <i class="icon-left back-left"></i>
-            Back
+            {{ commonLocaleData?.app_back }}
         </button>
     </div>
     <br />
@@ -22,17 +27,21 @@
                     <form name="firstStepForm" [formGroup]="firstStepForm" autocomplete="off" class="mt-5" novalidate>
                         <div class="plan-summary d-flex">
                             <div class="plan-width">
-                                <ng-template matStepLabel>Plans</ng-template>
+                                <ng-template matStepLabel>{{ localeData?.all_plans }}</ng-template>
                                 <div class="d-flex justify-content-between align-items-center mb-3">
-                                    <h4 class="font-16 strong">Choose Your Plan</h4>
+                                    <h2 class="font-16 strong">{{ localeData?.choose_plans }}</h2>
                                     <div class="d-flex column-gap15">
                                         <!-- <button mat-stroked-button color="primary" class="w-100" (click)="activateDialog()">
                                         Activate Via Key
                                     </button> -->
                                         <div class="custom-tab w-100">
                                             <mat-button-toggle-group aria-label="Font Style" formControlName="duration">
-                                                <mat-button-toggle value="MONTHLY">Monthly</mat-button-toggle>
-                                                <mat-button-toggle value="YEARLY">Yearly</mat-button-toggle>
+                                                <mat-button-toggle value="MONTHLY">{{
+                                                    commonLocaleData?.app_duration?.monthly
+                                                }}</mat-button-toggle>
+                                                <mat-button-toggle value="YEARLY">{{
+                                                    commonLocaleData?.app_duration?.yearly
+                                                }}</mat-button-toggle>
                                             </mat-button-toggle-group>
                                         </div>
                                     </div>
@@ -61,48 +70,44 @@
                                                     </th>
                                                     <td mat-cell *matCellDef="let element; let rowIndex = index">
                                                         <ng-container *ngIf="rowIndex === 0">
-                                                            <span>Invoices Count </span>
+                                                            <span>{{ localeData?.invoice_count }} </span>
                                                             <i
                                                                 class="icon-info cp"
-                                                                [matTooltip]="'Invoices'"
+                                                                [matTooltip]="commonLocaleData?.app_invoices"
                                                                 [matTooltipPosition]="'above'"
                                                             ></i>
                                                         </ng-container>
                                                         <ng-container *ngIf="rowIndex === 1">
-                                                            <span>Bills Count </span>
-                                                            <i
-                                                                class="icon-info cp"
-                                                                [matTooltip]="'Invoices'"
-                                                                [matTooltipPosition]="'above'"
-                                                            ></i>
+                                                            <span>{{ localeData?.bill_count }} </span>
+                                                            <i class="icon-info cp"></i>
                                                         </ng-container>
                                                         <ng-container *ngIf="rowIndex === 2">
-                                                            Accountant consultant
+                                                            {{ localeData?.accountant_consultant }}
                                                         </ng-container>
                                                         <ng-container *ngIf="rowIndex === 3">
-                                                            Desktop and Mobile App
+                                                            {{ localeData?.desktop_mobile_app }}
                                                         </ng-container>
                                                         <ng-container *ngIf="rowIndex === 4">
-                                                            Unlimited user access
+                                                            {{ localeData?.unlimited_users }}
                                                         </ng-container>
                                                         <ng-container *ngIf="rowIndex === 5">
-                                                            Import Previous Data
+                                                            {{ localeData?.import_data }}
                                                         </ng-container>
-                                                        <ng-container *ngIf="rowIndex === 6"> Security </ng-container>
+                                                        <ng-container *ngIf="rowIndex === 6">
+                                                            {{ localeData?.security }}
+                                                        </ng-container>
                                                     </td>
                                                     <td mat-cell *matCellDef="let element">
                                                         <div
                                                             class="d-flex align-items-center justify-content-between column-gap2"
                                                         >
                                                             <span
-                                                                >Reconcile bank <br />
-                                                                transactions</span
+                                                                >{{ localeData?.reconcile_bank }} <br />
+                                                                {{ localeData?.transactions }}</span
                                                             >
                                                             <i
                                                                 class="icon-info cp"
-                                                                [matTooltip]="
-                                                                    'Reconcile transactions to keep them in sync using Giddh software or the app.'
-                                                                "
+                                                                [matTooltip]="localeData?.reconcile_message"
                                                                 [matTooltipPosition]="'above'"
                                                             ></i>
                                                         </div>
@@ -127,7 +132,9 @@
                                                                             popularPlan?.uniqueName === plan?.uniqueName
                                                                     }"
                                                                 >
-                                                                    <span class="font-20">Popular</span>
+                                                                    <span class="font-20">{{
+                                                                        localeData?.popular
+                                                                    }}</span>
                                                                 </div>
                                                             </ng-container>
                                                             <ng-container
@@ -153,7 +160,7 @@
                                                                         >{{ plan?.additional?.currency?.code
                                                                         }}{{ plan?.additional?.yearlyAmount }}</span
                                                                     >
-                                                                    /yearly
+                                                                    / {{ commonLocaleData?.app_duration?.yearly }}
                                                                 </p>
                                                                 <p
                                                                     *ngIf="
@@ -166,12 +173,13 @@
                                                                         >{{ plan?.additional?.currency?.code
                                                                         }}{{ plan?.additional?.monthlyAmount }}</span
                                                                     >
-                                                                    /monthly
+                                                                    /{{ commonLocaleData?.app_duration?.monthly }}
                                                                 </p>
                                                                 <button
                                                                     mat-stroked-button
                                                                     color="primary"
                                                                     class="w-100"
+                                                                    aria-label="monthly"
                                                                     [class.selected]="
                                                                         firstStepForm.get('planUniqueName').value ===
                                                                         plan?.uniqueName
@@ -181,8 +189,8 @@
                                                                     {{
                                                                         firstStepForm.get("planUniqueName").value ===
                                                                         plan.uniqueName
-                                                                            ? "Selected"
-                                                                            : "Select Plan"
+                                                                            ? localeData?.selected
+                                                                            : localeData?.select_plan
                                                                     }}
                                                                 </button>
                                                             </div>
@@ -233,7 +241,7 @@
                                         class="no-data"
                                         *ngIf="!(planListInProgress$ | async) && dataSource?.data?.length === 0"
                                     >
-                                        No data found
+                                        {{ commonLocaleData?.app_no_data_found }}
                                     </h2>
                                 </div>
                             </div>
@@ -245,9 +253,9 @@
                     <form autocomplete="off" class="mt-5" novalidate [formGroup]="secondStepForm" name="secondStepForm">
                         <div class="plan-summary d-flex">
                             <div class="plan-width">
-                                <ng-template matStepLabel>Select billing account</ng-template>
+                                <ng-template matStepLabel>{{ localeData?.select_billing }}</ng-template>
                                 <h4 class="font-16 strong d-flex align-items-center mb-3">
-                                    Create a new billing account
+                                    {{ localeData?.create_billing }}
                                 </h4>
                                 <!-- remove back btn & max-width padding from change-billing component -->
                                 <mat-card class="outline-card change-billing-wrap">
@@ -257,8 +265,8 @@
                                                 <input-field
                                                     [type]="'text'"
                                                     [name]="'billingName'"
-                                                    [label]="'Billing Name'"
-                                                    [placeholder]="'Billing Name'"
+                                                    [label]="localeData?.billing_name"
+                                                    [placeholder]="localeData?.billing_name"
                                                     formControlName="billingName"
                                                     [showError]="
                                                         isFormSubmitted && !secondStepForm.get('billingName')?.value
@@ -270,9 +278,9 @@
                                                 <input-field
                                                     [type]="'text'"
                                                     [name]="'companyName'"
-                                                    [label]="'Company Name'"
+                                                    [label]="commonLocaleData?.app_company_name"
                                                     formControlName="companyName"
-                                                    [placeholder]="'Company Name'"
+                                                    [placeholder]="commonLocaleData?.app_company_name"
                                                     [showError]="
                                                         isFormSubmitted && !secondStepForm.get('companyName')?.value
                                                     "
@@ -283,9 +291,9 @@
                                                 <input-field
                                                     [type]="'text'"
                                                     [name]="'email'"
-                                                    [label]="'Email Id'"
+                                                    [label]="commonLocaleData?.app_email"
                                                     formControlName="email"
-                                                    [placeholder]="'Email Id'"
+                                                    [placeholder]="commonLocaleData?.app_email"
                                                     [showError]="isFormSubmitted && !secondStepForm.get('email')?.value"
                                                 >
                                                 </input-field>
@@ -294,9 +302,9 @@
                                                 <input-field
                                                     [type]="'number'"
                                                     [name]="'pincode'"
-                                                    [label]="'Pincode'"
+                                                    [label]="localeData?.pincode"
                                                     formControlName="pincode"
-                                                    [placeholder]="'Pincode'"
+                                                    [placeholder]="localeData?.pincode"
                                                 >
                                                 </input-field>
                                             </div>
@@ -327,7 +335,7 @@
                                                             secondStepForm.get('mobileNumber')?.touched &&
                                                             !intlClass?.isRequiredValidNumber
                                                         "
-                                                        >Please enter valid mobile number</mat-error
+                                                        >{{ localeData?.enter_valid_number }}</mat-error
                                                     >
                                                 </div>
                                             </div>
@@ -335,8 +343,8 @@
                                                 <div class="width-100">
                                                     <dropdown-field
                                                         [name]="'county'"
-                                                        [label]="'County' + '*'"
-                                                        [placeholder]="'Select County'"
+                                                        [label]="localeData?.county + '*'"
+                                                        [placeholder]="localeData?.county"
                                                         class="mb-3 d-block"
                                                         [options]="countrySource"
                                                         (selectedOption)="selectCountry($event)"
@@ -372,8 +380,8 @@
                                                 <div *ngIf="!countyList?.length">
                                                     <dropdown-field
                                                         [name]="'state'"
-                                                        [label]="'State*'"
-                                                        [placeholder]="'Select State'"
+                                                        [label]="commonLocaleData?.app_state"
+                                                        [placeholder]="commonLocaleData?.app_state"
                                                         [options]="states"
                                                         [showError]="
                                                             isFormSubmitted && !secondStepForm.get('state')?.value
@@ -388,8 +396,8 @@
                                                 <div *ngIf="countyList?.length">
                                                     <dropdown-field
                                                         [name]="'county'"
-                                                        [label]="Region"
-                                                        [placeholder]="'Select Region'"
+                                                        [label]="commonLocaleData?.app_region"
+                                                        [placeholder]="commonLocaleData?.app_select_region"
                                                         [options]="countyList"
                                                         [showError]="
                                                             isFormSubmitted && !secondStepForm.get('county')?.value
@@ -404,10 +412,10 @@
                                             </div>
                                             <div class="form-group">
                                                 <mat-form-field appearance="outline" class="w-100">
-                                                    <mat-label>Address</mat-label>
+                                                    <mat-label>{{ commonLocaleData?.app_address }}</mat-label>
                                                     <textarea
                                                         matInput
-                                                        placeholder="Enter Address..."
+                                                        [placeholder]="commonLocaleData?.app_address"
                                                         formControlName="address"
                                                     ></textarea>
                                                 </mat-form-field>
@@ -431,12 +439,14 @@
                     >
                         <div class="plan-summary d-flex">
                             <div class="plan-width">
-                                <ng-template matStepLabel>Review and pay</ng-template>
-                                <h4 class="font-16 mb-3 strong d-flex align-items-center">Payment details</h4>
+                                <ng-template matStepLabel>{{ localeData?.review_pay }}</ng-template>
+                                <h4 class="font-16 mb-3 strong d-flex align-items-center">
+                                    {{ localeData?.payment_details }}
+                                </h4>
                                 <div class="new-plan">
                                     <mat-card class="outline-card">
                                         <mat-card-content>
-                                            <h5 class="font-16 strong mb-3">Bill to</h5>
+                                            <h5 class="font-16 strong mb-3">{{ localeData?.bill_to }}</h5>
                                             <div class="payment-header border-bottom pb-3">
                                                 <span class="light-gray font-14 strong d-block">{{
                                                     secondStepForm.get("billingName")?.value
@@ -462,7 +472,7 @@
     <!-- plan-summary -->
     <ng-template #planSummary>
         <div class="summary-wrapper">
-            <h4 class="font-16 mb-3 strong d-flex align-items-center">Plan Summary</h4>
+            <h2 class="font-16 mb-3 strong d-flex align-items-center">{{ localeData?.plan_summary }}</h2>
             <mat-card class="outline-card">
                 <form
                     name="firstStepForm"
@@ -493,8 +503,8 @@
                             </span>
                         </div>
                         <div class="d-flex justify-content-between border-bottom py-3">
-                            <p>Subtotal</p>
-                            <span *ngIf="firstStepForm.get('duration')?.value === 'YEARLY' ">
+                            <p>{{ commonLocaleData?.app_subtotal }}</p>
+                            <span *ngIf="firstStepForm.get('duration')?.value === 'YEARLY'">
                                 <amount-field
                                     [amount]="selectedPlan?.yearlyAmount"
                                     [currencySymbol]="selectedPlan?.currency?.symbol"
@@ -521,45 +531,17 @@
                         >
                             <div class="d-flex justify-content-between py-3">
                                 <span class="strong">
-                                    <span *ngIf="firstStepForm.get('duration')?.value === 'YEARLY'">Yearly</span>
-                                    <span *ngIf="firstStepForm.get('duration')?.value === 'MONTHLY'">Monthly</span>
-                                    Amount</span
+                                    <span *ngIf="firstStepForm.get('duration')?.value === 'YEARLY'">{{
+                                        commonLocaleData?.app_duration?.yearly
+                                    }}</span>
+                                    <span *ngIf="firstStepForm.get('duration')?.value === 'MONTHLY'">{{
+                                        commonLocaleData?.app_duration?.monthly
+                                    }}</span>
+                                    {{ commonLocaleData?.app_amount }}</span
                                 >
 
                                 <span *ngIf="firstStepForm.get('duration')?.value === 'YEARLY'">
                                     <amount-field
-                                        *ngIf="
-                                            selectedPlan?.currency?.code?.toLowerCase() === 'inr' &&
-                                            secondStepForm.get('country')?.value?.value?.toLowerCase() === 'in' &&
-                                            !promoCodeResponse[0]?.discountValue
-                                        "
-                                        [amount]="
-                                            selectedPlan?.yearlyAmount +
-                                            (selectedPlan?.currency?.code?.toLowerCase() === 'inr' &&
-                                            secondStepForm.get('country')?.value?.value?.toLowerCase() === 'in'
-                                                ? selectedPlan?.yearlyAmount * taxPercentage
-                                                : 0)
-                                        "
-                                        [currencySymbol]="selectedPlan?.currency?.symbol"
-                                        [currencyCode]="selectedPlan?.currency?.code"
-                                    >
-                                    </amount-field>
-                                    <amount-field
-                                        *ngIf="
-                                            secondStepForm.get('country')?.value?.value !== 'IN' &&
-                                            promoCodeResponse[0]?.discountValue
-                                        "
-                                        [amount]="selectedPlan?.yearlyAmount"
-                                        [currencySymbol]="selectedPlan?.currency?.symbol"
-                                        [currencyCode]="selectedPlan?.currency?.code"
-                                    >
-                                    </amount-field>
-
-                                            <amount-field
-                                        *ngIf="
-                                            secondStepForm.get('country')?.value?.value !== 'IN' &&
-                                            !promoCodeResponse[0]?.discountValue
-                                        "
                                         [amount]="selectedPlan?.yearlyAmount"
                                         [currencySymbol]="selectedPlan?.currency?.symbol"
                                         [currencyCode]="selectedPlan?.currency?.code"
@@ -568,27 +550,6 @@
                                 </span>
                                 <span *ngIf="firstStepForm.get('duration')?.value === 'MONTHLY'">
                                     <amount-field
-                                        *ngIf="
-                                            selectedPlan?.currency?.code?.toLowerCase() === 'inr' &&
-                                            secondStepForm.get('country')?.value?.value === 'IN' &&
-                                            !promoCodeResponse[0]?.discountValue
-                                        "
-                                        [amount]="
-                                            selectedPlan?.monthlyAmount +
-                                            (selectedPlan?.currency?.code?.toLowerCase() === 'inr' &&
-                                            secondStepForm.get('country')?.value?.value === 'IN'
-                                                ? selectedPlan?.monthlyAmount * taxPercentage
-                                                : 0)
-                                        "
-                                        [currencySymbol]="selectedPlan?.currency?.symbol"
-                                        [currencyCode]="selectedPlan?.currency?.code"
-                                    >
-                                    </amount-field>
-                                    <amount-field
-                                        *ngIf="
-                                            secondStepForm.get('country')?.value?.value !== 'IN' &&
-                                            promoCodeResponse[0]?.discountValue
-                                        "
                                         [amount]="selectedPlan?.monthlyAmount"
                                         [currencySymbol]="selectedPlan?.currency?.symbol"
                                         [currencyCode]="selectedPlan?.currency?.code"
@@ -604,7 +565,7 @@
                                     !promoCodeResponse[0]?.discountValue
                                 "
                             >
-                                Including Tax (18% GST)
+                                {{ localeData?.including_tax }}
                             </p>
                         </div>
                         <div
@@ -618,7 +579,7 @@
                                 ' border-bottom': firstStepForm.get('planUniqueName').value && selectedStep === 2
                             }"
                         >
-                            <p>Discount</p>
+                            <p>{{ commonLocaleData?.app_discount }}</p>
                             <span>
                                 <amount-field
                                     [amount]="promoCodeResponse[0]?.discountValue"
@@ -636,7 +597,7 @@
                             "
                         >
                             <div class="d-flex justify-content-between py-3">
-                                <p>Final Amount</p>
+                                <p>{{ localeData?.final_amount }}</p>
                                 <span>
                                     <amount-field
                                         [amount]="
@@ -672,7 +633,7 @@
                                     promoCodeResponse[0]?.discountValue
                                 "
                             >
-                                Including Tax (18% GST)
+                                {{ localeData?.including_tax }}
                             </p>
                         </div>
                         <div
@@ -686,60 +647,65 @@
                             ></input-field>
                             <button
                                 [ngClass]="{
-                                    'promocode-button':
-                                        promoCodeResponse[0]?.discountValue
+                                    'promocode-button': promoCodeResponse[0]?.discountValue
                                 }"
+                                aria-label="promocode"
                                 mat-button
                                 color="primary"
                                 class="apply-btn position-absolute"
                                 (click)="applyPromoCode()"
                             >
-                                Apply
+                                {{ commonLocaleData?.app_apply }}
                             </button>
                         </div>
                         <div class="mt-3">
                             <button
                                 mat-stroked-button
+                                aria-label="next"
                                 color="primary"
                                 class="w-100"
                                 (click)="nextStepForm()"
                                 *ngIf="selectedStep === 0"
                             >
-                                Continue to billing account
+                                {{ localeData?.continue_billing_account }}
                             </button>
                             <button
                                 mat-stroked-button
+                                aria-label="next-step"
                                 color="primary"
                                 class="w-100"
                                 (click)="nextStepForm()"
                                 *ngIf="selectedStep === 1"
                             >
-                                Continue to review & pay account
+                                {{ localeData?.continue_review }}
                             </button>
                             <button
+                                aria-label="submit"
                                 mat-stroked-button
                                 color="primary"
                                 class="w-100"
                                 *ngIf="selectedStep === 2"
                                 (click)="onSubmit()"
                             >
-                                Confirm Purchase
+                                {{ localeData?.confirm_purchase }}
                             </button>
                             <button
+                                aria-label="back"
                                 mat-stroked-button
                                 class="w-100 mt-2"
                                 (click)="selectedStep = 0"
                                 *ngIf="selectedStep === 1"
                             >
-                                Back to Plan
+                                {{ localeData?.back_plan }}
                             </button>
                             <button
+                                aria-label="billing"
                                 mat-stroked-button
                                 class="w-100 mt-2"
                                 (click)="selectedStep = 1"
                                 *ngIf="selectedStep === 2"
                             >
-                                Back to billing account
+                                {{ localeData?.back_billing }}
                             </button>
                         </div>
                     </mat-card-content>
