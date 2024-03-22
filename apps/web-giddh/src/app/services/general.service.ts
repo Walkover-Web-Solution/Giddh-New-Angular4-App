@@ -705,7 +705,7 @@ export class GeneralService {
         }];
         const headerText: string = commonLocaleData?.app_confirmation;
         const headerCssClass: string = 'd-inline-block mr-1';
-        const messageCssClass: string = 'mr-b1 text-light';
+        const messageCssClass: string = 'mr-b1';
         const footerCssClass: string = 'mr-b1';
         return {
             headerText,

@@ -14601,13 +14601,16 @@ aside-menu-product-service {
 .depreciation-message {
     .message-wrapper {
         background-color: var(--color-danger);
-        color: var(--color-white);
+        color: var(--color-toast-primary-text);
         position: fixed;
         top: 0;
         width: 100%;
         z-index: 999;
         p{
             font-size: var(--font-size-16);
+        }
+        a {
+            color: var(--color-toast-primary-text);
         }
     }
 }
