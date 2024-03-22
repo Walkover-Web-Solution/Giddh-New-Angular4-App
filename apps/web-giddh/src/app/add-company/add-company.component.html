@@ -257,7 +257,6 @@
                             <ng-container
                                 *ngIf="secondStepForm.controls['businessType']?.value === businessTypes.Registered"
                             >
-                            {{isFormSubmitted}} :: {{secondStepForm.get('gstin')?.value }} :{{!isGstinValid}}
                                 <div class="col-lg-12">
                                     <input-field
                                         [name]="'gstin'"
@@ -384,7 +383,7 @@
                         <div class="row row-gap">
                             <div class="d-flex col-lg-12">
                                 <div class="pr-4 pl-0">
-                                    <label>{{ localeData?.make_yoursself }} : </label>
+                                    <label>{{ localeData?.make_yourself }} : </label>
                                 </div>
                                 <mat-radio-group name="ownerPermission" formControlName="creatorSuperAdmin">
                                     <mat-radio-button color="primary" value="true" (change)="setOwnerPermission($event)"
@@ -417,7 +416,7 @@
                                     [options]="permissionRoles"
                                     (selectedOption)="selectRole($event)"
                                     [defaultValue]="selectedRole"
-                                    [showError]="isFormSubmitted && !firstStepForm.get('roles')?.value"
+                                    [showError]="isFormSubmitted && !firstStepForm.get('roleUniqueName')?.value"
                                 >
                                 </dropdown-field>
                             </div>

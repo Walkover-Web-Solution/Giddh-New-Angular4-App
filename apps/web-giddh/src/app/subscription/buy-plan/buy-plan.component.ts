@@ -280,7 +280,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     }
 
     /**
-    * Hook cycle for afte component initialization
+    * Hook cycle for after component initialization
     *
     * @memberof BuyPlanComponent
     */
@@ -565,7 +565,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 }
 
                 if (!isValid) {
-                    let text = 'Invalid Tax';
+                    let text = this.commonLocaleData?.app_invalid_tax_name;
                     text = text?.replace("[TAX_NAME]", this.formFields['taxName'].label);
                     this.toasterService.showSnackBar("error", text);
                     this.selectedState = '';
@@ -606,7 +606,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     * @memberof BuyPlanComponent
     */
     public getEnterTaxText(): string {
-        let text = 'Enter Tax';
+        let text = this.commonLocaleData?.app_enter_tax_name;
         text = text?.replace("[TAX_NAME]", this.formFields['taxName']?.label);
         return text;
     }
@@ -795,7 +795,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     }
 
     /**
-    * This will use for select country
+    * This will use for select state
     *
     * @param {*} event
     * @memberof BuyPlanComponent
@@ -821,7 +821,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     /**
      * Shows cashfree dialog
      *
-     * @memberof LoginComponent
+     * @memberof BuyPlanComponent
      */
     public openCashfreeDialog(redirectLink: any): void {
         window.open(redirectLink, '_blank');

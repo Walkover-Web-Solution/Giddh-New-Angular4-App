@@ -73,7 +73,7 @@ export class CompanyListDialogComponent implements OnInit {
     }
 
     /**
-     * Hook cycel for component initialization.
+     * Hook cycle for component initialization.
      *
      * @memberof CompanyListDialogComponent
      */

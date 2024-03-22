@@ -14,7 +14,7 @@
                         <input-field
                             [type]="'text'"
                             [name]="'name'"
-                            [label]="'Name*'"
+                            [label]="commonLocaleData?.app_name + '*'"
                             formControlName="name"
                             [showError]="isFormSubmitted && !transferForm.get('name')?.value"
                         >
@@ -24,7 +24,7 @@
                         <input-field
                             [type]="'text'"
                             [name]="'lastname'"
-                            [label]="'Last Name'"
+                            [label]="commonLocaleData?.app_last + commonLocaleData?.app_name"
                             formControlName="lastName"
                         >
                         </input-field>
@@ -34,7 +34,7 @@
                     <input-field
                         [type]="'text'"
                         [name]="'email'"
-                        [label]="'Email'"
+                        [label]="commonLocaleData?.app_email_id"
                         formControlName="email"
                         [showError]="isFormSubmitted && !transferForm.get('email')?.value"
                     >

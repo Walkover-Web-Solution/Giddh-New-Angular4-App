@@ -8,23 +8,25 @@ import { AppState } from "../../store";
 import { BaseResponse } from "../../models/api-models/BaseResponse";
 import { PermissionService } from "../../services/permission.service";
 
-export interface PermissionListState {
+export interface AddCompanyListState {
     permissionRolesInProgress: boolean;
     permissionRoles: any
 }
 
-export const DEFAULT_PERMISSION_STATE: PermissionListState = {
+export const DEFAULT_ADD_COMPANY_STATE: AddCompanyListState = {
     permissionRolesInProgress: null,
     permissionRoles: null
 
 };
 
 @Injectable()
-export class AddCompanyComponentStore extends ComponentStore<PermissionListState> implements OnDestroy {
+export class AddCompanyComponentStore extends ComponentStore<AddCompanyListState> implements OnDestroy {
 
-    constructor(private toasterService: ToasterService, private permissionService: PermissionService,
-        private store: Store<AppState>) {
-        super(DEFAULT_PERMISSION_STATE);
+    constructor(
+        private toasterService: ToasterService,
+        private permissionService: PermissionService
+    ) {
+        super(DEFAULT_ADD_COMPANY_STATE);
     }
 
     /**

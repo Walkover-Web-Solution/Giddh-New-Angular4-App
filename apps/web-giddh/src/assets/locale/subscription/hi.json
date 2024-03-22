@@ -130,5 +130,7 @@
         "confirm_purchase": "क्रय की पुष्टि करें",
         "back_plan": "योजना पर वापस जाएं",
         "back_billing": "बिलिंग खाते पर वापस जाएं",
-        "company_name": "कंपनी का नाम"
+        "company_name": "कंपनी का नाम",
+        "promo_code": "प्रोमो कोड"
+
 	}

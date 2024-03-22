@@ -99,5 +99,6 @@
         "back_billing":"  Back to billing account",
         "company_name":" Company Name",
         "add_company":" Add Company",
-        "move_company": "Move Company"
+        "move_company": "Move Company",
+        "promo_code":" Promo Code"
     }

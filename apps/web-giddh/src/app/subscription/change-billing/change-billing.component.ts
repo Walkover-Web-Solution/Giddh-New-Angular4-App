@@ -317,7 +317,7 @@ export class ChangeBillingComponent implements OnInit, AfterViewInit, OnDestroy 
                 }
 
                 if (!isValid) {
-                    let text = 'Invalid Tax';
+                    let text = this.commonLocaleData?.app_invalid_tax_name;
                     text = text?.replace("[TAX_NAME]", this.formFields['taxName'].label);
                     this.toasterService.showSnackBar("error", text);
                     this.selectedState = '';
@@ -358,7 +358,7 @@ export class ChangeBillingComponent implements OnInit, AfterViewInit, OnDestroy 
     * @memberof ChangeBillingComponent
     */
     public getEnterTaxText(): string {
-        let text = 'Enter Tax';
+        let text = this.commonLocaleData?.app_enter_tax_name;
         text = text?.replace("[TAX_NAME]", this.formFields['taxName']?.label);
         return text;
     }

@@ -263,7 +263,6 @@
                                 <h4 class="font-16 strong d-flex align-items-center mb-3">
                                     {{ localeData?.create_billing }}
                                 </h4>
-                                <!-- remove back btn & max-width padding from change-billing component -->
                                 <mat-card class="outline-card change-billing-wrap">
                                     <mat-card-content>
                                         <div class="billing-details">
@@ -327,7 +326,7 @@
                                                             intlClass?.onlyPhoneNumber($event); validateMobileField()
                                                         "
                                                         id="init-contact"
-                                                        placeholder="Mobile Number"
+                                                        [placeholder]="commonLocaleData?.app_mobile_number"
                                                         formControlName="mobileNumber"
                                                         [ngClass]="{
                                                             'invalid-input':
@@ -375,7 +374,7 @@
                                                     [label]="
                                                         formFields['taxName']?.label
                                                             ? formFields['taxName']?.label
-                                                            : 'Tax Number'
+                                                            : commonLocaleData?.app_tax_number
                                                     "
                                                     [maxlength]="15"
                                                     (change)="validateGstNumber()"
@@ -615,7 +614,7 @@
                             <input-field
                                 [name]="'code'"
                                 formControlName="promoCode"
-                                [placeholder]="'Promo code'"
+                                [placeholder]="localeData?.promo_code"
                             ></input-field>
                             <button
                                 [ngClass]="{
