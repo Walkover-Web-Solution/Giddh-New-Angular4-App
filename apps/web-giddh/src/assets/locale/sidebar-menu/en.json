@@ -112,7 +112,7 @@
                     "additional": {
                         "createNew": {
                             "label": "+",
-                            "link": "/pages/proforma-invoice/invoice/debit%20note"
+                            "link": "/pages/proforma-invoice/invoice/debit note"
                         }
                     }
                 },
@@ -163,6 +163,7 @@
         },
         {
             "label": "Tax",
+            "link": "/pages/settings/taxes",
             "icon": "icon-tax-new",
             "items": [
                 {
@@ -259,8 +260,7 @@
                         }
                     }
                 }
-            ],
-            "link": "/pages/settings/taxes"
+            ]
         },
         {
             "label": "Reports",
@@ -381,10 +381,10 @@
                     "icon": "icon-warehouse1",
                     "description": "See all the warehouses",
                     "additional": {
-                "queryParams": {
-                    "voucherVersion": 1
+                    "queryParams": {
+                        "voucherVersion": 1
+                    }
                 }
-            }
                 }
             ]
         },
