@@ -87,28 +87,57 @@
             "icon": "icon-vendor",
             "items": [
                 {
+                    "label": "बिल",
+                    "link": "/pages/purchase-management/purchase/bill",
+                    "icon": "icon-invoice-new",
+                    "description": "खरेदी विनंती, खरेदी बिल, पीओ सुधारित करा",
+                    "additional": {
+                        "createNew": {
+                            "label": "+",
+                            "link": "/pages/proforma-invoice/invoice/purchase"
+                        }
+                    }
+                },
+                {
+                    "label": "बिल सेटिंग्ज",
+                    "link": "/pages/purchase-management/purchase/settings",
+                    "icon": "icon-invoice-new",
+                    "description": "बिल सेटिंग्ज"
+                },
+                {
                     "label": "डेबिट नोट",
                     "link": "/pages/invoice/preview/debit note",
                     "icon": "icon-debit-note-new",
-                    "description": "डेबिट नोट रेकॉर्ड करा आणि अद्यतनित करा"
+                    "description": "डेबिट नोट रेकॉर्ड करा आणि अद्यतनित करा",
+                    "additional": {
+                        "createNew": {
+                            "label": "+",
+                            "link": "/pages/proforma-invoice/invoice/debit note"
+                        }
+                    }
                 },
                 {
-                    "label": "बिल",
-                    "link": "/pages/proforma-invoice/invoice/purchase",
-                    "icon": "icon-invoice-new",
-                    "description": "खरेदी विनंती, खरेदी बिल, पीओ सुधारित करा"
-                },
-                {
-                    "label": "खरेदी व्यवस्थापन",
-                    "link": "/pages/purchase-management/purchase/bill",
-                    "icon": "icon-purchase-management1",
-                    "description": "खरेदी विनंती, खरेदी बिल, पीओ सुधारित करा"
+                    "label": "फेड",
+                    "link": "/pages/reports/payment",
+                    "icon": "icon-reciept-new",
+                    "description": "एकूण, आणि न वापरलेली देयके",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
                 },
                 {
                     "label": "खरेदी ऑर्डर",
                     "link": "/pages/purchase-management/purchase-order/new",
                     "icon": "icon-purchase-order",
-                    "description": "खरेदी विनंती, खरेदी बिल, पीओ सुधारित करा"
+                    "description": "खरेदी विनंती, खरेदी बिल, पीओ सुधारित करा",
+                    "additional": {
+                        "createNew": {
+                            "label": "+",
+                            "link": "/pages/purchase-management/purchase/bill"
+                        }
+                    }
                 },
                 {
                     "label": "खरेदी नोंदणी",
@@ -121,16 +150,12 @@
                     "label": "विक्रेता",
                     "link": "/pages/contact/vendor",
                     "icon": "icon-vendor",
-                    "description": "बल्क एसएमएस / ईमेल पाठवा, स्मरणपत्रे सेट करा"
-                },
-                {
-                    "label": "फेड",
-                    "link": "/pages/reports/payment",
-                    "icon": "icon-reciept-new",
-                    "description": "एकूण, आणि न वापरलेली देयके",
+                    "description": "बल्क एसएमएस / ईमेल पाठवा, स्मरणपत्रे सेट करा",
                     "additional": {
-                        "queryParams": {
-                            "voucherVersion": 2
+                        "createNew": {
+                            "label": "+",
+                            "link": "/pages/contact/vendor",
+                            "queryParams": { "addVendor" : true }
                         }
                     }
                 }
@@ -138,6 +163,7 @@
         },
         {
             "label": "कर",
+            "link": "/pages/settings/taxes",
             "icon": "icon-tax-new",
             "items": [
                 {
@@ -157,6 +183,7 @@
                     "icon": "icon-GSTR",
                     "description": "जीएसटीआर 1 फाइल करा आणि पहा",
                     "hide": "sidebar",
+                    "alwaysPresent": true,
                     "additional": {
                         "queryParams": {
                             "isGstMenu": true,
@@ -170,6 +197,7 @@
                     "icon": "icon-GSTR",
                     "description": "जीएसटीआर 2 फाइल करा आणि पहा",
                     "hide": "sidebar",
+                    "alwaysPresent": true,
                     "additional": {
                         "queryParams": {
                             "isGstMenu": true,
@@ -183,6 +211,7 @@
                     "icon": "icon-GSTR",
                     "description": "जीएसटीआर 3B फाइल करा आणि पहा",
                     "hide": "sidebar",
+                    "alwaysPresent": true,
                     "additional": {
                         "queryParams": {
                             "isGstMenu": true,
@@ -317,7 +346,12 @@
                     "label": "शाखा हस्तांतरण",
                     "link": "/pages/inventory/report",
                     "icon": "icon-branch-transfer",
-                    "description": "यादी व्यवस्थापित करा आणि हस्तांतरण यादी"
+                    "description": "यादी व्यवस्थापित करा आणि हस्तांतरण यादी",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 1
+                        }
+                    }
                 },
                 {
                     "label": "यादी",
@@ -345,7 +379,12 @@
                     "label": "कोठार",
                     "link": "/pages/settings/warehouse",
                     "icon": "icon-warehouse1",
-                    "description": "सर्व गोदामे पहा"
+                    "description": "सर्व गोदामे पहा",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 1
+                        }
+                    }
                 }
             ]
         },
@@ -449,6 +488,7 @@
     "create_company": "कंपनी तयार करा",
     "profile": "प्रोफाइल",
     "user_profile": "वापरकर्ता प्रोफाइल",
+    "api": "एपीआई",
     "to_navigate": "नॅव्हिगेट करण्यासाठी",
     "to_select": "निवडण्यासाठी",
     "to_dismiss": "डिसमिस करणे",
