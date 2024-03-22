@@ -38,7 +38,7 @@
                     "additional": {
                         "createNew": {
                             "label": "+",
-                            "link": "/pages/proforma-invoice/invoice/credit%20note"
+                            "link": "/pages/proforma-invoice/invoice/credit note"
                         }
                     }
                 },
@@ -215,7 +215,7 @@
                     "additional": {
                         "queryParams": {
                             "isGstMenu": true,
-                            "type": "gstr2",
+                            "type": "gstr3b",
                             "countrySpecific": ["IN"]
                         }
                     }

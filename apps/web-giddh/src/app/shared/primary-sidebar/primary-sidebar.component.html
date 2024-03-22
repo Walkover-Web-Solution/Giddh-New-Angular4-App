@@ -216,12 +216,17 @@
                                                         [routerLinkActiveOptions]="{ exact: true }"
                                                         [queryParams]="item?.additional?.queryParams"
                                                         >
-                                                        
                                                             <i [ngClass]="item.icon"></i>
                                                             {{ item?.label }}
-                                                       
-                                                         <strong *ngIf="item?.additional?.createNew" class="ml-auto" (click)="$event.stopPropagation();" [routerLink]="[item?.additional?.createNew?.link]"
-                                                         [queryParams]="item?.additional?.createNew?.queryParams">{{ item?.additional?.createNew?.label }}</strong>
+                                                            <strong 
+                                                                class="ml-auto" 
+                                                                *ngIf="item?.additional?.createNew" 
+                                                                (click)="$event.stopPropagation()" 
+                                                                [routerLink]="[item?.additional?.createNew?.link]"
+                                                                [queryParams]="item?.additional?.createNew?.queryParams"
+                                                            >
+                                                            {{ item?.additional?.createNew?.label }}
+                                                            </strong>
                                                 </div>
                                                     <div
                                                         *ngIf="!item?.link"
