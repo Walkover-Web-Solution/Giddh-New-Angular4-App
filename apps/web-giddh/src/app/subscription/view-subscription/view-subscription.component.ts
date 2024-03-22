@@ -17,8 +17,6 @@ import { MatMenuTrigger } from '@angular/material/menu';
     providers: [ViewSubscriptionComponentStore, SubscriptionComponentStore]
 })
 export class ViewSubscriptionComponent implements OnInit, OnDestroy {
-    /** Emit the call back function for move success response*/
-    @Output() public callBack: EventEmitter<boolean> = new EventEmitter();
     /** Mat menu instance reference */
     @ViewChild(MatMenuTrigger) menu: MatMenuTrigger;
     /** This will use for move company in to another company  */
@@ -180,6 +178,18 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
      */
     public buyPlan(): void {
         this.router.navigate(['/pages/subscription/buy-plan']);
+    }
+
+    /**
+    * This function will refresh the subscribed companies if move company was succesful and will close the popup
+    *
+    * @param {*} event
+    * @memberof ViewSubscriptionComponent
+    */
+    public addOrMoveCompanyCallback(event: boolean): void {
+        if (event === true) {
+            this.getSubscriptionData(this.subscriptionId);
+        }
     }
 
     /**

@@ -14,7 +14,7 @@ export class NeedsAuthentication  {
         return this.store.pipe(select(p => p.session.userLoginState), map(p => {
             if (p === userLoginStateEnum.newUserLoggedIn) {
                 this.zone.run(() => {
-                    this.router.navigate(['/new-company']);
+                    this.router.navigate(['/pages/subscription/buy-plan']);
                 });
             }
             if (p === userLoginStateEnum.notLoggedIn) {

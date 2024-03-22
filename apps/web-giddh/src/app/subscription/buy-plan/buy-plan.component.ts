@@ -12,11 +12,12 @@ import { CommonActions } from '../../actions/common.actions';
 import { IntlPhoneLib } from "../../theme/mobile-number-field/intl-phone-lib.class";
 import { SubscriptionsService } from '../../services/subscriptions.service';
 import { AppState } from '../../store';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { StatesRequest } from '../../models/api-models/Company';
 import { GeneralActions } from '../../actions/general/general.actions';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
+import { userLoginStateEnum } from '../../models/user-login-state';
 @Component({
     selector: 'buy-plan',
     templateUrl: './buy-plan.component.html',
@@ -103,6 +104,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public selectedPlan: any;
     /** Hold popular plan*/
     public popularPlan: any;
+    /** Hold session source observable*/
+    public session$: Observable<userLoginStateEnum>;
     /** Hold state source observable*/
     public stateSource$: Observable<IOption[]> = observableOf([]);
     /** Hold country source*/
@@ -129,6 +132,11 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public redirectLink: any;
     /** Hold final plan amount */
     public finalPlanAmount: number = 0;
+    /** True if new user logged in */
+    public isNewUserLoggedIn: boolean = false;
+    /** True if api call in progress */
+    public isLoading: boolean = false;
+
     constructor(
         public dialog: MatDialog,
         private readonly componentStore: BuyPlanComponentStore,
@@ -144,6 +152,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         private location: Location
     ) {
         this.componentStore.getAllPlans({ params: { countryCode: this.company.countryCode } });
+        this.session$ = this.store.pipe(select(p => p.session.userLoginState), distinctUntilChanged(), takeUntil(this.destroyed$));
     }
 
     /**
@@ -176,18 +185,17 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             }
         });
 
-        // window.addEventListener('message', event => {
-        //     if (event?.data && typeof event?.data === "string") {
-        //         const data: any = event?.data?.split("&").reduce(function (prev, curr, i, arr) {
-        //             var params = curr.split("=");
-        //             prev[decodeURIComponent(params[0])] = decodeURIComponent(params[1]);
-        //             return prev;
-        //         }, {});
-        //         if (data) {
-        //             this.router.navigate(['/pages/new-company/' + this.responseSubscriptionId]);
-        //         }
-        //     }
-        // });
+        this.session$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response === userLoginStateEnum.newUserLoggedIn) {
+                this.isNewUserLoggedIn = true;
+            }
+        });
+
+        window.addEventListener('message', event => {
+            if (event?.data && typeof event?.data === "string" && event?.data ==="CASHFREE") {
+                    this.router.navigate(['/pages/new-company/' + this.responseSubscriptionId]);
+            }
+        });
 
         this.applyPromoCodeSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
@@ -817,6 +825,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      */
     public openCashfreeDialog(redirectLink: any): void {
         window.open(redirectLink, '_blank');
+        this.isLoading = true;
     }
 
     /**

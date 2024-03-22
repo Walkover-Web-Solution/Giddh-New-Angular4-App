@@ -788,7 +788,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 }
             } else if (s === userLoginStateEnum.newUserLoggedIn) {
                 this.zone.run(() => {
-                    this.router.navigate(['/new-company']);
+                    this.router.navigate(['/pages/subscription/buy-plan']);
                 });
             } else if (s === userLoginStateEnum.userLoggedIn) {
                 if (this.generalService.getUtmParameter("companyUniqueName")) {
@@ -1846,7 +1846,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         let stateDetailsRequest = new StateDetailsRequest();
         stateDetailsRequest.companyUniqueName = companyUniqueName;
         stateDetailsRequest.lastState = decodeURI(lastState);
-        if (lastState !== 'pages/new-company') {
+        if (lastState !== '/pages/subscription/buy-plan') {
             this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
         }
     }

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Inject, OnInit, Output, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ReplaySubject, debounceTime, takeUntil } from 'rxjs';
 import { FormBuilder, UntypedFormGroup } from '@angular/forms';
@@ -25,8 +25,6 @@ export interface CompanyRequest {
     providers: [CompanyListDialogComponentStore, SubscriptionComponentStore]
 })
 export class CompanyListDialogComponent implements OnInit {
-    /** Emit the call back function for move success response*/
-    @Output() public callBack: EventEmitter<boolean> = new EventEmitter();
     /** Instance of company list */
     @ViewChild('companyList', { static: false }) public companyList: ElementRef;
     /** Mat menu instance reference */
@@ -214,11 +212,11 @@ export class CompanyListDialogComponent implements OnInit {
    * This function will refresh the subscribed companies if move company was succesful and will close the popup
    *
    * @param {*} event
-   * @memberof SubscriptionsComponent
+   * @memberof CompanyListDialogComponent
    */
     public addOrMoveCompanyCallback(event: boolean): void {
         if (event === true) {
-            this.callBack.emit(true);
+            this.getAllCompaniesList();
         }
     }
 
@@ -248,6 +246,5 @@ export class CompanyListDialogComponent implements OnInit {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
-
 
 }

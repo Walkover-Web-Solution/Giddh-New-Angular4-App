@@ -18,16 +18,23 @@ import { SubscriptionComponentStore } from '../../../subscription/utility/subscr
 })
 
 export class MoveCompanyComponent implements OnInit, OnDestroy {
+    /* Emit move company response */
     @Output() public moveCompany = new EventEmitter<boolean>();
+    /* Hold subscriptions data */
     @Input() public subscriptions: any[] = [];
+    /* Hold move selected company*/
     @Input() public moveSelectedCompany: any;
     /* This will hold local JSON data */
     @Input() public localeData: any = {};
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
+    /* Hold available plans data */
     public availablePlans: any[] = [];
+    /* Hold available plan options data */
     public availablePlansOption: IOption[] = [];
+    /* Hold selected plan data */
     public selectedPlan: any;
+    /* Hold subscription api request */
     public subscriptionRequestObj: SubscriptionRequest = {
         planUniqueName: '',
         subscriptionId: '',
@@ -45,9 +52,12 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
     /** Holds Store Subscription list observable*/
     public subscriptionList$ = this.componentStore.select(state => state.subscriptionList);
 
-    constructor(private store: Store<AppState>, private settingsProfileActions: SettingsProfileActions,
+    constructor(
+        private store: Store<AppState>,
+        private settingsProfileActions: SettingsProfileActions,
         private componentStore: SubscriptionComponentStore,
-        private settingsProfileService: SettingsProfileService) {
+        private settingsProfileService: SettingsProfileService
+    ) {
     }
 
     /**
@@ -56,14 +66,12 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
      * @memberof MoveCompanyComponent
      */
     public ngOnInit(): void {
-        console.log(this.subscriptions, this.moveSelectedCompany);
         if (this.moveSelectedCompany) {
             this.getCompanyDetails();
         }
         if (this.subscriptionMove) {
             this.componentStore.getAllSubscriptions(null);
             this.subscriptionList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                console.log(response);
                 if (response) {
                     this.subscriptions = response?.body?.results;
                 } else {
@@ -116,7 +124,7 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
      * @memberof MoveCompanyComponent
      */
     public getCompanyDetails(): void {
-        this.settingsProfileService.getCompanyDetails(this.moveSelectedCompany?.uniqueName ? this.moveSelectedCompany?.uniqueName : (this.moveSelectedCompany.companies[0]?.uniqueName)).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
+        this.settingsProfileService.getCompanyDetails(this.moveSelectedCompany?.uniqueName ? this.moveSelectedCompany?.uniqueName : (this.moveSelectedCompany?.companies && this.moveSelectedCompany?.companies[0]?.uniqueName ? this.moveSelectedCompany?.companies[0]?.uniqueName : this.moveSelectedCompany?.companiesList[0]?.uniqueName)).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
             if (response && response.status === "success" && response.body) {
                 this.moveSelectedCompany = response.body;
                 if (this.subscriptions && this.subscriptions.length > 0) {
@@ -125,13 +133,11 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
                             if (subscription.subscriptionId && this.moveSelectedCompany?.subscriptionId !== subscription.subscriptionId && subscription.companies?.length > subscription?.totalCompanies && this.availablePlans[subscription?.subscription?.uniqueName] === undefined &&
                                 subscription.planCountries?.find(country => country?.countryName === this.moveSelectedCompany.country ? this.moveSelectedCompany.country : this.moveSelectedCompany.country?.countryName)
                             ) {
-                                console.log('called');
                                 this.availablePlansOption.push({ label: subscription.plan?.name, value: subscription.plan?.uniqueName });
                                 if (this.availablePlans[subscription.plan?.uniqueName] === undefined) {
                                     this.availablePlans[subscription.plan?.uniqueName] = [];
                                 }
                                 this.availablePlans[subscription.plan?.uniqueName] = subscription;
-                                console.log(this.availablePlans, subscription);
                             }
                         } else {
                             if (subscription.subscriptionId && subscription.planDetails?.companiesLimit > subscription.totalCompanies && this.moveSelectedCompany?.subscription?.subscriptionId !== subscription.subscriptionId && this.availablePlans[subscription.planDetails?.uniqueName] === undefined && subscription.planDetails.countries.includes(this.moveSelectedCompany.country)) {
@@ -149,13 +155,11 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
         });
     }
 
-
-
     /**
-     * Releases memory
-     *
-     * @memberof MoveCompanyComponent
-     */
+    * Releases memory
+    *
+    * @memberof MoveCompanyComponent
+    */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
@@ -169,7 +173,7 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
      */
     public getMovePlanText(): string {
         let text = this.localeData?.subscription?.move_plan_note ? this.localeData?.subscription?.move_plan_note : this.localeData?.move_plan_note;
-        text = text?.replace("[COMPANY_NAME]", this.moveSelectedCompany?.name ? this.moveSelectedCompany?.name : this.moveSelectedCompany?.companies[0].name)?.replace("[PLAN_NAME]", this.moveSelectedCompany?.subscription?.planDetails?.name ? this.moveSelectedCompany?.subscription?.planDetails?.name : this.moveSelectedCompany?.plan?.name);
+        text = text?.replace("[COMPANY_NAME]", this.moveSelectedCompany?.name ? this.moveSelectedCompany?.name : (this.moveSelectedCompany?.companies && this.moveSelectedCompany?.companies[0]?.name ? this.moveSelectedCompany?.companies[0]?.name : this.moveSelectedCompany?.companiesList[0]?.name))?.replace("[PLAN_NAME]", this.moveSelectedCompany?.subscription?.planDetails?.name ? this.moveSelectedCompany?.subscription?.planDetails?.name : this.moveSelectedCompany?.plan?.name);
         return text;
     }
 }

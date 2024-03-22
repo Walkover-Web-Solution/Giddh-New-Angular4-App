@@ -57,7 +57,7 @@
                             <button aria-label="cancel" mat-menu-item (click)="cancelSubscription()">
                                 {{ commonLocaleData?.app_cancel }}
                             </button>
-                            <button aria-label="move" mat-menu-item (click)="openModalMove()">
+                            <button aria-label="move" mat-menu-item *ngIf="viewSubscriptionData?.companiesList?.length === 1" (click)="openModalMove()">
                                 {{ localeData?.move }}
                             </button>
                         </mat-menu>
