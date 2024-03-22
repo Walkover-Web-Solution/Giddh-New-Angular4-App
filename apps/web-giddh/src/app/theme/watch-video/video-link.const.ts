@@ -18,4 +18,5 @@ export const VIDEOLINK = {
     IMPORT_MASTER: "https://www.youtube.com/embed/Ij_kNKOzuqo?si=KLLx0XolqYBYB_U9",
     BARCODE: "https://www.youtube.com/embed/x1OJlwia3OY?si=1LBbTy-hxJI4bfKe",
     DAYBOOK: "https://www.youtube.com/embed/zYFouv7uaEo?si=34xOTDVT1-fC27H_",
+    AGING_REPORT: "https://www.youtube.com/embed/W7G3v8LP7oU?si=QadB2zrrhM_Qop7S",
 };

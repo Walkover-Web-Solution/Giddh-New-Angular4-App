@@ -17,5 +17,6 @@
     "VOUCHER_SALES":  "How to create an Invoice?",
     "ECOMM_INTEGRATION": "How to connect Shopify with Giddh",
     "BARCODE": "How to use barcode in Giddh",
-    "DAYBOOK": "How daybook report works in Giddh"
+    "DAYBOOK": "How daybook report works in Giddh",
+    "AGING_REPORT": "How aging reports works?"
 }
