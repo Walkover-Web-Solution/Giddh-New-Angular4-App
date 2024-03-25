@@ -319,7 +319,7 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
             allPlans?.forEach(plan => {
                 this.inputData.push(plan);
             });
-
+            console.log(this.inputData);
             this.showLoader = false;
             this.changeDetectionRef.detectChanges();
         });

@@ -1,10 +1,9 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivateDialogComponent } from '../activate-dialog/activate-dialog.component';
 import { BuyPlanComponentStore } from './utility/buy-plan.store';
 import { Observable, ReplaySubject, takeUntil, of as observableOf, distinctUntilChanged, debounceTime } from 'rxjs';
-import { MatTableDataSource } from '@angular/material/table';
 import { ToasterService } from '../../services/toaster.service';
 import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 import { CountryRequest, OnboardingFormRequest } from '../../models/api-models/Common';
@@ -18,6 +17,7 @@ import { GeneralActions } from '../../actions/general/general.actions';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { userLoginStateEnum } from '../../models/user-login-state';
+/** This will use for static data for plan table  */
 @Component({
     selector: 'buy-plan',
     templateUrl: './buy-plan.component.html',
@@ -28,6 +28,10 @@ import { userLoginStateEnum } from '../../models/user-login-state';
 export class BuyPlanComponent implements OnInit, OnDestroy {
     /** Stepper Form instance */
     @ViewChild('stepper') stepperIcon: any;
+    /** This will use for table content scroll in mobile */
+    @ViewChild('tableContent', { read: ElementRef }) public tableContent: ElementRef<any>;
+    /** This will use for hold table data */
+    public inputData: any[] = [];
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */
@@ -112,14 +116,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public countrySource: IOption[] = [];
     /** Hold country source observable*/
     public countrySource$: Observable<IOption[]> = observableOf([]);
-    /** Hold displayed columns dynamically*/
-    public displayedColumns: any = [];
-    /** Hold plan data source*/
-    public dataSource: any;
-    /** Getter for column unique names*/
-    public getColumnNames(): string[] {
-        return this.displayedColumns.map(column => column.uniqueName);
-    }
     /** Hold plan data source*/
     public planUniqueName: any;
     /** Hold plan data source*/
@@ -192,8 +188,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         });
 
         window.addEventListener('message', event => {
-            if (event?.data && typeof event?.data === "string" && event?.data ==="CASHFREE") {
-                    this.router.navigate(['/pages/new-company/' + this.responseSubscriptionId]);
+            if (event?.data && typeof event?.data === "string" && event?.data === "CASHFREE") {
+                this.router.navigate(['/pages/new-company/' + this.responseSubscriptionId]);
             }
         });
 
@@ -698,13 +694,12 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 } else {
                     this.finalPlanAmount = this.selectedPlan?.monthlyAmount;
                 }
-                let displayedColumns = [{ uniqueName: 'content', additional: "" }];
-                displayedColumns = displayedColumns.concat(response.map(column => ({ uniqueName: column.uniqueName, additional: column })));
-                this.displayedColumns = displayedColumns;
-                this.dataSource = new MatTableDataSource<any>(response);
+                this.inputData = [];
+                response?.forEach(plan => {
+                    this.inputData.push(plan);
+                });
             } else {
-                this.displayedColumns = [{ uniqueName: 'content', label: 'Content', sticky: true }];
-                this.dataSource = new MatTableDataSource<any>([]);
+                this.inputData = [];
             }
         });
     }
@@ -826,6 +821,24 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public openCashfreeDialog(redirectLink: any): void {
         window.open(redirectLink, '_blank');
         this.isLoading = true;
+    }
+
+    /**
+    * This will scroll the right slide in mobile view for table
+    *
+    * @memberof BuyPlanComponent
+    */
+    public scrollRight(): void {
+        this.tableContent.nativeElement.scrollTo({ left: (this.tableContent.nativeElement?.scrollLeft + 150), behavior: 'smooth' });
+    }
+
+    /**
+     *This will scroll the left slide in mobile view for table
+     *
+     * @memberof BuyPlanComponent
+     */
+    public scrollLeft(): void {
+        this.tableContent.nativeElement.scrollTo({ left: (this.tableContent.nativeElement?.scrollLeft - 150), behavior: 'smooth' });
     }
 
     /**
