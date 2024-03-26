@@ -39,7 +39,7 @@ export class UserAuthenticated  {
             }
             if (p.userLoginState === userLoginStateEnum.newUserLoggedIn) {
                 this.zone.run(() => {
-                    this.router.navigate(['/new-company']);
+                    this.router.navigate(['/pages/subscription/buy-plan']);
                 });
             }
             return !(p.userLoginState === userLoginStateEnum.userLoggedIn || p.userLoginState === userLoginStateEnum.newUserLoggedIn);

@@ -306,6 +306,12 @@ export class CompanyCreateRequest {
     amountPaid?: string;
     orderId?: string;
     razorpaySignature?: string;
+    creatorSuperAdmin: boolean;
+    permission: {
+        emailId: string,
+        entity: string,
+        roleUniqueName: string
+    }
 }
 
 export class CreateCompanyUsersPlan {

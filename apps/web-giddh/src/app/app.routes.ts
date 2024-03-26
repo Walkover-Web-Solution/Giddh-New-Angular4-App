@@ -29,6 +29,8 @@ export const ROUTES: Routes = [
     { path: 'ledger', redirectTo: 'pages/ledger' },
     { path: 'dummy', loadChildren: () => import('./dummy/dummy.module').then(module => module.DummyModule) },
     { path: 'new-company', loadChildren: () => import('./add-company/add-company-module').then(module => module.AddcompanyModule), canActivate: [NewUserAuthGuard] },
+    { path: 'subscription/buy-plan', loadChildren: () => import('./subscription/subscription.module').then(module => module.SubscriptionModule) },
+    { path: 'new-company/:subscriptionId', loadChildren: () => import('./add-company/add-company-module').then(module => module.AddcompanyModule), canActivate: [NewUserAuthGuard] },
     { path: 'onboarding', redirectTo: 'pages/onboarding', pathMatch: 'full' },
     { path: 'invoice', redirectTo: 'pages/invoice', pathMatch: 'full' },
     { path: 'sales', redirectTo: 'pages/proforma-invoice/invoice/sales' },
@@ -43,6 +45,7 @@ export const ROUTES: Routes = [
     { path: 'company-import-export', redirectTo: 'pages/company-import-export', pathMatch: 'full' },
     { path: 'new-vs-old-invoices', redirectTo: 'pages/new-vs-old-invoices', pathMatch: 'full' },
     { path: 'reports', redirectTo: 'pages/reports', pathMatch: 'full' },
+    { path: 'subscription', redirectTo: 'pages/subscription', pathMatch: 'full' },
     { path: 'mobile-home', redirectTo: 'pages/mobile-home', pathMatch: 'full' },
     { path: 'mobile-restricted', component: MobileRestrictedComponent },
     {
@@ -78,6 +81,7 @@ export const ROUTES: Routes = [
             { path: 'gstfiling', loadChildren: () => import('./gst/gst.module').then(module => module.GstModule) },
             { path: 'company-import-export', loadChildren: () => import('./company-import-export/company-import-export.module').then(module => module.CompanyImportExportModule) },
             { path: 'reports', loadChildren: () => import('./reports/reports.module').then(module => module.ReportsModule), canActivate: [NeedsAuthorization] },
+            { path: 'subscription', loadChildren: () => import('./subscription/subscription.module').then(module => module.SubscriptionModule), canActivate: [NeedsAuthorization] },
             { path: 'proforma-invoice', loadChildren: () => import('./voucher/voucher.module').then(module => module.VoucherModule), canActivate: [NeedsAuthorization] },
             { path: 'onboarding', loadChildren: () => import('./onboarding/onboarding.module').then(module => module.OnboardingModule), canActivate: [NeedsAuthorization] },
             { path: 'billing-detail', loadChildren: () => import('./billing-details/billing-details.module').then(module => module.BillingDetailModule) },
@@ -90,7 +94,9 @@ export const ROUTES: Routes = [
             { path: 'voucher', loadChildren: () => import('./payment-receipt/payment-receipt.module').then(module => module.PaymentReceiptModule), canActivate: [NeedsAuthorization] },
             { path: 'downloads', loadChildren: () => import('./downloads/downloads.module').then(module => module.DownloadsModule), canActivate: [NeedsAuthorization] },
             { path: 'custom-fields', loadChildren: () => import('./custom-fields/custom-fields.module').then(module => module.CustomFieldsModule), canActivate: [NeedsAuthorization] },
-            { path: 'new-company', loadChildren: () => import('./add-company/add-company-module').then(module => module.AddcompanyModule), canActivate: [NeedsAuthorization]},
+            { path: 'new-company', loadChildren: () => import('./add-company/add-company-module').then(module => module.AddcompanyModule), canActivate: [NeedsAuthorization] },
+            { path: 'new-company/:subscriptionId', loadChildren: () => import('./add-company/add-company-module').then(module => module.AddcompanyModule), canActivate: [NeedsAuthorization] },
+            { path: 'subscription/buy-plan', loadChildren: () => import('./subscription/subscription.module').then(module => module.SubscriptionModule) },
             { path: 'auth-hmrc', loadChildren: () => import('./auth-hmrc/auth-hmrc.module').then(module => module.AuthHMRCModule), canActivate: [NeedsAuthorization] },
             { path: '**', redirectTo: 'home', pathMatch: 'full' }
         ]

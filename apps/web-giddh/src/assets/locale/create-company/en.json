@@ -76,5 +76,9 @@
     "otp": "OTP",
     "verify": "Verify",
     "resend_otp": "Resend OTP",
-    "verify_number": "Please verify mobile number"
+    "verify_number": "Please verify mobile number",
+    "make_yourself":"Make yourself as a Super Admin",
+    "permission":"Give Permission to",
+    "permission_placeholder":"'Unique Name/Email ID",
+    "roles":"Roles"
 }

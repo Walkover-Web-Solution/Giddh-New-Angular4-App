@@ -12,7 +12,7 @@
             [id]="id"
             [class]="cssClass"
             [placeholder]="placeholder"
-            [ngModelOptions]="{standalone: true}"
+            [ngModelOptions]="{ standalone: true }"
             [(ngModel)]="ngModel"
             (ngModelChange)="handleChange()"
             (input)="handleInput()"
@@ -27,6 +27,7 @@
             (keydown.enter)="$event.preventDefault()"
             [autocomplete]="autocomplete"
             (blur)="emitBlurEvent()"
+            [ngClass]="{ 'error-box': showError }"
         />
         <input
             matInput
@@ -35,7 +36,7 @@
             [id]="id"
             [class]="cssClass"
             [placeholder]="placeholder"
-            [ngModelOptions]="{standalone: true}"
+            [ngModelOptions]="{ standalone: true }"
             [(ngModel)]="ngModel"
             (ngModelChange)="handleChange()"
             (input)="handleInput()"
@@ -51,6 +52,7 @@
             (keydown.enter)="$event.preventDefault()"
             [autocomplete]="autocomplete"
             (blur)="emitBlurEvent()"
+            [ngClass]="{ 'error-box': showError }"
         />
         <input
             matInput
@@ -59,7 +61,7 @@
             [id]="id"
             [class]="cssClass"
             [placeholder]="placeholder"
-            [ngModelOptions]="{standalone: true}"
+            [ngModelOptions]="{ standalone: true }"
             [(ngModel)]="ngModel"
             (ngModelChange)="handleChange()"
             (input)="handleInput()"
@@ -76,6 +78,7 @@
             (keydown.enter)="$event.preventDefault()"
             [autocomplete]="autocomplete"
             (blur)="emitBlurEvent()"
+            [ngClass]="{ 'error-box': showError }"
         />
         <input
             matInput
@@ -84,7 +87,7 @@
             [id]="id"
             [class]="cssClass"
             [placeholder]="placeholder"
-            [ngModelOptions]="{standalone: true}"
+            [ngModelOptions]="{ standalone: true }"
             [(ngModel)]="ngModel"
             (ngModelChange)="handleChange()"
             (input)="handleInput()"
@@ -100,6 +103,7 @@
             (keydown.enter)="$event.preventDefault()"
             [autocomplete]="autocomplete"
             (blur)="emitBlurEvent()"
+            [ngClass]="{ 'error-box': showError }"
         />
         <input
             matInput
@@ -108,7 +112,7 @@
             [id]="id"
             [class]="cssClass"
             [placeholder]="placeholder"
-            [ngModelOptions]="{standalone: true}"
+            [ngModelOptions]="{ standalone: true }"
             [(ngModel)]="ngModel"
             (ngModelChange)="handleChange()"
             (input)="handleInput()"
@@ -126,6 +130,7 @@
             (keydown.enter)="$event.preventDefault()"
             [autocomplete]="autocomplete"
             (blur)="emitBlurEvent()"
+            [ngClass]="{ 'error-box': showError }"
         />
         <span matPrefix *ngIf="matPrefix">{{ matPrefix }}</span>
         <span matSuffix *ngIf="matSuffix">{{ matSuffix }}</span>

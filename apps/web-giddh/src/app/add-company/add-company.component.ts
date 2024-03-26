@@ -1,9 +1,9 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { select, Store } from "@ngrx/store";
 import { Observable, ReplaySubject } from "rxjs";
-import { take, takeUntil } from "rxjs/operators";
+import { debounceTime, distinctUntilChanged, take, takeUntil } from "rxjs/operators";
 import { CommonActions } from "../actions/common.actions";
 import { CompanyActions } from "../actions/company.actions";
 import { GeneralActions } from "../actions/general/general.actions";
@@ -24,6 +24,7 @@ import { VerifyMobileActions } from "../actions/verify-mobile.actions";
 import { AuthService } from "../theme/ng-social-login-module/index";
 import { ConfirmModalComponent } from 'apps/web-giddh/src/app/theme/new-confirm-modal/confirm-modal.component';
 import { HttpClient } from "@angular/common/http";
+import { AddCompanyComponentStore } from "./utility/add-company.store";
 
 declare var initSendOTP: any;
 declare var window: any;
@@ -32,7 +33,8 @@ declare var window: any;
     selector: 'add-company',
     templateUrl: './add-company.component.html',
     styleUrls: ['./add-company.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [AddCompanyComponentStore]
 })
 
 export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
@@ -55,6 +57,8 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
     public firstStepForm: UntypedFormGroup;
     /** Form Group for company address form */
     public secondStepForm: UntypedFormGroup;
+    /** Form Group for subscription company form */
+    public thirdStepForm: UntypedFormGroup;
     /** True if api call in progress */
     public isLoading: boolean = false;
     /** Subject to unsubscribe from listeners */
@@ -98,7 +102,13 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         nameAlias: '',
         paymentId: '',
         amountPaid: '',
-        razorpaySignature: ''
+        razorpaySignature: '',
+        creatorSuperAdmin: false,
+        permission: {
+            emailId: '',
+            entity: 'company',
+            roleUniqueName: ''
+        }
     };
     /** Data for query params */
     public socketCompanyRequest: SocketNewCompanyRequest = new SocketNewCompanyRequest();
@@ -181,6 +191,13 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
     public verifyOtpInProgress: boolean = false;
     /** True if need to focus in otp field */
     public showFocusInOtpField: boolean = false;
+    /** Hold selected role */
+    public selectedRole: string = '';
+    /** Holds Store permission roles API response state as observable*/
+    public permissionRoles$ = this.componentStore.select(state => state.permissionRoles);
+    /** List of permission  roles */
+    public permissionRoles: any[] = [];
+
 
     /** Returns true if form is dirty else false */
     public get showPageLeaveConfirmation(): boolean {
@@ -190,6 +207,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
     constructor(
         private formBuilder: UntypedFormBuilder,
         private toaster: ToasterService,
+        private componentStore: AddCompanyComponentStore,
         private http: HttpClient,
         private store: Store<AppState>,
         private generalService: GeneralService,
@@ -203,9 +221,11 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         private pageLeaveUtilityService: PageLeaveUtilityService,
         public dialog: MatDialog,
         private verifyActions: VerifyMobileActions,
-        private socialAuthService: AuthService
+        private socialAuthService: AuthService,
+        private activateRoute: ActivatedRoute
     ) {
         this.isLoggedInWithSocialAccount$ = this.store.pipe(select(state => state.login.isLoggedInWithSocialAccount), takeUntil(this.destroyed$));
+
     }
 
     /**
@@ -219,6 +239,23 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         this.getCountry();
         this.getStates();
         this.getCurrency();
+        this.getRoles();
+
+        this.activateRoute.params.pipe(takeUntil(this.destroyed$)).subscribe(res => {
+            if (res) {
+                this.company.subscriptionRequest.subscriptionId = res?.subscriptionId;
+            }
+        });
+
+        this.permissionRoles$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.permissionRoles = response?.map(role => ({
+                    label: role.name,
+                    value: role?.uniqueName,
+                    additional: role
+                }));
+            }
+        });
 
         /** Library to separate phone number and calling code */
         if (window['libphonenumber'] === undefined) {
@@ -235,6 +272,22 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
 
         this.store.pipe(select(response => response.session.companies), takeUntil(this.destroyed$)).subscribe(companyList => {
             this.companiesList = companyList;
+        });
+
+        this.thirdStepForm.get('emailId').valueChanges.pipe(
+            debounceTime(700),
+            distinctUntilChanged(),
+            takeUntil(this.destroyed$),
+        ).subscribe(searchedText => {
+            if (searchedText !== null && searchedText !== undefined) {
+                if (this.thirdStepForm?.controls['emailId'].status === 'VALID') {
+                    this.thirdStepForm?.get('roleUniqueName').setValue('super_admin');
+                    this.selectedRole = 'Super Admin';
+                } else {
+                    this.thirdStepForm?.get('roleUniqueName').setValue('');
+                    this.selectedRole = '';
+                }
+            }
         });
 
         this.store.pipe(select(response => response.common.onboardingform), takeUntil(this.destroyed$)).subscribe(response => {
@@ -500,9 +553,17 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
             address: [''],
         });
 
+        this.thirdStepForm = this.formBuilder.group({
+            creatorSuperAdmin: [''],
+            emailId: ['', Validators.pattern(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/)],
+            roleUniqueName: ['', Validators.required],
+            entity: ['company']
+        });
+
         this.companyForm = this.formBuilder.group({
             firstStepForm: this.firstStepForm,
-            secondStepForm: this.secondStepForm
+            secondStepForm: this.secondStepForm,
+            thirdStepForm: this.thirdStepForm
         });
 
         this.firstStepForm.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(result => {
@@ -862,16 +923,26 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      */
     public nextStepForm(): void {
         this.isFormSubmitted = false;
-        if (this.firstStepForm.invalid || (this.showMobileField && !this.isMobileNumberVerified)) {
+        if ((this.selectedStep === 0 && this.firstStepForm.invalid) || (this.showMobileField && !this.isMobileNumberVerified)) {
             this.isFormSubmitted = true;
-            this.selectedStep = 0;
             if (!this.firstStepForm.invalid && this.showMobileField && !this.isMobileNumberVerified) {
                 this.toaster.showSnackBar("error", this.localeData?.verify_number);
             }
             return;
         }
+
+        if (this.selectedStep === 1 && this.secondStepForm.invalid) {
+            this.isFormSubmitted = true;
+            return;
+        }
+
+        if (this.selectedStep === 2 && this.thirdStepForm.invalid) {
+            this.isFormSubmitted = true;
+            return;
+        }
+
         this.firstStepForm.controls['mobile'].setValue(this.showMobileField ? this.intl?.getNumber() : this.mobileNo);
-        this.selectedStep = 1;
+        this.selectedStep++;
         this.company.name = this.firstStepForm.controls['name'].value;
         this.company.country = this.firstStepForm.controls['country'].value.value;
         this.company.baseCurrency = this.firstStepForm.controls['currency'].value.value;
@@ -882,6 +953,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
             this.fireSocketCompanyCreateRequest();
         }
     }
+
 
     /**
      * Get random string for company
@@ -1022,6 +1094,10 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         this.company.address = taxDetails[0]?.address;
         this.company.taxes = this.secondStepForm.value.taxes;
         this.generalService.createNewCompany = this.company;
+        this.company.permission.emailId = this.thirdStepForm.value.emailId;
+        this.company.permission.roleUniqueName = this.thirdStepForm.value.roleUniqueName;
+        this.company.permission.entity = this.thirdStepForm.value.entity;
+        this.company.creatorSuperAdmin = this.thirdStepForm.value.creatorSuperAdmin;
 
         this.isLoading = true;
         this.companyService.CreateNewCompany(this.company).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
@@ -1190,6 +1266,36 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
                 }
             });
         }
+    }
+
+    /**
+     * Retrieves the roles for permissions and updates the component's state.
+     * Invokes the `getPermissionRoles` method of `componentStore`.
+     *
+     * @memberof AddCompanyComponent
+     */
+    public getRoles(): void {
+        this.componentStore.getPermissionRoles(null);
+    }
+
+    /**
+     * Updates the selected role in the third step form.
+     *
+     * @param {*} event - The event containing the selected role.
+     * @memberof AddCompanyComponent
+     */
+    public selectRole(event: any): void {
+        this.thirdStepForm.get('roleUniqueName').setValue(event?.value);
+    }
+
+    /**
+     * Sets the owner permission in the third step form.
+     *
+     * @param {*} event - The event containing the owner permission.
+     * @memberof AddCompanyComponent
+     */
+    public setOwnerPermission(event: any): void {
+        this.thirdStepForm.get('creatorSuperAdmin').setValue(event?.value);
     }
 
     /**

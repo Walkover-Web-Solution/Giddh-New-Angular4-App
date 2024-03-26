@@ -218,7 +218,7 @@
                                 >
                                 </dropdown-field>
                             </div>
-                            <div class="col-lg-12 mobile-number fill-form" *ngIf="showMobileField">
+                            <div class="col-lg-12 mobile-number fill-form"  *ngIf="showMobileField">
                                 <span class="country-flag">
                                     <img
                                         *ngIf="currentFlag"
@@ -376,8 +376,60 @@
                                 ></p>
                             </div>
                         </div>
-                        <div class="pt-2 d-flex column-gap15">
-                            <button mat-stroked-button matStepperPrevious (click)="selectedStep = 0">
+                        <div class="d-flex column-gap15 mr-t15">
+                            <button mat-stroked-button color="primary" (click)="nextStepForm()">
+                                {{ commonLocaleData?.app_next }}
+                            </button>
+                        </div>
+                    </form>
+                </mat-step>
+
+                <mat-step [stepControl]="thirdStepForm">
+                    <form [formGroup]="thirdStepForm" name="thirdStepForm" autocomplete="off" novalidate>
+                        <ng-template matStepLabel>{{ commonLocaleData?.app_share }}</ng-template>
+                        <div class="row row-gap">
+                            <div class="d-flex col-lg-12">
+                                <div class="pr-4 pl-0">
+                                    <label>{{ localeData?.make_yourself }} : </label>
+                                </div>
+                                <mat-radio-group name="ownerPermission" formControlName="creatorSuperAdmin">
+                                    <mat-radio-button color="primary" value="true" (change)="setOwnerPermission($event)"
+                                        >{{ commonLocaleData?.app_yes }}
+                                    </mat-radio-button>
+                                    <mat-radio-button
+                                        color="primary"
+                                        value="false"
+                                        (change)="setOwnerPermission($event)"
+                                    >
+                                        {{ commonLocaleData?.app_no }}
+                                    </mat-radio-button>
+                                </mat-radio-group>
+                            </div>
+                            <div class="col-6 country-space">
+                                <input-field
+                                    [name]="'emailId'"
+                                    [label]="localeData?.permission"
+                                    [placeholder]="localeData?.permission_placeholder"
+                                    [type]="'text'"
+                                    formControlName="emailId"
+                                >
+                                </input-field>
+                            </div>
+                            <div class="col-6 currency-space">
+                                <dropdown-field
+                                    [name]="'roles'"
+                                    [label]="localeData?.roles + '*'"
+                                    [placeholder]="localeData?.roles"
+                                    [options]="permissionRoles"
+                                    (selectedOption)="selectRole($event)"
+                                    [defaultValue]="selectedRole"
+                                    [showError]="isFormSubmitted && !firstStepForm.get('roleUniqueName')?.value"
+                                >
+                                </dropdown-field>
+                            </div>
+                        </div>
+                        <div class="d-flex column-gap15 mt-3">
+                            <button mat-stroked-button matStepperPrevious (click)="selectedStep = 1">
                                 {{ commonLocaleData?.app_back }}
                             </button>
                             <button mat-stroked-button color="primary" (click)="onSubmit()">
