@@ -245,6 +245,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public isDropUp: boolean = false;
     /** Decimal places from company settings */
     public giddhBalanceDecimalPlaces: number = 2;
+    /** Holds Voucher Name that suports csv file export */
+    public csvSupportVoucherType: string[] = ['sales', 'debit note', 'credit note','purchase'];
 
     constructor(
         private store: Store<AppState>,
@@ -1354,7 +1356,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         });
     }
 
-    public exportCsvDownload(type: string) {
+    public exportCsvDownload(type: string): any {
         const isAllItemsSelected = this.allItemsSelected;
         this.exportcsvRequest.from = this.invoiceSearchRequest.from;
         this.exportcsvRequest.to = this.invoiceSearchRequest.to;
