@@ -37,6 +37,7 @@ import { MatCardModule } from '@angular/material/card';
 import { SafePipeModule } from '../shared/helpers/pipes/safePipe/safePipe.module';
 import { GiddhPageLoaderModule } from '../shared/giddh-page-loader/giddh-page-loader.module';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
 
 @NgModule({
 
@@ -86,7 +87,8 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
         SafePipeModule,
         GiddhPageLoaderModule,
         NoDataModule,
-        MatSlideToggleModule
+        MatSlideToggleModule,
+        WatchVideoModule
     ],
     providers: [
         DecimalPipe

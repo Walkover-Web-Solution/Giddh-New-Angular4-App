@@ -5,9 +5,12 @@
     (commonLocaleData)="commonLocaleData = $event"
 >
     <div class="pd-b2" *ngIf="localeData?.give_permission">
-        <h3 class="mr-b1">
-            <strong>{{ localeData?.give_permission }}:</strong>
-        </h3>
+        <div class="d-flex justify-content-between">
+            <h3 class="mr-b1">
+                <strong>{{ localeData?.give_permission }}:</strong>
+            </h3>
+            <watch-video [cssClass]="'text-primary'" [moduleName]="'MULTI_USER_ACCESS'"></watch-video>
+        </div>
         <setting-permission-form
             [userdata]="null"
             [isLblShow]="false"
