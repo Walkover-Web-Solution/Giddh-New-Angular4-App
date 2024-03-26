@@ -116,7 +116,7 @@
                             <button aria-label="buyplan" mat-stroked-button color="primary" (click)="buyPlan()">
                                 {{ localeData?.change_subscription }}
                             </button>
-                            <button aria-label="cacnelsubscription" mat-stroked-button (click)="cancelSubscription()">
+                            <button aria-label="cancelsubscription" mat-stroked-button (click)="cancelSubscription()">
                                 {{ localeData?.cancel_subscription }}
                             </button>
                         </div>
@@ -131,6 +131,7 @@
                     <p class="strong my-3 light-gray">{{commonLocaleData?.app_payment_mode}} : {{viewSubscriptionData?.cashfreeBillingInfo?.mode}}</p>
                     <p class="mr-b15" *ngIf="viewSubscriptionData?.cashfreeBillingInfo?.upiId">{{localeData?.upi_id}}: <span class="strong light-gray">{{viewSubscriptionData?.cashfreeBillingInfo?.upiId }}</span></p>
                     <p class="mr-b15" *ngIf="viewSubscriptionData?.cashfreeBillingInfo?.bankAccountNumber">{{commonLocaleData?.app_account_number}} : <span class="strong light-gray">{{viewSubscriptionData?.cashfreeBillingInfo?.bankAccountNumber}}</span></p>
+                        <p class="mr-b15" *ngIf="viewSubscriptionData?.cashfreeBillingInfo?.bankAccountHolder">{{localeData?.account_holder}} : <span class="strong light-gray">{{viewSubscriptionData?.cashfreeBillingInfo?.bankAccountHolder}}</span></p>
                 </mat-card-content>
             </mat-card>
         </div>

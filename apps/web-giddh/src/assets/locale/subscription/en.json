@@ -52,7 +52,7 @@
         "search_plans": "Search subscription and companies",
         "billing_account": "Billing Account",
         "subscriber": "Subscriber",
-        "plan_sub_name": "Plan Sub Name",
+        "plan_sub_name": "Plan Name",
         "renewal_date": "Renewal date",
         "change_plan":"Change plan",
         "request_transfer": "Request transfer",
@@ -103,5 +103,6 @@
         "promo_code":" Promo Code",
         "search_field": "Search [FIELD]",
         "subscription_cancel_message":"Subscription will be cancelled on Expiry Date",
-        "upi_id":" Upi ID"
+        "upi_id":" Upi ID",
+        "account_holder":"Account holder"
     }
