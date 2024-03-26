@@ -94,9 +94,9 @@
                         <div class="form-group">
                             <div class="width-100">
                                 <dropdown-field
-                                    [name]="'county'"
-                                    [label]="localeData?.county + '*'"
-                                    [placeholder]="localeData?.county"
+                                    [name]="'country'"
+                                    [label]="commonLocaleData?.app_country + '*'"
+                                    [placeholder]="commonLocaleData?.app_country"
                                     class="mb-3 d-block"
                                     [options]="countrySource"
                                     (selectedOption)="selectCountry($event)"

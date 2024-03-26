@@ -131,6 +131,8 @@
         "back_plan": "योजना पर वापस जाएं",
         "back_billing": "बिलिंग खाते पर वापस जाएं",
         "company_name": "कंपनी का नाम",
-        "promo_code": "प्रोमो कोड"
-
+        "promo_code": "प्रोमो कोड",
+        "search_field": "खोज [FIELD]",
+        "subscription_cancel_message":"समाप्ति तिथि पर सदस्यता रद्द कर दी जाएगी",
+        "upi_id":" यूपीआई आईडी"
 	}

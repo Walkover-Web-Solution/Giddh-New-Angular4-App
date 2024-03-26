@@ -11,7 +11,7 @@
             <button
                 *ngIf="showClearFilter"
                 mat-stroked-button
-                class="min160 mr-l1"SUB-20240321-2
+                class="min160 mr-l1"
                 color="primary"
                 (click)="clearFilter()"
             >
@@ -40,7 +40,7 @@
                             *matHeaderCellDef
                             class="td-search-box"
                             #searchNameContainer
-                            (clickOutside)="handleClickOutside($event, searchNameContainer, 'Name')"
+                            (clickOutside)="handleClickOutside($event, searchNameContainer, commonLocaleData?.app_name)"
                         >
                             <ng-container
                                 *ngTemplateOutlet="
@@ -71,7 +71,7 @@
                             class="td-search-box"
                             #searchBillingAccountContainer
                             (clickOutside)="
-                                handleClickOutside($event, searchBillingAccountContainer, 'Billing Account')
+                                handleClickOutside($event, searchBillingAccountContainer, localeData?.billing_account)
                             "
                         >
                             <ng-container
@@ -96,7 +96,9 @@
                             *matHeaderCellDef
                             class="td-search-box"
                             #searchSubscriberContainer
-                            (clickOutside)="handleClickOutside($event, searchSubscriberContainer, 'Subscriber')"
+                            (clickOutside)="
+                                handleClickOutside($event, searchSubscriberContainer, ocaleData?.subscriber)
+                            "
                         >
                             <ng-container
                                 *ngTemplateOutlet="
@@ -120,7 +122,9 @@
                             *matHeaderCellDef
                             class="td-search-box"
                             #searchCountryContainer
-                            (clickOutside)="handleClickOutside($event, searchCountryContainer, 'Country')"
+                            (clickOutside)="
+                                handleClickOutside($event, searchCountryContainer, commonLocaleData?.app_country)
+                            "
                         >
                             <ng-container
                                 *ngTemplateOutlet="
@@ -144,7 +148,9 @@
                             *matHeaderCellDef
                             class="td-search-box"
                             #searchPlanSubNameContainer
-                            (clickOutside)="handleClickOutside($event, searchPlanSubNameContainer, 'Plan Sub Name')"
+                            (clickOutside)="
+                                handleClickOutside($event, searchPlanSubNameContainer, localeData?.plan_sub_name)
+                            "
                         >
                             <ng-container
                                 *ngTemplateOutlet="
@@ -175,7 +181,9 @@
                             *matHeaderCellDef
                             class="td-search-box"
                             #searchStatusContainer
-                            (clickOutside)="handleClickOutside($event, searchStatusContainer, 'Status')"
+                            (clickOutside)="
+                                handleClickOutside($event, searchStatusContainer, commonLocaleData?.app_status)
+                            "
                         >
                             <ng-container
                                 *ngTemplateOutlet="
@@ -259,7 +267,7 @@
                                     <button mat-menu-item (click)="viewSubscription(element)">
                                         {{ localeData?.view_subscription }}
                                     </button>
-                                    <button mat-menu-item (click)="changeBilling(element)">
+                                    <button mat-menu-item (click)="changeBilling(element?.billingAccount?.uniqueName)">
                                         {{ localeData?.change_billing }}
                                     </button>
                                     <button mat-menu-item (click)="transferSubscription(element?.subscriptionId)">
@@ -268,7 +276,11 @@
                                     <button mat-menu-item (click)="cancelSubscription(element?.subscriptionId)">
                                         {{ commonLocaleData?.app_cancel }}
                                     </button>
-                                    <button mat-menu-item *ngIf="element?.companies?.length === 1" (click)="openModalMove(element, $event)">
+                                    <button
+                                        mat-menu-item
+                                        *ngIf="element?.companies?.length === 1"
+                                        (click)="openModalMove(element, $event)"
+                                    >
                                         {{ localeData?.move }}
                                     </button>
                                 </div>
@@ -298,7 +310,7 @@
             </div>
         </section>
         <div class="no-data" *ngIf="!shouldShowElement && !(subscriptionListInProgress$ | async)">
-            <h1>{{commonLocaleData?.app_no_data_found}}</h1>
+            <h1>{{ commonLocaleData?.app_no_data_found }}</h1>
         </div>
     </div>
 </ng-container>

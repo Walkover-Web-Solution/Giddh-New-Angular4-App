@@ -49,7 +49,6 @@ export class SettingsProfileService {
      * Patch company profile
      */
     public PatchProfile(model: any, companyUniqueName?: any, status?: any): Observable<BaseResponse<any, any>> {
-        console.log(model, status, companyUniqueName);
         if (companyUniqueName) {
             this.companyUniqueName = companyUniqueName;
         } else {

@@ -110,17 +110,7 @@
                                     </amount-field>
                                 </span>
                             </div>
-                            <div class="view-right d-flex align-items-end">
-                                <p class="light-gray mb-1">{{ localeData?.transaction_count }}</p>
-                                <span class="font-24">
-                                    <amount-field
-                                        [amount]="viewSubscriptionData?.planDetails?.transactionLimit"
-                                        [currencySymbol]="false"
-                                        [currencyCode]="false"
-                                    >
-                                    </amount-field>
-                                </span>
-                            </div>
+                            <div class="view-right d-flex align-items-end"></div>
                         </div>
                         <div class="d-flex column-gap1 mt-3">
                             <button aria-label="buyplan" mat-stroked-button color="primary" (click)="buyPlan()">
@@ -138,10 +128,9 @@
             <mat-card class="outline-card">
                 <mat-card-content>
                     <h4 class="font-16 strong border-bottom pb-2">{{ localeData?.billing_account }}</h4>
-                    <p class="strong my-3 light-gray">Payment by : {{viewSubscriptionData?.cashfreeBillingInfo?.mode}}</p>
-                    <p class="mr-b15">Account holder: <span class="strong light-gray">{{viewSubscriptionData?.cashfreeBillingInfo?.bankAccountHolder}}</span></p>
-                    <p class="mr-b15">Sort Code: <span class="strong light-gray">{{viewSubscriptionData?.cashfreeBillingInfo?.subReferenceId}}</span></p>
-                    <p>Account number: <span class="strong light-gray">{{viewSubscriptionData?.cashfreeBillingInfo?.bankAccountNumber}}</span></p>
+                    <p class="strong my-3 light-gray">{{commonLocaleData?.app_payment_mode}} : {{viewSubscriptionData?.cashfreeBillingInfo?.mode}}</p>
+                    <p class="mr-b15" *ngIf="viewSubscriptionData?.cashfreeBillingInfo?.upiId">{{localeData?.upi_id}}: <span class="strong light-gray">{{viewSubscriptionData?.cashfreeBillingInfo?.upiId }}</span></p>
+                    <p class="mr-b15" *ngIf="viewSubscriptionData?.cashfreeBillingInfo?.bankAccountNumber">{{commonLocaleData?.app_account_number}} : <span class="strong light-gray">{{viewSubscriptionData?.cashfreeBillingInfo?.bankAccountNumber}}</span></p>
                 </mat-card-content>
             </mat-card>
         </div>

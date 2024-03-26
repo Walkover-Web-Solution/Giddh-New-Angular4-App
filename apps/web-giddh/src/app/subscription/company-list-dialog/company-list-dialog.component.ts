@@ -215,7 +215,7 @@ export class CompanyListDialogComponent implements OnInit {
    * @memberof CompanyListDialogComponent
    */
     public addOrMoveCompanyCallback(event: boolean): void {
-        if (event === true) {
+        if (event) {
             this.getAllCompaniesList();
         }
     }

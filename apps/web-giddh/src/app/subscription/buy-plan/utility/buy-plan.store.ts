@@ -76,7 +76,7 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
                             }
                         },
                         (error: any) => {
-                            this.toasterService.showSnackBar('error', 'Error');
+                            this.toasterService.showSnackBar('error', 'Something went wrong! Please try again.');
                             return this.patchState({
                                 planList: [],
                                 planListInProgress: false
@@ -94,15 +94,15 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
      *
      * @memberof BuyPlanComponentStore
      */
-    readonly createPlan = this.effect((data: Observable<any>) => {
+    readonly createSubscription = this.effect((data: Observable<any>) => {
         return data.pipe(
             switchMap((req) => {
                 this.patchState({ createPlanInProgress: true });
-                return this.subscriptionService.createPlan(req).pipe(
+                return this.subscriptionService.createSubscription(req).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
-                                this.toasterService.showSnackBar('success', 'Create Plan Successfully');
+                                this.toasterService.showSnackBar('success', 'Create Subscription Successfully');
                                 return this.patchState({
                                     createPlanInProgress: false,
                                     createPlanResponse: res?.body ?? null,
@@ -120,7 +120,7 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
                             }
                         },
                         (error: any) => {
-                            this.toasterService.showSnackBar('error', 'Error');
+                            this.toasterService.showSnackBar('error', 'Something went wrong! Please try again.');
 
                             return this.patchState({
                                 createPlanInProgress: false
@@ -138,11 +138,11 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
     *
     * @memberof BuyPlanComponentStore
     */
-    readonly updatePlan = this.effect((data: Observable<any>) => {
+    readonly updateSubscription = this.effect((data: Observable<any>) => {
         return data.pipe(
             switchMap((req) => {
                 this.patchState({ updatePlanInProgress: true });
-                return this.subscriptionService.updatePlan(req).pipe(
+                return this.subscriptionService.updateSubscription(req).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
@@ -162,7 +162,7 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
                             }
                         },
                         (error: any) => {
-                            this.toasterService.showSnackBar('error', 'Error');
+                            this.toasterService.showSnackBar('error', 'Something went wrong! Please try again.');
 
                             return this.patchState({
                                 updatePlanInProgress: false
@@ -207,7 +207,7 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
                             }
                         },
                         (error: any) => {
-                            this.toasterService.showSnackBar('error', 'Error');
+                            this.toasterService.showSnackBar('error', 'Something went wrong! Please try again.');
 
                             return this.patchState({
                                 applyPromoCodeInProgress: false

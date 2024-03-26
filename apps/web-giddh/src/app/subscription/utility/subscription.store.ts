@@ -5,6 +5,8 @@ import { Observable, switchMap, catchError, EMPTY } from "rxjs";
 import { BaseResponse } from "../../models/api-models/BaseResponse";
 import { ToasterService } from "../../services/toaster.service";
 import { SubscriptionsService } from "../../services/subscriptions.service";
+import { AppState } from "../../store";
+import { Store } from "@ngrx/store";
 
 export interface SubscriptionState {
     subscriptionListInProgress: boolean;
@@ -38,9 +40,12 @@ export class SubscriptionComponentStore extends ComponentStore<SubscriptionState
 
     constructor(private toasterService: ToasterService,
         private subscriptionService: SubscriptionsService,
+        private store: Store<AppState>
     ) {
         super(DEFAULT_SUBSCRIPTION_STATE);
     }
+
+    public activeCompany$: Observable<any> = this.select(this.store.select(state => state.session.activeCompany), (response) => response);
 
     /**
      * Get All Subscriptions
@@ -61,7 +66,7 @@ export class SubscriptionComponentStore extends ComponentStore<SubscriptionState
                                 });
                             } else {
                                 if (res.message) {
-                                    this.toasterService.showSnackBar('success', res.message);
+                                    this.toasterService.showSnackBar('error', res.message);
                                 }
                                 return this.patchState({
                                     subscriptionList: [],
@@ -70,7 +75,7 @@ export class SubscriptionComponentStore extends ComponentStore<SubscriptionState
                             }
                         },
                         (error: any) => {
-                            this.toasterService.showSnackBar('error', 'Error');
+                            this.toasterService.showSnackBar('error', 'Something went wrong! Please try again.');
                             return this.patchState({
                                 subscriptionList: [],
                                 subscriptionListInProgress: false
@@ -113,7 +118,7 @@ export class SubscriptionComponentStore extends ComponentStore<SubscriptionState
                             }
                         },
                         (error: any) => {
-                            this.toasterService.showSnackBar('error', 'Error');
+                            this.toasterService.showSnackBar('error', 'Something went wrong! Please try again.');
 
                             return this.patchState({
                                 cancelSubscriptionInProgress: false
@@ -155,7 +160,7 @@ export class SubscriptionComponentStore extends ComponentStore<SubscriptionState
                             }
                         },
                         (error: any) => {
-                            this.toasterService.showSnackBar('error', 'Error');
+                            this.toasterService.showSnackBar('error', 'Something went wrong! Please try again.');
 
                             return this.patchState({
                                 transferSubscriptionSuccess: false
@@ -181,14 +186,14 @@ export class SubscriptionComponentStore extends ComponentStore<SubscriptionState
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
-                                this.toasterService.showSnackBar('success', 'Verify ownership successfully');
+                                this.toasterService.showSnackBar('success', 'Subscription ownership verified successfully.');
                                 return this.patchState({
                                     verifyOwnershipSuccess: res?.body ?? null,
                                     verifyOwnershipInProgress: false,
                                 });
                             } else {
                                 if (res.message) {
-                                    this.toasterService.showSnackBar('success', res.message);
+                                    this.toasterService.showSnackBar('error', res.message);
                                 }
                                 return this.patchState({
                                     verifyOwnershipSuccess: null,
@@ -197,7 +202,7 @@ export class SubscriptionComponentStore extends ComponentStore<SubscriptionState
                             }
                         },
                         (error: any) => {
-                            this.toasterService.showSnackBar('error', 'Error');
+                            this.toasterService.showSnackBar('error', 'Something went wrong! Please try again.');
                             return this.patchState({
                                 verifyOwnershipSuccess: null,
                                 verifyOwnershipInProgress: false
@@ -229,7 +234,7 @@ export class SubscriptionComponentStore extends ComponentStore<SubscriptionState
                                 });
                             } else {
                                 if (res.message) {
-                                    this.toasterService.showSnackBar('success', res.message);
+                                    this.toasterService.showSnackBar('error', res.message);
                                 }
                                 return this.patchState({
                                     subscribedCompanies: null,
@@ -238,7 +243,7 @@ export class SubscriptionComponentStore extends ComponentStore<SubscriptionState
                             }
                         },
                         (error: any) => {
-                            this.toasterService.showSnackBar('error', 'Error');
+                            this.toasterService.showSnackBar('error', 'Something went wrong! Please try again.');
                             return this.patchState({
                                 subscribedCompanies: null,
                                 subscribedCompaniesInProgress: false
