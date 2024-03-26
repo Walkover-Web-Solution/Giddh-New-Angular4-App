@@ -193,6 +193,7 @@
             .vouchers-entry-table {
                 table {
                     tr {
+
                         th,
                         td {
                             padding: 16px 8px;
@@ -211,6 +212,7 @@
                                     max-width: 120px;
                                 }
                             }
+
                             @media screen and (max-width: 1140px) {
                                 min-width: 200px !important;
                             }
@@ -218,7 +220,8 @@
 
                         th {
                             color: var(--color-giddh-blue);
-                            &:not(:first-child, :nth-child(2)){
+
+                            &:not(:first-child, :nth-child(2)) {
                                 padding-right: 14px !important;
                             }
                         }
@@ -254,6 +257,7 @@
 
                             .description {
                                 word-wrap: break-word;
+
                                 p {
                                     padding-left: 6px;
                                 }
@@ -267,9 +271,10 @@
                         &.default-active {
                             td {
                                 &.active {
-                                    box-shadow:  0 0 0 2px var(--color-common-secondary-border) inset;
+                                    box-shadow: 0 0 0 2px var(--color-common-secondary-border) inset;
                                 }
-                                .date-hsn-code{
+
+                                .date-hsn-code {
                                     padding-left: 7px;
                                     padding-right: 7px;
                                 }

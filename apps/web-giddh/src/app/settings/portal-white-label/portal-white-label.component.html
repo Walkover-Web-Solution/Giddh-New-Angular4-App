@@ -47,7 +47,9 @@
                 <button mat-stroked-button (click)="deleteConfirmationDialog()">
                     {{ commonLocaleData?.app_delete }}
                 </button>
-                <button mat-stroked-button color="primary" *ngIf="!allVerifiedDomain" (click)="verifyDomain()">{{ commonLocaleData?.app_verify }}</button>
+                <button mat-stroked-button color="primary" *ngIf="!allVerifiedDomain" (click)="verifyDomain()">
+                    {{ commonLocaleData?.app_verify }}
+                </button>
                 <button mat-stroked-button color="primary" (click)="openShareDomainDialog()">
                     {{ commonLocaleData?.app_share }}
                 </button>
@@ -172,7 +174,7 @@
                 <div>
                     <input-field
                         formControlName="url"
-                       [type]="'text'"
+                        [type]="'text'"
                         [name]="'companyName'"
                         (input)="onInputChange()"
                         [autocomplete]="'off'"

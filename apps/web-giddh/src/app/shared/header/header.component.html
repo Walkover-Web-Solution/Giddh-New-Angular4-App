@@ -370,7 +370,7 @@
                     </li>
                     <li class="header-utility-icons">
                         <button mat-icon-button aria-label="settings" [matTooltip]="commonLocaleData?.app_settings" [matTooltipPosition]="'below'" (click)="toggleSidebar(false)" class="icon-circle">
-                            <i class="icon-settings-cog"></i>
+                            <i class="icon-settings-cog icon-font-22"></i>
                         </button>
                     </li>
                     <li class="header-utility-icons">
@@ -425,7 +425,7 @@
         <div class="white-row plan-issue">
             <p>
                 <span class="icon-traingle-info"></span> {{ getSubscriptionEndNote() }}
-                <a href="javascript:void(0);" class="click-here" aria-label="go to plan" (click)="goToSelectPlan()">{{ localeData?.click_here }}</a>
+                <a href="javascript:void(0);" class="click-here text-underline" aria-label="go to plan" (click)="goToSelectPlan()">{{ localeData?.click_here }}</a>
             </p>
         </div>
     </div>
@@ -438,7 +438,7 @@
         <div class="white-row plan-issue">
             <p>
                 <span class="icon-traingle-info"></span> {{ getSubscriptionEndedNote() }}
-                <a href="javascript:void(0);" class="click-here" aria-label="get select " (click)="goToSelectPlan()">{{ localeData?.click_here }}</a>
+                <a href="javascript:void(0);" class="click-here text-underline" aria-label="get select " (click)="goToSelectPlan()">{{ localeData?.click_here }}</a>
             </p>
         </div>
     </div>
@@ -451,7 +451,7 @@
         <div class="white-row plan-issue">
             <p>
                 <span class="icon-traingle-info"></span> {{ getSubscriptionTransactionEndedNote() }}
-                <a href="javascript:void(0);" class="click-here" aria-label="get plan" (click)="goToSelectPlan()">{{ localeData?.click_here }}</a>
+                <a href="javascript:void(0);" class="click-here text-underline" aria-label="get plan" (click)="goToSelectPlan()">{{ localeData?.click_here }}</a>
             </p>
         </div>
     </div>
@@ -586,6 +586,13 @@
                 }"
                 (closeAsideEvent)="toggleSidebarPane(false, false)"
             ></aside-setting>
+    </div>
+    <div class="help-support-aside setting-sidebar-wrapper" *ngIf="asideInventorySidebarMenuState === 'in'">
+        <inventory-sidebar
+            class="inventory-sidebar"
+            [ngClass]="{ 'inventory-sidebar': isMobileSidebar }"
+            (closeAsideEvent)="toggleSidebarPane(false, false)"
+        ></inventory-sidebar>
     </div>
     <ng-template #datepickerTemplate>
         <div class="datepicker-modal">

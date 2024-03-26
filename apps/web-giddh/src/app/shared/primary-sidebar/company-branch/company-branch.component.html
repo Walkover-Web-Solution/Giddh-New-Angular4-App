@@ -53,7 +53,7 @@
                         <span>{{ localeData?.create_company }}</span>
                     </button> -->
                 </div>
-                <div class="company-list mt-2">
+                <div class="company-list mt-2" tabindex="0">
                     <ul
                         class="list-style-none font-15"
                         *ngIf="
@@ -66,6 +66,7 @@
                             [ngClass]="{ 'active': company?.uniqueName === activeCompany?.uniqueName }"
                             [tooltip]="company?.name + (company?.alias ? ' ( ' + company?.alias + ' ) ' : '')"
                             [placement]="i === 0 ? 'bottom' : 'top'"
+                            aria-hidden="true"
                         >
                             <span
                                 id="button-basic"

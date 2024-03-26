@@ -803,7 +803,7 @@
                         (click)="!isEinvoiceGenerated ? toggleRcmCheckbox(rcmCheckbox, 'label') : ''"
                         [innerHTML]="localeData?.transaction_available_rc"
                     ></label>
-                    <span class="text-light font-12"> ({{ localeData?.tax_compulsory }})</span>
+                    <span class="font-12"> ({{ localeData?.tax_compulsory }})</span>
                 </div>
                 <!-- reverse charge transction end  -->
                 <!--  tourist scheme template start      -->
@@ -1797,8 +1797,8 @@
                                             <td
                                                 *ngIf="
                                                     voucherApiVersion === 2 &&
-                                                    (vm.selectedLedger.voucher?.shortCode === 'credit note' ||
-                                                        vm.selectedLedger.voucher?.shortCode === 'debit note')
+                                                    (vm.selectedLedger?.voucher?.shortCode === 'credit note' ||
+                                                        vm.selectedLedger?.voucher?.shortCode === 'debit note')
                                                 "
                                                 class="pd-r1 pb-1"
                                             >

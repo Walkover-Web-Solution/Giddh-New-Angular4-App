@@ -71,56 +71,11 @@
     scroll-behavior: smooth;
     position: relative;
 }
-.existing-reason {
-    border-top: 1px solid var(--color-iron);
-    padding-top: 30px;
-    h4 {
-        font-family: var(--font-semibold);
-        margin-bottom: 10px;
-    }
-    ul {
-        list-style: none;
-        font-size: var(--font-size-15);
-        line-height: 30px;
-        color: var(--color-nero);
-    }
-}
 @media (max-width: 768px) {
     :host {
         max-width: 600px;
     }
     :host .aside-pane {
         max-width: 600px;
-    }
-}
-@media (max-width: 575px) {
-    :host {
-        max-width: 370px;
-    }
-    :host .aside-pane {
-        max-width: 370px;
-    }
-    .combo-table th,
-    .combo-table td {
-        min-width: 160px;
-        &:first-child {
-            min-width: 80px;
-        }
-    }
-}
-@media (max-width: 375px) {
-    :host {
-        max-width: 310px;
-    }
-    :host .aside-pane {
-        max-width: 310px;
-    }
-}
-@media (max-width: 320px) {
-    :host {
-        max-width: 280px;
-    }
-    :host .aside-pane {
-        max-width: 280px;
     }
 }

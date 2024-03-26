@@ -65,6 +65,7 @@ import { MatTooltipModule } from "@angular/material/tooltip";
 import { ReportFiltersComponent } from "./component/report-filters/report-filters.component";
 import { ReportsComponent } from "./component/reports/reports.component";
 import { GroupCreateEditModule } from "./component/create-update-group/create-update-group.module";
+import { SelectTableColumnModule } from "../shared/select-table-column/select-table-column.module";
 import { CustomUnitsComponent } from "./component/custom-units/custom-units.component";
 import { MatGridListModule } from "@angular/material/grid-list";
 import { MatListModule } from "@angular/material/list";
@@ -75,7 +76,6 @@ import { AsideCreateUnitGroupComponent } from "./component/aside-create-unit-gro
 import { RecipeModule } from "./component/recipe/recipe.module";
 import { ManufacturingModule } from "../manufacturing/manufacturing.module";
 import { InventoryMasterComponent } from "./component/inventory-master/inventory-master.component";
-import { SelectTableColumnModule } from "../shared/select-table-column/select-table-column.module";
 import { FormsModule } from "@angular/forms";
 import { NoDataModule } from "../shared/no-data/no-data.module";
 import { DragDropModule } from "@angular/cdk/drag-drop";
@@ -162,11 +162,11 @@ import { WatchVideoModule } from "../theme/watch-video/watch-video.module";
         MatDialogModule,
         MatAutocompleteModule,
         MatTooltipModule,
+        SelectTableColumnModule,
         MatGridListModule,
         MatListModule,
         RecipeModule,
         ManufacturingModule,
-        SelectTableColumnModule,
         CdkScrollModule,
         FormsModule,
         NoDataModule,

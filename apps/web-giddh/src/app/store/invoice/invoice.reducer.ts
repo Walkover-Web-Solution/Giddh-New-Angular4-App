@@ -478,6 +478,11 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
             newState.isInvoiceGenerated = true;
             return Object.assign({}, state, newState);
         }
+        case INVOICE_ACTIONS.RESET_PENDING_DATA:
+            return {
+                ...state,
+                ledgers: null
+            };
         case INVOICE_ACTIONS.GENERATE_BULK_E_INVOICE:
             return {
                 ...state,

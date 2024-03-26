@@ -706,7 +706,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     }
 
     /**
-     * This will use for print thermal pdf document
+     * This will use for print thermal print
      *
      * @memberof InvoicePreviewDetailsComponent
      */

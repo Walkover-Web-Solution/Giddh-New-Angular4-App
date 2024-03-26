@@ -269,7 +269,7 @@
                                             [attr.data-title]="commonLocaleData?.app_invoice_no"
                                             class="nowrap download-arrow"
                                         >
-                                            <a href="javascript:;" class="d-inline-block">{{ item?.docNumber }}</a>
+                                            <a href="javascript:;" class="d-inline-block color-link">{{ item?.docNumber }}</a>
                                             <a
                                                 (click)="onSelectEwayDownload(item)"
                                                 [tooltip]="localeData?.download_eway_bill"
@@ -316,7 +316,7 @@
                                             <div class="btn-group pull-left" dropdown>
                                                 <a
                                                     href="javascript:void(0)"
-                                                    class="dropdown-toggle"
+                                                    class="dropdown-toggle color-link"
                                                     [id]="'actionbutton_'+ i"
                                                     dropdownToggle
                                                     (click)="showActionsMenu($event)"

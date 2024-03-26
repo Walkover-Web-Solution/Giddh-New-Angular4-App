@@ -17,7 +17,7 @@ import { CommonActions } from '../../actions/common.actions';
 import { GeneralService } from '../../services/general.service';
 import { OrganizationType } from '../../models/user-login-state';
 import { cloneDeep, concat, isEmpty, isEqual } from '../../lodash-optimized';
-import { BootstrapToggleSwitch } from '../../app.constant'
+import { BootstrapToggleSwitch } from '../../app.constant';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
 
 @Component({
@@ -294,7 +294,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
         if (this.formToSave?.invoiceSettings?.gstEInvoiceEnable) {
             const invoiceSettings = this.formToSave.invoiceSettings;
             if (!invoiceSettings.gstEInvoiceUserName || !invoiceSettings.gstEInvoiceUserPassword || !invoiceSettings.gstEInvoiceGstin) {
-                this._toasty.errorToast('All fields are required for E-invoicing Authentication');
+                this._toasty.errorToast(this.localeData?.e_invoice_fields_required_error_message);
                 return;
             }
             if (this.formFields['taxName'] && this.formFields['taxName']['regex'] && this.formFields['taxName']['regex'].length > 0) {
@@ -306,7 +306,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
                     }
                 }
                 if (!isValid) {
-                    this._toasty.errorToast('Please provide a valid GSTIN');
+                    this._toasty.errorToast(this.localeData?.e_invoice_invalid_gstin_error_message);
                     return;
                 }
             }

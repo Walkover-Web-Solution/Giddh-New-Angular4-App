@@ -14,11 +14,13 @@ $custom-typography: mat-typography-config($font-family: var(--font-regular),
 @import "../css/global/onboarding.scss";
 @import "../css/global/custom-fields.scss";
 @import "../css/global/inventory.scss";
-@import "../css/global/mat-button.scss";
-@import "../css/global/search.scss";
 @import "../css/global/all-items.scss";
-@import "../css/global/vat-report.scss";
 @import "../css/global/header.scss";
+@import "../css/global/search.scss";
+@import "../css/global/mat-button.scss";
+@import "../css/global/vat-report.scss";
+@import "../css/global/help-support.scss";
+@import "../css/global/sales-register-expand.scss";
 @import "../css/global/setting-integration.scss";
 @import "../css/global/help-support.scss";
 @import "../css/global/sales-register-expand.scss";
@@ -27,9 +29,10 @@ $custom-typography: mat-typography-config($font-family: var(--font-regular),
 @import "../css/global/tabs.scss";
 @import "../css/global/table.scss";
 @import "../css/global/custom-price.scss";
+@import "../css/global/inventory-adjustment.scss";
+@import "../css/global/global-variable.scss";
 @import "../css/global/dialog.scss";
 @import "../css/global/add-bulk-entry.scss";
-@import "../css/global/global-variable.scss";
 
 /* table css need to removed at last  (start)Don't touch this table css (If any body work on that contact shalinee..)
 */
@@ -68,8 +71,8 @@ textarea {
     border-color: var(--color-table-primary-content-bar-border);
 }
 
-.basic>thead>tr>th {
-    color: var(--color-table-secondary-heading) !important;
+.basic > thead > tr > th {
+    color: var(--color-link) !important;
     border-right: 1px solid var(--color-table-primary-content-bar-border);
     padding: 15px 11px !important;
     font-weight: 400;
@@ -98,12 +101,6 @@ textarea {
     }
 }
 
-.billing-details {
-    .mat-form-field-infix {
-        border-top: 0 !important;
-    }
-}
-
 .all-table {
     .mat-column-contact {
         text-transform: lowercase;
@@ -119,6 +116,12 @@ textarea {
 
     .comment-header {
         min-width: 170px !important;
+    }
+}
+
+.billing-details {
+    .mat-form-field-infix {
+        border-top: 0 !important;
     }
 }
 
@@ -255,7 +258,9 @@ textarea {
                 }
             }
 
-            .mat-form-field-wrapper .mat-form-field-infix .mat-input-element.mat-form-field-autofill-control.mat-datepicker-input {
+            .mat-form-field-wrapper
+                .mat-form-field-infix
+                .mat-input-element.mat-form-field-autofill-control.mat-datepicker-input {
                 position: absolute;
                 height: 23px !important;
                 margin-top: 0;
@@ -834,6 +839,23 @@ textarea {
     }
 }
 
+/*--- custom ---*/
+.obj-gap {
+    column-gap: 5px;
+}
+
+/*---- custom -----*/
+.inline-adjustment {
+    .adjustments-list {
+        height: auto !important;
+        overflow-y: unset !important;
+    }
+
+    advance-receipt-adjustment-component {
+        min-width: 750px;
+    }
+}
+
 .select-domain {
     .mat-mdc-select {
         padding: 0px !important;
@@ -857,6 +879,10 @@ textarea {
     }
 }
 
+.gstr-button {
+    margin-bottom: 0 !important;
+    margin-right: 15px !important;
+}
 .voucher-preview-edit {
     .flag-input {
         .mdc-floating-label {
@@ -887,11 +913,79 @@ textarea {
     }
 }
 
-.plan-table-wrapper {
-    .mdc-data-table__row {
-        .active-plan-td-bottom {
-            border-bottom: 2px solid !important;
-            border-bottom-color: var(--color-giddh-blue) !important
+.journal-voucher {
+    .particular-account {
+        .form-control {
+            &:focus {
+                border: 1px solid var(--color-secondary-input-bar-border) !important;
+            }
+        }
+    }
+
+        .entry-date-container {
+            float: right;
+             width: 42%;
+
+        .mdc-text-field {
+                padding: 0px !important;
+            }
+        }
+
+    .amount1 {
+        .form-control {
+            &:focus {
+                border: 1px solid var(--color-secondary-input-bar-border) !important;
+            }
+        }
+    }
+
+        .amount2 {
+            .form-control {
+                &:focus {
+                    border: 1px solid var(--color-secondary-input-bar-border) !important;
+                }
+            }
+        }
+
+    .voucher-type {
+        .form-control {
+            &:focus {
+                border: 1px solid var(--color-secondary-input-bar-border) !important;
+            }
+        }
+    }
+
+        .custom-textarea {
+            .form-control {
+                &:focus {
+                    border: 1px solid var(--color-secondary-input-bar-border) !important;
+                }
+            }
+        }
+
+    .form-control {
+        background-color: transparent !important;
+        border: none !important
+    }
+
+    .particular-account {
+        .text-field-container {
+            width: 30%;
+            margin-left: 10px;
+        }
+    }
+
+    .form-control[disabled],
+    .form-control[readonly],
+    fieldset[disabled] .form-control {
+        background-color: transparent !important;
+    }
+
+    .custom-entry-date {
+        .form-control {
+            height: 23px;
+            border: none;
+            background-color: transparent !important;
         }
     }
 }
@@ -1000,7 +1094,7 @@ textarea {
 .mat-calendar-body-cell {
     &.mat-calendar-body-active {
         .mat-calendar-body-selected {
-            color: var(--color-white) !important;
+            color: var(--color-list) !important;
             background-color: var(--color-primary-header-background);
         }
     }
@@ -2314,7 +2408,7 @@ ul.sub-list {
         line-height: 15px;
 
         small {
-            color: var(--color-common-primary-text);
+            color: var(--color-gray-dark);
         }
     }
 }
@@ -2547,7 +2641,7 @@ modal-container.modal {
 .form-box .btn {
     min-width: 73px;
     margin-right: 2px;
-    width: 95px;
+    width: 110px;
     color: var(--color-secondary-button-text);
 }
 
@@ -2795,6 +2889,7 @@ modal-container.modal {
 }
 
 /* my css end */
+
 /*input*/
 .form-control {
     background: var(--color-secondary-input-bar-background) !important;
@@ -3311,7 +3406,7 @@ input[type="checkbox"]:checked:after {
 
 .btn-success {
     background: var(--color-nonary-button-background) !important;
-    color: var(--color-nonary-button-text) !important;
+    color: var(--color-white-tertiary) !important;
     border: 1px solid var(--color-nonary-button-background) !important;
 }
 
@@ -3558,7 +3653,7 @@ input[type="checkbox"]:checked:after {
 }
 
 .icon-font-22 {
-    font-size: 22px;
+    font-size: 22px !important;
 }
 
 .font-20 {
@@ -4231,6 +4326,7 @@ a.btn.btn-xs.btn-link.pull-right {
     position: relative;
     background: var(--color-primary-header-background) !important;
     color: var(--color-white);
+    border-color: var(--color-primary-popup-list-header-bottom-border);
     height: 65px;
     display: flex;
     align-items: center;
@@ -7840,6 +7936,44 @@ footer#footer.absolute-footer {
                 }
             }
         }
+
+        .scroll-container {
+            .wrap-account-sidebar {
+                .grp-wrapper {
+                    .col-wrapper {
+                        border-color: var(--color-common-secondary-border);
+
+                        &:nth-child(1) {
+                            background-color: var(--color-common-primary-background-for-all-components);
+                        }
+                    }
+                }
+            }
+        }
+
+        .manage-group-acc {
+            account-operations {
+                #middleBody {
+                    .top-bar {
+                        border-color: var(--color-common-secondary-border) !important;
+                    }
+                }
+            }
+        }
+    }
+
+    login {
+        .modal.fade {
+            .modal-body.clearfix {
+                #authModal {
+                    button[type="login"].ladda-button {
+                        .ladda-label {
+                            color: var(--color-secondary-button-text);
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -8683,10 +8817,6 @@ button.ladda-button .ladda-label {
 
 .panel {
     border-radius: 2px;
-}
-
-.invoice-modal-content .app-aside-menu-other-taxes:host {
-    top: 60px !important;
 }
 
 .mat-chip-list {
@@ -10162,6 +10292,7 @@ giddh-datepicker {
     }
 
     overflow-y: auto !important;
+    height: auto;
 
     .advance-search {
         #export-body {
@@ -11020,6 +11151,27 @@ body.update-scroll-hidden {
                     }
                 }
             }
+
+            .modal-body {
+                sh-select-menu {
+                    .menu {
+                        virtual-scroll {
+                            .total-padding {
+                                height: auto;
+                            }
+                        }
+
+                        .mat-dialog-container {
+                            .modal-body {
+                                input,
+                                textarea {
+                                    border: 1px solid var(--color-secondary-input-bar-border);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         .cdk-overlay-connected-position-bounding-box {
@@ -11032,6 +11184,37 @@ body.update-scroll-hidden {
                 }
             }
         }
+    }
+}
+
+.ledger-attachments-popup {
+    .cdk-overlay-container {
+        .mat-dialog-container {
+            background-color: var(--color-popup-background);
+        }
+
+        .cdk-overlay-connected-position-bounding-box {
+            .mat-menu-panel {
+                .mat-menu-content {
+                    button:focus {
+                        box-shadow: none !important;
+                        background-color: var(--color-dropdown-list-hover-background);
+                    }
+                }
+            }
+        }
+    }
+
+    button.mat-menu-item {
+        height: 40px;
+        display: flex;
+        align-items: center;
+        padding: 0 16px !important;
+    }
+
+    .mat-menu-content {
+        padding-top: 2px !important;
+        padding-bottom: 2px !important;
     }
 }
 
@@ -11178,8 +11361,14 @@ inventory-master {
     }
 
     .main-table {
-        tbody>tr>td:first-child {
-            min-width: 242px !important;
+        tbody {
+            tr {
+                td {
+                    &:first-child {
+                        min-width: 242px !important;
+                    }
+                }
+            }
         }
     }
 
@@ -13279,14 +13468,6 @@ body.prevent-body-scroll {
         }
     }
 
-    .mat-form-field-wrapper {
-        .mat-form-field-infix {
-            .mat-input-element.mat-form-field-autofill-control.mat-datepicker-input {
-                padding-left: 32px !important;
-            }
-        }
-    }
-
     .invoice-date-due-date {
         .mat-datepicker-toggle {
             .mat-button-wrapper {
@@ -13986,6 +14167,10 @@ hamburger-menu {
 
     .cdk-overlay-container-z-index {
         z-index: 1000 !important;
+    }
+
+    .cdk-overlay-container {
+        z-index: 9999 !important;
     }
 }
 
@@ -14746,6 +14931,10 @@ activity-compare-json {
     }
 }
 
+.mat-snack-bar-wrapper {
+    z-index: 99999 !important;
+}
+
 /*---- aside-button ----*/
 aside-menu-product-service {
     .mat-mdc-outlined-button {
@@ -14803,7 +14992,7 @@ aside-menu-product-service {
 .depreciation-message {
     .message-wrapper {
         background-color: var(--color-danger);
-        color: var(--color-white);
+        color: var(--color-toast-primary-text);
         position: fixed;
         top: 0;
         width: 100%;
@@ -14811,6 +15000,9 @@ aside-menu-product-service {
 
         p {
             font-size: var(--font-size-16);
+        }
+        a {
+            color: var(--color-toast-primary-text);
         }
     }
 }
@@ -14820,24 +15012,6 @@ aside-menu-product-service {
         .message-wrapper {
             p {
                 font-size: var(--font-15);
-            }
-        }
-    }
-}
-
-// Ledger Create Panel text color
-.new-ledger-panel {
-    color: var(--color-default-button) !important;
-
-    label,
-    strong {
-        color: var(--color-default-button) !important;
-    }
-
-    .mat-expansion-panel {
-        .mat-expansion-panel-header {
-            .mat-expansion-panel-header-title {
-                color: var(--color-default-button) !important;
             }
         }
     }
@@ -14867,4 +15041,9 @@ aside-menu-product-service {
 
 .text-black {
     color: var(--color-common-primary-text);
+}
+
+// color link light-dark theme
+.color-link {
+    color: var(--color-link) !important;
 }

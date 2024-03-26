@@ -38,10 +38,13 @@
                                 }
                             }
                             &.active {
-                                background-color: var(--color-primary-tax-sidebar-list-active) !important;
+                                background-color: var(--color-giddh-common-background) !important;
                                 span,
                                 span i {
-                                    color: var(--color-white) !important;
+                                    color: var(--color-white-tertiary) !important;
+                                }
+                                .unit-mapping-icon {
+                                    filter: var(--color-image-filter-white);
                                 }
                             }
                         }

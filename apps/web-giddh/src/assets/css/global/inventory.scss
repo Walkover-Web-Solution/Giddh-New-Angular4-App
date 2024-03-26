@@ -259,6 +259,7 @@ inventory-master {
     &.mat-mdc-menu-panel {
         max-height: 50vh;
     }
+}
 
     /*---- create-menufacturing ----*/
     .consumption-details-wrapper {
@@ -271,5 +272,11 @@ inventory-master {
                 }
             }
         }
+    }
+
+// Mat-Select search input
+.mat-mdc-option {
+    &.contains-mat-select-search {
+        background-color: var(--color-white);
     }
 }
