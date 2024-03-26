@@ -1049,17 +1049,10 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
         const foundContraEntry: boolean = this.validateForContraEntry(data);
         const foundSalesAndBankEntry: boolean = this.validateForSalesAndPurchaseEntry(data);
-
         if (foundContraEntry && data.voucherType !== VOUCHERS.CONTRA) {
             let message = this.localeData?.contra_entry_notallowed;
             message = message?.replace("[VOUCHER_TYPE]", data.voucherType);
             this._toaster.errorToast(message, this.commonLocaleData?.app_error);
-            this.activeRowIndex = null;
-            this.activeRowType = null;
-            return setTimeout(() => this.narrationBox?.nativeElement?.focus(), 500);
-        }
-        if (!foundContraEntry && data.voucherType === VOUCHERS.CONTRA) {
-            this._toaster.errorToast(this.localeData?.contra_entry_error, this.commonLocaleData?.app_error);
             this.activeRowIndex = null;
             this.activeRowType = null;
             return setTimeout(() => this.narrationBox?.nativeElement?.focus(), 500);
@@ -1401,7 +1394,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @memberof AccountAsVoucherComponent
      */
     public removeBlankTransaction(transactions: any[]) {
-        return transactions.filter(obj => obj && obj.particular && obj.amount);
+        return transactions.filter(obj => obj && obj.particular);
     }
 
     /**
