@@ -215,9 +215,9 @@
                             </div>
                             <button
                                 class="btn btn-default desktop-view-btn"
-                                *ngIf="selectedVoucher === 'sales' && selectedInvoicesList?.length && isExported"
+                                *ngIf="csvSupportVoucherType.includes(selectedVoucher) && selectedInvoicesList?.length && isExported"
                                 [tooltip]="commonLocaleData?.app_export"
-                                (click)="exportCsvDownload()"
+                                (click)="exportCsvDownload(selectedVoucher)"
                                 [ladda]="exportInvoiceRequestInProcess$ | async"
                                 data-spinner-size="20px"
                             >
@@ -502,9 +502,9 @@
                                 </div>
                                 <button
                                     class="btn btn-default mr-r15"
-                                    *ngIf="selectedVoucher === 'sales' && selectedInvoicesList?.length && isExported"
+                                    *ngIf="csvSupportVoucherType.includes(selectedVoucher) && selectedInvoicesList?.length && isExported"
                                     [tooltip]="commonLocaleData?.app_export"
-                                    (click)="exportCsvDownload()"
+                                    (click)="exportCsvDownload(selectedVoucher)"
                                     [ladda]="exportInvoiceRequestInProcess$ | async"
                                     data-spinner-size="20px"
                                 >
