@@ -75,7 +75,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
     public showCountry = false;
     /* True if  name show */
     public showName = false;
-    /* True if plan sub name show */
+    /* True if Plan Name show */
     public showPlanSubName = false;
     /* True if status show */
     public showStatus = false;
@@ -88,27 +88,27 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
             return false;
         }
         return (
-            (hasResponse && this.inlineSearch !== 'companyName' || this.showClearFilter) ||
-            (this.inlineSearch === 'companyName' && !hasResponse || this.showClearFilter) ||
-            (hasResponse && this.inlineSearch === 'companyName' || this.showClearFilter) ||
-            (hasResponse && this.inlineSearch !== 'billingAccountName' || this.showClearFilter) ||
-            (this.inlineSearch === 'billingAccountName' && !hasResponse || this.showClearFilter) ||
-            (hasResponse && this.inlineSearch === 'billingAccountName' || this.showClearFilter) ||
-            (hasResponse && this.inlineSearch !== 'subscriberName' || this.showClearFilter) ||
-            (this.inlineSearch === 'subscriberName' && !hasResponse || this.showClearFilter) ||
-            (hasResponse && this.inlineSearch === 'subscriberName' || this.showClearFilter) ||
-            (hasResponse && this.inlineSearch !== 'countryName' || this.showClearFilter) ||
-            (this.inlineSearch === 'countryName' && !hasResponse || this.showClearFilter) ||
-            (hasResponse && this.inlineSearch === 'countryName' || this.showClearFilter) ||
-            (hasResponse && this.inlineSearch !== 'planName' || this.showClearFilter) ||
-            (this.inlineSearch === 'planName' && !hasResponse || this.showClearFilter) ||
-            (hasResponse && this.inlineSearch === 'planName' || this.showClearFilter) ||
-            (hasResponse && this.inlineSearch !== 'status' || this.showClearFilter) ||
-            (this.inlineSearch === 'status' && !hasResponse || this.showClearFilter) ||
-            (hasResponse && this.inlineSearch === 'status' || this.showClearFilter) ||
-            (hasResponse && this.inlineSearch !== 'period' || this.showClearFilter) ||
-            (this.inlineSearch === 'period' && !hasResponse || this.showClearFilter) ||
-            (hasResponse && this.inlineSearch === 'period' || this.showClearFilter)
+            (this.inlineSearch !== 'companyName' || this.showClearFilter) ||
+            (this.inlineSearch === 'companyName' || this.showClearFilter) ||
+            (this.inlineSearch === 'companyName' || this.showClearFilter) ||
+            (this.inlineSearch !== 'billingAccountName' || this.showClearFilter) ||
+            (this.inlineSearch === 'billingAccountName' || this.showClearFilter) ||
+            (this.inlineSearch === 'billingAccountName' || this.showClearFilter) ||
+            (this.inlineSearch !== 'subscriberName' || this.showClearFilter) ||
+            (this.inlineSearch === 'subscriberName' || this.showClearFilter) ||
+            (this.inlineSearch === 'subscriberName' || this.showClearFilter) ||
+            (this.inlineSearch !== 'countryName' || this.showClearFilter) ||
+            (this.inlineSearch === 'countryName' || this.showClearFilter) ||
+            (this.inlineSearch === 'countryName' || this.showClearFilter) ||
+            (this.inlineSearch !== 'planName' || this.showClearFilter) ||
+            (this.inlineSearch === 'planName' || this.showClearFilter) ||
+            (this.inlineSearch === 'planName' || this.showClearFilter) ||
+            (this.inlineSearch !== 'status' || this.showClearFilter) ||
+            (this.inlineSearch === 'status' || this.showClearFilter) ||
+            (this.inlineSearch === 'status' || this.showClearFilter) ||
+            (this.inlineSearch !== 'period' || this.showClearFilter) ||
+            (this.inlineSearch === 'period' || this.showClearFilter) ||
+            (this.inlineSearch === 'period' || this.showClearFilter)
         );
     }
     /** Holds Store Cancel Subscription observable*/
@@ -332,7 +332,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
             if (this.subscriptionListForm?.controls['countryName'].value !== null && this.subscriptionListForm?.controls['countryName'].value !== '') {
                 return;
             }
-        } else if (searchedFieldName === 'Plan Sub Name') {
+        } else if (searchedFieldName === 'Plan Name') {
             if (this.subscriptionListForm?.controls['planName'].value !== null && this.subscriptionListForm?.controls['planName'].value !== '') {
                 return;
             }
@@ -358,7 +358,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
             }
             else if (searchedFieldName === 'Country') {
                 this.showCountry = false;
-            } else if (searchedFieldName === 'Plan Sub Name') {
+            } else if (searchedFieldName === 'Plan Name') {
                 this.showPlanSubName = false;
             } else if (searchedFieldName === 'Monthly/Yearly') {
                 this.showMonthlyYearly = false;
@@ -388,7 +388,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         if (fieldName === 'Country') {
             this.showCountry = true;
         }
-        if (fieldName === 'Plan Sub Name') {
+        if (fieldName === 'Plan Name') {
             this.showPlanSubName = true;
         }
         if (fieldName === 'Monthly/Yearly') {
@@ -609,8 +609,8 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
      * @param data - The subscription data for which the plan is to be changed.
      * @memberof SubscriptionComponent
      */
-    public changePlan(data: any): void {
-        this.router.navigate(['/pages/subscription/buy-plan/' + data?.plan?.uniqueName]);
+    public changePlan(): void {
+        this.router.navigate(['/pages/subscription/buy-plan/change']);
     }
 
     /**

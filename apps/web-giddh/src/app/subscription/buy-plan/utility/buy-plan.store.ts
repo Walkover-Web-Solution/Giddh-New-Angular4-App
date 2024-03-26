@@ -102,7 +102,7 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
-                                this.toasterService.showSnackBar('success', 'Create Subscription Successfully');
+                                this.toasterService.showSnackBar('success', 'Subscription created successfully');
                                 return this.patchState({
                                     createPlanInProgress: false,
                                     createPlanResponse: res?.body ?? null,

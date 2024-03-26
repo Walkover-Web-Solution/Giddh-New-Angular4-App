@@ -117,7 +117,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     /** Hold country source observable*/
     public countrySource$: Observable<IOption[]> = observableOf([]);
     /** Hold plan data source*/
-    public planUniqueName: any;
+    public changePlan: any;
     /** Hold plan data source*/
     public promoCodeResponse: any[] = [];
     /** This will use for tax percentage */
@@ -169,7 +169,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
 
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe((params: any) => {
             if (params) {
-                this.planUniqueName = params.planUniqueName;
+                this.changePlan = params.planUniqueName;
             }
         });
 
@@ -761,7 +761,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             promoCode: this.subscriptionForm.value.firstStepForm.promoCode ? this.subscriptionForm.value.firstStepForm.promoCode : null,
             paymentProvider: "CASHFREE"
         }
-        if (this.planUniqueName) {
+        if (this.changePlan) {
             this.componentStore.updateSubscription(request);
         } else {
             this.componentStore.createSubscription(request);
