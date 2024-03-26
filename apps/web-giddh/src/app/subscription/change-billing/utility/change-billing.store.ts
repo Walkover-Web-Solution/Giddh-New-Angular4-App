@@ -65,7 +65,7 @@ export class ChangeBillingComponentStore extends ComponentStore<BillingState> im
                             }
                         },
                         (error: any) => {
-                            this.toasterService.showSnackBar('error', 'Error');
+                            this.toasterService.showSnackBar('error', 'Something went wrong! Please try again.');
                             return this.patchState({
                                 getBillingDetails: [],
                                 getBillingDetailsInProgress: false
@@ -107,7 +107,7 @@ export class ChangeBillingComponentStore extends ComponentStore<BillingState> im
                             }
                         },
                         (error: any) => {
-                            this.toasterService.showSnackBar('error', 'Error');
+                            this.toasterService.showSnackBar('error', 'Something went wrong! Please try again.');
 
                             return this.patchState({
                                 updateBillingDetailsInProgress: false

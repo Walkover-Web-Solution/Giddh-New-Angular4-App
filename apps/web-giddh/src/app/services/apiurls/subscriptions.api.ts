@@ -4,14 +4,12 @@ export const SUBSCRIPTIONS_API = {
     SUBSCRIBED_COMPANY_TRANSACTIONS: 'subscriptions/company/:company/transactions?from=:from&to=:to&interval=:interval',
     SUBSCRIBED_COMPANIES_LIST: 'subscriptions/:subscriptionId/companies',
 };
-export const PLAN_API = {
-    GET_ALL_PLANS: 'v2/subscription/plans/all?countryCode=:countryCode',
-    CREATE_PLAN: 'v2/subscription',
-    UPDATE_PLAN: 'v2/subscription?company=:company',
-    APPLY_PROMOCODE: 'v2/subscription/promocode'
-};
 
-export const SUBSRIPTION_V2_API = {
+export const SUBSCRIPTION_V2_API = {
+    GET_ALL_PLANS: 'v2/subscription/plans/all?countryCode=:countryCode',
+    CREATE_SUBSCRIPTION: 'v2/subscription',
+    UPDATE_SUBSCRIPTION: 'v2/subscription?company=:company',
+    APPLY_PROMOCODE: 'v2/subscription/promocode',
     GET_ALL_SUBSCRIPTIONS: 'v2/subscription/list?page=:page&count=:count',
     SUBSCRIPTION_BY_ID: 'v2/subscription/:subscriptionId',
     CANCEL_SUBSCRIPTION_BY_ID: 'v2/subscription/:subscriptionId/cancel',

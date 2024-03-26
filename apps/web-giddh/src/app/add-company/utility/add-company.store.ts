@@ -41,7 +41,6 @@ export class AddCompanyComponentStore extends ComponentStore<AddCompanyListState
                 return this.permissionService.GetAllRoles().pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
-                            console.log(res);
                             if (res?.status === 'success') {
                                 return this.patchState({
                                     permissionRoles: res?.body ?? [],
@@ -49,7 +48,7 @@ export class AddCompanyComponentStore extends ComponentStore<AddCompanyListState
                                 });
                             } else {
                                 if (res.message) {
-                                    this.toasterService.showSnackBar('success', res.message);
+                                    this.toasterService.showSnackBar('error', res.message);
                                 }
                                 return this.patchState({
                                     permissionRoles: null,
@@ -58,7 +57,7 @@ export class AddCompanyComponentStore extends ComponentStore<AddCompanyListState
                             }
                         },
                         (error: any) => {
-                            this.toasterService.showSnackBar('error', 'Error');
+                            this.toasterService.showSnackBar('error', 'Something went wrong! Please try again.');
                             return this.patchState({
                                 permissionRoles: null,
                                 permissionRolesInProgress: false

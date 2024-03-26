@@ -49,7 +49,7 @@ export class CompanyListDialogComponentStore extends ComponentStore<CompanyListS
                                 });
                             } else {
                                 if (res.message) {
-                                    this.toasterService.showSnackBar('success', res.message);
+                                    this.toasterService.showSnackBar('error', res.message);
                                 }
                                 return this.patchState({
                                     companyList: [],
@@ -58,7 +58,7 @@ export class CompanyListDialogComponentStore extends ComponentStore<CompanyListS
                             }
                         },
                         (error: any) => {
-                            this.toasterService.showSnackBar('error', 'Error');
+                            this.toasterService.showSnackBar('error', 'Something went wrong! Please try again.');
                             return this.patchState({
                                 companyList: [],
                                 companyListInProgress: false
@@ -97,7 +97,7 @@ export class CompanyListDialogComponentStore extends ComponentStore<CompanyListS
                             }
                         },
                         (error: any) => {
-                            this.toasterService.showSnackBar('error', 'Error');
+                            this.toasterService.showSnackBar('error', 'Something went wrong! Please try again.');
                         }
                     ),
                     catchError((err) => EMPTY)

@@ -5,7 +5,7 @@ import { HttpWrapperService } from './http-wrapper.service';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
-import { PLAN_API, SUBSCRIPTIONS_API, SUBSRIPTION_V2_API } from './apiurls/subscriptions.api';
+import { SUBSCRIPTIONS_API, SUBSCRIPTION_V2_API } from './apiurls/subscriptions.api';
 import * as dayjs from 'dayjs';
 import { SubscriptionsUser } from '../models/api-models/Subscriptions';
 import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
@@ -88,7 +88,7 @@ export class SubscriptionsService {
      * @memberof SubscriptionsService
      */
     public getAllPlans(params: any): Observable<BaseResponse<any, any>> {
-        return this.http.get(this.config.apiUrl + PLAN_API.GET_ALL_PLANS
+        return this.http.get(this.config.apiUrl + SUBSCRIPTION_V2_API.GET_ALL_PLANS
             ?.replace(':countryCode', encodeURIComponent(params.countryCode ?? ''))
         ).pipe(map((res) => {
             let data: BaseResponse<any, any> = res;
@@ -129,7 +129,7 @@ export class SubscriptionsService {
      * @memberof SubscriptionsService
      */
     public getAllSubscriptions(pagination: any, model: any): Observable<BaseResponse<any, any>> {
-        return this.http.post(this.config.apiUrl + SUBSRIPTION_V2_API.GET_ALL_SUBSCRIPTIONS
+        return this.http.post(this.config.apiUrl + SUBSCRIPTION_V2_API.GET_ALL_SUBSCRIPTIONS
             ?.replace(':page', encodeURIComponent(pagination?.page ?? ''))
             ?.replace(':count', encodeURIComponent(pagination?.count ?? ''))
             , model)
@@ -145,14 +145,14 @@ export class SubscriptionsService {
     }
 
     /**
-     * Creates a new plan using the provided model in the SubscriptionsService.
+     * Creates a new subscription using the provided model in the SubscriptionsService.
      *
      * @param model - Data model for creating a plan.
      * @returns Observable<BaseResponse<any, any>> - Observable emitting the response.
      * @memberof SubscriptionsService
      */
-    public createPlan(model: any): Observable<BaseResponse<any, any>> {
-        return this.http.post(this.config.apiUrl + PLAN_API.CREATE_PLAN, model)
+    public createSubscription(model: any): Observable<BaseResponse<any, any>> {
+        return this.http.post(this.config.apiUrl + SUBSCRIPTION_V2_API.CREATE_SUBSCRIPTION, model)
             .pipe(
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
@@ -164,14 +164,14 @@ export class SubscriptionsService {
     }
 
     /**
-     * Updates a plan using the provided model in the SubscriptionsService.
+     * Updates a subscription using the provided model in the SubscriptionsService.
      *
      * @param model - Data model for updating a plan.
      * @returns Observable<BaseResponse<any, any>> - Observable emitting the response.
      * @memberof SubscriptionsService
      */
-    public updatePlan(model: any): Observable<BaseResponse<any, any>> {
-        return this.http.post(this.config.apiUrl + PLAN_API.UPDATE_PLAN
+    public updateSubscription(model: any): Observable<BaseResponse<any, any>> {
+        return this.http.post(this.config.apiUrl + SUBSCRIPTION_V2_API.UPDATE_SUBSCRIPTION
             ?.replace(':company', encodeURIComponent(this.generalService.companyUniqueName ?? '')),
             model)
             .pipe(
@@ -192,7 +192,7 @@ export class SubscriptionsService {
      * @memberof SubscriptionsService
      */
     public applyPromoCode(model: any): Observable<BaseResponse<any, any>> {
-        return this.http.post(this.config.apiUrl + PLAN_API.APPLY_PROMOCODE, model)
+        return this.http.post(this.config.apiUrl + SUBSCRIPTION_V2_API.APPLY_PROMOCODE, model)
             .pipe(
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
@@ -211,7 +211,7 @@ export class SubscriptionsService {
      * @memberof SubscriptionsService
      */
     public viewSubscriptionById(id: any): Observable<BaseResponse<any, any>> {
-        return this.http.get(this.config.apiUrl + SUBSRIPTION_V2_API.SUBSCRIPTION_BY_ID
+        return this.http.get(this.config.apiUrl + SUBSCRIPTION_V2_API.SUBSCRIPTION_BY_ID
             ?.replace(':subscriptionId', encodeURIComponent(id ?? '')))
             .pipe(
                 map((res) => {
@@ -232,7 +232,7 @@ export class SubscriptionsService {
      * @memberof SubscriptionsService
      */
     public cancelSubscriptionById(id: any): Observable<BaseResponse<any, any>> {
-        return this.http.get(this.config.apiUrl + SUBSRIPTION_V2_API.CANCEL_SUBSCRIPTION_BY_ID
+        return this.http.get(this.config.apiUrl + SUBSCRIPTION_V2_API.CANCEL_SUBSCRIPTION_BY_ID
             ?.replace(':subscriptionId', encodeURIComponent(id ?? '')))
             .pipe(
                 map((res) => {
@@ -253,7 +253,7 @@ export class SubscriptionsService {
      * @memberof SubscriptionsService
      */
     public transferSubscription(model: any, subscriptionId: string): Observable<BaseResponse<any, any>> {
-        return this.http.post(this.config.apiUrl + SUBSRIPTION_V2_API.TRANSFER
+        return this.http.post(this.config.apiUrl + SUBSCRIPTION_V2_API.TRANSFER
             ?.replace(':subscriptionId', encodeURIComponent(subscriptionId ?? '')),
             model)
             .pipe(
@@ -275,7 +275,7 @@ export class SubscriptionsService {
      * @memberof SubscriptionsService
      */
     public verifyOwnership(id: any): Observable<BaseResponse<any, any>> {
-        return this.http.get(this.config.apiUrl + SUBSRIPTION_V2_API.VERIFY_OWNERSHIP
+        return this.http.get(this.config.apiUrl + SUBSCRIPTION_V2_API.VERIFY_OWNERSHIP
             ?.replace(':requestId', encodeURIComponent(id ?? '')))
             .pipe(
                 map((res) => {
@@ -295,7 +295,7 @@ export class SubscriptionsService {
      * @memberof SubscriptionsService
      */
     public getBillingDetails(billingAccountUnqiueName: any): Observable<BaseResponse<any, any>> {
-        return this.http.get(this.config.apiUrl + SUBSRIPTION_V2_API.GET_BILLING_DETAILS
+        return this.http.get(this.config.apiUrl + SUBSCRIPTION_V2_API.GET_BILLING_DETAILS
             ?.replace(':billingAccountUnqiueName', encodeURIComponent(billingAccountUnqiueName ?? '')))
             .pipe(
                 map((res) => {
@@ -318,7 +318,7 @@ export class SubscriptionsService {
   * @memberof SubscriptionsService
   */
     public getCompaniesListBySubscriptionID(model: any, subscriptionId: any, params: any): Observable<BaseResponse<any, any>> {
-        return this.http.post(this.config.apiUrl + SUBSRIPTION_V2_API.GET_COMPANIES_LIST_BY_SUBSCRIPTION_ID
+        return this.http.post(this.config.apiUrl + SUBSCRIPTION_V2_API.GET_COMPANIES_LIST_BY_SUBSCRIPTION_ID
             ?.replace(':subscriptionId', encodeURIComponent(subscriptionId ?? ''))
             ?.replace(':sort', encodeURIComponent(params.sort ?? ''))
             ?.replace(':sortBy', encodeURIComponent(params.sortBy ?? ''))
@@ -346,7 +346,7 @@ export class SubscriptionsService {
      * @memberof SubscriptionsService
      */
     public updateBillingDetails(model: any, billingAccountUnqiueName: any): Observable<BaseResponse<any, any>> {
-        return this.http.patch(this.config.apiUrl + SUBSRIPTION_V2_API.UPDATE_BILLING_DETAILS
+        return this.http.patch(this.config.apiUrl + SUBSCRIPTION_V2_API.UPDATE_BILLING_DETAILS
             ?.replace(':billingAccountUnqiueName', encodeURIComponent(billingAccountUnqiueName ?? '')), model)
             .pipe(
                 map((res) => {

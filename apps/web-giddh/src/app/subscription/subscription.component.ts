@@ -88,27 +88,27 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
             return false;
         }
         return (
-            (hasResponse && this.inlineSearch !== 'name' || this.showClearFilter) ||
-            (this.inlineSearch === 'name' && !hasResponse || this.showClearFilter) ||
-            (hasResponse && this.inlineSearch === 'name' || this.showClearFilter) ||
+            (hasResponse && this.inlineSearch !== 'companyName' || this.showClearFilter) ||
+            (this.inlineSearch === 'companyName' && !hasResponse || this.showClearFilter) ||
+            (hasResponse && this.inlineSearch === 'companyName' || this.showClearFilter) ||
             (hasResponse && this.inlineSearch !== 'billingAccountName' || this.showClearFilter) ||
             (this.inlineSearch === 'billingAccountName' && !hasResponse || this.showClearFilter) ||
             (hasResponse && this.inlineSearch === 'billingAccountName' || this.showClearFilter) ||
-            (hasResponse && this.inlineSearch !== 'subscriber' || this.showClearFilter) ||
-            (this.inlineSearch === 'subscriber' && !hasResponse || this.showClearFilter) ||
-            (hasResponse && this.inlineSearch === 'subscriber' || this.showClearFilter) ||
-            (hasResponse && this.inlineSearch !== 'country' || this.showClearFilter) ||
-            (this.inlineSearch === 'country' && !hasResponse || this.showClearFilter) ||
-            (hasResponse && this.inlineSearch === 'country' || this.showClearFilter) ||
-            (hasResponse && this.inlineSearch !== 'planSubName' || this.showClearFilter) ||
-            (this.inlineSearch === 'planSubName' && !hasResponse || this.showClearFilter) ||
-            (hasResponse && this.inlineSearch === 'planSubName' || this.showClearFilter) ||
-            (hasResponse && this.inlineSearch !== 'Status' || this.showClearFilter) ||
-            (this.inlineSearch === 'Status' && !hasResponse || this.showClearFilter) ||
-            (hasResponse && this.inlineSearch === 'Status' || this.showClearFilter) ||
-            (hasResponse && this.inlineSearch !== 'monthYearly' || this.showClearFilter) ||
-            (this.inlineSearch === 'monthYearly' && !hasResponse || this.showClearFilter) ||
-            (hasResponse && this.inlineSearch === 'monthYearly' || this.showClearFilter)
+            (hasResponse && this.inlineSearch !== 'subscriberName' || this.showClearFilter) ||
+            (this.inlineSearch === 'subscriberName' && !hasResponse || this.showClearFilter) ||
+            (hasResponse && this.inlineSearch === 'subscriberName' || this.showClearFilter) ||
+            (hasResponse && this.inlineSearch !== 'countryName' || this.showClearFilter) ||
+            (this.inlineSearch === 'countryName' && !hasResponse || this.showClearFilter) ||
+            (hasResponse && this.inlineSearch === 'countryName' || this.showClearFilter) ||
+            (hasResponse && this.inlineSearch !== 'planName' || this.showClearFilter) ||
+            (this.inlineSearch === 'planName' && !hasResponse || this.showClearFilter) ||
+            (hasResponse && this.inlineSearch === 'planName' || this.showClearFilter) ||
+            (hasResponse && this.inlineSearch !== 'status' || this.showClearFilter) ||
+            (this.inlineSearch === 'status' && !hasResponse || this.showClearFilter) ||
+            (hasResponse && this.inlineSearch === 'status' || this.showClearFilter) ||
+            (hasResponse && this.inlineSearch !== 'period' || this.showClearFilter) ||
+            (this.inlineSearch === 'period' && !hasResponse || this.showClearFilter) ||
+            (hasResponse && this.inlineSearch === 'period' || this.showClearFilter)
         );
     }
     /** Holds Store Cancel Subscription observable*/
@@ -119,8 +119,6 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
     public subscribedCompaniesInProgress$ = this.componentStore.select(state => state.subscribedCompaniesInProgress);
     /* This will hold list of subscriptions */
     public subscriptions: SubscriptionsUser[] = [];
-    /** Observable to listen for subscriptions */
-    public subscriptions$: Observable<SubscriptionsUser[]>;
     /* This will hold the companies to use in selected company */
     public selectedCompany: any;
     /** This will use for active company */
@@ -137,7 +135,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         private subscriptionsActions: SubscriptionsActions,
         private router: Router
     ) {
-        this.subscriptions$ = this.store.pipe(select(state => state.subscriptions.subscriptions), takeUntil(this.destroyed$));
+
     }
 
     /**
@@ -165,9 +163,9 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if (activeCompany) {
-                this.activeCompany = activeCompany;
+        this.componentStore.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.activeCompany = response;
             }
         });
 
@@ -304,7 +302,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
    * @memberof SubscriptionComponent
    */
     public getSearchFieldText(title: any): string {
-        let searchField = "Search [FIELD]";
+        let searchField = this.localeData?.search_field;
         searchField = searchField?.replace("[FIELD]", title);
         return searchField;
     }
@@ -377,7 +375,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
      * @param {*} el
      * @memberof SubscriptionComponent
      */
-    public toggleSearch(fieldName: string) {
+    public toggleSearch(fieldName: string): void {
         if (fieldName === 'Name') {
             this.showName = true;
         }
@@ -436,7 +434,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
             data: data,
             panelClass: 'subscription-sidebar',
             role: 'alertdialog',
-            ariaLabel:'companyDialog'
+            ariaLabel: 'companyDialog'
         });
     }
 
@@ -481,11 +479,11 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         this.menu.closeMenu();
         this.subscriptionMove = true;
         this.selectedCompany = company;
-            this.dialog.open(this.moveCompany, {
-                width: '40%',
-                role: 'alertdialog',
-                ariaLabel: 'moveDialog'
-            });
+        this.dialog.open(this.moveCompany, {
+            width: '40%',
+            role: 'alertdialog',
+            ariaLabel: 'moveDialog'
+        });
     }
 
 
@@ -556,10 +554,10 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         this.menu.closeMenu();
         let cancelDialogRef = this.dialog.open(ConfirmModalComponent, {
             data: {
-                title: 'Cancel Subscription',
-                body: 'Subscription will be cancelled on Expiry Date',
-                ok: 'Proceed',
-                cancel: 'Cancel'
+                title: this.localeData?.cancel_subscription,
+                body: this.localeData?.subscription_cancel_message,
+                ok: this.commonLocaleData?.app_proceed,
+                cancel: this.commonLocaleData?.app_cancel
             },
             panelClass: 'cancel-confirmation-modal',
             width: '585px',
@@ -583,8 +581,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
      * @memberof SubscriptionComponent
      */
     public changeBilling(data: any): void {
-        // this.router.navigate(['/pages/subscription/change-billing/' + data?.subscriptionId]);
-        this.router.navigate(['/pages/subscription/change-billing/vwz1709217636400']);
+        this.router.navigate(['/pages/subscription/change-billing/' + data]);
     }
 
     /**
@@ -613,8 +610,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
      * @memberof SubscriptionComponent
      */
     public changePlan(data: any): void {
-        // this.router.navigate(['/pages/subscription/buy-plan' + data?.planDetails?.planUniqueName]);
-        this.router.navigate(['/pages/subscription/buy-plan/cdy1710506146367']);
+        this.router.navigate(['/pages/subscription/buy-plan/' + data?.plan?.uniqueName]);
     }
 
     /**

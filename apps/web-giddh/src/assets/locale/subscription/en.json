@@ -50,7 +50,7 @@
         "expires": "Expires",
         "timeline": "Timeline",
         "search_plans": "Search subscription and companies",
-        "billing_account": "Billing account",
+        "billing_account": "Billing Account",
         "subscriber": "Subscriber",
         "plan_sub_name": "Plan Sub Name",
         "renewal_date": "Renewal date",
@@ -100,5 +100,8 @@
         "company_name":" Company Name",
         "add_company":" Add Company",
         "move_company": "Move Company",
-        "promo_code":" Promo Code"
+        "promo_code":" Promo Code",
+        "search_field": "Search [FIELD]",
+        "subscription_cancel_message":"Subscription will be cancelled on Expiry Date",
+        "upi_id":" Upi ID"
     }

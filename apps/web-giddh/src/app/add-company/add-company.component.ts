@@ -222,7 +222,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         public dialog: MatDialog,
         private verifyActions: VerifyMobileActions,
         private socialAuthService: AuthService,
-        private activateRoute:ActivatedRoute
+        private activateRoute: ActivatedRoute
     ) {
         this.isLoggedInWithSocialAccount$ = this.store.pipe(select(state => state.login.isLoggedInWithSocialAccount), takeUntil(this.destroyed$));
 
@@ -555,7 +555,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
 
         this.thirdStepForm = this.formBuilder.group({
             creatorSuperAdmin: [''],
-            emailId: ['', [, Validators.pattern(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/)]],
+            emailId: ['', Validators.pattern(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/)],
             roleUniqueName: ['', Validators.required],
             entity: ['company']
         });
@@ -923,7 +923,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      */
     public nextStepForm(): void {
         this.isFormSubmitted = false;
-        if (this.selectedStep === 0 && this.firstStepForm.invalid || (this.showMobileField && !this.isMobileNumberVerified)) {
+        if ((this.selectedStep === 0 && this.firstStepForm.invalid) || (this.showMobileField && !this.isMobileNumberVerified)) {
             this.isFormSubmitted = true;
             if (!this.firstStepForm.invalid && this.showMobileField && !this.isMobileNumberVerified) {
                 this.toaster.showSnackBar("error", this.localeData?.verify_number);
@@ -942,7 +942,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         }
 
         this.firstStepForm.controls['mobile'].setValue(this.showMobileField ? this.intl?.getNumber() : this.mobileNo);
-        this.selectedStep ++;
+        this.selectedStep++;
         this.company.name = this.firstStepForm.controls['name'].value;
         this.company.country = this.firstStepForm.controls['country'].value.value;
         this.company.baseCurrency = this.firstStepForm.controls['currency'].value.value;

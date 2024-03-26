@@ -144,10 +144,10 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
     public cancelSubscription(): void {
         let cancelDialogRef = this.dialog.open(ConfirmModalComponent, {
             data: {
-                title: 'Cancel Subscription',
-                body: 'Subscription will be cancelled on Expiry Date',
-                ok: 'Proceed',
-                cancel: 'Cancel'
+                title: this.localeData?.cancel_subscription,
+                body: this.localeData?.subscription_cancel_message,
+                ok: this.commonLocaleData?.app_proceed,
+                cancel: this.commonLocaleData?.app_cancel
             },
             panelClass: 'cancel-confirmation-modal',
             width: '585px'
@@ -168,7 +168,7 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
      * @memberof ViewSubscriptionComponent
      */
     public changeBilling(): void {
-        this.router.navigate(['/pages/subscription/change-billing']);
+        this.router.navigate(['/pages/subscription/change-billing/' + this.viewSubscriptionData?.billingAccount?.uniqueName]);
     }
 
     /**
@@ -187,7 +187,7 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
     * @memberof ViewSubscriptionComponent
     */
     public addOrMoveCompanyCallback(event: boolean): void {
-        if (event === true) {
+        if (event) {
             this.getSubscriptionData(this.subscriptionId);
         }
     }

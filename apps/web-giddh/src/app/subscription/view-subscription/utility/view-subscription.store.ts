@@ -48,7 +48,7 @@ export class ViewSubscriptionComponentStore extends ComponentStore<ViewSubscript
                                 });
                             } else {
                                 if (res.message) {
-                                    this.toasterService.showSnackBar('success', res.message);
+                                    this.toasterService.showSnackBar('error', res.message);
                                 }
                                 return this.patchState({
                                     viewSubscription: null,
@@ -57,7 +57,7 @@ export class ViewSubscriptionComponentStore extends ComponentStore<ViewSubscript
                             }
                         },
                         (error: any) => {
-                            this.toasterService.showSnackBar('error', 'Error');
+                            this.toasterService.showSnackBar('error', 'Something went wrong! Please try again.');
                             return this.patchState({
                                 viewSubscription: null,
                                 viewSubscriptionInProgress: false
