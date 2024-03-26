@@ -17,5 +17,14 @@
     "VOUCHER_SALES": "चालान कसा तयार करावा?",
     "ECOMM_INTEGRATION": "Shopify ची Giddh सह कसे कनेक्ट करावी",
     "BARCODE": "Giddh मध्ये बारकोड कसा वापरावा",
-    "DAYBOOK": "Giddh मध्ये डे-बुक अहवाल कसे काम करतंय"
+    "DAYBOOK": "Giddh मध्ये डे-बुक अहवाल कसे काम करतंय",
+    "AGING_REPORT": "वृद्धी अहवाल कसे कार्य करतात?",
+    "INVOICE_SETTING": "चालान सेटिंग कसे बदलावी?",
+    "TWO_FACTOR_AUTHENTICATION": "दोन फॅक्टर प्रमाणीकरण कसे काम करते?",
+    "TAX_CREATION": "कर निर्माण कसा करायचा?",
+    "MRP_DISCOUNT": "MRP - वितरण कसे काम करतो?",
+    "CUSTOM_FIELD": "कस्टम फील्ड कसे तयार करावे?",
+    "MANUFACTURING": "उत्पादन कसे करावे?",
+    "MULTI_USER_ACCESS": "मल्टी युजरची प्रवेश कसे काम करतो?",
+    "INVOICE_TEMPLATE": "चालान टेम्पलेट कसे काम करते?"
 }

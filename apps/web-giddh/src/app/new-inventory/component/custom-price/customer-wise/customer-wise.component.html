@@ -64,14 +64,17 @@
                             <div class="right-heading" *ngIf="currentUser?.uniqueName">
                                 <button mat-stroked-button aria-label="inventory" color="primary" (click)="openSearchModal('stocks')"> {{
                                     localeData?.add_inventory }} </button>
-                                <div class="search-list position-relative" [formGroup]="searchForm"
-                                    *ngIf="!currentUser?.isTempUser">
-                                    <text-field type="text" [placeholder]="commonLocaleData?.app_search"
-                                        [cssClass]="'form-control search-bar'"
-                                        formControlName="stockSearch"></text-field>
-                                    <span>
-                                        <i class="icon-search"></i>
-                                    </span>
+                                <div class="d-flex align-items-center column-gap15">
+                                    <watch-video [cssClass]="'text-primary'" [moduleName]="'MRP_DISCOUNT'"></watch-video>
+                                    <div class="search-list position-relative" [formGroup]="searchForm"
+                                        *ngIf="!currentUser?.isTempUser">
+                                        <text-field type="text" [placeholder]="commonLocaleData?.app_search"
+                                            [cssClass]="'form-control search-bar'"
+                                            formControlName="stockSearch"></text-field>
+                                        <span>
+                                            <i class="icon-search"></i>
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
                             <ng-container *ngIf="currentUserStocks?.length && !isStockLoading">
