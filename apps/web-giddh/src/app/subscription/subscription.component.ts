@@ -84,31 +84,8 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
     /** Getter for show search element by type */
     public get shouldShowElement(): boolean {
         const hasResponse = this.dataSource?.filteredData?.length > 0;
-        if (!hasResponse) {
-            return false;
-        }
         return (
-            (this.inlineSearch !== 'companyName' || this.showClearFilter) ||
-            (this.inlineSearch === 'companyName' || this.showClearFilter) ||
-            (this.inlineSearch === 'companyName' || this.showClearFilter) ||
-            (this.inlineSearch !== 'billingAccountName' || this.showClearFilter) ||
-            (this.inlineSearch === 'billingAccountName' || this.showClearFilter) ||
-            (this.inlineSearch === 'billingAccountName' || this.showClearFilter) ||
-            (this.inlineSearch !== 'subscriberName' || this.showClearFilter) ||
-            (this.inlineSearch === 'subscriberName' || this.showClearFilter) ||
-            (this.inlineSearch === 'subscriberName' || this.showClearFilter) ||
-            (this.inlineSearch !== 'countryName' || this.showClearFilter) ||
-            (this.inlineSearch === 'countryName' || this.showClearFilter) ||
-            (this.inlineSearch === 'countryName' || this.showClearFilter) ||
-            (this.inlineSearch !== 'planName' || this.showClearFilter) ||
-            (this.inlineSearch === 'planName' || this.showClearFilter) ||
-            (this.inlineSearch === 'planName' || this.showClearFilter) ||
-            (this.inlineSearch !== 'status' || this.showClearFilter) ||
-            (this.inlineSearch === 'status' || this.showClearFilter) ||
-            (this.inlineSearch === 'status' || this.showClearFilter) ||
-            (this.inlineSearch !== 'period' || this.showClearFilter) ||
-            (this.inlineSearch === 'period' || this.showClearFilter) ||
-            (this.inlineSearch === 'period' || this.showClearFilter)
+            hasResponse || this.inlineSearch || this.showClearFilter
         );
     }
     /** Holds Store Cancel Subscription observable*/

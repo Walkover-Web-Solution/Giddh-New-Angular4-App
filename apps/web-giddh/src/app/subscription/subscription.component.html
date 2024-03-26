@@ -295,6 +295,9 @@
                     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                 </table>
             </form>
+            <div class="no-data" *ngIf="!dataSource?.filteredData?.length && !(subscriptionListInProgress$ | async)">
+                <h1>{{ commonLocaleData?.app_no_data_found }}</h1>
+            </div>
             <div class="pagination-wrapper justify-content-end">
                 <mat-paginator
                     (page)="handlePageChange($event)"
@@ -309,9 +312,6 @@
                 </mat-paginator>
             </div>
         </section>
-        <div class="no-data" *ngIf="!shouldShowElement && !(subscriptionListInProgress$ | async)">
-            <h1>{{ commonLocaleData?.app_no_data_found }}</h1>
-        </div>
     </div>
 </ng-container>
 <ng-template #searchTemplate let-show let-title="title" let-fieldName="fieldName" let-formControl="formControl">
