@@ -26,7 +26,7 @@ import { VerifyOwnershipDialogComponent } from './verify-ownership-dilaog/verify
                 path: 'buy-plan', component: BuyPlanComponent
             },
             {
-                path: 'buy-plan/:planUniqueName', component: BuyPlanComponent
+                path: 'buy-plan/:change', component: BuyPlanComponent
             }
         ])
     ],

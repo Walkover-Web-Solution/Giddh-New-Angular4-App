@@ -169,7 +169,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
 
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe((params: any) => {
             if (params) {
-                this.changePlan = params.planUniqueName;
+                this.changePlan = params.change;
             }
         });
 
