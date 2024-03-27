@@ -5,6 +5,9 @@
     (commonLocaleData)="commonLocaleData = $event"
 >
     <div class="setting-page user-detail-page relative" id="setting-tab" *ngIf="!isCreateAndSwitchCompanyInProcess">
+        <div class="video-link mr-r15" *ngIf="activeTab === 'mobile-number'">
+            <watch-video [cssClass]="'text-primary pr-0'" [moduleName]="'TWO_FACTOR_AUTHENTICATION'"></watch-video>
+        </div>
         <hamburger-menu *ngIf="localeData?.auth_key" [pageHeading]="getPageHeading()"></hamburger-menu>
         <!-- start of tab set -->
 

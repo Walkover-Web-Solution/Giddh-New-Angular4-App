@@ -15,6 +15,13 @@
     vertical-align: top;
 }
 
+.video-link {
+    position: relative;
+    z-index: 10;
+    float: right;
+    line-height: 46px;
+}
+
 @media (max-width: 575px) {
     .wrap-tab-content-pd-15 {
         form {
