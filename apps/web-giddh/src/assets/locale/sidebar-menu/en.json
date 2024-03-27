@@ -152,6 +152,7 @@
                     "icon": "icon-vendor",
                     "description": "Send Bulk SMS/Emails, Set reminders",
                     "additional": {
+                        "voucherVersion": 2,
                         "createNew": {
                             "label": "+",
                             "link": "/pages/contact/vendor",
@@ -372,8 +373,8 @@
                     "additional": {
                         "queryParams": {
                             "voucherVersion": 1
-                }   
-            }
+                        }   
+                    }
                 },
                 {
                     "label": "Warehouse",
@@ -381,10 +382,10 @@
                     "icon": "icon-warehouse1",
                     "description": "See all the warehouses",
                     "additional": {
-                    "queryParams": {
-                        "voucherVersion": 1
+                        "queryParams": {
+                            "voucherVersion": 1
+                        }
                     }
-                }
                 }
             ]
         },

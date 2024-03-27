@@ -152,6 +152,7 @@
                     "icon": "icon-vendor",
                     "description": "बल्क एसएमएस / ईमेल पाठवा, स्मरणपत्रे सेट करा",
                     "additional": {
+                        "voucherVersion": 2,
                         "createNew": {
                             "label": "+",
                             "link": "/pages/contact/vendor",
