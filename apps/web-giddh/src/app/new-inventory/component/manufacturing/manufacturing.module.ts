@@ -20,6 +20,7 @@ import { NoDataModule } from '../../../shared/no-data/no-data.module';
 import { GiddhPageLoaderModule } from '../../../shared/giddh-page-loader/giddh-page-loader.module';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { WatchVideoModule } from '../../../theme/watch-video/watch-video.module';
 
 @NgModule({
     imports: [
@@ -40,7 +41,8 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
         NoDataModule,
         GiddhPageLoaderModule,
         MatExpansionModule,
-        MatSlideToggleModule
+        MatSlideToggleModule,
+        WatchVideoModule
     ],
     exports: [
         CreateManufacturingComponent,
