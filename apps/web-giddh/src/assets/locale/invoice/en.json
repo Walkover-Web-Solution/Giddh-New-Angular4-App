@@ -178,5 +178,12 @@
     "amount_adjusted": "Amount adjusted successfully",
     "pincode_required": "Please update pincode in voucher before creating eway bill.",
     "bill": "Bill",
-    "thermal_message":"Preview is not available if Thermal Template is selected. Please change it in the template setting for default template to preview the invoice."
+    "thermal_message":"Preview is not available if Thermal Template is selected. Please change it in the template setting for default template to preview the invoice.",
+    "all_purchases": "All-purchases",
+    "all_credit_notes": "All-credit-notes",
+    "all_debit_notes": "All-debit-notes",
+    "purchases": "purchases",
+    "credit_notes": "credit-notes",
+    "debit_notes": "debit-notes",
+    "invoices": "invoices"
 }
