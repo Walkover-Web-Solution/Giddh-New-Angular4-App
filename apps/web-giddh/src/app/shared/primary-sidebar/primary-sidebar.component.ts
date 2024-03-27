@@ -206,8 +206,8 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             this.allItems = this.generalService.getVisibleMenuItems("sidebar", changes.apiMenuItems.currentValue, this.localeData?.items);
             this.allItems?.map(items => {
                 items?.items?.map(item => {
-                    if (item?.additional?.voucherVersion) {
-                        delete item?.additional?.voucherVersion;
+                    if (item?.additional?.queryParams?.voucherVersion) {
+                        delete item?.additional?.queryParams?.voucherVersion;
                     }
                     return item;
                 });
