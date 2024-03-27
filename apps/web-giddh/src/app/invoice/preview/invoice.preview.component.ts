@@ -1361,10 +1361,10 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this.exportcsvRequest.from = this.invoiceSearchRequest.from;
         this.exportcsvRequest.to = this.invoiceSearchRequest.to;
         let dataTosend = { accountUniqueName: '', uniqueNames: [], type: type };
-        if (this.selectedInvoicesList?.length > 0) {
-            dataTosend.accountUniqueName = isAllItemsSelected ? '' : this.selectedInvoicesList[0].account?.uniqueName;
+        if (this.selectedInvoicesList?.length === 1) {
+            dataTosend.accountUniqueName = this.selectedInvoicesList[0].account?.uniqueName;
         } else {
-            dataTosend.accountUniqueName = '';
+            delete dataTosend.accountUniqueName;
         }
         if (this.selectedItems.length) {
             dataTosend.uniqueNames = this.selectedItems;
@@ -1380,7 +1380,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                         item.isSelected = false;
                     });
                     let blob = this.generalService.base64ToBlob(response.body, 'application/xls', 512);
-                    const fileName  = `${(dataTosend?.accountUniqueName ? (dataTosend?.accountUniqueName + '-') : '')}${this.getExportFileNameByVoucherType(type, isAllItemsSelected)}.xls`
+                    const fileName  = `${this.getExportFileNameByVoucherType(type, isAllItemsSelected)}.xls`
                     return saveAs(blob, fileName);
                 } else {
                     this._toaster.errorToast(response.message);
