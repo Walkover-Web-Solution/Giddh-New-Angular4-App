@@ -152,7 +152,9 @@
                     "icon": "icon-vendor",
                     "description": "बल्क एसएमएस/ईमेल भेजें, रिमाइंडर सेट करें",
                     "additional": {
-                        "voucherVersion": 2,
+                        "queryParams": {
+                            "voucherVersion": 2
+                        },
                         "createNew": {
                             "label": "+",
                             "link": "/pages/contact/vendor",
