@@ -129,13 +129,13 @@
                 },
                 {
                     "label": "Purchase Order",
-                    "link": "/pages/purchase-management/purchase-order/new",
+                    "link": "/pages/purchase-management/purchase/order",
                     "icon": "icon-purchase-order",
                     "description": "Purchase request, purchase bill, modify PO",
                     "additional": {
                         "createNew": {
                             "label": "+",
-                            "link": "/pages/purchase-management/purchase/bill"
+                            "link": "/pages/purchase-management/purchase-order/new"
                         }
                     }
                 },
@@ -430,7 +430,7 @@
                     "description": "Overdues, P&L, Bank account, Ratio Analysis"
                 },
                 {
-                    "label": "Journal Voucher *",
+                    "label": "Journal Entries *",
                     "link": "/pages/journal-voucher",
                     "icon": "icon-journal-voucher-new",
                     "description": "Entries of Journal Voucher"
