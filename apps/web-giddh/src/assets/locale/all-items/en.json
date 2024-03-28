@@ -448,7 +448,7 @@
           "description": "Download cash flow report"
         },
         {
-          "label": "Journal Voucher *",
+          "label": "Journal Entries *",
           "link": "/pages/journal-voucher",
           "icon": "icon-journal-voucher-new",
           "description": "Entries of Journal Voucher"
