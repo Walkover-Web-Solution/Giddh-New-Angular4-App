@@ -29,6 +29,7 @@
                         </button>
                     </div>
                     <button
+                        *ngIf="inputData.rowData?.companies?.length < inputData.rowData?.totalCompanies"
                         (click)="createCompanyInSubscription()"
                         mat-stroked-button
                         [matTooltip]="localeData?.add_company_subscription"

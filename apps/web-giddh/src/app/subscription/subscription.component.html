@@ -283,6 +283,13 @@
                                     >
                                         {{ localeData?.move }}
                                     </button>
+                                    <button 
+                                        mat-menu-item 
+                                        *ngIf="element?.companies?.length < element?.totalCompanies"
+                                        (click)="createCompanyInSubscription(element?.subscriptionId)"
+                                    >
+                                        {{ localeData?.add_company }}
+                                    </button>
                                 </div>
                             </mat-menu>
                         </td>
