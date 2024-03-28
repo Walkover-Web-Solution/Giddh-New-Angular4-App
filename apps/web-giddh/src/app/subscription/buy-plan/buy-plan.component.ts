@@ -147,7 +147,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         private route: ActivatedRoute,
         private location: Location
     ) {
-        this.componentStore.getAllPlans({ params: { countryCode: this.company.countryCode } });
         this.session$ = this.store.pipe(select(p => p.session.userLoginState), distinctUntilChanged(), takeUntil(this.destroyed$));
     }
 
@@ -377,6 +376,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 this.company.inputMaskFormat = profile.balanceDisplayFormat?.toLowerCase() || '';
                 this.company.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
                 this.showTaxTypeByCountry(this.company.countryCode);
+
+                this.componentStore.getAllPlans({ params: { countryCode: this.company.countryCode } });
             }
         });
     }
