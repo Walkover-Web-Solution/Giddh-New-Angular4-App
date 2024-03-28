@@ -591,6 +591,15 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Navigates to the page for creating a new company.
+     *
+     * @memberof SubscriptionComponent
+     */
+    public createCompanyInSubscription(subscriptionId): void {
+        this.router.navigate(['/pages/new-company/' + subscriptionId]);
+    }
+
+    /**
      * Lifecycle hook that is called when the component is destroyed.
      * Removes "subscription-page" class from body, and completes the subject indicating component destruction.
      *
