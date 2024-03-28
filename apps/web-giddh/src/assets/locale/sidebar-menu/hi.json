@@ -129,13 +129,13 @@
                 },
                 {
                     "label": "खरीद आदेश",
-                    "link": "/pages/purchase-management/purchase-order/new",
+                    "link": "/pages/purchase-management/purchase/order",
                     "icon": "icon-purchase-order",
                     "description": "खरीद अनुरोध, खरीद बिल, पीओ संशोधित करें",
                     "additional": {
                         "createNew": {
                             "label": "+",
-                            "link": "/pages/purchase-management/purchase/bill"
+                            "link": "/pages/purchase-management/purchase-order/new"
                         }
                     }
                 },
@@ -430,7 +430,7 @@
                     "description": "अतिदेय, पी एंड एल, बैंक खाता, अनुपात विश्लेषण"
                 },
                 {
-                    "label": "पत्रिका की रसीद *",
+                    "label": "जर्नल प्रविष्टियां *",
                     "link": "/pages/journal-voucher",
                     "icon": "icon-journal-voucher-new",
                     "description": "जर्नल वाउचर की प्रविष्टियाँ"
