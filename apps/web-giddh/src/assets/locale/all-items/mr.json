@@ -443,7 +443,7 @@
           "description": "रोख प्रवाह अहवाल डाउनलोड करा"
         },
         {
-          "label": "जर्नल व्हाउचर",
+          "label": "जर्नल नोंदी *",
           "link": "/pages/journal-voucher",
           "icon": "icon-journal-voucher-new",
           "description": "जर्नल व्हाउचरच्या नोंदी"
