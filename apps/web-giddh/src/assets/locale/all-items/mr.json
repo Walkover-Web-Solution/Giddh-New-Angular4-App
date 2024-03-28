@@ -11,8 +11,10 @@
           "icon": "icon-aging-report-new",
           "description": "मागील दिवस आणि आगामी काळात देय रक्कम",
           "additional": {
-            "tab": "aging-report",
-            "tabIndex": 1
+            "queryParams": {
+                "tab": "aging-report",
+                "tabIndex": 1
+            }
           }
         },
         {
@@ -177,7 +179,9 @@
           "icon": "icon-reciept-new",
           "description": "एकूण, आणि न वापरलेली देयके",
           "additional": {
-            "voucherVersion": 2
+            "queryParams": {
+                "voucherVersion": 2
+            }
           }
         },
         {
@@ -201,11 +205,13 @@
           "description": "जीएसटीआर 1 फाइल करा आणि पहा",
           "hide": "sidebar",
           "additional": {
-            "isGstMenu": true,
-            "type": "gstr1",
-            "countrySpecific": [
-              "IN"
-            ]
+            "queryParams": {
+                "isGstMenu": true,
+                "type": "gstr1",
+                "countrySpecific": [
+                "IN"
+                ]
+            }
           }
         },
         {
@@ -214,11 +220,13 @@
           "description": "जीएसटीआर 2 फाइल करा आणि पहा",
           "hide": "sidebar",
           "additional": {
-            "isGstMenu": true,
-            "type": "gstr2",
-            "countrySpecific": [
-              "IN"
-            ]
+            "queryParams": {
+                "isGstMenu": true,
+                "type": "gstr2",
+                "countrySpecific": [
+                "IN"
+                ]
+            }
           }
         },
         {
@@ -227,11 +235,13 @@
           "description": "जीएसटीआर 3B फाइल करा आणि पहा",
           "hide": "sidebar",
           "additional": {
-            "isGstMenu": true,
-            "type": "gstr3b",
-            "countrySpecific": [
-              "IN"
-            ]
+            "queryParams": {
+                "isGstMenu": true,
+                "type": "gstr3b",
+                "countrySpecific": [
+                "IN"
+                ]
+            }
           }
         },
         {
@@ -241,9 +251,11 @@
           "description": "नंतर थेट गीधमधून व्युत्पन्न करा",
           "hide": "sidebar",
           "additional": {
-            "countrySpecific": [
-              "IN"
-            ]
+            "queryParams": {
+                "countrySpecific": [
+                "IN"
+                ]
+            }
           }
         },
         {
@@ -254,9 +266,11 @@
           "alwaysPresent": true,
           "hide": "sidebar",
           "additional": {
-            "countrySpecific": [
-              "IN"
-            ]
+            "queryParams": {
+                "countrySpecific": [
+                "IN"
+                ]
+            }
           }
         },
         {
@@ -281,9 +295,11 @@
           "description": "व्हॅट फाइल आणि पुनरावलोकन करा",
           "hide": "sidebar",
           "additional": {
-            "countrySpecific": [
-              "AE", "GB"
-            ]
+            "queryParams": {
+                "countrySpecific": [
+                "AE", "GB"
+                ]
+            }
           }
         }
       ]
@@ -298,8 +314,10 @@
           "icon": "icon-balance-sheet-new",
           "description": "एक्सेलमध्ये बीएस डाउनलोड करा, एकाधिक प्रकारची निर्याती",
           "additional": {
-            "tab": "balance-sheet",
-            "tabIndex": 2
+            "queryParams": {
+                "tab": "balance-sheet",
+                "tabIndex": 2
+            }
           }
         },
         {
@@ -314,8 +332,10 @@
           "icon": "icon-proft-loss-new",
           "description": "एक्सेल मध्ये डेटा डाउनलोड करा, प्रकल्प निहाय अहवाल",
           "additional": {
-            "tab": "profit-loss",
-            "tabIndex": 1
+            "queryParams": {
+                "tab": "profit-loss",
+                "tabIndex": 1
+            }
           }
         },
         {
@@ -330,8 +350,10 @@
           "icon": "icon-trial-balance-new",
           "description": "सर्व क्रेडिट आणि डेबिट शिल्लक डाउनलोड करा",
           "additional": {
-            "tab": "trial-balance",
-            "tabIndex": 0
+            "queryParams": {
+                "tab": "trial-balance",
+                "tabIndex": 0
+            }
           }
         },
         {
@@ -352,7 +374,9 @@
               "icon": "icon-inventory",
               "description": "स्टॉक / गट आणि युनिट आयात / तयार करा",
               "additional": {
+                "queryParams": {
                   "voucherVersion": 1
+                }
               }
           },
           {
@@ -361,7 +385,9 @@
               "icon": "icon-inventory",
               "description": "स्टॉक / गट आणि युनिट आयात / तयार करा",
               "additional": {
+                "queryParams": {
                   "voucherVersion": 2
+                }
               }
           },
           {
@@ -370,7 +396,9 @@
               "icon": "icon-manufacturing1",
               "description": "उत्पादन यादीची स्थिती शोधा",
               "additional": {
+                "queryParams": {
                   "voucherVersion": 1
+                }
               }
           },
           {
@@ -379,7 +407,9 @@
               "icon": "icon-manufacturing1",
               "description": "उत्पादन यादीची स्थिती शोधा",
               "additional": {
+                "queryParams": {
                   "voucherVersion": 2
+                }
               }
           },
           {
@@ -388,7 +418,9 @@
               "icon": "icon-branch-transfer",
               "description": "यादी व्यवस्थापित करा आणि हस्तांतरण यादी",
               "additional": {
+                "queryParams": {
                   "voucherVersion": 2
+                }
               }
           },
           {
@@ -397,7 +429,9 @@
               "icon": "icon-branch-transfer",
               "description": "यादी व्यवस्थापित करा आणि हस्तांतरण यादी",
               "additional": {
+                "queryParams": {
                   "voucherVersion": 1
+                }
               }
           },
           {
@@ -424,7 +458,9 @@
           "icon": "icon-audit-log",
           "description": "प्रविष्टींचा कालक्रमानुसार डेटा",
           "additional": {
-            "voucherVersion": 1
+            "queryParams": {
+                "voucherVersion": 1
+            }
           }
         },
         {
@@ -433,7 +469,9 @@
           "icon": "icon-audit-log",
           "description": "प्रविष्टींचा कालक्रमानुसार डेटा",
           "additional": {
-            "voucherVersion": 2
+            "queryParams": {
+                "voucherVersion": 2
+            }
           }
         },
         {
@@ -443,7 +481,7 @@
           "description": "रोख प्रवाह अहवाल डाउनलोड करा"
         },
         {
-          "label": "जर्नल नोंदी *",
+          "label": "जर्नल प्रविष्टियां *",
           "link": "/pages/journal-voucher",
           "icon": "icon-journal-voucher-new",
           "description": "जर्नल व्हाउचरच्या नोंदी"
@@ -460,8 +498,10 @@
           "icon": "icon-petty-cash",
           "description": "क्षुल्लक रोख आणि व्यवहार व्यवस्थापित करा",
           "additional": {
-            "tab": "pending",
-            "tabIndex": 0
+            "queryParams": {
+                "tab": "pending",
+                "tabIndex": 0
+            }
           }
         },
         {

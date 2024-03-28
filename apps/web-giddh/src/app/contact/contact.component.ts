@@ -383,10 +383,6 @@ export class ContactComponent implements OnInit, OnDestroy {
                 if (lastTabType) {
                     this.translationComplete(true);
                 }
-                if (queryParams?.addCustomer || queryParams?.addVendor) {
-                    const type = queryParams.addCustomer ? 'customer' : 'vendor';
-                    this.openAddAndManage(type);
-                }
             }
 
         });
