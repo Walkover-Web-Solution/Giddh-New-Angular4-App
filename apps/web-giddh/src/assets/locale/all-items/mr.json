@@ -82,6 +82,12 @@
           "description": "क्रेडिट नोट व्युत्पन्न करा आणि अद्यतनित करा"
         },
         {
+            "label": "बीजक सेटिंग्ज",
+            "link": "/pages/invoice/preview/settings/sales",
+            "icon": "icon-settings-cog",
+            "description": "बीजक सेटिंग्ज"
+        },
+        {
           "label": "पावती",
           "link": "/pages/reports/receipt",
           "icon": "icon-reciept-new",
@@ -140,6 +146,12 @@
           "link": "/pages/purchase-management/purchase/bill",
           "icon": "icon-purchase-management1",
           "description": "खरेदी विनंती, खरेदी बिल, पीओ सुधारित करा"
+        },
+        {
+            "label": "बिल सेटिंग्ज",
+            "link": "/pages/purchase-management/purchase/settings",
+            "icon": "icon-settings-cog",
+            "description": "बिल सेटिंग्ज"
         },
         {
           "label": "नवीन खरेदी ऑर्डर",

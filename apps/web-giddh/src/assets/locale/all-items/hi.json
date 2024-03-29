@@ -82,6 +82,12 @@
           "description": "क्रेडिट नोट जेनरेट करें और खाता अपडेट करें"
         },
         {
+            "label": "चालान सेटिंग",
+            "link": "/pages/invoice/preview/settings/sales",
+            "icon": "icon-settings-cog",
+            "description": "चालान सेटिंग"
+        },
+        {
           "label": "रसीद",
           "link": "/pages/reports/receipt",
           "icon": "icon-reciept-new",
@@ -140,6 +146,12 @@
           "link": "/pages/purchase-management/purchase/bill",
           "icon": "icon-purchase-management1",
           "description": "खरीद अनुरोध, खरीद बिल, पीओ संशोधित करें"
+        },
+        {
+            "label": "बिल सेटिंग",
+            "link": "/pages/purchase-management/purchase/settings",
+            "icon": "icon-settings-cog",
+            "description": "बिल सेटिंग"
         },
         {
           "label": "नया खरीद आदेश",
