@@ -82,6 +82,12 @@
           "description": "Generate credit note & update A/c"
         },
         {
+            "label": "Invoice Settings",
+            "link": "/pages/invoice/preview/settings/sales",
+            "icon": "icon-settings-cog",
+            "description": "Invoice settings"
+        },
+        {
           "label": "Receipt",
           "link": "/pages/reports/receipt",
           "icon": "icon-reciept-new",
@@ -140,6 +146,12 @@
           "link": "/pages/purchase-management/purchase/bill",
           "icon": "icon-purchase-management1",
           "description": "Purchase request, purchase bill, modify PO"
+        },
+        {
+            "label": "Bill Settings",
+            "link": "/pages/purchase-management/purchase/settings",
+            "icon": "icon-settings-cog",
+            "description": "Bill settings"
         },
         {
           "label": "New Purchase Order",
