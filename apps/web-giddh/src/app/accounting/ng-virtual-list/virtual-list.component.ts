@@ -7,6 +7,8 @@ import { IOption } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-optio
 import { concat, includes, startsWith } from 'apps/web-giddh/src/app/lodash-optimized';
 import { IForceClear } from 'apps/web-giddh/src/app/models/api-models/Sales';
 import { AVAccountListComponent } from './virtual-list-menu.component';
+import { CdkVirtualScrollViewport, ScrollDispatcher } from '@angular/cdk/scrolling';
+import { ReplaySubject, takeUntil } from 'rxjs';
 
 const FLATTEN_SEARCH_TERM = 'flatten';
 
@@ -32,8 +34,8 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
     @Input() public showClear: boolean = false;
     @Input() public forceClearReactive: IForceClear;
     @Input() public disabled: boolean;
-    @Input() public notFoundMsg: string = '';
-    @Input() public notFoundLinkText: string = '';
+    @Input() public notFoundMsg: string;
+    @Input() public notFoundLinkText: string;
     @Input() public notFoundLink: boolean = false;
     @Input() public isFilterEnabled: boolean = true;
     @Input() public width: string = 'auto';
@@ -58,7 +60,7 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
 
     @ViewChild('inputFilter', { static: false }) public inputFilter: ElementRef;
     @ViewChild('mainContainer', { static: true }) public mainContainer: ElementRef;
-    @ViewChild('menuEle', { static: true }) public menuEle: AVAccountListComponent;
+    @ViewChild('menuEle', { static: true }) public menuEle: CdkVirtualScrollViewport;
     @ContentChild('optionTemplate') public optionTemplate: TemplateRef<any>;
     @ViewChild('dd', { static: true }) public ele: ElementRef;
     @Output() public onHide: EventEmitter<any[]> = new EventEmitter<any[]>();
@@ -70,12 +72,15 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
     @Output() public viewInitEvent = new EventEmitter<any>();
     /** Emits the scroll to bottom event when pagination is required  */
     @Output() public scrollEnd: EventEmitter<void> = new EventEmitter();
+    @ViewChild('focusElement') focusElement: ElementRef;
+    @ViewChild('particularFocus', { static: true }) public particularFocus: ElementRef;
     public rows: IOption[] = [];
     public isOpen: boolean = true;
     public filter: string = '';
     public filteredData: IOption[] = [];
     public _selectedValues: IOption[] = [];
     public _options: IOption[] = [];
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     /** Keys. **/
 
@@ -89,7 +94,7 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
         DOWN: 40
     };
 
-    constructor(private cdRef: ChangeDetectorRef) {
+    constructor(private cdRef: ChangeDetectorRef, private scrollDispatcher: ScrollDispatcher) {
     }
 
     get options(): IOption[] {
@@ -279,12 +284,13 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
         this.isOpen = true;
         // this.focusFilter();
         this.onShow.emit();
-        if (this.menuEle && this.menuEle.virtualScrollElm && this.menuEle.virtualScrollElm) {
-            let item = this.rows.find(p => p?.value === (this._selectedValues?.length > 0 ? this._selectedValues[0] : (this.rows?.length > 0 ? this.rows[0]?.value : null)));
-            if (item !== null) {
-                this.menuEle.virtualScrollElm.scrollInto(item);
-            }
-        }
+        console.log(this.menuEle, this.scrollDispatcher);
+        // if (this.menuEle && this.menuEle.virtualScrollElm && this.menuEle.virtualScrollElm) {
+        //     let item = this.rows.find(p => p?.value === (this._selectedValues?.length > 0 ? this._selectedValues[0] : (this.rows?.length > 0 ? this.rows[0]?.value : null)));
+        //     if (item !== null) {
+        //         this.menuEle.virtualScrollElm.scrollInto(item);
+        //     }
+        // }
         this.cdRef.markForCheck();
     }
 
@@ -294,40 +300,40 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
             if (key === this.KEYS.ESC || key === this.KEYS.TAB || (key === this.KEYS.UP && event.altKey)) {
                 this.hide();
             } else if (key === this.KEYS.ENTER) {
-                if (this.menuEle && this.menuEle.virtualScrollElm && this.menuEle.virtualScrollElm) {
-                    let item = this.menuEle.virtualScrollElm.getHighlightedOption();
-                    if (item !== null) {
-                        this.toggleSelected(item);
-                    }
-                }
+                // if (this.menuEle && this.menuEle.virtualScrollElm && this.menuEle.virtualScrollElm) {
+                //     let item = this.menuEle.virtualScrollElm.getHighlightedOption();
+                //     if (item !== null) {
+                //         this.toggleSelected(item);
+                //     }
+                // }
                 // this.selectHighlightedOption();
             } else if (key === this.KEYS.UP) {
-                if (this.menuEle && this.menuEle.virtualScrollElm && this.menuEle.virtualScrollElm) {
-                    let item = this.menuEle.virtualScrollElm.getPreviousHilightledOption();
-                    if (item !== null) {
-                        // this.toggleSelected(item);
-                        this.menuEle.virtualScrollElm.scrollInto(item);
-                        this.menuEle.virtualScrollElm.startupLoop = true;
-                        this.menuEle.virtualScrollElm.refresh();
-                        event.preventDefault();
-                    }
-                }
+                // if (this.menuEle && this.menuEle.virtualScrollElm && this.menuEle.virtualScrollElm) {
+                //     let item = this.menuEle.virtualScrollElm.getPreviousHilightledOption();
+                //     if (item !== null) {
+                //         // this.toggleSelected(item);
+                //         this.menuEle.virtualScrollElm.scrollInto(item);
+                //         this.menuEle.virtualScrollElm.startupLoop = true;
+                //         this.menuEle.virtualScrollElm.refresh();
+                //         event.preventDefault();
+                //     }
+                // }
                 // this.optionList.highlightPreviousOption();
                 // this.dropdown.moveHighlightedIntoView();
                 // if (!this.filterEnabled) {
                 //   event.preventDefault();
                 // }
             } else if (key === this.KEYS.DOWN) {
-                if (this.menuEle && this.menuEle.virtualScrollElm && this.menuEle.virtualScrollElm) {
-                    let item = this.menuEle.virtualScrollElm.getNextHilightledOption();
-                    if (item !== null) {
-                        // this.toggleSelected(item);
-                        this.menuEle.virtualScrollElm.scrollInto(item);
-                        this.menuEle.virtualScrollElm.startupLoop = true;
-                        this.menuEle.virtualScrollElm.refresh();
-                        event.preventDefault();
-                    }
-                }
+                // if (this.menuEle && this.menuEle.virtualScrollElm && this.menuEle.virtualScrollElm) {
+                //     let item = this.menuEle.virtualScrollElm.getNextHilightledOption();
+                //     if (item !== null) {
+                //         // this.toggleSelected(item);
+                //         this.menuEle.virtualScrollElm.scrollInto(item);
+                //         this.menuEle.virtualScrollElm.startupLoop = true;
+                //         this.menuEle.virtualScrollElm.refresh();
+                //         event.preventDefault();
+                //     }
+                // }
                 // ----
                 // this.optionList.highlightNextOption();
                 // this.dropdown.moveHighlightedIntoView();
@@ -400,6 +406,18 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
 
     public ngOnInit() {
         //
+        if (this.isOpen) {
+            // Move focus to the anchor tag within the sidebar
+            this.focusElement?.nativeElement?.focus();
+        } else {
+            // Remove focus from the field
+            this.particularFocus?.nativeElement?.blur();
+        }
+        this.scrollDispatcher.scrolled().pipe(takeUntil(this.destroyed$)).subscribe((event: any) => {
+            if (event && event?.getDataLength() - event?.getRenderedRange().end < 20) {
+                this.scrollEnd.emit()
+            }
+        });
     }
 
     public ngAfterViewInit() {
@@ -414,6 +432,7 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
             }
         }
         if ('showList' in changes && changes.showList.currentValue !== changes.showList.previousValue) {
+            console.log(changes, this.selectedValues);
             if (changes.showList.currentValue) {
                 this.show();
             } else if (!changes.showList.currentValue) {

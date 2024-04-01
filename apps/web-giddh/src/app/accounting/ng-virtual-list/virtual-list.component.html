@@ -31,7 +31,7 @@
 
     <!-- </div> -->
     <!-- <span class="clear" *ngIf="showClear && selectedValues.length > 0" (click)="$event.stopPropagation();clear();">&times;</span> -->
-    <virtual-list-menu
+    <!-- <virtual-list-menu
         #menuEle
         [isOpen]="isOpen"
         [rows]="rows"
@@ -48,5 +48,52 @@
         [isPaginationEnabled]="isPaginationEnabled"
         [dropdownMinHeight]="dropdownMinHeight"
         (scrollEnd)="scrollEnd.emit()"
-    ></virtual-list-menu>
+    ></virtual-list-menu> -->
+
+    <div class="menu" *ngIf="isOpen">
+        <ul *ngIf="rows?.length === 0" class="grp-list group-list-no-found users-last-list">
+            <li>
+                <a href="javascript:void(0)"> {{ notFoundMsg }}</a>
+            </li>
+            <li>
+                <a class="btn-link" (click)="noResultsClicked.emit(); hide()" href="javascript:void(0)">{{
+                    notFoundLinkText
+                }}</a>
+            </li>
+        </ul>
+        <ng-container *ngIf="rows?.length">
+            <ul class="grp-list users-last-list">
+                <cdk-virtual-scroll-viewport
+                    #menuEle
+                    class="virtual-group-list overflow-x-hidden"
+                    [itemSize]="37"
+                    [minBufferPx]="400"
+                    [maxBufferPx]="800"
+                    [id]="i"
+                >
+                    <li
+                        *cdkVirtualFor="let row of rows; let j = index; trackBy: trackByFn"
+                        [class.selected]="selectedValues?.indexOf(row) !== -1"
+                        (mousedown)="toggleSelected(row)"
+                        [class.hilighted]="row['isHilighted']"
+                        class="list-item sidebarTooltip text-overflow-ellipsis"
+                    >
+                        <a
+                            #focusElement
+                            href="javascript:void(0);"
+                            class="list-item isAcc account-list"
+                            nav-vr-item
+                            id="acc_{{ row.label }}"
+                            tooltip="{{ row.label }}"
+                            placement="bottom"
+                            (click)="toggleSelected(row)"
+                            cdkFocusInitial
+                        >
+                            {{ row?.label }}
+                        </a>
+                    </li>
+                </cdk-virtual-scroll-viewport>
+            </ul>
+        </ng-container>
+    </div>
 </div>

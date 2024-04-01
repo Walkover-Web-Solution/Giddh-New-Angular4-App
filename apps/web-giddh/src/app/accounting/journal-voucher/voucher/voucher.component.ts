@@ -743,7 +743,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      */
     public closeChequeDetailForm(): void {
         this.dialog.closeAll();
-        // this.focusDebitCreditAmount();
+        this.changeTab('enter', 'account', true);
     }
     /**
      *
@@ -818,8 +818,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                         //     transactionAtIndex.get('inventory').value.push(this.initInventory());
                         // }
                     }
-                    if (!openChequePopup) {
-                    }
+                    this.changeTab('enter', 'account', true);
                     this.calculateAmount(Number(transactionAtIndex.get('amount').value), transactionAtIndex, idx);
 
                 } else {
@@ -1951,8 +1950,11 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     *
     * @memberof AccountAsVoucherComponent
     */
-    public changeTab(mode: any, type: any): void {
+    public changeTab(mode: any, type: any, againAccountSelect?: boolean): void {
         let transactionsFormArray = this.journalVoucherForm.get('transactions') as FormArray;
+        if (againAccountSelect) {
+            this.activeRowIndex = this.selectedIdx;
+        }
         if (mode === 'enter') {
             if (type === 'amount') {
                 if (this.totalCreditAmount === this.totalDebitAmount) {
@@ -1978,7 +1980,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 this.activeRowType = "amount";
             }
         } else if (mode === "shift") {
-
             if (type === 'type') {
                 this.activeRowIndex = this.activeRowIndex - 1;
                 this.activeRowType = "amount";
@@ -1986,6 +1987,15 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 this.activeRowType = "account";
             } else if (type === 'account') {
                 this.activeRowType = "type";
+            }
+        } else if (mode === "tab") {
+            if (type === 'amount') {
+                this.activeRowIndex = this.activeRowIndex + 1;
+                this.activeRowType = "type";
+            } else if (type === 'type') {
+                this.activeRowType = "account";
+            } else if (type === 'account') {
+                this.activeRowType = "amount";
             }
         }
 
