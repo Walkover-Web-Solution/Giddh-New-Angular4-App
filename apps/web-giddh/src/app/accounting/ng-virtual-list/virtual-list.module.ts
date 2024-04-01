@@ -5,13 +5,17 @@ import { ClickOutsideModule } from 'ng-click-outside';
 import { VirtualScrollModule } from '../../theme/ng-virtual-select/virtual-scroll';
 import { AVShSelectComponent } from './virtual-list.component';
 import { AVAccountListComponent } from './virtual-list-menu.component';
+import { ScrollingModule } from '@angular/cdk/scrolling';
+import { MatListModule } from '@angular/material/list';
 
 @NgModule({
     imports: [
         CommonModule,
         FormsModule,
         VirtualScrollModule,
-        ClickOutsideModule
+        ClickOutsideModule,
+        ScrollingModule,
+        MatListModule
     ],
     declarations: [
         AVShSelectComponent,
