@@ -171,8 +171,6 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
     public baseCurrency: string = '';
     /** Decimal places from company settings */
     public giddhBalanceDecimalPlaces: number = 2;
-    /** Holds true when Payment Report export in progress */
-    public exportInvoiceRequestInProcess$: Observable<boolean> = of(false);
     /** Holds Payment Report export request */
     private exportcsvRequest: any = {
         from: '',
@@ -193,7 +191,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
         private modalService: BsModalService,
         private route: ActivatedRoute,
         private invoiceBulkUpdateService: InvoiceBulkUpdateService,
-        private _invoiceService: InvoiceService
+        private invoiceService: InvoiceService
     ) {
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             if (params?.uniqueName && params?.accountUniqueName) {
@@ -901,7 +899,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
             dataTosend.uniqueNames = this.selectedReceipts;
         }
         this.exportcsvRequest.dataToSend = dataTosend;
-        this._invoiceService.exportCsvInvoiceDownload(this.exportcsvRequest).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+        this.invoiceService.exportCsvInvoiceDownload(this.exportcsvRequest).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response) {
                 if (response.status === 'success') {
                     this.selectedReceipts = [];

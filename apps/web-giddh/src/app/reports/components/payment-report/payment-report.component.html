@@ -101,8 +101,6 @@
                         class="btn btn-default mr-r15"
                         [tooltip]="commonLocaleData?.app_export"
                         (click)="exportCsvDownload()"
-                        [ladda]="exportInvoiceRequestInProcess$ | async"
-                        data-spinner-size="20px"
                     >
                         <span class="icon-export-icon"></span>
                     </button>

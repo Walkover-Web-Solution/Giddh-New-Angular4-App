@@ -151,8 +151,6 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
     public baseCurrency: string = '';
     /** Decimal places from company settings */
     public giddhBalanceDecimalPlaces: number = 2;
-    /** Holds true when Payment Report export in progress */
-    public exportInvoiceRequestInProcess$: Observable<boolean> = of(false);
     /** Holds Payment Report export request */
     private exportcsvRequest: any = {
         from: '',
@@ -174,7 +172,7 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
         private router: Router,
         private route: ActivatedRoute,
         private invoiceBulkUpdateService: InvoiceBulkUpdateService,
-        private _invoiceService: InvoiceService
+        private invoiceService: InvoiceService
     ) {
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             if (params?.uniqueName && params?.accountUniqueName) {
@@ -190,7 +188,6 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
                 this.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
             }
         });
-        this.exportInvoiceRequestInProcess$ = this.store.pipe(select(p => p.invoice.exportInvoiceInprogress), takeUntil(this.destroyed$));
     }
 
     /** Subscribe to universal date and set header title */
@@ -803,7 +800,7 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
             dataTosend.uniqueNames = this.selectedPayments;
         }
         this.exportcsvRequest.dataToSend = dataTosend;
-        this._invoiceService.exportCsvInvoiceDownload(this.exportcsvRequest).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+        this.invoiceService.exportCsvInvoiceDownload(this.exportcsvRequest).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response) {
                 if (response.status === 'success') {
                     this.selectedPayments = [];
