@@ -7,6 +7,7 @@ import { AVShSelectComponent } from './virtual-list.component';
 import { AVAccountListComponent } from './virtual-list-menu.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { MatListModule } from '@angular/material/list';
+import { KeyboardShortutModule } from '../../shared/helpers/directives/keyboardShortcut/keyboardShortut.module';
 
 @NgModule({
     imports: [
@@ -15,7 +16,8 @@ import { MatListModule } from '@angular/material/list';
         VirtualScrollModule,
         ClickOutsideModule,
         ScrollingModule,
-        MatListModule
+        MatListModule,
+        KeyboardShortutModule
     ],
     declarations: [
         AVShSelectComponent,

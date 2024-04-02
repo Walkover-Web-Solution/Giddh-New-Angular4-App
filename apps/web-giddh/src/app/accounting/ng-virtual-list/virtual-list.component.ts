@@ -60,7 +60,7 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
 
     @ViewChild('inputFilter', { static: false }) public inputFilter: ElementRef;
     @ViewChild('mainContainer', { static: true }) public mainContainer: ElementRef;
-    @ViewChild('menuEle', { static: true }) public menuEle: CdkVirtualScrollViewport;
+    @ViewChild('menuEle', { static: true }) public menuEle: AVAccountListComponent;
     @ContentChild('optionTemplate') public optionTemplate: TemplateRef<any>;
     @ViewChild('dd', { static: true }) public ele: ElementRef;
     @Output() public onHide: EventEmitter<any[]> = new EventEmitter<any[]>();
@@ -72,8 +72,6 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
     @Output() public viewInitEvent = new EventEmitter<any>();
     /** Emits the scroll to bottom event when pagination is required  */
     @Output() public scrollEnd: EventEmitter<void> = new EventEmitter();
-    @ViewChild('focusElement') focusElement: ElementRef;
-    @ViewChild('particularFocus', { static: true }) public particularFocus: ElementRef;
     public rows: IOption[] = [];
     public isOpen: boolean = true;
     public filter: string = '';
@@ -81,6 +79,8 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
     public _selectedValues: IOption[] = [];
     public _options: IOption[] = [];
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Hold selected index  */
+    public selectedIndex: number = -1;
 
     /** Keys. **/
 
@@ -94,7 +94,7 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
         DOWN: 40
     };
 
-    constructor(private cdRef: ChangeDetectorRef, private scrollDispatcher: ScrollDispatcher) {
+    constructor(private cdRef: ChangeDetectorRef, private scrollDispatcher: ScrollDispatcher, private eleRef: ElementRef) {
     }
 
     get options(): IOption[] {
@@ -284,7 +284,6 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
         this.isOpen = true;
         // this.focusFilter();
         this.onShow.emit();
-        console.log(this.menuEle, this.scrollDispatcher);
         // if (this.menuEle && this.menuEle.virtualScrollElm && this.menuEle.virtualScrollElm) {
         //     let item = this.rows.find(p => p?.value === (this._selectedValues?.length > 0 ? this._selectedValues[0] : (this.rows?.length > 0 ? this.rows[0]?.value : null)));
         //     if (item !== null) {
@@ -300,45 +299,45 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
             if (key === this.KEYS.ESC || key === this.KEYS.TAB || (key === this.KEYS.UP && event.altKey)) {
                 this.hide();
             } else if (key === this.KEYS.ENTER) {
-                // if (this.menuEle && this.menuEle.virtualScrollElm && this.menuEle.virtualScrollElm) {
-                //     let item = this.menuEle.virtualScrollElm.getHighlightedOption();
-                //     if (item !== null) {
-                //         this.toggleSelected(item);
-                //     }
-                // }
+                if (this.menuEle && this.menuEle.virtualScrollElm && this.menuEle.virtualScrollElm) {
+                    let item = this.menuEle.virtualScrollElm.getHighlightedOption();
+                    if (item !== null) {
+                        this.toggleSelected(item);
+                    }
+                }
                 // this.selectHighlightedOption();
             } else if (key === this.KEYS.UP) {
-                // if (this.menuEle && this.menuEle.virtualScrollElm && this.menuEle.virtualScrollElm) {
-                //     let item = this.menuEle.virtualScrollElm.getPreviousHilightledOption();
-                //     if (item !== null) {
-                //         // this.toggleSelected(item);
-                //         this.menuEle.virtualScrollElm.scrollInto(item);
-                //         this.menuEle.virtualScrollElm.startupLoop = true;
-                //         this.menuEle.virtualScrollElm.refresh();
-                //         event.preventDefault();
-                //     }
-                // }
+                if (this.menuEle && this.menuEle.virtualScrollElm && this.menuEle.virtualScrollElm) {
+                    let item = this.menuEle.virtualScrollElm.getPreviousHilightledOption();
+                    if (item !== null) {
+                        // this.toggleSelected(item);
+                        this.menuEle.virtualScrollElm.scrollInto(item);
+                        this.menuEle.virtualScrollElm.startupLoop = true;
+                        this.menuEle.virtualScrollElm.refresh();
+                        event.preventDefault();
+                    }
+                }
                 // this.optionList.highlightPreviousOption();
                 // this.dropdown.moveHighlightedIntoView();
                 // if (!this.filterEnabled) {
-                //   event.preventDefault();
+                //     event.preventDefault();
                 // }
             } else if (key === this.KEYS.DOWN) {
-                // if (this.menuEle && this.menuEle.virtualScrollElm && this.menuEle.virtualScrollElm) {
-                //     let item = this.menuEle.virtualScrollElm.getNextHilightledOption();
-                //     if (item !== null) {
-                //         // this.toggleSelected(item);
-                //         this.menuEle.virtualScrollElm.scrollInto(item);
-                //         this.menuEle.virtualScrollElm.startupLoop = true;
-                //         this.menuEle.virtualScrollElm.refresh();
-                //         event.preventDefault();
-                //     }
-                // }
-                // ----
-                // this.optionList.highlightNextOption();
+                if (this.menuEle && this.menuEle.virtualScrollElm && this.menuEle.virtualScrollElm) {
+                    let item = this.menuEle.virtualScrollElm.getNextHilightledOption();
+                    if (item !== null) {
+                        // this.toggleSelected(item);
+                        this.menuEle.virtualScrollElm.scrollInto(item);
+                        this.menuEle.virtualScrollElm.startupLoop = true;
+                        this.menuEle.virtualScrollElm.refresh();
+                        event.preventDefault();
+                    }
+                }
+
+                //     this.optionList.highlightNextOption();
                 // this.dropdown.moveHighlightedIntoView();
                 // if (!this.filterEnabled) {
-                //   event.preventDefault();
+                //     event.preventDefault();
                 // }
             }
         }
@@ -405,14 +404,6 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
     }
 
     public ngOnInit() {
-        //
-        if (this.isOpen) {
-            // Move focus to the anchor tag within the sidebar
-            this.focusElement?.nativeElement?.focus();
-        } else {
-            // Remove focus from the field
-            this.particularFocus?.nativeElement?.blur();
-        }
         this.scrollDispatcher.scrolled().pipe(takeUntil(this.destroyed$)).subscribe((event: any) => {
             if (event && event?.getDataLength() - event?.getRenderedRange().end < 20) {
                 this.scrollEnd.emit()
@@ -432,7 +423,6 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
             }
         }
         if ('showList' in changes && changes.showList.currentValue !== changes.showList.previousValue) {
-            console.log(changes, this.selectedValues);
             if (changes.showList.currentValue) {
                 this.show();
             } else if (!changes.showList.currentValue) {
@@ -495,8 +485,64 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
             this.selected.emit(newValue);
         }
     }
+
+    /**
+     * This will be use for key down events for list items highlighting
+     *
+     * @param {KeyboardEvent} event
+     * @memberof AVShSelectComponent
+     */
+    public handleKeyDown(event: KeyboardEvent) {
+        if (event.key === 'ArrowUp') {
+            event.preventDefault();
+            this.selectedIndex = Math.max(this.selectedIndex - 1, 0);
+        } else if (event.key === 'ArrowDown') {
+            event.preventDefault();
+            this.selectedIndex = Math.min(this.selectedIndex + 1, this.rows.length - 1);
+        }
+
+        const elements = this.eleRef?.nativeElement?.querySelectorAll('.list-item');
+        if (elements.length > 0) {
+            elements.forEach((element, index) => {
+                if (index === this.selectedIndex) {
+                    element.classList.add('hilighted');
+                } else {
+                    element.classList.remove('hilighted');
+                }
+            });
+            elements[this.selectedIndex].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+        }
+    }
+
+    /**
+     * Handles new column added usually when group/link is clicked
+     *
+     * @param {*} [element]
+     * @param {*} [navigation]
+     * @memberof AVShSelectComponent
+     */
+    public onColAdd(element?: any, navigation?: any): void {
+        setTimeout(() => {
+            navigation.add(element?.nativeElement);
+            navigation.nextVertical();
+        }, 200);
+    }
+
+    /**
+     * Initializes navigator
+     *
+     * @param {*} [navigator]
+     * @param {*} [element]
+     * @memberof AVShSelectComponent
+     */
+    public initNavigator(navigator?: any, element?: any): void {
+        navigator.add(element);
+    }
+
 }
 
 export function AVShSelectProvider(): any {
     return forwardRef(() => AVShSelectComponent);
 }
+
+
