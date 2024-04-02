@@ -1,3 +1,6 @@
+$hilighted-color: var(--color-blue) !important;
+$text-overflow-ellipsis-width: 255px;
+
 :host {
     display: block;
     position: relative;
@@ -22,12 +25,28 @@
     background: var(--color-dark-fog) !important;
 }
 
-.hilighted>a {
+.account-list:hover {
     color: var(--color-blue) !important;
+    background: var(--color-dark-fog) !important;
 }
 
-.no-result-link>a {
-    color: var(--color-blue) !important;
+.hilighted {
+    >a {
+        color: $hilighted-color;
+    }
+}
+
+.text-overflow-ellipsis {
+    .list-item {
+        text-overflow: ellipsis;
+        width: $text-overflow-ellipsis-width;
+    }
+}
+
+.no-result-link {
+    >a {
+        color: $hilighted-color;
+    }
 }
 
 .group-list-no-found {
