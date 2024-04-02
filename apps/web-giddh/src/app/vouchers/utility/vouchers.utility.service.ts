@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { SearchType, TaxSupportedCountries, TaxType, VoucherTypeEnum } from "./vouchers.const";
 import { GeneralService } from "../../services/general.service";
 import { VoucherForm } from "../../models/api-models/Voucher";
-import { GIDDH_VOUCHER_FORM } from "../../app.constant";
+import { GIDDH_VOUCHER_FORM, PAGINATION_LIMIT } from "../../app.constant";
 import { giddhRoundOff } from "../../shared/helpers/helperFunctions";
 import { GIDDH_DATE_FORMAT } from "../../shared/helpers/defaultDateFormat";
 import * as dayjs from "dayjs";
@@ -81,24 +81,19 @@ export class VouchersUtilityService {
         let group: string;
 
         if (searchType === SearchType.CUSTOMER) {
-            group = (voucherType === VoucherTypeEnum.debitNote) ? 'sundrycreditors' : (voucherType === VoucherTypeEnum.purchase || voucherType === VoucherTypeEnum.purchaseOrder) ? (this.generalService.voucherApiVersion === 2) ? 'sundrycreditors' : 'sundrycreditors, bankaccounts, cash' : 'sundrydebtors';
+            group = (voucherType === VoucherTypeEnum.debitNote) ? 'sundrycreditors' : (voucherType === VoucherTypeEnum.purchase || voucherType === VoucherTypeEnum.purchaseOrder) ? 'sundrycreditors' : 'sundrydebtors';
         } else if (searchType === SearchType.ITEM) {
             group = (voucherType === VoucherTypeEnum.debitNote || voucherType === VoucherTypeEnum.purchase || voucherType === VoucherTypeEnum.cashBill || voucherType === VoucherTypeEnum.cashDebitNote || voucherType === VoucherTypeEnum.purchaseOrder) ?
-                'operatingcost, indirectexpenses' : 'otherincome, revenuefromoperations';
+                'operatingcost, indirectexpenses, fixedassets' : 'otherincome, revenuefromoperations, fixedassets';
             withStocks = !!query;
-
-            if (this.generalService.voucherApiVersion === 2) {
-                group += ", fixedassets";
-            }
         } else if (searchType === SearchType.BANK) {
-            group = 'bankaccounts, cash';
-            if (this.generalService.voucherApiVersion === 2) {
-                group += ", loanandoverdraft";
-            }
+            group = 'bankaccounts, cash, loanandoverdraft';
         }
+
         const requestObject = {
             q: encodeURIComponent(query),
             page,
+            count: PAGINATION_LIMIT,
             group: encodeURIComponent(group)
         };
         if (withStocks) {
