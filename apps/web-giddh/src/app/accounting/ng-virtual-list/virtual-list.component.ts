@@ -493,7 +493,7 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
      * @param {KeyboardEvent} event
      * @memberof AVShSelectComponent
      */
-    public handleKeyDown(event: KeyboardEvent) {
+    public handleKeyDown(event: KeyboardEvent): void {
         if (event.key === 'ArrowUp') {
             event.preventDefault();
             this.selectedIndex = Math.max(this.selectedIndex - 1, 0);
