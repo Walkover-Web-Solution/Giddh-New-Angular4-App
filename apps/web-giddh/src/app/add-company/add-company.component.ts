@@ -197,6 +197,8 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
     public permissionRoles$ = this.componentStore.select(state => state.permissionRoles);
     /** List of permission  roles */
     public permissionRoles: any[] = [];
+    /** True if user is super admin */
+    public isUserSuperAdmin: boolean = false;
 
 
     /** Returns true if form is dirty else false */
@@ -240,20 +242,11 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         this.getStates();
         this.getCurrency();
         this.getRoles();
+        this.getPermissionRoles();
 
         this.activateRoute.params.pipe(takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 this.company.subscriptionRequest.subscriptionId = res?.subscriptionId;
-            }
-        });
-
-        this.permissionRoles$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                this.permissionRoles = response?.map(role => ({
-                    label: role.name,
-                    value: role?.uniqueName,
-                    additional: role
-                }));
             }
         });
 
@@ -281,10 +274,10 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         ).subscribe(searchedText => {
             if (searchedText !== null && searchedText !== undefined) {
                 if (this.thirdStepForm?.controls['emailId'].status === 'VALID') {
-                    this.thirdStepForm?.get('roleUniqueName').setValue('super_admin');
+                    this.selectRole({ label: 'Super Admin', value: 'super_admin' });
                     this.selectedRole = 'Super Admin';
                 } else {
-                    this.thirdStepForm?.get('roleUniqueName').setValue('');
+                    this.selectRole({ label: '', value: '' });
                     this.selectedRole = '';
                 }
             }
@@ -556,7 +549,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         this.thirdStepForm = this.formBuilder.group({
             creatorSuperAdmin: [''],
             emailId: ['', Validators.pattern(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/)],
-            roleUniqueName: ['', Validators.required],
+            roleUniqueName: [''],
             entity: ['company']
         });
 
@@ -1296,6 +1289,14 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      */
     public setOwnerPermission(event: any): void {
         this.thirdStepForm.get('creatorSuperAdmin').setValue(event?.value);
+        if (event?.value === 'false') {
+            this.thirdStepForm.get('roleUniqueName').setValidators(Validators.required);
+            this.isUserSuperAdmin = true;
+        } else {
+            this.thirdStepForm.get('roleUniqueName').removeValidators(Validators.required);
+            this.isUserSuperAdmin = false;
+        }
+        this.thirdStepForm.get('roleUniqueName')?.updateValueAndValidity();
     }
 
     /**
@@ -1336,6 +1337,23 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
             ];
             this.changeDetection.detectChanges();
         }
+    }
+
+    /**
+     * This will be use for get permissions roles
+     *
+     * @memberof AddCompanyComponent
+     */
+    public getPermissionRoles(): void {
+        this.permissionRoles$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.permissionRoles = response?.map(role => ({
+                    label: role.name,
+                    value: role?.uniqueName,
+                    additional: role
+                }));
+            }
+        });
     }
 
     /**

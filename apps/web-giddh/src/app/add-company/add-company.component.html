@@ -211,7 +211,7 @@
                                 >
                                 </dropdown-field>
                             </div>
-                            <div class="col-lg-12 mobile-number fill-form"  *ngIf="showMobileField">
+                            <div class="col-lg-12 mobile-number fill-form" *ngIf="showMobileField">
                                 <span class="country-flag">
                                     <img
                                         *ngIf="currentFlag"
@@ -411,12 +411,15 @@
                             <div class="col-6 currency-space">
                                 <dropdown-field
                                     [name]="'roles'"
-                                    [label]="localeData?.roles + '*'"
+                                    [label]="
+                                        localeData?.roles +
+                                        (isUserSuperAdmin ? '*' : '')
+                                    "
                                     [placeholder]="localeData?.roles"
                                     [options]="permissionRoles"
                                     (selectedOption)="selectRole($event)"
-                                    [defaultValue]="selectedRole"
-                                    [showError]="isFormSubmitted && !firstStepForm.get('roleUniqueName')?.value"
+                                    [defaultValue]="selectedRole ? selectedRole:''"
+                                    [showError]="isFormSubmitted && isUserSuperAdmin"
                                 >
                                 </dropdown-field>
                             </div>
