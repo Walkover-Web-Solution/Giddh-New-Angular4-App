@@ -100,8 +100,7 @@
                                                         class="mb-3"
                                                     >
                                                         <span class="strong"
-                                                            >{{ plan?.currency?.symbol
-                                                            }}{{ plan?.yearlyAmount }}</span
+                                                            >{{ plan?.currency?.symbol }}{{ plan?.yearlyAmount }}</span
                                                         >
                                                         / {{ commonLocaleData?.app_duration?.yearly }}
                                                     </p>
@@ -110,8 +109,7 @@
                                                         class="mb-3"
                                                     >
                                                         <span class="strong"
-                                                            >{{ plan?.currency?.symbol
-                                                            }}{{ plan?.monthlyAmount }}</span
+                                                            >{{ plan?.currency?.symbol }}{{ plan?.monthlyAmount }}</span
                                                         >
                                                         /{{ commonLocaleData?.app_duration?.monthly }}
                                                     </p>
@@ -148,11 +146,12 @@
                                                     ></i>
                                                 </span>
                                             </div>
-                                            <div class="grid-title-list font-15 plan-row-height" *ngFor="let plan of inputData"
-                                            [ngClass]="{
-                                                'active-plan-td':
-                                                    selectedPlan?.uniqueName === plan?.uniqueName
-                                            }"
+                                            <div
+                                                class="grid-title-list font-15 plan-row-height"
+                                                *ngFor="let plan of inputData"
+                                                [ngClass]="{
+                                                    'active-plan-td': selectedPlan?.uniqueName === plan?.uniqueName
+                                                }"
                                             >
                                                 <span class="sub-plan-name">{{ plan?.invoicesAllowed }}</span>
                                             </div>
@@ -164,12 +163,13 @@
                                                     <i class="icon-info cp"></i>
                                                 </span>
                                             </div>
-                                            <div class="grid-title-list list-grid-title plan-row-height" 
-                                            [ngClass]="{
-                                                'active-plan-td':
-                                                    selectedPlan?.uniqueName === plan?.uniqueName
-                                            }" 
-                                            *ngFor="let plan of inputData">
+                                            <div
+                                                class="grid-title-list list-grid-title plan-row-height"
+                                                [ngClass]="{
+                                                    'active-plan-td': selectedPlan?.uniqueName === plan?.uniqueName
+                                                }"
+                                                *ngFor="let plan of inputData"
+                                            >
                                                 <span>{{ plan?.billsAllowed }}</span>
                                             </div>
                                         </div>
@@ -179,70 +179,81 @@
                                                     {{ localeData?.accountant_consultant }}
                                                 </span>
                                             </div>
-                                            <div class="grid-title-list list-grid-title plan-row-height"
-                                            [ngClass]="{
-                                                'active-plan-td':
-                                                    selectedPlan?.uniqueName === plan?.uniqueName
-                                            }" 
-                                            *ngFor="let plan of inputData">
-                                            <i class="icon-tick"></i>
-                                            </div>
-                                        </div>
-                                        <div class="grid-list-div list-grid">
-                                            <div class="grid-title-left">
-                                                <span class="inner-name mat-table-sticky">  {{ localeData?.desktop_mobile_app }}</span>
-                                            </div>
-                                            <div class="grid-title-list list-grid-title plan-row-height"
-                                            [ngClass]="{
-                                                'active-plan-td':
-                                                    selectedPlan?.uniqueName === plan?.uniqueName
-                                            }" 
-                                            *ngFor="let plan of inputData">
+                                            <div
+                                                class="grid-title-list list-grid-title plan-row-height"
+                                                [ngClass]="{
+                                                    'active-plan-td': selectedPlan?.uniqueName === plan?.uniqueName
+                                                }"
+                                                *ngFor="let plan of inputData"
+                                            >
                                                 <i class="icon-tick"></i>
                                             </div>
                                         </div>
                                         <div class="grid-list-div list-grid">
                                             <div class="grid-title-left">
-                                                <span class="inner-name mat-table-sticky"> {{ localeData?.unlimited_users }}</span>
+                                                <span class="inner-name mat-table-sticky">
+                                                    {{ localeData?.desktop_mobile_app }}</span
+                                                >
                                             </div>
-                                            <div class="grid-title-list list-grid-title plan-row-height"
-                                            [ngClass]="{
-                                                'active-plan-td':
-                                                    selectedPlan?.uniqueName === plan?.uniqueName
-                                            }" 
-                                            *ngFor="let plan of inputData">
+                                            <div
+                                                class="grid-title-list list-grid-title plan-row-height"
+                                                [ngClass]="{
+                                                    'active-plan-td': selectedPlan?.uniqueName === plan?.uniqueName
+                                                }"
+                                                *ngFor="let plan of inputData"
+                                            >
                                                 <i class="icon-tick"></i>
                                             </div>
                                         </div>
                                         <div class="grid-list-div list-grid">
                                             <div class="grid-title-left">
-                                                <span class="inner-name mat-table-sticky">{{localeData?.import_data}}</span>
+                                                <span class="inner-name mat-table-sticky">
+                                                    {{ localeData?.unlimited_users }}</span
+                                                >
                                             </div>
-                                            <div class="grid-title-list list-grid-title plan-row-height" 
-                                            [ngClass]="{
-                                                'active-plan-td':
-                                                    selectedPlan?.uniqueName === plan?.uniqueName
-                                            }" 
-                                            *ngFor="let plan of inputData">
+                                            <div
+                                                class="grid-title-list list-grid-title plan-row-height"
+                                                [ngClass]="{
+                                                    'active-plan-td': selectedPlan?.uniqueName === plan?.uniqueName
+                                                }"
+                                                *ngFor="let plan of inputData"
+                                            >
+                                                <i class="icon-tick"></i>
+                                            </div>
+                                        </div>
+                                        <div class="grid-list-div list-grid">
+                                            <div class="grid-title-left">
+                                                <span class="inner-name mat-table-sticky">{{
+                                                    localeData?.import_data
+                                                }}</span>
+                                            </div>
+                                            <div
+                                                class="grid-title-list list-grid-title plan-row-height"
+                                                [ngClass]="{
+                                                    'active-plan-td': selectedPlan?.uniqueName === plan?.uniqueName
+                                                }"
+                                                *ngFor="let plan of inputData"
+                                            >
                                                 <i class="icon-tick"></i>
                                             </div>
                                         </div>
                                         <div class="grid-list-div list-grid bottom-grid-list-div">
                                             <div class="grid-title-left">
-                                                <span class="inner-name mat-table-sticky">{{ localeData?.security }}</span>
+                                                <span class="inner-name mat-table-sticky">{{
+                                                    localeData?.security
+                                                }}</span>
                                             </div>
                                             <div
                                                 class="grid-title-list bottom-buy-button plan-row-height"
                                                 [ngClass]="{
-                                                    'active-plan-td':
-                                                        selectedPlan?.uniqueName === plan?.uniqueName,
+                                                    'active-plan-td': selectedPlan?.uniqueName === plan?.uniqueName,
                                                     'active-plan-td-bottom':
-                                                        selectedPlan?.uniqueName === plan?.uniqueName 
+                                                        selectedPlan?.uniqueName === plan?.uniqueName
                                                 }"
                                                 *ngFor="let plan of inputData"
                                             >
-                                            <i class="icon-tick"></i>
-                                        </div>
+                                                <i class="icon-tick"></i>
+                                            </div>
                                         </div>
                                     </div>
                                 </ng-container>
@@ -277,7 +288,7 @@
                                                 <input-field
                                                     [type]="'text'"
                                                     [name]="'billingName'"
-                                                    [label]="localeData?.billing_name"
+                                                    [label]="localeData?.billing_name + '*'"
                                                     [placeholder]="localeData?.billing_name"
                                                     formControlName="billingName"
                                                     [showError]="
@@ -290,7 +301,7 @@
                                                 <input-field
                                                     [type]="'text'"
                                                     [name]="'companyName'"
-                                                    [label]="commonLocaleData?.app_company_name"
+                                                    [label]="commonLocaleData?.app_company_name + '*'"
                                                     formControlName="companyName"
                                                     [placeholder]="commonLocaleData?.app_company_name"
                                                     [showError]="
@@ -303,7 +314,7 @@
                                                 <input-field
                                                     [type]="'text'"
                                                     [name]="'email'"
-                                                    [label]="commonLocaleData?.app_email"
+                                                    [label]="commonLocaleData?.app_email + '*'"
                                                     formControlName="email"
                                                     [placeholder]="commonLocaleData?.app_email"
                                                     [showError]="isFormSubmitted && !secondStepForm.get('email')?.value"
@@ -333,7 +344,7 @@
                                                             intlClass?.onlyPhoneNumber($event); validateMobileField()
                                                         "
                                                         id="init-contact"
-                                                        [placeholder]="commonLocaleData?.app_mobile_number"
+                                                        [placeholder]="commonLocaleData?.app_mobile_number + '*'"
                                                         formControlName="mobileNumber"
                                                         [ngClass]="{
                                                             'invalid-input':
@@ -354,9 +365,9 @@
                                             <div class="form-group">
                                                 <div class="width-100">
                                                     <dropdown-field
-                                                        [name]="'county'"
-                                                        [label]="localeData?.county + '*'"
-                                                        [placeholder]="localeData?.county"
+                                                        [name]="'country'"
+                                                        [label]="commonLocaleData?.app_country + '*'"
+                                                        [placeholder]="lcommonLocaleData?.app_country"
                                                         class="mb-3 d-block"
                                                         [options]="countrySource"
                                                         (selectedOption)="selectCountry($event)"
