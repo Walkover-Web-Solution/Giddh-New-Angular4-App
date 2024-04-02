@@ -7,6 +7,8 @@ import { IOption } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-optio
 import { concat, includes, startsWith } from 'apps/web-giddh/src/app/lodash-optimized';
 import { IForceClear } from 'apps/web-giddh/src/app/models/api-models/Sales';
 import { AVAccountListComponent } from './virtual-list-menu.component';
+import { CdkVirtualScrollViewport, ScrollDispatcher } from '@angular/cdk/scrolling';
+import { ReplaySubject, takeUntil } from 'rxjs';
 
 const FLATTEN_SEARCH_TERM = 'flatten';
 
@@ -32,8 +34,8 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
     @Input() public showClear: boolean = false;
     @Input() public forceClearReactive: IForceClear;
     @Input() public disabled: boolean;
-    @Input() public notFoundMsg: string = '';
-    @Input() public notFoundLinkText: string = '';
+    @Input() public notFoundMsg: string;
+    @Input() public notFoundLinkText: string;
     @Input() public notFoundLink: boolean = false;
     @Input() public isFilterEnabled: boolean = true;
     @Input() public width: string = 'auto';
@@ -76,6 +78,10 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
     public filteredData: IOption[] = [];
     public _selectedValues: IOption[] = [];
     public _options: IOption[] = [];
+    /** Observable to unsubscribe all the store listeners to avoid memory leaks */
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Hold selected index  */
+    public selectedIndex: number = -1;
 
     /** Keys. **/
 
@@ -89,7 +95,7 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
         DOWN: 40
     };
 
-    constructor(private cdRef: ChangeDetectorRef) {
+    constructor(private cdRef: ChangeDetectorRef, private scrollDispatcher: ScrollDispatcher, private eleRef: ElementRef) {
     }
 
     get options(): IOption[] {
@@ -315,7 +321,7 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
                 // this.optionList.highlightPreviousOption();
                 // this.dropdown.moveHighlightedIntoView();
                 // if (!this.filterEnabled) {
-                //   event.preventDefault();
+                //     event.preventDefault();
                 // }
             } else if (key === this.KEYS.DOWN) {
                 if (this.menuEle && this.menuEle.virtualScrollElm && this.menuEle.virtualScrollElm) {
@@ -328,11 +334,11 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
                         event.preventDefault();
                     }
                 }
-                // ----
-                // this.optionList.highlightNextOption();
+
+                //     this.optionList.highlightNextOption();
                 // this.dropdown.moveHighlightedIntoView();
                 // if (!this.filterEnabled) {
-                //   event.preventDefault();
+                //     event.preventDefault();
                 // }
             }
         }
@@ -399,7 +405,11 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
     }
 
     public ngOnInit() {
-        //
+        this.scrollDispatcher.scrolled().pipe(takeUntil(this.destroyed$)).subscribe((event: any) => {
+            if (event && event?.getDataLength() - event?.getRenderedRange().end < 20) {
+                this.scrollEnd.emit()
+            }
+        });
     }
 
     public ngAfterViewInit() {
@@ -476,8 +486,64 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
             this.selected.emit(newValue);
         }
     }
+
+    /**
+     * This will be use for key down events for list items highlighting
+     *
+     * @param {KeyboardEvent} event
+     * @memberof AVShSelectComponent
+     */
+    public handleKeyDown(event: KeyboardEvent): void {
+        if (event.key === 'ArrowUp') {
+            event.preventDefault();
+            this.selectedIndex = Math.max(this.selectedIndex - 1, 0);
+        } else if (event.key === 'ArrowDown') {
+            event.preventDefault();
+            this.selectedIndex = Math.min(this.selectedIndex + 1, this.rows.length - 1);
+        }
+
+        const elements = this.eleRef?.nativeElement?.querySelectorAll('.list-item');
+        if (elements.length > 0) {
+            elements.forEach((element, index) => {
+                if (index === this.selectedIndex) {
+                    element.classList.add('hilighted');
+                } else {
+                    element.classList.remove('hilighted');
+                }
+            });
+            elements[this.selectedIndex].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+        }
+    }
+
+    /**
+     * Handles new column added usually when group/link is clicked
+     *
+     * @param {*} [element]
+     * @param {*} [navigation]
+     * @memberof AVShSelectComponent
+     */
+    public onColAdd(element?: any, navigation?: any): void {
+        setTimeout(() => {
+            navigation.add(element?.nativeElement);
+            navigation.nextVertical();
+        }, 200);
+    }
+
+    /**
+     * Initializes navigator
+     *
+     * @param {*} [navigator]
+     * @param {*} [element]
+     * @memberof AVShSelectComponent
+     */
+    public initNavigator(navigator?: any, element?: any): void {
+        navigator.add(element);
+    }
+
 }
 
 export function AVShSelectProvider(): any {
     return forwardRef(() => AVShSelectComponent);
 }
+
+
