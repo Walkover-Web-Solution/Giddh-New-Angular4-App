@@ -8,6 +8,14 @@
     left: -240px;
     z-index: 991;
 
+    .inventory-aside-pane {
+        padding-bottom: 60px !important;
+    }
+
+    .help-aside-body {
+        overflow-y: unset !important;
+    }
+
     .aside-pane {
         background-color: var(--color-white) !important;
         overflow-x: hidden;
@@ -93,8 +101,7 @@
                             color: var(--color-white-tertiary);
                             background-color: var(--color-giddh-blue);
                             .sidebar-menu-icons {
-                                filter: invert(99%) sepia(93%) saturate(24%) hue-rotate(68deg) brightness(106%)
-                                    contrast(100%);
+                                filter: invert(99%) sepia(93%) saturate(24%) hue-rotate(68deg) brightness(106%) contrast(100%);
                             }
                         }
                         &.sub-option[aria-level="1"] {
@@ -107,8 +114,7 @@
                                 color: var(--color-giddh-blue);
                                 background-color: var(--color-white);
                                 .sidebar-menu-icons {
-                                    filter: brightness(0) saturate(100%) invert(15%) sepia(31%) saturate(4938%)
-                                        hue-rotate(224deg) brightness(91%) contrast(104%);
+                                    filter: brightness(0) saturate(100%) invert(15%) sepia(31%) saturate(4938%) hue-rotate(224deg) brightness(91%) contrast(104%);
                                 }
                             }
                         }
@@ -135,8 +141,7 @@
                                 color: var(--color-giddh-blue);
                             }
                             .sidebar-menu-icons {
-                                filter: brightness(0) saturate(100%) invert(15%) sepia(31%) saturate(4938%)
-                                    hue-rotate(224deg) brightness(91%) contrast(104%);
+                                filter: brightness(0) saturate(100%) invert(15%) sepia(31%) saturate(4938%) hue-rotate(224deg) brightness(91%) contrast(104%);
                             }
                             .sidebar-icon {
                                 color: var(--color-giddh-blue);
