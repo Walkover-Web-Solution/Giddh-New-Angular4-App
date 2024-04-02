@@ -78,6 +78,7 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
     public filteredData: IOption[] = [];
     public _selectedValues: IOption[] = [];
     public _options: IOption[] = [];
+    /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Hold selected index  */
     public selectedIndex: number = -1;
@@ -284,12 +285,12 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
         this.isOpen = true;
         // this.focusFilter();
         this.onShow.emit();
-        // if (this.menuEle && this.menuEle.virtualScrollElm && this.menuEle.virtualScrollElm) {
-        //     let item = this.rows.find(p => p?.value === (this._selectedValues?.length > 0 ? this._selectedValues[0] : (this.rows?.length > 0 ? this.rows[0]?.value : null)));
-        //     if (item !== null) {
-        //         this.menuEle.virtualScrollElm.scrollInto(item);
-        //     }
-        // }
+        if (this.menuEle && this.menuEle.virtualScrollElm && this.menuEle.virtualScrollElm) {
+            let item = this.rows.find(p => p?.value === (this._selectedValues?.length > 0 ? this._selectedValues[0] : (this.rows?.length > 0 ? this.rows[0]?.value : null)));
+            if (item !== null) {
+                this.menuEle.virtualScrollElm.scrollInto(item);
+            }
+        }
         this.cdRef.markForCheck();
     }
 
