@@ -1696,4 +1696,18 @@ export class GeneralService {
 
         return operatingSystem;
     }
+
+    /**
+     * Check if a given country name is included in the array of supported countries for Plaid, and return a boolean value 
+     * indicating whether the country is supported or not.
+     *
+     * @param {string} countryName
+     * @returns {boolean}
+     * @memberof GeneralService
+     */
+    public checkCompanySupportPlaid(countryName: string): boolean {
+        const plaidSupportedCountryList = ['UNITED KINGDOM', 'GERMANY', 'FRANCE', 'NETHERLANDS', 'IRELAND', 'SPAIN', 'SWEDEN', 'DENMARK', 'POLAND', 'PORTUGAL', 'ITALY', 'LITHUANIA', 'LATVIA', 'ESTONIA', 'NORWAY', 'BELGIUM', 'UNITED STATES OF AMERICA', 'CANADA'];
+
+        return plaidSupportedCountryList.includes(countryName.toUpperCase());
+    }
 }
