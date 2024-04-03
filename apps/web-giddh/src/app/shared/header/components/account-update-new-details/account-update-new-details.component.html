@@ -266,6 +266,7 @@
                                                         (change)="
                                                             isDefaultAddressSelected(gst.get('isDefault')?.value, i)
                                                         "
+                                                        aria-label="defaultGst"
                                                     >
                                                     </mat-slide-toggle>
                                                 </span>
@@ -585,7 +586,7 @@
                         <div class="col-xl-1 col-lg-1 col-md-2 col-sm-12 pl-0 remove-user">
                             <div class="inc-dec">
                                 <div class="plus-minus w-100">
-                                    <button class="btn mr-0" (click)="removePortalUser(domain, i)">
+                                    <button class="btn mr-0" (click)="removePortalUser(domain, i)" aria-label="delete icon">
                                         <i class="icon-trash delete"></i>
                                     </button>
                                 </div>
@@ -910,6 +911,7 @@
                         *ngIf="showDeleteButton"
                         class="btn btn-danger"
                         (click)="deleteClicked.emit(true)"
+                        aria-label="delete"
                     >
                         {{ commonLocaleData?.app_delete }}
                     </button>
@@ -918,6 +920,7 @@
                         class="btn btn-primary update-btn-zindex"
                         [ladda]="updateAccountInProcess$ | async"
                         [disabled]="addAccountForm.invalid || !(isGstValid$ | async) || isMobileNumberInvalid"
+                        aria-label="update"
                     >
                         {{ commonLocaleData?.app_update }}
                     </button>
@@ -968,6 +971,7 @@
                                             type="submit"
                                             class="btn btn-primary merge-btn mr-0"
                                             [disabled]="moveAccountForm.invalid"
+                                            aria-label="move"
                                         >
                                             {{ localeData?.move }}
                                         </button>
@@ -1001,7 +1005,7 @@
                                 ></sh-select>
                             </span>
                             <span class="pull-right">
-                                <button type="submit" class="btn btn-primary merge-btn mr-0" (click)="mergeAccounts()">
+                                <button type="submit" class="btn btn-primary merge-btn mr-0" (click)="mergeAccounts()" aria-label="merge">
                                     {{ localeData?.merge }}
                                 </button>
                             </span>
@@ -1052,6 +1056,7 @@
                                 class="btn btn-primary merge-btn mr-0"
                                 [disabled]="isDiscountSaveDisable$ | async"
                                 (click)="applyDiscounts()"
+                                aria-label="apply"
                             >
                                 {{ commonLocaleData?.app_apply }}
                             </button>
@@ -1114,6 +1119,7 @@
                                         [disabled]="isTaxesSaveDisable$ | async"
                                         type="submit"
                                         class="btn btn-success save-btn mr-0"
+                                        aria-label="save"
                                     >
                                         {{ commonLocaleData?.app_save }}
                                     </button>
@@ -1163,6 +1169,7 @@
                         *ngIf="showDeleteButton"
                         class="btn btn-danger"
                         (click)="deleteClicked.emit(true)"
+                        aria-label="delete"
                     >
                         {{ commonLocaleData?.app_delete }}
                     </button>
@@ -1171,6 +1178,7 @@
                         class="btn btn-primary update-btn-zindex"
                         [ladda]="updateAccountInProcess$ | async"
                         [disabled]="addAccountForm.invalid || !(isGstValid$ | async)"
+                        aria-label="update"
                     >
                         {{ commonLocaleData?.app_update }}
                     </button>

@@ -1,7 +1,7 @@
 :host {
     position: fixed;
     left: auto;
-    top: 60px;
+    top: calc(var(--top-distance) + 60px);
     right: -5px;
     bottom: 0;
     max-width: 330px;
@@ -15,7 +15,13 @@
         height: 12px;
         background-color: var(--color-primary-aside-host-after-background);
         top: -6px;
-        right: 18px;
+        right: 128px;
+        @media screen and (max-width: 1024px) {
+            right: 92px;
+        }
+        @media screen and (max-width: 992px) {
+            right: 82px;
+        }
         z-index: 1;
         transform: rotate(45deg);
     }
@@ -27,7 +33,7 @@
     display: block;
     position: fixed;
     left: -41px;
-    top: 0;
+    top: var(--top-distance);
     z-index: 5;
     border: 0;
     cursor: pointer;
@@ -110,6 +116,9 @@
         .download-block {
             padding: 15px;
             border-bottom: 1px solid var(--color-common-secondary-border);
+            h3 {
+                color: var(--color-nero);
+            }
             h4 {
                 padding-bottom: 5px;
                 font-size: var(--font-size-15);
@@ -147,7 +156,7 @@
             font-size: var(--font-size-16);
             line-height: 1.5;
             p {
-                a {
+                a,i  {
                     color: var(--color-nero);
                 }
             }
@@ -207,7 +216,7 @@
     :host {
         position: fixed;
         left: auto;
-        top: 90px;
+        top: calc(var(--top-distance) + 90px);
     }
 }
 @media (max-width: 575px) {

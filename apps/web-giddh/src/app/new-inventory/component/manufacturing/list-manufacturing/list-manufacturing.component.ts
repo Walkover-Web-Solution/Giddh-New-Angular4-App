@@ -399,7 +399,9 @@ export class ListManufacturingComponent implements OnInit {
     public openAdvanceFilterDialog(): void {
         this.dialog.open(this.advanceFilterComponent, {
             width: '500px',
-            autoFocus: false
+            autoFocus: false,
+            role: 'alertdialog',
+            ariaLabel: 'Advance filter Dialog'
         });
     }
 

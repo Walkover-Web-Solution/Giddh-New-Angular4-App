@@ -8,13 +8,17 @@
     <div class="box clearfix" [keyboardShortcut]="'alt+c'" (onShortcutPress)="selectedTax = null; toggleTaxAsidePane()">
         <div class="d-flex justify-content-between">
             <h1 class="section-head m-0 pl-0 pb-0 pr-0">{{ localeData?.added_taxes }}</h1>
-            <button
-                class="btn btn-sky-blue mr-0"
-                [tooltip]="localeData?.create_new_tax"
-                (click)="selectedTax = null; toggleTaxAsidePane($event)"
-            >
-                <i class="icon icon-plus font-12"></i> {{ localeData?.new_tax }}
-            </button>
+            <div>
+                <watch-video [cssClass]="'text-primary mr-r15'" [moduleName]="'TAX_CREATION'"></watch-video>
+                <button
+                    class="btn btn-sky-blue mr-0"
+                    [tooltip]="localeData?.create_new_tax"
+                    (click)="selectedTax = null; toggleTaxAsidePane($event)"
+                    aria-label="create new tax"
+                >
+                    <i class="icon icon-plus font-12"></i> {{ localeData?.new_tax }}
+                </button>
+            </div>
         </div>
 
         <div class="col-sm-12 pd-t15 tax-table-wrapper">
@@ -197,6 +201,7 @@
                                         <button
                                             (click)="selectedTax = tax; toggleTaxAsidePane()"
                                             type="button"
+                                            aria-label="edit-icon"
                                             class="btn btn-xs"
                                         >
                                             <i
@@ -209,6 +214,7 @@
                                         <button
                                             *ngIf="!taxToEdit[i]"
                                             type="button"
+                                            aria-label="delete-icon"
                                             class="btn btn-xs"
                                             (click)="deleteTax(tax)"
                                         >

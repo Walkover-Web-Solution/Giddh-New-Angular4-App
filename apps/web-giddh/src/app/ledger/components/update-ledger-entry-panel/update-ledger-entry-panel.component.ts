@@ -14,7 +14,7 @@ import {
     ViewChild
 } from '@angular/core';
 import { select, Store } from '@ngrx/store';
-import { SubVoucher, RATE_FIELD_PRECISION, SearchResultText, RESTRICTED_VOUCHERS_FOR_DOWNLOAD, AdjustedVoucherType } from 'apps/web-giddh/src/app/app.constant';
+import { SubVoucher, RATE_FIELD_PRECISION, SearchResultText, RESTRICTED_VOUCHERS_FOR_DOWNLOAD, AdjustedVoucherType, ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT } from 'apps/web-giddh/src/app/app.constant';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { saveAs } from 'file-saver';
 import * as dayjs from 'dayjs';
@@ -223,14 +223,14 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     /** Stores the search results pagination details */
     public searchResultsPaginationData = {
         page: 0,
-        totalPages: 0,
+        count: ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT,
         query: ''
     };
     /** Stores the default search results pagination details (required only for passing
      * default search pagination details to Update ledger component) */
     public defaultResultsPaginationData = {
         page: 0,
-        totalPages: 0,
+        count: ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT,
         query: ''
     };
 
@@ -289,6 +289,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     private isSundryDebtorCreditor: boolean = false;
     /** account other applicable discount list which contains account's discount else immediate group's discount(inherited) */
     public accountOtherApplicableDiscount: any[] = [];
+    /** False if there is no data in account search */
+    public isAccountSearchData: boolean = true;
 
     constructor(
         private accountService: AccountService,
@@ -333,9 +335,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         }
         if (this.searchResultsPaginationPage) {
             this.searchResultsPaginationData.page = this.searchResultsPaginationPage;
-        }
-        if (this.searchResultsPaginationTotalPages) {
-            this.searchResultsPaginationData.totalPages = this.searchResultsPaginationTotalPages;
         }
 
         if (this.generalService.voucherApiVersion === 2) {
@@ -1464,7 +1463,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     public handleScrollEnd(): void {
-        if (this.searchResultsPaginationData.page < this.searchResultsPaginationData.totalPages) {
+        if (this.searchResultsPaginationData.page) {
             this.onSearchQueryChanged(
                 this.searchResultsPaginationData.query,
                 this.searchResultsPaginationData.page + 1,
@@ -1480,7 +1479,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                         }) || [];
                         this.defaultSuggestions = this.defaultSuggestions.concat(...results);
                         this.defaultResultsPaginationData.page = this.searchResultsPaginationData.page;
-                        this.defaultResultsPaginationData.totalPages = this.searchResultsPaginationData.totalPages;
                     }
                 });
         }
@@ -1507,36 +1505,42 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 q: encodeURIComponent(query),
                 page,
                 withStocks,
-                accountUniqueName: encodeURIComponent(accountUniqueName)
+                accountUniqueName: encodeURIComponent(accountUniqueName),
+                count: ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT
             }
-            this.searchService.searchAccount(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
-                if (data && data.body && data.body.results) {
-                    const searchResults = data.body.results.map(result => {
-                        return {
-                            value: result.stock ? `${result?.uniqueName}#${result?.stock?.uniqueName}` : result?.uniqueName,
-                            label: result.stock ? `${result?.name} (${result?.stock?.name})` : result?.name,
-                            additional: result
+            if (this.isAccountSearchData) {
+                this.searchService.searchAccount(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+                    if (!data?.body?.results?.length || (data?.body?.results?.length && ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT !== data?.body?.count)) {
+                        this.isAccountSearchData = false;
+                    }
+
+                    if (data && data.body && data.body.results) {
+                        const searchResults = data.body.results.map(result => {
+                            return {
+                                value: result.stock ? `${result?.uniqueName}#${result?.stock?.uniqueName}` : result?.uniqueName,
+                                label: result.stock ? `${result?.name} (${result?.stock?.name})` : result?.name,
+                                additional: result
+                            }
+                        }) || [];
+                        this.noResultsFoundLabel = SearchResultText.NotFound;
+                        if (page === 1) {
+                            this.searchResults = searchResults;
+                        } else {
+                            this.searchResults = [
+                                ...this.searchResults,
+                                ...searchResults
+                            ];
                         }
-                    }) || [];
-                    this.noResultsFoundLabel = SearchResultText.NotFound;
-                    if (page === 1) {
-                        this.searchResults = uniqBy(searchResults, 'value');
-                    } else {
-                        const uniqueResults = uniqBy([...this.searchResults,
-                        ...searchResults], 'value');
-                        this.searchResults = uniqueResults;
+                        this.searchResultsPaginationData.page = data.body.page;
+                        if (successCallback) {
+                            successCallback(data.body.results);
+                        } else {
+                            this.defaultResultsPaginationData.page = this.searchResultsPaginationData.page;
+                        }
+                        this.changeDetectorRef.detectChanges();
                     }
-                    this.searchResultsPaginationData.page = data.body.page;
-                    this.searchResultsPaginationData.totalPages = data.body.totalPages;
-                    if (successCallback) {
-                        successCallback(data.body.results);
-                    } else {
-                        this.defaultResultsPaginationData.page = this.searchResultsPaginationData.page;
-                        this.defaultResultsPaginationData.totalPages = this.searchResultsPaginationData.totalPages;
-                    }
-                    this.changeDetectorRef.detectChanges();
-                }
-            });
+                });
+            }
         } else {
             this.searchResults = [...this.defaultSuggestions];
             this.changeDetectorRef.detectChanges();
@@ -1552,7 +1556,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.searchResults = [...this.defaultSuggestions];
         this.searchResultsPaginationData = {
             page: 0,
-            totalPages: 0,
+            count: ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT,
             query: ''
         };
         this.noResultsFoundLabel = SearchResultText.NewSearch;
@@ -1962,7 +1966,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 }
             }) || [];
             this.defaultResultsPaginationData.page = this.searchResultsPaginationData.page;
-            this.defaultResultsPaginationData.totalPages = this.searchResultsPaginationData.totalPages;
             this.searchResults = [...this.defaultSuggestions];
             this.noResultsFoundLabel = SearchResultText.NotFound;
         });

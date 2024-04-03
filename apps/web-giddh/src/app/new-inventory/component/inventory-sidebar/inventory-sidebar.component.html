@@ -8,7 +8,7 @@
     <div class="aside-pane" (clickOutside)="closeAsidePaneIfMobile($event)" asideInventorySidebarMenuState>
         <div class="help-aside-body">
             <div class="back-to-main-slider">
-                <a [routerLink]="['/pages/giddh-all-items']">
+                <a [routerLink]="['/pages/giddh-all-items']" href="javascript:void(0);" aria-label="home icon">
                     <span>
                         <img src="{{ imgPath }}home-icon-black.svg" alt="home-icon" class="icon-pull-top">
                     </span>
@@ -36,8 +36,8 @@
                             *ngIf="!(node.onlyBranchMode && isCompany)"
                             (click)="toggleAsidePane($event, node)"
                         >
-                            <img src="{{ imgPath }}{{ node.icons }}" [ngClass]="{ 'mt-1': (node.name == localeData?.sidebar?.warehouse_balance)}" class="sidebar-menu-icons" alt="" />
-                            <h5>{{ node.name }}</h5>
+                            <img src="{{ imgPath }}{{ node.icons }}" [ngClass]="{ 'mt-1': (node.name == localeData?.sidebar?.warehouse_balance)}" class="sidebar-menu-icons" alt="icon" />
+                            <h2>{{ node.name }}</h2>
                         </span>
                     </mat-tree-node>
                     <mat-tree-node
@@ -46,7 +46,7 @@
                         matTreeNodeToggle
                         class="list"
                     >
-                        <button mat-icon-button disableRipple matTreeNodeToggle class="arrow-btn">
+                        <button mat-icon-button disableRipple matTreeNodeToggle class="arrow-btn" aria-label="sidebar icon">
                             <span class="sidebar-list-icon">
                                 <i *ngIf="treeControl.isExpanded(node)" class="icon-up mr-l1 font-15 sidebar-icon"></i>
                                 <i
@@ -55,8 +55,8 @@
                                 ></i>
                             </span>
                         </button>
-                        <img src="{{ imgPath }}{{ node.icons }}" class="sidebar-menu-icons" alt="" />
-                        <h5>{{ node.name }}</h5>
+                        <img src="{{ imgPath }}{{ node.icons }}" class="sidebar-menu-icons" alt="menu icon" />
+                        <h2>{{ node.name }}</h2>
                     </mat-tree-node>
                 </mat-tree>
             </div>

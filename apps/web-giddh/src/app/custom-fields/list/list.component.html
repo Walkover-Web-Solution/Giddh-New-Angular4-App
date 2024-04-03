@@ -9,6 +9,8 @@
     <div class="container-fluid mr-t15 custom-field-page">
         <div class="d-flex justify-content-between custom-field-header">
             <a
+                href="javascript:void(0);"
+                aria-label="add nav"
                 mat-stroked-button
                 color="primary"
                 id="custom-field-btn"
@@ -32,6 +34,7 @@
                     </mat-select>
                 </div>
             </div>
+            <watch-video [cssClass]="'text-primary'" [moduleName]="'CUSTOM_FIELD'"></watch-video>
         </div>
         <div class="custom-field-list mr-t15">
             <div>
@@ -59,6 +62,7 @@
                         <td mat-cell *matCellDef="let element">
                             <a
                                 href="javascript:;"
+                                aria-label="edit icon"
                                 [routerLink]="['/pages/custom-fields/edit/' + element?.uniqueName]"
                                 [matTooltip]="commonLocaleData?.app_edit"
                                 [matTooltipPosition]="'above'"
@@ -67,6 +71,7 @@
                             ></a>
                             <a
                                 href="javascript:;"
+                                aria-label="delete icon"
                                 [matTooltip]="commonLocaleData?.app_delete"
                                 [matTooltipPosition]="'above'"
                                 matTooltipClass="tooltip-black"

@@ -6,7 +6,7 @@
         <mat-card-content class="banks-scrollbar-wrapper" *ngIf="localeData">
             <div class="bank-details-block">
                 <cdk-virtual-scroll-viewport [itemSize]="61" *ngIf="!isLoading && bankAccounts?.length > 0"
-                    class="virtual-group-list overflow-x-hidden">
+                    class="virtual-group-list overflow-x-hidden" tabindex="0">
                     <div class="wrap-single-bank-detail">
                         <div class="single-bank-detail" *cdkVirtualFor="let bankaccount of bankAccounts">
                             <p class="bank-name">{{ bankaccount.name }}</p>

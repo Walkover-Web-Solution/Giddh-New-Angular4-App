@@ -1,6 +1,6 @@
 :host.inventory-sidebar {
     position: fixed;
-    top: 58px;
+    top: var(--top-sidebar);
     bottom: 0;
     min-height: 100vh;
     background-color: var(--color-white);
@@ -13,7 +13,7 @@
         overflow-x: hidden;
         overflow-y: auto;
         z-index: unset;
-        padding-bottom: 60px;
+        padding-bottom: 200px;
 
         .back-to-main-slider {
             display: block;
@@ -235,7 +235,7 @@
 @media (max-width: 767px) {
     :host.inventory-sidebar {
         z-index: 9999;
-        top: 0;
+        top: var(--top-sidebar);
     }
 }
 

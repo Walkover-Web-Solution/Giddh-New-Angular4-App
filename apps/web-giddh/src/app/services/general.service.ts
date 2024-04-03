@@ -621,7 +621,7 @@ export class GeneralService {
         }];
         const headerText: string = localeData?.date_change_confirmation_heading;
         const headerCssClass: string = 'd-inline-block mr-1';
-        const messageCssClass: string = 'mr-b1 text-light';
+        const messageCssClass: string = 'mr-b1';
         const footerCssClass: string = 'mr-b1';
         return (isVoucherDateSelected) ? {
             headerText,
@@ -661,6 +661,38 @@ export class GeneralService {
             messageText: 'Are you sure you want to delete this' + selectedBranchTransferType + '?',
             messageCssClass,
             footerText: 'It will be deleted permanently and will no longer be accessible from any other module.',
+            footerCssClass,
+            buttons
+        };
+    }
+
+    /**
+     * Handles the file return modal configuration
+     *
+     * @param {*} localeData
+     * @param {*} commonLocaleData
+     * @return {*}  {ConfirmationModalConfiguration}
+     * @memberof GeneralService
+     */
+    public fileReturnConfiguration(localeData: any, commonLocaleData: any): ConfirmationModalConfiguration {
+
+        const buttons: Array<ConfirmationModalButton> = [{
+            text: commonLocaleData?.app_yes,
+            color: 'primary'
+        },
+        {
+            text: commonLocaleData?.app_no
+        }];
+        const headerText: string = commonLocaleData?.app_confirmation;
+        const headerCssClass: string = 'd-inline-block mr-1';
+        const messageCssClass: string = 'mr-b1';
+        const footerCssClass: string = 'mr-b1';
+        return {
+            headerText,
+            headerCssClass,
+            messageText: localeData?.file_return_confirmation,
+            messageCssClass,
+            footerText: '',
             footerCssClass,
             buttons
         };
@@ -809,7 +841,7 @@ export class GeneralService {
         itemList?.forEach((menuItem, menuIndex) => {
             visibleMenuItems[menuIndex].items = [];
 
-            if (visibleMenuItems[menuIndex]?.additional?.voucherVersion && visibleMenuItems[menuIndex]?.additional?.voucherVersion !== this.voucherApiVersion) {
+            if (visibleMenuItems[menuIndex]?.additional?.queryParams?.voucherVersion && visibleMenuItems[menuIndex]?.additional?.queryParams?.voucherVersion !== this.voucherApiVersion) {
                 visibleMenuItems[menuIndex].hide = true;
             } else {
                 visibleMenuItems[menuIndex].itemIndex = index;
@@ -818,7 +850,7 @@ export class GeneralService {
 
             menuItem.items?.forEach(item => {
                 const isValidItem = apiItems.find(apiItem => apiItem?.uniqueName === item.link);
-                if (((isValidItem && item.hide !== module) || (item.alwaysPresent && item.hide !== module)) && (!item.additional?.countrySpecific?.length || item.additional?.countrySpecific?.indexOf(countryCode) > -1) && (!item.additional?.voucherVersion || item.additional?.voucherVersion === this.voucherApiVersion)) {
+                if (((isValidItem && item.hide !== module) || (item.alwaysPresent && item.hide !== module)) && (!item.additional?.countrySpecific?.length || item.additional?.countrySpecific?.indexOf(countryCode) > -1) && (!item.additional?.queryParams?.voucherVersion || item.additional?.queryParams?.voucherVersion === this.voucherApiVersion)) {
                     // If items returned from API have the current item which can be shown in branch/company mode, add it
                     visibleMenuItems[menuIndex].items.push(item);
                 }

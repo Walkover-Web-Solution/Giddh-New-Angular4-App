@@ -28,7 +28,7 @@
                             <i aria-hidden="true" class="icon-refresh"></i> {{ commonLocaleData?.app_clear_filter }}
                         </a>
                     </div>
-                    <button class="btn btn-sky-blue mr-0" [routerLink]="['/pages/settings/create-warehouse']">
+                    <button aria-label="create warehouse" class="btn btn-sky-blue mr-0" [routerLink]="['/pages/settings/create-warehouse']">
                         {{ localeData?.create_warehouse }}
                     </button>
                 </div>
@@ -63,7 +63,8 @@
                                 >
                                 <div class="btn-group" dropdown>
                                     <button
-                                        id="button-basic"
+                                        aria-label="vertical dots"
+                                        id="warehouse dots"
                                         dropdownToggle
                                         type="button"
                                         class="btn dropdown-toggle"

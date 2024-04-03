@@ -15,7 +15,7 @@
         </div>
         <div class="help-aside-body">
             <div class="back-to-main-slider" [ngClass]="{ 'setting-close-icon': isMobileScreen }">
-                <a href="javascript:;">
+                <a href="javascript:;" aria-label="back icon">
                     <span
                         class="d-flex align-items-center"
                         *ngIf="!isMobileScreen && !showSettingHeading"
@@ -36,7 +36,7 @@
                         *ngFor="let tab of section"
                         [ngClass]="{ 'active-link': tab.link === routerUrl || tab?.linked_pages?.includes(routerUrl) }"
                     >
-                        <a class="d-block clearfix" [routerLink]="[tab.link]">
+                        <a href="javascript:;" aria-label="icon" class="d-block clearfix" [routerLink]="[tab.link]">
                             <span [innerHTML]="tab.icon"></span>
                             <span>{{ tab.label }}</span>
                         </a>

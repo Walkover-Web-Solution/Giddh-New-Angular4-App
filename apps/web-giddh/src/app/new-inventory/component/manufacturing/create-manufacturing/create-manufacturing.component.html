@@ -13,55 +13,58 @@
                     <ng-container *ngIf="isCompany">
                         <div class="font-16 branch-msg">{{ localeData?.info_message }}</div>
                     </ng-container>
-                    <div class="form-fields w-100">
-                        <div class="d-inline-flex align-items-end">
-                            <div class="col manufacturing-date">
-                                <giddh-datepicker
-                                    name="date"
-                                    [cssClass]="'w-100 disable-bg' + (errorFields.date ? ' required-field-error' : '')"
-                                    [showToggleIcon]="false"
-                                    [(ngModel)]="manufacturingObject.manufacturingDetails[0].date"
-                                    (dateSelected)="errorFields.date = false"
-                                    [placeholder]="commonLocaleData?.app_date"
-                                    [appearance]="'outline'"
-                                    [disabled]="isCompany"
-                                >
-                                </giddh-datepicker>
-                            </div>
-                            <div class="col responsive-width" *ngIf="warehouses?.length > 1">
-                                <dropdown-field
-                                    [name]="'warehouseUniqueName'"
-                                    [placeholder]="commonLocaleData?.app_select_warehouse"
-                                    [options]="warehouses"
-                                    (selectedOption)="
-                                        manufacturingObject.manufacturingDetails[0].warehouseUniqueName = $event.value;
-                                        selectedWarehouseName = $event.label
-                                    "
-                                    [defaultValue]="selectedWarehouseName"
-                                    [readonly]="isCompany"
-                                >
-                                </dropdown-field>
-                            </div>
-                            <div class="col responsive-width">
-                                <div class="custom-card bg-green">
-                                    <p class="card-head-text">{{ localeData?.total_cost }}</p>
-                                    <p class="card-text">{{ totals.totalAmount }}</p>
+                    <div class="form-fields w-100 d-flex">
+                        <div>
+                            <div class="d-inline-flex align-items-end">
+                                <div class="col manufacturing-date">
+                                    <giddh-datepicker
+                                        name="date"
+                                        [cssClass]="'w-100 disable-bg' + (errorFields.date ? ' required-field-error' : '')"
+                                        [showToggleIcon]="false"
+                                        [(ngModel)]="manufacturingObject.manufacturingDetails[0].date"
+                                        (dateSelected)="errorFields.date = false"
+                                        [placeholder]="commonLocaleData?.app_date"
+                                        [appearance]="'outline'"
+                                        [disabled]="isCompany"
+                                    >
+                                    </giddh-datepicker>
+                                </div>
+                                <div class="col responsive-width" *ngIf="warehouses?.length > 1">
+                                    <dropdown-field
+                                        [name]="'warehouseUniqueName'"
+                                        [placeholder]="commonLocaleData?.app_select_warehouse"
+                                        [options]="warehouses"
+                                        (selectedOption)="
+                                            manufacturingObject.manufacturingDetails[0].warehouseUniqueName = $event.value;
+                                            selectedWarehouseName = $event.label
+                                        "
+                                        [defaultValue]="selectedWarehouseName"
+                                        [readonly]="isCompany"
+                                    >
+                                    </dropdown-field>
+                                </div>
+                                <div class="col responsive-width">
+                                    <div class="custom-card bg-green">
+                                        <p class="card-head-text">{{ localeData?.total_cost }}</p>
+                                        <p class="card-text">{{ totals.totalAmount }}</p>
+                                    </div>
+                                </div>
+                                <div class="col responsive-width">
+                                    <div class="custom-card bg-expense">
+                                        <p class="card-head-text">{{ localeData?.manufacturing_expenses }}</p>
+                                        <p class="card-text">{{ totals.expensePerItem }}</p>
+                                    </div>
+                                </div>
+                                <div class="col responsive-width">
+                                    <div class="custom-card bg-vivid-gamboge">
+                                        <p class="card-head-text">{{ localeData?.item_cost }}</p>
+                                        <p class="card-text">{{ totals.costPerItem }}</p>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col responsive-width">
-                                <div class="custom-card bg-expense">
-                                    <p class="card-head-text">{{ localeData?.manufacturing_expenses }}</p>
-                                    <p class="card-text">{{ totals.expensePerItem }}</p>
-                                </div>
-                            </div>
-                            <div class="col responsive-width">
-                                <div class="custom-card bg-vivid-gamboge">
-                                    <p class="card-head-text">{{ localeData?.item_cost }}</p>
-                                    <p class="card-text">{{ totals.costPerItem }}</p>
-                                </div>
-                            </div>
+                            <hr class="my-3 max-width-stock" />
                         </div>
-                        <hr class="my-3 max-width-stock" />
+                        <watch-video class="ml-auto" [cssClass]="'text-primary'" [moduleName]="'MANUFACTURING'"></watch-video>
                     </div>
                 </div>
                 <div class="row max-width-stock position-relative">

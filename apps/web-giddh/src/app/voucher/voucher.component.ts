@@ -29,7 +29,7 @@ import { cloneDeep, find, forEach, isEqual, isUndefined, omit, orderBy, uniqBy }
 import { InvoiceSetting } from '../models/interfaces/invoice.setting.interface';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { LedgerDiscountClass } from '../models/api-models/SettingsDiscount';
-import { SubVoucher, RATE_FIELD_PRECISION, HIGH_RATE_FIELD_PRECISION, SearchResultText, TCS_TDS_TAXES_TYPES, ENTRY_DESCRIPTION_LENGTH, EMAIL_REGEX_PATTERN, AdjustedVoucherType, MOBILE_NUMBER_UTIL_URL, MOBILE_NUMBER_IP_ADDRESS_URL, MOBILE_NUMBER_ADDRESS_JSON_URL, MOBILE_NUMBER_SELF_URL } from '../app.constant';
+import { SubVoucher, RATE_FIELD_PRECISION, HIGH_RATE_FIELD_PRECISION, SearchResultText, TCS_TDS_TAXES_TYPES, ENTRY_DESCRIPTION_LENGTH, EMAIL_REGEX_PATTERN, AdjustedVoucherType, MOBILE_NUMBER_UTIL_URL, MOBILE_NUMBER_SELF_URL, MOBILE_NUMBER_IP_ADDRESS_URL, MOBILE_NUMBER_ADDRESS_JSON_URL, ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT } from '../app.constant';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { ProformaActions } from '../actions/proforma/proforma.actions';
 import { PreviousInvoicesVm, ProformaFilter, ProformaGetRequest, ProformaResponse } from '../models/api-models/proforma';
@@ -497,31 +497,31 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     /** Stores the search results pagination details for customer */
     public searchCustomerResultsPaginationData = {
         page: 0,
-        totalPages: 0,
+        count: ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT,
         query: ''
     };
     /** Stores the search results pagination details for stock or service  */
     public searchItemResultsPaginationData = {
         page: 0,
-        totalPages: 0,
+        count: ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT,
         query: ''
     };
     /** Stores the search results pagination details for bank */
     public searchBankResultsPaginationData = {
         page: 0,
-        totalPages: 0,
+        count: ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT,
         query: ''
     };
     /** Stores the default search results pagination details for customer */
     public defaultCustomerResultsPaginationData = {
         page: 0,
-        totalPages: 0,
+        count: ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT,
         query: ''
     };
     /** Stores the default search results pagination details for stock or service */
     public defaultItemResultsPaginationData = {
         page: 0,
-        totalPages: 0,
+        count: ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT,
         query: ''
     };
     /** No results found label for dynamic search */
@@ -531,6 +531,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     /* Object for billing/shipping of company */
     public purchaseBillCompany: any = {
         billingDetails: {
+            index: '',
             address: [],
             state: { code: '', name: '' },
             county: { code: '', name: '' },
@@ -540,6 +541,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             pincode: ''
         },
         shippingDetails: {
+            index: '',
             address: [],
             state: { code: '', name: '' },
             county: { code: '', name: '' },
@@ -550,7 +552,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         }
     };
     /* This will hold autofill state of company billing/shipping */
-    public autoFillCompanyShipping: boolean = false;
+    public autoFillCompanyShipping: boolean = true;
     /* This will hold company's country states */
     public companyStatesSource: IOption[] = [];
     /* This will hold if copy purchase bill is done */
@@ -741,6 +743,20 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public lastScannedKey: string = '';
     /** True if barcode maching is typing */
     public isBarcodeMachineTyping: boolean = false;
+    /** False if there is no data in account search */
+    public isAccountSearchData: boolean = true;
+    /** True if there is initial call */
+    public initialApiCall: boolean = false;
+    /** Holds true if table entry has at least single stock is selected  */
+    public hasStock: boolean = false;
+    /** Hold account billing index  */
+    public accountBillingIndex: number = 0;
+    /** Hold account shipping index  */
+    public accountShippingIndex: number = 0;
+    /** Hold purchase billing index  */
+    public purchaseBillingIndex: number = 0;
+    /** Hold purchase shipping index  */
+    public purchaseShippingIndex: number = 0;
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -771,6 +787,27 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             (this.purchaseRecordInvoiceDate !== dayjs(this.invFormData.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT)) ||
             (this.purchaseRecordTaxNumber !== this.invFormData.accountDetails.shippingDetails.gstNumber ||
                 (this.purchaseRecordInvoiceNumber !== this.invFormData.voucherDetails.voucherNumber));
+    }
+
+    /**
+     * Show/Hide tax column if condition fulfills
+     *
+     * @readonly
+     * @type {boolean}
+     * @memberof VoucherComponent
+     */
+    public get showHideTaxColumn(): boolean {
+        let accountPartyType = '';
+        this.accountAddressList?.forEach(address => {
+            if (address.isDefault) {
+                accountPartyType = address.partyType.toLowerCase();
+            }
+        });
+        if ((this.isSalesInvoice || this.isCreditNote) && !this.selectedCompany?.withPay && (this.selectedCompany?.country !== this.customerCountryName || accountPartyType === 'sez' || accountPartyType === 'deemed export')) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     constructor(
@@ -1042,6 +1079,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     // for edit mode direct from @Input
                     if (params['voucherType'] && params['voucherType'] === 'pending' && params['selectedType']) {
                         this.isPendingVoucherType = true;
+                        this.getAccountDetails(this.accountUniqueName);
                     } else {
                         this.store.dispatch(this.invoiceReceiptActions.ResetVoucherDetails());
                         if (this.accountUniqueName && this.invoiceType && this.invoiceNo) {
@@ -1579,6 +1617,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     this.getAllAdvanceReceipts(this.invFormData.voucherDetails.customerUniquename, this.invFormData.voucherDetails.voucherDate)
                 }
 
+                this.checkIfEntryHasStock();
                 this.calculateBalanceDue();
                 this.calculateTotalDiscount();
                 this.calculateTotalTaxSum();
@@ -1788,19 +1827,24 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         if (this.accountUniqueName && !this.invoiceNo) {
             if (!this.isCashInvoice) {
                 const requestObject = this.getSearchRequestObject(this.accountUniqueName, 1, SEARCH_TYPE.CUSTOMER);
-                this.searchAccount(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
-                    if (data && data.body && data.body.results) {
-                        this.prepareSearchLists(data.body.results, 1, SEARCH_TYPE.CUSTOMER);
-                        this.makeCustomerList();
-                        const item = data.body.results.find(result => result?.uniqueName === this.accountUniqueName);
-                        if (item) {
-                            this.invFormData.voucherDetails.customerName = item.name;
-                            this.invFormData.voucherDetails.customerUniquename = item.accountUniqueName;
-                            this.isCustomerSelected = true;
-                            this.invFormData.accountDetails.name = '';
+                if (this.isAccountSearchData) {
+                    this.searchAccount(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+                        if (data?.body?.results?.length && (this.searchItemResultsPaginationData.count || this.defaultCustomerResultsPaginationData.count || this.defaultItemResultsPaginationData.count || this.defaultItemResultsPaginationData.count) !== data?.body?.count) {
+                            this.isAccountSearchData = false;
                         }
-                    }
-                });
+                        if (data && data.body && data.body.results) {
+                            this.prepareSearchLists(data.body.results, 1, SEARCH_TYPE.CUSTOMER);
+                            this.makeCustomerList();
+                            const item = data.body.results.find(result => result?.uniqueName === this.accountUniqueName);
+                            if (item) {
+                                this.invFormData.voucherDetails.customerName = item.name;
+                                this.invFormData.voucherDetails.customerUniquename = item.accountUniqueName;
+                                this.isCustomerSelected = true;
+                                this.invFormData.accountDetails.name = '';
+                            }
+                        }
+                    });
+                }
             } else {
                 this.prepareSearchLists([{
                     name: this.invFormData.accountDetails?.name,
@@ -1904,14 +1948,17 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @memberof VoucherComponent
      */
     private getNewStateCode(oldStatusCode: string): string {
-        const currentState = this.statesSource.find((st: any) => (oldStatusCode === st?.value || oldStatusCode === st.stateGstCode));
-        return (currentState) ? currentState?.value : '';
+        if (this.statesSource?.length) {
+            const currentState = this.statesSource.find((st: any) => (oldStatusCode === st?.value || oldStatusCode === st.stateGstCode));
+            return (currentState) ? currentState?.value : '';
+        } else {
+            return oldStatusCode;
+        }
     }
 
     public makeCustomerList() {
         if (!(this.invoiceType === VoucherTypeEnum.debitNote || this.invoiceType === VoucherTypeEnum.purchase)) {
             this.customerAcList$ = observableOf(orderBy(this.sundryDebtorsAcList, 'label'));
-
             this.salesAccounts$ = observableOf(orderBy(this.prdSerAcListForDeb, 'label'));
             this.selectedGrpUniqueNameForAddEditAccountModal = 'sundrydebtors';
         } else {
@@ -2189,8 +2236,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 this.isCashBankAccount = true;
             }
         });
-
         this.accountAddressList = data.addresses;
+
         this.customerCountryName = data.country.countryName;
         this.customerCountryCode = data?.country?.countryCode || 'IN';
         this.initializeAccountCurrencyDetails(data);
@@ -2399,6 +2446,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.purchaseOrders = [];
         this.purchaseBillCompany = {
             billingDetails: {
+                index: 0,
                 address: [],
                 state: { code: '', name: '' },
                 county: { code: '', name: '' },
@@ -2407,6 +2455,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 stateCode: ''
             },
             shippingDetails: {
+                index: 0,
                 address: [],
                 state: { code: '', name: '' },
                 county: { code: '', name: '' },
@@ -2426,7 +2475,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             this.toggleBodyClass();
         }
         this.clickAdjustAmount(false);
-        this.autoFillCompanyShipping = false;
+        this.autoFillCompanyShipping = true;
         this.userDeposit = null;
         this.fillDeliverToAddress();
         this.createEmbeddedViewAtIndex(0);
@@ -2451,13 +2500,13 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     }
 
     public autoFillShippingDetails() {
-        // auto fill shipping address
         if (this.autoFillShipping) {
             this.invFormData.accountDetails.shippingDetails = cloneDeep(this.invFormData.accountDetails.billingDetails);
             if (this.shippingState && this.shippingState.nativeElement) {
                 this.shippingState.nativeElement.classList.remove('error-box');
             }
         }
+        this.changeDetectorRef.detectChanges();
     }
 
     public convertDateForAPI(val: any): string {
@@ -3610,11 +3659,13 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 if (selectedAcc.additional.stock) {
                     txn.isStockTxn = true;
                     this.loadStockVariants(selectedAcc.additional.stock.uniqueName, isLinkedPoItem ? entryIndex : undefined);
+                    this.hasStock = true;
                 } else {
                     this.loadDetails(this.currentTxnRequestObject[this.activeIndx]);
                 }
             }
         } else {
+            this.checkIfEntryHasStock();
             txn.isStockTxn = false;
             txn.amount = 0;
             txn.highPrecisionAmount = txn.amount;
@@ -3880,6 +3931,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 this.calculateWhenTrxAltered(entry, transaction);
             }
         }
+
+        this.checkIfEntryHasStock();
+
         if (!isBulkItem) {
             this.changeDetectorRef.detectChanges();
         }
@@ -3941,6 +3995,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             this.toggleAccountSelectionDropdown(false);
         }
         if (this.isPurchaseInvoice) {
+            this.autoFillCompanyShippingDetails();
             this.fieldFilteredOptions = [];
             this.linkedPo = [];
             this.removePoItem();
@@ -4066,6 +4121,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         const stockVariants = this.stockVariants.getValue();
         stockVariants.splice(entryIdx, 1);
         this.stockVariants.next(stockVariants);
+        this.checkIfEntryHasStock();
     }
 
     public taxAmountEvent(txn: SalesTransactionItemClass, entry: SalesEntryClass) {
@@ -6565,7 +6621,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         } else if (response?.status === "einvoice-confirm") {
             this.isShowLoader = false;
             this.startLoader(false);
-            
+
             let dialogRef = this.dialog.open(ConfirmModalComponent, {
                 data: {
                     title: this.commonLocaleData?.app_confirm,
@@ -6907,9 +6963,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             searchType === SEARCH_TYPE.ITEM ? this.searchItemResultsPaginationData.page :
                 searchType === SEARCH_TYPE.BANK ? this.searchBankResultsPaginationData.page : 1;
         if (
-            (searchType === SEARCH_TYPE.CUSTOMER && this.searchCustomerResultsPaginationData.page < this.searchCustomerResultsPaginationData.totalPages) ||
-            (searchType === SEARCH_TYPE.ITEM && this.searchItemResultsPaginationData.page < this.searchItemResultsPaginationData.totalPages) ||
-            (searchType === SEARCH_TYPE.BANK && this.searchBankResultsPaginationData.page < this.searchBankResultsPaginationData.totalPages)) {
+            (searchType === SEARCH_TYPE.CUSTOMER) ||
+            (searchType === SEARCH_TYPE.ITEM) ||
+            (searchType === SEARCH_TYPE.BANK)) {
             this.onSearchQueryChanged(
                 query,
                 page + 1,
@@ -6926,14 +6982,12 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         if (searchType === SEARCH_TYPE.CUSTOMER) {
                             this.defaultCustomerSuggestions = this.defaultCustomerSuggestions.concat(...results);
                             this.defaultCustomerResultsPaginationData.page = this.searchCustomerResultsPaginationData.page;
-                            this.defaultCustomerResultsPaginationData.totalPages = this.searchCustomerResultsPaginationData.totalPages;
                             this.searchResults = [...this.defaultCustomerSuggestions];
                             this.assignSearchResultToList(SEARCH_TYPE.CUSTOMER);
                             this.makeCustomerList();
                         } else if (searchType === SEARCH_TYPE.ITEM) {
                             this.defaultItemSuggestions = this.defaultItemSuggestions.concat(...results);
                             this.defaultItemResultsPaginationData.page = this.searchItemResultsPaginationData.page;
-                            this.defaultItemResultsPaginationData.totalPages = this.searchItemResultsPaginationData.totalPages;
                             this.searchResults = [...this.defaultItemSuggestions];
                             this.assignSearchResultToList(SEARCH_TYPE.ITEM);
                             this.makeCustomerList();
@@ -6967,44 +7021,71 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 this.searchBankResultsPaginationData.query = query;
             }
             const requestObject = this.getSearchRequestObject(query, page, searchType);
-            this.searchAccount(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
-                if (data && data.body && data.body.results) {
-                    this.prepareSearchLists(data.body.results, page, searchType);
-                    this.makeCustomerList();
-                    this.noResultsFoundLabel = SearchResultText.NotFound;
-                    this.changeDetectorRef.detectChanges();
-                    if (searchType === SEARCH_TYPE.CUSTOMER) {
-                        this.searchCustomerResultsPaginationData.page = data.body.page;
-                        this.searchCustomerResultsPaginationData.totalPages = data.body.totalPages;
-                    } else if (searchType === SEARCH_TYPE.ITEM) {
-                        this.searchItemResultsPaginationData.page = data.body.page;
-                        this.searchItemResultsPaginationData.totalPages = data.body.totalPages;
-                    } else if (searchType === SEARCH_TYPE.BANK) {
-                        this.searchBankResultsPaginationData.page = data.body.page;
-                        this.searchBankResultsPaginationData.totalPages = data.body.totalPages;
-                    }
-                    if (successCallback) {
-                        successCallback(data.body.results);
-                    } else {
+            if (!this.initialApiCall) {
+                this.searchAccount(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+                    if (data && data.body && data.body.results) {
+                        this.initialApiCall = true;
+                        this.prepareSearchLists(data.body.results, page, searchType);
+                        this.makeCustomerList();
+                        this.noResultsFoundLabel = SearchResultText.NotFound;
+                        this.changeDetectorRef.detectChanges();
                         if (searchType === SEARCH_TYPE.CUSTOMER) {
-                            this.defaultCustomerResultsPaginationData.page = data.body.page;
-                            this.defaultCustomerResultsPaginationData.totalPages = data.body.totalPages;
+                            this.searchCustomerResultsPaginationData.page = data.body.page;
                         } else if (searchType === SEARCH_TYPE.ITEM) {
-                            this.defaultItemResultsPaginationData.page = data.body.page;
-                            this.defaultItemResultsPaginationData.totalPages = data.body.totalPages;
+                            this.searchItemResultsPaginationData.page = data.body.page;
+                        } else if (searchType === SEARCH_TYPE.BANK) {
+                            this.searchBankResultsPaginationData.page = data.body.page;
+                        }
+                        if (successCallback) {
+                            successCallback(data.body.results);
+                        } else {
+                            if (searchType === SEARCH_TYPE.CUSTOMER) {
+                                this.defaultCustomerResultsPaginationData.page = data.body.page;
+                            } else if (searchType === SEARCH_TYPE.ITEM) {
+                                this.defaultItemResultsPaginationData.page = data.body.page;
+                            }
                         }
                     }
+                });
+            } else {
+                if (this.isAccountSearchData) {
+                    this.searchAccount(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+                        if (!data?.body?.results?.length || (data?.body?.results?.length && ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT !== data?.body?.count)) {
+                            this.isAccountSearchData = false;
+                        }
+                        if (data && data.body && data.body.results) {
+                            this.prepareSearchLists(data.body.results, page, searchType);
+                            this.makeCustomerList();
+                            this.noResultsFoundLabel = SearchResultText.NotFound;
+                            this.changeDetectorRef.detectChanges();
+                            if (searchType === SEARCH_TYPE.CUSTOMER) {
+                                this.searchCustomerResultsPaginationData.page = data.body.page;
+                            } else if (searchType === SEARCH_TYPE.ITEM) {
+                                this.searchItemResultsPaginationData.page = data.body.page;
+                            } else if (searchType === SEARCH_TYPE.BANK) {
+                                this.searchBankResultsPaginationData.page = data.body.page;
+                            }
+                            if (successCallback) {
+                                successCallback(data.body.results);
+                            } else {
+                                if (searchType === SEARCH_TYPE.CUSTOMER) {
+                                    this.defaultCustomerResultsPaginationData.page = data.body.page;
+                                } else if (searchType === SEARCH_TYPE.ITEM) {
+                                    this.defaultItemResultsPaginationData.page = data.body.page;
+                                }
+                            }
+                        }
+                    });
                 }
-            });
+            }
+
         } else {
             if (searchType === SEARCH_TYPE.CUSTOMER) {
                 this.searchResults = [...this.defaultCustomerSuggestions];
                 this.searchCustomerResultsPaginationData.page = this.defaultCustomerResultsPaginationData.page;
-                this.searchCustomerResultsPaginationData.totalPages = this.defaultCustomerResultsPaginationData.totalPages;
             } else if (searchType === SEARCH_TYPE.ITEM) {
                 this.searchResults = [...this.defaultItemSuggestions];
                 this.searchItemResultsPaginationData.page = this.defaultItemResultsPaginationData.page;
-                this.searchItemResultsPaginationData.totalPages = this.defaultItemResultsPaginationData.totalPages;
             }
             this.assignSearchResultToList(searchType);
             this.makeCustomerList();
@@ -7080,7 +7161,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         const requestObject = {
             q: encodeURIComponent(query),
             page,
-            group: encodeURIComponent(group)
+            group: encodeURIComponent(group),
+            count: ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT
         };
         if (withStocks) {
             requestObject['withStocks'] = withStocks;
@@ -7113,13 +7195,13 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             if (searchType === SEARCH_TYPE.CUSTOMER) {
                 this.searchCustomerResultsPaginationData = {
                     page: 0,
-                    totalPages: 0,
+                    count: ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT,
                     query: ''
                 };
             } else if (searchType === SEARCH_TYPE.ITEM) {
                 this.searchItemResultsPaginationData = {
                     page: 0,
-                    totalPages: 0,
+                    count: ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT,
                     query: ''
                 };
             }
@@ -7130,27 +7212,27 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             this.defaultItemSuggestions = [];
             this.searchCustomerResultsPaginationData = {
                 page: 0,
-                totalPages: 0,
+                count: ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT,
                 query: ''
             };
             this.searchItemResultsPaginationData = {
                 page: 0,
-                totalPages: 0,
+                count: ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT,
                 query: ''
             };
             this.searchBankResultsPaginationData = {
                 page: 0,
-                totalPages: 0,
+                count: ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT,
                 query: ''
             };
             this.defaultCustomerResultsPaginationData = {
                 page: 0,
-                totalPages: 0,
+                count: ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT,
                 query: ''
             };
             this.defaultItemResultsPaginationData = {
                 page: 0,
-                totalPages: 0,
+                count: ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT,
                 query: ''
             };
             this.noResultsFoundLabel = SearchResultText.NewSearch;
@@ -7587,6 +7669,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 this.shippingStateCompany.nativeElement.classList.remove('error-box');
             }
         }
+        this.changeDetectorRef.detectChanges();
     }
 
     /**
@@ -7670,6 +7753,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         if (company.billingDetails && company.shippingDetails) {
             this.purchaseBillCompany = {
                 billingDetails: {
+                    index: 0,
                     address: company?.billingDetails?.address,
                     state: { code: company?.billingDetails?.state?.code, name: company?.billingDetails?.state?.name },
                     county: { code: company?.billingDetails?.county?.code, name: company?.billingDetails?.county?.name },
@@ -7679,6 +7763,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     pincode: company?.billingDetails?.pincode
                 },
                 shippingDetails: {
+                    index: 0,
                     address: company?.shippingDetails?.address,
                     state: { code: company?.shippingDetails?.state?.code, name: company?.shippingDetails?.state?.name },
                     county: { code: company?.shippingDetails?.county?.code, name: company?.shippingDetails?.county?.name },
@@ -7810,7 +7895,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         this.companyTaxesList = o;
                         this.theadArrReadOnly.forEach((item: IContentCommon) => {
                             // show tax label
-                            if (item.label === 'Tax') {
+                            if (item.label === this.commonLocaleData?.app_tax) {
                                 item.display = true;
                             }
                             return item;
@@ -8028,6 +8113,29 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     }
 
     /**
+     * This will be use for set index according billing shipping for account and company
+     *
+     * @param {*} type
+     * @param {number} index
+     * @memberof VoucherComponent
+     */
+    public setIndex(type: any, index: number): void {
+        if (type === 'accountBilling') {
+            this.accountBillingIndex = index + 1;
+        }
+        if (type === 'accountShipping') {
+            this.accountShippingIndex = index + 1;
+        }
+        if (type === 'purchaseBilling') {
+            this.purchaseBillingIndex = index + 1;
+        }
+        if (type === 'purchaseShipping') {
+            this.purchaseShippingIndex = index + 1;
+        }
+        this.changeDetectorRef.detectChanges();
+    }
+
+    /**
      * This will fill the selected address
      *
      * @param {*} data
@@ -8035,9 +8143,10 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @param {boolean} isCompanyAddress
      * @memberof VoucherComponent
      */
-    public selectAddress(data: any, address: any, isCompanyAddress: boolean = false): void {
+    public selectAddress(type: any, data: any, address: any, isCompanyAddress: boolean = false, index: number): void {
         if (data && address) {
             data.address[0] = address.address;
+            this.setIndex(type, index);
             if (!data.state) {
                 data.state = {};
             }
@@ -8049,7 +8158,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             data.stateCode = data.state.code;
             data.state.name = (isCompanyAddress) ? address.stateName : (address.state) ? address.state.name : "";
             data.stateName = data.state.name;
-            data.gstNumber = (isCompanyAddress) ? (address.gstNumber ?? address.taxNumber) : address.gstNumber;
+            data.gstNumber = (isCompanyAddress) ? ((address.gstNumber ? address.gstNumber : "") ?? (address.taxNumber ? address.taxNumber : "")) : ((address.gstNumber ? address.gstNumber : "") ?? (address.taxNumber ? address.taxNumber : ""));
+            data.taxNumber = (isCompanyAddress) ? ((address.gstNumber ? address.gstNumber : "") ?? (address.taxNumber ? address.taxNumber : "")) : ((address.gstNumber ? address.gstNumber : "") ?? (address.taxNumber ? address.taxNumber : ""));
             data.pincode = address.pincode;
             if (isCompanyAddress) {
                 this.autoFillCompanyShippingDetails();
@@ -8057,6 +8167,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 this.autoFillShippingDetails();
             }
         }
+        this.changeDetectorRef.detectChanges();
     }
 
     /**
@@ -8338,11 +8449,11 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.theadArrReadOnly = [
             {
                 display: true,
-                label: '#'
+                label: this.localeData?.product_service
             },
             {
                 display: true,
-                label: this.localeData?.product_service_description
+                label: this.commonLocaleData?.app_description
             },
             {
                 display: !this.currentVoucherFormDetails || this.currentVoucherFormDetails?.quantityAllowed,
@@ -8369,7 +8480,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 label: this.commonLocaleData?.app_total
             },
             {
-                display: true,
+                display: false,
                 label: ''
             }
         ];
@@ -8830,10 +8941,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      */
     public addBulkItems(): void {
         this.dialog.open(this.bulkItemsModal, {
-            width: '1000px',
-            height: 'auto',
-            maxHeight: '90vh',
-            maxWidth: '80vw'
         });
     }
     /**
@@ -9480,4 +9587,20 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             }
         }, 300);
     }
+
+    /**
+     * Check table entry has any stock and assign status to 'hasStock' variable
+     *
+     * @memberof VoucherComponent
+     */
+    public checkIfEntryHasStock(): void {
+        this.hasStock = false;
+
+        this.invFormData.entries.forEach(entry => {
+            if (entry.transactions[0]?.isStockTxn) {
+                this.hasStock = true;
+            }
+        });
+    }
+
 }

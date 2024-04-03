@@ -72,6 +72,8 @@ export enum OnBoardingType {
 export const PAGINATION_LIMIT = 50;
 /** API default count limit */
 export const API_COUNT_LIMIT = 20;
+/** Vouchers pagination limit  */
+export const ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT = 200;
 
 /** SubVoucher type */
 export enum SubVoucher {
@@ -619,3 +621,10 @@ export enum SUPPORTED_OPERATING_SYSTEMS {
     MacOS = 'MacOS',
     Windows = 'Windows'
 };
+
+export const ICICI_ALLOWED_COMPANIES = [
+    'mitti2in16805084405400lx4s8',
+    'walkovin164863366504908yve0',
+    'iciciiin16929619553650svnjv',
+    'aaaain16192663354510ja2o4'
+];

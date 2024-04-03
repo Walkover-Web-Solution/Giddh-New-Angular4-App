@@ -1,0 +1,97 @@
+<div class="modal-header">
+    <span mat-dialog-title class="font-16">{{ localeData?.file_return }}</span>
+    <button mat-icon-button mat-dialog-close class="p-0" aria-label="close icon"><i class="icon-cross font-16"></i></button>
+</div>
+<div mat-dialog-content class="modal-body" tabindex="0">
+    <div class="no-data" *ngIf="isLoading">
+        <giddh-page-loader></giddh-page-loader>
+    </div>
+
+    <ng-container *ngIf="!isLoading && vatReport?.length">
+        <div *ngFor="let report of vatReport; let i = index" class="pd-15">
+            <div class="white-box" *ngIf="i < 2">
+                <div class="d-flex justify-content-between align-items-center">
+                    <p>
+                        <strong class="table-heading">{{ report.section }}</strong>
+                    </p>
+                    <p class="inner-table-heading">
+                        {{ commonLocaleData?.app_amount }}
+                        ({{ activeCompany?.baseCurrency }})
+                    </p>
+                </div>
+                <div class="table-responsive">
+                    <table mat-table [dataSource]="report.sections"
+                        class="table basic mr-t2 on-mobile-view vat-report-table">
+                        <ng-container matColumnDef="number">
+                            <td mat-cell *matCellDef="let element" width="5%">
+                                {{ localeData?.box }} {{ element.order }}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="name">
+                            <td mat-cell *matCellDef="let element" width="45%">
+                                {{ element.description }}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="aed_amt">
+                            <td mat-cell *matCellDef="let element" class="text-right" width="20%">
+                                {{ activeCompany.baseCurrencySymbol }}
+                                {{ element.amount | giddhCurrency }}
+                            </td>
+                        </ng-container>
+                        <tr mat-row *matRowDef="let row; columns: ukDisplayedColumns"></tr>
+                    </table>
+                </div>
+            </div>
+            <div class="white-box" *ngIf="i == 2">
+                <div class="d-flex justify-content-between align-items-center">
+                    <p>
+                        <strong class="table-heading">{{ report.section }}</strong>
+                    </p>
+                    <p class="inner-table-heading">
+                        {{ commonLocaleData?.app_amount }}
+                        ({{ activeCompany?.baseCurrency }})
+                    </p>
+                </div>
+                <div class="table-responsive">
+                    <table mat-table [dataSource]="report.sections" class="
+                            table-hide-title table
+                            basic
+                            table-border-bottom
+                            mr-t2
+                            on-mobile-view
+                            table-border-top
+                        ">
+                        <ng-container matColumnDef="number">
+                            <th mat-header-cell *matHeaderCellDef></th>
+                            <td mat-cell *matCellDef="let element">
+                                {{ localeData?.box }} {{ element.order }}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="name">
+                            <th mat-header-cell *matHeaderCellDef></th>
+                            <td mat-cell *matCellDef="let element">{{ element.description }}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="aed_amt">
+                            <th mat-header-cell *matHeaderCellDef></th>
+                            <td mat-cell *matCellDef="let element" class="text-right">
+                                <span class="pr-1">{{ element.toolTip }}</span>
+                                <strong>{{ activeCompany.baseCurrencySymbol }}
+                                    {{ element.amount | giddhCurrency }}</strong>
+                            </td>
+                        </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="ukDisplayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: ukDisplayedColumns"></tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="!vatReport?.length" class="no-data no-report">
+            <h1>{{ localeData?.no_vrn_available }}</h1>
+        </div>
+    </ng-container>
+</div>
+<div mat-dialog-actions class="modal-footer justify-content-end">
+    <button mat-stroked-button mat-dialog-close>{{ commonLocaleData?.app_cancel }}</button>
+    <button mat-stroked-button color="primary" [disabled]="isLoading" (click)="submitVatReturn()">{{
+        commonLocaleData?.app_submit }}</button>
+</div>

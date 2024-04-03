@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnDestroy, Output, ViewChild } from '@angular/core';
-import { fromEvent, ReplaySubject, Observable } from 'rxjs';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { ReplaySubject, Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map, takeUntil } from 'rxjs/operators';
 import { SalesAddBulkStockItems, VoucherTypeEnum } from '../../models/api-models/Sales';
 import { SearchService } from '../../services/search.service';
@@ -9,6 +9,8 @@ import { IVariant } from '../../models/api-models/Ledger';
 import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 import { GeneralService } from '../../services/general.service';
 import { cloneDeep } from '../../lodash-optimized';
+import { PAGINATION_LIMIT } from '../../app.constant';
+import { FormControl } from '@angular/forms';
 
 @Component({
     selector: 'voucher-add-bulk-items-component',
@@ -17,7 +19,7 @@ import { cloneDeep } from '../../lodash-optimized';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class VoucherAddBulkItemsComponent implements OnDestroy {
+export class VoucherAddBulkItemsComponent implements OnInit, OnDestroy {
     @Input() public invoiceType: string;
     @Input() public accountUniqueName?: string;
     @ViewChild('searchElement', { static: false }) public searchElement: ElementRef;
@@ -33,7 +35,7 @@ export class VoucherAddBulkItemsComponent implements OnDestroy {
     /** Stores the search results pagination details */
     private searchResultsPaginationData = {
         page: 0,
-        totalPages: 0,
+        count: PAGINATION_LIMIT,
         query: ''
     };
 
@@ -42,6 +44,10 @@ export class VoucherAddBulkItemsComponent implements OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** False if there is no data in account search */
+    public isAccountSearchData: boolean = true;
+    /** Form Control of bulk stock searching  */
+    public stock: FormControl = new FormControl('');
 
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
@@ -50,6 +56,18 @@ export class VoucherAddBulkItemsComponent implements OnDestroy {
         private ledgerService: LedgerService,
         private generalService: GeneralService
     ) {
+    }
+
+    public ngOnInit(): void {
+        this.stock.valueChanges.pipe(
+            debounceTime(700),
+            distinctUntilChanged(),
+            takeUntil(this.destroyed$)
+        ).subscribe((res) => {
+            this.isAccountSearchData = true;
+            this.onSearchQueryChanged(res, 1);
+          });
+      
     }
 
     /**
@@ -62,14 +80,18 @@ export class VoucherAddBulkItemsComponent implements OnDestroy {
     public onSearchQueryChanged(query: string, page: number = 1): void {
         this.searchResultsPaginationData.query = query;
         const requestObject = this.getSearchRequestObject(query, page);
-        this.searchAccount(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
-            if (data && data.body && data.body.results) {
-                this.prepareSearchLists(data.body.results, page);
-                this.searchResultsPaginationData.page = data.body.page;
-                this.searchResultsPaginationData.totalPages = data.body.totalPages;
-                this.changeDetectorRef.detectChanges();
-            }
-        });
+        if (this.isAccountSearchData) {
+            this.searchAccount(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+                if (data?.body?.results?.length && this.searchResultsPaginationData.count !== data?.body?.count) {
+                    this.isAccountSearchData = false;
+                }
+                if (data && data.body && data.body.results) {
+                    this.prepareSearchLists(data.body.results, page);
+                    this.searchResultsPaginationData.page = data.body.page;
+                    this.changeDetectorRef.detectChanges();
+                }
+            });
+        }
     }
 
     /**
@@ -176,9 +198,7 @@ export class VoucherAddBulkItemsComponent implements OnDestroy {
      * @memberof VoucherAddBulkItemsComponent
      */
     public onScrollEnd(): void {
-        if (this.searchResultsPaginationData.page < this.searchResultsPaginationData.totalPages) {
-            this.onSearchQueryChanged(this.searchResultsPaginationData.query, this.searchResultsPaginationData.page + 1);
-        }
+        this.onSearchQueryChanged(this.searchResultsPaginationData.query, this.searchResultsPaginationData.page + 1);
     }
 
     public ngOnDestroy(): void {
@@ -195,17 +215,14 @@ export class VoucherAddBulkItemsComponent implements OnDestroy {
     public translationComplete(event: any): void {
         if (event) {
             this.onSearchQueryChanged('');
-
-            setTimeout(() => {
-                fromEvent(this.searchElement?.nativeElement, 'input').pipe(
-                    debounceTime(700),
-                    distinctUntilChanged(),
-                    map((e: any) => e.target?.value),
-                    takeUntil(this.destroyed$)
-                ).subscribe((res: string) => {
-                    this.onSearchQueryChanged(res, 1);
-                });
-            }, 100);
+            this.stock.valueChanges.pipe(
+                debounceTime(700),
+                distinctUntilChanged(),
+                takeUntil(this.destroyed$)
+            ).subscribe((res) => {
+                this.isAccountSearchData = true;
+                this.onSearchQueryChanged(res, 1);
+              });
         }
     }
 
@@ -257,7 +274,7 @@ export class VoucherAddBulkItemsComponent implements OnDestroy {
                 }
             }, () => {
                 this.isLoading = false;
-             });
+            });
         }
     }
 
@@ -270,11 +287,11 @@ export class VoucherAddBulkItemsComponent implements OnDestroy {
      */
     private loadStockVariants(item: SalesAddBulkStockItems): void {
         this.ledgerService.loadStockVariants(item.additional?.stock?.uniqueName).pipe(
-            map((variants: IVariant[]) => variants.map((variant: IVariant) => ({label: variant.name, value: variant.uniqueName})))).subscribe(res => {
+            map((variants: IVariant[]) => variants.map((variant: IVariant) => ({ label: variant.name, value: variant.uniqueName })))).subscribe(res => {
                 item.variants = res;
                 if (res.length === 1) {
                     // Single variant stock, add to list after loading details
-                    const defaultVariant: IVariant = {name: res[0].label, uniqueName: res[0].value};
+                    const defaultVariant: IVariant = { name: res[0].label, uniqueName: res[0].value };
                     item.variant = defaultVariant;
                     const requestObj = {
                         stockUniqueName: item.additional?.stock?.uniqueName ?? '',
@@ -304,7 +321,7 @@ export class VoucherAddBulkItemsComponent implements OnDestroy {
      */
     public variantChanged(item: SalesAddBulkStockItems, event: IOption): void {
         let selectedItem = cloneDeep(item);
-        selectedItem.variant = {name: event.label, uniqueName: event.value};
+        selectedItem.variant = { name: event.label, uniqueName: event.value };
         const index = this.selectedItems?.findIndex(f => f.additional.combinedUniqueName === `${selectedItem.uniqueName}#${event.value}`);
         if (index > -1) {
             this.toaster.warningToast(this.localeData?.item_selected);

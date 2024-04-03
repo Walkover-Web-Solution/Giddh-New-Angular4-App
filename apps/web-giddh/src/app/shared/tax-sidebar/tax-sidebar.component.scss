@@ -1,6 +1,6 @@
 :host.gst-sidebar {
     position: fixed;
-    top: 57px;
+    top: calc(var(--top-distance) + 57px);
     bottom: 0;
     min-height: 100vh;
     background: var(--color-white);
@@ -22,6 +22,9 @@
                 ul {
                     li {
                         padding: 0px;
+                        &.disabled {
+                            cursor: not-allowed;
+                        }
                         a {
                             display: flex;
                             align-items: flex-start;
@@ -34,20 +37,14 @@
                                     font-size: 20px;
                                 }
                             }
-                            &.disabled {
-                                span {
-                                    color: var(--color-common-primary-disabled) !important;
-                                }
-                                .icon-GSTR,
-                                .icon-GSTR:hover {
-                                    color: var(--color-common-primary-disabled) !important;
-                                }
-                            }
                             &.active {
-                                background-color: var(--color-primary-tax-sidebar-list-active) !important;
+                                background-color: var(--color-giddh-common-background) !important;
                                 span,
                                 span i {
-                                    color: var(--color-white) !important;
+                                    color: var(--color-white-tertiary) !important;
+                                }
+                                .unit-mapping-icon {
+                                    filter: var(--color-image-filter-white);
                                 }
                             }
                         }

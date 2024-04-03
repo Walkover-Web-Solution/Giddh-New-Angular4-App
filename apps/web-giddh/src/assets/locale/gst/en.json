@@ -104,7 +104,7 @@
         "missing_in_giddh": "Missing in Giddh",
         "partially_matched": "Partially Matched",
         "matched": "Matched",
-        "vendor_details": "Vendor Details",
+        "vendor_details": "Edit Vendor",
         "transaction_date": "Transaction Date",
         "reconcilation_note": "All transactions in Giddh Books whose vendor GSTIN, invoice number, invoice date, invoice amount and tax amount are same as the transactions in GSTN are displayed in this section.",
         "cancel_title": "Are you sure you want to cancel it?",
