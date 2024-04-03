@@ -1776,8 +1776,9 @@ input {
 .white-box {
     background: var(--color-white);
     padding: 20px;
-    margin-bottom: 15px;
+    margin: 15px auto;
     box-shadow: 0px 3px 6px var(--color-primary-common-box-shadow);
+    max-width: 1360px;
 }
 
 .vat-report .tab-content {

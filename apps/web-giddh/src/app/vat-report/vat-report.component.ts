@@ -79,13 +79,15 @@ export class VatReportComponent implements OnInit, OnDestroy {
     /** This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
     /** Hold uae main table displayed columns */
-    public displayedColumns: string[] = ['number', 'name', 'description', 'aed_amt', 'vat_amt', 'adjustment'];
+    public displayedColumns: string[] = ['number', 'name', 'aed_amt', 'vat_amt', 'adjustment'];
     /** Hold uae bottom table displayed columns */
     public uaeDisplayedColumns: string[] = ['number', 'description', 'tooltip'];
     /** Hold uk main table and bottom table displayed columns */
     public ukDisplayedColumns: string[] = ['number', 'name', 'aed_amt'];
     /** True if active country is UK */
     public isUKCompany: boolean = false;
+    /** True if active country is Zimbabwe */
+    public isZimbabweCompany: boolean = false;
     /** Hold static months array */
     public months: any[] = [
         { label: 'January', value: 1 },
@@ -111,6 +113,321 @@ export class VatReportComponent implements OnInit, OnDestroy {
     public selectedYear: any = "";
     /** Hold HMRC portal url */
     public connectToHMRCUrl: string = null;
+    public vatReportCurrencyList: any[] = [
+        { label: 'Dollar', value: 'dollars' },
+        { label: 'Cents', value: 'cents' }
+    ];
+    public vatReportCurrency: 'dollars' | 'cents' = 'dollars';
+    public dummyVatReport = [
+        {
+            "section": "DECLARATION OF OUTPUT TAX ",
+            "order": 1,
+            "sections": [
+                {
+                    "section": "1",
+                    "order": 1,
+                    "matCode": "V09",
+                    "description": "Supply of goods and/or service at standard rate",
+                    "valueOfSupply": {
+                        "dollars": 0,
+                        "cents": 0
+                    },
+                    "outputTax": {
+                        "dollars": 0,
+                        "cents": 0
+                    }
+                },
+                {
+                    "section": "2",
+                    "order": 2,
+                    "matCode": "V12",
+                    "description": "Supply of goods and/or services at 0% - Local",
+                    "valueOfSupply": {
+                        "dollars": 0,
+                        "cents": 0
+                    },
+                    "outputTax": {
+                        "dollars": 0,
+                        "cents": 0
+                    }
+                },
+                {
+                    "section": "3",
+                    "order": 3,
+                    "matCode": "V12",
+                    "description": "Supply of goods and/or services at 0% - Export",
+                    "valueOfSupply": {
+                        "dollars": 0,
+                        "cents": 0
+                    },
+                    "outputTax": {
+                        "dollars": 0,
+                        "cents": 0
+                    }
+                },
+                {
+                    "section": "4",
+                    "order": 4,
+                    "matCode": "V15",
+                    "description": "Supply of goods and/ or services at specific rateSupply of goods and/ or services at specific rate",
+                    "valueOfSupply": {
+                        "dollars": 0,
+                        "cents": 0
+                    },
+                    "outputTax": {
+                        "dollars": 0,
+                        "cents": 0
+                    }
+                },
+                {
+                    "section": "5",
+                    "order": 5,
+                    "matCode": "V18",
+                    "description": "Exempt Supplies",
+                    "valueOfSupply": {
+                        "dollars": 0,
+                        "cents": 0
+                    },
+                    "outputTax": {
+                        "dollars": 0,
+                        "cents": 0
+                    }
+                },
+                {
+                    "section": "6",
+                    "order": 6,
+                    "matCode": "V19",
+                    "description": "Imported services",
+                    "valueOfSupply": {
+                        "dollars": 0,
+                        "cents": 0
+                    },
+                    "outputTax": {
+                        "dollars": 0,
+                        "cents": 0
+                    }
+                },
+                {
+                    "section": "7",
+                    "order": 7,
+                    "matCode": "V20",
+                    "description": "Other",
+                    "valueOfSupply": {
+                        "dollars": 0,
+                        "cents": 0
+                    },
+                    "outputTax": {
+                        "dollars": 0,
+                        "cents": 0
+                    }
+                },
+                {
+                    "section": "8",
+                    "order": 8,
+                    "matCode": "V30",
+                    "description": "Debit/Credit Notes",
+                    "valueOfSupply": {
+                        "dollars": 0,
+                        "cents": 0
+                    },
+                    "outputTax": {
+                        "dollars": 0,
+                        "cents": 0
+                    }
+                },
+                {
+                    "section": "9",
+                    "order": 9,
+                    "description": "TOTAL OUTPUT TAX [A]",
+                    "outputTax": {
+                        "dollars": 0,
+                        "cents": 0
+                    }
+                }
+            ]
+        },
+        {
+            "section": "INPUT TAX CLAIM",
+            "order": 2,
+            "sections": [
+                {
+                    "section": "10",
+                    "order": 1,
+                    "matCode": "V39",
+                    "description": "Domestic goods and/or services purchased to make taxable supplies at standard rate",
+                    "valueOfSupply": {
+                        "dollars": 0,
+                        "cents": 0
+                    },
+                    "outputTax": {
+                        "dollars": 0,
+                        "cents": 0
+                    }
+                },
+                {
+                    "section": "11",
+                    "order": 2,
+                    "matCode": "V39",
+                    "description": "Domestic goods and/or services purchased to make taxable supplies at 0%",
+                    "valueOfSupply": {
+                        "dollars": 0,
+                        "cents": 0
+                    },
+                    "outputTax": {
+                        "dollars": 0,
+                        "cents": 0
+                    }
+                },
+                {
+                    "section": "12",
+                    "order": 3,
+                    "matCode": "V42",
+                    "description": "Imported goods to make taxable supplies (exclude capital goods) at standard rate",
+                    "valueOfSupply": {
+                        "dollars": 0,
+                        "cents": 0
+                    },
+                    "outputTax": {
+                        "dollars": 0,
+                        "cents": 0
+                    }
+                },
+                {
+                    "section": "13",
+                    "order": 4,
+                    "matCode": "V42",
+                    "description": "Imported goods to make taxable supplies (exclude capital goods) at 0%",
+                    "valueOfSupply": {
+                        "dollars": 0,
+                        "cents": 0
+                    },
+                    "outputTax": {
+                        "dollars": 0,
+                        "cents": 0
+                    }
+                },
+                {
+                    "section": "14",
+                    "order": 5,
+                    "matCode": "V45",
+                    "description": "Imported Capital Goods to make taxable supplies",
+                    "valueOfSupply": {
+                        "dollars": 0,
+                        "cents": 0
+                    },
+                    "outputTax": {
+                        "dollars": 0,
+                        "cents": 0
+                    }
+                },
+                {
+                    "section": "15",
+                    "order": 6,
+                    "matCode": "V45",
+                    "description": "Domestic Capital goods purchased to make taxable supplies",
+                    "valueOfSupply": {
+                        "dollars": 0,
+                        "cents": 0
+                    },
+                    "outputTax": {
+                        "dollars": 0,
+                        "cents": 0
+                    }
+                },
+                {
+                    "section": "16",
+                    "order": 7,
+                    "description": "Exempt Purchases - Local",
+                    "valueOfSupply": {
+                        "dollars": 0,
+                        "cents": 0
+                    },
+                    "outputTax": {
+                        "dollars": 0,
+                        "cents": 0
+                    }
+                },
+                {
+                    "section": "17",
+                    "order": 8,
+                    "description": "Exempt Purchases - Imports",
+                    "valueOfSupply": {
+                        "dollars": 0,
+                        "cents": 0
+                    },
+                    "outputTax": {
+                        "dollars": 0,
+                        "cents": 0
+                    }
+                },
+                {
+                    "section": "18",
+                    "order": 9,
+                    "matCode": "V57",
+                    "description": "Debit/Credit Notes",
+                    "valueOfSupply": {
+                        "dollars": 0,
+                        "cents": 0
+                    },
+                    "outputTax": {
+                        "dollars": 0,
+                        "cents": 0
+                    }
+                },
+                {
+                    "section": "19",
+                    "order": 10,
+                    "description": "TOTAL INPUT TAX [B]",
+                    "outputTax": {
+                        "dollars": 0,
+                        "cents": 0
+                    }
+                }
+            ]
+        },
+        {
+            "section": "CALCULATION OF VAT PAYABLE/REFUNDABLE",
+            "order": 3,
+            "sections": [
+                {
+                    "section": "20",
+                    "order": 1,
+                    "description": "TOTAL OUTPUT TAX (A)",
+                    "amount": {
+                        "dollars": 0,
+                        "cents": 0
+                    }
+                },
+                {
+                    "section": "21",
+                    "order": 2,
+                    "description": "Less: TOTAL INPUT TAX (B)",
+                    "amount": {
+                        "dollars": 0,
+                        "cents": 0
+                    }
+                },
+                {
+                    "section": "22",
+                    "order": 3,
+                    "description": "Less: VAT WITHHELD",
+                    "amount": {
+                        "dollars": 0,
+                        "cents": 0
+                    }
+                },
+                {
+                    "section": "23",
+                    "order": 4,
+                    "description": "AMOUNT PAYABLE/REFUNDABLE (A) - (B)",
+                    "amount": {
+                        "dollars": 0,
+                        "cents": 0
+                    }
+                }
+            ]
+        }
+    ];
 
     constructor(
         private gstReconcileService: GstReconcileService,
@@ -155,7 +472,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
             if (activeCompany && !this.activeCompany) {
                 this.activeCompany = activeCompany;
                 this.isUKCompany = this.activeCompany?.countryV2?.alpha2CountryCode === 'GB' ? true : false;
-
+                this.isZimbabweCompany = this.activeCompany?.countryV2?.alpha2CountryCode === 'ZW';
                 if (this.isUKCompany) {
                     this.getURLHMRCAuthorization();
                 }
@@ -247,6 +564,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
                         this.isLoading = false;
                         if (res.status === 'success') {
                             this.vatReport = res.body?.sections;
+                            console.log(res);
                             this.cdRef.detectChanges();
                         } else {
                             this.toasty.errorToast(res.message);
@@ -259,6 +577,8 @@ export class VatReportComponent implements OnInit, OnDestroy {
                         this.isLoading = false;
                         if (res.status === 'success') {
                             this.vatReport = res.body?.sections;
+                            console.log(res);
+
                             this.cdRef.detectChanges();
                         } else {
                             this.toasty.errorToast(res.message);
@@ -266,6 +586,8 @@ export class VatReportComponent implements OnInit, OnDestroy {
                     }
                 });
             }
+
+
         }
     }
 
