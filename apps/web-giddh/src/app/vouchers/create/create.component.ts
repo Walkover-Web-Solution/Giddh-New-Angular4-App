@@ -1125,6 +1125,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         if (this.isMultiCurrencyVoucher) {
             this.getExchangeRate(this.account.baseCurrency, this.company.baseCurrency, this.invoiceForm.get('date')?.value);
         }
+
+        this.invoiceForm.controls["account"].get("attentionTo").patchValue(accountData?.attentionTo);
+        this.invoiceForm.controls["account"].get("email").patchValue(accountData?.email);
+        this.invoiceForm.controls["account"].get("mobileNumber").patchValue(accountData?.mobileNo);
     }
 
     /**
@@ -1247,11 +1251,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         return this.formBuilder.group({
             date: [this.invoiceForm?.get('date')?.value || this.universalDate || dayjs().format(GIDDH_DATE_FORMAT)],
             description: [entryData ? entryData?.transactions[0]?.description : ''],
-            voucherType: [''],
+            voucherType: [this.voucherType],
             uniqueName: [''],
-            showCodeType: ['sac'], //temp
-            hsnNumber: [''],
-            sacNumber: [''],
+            showCodeType: [entryData && entryData?.transactions[0]?.stock?.hsnNumber ? 'hsn' :  'sac'], //temp
+            hsnNumber: [entryData ? entryData?.transactions[0]?.stock?.hsnNumber : ''],
+            sacNumber: [entryData ? entryData?.transactions[0]?.stock?.sacNumber : ''],
             attachedFile: [''],
             attachedFileName: [''],
             totalDiscount: [''], // temp
@@ -1275,30 +1279,30 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             transactions: this.formBuilder.array([
                 this.formBuilder.group({
                     account: this.formBuilder.group({
-                        name: [''],
-                        uniqueName: ['']
+                        name: [entryData ? entryData?.transactions[0]?.account?.name : ''],
+                        uniqueName: [entryData ? entryData?.transactions[0]?.account?.uniqueName : '']
                     }),
                     amount: this.formBuilder.group({
-                        amountForAccount: [0],
-                        amountForCompany: [0],
+                        amountForAccount: [entryData ? entryData?.transactions[0]?.amount?.amountForAccount : 0],
+                        amountForCompany: [entryData ? entryData?.transactions[0]?.amount?.amountForCompany : 0],
                         type: ['DEBIT']
                     }),
                     stock: this.formBuilder.group({
-                        name: [''],
-                        quantity: [1],
+                        name: [entryData ? entryData?.transactions[0]?.stock?.name : ''],
+                        quantity: [entryData ? entryData?.transactions[0]?.stock?.quantity : 1],
                         rate: this.formBuilder.group({
-                            rateForAccount: [1]
+                            rateForAccount: [entryData ? entryData?.transactions[0]?.stock?.rate?.rateForAccount : 1]
                         }),
                         stockUnit: this.formBuilder.group({
-                            code: [''],
-                            uniqueName: ['']
+                            code: [entryData ? entryData?.transactions[0]?.stock?.stockUnit?.code : ''],
+                            uniqueName: [entryData ? entryData?.transactions[0]?.stock?.stockUnit?.uniqueName : '']
                         }),
                         variant: this.formBuilder.group({
-                            name: [''],
-                            uniqueName: ['']
+                            name: [entryData ? entryData?.transactions[0]?.stock?.variant?.name : ''],
+                            uniqueName: [entryData ? entryData?.transactions[0]?.stock?.variant?.uniqueName : '']
                         }),
-                        skuCodeHeading: [''],
-                        skuCode: [''],
+                        skuCodeHeading: [entryData ? entryData?.transactions[0]?.stock?.skuCodeHeading : ''],
+                        skuCode: [entryData ? entryData?.transactions[0]?.stock?.sku : ''],
                         uniqueName: ['']
                     })
                 })
