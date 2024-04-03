@@ -376,10 +376,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 this.company.inputMaskFormat = profile.balanceDisplayFormat?.toLowerCase() || '';
                 this.company.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
                 this.showTaxTypeByCountry(this.company.countryCode);
-
-                this.componentStore.getAllPlans({ params: { countryCode: this.company.countryCode } });
             }
         });
+        this.componentStore.getAllPlans({ params: { countryCode: this.company.countryCode } });
     }
 
     /**
