@@ -489,6 +489,13 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             if (response) {
                 // this.invoiceForm.controls["account"].get("customerName")?.patchValue(this.invoiceForm.controls['account'].get('customerName')?.value);
                 this.getAccountDetails(response?.account.uniqueName);
+
+                const entriesFormArray = this.invoiceForm.get('entries') as FormArray;
+                entriesFormArray.clear();
+
+                response?.entries?.forEach(entry => {
+                    this.invoiceForm.get('entries')['controls'].push(this.getEntriesFormGroup(entry));
+                });
                 console.log(response);
             }
         });
@@ -1234,10 +1241,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @return {*}  {FormGroup}
      * @memberof VoucherCreateComponent
      */
-    private getEntriesFormGroup(): FormGroup {
+    private getEntriesFormGroup(entryData?: any): FormGroup {
+        console.log(entryData);
+
         return this.formBuilder.group({
-            date: [this.universalDate || dayjs().format(GIDDH_DATE_FORMAT)],
-            description: [''],
+            date: [this.invoiceForm?.get('date')?.value || this.universalDate || dayjs().format(GIDDH_DATE_FORMAT)],
+            description: [entryData ? entryData?.transactions[0]?.description : ''],
             voucherType: [''],
             uniqueName: [''],
             showCodeType: ['sac'], //temp
@@ -2050,7 +2059,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public copyInvoice(item: PreviousInvoicesVm): void {
-        this.componentStore.getVoucherDetails({ accountUniqueName: item.account?.uniqueName, payload: { invoiceNo: item.versionNumber, uniqueName: item?.uniqueName, voucherType: this.voucherType } });
+        this.componentStore.getVoucherDetails({ isCopy: true, accountUniqueName: item.account?.uniqueName, payload: { invoiceNo: item.versionNumber, uniqueName: item?.uniqueName, voucherType: this.voucherType } });
     }
 
     /**
