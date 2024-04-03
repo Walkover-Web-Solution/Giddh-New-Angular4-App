@@ -309,7 +309,7 @@ export const INVALID_STOCK_ERROR_MESSAGE = 'Both Unit and Rate fields are mandat
 
 /** Vat supported country codes */
 export const VAT_SUPPORTED_COUNTRIES = [
-    'QA', 'BH', 'AE', 'SA', 'OM', 'KW', 'GB'
+    'QA', 'BH', 'AE', 'SA', 'OM', 'KW', 'GB', 'ZW'
 ];
 
 export const API_POSTMAN_DOC_URL = 'https://apidoc.giddh.com/';
