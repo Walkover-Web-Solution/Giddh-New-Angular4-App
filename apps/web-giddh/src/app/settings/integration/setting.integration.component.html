@@ -379,7 +379,7 @@
                 </div>
             </mat-tab>
 
-            <mat-tab [label]="localeData?.payment?.tab_heading" *ngIf="(!isIciciBankSupportedCountry || iciciAllowedCompanies.includes(activeCompany?.uniqueName)) || isPlaidSupportedCountry">
+            <mat-tab [label]="localeData?.payment?.tab_heading" *ngIf="iciciAllowedCompanies.includes(activeCompany?.uniqueName) || isPlaidSupportedCountry">
                 <div class="clearfix box mat-tab-bottom-spacing">
                     <ng-container *ngIf="isIciciBankSupportedCountry">
                         <ng-template>
