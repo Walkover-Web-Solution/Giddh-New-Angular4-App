@@ -1292,7 +1292,7 @@
 <ng-template #accountAsideMenu>
     <generic-aside-menu-account (closeAsideEvent)="accountAsideMenuRef.close()" [class]="'in'"
         [selectedGrpUniqueName]="accountParentGroup" [keyboardShortcut]="{ 'esc': !hasUnsavedChanges }"
-        [selectedAccountUniqueName]="invoiceForm.controls['account'].get('uniqueName')?.value"
+        [selectedAccountUniqueName]="accountParentGroup !== 'bankaccounts' ? invoiceForm.controls['account'].get('uniqueName')?.value : ''"
         (onShortcutPress)="accountAsideMenuRef.close()" (addEvent)="addNewAccount($event)"
         (updateEvent)="updateAccount($event)">
     </generic-aside-menu-account>

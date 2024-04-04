@@ -1454,8 +1454,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 right: '0',
                 top: '0'
             }
-        })
-        this.accountAsideMenuRef.afterClosed().pipe(take(1)).subscribe(() => {
+        });
+
+        this.accountAsideMenuRef.afterClosed().pipe(take(1)).subscribe((response) => {
             if (this.showPageLeaveConfirmation) {
                 this.pageLeaveUtilityService.addBrowserConfirmationDialog();
             }
