@@ -1126,9 +1126,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.getExchangeRate(this.account.baseCurrency, this.company.baseCurrency, this.invoiceForm.get('date')?.value);
         }
 
-        this.invoiceForm.controls["account"].get("attentionTo").patchValue(accountData?.attentionTo);
-        this.invoiceForm.controls["account"].get("email").patchValue(accountData?.email);
-        this.invoiceForm.controls["account"].get("mobileNumber").patchValue(accountData?.mobileNo);
+        this.invoiceForm.controls["account"].get("attentionTo").setValue(accountData?.attentionTo);
+        this.invoiceForm.controls["account"].get("email").setValue(accountData?.email);
+        this.invoiceForm.controls["account"].get("mobileNumber").setValue(accountData?.mobileNo);
     }
 
     /**

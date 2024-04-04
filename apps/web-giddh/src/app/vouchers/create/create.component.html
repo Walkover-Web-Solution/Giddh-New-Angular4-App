@@ -1018,7 +1018,7 @@
                                                             <mat-card-content>
                                                                 <div class="container px-0" formGroupName="deposit">
                                                                     <div class="row align-items-center">
-                                                                        <ng-container *ngIf="true">
+                                                                        <ng-container>
                                                                             <div class="col-6">
                                                                                 <reactive-dropdown-field
                                                                                     [label]="'Account'"
@@ -1026,6 +1026,8 @@
                                                                                     [options]="briefAccounts$ | async"
                                                                                     (onClear)="selectedDepositAccount($event, true)"
                                                                                     (selectedOption)="selectedDepositAccount($event)"
+                                                                                    [showCreateNew]="true"
+                                                                                    [createNewText]="commonLocaleData?.app_create_new"
                                                                                     (createOption)="toggleAccountAsidePane(accountType.bank)"
                                                                                     formControlName="accountUniqueName">
                                                                                 </reactive-dropdown-field>
