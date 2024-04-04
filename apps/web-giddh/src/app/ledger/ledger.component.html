@@ -201,7 +201,11 @@
                                     container="body"
                                     *ngIf="isMobileScreen"
                                 >
-                                    <img (click)="showGiddhDatepicker($event)" src="{{ imgPath }}calender-icon.svg" alt="calender-icon" />
+                                    <img
+                                        (click)="showGiddhDatepicker($event)"
+                                        src="{{ imgPath }}calender-icon.svg"
+                                        alt="calender-icon"
+                                    />
                                 </div>
                                 <span class="input-wrapper ipad-view-datepicker" (click)="showGiddhDatepicker($event)">
                                     <mat-form-field appearance="fill" class="w-100">
@@ -531,7 +535,11 @@
                                         matTooltipClass="tooltip-black"
                                         (click)="showAutopaidModal()"
                                     >
-                                        <img class="autopaid-icon" src="{{ imgPath }}autopaid.svg" alt="autopaid-icon" />
+                                        <img
+                                            class="autopaid-icon"
+                                            src="{{ imgPath }}autopaid.svg"
+                                            alt="autopaid-icon"
+                                        />
                                     </a>
                                     <span
                                         class="bank-menu"
@@ -665,6 +673,13 @@
                                             >
                                                 <mat-grid-tile class="bold no-right-border" colspan="1">
                                                     {{ commonLocaleData?.app_date }}
+                                                    <mat-checkbox
+                                                        color="primary"
+                                                        id="select-all-entries-dr"
+                                                        [(ngModel)]="bankDebitSelectAll"
+                                                        *ngIf="checkedBankTrxWhileHovering?.length > 0"
+                                                        (change)="selectAllBankEntries($event, 'debit')"
+                                                    ></mat-checkbox>
                                                 </mat-grid-tile>
                                                 <mat-grid-tile class="bold no-right-border" colspan="2">
                                                     {{ commonLocaleData?.app_particular }}
@@ -690,6 +705,8 @@
                                                                 'compound-entry':
                                                                     txn.id === lc.selectedBankTxnUniqueName
                                                             }"
+                                                            (mouseover)="bankEntryHovered(txn.id)"
+                                                            (mouseout)="selectedBankTrxWhileHovering = ''"
                                                         >
                                                             <mat-grid-tile colspan="1">
                                                                 <div class="d-flex align-items-center column-gap5">
@@ -700,8 +717,21 @@
                                                                                 'transaction-mapped-select-entry-dr-' +
                                                                                 i
                                                                             "
+                                                                            [ngClass]="{
+                                                                                'd-none':
+                                                                                    selectedBankTrxWhileHovering !==
+                                                                                        txn.id &&
+                                                                                    !txn.isChecked &&
+                                                                                    checkedBankTrxWhileHovering?.length ===
+                                                                                        0
+                                                                            }"
                                                                             (change)="
-                                                                                selectEntryForBulkAction($event, item)
+                                                                                selectEntryForBulkAction(
+                                                                                    $event,
+                                                                                    item,
+                                                                                    txn.id,
+                                                                                    'debit'
+                                                                                )
                                                                             "
                                                                             [disabled]="
                                                                                 currentOrganizationType === 'COMPANY' &&
@@ -974,6 +1004,13 @@
                                             >
                                                 <mat-grid-tile class="bold no-right-border" colspan="1">
                                                     {{ commonLocaleData?.app_date }}
+                                                    <mat-checkbox
+                                                        color="primary"
+                                                        id="select-entries-date-cr"
+                                                        [(ngModel)]="bankCreditSelectAll"
+                                                        *ngIf="checkedBankTrxWhileHovering?.length > 0"
+                                                        (change)="selectAllBankEntries($event, 'credit')"
+                                                    ></mat-checkbox>
                                                 </mat-grid-tile>
                                                 <mat-grid-tile class="bold no-right-border" colspan="2">
                                                     {{ commonLocaleData?.app_particular }}
@@ -999,6 +1036,8 @@
                                                                 'compound-entry':
                                                                     txn.id === lc.selectedBankTxnUniqueName
                                                             }"
+                                                            (mouseover)="bankEntryHovered(txn.id)"
+                                                            (mouseout)="selectedBankTrxWhileHovering = ''"
                                                         >
                                                             <mat-grid-tile colspan="1">
                                                                 <div class="d-flex align-items-center column-gap5">
@@ -1009,9 +1048,22 @@
                                                                                 'transaction-mapped-select-entry-cr-' +
                                                                                 i
                                                                             "
+                                                                            [ngClass]="{
+                                                                                'd-none':
+                                                                                    selectedBankTrxWhileHovering !==
+                                                                                        txn.id &&
+                                                                                    !txn.isChecked &&
+                                                                                    checkedBankTrxWhileHovering?.length ===
+                                                                                        0
+                                                                            }"
                                                                             [(ngModel)]="txn.isChecked"
                                                                             (change)="
-                                                                                selectEntryForBulkAction($event, item)
+                                                                                selectEntryForBulkAction(
+                                                                                    $event,
+                                                                                    item,
+                                                                                    txn.id,
+                                                                                    'credit'
+                                                                                )
                                                                             "
                                                                             [disabled]="
                                                                                 currentOrganizationType === 'COMPANY' &&
