@@ -265,6 +265,28 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public get showPageLeaveConfirmation(): boolean {
         return (!this.isUpdateMode && (this.invoiceForm?.controls['account']?.get('customerName')?.value)) ? true : false;
     }
+
+    /**
+     * Show/Hide tax column if condition fulfills
+     *
+     * @readonly
+     * @type {boolean}
+     * @memberof VoucherCreateComponent
+     */
+    public get showHideTaxColumn(): boolean {
+        let accountPartyType = '';
+        this.account?.addresses?.forEach(address => {
+            if (address.isDefault) {
+                accountPartyType = address.partyType.toLowerCase();
+            }
+        });
+        if ((this.invoiceType?.isSalesInvoice || this.invoiceType?.isCreditNote) && !this.activeCompany?.withPay && (this.activeCompany?.country !== this.account?.countryCode || accountPartyType === 'sez' || accountPartyType === 'deemed export')) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
     /** Tax validations */
     public taxNumberValidations: any = {
         account: {
@@ -441,7 +463,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
                 const taxesFormArray = entryFormGroup.get('taxes') as FormArray;
                 taxesFormArray.clear();
-        
+
                 taxes?.forEach(tax => {
                     taxesFormArray.push(this.getTransactionTaxFormGroup(tax));
                 });
@@ -487,14 +509,24 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         /** Voucher details observable */
         this.componentStore.voucherDetails$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                // this.invoiceForm.controls["account"].get("customerName")?.patchValue(this.invoiceForm.controls['account'].get('customerName')?.value);
                 this.getAccountDetails(response?.account.uniqueName);
 
                 const entriesFormArray = this.invoiceForm.get('entries') as FormArray;
                 entriesFormArray.clear();
 
-                response?.entries?.forEach(entry => {
+                response?.entries?.forEach((entry: any, index: number) => {
+                    if (entry.transactions[0]?.stock) {
+                        this.stockUnits[index] = observableOf(entry.transactions[0]?.stock.unitRates);
+                    }
                     this.invoiceForm.get('entries')['controls'].push(this.getEntriesFormGroup(entry));
+
+                    if (entry.discounts?.length) {
+                        this.getSelectedDiscounts(index, entry.discounts);
+                    }
+
+                    if (entry.taxes) {
+                        this.getSelectedTaxes(index, entry.taxes);
+                    }
                 });
                 console.log(response);
             }
@@ -1250,10 +1282,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         return this.formBuilder.group({
             date: [this.invoiceForm?.get('date')?.value || this.universalDate || dayjs().format(GIDDH_DATE_FORMAT)],
-            description: [entryData ? entryData?.transactions[0]?.description : ''],
+            description: [entryData ? entryData?.description : ''],
             voucherType: [this.voucherType],
             uniqueName: [''],
-            showCodeType: [entryData && entryData?.transactions[0]?.stock?.hsnNumber ? 'hsn' :  'sac'], //temp
+            showCodeType: [entryData && entryData?.transactions[0]?.stock?.hsnNumber ? 'hsn' : 'sac'], //temp
             hsnNumber: [entryData ? entryData?.transactions[0]?.stock?.hsnNumber : ''],
             sacNumber: [entryData ? entryData?.transactions[0]?.stock?.sacNumber : ''],
             attachedFile: [''],

@@ -498,7 +498,7 @@
                                                 <th width="12%">Rate</th>
                                                 <th width="12%">Amount</th>
                                                 <th width="12%">Discount</th>
-                                                <th width="12%">Tax</th>
+                                                <th width="12%" *ngIf="this.showHideTaxColumn">Tax</th>
                                                 <th width="14%" class="total-column">Total</th>
                                             </tr>
                                         </thead>
@@ -766,7 +766,7 @@
                                                                         [readonly]="!transaction.get('stock.uniqueName')?.value"
                                                                         [type]="'text'"></text-field>
 
-                                                                    <ng-container formGroupName="stockUnit">
+                                                                    <ng-container *ngIf="transaction.get('stock.uniqueName')?.value" formGroupName="stockUnit">
                                                                         <ng-container
                                                                             *ngIf="activeEntryIndex !== entryIndex">
                                                                             {{
@@ -830,8 +830,8 @@
                                                                         <input matInput [placeholder]="'Enter'"
                                                                             class="form-control text-right"
                                                                             type="text" entryAmount
-                                                                            [rate]="transaction.get('stock.rate.rateForAccount')?.value"
-                                                                            [quantity]="transaction.get('stock.quantity')?.value"
+                                                                            [rate]="transaction.get('stock.uniqueName')?.value ? transaction.get('stock.rate.rateForAccount')?.value : transaction.get('amount.amountForAccount')?.value"
+                                                                            [quantity]="transaction.get('stock.uniqueName')?.value ? transaction.get('stock.quantity')?.value : 1"
                                                                             name="transactionAmount{{entryIndex}}"
                                                                             formControlName="amountForAccount"
                                                                             (calculatedAmount)="updateTransactionAmount(transaction, $event)" />
@@ -866,7 +866,7 @@
                                                                 </ng-container>
                                                                 <div>
                                                                     <discount-dropdown
-                                                                        *ngIf="activeEntryIndex === entryIndex"
+                                                                        [style.display]="activeEntryIndex === entryIndex ? 'block' : 'none'"
                                                                         [amount]="transaction.get('amount.amountForAccount')?.value"
                                                                         [discountsList]="discountsList$ | async"
                                                                         [selectedDiscountsList]="entry.get('discounts')?.value"
@@ -889,7 +889,7 @@
                                                     </td>
 
                                                     <!-- Tax -->
-                                                    <td width="12%">
+                                                    <td width="12%" *ngIf="this.showHideTaxColumn">
                                                         <ng-container
                                                             *ngFor="let transaction of entry.get('transactions')['controls']"
                                                             formArrayName="transactions">
@@ -904,7 +904,7 @@
                                                                 </ng-container>
                                                                 <div>
                                                                     <tax-dropdown
-                                                                        *ngIf="activeEntryIndex === entryIndex"
+                                                                        [style.display]="activeEntryIndex === entryIndex ? 'block' : 'none'"
                                                                         [date]="invoiceForm.get('date')?.value"
                                                                         [amount]="transaction.get('amount.amountForAccount')?.value - entry.get('totalDiscount')?.value"
                                                                         [selectedTaxesList]="entry.get('taxes')?.value"
@@ -938,8 +938,7 @@
                                                                 </amount-field>
                                                             </ng-container>
                                                             <div>
-                                                                <div class="text-field-container"
-                                                                    *ngIf="activeEntryIndex === entryIndex">
+                                                                <div class="text-field-container" [style.display]="activeEntryIndex === entryIndex ? 'block' : 'none'">
                                                                     <input matInput [placeholder]="'Enter'"
                                                                         class="form-control text-right" type="text"
                                                                         entryTotal [entry]="entry?.value"
