@@ -1054,7 +1054,11 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public getPartyTypes() {
         this.store.pipe(select(s => s.common.partyTypes), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
-                this.partyTypeSource = res;
+                switch (this.activeCompany?.countryV2?.alpha2CountryCode) {
+                    case 'ZW': this.partyTypeSource = res.filter(item => item.label === 'GOVERNMENT ENTITY');
+                        break;
+                    default: this.partyTypeSource = res;
+                }
             } else {
                 this.store.dispatch(this.commonActions.GetPartyType());
             }

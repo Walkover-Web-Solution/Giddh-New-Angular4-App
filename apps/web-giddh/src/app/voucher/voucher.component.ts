@@ -6167,7 +6167,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 this.showTRNNo = true;
                 this.showVATNo = false;
                 this.getOnboardingForm('AE')
-            } else if (name === 'United Kingdom') {
+            } else if (name === 'United Kingdom' || name === 'Zimbabwe' || name === 'Kenya') {
                 this.showGSTINNo = false;
                 this.showTRNNo = false;
                 this.showVATNo = true;

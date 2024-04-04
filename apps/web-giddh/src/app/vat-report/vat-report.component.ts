@@ -88,6 +88,8 @@ export class VatReportComponent implements OnInit, OnDestroy {
     public isUKCompany: boolean = false;
     /** True if active country is Zimbabwe */
     public isZimbabweCompany: boolean = false;
+    /** True if active country is Kenya */
+    public isKenyaCompany: boolean = false;
     /** Hold static months array */
     public months: any[] = [
         { label: 'January', value: 1 },
@@ -113,11 +115,18 @@ export class VatReportComponent implements OnInit, OnDestroy {
     public selectedYear: any = "";
     /** Hold HMRC portal url */
     public connectToHMRCUrl: string = null;
+    /** Holds Currency List for Zimbabwe Amount exchange rate */
     public vatReportCurrencyList: any[] = [
-        { label: 'Dollar', value: 'dollars' },
-        { label: 'Cents', value: 'cents' }
+        { label: 'BWP', value: 'BWP', additional: { symbol : 'P'} },
+        { label: 'USD', value: 'USD', additional: { symbol : '$'} },
+        { label: 'GBP', value: 'GBP', additional: { symbol : '£'} },
+        { label: 'INR', value: 'INR', additional: { symbol : '₹'} },
+        { label: 'EUR', value: 'EUR',  additional: { symbol : '€'} }
     ];
-    public vatReportCurrency: 'dollars' | 'cents' = 'dollars';
+    /** Holds Current Currency Symbol for Zimbabwe report */
+    public currentCurrencySymbol: string = this.vatReportCurrencyList[0].additional.symbol;
+    /** Holds Current Currency Code for Zimbabwe report */
+    public vatReportCurrency: 'BWP' | 'USD' | 'GBP' | 'INR' | 'EUR' = 'BWP';
     public dummyVatReport = [
         {
             "section": "DECLARATION OF OUTPUT TAX ",
@@ -440,7 +449,6 @@ export class VatReportComponent implements OnInit, OnDestroy {
         private settingsBranchAction: SettingsBranchActions,
         private breakpointObserver: BreakpointObserver,
         private modalService: BsModalService,
-        private settingsFinancialYearActions: SettingsFinancialYearActions,
         public settingsFinancialYearService: SettingsFinancialYearService
     ) {
         this.getFinancialYears();
