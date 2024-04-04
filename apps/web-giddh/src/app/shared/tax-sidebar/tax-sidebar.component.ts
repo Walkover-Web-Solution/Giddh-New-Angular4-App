@@ -62,6 +62,8 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
     public imgPath: string = "";
     /** True if active country is UK */
     public isUKCompany: boolean;
+    /** True if active country is Zimbabwe */
+    public isZimbabweCompany: boolean;
 
     constructor(
         private router: Router,
@@ -90,6 +92,8 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.isUKCompany = activeCompany?.country === "United Kingdom";
+                this.isZimbabweCompany = activeCompany?.country === "Zimbabwe";
+                
                 if (this.vatSupportedCountries.includes(activeCompany.countryV2?.alpha2CountryCode)) {
                     this.showVatMenus = true;
                     this.showGstMenus = false;
