@@ -116,11 +116,16 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public debitSelectAll: boolean = false;
     public creditSelectAll: boolean = false;
     public debitCreditSelectAll: boolean = false;
+    public bankDebitSelectAll: boolean = false;
+    public bankCreditSelectAll: boolean = false;
+    public bankDebitCreditSelectAll: boolean = false;
     public isBankTransactionLoading: boolean = false;
     public todaySelected: boolean = false;
     public todaySelected$: Observable<boolean> = observableOf(false);
     public selectedTrxWhileHovering: string;
     public checkedTrxWhileHovering: any[] = [];
+    public selectedBankTrxWhileHovering: string;
+    public checkedBankTrxWhileHovering: any[] = [];
     public ledgerTxnBalance: any = {};
     public isAdvanceSearchImplemented: boolean = false;
     public invoiceList: any[] = [];
@@ -641,6 +646,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.creditSelectAll = false;
                 this.debitSelectAll = false;
                 this.debitCreditSelectAll = false;
+                this.bankCreditSelectAll = false;
+                this.bankDebitSelectAll = false;
+                this.bankDebitCreditSelectAll = false;
             }
         });
 
@@ -1763,7 +1771,27 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.ledgerActions.SelectDeSelectAllEntries(type, ev?.checked));
     }
 
-    public selectEntryForBulkAction(ev: any, entryUniqueName: string) {
+    public selectAllBankEntries(ev: any, type: 'debit' | 'credit' | 'all') {
+        if (!ev?.checked) {
+            if (type === 'all') {
+                this.bankDebitCreditSelectAll = false;
+            } else if (type === 'debit') {
+                this.bankDebitSelectAll = false;
+            } else {
+                this.bankCreditSelectAll = false;
+            }
+            this.selectedBankTrxWhileHovering = null;
+        }
+        this.checkedBankTrxWhileHovering = [];
+
+        this.store.dispatch(this.ledgerActions.SelectDeSelectAllEntries(type, ev?.checked));
+    }
+
+    public bankEntryHovered(selectedBankTxnUniqueName: string):void {
+        this.selectedBankTrxWhileHovering = selectedBankTxnUniqueName;
+    }
+
+    public selectEntryForBulkAction(ev: any, entryUniqueName: string, id:any,type: string): void {
         if (entryUniqueName) {
             if (ev?.checked) {
                 this.entryUniqueNamesForBulkAction.push(entryUniqueName);
@@ -1772,13 +1800,63 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.entryUniqueNamesForBulkAction?.splice(itemIndx, 1);
             }
         }
+        const totalLength = (type === 'debit') ? this.lc.bankTransactionsDebitData?.length :
+            (type === 'credit') ? this.lc.bankTransactionsCreditData?.length :
+                (this.lc.bankTransactionsDebitData?.length + this.lc.bankTransactionsCreditData?.length);
+        if (ev?.checked) {
+            this.checkedBankTrxWhileHovering.push({ type, id });
+            this.store.dispatch(this.ledgerActions.SelectGivenEntries([id]));
+
+            const currentLength = this.isMobileScreen ?
+                this.checkedBankTrxWhileHovering?.length
+                : this.checkedBankTrxWhileHovering.filter(transaction => transaction?.type === type)?.length;
+            console.log(totalLength, currentLength, this.checkedBankTrxWhileHovering, this.selectedBankTrxWhileHovering);
+            if (currentLength === totalLength) {
+                if (type === 'credit') {
+                    this.bankCreditSelectAll = true;
+                } else if (type === 'debit') {
+                    this.bankDebitSelectAll = true;
+                } else {
+                    this.bankDebitCreditSelectAll = true;
+                }
+            } else {
+                if (type === 'credit') {
+                    this.bankCreditSelectAll = false;
+                } else if (type === 'debit') {
+                    this.bankDebitSelectAll = false;
+                } else {
+                    this.bankDebitCreditSelectAll = false;
+                }
+            }
+        } else {
+            let itemIndx = this.checkedBankTrxWhileHovering?.findIndex((item) => item?.uniqueName === id);
+            this.checkedBankTrxWhileHovering.splice(itemIndx, 1);
+            const currentLength = this.isMobileScreen ?
+                this.checkedBankTrxWhileHovering?.length
+                : this.checkedBankTrxWhileHovering?.filter(transaction => transaction?.type === type)?.length;
+            if (this.checkedBankTrxWhileHovering && (currentLength === 0 || currentLength < totalLength)) {
+                if (type === 'credit') {
+                    this.bankCreditSelectAll = false;
+                } else if (type === 'debit') {
+                    this.bankDebitSelectAll = false;
+                } else {
+                    this.bankDebitCreditSelectAll = false;
+                }
+                this.selectedBankTrxWhileHovering = '';
+            }
+
+            this.lc.selectedTxnUniqueName = null;
+            this.store.dispatch(this.ledgerActions.DeSelectGivenEntries([id]));
+        }
     }
 
     public entryHovered(uniqueName: string) {
         this.selectedTrxWhileHovering = uniqueName;
     }
 
+
     public entrySelected(ev: any, uniqueName: string, type: string) {
+        console.log(uniqueName);
         const totalLength = (type === 'debit') ? this.ledgerTransactions.debitTransactions?.length :
             (type === 'credit') ? this.ledgerTransactions.creditTransactions?.length :
                 (this.ledgerTransactions.debitTransactions?.length + this.ledgerTransactions.creditTransactions?.length);
