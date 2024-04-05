@@ -19,7 +19,7 @@ import { InvoiceReceiptFilter, ReciptResponse } from "../../models/api-models/re
 import { VouchersUtilityService } from "../utility/vouchers.utility.service";
 import { FormBuilder, FormArray, FormGroup, Validators } from "@angular/forms";
 import { GIDDH_DATE_FORMAT } from "../../shared/helpers/defaultDateFormat";
-import { AccountType, BriedAccountsGroup, SearchType, TaxType, VoucherTypeEnum } from "../utility/vouchers.const";
+import { AccountType, BriedAccountsGroup, OtherTaxTypes, SearchType, TaxType, VoucherTypeEnum } from "../utility/vouchers.const";
 import { SearchService } from "../../services/search.service";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { OtherTaxComponent } from "../../theme/other-tax/other-tax.component";
@@ -260,6 +260,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     };
     /** Holds account types */
     public accountType: any = AccountType;
+    /** Holds list of other tax types */
+    public otherTaxTypes: any[] = OtherTaxTypes;
 
     /** Returns true if account is selected else false */
     public get showPageLeaveConfirmation(): boolean {
@@ -517,6 +519,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 response?.entries?.forEach((entry: any, index: number) => {
                     if (entry.transactions[0]?.stock) {
                         this.stockUnits[index] = observableOf(entry.transactions[0]?.stock.unitRates);
+                        this.componentStore.getStockVariants({ q: entry.transactions[0]?.stock?.uniqueName, index: index });
                     }
                     this.invoiceForm.get('entries')['controls'].push(this.getEntriesFormGroup(entry));
 
@@ -525,10 +528,28 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     }
 
                     if (entry.taxes) {
-                        this.getSelectedTaxes(index, entry.taxes);
+                        let normalTaxes = [];
+                        let otherTax = null;
+                        entry.taxes?.forEach(tax => {
+                            if (this.otherTaxTypes.includes(tax.taxType)) {
+                                otherTax = tax;
+                            } else {
+                                normalTaxes.push(tax);
+                            }
+                        });
+
+                        if (normalTaxes?.length) {
+                            this.getSelectedTaxes(index, normalTaxes);
+                        }
+
+                        if (otherTax) {
+                            const selectedOtherTax = this.companyTaxes?.filter(tax => tax.uniqueName === otherTax.uniqueName);
+                            otherTax['taxDetail'] = selectedOtherTax[0].taxDetail;
+                            otherTax['name'] = selectedOtherTax[0].name;
+                            this.getSelectedOtherTax(index, otherTax, otherTax.calculationMethod);
+                        }
                     }
                 });
-                console.log(response);
             }
         });
     }
@@ -1278,16 +1299,14 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     private getEntriesFormGroup(entryData?: any): FormGroup {
-        console.log(entryData);
-
         return this.formBuilder.group({
             date: [this.invoiceForm?.get('date')?.value || this.universalDate || dayjs().format(GIDDH_DATE_FORMAT)],
             description: [entryData ? entryData?.description : ''],
             voucherType: [this.voucherType],
             uniqueName: [''],
-            showCodeType: [entryData && entryData?.transactions[0]?.stock?.hsnNumber ? 'hsn' : 'sac'], //temp
-            hsnNumber: [entryData ? entryData?.transactions[0]?.stock?.hsnNumber : ''],
-            sacNumber: [entryData ? entryData?.transactions[0]?.stock?.sacNumber : ''],
+            showCodeType: [entryData && entryData?.hsnNumber ? 'hsn' : 'sac'], //temp
+            hsnNumber: [entryData ? entryData?.hsnNumber : ''],
+            sacNumber: [entryData ? entryData?.sacNumber : ''],
             attachedFile: [''],
             attachedFileName: [''],
             totalDiscount: [''], // temp
@@ -1335,7 +1354,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         }),
                         skuCodeHeading: [entryData ? entryData?.transactions[0]?.stock?.skuCodeHeading : ''],
                         skuCode: [entryData ? entryData?.transactions[0]?.stock?.sku : ''],
-                        uniqueName: ['']
+                        uniqueName: [entryData ? entryData?.transactions[0]?.stock?.uniqueName : '']
                     })
                 })
             ]),
@@ -1360,7 +1379,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 amountForCompany: [''],
                 type: ['DEBIT']
             }),
-            calculationMethod: [discount?.discountType || 'FIX_AMOUNT'],
+            calculationMethod: [discount?.discountType || discount?.calculationMethod || 'FIX_AMOUNT'],
             discountValue: [discount?.discountValue],
             name: [discount?.name],
             particular: [''],
@@ -1393,6 +1412,56 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.bulkStockAsideMenuRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response) {
                 console.log(response);
+
+                let index = this.invoiceForm.get('entries')['controls']?.length;
+
+                this.invoiceForm.get('entries')['controls']?.forEach((control: any, entryIndex: number) => {
+                    if (!control.get('transactions.0.account.uniqueName')?.value) {
+                        this.deleteLineEntry(entryIndex);
+                    }
+                });
+
+                response?.forEach(item => {
+                    if (item.additional?.stock) {
+                        this.stockUnits[index] = observableOf(item.additional?.stock?.variant?.unitRates);
+                    }
+
+                    let entry = {
+                        hsnNumber: item.additional?.stock?.hsnNumber,
+                        sacNumber: item.additional?.stock?.sacNumber,
+                        transactions: [{
+                            account: {
+                                name: item.additional?.label,
+                                uniqueName: item.additional?.uniqueName
+                            },
+                            amount: {
+                                amountForAccount: giddhRoundOff(Number(item.quantity) * Number(item.rate), this.company.giddhBalanceDecimalPlaces),
+                                amountForCompany: giddhRoundOff(Number(item.quantity) * Number(item.rate), this.company.giddhBalanceDecimalPlaces) * this.invoiceForm.get('exchangeRate')?.value
+                            },
+                            stock: {
+                                name: item.additional?.stock?.name,
+                                uniqueName: item.additional?.stock?.uniqueName,
+                                quantity: item.quantity,
+                                rate: {
+                                    rateForAccount: item.rate
+                                },
+                                stockUnit: {
+                                    code: item.additional?.stock?.variant?.unitRates?.length ? item.additional?.stock?.variant?.unitRates[0].stockUnitCode : '',
+                                    uniqueName: item.additional?.stock?.variant?.unitRates?.length ? item.additional?.stock?.variant?.unitRates[0].stockUnitUniqueName : ''
+                                },
+                                variant: {
+                                    name: item.variantName,
+                                    uniqueName: item.additional?.stock?.variant?.uniqueName
+                                },
+                                sku: item.additional?.stock?.skuCode,
+                                skuCodeHeading: item.additional?.stock?.skuCodeHeading
+                            }
+                        }]
+                    }
+
+                    this.invoiceForm.get('entries')['controls'].push(this.getEntriesFormGroup(entry));
+                    index++;
+                });
             }
         });
     }
@@ -1421,37 +1490,48 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         this.otherTaxAsideMenuRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response) {
-                const entryFormGroup = this.getEntryFormGroup(response.entryIndex);
-                const transactionFormGroup = this.getTransactionFormGroup(entryFormGroup);
-                const tax = response.tax;
-                let taxableValue = 0;
-
-                if (['tcsrc', 'tcspay'].includes(tax?.taxType)) {
-                    if (response.calculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount) {
-                        taxableValue = Number(transactionFormGroup.get('amount.amountForAccount')?.value) - entryFormGroup.get('totalDiscount')?.value;
-                    } else if (response.calculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTotalAmount) {
-                        let rawAmount = Number(transactionFormGroup.get('amount.amountForAccount')?.value) - entryFormGroup.get('totalDiscount')?.value;
-                        taxableValue = (rawAmount + entryFormGroup.get('totalTaxWithoutCess')?.value + entryFormGroup.get('totalCess')?.value);
-                    }
-                    entryFormGroup.get('otherTax.type').patchValue('tcs');
-                } else {
-                    if (response.calculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount) {
-                        taxableValue = Number(transactionFormGroup.get('amount.amountForAccount')?.value) - entryFormGroup.get('totalDiscount')?.value;
-                    } else if (response.calculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTotalAmount) {
-                        let rawAmount = Number(transactionFormGroup.get('amount.amountForAccount')?.value) - entryFormGroup.get('totalDiscount')?.value;
-                        taxableValue = (rawAmount + entryFormGroup.get('totalTaxWithoutCess')?.value + entryFormGroup.get('totalCess')?.value);
-                    }
-                    entryFormGroup.get('otherTax.type').patchValue('tds');
-                }
-
-                entryFormGroup.get('otherTax.name').patchValue(tax.name);
-                entryFormGroup.get('otherTax.amount').patchValue(giddhRoundOff(((taxableValue * tax?.taxDetail[0]?.taxValue) / 100), this.highPrecisionRate));
-                entryFormGroup.get('otherTax.calculationMethod').patchValue(response.calculationMethod);
+                this.getSelectedOtherTax(response.entryIndex, response.tax, response.calculationMethod);
             } else {
                 const entryFormGroup = this.getEntryFormGroup(entryIndex);
                 entryFormGroup.get('otherTax').reset();
             }
         });
+    }
+
+    /**
+     * Updates the other tax in form control
+     *
+     * @param {number} entryIndex
+     * @param {*} tax
+     * @param {SalesOtherTaxesCalculationMethodEnum} calculationMethod
+     * @memberof VoucherCreateComponent
+     */
+    public getSelectedOtherTax(entryIndex: number, tax: any, calculationMethod: SalesOtherTaxesCalculationMethodEnum): void {
+        const entryFormGroup = this.getEntryFormGroup(entryIndex);
+        const transactionFormGroup = this.getTransactionFormGroup(entryFormGroup);
+        let taxableValue = 0;
+
+        if (['tcsrc', 'tcspay'].includes(tax?.taxType)) {
+            if (calculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount) {
+                taxableValue = Number(transactionFormGroup.get('amount.amountForAccount')?.value) - entryFormGroup.get('totalDiscount')?.value;
+            } else if (calculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTotalAmount) {
+                let rawAmount = Number(transactionFormGroup.get('amount.amountForAccount')?.value) - entryFormGroup.get('totalDiscount')?.value;
+                taxableValue = (rawAmount + entryFormGroup.get('totalTaxWithoutCess')?.value + entryFormGroup.get('totalCess')?.value);
+            }
+            entryFormGroup.get('otherTax.type').patchValue('tcs');
+        } else {
+            if (calculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount) {
+                taxableValue = Number(transactionFormGroup.get('amount.amountForAccount')?.value) - entryFormGroup.get('totalDiscount')?.value;
+            } else if (calculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTotalAmount) {
+                let rawAmount = Number(transactionFormGroup.get('amount.amountForAccount')?.value) - entryFormGroup.get('totalDiscount')?.value;
+                taxableValue = (rawAmount + entryFormGroup.get('totalTaxWithoutCess')?.value + entryFormGroup.get('totalCess')?.value);
+            }
+            entryFormGroup.get('otherTax.type').patchValue('tds');
+        }
+
+        entryFormGroup.get('otherTax.name').patchValue(tax.name);
+        entryFormGroup.get('otherTax.amount').patchValue(giddhRoundOff(((taxableValue * tax?.taxDetail[0]?.taxValue) / 100), this.highPrecisionRate));
+        entryFormGroup.get('otherTax.calculationMethod').patchValue(calculationMethod);
     }
 
     /**

@@ -40,3 +40,5 @@ export enum AccountType {
     'customer' = 'customer',
     'bank' = 'bank'
 };
+
+export const OtherTaxTypes = ['tdsrc', 'tdspay', 'tcspay', 'tcsrc'];

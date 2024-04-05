@@ -86,7 +86,7 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
             name: [item?.name || ""],
             stockUniqueName: [item.additional?.stock?.uniqueName || ""],
             variantUniqueName: [item?.variant?.uniqueName || ""],
-            customerUniqueName: ["sales"],
+            customerUniqueName: [this.inputData.customerUniqueName],
             additional: [item.additional || ""],
             variantName: [item?.variant?.name || ""],
         });
@@ -207,8 +207,7 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
                 item.rate = unitRates[0]?.rate ?? 0;
                 item.quantity = 1;
 
-                let itemFormGroup;
-                itemFormGroup = this.getStockFormGroup(item);
+                let itemFormGroup = this.getStockFormGroup(item);
                 this.getDataControls.push(itemFormGroup);
             }
         });

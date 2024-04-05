@@ -143,7 +143,7 @@ export class DiscountDropdownComponent implements OnInit, OnChanges, OnDestroy {
         this.totalDiscountAmount = 0;
 
         this.totalDiscountAmount += this.discountForm.get('fixedValue')?.value ? Number(this.discountForm.get('fixedValue')?.value) : 0;
-        this.totalDiscountAmount += this.discountForm.get('percentage')?.value ? ((Number(this.discountForm.get('percentage')?.value) / Number(this.amount)) * 100) : 0;
+        this.totalDiscountAmount += this.discountForm.get('percentage')?.value ? ((Number(this.discountForm.get('percentage')?.value) / 100) * Number(this.amount)) : 0;
 
         const discounts = this.discountForm.get('discounts') as FormArray;
         for (let i = 0; i <= discounts.length; i++) {
@@ -151,7 +151,7 @@ export class DiscountDropdownComponent implements OnInit, OnChanges, OnDestroy {
                 if (discounts.controls[i].get('discountType')?.value === 'FIX_AMOUNT') {
                     this.totalDiscountAmount += Number(discounts.controls[i].get('discountValue')?.value);
                 } else {
-                    this.totalDiscountAmount += ((Number(discounts.controls[i].get('discountValue')?.value) / Number(this.amount)) * 100);
+                    this.totalDiscountAmount += ((Number(discounts.controls[i].get('discountValue')?.value) / 100) * Number(this.amount));
                 }
             }
         }
