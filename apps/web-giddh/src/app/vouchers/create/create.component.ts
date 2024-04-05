@@ -262,12 +262,13 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public accountType: any = AccountType;
     /** Holds list of other tax types */
     public otherTaxTypes: any[] = OtherTaxTypes;
+    /** Voucher details */
+    public voucherDetails: any = {};
 
     /** Returns true if account is selected else false */
     public get showPageLeaveConfirmation(): boolean {
         return (!this.isUpdateMode && (this.invoiceForm?.controls['account']?.get('customerName')?.value)) ? true : false;
     }
-
     /**
      * Show/Hide tax column if condition fulfills
      *
@@ -1411,8 +1412,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         this.bulkStockAsideMenuRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response) {
-                console.log(response);
-
                 let index = this.invoiceForm.get('entries')['controls']?.length;
 
                 this.invoiceForm.get('entries')['controls']?.forEach((control: any, entryIndex: number) => {
@@ -1568,13 +1567,13 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             }
         });
 
-        this.accountAsideMenuRef.afterClosed().pipe(take(1)).subscribe((response) => {
+        this.accountAsideMenuRef.afterClosed().pipe(take(1)).subscribe(() => {
             if (this.showPageLeaveConfirmation) {
                 this.pageLeaveUtilityService.addBrowserConfirmationDialog();
             }
 
             if (this.accountParentGroup === "bankaccounts") {
-                this.getBriefAccounts();
+                this.componentStore.getBriefAccounts({ group: BriedAccountsGroup });
             }
         });
     }
@@ -1650,6 +1649,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.invoiceForm.controls["account"].get("uniqueName")?.patchValue(response?.uniqueName);
         this.invoiceForm.controls["account"].get("customerName")?.patchValue(response?.name);
         this.updateAccountDataInForm(response);
+        this.accountAsideMenuRef?.close();
     }
 
     /**
@@ -1907,7 +1907,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public createSendVoucher(): void {
-        this.saveVoucher(() => {
+        this.saveVoucher(voucher => {
+            this.voucherDetails = voucher?.body;
+
             let dialogRef = this.dialog.open(this.sendEmailModal, {
                 width: '650px'
             });
@@ -1924,7 +1926,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public createPrintVoucher(): void {
-        this.saveVoucher(() => {
+        this.saveVoucher(voucher => {
+            this.voucherDetails = voucher?.body;
+
             let dialogRef = this.dialog.open(this.printVoucherModal, {
                 width: '60vw',
                 height: '80vh'
@@ -2381,7 +2385,15 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public saveVoucher(callback?: Function): void {
-        let invoiceForm = this.vouchersUtilityService.cleanVoucherObject(this.invoiceForm.value);
+        const entries = [];
+        this.invoiceForm.get('entries')['controls']?.forEach(control => {
+            entries.push(control?.value);
+        });
+
+        let invoiceForm = cloneDeep(this.invoiceForm.value);
+        invoiceForm.entries = entries;
+
+        invoiceForm = this.vouchersUtilityService.cleanVoucherObject(invoiceForm);
 
         if (!this.isFormValid(invoiceForm)) {
             return;

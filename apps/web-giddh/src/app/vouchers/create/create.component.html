@@ -1317,9 +1317,9 @@
         [localeData]="localeData"
         [commonLocaleData]="commonLocaleData"
         [selectedItem]="{
-            voucherNumber: '240211-2',
-            uniqueName: '002',
-            voucherUniqueName: 'ibxoo1707645693722'
+            voucherNumber: voucherDetails?.number,
+            uniqueName: voucherDetails?.account?.uniqueName,
+            voucherUniqueName: voucherDetails?.uniqueName
         }"
         (cancelEvent)="cancelPrintModal()"></print-voucher>
     </ng-container>
@@ -1329,15 +1329,11 @@
 <ng-template #sendEmailModal>
     <ng-container>
         <app-email-send-dialog
-        [voucherType]="'sales'"
-        (successEvent)="sendEmail($event)"
-        [selectedItem]="{
-            voucherNumber: '240211-2',
-            uniqueName: '002',
-            account: invoiceForm.controls['account'].get('customerName').value,
-            voucherUniqueName: 'ibxoo1707645693722'
-        }"
-        (cancelEvent)="cancelEmailModal()"></app-email-send-dialog>
+            [voucherType]="'sales'"
+            (successEvent)="sendEmail($event)"
+            [selectedItem]="voucherDetails"
+            (cancelEvent)="cancelEmailModal()">
+        </app-email-send-dialog>
     </ng-container>
 </ng-template>
 <!-- endregion -->

@@ -8,22 +8,21 @@
 <mat-dialog-content>
     <form autocomplete="off" novalidate name="sendEmailForm" [formGroup]="sendEmailForm" (ngSubmit)="sendEmail()">
         <div class="modal-body">
-            <div class="w-100 option-value-field">
-                <text-field [name]="'name'" [cssClass]="'w-100'" formControlName="email.to" [type]="'text'">
-                </text-field>
+            <div class="w-100 option-value-field" formGroupName="email">
+                <text-field [name]="'email'" [cssClass]="'w-100'" formControlName="to" [type]="'text'"></text-field>
             </div>
             <div class="my-3">
                 <h3 class="mr-b05">Invoice Copy</h3>
                 <mat-checkbox color="primary" class="d-block font-15" (change)="onCopyTypeChange($event, 'Original')"
-                    formControlName="copyTypes">
+                    formControlName="copyTypeOriginal">
                     Original
                 </mat-checkbox>
                 <mat-checkbox color="primary" class="d-block font-15" (change)="onCopyTypeChange($event, 'Transport')"
-                    formControlName="copyTypes">
+                    formControlName="copyTypeCustomer">
                     Transport
                 </mat-checkbox>
                 <mat-checkbox color="primary" class="d-block font-15" (change)="onCopyTypeChange($event, 'Customer')"
-                    formControlName="copyTypes">
+                    formControlName="copyTypeTransport">
                     Customer
                 </mat-checkbox>
             </div>

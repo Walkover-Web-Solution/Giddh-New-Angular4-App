@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { VoucherTypeEnum } from '../utility/vouchers.const';
 
 @Component({
@@ -8,9 +8,13 @@ import { VoucherTypeEnum } from '../utility/vouchers.const';
     styleUrls: ['./email-send-dialog.component.scss']
 })
 export class EmailSendDialogComponent implements OnInit {
+    /** Voucher type */
     @Input() voucherType: VoucherTypeEnum;
-    @Input() selectedItem: { voucherNumber: string, uniqueName: string, account: { email: string }, voucherUniqueName?: string };
+    /** Voucher data */
+    @Input() selectedItem: any;
+    /** Success event emitter */
     @Output() public successEvent: EventEmitter<any> = new EventEmitter<any>();
+    /** Cancel event emitter */
     @Output() public cancelEvent: EventEmitter<boolean> = new EventEmitter<boolean>();
     /* This will hold local JSON data */
     public localeData: any = {};
@@ -25,12 +29,21 @@ export class EmailSendDialogComponent implements OnInit {
 
     constructor(private formBuilder: FormBuilder) { }
 
+    /**
+     * Lifecycle hook for component init
+     *
+     * @memberof EmailSendDialogComponent
+     */
     public ngOnInit(): void {
         this.initializeForm();
-        if (this.selectedItem && this.selectedItem.account && this.selectedItem.account.email) {
-            this.sendEmailForm.get('email.to').setValue(this.selectedItem.account.email);
-        }
 
+        if (this.selectedItem) {
+            if (this.selectedItem.account?.email) {
+                this.sendEmailForm.get('email.to').setValue(this.selectedItem.account.email);
+            }
+            this.sendEmailForm.get('uniqueName').setValue(this.selectedItem.uniqueName);
+            this.sendEmailForm.get('voucherType').setValue(this.selectedItem.type);
+        }
     }
 
     /**
@@ -41,9 +54,12 @@ export class EmailSendDialogComponent implements OnInit {
     */
     private initializeForm(): void {
         this.sendEmailForm = this.formBuilder.group({
-            copyTypes: this.formBuilder.array([['Original']]),
+            copyTypes: this.formBuilder.array([]),
+            copyTypeOriginal: [''],
+            copyTypeCustomer: [''],
+            copyTypeTransport: [''],
             email: this.formBuilder.group({
-                to: this.formBuilder.array([]),
+                to: ['']
             }),
             uniqueName: [''],
             voucherType: ['']
@@ -56,8 +72,8 @@ export class EmailSendDialogComponent implements OnInit {
     * @param {*} event
     * @memberof SendEmailInvoiceComponent
     */
-    public onCopyTypeChange(event, value: string): void {
-        if (event.checked) {
+    public onCopyTypeChange(event: any, value: string): void {
+        if (event?.checked) {
             this.copyTypes.push(this.formBuilder.control(value));
         } else {
             const index = this.copyTypes.controls.findIndex(x => x.value === value);
@@ -73,7 +89,6 @@ export class EmailSendDialogComponent implements OnInit {
      * @memberof EmailSendDialogComponent
      */
     public sendEmail(): void {
-        console.log(this.sendEmailForm.value)
         if ([VoucherTypeEnum.estimate, VoucherTypeEnum.generateEstimate, VoucherTypeEnum.proforma, VoucherTypeEnum.generateProforma].includes(this.voucherType)) {
             this.successEvent.emit(this.sendEmailForm.get('email.to').value);
         } else {
