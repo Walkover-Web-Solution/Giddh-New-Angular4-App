@@ -673,6 +673,16 @@
                                             >
                                                 <mat-grid-tile class="bold no-right-border" colspan="1">
                                                     {{ commonLocaleData?.app_date }}
+                                                </mat-grid-tile>
+                                                <mat-grid-tile class="bold no-right-border" colspan="2">
+                                                    {{ commonLocaleData?.app_particular }}
+                                                </mat-grid-tile>
+                                                <mat-grid-tile class="bold text-right no-right-border" colspan="1">
+                                                    {{ commonLocaleData?.app_amount }}
+                                                </mat-grid-tile>
+                                            </mat-grid-list>
+                                            <mat-grid-list cols="4" rowHeight="50px" class="ledger-row">
+                                                <mat-grid-tile colspan="1">
                                                     <mat-checkbox
                                                         color="primary"
                                                         id="select-all-entries-dr"
@@ -681,12 +691,10 @@
                                                         (change)="selectAllBankEntries($event, 'debit')"
                                                     ></mat-checkbox>
                                                 </mat-grid-tile>
-                                                <mat-grid-tile class="bold no-right-border" colspan="2">
-                                                    {{ commonLocaleData?.app_particular }}
-                                                </mat-grid-tile>
-                                                <mat-grid-tile class="bold text-right no-right-border" colspan="1">
-                                                    {{ commonLocaleData?.app_amount }}
-                                                </mat-grid-tile>
+                                                <mat-grid-tile colspan="2">&nbsp;</mat-grid-tile>
+                                                <mat-grid-tile class="no-right-border" colspan="1"
+                                                    >&nbsp;</mat-grid-tile
+                                                >
                                             </mat-grid-list>
                                             <mat-grid-list id="ledger-transaction-left-list" cols="4" rowHeight="50px">
                                                 <ng-container
@@ -717,6 +725,7 @@
                                                                                 'transaction-mapped-select-entry-dr-' +
                                                                                 i
                                                                             "
+                                                                             [(ngModel)]="txn.isChecked"
                                                                             [ngClass]="{
                                                                                 'd-none':
                                                                                     selectedBankTrxWhileHovering !==
@@ -1004,6 +1013,16 @@
                                             >
                                                 <mat-grid-tile class="bold no-right-border" colspan="1">
                                                     {{ commonLocaleData?.app_date }}
+                                                </mat-grid-tile>
+                                                <mat-grid-tile class="bold no-right-border" colspan="2">
+                                                    {{ commonLocaleData?.app_particular }}
+                                                </mat-grid-tile>
+                                                <mat-grid-tile class="bold text-right no-right-border" colspan="1">
+                                                    {{ commonLocaleData?.app_amount }}
+                                                </mat-grid-tile>
+                                            </mat-grid-list>
+                                            <mat-grid-list cols="4" rowHeight="50px" class="ledger-row">
+                                                <mat-grid-tile colspan="1">
                                                     <mat-checkbox
                                                         color="primary"
                                                         id="select-entries-date-cr"
@@ -1012,12 +1031,10 @@
                                                         (change)="selectAllBankEntries($event, 'credit')"
                                                     ></mat-checkbox>
                                                 </mat-grid-tile>
-                                                <mat-grid-tile class="bold no-right-border" colspan="2">
-                                                    {{ commonLocaleData?.app_particular }}
-                                                </mat-grid-tile>
-                                                <mat-grid-tile class="bold text-right no-right-border" colspan="1">
-                                                    {{ commonLocaleData?.app_amount }}
-                                                </mat-grid-tile>
+                                                <mat-grid-tile colspan="2">&nbsp;</mat-grid-tile>
+                                                <mat-grid-tile class="no-right-border" colspan="1"
+                                                    >&nbsp;</mat-grid-tile
+                                                >
                                             </mat-grid-list>
                                             <mat-grid-list id="ledger-transaction-right-list" cols="4" rowHeight="50px">
                                                 <ng-container
