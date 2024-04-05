@@ -169,7 +169,10 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public isIciciBankSupportedCountry: boolean = false;
     /** True, if is add or manage group form outside */
     public isAddAndManageOpenedFromOutside: boolean = false;
+    /** Holds array of company uniqueNames which ICICI allowed companies */
     public iciciAllowedCompanies: any[] = ICICI_ALLOWED_COMPANIES;
+    /** Holds true if current company country is plaid supported country */
+    public isPlaidSupportedCountry: boolean;
 
     constructor(
         private router: Router,
@@ -269,6 +272,12 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 this.amazonSellerRes = cloneDeep(o.amazonSeller);
                 this.amazonSellerForm.controls['sellers']?.patchValue(this.amazonSellerRes);
                 this.addAmazonSellerRow();
+            }
+        });
+
+        this.store.pipe(select(s => s.session.currentCompanyCurrency), takeUntil(this.destroyed$)).subscribe(res => {
+            if (res) {
+                this.isPlaidSupportedCountry = this.generalService.checkCompanySupportPlaid(res.country);
             }
         });
 
