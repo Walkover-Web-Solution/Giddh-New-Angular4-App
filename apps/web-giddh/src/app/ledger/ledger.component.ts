@@ -1055,6 +1055,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.lc.currentBlankTxn.showDropdown = false;
         }
         this.selectedTrxWhileHovering = '';
+        this.selectedBankTrxWhileHovering = '';
         this.lc.showBankLedgerPanel = false;
         this.needToReCalculate.next(false);
         this.lc.currentBlankTxn = null;
@@ -1772,20 +1773,32 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.ledgerActions.SelectDeSelectAllEntries(type, ev?.checked));
     }
 
-    public selectAllBankEntries(ev: any, type: 'debit' | 'credit' | 'all') {
+    public selectAllBankEntries(ev: any, type: 'debit' | 'credit' | 'all') :void{
         if (!ev?.checked) {
+            let uncheckedDebitTransactionRemaining = [];
+            let uncheckedCreditTransactionRemaining = [];
+            this.lc.bankTransactionsDebitData.forEach(response => {
+                uncheckedDebitTransactionRemaining = response?.transactions?.filter(transaction => transaction?.isChecked === true);
+            });
+            this.lc.bankTransactionsCreditData.forEach(response => {
+                uncheckedCreditTransactionRemaining = response?.transactions?.filter(transaction => transaction?.isChecked === true);
+            });
+            console.log(uncheckedDebitTransactionRemaining, uncheckedCreditTransactionRemaining);
+            if (!uncheckedDebitTransactionRemaining?.length && !uncheckedCreditTransactionRemaining?.length) {
+                this.checkedBankTrxWhileHovering = [];
+            }
+        } else {
             if (type === 'all') {
                 this.bankDebitCreditSelectAll = false;
             } else if (type === 'debit') {
                 this.bankDebitSelectAll = false;
+                this.store.dispatch(this.ledgerActions.SelectDrCrBankSelectAllEntries(type, ev?.checked, { debitTransactions: this.lc.bankTransactionsDebitData }));
             } else {
                 this.bankCreditSelectAll = false;
+                this.store.dispatch(this.ledgerActions.SelectDrCrBankSelectAllEntries(type, ev?.checked, { creditTransactions: this.lc.bankTransactionsCreditData }));
             }
             this.selectedBankTrxWhileHovering = null;
         }
-        this.checkedBankTrxWhileHovering = [];
-
-        this.store.dispatch(this.ledgerActions.SelectDeSelectAllEntries(type, ev?.checked));
     }
 
     public bankEntryHovered(selectedBankTxnUniqueName: string):void {
@@ -1806,7 +1819,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 (this.lc.bankTransactionsDebitData?.length + this.lc.bankTransactionsCreditData?.length);
         if (ev?.checked) {
             this.checkedBankTrxWhileHovering.push({ type, id });
-            this.store.dispatch(this.ledgerActions.SelectGivenEntries([id]));
+            this.store.dispatch(this.ledgerActions.SelectBankGivenEntries([id]));
 
             const currentLength = this.isMobileScreen ?
                 this.checkedBankTrxWhileHovering?.length
@@ -1845,9 +1858,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 }
                 this.selectedBankTrxWhileHovering = '';
             }
-
-            this.lc.selectedTxnUniqueName = null;
-            this.store.dispatch(this.ledgerActions.DeSelectGivenEntries([id]));
+            this.store.dispatch(this.ledgerActions.CrDrSelectBankGivenEntries([id]));
         }
     }
 
