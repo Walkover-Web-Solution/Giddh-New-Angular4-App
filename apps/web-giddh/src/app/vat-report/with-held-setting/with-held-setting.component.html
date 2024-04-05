@@ -3,7 +3,7 @@
     <hamburger-menu></hamburger-menu>
     <div class="relative w-100">
         <div class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper"
-        *ngIf="asideGstSidebarMenuState === 'in'">
+        *ngIf="asideTaxSidebarMenuState === 'in'">
         <tax-sidebar (navigateEvent)="handleNavigation()"
             [exclude]="'#primary-new-header'" class="gst-sidebar"></tax-sidebar>
         </div>
@@ -25,7 +25,7 @@
                 </input-field>
                 
                 <div class="col flex-grow-0">
-                    <button mat-stroked-button color="primary" (click)="changeTaxPercentage()" [disabled]="taxPercentage.invalid || !taxPercentage.dirty">{{
+                    <button mat-stroked-button color="primary" [disabled]="taxPercentage.invalid || !taxPercentage.dirty">{{
                         commonLocaleData?.app_submit }}</button>
                 </div>
             </div>

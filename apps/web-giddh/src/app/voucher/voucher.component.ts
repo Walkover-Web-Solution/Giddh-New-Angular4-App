@@ -6174,7 +6174,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 this.showTRNNo = false;
                 this.showVATNo = true;
 
-                let countryCode = null
+                let countryCode = null;
                 if (name === 'United Kingdom') {
                     countryCode = 'GB';
                 }else if (name === 'Zimbabwe') {
@@ -6182,7 +6182,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 }else if (name === 'Kenya') {
                     countryCode = 'KE';
                 }
-                this.getOnboardingForm(countryCode)
+                this.getOnboardingForm(countryCode);
             }
         } else {
             this.showGSTINNo = false;
