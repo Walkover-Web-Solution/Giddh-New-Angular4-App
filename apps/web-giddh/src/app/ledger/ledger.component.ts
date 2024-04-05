@@ -303,6 +303,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public entryUniqueNamesForBulkActionDuplicateCopy: string[] = [];
     /** False if there is no data in account search */
     public isAccountSearchData: boolean = true;
+    public selectedDebitTransactionIds = new Set<string>();
+    public selectedCreditTransactionIds = new Set<string>();
 
     constructor(
         private store: Store<AppState>,
@@ -945,6 +947,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                             this.lc.getReadyBankTransactionsForUI(res.body.transactionsList, (this.currentOrganizationType === OrganizationType.Company && (this.currentCompanyBranches && this.currentCompanyBranches.length > 2)));
                             this.getAccountSearchPrediction(this.lc.bankTransactionsCreditData);
                             this.getAccountSearchPrediction(this.lc.bankTransactionsDebitData);
+                            console.log(this.lc.bankTransactionsCreditData);
                         });
                         this.cdRf.detectChanges();
                     }
@@ -1773,92 +1776,49 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.ledgerActions.SelectDeSelectAllEntries(type, ev?.checked));
     }
 
-    public selectAllBankEntries(ev: any, type: 'debit' | 'credit' | 'all') :void{
-        if (!ev?.checked) {
-            let uncheckedDebitTransactionRemaining = [];
-            let uncheckedCreditTransactionRemaining = [];
-            this.lc.bankTransactionsDebitData.forEach(response => {
-                uncheckedDebitTransactionRemaining = response?.transactions?.filter(transaction => transaction?.isChecked === true);
-            });
-            this.lc.bankTransactionsCreditData.forEach(response => {
-                uncheckedCreditTransactionRemaining = response?.transactions?.filter(transaction => transaction?.isChecked === true);
-            });
-            console.log(uncheckedDebitTransactionRemaining, uncheckedCreditTransactionRemaining);
-            if (!uncheckedDebitTransactionRemaining?.length && !uncheckedCreditTransactionRemaining?.length) {
-                this.checkedBankTrxWhileHovering = [];
+    public selectAllBankEntries(ev: any, type: 'debit' | 'credit' | 'all'): void {
+        if (ev?.checked) {
+            if (type === 'debit') {
+                this.lc.bankTransactionsDebitData.forEach(response => {
+                    this.selectedDebitTransactionIds.add(response.transactions[0]?.id);
+                });
+            } else {
+                this.lc.bankTransactionsCreditData.forEach(response => {
+                    this.selectedCreditTransactionIds.add(response.transactions[0]?.id);
+                });
             }
         } else {
-            if (type === 'all') {
-                this.bankDebitCreditSelectAll = false;
-            } else if (type === 'debit') {
-                this.bankDebitSelectAll = false;
-                this.store.dispatch(this.ledgerActions.SelectDrCrBankSelectAllEntries(type, ev?.checked, { debitTransactions: this.lc.bankTransactionsDebitData }));
+            if (type === 'debit') {
+                    this.selectedDebitTransactionIds.clear();
             } else {
-                this.bankCreditSelectAll = false;
-                this.store.dispatch(this.ledgerActions.SelectDrCrBankSelectAllEntries(type, ev?.checked, { creditTransactions: this.lc.bankTransactionsCreditData }));
+                this.selectedCreditTransactionIds.clear();
             }
-            this.selectedBankTrxWhileHovering = null;
         }
     }
 
-    public bankEntryHovered(selectedBankTxnUniqueName: string):void {
+    public bankEntryHovered(selectedBankTxnUniqueName: string): void {
         this.selectedBankTrxWhileHovering = selectedBankTxnUniqueName;
     }
 
-    public selectEntryForBulkAction(ev: any, entryUniqueName: string, id:any,type: string): void {
+    public selectEntryForBulkAction(ev: any, entryUniqueName: string, id: any, type: string): void {
+        console.log(ev, entryUniqueName, id, type);
         if (entryUniqueName) {
             if (ev?.checked) {
+                if (type === 'credit') {
+                    this.selectedCreditTransactionIds.add(id);
+                } else if (type === 'debit') {
+                    this.selectedDebitTransactionIds.add(id);
+                }
                 this.entryUniqueNamesForBulkAction.push(entryUniqueName);
             } else {
                 let itemIndx = this.entryUniqueNamesForBulkAction?.findIndex((item) => item === entryUniqueName);
                 this.entryUniqueNamesForBulkAction?.splice(itemIndx, 1);
-            }
-        }
-        const totalLength = (type === 'debit') ? this.lc.bankTransactionsDebitData?.length :
-            (type === 'credit') ? this.lc.bankTransactionsCreditData?.length :
-                (this.lc.bankTransactionsDebitData?.length + this.lc.bankTransactionsCreditData?.length);
-        if (ev?.checked) {
-            this.checkedBankTrxWhileHovering.push({ type, id });
-            this.store.dispatch(this.ledgerActions.SelectBankGivenEntries([id]));
-
-            const currentLength = this.isMobileScreen ?
-                this.checkedBankTrxWhileHovering?.length
-                : this.checkedBankTrxWhileHovering.filter(transaction => transaction?.type === type)?.length;
-            console.log(totalLength, currentLength, this.checkedBankTrxWhileHovering, this.selectedBankTrxWhileHovering);
-            if (currentLength === totalLength) {
                 if (type === 'credit') {
-                    this.bankCreditSelectAll = true;
+                    this.selectedCreditTransactionIds.delete(id);
                 } else if (type === 'debit') {
-                    this.bankDebitSelectAll = true;
-                } else {
-                    this.bankDebitCreditSelectAll = true;
-                }
-            } else {
-                if (type === 'credit') {
-                    this.bankCreditSelectAll = false;
-                } else if (type === 'debit') {
-                    this.bankDebitSelectAll = false;
-                } else {
-                    this.bankDebitCreditSelectAll = false;
+                    this.selectedDebitTransactionIds.delete(id);
                 }
             }
-        } else {
-            let itemIndx = this.checkedBankTrxWhileHovering?.findIndex((item) => item?.uniqueName === id);
-            this.checkedBankTrxWhileHovering.splice(itemIndx, 1);
-            const currentLength = this.isMobileScreen ?
-                this.checkedBankTrxWhileHovering?.length
-                : this.checkedBankTrxWhileHovering?.filter(transaction => transaction?.type === type)?.length;
-            if (this.checkedBankTrxWhileHovering && (currentLength === 0 || currentLength < totalLength)) {
-                if (type === 'credit') {
-                    this.bankCreditSelectAll = false;
-                } else if (type === 'debit') {
-                    this.bankDebitSelectAll = false;
-                } else {
-                    this.bankDebitCreditSelectAll = false;
-                }
-                this.selectedBankTrxWhileHovering = '';
-            }
-            this.store.dispatch(this.ledgerActions.CrDrSelectBankGivenEntries([id]));
         }
     }
 
@@ -2621,11 +2581,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @memberof LedgerComponent
      */
     public deleteBankTransactions(): void {
-        let transactionIds = this.entryUniqueNamesForBulkAction.map((transaction: any) => transaction?.transactionId);
-        let params = { transactionIds: transactionIds };
+        let params = { transactionIds: [...this.selectedCreditTransactionIds, ...this.selectedDebitTransactionIds] };
         this.ledgerService.deleteBankTransactions(this.trxRequest.accountUniqueName, params).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
                 this.getBankTransactions();
+                this.selectedCreditTransactionIds.clear();
+                this.selectedDebitTransactionIds.clear();
                 this.toaster.showSnackBar("success", response?.body);
             } else {
                 this.toaster.showSnackBar("error", response?.message);

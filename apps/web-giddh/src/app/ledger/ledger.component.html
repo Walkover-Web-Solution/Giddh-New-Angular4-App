@@ -686,8 +686,16 @@
                                                     <mat-checkbox
                                                         color="primary"
                                                         id="select-all-entries-dr"
-                                                        [(ngModel)]="bankDebitSelectAll"
-                                                        *ngIf="checkedBankTrxWhileHovering?.length > 0"
+                                                        [checked]="
+                                                            selectedDebitTransactionIds.size ===
+                                                            lc.bankTransactionsDebitData?.length
+                                                        "
+                                                        [indeterminate]="
+                                                            selectedDebitTransactionIds.size > 0 &&
+                                                            selectedDebitTransactionIds.size <
+                                                                lc.bankTransactionsDebitData?.length
+                                                        "
+                                                        *ngIf="selectedDebitTransactionIds.size > 0"
                                                         (change)="selectAllBankEntries($event, 'debit')"
                                                     ></mat-checkbox>
                                                 </mat-grid-tile>
@@ -725,12 +733,16 @@
                                                                                 'transaction-mapped-select-entry-dr-' +
                                                                                 i
                                                                             "
-                                                                             [(ngModel)]="txn.isChecked"
+                                                                            [checked]="
+                                                                                selectedDebitTransactionIds.has(txn?.id)
+                                                                            "
                                                                             [ngClass]="{
                                                                                 'd-none':
                                                                                     selectedBankTrxWhileHovering !==
                                                                                         txn.id &&
-                                                                                    !txn.isChecked &&
+                                                                                    !selectedDebitTransactionIds.has(
+                                                                                        txn?.id
+                                                                                    ) &&
                                                                                     checkedBankTrxWhileHovering?.length ===
                                                                                         0
                                                                             }"
@@ -1025,9 +1037,17 @@
                                                 <mat-grid-tile colspan="1">
                                                     <mat-checkbox
                                                         color="primary"
-                                                        id="select-entries-date-cr"
-                                                        [(ngModel)]="bankCreditSelectAll"
-                                                        *ngIf="checkedBankTrxWhileHovering?.length > 0"
+                                                        id="select-all-entries-dr"
+                                                        [checked]="
+                                                            selectedCreditTransactionIds.size ===
+                                                            lc.bankTransactionsCreditData?.length
+                                                        "
+                                                        [indeterminate]="
+                                                            selectedCreditTransactionIds.size > 0 &&
+                                                            selectedCreditTransactionIds.size <
+                                                                lc.bankTransactionsCreditData?.length
+                                                        "
+                                                        *ngIf="selectedCreditTransactionIds.size > 0"
                                                         (change)="selectAllBankEntries($event, 'credit')"
                                                     ></mat-checkbox>
                                                 </mat-grid-tile>
@@ -1065,15 +1085,21 @@
                                                                                 'transaction-mapped-select-entry-cr-' +
                                                                                 i
                                                                             "
+                                                                            [checked]="
+                                                                                selectedCreditTransactionIds.has(
+                                                                                    txn?.id
+                                                                                )
+                                                                            "
                                                                             [ngClass]="{
                                                                                 'd-none':
                                                                                     selectedBankTrxWhileHovering !==
                                                                                         txn.id &&
-                                                                                    !txn.isChecked &&
+                                                                                    !selectedCreditTransactionIds.has(
+                                                                                        txn?.id
+                                                                                    ) &&
                                                                                     checkedBankTrxWhileHovering?.length ===
                                                                                         0
                                                                             }"
-                                                                            [(ngModel)]="txn.isChecked"
                                                                             (change)="
                                                                                 selectEntryForBulkAction(
                                                                                     $event,
