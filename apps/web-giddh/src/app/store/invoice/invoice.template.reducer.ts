@@ -23,6 +23,7 @@ export const initialState: CustomTemplateState = {
         isDefault: false,
         fontMedium: 12,
         isDefaultForVoucher: false,
+        showSectionsInline: false,
         uniqueName: 'gst_template_a',
         createdAt: '',
         updatedAt: '',
