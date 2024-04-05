@@ -126,7 +126,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
     /** Holds Current Currency Symbol for Zimbabwe report */
     public currentCurrencySymbol: string = this.vatReportCurrencyList[0].additional.symbol;
     /** Holds Current Currency Code for Zimbabwe report */
-    public vatReportCurrency: 'BWP' | 'USD' | 'GBP' | 'INR' | 'EUR' = 'BWP';
+    public vatReportCurrency: 'BWP' | 'USD' | 'GBP' | 'INR' | 'EUR' = this.vatReportCurrencyList[0].value;
     public dummyVatReport = [
         {
             "section": "DECLARATION OF OUTPUT TAX ",
@@ -479,8 +479,9 @@ export class VatReportComponent implements OnInit, OnDestroy {
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany && !this.activeCompany) {
                 this.activeCompany = activeCompany;
-                this.isUKCompany = this.activeCompany?.countryV2?.alpha2CountryCode === 'GB' ? true : false;
+                this.isUKCompany = this.activeCompany?.countryV2?.alpha2CountryCode === 'GB';
                 this.isZimbabweCompany = this.activeCompany?.countryV2?.alpha2CountryCode === 'ZW';
+                this.isKenyaCompany = this.activeCompany?.countryV2?.alpha2CountryCode === 'KE';
                 if (this.isUKCompany) {
                     this.getURLHMRCAuthorization();
                 }
@@ -572,7 +573,6 @@ export class VatReportComponent implements OnInit, OnDestroy {
                         this.isLoading = false;
                         if (res.status === 'success') {
                             this.vatReport = res.body?.sections;
-                            console.log(res);
                             this.cdRef.detectChanges();
                         } else {
                             this.toasty.errorToast(res.message);
@@ -585,8 +585,6 @@ export class VatReportComponent implements OnInit, OnDestroy {
                         this.isLoading = false;
                         if (res.status === 'success') {
                             this.vatReport = res.body?.sections;
-                            console.log(res);
-
                             this.cdRef.detectChanges();
                         } else {
                             this.toasty.errorToast(res.message);
