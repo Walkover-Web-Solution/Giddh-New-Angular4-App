@@ -55,7 +55,7 @@
                                                 [required]="true"></dropdown-field>
                                         </div>
                                         <!-- Adsofjsopdfdfds nnnfdsfndskfsdfd   Add fake condition || true -->
-                                        <div *ngIf="taxNumber && !isUKCompany && isZimbabweCompany || true" class="export-btn">
+                                        <div *ngIf="taxNumber && !isUKCompany && (isZimbabweCompany || isKenyaCompany) || true" class="export-btn">
                                             <button mat-stroked-button color="primary" (click)="downloadVatReport()">
                                                 <i class="icon-download1"></i>
                                                 {{ commonLocaleData?.app_export }}
@@ -74,7 +74,7 @@
                                 </div>
                             </div>
                         </div>
-                        <ng-container *ngIf="!isUKCompany && !isZimbabweCompany && !isLoading">
+                        <ng-container *ngIf="!isUKCompany && !isZimbabweCompany && !isKenyaCompany && !isLoading">
                             <div *ngFor="let report of vatReport; let i = index" class="pd-l15 pd-r15">
                                 <div class="white-box" *ngIf="i < 2">
                                     <p>
@@ -203,7 +203,8 @@
                         </ng-container>
                         <!-- uk-vrn-report -->
                         <ng-container *ngIf="(isUKCompany || isKenyaCompany) && !isLoading">
-                            <div *ngFor="let report of vatReport ?? dummyVatReport; let i = index" class="pd-l15 pd-r15">
+                            <!-- <div *ngFor="let report of vatReport ?? dummyVatReport; let i = index" class="pd-l15 pd-r15"> -->
+                                <div *ngFor="let report of dummyVatReport; let i = index" class="pd-l15 pd-r15">
                                 <div class="white-box" *ngIf="i < 2">
                                     <div class="d-flex justify-content-between align-items-center">
                                         <p>

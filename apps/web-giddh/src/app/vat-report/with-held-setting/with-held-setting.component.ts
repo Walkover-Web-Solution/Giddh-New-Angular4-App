@@ -1,26 +1,16 @@
-import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { Observable, ReplaySubject, take, takeUntil } from 'rxjs';
-import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
-import * as dayjs from 'dayjs';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ReplaySubject} from 'rxjs';
+import { BsModalService } from 'ngx-bootstrap/modal';
 import { GeneralService } from '../../services/general.service';
-import { OrganizationType } from '../../models/user-login-state';
 import { AppState } from '../../store';
-import { Store, select } from '@ngrx/store';
+import { Store } from '@ngrx/store';
 import { GstReconcileService } from '../../services/gst-reconcile.service';
-import { FormControl, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormControl, UntypedFormBuilder, Validators } from '@angular/forms';
 import { VatService } from '../../services/vat.service';
 import { ToasterService } from '../../services/toaster.service';
-import { FileReturnComponent } from '../file-return/file-return.component';
-import { ViewReturnComponent } from '../view-return/view-return.component';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 
-export interface ObligationsStatus {
-    label: string;
-    value: '' | 'F' | 'O';
-}
 @Component({
     selector: 'with-held-setting-component',
     templateUrl: './with-held-setting.component.html',
@@ -41,13 +31,10 @@ export class WithHeldSettingComponent implements OnInit, OnDestroy {
 
 
     constructor(
-        private gstReconcileService: GstReconcileService,
-        private formBuilder: UntypedFormBuilder,
         private store: Store<AppState>,
         private generalService: GeneralService,
         private vatService: VatService,
         private toaster: ToasterService,
-        private modalService: BsModalService,
         public dialog: MatDialog,
         private route: Router
     ) {
