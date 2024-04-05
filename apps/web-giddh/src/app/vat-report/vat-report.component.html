@@ -50,12 +50,11 @@
                                     <div class="ml-auto d-flex justify-content-center column-gap1 align-items-center">
                                         <div *ngIf="isZimbabweCompany" class="currency-width">
                                             <dropdown-field [label]="commonLocaleData?.app_currency" [options]="vatReportCurrencyList"
-                                                (selectedOption)="vatReportCurrency = $event?.value; currentCurrencySymbol = $event.additional.symbol"
+                                                (selectedOption)="vatReportCurrency = $event?.value; currentCurrencySymbol = $event?.additional?.symbol"
                                                 [placeholder]="commonLocaleData?.app_select" [defaultValue]="vatReportCurrencyList[0]?.label"
                                                 [required]="true"></dropdown-field>
                                         </div>
-                                        <!-- Adsofjsopdfdfds nnnfdsfndskfsdfd   Add fake condition || true -->
-                                        <div *ngIf="taxNumber && !isUKCompany && (isZimbabweCompany || isKenyaCompany) || true" class="export-btn">
+                                        <div *ngIf="taxNumber && !isUKCompany && (isZimbabweCompany || isKenyaCompany)" class="export-btn">
                                             <button mat-stroked-button color="primary" (click)="downloadVatReport()">
                                                 <i class="icon-download1"></i>
                                                 {{ commonLocaleData?.app_export }}
