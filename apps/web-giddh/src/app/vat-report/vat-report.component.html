@@ -12,9 +12,9 @@
             <div class="invoice-control w-100">
                 <div class="row mr-0 ml-0">
                     <div class="vat-report w-100 pd-l15 pd-r15" id="setting-tab">
-                        <div class="row mb-3 mt-3">
-                            <div class="col-lg-10">
-                                <div class="advance-search-by-date date-advance-search">
+                        <div class="row mb-3 mt-3 vat-report-action-wrapper">
+                            <div class="col-lg-12">
+                                <div class="advance-search-by-date date-advance-search flex-wrap row-gap">
                                     <dropdown-field [options]="financialYears"
                                     (selectedOption)="getYearStartAndEndDate($event)"
                                     [placeholder]="localeData?.select_year_label"
@@ -43,32 +43,38 @@
                                     <div *ngIf="taxes?.length > 1" class="trn-width">
                                         <dropdown-field [label]="commonLocaleData?.app_trn" [options]="taxes"
                                             (selectedOption)="getVatReport($event)"
-                                            [placeholder]="localeData?.select_trn" [defaultValue]="taxes[0]?.label"
+                                            [placeholder]="commonLocaleData?.select_trn" [defaultValue]="taxes[0]?.label"
                                             [required]="true"></dropdown-field>
+                                    </div>
+
+                                    <div class="ml-auto d-flex justify-content-center column-gap1 align-items-center">
+                                        <div *ngIf="isZimbabweCompany" class="currency-width">
+                                            <dropdown-field [label]="commonLocaleData?.app_currency" [options]="vatReportCurrencyList"
+                                                (selectedOption)="vatReportCurrency = $event?.value; currentCurrencySymbol = $event?.additional?.symbol"
+                                                [placeholder]="commonLocaleData?.app_select" [defaultValue]="vatReportCurrencyList[0]?.label"
+                                                [required]="true"></dropdown-field>
+                                        </div>
+                                        <div *ngIf="taxNumber && (isZimbabweCompany || isKenyaCompany)" class="export-btn">
+                                            <button mat-stroked-button color="primary" (click)="downloadVatReport()">
+                                                <i class="icon-download1"></i>
+                                                {{ commonLocaleData?.app_export }}
+                                            </button>
+                                        </div>
+                                        <a mat-stroked-button color="primary" class="text-right" *ngIf="isUKCompany"
+                                            [href]="connectToHMRCUrl" [disabled]="!connectToHMRCUrl">
+                                            <ng-container *ngIf="connectToHMRCUrl">
+                                                {{ localeData?.connect_to_hmrc }}
+                                            </ng-container>
+                                            <ng-container *ngIf="!connectToHMRCUrl">
+                                                {{ localeData?.connected_to_hmrc }}
+                                            </ng-container>
+                                        </a>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-2 text-right">
-                                <div *ngIf="taxNumber && !isUKCompany" class="export-btn">
-                                    <button mat-stroked-button color="primary" (click)="downloadVatReport()">
-                                        <i class="icon-download1"></i>
-                                        {{ commonLocaleData?.app_export }}
-                                    </button>
-                                </div>
-                                <a mat-stroked-button color="primary" class="text-right" *ngIf="isUKCompany"
-                                    [href]="connectToHMRCUrl" [disabled]="!connectToHMRCUrl">
-                                    <ng-container *ngIf="connectToHMRCUrl">
-                                        {{ localeData?.connect_to_hmrc }}
-                                    </ng-container>
-                                    <ng-container *ngIf="!connectToHMRCUrl">
-                                        {{ localeData?.connected_to_hmrc }}
-                                    </ng-container>
-
-                                </a>
-                            </div>
                         </div>
-                        <ng-container *ngIf="!isUKCompany && !isLoading">
-                            <div *ngFor="let report of vatReport; let i = index">
+                        <ng-container *ngIf="!isUKCompany && !isZimbabweCompany && !isKenyaCompany && !isLoading">
+                            <div *ngFor="let report of vatReport; let i = index" class="pd-l15 pd-r15">
                                 <div class="white-box" *ngIf="i < 2">
                                     <p>
                                         <strong class="table-heading">{{ report.section }}</strong>
@@ -91,20 +97,14 @@
                                                         (click)="viewVatReportTransactions(element.section)">{{
                                                         element.description }}
                                                     </a>
-                                                </td>
-                                                <td mat-footer-cell *matFooterCellDef class="font-weight-bold">
-                                                    {{ commonLocaleData?.app_total }}
-                                                </td>
-                                            </ng-container>
-                                            <ng-container matColumnDef="description">
-                                                <th mat-header-cell *matHeaderCellDef></th>
-                                                <td mat-cell *matCellDef="let element" width="10%">
-                                                    <a href="javascript:void(0)" class="text-light invoice-preview"
+                                                    <a href="javascript:void(0)" class="text-light invoice-preview ml-1"
                                                         [matTooltip]="element.toolTip" [matTooltipPosition]="'above'">
                                                         <span class="icon-info text-light"></span>
                                                     </a>
                                                 </td>
-                                                <td mat-footer-cell *matFooterCellDef></td>
+                                                <td mat-footer-cell *matFooterCellDef class="font-weight-bold">
+                                                    {{ commonLocaleData?.app_total }}
+                                                </td>
                                             </ng-container>
                                             <ng-container matColumnDef="aed_amt">
                                                 <th mat-header-cell *matHeaderCellDef class="text-right">
@@ -201,8 +201,9 @@
                             </div>
                         </ng-container>
                         <!-- uk-vrn-report -->
-                        <ng-container *ngIf="isUKCompany && !isLoading">
-                            <div *ngFor="let report of vatReport; let i = index">
+                        <ng-container *ngIf="(isUKCompany || isKenyaCompany) && !isLoading">
+                            <!-- <div *ngFor="let report of vatReport ?? dummyVatReport; let i = index" class="pd-l15 pd-r15"> -->
+                                <div *ngFor="let report of dummyVatReport; let i = index" class="pd-l15 pd-r15">
                                 <div class="white-box" *ngIf="i < 2">
                                     <div class="d-flex justify-content-between align-items-center">
                                         <p>
@@ -282,6 +283,87 @@
                             <div *ngIf="!isTaxApiInProgress && !vatReport?.length && !taxes?.length"
                                 class="no-data no-report">
                                 <h1>{{ localeData?.no_vrn_available }}</h1>
+                            </div>
+                        </ng-container>
+                        <ng-container *ngIf="isZimbabweCompany && !isLoading">
+                            <div *ngFor="let report of dummyVatReport; let i = index" class="pd-l15 pd-r15">
+                                <div class="white-box" *ngIf="i < 2">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <p>
+                                            <strong class="table-heading">{{ report.section }}</strong>
+                                        </p>
+                                        <p class="inner-table-heading">
+                                            {{ commonLocaleData?.app_amount }}
+                                        </p>
+                                    </div>
+                                    <div class="table-responsive">
+                                        <table mat-table [dataSource]="report.sections"
+                                            class="table basic mr-t2 on-mobile-view vat-report-table">
+                                            <ng-container matColumnDef="number">
+                                                <td mat-cell *matCellDef="let element" width="5%">
+                                                    {{ localeData?.box }} {{ element.order }}
+                                                </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="name">
+                                                <td mat-cell *matCellDef="let element" width="45%">
+                                                    {{ element.description }}
+                                                </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="aed_amt">
+                                                <td mat-cell *matCellDef="let element" class="text-right" width="20%">
+                                                    {{ currentCurrencySymbol + ((element.outputTax.dollars + (0.0 +  element.outputTax.cents)) | giddhCurrency) }}
+                                                </td>
+                                            </ng-container>
+                                            <tr mat-row *matRowDef="let row; columns: ukDisplayedColumns"></tr>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="white-box" *ngIf="i == 2">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <p>
+                                            <strong class="table-heading">{{ report.section }}</strong>
+                                        </p>
+                                        <p class="inner-table-heading">
+                                            {{ commonLocaleData?.app_amount }}
+                                        </p>
+                                    </div>
+                                    <div class="table-responsive">
+                                        <table mat-table [dataSource]="report.sections" class="
+                                                table-hide-title table
+                                                basic
+                                                table-border-bottom
+                                                mr-t2
+                                                on-mobile-view
+                                                table-border-top
+                                            ">
+                                            <ng-container matColumnDef="number">
+                                                <th mat-header-cell *matHeaderCellDef></th>
+                                                <td mat-cell *matCellDef="let element">
+                                                    {{ localeData?.box }} {{ element.order }}
+                                                </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="name">
+                                                <th mat-header-cell *matHeaderCellDef></th>
+                                                <td mat-cell *matCellDef="let element">{{ element.description }}</td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="aed_amt">
+                                                <th mat-header-cell *matHeaderCellDef></th>
+                                                <td mat-cell *matCellDef="let element" class="text-right">
+                                                    <span class="pr-1">{{ element.toolTip }}</span>
+                                                    <strong>
+                                                        {{ currentCurrencySymbol + ((element.amount.dollars + (0.0 +  element.amount.cents)) | giddhCurrency) }}
+                                                    </strong>
+                                                </td>
+                                            </ng-container>
+                                            <tr mat-header-row *matHeaderRowDef="ukDisplayedColumns"></tr>
+                                            <tr mat-row *matRowDef="let row; columns: ukDisplayedColumns"></tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div *ngIf="!isTaxApiInProgress && !vatReport?.length && !taxes?.length"
+                                class="no-data no-report">
+                                <h1>{{ localeData?.no_vat_available }}</h1>
                             </div>
                         </ng-container>
                         <div *ngIf="isLoading">

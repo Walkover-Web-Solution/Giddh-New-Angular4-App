@@ -757,6 +757,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public purchaseBillingIndex: number = 0;
     /** Hold purchase shipping index  */
     public purchaseShippingIndex: number = 0;
+    /** Holds Array of VAT supported Countries */
+    public vatSupportedCountries = ['United Kingdom', 'Zimbabwe', 'Kenya'];
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -6167,11 +6169,20 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 this.showTRNNo = true;
                 this.showVATNo = false;
                 this.getOnboardingForm('AE')
-            } else if (name === 'United Kingdom') {
+            } else if (this.vatSupportedCountries.includes(name)) {
                 this.showGSTINNo = false;
                 this.showTRNNo = false;
                 this.showVATNo = true;
-                this.getOnboardingForm('GB')
+
+                let countryCode = null;
+                if (name === 'United Kingdom') {
+                    countryCode = 'GB';
+                }else if (name === 'Zimbabwe') {
+                    countryCode = 'ZW';
+                }else if (name === 'Kenya') {
+                    countryCode = 'KE';
+                }
+                this.getOnboardingForm(countryCode);
             }
         } else {
             this.showGSTINNo = false;
