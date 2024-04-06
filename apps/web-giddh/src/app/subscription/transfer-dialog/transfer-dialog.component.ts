@@ -45,7 +45,7 @@ export class TransferDialogComponent implements OnInit {
             if (response) {
                 this.dialogRef.close(true);
             }
-        });
+        }); 
     }
 
     /**

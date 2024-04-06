@@ -30,6 +30,7 @@ $custom-typography: mat-typography-config($font-family: var(--font-regular),
 @import "../css/global/dialog.scss";
 @import "../css/global/add-bulk-entry.scss";
 @import "../css/global/global-variable.scss";
+@import "../css/global/mat-menu.scss";
 
 /* table css need to removed at last  (start)Don't touch this table css (If any body work on that contact shalinee..)
 */
@@ -13857,16 +13858,15 @@ input[type="checkbox"].cdk-visually-hidden::after {
         .table-menu-first-td {
             font-size: var(--font-size-15);
             vertical-align: middle;
-            display: none;
+            visibility: hidden;
             color: var(--color-primary-contact-icon-dots-three-vertical);
-            position: absolute;
-            right: 0;
+            height: 18px;
+            width: 18px;
         }
 
         &:hover {
             .table-menu-first-td {
-                display: block;
-                line-height: 1;
+                visibility: visible;
             }
         }
     }
