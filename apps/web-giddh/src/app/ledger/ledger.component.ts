@@ -298,8 +298,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public entryUniqueNamesForBulkActionDuplicateCopy: string[] = [];
     /** False if there is no data in account search */
     public isAccountSearchData: boolean = true;
+    /** Set of selected debit transaction IDs.*/
     public selectedDebitTransactionIds = new Set<string>();
+    /**  Set of selected credit transaction IDs.*/
     public selectedCreditTransactionIds = new Set<string>();
+    /** String representing the selected bank transaction while hovering. */
     public selectedBankTrxWhileHovering: string;
 
 
@@ -1769,8 +1772,15 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.ledgerActions.SelectDeSelectAllEntries(type, ev?.checked));
     }
 
-    public selectAllBankEntries(ev: any, type: 'debit' | 'credit' | 'all'): void {
-        if (ev?.checked) {
+    /**
+     * This will be use for select all bank entries
+     *
+     * @param {*} ev
+     * @param {('debit' | 'credit' | 'all')} type
+     * @memberof LedgerComponent
+     */
+    public selectAllBankEntries(event: any, type: 'debit' | 'credit' | 'all'): void {
+        if (event?.checked) {
             if (type === 'debit') {
                 this.lc.bankTransactionsDebitData.forEach(response => {
                     this.selectedDebitTransactionIds.add(response.transactions[0]?.id);
@@ -1808,18 +1818,15 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @param {string} type
      * @memberof LedgerComponent
      */
-    public selectEntryForBulkAction(ev: any, entryUniqueName: string, id: any, type: string): void {
+    public selectEntryForBulkAction(event: any, entryUniqueName: string, id: any, type: string): void {
         if (entryUniqueName) {
-            if (ev?.checked) {
+            if (event?.checked) {
                 if (type === 'credit') {
                     this.selectedCreditTransactionIds.add(id);
                 } else if (type === 'debit') {
                     this.selectedDebitTransactionIds.add(id);
                 }
-                this.entryUniqueNamesForBulkAction.push(entryUniqueName);
             } else {
-                let itemIndx = this.entryUniqueNamesForBulkAction?.findIndex((item) => item === entryUniqueName);
-                this.entryUniqueNamesForBulkAction?.splice(itemIndx, 1);
                 if (type === 'credit') {
                     this.selectedCreditTransactionIds.delete(id);
                 } else if (type === 'debit') {
