@@ -1,33 +1,42 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { VoucherTypeEnum } from '../utility/vouchers.const';
+import { VoucherComponentStore } from '../utility/vouchers.store';
+import { Observable, ReplaySubject, takeUntil } from 'rxjs';
+import { ToasterService } from '../../services/toaster.service';
 
 @Component({
     selector: 'app-email-send-dialog',
     templateUrl: './email-send-dialog.component.html',
     styleUrls: ['./email-send-dialog.component.scss']
 })
-export class EmailSendDialogComponent implements OnInit {
-    /** Voucher type */
-    @Input() voucherType: VoucherTypeEnum;
+export class EmailSendDialogComponent implements OnInit, OnDestroy {
     /** Voucher data */
     @Input() selectedItem: any;
     /** Success event emitter */
     @Output() public successEvent: EventEmitter<any> = new EventEmitter<any>();
-    /** Cancel event emitter */
-    @Output() public cancelEvent: EventEmitter<boolean> = new EventEmitter<boolean>();
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
     /** Form Group for send email form */
     public sendEmailForm: FormGroup;
+    /** Observable to unsubscribe all the store listeners to avoid memory leaks */
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Send email in progress Observable */
+    public sendEmailInProgress$: Observable<any> = this.componentStore.sendEmailInProgress$;
     /** Getter for copy type form array*/
     get copyTypes(): FormArray {
         return this.sendEmailForm.get('copyTypes') as FormArray;
     }
 
-    constructor(private formBuilder: FormBuilder) { }
+    constructor(
+        private formBuilder: FormBuilder,
+        private componentStore: VoucherComponentStore,
+        private toasterService: ToasterService
+    ) {
+
+    }
 
     /**
      * Lifecycle hook for component init
@@ -54,10 +63,10 @@ export class EmailSendDialogComponent implements OnInit {
     */
     private initializeForm(): void {
         this.sendEmailForm = this.formBuilder.group({
-            copyTypes: this.formBuilder.array([]),
-            copyTypeOriginal: [''],
-            copyTypeCustomer: [''],
-            copyTypeTransport: [''],
+            copyTypes: this.formBuilder.array(["Original"]),
+            copyTypeOriginal: [true],
+            copyTypeCustomer: [false],
+            copyTypeTransport: [false],
             email: this.formBuilder.group({
                 to: ['']
             }),
@@ -89,15 +98,25 @@ export class EmailSendDialogComponent implements OnInit {
      * @memberof EmailSendDialogComponent
      */
     public sendEmail(): void {
-        if ([VoucherTypeEnum.estimate, VoucherTypeEnum.generateEstimate, VoucherTypeEnum.proforma, VoucherTypeEnum.generateProforma].includes(this.voucherType)) {
+        if (!this.sendEmailForm.get('email.to').value) {
+            this.toasterService.showSnackBar("error", this.localeData?.enter_valid_email_error);
+            return;
+        }
+
+        if (!this.copyTypes?.value?.length) {
+            this.toasterService.showSnackBar("error", this.localeData?.select_invoice_copy);
+            return;
+        }
+
+        if ([VoucherTypeEnum.estimate, VoucherTypeEnum.generateEstimate, VoucherTypeEnum.proforma, VoucherTypeEnum.generateProforma].includes(this.selectedItem.type)) {
             this.successEvent.emit(this.sendEmailForm.get('email.to').value);
         } else {
-            this.successEvent.emit({ email: this.sendEmailForm.get('email.to').value, invoiceType: this.sendEmailForm.get('copyTypes').value, uniqueName: this.selectedItem?.uniqueName });
+            this.successEvent.emit({ email: this.sendEmailForm.get('email.to').value, invoiceType: this.copyTypes.value, uniqueName: this.selectedItem?.uniqueName });
         }
-        this.cancel();
     }
 
-    public cancel(): void {
-        this.cancelEvent.emit(true);
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 }

@@ -14,7 +14,7 @@ import { WarehouseActions } from "../../settings/warehouse/action/warehouse.acti
 import { SettingsUtilityService } from "../../settings/services/settings-utility.service";
 import { SettingsBranchActions } from "../../actions/settings/branch/settings.branch.action";
 import { OrganizationType } from "../../models/user-login-state";
-import { PreviousInvoicesVm, ProformaFilter, ProformaResponse } from "../../models/api-models/proforma";
+import { PreviousInvoicesVm, ProformaFilter, ProformaGetRequest, ProformaResponse } from "../../models/api-models/proforma";
 import { InvoiceReceiptFilter, ReciptResponse } from "../../models/api-models/recipt";
 import { VouchersUtilityService } from "../utility/vouchers.utility.service";
 import { FormBuilder, FormArray, FormGroup, Validators } from "@angular/forms";
@@ -264,6 +264,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public otherTaxTypes: any[] = OtherTaxTypes;
     /** Voucher details */
     public voucherDetails: any = {};
+    /** Send email dialog ref */
+    public emailDialogRef: MatDialogRef<any>;
 
     /** Returns true if account is selected else false */
     public get showPageLeaveConfirmation(): boolean {
@@ -551,6 +553,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         }
                     }
                 });
+            }
+        });
+
+        this.componentStore.sendEmailIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.emailDialogRef?.close();
             }
         });
     }
@@ -1909,13 +1917,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public createSendVoucher(): void {
         this.saveVoucher(voucher => {
             this.voucherDetails = voucher?.body;
-
-            let dialogRef = this.dialog.open(this.sendEmailModal, {
+            this.emailDialogRef = this.dialog.open(this.sendEmailModal, {
                 width: '650px'
-            });
-
-            dialogRef.afterClosed().pipe(takeUntil(this.destroyed$)).subscribe(response => {
-
             });
         });
     }
@@ -1928,14 +1931,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public createPrintVoucher(): void {
         this.saveVoucher(voucher => {
             this.voucherDetails = voucher?.body;
-
-            let dialogRef = this.dialog.open(this.printVoucherModal, {
+            this.dialog.open(this.printVoucherModal, {
                 width: '60vw',
                 height: '80vh'
-            });
-
-            dialogRef.afterClosed().pipe(takeUntil(this.destroyed$)).subscribe(response => {
-
             });
         });
     }
@@ -2403,6 +2401,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         this.voucherService.generateVoucher(invoiceForm.account.uniqueName, invoiceForm).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
+                this.resetVoucherForm();
+
                 let message = (invoiceForm.number) ? `${this.localeData?.entry_created}: ${invoiceForm.number}` : this.commonLocaleData?.app_messages?.voucher_saved;
                 this.toasterService.showSnackBar("success", message);
                 if (callback) {
@@ -2434,6 +2434,15 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
+     * Resets voucher form
+     *
+     * @memberof VoucherCreateComponent
+     */
+    public resetVoucherForm(): void {
+        this.invoiceForm.reset();
+    }
+
+    /**
      * This will be use for set billing address to shipping address
      *
      * @memberof VoucherCreateComponent
@@ -2448,11 +2457,34 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     /**
      * This will be use for send email after create voucher 
      *
-     * @param {(string | { email: string, invoiceType: string[] })} request
+     * @param {*} response
      * @memberof VoucherCreateComponent
      */
-    public sendEmail(request: string | { email: string, invoiceType: string[] }) {
-        console.log(request);
+    public sendEmail(response: any): void {
+        if (response) {
+            if (this.invoiceType.isEstimateInvoice || this.invoiceType.isProformaInvoice) {
+                let req: ProformaGetRequest = new ProformaGetRequest();
+
+                req.accountUniqueName = this.voucherDetails?.account?.uniqueName;
+
+                if (this.invoiceType.isProformaInvoice) {
+                    req.proformaNumber = this.voucherDetails?.number;
+                } else {
+                    req.estimateNumber = this.voucherDetails?.number;
+                }
+                req.emailId = (response.email as string).split(',');
+                this.componentStore.sendProformaEstimateOnEmail({ request: req, voucherType: this.invoiceType });
+            } else {
+                this.componentStore.sendVoucherOnEmail({
+                    accountUniqueName: this.voucherDetails?.account?.uniqueName, payload: {
+                        email: { to: response.email.split(',') },
+                        voucherType: this.voucherDetails?.type,
+                        copyTypes: response.invoiceType ? response.invoiceType : [],
+                        uniqueName: response.uniqueName
+                    }
+                });
+            }
+        }
     }
 
     /**

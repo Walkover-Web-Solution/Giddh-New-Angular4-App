@@ -4,7 +4,6 @@
     <div class="vouchers">
         <mat-card class="container-lg">
             <mat-card-content>
-
                 <!-- Voucher Page Heading -->
                 <div class="vouchers-title d-flex align-items-center">
                     <h1>{{ voucherType | voucherName: localeData | titlecase }}</h1>
@@ -1327,14 +1326,11 @@
 
 <!-- region send email popup -->
 <ng-template #sendEmailModal>
-    <ng-container>
-        <app-email-send-dialog
-            [voucherType]="'sales'"
-            (successEvent)="sendEmail($event)"
-            [selectedItem]="voucherDetails"
-            (cancelEvent)="cancelEmailModal()">
-        </app-email-send-dialog>
-    </ng-container>
+    <app-email-send-dialog
+        (successEvent)="sendEmail($event)"
+        [selectedItem]="voucherDetails"
+        (cancelEvent)="cancelEmailModal()">
+    </app-email-send-dialog>
 </ng-template>
 <!-- endregion -->
 

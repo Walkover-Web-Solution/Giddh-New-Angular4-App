@@ -6,6 +6,7 @@
     "original": "Original",
     "download_invoice": "Download Invoice",
     "enter_valid_email_error": "Enter some valid email Id's",
+    "select_invoice_copy": "Please select invoice copies",
     "invalid_emails": "Invalid email(s).",
     "enter_valid_number_error": "Enter some valid number's",
     "invalid_aadhar_no": "Invalid Aadhar No:",

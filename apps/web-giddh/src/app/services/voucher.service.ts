@@ -6,8 +6,8 @@ import { IServiceConfigArgs, ServiceConfig } from "./service.config";
 import { Observable, map, catchError } from "rxjs";
 import { BaseResponse } from "../models/api-models/BaseResponse";
 import { InvoiceSetting } from "../models/interfaces/invoice.setting.interface";
-import { INVOICE_API } from "./apiurls/invoice.api";
-import { ProformaFilter, ProformaResponse } from "../models/api-models/proforma";
+import { INVOICE_API, INVOICE_API_2 } from "./apiurls/invoice.api";
+import { ProformaFilter, ProformaGetRequest, ProformaResponse } from "../models/api-models/proforma";
 import { PROFORMA_API } from "./apiurls/proforma.api";
 import { InvoiceReceiptFilter, ReceiptVoucherDetailsRequest, ReciptResponse, Voucher, VoucherRequest } from "../models/api-models/recipt";
 import { VoucherTypeEnum } from "../models/api-models/Sales";
@@ -216,5 +216,36 @@ export class VoucherService {
                 return data;
             }),
             catchError((e) => this.errorHandler.HandleCatch<Voucher, ReceiptVoucherDetailsRequest>(e, model, { accountUniqueName })));
+    }
+
+    public sendVoucherOnEmail(accountUniqueName: string, dataToSend: any): Observable<BaseResponse<string, string>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        let url = this.config.apiUrl + INVOICE_API_2.SEND_INVOICE_ON_MAIL?.replace(':companyUniqueName', this.companyUniqueName)
+            ?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName));
+        if (this.generalService.voucherApiVersion === 2) {
+            url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
+        }
+        return this.http.post(url, dataToSend).pipe(map((res) => {
+            let data: BaseResponse<string, string> = res;
+            data.queryString = { accountUniqueName, dataToSend };
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e)));
+    }
+
+    public sendProformaEstimateOnEmail(request: ProformaGetRequest, voucherType: string): Observable<BaseResponse<string, ProformaGetRequest>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.post(this.config.apiUrl + PROFORMA_API.mailProforma
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':vouchers', voucherType)
+            ?.replace(':accountUniqueName', encodeURIComponent(request.accountUniqueName)),
+            request
+        ).pipe(
+            map((res) => {
+                let data: BaseResponse<string, ProformaGetRequest> = res;
+                data.queryString = voucherType;
+                data.request = request;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<string, ProformaGetRequest>(e, request)));
     }
 }

@@ -39,6 +39,8 @@ export interface VoucherState {
     linkedPoOrders: any[];
     particularDetails: any;
     voucherDetails: any;
+    sendEmailInProgress: boolean;
+    sendEmailIsSuccess: boolean;
 }
 
 const DEFAULT_STATE: VoucherState = {
@@ -60,7 +62,9 @@ const DEFAULT_STATE: VoucherState = {
     vendorPurchaseOrders: null,
     linkedPoOrders: null,
     particularDetails: null,
-    voucherDetails: null
+    voucherDetails: null,
+    sendEmailInProgress: null,
+    sendEmailIsSuccess: null
 };
 
 @Injectable()
@@ -95,6 +99,8 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
     public linkedPoOrders$ = this.select((state) => state.linkedPoOrders);
     public particularDetails$ = this.select((state) => state.particularDetails);
     public voucherDetails$ = this.select((state) => state.voucherDetails);
+    public sendEmailInProgress$ = this.select((state) => state.sendEmailInProgress);
+    public sendEmailIsSuccess$ = this.select((state) => state.sendEmailIsSuccess);
 
     public companyProfile$: Observable<any> = this.select(this.store.select(state => state.settings.profile), (response) => response);
     public activeCompany$: Observable<any> = this.select(this.store.select(state => state.session.activeCompany), (response) => response);
@@ -505,4 +511,55 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
         );
     });
 
+    readonly sendVoucherOnEmail = this.effect((data: Observable<{ accountUniqueName: string, payload: any }>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({ sendEmailInProgress: true, sendEmailIsSuccess: null });
+                return this.voucherService.sendVoucherOnEmail(req.accountUniqueName, req.payload).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res.status === "success") {
+                                this.toaster.showSnackBar("success", res.body);
+                                return this.patchState({ sendEmailInProgress: false, sendEmailIsSuccess: true });
+                            } else {
+                                this.toaster.showSnackBar("error", res.message);
+                                return this.patchState({ sendEmailInProgress: false, sendEmailIsSuccess: false });    
+                            }
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            return this.patchState({ sendEmailInProgress: false, sendEmailIsSuccess: false });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    readonly sendProformaEstimateOnEmail = this.effect((data: Observable<{ request: any, voucherType: string }>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({ sendEmailInProgress: true, sendEmailIsSuccess: null });
+                return this.voucherService.sendProformaEstimateOnEmail(req.request, req.voucherType).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res.status === "success") {
+                                this.toaster.showSnackBar("success", res.body);
+                                return this.patchState({ sendEmailInProgress: false, sendEmailIsSuccess: true });
+                            } else {
+                                this.toaster.showSnackBar("error", res.message);
+                                return this.patchState({ sendEmailInProgress: false, sendEmailIsSuccess: false });    
+                            }
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            return this.patchState({ sendEmailInProgress: false, sendEmailIsSuccess: false });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
 }
