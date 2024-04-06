@@ -14511,6 +14511,7 @@ body.hide-scroll-body.master-page {
 
 .mat-step-text-label {
     font-size: var(--font-size-16);
+    color: var(--color-common-primary-text);
 }
 
 .mat-step-icon-content {
@@ -14867,4 +14868,7 @@ aside-menu-product-service {
 
 .text-black {
     color: var(--color-common-primary-text);
+}
+.bg-transparent {
+    background-color: var(--color-transparent-background) !important;
 }

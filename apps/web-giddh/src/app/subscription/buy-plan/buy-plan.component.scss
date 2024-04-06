@@ -1,16 +1,16 @@
 .buy-plan-wrapper {
-    max-width: 1260px;
-    margin: 0 auto;
     .invalid-input {
         border: 1px solid var(--color-red-border) !important;
     }
 
     .plan-content {
         padding: 10px 8px 20px 8px;
+        height: calc(100% - 36px);
 
         h2,
         p {
             color: var(--color-common-primary-text);
+            white-space: break-spaces;
         }
 
         .feature-txt {
@@ -47,7 +47,7 @@
         text-align: center;
         line-height: 26px;
         border-bottom: 1px solid var(--color-common-primary-border);
-        min-width: 220px;
+        min-width: 230px;
         font-weight: 500;
         font-size: var(--font-size-15);
         border-right: 1px solid var(--color-iron);
@@ -55,10 +55,10 @@
     }
 
     .plan-table {
-        width: 100%;
+        width: min-content;
         float: left !important;
-        overflow-x: scroll;
-        overflow-y: hidden;
+    
+        overflow: hidden;
         white-space: nowrap;
         box-shadow: none !important;
         border: 1px solid var(--color-iron);
@@ -68,18 +68,18 @@
             display: inline-flex;
             float: left;
             height: 47px;
-            min-width: 51% !important;
         }
     }
     .plan-table {
         .top-heading {
-            height: 220px !important;
+            min-height: 220px !important;
+            height: auto;
         }
     }
 
     .plan-table {
         .grid-title-left {
-            width: 250px;
+            min-width: 260px;
             left: 0px;
             z-index: 9;
             border-bottom: 1px solid var(--color-common-primary-border);
@@ -123,6 +123,8 @@
         border-bottom: 2px solid var(--color-primary-header-background) !important;
     }
     .summary-wrapper {
+        width: 300px;
+        flex-shrink: 0;
         h2 {
             height: 38px;
         }
@@ -131,7 +133,8 @@
     .plan-summary {
         column-gap: 20px;
         .plan-width {
-            width: 74%;
+            min-width: 500px;
+            flex-shrink: 0;
 
             h4 {
                 height: 38px;
@@ -148,7 +151,6 @@
     }
 
     .summary-wrapper {
-        width: 26%;
 
         h4 {
             height: 38px;
@@ -187,7 +189,7 @@
                 border-right: 1px solid var(--color-iron);
                 background-color: var(--color-body-background) !important;
                 white-space: nowrap !important;
-                min-width: 220px;
+                min-width: 230px;
 
                 &:last-child {
                     border-right: 0px;
@@ -209,16 +211,7 @@
 @media screen and (max-width: 1180px) {
     .buy-plan-wrapper {
         .plan-summary {
-            flex-wrap: wrap;
             row-gap: 15px;
-
-            .plan-width {
-                width: 100%;
-            }
-        }
-
-        .summary-wrapper {
-            width: 100%;
         }
     }
 }
