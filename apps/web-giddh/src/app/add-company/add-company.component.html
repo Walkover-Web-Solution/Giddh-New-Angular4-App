@@ -410,19 +410,14 @@
                                 </input-field>
                             </div>
                             <div class="col-6 currency-space">
-                                <dropdown-field
-                                    [name]="'roles'"
-                                    [label]="
-                                        localeData?.roles +
-                                        (isUserSuperAdmin ? '*' : '')
-                                    "
-                                    [placeholder]="localeData?.roles"
-                                    [options]="permissionRoles"
-                                    (selectedOption)="selectRole($event)"
-                                    [defaultValue]="selectedRole ? selectedRole:''"
-                                    [showError]="isFormSubmitted && isUserSuperAdmin"
-                                >
-                                </dropdown-field>
+                                <mat-form-field appearance="outline" [ngClass]="{ 'error-border':isFormSubmitted && isUserSuperAdmin }">
+                                    <mat-label>{{ localeData?.roles }}</mat-label>
+                                    <mat-select formControlName="roleUniqueName" (selectionChange)="selectRole($event)">
+                                        <mat-option *ngFor="let option of permissionRoles" [value]="option.value">
+                                            {{ option?.label }}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
                             </div>
                         </div>
                         <div class="d-flex column-gap15 mt-3">

@@ -9,7 +9,16 @@
     <div class="subscription-container pd-15">
         <div class="button-wrapper d-flex w-100 pd-l1 justify-content-between pd-r1 pd-t1">
             <button
-                *ngIf="showClearFilter"
+                *ngIf="
+                    showClearFilter ||
+                    subscriptionListForm?.controls['companyName']?.value ||
+                    subscriptionListForm?.controls['billingAccountName']?.value ||
+                    subscriptionListForm?.controls['subscriberName']?.value ||
+                    subscriptionListForm?.controls['countryName']?.value ||
+                    subscriptionListForm?.controls['planName']?.value ||
+                    subscriptionListForm?.controls['status']?.value ||
+                    subscriptionListForm?.controls['period']?.value
+                "
                 mat-stroked-button
                 class="min160 mr-l1"
                 color="primary"
@@ -284,8 +293,8 @@
                                     >
                                         {{ localeData?.move }}
                                     </button>
-                                    <button 
-                                        mat-menu-item 
+                                    <button
+                                        mat-menu-item
                                         *ngIf="element?.companies?.length < element?.totalCompanies"
                                         (click)="createCompanyInSubscription(element?.subscriptionId)"
                                     >
@@ -303,9 +312,6 @@
                     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                 </table>
             </form>
-            <div class="no-data" *ngIf="!dataSource?.filteredData?.length && !(subscriptionListInProgress$ | async)">
-                <h1>{{ commonLocaleData?.app_no_data_found }}</h1>
-            </div>
             <div class="pagination-wrapper justify-content-end">
                 <mat-paginator
                     (page)="handlePageChange($event)"
@@ -320,6 +326,9 @@
                 </mat-paginator>
             </div>
         </section>
+        <div class="no-data" *ngIf="!dataSource?.filteredData?.length && !(subscriptionListInProgress$ | async)">
+            <h1>{{ commonLocaleData?.app_no_data_found }}</h1>
+        </div>
     </div>
 </ng-container>
 <ng-template #searchTemplate let-show let-title="title" let-fieldName="fieldName" let-formControl="formControl">
