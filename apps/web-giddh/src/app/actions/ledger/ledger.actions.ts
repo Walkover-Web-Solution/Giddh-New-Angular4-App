@@ -606,39 +606,6 @@ export class LedgerActions {
         };
     }
 
-    public SelectDrCrBankSelectAllEntries(mode: 'debit' | 'credit' | 'all', isChecked: boolean, transactionResponse:any): CustomActions {
-        console.log(mode, isChecked);
-        return {
-            type: LEDGER.SELECT_DESELECT_BANK_ALL_ENTRIES,
-            payload: { mode, isChecked, transactionResponse }
-        };
-    }
-
-    public SelectBankGivenEntries(entries: string[]): CustomActions {
-        console.log(entries);
-        return {
-            type: LEDGER.SELECT_BANK_GIVEN_ENTRIES,
-            payload: entries
-        };
-    }
-
-
-    public CrDrSelectBankGivenEntries(entries: string[]): CustomActions {
-        console.log(entries);
-        return {
-            type: LEDGER.DESELECT_BANK_GIVEN_ENTRIES,
-            payload: entries
-        };
-    }
-
-    public SetBankFailedBulkEntries(entries: string[]): CustomActions {
-        console.log(entries);
-        return {
-            type: LEDGER.SET_FAILED_BANK_BULK_ENTRIES,
-            payload: entries
-        };
-    }
-
     public SelectDeSelectAllEntries(mode: 'debit' | 'credit' | 'all', isChecked: boolean): CustomActions {
         return {
             type: LEDGER.SELECT_DESELECT_ALL_ENTRIES,
