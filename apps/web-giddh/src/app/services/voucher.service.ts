@@ -17,6 +17,7 @@ import { CustomTemplateResponse } from "../models/api-models/Invoice";
 import { VouchersUtilityService } from "../vouchers/utility/vouchers.utility.service";
 import { SALES_API_V2, SALES_API_V4 } from "./apiurls/sales.api";
 import { PURCHASE_ORDER_API } from "./apiurls/purchase-order.api";
+import { PAGINATION_LIMIT } from "../app.constant";
 
 
 @Injectable()
@@ -247,5 +248,30 @@ export class VoucherService {
                 return data;
             }),
             catchError((e) => this.errorHandler.HandleCatch<string, ProformaGetRequest>(e, request)));
+    }
+
+    /**
+     * This will get the invoice list where balance is due
+     *
+     * @param {any} model voucher type & account unique name
+     * @param {string} date Date in GIDDH_DATE_FORMAT
+     * @param {number} count
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof VoucherService
+     */
+    public getVouchersList(model: any, date: string, count: number = PAGINATION_LIMIT): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        let contextPath = SALES_API_V2.GET_VOUCHER_INVOICE_LIST
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':voucherDate', encodeURIComponent(date))
+            ?.replace(':adjustmentRequest', String(true))
+            ?.replace(':count', String(count))
+            ?.replace(':number', encodeURIComponent((model.number || "")))
+            ?.replace(':page', (model.page || 1));
+        if (this.generalService.voucherApiVersion === 2) {
+            contextPath = this.generalService.addVoucherVersion(contextPath, this.generalService.voucherApiVersion);
+        }
+        return this.http.post(this.config.apiUrl + contextPath, model
+        ).pipe(catchError((error) => this.errorHandler.HandleCatch<any, any>(error, model)));
     }
 }

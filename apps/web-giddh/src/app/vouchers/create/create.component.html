@@ -408,7 +408,7 @@
                                         <giddh-datepicker (keydown.enter)="$event.preventDefault()"
                                             [label]="invoiceType.isSalesInvoice  ?'Invoice Date': invoiceType.isPurchaseInvoice ? 'Bill Date': invoiceType.isCreditNote?'Credit Note Date': invoiceType.isDebitNote ?'Debit Note Date':invoiceType.isEstimateInvoice?'Estimate Date':invoiceType.isProformaInvoice?'Proforma Date':invoiceType.isPurchaseOrder ?'Order Date':'' "
                                             [placeholder]="'DDMMYYYY'" name="voucherDate" [showToggleIcon]="false"
-                                            [appearance]="'outline'" formControlName="date">
+                                            [appearance]="'outline'" formControlName="date" (dateSelected)="getAllVouchersForAdjustment()">
                                         </giddh-datepicker>
                                     </div>
 
@@ -1030,7 +1030,7 @@
                                                                                     formControlName="accountUniqueName">
                                                                                 </reactive-dropdown-field>
                                                                             </div>
-                                                                            <div class="col-6">
+                                                                            <div class="col-6" *ngIf="currentVoucherFormDetails?.depositAllowed && !invoiceType.isCashInvoice">
                                                                                 <input-field [name]="'amountForAccount'"
                                                                                     [label]="'Amount'"
                                                                                     [placeholder]="'Enter amount'"
@@ -1039,13 +1039,12 @@
                                                                                 </input-field>
                                                                             </div>
                                                                         </ng-container>
-
-                                                                        <div class="col" *ngIf="false">
+                                                                        <div class="col" *ngIf="(invoiceType.isSalesInvoice || invoiceType.isPurchaseInvoice || invoiceType.isCreditNote || invoiceType.isDebitNote) && vouchersForAdjustment?.length">
                                                                             <div
                                                                                 class="d-flex align-items-center column-gap1">
                                                                                 <span>Adjust Amount</span>
                                                                                 <span class="text-gray">00.00</span>
-                                                                                <i
+                                                                                <i (click)="openAdjustmentDialog()"
                                                                                     class="icon-edit text-blue font-12"></i>
                                                                             </div>
                                                                         </div>
@@ -1337,4 +1336,13 @@
 <ng-template #dateChangeConfirmationModel>
     <confirmation-modal [configuration]="dateChangeConfiguration"
         (buttonClicked)="handleDateChangeConfirmation($event)"></confirmation-modal>
+</ng-template>
+
+<ng-template #adjustmentModal>
+    <voucher-adjustments
+        [account]="account"
+        [voucherDetails]="invoiceForm?.value"
+        [voucherTotals]="voucherTotals"
+        [adjustedVoucherType]="voucherType">
+    </voucher-adjustments>
 </ng-template>

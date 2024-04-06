@@ -41,6 +41,7 @@ export interface VoucherState {
     voucherDetails: any;
     sendEmailInProgress: boolean;
     sendEmailIsSuccess: boolean;
+    vouchersForAdjustment: any;
 }
 
 const DEFAULT_STATE: VoucherState = {
@@ -64,7 +65,8 @@ const DEFAULT_STATE: VoucherState = {
     particularDetails: null,
     voucherDetails: null,
     sendEmailInProgress: null,
-    sendEmailIsSuccess: null
+    sendEmailIsSuccess: null,
+    vouchersForAdjustment: null
 };
 
 @Injectable()
@@ -101,11 +103,13 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
     public voucherDetails$ = this.select((state) => state.voucherDetails);
     public sendEmailInProgress$ = this.select((state) => state.sendEmailInProgress);
     public sendEmailIsSuccess$ = this.select((state) => state.sendEmailIsSuccess);
+    public vouchersForAdjustment$ = this.select((state) => state.vouchersForAdjustment);
 
     public companyProfile$: Observable<any> = this.select(this.store.select(state => state.settings.profile), (response) => response);
     public activeCompany$: Observable<any> = this.select(this.store.select(state => state.session.activeCompany), (response) => response);
     public onboardingForm$: Observable<any> = this.select(this.store.select(state => state.common.onboardingform), (response) => response);
     public isTcsTdsApplicable$: Observable<any> = this.select(this.store.select(state => state.company), (response) => response.isTcsTdsApplicable);
+    public company$: Observable<any> = this.select(this.store.select(state => state.company), (response) => response);
     public companyTaxes$: Observable<any> = this.select(this.store.select(state => state.company.taxes), (response) => response);
     public warehouseList$: Observable<any> = this.select(this.store.select(state => state.warehouse.warehouses), (response) => response);
     public branchList$: Observable<any> = this.select(this.store.select(state => state.settings.branches), (response) => response);
@@ -523,7 +527,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                                 return this.patchState({ sendEmailInProgress: false, sendEmailIsSuccess: true });
                             } else {
                                 this.toaster.showSnackBar("error", res.message);
-                                return this.patchState({ sendEmailInProgress: false, sendEmailIsSuccess: false });    
+                                return this.patchState({ sendEmailInProgress: false, sendEmailIsSuccess: false });
                             }
                         },
                         (error: any) => {
@@ -549,12 +553,38 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                                 return this.patchState({ sendEmailInProgress: false, sendEmailIsSuccess: true });
                             } else {
                                 this.toaster.showSnackBar("error", res.message);
-                                return this.patchState({ sendEmailInProgress: false, sendEmailIsSuccess: false });    
+                                return this.patchState({ sendEmailInProgress: false, sendEmailIsSuccess: false });
                             }
                         },
                         (error: any) => {
                             this.toaster.showSnackBar("error", error);
                             return this.patchState({ sendEmailInProgress: false, sendEmailIsSuccess: false });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    readonly getVouchersList = this.effect((data: Observable<{ request: any, date: string }>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({ vouchersForAdjustment: null });
+                return this.voucherService.getVouchersList(req.request, req.date).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res.status === "success") {
+                                res.request = req.request;
+                                return this.patchState({ vouchersForAdjustment: res });
+                            } else {
+                                this.toaster.showSnackBar("error", res.message);
+                                return this.patchState({ vouchersForAdjustment: null });
+                            }
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            return this.patchState({ vouchersForAdjustment: null });
                         }
                     ),
                     catchError((err) => EMPTY)

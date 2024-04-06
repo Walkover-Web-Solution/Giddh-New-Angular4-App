@@ -70,12 +70,14 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     @ViewChild('asideMenuProductService') asideMenuProductService: TemplateRef<any>;
     /** Template Reference for Create Tax aside menu */
     @ViewChild("createTax") public createTax: TemplateRef<any>;
-    /* Selector for send email  modal */
+    /* Selector for send email modal */
     @ViewChild('sendEmailModal', { static: true }) public sendEmailModal: any;
-    /* Selector for print  modal */
+    /* Selector for print modal */
     @ViewChild('printVoucherModal', { static: true }) public printVoucherModal: any;
     /** Date change confirmation modal */
     @ViewChild('dateChangeConfirmationModel', { static: true }) public dateChangeConfirmationModel: any;
+    /* Selector for adjustment modal */
+    @ViewChild('adjustmentModal', { static: true }) public adjustmentModal: any;
     /**  This will use for dayjs */
     public dayjs = dayjs;
     /** Holds current voucher type */
@@ -266,6 +268,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public voucherDetails: any = {};
     /** Send email dialog ref */
     public emailDialogRef: MatDialogRef<any>;
+    /** List of vouchers available for adjustment */
+    public vouchersForAdjustment: any[] = [];
 
     /** Returns true if account is selected else false */
     public get showPageLeaveConfirmation(): boolean {
@@ -559,6 +563,13 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.componentStore.sendEmailIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.emailDialogRef?.close();
+            }
+        });
+
+        this.componentStore.vouchersForAdjustment$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                const results = (response.body?.results || response.body?.items || response.body);
+                this.vouchersForAdjustment = results?.map(result => ({ ...result, adjustmentAmount: { amountForAccount: result.balanceDue?.amountForAccount, amountForCompany: result.balanceDue?.amountForCompany } }));
             }
         });
     }
@@ -1010,6 +1021,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     private getAccountDetails(accountUniqueName: string): void {
         this.componentStore.getAccountDetails(accountUniqueName);
+
+        this.getAllVouchersForAdjustment();
 
         if (this.invoiceType.isPurchaseInvoice) {
             let request = { companyUniqueName: this.activeCompany?.uniqueName, accountUniqueName: accountUniqueName, page: 1, count: 100, sort: '', sortBy: '' };
@@ -2508,5 +2521,38 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+    }
+
+    /**
+     * Get list of all vouchers for adjustment
+     *
+     * @memberof VoucherCreateComponent
+     */
+    public getAllVouchersForAdjustment(): void {
+        this.vouchersForAdjustment = [];
+        let voucherDate = this.invoiceForm.get("date")?.value;
+
+        if (typeof voucherDate !== 'string') {
+            voucherDate = dayjs(voucherDate).format(GIDDH_DATE_FORMAT);
+        }
+
+        if (this.invoiceForm.controls['account'].get('uniqueName')?.value && voucherDate) {
+            const requestObject = {
+                accountUniqueName: this.invoiceForm.controls['account'].get('uniqueName')?.value,
+                voucherType: this.voucherType
+            };
+            this.componentStore.getVouchersList({ request: requestObject, date: voucherDate });
+        }
+    }
+
+    /**
+     * Opens adjustment dialog
+     *
+     * @memberof VoucherCreateComponent
+     */
+    public openAdjustmentDialog(): void {
+        this.dialog.open(this.adjustmentModal, {
+            width: '650px'
+        });
     }
 }
