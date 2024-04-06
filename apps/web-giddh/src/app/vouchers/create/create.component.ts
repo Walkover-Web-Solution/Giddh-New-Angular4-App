@@ -2032,6 +2032,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public deleteLineEntry(entryIndex: number): void {
         const entries = this.invoiceForm.get('entries') as FormArray;
         entries.removeAt(entryIndex);
+        this.calculateVoucherTotals();
     }
 
     /**
@@ -2225,7 +2226,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     private calculateVoucherTotals(): void {
-        this.voucherTotals = this.vouchersUtilityService.getVoucherTotals(this.invoiceForm.get('entries')?.value, this.company.giddhBalanceDecimalPlaces, this.applyRoundOff);
+        const entries = this.getEntries();
+        this.voucherTotals = this.vouchersUtilityService.getVoucherTotals(entries, this.company.giddhBalanceDecimalPlaces, this.applyRoundOff);
     }
 
     /**
@@ -2377,16 +2379,27 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
+     * Returns voucher entries
+     *
+     * @return {*}  {any[]}
+     * @memberof VoucherCreateComponent
+     */
+    public getEntries(): any[] {
+        const entries = [];
+        this.invoiceForm.get('entries')['controls']?.forEach(control => {
+            entries.push(control?.value);
+        });
+        return entries;
+    }
+
+    /**
      * Saves voucher
      *
      * @param {Function} [callback]
      * @memberof VoucherCreateComponent
      */
     public saveVoucher(callback?: Function): void {
-        const entries = [];
-        this.invoiceForm.get('entries')['controls']?.forEach(control => {
-            entries.push(control?.value);
-        });
+        const entries = this.getEntries();
 
         let invoiceForm = cloneDeep(this.invoiceForm.value);
         invoiceForm.entries = entries;

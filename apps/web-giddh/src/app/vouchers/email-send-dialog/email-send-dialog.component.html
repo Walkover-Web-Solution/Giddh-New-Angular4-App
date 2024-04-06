@@ -12,7 +12,8 @@
         </button>
     </div>
     <mat-dialog-content>
-        <form autocomplete="off" novalidate name="sendEmailForm" [formGroup]="sendEmailForm" (ngSubmit)="sendEmail()">
+        <giddh-page-loader *ngIf="sendEmailInProgress$ | async"></giddh-page-loader>
+        <form autocomplete="off" [style.display]="(sendEmailInProgress$ | async) ? 'none' : 'block'" novalidate name="sendEmailForm" [formGroup]="sendEmailForm" (ngSubmit)="sendEmail()">
             <div class="modal-body">
                 <div class="w-100 option-value-field" formGroupName="email">
                     <text-field [name]="'email'" [placeholder]="'Enter email addresses'" [cssClass]="'w-100'" formControlName="to" [type]="'text'"></text-field>

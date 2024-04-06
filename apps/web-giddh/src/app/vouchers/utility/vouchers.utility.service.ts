@@ -217,7 +217,9 @@ export class VouchersUtilityService {
             totalTaxWithoutCess: 0,
             totalCess: 0,
             grandTotal: 0,
-            roundOff: 0
+            roundOff: 0,
+            tcsTotal: 0,
+            tdsTotal: 0
         };
 
         entries?.forEach(entry => {
@@ -227,6 +229,12 @@ export class VouchersUtilityService {
             voucherTotals.totalTaxWithoutCess += (Number(entry.totalTaxWithoutCess));
             voucherTotals.totalCess += (Number(entry.totalCess));
             voucherTotals.grandTotal += (Number(entry.total?.amountForAccount));
+
+            if (entry.otherTaxType === 'tcs') {
+                voucherTotals.tcsTotal += entry.otherTaxSum;
+            } else if (entry.otherTaxType === 'tds') {
+                voucherTotals.tdsTotal += entry.otherTaxSum;
+            }
         });
 
         voucherTotals.totalAmount = giddhRoundOff(voucherTotals.totalAmount, balanceDecimalPlaces);

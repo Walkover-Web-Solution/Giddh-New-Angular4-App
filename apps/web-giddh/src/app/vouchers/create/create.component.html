@@ -1255,7 +1255,7 @@
                                 </div>
 
                                 <div class="vouchers-actions d-flex justify-content-end column-gap1 pd-t2 pd-b2 mt-4">
-                                    <button mat-stroked-button *ngIf="!isUpdateMode">Clear</button>
+                                    <button mat-stroked-button *ngIf="!isUpdateMode" (click)="resetVoucherForm()">Clear</button>
                                     <button mat-stroked-button color="primary"
                                         *ngIf="invoiceType.isSalesInvoice" (click)="updateAccountAndGenerateVoucher()">Generate Sales & Update A/c</button>
                                     <button mat-stroked-button color="primary"
