@@ -95,24 +95,53 @@
                                                     <p class="font-15 my-3 feature-txt">
                                                         {{ plan?.description }}
                                                     </p>
-                                                    <p
+                                                    <ng-container
                                                         *ngIf="firstStepForm.get('duration')?.value === 'YEARLY'"
-                                                        class="mb-3"
                                                     >
-                                                        <span class="strong"
-                                                            >{{ plan?.currency?.symbol }}{{ plan?.yearlyAmount }}</span
-                                                        >
-                                                        / {{ commonLocaleData?.app_duration?.yearly }}
-                                                    </p>
-                                                    <p
+                                                        <p class="mb-3">
+                                                             <s>    <span class="strong"
+                                                                >{{ plan?.currency?.symbol
+                                                                }}{{ plan?.yearlyAmount }}</span
+                                                            ></s>x
+                                                        </p>
+                                                        <p class="mb-3">
+                                                            <span class="strong"
+                                                                >{{ plan?.currency?.symbol }}{{ plan?.yearlyAmount }} /
+                                                                {{ commonLocaleData?.app_duration?.yearly }}</span
+                                                            >
+                                                        </p>
+                                                        <p class="strong">
+                                                            Save {{ plan?.currency?.symbol
+                                                            }}{{ plan?.yearlyAmount }} for
+                                                            {{ plan?.yearlyDiscount?.duration }}
+                                                            {{ commonLocaleData?.app_duration?.yearly | lowercase }}
+                                                        </p>
+                                                    </ng-container>
+                                                    <ng-container
                                                         *ngIf="firstStepForm.get('duration')?.value === 'MONTHLY'"
-                                                        class="mb-3"
                                                     >
-                                                        <span class="strong"
-                                                            >{{ plan?.currency?.symbol }}{{ plan?.monthlyAmount }}</span
-                                                        >
-                                                        /{{ commonLocaleData?.app_duration?.monthly }}
-                                                    </p>
+                                                        <p class="mb-3">
+                                                          <s>  <span class="strong"
+                                                                >{{ plan?.currency?.symbol
+                                                                }}{{ plan?.monthlyAmount }}</span
+                                                            >
+                                                            </s>
+                                                        </p>
+                                                        <p class="mb-3">
+                                                            <span class="strong"
+                                                                >{{ plan?.currency?.symbol
+                                                                }}{{ plan?.monthlyAmount }} /{{
+                                                                    commonLocaleData?.app_duration?.monthly
+                                                                }}</span
+                                                            >
+                                                        </p>
+                                                        <p class="strong">
+                                                            Save {{ plan?.currency?.symbol
+                                                            }}{{ plan?.monthlyAmount }} for
+                                                            {{ plan?.monthlyDiscount?.duration }}
+                                                            {{ commonLocaleData?.app_duration?.monthly | lowercase }}
+                                                        </p>
+                                                    </ng-container>
                                                     <button
                                                         mat-stroked-button
                                                         color="primary"

@@ -108,6 +108,9 @@ export class CompanyListDialogComponent implements OnInit {
                     this.showClearFilter = true;
                     this.getAllCompaniesList();
                 }
+                if (searchedText === null ||searchedText === "" ) {
+                    this.showClearFilter = false;
+                }
             });
 
         this.changeDetection.detectChanges();
