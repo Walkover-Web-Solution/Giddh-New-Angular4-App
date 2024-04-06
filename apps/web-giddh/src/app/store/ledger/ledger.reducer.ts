@@ -12,7 +12,6 @@ export interface LedgerState {
     account?: AccountResponse;
     transcationRequest?: TransactionsRequest;
     transactionsResponse?: TransactionsResponse;
-    bankTransactionsResponse?: any;
     transactionInprogress: boolean;
     accountInprogress: boolean;
     downloadInvoiceInProcess?: boolean;
@@ -362,90 +361,7 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
                 ledgerBulkActionFailedEntries: action.payload
             };
         }
-        case LEDGER.SELECT_DESELECT_BANK_ALL_ENTRIES: {
-            console.log('SELECT_DESELECT_BANK_ALL_ENTRIES',state,action);
-            return {
-                ...state,
-                bankTransactionsResponse: markBankCheckedUnChecked(action.payload.transactionResponse, action.payload.mode, action.payload.isChecked)
-            };
-        }
-        case LEDGER.SELECT_BANK_GIVEN_ENTRIES: {
-            console.log(state, action);
-            let res = action.payload as string[];
-            let debitTrx = state.transactionsResponse.debitTransactions;
-            console.log('SELECT_BANK_GIVEN_ENTRIES debitTrx', debitTrx);
 
-            debitTrx.forEach(f => {
-                res.forEach(c => {
-                    if (c === f.entryUniqueName) {
-                        f.isChecked = true;
-                    }
-                });
-                return f;
-            });
-            let creditTrx = state.transactionsResponse.creditTransactions;
-            console.log('SELECT_BANK_GIVEN_ENTRIES creditTrx', creditTrx);
-
-            creditTrx.forEach(f => {
-                res.forEach(c => {
-                    if (c === f.entryUniqueName) {
-                        f.isChecked = true;
-                    }
-                });
-                return f;
-            });
-
-            return {
-                ...state,
-                transactionsResponse: state.transactionsResponse,
-                ledgerBulkActionFailedEntries: []
-            };
-        }
-
-        case LEDGER.DESELECT_BANK_GIVEN_ENTRIES: {
-            console.log(state, action);
-            let res = action.payload as string[];
-            let newState = cloneDeep(state);
-            let debitTrx = newState.transactionsResponse.debitTransactions;
-            console.log('DESELECT_BANK_GIVEN_ENTRIES debitTrx', debitTrx);
-            debitTrx = debitTrx.map(f => {
-                res.forEach(c => {
-                    if (c === f.entryUniqueName) {
-                        f.isChecked = false;
-                    }
-                });
-                return f;
-            });
-            let creditTrx = newState.transactionsResponse.creditTransactions;
-            console.log('DESELECT_BANK_GIVEN_ENTRIES creditTrx', creditTrx);
-
-            creditTrx = creditTrx.map(f => {
-                res.forEach(c => {
-                    if (c === f.entryUniqueName) {
-                        f.isChecked = false;
-                    }
-                });
-                return f;
-            });
-
-            return {
-                ...state,
-                transactionsResponse: {
-                    ...state.transactionsResponse,
-                    debitTransactions: debitTrx,
-                    creditTransactions: creditTrx
-                },
-                ledgerBulkActionFailedEntries: []
-            };
-        }
-
-        case LEDGER.SET_FAILED_BANK_BULK_ENTRIES: {
-            console.log(state, action);
-            return {
-                ...state,
-                ledgerBulkActionFailedEntries: action.payload
-            };
-        }
         case LEDGER.GET_LEDGER_BALANCE: {
             return {
                 ...state,
@@ -568,47 +484,3 @@ const markCheckedUnChecked = (transactionDetails: TransactionsResponse, mode: 'd
     return newResponse;
 };
 
-const markBankCheckedUnChecked = (transactionDetails: any, mode: 'debit' | 'credit' | 'all', isChecked: boolean): any => {
-    console.log(transactionDetails, mode, isChecked);
-    let newResponse: any = Object.assign({}, transactionDetails);
-    let key = '';
-    let reverse = '';
-
-    if (mode === 'all') {
-        key = 'debitTransactions';
-        reverse = 'creditTransactions';
-
-        newResponse[key].map(dbt => dbt.transactions[0].isChecked = false);
-
-        if (isChecked) {
-            newResponse[key].map(dt => {
-                dt.transactions[0].isChecked = true;
-                return dt;
-            });
-        }
-
-        key = 'creditTransactions';
-        reverse = 'debitTransactions';
-
-        newResponse[key].map(dbt => dbt.transactions[0].isChecked = false);
-
-        if (isChecked) {
-            newResponse[key].map(dt => {
-                dt.transactions[0].isChecked = true;
-                return dt;
-            });
-        }
-    } else {
-        key = mode === 'debit' ? 'debitTransactions' : 'creditTransactions';
-        reverse = mode === 'debit' ? 'creditTransactions' : 'debitTransactions';
-        newResponse[key].map(dbt => dbt.transactions[0].isChecked = false);
-        if (isChecked) {
-            newResponse[key].map(dt => {
-                    dt.transactions[0].isChecked = true;
-                return dt;
-            });
-        }
-    }
-
-    return newResponse;
-};

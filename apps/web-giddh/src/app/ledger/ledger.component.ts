@@ -116,16 +116,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public debitSelectAll: boolean = false;
     public creditSelectAll: boolean = false;
     public debitCreditSelectAll: boolean = false;
-    public bankDebitSelectAll: boolean = false;
-    public bankCreditSelectAll: boolean = false;
-    public bankDebitCreditSelectAll: boolean = false;
     public isBankTransactionLoading: boolean = false;
     public todaySelected: boolean = false;
     public todaySelected$: Observable<boolean> = observableOf(false);
     public selectedTrxWhileHovering: string;
     public checkedTrxWhileHovering: any[] = [];
-    public selectedBankTrxWhileHovering: string;
-    public checkedBankTrxWhileHovering: any[] = [];
     public ledgerTxnBalance: any = {};
     public isAdvanceSearchImplemented: boolean = false;
     public invoiceList: any[] = [];
@@ -305,6 +300,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public isAccountSearchData: boolean = true;
     public selectedDebitTransactionIds = new Set<string>();
     public selectedCreditTransactionIds = new Set<string>();
+    public selectedBankTrxWhileHovering: string;
+
 
     constructor(
         private store: Store<AppState>,
@@ -649,9 +646,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.creditSelectAll = false;
                 this.debitSelectAll = false;
                 this.debitCreditSelectAll = false;
-                this.bankCreditSelectAll = false;
-                this.bankDebitSelectAll = false;
-                this.bankDebitCreditSelectAll = false;
             }
         });
 
@@ -947,7 +941,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
                             this.lc.getReadyBankTransactionsForUI(res.body.transactionsList, (this.currentOrganizationType === OrganizationType.Company && (this.currentCompanyBranches && this.currentCompanyBranches.length > 2)));
                             this.getAccountSearchPrediction(this.lc.bankTransactionsCreditData);
                             this.getAccountSearchPrediction(this.lc.bankTransactionsDebitData);
-                            console.log(this.lc.bankTransactionsCreditData);
                         });
                         this.cdRf.detectChanges();
                     }
@@ -1789,19 +1782,33 @@ export class LedgerComponent implements OnInit, OnDestroy {
             }
         } else {
             if (type === 'debit') {
-                    this.selectedDebitTransactionIds.clear();
+                this.selectedDebitTransactionIds.clear();
             } else {
                 this.selectedCreditTransactionIds.clear();
             }
         }
     }
 
+    /**
+     * This will be use for bank entry hovered
+     *
+     * @param {string} selectedBankTxnUniqueName
+     * @memberof LedgerComponent
+     */
     public bankEntryHovered(selectedBankTxnUniqueName: string): void {
         this.selectedBankTrxWhileHovering = selectedBankTxnUniqueName;
     }
 
+    /**
+     * This will be use for selecting bank entry
+     *
+     * @param {*} ev
+     * @param {string} entryUniqueName
+     * @param {*} id
+     * @param {string} type
+     * @memberof LedgerComponent
+     */
     public selectEntryForBulkAction(ev: any, entryUniqueName: string, id: any, type: string): void {
-        console.log(ev, entryUniqueName, id, type);
         if (entryUniqueName) {
             if (ev?.checked) {
                 if (type === 'credit') {
@@ -1828,7 +1835,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
 
     public entrySelected(ev: any, uniqueName: string, type: string) {
-        console.log(uniqueName);
         const totalLength = (type === 'debit') ? this.ledgerTransactions.debitTransactions?.length :
             (type === 'credit') ? this.ledgerTransactions.creditTransactions?.length :
                 (this.ledgerTransactions.debitTransactions?.length + this.ledgerTransactions.creditTransactions?.length);
