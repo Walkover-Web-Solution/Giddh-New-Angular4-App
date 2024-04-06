@@ -359,7 +359,7 @@ export class ChangeBillingComponent implements OnInit, AfterViewInit, OnDestroy 
     */
     public getEnterTaxText(): string {
         let text = this.commonLocaleData?.app_enter_tax_name;
-        text = text?.replace("[TAX_NAME]", this.formFields['taxName']?.label);
+        text = text?.replace("[TAX_NAME]", this.formFields['taxName']?.label ?? this.commonLocaleData?.app_number);
         return text;
     }
 
@@ -407,9 +407,9 @@ export class ChangeBillingComponent implements OnInit, AfterViewInit, OnDestroy 
                 this.company.baseCurrencySymbol = profile.baseCurrencySymbol;
                 this.company.inputMaskFormat = profile.balanceDisplayFormat?.toLowerCase() || '';
                 this.company.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
-                this.showTaxTypeByCountry(this.company.countryCode);
             }
         });
+        this.showTaxTypeByCountry(this.company.countryCode);
     }
 
     /**

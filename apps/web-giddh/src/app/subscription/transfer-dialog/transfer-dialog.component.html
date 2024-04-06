@@ -1,4 +1,10 @@
-<ng-container appTranslate [file]="'subscription'" (localeData)="localeData = $event">
+<ng-container
+    appTranslate
+    [file]="'subscription'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
+
     <div class="d-flex align-items-center justify-content-between border-bottom p-3">
         <h3 class="font-16">{{ localeData?.request_transfer }}</h3>
         <i mat-dialog-close class="icon-cross icon-font-16"></i>
@@ -14,7 +20,8 @@
                         <input-field
                             [type]="'text'"
                             [name]="'name'"
-                            [label]="commonLocaleData?.app_name + '*'"
+                            [placeholder]="commonLocaleData?.app_name"
+                            [required]="true"
                             formControlName="name"
                             [showError]="isFormSubmitted && !transferForm.get('name')?.value"
                         >
@@ -24,7 +31,7 @@
                         <input-field
                             [type]="'text'"
                             [name]="'lastname'"
-                            [label]="commonLocaleData?.app_last + commonLocaleData?.app_name"
+                            [placeholder]="commonLocaleData?.app_last + commonLocaleData?.app_name"
                             formControlName="lastName"
                         >
                         </input-field>
@@ -34,7 +41,8 @@
                     <input-field
                         [type]="'text'"
                         [name]="'email'"
-                        [label]="commonLocaleData?.app_email_id"
+                        [placeholder]="commonLocaleData?.app_email_id"
+                        [required]="true"
                         formControlName="email"
                         [showError]="isFormSubmitted && !transferForm.get('email')?.value"
                     >

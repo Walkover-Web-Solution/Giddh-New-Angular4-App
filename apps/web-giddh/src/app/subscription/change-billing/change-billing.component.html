@@ -115,7 +115,7 @@
                                 [showError]="
                                     (isFormSubmitted && !changeBillingForm.get('taxNumber')?.value) || !isGstinValid
                                 "
-                                [label]="formFields['taxName']?.label ? formFields['taxName']?.label : commonLocaleData?.app_enter_tax_name"
+                                
                                 [maxlength]="15"
                                 (change)="validateGstNumber()"
                             >
