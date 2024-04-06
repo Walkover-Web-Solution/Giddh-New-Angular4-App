@@ -395,7 +395,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
      * @param {string} value
      * @memberof DesignFiltersContainerComponent
      */
-    public onChangeFieldVisibility(fieldName: string, value: string) {
+    public onChangeFieldVisibility(fieldName: string, value: string): void {
         let template = cloneDeep(this.customTemplate);
         if (fieldName) {
             template[fieldName] = value;
