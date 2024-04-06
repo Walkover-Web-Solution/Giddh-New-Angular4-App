@@ -513,7 +513,7 @@
                                         [matTooltipPosition]="'above'"
                                         matTooltipClass="tooltip-black"
                                         (click)="showBulkDeleteBankTransactionsConfirmationModal()"
-                                        *ngIf="entryUniqueNamesForBulkAction?.length > 0 && lc.showEledger"
+                                        *ngIf="entryUniqueNamesForBulkAction?.length > 0 || selectedDebitTransactionIds?.size > 0 || selectedCreditTransactionIds?.size > 0"
                                     >
                                         <i class="icon-trash lh-0"></i>
                                     </a>
@@ -687,15 +687,15 @@
                                                         color="primary"
                                                         id="select-all-entries-dr"
                                                         [checked]="
-                                                            selectedDebitTransactionIds.size ===
+                                                            selectedDebitTransactionIds?.size ===
                                                             lc.bankTransactionsDebitData?.length
                                                         "
                                                         [indeterminate]="
-                                                            selectedDebitTransactionIds.size > 0 &&
-                                                            selectedDebitTransactionIds.size <
+                                                            selectedDebitTransactionIds?.size > 0 &&
+                                                            selectedDebitTransactionIds?.size <
                                                                 lc.bankTransactionsDebitData?.length
                                                         "
-                                                        *ngIf="selectedDebitTransactionIds.size > 0"
+                                                        *ngIf="selectedDebitTransactionIds?.size > 0"
                                                         (change)="selectAllBankEntries($event, 'debit')"
                                                     ></mat-checkbox>
                                                 </mat-grid-tile>
@@ -734,7 +734,7 @@
                                                                                 i
                                                                             "
                                                                             [checked]="
-                                                                                selectedDebitTransactionIds.has(txn?.id)
+                                                                                selectedDebitTransactionIds?.has(txn?.id)
                                                                             "
                                                                             [ngClass]="{
                                                                                 'd-none':
@@ -742,9 +742,7 @@
                                                                                         txn.id &&
                                                                                     !selectedDebitTransactionIds.has(
                                                                                         txn?.id
-                                                                                    ) &&
-                                                                                    checkedBankTrxWhileHovering?.length ===
-                                                                                        0
+                                                                                    )
                                                                             }"
                                                                             (change)="
                                                                                 selectEntryForBulkAction(
@@ -1039,15 +1037,15 @@
                                                         color="primary"
                                                         id="select-all-entries-dr"
                                                         [checked]="
-                                                            selectedCreditTransactionIds.size ===
+                                                            selectedCreditTransactionIds?.size ===
                                                             lc.bankTransactionsCreditData?.length
                                                         "
                                                         [indeterminate]="
-                                                            selectedCreditTransactionIds.size > 0 &&
-                                                            selectedCreditTransactionIds.size <
+                                                            selectedCreditTransactionIds?.size > 0 &&
+                                                            selectedCreditTransactionIds?.size <
                                                                 lc.bankTransactionsCreditData?.length
                                                         "
-                                                        *ngIf="selectedCreditTransactionIds.size > 0"
+                                                        *ngIf="selectedCreditTransactionIds?.size > 0"
                                                         (change)="selectAllBankEntries($event, 'credit')"
                                                     ></mat-checkbox>
                                                 </mat-grid-tile>
@@ -1086,7 +1084,7 @@
                                                                                 i
                                                                             "
                                                                             [checked]="
-                                                                                selectedCreditTransactionIds.has(
+                                                                                selectedCreditTransactionIds?.has(
                                                                                     txn?.id
                                                                                 )
                                                                             "
@@ -1094,11 +1092,9 @@
                                                                                 'd-none':
                                                                                     selectedBankTrxWhileHovering !==
                                                                                         txn.id &&
-                                                                                    !selectedCreditTransactionIds.has(
+                                                                                    !selectedCreditTransactionIds?.has(
                                                                                         txn?.id
-                                                                                    ) &&
-                                                                                    checkedBankTrxWhileHovering?.length ===
-                                                                                        0
+                                                                                    )
                                                                             }"
                                                                             (change)="
                                                                                 selectEntryForBulkAction(
