@@ -21,6 +21,7 @@
                 [selectedIndex]="selectedStep"
                 (selectionChange)="onSelectedTab($event)"
                 [disableRipple]="firstStepForm.invalid"
+                class="bg-transparent"
             >
                 <mat-step [stepControl]="firstStepForm" role="tabpanel">
                     <form
