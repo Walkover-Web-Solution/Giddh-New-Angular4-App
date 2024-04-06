@@ -51,7 +51,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     /** Request object for OTP */
     public requestObjectToGetOTP: GetOTPRequest = {
         bankName: '',
-        urn: '',
+        bankUserId: '',
         uniqueName: '',
         totalAmount: '',
         bankPaymentTransactions: []
@@ -288,7 +288,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     public sendOTP() {
         let request = {
             params: {
-                urn: this.mode.iciciCorporateDetails.URN
+                bankUserId: this.mode.iciciCorporateDetails.URN
             }
         };
         this.companyService.getOTP(request).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
@@ -429,7 +429,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
 
         if(loadPayorList) {
             this.selectedBankUrn = '';
-            this.requestObjectToGetOTP.urn = '';
+            this.requestObjectToGetOTP.bankUserId = '';
             this.getBankAccountPayorsList();
         }
     }
@@ -443,7 +443,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     public selectPayor(event: IOption): void {
         if (event) {
             this.selectedBankUrn = event.value;
-            this.requestObjectToGetOTP.urn = event.value;
+            this.requestObjectToGetOTP.bankUserId = event.value;
         }
     }
 
@@ -607,7 +607,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     public initializeNewForm(): void {
         this.addAccountBulkPaymentForm = this.formBuilder.group({
             bankName: [''],
-            urn: [''],
+            bankUserId: [''],
             totalAmount: [''],
             bankPaymentTransactions: this.formBuilder.array([
                 this.formBuilder.group({
@@ -696,7 +696,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         }
         this.isPayorRequired = false;
         this.selectedBankUrn = '';
-        this.requestObjectToGetOTP.urn = '';
+        this.requestObjectToGetOTP.bankUserId = '';
         this.forceClear$ = of({ status: true });
         this.isPayorListInProgress = true;
         this.settingsIntegrationService.getBankAccountPayorsList(this.selectedBankUniqueName, this.totalSelectedAccountAmount).pipe(take(1)).subscribe(response => {
