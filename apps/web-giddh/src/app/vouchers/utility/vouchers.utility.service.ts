@@ -219,7 +219,8 @@ export class VouchersUtilityService {
             grandTotal: 0,
             roundOff: 0,
             tcsTotal: 0,
-            tdsTotal: 0
+            tdsTotal: 0,
+            balanceDue: 0
         };
 
         entries?.forEach(entry => {

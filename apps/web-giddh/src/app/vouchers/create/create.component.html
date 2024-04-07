@@ -84,7 +84,12 @@
                                 </div>
                                 <div class="col-2 text-right">
                                     <span class="balance-due-label">Balance Due</span>
-                                    <h2>0.00</h2>
+                                    <h2>
+                                        <amount-field [amount]="voucherTotals.balanceDue"
+                                            [currencySymbol]="isMultiCurrencyVoucher ? account.baseCurrencySymbol : false"
+                                            [currencyCode]="isMultiCurrencyVoucher ? account.baseCurrency : false">
+                                        </amount-field>
+                                    </h2>
                                 </div>
                                 <div class="col-12">
                                     <span
@@ -1043,7 +1048,31 @@
                                                                             <div
                                                                                 class="d-flex align-items-center column-gap1">
                                                                                 <span>Adjust Amount</span>
-                                                                                <span class="text-gray">00.00</span>
+                                                                                <span class="text-gray">
+                                                                                    <amount-field
+                                                                                        [amount]="
+                                                                                            adjustPaymentData.totalAdjustedAmount
+                                                                                                | replace
+                                                                                                    : '-'
+                                                                                                    : ''
+                                                                                        "
+                                                                                        [currencySymbol]="
+                                                                                            isMulticurrencyAccount
+                                                                                                ? invFormData
+                                                                                                        .accountDetails
+                                                                                                        ?.currencySymbol
+                                                                                                : false
+                                                                                        "
+                                                                                        [currencyCode]="
+                                                                                            isMulticurrencyAccount
+                                                                                                ? invFormData
+                                                                                                        .accountDetails
+                                                                                                        ?.currency
+                                                                                                        ?.code
+                                                                                                : false
+                                                                                        "
+                                                                                    ></amount-field>
+                                                                                </span>
                                                                                 <i (click)="openAdjustmentDialog()"
                                                                                     class="icon-edit text-blue font-12"></i>
                                                                             </div>
@@ -1243,7 +1272,7 @@
                                                     Balance Due
                                                 </div>
                                                 <div class="col-3">
-                                                    <amount-field [amount]="0"
+                                                    <amount-field [amount]="voucherTotals.balanceDue"
                                                         [currencySymbol]="isMultiCurrencyVoucher ? account.baseCurrencySymbol : false"
                                                         [currencyCode]="isMultiCurrencyVoucher ? account.baseCurrency : false">
                                                     </amount-field>
@@ -1343,6 +1372,13 @@
         [account]="account"
         [voucherDetails]="invoiceForm?.value"
         [voucherTotals]="voucherTotals"
-        [adjustedVoucherType]="voucherType">
+        [adjustedVoucherType]="voucherType"
+        [isUpdateMode]="isUpdateMode"
+        [depositAmount]="invoiceForm.get('deposit.amountForAccount')?.value"
+        [advanceReceiptAdjustmentUpdatedData]="advanceReceiptAdjustmentData"
+        (closeModelEvent)="closeAdvanceReceiptModal()"
+        (submitClicked)="getAdvanceReceiptAdjustData($event)"
+        [voucherForAdjustment]="vouchersForAdjustment"
+        >
     </voucher-adjustments>
 </ng-template>

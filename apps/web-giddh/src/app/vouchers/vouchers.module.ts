@@ -67,6 +67,7 @@ import { AmountFieldComponentModule } from "../shared/amount-field/amount-field.
 import { EntryAmountModule } from "./utility/directives/entry-amount/entry-amount.module";
 import { EntryTotalModule } from "./utility/directives/entry-total/entry-total.module";
 import { GiddhPageLoaderModule } from "../shared/giddh-page-loader/giddh-page-loader.module";
+import { ReplacePipeModule } from "../shared/helpers/pipes/replace/replace.module";
 
 @NgModule({
     declarations: [
@@ -140,7 +141,8 @@ import { GiddhPageLoaderModule } from "../shared/giddh-page-loader/giddh-page-lo
         AmountFieldComponentModule,
         EntryAmountModule,
         EntryTotalModule,
-        GiddhPageLoaderModule
+        GiddhPageLoaderModule,
+        ReplacePipeModule
     ],
     exports: [
 

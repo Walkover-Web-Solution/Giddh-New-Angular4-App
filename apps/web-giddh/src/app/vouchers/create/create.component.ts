@@ -35,13 +35,14 @@ import { ToasterService } from "../../services/toaster.service";
 import { CommonService } from "../../services/common.service";
 import { PURCHASE_ORDER_STATUS } from "../../shared/helpers/purchaseOrderStatus";
 import { cloneDeep } from "../../lodash-optimized";
-import { ENTRY_DESCRIPTION_LENGTH, HIGH_RATE_FIELD_PRECISION, RATE_FIELD_PRECISION, SubVoucher } from "../../app.constant";
+import { AdjustedVoucherType, ENTRY_DESCRIPTION_LENGTH, HIGH_RATE_FIELD_PRECISION, RATE_FIELD_PRECISION, SubVoucher } from "../../app.constant";
 import { IntlPhoneLib } from "../../theme/mobile-number-field/intl-phone-lib.class";
 import { SalesOtherTaxesCalculationMethodEnum } from "../../models/api-models/Sales";
 import { giddhRoundOff } from "../../shared/helpers/helperFunctions";
 import { VoucherService } from "../../services/voucher.service";
 import { ConfirmModalComponent } from "../../theme/new-confirm-modal/confirm-modal.component";
 import { AddBulkItemsComponent } from "../../theme/add-bulk-items/add-bulk-items.component";
+import { AdjustAdvancePaymentModal, VoucherAdjustments } from "../../models/api-models/AdvanceReceiptsAdjust";
 
 @Component({
     selector: "create",
@@ -258,7 +259,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         totalTaxWithoutCess: 0,
         totalCess: 0,
         grandTotal: 0,
-        roundOff: 0
+        roundOff: 0,
+        tcsTotal: 0,
+        tdsTotal: 0,
+        balanceDue: 0
     };
     /** Holds account types */
     public accountType: any = AccountType;
@@ -270,6 +274,32 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public emailDialogRef: MatDialogRef<any>;
     /** List of vouchers available for adjustment */
     public vouchersForAdjustment: any[] = [];
+    /** Stores the adjustment data */
+    public advanceReceiptAdjustmentData: VoucherAdjustments;
+    /** Adjustment dialog ref */
+    public adjustmentDialogRef: MatDialogRef<any>;
+    /** Show advance receipts adjust */
+    public showAdvanceReceiptAdjust: boolean = false;
+    public isAdjustAmount = false;
+    public adjustPaymentData: AdjustAdvancePaymentModal = {
+        customerName: '',
+        customerUniquename: '',
+        voucherDate: '',
+        balanceDue: 0,
+        dueDate: '',
+        grandTotal: 0,
+        gstTaxesTotal: 0,
+        subTotal: 0,
+        totalTaxableValue: 0,
+        totalAdjustedAmount: 0,
+        convertedTotalAdjustedAmount: 0
+    }
+    public adjustPaymentBalanceDueData: number = 0;
+    public totalAdvanceReceiptsAdjustedAmount: number = 0;
+    /** To check is selected invoice already adjusted with at least one advance receipts  */
+    public isInvoiceAdjustedWithAdvanceReceipts: boolean = false;
+    /**  This will use for deposit amount before update  */
+    public depositAmountBeforeUpdate: number = 0;
 
     /** Returns true if account is selected else false */
     public get showPageLeaveConfirmation(): boolean {
@@ -2241,6 +2271,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     private calculateVoucherTotals(): void {
         const entries = this.getEntries();
         this.voucherTotals = this.vouchersUtilityService.getVoucherTotals(entries, this.company.giddhBalanceDecimalPlaces, this.applyRoundOff);
+        this.calculateBalanceDue();
     }
 
     /**
@@ -2551,8 +2582,112 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public openAdjustmentDialog(): void {
-        this.dialog.open(this.adjustmentModal, {
+        this.adjustmentDialogRef = this.dialog.open(this.adjustmentModal, {
             width: '650px'
         });
+    }
+
+    public closeAdvanceReceiptModal() {
+        this.showAdvanceReceiptAdjust = false;
+        this.dialog.closeAll();
+        if (this.advanceReceiptAdjustmentData && this.advanceReceiptAdjustmentData.adjustments) {
+            this.isAdjustAmount = this.advanceReceiptAdjustmentData.adjustments.length ? true : false;
+        } else {
+            this.isAdjustAmount = false;
+        }
+    }
+
+    /**
+     * To get all advance adjusted data
+     *
+     * @param {{ adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal }} advanceReceiptsAdjustEvent event that contains advance receipts adjusted data
+     * @memberof VoucherComponent
+     */
+    public getAdvanceReceiptAdjustData(advanceReceiptsAdjustEvent: { adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal }) {
+        this.advanceReceiptAdjustmentData = advanceReceiptsAdjustEvent.adjustVoucherData;
+        if (this.advanceReceiptAdjustmentData && this.advanceReceiptAdjustmentData.adjustments) {
+            this.advanceReceiptAdjustmentData.adjustments.forEach(adjustment => {
+                adjustment.voucherNumber = adjustment.voucherNumber === this.commonLocaleData?.app_not_available ? '' : adjustment.voucherNumber;
+            });
+        }
+        this.adjustPaymentData = advanceReceiptsAdjustEvent.adjustPaymentData;
+        if (this.adjustPaymentData.totalAdjustedAmount) {
+            this.isAdjustAmount = true;
+        } else {
+            this.isAdjustAmount = false;
+        }
+        if (this.isUpdateMode) {
+            this.calculateAdjustedVoucherTotal(advanceReceiptsAdjustEvent.adjustVoucherData.adjustments)
+        }
+        this.adjustPaymentBalanceDueData = this.getCalculatedBalanceDueAfterAdvanceReceiptsAdjustment();
+        this.closeAdvanceReceiptModal();
+    }
+
+    public calculateAdjustedVoucherTotal(voucherObjectArray: any[]): void {
+        this.totalAdvanceReceiptsAdjustedAmount = 0;
+        if (voucherObjectArray) {
+            let adjustments = cloneDeep(voucherObjectArray);
+            let totalAmount = 0;
+            if (adjustments) {
+                adjustments.forEach((item) => {
+                    if (((this.voucherType === AdjustedVoucherType.SalesInvoice && item?.voucherType === AdjustedVoucherType.DebitNote) || (this.voucherType === AdjustedVoucherType.PurchaseInvoice && item?.voucherType === AdjustedVoucherType.CreditNote) ||
+                        (this.voucherType === AdjustedVoucherType.DebitNote && item?.voucherType === AdjustedVoucherType.OpeningBalance && item.voucherBalanceType === "dr") ||
+                        ((this.voucherType === AdjustedVoucherType.DebitNote || this.voucherType === AdjustedVoucherType.SalesInvoice || this.voucherType === AdjustedVoucherType.Sales || this.voucherType === AdjustedVoucherType.Payment) && (item?.voucherType === AdjustedVoucherType.Journal || item?.voucherType === AdjustedVoucherType.JournalVoucher) && item?.voucherBalanceType === "dr") ||
+                        (this.voucherType === AdjustedVoucherType.CreditNote && item?.voucherType === AdjustedVoucherType.OpeningBalance && item.voucherBalanceType === "cr") ||
+                        ((this.voucherType === AdjustedVoucherType.CreditNote || this.voucherType === AdjustedVoucherType.Purchase || this.voucherType === AdjustedVoucherType.Receipt || this.voucherType === AdjustedVoucherType.AdvanceReceipt) && (item?.voucherType === AdjustedVoucherType.Journal || item?.voucherType === AdjustedVoucherType.JournalVoucher) && item?.voucherBalanceType === "cr") ||
+                        ((this.voucherType === AdjustedVoucherType.Purchase || this.voucherType === AdjustedVoucherType.PurchaseInvoice) && (item?.voucherType === AdjustedVoucherType.Journal || item?.voucherType === AdjustedVoucherType.JournalVoucher) && item?.voucherBalanceType === "cr"))) {
+                        totalAmount -= Number(item.adjustmentAmount ? item.adjustmentAmount.amountForAccount : 0);
+                    } else {
+                        totalAmount += Number(item.adjustmentAmount ? item.adjustmentAmount.amountForAccount : 0);
+                    }
+                });
+            }
+            this.totalAdvanceReceiptsAdjustedAmount = totalAmount;
+            this.adjustPaymentData.totalAdjustedAmount = this.totalAdvanceReceiptsAdjustedAmount;
+            if (this.adjustPaymentData.totalAdjustedAmount > 0) {
+                this.isAdjustAmount = true;
+            } else {
+                this.isAdjustAmount = false;
+            }
+        } else {
+            this.advanceReceiptAdjustmentData.adjustments = [];
+        }
+    }
+
+    /**
+     * To calculate balance due amount after adjustment of advance receipts
+     *
+     * @returns {number} Balance due amount
+     * @memberof VoucherComponent
+     */
+    public getCalculatedBalanceDueAfterAdvanceReceiptsAdjustment(): number {
+        return parseFloat(Number(this.voucherTotals.grandTotal + this.voucherTotals.tcsTotal - this.adjustPaymentData.totalAdjustedAmount - this.invoiceForm.get('deposit.amountForAccount')?.value - this.voucherTotals.tdsTotal).toFixed(this.company?.giddhBalanceDecimalPlaces));
+    }
+
+    public calculateBalanceDue(): void {
+        let depositAmount = Number(this.invoiceForm.get('deposit.amountForAccount')?.value);
+        if (this.isMultiCurrencyVoucher) {
+            if (this.invoiceForm.get("deposit.currencySymbol")?.value === this.account.baseCurrencySymbol) {
+                depositAmount = depositAmount * this.invoiceForm.get('exchangeRate')?.value;
+            }
+            depositAmount = depositAmount / this.invoiceForm.get('exchangeRate')?.value || 0;
+        }
+
+        if (isNaN(this.voucherTotals.grandTotal)) {
+            this.voucherTotals.grandTotal = 0;
+        }
+
+        if ((this.vouchersForAdjustment?.length || this.isInvoiceAdjustedWithAdvanceReceipts) && this.adjustPaymentData.totalAdjustedAmount) {
+            this.adjustPaymentBalanceDueData = this.getCalculatedBalanceDueAfterAdvanceReceiptsAdjustment();
+        } else {
+            this.adjustPaymentBalanceDueData = 0;
+        }
+        this.voucherTotals.balanceDue =
+            giddhRoundOff((((this.voucherTotals.grandTotal + this.voucherTotals.tcsTotal + this.voucherTotals.roundOff) - this.voucherTotals.tdsTotal) - depositAmount - Number(this.depositAmountBeforeUpdate) - this.totalAdvanceReceiptsAdjustedAmount), this.company?.giddhBalanceDecimalPlaces);
+        
+        if (this.isUpdateMode && this.isInvoiceAdjustedWithAdvanceReceipts && !this.adjustPaymentData.totalAdjustedAmount) {
+            this.voucherTotals.balanceDue =
+                giddhRoundOff((((this.voucherTotals.grandTotal + this.voucherTotals.tcsTotal + this.voucherTotals.roundOff) - this.voucherTotals.tdsTotal) - Number(this.depositAmountBeforeUpdate) - this.totalAdvanceReceiptsAdjustedAmount), this.company?.giddhBalanceDecimalPlaces);
+        }
     }
 }
