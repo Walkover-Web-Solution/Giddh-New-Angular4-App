@@ -104,5 +104,7 @@
         "search_field": "Search [FIELD]",
         "subscription_cancel_message":"Subscription will be cancelled on Expiry Date",
         "upi_id":" Upi ID",
-        "account_holder":"Account holder"
+        "account_holder":"Account holder",
+        "for":"for",
+        "save":"Save"
     }

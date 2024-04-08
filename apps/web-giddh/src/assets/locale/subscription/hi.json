@@ -135,5 +135,7 @@
         "search_field": "खोज [FIELD]",
         "subscription_cancel_message":"समाप्ति तिथि पर सदस्यता रद्द कर दी जाएगी",
         "upi_id":" यूपीआई आईडी",
-        "account_holder":"खाता धारक"
+        "account_holder":"खाता धारक",
+        "for":"के लिए",
+		"save":"बचत"
 	}

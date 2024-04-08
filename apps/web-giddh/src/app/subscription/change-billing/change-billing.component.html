@@ -67,7 +67,7 @@
                             <div id="init-contact-wrapper" class="position-relative w-100">
                                 <input
                                     type="tel"
-                                    class="mat-form-field-border mat-form-field-height mobile-height"
+                                    class="mat-form-field-border mat-form-field-height mobile-height bg-transparent border"
                                     #initContact
                                     aria-autocomplete="none"
                                     autocomplete="off"
@@ -115,7 +115,7 @@
                                 [showError]="
                                     (isFormSubmitted && !changeBillingForm.get('taxNumber')?.value) || !isGstinValid
                                 "
-                                [label]="formFields['taxName']?.label ? formFields['taxName']?.label : commonLocaleData?.app_enter_tax_name"
+                                
                                 [maxlength]="15"
                                 (change)="validateGstNumber()"
                             >

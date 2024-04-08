@@ -24,10 +24,11 @@
                 [selectedIndex]="selectedStep"
                 (selectionChange)="onSelectedTab($event)"
                 [disableRipple]="firstStepForm.invalid"
+                class="bg-transparent text-black"
             >
                 <mat-step [stepControl]="firstStepForm">
                     <form name="firstStepForm" [formGroup]="firstStepForm" autocomplete="off" class="mt-5" novalidate>
-                        <div class="plan-summary d-flex">
+                        <div class="plan-summary d-flex justify-content-center">
                             <div class="plan-width">
                                 <ng-template matStepLabel>{{ localeData?.all_plans }}</ng-template>
                                 <div class="d-flex justify-content-between align-items-center mb-3">
@@ -88,35 +89,64 @@
                                                 <ng-container *ngIf="!(popularPlan?.uniqueName === plan?.uniqueName)">
                                                     <div class="popular-txt-height"></div>
                                                 </ng-container>
-                                                <div class="plan-content">
-                                                    <h2 class="font-20 strong">
+                                                <div class="plan-content d-flex flex-column">
+                                                    <h2 class="font-20 strong plan-title">
                                                         {{ plan?.name }}
                                                     </h2>
-                                                    <p class="font-15 my-3 feature-txt">
+                                                    <p class="font-15 mt-3 feature-txt">
                                                         {{ plan?.description }}
                                                     </p>
-                                                    <p
+                                                    <ng-container
                                                         *ngIf="firstStepForm.get('duration')?.value === 'YEARLY'"
-                                                        class="mb-3"
                                                     >
-                                                        <span class="strong"
-                                                            >{{ plan?.currency?.symbol }}{{ plan?.yearlyAmount }}</span
-                                                        >
-                                                        / {{ commonLocaleData?.app_duration?.yearly }}
-                                                    </p>
-                                                    <p
+                                                        <p class="mb-2">
+                                                             <s>    <span class="strong"
+                                                                >{{ plan?.currency?.symbol
+                                                                }}{{ plan?.yearlyAmount }}</span
+                                                            ></s>
+                                                        </p>
+                                                        <p class="mb-3">
+                                                            <span class="strong font-20"
+                                                                >{{ plan?.currency?.symbol }}{{ plan?.yearlyAmount }} /
+                                                                {{ commonLocaleData?.app_duration?.yearly }}</span
+                                                            >
+                                                        </p>
+                                                        <p class="strong">
+                                                       {{localeData?.save}} {{ plan?.currency?.symbol
+                                                            }}{{ plan?.yearlyAmount }} {{localeData?.for}}
+                                                            {{ plan?.yearlyDiscount?.duration }}
+                                                            {{ commonLocaleData?.app_duration?.yearly | lowercase }}
+                                                        </p>
+                                                    </ng-container>
+                                                    <ng-container
                                                         *ngIf="firstStepForm.get('duration')?.value === 'MONTHLY'"
-                                                        class="mb-3"
                                                     >
-                                                        <span class="strong"
-                                                            >{{ plan?.currency?.symbol }}{{ plan?.monthlyAmount }}</span
-                                                        >
-                                                        /{{ commonLocaleData?.app_duration?.monthly }}
-                                                    </p>
+                                                        <p class="mb-2">
+                                                          <s>  <span class="strong"
+                                                                >{{ plan?.currency?.symbol
+                                                                }}{{ plan?.monthlyAmount }}</span
+                                                            >
+                                                            </s>
+                                                        </p>
+                                                        <p class="mb-3">
+                                                            <span class="strong font-20"
+                                                                >{{ plan?.currency?.symbol
+                                                                }}{{ plan?.monthlyAmount }} /{{
+                                                                    commonLocaleData?.app_duration?.monthly
+                                                                }}</span
+                                                            >
+                                                        </p>
+                                                        <p class="strong">
+                                                            {{localeData?.save}} {{ plan?.currency?.symbol
+                                                            }}{{ plan?.monthlyAmount }}     {{localeData?.for}}
+                                                            {{ plan?.monthlyDiscount?.duration }}
+                                                            {{ commonLocaleData?.app_duration?.monthly | lowercase }}
+                                                        </p>
+                                                    </ng-container>
                                                     <button
                                                         mat-stroked-button
                                                         color="primary"
-                                                        class="w-100"
+                                                        class="w-100 mt-auto"
                                                         aria-label="monthly"
                                                         [class.selected]="
                                                             firstStepForm.get('planUniqueName').value ===
@@ -275,7 +305,7 @@
                 </mat-step>
                 <mat-step [stepControl]="secondStepForm" name="secondStepForm">
                     <form autocomplete="off" class="mt-5" novalidate [formGroup]="secondStepForm" name="secondStepForm">
-                        <div class="plan-summary d-flex">
+                        <div class="plan-summary d-flex justify-content-center">
                             <div class="plan-width">
                                 <ng-template matStepLabel>{{ localeData?.select_billing }}</ng-template>
                                 <h4 class="font-16 strong d-flex align-items-center mb-3">
@@ -336,7 +366,7 @@
                                                 <div id="init-contact-wrapper" class="position-relative w-100">
                                                     <input
                                                         type="tel"
-                                                        class="mat-form-field-border mat-form-field-height mobile-height"
+                                                        class="mat-form-field-border mat-form-field-height mobile-height bg-transparent border"
                                                         #initContact
                                                         aria-autocomplete="none"
                                                         autocomplete="off"
@@ -460,7 +490,7 @@
                         [formGroup]="thirdStepForm"
                         name="thirdStepForm"
                     >
-                        <div class="plan-summary d-flex">
+                        <div class="plan-summary d-flex justify-content-center">
                             <div class="plan-width">
                                 <ng-template matStepLabel>{{ localeData?.review_pay }}</ng-template>
                                 <h4 class="font-16 mb-3 strong d-flex align-items-center">

@@ -274,12 +274,13 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         ).subscribe(searchedText => {
             if (searchedText !== null && searchedText !== undefined) {
                 if (this.thirdStepForm?.controls['emailId'].status === 'VALID') {
-                    this.selectRole({ label: 'Super Admin', value: 'super_admin' });
-                    this.selectedRole = 'Super Admin';
+                    this.updateSelectRoleValue('super_admin');
                 } else {
-                    this.selectRole({ label: '', value: '' });
-                    this.selectedRole = '';
+                    this.thirdStepForm.get('roleUniqueName').setValue('');
                 }
+            }
+            if (searchedText === null || searchedText === "") {
+                this.thirdStepForm.get('roleUniqueName').setValue('');
             }
         });
 
@@ -1091,7 +1092,6 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         this.company.permission.roleUniqueName = this.thirdStepForm.value.roleUniqueName;
         this.company.permission.entity = this.thirdStepForm.value.entity;
         this.company.creatorSuperAdmin = this.thirdStepForm.value.creatorSuperAdmin;
-
         this.isLoading = true;
         this.companyService.CreateNewCompany(this.company).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
             if (response?.status === "success") {
@@ -1354,6 +1354,19 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
                 }));
             }
         });
+    }
+
+    /**
+     * This wiill be use for update select role value
+     *
+     * @param {string} value
+     * @memberof AddCompanyComponent
+     */
+    public updateSelectRoleValue(value: string): void {
+        const selectedOption = this.permissionRoles.find(option => option.value === value);
+        if (selectedOption) {
+            this.thirdStepForm.get('roleUniqueName').setValue(selectedOption.value);
+        }
     }
 
     /**
