@@ -140,7 +140,6 @@ export class CompanyListDialogComponent implements OnInit {
         this.initCompanyListRequest();
         this.companyListForm.get('name').setValue("");
         this.companyListForm.reset();
-        this.getAllCompaniesList();
     }
 
 
