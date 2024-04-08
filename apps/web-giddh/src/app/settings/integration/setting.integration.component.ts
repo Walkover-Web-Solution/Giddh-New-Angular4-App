@@ -1264,7 +1264,12 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @memberof SettingIntegrationComponent
      */
     public deleteBankAccountLogin(): void {
-        let model = { uniqueName: this.activeBankAccount?.uniqueName, urn: this.activeBankAccount?.urn }
+        let model;
+        if (this.isPlaidSupportedCountry) {
+            model = { uniqueName: this.activeBankAccount?.uniqueName, urn: this.activeBankAccount?.urn }
+        } else {
+            model = { uniqueName: this.activeBankAccount?.uniqueName, bankUserId: this.activeBankAccount?.urn }
+        }
         this.settingsIntegrationService.deleteBankAccountLogin(model).pipe(take(1)).subscribe(response => {
             if (response?.status === "success") {
                 this.getAllBankAccounts();
@@ -1284,7 +1289,11 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @memberof SettingIntegrationComponent
      */
     public showDeleteBankAccountLoginConfirmationModal(bankAccount: any, payor: any): void {
-        this.activeBankAccount = { uniqueName: bankAccount?.bankResource?.uniqueName, urn: payor?.urn, loginId: payor?.loginId };
+        if (this.isPlaidSupportedCountry) {
+            this.activeBankAccount = { uniqueName: bankAccount?.bankResource?.uniqueName, urn: payor?.urn, loginId: payor?.loginId };
+        } else {
+            this.activeBankAccount = { uniqueName: bankAccount?.bankResource?.uniqueName, bankUserId: payor?.urn, loginId: payor?.loginId };
+        }
         this.confirmationModal?.show();
     }
 
@@ -1347,7 +1356,13 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @memberof SettingIntegrationComponent
      */
     public getPayorRegistrationStatus(bankAccount: any, payor: any): void {
-        let request = { bankAccountUniqueName: bankAccount?.bankResource?.uniqueName, urn: payor?.urn };
+        let request;
+
+        if (this.isPlaidSupportedCountry) {
+            request = { bankAccountUniqueName: bankAccount?.bankResource?.uniqueName, urn: payor?.urn };
+        } else {
+            request = { bankAccountUniqueName: bankAccount?.bankResource?.uniqueName, bankUserId: payor?.urn };
+        }
 
         this.settingsIntegrationService.getPayorRegistrationStatus(request).pipe(take(1)).subscribe(response => {
             payor.isConnected = (response?.body?.status === ACCOUNT_REGISTERED_STATUS);
