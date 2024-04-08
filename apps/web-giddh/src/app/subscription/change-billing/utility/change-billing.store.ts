@@ -56,7 +56,7 @@ export class ChangeBillingComponentStore extends ComponentStore<BillingState> im
                                 });
                             } else {
                                 if (res.message) {
-                                    this.toasterService.showSnackBar('success', res.message);
+                                    this.toasterService.showSnackBar('error', res.message);
                                 }
                                 return this.patchState({
                                     getBillingDetails: [],

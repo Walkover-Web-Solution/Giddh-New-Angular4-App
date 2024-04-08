@@ -368,7 +368,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     */
     private getCompanyProfile(): void {
         this.componentStore.companyProfile$.pipe(takeUntil(this.destroyed$)).subscribe(profile => {
-            if (profile && Object.keys(profile).length && !this.company?.countryName) {
+            if (profile && Object.keys(profile).length) {
                 this.company.countryName = profile.country;
                 this.company.countryCode = profile.countryCode || profile.countryV2.alpha2CountryCode;
                 this.company.baseCurrency = profile.baseCurrency;
@@ -376,9 +376,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 this.company.inputMaskFormat = profile.balanceDisplayFormat?.toLowerCase() || '';
                 this.company.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
                 this.showTaxTypeByCountry(this.company.countryCode);
+                this.componentStore.getAllPlans({ params: { countryCode: this.company.countryCode } });
             }
         });
-        this.componentStore.getAllPlans({ params: { countryCode: this.company.countryCode } });
     }
 
     /**
