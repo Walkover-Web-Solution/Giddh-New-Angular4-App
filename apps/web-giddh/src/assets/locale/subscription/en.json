@@ -105,5 +105,6 @@
         "subscription_cancel_message":"Subscription will be cancelled on Expiry Date",
         "upi_id":" Upi ID",
         "account_holder":"Account holder",
-        "for":"for"
+        "for":"for",
+        "save":"Save"
     }
