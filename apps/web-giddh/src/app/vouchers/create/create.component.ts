@@ -17,7 +17,7 @@ import { OrganizationType } from "../../models/user-login-state";
 import { PreviousInvoicesVm, ProformaFilter, ProformaGetRequest, ProformaResponse } from "../../models/api-models/proforma";
 import { InvoiceReceiptFilter, ReciptResponse } from "../../models/api-models/recipt";
 import { VouchersUtilityService } from "../utility/vouchers.utility.service";
-import { FormBuilder, FormArray, FormGroup, Validators } from "@angular/forms";
+import { FormBuilder, FormArray, FormGroup, Validators, FormControl } from "@angular/forms";
 import { GIDDH_DATE_FORMAT } from "../../shared/helpers/defaultDateFormat";
 import { AccountType, BriedAccountsGroup, OtherTaxTypes, SearchType, TaxType, VoucherTypeEnum } from "../utility/vouchers.const";
 import { SearchService } from "../../services/search.service";
@@ -43,6 +43,7 @@ import { VoucherService } from "../../services/voucher.service";
 import { ConfirmModalComponent } from "../../theme/new-confirm-modal/confirm-modal.component";
 import { AddBulkItemsComponent } from "../../theme/add-bulk-items/add-bulk-items.component";
 import { AdjustAdvancePaymentModal, VoucherAdjustments } from "../../models/api-models/AdvanceReceiptsAdjust";
+import { PurchaseOrderService } from "../../services/purchase-order.service";
 
 @Component({
     selector: "create",
@@ -312,6 +313,28 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     private vouchersListForCreditDebitNote: any[] = [];
     /** Observable for vouchers list for credit/debit note */
     public vouchersListForCreditDebitNote$: Observable<any> = observableOf(null);
+    /* This will hold if PO linking is updated */
+    public poLinkUpdated: boolean = false;
+    /* This will hold the purchase orders */
+    public purchaseOrders: any[] = [];
+    /* This will hold linked PO */
+    public linkedPo: any[] = [];
+    /* This will hold linked PO items*/
+    public linkedPoNumbers: any[] = [];
+    /* This will hold filter dates for PO */
+    public poFilterDates: any = { from: '', to: '' };
+    /** This will use for instance of linkPO Dropdown */
+    public linkPoDropdown: FormControl = new FormControl();
+    /** Filtered options to show in autocomplete list */
+    public fieldFilteredOptions: any[] = [];
+    /** Stores the purchase order number value mapping */
+    public purchaseOrderNumberValueMapping: any[] = [];
+    /* This will hold selected PO */
+    public selectedPoItems: any[] = [];
+    /** True, if the linking with PO is in progress */
+    private isPoLinkingInProgress: boolean = false;
+    /* This will hold the existing PO entries with quantity */
+    public existingPoEntries: any[] = [];
 
     /** Returns true if account is selected else false */
     public get showPageLeaveConfirmation(): boolean {
@@ -371,7 +394,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         private salesAction: SalesActions,
         private toasterService: ToasterService,
         private commonService: CommonService,
-        private voucherService: VoucherService
+        private voucherService: VoucherService,
+        private purchaseOrderService: PurchaseOrderService
     ) {
 
     }
@@ -1489,6 +1513,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             total: this.formBuilder.group({ //temp
                 amountForAccount: [0],
                 amountForCompany: [0]
+            }),
+            purchaseOrderItemMapping: this.formBuilder.group({
+                uniqueName: [''],
+                entryUniqueName: ['']
             })
         });
     }
@@ -2799,6 +2827,231 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             }
 
             this.componentStore.getVoucherListForCreditDebitNote({ request: request, date: date });
+        }
+    }
+
+    public getPurchaseOrder(event: any, addRemove: boolean): void {
+        if (event) {
+            let newPo = this.linkedPo?.filter(po => !this.selectedPoItems?.includes(po));
+            let selectedOption = this.fieldFilteredOptions?.filter(option => option?.value === newPo[0]);
+            let order = selectedOption[0];
+            if (order && !this.selectedPoItems.includes(order?.value)) {
+                this.startLoader(true);
+                let getRequest = { companyUniqueName: this.activeCompany?.uniqueName, poUniqueName: order?.value };
+                this.purchaseOrderService.get(getRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                    if (response) {
+                        if (response.status === "success" && response.body) {
+                            if (this.linkedPo.includes(response.body.uniqueName)) {
+                                if (response.body && response.body.entries && response.body.entries.length > 0) {
+                                    this.selectedPoItems.push(response.body.uniqueName);
+                                    this.linkedPoNumbers[order?.value]['items'] = response.body.entries;
+                                    if (addRemove) {
+                                        this.addPoItems(response.body.uniqueName, response.body.entries);
+                                    } else {
+                                        this.startLoader(false);
+                                    }
+                                } else {
+                                    this.startLoader(false);
+                                    this.linkedPoNumbers[order?.value]['items'] = [];
+                                }
+                            } else {
+                                this.startLoader(false);
+                            }
+                        } else {
+                            this.startLoader(false);
+                            this.toasterService.showSnackBar("error", response.message);
+                        }
+                    }
+                });
+            } else {
+                if (addRemove) {
+                    this.removePoItem();
+                }
+            }
+        } else {
+            if (addRemove) {
+                this.removePoItem();
+            }
+        }
+    }
+
+    /**
+     * This will add the items if linked PO is selected
+     *
+     * @param {*} entries
+     * @memberof VoucherComponent
+     */
+    public addPoItems(poUniqueName: string, entries: any): void {
+        this.startLoader(true);
+        this.isPoLinkingInProgress = true;
+        let voucherEntries = this.getEntries();
+        let blankItemIndex = voucherEntries?.findIndex(entry => !entry.transactions[0].account?.uniqueName);
+
+        entries?.forEach(entry => {
+            let transactionLoop = 0;
+
+            if (entry.totalQuantity && entry.usedQuantity && entry.transactions && entry.transactions[0] && entry.transactions[0].stock) {
+                if (this.existingPoEntries[entry.uniqueName]) {
+                    entry.transactions[0].stock.quantity = entry.usedQuantity;
+                } else {
+                    entry.transactions[0].stock.quantity = entry.totalQuantity - entry.usedQuantity;
+                }
+            }
+
+            entry.transactions?.forEach(item => {
+                if (item.stock) {
+                    let stockUniqueName = item.stock.uniqueName;
+                    item.stock.uniqueName = "purchases#" + item.stock.uniqueName;
+                    item.uniqueName = item.stock.uniqueName;
+                    item.value = item.stock.uniqueName;
+                    item.additional = item.stock;
+                    item.additional.uniqueName = "purchases";
+                    item.additional.stock = {};
+                    item.additional.stock.uniqueName = stockUniqueName;
+                    if (this.existingPoEntries[entry.uniqueName]) {
+                        item.additional.maxQuantity = this.existingPoEntries[entry?.uniqueName];
+                    } else {
+                        item.additional.maxQuantity = item.stock.quantity;
+                    }
+                } else {
+                    item.stock = undefined;
+                    item.uniqueName = item.account?.uniqueName;
+                    item.value = item.account?.uniqueName;
+                    item.additional = item.account;
+                    if (this.existingPoEntries[entry?.uniqueName]) {
+                        item.additional.maxQuantity = this.existingPoEntries[entry?.uniqueName];
+                    } else {
+                        item.additional.maxQuantity = entry.totalQuantity - entry.usedQuantity;
+                    }
+                }
+
+                if (item.additional.maxQuantity > 0) {
+                    let lastIndex = -1;
+                    let entryFormGroup;
+                    if (blankItemIndex > -1) {
+                        lastIndex = blankItemIndex;
+                        entryFormGroup = this.getEntryFormGroup(lastIndex);
+                    } else {
+                        this.addNewLineEntry();
+                        lastIndex = this.invoiceForm.get('entries')['controls']?.length - 1;
+                        entryFormGroup = this.getEntryFormGroup(lastIndex);
+                    }
+
+                    this.activeEntryIndex = lastIndex;
+                    const entryDate = this.invoiceForm.get("date")?.value || this.universalDate;
+
+                    let transactionFormGroup = this.getTransactionFormGroup(entryFormGroup);
+
+                    if (typeof (entryDate) === "object") {
+                        transactionFormGroup.get("date")?.patchValue(dayjs(entryDate).format(GIDDH_DATE_FORMAT));
+                    } else {
+                        transactionFormGroup.get("date")?.patchValue(dayjs(entryDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT));
+                    }
+
+                    transactionFormGroup.get("account.uniqueName")?.patchValue(item?.uniqueName);
+                    entryFormGroup.get("description")?.patchValue(entry.description);
+
+                    const discountsFormArray = entryFormGroup.get('discounts') as FormArray;
+                    discountsFormArray.clear();
+                    entry.discounts?.forEach(discount => {
+                        discountsFormArray.push(this.getTransactionDiscountFormGroup(discount));
+                    });
+                    
+                    const taxesFormArray = entryFormGroup.get('taxes') as FormArray;
+                    taxesFormArray.clear();
+                    entry.taxes?.forEach(tax => {
+                        taxesFormArray.push(this.getTransactionTaxFormGroup(tax));
+                    });
+
+                    entryFormGroup.get("purchaseOrderItemMapping")?.patchValue({ uniqueName: poUniqueName, entryUniqueName: entry?.uniqueName });
+
+                    this.selectStock(item, lastIndex);
+
+                    transactionLoop++;
+                }
+            });
+        });
+    }
+
+    /**
+     * This will remove the Items if linked PO is removed
+     *
+     * @memberof VoucherComponent
+     */
+    public removePoItem(): void {
+        if (this.selectedPoItems && this.selectedPoItems.length > 0) {
+            this.startLoader(true);
+            setTimeout(() => {
+                let selectedPoItems = [];
+                this.selectedPoItems?.forEach(order => {
+                    if (!this.linkedPo.includes(order)) {
+                        let entries = (this.linkedPoNumbers[order]) ? this.linkedPoNumbers[order]['items'] : [];
+                        let voucherEntries = this.getEntries();
+
+                        if (entries && entries.length > 0 && voucherEntries?.length > 0) {
+                            entries.forEach(entry => {
+                                entry.transactions.forEach(item => {
+                                    let entryLoop = 0;
+                                    let remainingQuantity = (item.stock && item.stock.quantity !== undefined && item.stock.quantity !== null) ? item.stock.quantity : 1;
+
+                                    voucherEntries.forEach(entry => {
+                                        let entryFormGroup = this.getEntryFormGroup(entryLoop);
+                                        let entryRemoved = false;
+
+                                        if (entryFormGroup && remainingQuantity > 0 && entryFormGroup.get("purchaseOrderItemMapping.uniqueName")?.value === order) {
+                                            let transactionLoop = 0;
+                                            entry.transactions.forEach(transaction => {
+                                                let transactionFormGroup = this.getTransactionFormGroup(entryFormGroup);
+
+                                                if (remainingQuantity > 0) {
+                                                    let accountUniqueName = transactionFormGroup.get("account.uniqueName")?.value;
+                                                    if (accountUniqueName) {
+                                                        accountUniqueName = accountUniqueName?.replace("purchases#", "");
+                                                    }
+
+                                                    let stockUniqueName = (item.stock && item.stock.uniqueName) ? item.stock.uniqueName : "";
+                                                    if (stockUniqueName) {
+                                                        stockUniqueName = stockUniqueName?.replace("purchases#", "");
+                                                    }
+
+                                                    if (item.stock && item.stock.uniqueName && accountUniqueName) {
+                                                        if (stockUniqueName === accountUniqueName) {
+                                                            if (transactionFormGroup.get("quantity")?.value > remainingQuantity) {
+                                                                transactionFormGroup.get("quantity")?.patchValue(transactionFormGroup.get("quantity")?.value - remainingQuantity);
+                                                                remainingQuantity -= remainingQuantity;
+                                                            } else {
+                                                                remainingQuantity -= transactionFormGroup.get("quantity")?.value;
+                                                                entryRemoved = true;
+                                                                this.removeTransaction(entryLoop);
+                                                            }
+                                                        }
+                                                    } else if (item.account && item.account.uniqueName && accountUniqueName) {
+                                                        if (item.account.uniqueName === accountUniqueName) {
+                                                            remainingQuantity = 0;
+                                                            entryRemoved = true;
+                                                            this.removeTransaction(entryLoop);
+                                                        }
+                                                    }
+                                                }
+                                                transactionLoop++;
+                                            });
+                                        }
+                                        if (!entryRemoved) {
+                                            entryLoop++;
+                                        }
+                                    });
+                                });
+                            });
+                        }
+                    } else {
+                        selectedPoItems.push(order);
+                    }
+                });
+
+                this.selectedPoItems = selectedPoItems;
+
+                this.startLoader(false);
+            }, 100);
         }
     }
 }

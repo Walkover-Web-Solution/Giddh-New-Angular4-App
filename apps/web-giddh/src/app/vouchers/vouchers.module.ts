@@ -69,6 +69,7 @@ import { EntryTotalModule } from "./utility/directives/entry-total/entry-total.m
 import { GiddhPageLoaderModule } from "../shared/giddh-page-loader/giddh-page-loader.module";
 import { ReplacePipeModule } from "../shared/helpers/pipes/replace/replace.module";
 import { CurrencyModule } from "../shared/helpers/pipes/currencyPipe/currencyType.module";
+import { NgxMatSelectSearchModule } from "ngx-mat-select-search";
 
 @NgModule({
     declarations: [
@@ -144,7 +145,8 @@ import { CurrencyModule } from "../shared/helpers/pipes/currencyPipe/currencyTyp
         EntryTotalModule,
         GiddhPageLoaderModule,
         ReplacePipeModule,
-        CurrencyModule
+        CurrencyModule,
+        NgxMatSelectSearchModule
     ],
     exports: [
 
