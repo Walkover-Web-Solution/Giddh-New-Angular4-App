@@ -657,6 +657,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 this.selectedPlan = result.find(plan => plan.uniqueName === this.firstStepForm.get('planUniqueName').value);
             }
         });
+        if (this.firstStepForm?.get('promoCode')?.value) {
+            this.firstStepForm?.get('promoCode')?.setValue(this.firstStepForm?.get('promoCode')?.value);
+        }
         this.selectedStep++;
     }
 
