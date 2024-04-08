@@ -1319,7 +1319,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             isRcmEntry: [false],
             touristSchemeApplicable: [false],
             passportNumber: [''],
-            generateEInvoice: [null]
+            generateEInvoice: [null],
+            voucherUniqueName: [''] //temp
         });
     }
 
@@ -2222,6 +2223,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public copyInvoice(item: PreviousInvoicesVm): void {
+        this.invoiceForm.get("voucherUniqueName")?.patchValue(item?.uniqueName);
         this.componentStore.getVoucherDetails({ isCopy: true, accountUniqueName: item.account?.uniqueName, payload: { invoiceNo: item.versionNumber, uniqueName: item?.uniqueName, voucherType: this.voucherType } });
     }
 

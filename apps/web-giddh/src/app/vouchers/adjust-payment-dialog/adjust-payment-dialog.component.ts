@@ -219,49 +219,6 @@ export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
             }
         });
         this.enableVoucherAdjustmentMultiCurrency = enableVoucherAdjustmentMultiCurrency;
-
-        this.componentStore.vouchersForAdjustment$.pipe(takeUntil(this.destroyed$)).subscribe(res => {
-            if (res?.status === 'success') {
-                this.adjustVoucherOptions = [];
-                if (this.adjustVoucherForm && this.adjustVoucherForm.adjustments) {
-                    this.adjustVoucherForm.adjustments.forEach(item => {
-                        if (item && item.uniqueName) {
-                            item.voucherDate = item.voucherDate?.replace(/-/g, '/');
-                            item.accountCurrency = item.accountCurrency ?? item.currency ?? { symbol: this.baseCurrencySymbol, code: this.companyCurrency };
-                            item.voucherNumber = this.generalService.getVoucherNumberLabel(item.voucherType, item.voucherNumber, this.commonLocaleData);
-                            this.adjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
-                            this.newAdjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
-                        }
-                    });
-                }
-                this.allAdvanceReceiptResponse = (res.body?.items?.length) ? res.body?.items : (res.body?.results?.length) ? res.body?.results : res.body;
-
-                this.allAdvanceReceiptResponse = this.adjustmentUtilityService.formatAdjustmentsObject(this.allAdvanceReceiptResponse);
-
-                if (this.allAdvanceReceiptResponse?.length) {
-                    if (this.allAdvanceReceiptResponse && this.allAdvanceReceiptResponse?.length) {
-                        this.allAdvanceReceiptResponse.forEach(item => {
-                            if (item) {
-                                if (!item?.adjustmentAmount) {
-                                    item.adjustmentAmount = cloneDeep(item.balanceDue);
-                                }
-                                item.voucherDate = item.voucherDate?.replace(/-/g, '/');
-                                item.accountCurrency = item.accountCurrency ?? item.currency ?? { symbol: this.baseCurrencySymbol, code: this.companyCurrency };
-                                item.voucherNumber = this.generalService.getVoucherNumberLabel(item.voucherType, item.voucherNumber, this.commonLocaleData);
-                                this.adjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
-                                this.newAdjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
-                            }
-                        });
-                    } else {
-                        if ((!this.adjustVoucherForm?.adjustments?.length || !this.adjustVoucherForm?.adjustments[0]?.uniqueName) && this.isVoucherModule) {
-                            this.toasterService.showSnackBar("warning", NO_ADVANCE_RECEIPT_FOUND);
-                        }
-                    }
-                }
-
-                this.adjustVoucherOptions$ = of(this.adjustVoucherOptions);
-            }
-        });
     }
 
     /**
@@ -332,8 +289,6 @@ export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
             tcsTotal: Number(this.voucherTotals.tcsTotal),
             tdsTotal: Number(this.voucherTotals.tdsTotal)
         });
-
-        console.log(this.adjustPayment);
 
         if (this.getBalanceDue() > 0) {
             this.isInvalidForm = true;
@@ -802,7 +757,7 @@ export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
      */
     public getConvertedBalanceDue(): number {
         return parseFloat(Number(
-            this.getConvertedCompanyAmount(this.adjustPayment?.grandTotal, this.voucherDetails?.voucherDetails?.exchangeRate) +
+            this.getConvertedCompanyAmount(this.adjustPayment?.grandTotal, this.voucherDetails?.exchangeRate) +
             this.adjustPayment.tcsTotal - this.adjustPayment.convertedTotalAdjustedAmount - this.depositAmount - this.adjustPayment.tdsTotal).toFixed(this.giddhBalanceDecimalPlaces));
     }
 
@@ -923,7 +878,7 @@ export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
     public getExchangeGainLossText(): string {
         const isProfit = this.isExchangeProfitable();
         const profitType = isProfit ? this.commonLocaleData?.app_exchange_gain : this.commonLocaleData?.app_exchange_loss;
-        const text = `${this.localeData?.exchange_gain_loss_label?.replace('[PROFIT_TYPE]', profitType)} ${this.baseCurrencySymbol}${Math.abs(this.voucherDetails?.voucherDetails?.gainLoss)}`;
+        const text = `${this.localeData?.exchange_gain_loss_label?.replace('[PROFIT_TYPE]', profitType)} ${this.baseCurrencySymbol}${Math.abs(this.voucherDetails?.gainLoss)}`;
         return text;
     }
 
@@ -934,7 +889,7 @@ export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
      * @memberof AdvanceReceiptAdjustmentComponent
      */
     public isExchangeProfitable(): boolean {
-        return this.voucherDetails?.voucherDetails?.gainLoss >= 0;
+        return this.voucherDetails?.gainLoss >= 0;
     }
 
     /**
@@ -1119,7 +1074,7 @@ export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
             return;
         }
 
-        requestObject.uniqueName = this.voucherDetails?.voucherDetails?.voucherUniqueName;
+        requestObject.uniqueName = this.voucherDetails?.voucherUniqueName;
         requestObject.voucherBalanceType = this.voucherDetails?.type;
 
         this.voucherService.getVouchersList(requestObject, this.voucherDetails.date).pipe(takeUntil(this.destroyed$)).subscribe(response => {
