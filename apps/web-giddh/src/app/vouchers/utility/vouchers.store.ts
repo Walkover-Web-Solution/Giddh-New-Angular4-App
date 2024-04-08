@@ -42,6 +42,7 @@ export interface VoucherState {
     sendEmailInProgress: boolean;
     sendEmailIsSuccess: boolean;
     vouchersForAdjustment: any;
+    voucherListForCreditDebitNote: any;
 }
 
 const DEFAULT_STATE: VoucherState = {
@@ -66,7 +67,8 @@ const DEFAULT_STATE: VoucherState = {
     voucherDetails: null,
     sendEmailInProgress: null,
     sendEmailIsSuccess: null,
-    vouchersForAdjustment: null
+    vouchersForAdjustment: null,
+    voucherListForCreditDebitNote: null
 };
 
 @Injectable()
@@ -104,6 +106,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
     public sendEmailInProgress$ = this.select((state) => state.sendEmailInProgress);
     public sendEmailIsSuccess$ = this.select((state) => state.sendEmailIsSuccess);
     public vouchersForAdjustment$ = this.select((state) => state.vouchersForAdjustment);
+    public voucherListForCreditDebitNote$ = this.select((state) => state.voucherListForCreditDebitNote);
 
     public companyProfile$: Observable<any> = this.select(this.store.select(state => state.settings.profile), (response) => response);
     public activeCompany$: Observable<any> = this.select(this.store.select(state => state.session.activeCompany), (response) => response);
@@ -585,6 +588,29 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                         (error: any) => {
                             this.toaster.showSnackBar("error", error);
                             return this.patchState({ vouchersForAdjustment: null });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    readonly getVoucherListForCreditDebitNote = this.effect((data: Observable<{ request: any, date: string }>) => {
+        return data.pipe(
+            switchMap((req) => {
+                return this.ledgerService.getInvoiceListsForCreditNote(req.request, req.date).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            return this.patchState({
+                                voucherListForCreditDebitNote: res ?? null
+                            });
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            return this.patchState({
+                                voucherListForCreditDebitNote: null
+                            });
                         }
                     ),
                     catchError((err) => EMPTY)

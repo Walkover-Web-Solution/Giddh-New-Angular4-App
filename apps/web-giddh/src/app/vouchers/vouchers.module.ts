@@ -68,6 +68,7 @@ import { EntryAmountModule } from "./utility/directives/entry-amount/entry-amoun
 import { EntryTotalModule } from "./utility/directives/entry-total/entry-total.module";
 import { GiddhPageLoaderModule } from "../shared/giddh-page-loader/giddh-page-loader.module";
 import { ReplacePipeModule } from "../shared/helpers/pipes/replace/replace.module";
+import { CurrencyModule } from "../shared/helpers/pipes/currencyPipe/currencyType.module";
 
 @NgModule({
     declarations: [
@@ -142,7 +143,8 @@ import { ReplacePipeModule } from "../shared/helpers/pipes/replace/replace.modul
         EntryAmountModule,
         EntryTotalModule,
         GiddhPageLoaderModule,
-        ReplacePipeModule
+        ReplacePipeModule,
+        CurrencyModule
     ],
     exports: [
 

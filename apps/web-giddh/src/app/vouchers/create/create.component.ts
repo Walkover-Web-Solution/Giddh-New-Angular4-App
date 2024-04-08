@@ -34,7 +34,7 @@ import { NewConfirmationModalComponent } from "../../theme/new-confirmation-moda
 import { ToasterService } from "../../services/toaster.service";
 import { CommonService } from "../../services/common.service";
 import { PURCHASE_ORDER_STATUS } from "../../shared/helpers/purchaseOrderStatus";
-import { cloneDeep } from "../../lodash-optimized";
+import { cloneDeep, uniqBy } from "../../lodash-optimized";
 import { AdjustedVoucherType, ENTRY_DESCRIPTION_LENGTH, HIGH_RATE_FIELD_PRECISION, RATE_FIELD_PRECISION, SubVoucher } from "../../app.constant";
 import { IntlPhoneLib } from "../../theme/mobile-number-field/intl-phone-lib.class";
 import { SalesOtherTaxesCalculationMethodEnum } from "../../models/api-models/Sales";
@@ -294,12 +294,24 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         totalAdjustedAmount: 0,
         convertedTotalAdjustedAmount: 0
     }
+    /** Total balance due date for adjustment */
     public adjustPaymentBalanceDueData: number = 0;
+    /** Total advance receipts adjustment amount */
     public totalAdvanceReceiptsAdjustedAmount: number = 0;
     /** To check is selected invoice already adjusted with at least one advance receipts  */
     public isInvoiceAdjustedWithAdvanceReceipts: boolean = false;
     /**  This will use for deposit amount before update  */
     public depositAmountBeforeUpdate: number = 0;
+    /** Current page for reference vouchers */
+    private referenceVouchersCurrentPage: number = 1;
+    /** Total pages for reference vouchers */
+    private referenceVouchersTotalPages: number = 1;
+    /** Reference voucher search field */
+    private searchReferenceVoucher: any = "";
+    /** Vouchers list for credit/debit note */
+    private vouchersListForCreditDebitNote: any[] = [];
+    /** Observable for vouchers list for credit/debit note */
+    public vouchersListForCreditDebitNote$: Observable<any> = observableOf(null);
 
     /** Returns true if account is selected else false */
     public get showPageLeaveConfirmation(): boolean {
@@ -602,6 +614,61 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.vouchersForAdjustment = results?.map(result => ({ ...result, adjustmentAmount: { amountForAccount: result.balanceDue?.amountForAccount, amountForCompany: result.balanceDue?.amountForCompany } }));
             }
         });
+
+        this.componentStore.voucherListForCreditDebitNote$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.body) {
+                this.referenceVouchersTotalPages = response.body.totalPages;
+                if (response.body.results || response.body.items) {
+                    let items = [];
+                    if (response.body.results) {
+                        items = response.body.results;
+                    } else if (response.body.items) {
+                        items = response.body.items;
+                    }
+
+                    items?.forEach(invoice => this.vouchersListForCreditDebitNote?.push({ label: invoice.voucherNumber ? invoice.voucherNumber : this.commonLocaleData?.app_not_available, value: invoice?.uniqueName, additional: invoice }));
+                }
+
+                if (this.isUpdateMode) {
+                    const referenceVoucher = this.invoiceForm.controls["referenceVoucher"];
+                    if (referenceVoucher) {
+                        let invoiceSelected = {
+                            label: referenceVoucher.get("number")?.value ? referenceVoucher.get("number")?.value : this.commonLocaleData?.app_not_available,
+                            value: referenceVoucher.get("uniqueName")?.value,
+                            additional: referenceVoucher
+                        };
+                        const linkedInvoice = this.vouchersListForCreditDebitNote.find(invoice => invoice?.value === invoiceSelected?.value);
+                        if (!linkedInvoice) {
+                            this.vouchersListForCreditDebitNote.push(invoiceSelected);
+                        }
+                    }
+                }
+                uniqBy(this.vouchersListForCreditDebitNote, 'value');
+                this.vouchersListForCreditDebitNote$ = observableOf(this.vouchersListForCreditDebitNote);
+            }
+        })
+    }
+
+    public creditNoteInvoiceSelected(event: any): void {
+        if (event && event.additional && event.value) {
+            const referenceVoucher = this.invoiceForm.controls["referenceVoucher"];
+            referenceVoucher.get("uniqueName")?.patchValue(event.value);
+            referenceVoucher.get("voucherType")?.patchValue(event.additional?.voucherType);
+            referenceVoucher.get("number")?.patchValue(event.additional?.voucherNumber);
+            referenceVoucher.get("date")?.patchValue(event.additional?.voucherDate);
+        }
+    }
+
+    /**
+     * Resets invoice list and current page
+     *
+     * @memberof VoucherComponent
+     */
+    public resetVoucherListForCreditDebitNote(): void {
+        this.vouchersListForCreditDebitNote = [];
+        this.vouchersListForCreditDebitNote$ = observableOf([]);
+        this.referenceVouchersCurrentPage = 1;
+        this.referenceVouchersTotalPages = 1;
     }
 
     /**
@@ -1053,6 +1120,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.componentStore.getAccountDetails(accountUniqueName);
 
         this.getAllVouchersForAdjustment();
+        this.getVoucherListForCreditDebitNote();
 
         if (this.invoiceType.isPurchaseInvoice) {
             let request = { companyUniqueName: this.activeCompany?.uniqueName, accountUniqueName: accountUniqueName, page: 1, count: 100, sort: '', sortBy: '' };
@@ -1320,7 +1388,14 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             touristSchemeApplicable: [false],
             passportNumber: [''],
             generateEInvoice: [null],
-            voucherUniqueName: [''] //temp
+            voucherUniqueName: [''], //temp
+            referenceVoucher: this.formBuilder.group({
+                uniqueName: [''],
+                voucherType: [''],
+                number: [''],
+                date: ['']
+            }),
+            einvoiceGenerated: [false]
         });
     }
 
@@ -2686,10 +2761,44 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         }
         this.voucherTotals.balanceDue =
             giddhRoundOff((((this.voucherTotals.grandTotal + this.voucherTotals.tcsTotal + this.voucherTotals.roundOff) - this.voucherTotals.tdsTotal) - depositAmount - Number(this.depositAmountBeforeUpdate) - this.totalAdvanceReceiptsAdjustedAmount), this.company?.giddhBalanceDecimalPlaces);
-        
+
         if (this.isUpdateMode && this.isInvoiceAdjustedWithAdvanceReceipts && !this.adjustPaymentData.totalAdjustedAmount) {
             this.voucherTotals.balanceDue =
                 giddhRoundOff((((this.voucherTotals.grandTotal + this.voucherTotals.tcsTotal + this.voucherTotals.roundOff) - this.voucherTotals.tdsTotal) - Number(this.depositAmountBeforeUpdate) - this.totalAdvanceReceiptsAdjustedAmount), this.company?.giddhBalanceDecimalPlaces);
+        }
+    }
+
+    public getVoucherListForCreditDebitNote(): void {
+        if (this.invoiceForm.controls['account'].get('uniqueName')?.value && (this.invoiceType.isCreditNote || this.invoiceType.isDebitNote)) {
+            let request = {
+                accountUniqueName: this.invoiceForm.controls['account'].get('uniqueName')?.value,
+                voucherType: this.invoiceType.isCreditNote ? VoucherTypeEnum.creditNote : VoucherTypeEnum.debitNote,
+                number: '',
+                page: 1
+            }
+
+            request.number = this.searchReferenceVoucher;
+            request.page = this.referenceVouchersCurrentPage;
+
+            if (request.page > 1 && this.referenceVouchersTotalPages < request.page) {
+                return;
+            }
+
+            this.referenceVouchersCurrentPage++;
+
+            if (request.page === 1) {
+                this.vouchersListForCreditDebitNote = [];
+                this.vouchersListForCreditDebitNote$ = observableOf(null);
+            }
+
+            let date;
+            if (typeof this.invoiceForm.get("date")?.value === 'string') {
+                date = this.invoiceForm.get("date")?.value;
+            } else {
+                date = dayjs(this.invoiceForm.get("date")?.value).format(GIDDH_DATE_FORMAT);
+            }
+
+            this.componentStore.getVoucherListForCreditDebitNote({ request: request, date: date });
         }
     }
 }

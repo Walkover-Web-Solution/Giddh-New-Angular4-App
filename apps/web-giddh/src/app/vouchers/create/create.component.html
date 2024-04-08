@@ -413,7 +413,7 @@
                                         <giddh-datepicker (keydown.enter)="$event.preventDefault()"
                                             [label]="invoiceType.isSalesInvoice  ?'Invoice Date': invoiceType.isPurchaseInvoice ? 'Bill Date': invoiceType.isCreditNote?'Credit Note Date': invoiceType.isDebitNote ?'Debit Note Date':invoiceType.isEstimateInvoice?'Estimate Date':invoiceType.isProformaInvoice?'Proforma Date':invoiceType.isPurchaseOrder ?'Order Date':'' "
                                             [placeholder]="'DDMMYYYY'" name="voucherDate" [showToggleIcon]="false"
-                                            [appearance]="'outline'" formControlName="date" (dateSelected)="getAllVouchersForAdjustment()">
+                                            [appearance]="'outline'" formControlName="date" (dateSelected)="getAllVouchersForAdjustment(); getVoucherListForCreditDebitNote();">
                                         </giddh-datepicker>
                                     </div>
 
@@ -446,6 +446,46 @@
                                                 !isEinvoiceGenerated ? toggleRcmCheckbox(rcmCheckbox, 'label') : ''
                                             " [innerHTML]="localeData?.transaction_reverse_charge">
                                         </label>
+                                    </div>
+                                    <div class="col-6 mr-t15" *ngIf="invoiceType.isCreditNote || invoiceType.isDebitNote">
+                                        <reactive-dropdown-field 
+                                            [cssClass]="'border-0'" 
+                                            [name]="'invoiceLinking'"
+                                            [label]="commonLocaleData?.app_select_voucher" 
+                                            [placeholder]="commonLocaleData?.app_select_voucher"
+                                            [options]="vouchersListForCreditDebitNote$ | async" 
+                                            (selectedOption)="creditNoteInvoiceSelected($event)" 
+                                            [enableDynamicSearch]="true"
+                                            (dynamicSearchedQuery)="
+                                                searchReferenceVoucher = $event;
+                                                resetVoucherListForCreditDebitNote();
+                                                getVoucherListForCreditDebitNote()
+                                            "
+                                            [isPaginationEnabled]="true"
+                                            (scrollEnd)="
+                                                !searchReferenceVoucher ? getVoucherListForCreditDebitNote() : ''
+                                            "
+                                            [scrollableElementId]="'referenceVoucher'"
+                                            [readonly]="isEinvoiceGenerated">
+                                            <ng-template #optionTemplate let-option="option">
+                                                <a
+                                                    *ngIf="option"
+                                                    href="javascript:void(0);"
+                                                    aria-label="option"
+                                                    class="linking-item"
+                                                >
+                                                    <div class="option-label">{{ option?.label }}</div>
+                                                    <div class="option-value">
+                                                        ({{ commonLocaleData?.app_dated }}:
+                                                        {{ option.additional?.voucherDate }})
+                                                    </div>
+                                                    <div class="option-value-stock">
+                                                        ({{ commonLocaleData?.app_amount }}:
+                                                        {{ option.additional?.unadjustedAmount?.amountForAccount | giddhCurrency }})
+                                                    </div>
+                                                </a>
+                                            </ng-template>
+                                        </reactive-dropdown-field>
                                     </div>
                                     <!-- For Tourist Scheme start -->
                                     <ng-container *ngIf="company?.countryCode === 'AE'">
@@ -1292,10 +1332,10 @@
                                     <button mat-stroked-button color="primary" *ngIf="invoiceType.isCreditNote">
                                         Generate Credit Note & Update A/c
                                     </button>
-                                    <button mat-stroked-button color="primary" *ngIf="invoiceType.isCreditNote">
+                                    <button mat-stroked-button color="primary" *ngIf="invoiceType.isCreditNote" (click)="generateVoucher()">
                                         Generate Credit Note </button>
 
-                                    <button mat-stroked-button color="primary" *ngIf="invoiceType.isPurchaseInvoice">
+                                    <button mat-stroked-button color="primary" *ngIf="invoiceType.isPurchaseInvoice" (click)="generateVoucher()">
                                         Save </button>
                                     <button mat-stroked-button [matMenuTriggerFor]="moreOptions"
                                         class="vouchers-more-option-btn" *ngIf="invoiceType.isSalesInvoice"> <i
