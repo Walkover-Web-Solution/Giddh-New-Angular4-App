@@ -112,8 +112,8 @@
                                                             >
                                                         </p>
                                                         <p class="strong mb-2">
-                                                            Save {{ plan?.currency?.symbol
-                                                            }}{{ plan?.yearlyAmount }} for
+                                                       {{commonLocaleData?.app_save}} {{ plan?.currency?.symbol
+                                                            }}{{ plan?.yearlyAmount }} {{localeData?.for}}
                                                             {{ plan?.yearlyDiscount?.duration }}
                                                             {{ commonLocaleData?.app_duration?.yearly | lowercase }}
                                                         </p>
@@ -137,8 +137,8 @@
                                                             >
                                                         </p>
                                                         <p class="strong mb-2">
-                                                            Save {{ plan?.currency?.symbol
-                                                            }}{{ plan?.monthlyAmount }} for
+                                                            {{commonLocaleData?.app_save}} {{ plan?.currency?.symbol
+                                                            }}{{ plan?.monthlyAmount }}     {{localeData?.for}}
                                                             {{ plan?.monthlyDiscount?.duration }}
                                                             {{ commonLocaleData?.app_duration?.monthly | lowercase }}
                                                         </p>
