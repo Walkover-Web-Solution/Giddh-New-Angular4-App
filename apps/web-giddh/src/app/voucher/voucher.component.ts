@@ -8445,7 +8445,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         let invoiceType = ((this.invoiceType === 'proforma' || this.invoiceType === 'proformas') ? this.localeData?.invoice_types?.proforma
             : (this.invoiceType === 'estimate' || this.invoiceType === 'estimates') ? this.localeData?.invoice_types?.estimate
                 : (this.invoiceType === 'sales') ? this.localeData?.invoice_types?.invoice : (this.invoiceType === 'credit note') ? this.localeData?.invoice_types?.credit_note : (this.invoiceType === 'debit note') ? this.localeData?.invoice_types?.debit_note : (this.invoiceType === 'purchase') ? this.localeData?.invoice_types?.purchase : (this.invoiceType === 'cash') ? this.localeData?.invoice_types?.cash_invoice
-                    : (this.invoiceType === 'cash bill') ? this.localeData?.invoice_types?.cash_invoice_bill : (this.invoiceType === 'cash credit note') ? this.localeData?.invoice_types?.cash_invoice_credit_note : (this.invoiceType === 'cash debit note') ? this.localeData?.invoice_types?.cash_invoice_debit_note : this.invoiceType);
+                    : (this.invoiceType === 'cash bill') ? this.localeData?.invoice_types?.cash_bill : (this.invoiceType === 'cash credit note') ? this.localeData?.invoice_types?.cash_credit_note : (this.invoiceType === 'cash debit note') ? this.localeData?.invoice_types?.cash_debit_note : this.invoiceType);
         invoiceType = this.titleCasePipe.transform(invoiceType);
         this.updateInvoiceText = this.updateInvoiceText?.replace("[INVOICE_TYPE]", invoiceType);
         this.invoiceTypeLabel = invoiceType;
@@ -8566,13 +8566,13 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 invoiceType = this.localeData?.invoice_types?.purchase;
                 break;
             case VoucherTypeEnum.cashBill:
-                invoiceType = this.localeData?.invoice_types?.cash_invoice_bill;
+                invoiceType = this.localeData?.invoice_types?.cash_bill;
                 break;
             case VoucherTypeEnum.cashCreditNote:
-                invoiceType = this.localeData?.invoice_types?.cash_invoice_credit_note;
+                invoiceType = this.localeData?.invoice_types?.cash_credit_note;
                 break;
             case VoucherTypeEnum.cashDebitNote:
-                invoiceType = this.localeData?.invoice_types?.cash_invoice_debit_note;
+                invoiceType = this.localeData?.invoice_types?.cash_debit_note;
                 break;
 
             default:
