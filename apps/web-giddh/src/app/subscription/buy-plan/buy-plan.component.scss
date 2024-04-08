@@ -7,10 +7,19 @@
         padding: 10px 8px 20px 8px;
         height: calc(100% - 36px);
 
+        .plan-title{
+            min-height: 48px;
+        }
+
         h2,
         p {
             color: var(--color-common-primary-text);
             white-space: break-spaces;
+        }
+        p {
+            s {
+                color: var(--color-gray);
+            }
         }
 
         .feature-txt {
@@ -131,10 +140,11 @@
     }
 
     .plan-summary {
+        width: fit-content;
+        margin: auto;
         column-gap: 20px;
         .plan-width {
             min-width: 500px;
-            flex-shrink: 0;
 
             h4 {
                 height: 38px;

@@ -90,28 +90,28 @@
                                                     <div class="popular-txt-height"></div>
                                                 </ng-container>
                                                 <div class="plan-content d-flex flex-column">
-                                                    <h2 class="font-20 strong">
+                                                    <h2 class="font-20 strong plan-title">
                                                         {{ plan?.name }}
                                                     </h2>
-                                                    <p class="font-15 my-3 feature-txt">
+                                                    <p class="font-15 mt-3 feature-txt">
                                                         {{ plan?.description }}
                                                     </p>
                                                     <ng-container
                                                         *ngIf="firstStepForm.get('duration')?.value === 'YEARLY'"
                                                     >
-                                                        <p class="mb-3">
+                                                        <p class="mb-2">
                                                              <s>    <span class="strong"
                                                                 >{{ plan?.currency?.symbol
                                                                 }}{{ plan?.yearlyAmount }}</span
                                                             ></s>
                                                         </p>
                                                         <p class="mb-3">
-                                                            <span class="strong"
+                                                            <span class="strong font-20"
                                                                 >{{ plan?.currency?.symbol }}{{ plan?.yearlyAmount }} /
                                                                 {{ commonLocaleData?.app_duration?.yearly }}</span
                                                             >
                                                         </p>
-                                                        <p class="strong">
+                                                        <p class="strong mb-2">
                                                             Save {{ plan?.currency?.symbol
                                                             }}{{ plan?.yearlyAmount }} for
                                                             {{ plan?.yearlyDiscount?.duration }}
@@ -121,7 +121,7 @@
                                                     <ng-container
                                                         *ngIf="firstStepForm.get('duration')?.value === 'MONTHLY'"
                                                     >
-                                                        <p class="mb-3">
+                                                        <p class="mb-2">
                                                           <s>  <span class="strong"
                                                                 >{{ plan?.currency?.symbol
                                                                 }}{{ plan?.monthlyAmount }}</span
@@ -129,14 +129,14 @@
                                                             </s>
                                                         </p>
                                                         <p class="mb-3">
-                                                            <span class="strong"
+                                                            <span class="strong font-20"
                                                                 >{{ plan?.currency?.symbol
                                                                 }}{{ plan?.monthlyAmount }} /{{
                                                                     commonLocaleData?.app_duration?.monthly
                                                                 }}</span
                                                             >
                                                         </p>
-                                                        <p class="strong">
+                                                        <p class="strong mb-2">
                                                             Save {{ plan?.currency?.symbol
                                                             }}{{ plan?.monthlyAmount }} for
                                                             {{ plan?.monthlyDiscount?.duration }}
