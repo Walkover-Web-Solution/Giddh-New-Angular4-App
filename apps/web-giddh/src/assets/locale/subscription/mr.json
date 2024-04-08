@@ -136,5 +136,6 @@
         "subscription_cancel_message":"कालबाह्यता तारखेला सदस्यता रद्द केली जाईल",
         "upi_id":" Upi आयडी",
         "account_holder":"खातेधारक",
-        "for":"च्या साठी"
+        "for":"च्या साठी",
+		"save":"बचत"
 	}
