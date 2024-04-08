@@ -1,10 +1,10 @@
 {
     "invoice_types": {
-        "sales": "विक्री",
+        "invoice": "चालान",
         "credit_note": "क्रेडिट टीप",
         "debit_note": "डेबिट टीप",
         "purchase": "खरेदी",
-        "cash": "रोख",
+        "cash_invoice": "रोख चलन",
         "proforma": "प्रोफार्मा",
         "estimate": "अंदाज",
         "cash_bill": "रोख बिल",
