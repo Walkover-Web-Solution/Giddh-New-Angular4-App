@@ -14693,7 +14693,7 @@ body.hide-scroll-body.master-page {
 
 .mat-horizontal-content-container {
     padding: 10px 20px 20px 20px !important;
-    overflow: visible !important;
+    overflow-x: auto !important;
 }
 
 .mat-step-text-label {
@@ -14917,6 +14917,11 @@ activity-compare-json {
                 }
             }
         }
+    .mat-horizontal-stepper-header-container {
+        max-width: 1240px;
+        margin: 0 auto;
+        width: 100%;
+    }
 }
 // Material 16 Table
 .mdc-data-table__row {
