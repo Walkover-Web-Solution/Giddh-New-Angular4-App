@@ -186,7 +186,11 @@ export class ChangeBillingComponent implements OnInit, AfterViewInit, OnDestroy 
         this.changeBillingForm.controls['companyName'].setValue(data.companyName);
         this.changeBillingForm.controls['email'].setValue(data.email);
         this.changeBillingForm.controls['pincode'].setValue(data.pincode);
-        this.changeBillingForm.controls['mobileNumber'].setValue('+'+data.mobileNumber);
+        if (data?.mobileNumber?.startsWith('+')){
+            this.changeBillingForm.controls['mobileNumber'].setValue(data.mobileNumber);
+        } else {
+            this.changeBillingForm.controls['mobileNumber'].setValue('+' + data.mobileNumber);
+        }
         this.changeBillingForm.controls['taxNumber'].setValue(data.taxNumber);
         this.changeBillingForm.controls['country'].setValue(data.country);
         this.changeBillingForm.controls['state'].setValue(data.state);
@@ -489,13 +493,20 @@ export class ChangeBillingComponent implements OnInit, AfterViewInit, OnDestroy 
             return;
         }
 
+        let mobileNumber;
+        if (this.changeBillingForm.value.mobileNumber.includes('+')) {
+            mobileNumber = this.intlClass?.selectedCountryData?.dialCode + this.changeBillingForm.value.mobileNumber?.replace(/\+/g, '');
+        } else {
+            mobileNumber = this.intlClass?.selectedCountryData?.dialCode + this.changeBillingForm.value.mobileNumber;
+        }
+
         let request = {
             billingName: this.changeBillingForm.value.billingName,
             companyName: this.changeBillingForm.value.companyName,
             taxNumber: this.changeBillingForm.value.taxNumber,
             email: this.changeBillingForm.value.email,
             pincode: this.changeBillingForm.value.pincode,
-            mobileNumber: this.intlClass.selectedCountryData?.dialCode + this.changeBillingForm.value.mobileNumber,
+            mobileNumber: mobileNumber,
             country: {
                 name: this.changeBillingForm.value.country.name,
                 code: this.changeBillingForm.value.country.code
