@@ -48,8 +48,8 @@
         [dropdownMinHeight]="dropdownMinHeight"
         (scrollEnd)="scrollEnd.emit()"
     ></virtual-list-menu> -->
-<div [style.width]="width">
-    <div #dd class="menu" *ngIf="isOpen">
+<div [style.width]="width" class="h-100">
+    <div #dd class="menu" *ngIf="isOpen" class="h-100">
         <ul *ngIf="rows?.length === 0" class="grp-list group-list-no-found users-last-list">
             <li>
                 <a href="javascript:void(0)"> {{ notFoundMsg }}</a>
@@ -61,6 +61,7 @@
             </li>
         </ul>
         <div
+            class="h-100"
             #root
             (onReset)="initNavigator(navigation, root.children[0])"
             [navigationWalker]="{ vertical: 'nav-vr-item' }"
