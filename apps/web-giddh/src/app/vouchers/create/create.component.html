@@ -847,6 +847,7 @@
                                                                         [cssClass]="'form-control text-right'"
                                                                         [name]="'transactionQuantity' + entryIndex"
                                                                         [readonly]="!transaction.get('stock.uniqueName')?.value"
+                                                                        (change)="handleQuantityBlur(transaction)"
                                                                         [type]="'text'"></text-field>
 
                                                                     <ng-container *ngIf="transaction.get('stock.uniqueName')?.value" formGroupName="stockUnit">

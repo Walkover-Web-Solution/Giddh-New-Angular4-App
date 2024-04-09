@@ -1508,6 +1508,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     stock: this.formBuilder.group({
                         name: [entryData ? entryData?.transactions[0]?.stock?.name : ''],
                         quantity: [entryData ? entryData?.transactions[0]?.stock?.quantity : 1],
+                        maxQuantity: [entryData ? entryData?.transactions[0]?.stock?.quantity : 1], //temp (for PO linking in PB)
                         rate: this.formBuilder.group({
                             rateForAccount: [entryData ? entryData?.transactions[0]?.stock?.rate?.rateForAccount : 1]
                         }),
@@ -2861,7 +2862,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                                     this.selectedPoItems.push(response.body.uniqueName);
                                     this.linkedPoNumbers[order?.value]['items'] = response.body.entries;
                                     if (addRemove) {
-                                        this.addPoItems(response.body.uniqueName, response.body.entries);
+                                        this.addPoItems(response.body.uniqueName, response.body.entries, 0);
                                     } else {
                                         this.startLoader(false);
                                     }
@@ -2896,98 +2897,157 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @param {*} entries
      * @memberof VoucherComponent
      */
-    public addPoItems(poUniqueName: string, entries: any): void {
+    public addPoItems(poUniqueName: string, entries: any, entryIndex: number): void {
         this.startLoader(true);
         this.isPoLinkingInProgress = true;
         let voucherEntries = this.getEntries();
+        let entry = entries[entryIndex];
+        let item = entry.transactions[0];
         let blankItemIndex = voucherEntries?.findIndex(entry => !entry.transactions[0].account?.uniqueName);
+        
+        if (entry.totalQuantity && entry.usedQuantity && entry.transactions && item && item.stock) {
+            if (this.existingPoEntries[entry.uniqueName]) {
+                item.stock.quantity = entry.usedQuantity;
+            } else {
+                item.stock.quantity = entry.totalQuantity - entry.usedQuantity;
+            }
+        }
 
-        entries?.forEach(entry => {
-            let transactionLoop = 0;
+        if (item.stock) {
+            let stockUniqueName = item.stock.uniqueName;
+            item.stock.uniqueName = "purchases#" + item.stock.uniqueName;
+            item.uniqueName = item.stock.uniqueName;
+            item.label = item.stock?.name;
+            item.value = item.stock.uniqueName;
+            item.additional = item.stock;
+            item.additional.uniqueName = "purchases";
+            item.additional.stock = {};
+            item.additional.stock.uniqueName = stockUniqueName;
+            if (this.existingPoEntries[entry.uniqueName]) {
+                item.additional.maxQuantity = this.existingPoEntries[entry?.uniqueName];
+            } else {
+                item.additional.maxQuantity = item.stock.quantity;
+            }
+        } else {
+            item.stock = undefined;
+            item.uniqueName = item.account?.uniqueName;
+            item.label = item.account?.name;
+            item.value = item.account?.uniqueName;
+            item.additional = item.account;
+            if (this.existingPoEntries[entry?.uniqueName]) {
+                item.additional.maxQuantity = this.existingPoEntries[entry?.uniqueName];
+            } else {
+                item.additional.maxQuantity = entry.totalQuantity - entry.usedQuantity;
+            }
+        }
 
-            if (entry.totalQuantity && entry.usedQuantity && entry.transactions && entry.transactions[0] && entry.transactions[0].stock) {
-                if (this.existingPoEntries[entry.uniqueName]) {
-                    entry.transactions[0].stock.quantity = entry.usedQuantity;
-                } else {
-                    entry.transactions[0].stock.quantity = entry.totalQuantity - entry.usedQuantity;
-                }
+        if (item.additional.maxQuantity > 0) {
+            let lastIndex = -1;
+            let entryFormGroup;
+            if (blankItemIndex > -1) {
+                lastIndex = blankItemIndex;
+                entryFormGroup = this.getEntryFormGroup(lastIndex);
+            } else {
+                this.addNewLineEntry();
+                lastIndex = this.invoiceForm.get('entries')['controls']?.length - 1;
+                entryFormGroup = this.getEntryFormGroup(lastIndex);
             }
 
-            entry.transactions?.forEach(item => {
-                if (item.stock) {
-                    let stockUniqueName = item.stock.uniqueName;
-                    item.stock.uniqueName = "purchases#" + item.stock.uniqueName;
-                    item.uniqueName = item.stock.uniqueName;
-                    item.label = item.stock?.name;
-                    item.value = item.stock.uniqueName;
-                    item.additional = item.stock;
-                    item.additional.uniqueName = "purchases";
-                    item.additional.stock = {};
-                    item.additional.stock.uniqueName = stockUniqueName;
-                    if (this.existingPoEntries[entry.uniqueName]) {
-                        item.additional.maxQuantity = this.existingPoEntries[entry?.uniqueName];
-                    } else {
-                        item.additional.maxQuantity = item.stock.quantity;
-                    }
-                } else {
-                    item.stock = undefined;
-                    item.uniqueName = item.account?.uniqueName;
-                    item.label = item.account?.name;
-                    item.value = item.account?.uniqueName;
-                    item.additional = item.account;
-                    if (this.existingPoEntries[entry?.uniqueName]) {
-                        item.additional.maxQuantity = this.existingPoEntries[entry?.uniqueName];
-                    } else {
-                        item.additional.maxQuantity = entry.totalQuantity - entry.usedQuantity;
-                    }
-                }
+            this.activeEntryIndex = lastIndex;
+            const entryDate = this.invoiceForm.get("date")?.value || this.universalDate;
 
-                if (item.additional.maxQuantity > 0) {
-                    let lastIndex = -1;
-                    let entryFormGroup;
-                    if (blankItemIndex > -1) {
-                        lastIndex = blankItemIndex;
-                        entryFormGroup = this.getEntryFormGroup(lastIndex);
-                    } else {
-                        this.addNewLineEntry();
-                        lastIndex = this.invoiceForm.get('entries')['controls']?.length - 1;
-                        entryFormGroup = this.getEntryFormGroup(lastIndex);
-                    }
+            let transactionFormGroup = this.getTransactionFormGroup(entryFormGroup);
 
-                    this.activeEntryIndex = lastIndex;
-                    const entryDate = this.invoiceForm.get("date")?.value || this.universalDate;
+            if (typeof (entryDate) === "object") {
+                transactionFormGroup.get("date")?.patchValue(dayjs(entryDate).format(GIDDH_DATE_FORMAT));
+            } else {
+                transactionFormGroup.get("date")?.patchValue(dayjs(entryDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT));
+            }
 
-                    let transactionFormGroup = this.getTransactionFormGroup(entryFormGroup);
+            transactionFormGroup.get("account.uniqueName")?.patchValue(item?.uniqueName);
+            entryFormGroup.get("description")?.patchValue(entry.description);
 
-                    if (typeof (entryDate) === "object") {
-                        transactionFormGroup.get("date")?.patchValue(dayjs(entryDate).format(GIDDH_DATE_FORMAT));
-                    } else {
-                        transactionFormGroup.get("date")?.patchValue(dayjs(entryDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT));
-                    }
-
-                    transactionFormGroup.get("account.uniqueName")?.patchValue(item?.uniqueName);
-                    entryFormGroup.get("description")?.patchValue(entry.description);
-
-                    const discountsFormArray = entryFormGroup.get('discounts') as FormArray;
-                    discountsFormArray.clear();
-                    entry.discounts?.forEach(discount => {
-                        discountsFormArray.push(this.getTransactionDiscountFormGroup(discount));
-                    });
-                    
-                    const taxesFormArray = entryFormGroup.get('taxes') as FormArray;
-                    taxesFormArray.clear();
-                    entry.taxes?.forEach(tax => {
-                        taxesFormArray.push(this.getTransactionTaxFormGroup(tax));
-                    });
-
-                    entryFormGroup.get("purchaseOrderItemMapping")?.patchValue({ uniqueName: poUniqueName, entryUniqueName: entry?.uniqueName });
-
-                    this.selectStock(item, lastIndex);
-
-                    transactionLoop++;
-                }
+            const discountsFormArray = entryFormGroup.get('discounts') as FormArray;
+            discountsFormArray.clear();
+            entry.discounts?.forEach(discount => {
+                discountsFormArray.push(this.getTransactionDiscountFormGroup(discount));
             });
-        });
+            
+            const taxesFormArray = entryFormGroup.get('taxes') as FormArray;
+            taxesFormArray.clear();
+            entry.taxes?.forEach(tax => {
+                taxesFormArray.push(this.getTransactionTaxFormGroup(tax));
+            });
+
+            entryFormGroup.get("purchaseOrderItemMapping")?.patchValue({ uniqueName: poUniqueName, entryUniqueName: entry?.uniqueName });
+
+            let keysToUpdate = {
+                accountName: item?.label,
+                accountUniqueName: item?.account?.uniqueName,
+                stockName: "",
+                stockUniqueName: ""
+            };
+
+            if (item?.additional?.stock?.uniqueName) {
+                keysToUpdate.stockName = item?.additional?.stock?.name;
+                keysToUpdate.stockUniqueName = item?.additional?.stock?.uniqueName;
+            }
+
+            transactionFormGroup.get('account').get('name')?.patchValue(keysToUpdate.accountName);
+            transactionFormGroup.get('account').get('uniqueName')?.patchValue(keysToUpdate.accountUniqueName);
+            transactionFormGroup.get('stock').get('name')?.patchValue(keysToUpdate.stockName);
+            transactionFormGroup.get('stock').get('uniqueName')?.patchValue(keysToUpdate.stockUniqueName);
+
+            if (item?.additional?.hasVariants) {
+                this.componentStore.getStockVariants({ q: item?.additional?.stock?.uniqueName, index: lastIndex });
+            } else {
+                let payload = {};
+
+                if (keysToUpdate.stockUniqueName) {
+                    payload = { stockUniqueName: keysToUpdate.stockUniqueName, customerUniqueName: this.invoiceForm.get('account.uniqueName')?.value };
+                }
+
+                this.searchService.loadDetails(transactionFormGroup.get("account.uniqueName")?.value, payload).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                    if (response && response.status === "success") {
+                        if (response.body.stock) {
+                            transactionFormGroup.get('stock').get('skuCode')?.patchValue(response.body.stock.skuCode);
+                            transactionFormGroup.get('stock').get('skuCodeHeading')?.patchValue(response.body.stock.skuCodeHeading);
+                            transactionFormGroup.get('stock').get('quantity')?.patchValue(item.additional?.quantity);
+                            transactionFormGroup.get('stock').get('maxQuantity')?.patchValue(item.additional?.maxQuantity);
+                            transactionFormGroup.get('stock').get('rate.rateForAccount')?.patchValue(item.additional?.rate?.amountForAccount);
+        
+                            this.stockUnits[response.entryIndex] = observableOf(response.body.stock.variant.unitRates);
+                        } else {
+                            transactionFormGroup.get('amount.amountForAccount')?.patchValue(item.amount?.amountForAccount);
+                            this.stockUnits[response.entryIndex] = observableOf([]);
+                        }
+        
+                        const taxes = this.generalService.fetchTaxesOnPriority(
+                            response.body.stock?.taxes ?? [],
+                            response.body.stock?.groupTaxes ?? [],
+                            response.body.taxes ?? [],
+                            response.body.groupTaxes ?? []);
+        
+                        const taxesFormArray = entryFormGroup.get('taxes') as FormArray;
+                        taxesFormArray.clear();
+        
+                        taxes?.forEach(tax => {
+                            taxesFormArray.push(this.getTransactionTaxFormGroup(tax));
+                        });
+
+                        if (entries?.length === (entryIndex + 1)) {
+                            this.startLoader(false);
+                        } else {
+                            entryIndex++;
+                            this.addPoItems(poUniqueName, entries, entryIndex);
+                        }
+                    } else {
+                        this.toasterService.showSnackBar("error", response?.message);
+                        this.startLoader(false);
+                    }
+                });
+            }
+        }
     }
 
     /**
@@ -3033,11 +3093,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
                                                     if (item.stock && item.stock.uniqueName && accountUniqueName) {
                                                         if (stockUniqueName === accountUniqueName) {
-                                                            if (transactionFormGroup.get("quantity")?.value > remainingQuantity) {
-                                                                transactionFormGroup.get("quantity")?.patchValue(transactionFormGroup.get("quantity")?.value - remainingQuantity);
+                                                            if (transactionFormGroup.get("stock.quantity")?.value > remainingQuantity) {
+                                                                transactionFormGroup.get("stock.quantity")?.patchValue(transactionFormGroup.get("stock.quantity")?.value - remainingQuantity);
                                                                 remainingQuantity -= remainingQuantity;
                                                             } else {
-                                                                remainingQuantity -= transactionFormGroup.get("quantity")?.value;
+                                                                remainingQuantity -= transactionFormGroup.get("stock.quantity")?.value;
                                                                 entryRemoved = true;
                                                                 this.deleteLineEntry(entryLoop);
                                                             }
@@ -3092,6 +3152,14 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             }
         });
         this.fieldFilteredOptions = filteredOptions;
-        console.log(this.purchaseOrders, this.fieldFilteredOptions);
+    }
+
+    public handleQuantityBlur(transaction: any): void {
+        if (transaction.get("stock.quantity")?.value !== undefined && this.invoiceType.isPurchaseInvoice && transaction.get("stock.maxQuantity")?.value !== undefined) {
+            if (transaction.get("stock.quantity")?.value > transaction.get("stock.maxQuantity")?.value) {
+                transaction.get("stock.quantity")?.patchValue(transaction.get("stock.maxQuantity")?.value);
+                this.toasterService.showSnackBar("error", this.localeData?.quantity_error + " (" + transaction.get("stock.maxQuantity")?.value + ")");
+            }
+        }
     }
 }
