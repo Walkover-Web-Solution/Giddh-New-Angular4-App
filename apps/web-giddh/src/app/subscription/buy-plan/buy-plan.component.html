@@ -442,11 +442,7 @@
                                                                 !secondStepForm.get('taxNumber')?.value) ||
                                                             !isGstinValid
                                                         "
-                                                        [label]="
-                                                            formFields['taxName']?.label
-                                                                ? formFields['taxName']?.label
-                                                                : commonLocaleData?.app_tax_number
-                                                        "
+                                                        [label]="formFields['taxName']?.label ?? commonLocaleData?.app_tax_number"
                                                         [maxlength]="15"
                                                         (change)="validateGstNumber()"
                                                     >
@@ -703,7 +699,7 @@
                         </div>
                         <div class="position-relative mt-3" *ngIf="firstStepForm.get('planUniqueName').value">
                             <div class="w-100">
-                                <div class="d-flex align-items-center">
+                                <div class="d-flex align-items-center justify-content-between">
                                     <input-field
                                         [name]="'code'"
                                         formControlName="promoCode"

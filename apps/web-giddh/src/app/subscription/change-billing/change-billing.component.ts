@@ -363,7 +363,7 @@ export class ChangeBillingComponent implements OnInit, AfterViewInit, OnDestroy 
     */
     public getEnterTaxText(): string {
         let text = this.commonLocaleData?.app_enter_tax_name;
-        text = text?.replace("[TAX_NAME]", this.formFields['taxName']?.label ?? this.commonLocaleData?.app_number);
+        text = text?.replace("[TAX_NAME]", this.formFields['taxName']?.label ?? this.commonLocaleData?.app_tax_number);
         return text;
     }
 

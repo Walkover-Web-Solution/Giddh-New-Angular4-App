@@ -148,6 +148,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         private location: Location
     ) {
         this.session$ = this.store.pipe(select(p => p.session.userLoginState), distinctUntilChanged(), takeUntil(this.destroyed$));
+        this.store.dispatch(this.generalActions.openSideMenu(false));
     }
 
     /**
@@ -206,7 +207,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 this.setFinalAmount();
             }
         });
-
     }
 
     /**
@@ -597,7 +597,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     */
     public getEnterTaxText(): string {
         let text = this.commonLocaleData?.app_enter_tax_name;
-        text = text?.replace("[TAX_NAME]", this.formFields['taxName']?.label);
+        text = text?.replace("[TAX_NAME]", this.formFields['taxName']?.label ?? this.commonLocaleData?.app_tax_number);
         return text;
     }
 
