@@ -123,7 +123,7 @@ export class VouchersUtilityService {
                 break;
 
             case VoucherTypeEnum.sales:
-                voucherName = localeData?.invoice_types?.sales;
+                voucherName = localeData?.invoice_types?.invoice;
                 break;
 
             case VoucherTypeEnum.creditNote:
@@ -139,7 +139,7 @@ export class VouchersUtilityService {
                 break;
 
             case VoucherTypeEnum.cash:
-                voucherName = localeData?.invoice_types?.cash;
+                voucherName = localeData?.invoice_types?.cash_invoice;
                 break;
 
             case VoucherTypeEnum.cashBill:

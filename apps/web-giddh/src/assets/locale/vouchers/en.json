@@ -1,10 +1,10 @@
 {
     "invoice_types": {
-        "sales": "Sales",
+        "invoice": "Invoice",
         "credit_note": "Credit Note",
         "debit_note": "Debit Note",
         "purchase": "Bill",
-        "cash": "Cash",
+        "cash_invoice": "Cash Invoice",
         "proforma": "Proforma",
         "estimate": "Estimate",
         "cash_bill": "Cash Bill",
@@ -116,5 +116,6 @@
     "account": "Account",
     "select_variant": "Select Variant",
     "variant": "Variant",
-    "account_missing_in_stock": "account is not linked with stock"
+    "account_missing_in_stock": "account is not linked with stock",
+    "add_new_address": "+ Add new address"
 }

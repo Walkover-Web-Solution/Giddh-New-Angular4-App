@@ -1,7 +1,13 @@
 .vouchers {
     padding: 5px 0;
-    .container-lg{
-        max-width: 1240px !important;
+
+    .container-lg {
+        max-width: 1540px !important;
+
+        @media screen and (max-width: 768px) {
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+        }
     }
 
     .row-gap {

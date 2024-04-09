@@ -38,6 +38,9 @@
                     </a>
                 </span>
             </mat-autocomplete>
+            <div class="dropdown-bg" (click)="!readonly ? openDropdownPanel() : $event.stopPropagation()">
+                <span class="arrow-dropdown"></span>
+            </div>
         </mat-form-field>
     </ng-container>
     <ng-container *ngIf="!showLabel">

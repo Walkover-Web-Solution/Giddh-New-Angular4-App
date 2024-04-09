@@ -54,7 +54,7 @@
                                             <mat-menu #copyLastVouchers="matMenu">
                                                 <div class="mat-menu-width-large">
                                                     <ng-container *ngIf="getLastVouchersInProgress$ | async">
-                                                        <mat-spinner [diameter]="30"></mat-spinner>
+                                                            <mat-spinner class="ml-auto mr-auto my-4" [diameter]="30"></mat-spinner>
                                                     </ng-container>
                                                     <ng-container *ngIf="(lastVouchersList$ | async)?.length">
                                                         <button mat-menu-item
@@ -84,8 +84,8 @@
                                     </div>
                                 </div>
                                 <div class="col-2 text-right">
-                                    <span class="balance-due-label">Balance Due</span>
-                                    <h2>
+                                    <div class="balance-due-label">Balance Due</div>
+                                    <h2 class="d-inline-block">
                                         <amount-field [amount]="voucherTotals.balanceDue"
                                             [currencySymbol]="isMultiCurrencyVoucher ? account.baseCurrencySymbol : false"
                                             [currencyCode]="isMultiCurrencyVoucher ? account.baseCurrency : false">
@@ -129,15 +129,18 @@
                                         </div>
                                         <div class="col-6" formGroupName="billingAddress">
                                             <label for="billingAddress" class="billing-label"
-                                                [ngClass]="{ 'p-0' : invoiceType.isCashInvoice }">Billing
-                                                Address</label> <i *ngIf="!invoiceType.isCashInvoice"
+                                                [ngClass]="{ 'p-0' : invoiceType.isCashInvoice }">
+                                                <span>Billing Address</span>
+                                                <span *ngIf="!invoiceType.isCashInvoice">
+                                                    &#40; {{ commonLocaleData?.app_address }}
+                                                    {{ invoiceForm.controls['account'].get("billingAddress").get("index")?.value + 1 }}
+                                                    &#41;
+                                                </span>
+                                            </label> 
+                                            <i *ngIf="!invoiceType.isCashInvoice"
                                                 [matMenuTriggerFor]="billingAddress"
-                                                class="icon-edit text-blue cursor-pointer pl-2 font-12"></i>
-
-                                            <div *ngIf="!invoiceType.isCashInvoice" class="mt-2">Address {{
-                                                invoiceForm.controls['account'].get("billingAddress").get("index")?.value
-                                                + 1 }}
-                                            </div>
+                                                class="icon-edit text-blue cursor-pointer pl-2 font-12">
+                                            </i>
                                             <mat-menu #billingAddress="matMenu">
                                                 <div class="mat-menu-width-large vouchers-address-menu">
                                                     <ng-container
@@ -157,8 +160,8 @@
                                                         </button>
                                                         <mat-divider></mat-divider>
                                                     </ng-container>
-                                                    <!-- <button mat-menu-item class="vouchers-add-new"
-                                                        >+ Add new address</button> -->
+                                                    <button mat-menu-item class="vouchers-add-new" (click)="toggleAccountAsidePane(accountType.customer)"
+                                                        >{{ localeData?.add_new_address }}</button>
                                                 </div>
                                             </mat-menu>
                                             <div class="vouchers-address-form" *ngIf="invoiceType.isCashInvoice">
@@ -202,8 +205,14 @@
                                                 Shipping Address Same as Billing Address
                                             </mat-checkbox>
                                             <ng-container *ngIf="!invoiceType.isCashInvoice">
-                                                <label for="billingAddress" class="billing-label">Shipping
-                                                    Address</label> <i *ngIf="!invoiceType.isCashInvoice"
+                                                <label for="billingAddress" class="billing-label">
+                                                    <span>Shipping Address</span>
+                                                    <span *ngIf="!invoiceType.isCashInvoice">
+                                                        &#40; {{ commonLocaleData?.app_address }} 
+                                                        {{ invoiceForm.controls['account'].get("shippingAddress").get("index")?.value + 1 }}
+                                                        &#41;
+                                                    </span>
+                                                </label> <i *ngIf="!invoiceType.isCashInvoice"
                                                     [matMenuTriggerFor]="shippingAddress"
                                                     class="icon-edit text-blue cursor-pointer pl-2 font-12"></i>
 
@@ -226,17 +235,11 @@
                                                             </button>
                                                             <mat-divider></mat-divider>
                                                         </ng-container>
-                                                        <!-- <button mat-menu-item class="vouchers-add-new"
-                                                          >+ Add new
-                                                            address</button> -->
+                                                        <button mat-menu-item class="vouchers-add-new" (click)="toggleAccountAsidePane(accountType.customer)"
+                                                          >{{ localeData?.add_new_address }}</button>
                                                     </div>
                                                 </mat-menu>
                                             </ng-container>
-
-                                            <div *ngIf="!invoiceType.isCashInvoice" class="mt-2">Address {{
-                                                invoiceForm.controls['account'].get("shippingAddress").get("index")?.value
-                                                + 1
-                                                }} </div>
 
                                             <div class="vouchers-address-form form-disabled"
                                                 *ngIf="invoiceType.isCashInvoice">
@@ -342,8 +345,8 @@
                                                     </button>
                                                     <mat-divider></mat-divider>
                                                 </ng-container>
-                                                <button mat-menu-item class="vouchers-add-new">+ Add new
-                                                    address</button>
+                                                <button mat-menu-item class="vouchers-add-new" (click)="toggleAccountAsidePane(accountType.customer)"
+                                                          >{{ localeData?.add_new_address }}</button>
                                             </div>
                                         </mat-menu>
                                         <div class="mt-2">Address {{
@@ -373,8 +376,8 @@
                                                     </button>
                                                     <mat-divider></mat-divider>
                                                 </ng-container>
-                                                <button mat-menu-item class="vouchers-add-new">+ Add new
-                                                    address</button>
+                                                <button mat-menu-item class="vouchers-add-new" (click)="toggleAccountAsidePane(accountType.customer)"
+                                                          >{{ localeData?.add_new_address }}</button>
                                             </div>
                                         </mat-menu>
                                         <div class="mt-2">Address {{
