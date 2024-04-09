@@ -15,7 +15,7 @@ export const COMPANY_API = {
     BUSINESS_NATURE_LIST: 'business-nature',
     RAZORPAY_ORDERID: 'subscription/generateOrder?amount=:amount&currency=:currency',
 
-    GET_OTP: 'company/:companyUniqueName/bank/generateotp?urn=:urn',
+    GET_OTP: 'company/:companyUniqueName/bank/generateotp?bankUserId=:bankUserId',
     GET_REGISTERED_SALES: 'v2/company/:companyUniqueName/sales-register-overview?from=:fromDate&to=:toDate&interval=:interval',
     GET_DETAILED_REGISTERED_SALES: 'v2/company/:companyUniqueName/sales-register-detailed?',
 
@@ -25,8 +25,8 @@ export const COMPANY_API = {
     GET_DETAILED_REGISTERED_PURCHASE: 'v2/company/:companyUniqueName/purchases-register-detailed?',
     GET_COMPANY_INTEGRATED_BANK_LIST: 'company/:companyUniqueName/payment/banks/accounts',
     BULK_PAYMENT: 'company/:companyUniqueName/bank/payments',
-    BULK_PAYMENT_CONFIRM: 'company/:companyUniqueName/bank/payments/confirm?urn=:urn&uniqueName=:uniqueName',
-    BULK_PAYMENT_RESEND_OTP: 'company/:companyUniqueName/bank/resend-otp?urn=:urn&uniqueName=:uniqueName&requestId=:requestId',
+    BULK_PAYMENT_CONFIRM: 'company/:companyUniqueName/bank/payments/confirm?bankUserId=:bankUserId&uniqueName=:uniqueName',
+    BULK_PAYMENT_RESEND_OTP: 'company/:companyUniqueName/bank/resend-otp?bankUserId=:bankUserId&uniqueName=:uniqueName&requestId=:requestId',
 
     CREATE_NEW_BRANCH: 'company/:companyUniqueName/branch',
     GET_ALL_BRANCHES: 'company/:companyUniqueName/branch',

@@ -1255,7 +1255,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @memberof SettingIntegrationComponent
      */
     public trackByPayorUniqueName(index: number, item: any): any {
-        return item?.urn;
+        return item?.bankUserId;
     }
 
     /**
@@ -1266,9 +1266,9 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public deleteBankAccountLogin(): void {
         let model;
         if (this.isPlaidSupportedCountry) {
-            model = { uniqueName: this.activeBankAccount?.uniqueName, urn: this.activeBankAccount?.urn }
+            model = { uniqueName: this.activeBankAccount?.uniqueName, urn: this.activeBankAccount?.bankUserId }
         } else {
-            model = { uniqueName: this.activeBankAccount?.uniqueName, bankUserId: this.activeBankAccount?.urn }
+            model = { uniqueName: this.activeBankAccount?.uniqueName, bankUserId: this.activeBankAccount?.bankUserId }
         }
         this.settingsIntegrationService.deleteBankAccountLogin(model).pipe(take(1)).subscribe(response => {
             if (response?.status === "success") {
@@ -1290,9 +1290,9 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      */
     public showDeleteBankAccountLoginConfirmationModal(bankAccount: any, payor: any): void {
         if (this.isPlaidSupportedCountry) {
-            this.activeBankAccount = { uniqueName: bankAccount?.bankResource?.uniqueName, urn: payor?.urn, loginId: payor?.loginId };
+            this.activeBankAccount = { uniqueName: bankAccount?.bankResource?.uniqueName, urn: payor?.bankUserId, loginId: payor?.loginId };
         } else {
-            this.activeBankAccount = { uniqueName: bankAccount?.bankResource?.uniqueName, bankUserId: payor?.urn, loginId: payor?.loginId };
+            this.activeBankAccount = { uniqueName: bankAccount?.bankResource?.uniqueName, bankUserId: payor?.bankUserId, loginId: payor?.loginId };
         }
         this.confirmationModal?.show();
     }
