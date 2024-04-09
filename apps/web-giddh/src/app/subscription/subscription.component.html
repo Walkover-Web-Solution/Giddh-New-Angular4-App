@@ -34,7 +34,7 @@
         <div *ngIf="subscriptionListInProgress$ | async">
             <giddh-page-loader></giddh-page-loader>
         </div>
-        <section *ngIf="shouldShowElement && !(subscriptionListInProgress$ | async)">
+        <section *ngIf="showData && !(subscriptionListInProgress$ | async)">
             <form
                 class="table-responsive"
                 name="subscriptionListForm"
