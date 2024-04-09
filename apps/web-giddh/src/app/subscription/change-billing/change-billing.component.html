@@ -109,6 +109,7 @@
                         <div class="form-group">
                             <input-field
                                 [name]="'taxNumber'"
+                                [label]="formFields['taxName']?.label ?? commonLocaleData?.app_tax_number"
                                 [placeholder]="getEnterTaxText()"
                                 [type]="'text'"
                                 formControlName="taxNumber"
