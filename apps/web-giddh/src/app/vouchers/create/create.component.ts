@@ -1155,8 +1155,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     private getAccountDetails(accountUniqueName: string): void {
         this.componentStore.getAccountDetails(accountUniqueName);
 
-        this.getAllVouchersForAdjustment();
-        this.getVoucherListForCreditDebitNote();
+        if (!this.invoiceType.isPurchaseOrder) {
+            this.getAllVouchersForAdjustment();
+            this.getVoucherListForCreditDebitNote();
+        }
 
         if (this.invoiceType.isPurchaseInvoice) {
             let request = { companyUniqueName: this.activeCompany?.uniqueName, accountUniqueName: accountUniqueName, page: 1, count: 100, sort: '', sortBy: '' };
