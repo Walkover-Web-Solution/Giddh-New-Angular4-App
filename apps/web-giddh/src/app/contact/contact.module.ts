@@ -44,6 +44,7 @@ import { GiddhPageLoaderModule } from '../shared/giddh-page-loader/giddh-page-lo
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatListModule } from '@angular/material/list';
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
 
 @NgModule({
     declarations: [
@@ -99,7 +100,8 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
         GiddhPageLoaderModule,
         MatSlideToggleModule,
         MatListModule,
-        ScrollingModule
+        ScrollingModule,
+        WatchVideoModule
     ],
     providers: [
         GiddhCurrencyPipe

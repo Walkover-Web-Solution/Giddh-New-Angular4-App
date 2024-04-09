@@ -50,7 +50,7 @@
                                     *ngIf="subItem.link"
                                     class="single-menu-item"
                                     (click)="redirectSubItemLink(subItem)"
-                                    [queryParams]="subItem?.additional"
+                                    [queryParams]="subItem?.additional?.queryParams"
                                     [class.active]="menuIndex === filteredMenuIndex && itemIndex === subItemIndex"
                                     [tabindex]="subItemIndex"
                                 >
@@ -58,7 +58,7 @@
                                         <h4><i class="{{ subItem?.icon }} mr-r1"></i> {{ subItem?.label }}</h4>
                                     </mat-card-title>
                                     <mat-card-content>
-                                        <p>{{ subItem?.description }}</p>
+                                        <p class="font-12">{{ subItem?.description }}</p>
                                     </mat-card-content>
                                 </mat-card>
                                 <mat-card
@@ -71,7 +71,7 @@
                                         <h4><i class="{{ subItem?.icon }} mr-r1"></i> {{ subItem?.label }}</h4>
                                     </mat-card-title>
                                     <mat-card-content>
-                                        <p>{{ subItem?.description }}</p>
+                                        <p class="font-12">{{ subItem?.description }}</p>
                                     </mat-card-content>
                                 </mat-card>
                             </ng-container>
@@ -99,7 +99,7 @@
         </div>
         <div class="modal-body pd-l2 pd-r2 clearfix d-flex">
             <ng-container *ngFor="let item of subMenuItems">
-                <mat-card class="single-item" (click)="redirectSubItemLink(item)" [queryParams]="item?.additional">
+                <mat-card class="single-item" (click)="redirectSubItemLink(item)" [queryParams]="item?.additional?.queryParams">
                     <mat-card-title>
                         <h4><i class="{{ item?.icon }} mr-r1"></i> {{ item?.label }}</h4>
                     </mat-card-title>

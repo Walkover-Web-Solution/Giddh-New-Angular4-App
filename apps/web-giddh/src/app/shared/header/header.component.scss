@@ -158,7 +158,6 @@ ul{
                     &:hover {
                         .icon-circle{
                             background-color: var(--color-white-tertiary);
-                          
                             i[class^='icon-'],
                             i[class*=' icon-'] {
                               color: var(--color-giddh-blue) !important;
@@ -519,13 +518,12 @@ aside-setting {
 .profile-wrapper{
     padding: 9px 0;
     .profile-picture{
-        color: var(--color-tertiary-login-box-body-text);
+        color: var(--color-dropdown-list-secondary);
         width: 40px;
         height: 40px;
         border: 1px solid var(--color-deep-saffron);
         border-radius: 50%;
         background-color: var(--color-deep-saffron);
-    
         span{
             line-height: 38px;
         }

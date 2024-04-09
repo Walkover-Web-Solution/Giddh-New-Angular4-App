@@ -22,6 +22,7 @@ import { DiscountControlModule } from '../../../theme/discount-control/discount-
 import { ScrollComponent } from './advance-list-items-popup/virtual-scroll';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatRadioModule } from '@angular/material/radio';
+import { WatchVideoModule } from '../../../theme/watch-video/watch-video.module';
 
 @NgModule({
     imports: [
@@ -44,7 +45,8 @@ import { MatRadioModule } from '@angular/material/radio';
         NewConfirmModalModule,
         DiscountControlModule,
         MatTooltipModule,
-        MatRadioModule
+        MatRadioModule,
+        WatchVideoModule
     ],
     exports: [
         CustomerWiseComponent,

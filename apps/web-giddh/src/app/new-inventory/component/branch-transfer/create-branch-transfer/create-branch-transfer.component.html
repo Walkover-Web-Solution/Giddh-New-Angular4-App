@@ -1614,6 +1614,7 @@
                                                                     </div>
                                                                     <div class="d-flex mt-3 column-gap1">
                                                                         <button
+                                                                            aria-label="save"
                                                                             mat-stroked-button
                                                                             color="primary"
                                                                             class="w-100"
@@ -1622,6 +1623,7 @@
                                                                             {{ commonLocaleData?.app_save }}
                                                                         </button>
                                                                         <button
+                                                                            aria-label="cancel"
                                                                             mat-stroked-button
                                                                             class="w-100"
                                                                             (click)="closeShowCodeMenu(product)"
@@ -1670,7 +1672,7 @@
                                                                             : product.get("sacNumber")?.value
                                                                     }}
                                                                     <span class="edit-icon cp">
-                                                                        <img src="assets/images/edit-pencilicon.svg" />
+                                                                        <img src="assets/images/edit-pencilicon.svg" alt="edit img" />
                                                                     </span>
                                                                 </span>
                                                             </div>
@@ -1760,6 +1762,7 @@
                                                                     </div>
                                                                     <div class="d-flex mt-3 column-gap1">
                                                                         <button
+                                                                            aria-label="save"
                                                                             mat-stroked-button
                                                                             color="primary"
                                                                             class="w-100"
@@ -1768,6 +1771,7 @@
                                                                             {{ commonLocaleData?.app_save }}
                                                                         </button>
                                                                         <button
+                                                                            aria-label="cancel"
                                                                             mat-stroked-button
                                                                             class="w-100"
                                                                             (click)="closeSacNumber(product)"
@@ -2334,13 +2338,14 @@
                     <div class="row position-bottom">
                         <div class="col-xl-8 col-lg-10 col-sm-12 mb-4">
                             <div class="action-btn-wrapper text-right w-100 d-flex column-gap1 justify-content-end">
-                                <button mat-stroked-button (click)="resetForm()" *ngIf="!isUpdateMode">
+                                <button aria-label="clear" mat-stroked-button (click)="resetForm()" *ngIf="!isUpdateMode">
                                     {{ commonLocaleData?.app_clear }}
                                 </button>
-                                <button *ngIf="isUpdateMode" mat-stroked-button (click)="navigateToList()">
+                                <button aria-label="cancel" *ngIf="isUpdateMode" mat-stroked-button (click)="navigateToList()">
                                     {{ commonLocaleData?.app_cancel }}
                                 </button>
-                                <button
+                                <button 
+                                    aria-label="uniqueName"
                                     mat-stroked-button
                                     color="primary"
                                     *ngIf="isBranch || isCompanyWithSingleBranch"

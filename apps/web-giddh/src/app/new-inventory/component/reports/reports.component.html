@@ -33,7 +33,7 @@
                         <div class="top-content">
                             <div class="d-flex w-100 justify-content-between overflow-x-auto">
                                 <div class="total-details-box mr-r05 count-box">
-                                    <h5>
+                                    <h2>
                                         <span *ngIf="reportType === 'GROUP'">
                                             {{ localeData?.reports?.group_count }}</span
                                         >
@@ -51,10 +51,10 @@
                                                 >{{ stockReportRequest?.totalItems ?? "-" }}
                                             </span>
                                         </div>
-                                    </h5>
+                                    </h2>
                                 </div>
                                 <div class="total-details-box mr-r05 border-none opening-box">
-                                    <h5 class="float-left">
+                                    <h2 class="float-left">
                                         {{ localeData?.reports?.profit_loss }}
                                         <div class="mt-2">
                                             <span
@@ -85,10 +85,10 @@
                                             <br />
                                             <span class="d-inline-flex mt-1"> ({{ selectedDateRangeUi }}) </span>
                                         </div>
-                                    </h5>
+                                    </h2>
                                 </div>
                                 <div class="total-details-box mr-r05 border-none sales-purchase">
-                                    <h5 class="float-left">
+                                    <h2 class="float-left">
                                         {{ localeData?.reports?.opening }}
                                         <div class="mt-2">
                                             <span
@@ -143,10 +143,10 @@
                                                 >)
                                             </span>
                                         </div>
-                                    </h5>
+                                    </h2>
                                 </div>
                                 <div class="total-details-box mr-r05 border-none payment-receipt">
-                                    <h5 class="float-left">
+                                    <h2 class="float-left">
                                         {{ localeData?.reports?.inward }}
                                         <div class="mt-2">
                                             <span
@@ -201,10 +201,10 @@
                                                 >)
                                             </span>
                                         </div>
-                                    </h5>
+                                    </h2>
                                 </div>
                                 <div class="total-details-box mr-r05 border-none due-box">
-                                    <h5 class="float-left">
+                                    <h2 class="float-left">
                                         {{ localeData?.reports?.outward }}
                                         <div class="mt-2">
                                             <span
@@ -259,10 +259,10 @@
                                                 >)
                                             </span>
                                         </div>
-                                    </h5>
+                                    </h2>
                                 </div>
                                 <div class="total-details-box border-none closing-box">
-                                    <h5 class="float-left">
+                                    <h2 class="float-left">
                                         {{ localeData?.reports?.closing }}
                                         <div class="mt-2">
                                             <span
@@ -318,7 +318,7 @@
                                                 >)
                                             </span>
                                         </div>
-                                    </h5>
+                                    </h2>
                                 </div>
                             </div>
                         </div>

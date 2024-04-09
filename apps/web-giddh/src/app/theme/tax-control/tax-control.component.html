@@ -8,7 +8,7 @@
         <sup class="mandatory-asterisk" *ngIf="isMandatory">*</sup></label
     >
     <a id="tax" class="clearfix">
-        <div class="multi-select adjust" id="tax-control-multi-select">
+        <div class="multi-select adjust position-relative" id="tax-control-multi-select">
             <input
                 (keydown.enter)="$event.preventDefault()"
                 matInput
@@ -51,6 +51,7 @@
             [style.width.px]="260"
             [style.max-height.px]="327"
             [style.min-height.px]="100"
+            [style.right]="0"
         >
             <li *ngIf="taxRenderData.length === 0">
                 <p class="lead pd">{{ commonLocaleData?.app_no_tax_found }}</p>

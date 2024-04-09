@@ -14,7 +14,7 @@
         <mat-dialog-content>
             <div class="help-aside-body">
                 <div class="faq-block">
-                    <a href="https://giddh.com/help" target="_blank">
+                    <a href="https://giddh.com/help" target="_blank" aria-label="faq">
                         <p>{{ localeData?.faq }}</p>
                         <small>{{ localeData?.have_questions }}</small>
                     </a>
@@ -22,22 +22,22 @@
                 <div class="feature-block">
                     <mat-list role="list">
                         <mat-list-item role="listitem">
-                            <a href="https://trello.com/b/1cPr6Mkc/giddh-roadmap" target="_blank">{{
+                            <a href="https://trello.com/b/1cPr6Mkc/giddh-roadmap" target="_blank" aria-label="upcoming">{{
                                 localeData?.upcoming
                             }}</a>
                         </mat-list-item>
                         <mat-list-item role="listitem">
-                            <a href="https://giddh.canny.io/feature-requests" target="_blank">{{
+                            <a href="https://giddh.canny.io/feature-requests" target="_blank" aria-label="feaure request">{{
                                 localeData?.feature_request
                             }}</a>
                         </mat-list-item>
                         <mat-list-item role="listitem">
-                            <a href="https://changelog.giddh.com" target="_blank">{{ localeData?.changelog }}</a>
+                            <a href="https://changelog.giddh.com" target="_blank" aria-label="changelog">{{ localeData?.changelog }}</a>
                         </mat-list-item>
                     </mat-list>
                 </div>
                 <div class="download-block">
-                    <h4>{{ commonLocaleData?.app_download }}</h4>
+                    <h3>{{ commonLocaleData?.app_download }}</h3>
                     <mat-list role="list">
                         <div class="d-flex">
                             <mat-list-item role="listitem">
@@ -45,6 +45,7 @@
                                     href="https://play.google.com/store/apps/details?id=com.app.Giddh&hl=en"
                                     target="_blank"
                                     [title]="localeData?.android_app"
+                                    aria-label="android"
                                 >
                                     <i class="icon-android"></i> {{ localeData?.android }}</a
                                 >
@@ -56,6 +57,7 @@
                                     }}.dmg"
                                     target="_blank"
                                     [title]="localeData?.macos_app"
+                                    aria-label="mac"
                                 >
                                     <i class="icon-mac"></i> {{ localeData?.macos }}</a
                                 >
@@ -67,6 +69,7 @@
                                     href="https://apps.apple.com/in/app/giddh-books-that-make-sense/id1491003438"
                                     target="_blank"
                                     [title]="localeData?.ios_app"
+                                    aria-label="ios"
                                 >
                                     <i class="icon-mac"></i> {{ localeData?.ios }}</a
                                 >
@@ -78,6 +81,7 @@
                                     }}.exe"
                                     target="_blank"
                                     [title]="localeData?.windows_app"
+                                    aria-label="windows"
                                 >
                                     <i class="icon-windows"></i> {{ localeData?.windows }}</a
                                 >
@@ -87,9 +91,9 @@
                 </div>
                 <div class="request-demo">
                     <div class="file-image">
-                        <img src="{{ imgPath }}request-demo.svg" />
+                        <img src="{{ imgPath }}request-demo.svg" alt="request img" />
                         <p class="text-gray">{{ localeData?.request_demo }}:</p>
-                        <button mat-stroked-button color="primary" (click)="scheduleNow($event)">
+                        <button mat-stroked-button color="primary" (click)="scheduleNow($event)" aria-label="schedule img">
                             {{ commonLocaleData?.app_schedule_now }}
                         </button>
                         <br />
@@ -98,10 +102,10 @@
                     <div class="contact-block">
                         <p class="d-flex  align-items-center mb-1  support-mail-tel">
                             <i class="icon-mail mr-2"></i
-                            ><a href="mailto:support@giddh.com">{{ localeData?.contact1 }}</a>
+                            ><a href="mailto:support@giddh.com" aria-label="mail">{{ localeData?.contact1 }}</a>
                         </p>
                         <p class="d-flex  align-items-center support-mail-tel">
-                            <i class="icon-mobile mr-2"></i><a href="tel:9188188 88768">+91-88188 88768</a>
+                            <i class="icon-mobile mr-2"></i><a href="tel:9188188 88768" aria-label="contact">+91-88188 88768</a>
                         </p>
                         <br />
                     </div>

@@ -298,6 +298,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public entryUniqueNamesForBulkActionDuplicateCopy: string[] = [];
     /** False if there is no data in account search */
     public isAccountSearchData: boolean = true;
+    /** Set of selected debit transaction IDs.*/
+    public selectedDebitTransactionIds = new Set<string>();
+    /**  Set of selected credit transaction IDs.*/
+    public selectedCreditTransactionIds = new Set<string>();
+    /** String representing the selected bank transaction while hovering. */
+    public selectedBankTrxWhileHovering: string;
+
 
     constructor(
         private store: Store<AppState>,
@@ -795,8 +802,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
                         body: response?.message,
                         ok: this.commonLocaleData?.app_yes,
                         cancel: this.commonLocaleData?.app_no,
-                        permanentlyDeleteMessage: ' '
-                    }
+                        permanentlyDeleteMessage: ' ',
+                    },
+                    role: 'alertdialog',
+                    ariaLabel: 'confirmation'
                 });
 
                 dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
@@ -829,8 +838,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
                         body: response?.message,
                         ok: this.commonLocaleData?.app_yes,
                         cancel: this.commonLocaleData?.app_no,
-                        permanentlyDeleteMessage: ' '
-                    }
+                        permanentlyDeleteMessage: ' ',
+                    },
+                    role: 'alertdialog',
+                    ariaLabel: 'confirmation'
                 });
 
                 dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
@@ -847,8 +858,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
                         body: response?.message,
                         ok: this.commonLocaleData?.app_yes,
                         cancel: this.commonLocaleData?.app_no,
-                        permanentlyDeleteMessage: ' '
-                    }
+                        permanentlyDeleteMessage: ' ',
+                    },
+                    role: 'alertdialog',
+                    ariaLabel: 'confirmation'
                 });
 
                 dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
@@ -1041,6 +1054,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.lc.currentBlankTxn.showDropdown = false;
         }
         this.selectedTrxWhileHovering = '';
+        this.selectedBankTrxWhileHovering = '';
         this.lc.showBankLedgerPanel = false;
         this.needToReCalculate.next(false);
         this.lc.currentBlankTxn = null;
@@ -1361,8 +1375,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 accountUniqueName: this.lc.accountUnq,
                 advanceSearchRequest: this.advanceSearchRequest,
                 from: this.shareLedgerDates?.from,
-                to: this.shareLedgerDates?.to
-            }
+                to: this.shareLedgerDates?.to,
+            },
+            role: 'alertdialog',
+            ariaLabel: 'share'
         });
     }
 
@@ -1385,8 +1401,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
             width: '630px',
             data: {
                 accountUniqueName: this.lc.accountUnq,
-                advanceSearchRequest: this.advanceSearchRequest
-            }
+                advanceSearchRequest: this.advanceSearchRequest,
+            },
+            role: 'alertdialog',
+            ariaLabel: 'export'
         });
 
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
@@ -1545,7 +1563,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public loadUpdateLedgerComponent() {
         this.updateLedgerModalDialogRef = this.dialog.open(this.updateLedgerModal, {
             width: '70%',
-            height: '650px'
+            height: '650px',
+            role: 'alertdialog',
+            ariaLabel: 'update'
         });
 
         this.updateLedgerModalDialogRef.afterClosed().pipe(take(1)).subscribe(() => {
@@ -1655,7 +1675,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
 
         this.advanceSearchDialogRef = this.dialog.open(this.advanceSearchModal, {
-            width: '980px'
+            width: '980px',
+            role: 'alertdialog',
+            ariaLabel: 'advance'
         });
     }
 
@@ -1750,13 +1772,66 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.ledgerActions.SelectDeSelectAllEntries(type, ev?.checked));
     }
 
-    public selectEntryForBulkAction(ev: any, entryUniqueName: string) {
-        if (entryUniqueName) {
-            if (ev?.checked) {
-                this.entryUniqueNamesForBulkAction.push(entryUniqueName);
+    /**
+     * This will be use for select all bank entries
+     *
+     * @param {*} ev
+     * @param {('debit' | 'credit' | 'all')} type
+     * @memberof LedgerComponent
+     */
+    public selectAllBankEntries(event: any, type: 'debit' | 'credit' | 'all'): void {
+        if (event?.checked) {
+            if (type === 'debit') {
+                this.lc.bankTransactionsDebitData.forEach(response => {
+                    this.selectedDebitTransactionIds.add(response.transactions[0]?.id);
+                });
             } else {
-                let itemIndx = this.entryUniqueNamesForBulkAction?.findIndex((item) => item === entryUniqueName);
-                this.entryUniqueNamesForBulkAction?.splice(itemIndx, 1);
+                this.lc.bankTransactionsCreditData.forEach(response => {
+                    this.selectedCreditTransactionIds.add(response.transactions[0]?.id);
+                });
+            }
+        } else {
+            if (type === 'debit') {
+                this.selectedDebitTransactionIds.clear();
+            } else {
+                this.selectedCreditTransactionIds.clear();
+            }
+        }
+    }
+
+    /**
+     * This will be use for bank entry hovered
+     *
+     * @param {string} selectedBankTxnUniqueName
+     * @memberof LedgerComponent
+     */
+    public bankEntryHovered(selectedBankTxnUniqueName: string): void {
+        this.selectedBankTrxWhileHovering = selectedBankTxnUniqueName;
+    }
+
+    /**
+     * This will be use for selecting bank entry
+     *
+     * @param {*} ev
+     * @param {string} entryUniqueName
+     * @param {*} id
+     * @param {string} type
+     * @memberof LedgerComponent
+     */
+    public selectEntryForBulkAction(event: any, entryUniqueName: string, id: any, type: string): void {
+        if (entryUniqueName) {
+            if (event?.checked) {
+                if (type === 'credit') {
+                    this.selectedCreditTransactionIds.add(id);
+                } else if (type === 'debit') {
+                    this.selectedDebitTransactionIds.add(id);
+                }
+            } else {
+                if (type === 'credit') {
+                    this.selectedCreditTransactionIds.delete(id);
+                } else if (type === 'debit') {
+                    this.selectedDebitTransactionIds.delete(id);
+                }
             }
         }
     }
@@ -1764,6 +1839,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public entryHovered(uniqueName: string) {
         this.selectedTrxWhileHovering = uniqueName;
     }
+
 
     public entrySelected(ev: any, uniqueName: string, type: string) {
         const totalLength = (type === 'debit') ? this.ledgerTransactions.debitTransactions?.length :
@@ -1823,7 +1899,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 cancel: this.commonLocaleData?.app_no,
                 permanentlyDeleteMessage: this.localeData?.delete_entries_content
             },
-            width: '650px'
+            width: '650px',
+            role: 'alertdialog',
+            ariaLabel: 'confirmation'
         });
 
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
@@ -1848,7 +1926,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 body: this.localeData?.select_voucher_generate,
                 button1Text: this.commonLocaleData?.app_generate_multiple,
                 button2Text: this.commonLocaleData?.app_generate_compound
-            }
+            },
+            role: 'alertdialog',
+            ariaLabel: 'bulk'
         });
 
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
@@ -1919,7 +1999,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 top: '0',
             },
             width: '760px',
-            disableClose: true
+            disableClose: true,
+            role: 'alertdialog',
+            ariaLabel: 'aside'
         });
 
         this.ledgerAsidePaneModal.afterClosed().pipe(take(1)).subscribe(response => {
@@ -1943,7 +2025,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 maxWidth: '760px',
                 width: '100%',
                 height: '100vh',
-                maxHeight: '100vh'
+                maxHeight: '100vh',
+                role: 'alertdialog',
+                ariaLabel: 'aside'
             });
             this.cdRf.detectChanges();
         } else {
@@ -2364,7 +2448,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 accountUniqueName: this.lc.accountUnq,
                 localeData: this.localeData,
                 commonLocaleData: this.commonLocaleData
-            }
+            },
+            role: 'alertdialog',
+            ariaLabel: 'import'
         });
 
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
@@ -2490,7 +2576,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 body: this.localeData?.delete_bank_transactions_title,
                 ok: this.commonLocaleData?.app_yes,
                 cancel: this.commonLocaleData?.app_no
-            }
+            },
+            role: 'alertdialog',
+            ariaLabel: 'confirmation'
         });
 
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
@@ -2506,11 +2594,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @memberof LedgerComponent
      */
     public deleteBankTransactions(): void {
-        let transactionIds = this.entryUniqueNamesForBulkAction.map((transaction: any) => transaction?.transactionId);
-        let params = { transactionIds: transactionIds };
+        let params = { transactionIds: [...this.selectedCreditTransactionIds, ...this.selectedDebitTransactionIds] };
         this.ledgerService.deleteBankTransactions(this.trxRequest.accountUniqueName, params).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
                 this.getBankTransactions();
+                this.selectedCreditTransactionIds.clear();
+                this.selectedDebitTransactionIds.clear();
                 this.toaster.showSnackBar("success", response?.body);
             } else {
                 this.toaster.showSnackBar("error", response?.message);
@@ -2655,7 +2744,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.selectedItem = transaction;
         let dialogRef = this.dialog.open(templateRef, {
             width: '70%',
-            height: '790px'
+            height: '790px',
+            role: 'alertdialog',
+            ariaLabel: 'template'
         });
 
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {

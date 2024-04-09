@@ -7,7 +7,7 @@
     height: inherit;
     padding: 0;
     overflow: auto;
-    z-index: 1;
+    z-index: 9;
 }
 
 .fake-label {
@@ -37,9 +37,6 @@ sup.mandatory-asterisk {
 .dropdown-menu {
     left: unset !important;
     top: 0px;
-    @media screen and (max-width: 992px) {
-        transform: translateX(-75%);
-    }
     li{
         padding: 0 10px;
         height: 40px;

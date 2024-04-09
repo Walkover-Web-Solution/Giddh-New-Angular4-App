@@ -180,21 +180,21 @@
                     <label>{{ localeData?.all_applicable_taxes_label }}</label>
                 </div>
                 <div class="form-group">
-                    <div class="input-group">
+                    <div class="input-group justify-content-end row-gap">
                         <sh-select
                             formControlName="taxes"
-                            class="all-taxes"
+                            class="w-100"
                             [placeholder]="localeData?.all_applicable_taxes_placeholder"
                             (selected)="taxesSelected($event)"
                             [options]="companyTaxDropDown"
                             [multiple]="true"
                         >
                         </sh-select>
-                        <span class="input-group-btn pd-l2">
+                        <span class="input-group-btn">
                             <button type="submit" [disabled]="isTaxesSaveDisable$ | async" class="btn btn-success">
                                 {{ commonLocaleData?.app_save }}
-                            </button></span
-                        >
+                            </button>
+                        </span>
                     </div>
                 </div>
             </form>

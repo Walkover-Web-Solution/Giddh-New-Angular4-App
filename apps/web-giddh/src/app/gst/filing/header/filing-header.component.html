@@ -6,10 +6,10 @@
     <!-- region gstr1 -->
     <div class="list-style row" *ngIf="selectedGst === GstReport.Gstr1">
         <div class="wrap-GSTR-1-title col-lg-4 col-sm-8 col-12 xs-mb-1">
-            <a href="javascript:void(0);" [routerLink]="['/gstfiling']" class="ember-view">
-                <img src="{{ imgPath }}back.svg" class="icon icon-sm text-middle" />
+            <a href="javascript:void(0);" [routerLink]="['/gstfiling']" aria-label="back img"  class="ember-view">
+                <img src="{{ imgPath }}back.svg" class="icon icon-sm text-middle" alt="back img"  />
             </a>
-            <img src="{{ imgPath }}cart.svg" class="icon gstr-icon text-middle" />
+            <img src="{{ imgPath }}cart.svg" class="icon gstr-icon text-middle" alt="cart img"  />
 
             <div class="text-middle nav-top">
                 <div class="text-middle head head-font-weight">
@@ -37,7 +37,7 @@
                         </button>
                         <ul *dropdownMenu class="dropdown-menu month-picker" role="menu" id="monthPicker">
                             <li role="menuitem">
-                                <a class="dropdown-item" href="javascript:void(0)">
+                                <a class="dropdown-item" href="javascript:void(0);" aria-label="datepicker">
                                     <bs-datepicker-inline
                                         name="fromDate"
                                         (click)="$event.stopPropagation()"
@@ -65,7 +65,7 @@
                         >
                     </div>
                 </div>
-                <div class="font-xs text-muted text-middle normal">{{ localeData?.outward_supplies_details }}</div>
+                <div class="font-xs text-middle normal">{{ localeData?.outward_supplies_details }}</div>
             </div>
         </div>
 
@@ -114,10 +114,10 @@
 
     <!-- region gstr2 -->
     <div class="list-style" *ngIf="selectedGst === GstReport.Gstr2">
-        <a href="javascript:void(0);" id="ember1210" class="ember-view" [routerLink]="['/gstfiling']">
-            <img src="{{ imgPath }}back.svg" class="icon icon-sm text-middle" />
+        <a href="javascript:void(0);" aria-label="back img"  id="ember1210" class="ember-view" [routerLink]="['/gstfiling']">
+            <img src="{{ imgPath }}back.svg" class="icon icon-sm text-middle" alt="back img"  />
         </a>
-        <img src="{{ imgPath }}bag.svg" class="icon gstr-icon text-middle" />
+        <img src="{{ imgPath }}bag.svg" class="icon gstr-icon text-middle" alt="back img"  />
 
         <div class="text-middle nav-top">
             <div class="text-middle head-font-weight">
@@ -145,7 +145,7 @@
                     </button>
                     <ul *dropdownMenu class="dropdown-menu month-picker" role="menu" id="monthPicker">
                         <li role="menuitem">
-                            <a class="dropdown-item" href="javascript:void(0)">
+                            <a class="dropdown-item" href="javascript:void(0);" aria-label="datepicker" >
                                 <bs-datepicker-inline
                                     name="fromDate"
                                     (click)="$event.stopPropagation()"
@@ -173,7 +173,7 @@
                     >
                 </div>
             </div>
-            <div class="font-xs text-muted text-middle normal">{{ localeData?.inward_supplies_details }}</div>
+            <div class="font-xs text-middle normal">{{ localeData?.inward_supplies_details }}</div>
         </div>
 
         <div class="pull-right btn-wrapper-filling-header">
@@ -193,12 +193,12 @@
                     aria-labelledby="button-triggers-manual"
                 >
                     <li role="menuitem">
-                        <a class="dropdown-item" href="javascript:void(0)" (click)="onDownloadSheetGSTR('main')">{{
+                        <a class="dropdown-item" href="javascript:void(0);" aria-label="download"  (click)="onDownloadSheetGSTR('main')">{{
                             localeData?.filing?.download_sheet
                         }}</a>
                     </li>
                     <li role="menuitem">
-                        <a class="dropdown-item" href="javascript:void(0)" (click)="onDownloadSheetGSTR('error')">{{
+                        <a class="dropdown-item" href="javascript:void(0);" aria-label="download" (click)="onDownloadSheetGSTR('error')">{{
                             localeData?.filing?.download_error_sheet
                         }}</a>
                     </li>

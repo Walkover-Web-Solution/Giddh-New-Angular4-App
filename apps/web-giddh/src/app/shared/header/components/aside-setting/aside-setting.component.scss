@@ -128,7 +128,7 @@
                 }
             }
             &:hover {
-                background-color: var(--color-sidebar-anchor-text-hover);
+                background-color: var(--color-giddh-common-background);
                 a {
                     span {
                         color: var(--color-primary-right-sidebar-list-text-hover) !important;
@@ -224,7 +224,7 @@
 ::ng-deep {
     .back-to-main-slider {
         .ng-star-inserted {
-            color: var(--color-right-sidebar-back);
+            color: var(--color-giddh-blue);
         }
     }
 }

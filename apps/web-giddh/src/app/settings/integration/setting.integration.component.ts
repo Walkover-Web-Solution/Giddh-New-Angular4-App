@@ -12,7 +12,7 @@ import { IOption } from '../../theme/ng-select/option.interface';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { CompanyActions } from "../../actions/company.actions";
 import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.component';
-import { BootstrapToggleSwitch, BROADCAST_CHANNELS, Configuration, EMAIL_VALIDATION_REGEX, SELECT_ALL_RECORDS } from "../../app.constant";
+import { BootstrapToggleSwitch, BROADCAST_CHANNELS, Configuration, EMAIL_VALIDATION_REGEX, ICICI_ALLOWED_COMPANIES, SELECT_ALL_RECORDS } from "../../app.constant";
 import { AuthenticationService } from "../../services/authentication.service";
 import { IForceClear } from '../../models/api-models/Sales';
 import { EcommerceService } from '../../services/ecommerce.service';
@@ -169,6 +169,10 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public isIciciBankSupportedCountry: boolean = false;
     /** True, if is add or manage group form outside */
     public isAddAndManageOpenedFromOutside: boolean = false;
+    /** Holds array of company uniqueNames which ICICI allowed companies */
+    public iciciAllowedCompanies: any[] = ICICI_ALLOWED_COMPANIES;
+    /** Holds true if current company country is plaid supported country */
+    public isPlaidSupportedCountry: boolean;
 
     constructor(
         private router: Router,
@@ -268,6 +272,12 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 this.amazonSellerRes = cloneDeep(o.amazonSeller);
                 this.amazonSellerForm.controls['sellers']?.patchValue(this.amazonSellerRes);
                 this.addAmazonSellerRow();
+            }
+        });
+
+        this.store.pipe(select(s => s.session.currentCompanyCurrency), takeUntil(this.destroyed$)).subscribe(res => {
+            if (res) {
+                this.isPlaidSupportedCountry = this.generalService.checkCompanySupportPlaid(res.country);
             }
         });
 

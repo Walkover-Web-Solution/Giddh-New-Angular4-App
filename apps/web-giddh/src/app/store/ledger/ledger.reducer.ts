@@ -361,6 +361,7 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
                 ledgerBulkActionFailedEntries: action.payload
             };
         }
+
         case LEDGER.GET_LEDGER_BALANCE: {
             return {
                 ...state,
@@ -482,3 +483,4 @@ const markCheckedUnChecked = (transactionDetails: TransactionsResponse, mode: 'd
 
     return newResponse;
 };
+

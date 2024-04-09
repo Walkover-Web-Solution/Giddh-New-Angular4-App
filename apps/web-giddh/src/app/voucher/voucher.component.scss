@@ -1,30 +1,33 @@
 .vouchers {
     padding: 5px 0;
+
     .invoice-type-text {
         margin-top: 3px;
-        margin-left: 2px;   
+        margin-left: 2px;
     }
-
     .remove-invoice-icon {
         position: absolute;
         right: -15px;
         top: 14px
     }
-    .container-lg{
-        max-width: 1240px !important;
-        .vouchers-content{
+    
+    .container-lg {
+        max-width: 1540px !important;
+
+        .vouchers-content {
             min-height: 80vh;
         }
 
-        @media screen and (max-width: 768px){
+        @media screen and (max-width: 768px) {
             padding-left: 0 !important;
             padding-right: 0 !important;
-        }        
+        }
     }
 
     .row-gap {
         row-gap: 15px;
     }
+
     .row-gap-25 {
         row-gap: 25px;
     }
@@ -38,9 +41,11 @@
             color: var(--color-giddh-blue);
         }
     }
+
     .differ-currency {
-        color: var(--color-gray);
+        color: var(--color-common-primary-text);
         font-size: var(--font-size-15);
+        padding-right: 6px;
     }
 
     #button-dropup {
@@ -74,7 +79,7 @@
 
         .vouchers-copy-sales {
             color: var(--color-giddh-blue);
-        }  
+        }
     }
 
     .vouchers-secondary-form {
@@ -116,6 +121,7 @@
                     'address address'
                     'country state'
                     'gstin pincode';
+                grid-template-columns: 48% 48%;
                 gap: 15px;
                 padding: 15px;
                 border: 1px solid var(--color-fields-border);
@@ -124,9 +130,9 @@
 
                 &.without-gstin {
                     grid-template-areas:
-                    'address address'
-                    'country state'
-                    'pincode pincode' !important;
+                        'address address'
+                        'country state'
+                        'pincode pincode' !important;
                 }
 
                 .address-field {
@@ -165,14 +171,14 @@
                 }
             }
 
-            @media screen and (max-width: 768px){
-                .row{
-                    .col-6{
-                            padding-left: 10px !important;
-                            padding-right: 10px !important;
+            @media screen and (max-width: 768px) {
+                .row {
+                    .col-6 {
+                        padding-left: 10px !important;
+                        padding-right: 10px !important;
                     }
                 }
-            } 
+            }
 
         }
 
@@ -188,57 +194,94 @@
             .vouchers-entry-table {
                 table {
                     tr {
-
                         th,
                         td {
                             padding: 16px 8px;
-                            border-bottom: 1px solid var(--color-common-secondary-border);
-                            &:not(:first-child, :nth-child(2)){
+                            border: 1px solid var(--color-common-secondary-border);
+
+                            &:not(:first-child, :nth-child(2)) {
                                 text-align: right;
                             }
+
                             &.total-column {
                                 min-width: 120px;
                             }
 
                             &.product-column {
                                 @media screen and (max-width: 1280px) {
-                                    max-width: 120px;   
+                                    max-width: 120px;
                                 }
+                            }
+                            @media screen and (max-width: 1140px) {
+                                min-width: 200px !important;
                             }
                         }
 
                         th {
-                            border-top: 1px solid var(--color-common-secondary-border);
                             color: var(--color-giddh-blue);
+                            &:not(:first-child, :nth-child(2)){
+                                padding-right: 14px !important;
+                            }
                         }
 
                         td {
                             vertical-align: top;
 
                             .delete-btn {
-                                right: 5px;
+                                right: 6px;
                                 bottom: 18px;
                                 transition: all 200ms;
 
-                                &:hover{
+                                &:hover {
                                     transform: scale(1.2);
                                 }
                             }
+
                             &.item-tax {
                                 padding-bottom: 36px !important;
+
+                                .wrap-other-tax {
+                                    padding-right: 6px;
+                                }
                             }
 
                             .select-account-label {
-                                color: var(--color-gray);
+                                color: var(--color-common-primary-text);
                             }
-                            amount-field{
+
+                            amount-field {
                                 display: inline-block;
                             }
+
                             .description {
                                 word-wrap: break-word;
+                                p {
+                                    padding-left: 6px;
+                                }
+                            }
+
+                            .wrap-td-data {
+                                padding-right: 6px;
+                            }
+                        }
+
+                        &.default-active {
+                            td {
+                                &.active {
+                                    box-shadow:  0 0 0 2px var(--color-common-secondary-border) inset;
+                                }
+                                .date-hsn-code{
+                                    padding-left: 7px;
+                                    padding-right: 7px;
+                                }
                             }
                         }
                     }
+                }
+
+
+                @media screen and (max-width: 1140px) {
+                    overflow-x: auto;
                 }
             }
 
@@ -300,10 +343,11 @@
                     }
                 }
 
-                .adjustment-height{
+                .adjustment-height {
                     height: 48px;
                 }
-                .total-amount-wrapper{
+
+                .total-amount-wrapper {
                     amount-field {
                         display: inline-block;
                     }
@@ -328,10 +372,12 @@
 .option-value {
     color: var(--color-gray);
 }
+
 .entries-giddh-datepicker {
     height: 0 !important;
 }
-.product-name  {
+
+.product-name {
     display: block;
     word-break: break-word;
 }

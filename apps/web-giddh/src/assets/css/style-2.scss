@@ -70,7 +70,7 @@ textarea {
 }
 
 .basic > thead > tr > th {
-    color: var(--color-table-secondary-heading) !important;
+    color: var(--color-link) !important;
     border-right: 1px solid var(--color-table-primary-content-bar-border);
     padding: 15px 11px !important;
     font-weight: 400;
@@ -324,7 +324,6 @@ textarea {
     .exchange-rate-original {
         display: inline-block;
         width: 80px;
-        height: 26px !important;
         text-align: center;
         border-radius: 5px;
     }
@@ -346,6 +345,10 @@ textarea {
 
 .text-align-right {
     text-align: right;
+}
+
+.text-primary {
+    color: var(--color-giddh-blue) !important;
 }
 
 .invoice-date-due-date {
@@ -867,6 +870,7 @@ textarea {
     max-width: 260px !important;
     max-height: 340px;
     padding: 15px;
+    right: 0;
 
     ul {
         .discount-list {
@@ -1017,7 +1021,7 @@ textarea {
 .mat-calendar-body-cell {
     &.mat-calendar-body-active {
         .mat-calendar-body-selected {
-            color: var(--color-white) !important;
+            color: var(--color-list) !important;
             background-color: var(--color-primary-header-background);
         }
     }
@@ -1710,7 +1714,7 @@ input {
         .profile-tab-container {
             .account-aside-menu-state {
                 .aside-pane {
-                    #close {
+                    #closedialog {
                         top: 18px;
                     }
                 }
@@ -2301,7 +2305,7 @@ ul.sub-list {
         line-height: 15px;
 
         small {
-            color: var(--color-gray);
+            color: var(--color-gray-dark);
         }
     }
 }
@@ -3295,7 +3299,7 @@ input[type="checkbox"]:checked:after {
 
 .btn-success {
     background: var(--color-nonary-button-background) !important;
-    color: var(--color-nonary-button-text) !important;
+    color: var(--color-white-tertiary) !important;
     border: 1px solid var(--color-nonary-button-background) !important;
 }
 
@@ -3350,6 +3354,7 @@ input[type="checkbox"]:checked:after {
     color: var(--color-danger) !important;
     border-color: var(--color-iron) !important;
     outline: none !important;
+    box-shadow: none !important;
 }
 
 .btn-danger:disabled,
@@ -3364,7 +3369,7 @@ input[type="checkbox"]:checked:after {
 
 .btn-cancel {
     background: var(--color-dark-fog);
-    color: var(--color-octonary-button-text);
+    color: var(--color-common-primary-text);
     border-color: var(--color-dark-fog);
 }
 
@@ -3541,7 +3546,7 @@ input[type="checkbox"]:checked:after {
 }
 
 .icon-font-22 {
-    font-size: 22px;
+    font-size: 22px !important;
 }
 
 .font-24 {
@@ -4078,7 +4083,7 @@ a.btn.btn-xs.btn-link.pull-right {
 #tax-control-multi-select.multi-select input.form-control[readonly] {
     background-image: var(--color-caret-image) !important;
     background-color: var(--color-white) !important;
-    background-position: 95% !important;
+    background-position: 97% !important;
 
     &.field-disabled {
         background-color: var(--color-primary-input-bar-background) !important;
@@ -4421,21 +4426,39 @@ select.form-control {
     background-color: var(--color-master-page-left-sidebar-secondary-background);
 }
 
-.grp-list li,
-.new-btn-ul li {
+.grp-list .master-list,
+.new-btn-ul .new-btn {
     list-style: none;
 }
 
-.grp-list li a,
-.new-btn-ul li a {
+.grp-list .master-list a,
+.new-btn-ul .new-btn a {
     padding: 4px 15px !important;
     display: block;
     font-size: var(--font-size-15);
     font-weight: 500;
-    color: var(--color-master-page-sidebar-primary-group);
+    color: var(--color-common-primary-text);
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
+}
+
+.grp-list,
+.new-btn-u {
+    li {
+        list-style: none;
+
+        a {
+            padding: 4px 15px !important;
+            display: block;
+            font-size: var(--font-size-15);
+            font-weight: 500;
+            color: var(--color-master-page-sidebar-primary-group);
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+    }
 }
 
 .grp-col {
@@ -4552,7 +4575,7 @@ label {
     margin-left: 255px;
 }
 
-.col-wrapper:nth-child(1) li a {
+.col-wrapper:nth-child(1) .master-list a {
     text-transform: uppercase;
     padding: 8px 15px !important;
 }
@@ -4561,7 +4584,7 @@ label {
     background: var(--color-dark-fog) !important;
 }
 
-.col-wrapper:last-child ul li a.isParent {
+.col-wrapper:last-child .grp-list .master-list a.isParent {
     background: none;
 }
 
@@ -5007,7 +5030,7 @@ label {
     position: relative;
 }
 
-.col-wrapper:nth-child(1) ul li a.btn-add {
+.col-wrapper:nth-child(1) .grp-list .master-list a.btn-add {
     display: none !important;
 }
 
@@ -7604,7 +7627,7 @@ app-header {
 }
 
 .text-danger {
-    color: var(--color-danger);
+    color: var(--color-danger) !important;
 }
 
 #ngb-typeahead-1 {
@@ -7731,7 +7754,7 @@ app-header {
     border-radius: 0;
 }
 
-.account-aside-menu-state #close {
+.account-aside-menu-state #closedialog {
     display: block;
     position: fixed;
     right: 472px;
@@ -8623,7 +8646,7 @@ button.ladda-button .ladda-label {
     transition: none !important;
 }
 
-.account-aside-menu-state #close {
+.account-aside-menu-state #closedialog {
     display: block;
     position: absolute;
     right: 10px;
@@ -10853,7 +10876,7 @@ body.update-scroll-hidden {
                     a {
                         min-width: 110px;
                         font-family: var(--font-regular);
-                        color: var(--color-nav-tabs-anchor) !important;
+                        color: var(--color-common-primary-text) !important;
                         padding-top: 5px !important;
                         padding-left: 20px !important;
                         height: 30px;
@@ -12851,7 +12874,7 @@ inventory-master {
         padding-top: 0;
     }
 
-    .col-wrapper:nth-child(1) li a {
+    .col-wrapper:nth-child(1) .master-list a {
         text-transform: uppercase;
         padding: 4px 15px !important;
     }
@@ -12910,8 +12933,8 @@ inventory-master {
         overflow-y: auto !important;
     }
 
-    .grp-list li a,
-    .new-btn-ul li a {
+    .grp-list .master-list a,
+    .new-btn-ul .new-btn a {
         display: initial;
     }
 
@@ -14585,7 +14608,7 @@ activity-compare-json {
 .mat-form-field-invalid .mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__leading,
 .mat-form-field-invalid .mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__notch,
 .mat-form-field-invalid .mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__trailing {
-    border-color: var(--color-red) !important;
+    border-color: var(--color-red-border) !important;
 }
 .mat-mdc-dialog-content {
     max-height: 70vh !important;
@@ -14675,13 +14698,16 @@ aside-menu-product-service {
 .depreciation-message {
     .message-wrapper {
         background-color: var(--color-danger);
-        color: var(--color-white);
+        color: var(--color-toast-primary-text);
         position: fixed;
         top: 0;
         width: 100%;
         z-index: 999;
         p{
             font-size: var(--font-size-16);
+        }
+        a {
+            color: var(--color-toast-primary-text);
         }
     }
 }
@@ -14719,4 +14745,24 @@ aside-menu-product-service {
         text-overflow: ellipsis;
         white-space: nowrap;
     }
+}
+
+// datepicker label
+.date-label {
+    label {
+        position: absolute;
+        z-index: -1;
+    }
+}
+
+.opacity-hidden {
+    opacity: 0;
+}
+.text-black {
+    color: var(--color-common-primary-text);
+}
+
+// color link light-dark theme
+.color-link {
+    color: var(--color-link) !important;
 }

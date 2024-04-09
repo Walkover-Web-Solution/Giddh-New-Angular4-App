@@ -8,6 +8,7 @@ dropdown-field,
 input-field,
 stock-balance,
 mat-form-field,
+report-filters,
 .custom-mat-form-field {
     .mat-mdc-form-field {
         width: 100%;
@@ -126,20 +127,20 @@ mat-form-field,
         .mdc-text-field--outlined {
             &:not(.mdc-text-field--disabled) {
                 .mdc-notched-outline__leading {
-                    border-color: var(--color-red) !important;
+                    border-color: var(--color-red-border) !important;
                 }
 
                 &.mdc-text-field--focused {
                     .mdc-notched-outline__notch {
-                        border-color: var(--color-red) !important;
+                        border-color: var(--color-red-border) !important;
                     }
 
                     .mdc-notched-outline__leading {
-                        border-color: var(--color-red) !important;
+                        border-color: var(--color-red-border) !important;
                     }
 
                     .mdc-notched-outline__trailing {
-                        border-color: var(--color-red) !important;
+                        border-color: var(--color-red-border) !important;
                     }
                 }
 

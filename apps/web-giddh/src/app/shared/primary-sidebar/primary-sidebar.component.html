@@ -83,6 +83,7 @@
                             <li *ngFor="let acc of accountItemsFromIndexDB">
                                 <a
                                     [href]="'/pages/ledger/'+ acc?.uniqueName"
+                                    aria-label="account"
                                     [routerLinkActive]="['active']"
                                     [class.active]="isLedgerAccSelected && selectedLedgerName === acc?.uniqueName"
                                     (click)="analyzeAccounts($event, acc); companyDetailsDropDownWeb.hide(); $event.stopPropagation()"
@@ -91,7 +92,8 @@
                             </li>
                             <li>
                                 <a
-                                    href="javascript:;"
+                                    href="javascript:void(0);"
+                                    aria-label="show more"
                                     (click)="showNavigationModal()"
                                     class="show-more cursor-pointer"
                                     >{{ localeData?.show_more }}</a
@@ -107,6 +109,7 @@
                     >
                         <a
                             href="javascript:void(0);"
+                            aria-label="account-icon"
                             id="button-basic-01"
                             dropdownToggle
                             type="button"
@@ -122,16 +125,17 @@
                             role="menu"
                             aria-labelledby="button-basic-01"
                         >
-                            <li *ngFor="let acc of accountItemsFromIndexDB">
+                            <li *ngFor="let acc of accountItemsFromIndexDB" role="menuitem">
                                 <a
                                     href="javascript:void(0);"
+                                    aria-label="account item"
                                     routerLink="ledger/{{ acc?.uniqueName }}"
                                     (click)="analyzeAccounts($event, acc); accountDropdown?.hide()"
                                     >{{ acc.name }} {{ commonLocaleData?.app_ac }}</a
                                 >
                             </li>
-                            <li>
-                                <a (click)="showNavigationModal()" class="show-more cursor-pointer">{{
+                            <li role="menuitem">
+                                <a href="javascript:void(0);" aria-label="Show more" (click)="showNavigationModal()" class="show-more cursor-pointer">{{
                                     localeData?.show_more
                                 }}</a>
                             </li>
@@ -154,7 +158,7 @@
                                 </span>
                             </p>
                         </div>
-                        <ul class="list-style-none giddh-primary-items">
+                        <ul class="list-style-none giddh-primary-items" role="menu">
                             <ng-container *ngFor="let menu of allItems; trackBy: trackItems;">
                                 <ng-container *ngIf="!menu.hide">
                                     <li
@@ -164,9 +168,11 @@
                                         [autoClose]="isOpen ? false : true"
                                         [attr.container]="!isOpen ? 'body' : ''"
                                         (click)="openActiveItem(menu.itemIndex)"
+                                        role="menuitem"
                                     >
                                         <a
                                             href="javascript:void(0);"
+                                            aria-label="menu"
                                             tooltip="{{ menu?.label }}"
                                             *ngIf="menu?.items?.length"
                                             dropdownToggle
@@ -181,9 +187,10 @@
                                         </a>
                                         <a
                                             href="javascript:void(0);"
+                                            aria-label="menu"
                                             *ngIf="menu?.items?.length === 0 && menu?.link"
                                             [routerLink]="[menu?.link]"
-                                            [queryParams]="menu?.additional"
+                                            [queryParams]="menu?.additional?.queryParams"
                                             dropdownToggle
                                             class="dropdown-toggle"
                                         >
@@ -194,10 +201,10 @@
                                         </a>
                                         <ng-container *ngIf="menu?.items?.length">
                                             <ul *dropdownMenu class="dropdown-menu list-style-none pd-l2 sub-menu" role="menu">
-                                                <li *ngFor="let item of menu?.items; trackBy: trackItems">
-                                                    <a
+                                                <li *ngFor="let item of menu?.items; trackBy: trackItems" role="menuitem">
+                                                    <div
                                                         *ngIf="item?.link"
-                                                        href="javascript:void(0);"
+                                                        aria-label="menu"
                                                         [class.active]="
                                                             rla?.isActive ||
                                                             isRouteWithParamsActive(item?.link) ||
@@ -207,17 +214,43 @@
                                                         routerLinkActive
                                                         #rla="routerLinkActive"
                                                         [routerLinkActiveOptions]="{ exact: true }"
-                                                        [queryParams]="item?.additional"
-                                                        ><i [ngClass]="item.icon"></i>
-                                                        {{ item?.label }}
-                                                    </a>
-                                                    <a
+                                                        [queryParams]="item?.additional?.queryParams"
+                                                        >
+                                                            <i [ngClass]="item.icon"></i>
+                                                            {{ item?.label }}
+                                                            <ng-container *ngIf="!(item?.additional?.createNew?.queryParams?.addVendor || item?.additional?.createNew?.queryParams?.addCustomer)">
+                                                                <strong 
+                                                                    class="ml-auto" 
+                                                                    *ngIf="item?.additional?.createNew" 
+                                                                    (click)="$event.stopPropagation()" 
+                                                                    [routerLink]="[item?.additional?.createNew?.link]"
+                                                                    [queryParams]="item?.additional?.createNew?.queryParams"
+                                                                >
+                                                                {{ item?.additional?.createNew?.label }}
+                                                                </strong>
+                                                            </ng-container>
+                                                            <ng-container *ngIf="(item?.additional?.createNew?.queryParams?.addVendor || item?.additional?.createNew?.queryParams?.addCustomer)">
+                                                                <strong 
+                                                                class="ml-auto" 
+                                                                (click)="
+                                                                    $event.stopPropagation();
+                                                                    selectedGroupForCreateAccount = 
+                                                                    item?.additional?.createNew?.queryParams?.addCustomer
+                                                                    ? 'sundrydebtors'
+                                                                    : 'sundrycreditors';
+                                                                    toggleAccountAsidePane()"
+                                                                >
+                                                                    {{ item?.additional?.createNew?.label }}
+                                                                </strong>
+                                                            </ng-container>
+                                                </div>
+                                                    <div
                                                         *ngIf="!item?.link"
-                                                        href="javascript:void(0);"
+                                                        aria-label="menu"
                                                         (click)="handleItemClick(item)"
                                                         ><i [ngClass]="item.icon"></i>
                                                         {{ item?.label }}
-                                                    </a>
+                                                    </div>
                                                 </li>
                                             </ul>
                                         </ng-container>

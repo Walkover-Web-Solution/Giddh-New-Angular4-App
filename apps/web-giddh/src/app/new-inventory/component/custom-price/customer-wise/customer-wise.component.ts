@@ -467,7 +467,9 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                 cancel: this.commonLocaleData?.app_no,
                 permanentlyDeleteMessage: this.commonLocaleData?.app_permanently_delete_message
             },
-            width: '600px'
+            width: '600px',
+            role: 'alertdialog',
+            ariaLabel: 'Confirm Dialog'
         });
 
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
@@ -810,7 +812,9 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
             count: this.paginationLimit
         }
         this.dialogRef = this.dialog.open(this.addSearchModal, {
-            width: '580px'
+            width: '580px',
+            role: 'alertdialog',
+            ariaLabel: 'Add search Dialog'
         });
     }
 
