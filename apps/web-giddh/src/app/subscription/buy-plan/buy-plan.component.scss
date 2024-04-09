@@ -66,7 +66,7 @@
     .plan-table {
         width: min-content;
         float: left !important;
-    
+
         overflow: hidden;
         white-space: nowrap;
         box-shadow: none !important;
@@ -102,6 +102,8 @@
 
     .mobile-height {
         height: 48px !important;
+        width: 100%;
+        padding-left: 10px;
     }
 
     .active-plan {
@@ -161,14 +163,8 @@
     }
 
     .summary-wrapper {
-
         h4 {
             height: 38px;
-        }
-
-        .apply-btn {
-            top: 6px;
-            right: 6px;
         }
     }
 }

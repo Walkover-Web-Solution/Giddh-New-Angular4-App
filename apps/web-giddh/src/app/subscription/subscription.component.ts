@@ -37,7 +37,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** This will use for table heading */
-    public displayedColumns: string[] = ['companyName', 'billingAccountName', 'subscriberName', 'countryName', 'planName', 'status', 'period', 'renewalDate'];
+    public displayedColumns: string[] = ['companyName', 'billingAccountName', 'subscriberName', 'countryName', 'planName', 'status', 'duration', 'renewalDate'];
     /** Hold the data of subscriptions */
     public dataSource: any;
     /** True if translations loaded */
@@ -238,7 +238,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.subscriptionListForm?.controls['period'].valueChanges.pipe(
+        this.subscriptionListForm?.controls['duration'].valueChanges.pipe(
             debounceTime(700),
             distinctUntilChanged(),
             takeUntil(this.destroyed$),
@@ -267,7 +267,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
             countryName: null,
             planName: null,
             status: null,
-            period: null
+            duration: null
         });
     }
 
@@ -318,7 +318,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
                 return;
             }
         } else if (searchedFieldName === 'Monthly/Yearly') {
-            if (this.subscriptionListForm?.controls['period'].value !== null && this.subscriptionListForm?.controls['period'].value !== '') {
+            if (this.subscriptionListForm?.controls['duration'].value !== null && this.subscriptionListForm?.controls['duration'].value !== '') {
                 return;
             }
         }

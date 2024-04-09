@@ -17,14 +17,14 @@
                     subscriptionListForm?.controls['countryName']?.value ||
                     subscriptionListForm?.controls['planName']?.value ||
                     subscriptionListForm?.controls['status']?.value ||
-                    subscriptionListForm?.controls['period']?.value
+                    subscriptionListForm?.controls['duration']?.value
                 "
                 mat-stroked-button
                 class="min160 mr-l1"
                 color="primary"
                 (click)="clearFilter()"
             >
-                + {{ commonLocaleData?.app_clear }}
+             {{ commonLocaleData?.app_clear }}
             </button>
             <div class="min160 mr-l1" *ngIf="!showClearFilter"></div>
             <button mat-stroked-button class="min160 mr-l1" color="primary" (click)="createSubscription()">
@@ -212,7 +212,7 @@
                             }}</span>
                         </td>
                     </ng-container>
-                    <ng-container matColumnDef="period">
+                    <ng-container matColumnDef="duration">
                         <th
                             mat-header-cell
                             *matHeaderCellDef
@@ -229,7 +229,7 @@
                                             commonLocaleData?.app_duration?.monthly +
                                             '/' +
                                             commonLocaleData?.app_duration?.yearly,
-                                        formControl: subscriptionListForm.controls['period'],
+                                        formControl: subscriptionListForm.controls['duration'],
                                         title:
                                             commonLocaleData?.app_duration?.monthly +
                                             '/' +

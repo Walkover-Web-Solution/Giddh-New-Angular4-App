@@ -314,6 +314,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 this.promoCodeResponse[0] = response;
                 if (this.secondStepForm?.get('country')?.value?.value?.toLowerCase() === 'in' && this.promoCodeResponse?.length) {
                     this.finalPlanAmount = response?.finalAmount + (response?.finalAmount * this.taxPercentage);
+                } else {
+                    this.finalPlanAmount = response?.finalAmount;
                 }
             }
         });
@@ -348,16 +350,26 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      *
      * @memberof BuyPlanComponent
      */
-    public applyPromoCode(): void {
+    public applyPromoCode(type: string): void {
+        let request;
         if (this.firstStepForm.get('promoCode')?.value) {
-            let request = {
-                promoCode: this.firstStepForm.get('promoCode')?.value,
-                planUniqueName: this.firstStepForm.get('planUniqueName')?.value,
-                duration: this.firstStepForm.get('duration')?.value
+            if (type === 'add') {
+             request = {
+                    promoCode: this.firstStepForm.get('promoCode')?.value,
+                    planUniqueName: this.firstStepForm.get('planUniqueName')?.value,
+                    duration: this.firstStepForm.get('duration')?.value
+                }
+            } else {
+                request = {
+                    promoCode: "",
+                    planUniqueName: this.firstStepForm.get('planUniqueName')?.value,
+                    duration: this.firstStepForm.get('duration')?.value
+                }
             }
             this.componentStore.applyPromocode(request);
         }
     }
+
 
 
     /**
@@ -368,7 +380,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     */
     private getCompanyProfile(): void {
         this.componentStore.companyProfile$.pipe(takeUntil(this.destroyed$)).subscribe(profile => {
-            if (profile && Object.keys(profile).length && !this.company?.countryName) {
+            if (profile && Object.keys(profile).length) {
                 this.company.countryName = profile.country;
                 this.company.countryCode = profile.countryCode || profile.countryV2.alpha2CountryCode;
                 this.company.baseCurrency = profile.baseCurrency;
@@ -376,9 +388,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 this.company.inputMaskFormat = profile.balanceDisplayFormat?.toLowerCase() || '';
                 this.company.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
                 this.showTaxTypeByCountry(this.company.countryCode);
+                this.componentStore.getAllPlans({ params: { countryCode: this.company.countryCode } });
             }
         });
-        this.componentStore.getAllPlans({ params: { countryCode: this.company.countryCode } });
     }
 
     /**
@@ -601,17 +613,17 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             if (result) {
                 this.selectedPlan = result.find(plan => plan?.uniqueName === this.firstStepForm.get('planUniqueName').value);
                 if (this.firstStepForm.get('duration').value === 'YEARLY') {
-                    this.finalPlanAmount = this.selectedPlan?.yearlyAmount;
+                    this.finalPlanAmount = this.selectedPlan?.yearlyAmountAfterDiscount;
                 } else {
-                    this.finalPlanAmount = this.selectedPlan?.monthlyAmount;
+                    this.finalPlanAmount = this.selectedPlan?.monthlyAmountAfterDiscount;
                 }
                 if (this.secondStepForm?.get('country')?.value?.value?.toLowerCase() === 'in') {
                     this.finalPlanAmount = this.finalPlanAmount + this.finalPlanAmount * this.taxPercentage;
                 } else {
                     if (this.firstStepForm.get('duration').value === 'YEARLY') {
-                        this.finalPlanAmount = this.selectedPlan?.yearlyAmount;
+                        this.finalPlanAmount = this.selectedPlan?.yearlyAmountAfterDiscount;
                     } else {
-                        this.finalPlanAmount = this.selectedPlan?.monthlyAmount;
+                        this.finalPlanAmount = this.selectedPlan?.monthlyAmountAfterDiscount;
                     }
                 }
             }
@@ -645,6 +657,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 this.selectedPlan = result.find(plan => plan.uniqueName === this.firstStepForm.get('planUniqueName').value);
             }
         });
+        if (this.firstStepForm?.get('promoCode')?.value) {
+            this.firstStepForm?.get('promoCode')?.setValue(this.firstStepForm?.get('promoCode')?.value);
+        }
         this.selectedStep++;
     }
 
@@ -671,9 +686,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 this.popularPlan = response[1];
                 this.firstStepForm.get('planUniqueName').setValue(this.selectedPlan?.uniqueName);
                 if (this.firstStepForm.get('duration').value === 'YEARLY') {
-                    this.finalPlanAmount = this.selectedPlan?.yearlyAmount;
+                    this.finalPlanAmount = this.selectedPlan?.yearlyAmountAfterDiscount;
                 } else {
-                    this.finalPlanAmount = this.selectedPlan?.monthlyAmount;
+                    this.finalPlanAmount = this.selectedPlan?.monthlyAmountAfterDiscount;
                 }
                 this.inputData = [];
                 response?.forEach(plan => {
@@ -698,9 +713,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 this.finalPlanAmount = this.finalPlanAmount + this.finalPlanAmount * this.taxPercentage;
             } else {
                 if (this.firstStepForm.get('duration').value === 'YEARLY') {
-                    this.finalPlanAmount = this.selectedPlan?.yearlyAmount;
+                    this.finalPlanAmount = this.selectedPlan?.yearlyAmountAfterDiscount;
                 } else {
-                    this.finalPlanAmount = this.selectedPlan?.monthlyAmount;
+                    this.finalPlanAmount = this.selectedPlan?.monthlyAmountAfterDiscount;
                 }
             }
 
