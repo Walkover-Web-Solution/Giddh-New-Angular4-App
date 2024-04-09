@@ -3,7 +3,7 @@ export interface IRegistration {
         corpId: string,
         userId: string,
         accountNo: string,
-        URN: string
+        bankUserId: string
     },
     account: {
         name: string,
