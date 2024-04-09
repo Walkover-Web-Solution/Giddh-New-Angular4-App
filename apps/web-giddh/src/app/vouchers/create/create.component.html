@@ -1,5 +1,6 @@
 <ng-container appTranslate [file]="'vouchers'" (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
+    <giddh-page-loader *ngIf="showLoader"></giddh-page-loader>
     <hamburger-menu></hamburger-menu>
     <div class="vouchers">
         <mat-card class="container-lg">
@@ -389,17 +390,17 @@
                                     <div class="col-6">
                                         <mat-select
                                             name="linkedPO"
-                                            [(ngModel)]="linkedPo"
+                                            formControlName="linkedPo"
                                             [multiple]="true"
                                             (selectionChange)="getPurchaseOrder($event?.value, true)"
                                             class="po-mat-select"
                                             [placeholder]="localeData?.select_order_placeholder"
-                                            [disabled]="linkedPo?.length === 0 && fieldFilteredOptions?.length === 0"
+                                            [disabled]="invoiceForm.get('linkedPo')?.value?.length === 0 && fieldFilteredOptions?.length === 0"
                                         >
-                                            <mat-select-trigger *ngIf="linkedPo?.length">
-                                                <ng-container *ngFor="let poNumber of linkedPo; let i = index"
+                                            <mat-select-trigger *ngIf="invoiceForm.get('linkedPo')?.value?.length">
+                                                <ng-container *ngFor="let poNumber of invoiceForm.get('linkedPo')?.value; let i = index"
                                                     >{{ purchaseOrderNumberValueMapping[poNumber]
-                                                    }}<ng-container *ngIf="linkedPo[i + 1]">, </ng-container>
+                                                    }}<ng-container *ngIf="invoiceForm.get('linkedPo')?.value[i + 1]">, </ng-container>
                                                 </ng-container>
                                             </mat-select-trigger>
                                             <mat-option class="po-options-line">

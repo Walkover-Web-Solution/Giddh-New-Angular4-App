@@ -317,8 +317,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public poLinkUpdated: boolean = false;
     /* This will hold the purchase orders */
     public purchaseOrders: any[] = [];
-    /* This will hold linked PO */
-    public linkedPo: any[] = [];
     /* This will hold linked PO items*/
     public linkedPoNumbers: any[] = [];
     /* This will hold filter dates for PO */
@@ -335,6 +333,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     private isPoLinkingInProgress: boolean = false;
     /* This will hold the existing PO entries with quantity */
     public existingPoEntries: any[] = [];
+    public showLoader: boolean = false;
 
     /** Returns true if account is selected else false */
     public get showPageLeaveConfirmation(): boolean {
@@ -670,7 +669,20 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 uniqBy(this.vouchersListForCreditDebitNote, 'value');
                 this.vouchersListForCreditDebitNote$ = observableOf(this.vouchersListForCreditDebitNote);
             }
-        })
+        });
+
+        this.linkPoDropdown.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(search => {
+            this.filterPurchaseOrder(search);
+        });
+
+        this.vendorPurchaseOrders$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            this.purchaseOrders = response;
+            this.filterPurchaseOrder("");
+        });
+
+        this.componentStore.linkedPoOrders$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            this.linkedPoNumbers = response;
+        });
     }
 
     public creditNoteInvoiceSelected(event: any): void {
@@ -1222,6 +1234,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             } else {
                 let keysToUpdate = {
                     accountName: event?.label,
+                    accountUniqueName: event?.account?.uniqueName,
                     stockName: "",
                     stockUniqueName: ""
                 };
@@ -1232,6 +1245,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 }
 
                 transactionFormGroup.get('account').get('name')?.patchValue(keysToUpdate.accountName);
+                transactionFormGroup.get('account').get('uniqueName')?.patchValue(keysToUpdate.accountUniqueName);
                 transactionFormGroup.get('stock').get('name')?.patchValue(keysToUpdate.stockName);
                 transactionFormGroup.get('stock').get('uniqueName')?.patchValue(keysToUpdate.stockUniqueName);
 
@@ -1419,7 +1433,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 number: [''],
                 date: ['']
             }),
-            einvoiceGenerated: [false]
+            einvoiceGenerated: [false],
+            linkedPo: [null] //temp
         });
     }
 
@@ -2832,7 +2847,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
     public getPurchaseOrder(event: any, addRemove: boolean): void {
         if (event) {
-            let newPo = this.linkedPo?.filter(po => !this.selectedPoItems?.includes(po));
+            let newPo = this.invoiceForm.get("linkedPo")?.value?.filter(po => !this.selectedPoItems?.includes(po));
             let selectedOption = this.fieldFilteredOptions?.filter(option => option?.value === newPo[0]);
             let order = selectedOption[0];
             if (order && !this.selectedPoItems.includes(order?.value)) {
@@ -2841,7 +2856,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.purchaseOrderService.get(getRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     if (response) {
                         if (response.status === "success" && response.body) {
-                            if (this.linkedPo.includes(response.body.uniqueName)) {
+                            if (this.invoiceForm.get("linkedPo")?.value.includes(response.body.uniqueName)) {
                                 if (response.body && response.body.entries && response.body.entries.length > 0) {
                                     this.selectedPoItems.push(response.body.uniqueName);
                                     this.linkedPoNumbers[order?.value]['items'] = response.body.entries;
@@ -2903,6 +2918,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     let stockUniqueName = item.stock.uniqueName;
                     item.stock.uniqueName = "purchases#" + item.stock.uniqueName;
                     item.uniqueName = item.stock.uniqueName;
+                    item.label = item.stock?.name;
                     item.value = item.stock.uniqueName;
                     item.additional = item.stock;
                     item.additional.uniqueName = "purchases";
@@ -2916,6 +2932,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 } else {
                     item.stock = undefined;
                     item.uniqueName = item.account?.uniqueName;
+                    item.label = item.account?.name;
                     item.value = item.account?.uniqueName;
                     item.additional = item.account;
                     if (this.existingPoEntries[entry?.uniqueName]) {
@@ -2984,7 +3001,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             setTimeout(() => {
                 let selectedPoItems = [];
                 this.selectedPoItems?.forEach(order => {
-                    if (!this.linkedPo.includes(order)) {
+                    if (!this.invoiceForm.get("linkedPo")?.value.includes(order)) {
                         let entries = (this.linkedPoNumbers[order]) ? this.linkedPoNumbers[order]['items'] : [];
                         let voucherEntries = this.getEntries();
 
@@ -3022,14 +3039,14 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                                                             } else {
                                                                 remainingQuantity -= transactionFormGroup.get("quantity")?.value;
                                                                 entryRemoved = true;
-                                                                this.removeTransaction(entryLoop);
+                                                                this.deleteLineEntry(entryLoop);
                                                             }
                                                         }
                                                     } else if (item.account && item.account.uniqueName && accountUniqueName) {
                                                         if (item.account.uniqueName === accountUniqueName) {
                                                             remainingQuantity = 0;
                                                             entryRemoved = true;
-                                                            this.removeTransaction(entryLoop);
+                                                            this.deleteLineEntry(entryLoop);
                                                         }
                                                     }
                                                 }
@@ -3053,5 +3070,28 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.startLoader(false);
             }, 100);
         }
+    }
+
+    public startLoader(isLoading: boolean): void {
+        this.showLoader = isLoading;
+    }
+
+    /**
+     * This will use for filter purchase orders
+     *
+     * @param {*} search
+     * @memberof VoucherComponent
+     */
+    public filterPurchaseOrder(search: any): void {
+        let filteredOptions: any[] = [];
+        this.purchaseOrderNumberValueMapping = [];
+        this.purchaseOrders?.forEach(option => {
+            if (typeof search !== "string" || option?.label?.toLowerCase()?.indexOf(search?.toLowerCase()) > -1) {
+                filteredOptions.push({ label: option.label, value: option?.value, additional: option?.additional });
+                this.purchaseOrderNumberValueMapping[option?.value] = option.label;
+            }
+        });
+        this.fieldFilteredOptions = filteredOptions;
+        console.log(this.purchaseOrders, this.fieldFilteredOptions);
     }
 }
