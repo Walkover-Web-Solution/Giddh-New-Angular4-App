@@ -4559,6 +4559,22 @@ select.form-control {
     overflow: hidden;
 }
 
+.grp-list, .new-btn-u {
+    li {
+        list-style: none;
+        a {
+            padding: 4px 15px !important;
+            display: block;
+            font-size: var(--font-size-15);
+            font-weight: 500;
+            color: var(--color-master-page-sidebar-primary-group);
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+    }
+}
+
 .grp-col {
     float: left;
     overflow-x: auto;

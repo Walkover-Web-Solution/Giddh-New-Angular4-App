@@ -4,6 +4,7 @@ $text-overflow-ellipsis-width: 255px;
 :host {
     display: block;
     position: relative;
+    height: 100%;
 }
 
 .virtual-group-list {
