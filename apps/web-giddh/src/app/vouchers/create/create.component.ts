@@ -334,6 +334,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     /* This will hold the existing PO entries with quantity */
     public existingPoEntries: any[] = [];
     public showLoader: boolean = false;
+    /** Holds true if table entry has at least single stock is selected  */
+    public hasStock: boolean = false;
 
     /** Returns true if account is selected else false */
     public get showPageLeaveConfirmation(): boolean {

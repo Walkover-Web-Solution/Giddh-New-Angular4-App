@@ -143,72 +143,84 @@
             .vouchers-entry-table {
                 table {
                     tr {
-
                         th,
                         td {
-                            padding: 12px 8px;
-                            border-bottom: 1px solid var(--color-common-secondary-border);
-                            &:not(:first-child, :nth-child(2)){
+                            padding: 16px 8px;
+                            border: 1px solid var(--color-common-secondary-border);
+
+                            &:not(:first-child, :nth-child(2)) {
                                 text-align: right;
                             }
 
-                            
-
                             &.total-column {
                                 min-width: 120px;
+                                padding-bottom: 36px !important;
+
+                                .wrap-other-tax {
+                                    padding-right: 6px;
+                                }
                             }
 
                             &.product-column {
                                 @media screen and (max-width: 1280px) {
-                                    max-width: 120px;   
+                                    max-width: 120px;
                                 }
+                            }
+                            @media screen and (max-width: 1140px) {
+                                min-width: 200px !important;
                             }
                         }
 
                         th {
-                            border-top: 1px solid var(--color-common-secondary-border);
                             color: var(--color-giddh-blue);
-
-                            &:first-child {
-                                border-left: 1px solid var(--color-common-secondary-border);
-                            }
-
-                            &:last-child {
-                                border-right: 1px solid var(--color-common-secondary-border);
+                            &:not(:first-child, :nth-child(2)){
+                                padding-right: 14px !important;
                             }
                         }
 
                         td {
                             vertical-align: top;
 
-                            // ##########   TABLE WITH BORDER CODE
-                            // border-left: 1px solid var(--color-common-secondary-border);
-                            // border-right: 1px solid var(--color-common-secondary-border);
-
                             .delete-btn {
-                                // ##########   TABLE WITH BORDER CODE
-                                // right: -24px;
-                                // top: 50%;
-                                // transform: translateY(-50%);
-                                // visibility: hidden;
-                                
-                                right: 5px;
-                                bottom: 8px;
+                                right: 6px;
+                                bottom: 18px;
                                 transition: all 200ms;
 
-                                &:hover{
+                                &:hover {
                                     transform: scale(1.2);
                                 }
                             }
 
                             .select-account-label {
-                                color: var(--color-gray);
+                                color: var(--color-common-primary-text);
                             }
-                            amount-field{
+
+                            amount-field {
                                 display: inline-block;
+                            }
+
+                            &.description {
+                                .description-text {
+                                    word-wrap: break-word;
+                                }
+                                .characters-left-text {
+                                    padding-left: 6px;
+                                }
+                            }
+
+                            .wrap-td-data {
+                                padding-right: 6px;
+                            }
+
+                            &.active {
+                                box-shadow:  0 0 0 2px var(--color-common-secondary-border) inset;
                             }
                         }
                     }
+                }
+
+                @media screen and (max-width: 1140px) {
+                    overflow-x: auto;
                 }
             }
 
