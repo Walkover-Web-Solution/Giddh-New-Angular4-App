@@ -520,8 +520,23 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 const transactionFormGroup = this.getTransactionFormGroup(entryFormGroup);
 
                 if (response.body.stock) {
-                    transactionFormGroup.get('stock').get('skuCode')?.patchValue(response.body.stock.skuCode);
-                    transactionFormGroup.get('stock').get('skuCodeHeading')?.patchValue(response.body.stock.skuCodeHeading);
+                    transactionFormGroup.get('stock.skuCode')?.patchValue(response.body.stock.skuCode);
+                    transactionFormGroup.get('stock.skuCodeHeading')?.patchValue(response.body.stock.skuCodeHeading);
+                    transactionFormGroup.get('stock.stockUnit.code')?.patchValue(response.body.stock.variant?.unitRates[0]?.stockUnitCode);
+                    transactionFormGroup.get('stock.stockUnit.uniqueName')?.patchValue(response.body.stock.variant?.unitRates[0]?.stockUnitUniqueName);
+                    entryFormGroup.get('hsnNumber')?.patchValue(response.body.stock.hsnNumber);
+                    entryFormGroup.get('sacNumber')?.patchValue(response.body.stock.sacNumber);
+                    entryFormGroup.get('showCodeType')?.patchValue(response.body.stock.hsnNumber ? 'hsn' : 'sac');
+
+                    let rate = 0;
+                    response.body.stock.variant?.unitRates?.forEach(unitRate => {
+                        rate = Number((unitRate.rate / this.invoiceForm.get('exchangeRate')?.value).toFixed(this.highPrecisionRate));
+                    });
+                    transactionFormGroup.get('stock.rate.rateForAccount')?.patchValue(rate);
+
+                    if (response.body.stock.variant?.variantDiscount?.quantity) {
+                        transactionFormGroup.get('stock.quantity')?.patchValue(response.body.stock.variant?.variantDiscount?.quantity);
+                    }
 
                     this.stockUnits[response.entryIndex] = observableOf(response.body.stock.variant.unitRates);
                 } else {
@@ -539,6 +554,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
                 taxes?.forEach(tax => {
                     taxesFormArray.push(this.getTransactionTaxFormGroup(tax));
+                });
+
+                const discountsFormArray = entryFormGroup.get('discounts') as FormArray;
+                discountsFormArray.clear();
+                response.body.stock.variant?.variantDiscount?.discounts?.forEach(discount => {
+                    discountsFormArray.push(this.getTransactionDiscountFormGroup(discount?.discount));
                 });
             }
         });
@@ -1235,7 +1256,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             } else {
                 let keysToUpdate = {
                     accountName: event?.label,
-                    accountUniqueName: event?.account?.uniqueName,
+                    accountUniqueName: event?.account?.uniqueName || event?.value,
                     stockName: "",
                     stockUniqueName: ""
                 };

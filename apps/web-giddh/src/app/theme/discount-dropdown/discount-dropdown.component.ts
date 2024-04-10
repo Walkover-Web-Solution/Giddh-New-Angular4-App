@@ -82,6 +82,7 @@ export class DiscountDropdownComponent implements OnInit, OnChanges, OnDestroy {
                     this.discountForm.get('percentage').patchValue(hasManualDiscount[0].discountValue);
                 }
             }
+            this.addDiscountsInForm();
         }
         if (changes?.discountsList?.currentValue) {
             this.addDiscountsInForm();
@@ -106,7 +107,8 @@ export class DiscountDropdownComponent implements OnInit, OnChanges, OnDestroy {
      */
     private addDiscountsInForm(): void {
         const discounts = this.discountForm.get('discounts') as FormArray;
-        this.discountsList.forEach(discount => {
+        discounts?.clear();
+        this.discountsList?.forEach(discount => {
             const isDiscountSelected = this.selectedDiscountsList?.filter(selectedDiscount => selectedDiscount?.uniqueName === discount.uniqueName);
             discount.isActive = isDiscountSelected?.length > 0;
             discounts.push(this.getDiscountFormGroup(discount));
