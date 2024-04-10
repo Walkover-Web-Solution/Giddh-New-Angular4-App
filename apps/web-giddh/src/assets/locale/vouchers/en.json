@@ -117,5 +117,6 @@
     "select_variant": "Select Variant",
     "variant": "Variant",
     "account_missing_in_stock": "account is not linked with stock",
-    "add_new_address": "+ Add new address"
+    "add_new_address": "+ Add new address",
+    "po_created": "Purchase order created succesfully with voucher number - [PO_NUMBER]"
 }

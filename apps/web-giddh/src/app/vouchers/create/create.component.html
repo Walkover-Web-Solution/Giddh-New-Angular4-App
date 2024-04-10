@@ -326,11 +326,9 @@
 
                                     <!-- Billing Address -->
                                     <div class="col-6">
-                                        <label for="billingAddress" class="billing-label"
-                                            [ngClass]="{ 'p-0' : invoiceType.isCashInvoice }">Billing Address</label> <i
+                                        <label for="billingAddress" class="billing-label">Billing Address</label> <i
                                             [matMenuTriggerFor]="companyBillingAddress"
                                             class="icon-edit text-blue cursor-pointer pl-2 font-12"></i>
-
                                         <mat-menu #companyBillingAddress="matMenu">
                                             <div class="mat-menu-width-large vouchers-address-menu">
                                                 <ng-container *ngFor="let address of company?.addresses; let i = index">
@@ -346,8 +344,6 @@
                                                     </button>
                                                     <mat-divider></mat-divider>
                                                 </ng-container>
-                                                <button mat-menu-item class="vouchers-add-new" (click)="toggleAccountAsidePane(accountType.customer)"
-                                                          >{{ localeData?.add_new_address }}</button>
                                             </div>
                                         </mat-menu>
                                         <div class="mt-2">Address {{
@@ -361,7 +357,6 @@
                                         <label for="billingAddress" class="billing-label">Shipping Address</label> <i
                                             [matMenuTriggerFor]="companyShippingAddress"
                                             class="icon-edit text-blue cursor-pointer pl-2 font-12"></i>
-
                                         <mat-menu #companyShippingAddress="matMenu">
                                             <div class="mat-menu-width-large  vouchers-address-menu">
                                                 <ng-container *ngFor="let address of company?.addresses; let i = index">
@@ -377,8 +372,6 @@
                                                     </button>
                                                     <mat-divider></mat-divider>
                                                 </ng-container>
-                                                <button mat-menu-item class="vouchers-add-new" (click)="toggleAccountAsidePane(accountType.customer)"
-                                                          >{{ localeData?.add_new_address }}</button>
                                             </div>
                                         </mat-menu>
                                         <div class="mt-2">Address {{
@@ -987,7 +980,7 @@
                                                                         [currencyCode]="isMultiCurrencyVoucher ? account.baseCurrency : false">
                                                                     </amount-field>
                                                                 </ng-container>
-                                                                <div>
+                                                                <div [class.error-box]="transaction.get('requiredTax')?.value">
                                                                     <tax-dropdown
                                                                         [style.display]="activeEntryIndex === entryIndex ? 'block' : 'none'"
                                                                         [date]="invoiceForm.get('date')?.value"
@@ -1380,7 +1373,7 @@
                                     <button mat-stroked-button color="primary" *ngIf="invoiceType.isCreditNote" (click)="generateVoucher()">
                                         Generate Credit Note </button>
 
-                                    <button mat-stroked-button color="primary" *ngIf="invoiceType.isPurchaseInvoice" (click)="generateVoucher()">
+                                    <button mat-stroked-button color="primary" *ngIf="invoiceType.isPurchaseInvoice || invoiceType.isPurchaseOrder" (click)="generateVoucher()">
                                         Save </button>
                                     <button mat-stroked-button [matMenuTriggerFor]="moreOptions"
                                         class="vouchers-more-option-btn" *ngIf="invoiceType.isSalesInvoice"> <i
