@@ -117,5 +117,6 @@
     "select_variant": "प्रकार निवडा",
     "variant": "प्रकार",
     "account_missing_in_stock": "खाते स्टॉकशी जोडलेले नाही",
-    "add_new_address": "+ नवीन पत्ता जोडा"
+    "add_new_address": "+ नवीन पत्ता जोडा",
+    "po_created": "व्हाउचर नंबरसह खरेदी ऑर्डर यशस्वीरित्या तयार केली - [PO_NUMBER]"
 }

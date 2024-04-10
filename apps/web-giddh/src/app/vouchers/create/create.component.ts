@@ -329,10 +329,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public purchaseOrderNumberValueMapping: any[] = [];
     /* This will hold selected PO */
     public selectedPoItems: any[] = [];
-    /** True, if the linking with PO is in progress */
-    private isPoLinkingInProgress: boolean = false;
     /* This will hold the existing PO entries with quantity */
     public existingPoEntries: any[] = [];
+    /** Show/Hide page loader */
     public showLoader: boolean = false;
     /** Holds true if table entry has at least single stock is selected  */
     public hasStock: boolean = false;
@@ -523,8 +522,23 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 const transactionFormGroup = this.getTransactionFormGroup(entryFormGroup);
 
                 if (response.body.stock) {
-                    transactionFormGroup.get('stock').get('skuCode')?.patchValue(response.body.stock.skuCode);
-                    transactionFormGroup.get('stock').get('skuCodeHeading')?.patchValue(response.body.stock.skuCodeHeading);
+                    transactionFormGroup.get('stock.skuCode')?.patchValue(response.body.stock.skuCode);
+                    transactionFormGroup.get('stock.skuCodeHeading')?.patchValue(response.body.stock.skuCodeHeading);
+                    transactionFormGroup.get('stock.stockUnit.code')?.patchValue(response.body.stock.variant?.unitRates[0]?.stockUnitCode);
+                    transactionFormGroup.get('stock.stockUnit.uniqueName')?.patchValue(response.body.stock.variant?.unitRates[0]?.stockUnitUniqueName);
+                    entryFormGroup.get('hsnNumber')?.patchValue(response.body.stock.hsnNumber);
+                    entryFormGroup.get('sacNumber')?.patchValue(response.body.stock.sacNumber);
+                    entryFormGroup.get('showCodeType')?.patchValue(response.body.stock.hsnNumber ? 'hsn' : 'sac');
+
+                    let rate = 0;
+                    response.body.stock.variant?.unitRates?.forEach(unitRate => {
+                        rate = Number((unitRate.rate / this.invoiceForm.get('exchangeRate')?.value).toFixed(this.highPrecisionRate));
+                    });
+                    transactionFormGroup.get('stock.rate.rateForAccount')?.patchValue(rate);
+
+                    if (response.body.stock.variant?.variantDiscount?.quantity) {
+                        transactionFormGroup.get('stock.quantity')?.patchValue(response.body.stock.variant?.variantDiscount?.quantity);
+                    }
 
                     this.stockUnits[response.entryIndex] = observableOf(response.body.stock.variant.unitRates);
                 } else {
@@ -542,6 +556,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
                 taxes?.forEach(tax => {
                     taxesFormArray.push(this.getTransactionTaxFormGroup(tax));
+                });
+
+                const discountsFormArray = entryFormGroup.get('discounts') as FormArray;
+                discountsFormArray.clear();
+                response.body.stock.variant?.variantDiscount?.discounts?.forEach(discount => {
+                    discountsFormArray.push(this.getTransactionDiscountFormGroup(discount?.discount));
                 });
             }
         });
@@ -1238,7 +1258,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             } else {
                 let keysToUpdate = {
                     accountName: event?.label,
-                    accountUniqueName: event?.account?.uniqueName,
+                    accountUniqueName: event?.account?.uniqueName || event?.value,
                     stockName: "",
                     stockUniqueName: ""
                 };
@@ -2581,38 +2601,60 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         invoiceForm = this.vouchersUtilityService.formatVoucherObject(invoiceForm);
 
-        this.voucherService.generateVoucher(invoiceForm.account.uniqueName, invoiceForm).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response?.status === "success") {
-                this.resetVoucherForm();
+        if (this.invoiceType.isPurchaseOrder) {
+            invoiceForm.type = "purchase";
 
-                let message = (invoiceForm.number) ? `${this.localeData?.entry_created}: ${invoiceForm.number}` : this.commonLocaleData?.app_messages?.voucher_saved;
-                this.toasterService.showSnackBar("success", message);
-                if (callback) {
-                    callback(response);
+            let getRequestObject = {
+                companyUniqueName: this.activeCompany?.uniqueName,
+                accountUniqueName: invoiceForm.account.uniqueName
+            };
+
+            this.purchaseOrderService.create(getRequestObject, invoiceForm).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                if (response && response.status === "success") {
+                    this.resetVoucherForm();
+
+                    let message = this.localeData?.po_created;
+                    message = message?.replace("[PO_NUMBER]", response.body?.number);
+                    this.toasterService.showSnackBar("success", message);
+                } else {
+                    this.toasterService.showSnackBar("error", response?.message, response?.code);
                 }
-            } else if (response?.status === "einvoice-confirm") {
-                let dialogRef = this.dialog.open(ConfirmModalComponent, {
-                    data: {
-                        title: this.commonLocaleData?.app_confirm,
-                        body: response?.message,
-                        ok: this.commonLocaleData?.app_yes,
-                        cancel: this.commonLocaleData?.app_no,
-                        permanentlyDeleteMessage: ' '
-                    }
-                });
+            });
 
-                dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
-                    if (response) {
-                        this.invoiceForm.get('generateEInvoice')?.patchValue(true);
-                    } else {
-                        this.invoiceForm.get('generateEInvoice')?.patchValue(false);
+        } else {
+            this.voucherService.generateVoucher(invoiceForm.account.uniqueName, invoiceForm).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                if (response?.status === "success") {
+                    this.resetVoucherForm();
+
+                    let message = (invoiceForm.number) ? `${this.localeData?.entry_created}: ${invoiceForm.number}` : this.commonLocaleData?.app_messages?.voucher_saved;
+                    this.toasterService.showSnackBar("success", message);
+                    if (callback) {
+                        callback(response);
                     }
-                    this.saveVoucher(callback);
-                });
-            } else {
-                this.toasterService.showSnackBar("error", response?.message, response?.code);
-            }
-        });
+                } else if (response?.status === "einvoice-confirm") {
+                    let dialogRef = this.dialog.open(ConfirmModalComponent, {
+                        data: {
+                            title: this.commonLocaleData?.app_confirm,
+                            body: response?.message,
+                            ok: this.commonLocaleData?.app_yes,
+                            cancel: this.commonLocaleData?.app_no,
+                            permanentlyDeleteMessage: ' '
+                        }
+                    });
+
+                    dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+                        if (response) {
+                            this.invoiceForm.get('generateEInvoice')?.patchValue(true);
+                        } else {
+                            this.invoiceForm.get('generateEInvoice')?.patchValue(false);
+                        }
+                        this.saveVoucher(callback);
+                    });
+                } else {
+                    this.toasterService.showSnackBar("error", response?.message, response?.code);
+                }
+            });
+        }
     }
 
     /**
@@ -2903,7 +2945,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     public addPoItems(poUniqueName: string, entries: any, entryIndex: number): void {
         this.startLoader(true);
-        this.isPoLinkingInProgress = true;
         let voucherEntries = this.getEntries();
         let entry = entries[entryIndex];
         let item = entry.transactions[0];

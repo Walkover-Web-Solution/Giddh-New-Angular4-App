@@ -326,11 +326,9 @@
 
                                     <!-- Billing Address -->
                                     <div class="col-6">
-                                        <label for="billingAddress" class="billing-label"
-                                            [ngClass]="{ 'p-0' : invoiceType.isCashInvoice }">Billing Address</label> <i
+                                        <label for="billingAddress" class="billing-label">Billing Address</label> <i
                                             [matMenuTriggerFor]="companyBillingAddress"
                                             class="icon-edit text-blue cursor-pointer pl-2 font-12"></i>
-
                                         <mat-menu #companyBillingAddress="matMenu">
                                             <div class="mat-menu-width-large vouchers-address-menu">
                                                 <ng-container *ngFor="let address of company?.addresses; let i = index">
@@ -346,8 +344,6 @@
                                                     </button>
                                                     <mat-divider></mat-divider>
                                                 </ng-container>
-                                                <button mat-menu-item class="vouchers-add-new" (click)="toggleAccountAsidePane(accountType.customer)"
-                                                          >{{ localeData?.add_new_address }}</button>
                                             </div>
                                         </mat-menu>
                                         <div class="mt-2">Address {{
@@ -361,7 +357,6 @@
                                         <label for="billingAddress" class="billing-label">Shipping Address</label> <i
                                             [matMenuTriggerFor]="companyShippingAddress"
                                             class="icon-edit text-blue cursor-pointer pl-2 font-12"></i>
-
                                         <mat-menu #companyShippingAddress="matMenu">
                                             <div class="mat-menu-width-large  vouchers-address-menu">
                                                 <ng-container *ngFor="let address of company?.addresses; let i = index">
@@ -377,8 +372,6 @@
                                                     </button>
                                                     <mat-divider></mat-divider>
                                                 </ng-container>
-                                                <button mat-menu-item class="vouchers-add-new" (click)="toggleAccountAsidePane(accountType.customer)"
-                                                          >{{ localeData?.add_new_address }}</button>
                                             </div>
                                         </mat-menu>
                                         <div class="mt-2">Address {{
@@ -643,12 +636,10 @@
                                                                                 <a href="javascript:;"
                                                                                     class="flex-column">
                                                                                     <div class="option-label pt-2">
-                                                                                        {{ option?.label | titlecase
-                                                                                        }}</div>
+                                                                                        {{ option?.label | titlecase }}
+                                                                                    </div>
                                                                                     <div class="option-value pb-2">
-                                                                                        {{
-                                                                                        option.additional?.uniqueName
-                                                                                        }}
+                                                                                        {{ option.additional?.uniqueName }}
                                                                                     </div>
                                                                                 </a>
                                                                             </ng-container>
@@ -656,20 +647,17 @@
                                                                                 *ngIf="option.additional?.stock">
                                                                                 <a href="javascript:;"
                                                                                     class="flex-column">
-                                                                                    <div class="option-label">{{
-                                                                                        option?.label }}</div>
+                                                                                    <div class="option-label">
+                                                                                        {{ option?.label | titlecase }}
+                                                                                        <span *ngIf="option?.additional?.stock">
+                                                                                            ({{ option?.additional?.stock?.name | titlecase }})
+                                                                                        </span>
+                                                                                    </div>
                                                                                     <div class="option-value">
-                                                                                        {{
-                                                                                        option.additional?.uniqueName
-                                                                                        }}
+                                                                                        {{ option.additional?.uniqueName }}
                                                                                     </div>
                                                                                     <div class="option-value-stock">
-                                                                                        {{
-                                                                                        commonLocaleData?.app_stock
-                                                                                        }}:
-                                                                                        {{
-                                                                                        option.additional?.stock?.uniqueName
-                                                                                        }}
+                                                                                        {{ commonLocaleData?.app_stock }}: {{ option.additional?.stock?.uniqueName }}
                                                                                     </div>
                                                                                 </a>
                                                                             </ng-container>
@@ -1001,7 +989,7 @@
                                                                         </amount-field>
                                                                     </div>
                                                                 </ng-container>
-                                                                <div>
+                                                                <div [class.error-box]="transaction.get('requiredTax')?.value">
                                                                     <tax-dropdown
                                                                         [style.display]="activeEntryIndex === entryIndex ? 'block' : 'none'"
                                                                         [date]="invoiceForm.get('date')?.value"
@@ -1385,22 +1373,26 @@
 
                                 <div class="vouchers-actions d-flex justify-content-end column-gap1 pd-t2 pd-b2 mt-4">
                                     <button mat-stroked-button *ngIf="!isUpdateMode" (click)="resetVoucherForm()">Clear</button>
-                                    <button mat-stroked-button color="primary"
-                                        *ngIf="invoiceType.isSalesInvoice" (click)="updateAccountAndGenerateVoucher()">Generate Sales & Update A/c</button>
+                                    <button mat-stroked-button color="primary" *ngIf="invoiceType.isSalesInvoice" (click)="updateAccountAndGenerateVoucher()">Generate Sales & Update A/c
+                                    </button>
                                     <button mat-stroked-button color="primary"
                                         *ngIf="invoiceType.isSalesInvoice" (click)="generateVoucher()">Generate Sales</button>
-
-                                    <button mat-stroked-button color="primary" *ngIf="invoiceType.isCreditNote">
+                                    <button mat-stroked-button color="primary" *ngIf="invoiceType.isCreditNote" (click)="updateAccountAndGenerateVoucher()">
                                         Generate Credit Note & Update A/c
                                     </button>
                                     <button mat-stroked-button color="primary" *ngIf="invoiceType.isCreditNote" (click)="generateVoucher()">
-                                        Generate Credit Note </button>
-
-                                    <button mat-stroked-button color="primary" *ngIf="invoiceType.isPurchaseInvoice" (click)="generateVoucher()">
+                                        Generate Credit Note 
+                                    </button>
+                                    <button mat-stroked-button color="primary" *ngIf="invoiceType.isDebitNote" (click)="updateAccountAndGenerateVoucher()">
+                                        Generate Debit Note & Update A/c
+                                    </button>
+                                    <button mat-stroked-button color="primary" *ngIf="invoiceType.isDebitNote" (click)="generateVoucher()">
+                                        Generate Debit Note 
+                                    </button>
+                                    <button mat-stroked-button color="primary" *ngIf="invoiceType.isPurchaseInvoice || invoiceType.isPurchaseOrder" (click)="generateVoucher()">
                                         Save </button>
-                                    <button mat-stroked-button [matMenuTriggerFor]="moreOptions"
-                                        class="vouchers-more-option-btn" *ngIf="invoiceType.isSalesInvoice"> <i
-                                            class="caret"></i>
+                                    <button mat-stroked-button [matMenuTriggerFor]="moreOptions" class="vouchers-more-option-btn" *ngIf="invoiceType.isSalesInvoice"> 
+                                        <i class="caret"></i>
                                     </button>
                                     <mat-menu #moreOptions="matMenu">
                                         <button mat-menu-item (click)="createSendVoucher()">Create & Send</button>
