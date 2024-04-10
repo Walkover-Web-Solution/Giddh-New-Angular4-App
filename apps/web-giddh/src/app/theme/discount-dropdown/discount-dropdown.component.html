@@ -1,5 +1,5 @@
 <div class="multi-select">
-    <input type="text" class="form-control text-right" [matMenuTriggerFor]="discountControlMenu" [placeholder]="currency + '0'"
+    <input type="text" class="form-control text-right total-discount-amount" [matMenuTriggerFor]="discountControlMenu" [placeholder]="currency + '0'"
         readonly [value]="currency + totalDiscountAmount">
     <mat-menu #discountControlMenu="matMenu">
         <div class="d-flex flex-column px-3 pt-2 discount-wrapper" (click)="$event.stopPropagation()" [formGroup]="discountForm">
