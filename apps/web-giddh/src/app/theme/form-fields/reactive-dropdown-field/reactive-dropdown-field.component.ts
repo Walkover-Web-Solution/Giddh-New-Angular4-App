@@ -22,7 +22,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     /** Trigger instance for auto complete */
     @ViewChild('trigger', { static: false, read: MatAutocompleteTrigger }) trigger: MatAutocompleteTrigger;
     /** Select Field instance for auto focus */
-    @ViewChild('selectField', { static: true }) public selectField: ElementRef;
+    @ViewChild('selectField', { static: false }) public selectField: ElementRef;
     /** CSS class name to add on the field */
     @Input() public cssClass: string = "";
     /** CSS class name to add on the mat autocomplete panel class */
@@ -257,6 +257,8 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
      */
     public openDropdownPanel(): void {
         this.trigger?.openPanel();
-        this.selectField?.nativeElement?.focus();
+        setTimeout(() => {
+            this.selectField?.nativeElement?.focus();
+        }, 10);
     }
 }

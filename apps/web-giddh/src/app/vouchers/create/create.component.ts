@@ -424,7 +424,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 /** Open account dropdown on create */
                 if (!params?.uniqueName) {
                     this.openAccountDropdown = true;
-                    this.activeEntryIndex = 0;
                 } else {
                     this.invoiceForm.get('uniqueName').patchValue(params?.uniqueName);
                 }
@@ -522,10 +521,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 const transactionFormGroup = this.getTransactionFormGroup(entryFormGroup);
 
                 if (response.body.stock) {
-                    transactionFormGroup.get('stock.skuCode')?.patchValue(response.body.stock.skuCode);
-                    transactionFormGroup.get('stock.skuCodeHeading')?.patchValue(response.body.stock.skuCodeHeading);
-                    transactionFormGroup.get('stock.stockUnit.code')?.patchValue(response.body.stock.variant?.unitRates[0]?.stockUnitCode);
-                    transactionFormGroup.get('stock.stockUnit.uniqueName')?.patchValue(response.body.stock.variant?.unitRates[0]?.stockUnitUniqueName);
                     entryFormGroup.get('hsnNumber')?.patchValue(response.body.stock.hsnNumber);
                     entryFormGroup.get('sacNumber')?.patchValue(response.body.stock.sacNumber);
                     entryFormGroup.get('showCodeType')?.patchValue(response.body.stock.hsnNumber ? 'hsn' : 'sac');
@@ -535,10 +530,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         rate = Number((unitRate.rate / this.invoiceForm.get('exchangeRate')?.value).toFixed(this.highPrecisionRate));
                     });
                     transactionFormGroup.get('stock.rate.rateForAccount')?.patchValue(rate);
-
-                    if (response.body.stock.variant?.variantDiscount?.quantity) {
-                        transactionFormGroup.get('stock.quantity')?.patchValue(response.body.stock.variant?.variantDiscount?.quantity);
-                    }
+                    transactionFormGroup.get('stock.skuCode')?.patchValue(response.body.stock.skuCode);
+                    transactionFormGroup.get('stock.skuCodeHeading')?.patchValue(response.body.stock.skuCodeHeading);
+                    transactionFormGroup.get('stock.stockUnit.code')?.patchValue(response.body.stock.variant?.unitRates[0]?.stockUnitCode);
+                    transactionFormGroup.get('stock.stockUnit.uniqueName')?.patchValue(response.body.stock.variant?.unitRates[0]?.stockUnitUniqueName);
+                    transactionFormGroup.get('stock.variant.salesTaxInclusive')?.patchValue(response.body.stock.variant?.salesTaxInclusive);
+                    transactionFormGroup.get('stock.variant.purchaseTaxInclusive')?.patchValue(response.body.stock.variant?.purchaseTaxInclusive);
 
                     this.stockUnits[response.entryIndex] = observableOf(response.body.stock.variant.unitRates);
                 } else {
@@ -1237,6 +1234,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         } else {
             this.invoiceForm.controls["account"].get("customerName")?.patchValue(event?.label);
             this.getAccountDetails(event?.value);
+            this.activeEntryIndex = 0;
         }
     }
 
@@ -1285,6 +1283,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     this.componentStore.getParticularDetails({ accountUniqueName: transactionFormGroup.get("account.uniqueName")?.value, payload: payload, entryIndex: entryIndex });
                 }
             }
+
+            this.checkIfEntriesHasStock();
         }
     }
 
@@ -1542,7 +1542,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         }),
                         variant: this.formBuilder.group({
                             name: [entryData ? entryData?.transactions[0]?.stock?.variant?.name : ''],
-                            uniqueName: [entryData ? entryData?.transactions[0]?.stock?.variant?.uniqueName : '']
+                            uniqueName: [entryData ? entryData?.transactions[0]?.stock?.variant?.uniqueName : ''],
+                            salesTaxInclusive: [entryData ? entryData?.transactions[0]?.stock?.variant?.salesTaxInclusive : false],
+                            purchaseTaxInclusive: [entryData ? entryData?.transactions[0]?.stock?.variant?.purchaseTaxInclusive : false]
                         }),
                         skuCodeHeading: [entryData ? entryData?.transactions[0]?.stock?.skuCodeHeading : ''],
                         skuCode: [entryData ? entryData?.transactions[0]?.stock?.sku : ''],
@@ -2207,7 +2209,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public addNewLineEntry(): void {
         this.invoiceForm.get('entries')['controls'].push(this.getEntriesFormGroup());
         const entries = this.invoiceForm.get('entries') as FormArray;
-        this.activeEntryIndex = entries?.length - 1;
+        setTimeout(() => {
+            this.activeEntryIndex = entries?.length - 1;
+        }, 10);
     }
 
     /**
@@ -2219,6 +2223,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public deleteLineEntry(entryIndex: number): void {
         const entries = this.invoiceForm.get('entries') as FormArray;
         entries.removeAt(entryIndex);
+        if (!entries?.length) {
+            this.addNewLineEntry();
+        }
+        this.checkIfEntriesHasStock();
         this.calculateVoucherTotals();
     }
 
@@ -2949,7 +2957,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         let entry = entries[entryIndex];
         let item = entry.transactions[0];
         let blankItemIndex = voucherEntries?.findIndex(entry => !entry.transactions[0].account?.uniqueName);
-        
+
         if (entry.totalQuantity && entry.usedQuantity && entry.transactions && item && item.stock) {
             if (this.existingPoEntries[entry.uniqueName]) {
                 item.stock.quantity = entry.usedQuantity;
@@ -3017,7 +3025,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             entry.discounts?.forEach(discount => {
                 discountsFormArray.push(this.getTransactionDiscountFormGroup(discount));
             });
-            
+
             const taxesFormArray = entryFormGroup.get('taxes') as FormArray;
             taxesFormArray.clear();
             entry.taxes?.forEach(tax => {
@@ -3060,22 +3068,22 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                             transactionFormGroup.get('stock').get('quantity')?.patchValue(item.additional?.quantity);
                             transactionFormGroup.get('stock').get('maxQuantity')?.patchValue(item.additional?.maxQuantity);
                             transactionFormGroup.get('stock').get('rate.rateForAccount')?.patchValue(item.additional?.rate?.amountForAccount);
-        
+
                             this.stockUnits[response.entryIndex] = observableOf(response.body.stock.variant.unitRates);
                         } else {
                             transactionFormGroup.get('amount.amountForAccount')?.patchValue(item.amount?.amountForAccount);
                             this.stockUnits[response.entryIndex] = observableOf([]);
                         }
-        
+
                         const taxes = this.generalService.fetchTaxesOnPriority(
                             response.body.stock?.taxes ?? [],
                             response.body.stock?.groupTaxes ?? [],
                             response.body.taxes ?? [],
                             response.body.groupTaxes ?? []);
-        
+
                         const taxesFormArray = entryFormGroup.get('taxes') as FormArray;
                         taxesFormArray.clear();
-        
+
                         taxes?.forEach(tax => {
                             taxesFormArray.push(this.getTransactionTaxFormGroup(tax));
                         });
@@ -3206,5 +3214,15 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.toasterService.showSnackBar("error", this.localeData?.quantity_error + " (" + transaction.get("stock.maxQuantity")?.value + ")");
             }
         }
+    }
+
+    private checkIfEntriesHasStock(): void {
+        this.hasStock = false;
+        const entries = this.getEntries();
+        entries?.forEach(entry => {
+            if (entry.transactions[0]?.stock?.uniqueName) {
+                this.hasStock = true;
+            }
+        });
     }
 }
