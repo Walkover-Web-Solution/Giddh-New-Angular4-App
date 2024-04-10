@@ -319,7 +319,7 @@
                                 </div>
 
                                 <!-- Row 2 for Deliver To Only show in Cash Invoice -->
-                                <div class="row" *ngIf="invoiceType.isPurchaseOrder" formGroupName="account">
+                                <div class="row pd-b1" *ngIf="invoiceType.isPurchaseOrder || invoiceType.isPurchaseInvoice" formGroupName="account">
                                     <div class="col-12 mr-t15">
                                         <span class="billing-deliver-label">Deliver To</span>
                                     </div>
@@ -445,7 +445,7 @@
                                     <div class="col-3 pr-2">
                                         <giddh-datepicker (keydown.enter)="$event.preventDefault()"
                                             [label]="invoiceType.isSalesInvoice  ?'Invoice Date': invoiceType.isPurchaseInvoice ? 'Bill Date': invoiceType.isCreditNote?'Credit Note Date': invoiceType.isDebitNote ?'Debit Note Date':invoiceType.isEstimateInvoice?'Estimate Date':invoiceType.isProformaInvoice?'Proforma Date':invoiceType.isPurchaseOrder ?'Order Date':'' "
-                                            [placeholder]="'DDMMYYYY'" name="voucherDate" [showToggleIcon]="false"
+                                            [placeholder]="'DD-MM-YYYY'" name="voucherDate" [showToggleIcon]="false"
                                             [appearance]="'outline'" formControlName="date" (dateSelected)="getAllVouchersForAdjustment(); getVoucherListForCreditDebitNote();">
                                         </giddh-datepicker>
                                     </div>
@@ -462,7 +462,7 @@
                                 ">
                                         <giddh-datepicker (keydown.enter)="$event.preventDefault()"
                                             [label]="(invoiceType.isSalesInvoice || invoiceType.isProformaInvoice || invoiceType.isPurchaseInvoice) ? 'Due Date': invoiceType.isPurchaseOrder ? 'Expected Delivery': invoiceType.isEstimateInvoice ? 'Expiry Date' : ''"
-                                            [placeholder]="'DDMMYYYY'" name="voucherDueDate" [showToggleIcon]="false"
+                                            [placeholder]="'DD-MM-YYYY'" name="voucherDueDate" [showToggleIcon]="false"
                                             [appearance]="'outline'" formControlName="dueDate">
                                         </giddh-datepicker>
                                     </div>
@@ -1107,7 +1107,7 @@
                                                                 <div class="container px-0" formGroupName="deposit">
                                                                     <div class="row align-items-center">
                                                                         <ng-container>
-                                                                            <div class="col-6">
+                                                                            <div class="col">
                                                                                 <reactive-dropdown-field
                                                                                     [label]="'Account'"
                                                                                     [placeholder]="'Select Account'"
@@ -1120,7 +1120,7 @@
                                                                                     formControlName="accountUniqueName">
                                                                                 </reactive-dropdown-field>
                                                                             </div>
-                                                                            <div class="col-6" *ngIf="currentVoucherFormDetails?.depositAllowed && !invoiceType.isCashInvoice">
+                                                                            <div class="col" *ngIf="currentVoucherFormDetails?.depositAllowed && !invoiceType.isCashInvoice">
                                                                                 <input-field [name]="'amountForAccount'"
                                                                                     [label]="'Amount'"
                                                                                     [placeholder]="'Enter amount'"
@@ -1182,7 +1182,7 @@
                                                                         <giddh-datepicker type="text"
                                                                             (keydown.enter)="$event.preventDefault()"
                                                                             [label]="'Ship Date'"
-                                                                            [placeholder]="'DDMMYYYY'"
+                                                                            [placeholder]="'DD-MM-YYYY'"
                                                                             name="shippingDate" [showToggleIcon]="false"
                                                                             [appearance]="'outline'"
                                                                             formControlName="shippingDate">
@@ -1234,7 +1234,7 @@
                                                                                 formControlName="message2"></textarea>
                                                                         </mat-form-field>
                                                                     </div>
-                                                                    <div class="col-12 px-2" *ngIf="!invoiceType.isPurchaseOrder">
+                                                                    <div class="col-12 px-2" *ngIf="!(invoiceType.isPurchaseOrder || invoiceType.isSalesInvoice)">
                                                                         <ng-container *ngIf="!selectedFileName">
                                                                             <div class="vouchers-attachment mat-form-field-border d-flex align-items-center column-gap1 p-2"
                                                                                 [matTooltip]="'No file chosen'"
@@ -1292,7 +1292,7 @@
                                                     Total Amount
                                                 </div>
                                                 <div class="col-3">
-                                                    <amount-field [amount]="voucherTotals.totalAmount"
+                                                    <amount-field class="d-inline-block" [amount]="voucherTotals.totalAmount"
                                                         [currencySymbol]="isMultiCurrencyVoucher ? account.baseCurrencySymbol : false"
                                                         [currencyCode]="isMultiCurrencyVoucher ? account.baseCurrency : false">
                                                     </amount-field>
@@ -1301,7 +1301,7 @@
                                                     Discount
                                                 </div>
                                                 <div class="col-3">
-                                                    <amount-field [amount]="voucherTotals.totalDiscount"
+                                                    <amount-field class="d-inline-block" [amount]="voucherTotals.totalDiscount"
                                                         [currencySymbol]="isMultiCurrencyVoucher ? account.baseCurrencySymbol : false"
                                                         [currencyCode]="isMultiCurrencyVoucher ? account.baseCurrency : false">
                                                     </amount-field>
@@ -1310,7 +1310,7 @@
                                                     Taxable Value
                                                 </div>
                                                 <div class="col-3">
-                                                    <amount-field [amount]="voucherTotals.totalTaxableValue"
+                                                    <amount-field class="d-inline-block" [amount]="voucherTotals.totalTaxableValue"
                                                         [currencySymbol]="isMultiCurrencyVoucher ? account.baseCurrencySymbol : false"
                                                         [currencyCode]="isMultiCurrencyVoucher ? account.baseCurrency : false">
                                                     </amount-field>
@@ -1319,7 +1319,7 @@
                                                     Tax
                                                 </div>
                                                 <div class="col-3">
-                                                    <amount-field [amount]="voucherTotals.totalTaxWithoutCess"
+                                                    <amount-field class="d-inline-block" [amount]="voucherTotals.totalTaxWithoutCess"
                                                         [currencySymbol]="isMultiCurrencyVoucher ? account.baseCurrencySymbol : false"
                                                         [currencyCode]="isMultiCurrencyVoucher ? account.baseCurrency : false">
                                                     </amount-field>
@@ -1329,7 +1329,7 @@
                                                         CESS
                                                     </div>
                                                     <div class="col-3">
-                                                        <amount-field [amount]="voucherTotals.totalCess"
+                                                        <amount-field class="d-inline-block" [amount]="voucherTotals.totalCess"
                                                             [currencySymbol]="isMultiCurrencyVoucher ? account.baseCurrencySymbol : false"
                                                             [currencyCode]="isMultiCurrencyVoucher ? account.baseCurrency : false">
                                                         </amount-field>
@@ -1340,7 +1340,7 @@
                                                         Round Off
                                                     </div>
                                                     <div class="col-3">
-                                                        <amount-field [amount]="voucherTotals.roundOff"
+                                                        <amount-field class="d-inline-block" [amount]="voucherTotals.roundOff"
                                                             [currencySymbol]="isMultiCurrencyVoucher ? account.baseCurrencySymbol : false"
                                                             [currencyCode]="isMultiCurrencyVoucher ? account.baseCurrency : false">
                                                         </amount-field>
@@ -1350,7 +1350,7 @@
                                                     Total
                                                 </div>
                                                 <div class="col-3">
-                                                    <amount-field [amount]="voucherTotals.grandTotal"
+                                                    <amount-field class="d-inline-block" [amount]="voucherTotals.grandTotal"
                                                         [currencySymbol]="isMultiCurrencyVoucher ? account.baseCurrencySymbol : false"
                                                         [currencyCode]="isMultiCurrencyVoucher ? account.baseCurrency : false">
                                                     </amount-field>
@@ -1360,12 +1360,37 @@
                                                         Balance Due
                                                     </div>
                                                     <div class="col-3">
-                                                        <amount-field [amount]="voucherTotals.balanceDue"
+                                                        <amount-field class="d-inline-block" [amount]="voucherTotals.balanceDue"
                                                             [currencySymbol]="isMultiCurrencyVoucher ? account.baseCurrencySymbol : false"
                                                             [currencyCode]="isMultiCurrencyVoucher ? account.baseCurrency : false">
                                                         </amount-field>
                                                     </div>
                                                 </ng-container>
+
+                                                <!-- NEED TO WORK ON THIS FLOW ALSO WHERE INPUT FIELD COME HERE -->
+                                                <div class="col-9">
+                                                    Total {{ account.baseCurrencySymbol }}
+                                                </div>
+                                                <div class="col-3">
+                                                    <amount-field *ngIf="true" class="d-inline-block" [amount]="voucherTotals.grandTotal"
+                                                        [currencySymbol]="isMultiCurrencyVoucher ? account.baseCurrencySymbol : false"
+                                                        [currencyCode]="isMultiCurrencyVoucher ? account.baseCurrency : false">
+                                                    </amount-field>
+                                                    <text-field
+                                                            *ngIf="false"
+                                                            [id]="'grandTotalMulDum'"
+                                                            #grandTotalInr
+                                                            [type]="'text'"
+                                                            [cssClass]="
+                                                                'form-control mat-field-border'
+                                                            "
+                                                            [name]="'grandTotalMulDum'"
+                                                            [prefix]="account?.baseCurrencySymbol"
+                                                            [mask]="company?.inputMaskFormat"
+                                                            [useMask]="true"
+                                                            [readonly]="isEinvoiceGenerated"
+                                                        ></text-field>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
