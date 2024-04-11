@@ -132,9 +132,8 @@
                                                 [ngClass]="{ 'p-0' : invoiceType.isCashInvoice }">
                                                 <span>Billing Address</span>
                                                 <span *ngIf="!invoiceType.isCashInvoice">
-                                                    &#40; {{ commonLocaleData?.app_address }}
-                                                    {{ invoiceForm.controls['account'].get("billingAddress").get("index")?.value + 1 }}
-                                                    &#41;
+                                                    &#40;{{ commonLocaleData?.app_address }}
+                                                    {{ invoiceForm.controls['account'].get("billingAddress").get("index")?.value + 1 }}&#41;
                                                 </span>
                                             </label> 
                                             <i *ngIf="!invoiceType.isCashInvoice"
@@ -208,9 +207,8 @@
                                                 <label for="billingAddress" class="billing-label">
                                                     <span>Shipping Address</span>
                                                     <span *ngIf="!invoiceType.isCashInvoice">
-                                                        &#40; {{ commonLocaleData?.app_address }} 
-                                                        {{ invoiceForm.controls['account'].get("shippingAddress").get("index")?.value + 1 }}
-                                                        &#41;
+                                                        &#40;{{ commonLocaleData?.app_address }} 
+                                                        {{ invoiceForm.controls['account'].get("shippingAddress").get("index")?.value + 1 }}&#41;
                                                     </span>
                                                 </label> <i *ngIf="!invoiceType.isCashInvoice"
                                                     [matMenuTriggerFor]="shippingAddress"
@@ -346,9 +344,9 @@
                                                 </ng-container>
                                             </div>
                                         </mat-menu>
-                                        <div class="mt-2">Address {{
+                                        <div class="mt-2">(Address {{
                                             invoiceForm.controls['company'].get("billingAddress").get("index")?.value +
-                                            1 }}
+                                            1 }})
                                         </div>
                                     </div>
 
@@ -374,9 +372,9 @@
                                                 </ng-container>
                                             </div>
                                         </mat-menu>
-                                        <div class="mt-2">Address {{
+                                        <div class="mt-2">(Address {{
                                             invoiceForm.controls['company'].get("shippingAddress").get("index")?.value +
-                                            1 }}
+                                            1 }})
                                         </div>
                                     </div>
                                 </div>
@@ -446,20 +444,12 @@
                                         <giddh-datepicker (keydown.enter)="$event.preventDefault()"
                                             [label]="invoiceType.isSalesInvoice  ?'Invoice Date': invoiceType.isPurchaseInvoice ? 'Bill Date': invoiceType.isCreditNote?'Credit Note Date': invoiceType.isDebitNote ?'Debit Note Date':invoiceType.isEstimateInvoice?'Estimate Date':invoiceType.isProformaInvoice?'Proforma Date':invoiceType.isPurchaseOrder ?'Order Date':'' "
                                             [placeholder]="'DD-MM-YYYY'" name="voucherDate" [showToggleIcon]="false"
-                                            [appearance]="'outline'" formControlName="date" (dateSelected)="getAllVouchersForAdjustment(); getVoucherListForCreditDebitNote();">
+                                            [appearance]="'outline'" formControlName="date" (dateSelected)="isVoucherDateChanged = true; getAllVouchersForAdjustment(); getVoucherListForCreditDebitNote();">
                                         </giddh-datepicker>
                                     </div>
 
                                     <!-- Due Date -->
-                                    <div class="col-3 pl-2" *ngIf="
-                                    (currentVoucherFormDetails?.dueDate ||
-                                    invoiceType.isSalesInvoice ||
-                                    invoiceType.isPurchaseInvoice ||
-                                    invoiceType.isPurchaseOrder ||
-                                    invoiceType.isProformaInvoice ||
-                                    invoiceType.isEstimateInvoice) &&
-                                    !invoiceType.isCashInvoice
-                                ">
+                                    <div class="col-3 pl-2" *ngIf="(currentVoucherFormDetails?.dueDate || invoiceType.isSalesInvoice || invoiceType.isPurchaseInvoice || invoiceType.isPurchaseOrder || invoiceType.isProformaInvoice || invoiceType.isEstimateInvoice) && !invoiceType.isCashInvoice">
                                         <giddh-datepicker (keydown.enter)="$event.preventDefault()"
                                             [label]="(invoiceType.isSalesInvoice || invoiceType.isProformaInvoice || invoiceType.isPurchaseInvoice) ? 'Due Date': invoiceType.isPurchaseOrder ? 'Expected Delivery': invoiceType.isEstimateInvoice ? 'Expiry Date' : ''"
                                             [placeholder]="'DD-MM-YYYY'" name="voucherDueDate" [showToggleIcon]="false"
@@ -475,9 +465,7 @@
                                             (change)="changeRcmCheckboxState($event)" class="mr-r1" name="rcmEntry"
                                             [disabled]="isEinvoiceGenerated" color="primary">
                                         </mat-checkbox>
-                                        <label for="reverse-charge" (click)="
-                                                !isEinvoiceGenerated ? toggleRcmCheckbox(rcmCheckbox, 'label') : ''
-                                            " [innerHTML]="localeData?.transaction_reverse_charge">
+                                        <label for="reverse-charge" (click)="!isEinvoiceGenerated ? toggleRcmCheckbox(rcmCheckbox, 'label') : ''" [innerHTML]="localeData?.transaction_reverse_charge">
                                         </label>
                                     </div>
                                     <div class="col-6 mr-t15" *ngIf="invoiceType.isCreditNote || invoiceType.isDebitNote">

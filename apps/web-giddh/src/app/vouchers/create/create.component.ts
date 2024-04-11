@@ -335,6 +335,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public showLoader: boolean = false;
     /** Holds true if table entry has at least single stock is selected  */
     public hasStock: boolean = false;
+    /** This will hold if voucher date is manually changed */
+    public isVoucherDateChanged: boolean = false;
 
     /** Returns true if account is selected else false */
     public get showPageLeaveConfirmation(): boolean {
@@ -450,7 +452,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             if (response) {
                 try {
                     this.universalDate = dayjs(response[1]).format(GIDDH_DATE_FORMAT);
-                    if (!this.isUpdateMode) {
+                    if (!this.isUpdateMode && !this.isVoucherDateChanged) {
                         this.invoiceForm.get('date')?.patchValue(this.universalDate);
 
                         let entryFields = [];
@@ -1232,7 +1234,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     public selectAccount(event: any, isClear: boolean = false): void {
         if (isClear) {
-            this.invoiceForm.reset();
+            this.resetVoucherForm();
         } else {
             this.invoiceForm.controls["account"].get("customerName")?.patchValue(event?.label);
             this.getAccountDetails(event?.value);
@@ -2674,6 +2676,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     public resetVoucherForm(): void {
         this.invoiceForm.reset();
+        this.invoiceForm.get('date')?.patchValue(this.universalDate);
+        this.isVoucherDateChanged = false;
+        let entryFields = [];
+        entryFields.push({ key: 'date', value: this.universalDate });
+        this.updateEntry(0, entryFields);
+        this.updateDueDate();
     }
 
     /**
