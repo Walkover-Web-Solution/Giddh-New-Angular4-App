@@ -369,8 +369,8 @@ export class CompanyService {
      * @returns {Observable<BaseResponse<BulkPaymentResponse, BulkPaymentConfirmRequest>>}
      * @memberof CompanyService
      */
-    public bulkVendorPaymentConfirm(companyUniqueName: string, bankUserId: string, bankAccountUniqueName: string, requestObject: BulkPaymentConfirmRequest): Observable<BaseResponse<BulkPaymentResponse, BulkPaymentConfirmRequest>> {
-        return this.http.post(this.config.apiUrl + COMPANY_API.BULK_PAYMENT_CONFIRM?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName))?.replace(':bankUserId', bankUserId)?.replace(':uniqueName', encodeURIComponent(bankAccountUniqueName)), requestObject).pipe(map((res) => {
+    public bulkVendorPaymentConfirm(companyUniqueName: string, urn: string, bankAccountUniqueName: string, requestObject: BulkPaymentConfirmRequest): Observable<BaseResponse<BulkPaymentResponse, BulkPaymentConfirmRequest>> {
+        return this.http.post(this.config.apiUrl + COMPANY_API.BULK_PAYMENT_CONFIRM?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName))?.replace(':urn', urn)?.replace(':uniqueName', encodeURIComponent(bankAccountUniqueName)), requestObject).pipe(map((res) => {
             return res;
         }), catchError((e) => this.errorHandler.HandleCatch<BulkPaymentResponse, BulkPaymentConfirmRequest>(e, BulkPaymentConfirmRequest)));
     }
@@ -384,8 +384,8 @@ export class CompanyService {
     * @returns
     * @memberof CompanyService
     */
-    public resendOtp(companyUniqueName: string, bankUserId: string, requestId: string, uniqueName: string): Observable<BaseResponse<any, any>> {
-        let url = this.config.apiUrl + COMPANY_API.BULK_PAYMENT_RESEND_OTP?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName))?.replace(':uniqueName', encodeURIComponent(uniqueName))?.replace(':bankUserId', bankUserId)?.replace(':requestId', requestId);
+    public resendOtp(companyUniqueName: string, urn: string, requestId: string, uniqueName: string): Observable<BaseResponse<any, any>> {
+        let url = this.config.apiUrl + COMPANY_API.BULK_PAYMENT_RESEND_OTP?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName))?.replace(':uniqueName', encodeURIComponent(uniqueName))?.replace(':urn', urn)?.replace(':requestId', requestId);
         return this.http.get(url).pipe(map((res) => {
             let data: BaseResponse<any, any> = res;
             return data;
