@@ -14,7 +14,7 @@
                         ? trigger.closePanel()
                         : null
                 " [value]="labelValue" />
-            <mat-autocomplete (optionSelected)="optionSelected($event)" optionsScroll
+            <mat-autocomplete (optionSelected)="optionSelected($event)" optionsScroll class="py-0"
                 [enableDynamicSearch]="enableDynamicSearch" (optionsScroll)="onScroll()" autoActiveFirstOption
                 [displayWith]="displayLabel" #auto="matAutocomplete">
                 <span class="position-relative">
@@ -29,6 +29,9 @@
                         </mat-option>
                         <mat-divider *ngIf="showOptionDivider"></mat-divider>
                     </ng-container>
+                    <mat-option disabled *ngIf="!(fieldFilteredOptions$ | async)">
+                        {{ commonLocaleData?.app_no_result_found }}
+                    </mat-option>
                     <a href="javascript:;" *ngIf="createNewText" (click)="createNewRecord()"
                         class="position-sticky create-new-wrapper d-flex justify-content-between px-3 py-2">
                         <div class="item create-new">{{ createNewText }}</div>

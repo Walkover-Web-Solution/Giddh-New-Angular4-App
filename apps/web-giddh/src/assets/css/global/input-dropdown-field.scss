@@ -23,7 +23,8 @@ report-filters,
             }
 
             .mat-mdc-form-field-infix {
-                min-height: 3rem;
+                min-height: 48px;
+                max-height: 48px;
                 padding: 12px 0 !important;
 
                 .mat-mdc-input-element {

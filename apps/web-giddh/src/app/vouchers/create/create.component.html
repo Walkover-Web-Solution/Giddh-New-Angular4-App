@@ -326,7 +326,14 @@
 
                                     <!-- Billing Address -->
                                     <div class="col-6">
-                                        <label for="billingAddress" class="billing-label">Billing Address</label> <i
+                                        <label for="billingAddress" class="billing-label">
+                                            <span>Billing Address</span>
+                                            <span *ngIf="!invoiceType.isCashInvoice">
+                                                &#40; {{ commonLocaleData?.app_address }}
+                                                {{ invoiceForm.controls['company'].get("billingAddress").get("index")?.value + 1 }}
+                                                &#41;
+                                            </span>
+                                        </label> <i
                                             [matMenuTriggerFor]="companyBillingAddress"
                                             class="icon-edit text-blue cursor-pointer pl-2 font-12"></i>
                                         <mat-menu #companyBillingAddress="matMenu">
@@ -346,15 +353,18 @@
                                                 </ng-container>
                                             </div>
                                         </mat-menu>
-                                        <div class="mt-2">Address {{
-                                            invoiceForm.controls['company'].get("billingAddress").get("index")?.value +
-                                            1 }}
-                                        </div>
                                     </div>
 
                                     <!-- Shipping Address -->
                                     <div class="col-6">
-                                        <label for="billingAddress" class="billing-label">Shipping Address</label> <i
+                                        <label for="billingAddress" class="billing-label">
+                                            <span>Shipping Address</span>
+                                            <span *ngIf="!invoiceType.isCashInvoice">
+                                                &#40; {{ commonLocaleData?.app_address }} 
+                                                {{ invoiceForm.controls['company'].get("shippingAddress").get("index")?.value + 1 }}
+                                                &#41;
+                                            </span>
+                                        </label> <i
                                             [matMenuTriggerFor]="companyShippingAddress"
                                             class="icon-edit text-blue cursor-pointer pl-2 font-12"></i>
                                         <mat-menu #companyShippingAddress="matMenu">
@@ -374,10 +384,6 @@
                                                 </ng-container>
                                             </div>
                                         </mat-menu>
-                                        <div class="mt-2">Address {{
-                                            invoiceForm.controls['company'].get("shippingAddress").get("index")?.value +
-                                            1 }}
-                                        </div>
                                     </div>
                                 </div>
                                 <!-- Row 3 -->
@@ -543,7 +549,7 @@
                                 </div>
                             </div>
 
-                            <div class="vouchers-large-container mt-4 pt-4">
+                            <div class="vouchers-large-container mr-t15 pt-4">
                                 <div class="change-currency  d-flex justify-content-end align-items-center column-gap1 text-uppercase pb-2"
                                     *ngIf="isMultiCurrencyVoucher">
                                     <span>{{ commonLocaleData?.app_numbers?.one }} {{ company?.baseCurrency }}</span>
