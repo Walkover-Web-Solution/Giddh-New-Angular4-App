@@ -136,6 +136,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public razorpay: any;
     /** Holds subscription response */
     private subscriptionResponse: any = {};
+    /** Holds Store Apply Promocode API response state as observable*/
+    public updateSubscriptionPaymentIsSuccess$ = this.componentStore.select(state => state.updateSubscriptionPaymentIsSuccess);
 
     constructor(
         public dialog: MatDialog,
@@ -189,6 +191,13 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             }
         });
 
+        this.updateSubscriptionPaymentIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.router.navigate(['/pages/new-company/' + response?.subscription?.subscriptionId]);
+            }
+        });
+
+
         this.session$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.isNewUserLoggedIn = response === userLoginStateEnum.newUserLoggedIn;
         });
@@ -241,26 +250,26 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 if (result) {
                     this.selectedPlan = result.find(plan => plan?.uniqueName === this.firstStepForm.get('planUniqueName').value);
                     if (this.firstStepForm.get('duration').value === 'YEARLY') {
-                        this.finalPlanAmount = this.selectedPlan?.yearlyAmount;
+                        this.finalPlanAmount = this.selectedPlan?.yearlyAmountAfterDiscount;
                     } else {
-                        this.finalPlanAmount = this.selectedPlan?.monthlyAmount;
+                        this.finalPlanAmount = this.selectedPlan?.monthlyAmountAfterDiscount;
                     }
                     if (this.secondStepForm?.get('country')?.value?.value?.toLowerCase() === 'in') {
                         this.finalPlanAmount = this.finalPlanAmount + (this.finalPlanAmount * this.taxPercentage);
                     } else {
                         if (this.firstStepForm.get('duration').value === 'YEARLY') {
-                            this.finalPlanAmount = this.selectedPlan?.yearlyAmount;
+                            this.finalPlanAmount = this.selectedPlan?.yearlyAmountAfterDiscount;
                         } else {
-                            this.finalPlanAmount = this.selectedPlan?.monthlyAmount;
+                            this.finalPlanAmount = this.selectedPlan?.monthlyAmountAfterDiscount;
                         }
                     }
                 }
             });
         } else {
             if (this.firstStepForm.get('duration').value === 'YEARLY') {
-                this.finalPlanAmount = this.selectedPlan?.yearlyAmount;
+                this.finalPlanAmount = this.selectedPlan?.yearlyAmountAfterDiscount;
             } else {
-                this.finalPlanAmount = this.selectedPlan?.monthlyAmount;
+                this.finalPlanAmount = this.selectedPlan?.monthlyAmountAfterDiscount;
             }
         }
     }

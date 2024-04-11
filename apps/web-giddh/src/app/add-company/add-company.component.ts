@@ -1076,6 +1076,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
             number = phoneNumber.replace(countryCode, '').trim();
             number = number.substring(1);
         }
+
         let taxDetails = this.prepareTaxDetail(this.companyForm);
         this.company.name = this.firstStepForm.value.name;
         this.company.country = this.firstStepForm.value.country.value;
@@ -1093,6 +1094,9 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         this.company.permission.entity = this.thirdStepForm.value.entity;
         this.company.creatorSuperAdmin = this.thirdStepForm.value.creatorSuperAdmin;
         this.isLoading = true;
+        if (this.thirdStepForm.value.creatorSuperAdmin) {
+            delete this.company.permission;
+        }
         this.companyService.CreateNewCompany(this.company).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
             if (response?.status === "success") {
                 this.store.dispatch(this.companyActions.CreateNewCompanyResponse(response));
