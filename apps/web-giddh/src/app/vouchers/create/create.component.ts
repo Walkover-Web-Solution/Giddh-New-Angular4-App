@@ -337,11 +337,14 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public hasStock: boolean = false;
     /** This will hold if voucher date is manually changed */
     public isVoucherDateChanged: boolean = false;
+    /** True if voucher number field is enabled */
+    public useCustomVoucherNumber: boolean = false;
 
     /** Returns true if account is selected else false */
     public get showPageLeaveConfirmation(): boolean {
         return (!this.isUpdateMode && (this.invoiceForm?.controls['account']?.get('customerName')?.value)) ? true : false;
     }
+
     /**
      * Show/Hide tax column if condition fulfills
      *
@@ -557,11 +560,13 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     taxesFormArray.push(this.getTransactionTaxFormGroup(tax));
                 });
 
-                const discountsFormArray = entryFormGroup.get('discounts') as FormArray;
-                discountsFormArray.clear();
-                response.body.stock.variant?.variantDiscount?.discounts?.forEach(discount => {
-                    discountsFormArray.push(this.getTransactionDiscountFormGroup(discount?.discount));
-                });
+                if (response.body.stock) {
+                    const discountsFormArray = entryFormGroup.get('discounts') as FormArray;
+                    discountsFormArray.clear();
+                    response.body.stock.variant?.variantDiscount?.discounts?.forEach(discount => {
+                        discountsFormArray.push(this.getTransactionDiscountFormGroup(discount?.discount));
+                    });
+                }
             }
         });
 
@@ -643,6 +648,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         }
                     }
                 });
+
+                this.startLoader(false);
             }
         });
 
@@ -784,14 +791,21 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.invoiceSettings = settings;
                 if (this.voucherType === VoucherTypeEnum.sales || this.voucherType === VoucherTypeEnum.cash) {
                     this.applyRoundOff = settings.invoiceSettings.salesRoundOff;
+                    this.useCustomVoucherNumber = settings?.invoiceSettings?.useCustomInvoiceNumber;
                 } else if (this.voucherType === VoucherTypeEnum.purchase) {
                     this.applyRoundOff = settings.invoiceSettings.purchaseRoundOff;
+                    this.useCustomVoucherNumber = settings?.invoiceSettings?.useCustomPurchaseNumber;
                 } else if (this.voucherType === VoucherTypeEnum.debitNote) {
                     this.applyRoundOff = settings.invoiceSettings.debitNoteRoundOff;
+                    this.useCustomVoucherNumber = settings?.invoiceSettings?.useCustomDebitNoteNumber;
                 } else if (this.voucherType === VoucherTypeEnum.creditNote) {
                     this.applyRoundOff = settings.invoiceSettings.creditNoteRoundOff;
+                    this.useCustomVoucherNumber = settings?.invoiceSettings?.useCustomCreditNoteNumber;
                 } else if (this.voucherType === VoucherTypeEnum.estimate || this.voucherType === VoucherTypeEnum.generateEstimate || this.voucherType === VoucherTypeEnum.proforma || this.voucherType === VoucherTypeEnum.generateProforma) {
                     this.applyRoundOff = true;
+                    this.useCustomVoucherNumber = true;
+                } else if (this.voucherType === VoucherTypeEnum.purchaseOrder) {
+                    this.useCustomVoucherNumber = settings?.purchaseBillSettings?.useCustomPONumber;
                 }
                 this.updateDueDate();
             }
@@ -929,10 +943,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             if (!response) {
                 this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: 0 }));
             } else {
-                let warehouseResults = response.results?.filter(wh => !wh.isArchived);
+                let warehouseResults = response.results?.filter(warehouse => !warehouse.isArchived);
                 const warehouseData = this.settingsUtilityService.getFormattedWarehouseData(warehouseResults);
                 this.warehouses = warehouseData.formattedWarehouses;
-                this.showWarehouse = true;
+                this.showWarehouse = this.warehouses?.length ? true : false;
             }
         });
     }
@@ -1178,7 +1192,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     private getAccountDetails(accountUniqueName: string): void {
         this.componentStore.getAccountDetails(accountUniqueName);
 
-        if (!this.invoiceType.isPurchaseOrder) {
+        if (this.invoiceType.isSalesInvoice || this.invoiceType.isPurchaseInvoice || this.invoiceType.isCreditNote || this.invoiceType.isDebitNote) {
             this.getAllVouchersForAdjustment();
             this.getVoucherListForCreditDebitNote();
         }
@@ -1462,7 +1476,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 date: ['']
             }),
             einvoiceGenerated: [false],
-            linkedPo: [null] //temp
+            linkedPo: [null], //temp
+            grandTotalMultiCurrency: [0] //temp
         });
     }
 
@@ -2378,6 +2393,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public copyInvoice(item: PreviousInvoicesVm): void {
+        this.startLoader(true);
         this.invoiceForm.get("voucherUniqueName")?.patchValue(item?.uniqueName);
         this.componentStore.getVoucherDetails({ isCopy: true, accountUniqueName: item.account?.uniqueName, payload: { invoiceNo: item.versionNumber, uniqueName: item?.uniqueName, voucherType: this.voucherType } });
     }
@@ -2427,7 +2443,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     private calculateVoucherTotals(): void {
         const entries = this.getEntries();
-        this.voucherTotals = this.vouchersUtilityService.getVoucherTotals(entries, this.company.giddhBalanceDecimalPlaces, this.applyRoundOff);
+        this.voucherTotals = this.vouchersUtilityService.getVoucherTotals(entries, this.company.giddhBalanceDecimalPlaces, this.applyRoundOff, this.invoiceForm.get('exchangeRate')?.value);
+        this.invoiceForm.get('grandTotalMultiCurrency')?.patchValue(this.voucherTotals?.grandTotalMultiCurrency);
         this.calculateBalanceDue();
     }
 
@@ -2613,6 +2630,13 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         invoiceForm = this.vouchersUtilityService.formatVoucherObject(invoiceForm);
 
+        if (this.hasStock && this.warehouses?.length === 1) {
+            invoiceForm.warehouse = {
+                name: this.warehouses[0]?.name,
+                uniqueName: this.warehouses[0]?.uniqueName
+            }
+        }
+
         if (this.invoiceType.isPurchaseOrder) {
             invoiceForm.type = "purchase";
 
@@ -2632,7 +2656,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     this.toasterService.showSnackBar("error", response?.message, response?.code);
                 }
             });
-
         } else {
             this.voucherService.generateVoucher(invoiceForm.account.uniqueName, invoiceForm).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response?.status === "success") {
@@ -2676,6 +2699,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     public resetVoucherForm(): void {
         this.invoiceForm.reset();
+        this.hasStock = false;
         this.invoiceForm.get('date')?.patchValue(this.universalDate);
         this.isVoucherDateChanged = false;
         let entryFields = [];
@@ -3234,5 +3258,13 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.hasStock = true;
             }
         });
+        this.showWarehouse = this.hasStock;
+    }
+
+    public updateExchangeRate(amount: any): void {
+        amount = amount?.target?.value;
+        amount = (amount) ? String(amount)?.replace(this.company.baseCurrencySymbol, '') : '';
+        let total = (amount) ? (parseFloat(this.generalService.removeSpecialCharactersFromAmount(amount)) || 0) : 0;
+        this.invoiceForm.get('exchangeRate')?.patchValue(total / this.voucherTotals.grandTotal || 0);
     }
 }

@@ -1,6 +1,5 @@
 <ng-container appTranslate [file]="'vouchers'" (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
-    <giddh-page-loader *ngIf="showLoader"></giddh-page-loader>
     <hamburger-menu></hamburger-menu>
     <div class="vouchers">
         <mat-card class="container-lg">
@@ -13,8 +12,8 @@
                             [moduleName]="invoiceType.isSalesInvoice ? 'VOUCHER_SALES' : 'VOUCHER_CASH'"></watch-video>
                     </div>
                 </div>
-
-                <div class="vouchers-content-wrapper">
+                <giddh-page-loader *ngIf="showLoader"></giddh-page-loader>
+                <div class="vouchers-content-wrapper" [hidden]="showLoader">
                     <form autocomplete="off" novalidate name="invoiceForm" [formGroup]="invoiceForm">
                         <!-- Voucher Form Top Section -->
                         <div class="vouchers-primary-form" formGroupName="account">
@@ -45,7 +44,7 @@
                                                 [autoFocus]="true" formControlName="customerName"></input-field>
                                         </div>
                                         <ng-container
-                                            *ngIf="!invoiceType.isCashInvoice && !invoiceType.isPurchaseOrder && invoiceForm.controls['account'].get('uniqueName')?.value">
+                                            *ngIf="(invoiceType.isSalesInvoice || invoiceType.isPurchaseInvoice || invoiceType.isCreditNote || invoiceType.isDebitNote) && invoiceForm.controls['account'].get('uniqueName')?.value">
                                             <div class="vouchers-copy-sales mr-l3 cursor-pointer"
                                                 (click)="getPreviousVouchers()" [matMenuTriggerFor]="copyLastVouchers">
                                                 <i class="icon-copy-file"></i>
@@ -309,7 +308,7 @@
                                     </ng-container>
 
                                     <!-- Warehouse -->
-                                    <div class="col-6 mr-t15" *ngIf="showWarehouse" formGroupName="warehouse">
+                                    <div class="col-6 mr-t15" *ngIf="showWarehouse && warehouses?.length > 1" formGroupName="warehouse">
                                         <reactive-dropdown-field [cssClass]="'border-0'" [name]="'warehouse'"
                                             formControlName="uniqueName" [label]="'Warehouse'" [placeholder]="'Select'"
                                             [options]="warehouses"></reactive-dropdown-field>
@@ -435,7 +434,7 @@
                                         <input-field [name]="'vouchers-number'"
                                             [label]="!invoiceType.isPurchaseOrder? 'Voucher Number' : 'Order Number'"
                                             [placeholder]="!invoiceType.isPurchaseOrder? 'Enter voucher number' : 'Enter Order Number'"
-                                            [type]="'text'" formControlName="number" [readonly]="!invoiceSettings?.invoiceSettings?.useCustomInvoiceNumber" [disabled]="!invoiceSettings?.invoiceSettings?.useCustomInvoiceNumber">
+                                            [type]="'text'" formControlName="number" [readonly]="isUpdateMode || !useCustomVoucherNumber" [disabled]="isUpdateMode || !useCustomVoucherNumber">
                                         </input-field>
                                     </div>
 
@@ -534,11 +533,11 @@
                             <div class="vouchers-large-container mt-4 pt-4">
                                 <div class="change-currency  d-flex justify-content-end align-items-center column-gap1 text-uppercase pb-2"
                                     *ngIf="isMultiCurrencyVoucher">
-                                    <span>{{ commonLocaleData?.app_numbers?.one }} {{ company?.baseCurrency }}</span>
+                                    <span>{{ commonLocaleData?.app_numbers?.one }} {{ account?.baseCurrency }}</span>
                                     <img alt="switch-icon" height="15px" src="/assets/images/switch-icon.svg" />
                                     <span *ngIf="!showExchangeRateEditField">{{ invoiceForm.get('exchangeRate')?.value
                                         }} {{
-                                        account?.baseCurrency }}</span>
+                                        company?.baseCurrency }}</span>
                                     <div class="currency-input-wrapper" *ngIf="showExchangeRateEditField">
                                         <text-field [cssClass]="'form-control'" [type]="'number'"
                                             [matSuffix]="account?.baseCurrency"
@@ -1358,30 +1357,28 @@
                                                     </div>
                                                 </ng-container>
 
-                                                <!-- NEED TO WORK ON THIS FLOW ALSO WHERE INPUT FIELD COME HERE -->
-                                                <div class="col-9">
-                                                    Total {{ account.baseCurrencySymbol }}
-                                                </div>
-                                                <div class="col-3">
-                                                    <amount-field *ngIf="true" class="d-inline-block" [amount]="voucherTotals.grandTotal"
-                                                        [currencySymbol]="isMultiCurrencyVoucher ? account.baseCurrencySymbol : false"
-                                                        [currencyCode]="isMultiCurrencyVoucher ? account.baseCurrency : false">
-                                                    </amount-field>
-                                                    <text-field
-                                                            *ngIf="false"
-                                                            [id]="'grandTotalMulDum'"
-                                                            #grandTotalInr
+                                                <ng-container *ngIf="isMultiCurrencyVoucher">
+                                                    <div class="col-9">
+                                                        Total {{ company.baseCurrencySymbol }}
+                                                    </div>
+                                                    <div class="col-3">
+                                                        <text-field
+                                                            [id]="'grandTotalMultiCurrency'"
+                                                            #grandTotalMultiCurrency
                                                             [type]="'text'"
                                                             [cssClass]="
                                                                 'form-control mat-field-border'
                                                             "
-                                                            [name]="'grandTotalMulDum'"
-                                                            [prefix]="account?.baseCurrencySymbol"
+                                                            [name]="'grandTotalMultiCurrency'"
+                                                            [prefix]="company?.baseCurrencySymbol"
                                                             [mask]="company?.inputMaskFormat"
                                                             [useMask]="true"
                                                             [readonly]="isEinvoiceGenerated"
+                                                            formControlName="grandTotalMultiCurrency"
+                                                            (change)="updateExchangeRate($event)"
                                                         ></text-field>
-                                                </div>
+                                                    </div>
+                                                </ng-container>
                                             </div>
                                         </div>
                                     </div>
