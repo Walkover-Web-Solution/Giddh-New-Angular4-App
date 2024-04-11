@@ -272,7 +272,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     */
     public ngAfterViewInit(): void {
         this.stepperIcon._getIndicatorType = () => 'number';
-        this.initIntl();
     }
 
     /**
@@ -681,6 +680,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      */
     public onSelectedTab(event: any): void {
         this.selectedStep = event?.selectedIndex;
+        if(this.selectedStep === 1){
+            this.initIntl();
+        }
     }
 
     /**
