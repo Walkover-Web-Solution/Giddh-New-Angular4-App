@@ -139,7 +139,7 @@ export class IntegratedBankList {
     bankName?: any;
     userAmountRanges: UserAmountRange[];
     message?: any;
-    URN: string;
+    bankUserId: string;
 }
 
 
