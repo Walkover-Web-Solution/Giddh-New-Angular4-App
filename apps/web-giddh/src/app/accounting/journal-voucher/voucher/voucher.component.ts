@@ -866,7 +866,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         if (event && accountName) {
             this.filterByText = accountName;
             this.showLedgerAccountList = true;
-            console.log(this.selectedInputFeildIndex, this.activeRowType);
             this.onAccountSearchQueryChanged(this.filterByText);
             // setTimeout(() => {
             //     this.showLedgerAccountList = true;
@@ -1849,8 +1848,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             };
             // Loaded accounts will be of groups -> (Groups - Except Groups)
             this.searchService.searchAccountV2(requestObject).subscribe(data => {
-                this.activeRowIndex = this.selectedInputFeildIndex;
-                this.activeRowType = 'account';
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
                         return {

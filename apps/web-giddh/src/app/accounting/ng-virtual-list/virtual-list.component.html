@@ -75,10 +75,11 @@
                         [itemSize]="37"
                         [minBufferPx]="400"
                         [maxBufferPx]="800"
+                        (keydown)="handleKeyDown($event)"
                     >
                         <li
                             *cdkVirtualFor="let row of rows; let j = index; trackBy: trackByFn"
-                            [ngClass]="{ 'hilighted': j === selectedItemIndex }"
+                            [ngClass]="{ 'hilighted': j === selectedIndex }"
                             class="list-item sidebarTooltip text-overflow-ellipsis"
                         >
                             <a
