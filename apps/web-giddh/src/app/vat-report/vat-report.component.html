@@ -203,7 +203,7 @@
                         <!-- uk-vrn-report -->
                         <ng-container *ngIf="(isUKCompany || isKenyaCompany) && !isLoading">
                             <!-- <div *ngFor="let report of vatReport ?? dummyVatReport; let i = index" class="pd-l15 pd-r15"> -->
-                                <div *ngFor="let report of dummyVatReport; let i = index" class="pd-l15 pd-r15">
+                                <div *ngFor="let report of (isUKCompany ? vatReport : dummyVatReport); let i = index" class="pd-l15 pd-r15">
                                 <div class="white-box" *ngIf="i < 2">
                                     <div class="d-flex justify-content-between align-items-center">
                                         <p>
