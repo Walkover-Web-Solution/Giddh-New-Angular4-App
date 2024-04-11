@@ -210,7 +210,7 @@ export class VouchersUtilityService {
         }
     }
 
-    public getVoucherTotals(entries: any[], balanceDecimalPlaces: number, applyRoundOff: boolean): any {
+    public getVoucherTotals(entries: any[], balanceDecimalPlaces: number, applyRoundOff: boolean, exchangeRate: number): any {
         let voucherTotals = {
             totalAmount: 0,
             totalDiscount: 0,
@@ -218,6 +218,7 @@ export class VouchersUtilityService {
             totalTaxWithoutCess: 0,
             totalCess: 0,
             grandTotal: 0,
+            grandTotalMultiCurrency: 0,
             roundOff: 0,
             tcsTotal: 0,
             tdsTotal: 0,
@@ -245,6 +246,7 @@ export class VouchersUtilityService {
         voucherTotals.totalTaxWithoutCess = giddhRoundOff(voucherTotals.totalTaxWithoutCess, balanceDecimalPlaces);
         voucherTotals.totalCess = giddhRoundOff(voucherTotals.totalCess, balanceDecimalPlaces);
         voucherTotals.grandTotal = giddhRoundOff(voucherTotals.grandTotal, balanceDecimalPlaces);
+        voucherTotals.grandTotalMultiCurrency = giddhRoundOff(voucherTotals.grandTotal * exchangeRate, balanceDecimalPlaces);
         voucherTotals.roundOff = (applyRoundOff) ? Number((Math.round(voucherTotals.grandTotal) - voucherTotals.grandTotal).toFixed(balanceDecimalPlaces)) : Number((0).toFixed(balanceDecimalPlaces));
 
         return voucherTotals;
