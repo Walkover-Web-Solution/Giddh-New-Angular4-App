@@ -681,6 +681,7 @@
                                                                                 *ngIf="activeEntryIndex === entryIndex"
                                                                                 [label]="localeData?.select_variant"
                                                                                 [placeholder]="localeData?.select_variant"
+                                                                                [labelValue]="transaction.get('stock.variant.name')?.value"
                                                                                 formControlName="uniqueName"
                                                                                 [name]="'transactionStockVariantUniqueName' + entryIndex"
                                                                                 [options]="stockVariants[entryIndex] | async"

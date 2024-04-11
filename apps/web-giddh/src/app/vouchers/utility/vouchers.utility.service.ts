@@ -6,6 +6,7 @@ import { GIDDH_VOUCHER_FORM, PAGINATION_LIMIT } from "../../app.constant";
 import { giddhRoundOff } from "../../shared/helpers/helperFunctions";
 import { GIDDH_DATE_FORMAT } from "../../shared/helpers/defaultDateFormat";
 import * as dayjs from "dayjs";
+import * as cleaner from 'fast-clean';
 
 @Injectable()
 export class VouchersUtilityService {
@@ -303,6 +304,10 @@ export class VouchersUtilityService {
             }
 
             delete entry.otherTax;
+        });
+
+        invoiceForm = cleaner?.clean(invoiceForm, {
+            nullCleaner: true
         });
 
         return invoiceForm;

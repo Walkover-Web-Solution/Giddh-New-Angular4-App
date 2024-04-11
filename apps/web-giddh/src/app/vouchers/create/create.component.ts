@@ -1090,6 +1090,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.voucherAccountResults$ = observableOf(voucherAccountResults.concat(...newResults));
             } else {
                 this.accountSearchRequest.loadMore = false;
+                this.voucherAccountResults$ = observableOf(null);
             }
             this.accountSearchRequest.isLoading = false;
         });
@@ -1123,6 +1124,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.voucherStockResults$ = observableOf(voucherStockResults.concat(...newResults));
             } else {
                 this.stockSearchRequest.loadMore = false;
+                this.voucherStockResults$ = observableOf(null);
             }
             this.stockSearchRequest.isLoading = false;
         });
