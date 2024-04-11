@@ -23,7 +23,7 @@ export class IntegratedBankList {
 /** Get bank request object */
 export class GetOTPRequest {
     bankName: string;
-    bankUserId: string;
+    urn: string;
     uniqueName: string;
     totalAmount: string;
     bankPaymentTransactions: BankTransactionForOTP[];

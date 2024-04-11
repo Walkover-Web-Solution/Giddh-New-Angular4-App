@@ -51,7 +51,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     /** Request object for OTP */
     public requestObjectToGetOTP: GetOTPRequest = {
         bankName: '',
-        bankUserId: '',
+        urn: '',
         uniqueName: '',
         totalAmount: '',
         bankPaymentTransactions: []
@@ -429,7 +429,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
 
         if(loadPayorList) {
             this.selectedBankUserId = '';
-            this.requestObjectToGetOTP.bankUserId = '';
+            this.requestObjectToGetOTP.urn = '';
             this.getBankAccountPayorsList();
         }
     }
@@ -443,7 +443,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     public selectPayor(event: IOption): void {
         if (event) {
             this.selectedBankUserId = event.value;
-            this.requestObjectToGetOTP.bankUserId = event.value;
+            this.requestObjectToGetOTP.urn = event.value;
         }
     }
 
@@ -696,7 +696,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         }
         this.isPayorRequired = false;
         this.selectedBankUserId = '';
-        this.requestObjectToGetOTP.bankUserId = '';
+        this.requestObjectToGetOTP.urn = '';
         this.forceClear$ = of({ status: true });
         this.isPayorListInProgress = true;
         this.settingsIntegrationService.getBankAccountPayorsList(this.selectedBankUniqueName, this.totalSelectedAccountAmount).pipe(take(1)).subscribe(response => {
