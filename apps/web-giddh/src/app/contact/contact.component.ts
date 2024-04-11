@@ -236,6 +236,8 @@ export class ContactComponent implements OnInit, OnDestroy {
     public customiseColumns = [];
     /** Holds inventory type module  */
     public moduleType: string = '';
+    /** Holds true if current company country is plaid supported country */
+    public isPlaidSupportedCountry: boolean;
 
     constructor(public dialog: MatDialog, private store: Store<AppState>, private router: Router, private companyServices: CompanyService, private commonActions: CommonActions, private toaster: ToasterService,
         private contactService: ContactService, private settingsIntegrationActions: SettingsIntegrationActions, private companyActions: CompanyActions, private componentFactoryResolver: ComponentFactoryResolver, private cdRef: ChangeDetectorRef, private generalService: GeneralService, private route: ActivatedRoute, private generalAction: GeneralActions,
@@ -285,7 +287,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             let queryParams = result[1];
             let lastTabType = this.moduleType;
             this.moduleType = (params.type)?.toUpperCase();
-            
+
             if (params) {
                if ((params["type"] && params["type"].indexOf("customer") > -1) || (queryParams && queryParams.tab && queryParams.tab === "customer")) {
                     const activeTab = this.activeTab;
@@ -311,6 +313,13 @@ export class ContactComponent implements OnInit, OnDestroy {
                     this.setActiveTab("aging-report");
                 }
                 this.customiseColumns = cloneDeep(CONTACTS_COMMON_COLUMNS);
+
+                this.store.pipe(select(s => s.session.currentCompanyCurrency), takeUntil(this.destroyed$)).subscribe(res => {
+                    if (res) {
+                        this.isPlaidSupportedCountry = this.generalService.checkCompanySupportPlaid(res.country);
+                    }
+                });
+
 
                 if (this.activeTab === ContactsTab.customer.toLowerCase()) {
                     this.customiseColumns.splice(0, 0,
