@@ -261,6 +261,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     public activeRowIndex: number = null;
     /** Active row for current fields*/
     public activeRowType: string = null;
+    /** Active row for current fields*/
+    public selectedInputFeildIndex: number = null;
 
     constructor(
         private _ledgerActions: LedgerActions,
@@ -667,6 +669,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      */
     public onAccountFocus(event: any, element: any, trxnType: any, index: number): void {
         this.selectedAccountInputField = event.target;
+
         this.selectedField = 'account';
         this.showConfirmationBox = false;
         this.selectedTransactionType = trxnType;
@@ -863,6 +866,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         if (event && accountName) {
             this.filterByText = accountName;
             this.showLedgerAccountList = true;
+            console.log(this.selectedInputFeildIndex, this.activeRowType);
             this.onAccountSearchQueryChanged(this.filterByText);
             // setTimeout(() => {
             //     this.showLedgerAccountList = true;
@@ -1845,6 +1849,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             };
             // Loaded accounts will be of groups -> (Groups - Except Groups)
             this.searchService.searchAccountV2(requestObject).subscribe(data => {
+                this.activeRowIndex = this.selectedInputFeildIndex;
+                this.activeRowType = 'account';
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
                         return {

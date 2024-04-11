@@ -82,6 +82,9 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Hold selected index  */
     public selectedIndex: number = -1;
+    /** Hold selected item index  */
+    public selectedItemIndex: number = 0;
+    public activeItem:any = null;
 
     /** Keys. **/
 
@@ -296,51 +299,53 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
 
     public keydownUp(event) {
         let key = event.which;
+        console.log(event, this.isOpen);
         if (this.isOpen) {
             if (key === this.KEYS.ESC || key === this.KEYS.TAB || (key === this.KEYS.UP && event.altKey)) {
                 this.hide();
             } else if (key === this.KEYS.ENTER) {
-                if (this.menuEle && this.menuEle.virtualScrollElm && this.menuEle.virtualScrollElm) {
-                    let item = this.menuEle.virtualScrollElm.getHighlightedOption();
-                    if (item !== null) {
-                        this.toggleSelected(item);
-                    }
-                }
+                // if (this.menuEle && this.menuEle.virtualScrollElm && this.menuEle.virtualScrollElm) {
+                //     let item = this.menuEle.virtualScrollElm.getHighlightedOption();
+                //     if (item !== null) {
+                //         this.toggleSelected(item);
+                //     }
+                // }
                 // this.selectHighlightedOption();
             } else if (key === this.KEYS.UP) {
-                if (this.menuEle && this.menuEle.virtualScrollElm && this.menuEle.virtualScrollElm) {
-                    let item = this.menuEle.virtualScrollElm.getPreviousHilightledOption();
-                    if (item !== null) {
-                        // this.toggleSelected(item);
-                        this.menuEle.virtualScrollElm.scrollInto(item);
-                        this.menuEle.virtualScrollElm.startupLoop = true;
-                        this.menuEle.virtualScrollElm.refresh();
-                        event.preventDefault();
-                    }
-                }
+                console.log(this.activeItem, this.selectedItemIndex);
+                // if (this.menuEle && this.menuEle.virtualScrollElm && this.menuEle.virtualScrollElm) {
+                //     let item = this.menuEle.virtualScrollElm.getPreviousHilightledOption();
+                //     if (item !== null) {
+                //         // this.toggleSelected(item);
+                //         this.menuEle.virtualScrollElm.scrollInto(item);
+                //         this.menuEle.virtualScrollElm.startupLoop = true;
+                //         this.menuEle.virtualScrollElm.refresh();
+                //         event.preventDefault();
+                //     }
+                // }
                 // this.optionList.highlightPreviousOption();
                 // this.dropdown.moveHighlightedIntoView();
                 // if (!this.filterEnabled) {
                 //     event.preventDefault();
                 // }
             } else if (key === this.KEYS.DOWN) {
-                if (this.menuEle && this.menuEle.virtualScrollElm && this.menuEle.virtualScrollElm) {
-                    let item = this.menuEle.virtualScrollElm.getNextHilightledOption();
-                    if (item !== null) {
-                        // this.toggleSelected(item);
-                        this.menuEle.virtualScrollElm.scrollInto(item);
-                        this.menuEle.virtualScrollElm.startupLoop = true;
-                        this.menuEle.virtualScrollElm.refresh();
-                        event.preventDefault();
-                    }
-                }
+                // if (this.menuEle && this.menuEle.virtualScrollElm && this.menuEle.virtualScrollElm) {
+                //     let item = this.menuEle.virtualScrollElm.getNextHilightledOption();
+                //     if (item !== null) {
+                //         // this.toggleSelected(item);
+                //         this.menuEle.virtualScrollElm.scrollInto(item);
+                //         this.menuEle.virtualScrollElm.startupLoop = true;
+                //         this.menuEle.virtualScrollElm.refresh();
+                //         event.preventDefault();
+                //     }
+            // }
 
-                //     this.optionList.highlightNextOption();
-                // this.dropdown.moveHighlightedIntoView();
-                // if (!this.filterEnabled) {
-                //     event.preventDefault();
-                // }
-            }
+            //     this.optionList.highlightNextOption();
+            // this.dropdown.moveHighlightedIntoView();
+            // if (!this.filterEnabled) {
+            //     event.preventDefault();
+            // }
+        }
         }
         this.cdRef.detectChanges();
     }
@@ -425,6 +430,7 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
         }
         if ('showList' in changes && changes.showList.currentValue !== changes.showList.previousValue) {
             if (changes.showList.currentValue) {
+                this.selectedItemIndex = 0;
                 this.show();
             } else if (!changes.showList.currentValue) {
                 this.filter = this.selectedValues[0] ? this.selectedValues[0].label : '';
@@ -432,6 +438,7 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
             }
         }
         if ('keydownUpInput' in changes && changes.keydownUpInput.currentValue !== changes.keydownUpInput.previousValue) {
+            console.log(changes, changes.keydownUpInput);
             this.keydownUp(changes.keydownUpInput.currentValue);
         }
     }
@@ -493,25 +500,27 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
      * @param {KeyboardEvent} event
      * @memberof AVShSelectComponent
      */
-    public handleKeyDown(event: KeyboardEvent): void {
+    public handleKeyDown(event: KeyboardEvent, item?: any, index?: number): void {
+        this.selectedItemIndex = index;
+        this.activeItem = item;
         if (event.key === 'ArrowUp') {
             event.preventDefault();
-            this.selectedIndex = Math.max(this.selectedIndex - 1, 0);
+            this.selectedItemIndex = Math.max(this.selectedItemIndex - 1, 0);
         } else if (event.key === 'ArrowDown') {
             event.preventDefault();
-            this.selectedIndex = Math.min(this.selectedIndex + 1, this.rows.length - 1);
+            this.selectedItemIndex = Math.min(this.selectedItemIndex + 1, this.rows.length - 1);
         }
 
         const elements = this.eleRef?.nativeElement?.querySelectorAll('.list-item');
         if (elements.length > 0) {
             elements.forEach((element, index) => {
-                if (index === this.selectedIndex) {
+                if (index === this.selectedItemIndex) {
                     element.classList.add('hilighted');
                 } else {
                     element.classList.remove('hilighted');
                 }
             });
-            elements[this.selectedIndex].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+            elements[this.selectedItemIndex].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
         }
     }
 

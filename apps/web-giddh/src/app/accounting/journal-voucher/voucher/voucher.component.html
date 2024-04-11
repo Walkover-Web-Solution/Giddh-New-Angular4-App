@@ -92,6 +92,7 @@
                                             }"
                                             formGroupName="selectedAccount"
                                         >
+                                        {{activeRowIndex}}:{{activeRowType}}
                                             <text-field
                                                 [autoFocus]="activeRowIndex === i && activeRowType === 'account'"
                                                 [autocomplete]="'off'"
@@ -109,7 +110,9 @@
                                                         transaction.get('type')?.value,
                                                         i
                                                     );
-                                                    searchedAccountQuery.next($event)
+                                                    searchedAccountQuery.next($event);
+                                                    selectedInputFeildIndex = i
+
                                                 "
                                                 (blur)="onAccountBlur($event)"
                                                 [ngClass]="{ 'focus': isSelectedRow && selectedIdx === i }"
