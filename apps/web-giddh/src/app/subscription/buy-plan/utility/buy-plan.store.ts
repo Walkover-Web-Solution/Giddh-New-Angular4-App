@@ -6,6 +6,7 @@ import { SubscriptionsService } from "../../../services/subscriptions.service";
 import { ToasterService } from "../../../services/toaster.service";
 import { AppState } from "../../../store";
 import { Store } from "@ngrx/store";
+import { SettingsProfileService } from "../../../services/settings.profile.service";
 
 export interface BuyPlanState {
     planListInProgress: boolean;
@@ -17,7 +18,9 @@ export interface BuyPlanState {
     updatePlanInProgress: boolean;
     applyPromoCodeSuccess: boolean;
     applyPromoCodeInProgress: boolean;
-    promoCodeResponse: any
+    promoCodeResponse: any;
+    updateSubscriptionPaymentInProgress: boolean;
+    updateSubscriptionPaymentIsSuccess: boolean;
 }
 
 export const DEFAULT_BUY_PLAN_STATE: BuyPlanState = {
@@ -30,7 +33,9 @@ export const DEFAULT_BUY_PLAN_STATE: BuyPlanState = {
     applyPromoCodeInProgress: false,
     promoCodeResponse: null,
     updatePlanSuccess: false,
-    updatePlanInProgress: false
+    updatePlanInProgress: false,
+    updateSubscriptionPaymentInProgress: false,
+    updateSubscriptionPaymentIsSuccess: false
 };
 
 @Injectable()
@@ -38,6 +43,7 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
 
     constructor(private toasterService: ToasterService,
         private subscriptionService: SubscriptionsService,
+        private settingsProfileService: SettingsProfileService,
         private store: Store<AppState>) {
         super(DEFAULT_BUY_PLAN_STATE);
     }
@@ -211,6 +217,44 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
 
                             return this.patchState({
                                 applyPromoCodeInProgress: false
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    readonly updateSubscriptionPayment = this.effect((data: Observable<any>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({ updateSubscriptionPaymentInProgress: true });
+                return this.settingsProfileService.PatchProfile(req.request).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res?.status === 'success') {
+                                this.toasterService.showSnackBar('success', 'Plan purchased successfully');
+                                return this.patchState({
+                                    updateSubscriptionPaymentInProgress: false,
+                                    updateSubscriptionPaymentIsSuccess: true
+                                });
+                            } else {
+                                if (res.message) {
+                                    this.toasterService.showSnackBar('error', res.message);
+                                }
+                                return this.patchState({
+                                    updateSubscriptionPaymentInProgress: false,
+                                    updateSubscriptionPaymentIsSuccess: false
+                                });
+                            }
+                        },
+                        (error: any) => {
+                            this.toasterService.showSnackBar('error', 'Something went wrong! Please try again.');
+
+                            return this.patchState({
+                                updateSubscriptionPaymentInProgress: false,
+                                updateSubscriptionPaymentIsSuccess: false
                             });
                         }
                     ),
