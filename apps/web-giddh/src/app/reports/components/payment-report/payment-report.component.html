@@ -92,32 +92,41 @@
                     </button>
                 </div>
                 <div
-                    *ngIf="!isCompany && selectedPayments?.length > 0"
+                    *ngIf="selectedPayments?.length > 0"
                     class="btn-group ml-auto"
                     dropdown
                     #dp="bs-dropdown"
                 >
                     <button
-                        dropdownToggle
-                        type="button"
-                        class="btn btn-primary more-btn-dropdown dropdown-toggle mr-0"
-                        aria-controls="dropdown-basic"
+                        class="btn btn-default mr-r15"
+                        [tooltip]="commonLocaleData?.app_export"
+                        (click)="exportCsvDownload()"
                     >
-                        {{ commonLocaleData?.app_more }}
-                        <span class="caret"></span>
+                        <span class="icon-export-icon"></span>
                     </button>
-                    <ul
-                        *dropdownMenu
-                        class="dropdown-menu fixed-dropdown-plus"
-                        role="menu"
-                        aria-labelledby="button-basic"
-                    >
-                        <li role="menuitem">
-                            <a class="dropdown-item cp" href="javascript:void(0)" (click)="openConfirmationPopup()">{{
-                                commonLocaleData?.app_delete
-                            }}</a>
-                        </li>
-                    </ul>
+                    <ng-container *ngIf="!isCompany">
+                        <button
+                            dropdownToggle
+                            type="button"
+                            class="btn btn-primary more-btn-dropdown dropdown-toggle mr-0"
+                            aria-controls="dropdown-basic"
+                        >
+                            {{ commonLocaleData?.app_more }}
+                            <span class="caret"></span>
+                        </button>
+                        <ul
+                            *dropdownMenu
+                            class="dropdown-menu fixed-dropdown-plus"
+                            role="menu"
+                            aria-labelledby="button-basic"
+                        >
+                            <li role="menuitem">
+                                <a class="dropdown-item cp" href="javascript:void(0)" (click)="openConfirmationPopup()">{{
+                                    commonLocaleData?.app_delete
+                                }}</a>
+                            </li>
+                        </ul>
+                    </ng-container>
                 </div>
                 <div
                     class="advance-icon cursor-pointer btn btn-primary mr-0"
