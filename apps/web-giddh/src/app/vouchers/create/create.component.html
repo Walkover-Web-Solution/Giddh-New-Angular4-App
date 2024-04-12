@@ -137,7 +137,7 @@
                                             </label> 
                                             <i *ngIf="!invoiceType.isCashInvoice"
                                                 [matMenuTriggerFor]="billingAddress"
-                                                class="icon-edit text-blue cursor-pointer pl-2 font-12">
+                                                class="icon-edit text-blue pl-2 font-12">
                                             </i>
                                             <mat-menu #billingAddress="matMenu">
                                                 <div class="mat-menu-width-large vouchers-address-menu">
@@ -211,7 +211,7 @@
                                                     </span>
                                                 </label> <i *ngIf="!invoiceType.isCashInvoice"
                                                     [matMenuTriggerFor]="shippingAddress"
-                                                    class="icon-edit text-blue cursor-pointer pl-2 font-12"></i>
+                                                    class="icon-edit text-blue pl-2 font-12"></i>
 
                                                 <mat-menu #shippingAddress="matMenu">
                                                     <div class="mat-menu-width-large vouchers-address-menu">
@@ -331,7 +331,7 @@
                                             </span>
                                         </label> <i
                                             [matMenuTriggerFor]="companyBillingAddress"
-                                            class="icon-edit text-blue cursor-pointer pl-2 font-12"></i>
+                                            class="icon-edit text-blue pl-2 font-12"></i>
                                         <mat-menu #companyBillingAddress="matMenu">
                                             <div class="mat-menu-width-large vouchers-address-menu">
                                                 <ng-container *ngFor="let address of company?.addresses; let i = index">
@@ -361,7 +361,7 @@
                                             </span>
                                         </label> <i
                                             [matMenuTriggerFor]="companyShippingAddress"
-                                            class="icon-edit text-blue cursor-pointer pl-2 font-12"></i>
+                                            class="icon-edit text-blue pl-2 font-12"></i>
                                         <mat-menu #companyShippingAddress="matMenu">
                                             <div class="mat-menu-width-large  vouchers-address-menu">
                                                 <ng-container *ngFor="let address of company?.addresses; let i = index">
@@ -391,7 +391,7 @@
                                             formControlName="linkedPo"
                                             [multiple]="true"
                                             (selectionChange)="getPurchaseOrder($event?.value, true)"
-                                            class="po-mat-select"
+                                            class="po-mat-select mat-form-field-border"
                                             [placeholder]="localeData?.select_order_placeholder"
                                             [disabled]="invoiceForm.get('linkedPo')?.value?.length === 0 && fieldFilteredOptions?.length === 0"
                                         >
@@ -547,7 +547,7 @@
                                             [matSuffix]="account?.baseCurrency"
                                             formControlName="exchangeRate"></text-field>
                                     </div>
-                                    <i class="icon-edit text-blue cursor-pointer"
+                                    <i class="icon-edit text-blue"
                                         (click)="showExchangeRateEditField = true"
                                         *ngIf="!showExchangeRateEditField"></i>
                                     <i class="icon-save text-blue cursor-pointer"
@@ -724,7 +724,7 @@
                                                                                 [isOpened]="openEntryDatepicker">
                                                                             </giddh-datepicker>
                                                                         </ng-container>
-                                                                        <i class="icon-edit text-blue cursor-pointer"
+                                                                        <i class="icon-edit text-blue"
                                                                             (click)="openEntryDatepicker = true"></i>
                                                                     </div>
                                                                 </div>
@@ -741,7 +741,7 @@
                                                                     <div class="mt-1"
                                                                         [hidden]="activeEntryIndex !== entryIndex">
                                                                         Update <i
-                                                                            class="icon-edit text-blue cursor-pointer"
+                                                                            class="icon-edit text-blue"
                                                                             (click)="updateCurrentHsnSac(entry)"
                                                                             #menuTrigger="matMenuTrigger"
                                                                             [matMenuTriggerFor]="update"></i></div>
