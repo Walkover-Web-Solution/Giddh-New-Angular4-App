@@ -326,9 +326,8 @@
                                         <label for="billingAddress" class="billing-label">
                                             <span>Billing Address</span>
                                             <span *ngIf="!invoiceType.isCashInvoice">
-                                                &#40; {{ commonLocaleData?.app_address }}
-                                                {{ invoiceForm.controls['company'].get("billingAddress").get("index")?.value + 1 }}
-                                                &#41;
+                                                ({{ commonLocaleData?.app_address }}
+                                                {{ invoiceForm.controls['company'].get("billingAddress").get("index")?.value + 1 }})
                                             </span>
                                         </label> <i
                                             [matMenuTriggerFor]="companyBillingAddress"
@@ -357,9 +356,8 @@
                                         <label for="billingAddress" class="billing-label">
                                             <span>Shipping Address</span>
                                             <span *ngIf="!invoiceType.isCashInvoice">
-                                                &#40; {{ commonLocaleData?.app_address }} 
-                                                {{ invoiceForm.controls['company'].get("shippingAddress").get("index")?.value + 1 }}
-                                                &#41;
+                                                ({{ commonLocaleData?.app_address }} 
+                                                {{ invoiceForm.controls['company'].get("shippingAddress").get("index")?.value + 1 }})
                                             </span>
                                         </label> <i
                                             [matMenuTriggerFor]="companyShippingAddress"
@@ -1139,22 +1137,17 @@
                                                                                         "
                                                                                         [currencySymbol]="
                                                                                             isMulticurrencyAccount
-                                                                                                ? invFormData
-                                                                                                        .accountDetails
-                                                                                                        ?.currencySymbol
+                                                                                                ? account?.baseCurrencySymbol
                                                                                                 : false
                                                                                         "
                                                                                         [currencyCode]="
                                                                                             isMulticurrencyAccount
-                                                                                                ? invFormData
-                                                                                                        .accountDetails
-                                                                                                        ?.currency
-                                                                                                        ?.code
+                                                                                                ? account?.baseCurrency
                                                                                                 : false
                                                                                         "
                                                                                     ></amount-field>
                                                                                 </span>
-                                                                                <i (click)="openAdjustmentDialog()"
+                                                                                <i (click)="openAdjustmentDialog(true)"
                                                                                     class="icon-edit text-blue font-12"></i>
                                                                             </div>
                                                                         </div>

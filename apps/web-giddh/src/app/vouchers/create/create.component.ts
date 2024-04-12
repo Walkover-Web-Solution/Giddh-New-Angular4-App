@@ -44,6 +44,7 @@ import { ConfirmModalComponent } from "../../theme/new-confirm-modal/confirm-mod
 import { AddBulkItemsComponent } from "../../theme/add-bulk-items/add-bulk-items.component";
 import { AdjustAdvancePaymentModal, VoucherAdjustments } from "../../models/api-models/AdvanceReceiptsAdjust";
 import { PurchaseOrderService } from "../../services/purchase-order.service";
+import { AdjustmentUtilityService } from "../../shared/advance-receipt-adjustment/services/adjustment-utility.service";
 
 @Component({
     selector: "create",
@@ -277,8 +278,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public vouchersForAdjustment: any[] = [];
     /** Stores the adjustment data */
     public advanceReceiptAdjustmentData: VoucherAdjustments;
-    /** Adjustment dialog ref */
-    public adjustmentDialogRef: MatDialogRef<any>;
     /** Show advance receipts adjust */
     public showAdvanceReceiptAdjust: boolean = false;
     public isAdjustAmount = false;
@@ -339,6 +338,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public isVoucherDateChanged: boolean = false;
     /** True if voucher number field is enabled */
     public useCustomVoucherNumber: boolean = false;
+    /** Stores the adjustments as a backup that are present on the current opened entry */
+    public originalVoucherAdjustments: VoucherAdjustments;
 
     /** Returns true if account is selected else false */
     public get showPageLeaveConfirmation(): boolean {
@@ -400,7 +401,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         private toasterService: ToasterService,
         private commonService: CommonService,
         private voucherService: VoucherService,
-        private purchaseOrderService: PurchaseOrderService
+        private purchaseOrderService: PurchaseOrderService,
+        private adjustmentUtilityService: AdjustmentUtilityService
     ) {
 
     }
@@ -906,7 +908,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.componentStore.onboardingForm$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.formFields = [];
-                Object.keys(response.fields).forEach(key => {
+                Object.keys(response.fields)?.forEach(key => {
                     if (response?.fields[key]) {
                         this.formFields[response.fields[key]?.name] = [];
                         this.formFields[response.fields[key]?.name] = response.fields[key];
@@ -1106,7 +1108,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.voucherAccountResults$ = observableOf(voucherAccountResults.concat(...newResults));
             } else {
                 this.accountSearchRequest.loadMore = false;
-                this.voucherAccountResults$ = observableOf(null);
+                if (page === 1) {
+                    this.voucherAccountResults$ = observableOf(null);
+                }
             }
             this.accountSearchRequest.isLoading = false;
         });
@@ -1140,7 +1144,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.voucherStockResults$ = observableOf(voucherStockResults.concat(...newResults));
             } else {
                 this.stockSearchRequest.loadMore = false;
-                this.voucherStockResults$ = observableOf(null);
+                if (page === 1) {
+                    this.voucherStockResults$ = observableOf(null);
+                }
             }
             this.stockSearchRequest.isLoading = false;
         });
@@ -2184,7 +2190,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public handleDateChangeConfirmation(action: string): void {
         if (action === this.commonLocaleData?.app_yes) {
             if (this.dateChangeType === "voucher") {
-                this.invoiceForm?.get('entries')['controls'].forEach(entry => {
+                this.invoiceForm?.get('entries')['controls']?.forEach(entry => {
                     entry.get('date')?.patchValue(dayjs(this.invoiceForm.get('date')?.value).format(GIDDH_DATE_FORMAT));
                 });
             } else if (this.dateChangeType === "entry") {
@@ -2637,6 +2643,35 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             }
         }
 
+        if ((this.invoiceType.isSalesInvoice || this.invoiceType.isCreditNote || this.invoiceType.isDebitNote) && this.advanceReceiptAdjustmentData && this.advanceReceiptAdjustmentData.adjustments) {
+            if (this.advanceReceiptAdjustmentData.adjustments.length) {
+                const adjustments = cloneDeep(this.advanceReceiptAdjustmentData.adjustments);
+                if (adjustments) {
+                    adjustments.forEach(adjustment => {
+                        if (adjustment.balanceDue !== undefined) {
+                            delete adjustment.balanceDue;
+                        }
+                    });
+                    invoiceForm.voucherAdjustments = {
+                        adjustments
+                    };
+
+                    if (invoiceForm.voucherAdjustments && invoiceForm.voucherAdjustments.adjustments && invoiceForm.voucherAdjustments.adjustments.length > 0) {
+                        invoiceForm.voucherAdjustments.adjustments.map(item => {
+                            if (item && item.voucherDate) {
+                                item.voucherDate = item.voucherDate?.replace(/\//g, '-');
+                            }
+                        });
+                    }
+                }
+            } else {
+                this.advanceReceiptAdjustmentData.adjustments = [];
+                invoiceForm.voucherAdjustments = this.advanceReceiptAdjustmentData;
+            }
+
+            invoiceForm = this.adjustmentUtilityService.getAdjustmentObjectVoucherModule(invoiceForm);
+        }
+
         if (this.invoiceType.isPurchaseOrder) {
             invoiceForm.type = "purchase";
 
@@ -2790,10 +2825,27 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      *
      * @memberof VoucherCreateComponent
      */
-    public openAdjustmentDialog(): void {
-        this.adjustmentDialogRef = this.dialog.open(this.adjustmentModal, {
-            width: '650px'
-        });
+    public openAdjustmentDialog(open: boolean): void {
+        if (open) {
+            this.isAdjustAmount = true;
+            if (!this.advanceReceiptAdjustmentData?.adjustments?.length && this.originalVoucherAdjustments?.adjustments?.length) {
+                // If length of voucher adjustment is 0 i.e., user has changed its original adjustments but has not performed update operation
+                // and voucher already has original adjustments to it then show the
+                // original adjustments in adjustment popup
+                this.advanceReceiptAdjustmentData = cloneDeep(this.originalVoucherAdjustments);
+                this.calculateAdjustedVoucherTotal(this.originalVoucherAdjustments?.adjustments);
+            }
+            this.dialog.open(this.adjustmentModal, {
+                width: '650px'
+            });
+        } else {
+            this.isAdjustAmount = false;
+            this.adjustPaymentBalanceDueData = 0;
+            this.adjustPaymentData.totalAdjustedAmount = 0;
+            this.totalAdvanceReceiptsAdjustedAmount = 0;
+            this.advanceReceiptAdjustmentData.adjustments = [];
+            this.calculateBalanceDue();
+        }
     }
 
     public closeAdvanceReceiptModal() {
@@ -2815,7 +2867,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public getAdvanceReceiptAdjustData(advanceReceiptsAdjustEvent: { adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal }) {
         this.advanceReceiptAdjustmentData = advanceReceiptsAdjustEvent.adjustVoucherData;
         if (this.advanceReceiptAdjustmentData && this.advanceReceiptAdjustmentData.adjustments) {
-            this.advanceReceiptAdjustmentData.adjustments.forEach(adjustment => {
+            this.advanceReceiptAdjustmentData.adjustments?.forEach(adjustment => {
                 adjustment.voucherNumber = adjustment.voucherNumber === this.commonLocaleData?.app_not_available ? '' : adjustment.voucherNumber;
             });
         }
@@ -2825,9 +2877,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         } else {
             this.isAdjustAmount = false;
         }
-        if (this.isUpdateMode) {
-            this.calculateAdjustedVoucherTotal(advanceReceiptsAdjustEvent.adjustVoucherData.adjustments)
-        }
+        
+        this.calculateAdjustedVoucherTotal(advanceReceiptsAdjustEvent.adjustVoucherData.adjustments)
         this.adjustPaymentBalanceDueData = this.getCalculatedBalanceDueAfterAdvanceReceiptsAdjustment();
         this.closeAdvanceReceiptModal();
     }
@@ -2891,6 +2942,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         } else {
             this.adjustPaymentBalanceDueData = 0;
         }
+
         this.voucherTotals.balanceDue =
             giddhRoundOff((((this.voucherTotals.grandTotal + this.voucherTotals.tcsTotal + this.voucherTotals.roundOff) - this.voucherTotals.tdsTotal) - depositAmount - Number(this.depositAmountBeforeUpdate) - this.totalAdvanceReceiptsAdjustedAmount), this.company?.giddhBalanceDecimalPlaces);
 
@@ -3154,17 +3206,17 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
                         if (entries && entries.length > 0 && voucherEntries?.length > 0) {
                             entries.forEach(entry => {
-                                entry.transactions.forEach(item => {
+                                entry.transactions?.forEach(item => {
                                     let entryLoop = 0;
                                     let remainingQuantity = (item.stock && item.stock.quantity !== undefined && item.stock.quantity !== null) ? item.stock.quantity : 1;
 
-                                    voucherEntries.forEach(entry => {
+                                    voucherEntries?.forEach(entry => {
                                         let entryFormGroup = this.getEntryFormGroup(entryLoop);
                                         let entryRemoved = false;
 
                                         if (entryFormGroup && remainingQuantity > 0 && entryFormGroup.get("purchaseOrderItemMapping.uniqueName")?.value === order) {
                                             let transactionLoop = 0;
-                                            entry.transactions.forEach(transaction => {
+                                            entry.transactions?.forEach(transaction => {
                                                 let transactionFormGroup = this.getTransactionFormGroup(entryFormGroup);
 
                                                 if (remainingQuantity > 0) {

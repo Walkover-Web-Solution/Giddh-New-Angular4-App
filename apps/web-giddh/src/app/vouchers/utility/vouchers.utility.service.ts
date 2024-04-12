@@ -344,7 +344,9 @@ export class VouchersUtilityService {
     public formatVoucherObject(invoiceForm: any): any {
         invoiceForm.date = this.convertDateToString(invoiceForm.date);
         invoiceForm.dueDate = this.convertDateToString(invoiceForm.dueDate);
-        invoiceForm.templateDetails.other.shippingDate = this.convertDateToString(invoiceForm.templateDetails.other.shippingDate);
+        if (invoiceForm.templateDetails?.other?.shippingDate) {
+            invoiceForm.templateDetails.other.shippingDate = this.convertDateToString(invoiceForm.templateDetails.other.shippingDate);
+        }
 
         invoiceForm = this.formatBillingShippingAddress(invoiceForm);
         return invoiceForm;
