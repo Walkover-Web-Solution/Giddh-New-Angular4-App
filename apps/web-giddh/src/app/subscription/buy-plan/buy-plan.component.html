@@ -49,18 +49,25 @@
                                         Activate Via Key
                                     </button> -->
                                             <div class="custom-tab w-100">
-                                                <mat-button-toggle-group
-                                                    aria-label="Font Style"
-                                                    (change)="toggleDuration($event)"
-                                                    formControlName="duration"
+                                                <ng-container
+                                                    *ngIf="
+                                                        selectedPlan?.yearlyAmountAfterDiscount > 0 &&
+                                                        selectedPlan?.monthlyAmountAfterDiscount > 0
+                                                    "
                                                 >
-                                                    <mat-button-toggle value="MONTHLY">{{
-                                                        commonLocaleData?.app_duration?.monthly
-                                                    }}</mat-button-toggle>
-                                                    <mat-button-toggle value="YEARLY">{{
-                                                        commonLocaleData?.app_duration?.yearly
-                                                    }}</mat-button-toggle>
-                                                </mat-button-toggle-group>
+                                                    <mat-button-toggle-group
+                                                        aria-label="Font Style"
+                                                        (change)="toggleDuration($event)"
+                                                        formControlName="duration"
+                                                    >
+                                                        <mat-button-toggle value="MONTHLY">{{
+                                                            commonLocaleData?.app_duration?.monthly
+                                                        }}</mat-button-toggle>
+                                                        <mat-button-toggle value="YEARLY">{{
+                                                            commonLocaleData?.app_duration?.yearly
+                                                        }}</mat-button-toggle>
+                                                    </mat-button-toggle-group>
+                                                </ng-container>
                                             </div>
                                         </div>
                                     </div>
@@ -343,6 +350,7 @@
                                                         [showError]="
                                                             isFormSubmitted && !secondStepForm.get('billingName')?.value
                                                         "
+                                                        [autocomplete]="'off'"
                                                     >
                                                     </input-field>
                                                 </div>
@@ -356,6 +364,7 @@
                                                         [showError]="
                                                             isFormSubmitted && !secondStepForm.get('companyName')?.value
                                                         "
+                                                        [autocomplete]="'off'"
                                                     >
                                                     </input-field>
                                                 </div>
@@ -369,6 +378,7 @@
                                                         [showError]="
                                                             isFormSubmitted && !secondStepForm.get('email')?.value
                                                         "
+                                                        [autocomplete]="'off'"
                                                     >
                                                     </input-field>
                                                 </div>
@@ -379,6 +389,7 @@
                                                         [label]="localeData?.pincode"
                                                         formControlName="pincode"
                                                         [placeholder]="localeData?.pincode"
+                                                        [autocomplete]="'off'"
                                                     >
                                                     </input-field>
                                                 </div>
@@ -390,7 +401,7 @@
                                                             class="mat-form-field-border mat-form-field-height mobile-height bg-transparent border"
                                                             #initContact
                                                             aria-autocomplete="none"
-                                                            autocomplete="off"
+                                                            [autocomplete]="'off'"
                                                             (keypress)="
                                                                 intlClass?.onlyPhoneNumber($event);
                                                                 validateMobileField()
@@ -442,9 +453,13 @@
                                                                 !secondStepForm.get('taxNumber')?.value) ||
                                                             !isGstinValid
                                                         "
-                                                        [label]="formFields['taxName']?.label ?? commonLocaleData?.app_tax_number"
+                                                        [label]="
+                                                            formFields['taxName']?.label ??
+                                                            commonLocaleData?.app_tax_number
+                                                        "
                                                         [maxlength]="15"
                                                         (change)="validateGstNumber()"
+                                                        [autocomplete]="'off'"
                                                     >
                                                     </input-field>
                                                 </div>
@@ -489,6 +504,7 @@
                                                             matInput
                                                             [placeholder]="commonLocaleData?.app_address"
                                                             formControlName="address"
+                                                            [autocomplete]="'off'"
                                                         ></textarea>
                                                     </mat-form-field>
                                                 </div>

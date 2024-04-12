@@ -80,5 +80,6 @@
     "make_yourself": "खुद को एक सुपर एडमिन बनाएं",
     "permission": "अनुमति दें",
     "permission_placeholder": "अद्वितीय नाम / ईमेल आईडी",
-    "roles": "भूमिकाएँ"
+    "roles": "भूमिकाएँ",
+    "add_user": "उपयोगकर्ता जोड़ें"
 }
