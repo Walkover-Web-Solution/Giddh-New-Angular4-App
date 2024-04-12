@@ -138,7 +138,9 @@ export class ChangeBillingComponent implements OnInit, AfterViewInit, OnDestroy 
      * @memberof ChangeBillingComponent
      */
     public ngAfterViewInit(): void {
-        this.initIntl();
+        setTimeout(()=> {
+            this.initIntl();
+        });
         this.getBillingDetails$.pipe(takeUntil(this.destroyed$)).subscribe(data => {
             if (data) {
                 this.setFormValues(data);
