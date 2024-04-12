@@ -261,6 +261,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     public activeRowIndex: number = null;
     /** Active row for current fields*/
     public activeRowType: string = null;
+    /** Active row for current fields*/
+    public selectedInputFieldIndex: number = null;
 
     constructor(
         private _ledgerActions: LedgerActions,
@@ -667,6 +669,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      */
     public onAccountFocus(event: any, element: any, trxnType: any, index: number): void {
         this.selectedAccountInputField = event.target;
+
         this.selectedField = 'account';
         this.showConfirmationBox = false;
         this.selectedTransactionType = trxnType;
@@ -2001,6 +2004,18 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         }
 
         this.changeDetectionRef.detectChanges();
+    }
+
+    /**
+     * This will be use for get type event
+     *
+     * @param {string} event
+     * @memberof AccountAsVoucherComponent
+     */
+    public getTypeEvent(event: string): void {
+        if (event) {
+            document.getElementById(`transactionAccount_` + this.selectedInputFieldIndex).focus();
+        }
     }
 
 

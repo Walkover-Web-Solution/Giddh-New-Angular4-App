@@ -82,6 +82,8 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Hold selected index  */
     public selectedIndex: number = -1;
+    /** Emits the typing event  */
+    @Output() public typingEvent: EventEmitter<string> = new EventEmitter();
 
     /** Keys. **/
 
@@ -300,47 +302,47 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
             if (key === this.KEYS.ESC || key === this.KEYS.TAB || (key === this.KEYS.UP && event.altKey)) {
                 this.hide();
             } else if (key === this.KEYS.ENTER) {
-                if (this.menuEle && this.menuEle.virtualScrollElm && this.menuEle.virtualScrollElm) {
-                    let item = this.menuEle.virtualScrollElm.getHighlightedOption();
-                    if (item !== null) {
-                        this.toggleSelected(item);
-                    }
-                }
+                // if (this.menuEle && this.menuEle.virtualScrollElm && this.menuEle.virtualScrollElm) {
+                //     let item = this.menuEle.virtualScrollElm.getHighlightedOption();
+                //     if (item !== null) {
+                //         this.toggleSelected(item);
+                //     }
+                // }
                 // this.selectHighlightedOption();
             } else if (key === this.KEYS.UP) {
-                if (this.menuEle && this.menuEle.virtualScrollElm && this.menuEle.virtualScrollElm) {
-                    let item = this.menuEle.virtualScrollElm.getPreviousHilightledOption();
-                    if (item !== null) {
-                        // this.toggleSelected(item);
-                        this.menuEle.virtualScrollElm.scrollInto(item);
-                        this.menuEle.virtualScrollElm.startupLoop = true;
-                        this.menuEle.virtualScrollElm.refresh();
-                        event.preventDefault();
-                    }
-                }
+                // if (this.menuEle && this.menuEle.virtualScrollElm && this.menuEle.virtualScrollElm) {
+                //     let item = this.menuEle.virtualScrollElm.getPreviousHilightledOption();
+                //     if (item !== null) {
+                //         // this.toggleSelected(item);
+                //         this.menuEle.virtualScrollElm.scrollInto(item);
+                //         this.menuEle.virtualScrollElm.startupLoop = true;
+                //         this.menuEle.virtualScrollElm.refresh();
+                //         event.preventDefault();
+                //     }
+                // }
                 // this.optionList.highlightPreviousOption();
                 // this.dropdown.moveHighlightedIntoView();
                 // if (!this.filterEnabled) {
                 //     event.preventDefault();
                 // }
             } else if (key === this.KEYS.DOWN) {
-                if (this.menuEle && this.menuEle.virtualScrollElm && this.menuEle.virtualScrollElm) {
-                    let item = this.menuEle.virtualScrollElm.getNextHilightledOption();
-                    if (item !== null) {
-                        // this.toggleSelected(item);
-                        this.menuEle.virtualScrollElm.scrollInto(item);
-                        this.menuEle.virtualScrollElm.startupLoop = true;
-                        this.menuEle.virtualScrollElm.refresh();
-                        event.preventDefault();
-                    }
-                }
+                // if (this.menuEle && this.menuEle.virtualScrollElm && this.menuEle.virtualScrollElm) {
+                //     let item = this.menuEle.virtualScrollElm.getNextHilightledOption();
+                //     if (item !== null) {
+                //         // this.toggleSelected(item);
+                //         this.menuEle.virtualScrollElm.scrollInto(item);
+                //         this.menuEle.virtualScrollElm.startupLoop = true;
+                //         this.menuEle.virtualScrollElm.refresh();
+                //         event.preventDefault();
+                //     }
+            // }
 
-                //     this.optionList.highlightNextOption();
-                // this.dropdown.moveHighlightedIntoView();
-                // if (!this.filterEnabled) {
-                //     event.preventDefault();
-                // }
-            }
+            //     this.optionList.highlightNextOption();
+            // this.dropdown.moveHighlightedIntoView();
+            // if (!this.filterEnabled) {
+            //     event.preventDefault();
+            // }
+        }
         }
         this.cdRef.detectChanges();
     }
@@ -425,6 +427,7 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
         }
         if ('showList' in changes && changes.showList.currentValue !== changes.showList.previousValue) {
             if (changes.showList.currentValue) {
+                this.selectedIndex = 0;
                 this.show();
             } else if (!changes.showList.currentValue) {
                 this.filter = this.selectedValues[0] ? this.selectedValues[0].label : '';
@@ -500,6 +503,8 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
         } else if (event.key === 'ArrowDown') {
             event.preventDefault();
             this.selectedIndex = Math.min(this.selectedIndex + 1, this.rows.length - 1);
+        } else {
+            this.typingEvent.emit(event?.key);
         }
 
         const elements = this.eleRef?.nativeElement?.querySelectorAll('.list-item');
@@ -511,7 +516,7 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
                     element.classList.remove('hilighted');
                 }
             });
-            elements[this.selectedIndex].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+            elements[this.selectedIndex]?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
         }
     }
 
