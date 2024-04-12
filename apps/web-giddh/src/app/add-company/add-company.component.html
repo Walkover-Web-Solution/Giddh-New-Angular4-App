@@ -424,8 +424,7 @@
                                             *ngIf="permission.get('emailId').dirty && permission.get('emailId').invalid"
                                             id="emailError_{{ i }}"
                                         >
-                                            Invalid Email
-                                            <!-- {{ localeData?.email_id_error }} -->
+                                            {{ localeData?.invalid_email_error }}
                                         </span>
                                     </div>
                                     <div class="col-6 currency-space">
