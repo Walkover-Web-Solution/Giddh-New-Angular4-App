@@ -27,5 +27,7 @@
     "delete_vouchers": "क्या आप वाउचर/रसीदों को हटाना चाहते हैं?",
     "uploaded_bill": "अपलोड किया गया बिल",
     "currency_conversion": "[BASE_CURRENCY] में: [AMOUNT] <br /> (रूपांतरण दर: [CONVERSION_RATE]) ",
-    "exchange_gain_loss_label": "[BASE_CURRENCY] में: [AMOUNT] <br /> विनिमय [PROFIT_TYPE]: "
+    "exchange_gain_loss_label": "[BASE_CURRENCY] में: [AMOUNT] <br /> विनिमय [PROFIT_TYPE]: ",
+    "receipts": "सभी_रसीदें",
+    "all_receipts": "सभी-रसीदें"
 }
