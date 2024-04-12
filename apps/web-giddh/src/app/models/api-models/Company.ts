@@ -307,11 +307,11 @@ export class CompanyCreateRequest {
     orderId?: string;
     razorpaySignature?: string;
     creatorSuperAdmin: boolean;
-    permission: {
+    permission: [{
         emailId: string,
         entity: string,
         roleUniqueName: string
-    }
+    }]
 }
 
 export class CreateCompanyUsersPlan {
