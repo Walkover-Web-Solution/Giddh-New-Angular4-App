@@ -138,7 +138,9 @@ export class ChangeBillingComponent implements OnInit, AfterViewInit, OnDestroy 
      * @memberof ChangeBillingComponent
      */
     public ngAfterViewInit(): void {
-        this.initIntl();
+        setTimeout(()=> {
+            this.initIntl();
+        });
         this.getBillingDetails$.pipe(takeUntil(this.destroyed$)).subscribe(data => {
             if (data) {
                 this.setFormValues(data);
@@ -495,9 +497,9 @@ export class ChangeBillingComponent implements OnInit, AfterViewInit, OnDestroy 
 
         let mobileNumber;
         if (this.changeBillingForm.value.mobileNumber.includes('+')) {
-            mobileNumber = this.intlClass?.selectedCountryData?.dialCode + this.changeBillingForm.value.mobileNumber?.replace(/\+/g, '');
+            mobileNumber = this.changeBillingForm.value.mobileNumber?.replace(/\+/g, '');
         } else {
-            mobileNumber = this.intlClass?.selectedCountryData?.dialCode + this.changeBillingForm.value.mobileNumber;
+            mobileNumber = this.changeBillingForm.value.mobileNumber;
         }
 
         let request = {
