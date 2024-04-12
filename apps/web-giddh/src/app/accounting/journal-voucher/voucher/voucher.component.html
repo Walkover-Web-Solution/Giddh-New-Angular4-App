@@ -68,7 +68,7 @@
                                         >
                                             <text-field
                                                 [autoFocus]="activeRowIndex === i && activeRowType === 'type'"
-                                                [id]="'transaction_' + i"
+                                                [id]="'transactionType_' + i"
                                                 [type]="'text'"
                                                 [cssClass]="'form-control text-capitalize byTo'"
                                                 [readonly]="i === 0 && !isFirstRowDeleted"
@@ -92,11 +92,10 @@
                                             }"
                                             formGroupName="selectedAccount"
                                         >
-                                        {{activeRowIndex}}:{{activeRowType}}
                                             <text-field
                                                 [autoFocus]="activeRowIndex === i && activeRowType === 'account'"
                                                 [autocomplete]="'off'"
-                                                [id]="'transaction_' + i"
+                                                [id]="'transactionAccount_' + i"
                                                 [type]="'text'"
                                                 [cssClass]="'form-control from-or-to-acc'"
                                                 [required]="transaction.get('amount')?.value"
@@ -137,6 +136,7 @@
                                             }"
                                         >
                                             <text-field
+                                                [id]="'transactionAmount_' + i"
                                                 (keydown.Tab)="changeTab('tab', 'amount')"
                                                 (keydown.Shift.Tab)="changeTab('shift', 'amount')"
                                                 *ngIf="transaction.get('type')?.value?.toLowerCase() === 'by'"
@@ -312,6 +312,7 @@
             [(ngModel)]="currentSelectedValue"
             [placeholder]="commonLocaleData?.app_select_option"
             (scrollEnd)="handleScrollEnd()"
+            (typingEvent)="getTypeEvent($event)"
             [notFoundLink]="selectedField === 'account'"
             (noResultsClicked)="addNewAccount()"
             (noOptionsFound)="onNoAccountFound($event)"

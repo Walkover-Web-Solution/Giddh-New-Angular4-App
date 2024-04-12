@@ -82,6 +82,8 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Hold selected index  */
     public selectedIndex: number = -1;
+    /** Emits the typing event  */
+    @Output() public typingEvent: EventEmitter<string> = new EventEmitter();
 
     /** Keys. **/
 
@@ -501,6 +503,8 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
         } else if (event.key === 'ArrowDown') {
             event.preventDefault();
             this.selectedIndex = Math.min(this.selectedIndex + 1, this.rows.length - 1);
+        } else {
+            this.typingEvent.emit(event?.key);
         }
 
         const elements = this.eleRef?.nativeElement?.querySelectorAll('.list-item');

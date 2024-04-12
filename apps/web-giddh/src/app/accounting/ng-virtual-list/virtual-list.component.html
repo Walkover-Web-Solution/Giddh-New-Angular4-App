@@ -91,6 +91,7 @@
                                 tooltip="{{ row.label }}"
                                 placement="bottom"
                                 (click)="toggleSelected(row)"
+                                (keydown.enter)="toggleSelected(row)"
                             >
                                 {{ row?.label }}
                             </a>

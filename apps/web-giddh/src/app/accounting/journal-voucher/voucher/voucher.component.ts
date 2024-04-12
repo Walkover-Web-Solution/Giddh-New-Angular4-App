@@ -2006,6 +2006,18 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this.changeDetectionRef.detectChanges();
     }
 
+    /**
+     * This will be use for get type event
+     *
+     * @param {string} event
+     * @memberof AccountAsVoucherComponent
+     */
+    public getTypeEvent(event: string): void {
+        if (event) {
+            document.getElementById(`transactionAccount_` + this.selectedInputFeildIndex).focus();
+        }
+    }
+
 
     /**
         * This will add new row for adjusment
