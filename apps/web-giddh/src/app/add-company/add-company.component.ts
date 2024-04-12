@@ -8,7 +8,7 @@ import { CommonActions } from "../actions/common.actions";
 import { CompanyActions } from "../actions/company.actions";
 import { GeneralActions } from "../actions/general/general.actions";
 import { LoginActions } from "../actions/login.action";
-import { BusinessTypes, EMAIL_VALIDATION_REGEX, MOBILE_NUMBER_SELF_URL, MOBILE_NUMBER_UTIL_URL, OTP_PROVIDER_URL, OTP_WIDGET_ID_NEW, OTP_WIDGET_TOKEN_NEW } from '../app.constant';
+import { BusinessTypes, MOBILE_NUMBER_SELF_URL, MOBILE_NUMBER_UTIL_URL, OTP_PROVIDER_URL, OTP_WIDGET_ID_NEW, OTP_WIDGET_TOKEN_NEW } from '../app.constant';
 import { CountryRequest, OnboardingFormRequest } from "../models/api-models/Common";
 import { Addresses, CompanyCreateRequest, CompanyResponse, SocketNewCompanyRequest, StatesRequest } from "../models/api-models/Company";
 import { UserDetails } from "../models/api-models/loginModels";
@@ -25,7 +25,6 @@ import { AuthService } from "../theme/ng-social-login-module/index";
 import { ConfirmModalComponent } from 'apps/web-giddh/src/app/theme/new-confirm-modal/confirm-modal.component';
 import { HttpClient } from "@angular/common/http";
 import { AddCompanyComponentStore } from "./utility/add-company.store";
-import { isEqual } from "../lodash-optimized";
 
 declare var initSendOTP: any;
 declare var window: any;
@@ -200,7 +199,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
     public permissionRoles: any[] = [];
     /** True if user is super admin */
     public isUserSuperAdmin: boolean = false;
-    /** True if last duplicate role users */
+    /** Hold permission role index */
     public permissionRoleIndex: number;
 
 
@@ -575,29 +574,20 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      * This will be use for add new portal user
      *
      * @param {*} [user]
-     * @memberof AccountAddNewDetailsComponent
+     * @memberof AddCompanyComponent
      */
     public addNewUser(): void {
-        // Check if creatorSuperAdmin is true
         const isSuperAdmin = this.thirdStepForm.get('creatorSuperAdmin').value === 'false';
-
-        // Get the permissionRoles FormArray
         let mappings = this.thirdStepForm.get('permissionRoles') as FormArray;
-
-        // Create a new FormGroup for the new user
         let mappingForm = this.formBuilder.group({
             emailId: ['', Validators.pattern(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/)], // Add email validation
-            roleUniqueName: [''], // Initially set to empty
+            roleUniqueName: [''],
             entity: ['company']
         });
-
-        // Add Validators.required to roleUniqueName if creatorSuperAdmin is true
         if (isSuperAdmin) {
             mappingForm.get('roleUniqueName').setValidators(Validators.required);
             mappingForm.get('roleUniqueName').updateValueAndValidity();
         }
-
-        // Add the new FormGroup to the permissionRoles FormArray
         mappings.push(mappingForm);
     }
 
@@ -607,7 +597,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      * This will be use for remove portal user
      *
      * @param {number} index
-     * @memberof AccountAddNewDetailsComponent
+     * @memberof AddCompanyComponent
      */
     public removeUser(index: number): void {
         let mappings = this.thirdStepForm.get('permissionRoles') as FormArray;
@@ -1329,12 +1319,8 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
     public selectRole(event: any, index: number): void {
         const selectedRole = event?.value;
         const permissionRolesArray = this.thirdStepForm.get('permissionRoles') as FormArray;
-
-        // Get the FormGroup at the specified index
-        const permissionGroup = permissionRolesArray.at(index) as FormGroup;
-
-        // Update the value of roleUniqueName FormControl within the FormGroup
-        permissionGroup.get('roleUniqueName').setValue(selectedRole);
+        const permissionGroup = permissionRolesArray?.at(index) as FormGroup;
+        permissionGroup.get('roleUniqueName')?.setValue(selectedRole);
     }
 
     /**
@@ -1346,25 +1332,14 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
     public setOwnerPermission(event: any): void {
         const isSuperAdmin = event?.value === 'true';
         this.thirdStepForm.get('creatorSuperAdmin').setValue(event?.value);
-
-        // Access permissionRoles FormArray
         const permissionRolesArray = this.thirdStepForm.get('permissionRoles') as FormArray;
-
-        // Loop through each FormGroup in the FormArray
-        permissionRolesArray.controls.forEach((permissionGroup: FormGroup) => {
-            // Get the roleUniqueName FormControl
+        permissionRolesArray?.controls.forEach((permissionGroup: FormGroup) => {
             const roleUniqueNameControl = permissionGroup.get('roleUniqueName');
-
-            // Set validators based on isSuperAdmin value
             if (isSuperAdmin) {
-                // If the user is a super admin, remove validators
                 roleUniqueNameControl.clearValidators();
             } else {
-                // If the user is not a super admin, set validators
                 roleUniqueNameControl.setValidators([Validators.required]); // Add your validators here
             }
-
-            // Update the validity status of the roleUniqueName control
             roleUniqueNameControl.updateValueAndValidity();
         });
     }
