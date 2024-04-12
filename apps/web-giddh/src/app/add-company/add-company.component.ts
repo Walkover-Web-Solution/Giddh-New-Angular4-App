@@ -272,69 +272,17 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
 
         let mappings = this.thirdStepForm.get('permissionRoles') as FormArray;
         mappings.valueChanges.pipe(debounceTime(1000), takeUntil(this.destroyed$), distinctUntilChanged((prev, current) => current?.[this.permissionRoleIndex]?.emailId === prev?.[this.permissionRoleIndex]?.emailId)).subscribe((res) => {
-            console.log(res);
             if (this.permissionRoleIndex === null || this.permissionRoleIndex === undefined) {
                 return;
             }
             const index = this.permissionRoleIndex;
             let change = mappings.at(index);
-            console.log(change);
-            if (change?.get('emailId')?.status === 'VALID') {
+            if (change?.get('emailId')?.value && change?.get('emailId')?.status === 'VALID') {
                 this.updateSelectRoleValue(index, 'super_admin');
             } else {
                 this.updateSelectRoleValue(index, '');
             }
         });
-
-        // const permissionRolesArray = (this.thirdStepForm.get('permissionRoles') as FormArray);
-        // permissionRolesArray.controls.forEach((permissionGroup, index) => {
-        //     console.log(permissionGroup, index);
-        //     const emailIdControl = permissionGroup.get('emailId');
-        //     emailIdControl.valueChanges.subscribe((value: string) => {
-        //         console.log('value changed', value);
-        //         if (emailIdControl.invalid && (emailIdControl.dirty || emailIdControl.touched)) {
-        //             console.log(`Email ID at index ${index} is invalid.`);
-        //         } else {
-        //             this.updateSelectRoleValue(index, 'super_admin');
-        //         }
-        //     });
-        // });
-
-        // const mappings = this.thirdStepForm.get('permissionRoles') as FormArray;
-        // mappings.controls.forEach((control: FormGroup, permissionRoleIndex: number) => {
-        //     console.log(control, permissionRoleIndex);
-        //     const emailIdControl = control.get('emailId');
-        //     emailIdControl.valueChanges.pipe(
-        //         debounceTime(1000),
-        //         takeUntil(this.destroyed$)
-        //     ).subscribe((emailId: string) => {
-        //         console.log('EmailId changed for permissionRoleIndex:', permissionRoleIndex, 'EmailId:', emailId);
-        //         if (emailId && emailIdControl.status === 'VALID') {
-        //             this.updateSelectRoleValue(permissionRoleIndex, 'super_admin');
-        //         } else {
-        //             this.updateSelectRoleValue(permissionRoleIndex, '');
-        //         }
-        //     });
-        // });
-
-
-
-        // this.thirdStepForm.get('emailId').valueChanges.pipe(
-        //     debounceTime(700),
-        //     distinctUntilChanged(),
-        //     takeUntil(this.destroyed$),
-        // ).subscribe(searchedText => {
-        //     if (searchedText !== null && searchedText !== undefined) {
-        //         if (this.thirdStepForm?.controls['emailId'].status === 'VALID') {
-        //             this.updateSelectRoleValue('super_admin');
-        //         } else {
-        //             this.thirdStepForm.get('roleUniqueName').setValue('');
-        //         }
-        //     }
-        //     if (searchedText === null || searchedText === "") {
-        //         this.thirdStepForm.get('roleUniqueName').setValue('');
-        //     }
-        // });
 
         this.store.pipe(select(response => response.common.onboardingform), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
@@ -1187,16 +1135,12 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         this.company.address = taxDetails[0]?.address;
         this.company.taxes = this.secondStepForm.value.taxes;
         this.generalService.createNewCompany = this.company;
-        // this.company.permission.emailId = this.thirdStepForm.value.emailId;
-        // this.company.permission.roleUniqueName = this.thirdStepForm.value.roleUniqueName;
-        // this.company.permission.entity = this.thirdStepForm.value.entity;
+        this.company.permission = this.thirdStepForm.value.permissionRoles;
         this.company.creatorSuperAdmin = this.thirdStepForm.value.creatorSuperAdmin;
-        // this.isLoading = true;
-        if (this.thirdStepForm.value.creatorSuperAdmin) {
+        this.isLoading = true;
+        if (this.thirdStepForm.value.creatorSuperAdmin && !this.thirdStepForm.value.permissionRoles[0]?.emailId) {
             delete this.company.permission;
         }
-        console.log(this.thirdStepForm.value);
-        return;
         this.companyService.CreateNewCompany(this.company).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
             if (response?.status === "success") {
                 this.store.dispatch(this.companyActions.CreateNewCompanyResponse(response));
@@ -1488,18 +1432,9 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      * @memberof AddCompanyComponent
      */
     public updateSelectRoleValue(index: number, role: string): void {
-        // Get the permissionRoles FormArray
         const mappings = this.thirdStepForm.get('permissionRoles') as FormArray;
-
-        // Get the FormGroup for the specified index
-        const userGroup = mappings.at(index) as FormGroup;
-
-        // Set the value of roleUniqueName for the user at the specified index
-        userGroup.get('roleUniqueName').setValue(role);
-        // const selectedOption = this.permissionRoles.find(option => option.value === value);
-        // if (selectedOption) {
-        //     this.thirdStepForm.get('roleUniqueName').setValue(selectedOption.value);
-        // }
+        const userGroup = mappings?.at(index) as FormGroup;
+        userGroup?.get('roleUniqueName').setValue(role);
     }
 
     /**
