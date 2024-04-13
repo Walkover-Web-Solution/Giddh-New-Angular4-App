@@ -6,6 +6,7 @@ import { ReplaySubject, takeUntil } from "rxjs";
 import { AppState } from "../../store";
 import { Store, select } from "@ngrx/store";
 import { giddhRoundOff } from "../../shared/helpers/helperFunctions";
+import { isEqual } from "../../lodash-optimized";
 
 @Component({
     selector: "tax-dropdown",
@@ -61,6 +62,10 @@ export class TaxDropdownComponent implements OnChanges {
      * @memberof TaxDropdownComponent
      */
     public ngOnChanges(changes: SimpleChanges): void {
+        if (changes?.selectedTaxesList?.currentValue && !isEqual(changes?.selectedTaxesList?.currentValue, changes?.selectedTaxesList?.previousValue)) {
+            this.addTaxesInForm();
+        }
+
         if (changes?.taxesList?.currentValue) {
             this.addTaxesInForm();
             this.enableDisableTaxes();
@@ -74,7 +79,9 @@ export class TaxDropdownComponent implements OnChanges {
      */
     public addTaxesInForm(): void {
         const taxes = this.taxForm.get('taxes') as FormArray;
-        this.taxesList.forEach(tax => {
+        taxes?.clear();
+
+        this.taxesList?.forEach(tax => {
             const isTaxSelected = this.selectedTaxesList?.filter(selectedTax => selectedTax?.uniqueName === tax.uniqueName);
             tax.isChecked = isTaxSelected?.length > 0;
             taxes.push(this.getTaxFormGroup(tax));
@@ -142,10 +149,11 @@ export class TaxDropdownComponent implements OnChanges {
         const taxes = this.taxForm.get('taxes') as FormArray;
         for (let i = 0; i <= taxes.length; i++) {
             if (taxes.controls[i]?.get('isChecked')?.value) {
-                this.totalTaxAmount += ((Number(this.amount) * Number(taxes.controls[i].get('taxDetail')?.value?.taxValue)) / 100);
+                this.totalTaxAmount += ((Number(taxes.controls[i].get('taxDetail')?.value?.taxValue) / 100) * Number(this.amount));
             }
         }
 
+        this.totalTaxAmount = giddhRoundOff(this.totalTaxAmount, this.balanceDecimalPlaces);
         this.emitSelectedTaxes();
     }
 
@@ -157,10 +165,8 @@ export class TaxDropdownComponent implements OnChanges {
      */
     private emitSelectedTaxes(): void {
         const taxes = this.taxForm.get('taxes') as FormArray;
-        let selectedTaxes = taxes.value?.filter(tax => tax.isChecked);
-
-        this.selectedTaxes.emit(selectedTaxes);
-        this.totalTax.emit(giddhRoundOff(this.totalTaxAmount, this.balanceDecimalPlaces));
+        this.selectedTaxes.emit(taxes.value?.filter(tax => tax.isChecked));
+        this.totalTax.emit(this.totalTaxAmount);
     }
 
     /**

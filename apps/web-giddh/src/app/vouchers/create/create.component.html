@@ -566,7 +566,7 @@
                                                 <th [width]="hasStock ? '10%' : '10%'" [ngClass]="{ 'd-none' : !hasStock}">Rate</th>
                                                 <th [width]="hasStock ? '10%' : '14%'">Amount</th>
                                                 <th [width]="hasStock ? '9%' : '14%'">Discount</th>
-                                                <th [width]="hasStock ? '10%' : '14%'" *ngIf="this.showHideTaxColumn">Tax</th>
+                                                <th [width]="hasStock ? '10%' : '14%'" *ngIf="showTaxColumn">Tax</th>
                                                 <th [width]="hasStock ? '16%' : '16%'">Total</th>
                                             </tr>
                                         </thead>
@@ -969,7 +969,7 @@
                                                     </td>
 
                                                     <!-- Tax -->
-                                                    <td [width]="hasStock ? '10%' : '14%'" class="item-tax" *ngIf="this.showHideTaxColumn">
+                                                    <td [width]="hasStock ? '10%' : '14%'" class="item-tax" *ngIf="showTaxColumn">
                                                         <ng-container
                                                             *ngFor="let transaction of entry.get('transactions')['controls']"
                                                             formArrayName="transactions">

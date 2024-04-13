@@ -351,4 +351,32 @@ export class VouchersUtilityService {
         invoiceForm = this.formatBillingShippingAddress(invoiceForm);
         return invoiceForm;
     }
+
+    public calculateInclusiveRate(entry: any, companyTaxes: any[], balanceDecimalPlaces: any): number {
+        let entryTotal = giddhRoundOff(Number(entry.transactions[0].stock?.quantity) * Number(entry.transactions[0].stock?.rate?.rateForAccount));
+
+        // Calculate percentage discount total
+        let percentageDiscountTotal = entry.discounts?.filter(activeDiscount => activeDiscount.discountType === 'PERCENTAGE' || activeDiscount.calculationMethod === 'PERCENTAGE')
+            .reduce((pv, cv) => {
+                return Number(cv.discountValue) ? Number(pv) + Number(cv.discountValue) : Number(pv);
+            }, 0) || 0;
+
+        // Calculate fixed discount total
+        let fixedDiscountTotal = entry.discounts?.filter(activeDiscount => activeDiscount.discountType === 'FIX_AMOUNT' || activeDiscount.calculationMethod === 'FIX_AMOUNT')
+            .reduce((pv, cv) => {
+                return Number(cv.discountValue) ? Number(pv) + Number(cv.discountValue) : Number(pv);
+            }, 0) || 0;
+
+        // Calculate tax
+        let taxTotal: number = 0;
+        entry?.taxes?.forEach(selectedTax => {
+            companyTaxes?.forEach(tax => {
+                if (tax.uniqueName === selectedTax?.uniqueName) {
+                    taxTotal = Number(tax.taxDetail[0].taxValue);
+                }
+            });
+        });
+
+        return giddhRoundOff(((entryTotal + fixedDiscountTotal + 0.01 * fixedDiscountTotal * Number(taxTotal)) / (1 - 0.01 * percentageDiscountTotal + 0.01 * Number(taxTotal) - 0.0001 * percentageDiscountTotal * Number(taxTotal))), balanceDecimalPlaces);
+    }
 }
