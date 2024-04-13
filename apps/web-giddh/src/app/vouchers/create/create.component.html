@@ -447,7 +447,7 @@
                                         <giddh-datepicker (keydown.enter)="$event.preventDefault()"
                                             [label]="invoiceType.isSalesInvoice  ?'Invoice Date': invoiceType.isPurchaseInvoice ? 'Bill Date': invoiceType.isCreditNote?'Credit Note Date': invoiceType.isDebitNote ?'Debit Note Date':invoiceType.isEstimateInvoice?'Estimate Date':invoiceType.isProformaInvoice?'Proforma Date':invoiceType.isPurchaseOrder ?'Order Date':'' "
                                             [placeholder]="'DD-MM-YYYY'" name="voucherDate" [showToggleIcon]="false"
-                                            [appearance]="'outline'" formControlName="date" (dateSelected)="isVoucherDateChanged = true; getAllVouchersForAdjustment(); getVoucherListForCreditDebitNote();">
+                                            [appearance]="'outline'" formControlName="date" (dateSelected)="onBlueVoucherDate()">
                                         </giddh-datepicker>
                                     </div>
 
@@ -713,7 +713,7 @@
                                                                                 [showToggleIcon]="false"
                                                                                 [hideLabel]="true" #dp
                                                                                 (keydown.enter)="$event.preventDefault()"
-                                                                                (dateSelected)="onBlurEntryDate(entry, true)"
+                                                                                (dateSelected)="onBlurEntryDate(entry, entryIndex)"
                                                                                 id="transactionDate{{ entryIndex }}"
                                                                                 [disabled]="isUpdateMode"
                                                                                 [cssClass]="'entry-custom-date width-80 border-0'"
@@ -989,7 +989,7 @@
                                                                         [date]="invoiceForm.get('date')?.value"
                                                                         [amount]="transaction.get('amount.amountForAccount')?.value - entry.get('totalDiscount')?.value"
                                                                         [selectedTaxesList]="entry.get('taxes')?.value"
-                                                                        [taxesList]="companyTaxes$ | async"
+                                                                        [taxesList]="companyTaxes"
                                                                         [currency]="account.baseCurrencySymbol"
                                                                         (createNewTax)="showCreateTaxDialog()"
                                                                         (selectedTaxes)="getSelectedTaxes(entryIndex, $event)"
@@ -1090,7 +1090,7 @@
                                         <div class="col-8 px-0">
                                             <div class="container px-0">
                                                 <div class="row">
-                                                    <div class="col-12" *ngIf="!invoiceType.isPurchaseOrder">
+                                                    <div class="col-12" *ngIf="!invoiceType.isPurchaseOrder && ((currentVoucherFormDetails?.depositAllowed && !invoiceType.isCashInvoice) || ((invoiceType.isSalesInvoice || invoiceType.isPurchaseInvoice || invoiceType.isCreditNote || invoiceType.isDebitNote) && vouchersForAdjustment?.length))">
                                                         <mat-card>
                                                             <mat-card-header>
                                                                 <mat-card-title>
@@ -1100,7 +1100,7 @@
                                                             <mat-card-content>
                                                                 <div class="container px-0" formGroupName="deposit">
                                                                     <div class="row align-items-center">
-                                                                        <ng-container>
+                                                                        <ng-container *ngIf="currentVoucherFormDetails?.depositAllowed && !invoiceType.isCashInvoice">
                                                                             <div class="col">
                                                                                 <reactive-dropdown-field
                                                                                     [label]="'Account'"
@@ -1114,7 +1114,7 @@
                                                                                     formControlName="accountUniqueName">
                                                                                 </reactive-dropdown-field>
                                                                             </div>
-                                                                            <div class="col" *ngIf="currentVoucherFormDetails?.depositAllowed && !invoiceType.isCashInvoice">
+                                                                            <div class="col">
                                                                                 <input-field [name]="'amountForAccount'"
                                                                                     [label]="'Amount'"
                                                                                     [placeholder]="'Enter amount'"
@@ -1389,6 +1389,8 @@
                                     </button>
                                     <button mat-stroked-button color="primary"
                                         *ngIf="invoiceType.isSalesInvoice" (click)="generateVoucher()">Generate Sales</button>
+                                    <button mat-stroked-button color="primary"
+                                        *ngIf="invoiceType.isCashInvoice" (click)="generateVoucher()">Generate Cash</button>
                                     <button mat-stroked-button color="primary" *ngIf="invoiceType.isCreditNote" (click)="updateAccountAndGenerateVoucher()">
                                         Generate Credit Note & Update A/c
                                     </button>

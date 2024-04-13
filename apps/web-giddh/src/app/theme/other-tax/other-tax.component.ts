@@ -66,7 +66,7 @@ export class OtherTaxComponent implements OnInit, OnDestroy {
     private initOtherTaxForm(): void {
         this.otherTaxForm = this.formBuilder.group({
             tax: ['', Validators.required],
-            calculationMethod: ['', Validators.required],
+            calculationMethod: ['OnTaxableAmount', Validators.required],
             entryIndex: [this.inputData?.entryIndex]
         });
     }

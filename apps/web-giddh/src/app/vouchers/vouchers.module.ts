@@ -70,6 +70,7 @@ import { GiddhPageLoaderModule } from "../shared/giddh-page-loader/giddh-page-lo
 import { ReplacePipeModule } from "../shared/helpers/pipes/replace/replace.module";
 import { CurrencyModule } from "../shared/helpers/pipes/currencyPipe/currencyType.module";
 import { NgxMatSelectSearchModule } from "ngx-mat-select-search";
+import { ConfirmationModalModule } from "../theme/confirmation-modal/confirmation-modal.module";
 
 @NgModule({
     declarations: [
@@ -146,7 +147,8 @@ import { NgxMatSelectSearchModule } from "ngx-mat-select-search";
         GiddhPageLoaderModule,
         ReplacePipeModule,
         CurrencyModule,
-        NgxMatSelectSearchModule
+        NgxMatSelectSearchModule,
+        ConfirmationModalModule
     ],
     exports: [
 
