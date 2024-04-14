@@ -71,6 +71,7 @@ import { ReplacePipeModule } from "../shared/helpers/pipes/replace/replace.modul
 import { CurrencyModule } from "../shared/helpers/pipes/currencyPipe/currencyType.module";
 import { NgxMatSelectSearchModule } from "ngx-mat-select-search";
 import { ConfirmationModalModule } from "../theme/confirmation-modal/confirmation-modal.module";
+import { EntryOtherTaxModule } from "./utility/directives/entry-other-tax/entry-other-tax.module";
 
 @NgModule({
     declarations: [
@@ -144,6 +145,7 @@ import { ConfirmationModalModule } from "../theme/confirmation-modal/confirmatio
         AmountFieldComponentModule,
         EntryAmountModule,
         EntryTotalModule,
+        EntryOtherTaxModule,
         GiddhPageLoaderModule,
         ReplacePipeModule,
         CurrencyModule,

@@ -24,9 +24,9 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
     @Input() public tax: TaxResponse;
     @Input() public asidePaneState: string;
     /* This will hold local JSON data */
-    @Input() public localeData: any = {};
+    public localeData: any = {};
     /* This will hold common JSON data */
-    @Input() public commonLocaleData: any = {};
+    public commonLocaleData: any = {};
     public taxList: IOption[] = [];
     public duration: IOption[] = [];
     public tdsTcsTaxSubTypes: IOption[] = [];
@@ -92,11 +92,10 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
                 this.isTaxCreateInProcess = result;
             });
 
-            this.store
+        this.store
             .pipe(select(p => p.company && p.company.isTaxCreatedSuccessfully), takeUntil(this.destroyed$))
             .subscribe(result => {
-                console.log(result)
-                if(result && this.otherTax){
+                if(result && this.otherTax) {
                     this.closeEvent.emit();
                 }
             });

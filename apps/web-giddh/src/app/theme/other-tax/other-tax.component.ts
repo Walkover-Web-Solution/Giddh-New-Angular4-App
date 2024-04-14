@@ -1,11 +1,12 @@
 import { Component, Inject, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
-import { Observable, ReplaySubject, takeUntil, of as observableOf, take, of } from "rxjs";
+import { Observable, ReplaySubject, takeUntil, of as observableOf, of } from "rxjs";
 import { OtherTaxComponentStore } from "./utility/other-tax.store";
 import { AppState } from "../../store";
 import { Store } from "@ngrx/store";
 import { CompanyActions } from "../../actions/company.actions";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from "@angular/material/dialog";
+import { SettingsTaxesActions } from "../../actions/settings/taxes/settings.taxes.action";
 
 @Component({
     selector: "other-tax",
@@ -42,7 +43,8 @@ export class OtherTaxComponent implements OnInit, OnDestroy {
         private dialog: MatDialog,
         private store: Store<AppState>,
         public dialogRef: MatDialogRef<any>,
-        @Inject(MAT_DIALOG_DATA) public inputData
+        @Inject(MAT_DIALOG_DATA) public inputData,
+        private settingsTaxesAction: SettingsTaxesActions
     ) {
 
     }
@@ -53,6 +55,7 @@ export class OtherTaxComponent implements OnInit, OnDestroy {
      * @memberof OtherTaxComponent
      */
     public ngOnInit(): void {
+        this.store.dispatch(this.settingsTaxesAction.CreateTaxResponse(null));
         this.initOtherTaxForm();
         this.getCompanyTaxes();
     }
@@ -128,7 +131,6 @@ export class OtherTaxComponent implements OnInit, OnDestroy {
     public closeCreateTaxDialog(): void {
         this.taxAsideMenuRef.close();
         this.otherTax = false;
-        this.componentStore.companyTaxes$;
     }
 
     /**

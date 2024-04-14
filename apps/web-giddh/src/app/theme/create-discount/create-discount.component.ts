@@ -12,7 +12,7 @@ import { MatDialogRef } from "@angular/material/dialog";
 })
 export class CreateDiscountComponent implements OnInit, OnDestroy {
     /** Discounts list Observable */
-    public discountsAccountList$: Observable<any> = this.componentStore.discountsAccountList$;
+    public discountsAccountList$: Observable<any> = observableOf(null);
     /** Form Group for invoice form */
     public createDiscountForm: FormGroup;
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
@@ -69,7 +69,7 @@ export class CreateDiscountComponent implements OnInit, OnDestroy {
      * @memberof CreateDiscountComponent
      */
     private getDiscountAccounts(): void {
-        this.discountsAccountList$.pipe(takeUntil(this.destroyed$)).subscribe(discountsAccountList => {
+        this.componentStore.discountsAccountList$.pipe(takeUntil(this.destroyed$)).subscribe(discountsAccountList => {
             if (!discountsAccountList) {
                 this.componentStore.getDiscountsAccountList();
             } else {
@@ -84,7 +84,7 @@ export class CreateDiscountComponent implements OnInit, OnDestroy {
      * @memberof CreateDiscountComponent
      */
     public clearAccount(): void {
-        this.createDiscountForm.reset();
+        this.createDiscountForm.get('accountUniqueName')?.patchValue('');
     }
 
     /**
@@ -117,7 +117,11 @@ export class CreateDiscountComponent implements OnInit, OnDestroy {
      * @memberof CreateDiscountComponent
      */
     public clearDiscount(): void {
-        this.createDiscountForm.reset();
+        this.isFormSubmitted = false;
+        this.createDiscountForm.get('type')?.patchValue('');
+        this.createDiscountForm.get('name')?.patchValue('');
+        this.createDiscountForm.get('discountValue')?.patchValue('');
+        this.createDiscountForm.get('accountUniqueName')?.patchValue('');
     }
 
     /**

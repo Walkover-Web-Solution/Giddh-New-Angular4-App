@@ -1041,6 +1041,9 @@
                                                         </ng-container>
                                                         <div class="d-flex align-items-center justify-content-end"
                                                             *ngIf="activeEntryIndex === entryIndex"
+                                                            entryOtherTax
+                                                            [entry]="entry?.value"
+                                                            (calculatedAmount)="updateEntryOtherTax(entry, $event)"
                                                             formGroupName="otherTax">
                                                             <mat-checkbox type="checkbox" color="primary"
                                                                 formControlName="isChecked"
@@ -1433,8 +1436,8 @@
 
 <!-- Create Tax Aside Pane -->
 <ng-template #createTax>
-    <aside-menu-create-tax-component [class]="'in'" [tax]="selectedTax" [localeData]="localeData"
-        [commonLocaleData]="commonLocaleData" (closeEvent)="taxAsideMenuRef.close()"></aside-menu-create-tax-component>
+    <aside-menu-create-tax-component [class]="'in'" [tax]="selectedTax" [localeData]="localeData" [otherTax]="true"
+        [commonLocaleData]="commonLocaleData" (closeEvent)="closeTaxModal()"></aside-menu-create-tax-component>
 </ng-template>
 
 <ng-template #asideMenuProductService>

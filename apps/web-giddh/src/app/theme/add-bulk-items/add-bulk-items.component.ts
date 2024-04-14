@@ -204,7 +204,7 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
                 };
 
                 const unitRates = data.body?.stock?.variant?.unitRates ?? [];
-                item.rate = unitRates[0]?.rate ?? 0;
+                item.rate = unitRates?.length ? unitRates[0]?.rate : 0;
                 item.quantity = 1;
 
                 let itemFormGroup = this.getStockFormGroup(item);

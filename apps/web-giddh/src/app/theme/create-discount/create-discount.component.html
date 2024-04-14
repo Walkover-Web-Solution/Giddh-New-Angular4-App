@@ -10,7 +10,7 @@
                     <span class="custom-mat-form-field">
                         <mat-form-field appearance="outline" placeholder="Select Discount Type">
                             <mat-label>Discount Type</mat-label>
-                            <mat-select [formControlName]="'type'" required="true">
+                            <mat-select formControlName="type">
                                 <mat-option [value]="'FIXED_VALUE'">As per value</mat-option>
                                 <mat-option [value]="'PERCENT'">As per percent</mat-option>
                             </mat-select>
@@ -19,20 +19,19 @@
                 </div>
                 <div class="col-6">
                     <input-field [type]="'text'" [showError]="isFormSubmitted && !createDiscountForm.get('name')?.value"
-                        [name]="'discount-name'" formControlName="name" [placeholder]="'Enter name'" [label]="'Name'"
-                        [required]="true"></input-field>
+                        [name]="'discount-name'" formControlName="name" [placeholder]="'Enter name'" [label]="'Name'"></input-field>
                 </div>
                 <div class="col-6">
                     <input-field [type]="'number'"
-                        [showError]="isFormSubmitted && !createDiscountForm.get('value')?.value"
+                        [showError]="isFormSubmitted && !createDiscountForm.get('discountValue')?.value"
                         [name]="'discountValue'" formControlName="discountValue" [placeholder]="'Enter value'"
-                        [label]="'Value'" [required]="true"></input-field>
+                        [label]="'Value'"></input-field>
                 </div>
                 <div class="col-6">
                     <reactive-dropdown-field [label]="'Linked Accounts'" [placeholder]="'Select discount'"
                         formControlName="accountUniqueName" [name]="'accountUniqueName'"
-                        [options]="discountsAccountList$ | async" [required]="true"
-                        [showError]="isFormSubmitted && !createDiscountForm.get('linkedAccount')?.value"
+                        [options]="discountsAccountList$ | async"
+                        [showError]="isFormSubmitted && !createDiscountForm.get('accountUniqueName')?.value"
                         (onClear)="clearAccount()">
                     </reactive-dropdown-field>
                 </div>

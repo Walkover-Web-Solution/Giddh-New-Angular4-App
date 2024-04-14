@@ -45,6 +45,7 @@ import { AddBulkItemsComponent } from "../../theme/add-bulk-items/add-bulk-items
 import { AdjustAdvancePaymentModal, VoucherAdjustments } from "../../models/api-models/AdvanceReceiptsAdjust";
 import { PurchaseOrderService } from "../../services/purchase-order.service";
 import { AdjustmentUtilityService } from "../../shared/advance-receipt-adjustment/services/adjustment-utility.service";
+import { SettingsTaxesActions } from "../../actions/settings/taxes/settings.taxes.action";
 
 @Component({
     selector: "create",
@@ -402,7 +403,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         private commonService: CommonService,
         private voucherService: VoucherService,
         private purchaseOrderService: PurchaseOrderService,
-        private adjustmentUtilityService: AdjustmentUtilityService
+        private adjustmentUtilityService: AdjustmentUtilityService,
+        private settingsTaxesAction: SettingsTaxesActions
     ) {
 
     }
@@ -1561,7 +1563,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 amount: [''],
                 type: [''],
                 calculationMethod: [''],
-                isChecked: [false]
+                isChecked: [false],
+                taxValue: [0]
             }),
             requiredTax: [false], //temp
             discounts: this.formBuilder.array([
@@ -1678,6 +1681,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     let entry = {
                         hsnNumber: item.additional?.stock?.hsnNumber,
                         sacNumber: item.additional?.stock?.sacNumber,
+                        showCodeType: item.additional?.stock?.hsnNumber ? 'hsn' : 'sac',
                         transactions: [{
                             account: {
                                 name: item.additional?.label,
@@ -1700,17 +1704,65 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                                 },
                                 variant: {
                                     name: item.variantName,
-                                    uniqueName: item.additional?.stock?.variant?.uniqueName
+                                    uniqueName: item.additional?.stock?.variant?.uniqueName,
+                                    salesTaxInclusive: item.additional?.stock?.variant?.salesTaxInclusive,
+                                    purchaseTaxInclusive: item.additional?.stock?.variant?.purchaseTaxInclusive
                                 },
                                 sku: item.additional?.stock?.skuCode,
                                 skuCodeHeading: item.additional?.stock?.skuCodeHeading
                             }
                         }]
-                    }
+                    };
 
                     this.invoiceForm.get('entries')['controls'].push(this.getEntriesFormGroup(entry));
+
+                    let entryFormGroup = this.getEntryFormGroup(index);
+                    let transactionFormGroup = this.getTransactionFormGroup(entryFormGroup);
+
+                    const taxes = this.generalService.fetchTaxesOnPriority(
+                        item.additional.stock?.taxes ?? [],
+                        item.additional.stock?.groupTaxes ?? [],
+                        item.additional.taxes ?? [],
+                        item.additional.groupTaxes ?? []);
+    
+                    const taxesFormArray = entryFormGroup.get('taxes') as FormArray;
+                    taxesFormArray.clear();
+    
+                    const selectedTaxes = [];
+                    let otherTax = null;
+                    taxes?.forEach(selectedTax => {
+                        this.companyTaxes?.forEach(tax => {
+                            if (this.otherTaxTypes.includes(tax.taxType)) {
+                                otherTax = tax;
+                            } else {
+                                if (tax.uniqueName === selectedTax) {
+                                    selectedTaxes.push(tax);
+                                }
+                            }
+                        });
+                    });
+    
+                    selectedTaxes?.forEach(tax => {
+                        taxesFormArray.push(this.getTransactionTaxFormGroup(tax));
+                    });
+    
+                    if (otherTax) {
+                        const selectedOtherTax = this.companyTaxes?.filter(tax => tax.uniqueName === otherTax.uniqueName);
+                        otherTax['taxDetail'] = selectedOtherTax[0].taxDetail;
+                        otherTax['name'] = selectedOtherTax[0].name;
+                        this.getSelectedOtherTax(index, otherTax, otherTax.calculationMethod);
+                    }
+    
+                    if (item.additional.stock?.variant?.salesTaxInclusive || item.additional.stock?.variant?.purchaseTaxInclusive) {
+                        const amount = this.vouchersUtilityService.calculateInclusiveRate(entryFormGroup?.value, this.companyTaxes, this.company.giddhBalanceDecimalPlaces);
+                        transactionFormGroup.get('amount.amountForAccount').patchValue(amount);
+                        transactionFormGroup.get('stock.rate.rateForAccount')?.patchValue((amount / transactionFormGroup.get('stock.quantity')?.value));
+                    }
+
                     index++;
                 });
+
+                this.checkIfEntriesHasStock();
             }
         });
     }
@@ -1779,6 +1831,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         }
 
         entryFormGroup.get('otherTax.name').patchValue(tax.name);
+        entryFormGroup.get('otherTax.taxValue').patchValue(tax?.taxDetail[0]?.taxValue);
         entryFormGroup.get('otherTax.amount').patchValue(giddhRoundOff(((taxableValue * tax?.taxDetail[0]?.taxValue) / 100), this.highPrecisionRate));
         entryFormGroup.get('otherTax.calculationMethod').patchValue(calculationMethod);
     }
@@ -1908,6 +1961,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public showCreateTaxDialog(): void {
+        this.store.dispatch(this.settingsTaxesAction.CreateTaxResponse(null));
         this.taxAsideMenuRef = this.dialog.open(this.createTax, {
             position: {
                 right: '0',
@@ -2697,6 +2751,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         invoiceForm = this.vouchersUtilityService.formatVoucherObject(invoiceForm);
 
+        if (!this.currentVoucherFormDetails?.depositAllowed || this.invoiceType.isCashInvoice) {
+            delete invoiceForm.deposit;
+        }
+
         if (this.hasStock && this.warehouses?.length === 1) {
             invoiceForm.warehouse = {
                 name: this.warehouses[0]?.name,
@@ -3394,5 +3452,14 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         amount = (amount) ? String(amount)?.replace(this.company.baseCurrencySymbol, '') : '';
         let total = (amount) ? (parseFloat(this.generalService.removeSpecialCharactersFromAmount(amount)) || 0) : 0;
         this.invoiceForm.get('exchangeRate')?.patchValue(total / this.voucherTotals.grandTotal || 0);
+    }
+
+    public updateEntryOtherTax(entryFormGroup: FormGroup, amount: any): void {
+        entryFormGroup.get('otherTax.amount').patchValue(amount);
+    }
+
+    public closeTaxModal(): void {
+        this.store.dispatch(this.companyActions.getTax());
+        this.taxAsideMenuRef.close();
     }
 }

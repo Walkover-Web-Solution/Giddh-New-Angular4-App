@@ -1,4 +1,8 @@
-<ng-container appTranslate (commonLocaleData)="commonLocaleData = $event">
+<ng-container 
+    appTranslate
+    [file]="'settings/taxes'"
+    (localeData)="localeData = $event" 
+    (commonLocaleData)="commonLocaleData = $event">
     <div class="other-tax dialog-asidepan">
         <div class="dialog-header">
             <span mat-dialog-title class="font-16">Tax applicable</span>
